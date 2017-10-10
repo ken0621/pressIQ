@@ -24,6 +24,7 @@ use App\Globals\Mlm_complan_manager_repurchase;
 use App\Globals\Columns;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_brown_rank;
+use App\Models\Tbl_membership_code;
 use DB;
 use Redirect;
 use Request;
@@ -35,6 +36,19 @@ class MlmDeveloperController extends Member
 {
     public $session = "MLM Developer";
 
+    public function myTest()
+    {
+        // $data = Tbl_membership_code::join("tbl_mlm_slot","tbl_mlm_slot.slot_no","=","tbl_membership_code.membership_activation_code")->where("used",0)->get();
+        // foreach($data as $d)
+        // {
+        //     echo "</br>".$d->slot_no;
+        // }
+        $data =  $plan_settings = Tbl_mlm_plan::where('shop_id', $this->user_info->shop_id)
+            ->where('marketing_plan_enable', 1)
+            ->where('marketing_plan_trigger', 'Slot Creation')
+            ->get();
+        dd($data);
+    }    
     public function index()
     {
         $data["page"]           = "MLM Developer";

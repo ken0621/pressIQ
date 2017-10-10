@@ -96,7 +96,36 @@ class DashboardController extends Member
                             ->where("je_shop_id", $this->getShopId())
                             ->whereIn("chart_type_name", ['Bank'])
                             ->get();
+        $data['pis'] = Purchasing_inventory_system::check();
+        if($data['pis'])
+        {
 
+            $sixmonths = Carbon::now()->subMonths(12)->format("Y-m-d") . " 00:00:00";
+
+            $end_date = date("Y-m-d H:i:s", strtotime(Carbon::now()));
+            $start_date = date("Y-m-d H:i:s", strtotime($sixmonths));
+            
+            if(Request::input("start_date") && Request::input("end_date")) 
+            {
+                $end_date = date("Y-m-d H:i:s", strtotime(Request::input("end_date")));
+                $start_date = date("Y-m-d H:i:s", strtotime(Request::input("start_date")));
+            }
+
+            $data['po_amount'] = currency('PHP ',Purchase_Order::get_po_amount($start_date, $end_date)); 
+            $data['count_po']  =number_format(Purchase_Order::count_po($start_date, $end_date));
+
+            $data['count_ar'] = number_format(Invoice::count_ar($start_date, $end_date)); 
+            $data['ar_amount']  = currency('PHP ',Invoice::get_ar_amount($start_date, $end_date));
+
+            $data['count_ap'] = number_format(Billing::count_ap($start_date, $end_date)); 
+            $data['ap_amount']  = currency('PHP ',Billing::get_ap_amount($start_date, $end_date));
+
+            $data['sales_amount'] = currency('PHP ',Invoice::get_sales_amount($start_date, $end_date));
+            $data['pb_amount'] = currency('PHP ',Billing::get_paid_bills_amount($start_date, $end_date));
+
+            $data["mants"] = Carbon::now()->subMonths(12);
+            return view('member.dashboard.dashboard', $data);
+        }
 		return view('member.dashboard.new_dashboard', $data);
 	}
 

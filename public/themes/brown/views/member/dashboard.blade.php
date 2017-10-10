@@ -1,6 +1,11 @@
 @extends("member.member_layout")
 @section("member_content")
 
+
+{{-- <div class="top-message-warning animated fadeInUp">
+	<div class="message-warning"><b>Warning!</b> You haven't setup your <b>PAYOUT DETAILS</b>, you need to set them up in order to receive your wallet.</div>
+</div> --}}
+
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
@@ -72,142 +77,6 @@
 	</div>
 @else
 	<div class="dashboard" style="overflow: hidden;">
-		<!-- <div class="row clearfix">
-			<div class="col-md-6">
-				<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
-				<div class="sub-container">
-					<div class="table-holder">
-						<div class="chart-legend">
-							<div class="holder">
-								<div class="color" style="background-color: #76b6ec"></div>
-								<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
-							</div>
-							<div class="holder">
-								<div class="color" style="background-color: #8E5EA2"></div>
-								<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
-							</div>
-							<div class="chart-holder">
-								<canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="400" height="400"></canvas>
-							</div>
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
-							</div>
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
-							</div>
-						</div>
-		
-						<table class="table hidden">
-							<thead>
-								<tr>
-									<th width="33.3333333333%">Level</th>
-									<th width="33.3333333333%">Count</th>
-									<th width="33.3333333333%">Percentage</th>
-								</tr>
-							</thead>
-							<tbody class="table-body">
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">
-									<td>1</td>
-									<td>2/2</td>
-									<td>100%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">
-									<td>2</td>
-									<td>4/4</td>
-									<td>100%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">
-									<td>4</td>
-									<td>8/8</td>
-									<td>100%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">
-									<td>5</td>
-									<td>16/16</td>
-									<td>100%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 98.875%, rgb(237, 237, 237) 98.875%);">
-									<td>6</td>
-									<td>31/32</td>
-									<td>98.875%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 40.625%, rgb(237, 237, 237) 40.625%);">
-									<td>7</td>
-									<td>26/64</td>
-									<td>40.625%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 28.90625%, rgb(237, 237, 237) 28.90625%);">
-									<td>8</td>
-									<td>37/128</td>
-									<td>28.90625%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 20.3125%, rgb(237, 237, 237) 20.3125%);">
-									<td>9</td>
-									<td>52/256</td>
-									<td>20.3125%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 13.4765625%, rgb(237, 237, 237) 13.4765625%);">
-									<td>10</td>
-									<td>69/512</td>
-									<td>13.4765625%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 4.1015625%, rgb(237, 237, 237) 4.1015625%);">
-									<td>11</td>
-									<td>42/1024</td>
-									<td>4.1015625%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 1.953125%, rgb(237, 237, 237) 1.953125%);">
-									<td>12</td>
-									<td>40/2048</td>
-									<td>1.953125%</td>	
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		
-			<div class="col-md-6">
-				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
-				<div class="sub-container">
-					<div class="chart-legend">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Pairing Reward</span> {{ $wallet->display_complan_triangle }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Direct Referral Bonus</span> {{ $wallet->display_complan_direct }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Builder Reward</span> {{ $wallet->display_complan_builder }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Leader Reward</span> {{ $wallet->display_complan_leader }}</div>
-						</div>
-					</div>
-		
-				</div>
-		
-				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
-				<div class="sub-container">
-					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Builder Point(s)</span> {{ $points->display_brown_builder_points }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Leader Point(s)</span> {{ $points->display_brown_leader_points }}</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> -->
 		<!-- WALLET SUMMARY -->
 		<div class="row clearfix">
 			<div class="col-md-3">
@@ -273,32 +142,6 @@
 			</div>
 		</div>
 		
-		<!-- ACADEMY -->
-		<!-- <div class="academy-container">
-			<div class="row-no-padding clearfix">
-				<div class="col-md-6 left-section">
-					<form action="">
-						<img src="/themes/{{ $shop_theme }}/img/left.jpg" alt="">
-						<div class="row row-no-padding">
-							<div class="col-md-4">
-								<input style="border-radius: 0px; border-right: 0; box-shadow: none !important;" class="form-control input-sm" type="text" placeholder="Family Name">
-							</div>
-							<div class="col-md-4">
-								<input style="border-radius: 0px; border-left: 0; box-shadow: none !important;" class="form-control input-sm" type="text" placeholder="First Name">
-							</div>
-							<div class="col-md-4" style="padding-left: 3px !important;">
-								<input style="border-radius: 0px; box-shadow: none !important;" class="form-control input-sm" type="text" placeholder="Middle Name">
-							</div>
-						</div>
-						<textarea name="" class="address form-control input-sm" id="" placeholder="Address"></textarea>
-					</form>
-				</div>	
-				<div class="col-md-6 right-section">
-					<img src="/themes/{{ $shop_theme }}/img/right.jpg" alt="">
-				</div>
-			</div>
-		</div> -->
-
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
@@ -337,7 +180,55 @@
 						</div>
 					</div>
 				</div>
-			</div>
+{{-- 				<div class="title"><i class="align-icon fa fa-newspaper-o"></i> Upcoming Events</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="min-height: 310px; max-height: auto;">
+						<div class="events-container">
+							<div class="event-list">
+								<div class="event clearfix">
+									<div class="date">
+										<div class="day">14</div>
+										<div class="month">OCTOBER</div>
+									</div>
+									<div class="detail">
+										<div class="titles">Demand Driven Marketing</div>
+										<div class="description">While the concept of demand-driven supply chains is relevant to all industries. </div>
+										<div class="action">
+											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
+										</div>
+									</div>
+								</div>
+								<div class="event clearfix">
+									<div class="date">
+										<div class="day">22</div>
+										<div class="month">OCTOBER</div>
+									</div>
+									<div class="detail">
+										<div class="titles">Entereneural Branding</div>
+										<div class="description">This event will be lead by Jonathan Petalber.</div>
+										<div class="action">
+											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
+										</div>
+									</div>
+								</div>
+								<div class="event clearfix">
+									<div class="date">
+										<div class="day">28</div>
+										<div class="month">OCTOBER</div>
+									</div>
+									<div class="detail">
+										<div class="titles">Transformational Leadership</div>
+										<div class="description">Works with subordinates to identify needed change.</div>
+										<div class="action">
+											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> --}}
 		</div>
 
 		<div class="row clearfix">

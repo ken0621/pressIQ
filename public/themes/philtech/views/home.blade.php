@@ -164,10 +164,10 @@
 							<div class="grid-1">
 								<div class="single-slide">
 									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide1.png">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide1.jpg">
 									</div>
 									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.png">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.jpg">
 									</div>
 								</div>
 							</div>

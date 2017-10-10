@@ -3468,7 +3468,7 @@ class Payroll2
 		}
 		
 		
-
+		
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
 		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
@@ -4752,7 +4752,7 @@ class Payroll2
 			array_push($return->_breakdown, $val);
 			$val = null;
 		}
-
+		
 		$deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
 			
 		if(isset($deduction["deduction"]))

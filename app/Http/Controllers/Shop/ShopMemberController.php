@@ -175,7 +175,6 @@ class ShopMemberController extends Shop
         }
 
         echo json_encode("success");
-
     }
     public function getPayoutSettingSuccess()
     {

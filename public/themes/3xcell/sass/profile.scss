@@ -271,13 +271,12 @@ $text-dark: #272c2f;
 				{
 					text-align: right;
 					margin-top: 15px;
-					.btn-brown
+
+					.btn
 					{
-						border-radius: 2.5px;
-						padding: 10px 25px;
+						background-color: #2161C8;
 						color: #fff;
-						font-weight: $bold;
-						font-size: 13px;
+
 						@media screen and (min-width: 150px)
 						{
 							width: 150px;

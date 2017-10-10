@@ -81,6 +81,7 @@
 				   @if($allowed_change_pass)
 				   <li><a data-toggle="tab" href="#password">Password</a></li>
 				   @endif
+				   <li><a data-toggle="tab" href="#add_beneficiary">Beneficiary</a></li>
 				</ul>
 				<div class="tab-content">
 				   <div id="basic_info" class="tab-pane fade in active">
@@ -167,7 +168,7 @@
 						   		</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-default" type="submit"><i class="fa fa-pencil"></i> Update</button>
+							   			<button class="btn" type="submit"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -194,7 +195,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button type="submit" class="submit-button btn btn-default"><i class="fa fa-pencil"></i> Update</button>
+							   			<button type="submit" class="submit-button btn"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -258,13 +259,61 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-default" type="submit"><i class="fa fa-pencil"></i>  Update</button>
+							   			<button class="btn" type="submit"><i class="fa fa-pencil"></i>  Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
 					   </form>
 				   </div>
 				   @endif
+				   <!-- ADD BENEFICIARY -->
+				   <div id="add_beneficiary" class="tab-pane fade in active">
+				   	<div class="beneficiary_success_message hidden">
+				   		<div class="alert alert-success">
+				   			<strong>Success!</strong> Your beneficiary has been successfully added.
+				   		</div>
+				   	</div>
+				   	<div class="beneficiary_info_failed_message hidden">
+				   		<div class="alert alert-danger">
+				   			<ul>
+
+				   			</ul>
+				   		</div>
+				   	</div>
+				   	<form class="info-form">
+				   		<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				   		<div class="row clearfix">
+				   			<div class="col-md-12">
+				   				<div class="form-group">
+				   					<label>First Name</label>
+				   					<input type="text" class="form-control" name="first_name" value="">
+				   				</div>
+				   				<div class="form-group">
+				   					<label>Middle Name</label>
+				   					<input type="text" class="form-control" name="middle_name" value="">
+				   				</div>
+				   				<div class="form-group">
+				   					<label>Last Name</label>
+				   					<input type="text" class="form-control" name="last_name" value="">
+				   				</div>
+				   				<div class="form-group">
+				   					<label>Contact Number</label>
+				   					<input type="text" class="form-control" name="contact_number" value="">
+				   				</div>
+				   				<div class="form-group">
+				   					<label>Email</label>
+				   					<input type="text" class="form-control" name="email" value="">
+				   				</div>
+				   			</div>
+				   			<div class="col-md-12">
+				   				<div class="form-group btn-holder">
+				   					<button class="btn" type="submit"><i class="fa fa-paper-plane-o"></i> Submit</button>
+				   				</div>
+				   			</div>
+				   		</div>
+				   	</form>
+				   </div>
+				   <!-- END ADD BENEFICIARY -->
 				</div>
 			</div>
 		</div>

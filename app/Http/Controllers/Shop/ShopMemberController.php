@@ -130,6 +130,7 @@ class ShopMemberController extends Shop
         $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->bank()->get();
         $data["_method"] = unserialize($this->shop_info->shop_payout_method);
         $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
+        $data["tin_number"] = Self::$customer_info->tin_number;
         return view("member2.payout_settings", $data);
     }
     public function postPayoutSetting()
@@ -138,6 +139,7 @@ class ShopMemberController extends Shop
 
         /* UPDATE CUSTOMER PAYOUT METHOD */
         $update_customer["customer_payout_method"] = request("customer_payout_method");
+        $update_customer["tin_number"] = request("tin_number");
         Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
 
 

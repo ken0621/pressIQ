@@ -7,13 +7,18 @@
 	<div class="modal-body clearfix">
 		<div class="row">
 	        <div class="clearfix modal-body"> 
-	            <div class="col-md-12">
+	            <div class="col-md-6">
 	                <label for="basic-input">How would you like to receive your payout?</label>
 	                <select name="customer_payout_method" class="form-control choose-method">
 	                	@foreach($_method as $method)
 	                		<option {{ $customer->customer_payout_method == $method ? "selected" : "" }} value="{{ $method }}">{{ strtoupper($method) }}</option>
 	                	@endforeach
 	                </select>
+	            </div>
+
+	            <div class="col-md-6">
+	                <label for="basic-input">Enter Your Tin Number</label>
+	                <input class="form-control" required="required" type="text" name="tin_number" value="{{ $tin_number }} ">
 	            </div>
 	        </div>
 	    </div>
@@ -146,7 +151,7 @@ function action_submit_payout_details(form_data)
 			$("#global_modal").modal("hide");
 			setTimeout(function()
 			{
-				action_load_link_to_modal("members/payout-setting-success", "sm");
+				action_load_link_to_modal("/members/payout-setting-success", "sm");
 				$(".top-message-warning.for-payout").fadeOut();
 			}, 350);
 		}

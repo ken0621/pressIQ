@@ -1,9 +1,12 @@
 @extends("member.member_layout")
 @section("member_content")
 
-<div class="top-message-warning for-payout" onclick="action_load_link_to_modal('/members/payout-setting', 'lg')">
-	<div class="message-warning text-center"><b>Warning!</b> You won't be receiving your payout until you setup your <b>payout details</b>. Click here to set it up right away. </div>
-</div>
+
+@if($customer->customer_payout_method == "unset")
+	<div class="top-message-warning for-payout" onclick="action_load_link_to_modal('/members/payout-setting', 'lg')">
+		<div class="message-warning text-center"><b>Warning!</b> You won't be receiving your payout until you setup your <b>payout details</b>. Click here to set it up right away. </div>
+	</div>
+@endif
 
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
@@ -165,22 +168,10 @@
 					</div>	
 				</div>
 
-				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
-				<div class="sub-container">
-					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Builder Point(s)</span><span class="value">{{ $points->display_brown_builder_points }}</span></div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Leader Point(s)</span><span class="value">{{ $points->display_brown_leader_points }}</span></div>
-						</div>
-					</div>
-				</div>
+
 			</div>
 			<div class="animated fadeInUp col-md-6">
-				<div class="title"><i class="align-icon fa fa-newspaper-o"></i> Upcoming Events</div>
+{{-- 				<div class="title"><i class="align-icon fa fa-newspaper-o"></i> Upcoming Events</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="min-height: 310px; max-height: auto;">
 						<div class="events-container">
@@ -227,7 +218,21 @@
 							</div>
 						</div>
 					</div>
+				</div> --}}
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Builder Point(s)</span><span class="value">{{ $points->display_brown_builder_points }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Leader Point(s)</span><span class="value">{{ $points->display_brown_leader_points }}</span></div>
+						</div>
+					</div>
 				</div>
+				
 			</div>
 		</div>
 

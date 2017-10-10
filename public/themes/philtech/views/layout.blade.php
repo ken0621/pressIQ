@@ -46,9 +46,17 @@
                 <div class="holder"><a href="javascript:">COMPANY</a></div>
                 <div class="holder"><a href="javascript:">BUSINESS PRESENTATION</a></div>
                 <div class="holder"><a href="javascript:">NEWS</a></div>
+
+                @if($customer)
+                <div class="holder"><a href="/members">MY ACCOUNT</a></div>
+                <div class="holder"><div class="linya"></div></div>
+                <div class="holder"><a href="/members/logout">LOGOUT</a></div>
+                @else
                 <div class="holder"><a href="/members/login">LOGIN</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="/members/register">REGISTER</a></div>
+                @endif
+
             </div>
         </div>
         <div class="header-nav-middle">

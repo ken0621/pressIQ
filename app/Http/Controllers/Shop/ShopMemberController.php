@@ -30,8 +30,10 @@ use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_email_template;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_transaction_item;
+use App\Models\Tbl_mlm_slot_bank;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
+use App\Models\Tbl_payout_bank;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -115,13 +117,69 @@ class ShopMemberController extends Shop
         {
             return "ERROR OCCURRED";
         }
-
     }
     public function getAutologin()
     {
         $data["force_login"] = true;
         $data["password"] = Crypt::decrypt(request()->password);
         return view("member.autologin", $data);
+    }
+    public function getPayoutSetting()
+    {
+        $data["page"] = "Payout";
+        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->bank()->get();
+        $data["_method"] = unserialize($this->shop_info->shop_payout_method);
+        $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
+        return view("member2.payout_settings", $data);
+    }
+    public function postPayoutSetting()
+    {
+        $shop_id = $this->shop_info->shop_id;
+
+        /* UPDATE CUSTOMER PAYOUT METHOD */
+        $update_customer["customer_payout_method"] = request("customer_payout_method");
+        Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
+
+
+        /* UPDATE EON METHOD */
+        foreach(request("eon_slot_code") as $key => $eon_slot_no)
+        {
+            $update_mlm_slot["slot_eon_account_no"] = request("eon_account_no")[$key];
+            $update_mlm_slot["slot_eon_card_no"] = request("eon_card_no")[$key];
+            Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $eon_slot_no)->update($update_mlm_slot);
+        }
+
+
+        /* UPDATE BANK DETAILS */
+        foreach(request("bank_slot_no") as $key => $bank_slot_no)
+        {
+            $slotinfo = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $bank_slot_no)->first();
+
+            $check_bank_exist = Tbl_mlm_slot_bank::where("slot_id", $slotinfo->slot_id)->first();
+
+            if($check_bank_exist)
+            {
+                $update_bank["payout_bank_id"] = request("bank_id")[$key];
+                $update_bank["bank_account_number"] = request("bank_account_no")[$key];
+                Tbl_mlm_slot_bank::where("slot_id", $slotinfo->slot_id)->update($update_bank);
+            }
+            else
+            {
+                $insert_bank["slot_id"] = $slotinfo->slot_id;
+                $insert_bank["payout_bank_id"] = request("bank_id")[$key];
+                $insert_bank["bank_account_number"] = request("bank_account_no")[$key];
+                Tbl_mlm_slot_bank::insert($insert_bank);
+            }
+        }
+
+        echo json_encode("success");
+
+    }
+    public function getPayoutSettingSuccess()
+    {
+        $data["title"] = "Success!";
+        $data["message"] = "Payout details has been successfully updated.";
+        return view("member2.success", $data);
     }
     public static function store_login_session($email, $password)
     {

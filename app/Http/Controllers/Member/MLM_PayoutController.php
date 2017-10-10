@@ -6,7 +6,10 @@ use Carbon\Carbon;
 use Session;
 use Validator;
 use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Models\Tbl_payout_bank;
+use App\Models\Tbl_payout_bank_shop;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_shop;
 use App\Globals\Currency;
 use Redirect;
 use App\Globals\MLM2;
@@ -75,6 +78,51 @@ class MLM_PayoutController extends Member
 
 
 		return view('member.mlm_payout.payout_table', $data);
+	}
+	public function getConfig()
+	{
+		$data["pate"] = "Payout Configuration";
+		$_bank = Tbl_payout_bank::get();
+
+		foreach($_bank as $key => $bank)
+		{
+			$check = Tbl_payout_bank_shop::where("shop_id", $this->user_info->shop_id)->where("payout_bank_id", $bank->payout_bank_id)->first();
+			
+			if($check)
+			{
+				$_bank[$key]->enabled = true;
+			}
+			else
+			{
+				$_bank[$key]->enabled = false;
+			}
+		}
+
+		$data["_bank"] = $_bank;
+		return view('member.mlm_payout.payout_config', $data);
+	}
+	public function postConfig()
+	{
+		$response["response_status"] = "success";
+		$response["call_function"] = "payout_config_success";
+		$update_shop["shop_payout_method"] = serialize(request("payout_method"));
+		Tbl_shop::where("shop_id", $this->user_info->shop_id)->update($update_shop);
+
+
+		Tbl_payout_bank_shop::where("shop_id", $this->user_info->shop_id)->delete();
+
+		if(request("bank"))
+		{
+			foreach(request("bank") as $key => $payout_bank_id)
+			{
+				$insert_bank_shop[$key]["shop_id"] = $this->user_info->shop_id;
+				$insert_bank_shop[$key]["payout_bank_id"] = $payout_bank_id;
+			}
+		}
+
+		Tbl_payout_bank_shop::insert($insert_bank_shop);
+
+		return json_encode($response);
 	}
 	public function getImport()
 	{

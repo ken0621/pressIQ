@@ -28,7 +28,13 @@ class Seed_manual
         {
             Seed_manual::seed_tbl_payroll_entity();
         }
+
+        if(!DB::table('tbl_payout_bank')->first())
+        {
+            Seed_manual::seed_tbl_payout_bank();
+        }
     }
+
 
     public static function getShopId()
     {
@@ -45,6 +51,23 @@ class Seed_manual
       DB::table('tbl_user_position')->insert($insert);
     }
     
+    public static function seed_tbl_payout_bank()
+    {
+        $insert[]["payout_bank_name"] = "BDO Unibank";
+        $insert[]["payout_bank_name"] = "Metrobank";
+        $insert[]["payout_bank_name"] = "Land Bank";
+        $insert[]["payout_bank_name"] = "BPI";
+        $insert[]["payout_bank_name"] = "Security Bank";
+        $insert[]["payout_bank_name"] = "PNB";
+        $insert[]["payout_bank_name"] = "Chinabank";
+        $insert[]["payout_bank_name"] = "DBP";
+        $insert[]["payout_bank_name"] = "Unionbank";
+        $insert[]["payout_bank_name"] = "RCBC";
+                      
+
+        DB::table("tbl_payout_bank")->insert($insert);
+    }
+
     public static function seed_tbl_chart_account_type()
     {
         $insert[1]['chart_type_id']             = 1;

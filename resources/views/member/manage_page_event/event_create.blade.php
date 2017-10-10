@@ -1,5 +1,5 @@
 <form class="global-submit" method="post" action="{{$action}}">
-    
+
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
     <div class="modal-header">
     	<button type="button" class="close" data-dismiss="modal">×</button>
@@ -13,24 +13,41 @@
                         <div class="col-md-4 text-center">
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    <input type="hidden" class="upload_image_1" name="event_thumbnail_image">    
+                                    <input type="hidden" class="upload_image_1" name="event_thumbnail_image" value="/assets/front/img/default.jpg">    
                                     <label for="basic-input">Event Thumbnail</label>
                                     <div class="img">
-                                        <img class="match-height img-responsive image-put-1 image-gallery image-gallery-single" key="1" style="height: 150px;width: 150px; object-fit: cover; border: 1px solid #ddd;margin:auto">
+                                        <img class="match-height img-responsive image-put-1 image-gallery image-gallery-single" key="1" src="/assets/front/img/default.jpg" style="height: 150px;width: 150px; object-fit: cover; border: 1px solid #ddd;margin:auto">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    <input type="hidden" class="upload_image_2" name="event_banner_image">    
+                                    <input type="hidden" class="upload_image_2" name="event_banner_image" value="/assets/front/img/default.jpg">    
                                     <label for="basic-input">Event Banner</label>
                                     <div class="img">
-                                        <img class="match-height img-responsive image-put-2 image-gallery image-gallery-single" key="2" style="height: 250px;width: 250px; object-fit: cover; border: 1px solid #ddd;margin:auto">
+                                        <img class="match-height img-responsive image-put-2 image-gallery image-gallery-single" key="2"  src="/assets/front/img/default.jpg" style="height: 250px;width: 250px; object-fit: cover; border: 1px solid #ddd;margin:auto">
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-8">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <div class="checkbox">
+                                        <label>Available For :</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="checkbox">
+                                      <label><input type="checkbox" value="1" name="event_member">Members</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="checkbox">
+                                      <label><input type="checkbox" value="1" name="event_guest">Guest</label>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <label>Title</label>
@@ -52,7 +69,7 @@
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <label>Description</label>
-                                    <textarea class="form-control input-sm tinymce" name="even_description"></textarea>
+                                    <textarea class="form-control input-sm tinymce" name="event_description"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +99,7 @@
 
         if(data.akey != 0) 
         {
-            $('.upload_image_'+data.key).val(image_path);
+            $('.upload_image_'+data.akey).val(image_path);
             $('.image-put-'+data.akey).attr("src", image_path);
         }
     }

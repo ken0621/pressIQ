@@ -53,22 +53,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">Sample Name</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Action <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-custom">
-                                                    <li><a href="javascript:">Edit </a></li>
-                                                    <li><a href="javascript:"> Archived </a> </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @if(count($_event) > 0)
+                                    @foreach($_event as $key => $event)
+                                    <tr>
+                                        <td class="text-center">{{$key+1}}</td>
+                                        <td class="text-center">
+                                            <img class="match-height img-responsive" key="2"  src="{{$event->event_thumbnail_image}}" style="height: 100px;width:100px; object-fit: cover; border: 1px solid #ddd;margin:auto">
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="title">
+                                                <h4>{{ucwords($event->event_title)}}</h4>
+                                            </div>
+                                            <div class="sub-title">{{date('M d, Y',strtotime($event->event_date))}}</div>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Action <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-custom">
+                                                        <li><a href="javascript:">Edit </a></li>
+                                                        <li><a href="javascript:"> Archived </a> </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                @else
+                                <tr><td colspan="4" class="text-center">NO EVENT YET</td></tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -78,4 +91,19 @@
     </div>
 </div>
 </div>
+@endsection
+@section('script')
+<script type="text/javascript">
+    function success_event(data)
+    {        
+        if(data.status)
+        {
+            toastr.success('Success');
+            setInterval(function()
+            {
+                location.reload();
+            },2000);       
+        }
+    }
+</script>
 @endsection

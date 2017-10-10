@@ -126,7 +126,7 @@
             <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
             <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
             <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
-            <li class="nav-border"><a href="/legalities">LEGALITIES</a></li>
+            <li class="nav-border {{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">LEGALITIES</a></li>
             <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li> 
             
             {{-- @if(isset($_categories))
@@ -156,14 +156,14 @@
                 <div class="col-md-2 col-sm-6">
                     <div class="btm-title">INFORMATION</div>
                     <ul>
-                        <li><a href="/partners">Our Partners</a></li>
+                        <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partners</a></li>
                         <li><a href="https://loadcentral.net">E-loading Business</a></li>
                         <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
                         <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li>
                         <li><a href="https://philtechglobalinc.vmoney.com/">E-money</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">Career</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">Events</a></li>
-                        <li><a href="/legalities">Legalities</a></li>
+                        <li class="{{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">Legalities</a></li>
                         <li><a href="https://drive.google.com/file/d/0B9C_Tfe9UZCmemJFeXA3dWRyYjVKOVY1MlVkUlNiWlVDang4/view">Business Presentation</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
                     </ul>

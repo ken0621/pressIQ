@@ -71,9 +71,9 @@
 								<li>
 									<a href="/members/wallet-encashment"><div class="nav-holder"> &nbsp;&nbsp;<span>Wallet Encashment</span></div></a>
 								</li>
-								<li>
+{{-- 								<li>
 									<a href="/members/wallet-logs"><div class="nav-holder"> &nbsp;&nbsp;<span>Wallet Transfer</span></div></a>
-								</li>
+								</li> --}}
 							</ul>
 						</li>
 						@else

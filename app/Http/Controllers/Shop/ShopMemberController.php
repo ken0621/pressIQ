@@ -157,26 +157,29 @@ class ShopMemberController extends Shop
         {
             $slotinfo = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $bank_slot_no)->first();
 
-            $check_bank_exist = Tbl_mlm_slot_bank::where("slot_id", $slotinfo->slot_id)->first();
+            if(request("bank_id")[$key] != "")
+            {
+                $check_bank_exist = Tbl_mlm_slot_bank::where("slot_id", $slotinfo->slot_id)->first();
 
-            if($check_bank_exist)
-            {
-                $update_bank["payout_bank_id"] = request("bank_id")[$key];
-                $update_bank["bank_account_number"] = request("bank_account_no")[$key];
-                Tbl_mlm_slot_bank::where("slot_id", $slotinfo->slot_id)->update($update_bank);
-            }
-            else
-            {
-                $insert_bank["slot_id"] = $slotinfo->slot_id;
-                $insert_bank["payout_bank_id"] = request("bank_id")[$key];
-                $insert_bank["bank_account_number"] = request("bank_account_no")[$key];
-                Tbl_mlm_slot_bank::insert($insert_bank);
+                if($check_bank_exist)
+                {
+                    $update_bank["payout_bank_id"] = request("bank_id")[$key];
+                    $update_bank["bank_account_number"] = request("bank_account_no")[$key];
+                    Tbl_mlm_slot_bank::where("slot_id", $slotinfo->slot_id)->update($update_bank);
+                }
+                else
+                {
+                    $insert_bank["slot_id"] = $slotinfo->slot_id;
+                    $insert_bank["payout_bank_id"] = request("bank_id")[$key];
+                    $insert_bank["bank_account_number"] = request("bank_account_no")[$key];
+                    Tbl_mlm_slot_bank::insert($insert_bank);
+                }
             }
         }
 
         echo json_encode("success");
     }
-    
+
     public function getPayoutSettingSuccess()
     {
         $data["title"] = "Success!";

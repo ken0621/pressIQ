@@ -13,22 +13,12 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
-        <!-- BOOTSTRAP -->
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
-        <!-- FONT AWESOME -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
-        <!-- SLICK CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick.css">
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick-theme.css">
+        
         <!-- GLOBAL CSS -->
+        @include("frontend.ghead")
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-        <link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
         <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
-        <!-- Brown Custom Icon -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
-        <!-- THEME COLOR -->
-        <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
+        
         <!-- OTHER CSS -->
         @yield("css")
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
@@ -236,16 +226,8 @@
         </div>
     </div>
     <div class="multiple_global_modal_container"></div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
-    <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/match-height.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global_cart.js"></script>
+
+    @include("frontend.gfoot")
     <script src="/themes/{{ $shop_theme }}/js/custom_theme.js"></script>
     @yield("js")
     </body>

@@ -1341,6 +1341,15 @@ function page_list()
     $nav[$page]['type']     = "menu";
     
     /* -- MANAGE CONTENT => PAGE INFORMATION */
+    $code = "page-event";
+    $nav[$page]['submenu'][$code]['label'] = "Events";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/events";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Arcylen Garcia Gutierrez </span>";
+
+    /* -- MANAGE CONTENT => PAGE INFORMATION */
     $code = "page-theme";
     $nav[$page]['submenu'][$code]['label'] = "Themes";
     $nav[$page]['submenu'][$code]['code'] = $code;

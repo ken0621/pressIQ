@@ -1068,6 +1068,9 @@ AdvancedRoute::controller('/member/maintenance/app_keys', 'Member\SocialNetworki
 AdvancedRoute::controller('/member/columns', 'Member\ColumnsController');
 /* End */
 
+/* EVENTS */
+AdvancedRoute::controller('/member/page/events','Member\EventController');
+
 AdvancedRoute::controller('/tester','TesterController');
 
 // test lang load

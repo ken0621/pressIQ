@@ -24,6 +24,7 @@
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
+        <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
         <!-- Brown Custom Icon -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
         <!-- THEME COLOR -->
@@ -245,9 +246,9 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
+    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
     <script type="text/javascript" src="/assets/front/js/global.js"></script>
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
     @yield("js")
     </body>
 

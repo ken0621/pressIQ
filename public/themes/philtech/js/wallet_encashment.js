@@ -17,13 +17,10 @@ function encashment()
 	}
 	function event_request_payout_clicked()
 	{
-		$(".request-payout").click(function()
-		{
-			action_request_payout_clicked();
-		});
+		
 	}
 	function action_request_payout_clicked()
 	{
-		action_load_link_to_modal("/members/wallet-encashment-modal", "md");
+		
 	}
 }

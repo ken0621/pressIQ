@@ -13,26 +13,11 @@
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">  
-        <!-- BOOTSTRAP -->
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
-        <!-- FONT AWESOME -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
-        <!-- SLICK CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick.css">
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick-theme.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-        <link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
-        <!-- THEME COLOR -->
-        <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
-        <!-- PARALLAX -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
-        
-        <!-- LIGHTBOX -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/lightbox/css/lightbox.css">
-
+        @include("frontend.ghead")
+       
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
@@ -74,26 +59,33 @@
                         <i class="fa fa-google-plus-square" aria-hidden="true"></i>
                     </span>
                 </div> 
-                @if($customer_info_a)
+               @if($customer)
                <div class="login-container">
                    <div class="login-button">
-                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/mlm">MY ACCOUNT</a></span>
+                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/members">MY ACCOUNT</a></span>
                    </div>
+               </div>
+              <div class="join-us-container">
+                   <a href="/members/logout">
+                       <div class="join-us-button">
+                           <span>LOGOUT</span>
+                       </div>
+                   </a>
                </div>
                @else
                 <div class="login-container">
                    <div class="login-button">
-                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/mlm/login">LOGIN</a></span>
+                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/members/login">LOGIN</a></span>
                    </div>
                </div>
-               @endif
                <div class="join-us-container">
-                   <a href="/mlm/register">
+                   <a href="/members/register">
                        <div class="join-us-button">
                            <img src="/themes/{{ $shop_theme }}/img/button-icon1.png"><span>&nbsp;&nbsp;JOIN US TODAY</span>
                        </div>
                    </a>
                </div>
+               @endif
            </div>
         </div>
     </div>

@@ -56,21 +56,7 @@
 
                     		@endforeach
                     	@endif
-=======
-                                <tr>
-                                    <td>{{date('M d, g:i A',strtotime($audit->audit_created_at))}}</td>
-                                    <td>{{$audit->user}}</td>
-                                    {{-- <td>{{ucfirst($audit->action)}} <a>{{$audit->transaction_txt}}</a></td> --}}
-                                    <td>{{ucfirst($audit->action)}} <a>{{$audit->transaction_txt}}</a></td>
-                                    <td>{{$audit->source}}</td>
-                                    <td>{{$audit->transaction_date}}</td>
-                                    <td>{{$audit->transaction_amount}}</td>
-                                    <td class="text-center"><button class="btn btn-link popup" link="/member/payroll/employee_list/modal_view_all_transaction/{{$audit->audit_trail_id}}/{{$audit->user_id}}" size="lg">History</button></td>
-                                </tr>
 
-                            @endforeach
-                        @endif
->>>>>>> d54e84ae66618aa3caef22478d398b1be998d6f9
                     </tbody>
                     </table>
                 </div>

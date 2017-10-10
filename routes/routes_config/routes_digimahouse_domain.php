@@ -11,6 +11,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/cart/clear', 'Shop\ShopCartController@clear_cart');
 	Route::get('/product', 'Shop\ShopProductController@index');
 	Route::get('/product/view/{id}', 'Shop\ShopProductContentController@index');
+	Route::get('/product/view2/{id}', 'Shop\ShopProductContent2Controller@index');
 	Route::get('/product/variant', 'Shop\ShopProductContentController@variant');
 	Route::get('/product/search', 'Shop\ShopProductContentController@search');
 	Route::get('/about', 'Shop\ShopAboutController@index');

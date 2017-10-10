@@ -32,6 +32,7 @@
             </div>
             <div class="col-md-3">
               <select class="form-control select-manufacturer" placeholder="Enter Manufacturer" >
+                  <option value="">All</option>
                   @include("member.load_ajax_data.load_manufacturer")
               </select>
             </div>
@@ -71,17 +72,29 @@
         widht : '100%',
         onChangeValue : function ()
         {
+            $(".inventory-table").css("opacity", 0.3);
+            var id = $('#warehouse_id').val();
+            var m_id = $(this).val();
             if($(this).val())
             {
-                var id = $('#warehouse_id').val();
-                var m_id = $(this).val();
                 $('.inventory-table').load('/member/item/warehouse/view_v2/table/'+id+'?type='+global_type+'&m_id='+m_id+' .inventory-container', function()
                 {
                     $('.tab-pane').removeClass('active');
                     $('#'+global_type).addClass('active in');
                     global_m_id = m_id;
                     $('.print-inventory').attr('href','/member/item/warehouse/view_v2/print/'+id+'/bundle?m_id='+global_m_id);
+                    $(".inventory-table").css("opacity", 1);
                 })
+            }
+            else
+            {
+                $('.inventory-table').load('/member/item/warehouse/view_v2/table/'+id+'?type='+global_type + ' .inventory-container', function()
+                {
+                    $('.tab-pane').removeClass('active');
+                    $('#'+global_type).addClass('active in');
+                    $('.print-inventory').attr('href','/member/item/warehouse/view_v2/print/'+id+'/'+global_type);
+                    $(".inventory-table").css("opacity", 1);
+                });
             }
         }
     });

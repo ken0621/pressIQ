@@ -597,27 +597,23 @@ class MLM2
 	}
 	public static function use_membership_code($shop_id, $pin, $activation, $slot_id_created, $remarks = null, $consume = array())
 	{
-		$return = MLM2::check_membership_code($shop_id, $pin, $activation);
-
-		if(!$return)
+		$update["mlm_slot_id_created"] 		= $slot_id_created;
+		$update["item_in_use"] 				= "used";
+		$update["record_inventory_status"]	= 1;
+		
+		if(count($consume) > 0)
 		{
-			$update["mlm_slot_id_created"] 		= $slot_id_created;
-			$update["item_in_use"] 				= "used";
-			
-			if(count($consume) > 0)
-			{
-				$update["record_consume_ref_name"] 	= $consume['name'];
-				$update["record_consume_ref_id"]	= $consume['id'];
-			}
-
-			if($remarks)
-			{
-				$initial_record 					= Tbl_warehouse_inventory_record_log::codes($shop_id, $pin, $activation)->first();
-				$update["record_item_remarks"]	 	= $initial_record->record_item_remarks . "\r\n" . $remarks;
-			}
-
-			Tbl_warehouse_inventory_record_log::codes($shop_id, $pin, $activation)->update($update);			
+			$update["record_consume_ref_name"] 	= $consume['name'];
+			$update["record_consume_ref_id"]	= $consume['id'];
 		}
+
+		if($remarks)
+		{
+			$initial_record 					= Tbl_warehouse_inventory_record_log::codes($shop_id, $pin, $activation)->first();
+			$update["record_item_remarks"]	 	= $initial_record->record_item_remarks . "\r\n" . $remarks;
+		}
+
+		Tbl_warehouse_inventory_record_log::codes($shop_id, $pin, $activation)->update($update);
 	}
 	public static function create_slot_no_rule()
 	{

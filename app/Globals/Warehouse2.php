@@ -593,6 +593,7 @@ class Warehouse2
             $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
                                                    ->where("record_item_id",$item_id)
                                                    ->where("record_inventory_status",0)
+                                                   ->where("item_in_use",'unused')
                                                    ->value('record_log_id');
             if($serial_qty > 0)
             {
@@ -602,6 +603,7 @@ class Warehouse2
                                                    ->where("record_item_id",$item_id)
                                                    ->where("record_inventory_status",0)
                                                    ->where("record_serial_number",$serial[$ctr_qty])
+                                                   ->where("item_in_use",'unused')
                                                    ->value('record_log_id');
             }
             Warehouse2::insert_item_history($id);

@@ -800,6 +800,11 @@ class ShopMemberController extends Shop
         $data["total_payout"]   = Currency::format($total_payout);
         return (Self::load_view_for_members("member.wallet_encashment", $data));
     }
+    public function getWalletEncashmentModal()
+    {
+        $data["page"]           = "Wallet Encashment";
+        return (Self::load_view_for_members("member.wallet_encashment_modal", $data));
+    }
     public function getSlot()
     {
         $data["page"] = "Slot";

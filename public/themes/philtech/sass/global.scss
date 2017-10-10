@@ -10,6 +10,12 @@ body
 	opacity: 0;
 	transition: 0.3s all ease;
 }
+.content
+{
+	padding-top: 0px;
+	padding-bottom: 35px;
+	margin-top: 10px;
+}
 .slick-slider:hover
 {
 	.control-c
@@ -23,6 +29,33 @@ body
 	{
 		background-color: #bdc3c7 !important;
 		cursor: not-allowed;
+	}
+}
+.item-title
+{
+	font-family: "Arial", sans-serif;
+	color: #585858;
+	font-size: 15px;
+	font-weight: 400;
+}
+.item-price
+{
+	padding-top: 5px;
+	color: #006cc5;
+	font-size: 18px !important;
+	font-weight: 400;
+	margin-top: 10px;
+}
+.item-container
+{
+	padding-top: 20px;
+}
+.item-details
+{
+	padding-top: 20px;
+	a
+	{
+		text-decoration: none;
 	}
 }
 .btn-primary

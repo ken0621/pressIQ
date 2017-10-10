@@ -14,39 +14,72 @@
 					@if(isset($_categories))
 						@foreach($_categories as $category)
 						<div class="button-shop">
-							<div class="text">
-								<!-- <img src="/themes/{{ $shop_theme }}/img/electronics.png"> -->
-								{{ $category['type_name'] }}
+							<div class="text" style="cursor: pointer;" onClick="location.href='/product?type={{ $category['type_id'] }}'">
+								{{-- <img src="/themes/{{ $shop_theme }}/img/sidebar/dth.png"> --}}
+								<span>{{ $category['type_name'] }}</span>
 							</div>
-							@if($category['subcategory'])
-							<div class="hover">
-								<div class="hover-holder">
-									<div class="row clearfix">
-										<ul class="col-md-12">
-											@foreach($category['subcategory'] as $subcategory)
-											<li><a href="/product?type={{ $subcategory['type_id'] }}">{{ $subcategory['type_name'] }}</a></li>
-												@foreach($subcategory['subcategory'] as $subcategory1)
-												<li><a href="/product?type={{ $subcategory1['type_id'] }}">{{ $subcategory1['type_name'] }}></a></li>
-													@foreach($subcategory1['subcategory'] as $subcategory2)
-													<li><a href="/product?type={{ $subcategory2['type_id'] }}">{{ $subcategory2['type_name'] }}></a></li>
-													@endforeach
-												@endforeach
-											@endforeach
-										</ul>
-									</div>
-									<div class="banner-holder">
-										<img src="/themes/{{ $shop_theme }}/img/big-discount.jpg">
-									</div>
-								</div>
-							</div>
-							@endif
 						</div>
 						@endforeach
+					@else
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/dth.png">
+							<span>DTH PRODUCTS</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/card.png">
+							<span>PREPAID CARDS</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/gadgets.png">
+							<span>GADGETS</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/electronics.png">
+							<span>ELECTRONICS</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/services.png">
+							<span>SERVICES</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/entertainment.png">
+							<span>ENTERTAINMENT</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/apparel.png">
+							<span>APPAREL</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/accessories.png">
+							<span>ACCESSORIES</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/health.png">
+							<span>HEALTH & WELLNESS</span>
+						</div>
+					</div>
 					@endif
 				</div>
 				<div class="hot-deals-container">
-					<div class="left-container-title">
-						<span>DAILY HOT DEALS</span>
+					<div class="wow-title">
+						<span class="orange">HOT</span><span class="blue">DEALS</span>
 						<span class="scroll-button"><a class="left" href="#"><img src="/themes/{{ $shop_theme }}/img/left-button-scroll.png"></a><a class="right" href="#"><img src="/themes/{{ $shop_theme }}/img/right-button-scroll.png"></a></span>
 					</div>
 					<div class="daily-container">
@@ -55,15 +88,15 @@
 								<div class="hot-deals-item-container">
 									<img class="4-3-ratio" src="{{ get_collection_first_image($collection) }}">
 									<div class="item-details">
-										<div class="item-title"><a href="/product/view/{{ $collection['product']['eprod_id'] }}">{{ $collection['product']['eprod_name'] }}</a></div>
+										<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ get_collection_first_name($collection) }}</div></a>
 										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 									</div>
 									<button type="button" onClick="location.href='/product/view/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn" style="margin-top: 25px;">
 										<table>
 											<tbody>
 												<tr>
-													<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-													<td class="text">View More</td>
+													<td class="icon"><img src="/themes/{{ $shop_theme }}/img/header/cart-icon.png"></td>
+													<td class="text">SHOP NOW</td>
 												</tr>
 											</tbody>
 										</table>
@@ -73,22 +106,49 @@
 						@endforeach
 					</div>
 				</div>
-				<div class="special-offers-container">
-					<div class="left-container-title">
-						<span>SPECIAL OFFERS</span>
+				<div class="hot-deals-container">
+					<div class="wow-title">
+						<span class="orange">SPECIAL</span><span class="blue">OFFERS</span>
 					</div>
 					<div class="item-container">
 						@foreach(get_collection(get_content($shop_theme_info, "home", "special_offers"), $shop_id) as $collection)
-						<div class="row-no-padding clearfix per-item">
-							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
+							<div class="row-no-padding clearfix per-item">
+								<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
+								<div class="col-xs-8">
+									<div class=" item-details-container">
+										<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
+										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
+									</div>
+								</div>
+							</div>
+						@endforeach
+						{{-- <div class="row-no-padding clearfix per-item">
+							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/2.jpg"></div>
 							<div class="col-xs-8">
 								<div class=" item-details-container">
-									<div class="item-title"><a href="/product/view/{{ $collection['product']['eprod_id'] }}">{{ $collection['product']['eprod_name'] }}</a></div>
-									<div class="item-price">{{ get_collection_first_price($collection) }}</div>
+									<a href="/product/view/test"><div class="item-title">Nokia 3310 (20170)</div></a>
+									<div class="item-price">P 5,990.00</div>
 								</div>
 							</div>
 						</div>
-						@endforeach
+						<div class="row-no-padding clearfix per-item">
+							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/3.jpg"></div>
+							<div class="col-xs-8">
+								<div class=" item-details-container">
+									<a href="/product/view/test"><div class="item-title">GSat HD (Complete Set)</div></a>
+									<div class="item-price">P 2,499.00</div>
+								</div>
+							</div>
+						</div>
+						<div class="row-no-padding clearfix per-item">
+							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/4.jpg"></div>
+							<div class="col-xs-8">
+								<div class=" item-details-container">
+									<a href="/product/view/test"><div class="item-title">GSat Prepaid (Load Card 500)</div></a>
+									<div class="item-price">P 500.00</div>
+								</div>
+							</div>
+						</div> --}}
 					</div>
 				</div>
 			</div>

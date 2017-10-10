@@ -1,6 +1,6 @@
-var global = new global()
+var custom_theme = new custom_theme();
 
-function global()
+function custom_theme()
 {
 	init();
 	function init()
@@ -163,4 +163,9 @@ function ready_load_mini_ecom_cart()
 function action_after_load()
 {
 	
+}
+function onSearch()
+{
+    var keyword = $('#keyword').val();
+    $("#submit_link").attr("href", "/product_search?keyword="+$('#keyword').val());
 }

@@ -952,10 +952,10 @@ class ShopMemberController extends Shop
             
             if (isset($slot) && $slot) 
             {
-                // if ($minimum_encashment <= $request->wallet_amount) 
-                // {
-                //     if ($wallet > $request->wallet_amount) 
-                //     {
+                if ($minimum_encashment <= $request->wallet_amount) 
+                {
+                    if ($wallet > $request->wallet_amount) 
+                    {
                         if ($request->vmoney_email) 
                         {
                             if($request->wallet_amount)
@@ -1061,18 +1061,18 @@ class ShopMemberController extends Shop
                             $data_a['status'] = "error";
                             $data_a['message'] = "Email Recipient is required";   
                         }
-                //     }
-                //     else
-                //     {
-                //         $data_a['status'] = "error";
-                //         $data_a['message'] = "Not enough wallet";   
-                //     }
-                // }
-                // else
-                // {
-                //     $data_a['status'] = "error";
-                //     $data_a['message'] = "The minimum_encashment is PHP. " . number_format($minimum_encashment, 2);   
-                // }
+                    }
+                    else
+                    {
+                        $data_a['status'] = "error";
+                        $data_a['message'] = "Not enough wallet";   
+                    }
+                }
+                else
+                {
+                    $data_a['status'] = "error";
+                    $data_a['message'] = "The minimum_encashment is PHP. " . number_format($minimum_encashment, 2);   
+                }
             }
             else
             {

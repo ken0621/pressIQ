@@ -105,7 +105,7 @@
     </div>
     <!-- NAVIGATION -->
     <nav class="navbar navbar-default">
-      <div class="container">
+      <div class="container sticky-hide">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -115,15 +115,6 @@
             <span class="icon-bar"></span>
           </button>
         </div>
-        <style type="text/css">
-        @media screen and (min-width: 991px)
-        {
-            .navbar-nav a
-            {
-                font-size: 12px !important;
-            }
-        }
-        </style>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
@@ -137,15 +128,21 @@
             <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
             <li class="nav-border {{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">LEGALITIES</a></li>
             <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li> 
-            
-            {{-- @if(isset($_categories))
-                @foreach($_categories as $category)     
-                <li class="nav-border {{ Request::input('type') == $category['type_id'] ? 'active' : '' }}"><a href="/product?type={{ $category['type_id'] }}" style="text-transform: uppercase;">{{ $category['type_name'] }}</a></li>
-                @endforeach
-            @endif --}}
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
+      <div class="sticky-show">
+          <div class="container">
+              <div class="holder">
+                  <button type="button" class="navbar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+              </div>
+          </div>
+      </div>
     </nav>
 
     <div id="scroll-to" class="clearfix">
@@ -248,18 +245,7 @@
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
     <script type="text/javascript" src="/assets/front/js/global.js"></script>
-    <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
+    <script src="/themes/{{ $shop_theme }}/js/custom_theme.js"></script>
     @yield("js")
     </body>
-
-<script type="text/javascript">
-    
-    function onSearch()
-    {
-        var keyword = $('#keyword').val();
-        $("#submit_link").attr("href", "/product_search?keyword="+$('#keyword').val());
-    }
-
-</script>
-    
 </html>

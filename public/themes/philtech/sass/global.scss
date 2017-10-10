@@ -33,7 +33,6 @@ body
 }
 .item-title
 {
-	font-family: "Arial", sans-serif;
 	color: #585858;
 	font-size: 15px;
 	font-weight: 400;
@@ -588,7 +587,6 @@ body
 	width: 100%;
 	padding: 15px;
 	margin-top: 15px;
-	
 	.hot-deals-item-container
 	{
 		padding: 20px;
@@ -676,6 +674,10 @@ body
 	border-bottom: 4px solid #ff8500;
 	box-shadow: none;
 }
+.sticky-show
+{
+	display: none;
+}
 .navbar.sticky
 {
     position: fixed;
@@ -683,6 +685,14 @@ body
     left: 0;
     right: 0;
     z-index: 100;
+    .sticky-show
+    {
+    	display: block;
+    }
+    .sticky-hide
+    {
+    	display: none;
+    }
 }
 @media screen and (max-width: 991px)
 {
@@ -1216,4 +1226,12 @@ footer
 		display: inline-block;
 		vertical-align: middle;
 	}
+}
+
+@media screen and (min-width: 991px)
+{
+    .navbar-nav a
+    {
+        font-size: 12px !important;
+    }
 }

@@ -88,10 +88,10 @@
 								<div class="hot-deals-item-container">
 									<img class="4-3-ratio" src="{{ get_collection_first_image($collection) }}">
 									<div class="item-details">
-										<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ get_collection_first_name($collection) }}</div></a>
+										<a href="/product/view2/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ get_collection_first_name($collection) }}</div></a>
 										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 									</div>
-									<button type="button" onClick="location.href='/product/view/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn" style="margin-top: 25px;">
+									<button type="button" onClick="location.href='/product/view2/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn" style="margin-top: 25px;">
 										<table>
 											<tbody>
 												<tr>
@@ -116,7 +116,7 @@
 								<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
 								<div class="col-xs-8">
 									<div class=" item-details-container">
-										<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
+										<a href="/product/view2/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
 										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 									</div>
 								</div>
@@ -126,7 +126,7 @@
 							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/2.jpg"></div>
 							<div class="col-xs-8">
 								<div class=" item-details-container">
-									<a href="/product/view/test"><div class="item-title">Nokia 3310 (20170)</div></a>
+									<a href="/product/view2/test"><div class="item-title">Nokia 3310 (20170)</div></a>
 									<div class="item-price">P 5,990.00</div>
 								</div>
 							</div>
@@ -135,7 +135,7 @@
 							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/3.jpg"></div>
 							<div class="col-xs-8">
 								<div class=" item-details-container">
-									<a href="/product/view/test"><div class="item-title">GSat HD (Complete Set)</div></a>
+									<a href="/product/view2/test"><div class="item-title">GSat HD (Complete Set)</div></a>
 									<div class="item-price">P 2,499.00</div>
 								</div>
 							</div>
@@ -144,7 +144,7 @@
 							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/4.jpg"></div>
 							<div class="col-xs-8">
 								<div class=" item-details-container">
-									<a href="/product/view/test"><div class="item-title">GSat Prepaid (Load Card 500)</div></a>
+									<a href="/product/view2/test"><div class="item-title">GSat Prepaid (Load Card 500)</div></a>
 									<div class="item-price">P 500.00</div>
 								</div>
 							</div>
@@ -182,7 +182,7 @@
 									<div class="per-item-container">
 										<div class="image-content-1">
 											<div class="item-image-large" style="background-image: url({{ get_product_first_image($product) }})"></div>
-											<button type="button" onClick="location.href='/product/view/{{ $product['eprod_id'] }}'" class="new-add-to-cart-button btn" >
+											<button type="button" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'" class="new-add-to-cart-button btn" >
 											<table>
 												<tbody>
 													<tr>
@@ -194,7 +194,7 @@
 										</button>
 										</div>
 										<div class="item-details">
-											<div class="item-title"><a href="/product/view/{{ $product['eprod_id'] }}">{{ $product['eprod_name'] }}</a></div>
+											<div class="item-title"><a href="/product/view2/{{ $product['eprod_id'] }}">{{ $product['eprod_name'] }}</a></div>
 											<!-- <div class="rating">
 												<img src="/themes/{{ $shop_theme }}/img/star-active.png">
 												<img src="/themes/{{ $shop_theme }}/img/star-active.png">

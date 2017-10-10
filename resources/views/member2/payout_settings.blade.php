@@ -18,7 +18,7 @@
 
 	            <div class="col-md-6">
 	                <label for="basic-input">Enter Your Tin Number</label>
-	                <input class="form-control" required="required" type="text" name="tin_number" value="{{ $tin_number }} ">
+	                <input class="form-control" required="required" type="text" name="tin_number" value="{{ trim($tin_number) }}">
 	            </div>
 	        </div>
 	    </div>
@@ -157,5 +157,4 @@ function action_submit_payout_details(form_data)
 		}
 	});
 }
-
 </script>

@@ -2,9 +2,11 @@
 @section("member_content")
 
 @if($customer->customer_payout_method == "unset")
+	@if($mlm_member)
 	<div class="top-message-warning for-payout" onclick="action_load_link_to_modal('/members/payout-setting', 'lg')">
 		<div class="message-warning text-center"><b>Warning!</b> You won't be receiving your payout until you setup your <b>payout details</b>. Click here to set it up right away. </div>
 	</div>
+	@endif
 @endif
 
 

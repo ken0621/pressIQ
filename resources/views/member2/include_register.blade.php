@@ -135,7 +135,7 @@
 								<div class="form-group">
 									<div class="choice">
 										<div class="holder">
-											<button class="btn btn-brown">Sign Up</button>
+											<button class="btn">Sign Up</button>
 										</div>
 										<div class="holder"><span class="or">OR</span></div>
 										<div class="holder"><a class="login-href" href="javascript:">Login an Account</a></div>

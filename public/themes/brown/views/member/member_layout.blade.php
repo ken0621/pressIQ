@@ -99,12 +99,8 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
 @endsection
+
 @section("css")
 @yield("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member.css">

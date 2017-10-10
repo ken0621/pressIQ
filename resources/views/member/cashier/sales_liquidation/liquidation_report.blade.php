@@ -599,5 +599,10 @@
         {
             padding: 5px;
         }
+
+        div 
+        {
+            page-break-inside: avoid; 
+        }
     </style>
 </html>

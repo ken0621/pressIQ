@@ -1068,7 +1068,7 @@ class PayrollController extends Member
 		$insert['payroll_employee_remarks'] 		= Request::input('payroll_employee_remarks');
           $insert['branch_location_id']                = Request::input('branch_location_id') != null ? Request::input('branch_location_id') : 0;
           $insert['shift_code_id']                     = Request::input('shift_code_id') != null ? Request::input('shift_code_id') : 0;
-		AuditTrail::record_logs("Adding Employee","Adding Employee with Name:".Request::input('payroll_employee_display_name'),Request::input('payroll_employee_number'),"","");
+		AuditTrail::record_logs("Adding Employee","Adding Employee with Name:".Request::input('payroll_employee_display_name'),'',"","");
           $payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
 
 
@@ -1201,9 +1201,9 @@ class PayrollController extends Member
           $insert_requirements['school_credentials_requirements_id']  = Request::input('school_credentials_requirements_id');
           $insert_requirements['has_valid_id']                             = $has_valid_id;
           $insert_requirements['valid_id_requirements_id']            = Request::input('valid_id_requirements_id');
-          $new_data = AuditTrail::get_table_data("Tbl_payroll_employee_requirements","","");
+          
           Tbl_payroll_employee_requirements::insert($insert_requirements);
-          AuditTrail::record_logs("INSERTING","Payroll Employee Requirements",$this->shop_id(),"",serialize($new_data));
+         
 
 
           $payroll_dependent_name       = Request::input('payroll_dependent_name');
@@ -1723,8 +1723,9 @@ class PayrollController extends Member
           $insert['deduct_philhealth_custom']     = $deduct_philhealth_custom;
           $insert['is_deduct_pagibig_default']    = $is_deduct_pagibig_default;
           $insert['deduct_pagibig_custom']        = $deduct_pagibig_custom;
-          AuditTrail::record_logs("CREATED: Employee Salary","Inserting Employee Salary with employee ID #".Request::input('payroll_employee_id'),Request::input('payroll_employee_id'),"","Tbl_payroll_employee_salary::insert($insert);");
-          Tbl_payroll_employee_salary::insert($insert);
+          $get_id = Tbl_payroll_employee_salary::insertGetId($insert);
+          AuditTrail::record_logs("CREATED: Employee Salary","Inserting Employee Salary with employee ID #".$get_id,$get_id,"","");
+          
           $return['status'] = 'success';
 		
 		return json_encode($return);

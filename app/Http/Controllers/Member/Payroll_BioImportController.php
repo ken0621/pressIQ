@@ -192,6 +192,12 @@ class Payroll_BioImportController extends Member
 						$insert_time['payroll_time_sheet_out'] 		= $value["time_out"];
 						$insert_time['payroll_time_sheet_origin'] 	= $biometric_name;
 
+
+						if($company != '' || $company != 0 || $company != null)
+		    			{
+		    				$insert_time['payroll_company_id'] = $company;
+		    			}
+
 						Tbl_payroll_time_sheet_record::insert($insert_time);
 					
 						$success++;

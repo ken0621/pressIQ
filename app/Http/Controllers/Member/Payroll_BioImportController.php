@@ -38,9 +38,19 @@ class Payroll_BioImportController extends Member
 	{
 		$file 		= Request::file('file');
 		$biometric 	= Request::input('biometric');
-		$company_id 	= Request::input('company');
-		$data['company_info']=Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-		$company=$data['company_info']->payroll_company_name;
+		$company_id = Request::input('company');
+		
+
+		if ($company_id != '') 
+		{
+			$data['company_info']=Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+			$company = $data['company_info']->payroll_company_name;
+		}
+		else
+		{
+			$company="";
+		}
+		
 		
 		
 
@@ -143,7 +153,7 @@ class Payroll_BioImportController extends Member
 		}
 	}
 
-	public function save_time_record($_time_record, $shop_id, $biometric_name)
+	public function save_time_record($_time_record, $company ,$shop_id, $biometric_name)
 	{
 		$success = 0;
 		$failed = 0;

@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Member;
-
+use App\Globals\AuditTrail;
+use App\Models\Tbl_audit_trail;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -27,10 +28,16 @@ class Payroll_BioImportController extends Member
 	{
 		$file 		= Request::file('file');
 		$biometric 	= Request::input('biometric');
-		$company 	= Request::input('company');
+		$company_id 	= Request::input('company');
+		$data['company_info']=Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+		$company=$data['company_info']->payroll_company_name;
+		
+		
+
 
 		if($biometric == 'ZKTime 5.0')
 		{
+
 			return Self::import_ZKTime_5_0($file , $company);
 		}
 
@@ -46,6 +53,7 @@ class Payroll_BioImportController extends Member
 
 		if($biometric == 'Digital Persona')
 		{
+
 			return Self::import_Digital_Persona($file, $company);
 		}
 
@@ -67,6 +75,22 @@ class Payroll_BioImportController extends Member
 		{
 			return Self::import_touchlink_v1($file, $company);
 		}
+		
+		if($biometric == 'Testing Import')
+		{
+			return Self::import_testing($file , $company);
+		}
+	}
+	public function import_testing($file, $company)
+	{
+		 $_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('column1', 'column2'));
+
+		 foreach($_time as $key => $excel)
+		 {
+		 	$output[$key] = $excel["column2"];
+		 }
+		 
+		 dd($output);
 	}
     public function import_touchlink_v1($file, $company) /* BIO METRICS START */
     {
@@ -221,7 +245,6 @@ class Payroll_BioImportController extends Member
 	public function modal_biometrics()
 	{
 		$data['_company'] = Payroll::company_heirarchy(Self::shop_id());
-
 		return view('member.payroll.modal.modal_biometrics', $data);
 	}
 
@@ -387,6 +410,7 @@ class Payroll_BioImportController extends Member
 	    	{
 	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
 	    		$count_inserted = count($insert_time_record);
+	    		AuditTrail::record_logs('INSERTED: '.$company.' Timesheet',$count_inserted.' Files had been inserted using zkteco TX628   Template.', "", "" ,"");
 	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
 	    	}
 
@@ -464,6 +488,7 @@ class Payroll_BioImportController extends Member
 	    	{
 	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
 	    		$count_inserted = count($insert_time_record);
+	    		AuditTrail::record_logs('INSERTED: '.$company.' Timesheet',$count_inserted.' Files had been inserted using ZKTime 5 0   Template.', "", "" ,"");
 	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
 	    	}
 	    	
@@ -542,6 +567,7 @@ class Payroll_BioImportController extends Member
 	    	{
 	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
 	    		$count_inserted = count($insert_time_record);
+	    		AuditTrail::record_logs('INSERTED: '.$company.' Timesheet',$count_inserted.' Files had been inserted using zkteco yh803aups  Template.', "", "" ,"");
 	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
 	    	}
 	    	
@@ -553,6 +579,7 @@ class Payroll_BioImportController extends Member
 
     public function import_Digital_Persona($file, $company)
     {
+    	
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('id_no','date','time_in','time_out'))->toArray();
     	// dd($_time);
     	$space = '        ';
@@ -643,6 +670,8 @@ class Payroll_BioImportController extends Member
 	    	{
 	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
 	    		$count_inserted = count($insert_time_record);
+	    		AuditTrail::record_logs('INSERTED: '.$company.' Timesheet',$count_inserted.' Files had been inserted using Digital Persona  Template.', "", "" ,"");
+	    		
 	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
 	    	}
     	}
@@ -730,6 +759,9 @@ class Payroll_BioImportController extends Member
 
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','employee_name','date','time_in','time_out'));
 
+
+		dd($_time);
+
     	if(!isset($_time[0]['employee_no']))
     	{
     		$error["message"] = "Error in employee no";
@@ -799,6 +831,17 @@ class Payroll_BioImportController extends Member
     			}
 
 
+	    	// dd($insert_time_record);
+	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
+	    	if(!empty($insert_time_record))
+	    	{
+	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
+	    		$count_inserted = count($insert_time_record);
+	    		AuditTrail::record_logs('INSERTED: '.$company.' Timesheet',$count_inserted.' Files had been inserted using Manual Template.', "", "" ,"");
+	    		
+	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
+
+
 	    		$_record[$key_employee]->employee_record[$key_date]				= new stdClass();
 		    	$_record[$key_employee]->employee_record[$key_date]->date 		= date('Y-m-d', strtotime($excel['date']));
 		    	$_record[$key_employee]->employee_record[$key_date]->time_in 	= date('H:i:s', strtotime($excel['time_in']));
@@ -806,6 +849,7 @@ class Payroll_BioImportController extends Member
 		    	$_record[$key_employee]->employee_record[$key_date]->branch 	= "";
 		    	$_record[$key_employee]->employee_record[$key_date]->status 	= "status";
 		    	$key_date++; 	
+
 	    	}
 
 	    	$data = Self::save_record($_record, $company, $this->user_info->shop_id, "MANUAL TEMPLATE");
@@ -938,13 +982,15 @@ class Payroll_BioImportController extends Member
 		    		Self::delete_blank($payroll_time_sheet_id);
     			}
     		}
-
+    		// dd($company);
     		$message = '<center><span class="color-gray">Nothing to insert</span></center>';
 
 	    	if(!empty($insert_time_record))
 	    	{
 	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
 	    		$count_inserted = count($insert_time_record);
+	    		AuditTrail::record_logs('INSERTED: '.$company.' Timesheet',$count_inserted.' Files had been inserted using Mustard Seed Template.', "", "" ,"");
+	    		
 	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
 	    	}
     	}

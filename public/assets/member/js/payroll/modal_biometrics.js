@@ -9,6 +9,7 @@ function modal_biometrics()
 	{
 		file_change_event();
 		import_file_event();
+		import_from_biometric();
 	}
 
 	function file_change_event()
@@ -18,6 +19,15 @@ function modal_biometrics()
 		{
 			var file_name = $(this)[0].files[0].name;
 			$(".file-name").html(file_name);
+		});
+	}
+
+	function import_from_biometric()
+	{
+		$('.btn-import-biometric').unbind("click");
+		$('.btn-import-biometric').bind("click",function()
+		{
+			action_load_link_to_modal('/member/payroll/payroll_biometric/modal_import_biometric', 'lg');
 		});
 	}
 
@@ -35,6 +45,7 @@ function modal_biometrics()
 				formdata.append("_token", $("._token").val());
 				formdata.append("file",file);
 				formdata.append("biometric", $("#biometric_name").val())
+				formdata.append("company", $("#company").val())
 
 				ajax.upload.addEventListener("progress",function(event)
 				{

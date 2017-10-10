@@ -94,11 +94,11 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function timesheet($period_id, $employee_id)
 	{
-		// dd();
 		$data["page"]					= "Employee Timesheet";
 		$data["employee_id"]			= $this->$employee_id = $employee_id;
 		$data["employee_info"]			= $this->db_get_employee_information($employee_id); 
 		$data["company_period"] 		= $this->db_get_company_period_information($period_id);
+
 		$data["show_period_start"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_start));
 		$data["show_period_end"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
 		$data["_timesheet"] 			= Payroll2::timesheet_info($data["company_period"], $employee_id);
@@ -112,11 +112,11 @@ class PayrollTimeSheet2Controller extends Member
 
 		$data["period_id"] = $period_id;
 
+
 		if($data["compute_type"] == "Flat Rate")
 		{
 			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
 		}
-		
 		else
 		{
 			return view('member.payroll2.employee_timesheet', $data);
@@ -804,10 +804,10 @@ class PayrollTimeSheet2Controller extends Member
 		$from = $data["start_date"] = $company_period->payroll_period_start;
 		$to = $data["end_date"] = $company_period->payroll_period_end;
 		
+		
 		while($from <= $to)
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
-
 			$_timesheet[$from] = Payroll2::timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);
 			
 			//check if approved
@@ -890,6 +890,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["date"] = $date = Tbl_payroll_period_company::sel($period_company_id)->value('payroll_period_start');
 		$data["group"] = $group = $this->db_get_current_employee_contract($employee_id, $date);
 
+
 		if(!$group)
 		{
 			dd("You need to set a PAYROLL GROUP in order to show summary.");
@@ -919,6 +920,7 @@ class PayrollTimeSheet2Controller extends Member
 			$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
 			$data["computation_type"] 	= $computation_type = $group->payroll_group_salary_computation;
 		}
+
 		// dd($this->compute_whole_cutoff($period_company_id, $employee_id));
 		$data["employee_salary"] 		= tbl_payroll_employee_salary::where("payroll_employee_id", $employee_id);
 		$data["employee_id"] 			= $employee_id;

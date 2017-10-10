@@ -46,9 +46,17 @@
                 <div class="holder"><a href="javascript:">COMPANY</a></div>
                 <div class="holder"><a href="javascript:">BUSINESS PRESENTATION</a></div>
                 <div class="holder"><a href="javascript:">NEWS</a></div>
+
+                @if($customer)
+                <div class="holder"><a href="/members">MY ACCOUNT</a></div>
+                <div class="holder"><div class="linya"></div></div>
+                <div class="holder"><a href="/members/logout">LOGOUT</a></div>
+                @else
                 <div class="holder"><a href="/members/login">LOGIN</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="/members/register">REGISTER</a></div>
+                @endif
+
             </div>
         </div>
         <div class="header-nav-middle">
@@ -126,7 +134,7 @@
             <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
             <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
             <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
-            <li class="nav-border"><a href="/legalities">LEGALITIES</a></li>
+            <li class="nav-border {{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">LEGALITIES</a></li>
             <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li> 
             
             {{-- @if(isset($_categories))
@@ -151,21 +159,21 @@
                     <div class="img-footer">
                         <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech.jpg">
                     </div>
-                    <p>PHILTECH, INC. “We provide Business” Is a subsidiary company of ZENAR TELECOMS, INC. with highly experienced both in retail and distribution of technology industry for almost 20years.</p>
+                    <p>PHILTECH, INC. “We provide Business” Is a subsidiary company of ZENAR TELECOMS, INC. with highly experienced both in retail and distribution of technology industry for almost 20years. PHILTE... <a style="color: #fff" href="/about">See more</a></p>
                 </div> 
                 <div class="col-md-2 col-sm-6">
                     <div class="btm-title">INFORMATION</div>
                     <ul>
-                        <li><a href="javascript:">Our Partners</a></li>
-                        <li><a href="javascript:">E-loading Business</a></li>
-                        <li><a href="javascript:">Airline Ticketing</a></li>
-                        <li><a href="javascript:">Travel and Tours</a></li>
-                        <li><a href="javascript:">E-money</a></li>
-                        <li><a href="javascript:">Career</a></li>
-                        <li><a href="javascript:">Events</a></li>
-                        <li><a href="javascript:">Legalities</a></li>
-                        <li><a href="javascript:">Business Presentation</a></li>
-                        <li><a href="javascript:">News</a></li>
+                        <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partners</a></li>
+                        <li><a href="https://loadcentral.net">E-loading Business</a></li>
+                        <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
+                        <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li>
+                        <li><a href="https://philtechglobalinc.vmoney.com/">E-money</a></li>
+                        <li><a href="javascript:" onClick="alert('Under Development');">Career</a></li>
+                        <li><a href="javascript:" onClick="alert('Under Development');">Events</a></li>
+                        <li class="{{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">Legalities</a></li>
+                        <li><a href="https://drive.google.com/file/d/0B9C_Tfe9UZCmemJFeXA3dWRyYjVKOVY1MlVkUlNiWlVDang4/view">Business Presentation</a></li>
+                        <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
                     </ul>
                 </div>
                 <div class="col-md-2 col-sm-6">

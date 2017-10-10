@@ -29,6 +29,7 @@ class CreateTblVmoneyWalletLogs extends Migration
                   ->references('customer_id')->on('tbl_customer')
                   ->onDelete('cascade');
         });
+        
     }
 
     /**

@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
@@ -244,7 +246,7 @@ body
 				}
 				span
 				{
-					color: #693d28;
+					color: #2161C8;
 				}
 			}
 			.choice
@@ -262,8 +264,15 @@ body
 
 				.btn
 				{
+					@include transition(0.2s);
+
 					background-color: #2161C8;
 					color: #fff;
+
+					&:hover
+					{
+						opacity: 0.8;
+					}
 				}
 
 				.or
@@ -286,6 +295,10 @@ body
 					@media screen and (max-width: 370px)
 					{
 						display: block;
+					}
+					&:hover
+					{
+						opacity: 0.8;
 					}
 				}
 				.btn-brown

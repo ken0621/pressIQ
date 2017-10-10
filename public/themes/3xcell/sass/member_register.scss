@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
@@ -263,7 +265,13 @@ body
 				}
 				span
 				{
+					@include transition(0.2s);
 					color: #2161C8;
+
+					&:hover
+					{
+						opacity: 0.8;
+					}
 				}
 			}
 			.choice
@@ -283,19 +291,32 @@ body
 					}
 					a
 					{
+						@include transition(0.2s);
+
 						color: $text-dark !important;
 						font-weight: $regular;
 						color: #2161C8 !important;
 						font-size: 15px !important;
+
+						&:hover
+						{
+							opacity: 0.8;
+						}
 					}
 					.btn
 					{
+						@include transition(0.2s);
 						background-color: #2161C8;
 						color: #fff;
 
 						@media screen and (max-width: 991px)
 						{
 							width: 100%;
+						}
+
+						&:hover
+						{
+							opacity: 0.8;
 						}
 					}
 				}

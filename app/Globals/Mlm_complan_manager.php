@@ -63,6 +63,29 @@ class Mlm_complan_manager
             $direct_referral_rpv = 0;
         }
 
+        if($direct_referral_rpv != 0)
+        {
+            $array['points_log_complan']        = "DIRECT_REFERRAL_PV";
+            $array['points_log_level']          = 0;
+            $array['points_log_slot']           = $slot_info->slot_id;
+            $array['points_log_Sponsor']        = $slot_info->slot_id;
+            $array['points_log_date_claimed']   = Carbon::now();
+            $array['points_log_converted']      = 0;
+            $array['points_log_converted_date'] = Carbon::now();
+            $array['points_log_type']           = 'RPV';
+            $array['points_log_from']           = 'Slot Creation';
+            $array['points_log_points']         = $direct_referral_rpv;
+
+            $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
+
+            $insert_rank_log["rank_original_amount"] = $direct_referral_rpv;
+            $insert_rank_log["rank_percentage_used"] = 0;
+            $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
+            Tbl_rank_points_log::insert($insert_rank_log);
+        }
+
+
+
         $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_info->slot_id)->parent_info()->get();
 
         foreach($_sponsor_tree as $sponsor_tree)

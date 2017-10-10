@@ -1233,9 +1233,9 @@ class ShopMemberController extends Shop
             $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
             $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $new_slot_no);
             
-            $return = MLM2::check_membership_code($shop_id, $data["pin"], $data["activation"]);
+            $return = Item::check_product_code($shop_id, $data["pin"], $data["activation"]);
 
-            if(!$return)
+            if($return)
             {
                 $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
 
@@ -1252,11 +1252,11 @@ class ShopMemberController extends Shop
                 else
                 {
                     echo json_encode($create_slot);
-                }  
+                }                
             }
             else
             {
-                echo json_encode('error');
+                echo json_encode('Item Code already used');
             }
         }
     }

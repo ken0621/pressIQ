@@ -1665,6 +1665,7 @@ class Item
                                                  ->where('mlm_activation',$mlm_activation)
                                                  ->where('mlm_pin',$mlm_pin)
                                                  ->where('record_inventory_status',0)
+                                                 ->where('item_in_use','unused')
                                                  ->count();
         $return = false;
         if($ctr > 0)

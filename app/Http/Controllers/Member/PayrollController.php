@@ -1723,8 +1723,9 @@ class PayrollController extends Member
           $insert['deduct_philhealth_custom']     = $deduct_philhealth_custom;
           $insert['is_deduct_pagibig_default']    = $is_deduct_pagibig_default;
           $insert['deduct_pagibig_custom']        = $deduct_pagibig_custom;
-          AuditTrail::record_logs("CREATED: Employee Salary","Inserting Employee Salary with employee ID #".Request::input('payroll_employee_id'),Request::input('payroll_employee_id'),"","Tbl_payroll_employee_salary::insert($insert);");
-          Tbl_payroll_employee_salary::insert($insert);
+          $get_id = Tbl_payroll_employee_salary::insertGetId($insert);
+          AuditTrail::record_logs("CREATED: Employee Salary","Inserting Employee Salary with employee ID #".$get_id,$get_id,"","");
+          
           $return['status'] = 'success';
 		
 		return json_encode($return);

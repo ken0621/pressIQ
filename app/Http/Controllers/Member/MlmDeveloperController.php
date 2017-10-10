@@ -8,6 +8,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_plan;
+use App\Models\Tbl_mlm_plan_setting;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_gc;
 use App\Models\Tbl_tree_sponsor;
@@ -347,9 +348,22 @@ class MlmDeveloperController extends Member
         }
         else
         {
+            $self_direct_referral_pv = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
             if($slot_sponsor != null)
             {
                 Mlm_compute::entry($slot_id);
+            }
+            elseif($self_direct_referral_pv)
+            {
+                if($self_direct_referral_pv->direct_referral_pv_initial_rpv == 1)
+                {
+                    $direct_referral_pv_plan = Tbl_mlm_plan::where('shop_id', $shop_id)->where('marketing_plan_enable', 1)->where('marketing_plan_code', 'DIRECT_REFERRAL_PV')->first();
+                    if($direct_referral_pv_plan)
+                    {                    
+                        $slot_new_direct = Tbl_mlm_slot::where('slot_id', $slot_id)->membership()->membership_points()->customer()->first();
+                        Mlm_complan_manager::direct_referral_pv($slot_new_direct);
+                    }
+                }
             }
             
             $return["status"]        = "success";

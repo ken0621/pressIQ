@@ -5,7 +5,6 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
-
 .profile-container
 {
 	font-family: $content-text;
@@ -90,7 +89,7 @@ $text-dark: #272c2f;
 			font-weight: $regular;
 			margin-top: 5px;
 		}
-		.green
+		/* .green
 		{
 			border-color: #63b944;
 		}
@@ -101,7 +100,7 @@ $text-dark: #272c2f;
 		.orange
 		{
 			border-color: #ed5639;
-		}
+		} */
 	}
 	.profile-about
 	{
@@ -227,9 +226,10 @@ $text-dark: #272c2f;
 						background-color: #fff;
 					}
 				}
+
 				&.active
 				{
-					border-bottom: 2.5px solid #78513e;
+					border-bottom: 2.5px solid #FF8500;
 					a
 					{
 						font-weight: $regular;
@@ -333,7 +333,7 @@ $text-dark: #272c2f;
 	.modal-header
 	{
 		border: 0;
-		background-color: #665750;
+		background-color: #006CC5;
 		.modal-title
 		{
 			color: #ffffff;

@@ -51,10 +51,6 @@ class Payroll_BioImportController extends Member
 			$company="";
 		}
 		
-		
-		
-
-
 		if($biometric == 'ZKTime 5.0')
 		{
 
@@ -83,6 +79,7 @@ class Payroll_BioImportController extends Member
 		}
 		if($biometric == 'Manual Template')
 		{
+
 			return Self::import_manual($file, $company);
 		}
 
@@ -277,6 +274,7 @@ class Payroll_BioImportController extends Member
     }
     public static function save_record($_record, $company, $shop_id, $biometerics_name)
     {
+
     	$success = 0;
     	$failed = 0;
     	$incomplete = 0;
@@ -894,9 +892,6 @@ class Payroll_BioImportController extends Member
 
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','employee_name','date','time_in','time_out'));
 
-
-		dd($_time);
-
     	if(!isset($_time[0]['employee_no']))
     	{
     		$error["message"] = "Error in employee no";
@@ -931,7 +926,7 @@ class Payroll_BioImportController extends Member
     		$error["data"] = $_time;
     		dd($error);
     	}
-
+    	
 
     	if(isset($_time[0]['employee_no']) && isset($_time[0]['employee_name']) && isset($_time[0]['date']) && isset($_time[0]['time_in']) && isset($_time[0]['time_out']))
     	{
@@ -996,6 +991,8 @@ class Payroll_BioImportController extends Member
     		echo "<div class='text-center'>INVALID FILE FORMAT</div>";
     	}
     }
+
+
 
     public function import_mustard_seed($file, $company)
     {

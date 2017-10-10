@@ -14,6 +14,119 @@ $text-dark: #404040;
 	  transition: all $transition ease-in-out;
 }
 
+.top-message-warning
+{
+	background-color: #6d310e;
+	color: #fff;
+	padding: 10px;
+	margin-bottom: 10px;
+	border-radius: 2px;
+	opacity: 0.7;
+	cursor: pointer;
+	
+	&:hover
+	{
+		opacity: 1.0;
+	}
+}
+
+.events-container
+{
+	.event-list
+	{
+
+		.event
+		{
+			position: relative;
+			margin-bottom: 5px;
+			padding-bottom: 5px;
+			border-bottom: 2px dotted #eee;
+			cursor: default;
+			padding: 5px;
+			border-radius: 3px;
+
+
+
+			.date
+			{
+				width: 100px;
+				height: 100px;
+				background-color: #000;
+				opacity: 0.6;
+				color: #fff;
+				text-align: center;
+				padding: 10px;
+				float: left;
+				border-radius: 3px;
+
+				.day
+				{
+					font-size: 45px;
+					margin-top: -5px;
+				}
+				.month
+				{
+					font-size: 16px;
+					margin-top: -10px;
+				}
+			}
+			.detail
+			{
+				float: right;
+				width: calc(100% - 110px);
+				padding-top: 5px;
+
+				.titles
+				{
+					font-weight: bold;
+					text-transform: uppercase;
+				}
+				.description
+				{
+
+				}
+				.action
+				{
+					position: absolute;
+					bottom: 10px;
+					right: 5px;
+
+					a
+					{
+						padding: 5px 5px;
+						font-size: 16px;
+						display: inline-block;
+						text-decoration: none;
+						color: #128DD3;
+						opacity: 0.5;
+						border-radius: 3px;
+						&:hover
+						{
+							opacity: 1.0;
+						}
+					}
+				}
+			}
+
+			&:hover
+			{
+				background-color: #fafafa;
+				.date
+				{
+					opacity: 0.8;
+				}
+			}
+
+			&:last-child
+			{
+				border-bottom: none;
+				padding-bottom: 0;
+			}
+		}
+	}
+}
+
+
 .dashboard
 {
 	font-family: $content-text;

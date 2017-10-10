@@ -9,7 +9,7 @@
 				<div class="left-bar-categories">
 					<div class="left-bar-title">
 						<img src="/themes/{{ $shop_theme }}/img/menu.png">
-						<span>CATEGORIES</span>
+						<span>Shop By Category</span>
 					</div>
 					@if(isset($_categories))
 						@foreach($_categories as $category)

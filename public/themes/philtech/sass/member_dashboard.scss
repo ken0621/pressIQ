@@ -1,17 +1,11 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
-
-@mixin transition($transition)
-{
-	  -webkit-transition: all $transition ease-in-out;
-	  -moz-transition: all $transition ease-in-out;
-	  -o-transition: all $transition ease-in-out;
-	  transition: all $transition ease-in-out;
-}
 
 .dashboard
 {
@@ -359,7 +353,7 @@ $text-dark: #272c2f;
 	{
 		.modal-header
 		{
-			background-color: #693d28;
+			background-color: #006CC5;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 			.modal-title
@@ -404,9 +398,9 @@ $text-dark: #272c2f;
 				.btn-ok
 				{
 					color: #fff;
-					background-color: #693d28;
+					background-color: rgba(0,108,197, 0.8);
 					padding: 12px 60px;
-					border: 2px solid #693d28;
+					border: 2px solid #006CC5;
 					border-radius: 2px;
 				}
 			}

@@ -17,6 +17,19 @@
 								{{-- <img src="/themes/{{ $shop_theme }}/img/sidebar/dth.png"> --}}
 								<span>{{ $category['type_name'] }}</span>
 							</div>
+							@if($category['subcategory'])
+							<div class="hover">
+								<div class="hover-holder">
+									<div class="clearfix">
+										<ul>
+											@foreach($category['subcategory'] as $subcategory)
+												<li><a href="/product?type={{ $subcategory['type_id'] }}">{{ $subcategory['type_name'] }}</a></li>
+											@endforeach
+										</ul>
+									</div>
+								</div>
+							</div>
+							@endif
 						</div>
 						@endforeach
 					@else

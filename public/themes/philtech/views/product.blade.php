@@ -18,6 +18,19 @@
 								{{-- <img src="/themes/{{ $shop_theme }}/img/sidebar/dth.png"> --}}
 								<span>{{ $category['type_name'] }}</span>
 							</div>
+							@if($category['subcategory'])
+							<div class="hover">
+								<div class="hover-holder">
+									<div class="clearfix">
+										<ul>
+											@foreach($category['subcategory'] as $subcategory)
+												<li><a href="/product?type={{ $subcategory['type_id'] }}">{{ $subcategory['type_name'] }}</a></li>
+											@endforeach
+										</ul>
+									</div>
+								</div>
+							</div>
+							@endif
 						</div>
 						@endforeach
 					@else
@@ -154,9 +167,20 @@
 			</div>
 
 			<div class="col-md-9 prod-content">
+				<div class="breadcrumbs">
+					<div class="holder"><a href="/">HOME</a></div>
+					<div class="holder">•</div>
+					@foreach($breadcrumbs as $breadcrumb)
+						@if($loop->last)
+							<div class="holder active"><a href="/product?type={{ $breadcrumb["type_id"] }}">{{ $breadcrumb["type_name"] }}</a></div>
+						@else
+							<div class="holder"><a href="/product?type={{ $breadcrumb["type_id"] }}">{{ $breadcrumb["type_name"] }}</a></div>
+							<div class="holder">•</div>
+						@endif
+					@endforeach
+				</div>
 				<!-- FEATURED TODAY -->
-				<span class="prod-big-image"><img id="prod-big-image" src="{{ get_content($shop_theme_info, 'product', 'product_banner', '/themes/'. $shop_theme .'/img/2017-banner.jpg') }}"></span>
-					<div class="featured-container">
+					<div class="featured-container" style="margin-top: 0;">
 						<div class="left-container-title">
 							<form class="sort-by" method="get">
 							<input type="hidden" name="type" value="{{ Request::input('type') }}">
@@ -181,7 +205,8 @@
 								<div class="col-md-3 match-height">
 									<div class="per-item-container">
 										<div class="image-content-1">
-											<div class="item-image-large" style="background-image: url({{ get_product_first_image($product) }})"></div>
+											{{-- <div class="item-image-large" style="background-image: url({{ get_product_first_image($product) }})"></div> --}}
+											<img style="width: 100%;" class="4-3-ratio" src="{{ get_product_first_image($product) }}">
 											<button type="button" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'" class="new-add-to-cart-button btn" >
 											<table>
 												<tbody>
@@ -204,7 +229,7 @@
 											</div> -->
 											<div class="item-price">&#8369; {{ $product['min_price'] == $product['max_price'] ? number_format($product['max_price'], 2) : number_format($product['min_price'], 2) . ' - ' . number_format($product['max_price'], 2) }}</div>
 										</div>
-										@if(count($product['variant'][0]['mlm_discount']) > 0)
+										{{-- @if(count($product['variant'][0]['mlm_discount']) > 0)
 			                            <div style="margin-top: 15px;">
 			                                <table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 12px;">
 			                                    <thead>
@@ -223,7 +248,7 @@
 			                                    </tbody>
 			                                </table>
 			                            </div>
-			                            @endif
+			                            @endif --}}
 									</div>
 								</div>
 								@endforeach

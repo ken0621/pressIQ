@@ -3,6 +3,22 @@
 <div class="content">
     <div class="container">
         <div class="row clearfix">
+            <div class="col-md-12">
+                <div class="breadcrumbs">
+                    <div class="holder"><a href="/">HOME</a></div>
+                    <div class="holder">•</div>
+                    @foreach($breadcrumbs as $breadcrumb)
+                        @if($loop->last)
+                            <div class="holder active"><a href="/product?type={{ $breadcrumb["type_id"] }}">{{ $breadcrumb["type_name"] }}</a></div>
+                            <div class="holder">•</div>
+                        @else
+                            <div class="holder"><a href="/product?type={{ $breadcrumb["type_id"] }}">{{ $breadcrumb["type_name"] }}</a></div>
+                            <div class="holder">•</div>
+                        @endif
+                    @endforeach
+                    <div class="holder active"><a href="javascript:">{{ $product["eprod_name"] }}</a></div>
+                </div>
+            </div>
             <!-- ITEM CONTENT -->
             <div class="col-md-9">
                 <?php $ctr = 0; ?>
@@ -84,7 +100,7 @@
                                                 <div class="quantity-label">Quantity</div>
                                                 <form>
                                                     <input style="width: 60px;" class="variation-qty form-control input-lg" variant-id="{{ $product_variant['evariant_id'] }}" type="number" name="quantity" min="1" max="100" value="1">
-                                                    <button class="add-to-cart {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }}" {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }} variant-id="{{ $product_variant['evariant_id'] }}" type="button"><i class="fa fa-shopping-cart" aria-hidden="true"></i> ADD TO CART</button>
+                                                    <button class="add-to-cart {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }}" {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }} variant-id="{{ $product_variant['evariant_id'] }}" type="button">Add to Cart</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -95,6 +111,7 @@
                     </div>
                     @if($product_variant['evariant_description'])
                     <div class="featured-container" style="padding: 25px;">
+                        <div class="item-header">Product Details</div>
                         <div class="item-description" style="overflow: auto;">{!! $product_variant['evariant_description'] !!}</div>
                     </div>
                     @endif
@@ -102,14 +119,14 @@
                 <?php $ctr++; ?>
                 @endforeach
                 <div class="featured-container clearfix">
-                    <div class="other-related"><strong>Other Related Products</strong></div>
+                    <div class="other-related"><span class="yellow">RELATED</span><span class="blue">PRODUCTS</span></div>
                     <div class="other-related-items row clearfix">
                         @foreach(limit_foreach($_related, 4) as $related)
                         <div class="col-md-3">
                             <div class="per-item-container">
                                 <div class="image-content-1">
                                     <img class="4-3-ratio item-image-large other-related-images" src="{{ get_product_first_image($related) }}">
-                                    <button type="button" onClick="location.href='/product/view/{{ $related['eprod_id'] }}'" class="new-add-to-cart-button btn" >
+                                    <button type="button" onClick="location.href='/product/view2/{{ $related['eprod_id'] }}'" class="new-add-to-cart-button btn" >
                                         <table>
                                             <tbody>
                                                 <tr>
@@ -121,7 +138,7 @@
                                     </button>
                                 </div>
                                 <div class="item-details">
-                                    <div class="item-name"><a href="/product/view/{{ $related['eprod_id'] }}" style="color: #1a1a1a;">{{ get_product_first_name($related) }}</a></div>
+                                    <div class="item-name"><a href="/product/view2/{{ $related['eprod_id'] }}" style="color: #1a1a1a;">{{ get_product_first_name($related) }}</a></div>
                                     <div class="item-price">{{ get_product_first_price($related) }}</div>
                                 </div>
                             </div>
@@ -161,6 +178,51 @@
                             </div>
                         </div>
                         @endforeach
+                    </div>
+                </div>
+                <div class="hot-deals-container" style="margin-top: 30px;">
+                    <div class="wow-title">
+                        <span class="orange">SPECIAL</span><span class="blue">OFFERS</span>
+                    </div>
+                    <div class="item-container">
+                        @foreach(get_collection(get_content($shop_theme_info, "home", "special_offers"), $shop_id) as $collection)
+                            <div class="row-no-padding clearfix per-item">
+                                <div class="col-xs-4"><img style="width: 100%; padding-right: 10px;" class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
+                                <div class="col-xs-8">
+                                    <div class=" item-details-container">
+                                        <a href="/product/view2/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
+                                        <div class="item-price">{{ get_collection_first_price($collection) }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                        {{-- <div class="row-no-padding clearfix per-item">
+                            <div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/2.jpg"></div>
+                            <div class="col-xs-8">
+                                <div class=" item-details-container">
+                                    <a href="/product/view2/test"><div class="item-title">Nokia 3310 (20170)</div></a>
+                                    <div class="item-price">P 5,990.00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-no-padding clearfix per-item">
+                            <div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/3.jpg"></div>
+                            <div class="col-xs-8">
+                                <div class=" item-details-container">
+                                    <a href="/product/view2/test"><div class="item-title">GSat HD (Complete Set)</div></a>
+                                    <div class="item-price">P 2,499.00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-no-padding clearfix per-item">
+                            <div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/4.jpg"></div>
+                            <div class="col-xs-8">
+                                <div class=" item-details-container">
+                                    <a href="/product/view2/test"><div class="item-title">GSat Prepaid (Load Card 500)</div></a>
+                                    <div class="item-price">P 500.00</div>
+                                </div>
+                            </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

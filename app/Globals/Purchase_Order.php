@@ -98,7 +98,7 @@ class Purchase_Order
         $old = AuditTrail::get_table_data("tbl_purchase_order","po_id",$po_id);
 
         $update['po_vendor_id']                  = $vendor_info['po_vendor_id'];        
-        $update['po_billing_address']   = $po_info['billing_address'];
+        $update['po_billing_address']            = $po_info['billing_address'];
         $insert['po_vendor_email']               = $vendor_info['po_vendor_email'];
         $update['po_terms_id']                   = $po_info['po_terms_id'];
         $update['po_date']                       = $po_info['po_date'];

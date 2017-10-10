@@ -1,9 +1,25 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
+
+.btn-lblue
+{
+	@include transition(0.2s);
+	background-color: inherit;
+	border: 1px solid #006CC5;
+	color: #006CC5;
+
+	&:hover
+	{
+		background-color: #006CC5;
+		color: #fff;
+	}
+}
 
 .profile-container
 {

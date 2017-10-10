@@ -2,12 +2,13 @@
 @section("content")
 <div class="bts-popup" role="alert">
     <div class="bts-popup-container">
-		<img src="/themes/{{ $shop_theme }}/img/front-popup-img.jpg">
+		
 		<div class="button-container">
 			<div class="link-btn"><a href="">ENROLL NOW</a></div>
 		</div>
     </div>
 </div>
+
 <div class="content">
 	<div class="wrapper-1">
 		<!-- <div class="container">
@@ -238,6 +239,9 @@
 			<img src="/themes/{{ $shop_theme }}/img/brown-video.png">
 		</div> -->
 		<div class="container">
+			<div class="row clearfix">
+				<img class="wow fadeInUp" style="width: 100%; margin-top: 20px;"  data-wow-offset="50" data-wow-delay="0.2s" src="/themes/{{ $shop_theme }}/img/front-popup-img.jpg">
+			</div>
 			<div class="row clearfix">
 				<div class="col-md-6 col-sm-6">
 					<div class="img-container wow fadeInLeft" data-wow-offset="50" data-wow-delay="0.2s">

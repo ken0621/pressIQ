@@ -1068,7 +1068,7 @@ class PayrollController extends Member
 		$insert['payroll_employee_remarks'] 		= Request::input('payroll_employee_remarks');
           $insert['branch_location_id']                = Request::input('branch_location_id') != null ? Request::input('branch_location_id') : 0;
           $insert['shift_code_id']                     = Request::input('shift_code_id') != null ? Request::input('shift_code_id') : 0;
-		AuditTrail::record_logs("Adding Employee","Adding Employee with Name:".Request::input('payroll_employee_display_name'),Request::input('payroll_employee_number'),"","");
+		AuditTrail::record_logs("Adding Employee","Adding Employee with Name:".Request::input('payroll_employee_display_name'),'',"","");
           $payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
 
 
@@ -1201,9 +1201,9 @@ class PayrollController extends Member
           $insert_requirements['school_credentials_requirements_id']  = Request::input('school_credentials_requirements_id');
           $insert_requirements['has_valid_id']                             = $has_valid_id;
           $insert_requirements['valid_id_requirements_id']            = Request::input('valid_id_requirements_id');
-          $new_data = AuditTrail::get_table_data("Tbl_payroll_employee_requirements","","");
+          
           Tbl_payroll_employee_requirements::insert($insert_requirements);
-          AuditTrail::record_logs("INSERTING","Payroll Employee Requirements",$this->shop_id(),"",serialize($new_data));
+         
 
 
           $payroll_dependent_name       = Request::input('payroll_dependent_name');

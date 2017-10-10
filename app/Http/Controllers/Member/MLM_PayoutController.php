@@ -120,8 +120,11 @@ class MLM_PayoutController extends Member
 			}
 		}
 
-		Tbl_payout_bank_shop::insert($insert_bank_shop);
-
+		if(isset($insert_bank_shop))
+		{
+			Tbl_payout_bank_shop::insert($insert_bank_shop);
+		}
+		
 		return json_encode($response);
 	}
 	public function getImport()
@@ -188,7 +191,6 @@ class MLM_PayoutController extends Member
 		$total_net 				= 0;
 		$minimum_encashment		= $minimum;
 		$data["method"]			= $method;
-
 
 		if($source == "wallet")
 		{

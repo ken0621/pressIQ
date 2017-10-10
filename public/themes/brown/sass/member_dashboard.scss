@@ -16,14 +16,14 @@ $text-dark: #404040;
 
 .top-message-warning
 {
-	background-color: #6d310e;
+	background-color: #7c0000;
 	color: #fff;
 	padding: 10px;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 	border-radius: 2px;
-	opacity: 0.7;
+	opacity: 0.8;
 	cursor: pointer;
-	
+
 	&:hover
 	{
 		opacity: 1.0;

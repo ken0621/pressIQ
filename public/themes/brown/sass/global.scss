@@ -18,6 +18,31 @@ body
 
 }
 
+
+.btn-def-white
+{
+	border: 2px solid #ddd;
+	background-color: #fff;
+	color: $text-dark;
+	&:hover
+	{
+		border: 2px solid $text-dark;
+	}
+}
+.btn-custom-primary
+{
+	background-color: #722f09 !important;
+	color: #fff;
+	opacity: 0.7;
+
+	&:hover
+	{
+		color: #fff;
+		opacity: 1.0;
+	}
+}
+
+
 @mixin transition($transition)
 {
   	-webkit-transition: all $transition ease-in-out;

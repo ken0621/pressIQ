@@ -5,7 +5,7 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Marketing Plan - Direct</span>
+                <span class="page-title">Marketing Plan - Direct Referral PV</span>
                 <small>
                     You can set the computation of your direct marketing plan here.
                 </small>
@@ -16,6 +16,22 @@
     </div>
 </div>
 {!! $basic_settings !!} 
+<div class="panel panel-default">
+  <div class="panel-body">
+
+    <form class="global-submit" method="post" id="save_include" action="/member/mlm/plan/direct_referral_pv/edit/save_include_direct_referral">
+        {!! csrf_field() !!}
+        <div class="col-md-12 pull">
+            <label for="direct_referral_pv_initial_rpv">Include Self Slot to have a pv</label>
+            <input type="checkbox" id="direct_referral_pv_initial_rpv" name="direct_referral_pv_initial_rpv" value="1" {{$direct_referral_pv_initial_rpv == 1 ? 'checked' : ''}}>
+        </div> 
+        <div class="col-md-1 pull-right">
+            <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="save_include()">Save</a>
+        </div> 
+    </form>       
+
+  </div>
+</div>
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">
@@ -66,6 +82,10 @@
 
 @section('script')
 <script type="text/javascript">
+function save_include()
+{
+ $('#save_include').submit();   
+}
 function save_direct_points_membership(membershipid)
 {
     var direct_referral_rpv      = $('.direct_referral_rpvinput' + membershipid).val();

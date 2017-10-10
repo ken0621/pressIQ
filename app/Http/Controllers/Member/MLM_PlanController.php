@@ -2750,8 +2750,19 @@ class MLM_PlanController extends Member
 
     public static function direct_referral_pv($shop_id)
     {
-        $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
-        $data['basic_settings'] = MLM_PlanController::basic_settings('DIRECT_REFERRAL_PV');
+        $data['membership']                     = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['basic_settings']                 = MLM_PlanController::basic_settings('DIRECT_REFERRAL_PV');
+        $data['direct_referral_pv_initial_rpv'] = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->direct_referral_pv_initial_rpv; 
         return view('member.mlm_plan.configure.direct_referral_pv', $data);
+    }
+
+    public function save_include_direct_referral()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $update["direct_referral_pv_initial_rpv"] = Request::input("direct_referral_pv_initial_rpv");
+        Tbl_mlm_plan_setting::where("shop_id",$shop_id)->update($update); 
+        $data['response_status'] = "success";
+
+        echo json_encode($data);          
     }
 }

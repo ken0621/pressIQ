@@ -16,14 +16,13 @@
 		<div class="right">
 			<div class="text-right">
 				<!-- <button type="button" class="btn btn-default"><i class="fa fa-bank"></i> PAYOUT METHOD</button> -->
-				<!-- <button type="button" class="btn btn-primary request-payout"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button> -->
+				<button onclick="action_load_link_to_modal('/members/request-payout','lg')" type="button" class="btn btn-primary"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button>
 			</div>
 		</div>
 	</div>
 	<div class="wallet-encashment-content">
 		<div class="title">
 			Encashment History
-
 		</div>
 		<div class="table-holder table-responsive">
 			<table class="table table-striped">

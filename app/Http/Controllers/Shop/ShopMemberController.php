@@ -128,6 +128,11 @@ class ShopMemberController extends Shop
         $data["password"] = Crypt::decrypt(request()->password);
         return view("member.autologin", $data);
     }
+    public function getRequestPayout()
+    {
+        $data["page"] = "Request Payout";
+        return view("member2.request_payout", $data);
+    }
     public function getPayoutSetting()
     {
         $data["page"] = "Payout";

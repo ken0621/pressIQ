@@ -23,6 +23,13 @@ Route::any('/member/page/partnerview/delete/{id}', 'Member\Page_ThemesController
 Route::get('/member/page/partnerview/partner-filter-by-location', 'Member\Page_ThemesController@partnerFilterByLocation');
 
 /*Press Release Email System*/
-Route::get('/member/page/press_release_email/create_press_release', 'Member\Press_Release_Controller@press_create_email');
+Route::any('/member/page/press_release_email/create_press_release', 'Member\Press_Release_Controller@press_create_email');
+Route::any('/member/page/press_release_email/send_press_release', 'Member\Press_Release_Controller@send_email');
+Route::any('/member/page/press_release_email/save_email_press_release', 'Member\Press_Release_Controller@save_email');
+Route::any('/member/page/press_release_email/choose_recipient_press_release', 'Member\Press_Release_Controller@choose_recipient');
+Route::any('/member/page/press_release_email/search_recipient_press_release', 'Member\Press_Release_Controller@search_recipient');
+Route::any('/member/page/press_release_email/add_recipient_press_release', 'Member\Press_Release_Controller@add_recipient');
+Route::any('/member/page/press_release_email/view_press_release', 'Member\Press_Release_Controller@press_view_email');
+Route::any('/member/page/press_release_email/view_send_email_press_release', 'Member\Press_Release_Controller@view_send_email');
 
 

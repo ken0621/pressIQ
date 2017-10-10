@@ -1338,20 +1338,24 @@ function page_list()
     $nav[$page]['submenu'][$segment]['segment']= $segment;
     $nav[$page]['submenu'][$segment]['type']   = "submenu";
 
+    $segment2 = "page-press-release";
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['name'] = "Press Release";
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['segment2'] = $segment2;
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['type'] = "submenu";
 
-        /* -- MLM => MEMBERSHIP CODES */
+
         $code = "page-email-create";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Create Press Release";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/press_release_email/create_press_release";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'claim'];
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout Only";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: blue'>Ephraim John Dognidon</span>";
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$code]['label'] = "Create Press Release";
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$code]['url'] = $path . $page ."/press_release_email/create_press_release";
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$code]['user_settings'] = ['access_page', 'claim'];
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$code]['status'] = "Layout Only";
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$code]['developer'] = "<span style='color: blue'>Ephraim John Dognidon</span>";
 
         $code = "page-email-view";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "View Press Release";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/email";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/press_release_email/view_press_release";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'claim'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout Only";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: blue'>Ephraim John Dognidon</span>";

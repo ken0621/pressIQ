@@ -599,6 +599,7 @@ class MLM2
 	{
 		$update["mlm_slot_id_created"] 		= $slot_id_created;
 		$update["item_in_use"] 				= "used";
+		$update["record_inventory_status"]	= 1;
 		
 		if(count($consume) > 0)
 		{

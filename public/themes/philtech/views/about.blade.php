@@ -2,6 +2,7 @@
 @section("content")
 <!-- OUR VALUES -->
 <div class="container">
+
 	<div class="values">
 		<div class="holder message">
 			<div class="row clearfix">
@@ -26,34 +27,32 @@
 		</div>
 	</div>
 
-
-<!-- TOP CONTENT -->
+	<!-- TOP CONTENT -->
 	<div class="top-content">
-
-		<div class="col-md-6 top-content-image">
-			<img src="{{ get_content($shop_theme_info, 'about', 'about_image', '/themes/'. $shop_theme .'/img/about-content-image.jpg') }}">
-		</div>
-
-		<div class="row clearfix">
+		<div class="clearfix">
+			<div class="col-md-6">
+				<div class="top-content-image">
+					<img src="{{ get_content($shop_theme_info, 'about', 'about_image', '/themes/'. $shop_theme .'/img/about-content-image.jpg') }}">
+				</div>
+			</div>
+		
 			<div class="col-md-6">
 				<div class="top-title">
-					<div>
-						<div class="welcome">{{ get_content($shop_theme_info, "about", "about_title", "Welcome to Shopshoshop.com") }}</div>
-					</div>
+					<span class="welcome">{{ get_content($shop_theme_info, "about", "about_title", "Welcome to Shopshoshop.com") }}</span>
 				</div>
-				<div style="margin-left: 0;" class="paragraph">		
+				<div class="paragraph">
 					<div style="white-space: pre-wrap;">{{ get_content($shop_theme_info, "about", "about_content", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.") }}</div>
 				</div>
 			</div>
 		</div>
-
 	</div>
 
 
-<!-- BOTTOM CONTENT -->
+	<!-- BOTTOM CONTENT -->
 	<div class="bottom-content">
 		
-		<div class="row">
+		<div class="clearfix">
+
 			<div class="bottom-image"><img src="{{ get_content($shop_theme_info, 'about', 'about_mission_image', '/themes/'. $shop_theme .'/img/mission.png') }}"></div>
 
 			<div class="title">
@@ -62,7 +61,9 @@
 
 			<div class="bottom-par" style="white-space: pre-wrap;">{{ get_content($shop_theme_info, "about", "about_mission_content", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.") }}</div>
 
-			<div class="bottom-image"><img src="{{ get_content($shop_theme_info, 'about', 'about_vision_image', '/themes/'. $shop_theme .'/img/vision.png') }}"></div>
+			<div class="bottom-image">
+				<img src="{{ get_content($shop_theme_info, 'about', 'about_vision_image', '/themes/'. $shop_theme .'/img/vision.png') }}">
+			</div>
 
 			<div class="title">
 				<div>{{ get_content($shop_theme_info, "about", "about_vision_title", "Our Vision") }}</div>

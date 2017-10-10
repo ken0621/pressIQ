@@ -117,17 +117,23 @@
 				<div class="title">Reward Summary</div>
 				<div class="sub-container">
 					<div class="chart-legend">
-						@foreach($_wallet_plan as $plan)
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
-							</div>
-						@endforeach
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Binary Pairing</span><span class="value">{{ $wallet->display_complan_binary }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Direct Referral</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Gift Certificate</span><span class="value">PHP 0.00</span></div>
+						</div>
 					</div>
 
 				</div>
 
-				<div class="title">Reward Points</div>
+{{-- 				<div class="title">Reward Points</div>
 				<div class="sub-container">
 					@if(count($_point_plan) > 0)
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
@@ -141,7 +147,7 @@
 					@else
 						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
 					@endif
-				</div>
+				</div> --}}
 			</div>
 		</div>
 		<div class="row clearfix">

@@ -245,6 +245,7 @@
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
     <script type="text/javascript" src="/assets/front/js/global.js"></script>
+    <script type="text/javascript" src="/assets/front/js/global_cart.js"></script>
     <script src="/themes/{{ $shop_theme }}/js/custom_theme.js"></script>
     @yield("js")
     </body>

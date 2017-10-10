@@ -89,18 +89,18 @@
                                         </div>
                                         <div class="col-md-12 price-old-new">
                                             @if($product_variant['discounted'] == "true")
-                                            <div class="present-item-price">PHP {{ number_format($product_variant['discounted_price'], 2) }}</div>
-                                            <div class="item-old-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
+                                            <div class="present-item-price">&#8369; {{ number_format($product_variant['discounted_price'], 2) }}</div>
+                                            <div class="item-old-price">&#8369; {{ number_format($product_variant['evariant_price'], 2) }}</div>
                                             @else
-                                            <div class="present-item-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
+                                            <div class="present-item-price">&#8369; {{ number_format($product_variant['evariant_price'], 2) }}</div>
                                             @endif
                                         </div>
                                         <div class="col-md-12 item-quantity">
                                             <div class="quantity-input">
                                                 <div class="quantity-label">Quantity</div>
                                                 <form>
-                                                    <input style="width: 60px;" class="variation-qty form-control input-lg" variant-id="{{ $product_variant['evariant_id'] }}" type="number" name="quantity" min="1" max="100" value="1">
-                                                    <button class="add-to-cart {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }}" {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }} variant-id="{{ $product_variant['evariant_id'] }}" type="button">Add to Cart</button>
+                                                    <input onChange="$(this).siblings('.product-add-cart').attr('quantity', $(this).val())" style="width: 60px;" class="variation-qty form-control input-lg" type="number" name="quantity" min="1" max="100" value="1">
+                                                    <button item-id="{{ $product_variant['evariant_item_id'] }}" quantity="1" class="product-add-cart {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }}" {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }} type="button">Add to Cart</button>
                                                 </form>
                                             </div>
                                         </div>

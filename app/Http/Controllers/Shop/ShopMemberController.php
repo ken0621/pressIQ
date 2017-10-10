@@ -1233,21 +1233,30 @@ class ShopMemberController extends Shop
             $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
             $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $new_slot_no);
             
-            $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
+            $return = MLM2::check_membership_code($shop_id, $data["pin"], $data["activation"]);
 
-            if(is_numeric($create_slot))
+            if(!$return)
             {
-                $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
-                MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
+                $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
 
-                $slot_id = $create_slot;
-                $store["get_success_mode"] = "success";
-                session($store);
-                echo json_encode("success");
+                if(is_numeric($create_slot))
+                {
+                    $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
+                    MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
+
+                    $slot_id = $create_slot;
+                    $store["get_success_mode"] = "success";
+                    session($store);
+                    echo json_encode("success");
+                }
+                else
+                {
+                    echo json_encode($create_slot);
+                }  
             }
             else
             {
-                echo json_encode($create_slot);
+                echo json_encode('error');
             }
         }
     }

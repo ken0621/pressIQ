@@ -10,6 +10,29 @@
 						<img src="/themes/{{ $shop_theme }}/img/menu.png">
 						<span>Shop By Category</span>
 					</div>
+					@if(isset($_categories))
+						@foreach($_categories as $category)
+						<div class="button-shop">
+							<div class="text" style="cursor: pointer;" onClick="location.href='/product?type={{ $category['type_id'] }}'">
+								{{-- <img src="/themes/{{ $shop_theme }}/img/sidebar/dth.png"> --}}
+								<span>{{ $category['type_name'] }}</span>
+							</div>
+							@if($category['subcategory'])
+							<div class="hover">
+								<div class="hover-holder">
+									<div class="clearfix">
+										<ul>
+											@foreach($category['subcategory'] as $subcategory)
+												<li><a href="/product?type={{ $subcategory['type_id'] }}">{{ $subcategory['type_name'] }}</a></li>
+											@endforeach
+										</ul>
+									</div>
+								</div>
+							</div>
+							@endif
+						</div>
+						@endforeach
+					@else
 					<div class="button-shop">
 						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
 							<img src="/themes/{{ $shop_theme }}/img/sidebar/dth.png">
@@ -64,6 +87,7 @@
 							<span>HEALTH & WELLNESS</span>
 						</div>
 					</div>
+					@endif
 				</div>
 				<div class="hot-deals-container">
 					<div class="wow-title">
@@ -71,46 +95,27 @@
 						<span class="scroll-button"><a class="left" href="#"><img src="/themes/{{ $shop_theme }}/img/left-button-scroll.png"></a><a class="right" href="#"><img src="/themes/{{ $shop_theme }}/img/right-button-scroll.png"></a></span>
 					</div>
 					<div class="daily-container">
-						{{-- @foreach(get_collection(get_content($shop_theme_info, "home", "daily_hot_deals"), $shop_id) as $collection)
+						@foreach(get_collection(get_content($shop_theme_info, "home", "daily_hot_deals"), $shop_id) as $collection)
 							<div class="holder">
 								<div class="hot-deals-item-container">
 									<img class="4-3-ratio" src="{{ get_collection_first_image($collection) }}">
 									<div class="item-details">
-										<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ get_collection_first_name($collection) }}</div></a>
+										<a href="/product/view2/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ get_collection_first_name($collection) }}</div></a>
 										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 									</div>
-									<button type="button" onCLick="location.href='/product/view/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn" style="margin-top: 25px;">
+									<button type="button" onClick="location.href='/product/view2/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn" style="margin-top: 25px;">
 										<table>
 											<tbody>
 												<tr>
-													<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-													<td class="text">View More</td>
+													<td class="icon"><img src="/themes/{{ $shop_theme }}/img/header/cart-icon.png"></td>
+													<td class="text">SHOP NOW</td>
 												</tr>
 											</tbody>
 										</table>
 									</button>
 								</div>
 							</div>
-						@endforeach --}}
-						<div class="holder">
-							<div class="hot-deals-item-container">
-								<img class="4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/gsat.jpg">
-								<div class="item-details">
-									<a href="/product/view/test"><div class="item-title">Gsat Prepaid (Load Card 200)</div></a>
-									<div class="item-price">P 200.00</div>
-								</div>
-								<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn" style="margin-top: 25px;">
-									<table>
-										<tbody>
-											<tr>
-												<td class="icon"><img src="/themes/{{ $shop_theme }}/img/header/cart-icon.png"></td>
-												<td class="text">SHOP NOW</td>
-											</tr>
-										</tbody>
-									</table>
-								</button>
-							</div>
-						</div>
+						@endforeach
 					</div>
 				</div>
 				<div class="hot-deals-container">
@@ -118,20 +123,22 @@
 						<span class="orange">SPECIAL</span><span class="blue">OFFERS</span>
 					</div>
 					<div class="item-container">
-						<div class="row-no-padding clearfix per-item">
-							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/1.jpg"></div>
-							<div class="col-xs-8">
-								<div class=" item-details-container">
-									<a href="/product/view/test"><div class="item-title">Samsung Galaxy J2</div></a>
-									<div class="item-price">P 5,990.00</div>
+						@foreach(get_collection(get_content($shop_theme_info, "home", "special_offers"), $shop_id) as $collection)
+							<div class="row-no-padding clearfix per-item">
+								<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
+								<div class="col-xs-8">
+									<div class=" item-details-container">
+										<a href="/product/view2/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
+										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="row-no-padding clearfix per-item">
+						@endforeach
+						{{-- <div class="row-no-padding clearfix per-item">
 							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/2.jpg"></div>
 							<div class="col-xs-8">
 								<div class=" item-details-container">
-									<a href="/product/view/test"><div class="item-title">Nokia 3310 (20170)</div></a>
+									<a href="/product/view2/test"><div class="item-title">Nokia 3310 (20170)</div></a>
 									<div class="item-price">P 5,990.00</div>
 								</div>
 							</div>
@@ -140,7 +147,7 @@
 							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/3.jpg"></div>
 							<div class="col-xs-8">
 								<div class=" item-details-container">
-									<a href="/product/view/test"><div class="item-title">GSat HD (Complete Set)</div></a>
+									<a href="/product/view2/test"><div class="item-title">GSat HD (Complete Set)</div></a>
 									<div class="item-price">P 2,499.00</div>
 								</div>
 							</div>
@@ -149,11 +156,11 @@
 							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="/themes/{{ $shop_theme }}/img/product/4.jpg"></div>
 							<div class="col-xs-8">
 								<div class=" item-details-container">
-									<a href="/product/view/test"><div class="item-title">GSat Prepaid (Load Card 500)</div></a>
+									<a href="/product/view2/test"><div class="item-title">GSat Prepaid (Load Card 500)</div></a>
 									<div class="item-price">P 500.00</div>
 								</div>
 							</div>
-						</div>
+						</div> --}}
 					</div>
 				</div>
 			</div>
@@ -188,11 +195,12 @@
 					</div>
 					<div class="featured-item-container clearfix">
 						<div class="multiple-item">
+							@foreach(get_collection(get_content($shop_theme_info, "home", "featured_today"), $shop_id) as $collection)
 							<div>
 								<div class="per-item-container">
 									<div class="image-content-1">
-										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/21.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<img class="item-image-large 1-1-ratio" src="{{ get_collection_first_image($collection) }}">
+										<button type="button" onCLick="location.href='/product/view2/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -204,16 +212,17 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Samsung Galaxy J2</div></a>
-										<div class="item-price">P 5,990.00</div>
+										<a href="/product/view2/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ get_collection_first_name($collection) }}</div></a>
+										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 									</div>
 								</div>
 							</div>
-							<div>
+							@endforeach
+							{{-- <div>
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/22.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -225,7 +234,7 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Oppo A37</div></a>
+										<a href="/product/view2/test"><div class="item-title">Oppo A37</div></a>
 										<div class="item-price">P 12,990.00</div>
 									</div>
 								</div>
@@ -234,7 +243,7 @@
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/23.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -246,7 +255,7 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Samsung Galaxy A5</div></a>
+										<a href="/product/view2/test"><div class="item-title">Samsung Galaxy A5</div></a>
 										<div class="item-price">P 19,990.00</div>
 									</div>
 								</div>
@@ -255,7 +264,7 @@
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/24.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -267,7 +276,7 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Samsung Galaxy A7</div></a>
+										<a href="/product/view2/test"><div class="item-title">Samsung Galaxy A7</div></a>
 										<div class="item-price">P 23,990.00</div>
 									</div>
 								</div>
@@ -276,7 +285,7 @@
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/21.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -288,7 +297,7 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Samsung Galaxy J2</div></a>
+										<a href="/product/view2/test"><div class="item-title">Samsung Galaxy J2</div></a>
 										<div class="item-price">P 5,990.00</div>
 									</div>
 								</div>
@@ -297,7 +306,7 @@
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/22.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -309,7 +318,7 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Oppo A37</div></a>
+										<a href="/product/view2/test"><div class="item-title">Oppo A37</div></a>
 										<div class="item-price">P 12,990.00</div>
 									</div>
 								</div>
@@ -318,7 +327,7 @@
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/23.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -330,7 +339,7 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Samsung Galaxy A5</div></a>
+										<a href="/product/view2/test"><div class="item-title">Samsung Galaxy A5</div></a>
 										<div class="item-price">P 19,990.00</div>
 									</div>
 								</div>
@@ -339,7 +348,7 @@
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/24.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -351,11 +360,11 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Samsung Galaxy A7</div></a>
+										<a href="/product/view2/test"><div class="item-title">Samsung Galaxy A7</div></a>
 										<div class="item-price">P 23,990.00</div>
 									</div>
 								</div>
-							</div>
+							</div> --}}
 						</div>
 					</div>
 				</div>
@@ -364,22 +373,24 @@
 						<span class="orange">BEST</span><span class="blue">SELLER</span>
 					</div>
 					<div class="best-item-container row clearfix">	
-						<div class="col-md-4">
+						@foreach(get_collection(get_content($shop_theme_info, "home", "best_seller"), $shop_id) as $collection)
+						<div class="col-md-4 match-height">
 							<div class="per-item-container">
 								<div class="row clearfix">
 									<div class="col-md-6 col-sm-12">
-										<a href="#"><img class="item-image-small 4-3-ratio" style="width: 100%;" src="/themes/{{ $shop_theme }}/img/product/31.jpg"></a>
+										<a href="#"><img class="item-image-small 4-3-ratio" style="width: 100%;" src="{{ get_collection_first_image($collection) }}"></a>
 									</div>
 									<div class="col-md-6 col-sm-12">
 										<div class="item-details" style="padding-top: 0;">
-											<a href="/product/view/test"><div class="item-title">GSat Prepaid (Load 99)</div></a>
-											<div class="item-price">P 99.00</div>
+											<a href="/product/view2/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
+											<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4">
+						@endforeach
+						{{-- <div class="col-md-4">
 							<div class="per-item-container">
 								<div class="row clearfix">
 									<div class="col-md-6 col-sm-12">
@@ -387,7 +398,7 @@
 									</div>
 									<div class="col-md-6 col-sm-12">
 										<div class="item-details" style="padding-top: 0;">
-											<a href="/product/view/test"><div class="item-title">GSat Prepaid (Load 200)</div></a>
+											<a href="/product/view2/test"><div class="item-title">GSat Prepaid (Load 200)</div></a>
 											<div class="item-price">P 200.00</div>
 										</div>
 									</div>
@@ -402,7 +413,7 @@
 									</div>
 									<div class="col-md-6 col-sm-12">
 										<div class="item-details" style="padding-top: 0;">
-											<a href="/product/view/test"><div class="item-title">GSat Prepaid (Load 300)</div></a>
+											<a href="/product/view2/test"><div class="item-title">GSat Prepaid (Load 300)</div></a>
 											<div class="item-price">P 300.00</div>
 										</div>
 									</div>
@@ -417,7 +428,7 @@
 									</div>
 									<div class="col-md-6 col-sm-12">
 										<div class="item-details" style="padding-top: 0;">
-											<a href="/product/view/test"><div class="item-title">GSat Prepaid (Load 500)</div></a>
+											<a href="/product/view2/test"><div class="item-title">GSat Prepaid (Load 500)</div></a>
 											<div class="item-price">P 500.00</div>
 										</div>
 									</div>
@@ -432,7 +443,7 @@
 									</div>
 									<div class="col-md-6 col-sm-12">
 										<div class="item-details" style="padding-top: 0;">
-											<a href="/product/view/test"><div class="item-title">GSat Pinoy (Complete Set)</div></a>
+											<a href="/product/view2/test"><div class="item-title">GSat Pinoy (Complete Set)</div></a>
 											<div class="item-price">P 1,999.00</div>
 										</div>
 									</div>
@@ -447,13 +458,13 @@
 									</div>
 									<div class="col-md-6 col-sm-12">
 										<div class="item-details" style="padding-top: 0;">
-											<a href="/product/view/test"><div class="item-title">GSat HD (Complete Set)</div></a>
+											<a href="/product/view2/test"><div class="item-title">GSat HD (Complete Set)</div></a>
 											<div class="item-price">P 2,499.00</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> --}}
 					</div>
 				</div>
 				<div class="featured-container">
@@ -462,11 +473,12 @@
 					</div>
 					<div class="featured-item-container clearfix">	
 						<div class="multiple-item">
+							@foreach(get_collection(get_content($shop_theme_info, "home", "new_arrivals"), $shop_id) as $collection)
 							<div>
 								<div class="per-item-container">
 									<div class="image-content-1">
-										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/41.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<img class="item-image-large 1-1-ratio" src="{{ get_collection_first_image($collection) }}">
+										<button type="button" onClick="location.href='/product/view2/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -478,16 +490,17 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Oppo F3 Plus</div></a>
-										<div class="item-price">P 23,990.00</div>
+										<a href="/product/view2/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
+										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 									</div>
 								</div>
 							</div>
-							<div>
+							@endforeach
+							{{-- <div>
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/42.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -499,7 +512,7 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Samsung Galaxy J2</div></a>
+										<a href="/product/view2/test"><div class="item-title">Samsung Galaxy J2</div></a>
 										<div class="item-price">P 5,990.00</div>
 									</div>
 								</div>
@@ -508,7 +521,7 @@
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/43.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -520,7 +533,7 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Samsung Galaxy A7</div></a>
+										<a href="/product/view2/test"><div class="item-title">Samsung Galaxy A7</div></a>
 										<div class="item-price">P 23,990.00</div>
 									</div>
 								</div>
@@ -529,7 +542,7 @@
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/44.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -541,7 +554,7 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Vivo V5 Plus</div></a>
+										<a href="/product/view2/test"><div class="item-title">Vivo V5 Plus</div></a>
 										<div class="item-price">P 19,990.00</div>
 									</div>
 								</div>
@@ -550,7 +563,7 @@
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/41.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -562,7 +575,7 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Oppo F3 Plus</div></a>
+										<a href="/product/view2/test"><div class="item-title">Oppo F3 Plus</div></a>
 										<div class="item-price">P 23,990.00</div>
 									</div>
 								</div>
@@ -571,7 +584,7 @@
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/42.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -583,7 +596,7 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Samsung Galaxy J2</div></a>
+										<a href="/product/view2/test"><div class="item-title">Samsung Galaxy J2</div></a>
 										<div class="item-price">P 5,990.00</div>
 									</div>
 								</div>
@@ -592,7 +605,7 @@
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/43.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -604,7 +617,7 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Samsung Galaxy A7</div></a>
+										<a href="/product/view2/test"><div class="item-title">Samsung Galaxy A7</div></a>
 										<div class="item-price">P 23,990.00</div>
 									</div>
 								</div>
@@ -613,7 +626,7 @@
 								<div class="per-item-container">
 									<div class="image-content-1">
 										<img class="item-image-large 1-1-ratio" src="/themes/{{ $shop_theme }}/img/product/44.jpg">
-										<button type="button" onCLick="location.href='/product/view/test'" class="new-add-to-cart-button btn">
+										<button type="button" onCLick="location.href='/product/view2/test'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
 													<tr>
@@ -625,11 +638,11 @@
 										</button>
 									</div>
 									<div class="item-details">
-										<a href="/product/view/test"><div class="item-title">Vivo V5 Plus</div></a>
+										<a href="/product/view2/test"><div class="item-title">Vivo V5 Plus</div></a>
 										<div class="item-price">P 19,990.00</div>
 									</div>
 								</div>
-							</div>
+							</div> --}}
 						</div>
 					</div>
 				</div>
@@ -671,6 +684,13 @@
 							<img class="item-image-small brand-image" src="/themes/{{ $shop_theme }}/img/brand4.png">
 						</div>
 						@endif --}}
+							@if(is_serialized(get_content($shop_theme_info, "home", "home_brand")))
+								@foreach(unserialize(get_content($shop_theme_info, "home", "home_brand")) as $brand)
+								<div>
+									<img class="item-image-small brand-image" src="{{ $brand }}">
+								</div>
+								@endforeach
+							@else
 							<div>
 								<img class="item-image-small brand-image" src="/themes/{{ $shop_theme }}/img/logo/1.jpg">
 							</div>
@@ -683,6 +703,7 @@
 							<div>
 								<img class="item-image-small brand-image" src="/themes/{{ $shop_theme }}/img/logo/4.jpg">
 							</div>
+							@endif
 						</div>
 					</div>
 				</div>

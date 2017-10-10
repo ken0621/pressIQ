@@ -152,16 +152,28 @@ $text-dark: #272c2f;
 			{
 				color: $text-light;
 				font-size: 15px;
+
 				.btn-orange
 				{
-					background-color: #ed5639;
-					color: #fff;
+					@include transition(0.2s);
+
+					background-color: inherit;
+					border: 1px solid #ed5639;
+					color: #ed5639;
+					font-weight: $semi-bold;
+
+					&:hover
+					{
+						background-color: #ed5639;
+						color: #fff;
+					}
 				}
-				.btn
+
+				/* .btn
 				{
 					padding: 7.5px 15px;
 					font-size: 13px;
-				}
+				} */
 			}
 			@media screen and (max-width: 500px)
 			{

@@ -212,7 +212,7 @@
 										@endforeach
 									@else
 									<div class="event clearfix text-center">
-										NO EVENTS
+										<div style="padding: 100px 30px;">NO EVENT POSTED YET</div>
 									</div>
 									@endif
 								@endif

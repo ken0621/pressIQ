@@ -140,13 +140,138 @@ class ShopMemberController extends Shop
     public function getRequestPayout()
     {
         $data["page"] = "Request Payout";
+        $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
         return view("member2.request_payout", $data);
+    }
+    public function postRequestPayout()
+    {
+        $store["request_wallet"] = request("request_wallet");
+        session($store);
+        return Self::payout_validation();
+    }
+    public function payout_validation()
+    {
+        $return = "";
+        $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+        
+        foreach($_slot as $key => $slot)
+        {
+            $request_amount = request("request_wallet")[$key];
+
+            if(doubleval($slot->current_wallet) < doubleval($request_amount))
+            {
+                $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is more than the amount you currently have.</div>";
+            }
+
+            if($request_amount < 0)
+            {
+                $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is less than zero.</div>";
+            }
+        }
+
+        return $return;
+    }
+    public function anyVerifyPayout()
+    {
+        $data["page"] = "Verify Payout";
+        $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+        
+        $tax = 10;
+        $charge = 100;
+        $total_payout = 0;
+
+        if(request()->isMethod("post"))
+        {
+            $request_method = "post";
+        }
+        else
+        {
+            $request_method = "get";
+        }
+
+        if(Self::payout_validation() == "")
+        {
+            $request_wallet = session("request_wallet");
+
+            foreach($_slot as $key => $slot)
+            {
+                $amount = doubleval($request_wallet[$key]);
+
+                $_slot[$key]->request_amount = $amount;
+                $_slot[$key]->display_request_amount = Currency::format($amount);
+
+                $tax_amount = ($tax / 100) * $amount;
+                $charge_amount = $charge;
+                $take_home = $amount - ($tax_amount + $charge_amount);
+
+                if($take_home < 0)
+                {
+                    $take_home = 0;
+                }
+
+                $_slot[$key]->tax_amount = $tax_amount;
+                $_slot[$key]->charge_amount = $charge_amount;
+                $_slot[$key]->take_home = $take_home;
+
+                $_slot[$key]->display_tax_amount = Currency::format($tax_amount);
+                $_slot[$key]->display_charge_amount = Currency::format($charge_amount);
+                $_slot[$key]->display_take_home = Currency::format($take_home);
+
+                if($take_home == 0)
+                {
+                    unset($_slot[$key]);
+                }
+                else
+                {
+                    if($request_method == "post")
+                    {
+                        $shop_id    = $this->shop_info->shop_id;
+                        $customer_info = Self::$customer_info;
+
+                        if($customer_info->customer_payout_method == "unset")
+                        {
+                            $method     = "cheque";
+                        }
+                        else
+                        {
+                            $method     = $customer_info->customer_payout_method;
+                        }
+
+                        $slot_id    = $slot->slot_id;
+                        $remarks    = "Request by Customer";
+                        $other      = 0;
+                        $date       = date("m/d/Y");
+                        $status     = "PENDING";
+
+                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $charge_amount, $other, $date, $status);
+                    }
+                }
+
+                $total_payout += $take_home;
+            }
+
+
+            if($request_method == "get")
+            {
+                $data["total_payout"] = $total_payout;
+                $data["display_total_payout"] = Currency::format($total_payout);
+
+                $data["_slot"] = $_slot;
+
+                return view("member2.verify_payout", $data); 
+            }
+        }
+        else
+        {
+            echo "SERVER ERROR";
+        }
     }
     public function getPayoutSetting()
     {
         $data["page"] = "Payout";
         $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->bank()->get();
         $data["_method"] = unserialize($this->shop_info->shop_payout_method);
+
         $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
         $data["tin_number"] = Self::$customer_info->tin_number;
         return view("member2.payout_settings", $data);

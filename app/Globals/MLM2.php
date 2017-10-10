@@ -143,7 +143,7 @@ class MLM2
 			$insert["wallet_log_tax"] 				= doubleval((str_replace(",","",$tax)));
 			$insert["wallet_log_service_charge"] 	= doubleval((str_replace(",","",$service)));
 			$insert["wallet_log_other_charge"] 		= doubleval((str_replace(",","",$other)));
-			$insert["wallet_log_payout_status"] 	= "DONE";
+			$insert["wallet_log_payout_status"] 	= $status;
 			$insert["wallet_log_date_created"]		= ($date == null ? Carbon::now() : date("Y-m-d", strtotime($date)));
 
 			return Tbl_mlm_slot_wallet_log::insertGetId($insert);
@@ -207,6 +207,7 @@ class MLM2
 		foreach($_slot as $key =>  $slot)
 		{
 			$_slot[$key]->display_total_earnings = Currency::format($slot->total_earnings);
+			$_slot[$key]->display_current_wallet = Currency::format($slot->current_wallet);
 
 
 			if($slot->brown_rank_id == null)

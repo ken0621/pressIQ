@@ -5,7 +5,7 @@
 
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+		<h4 class="modal-title"><i class="fa fa-money"></i> VERIFY REQUEST PAYOUT</h4>
 	</div>
 	<div class="modal-body clearfix">
 		<div class="error-message-here text-center" style="color: red; padding: 5px;"></div>
@@ -13,29 +13,40 @@
 	        <thead style="text-transform: uppercase">
 	            <tr>
 	                <th class="text-center">SLOT CODE</th>
-	                <th class="text-center" width="180px;">CURRENT WALLET</th>
 	                <th class="text-center" width="180px">REQUEST AMOUNT</th>
+	                <th class="text-center" width="150px;">TAX</th>
+	                <th class="text-center" width="150px;">OTHER CHARGE</th>
+	                <th class="text-right" width="180px;">SUBTOTAL</th>
 	            </tr>
 	        </thead>
 	        <tbody>
 	        	@foreach($_slot as $slot)
-
-	            <tr current_wallet="{{ $slot->current_wallet }}">
-	                <td style="vertical-align: middle;" class="text-center">{{ $slot->slot_no }}</td>
-	                <td style="vertical-align: middle;" class="text-center">{{ $slot->display_current_wallet }}</td>
-	                <td style="vertical-align: middle;" class="text-center"><input name="request_wallet[]" class="form-control text-center" placeholder="ENTER AMOUNT" type="text" value="{{ floor($slot->current_wallet) }}"></td>
-	            </tr>
-	            @endforeach
+	        	<tr>
+	        		<td class="text-center">{{ $slot->slot_no }}</td>
+	        		<td class="text-center">{{ $slot->display_request_amount }}</td>
+	        		<td class="text-center">{{ $slot->display_tax_amount }}</td>
+	        		<td class="text-center">{{ $slot->display_charge_amount }}</td>
+	        		<td class="text-right">{{ $slot->display_take_home }}</td>
+	        	</tr>
+	        	@endforeach
 	        </tbody>
+	        <tfoot>
+	        	<tr>
+	        		<td colspan="4" class="text-right">TAKE HOME PAY</td>
+	        		<td class="text-right" style="font-weight: bold;">{{ $display_total_payout }}</td>
+	        	</tr>
+	        </tfoot>
 	    </table>
 	</div>
 	<div class="modal-footer">
-		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-		<button type="submit" class="btn btn-primary btn-custom-primary" type="button"><i class="fa fa-angle-double-right"></i> Request Payout</button>
+		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+		<button type="submit" class="btn btn-primary btn-custom-primary" type="button"><i class="fa fa-check"></i> Confirm Request Payout</button>
 	</div>
 </form>
 
+
 <script type="text/javascript">
+
 	var request_payout = new request_payout();
 
 	function request_payout()
@@ -53,23 +64,19 @@
 			{
 				$.ajax(
 				{
-					url:"/members/request-payout",
+					url:"/members/verify-payout",
 					data: $(e.currentTarget).serialize(),
 					type:"post",
 					success: function(data)
 					{
 						if(data == "")
 						{
-							$("#global_modal").modal("hide");
-							setTimeout(function()
-							{
-								action_load_link_to_modal("/members/verify-payout", "lg");
-							}, 350);
+							window.location.reload();
 						}
 						else
 						{
-							$(".error-message-here").html(data);
-						}	
+							alert("A problem occurred");
+						}
 					}
 				});
 
@@ -77,4 +84,5 @@
 			});
 		}
 	}
+
 </script>

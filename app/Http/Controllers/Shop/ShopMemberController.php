@@ -14,6 +14,7 @@ use DB;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 use App\Globals\Payment;
+use App\Globals\ShopEvent;
 use App\Globals\Customer;
 use App\Globals\MemberSlotGenealogy;
 use App\Rules\Uniqueonshop;
@@ -95,11 +96,19 @@ class ShopMemberController extends Shop
                     $data["not_placed_slot"] = $data["_unplaced"][0];
                 }
             }
+
+            $data['_event'] = ShopEvent::get($this->shop_info->shop_id,0 , 3);
         }
         
         $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
 
         return Self::load_view_for_members('member.dashboard', $data);
+    }
+    public function getEventDetails(Request $request)
+    {
+        $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);
+
+        return Self::load_view_for_members('member.view_events', $data);
     }
     public function getLead()
     {

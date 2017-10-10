@@ -146,12 +146,19 @@ class MLM_ProductController extends Member
                 $data['active'][$add_count]        = "RANK_GROUP";
                 $data['active_label'][$add_count]  = "Rank Group Bonus"; 
                 $add_count++;
+            }            
+            else if($value->marketing_plan_code == "REPURCHASE_CASHBACK")
+            {
+                $data['active'][$add_count]        = "RANK_REPURCHASE_CASHBACK";
+                $data['active_label'][$add_count]  = "Rank Repurchase Cashback"; 
+                $add_count++;
             }
 	    }
 
-	    $data['item'] 		   = $this->iteminventory($_inventory, $data['active']);
-	    $data['_inventory']    = $_inventory;	    
+        $data['item']          = $this->iteminventory($_inventory, $data['active']);
+        $data['_inventory']    = $_inventory;       
         $data['item_search']   = $item_search;
+        // dd($data);
         
         return view('member.mlm_product.product', $data);
     }

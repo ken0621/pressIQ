@@ -157,5 +157,4 @@ function action_submit_payout_details(form_data)
 		}
 	});
 }
-
 </script>

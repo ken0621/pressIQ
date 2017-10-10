@@ -170,29 +170,53 @@
 						</div>
 					</div>	
 				</div>
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Builder Point(s)</span><span class="value">{{ $points->display_brown_builder_points }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Leader Point(s)</span><span class="value">{{ $points->display_brown_leader_points }}</span></div>
+						</div>
+					</div>
+				</div>
 
 
 			</div>
 			<div class="animated fadeInUp col-md-6">
-{{-- 				<div class="title"><i class="align-icon fa fa-newspaper-o"></i> Upcoming Events</div>
+				<div class="title"><i class="align-icon fa fa-newspaper-o"></i> Upcoming Events</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="min-height: 310px; max-height: auto;">
 						<div class="events-container">
 							<div class="event-list">
-								<div class="event clearfix">
-									<div class="date">
-										<div class="day">14</div>
-										<div class="month">OCTOBER</div>
-									</div>
-									<div class="detail">
-										<div class="titles">Demand Driven Marketing</div>
-										<div class="description">While the concept of demand-driven supply chains is relevant to all industries. </div>
-										<div class="action">
-											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
+								@if(isset($_event))
+									@if(count($_event) > 0)
+										@foreach($_event as $event)
+										<div class="event clearfix">
+											<div class="date">
+												<div class="day">{{date('d', strtotime($event->event_date))}}</div>
+												<div class="month">{{date('F', strtotime($event->event_date))}}</div>
+											</div>
+											<div class="detail">
+												<div class="titles">{{$event->event_title}}</div>
+												<div class="description">{{$event->event_sub_title}}</div>
+												<div class="action">
+													<a class="popup" size="md" link="/members/event-details?id={{$event->event_id}}"><i class="fa fa-check-circle"></i> Details</a> 
+													<a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
+												</div>
+											</div>
 										</div>
+										@endforeach
+									@else
+									<div class="event clearfix text-center">
+										NO EVENTS
 									</div>
-								</div>
-								<div class="event clearfix">
+									@endif
+								@endif
+								{{-- <div class="event clearfix">
 									<div class="date">
 										<div class="day">22</div>
 										<div class="month">OCTOBER</div>
@@ -217,24 +241,11 @@
 											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
 										</div>
 									</div>
-								</div>
+								</div> --}}
 							</div>
 						</div>
 					</div>
-				</div> --}}
-				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
-				<div class="sub-container">
-					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Builder Point(s)</span><span class="value">{{ $points->display_brown_builder_points }}</span></div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Leader Point(s)</span><span class="value">{{ $points->display_brown_leader_points }}</span></div>
-						</div>
-					</div>
-				</div>
+				</div> 
 				
 			</div>
 		</div>

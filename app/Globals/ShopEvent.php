@@ -18,9 +18,17 @@ class ShopEvent
 	{
 		return Tbl_shop_event::where('event_id',$id)->update($update);
 	}
-	public static function get($shop_id, $archived = 0)
+	public static function get($shop_id, $archived = 0, $get = 0)
 	{
-		return Tbl_shop_event::where('event_shop_id',$shop_id)->where('archived', $archived)->orderBy('event_date','ASC')->get();
+		$data = Tbl_shop_event::where('event_shop_id',$shop_id)->where('archived', $archived);
+		if($get != 0)
+		{
+			$data->take($get);
+		}
+
+		$return = $data->orderBy('event_date','ASC')->get();
+
+		return $return;
 	}
 	public static function first($shop_id, $event_id)
 	{

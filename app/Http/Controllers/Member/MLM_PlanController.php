@@ -1027,11 +1027,21 @@ class MLM_PlanController extends Member
         elseif(isset($_POST['direct_referral_rpv']))
         {
             
-            $validate['membership_id'] = Request::input("membership_id");
-            $validate['direct_referral_rpv'] = Request::input("direct_referral_rpv");
+            $validate['membership_id']            = Request::input("membership_id");
+            $validate['direct_referral_rpv']      = Request::input("direct_referral_rpv");
+            $validate['direct_referral_rgpv']     = Request::input("direct_referral_rgpv");
+            $validate['direct_referral_spv']      = Request::input("direct_referral_spv");
+            $validate['direct_referral_sgpv']     = Request::input("direct_referral_sgpv");
+            $validate['direct_referral_self_rpv'] = Request::input("direct_referral_self_rpv");
+            $validate['direct_referral_self_spv'] = Request::input("direct_referral_self_spv");
             
-            $rules['membership_id']                     = "required";
-            $rules['direct_referral_rpv']  = "required";
+            $rules['membership_id']               = "required";
+            $rules['direct_referral_rpv']         = "required";
+            $rules['direct_referral_rgpv']        = "required";
+            $rules['direct_referral_spv']         = "required";
+            $rules['direct_referral_sgpv']        = "required";
+            $rules['direct_referral_self_rpv']    = "required";
+            $rules['direct_referral_self_spv']    = "required";
             
             
             $validator = Validator::make($validate,$rules);
@@ -1040,13 +1050,23 @@ class MLM_PlanController extends Member
                 $count = Tbl_membership_points::where('membership_id', $validate['membership_id'])->count();
                 if($count == 0)
                 {
-                    $insert['membership_id'] = $validate['membership_id'];
-                    $insert['direct_referral_rpv'] = $validate['direct_referral_rpv'];
+                    $insert['membership_id']             = $validate['membership_id'];
+                    $insert['direct_referral_rpv']       = $validate['direct_referral_rpv'];
+                    $insert['direct_referral_rgpv']      = $validate['direct_referral_rgpv'];
+                    $insert['direct_referral_spv']       = $validate['direct_referral_spv'];
+                    $insert['direct_referral_sgpv']      = $validate['direct_referral_sgpv'];
+                    $insert['direct_referral_self_rpv']  = $validate['direct_referral_rpv'];
+                    $insert['direct_referral_self_spv']  = $validate['direct_referral_spv'];
                     Tbl_membership_points::insert($insert);
                 }
                 else
                 {
-                    $update['direct_referral_rpv'] = $validate['direct_referral_rpv'];
+                    $update['direct_referral_rpv']      = $validate['direct_referral_rpv'];
+                    $update['direct_referral_rgpv']     = $validate['direct_referral_rgpv'];
+                    $update['direct_referral_spv']      = $validate['direct_referral_spv'];
+                    $update['direct_referral_sgpv']     = $validate['direct_referral_sgpv'];
+                    $update['direct_referral_self_rpv'] = $validate['direct_referral_self_rpv'];
+                    $update['direct_referral_self_spv'] = $validate['direct_referral_self_spv'];
                     Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
                 }
             }
@@ -1430,6 +1450,7 @@ class MLM_PlanController extends Member
             $insert['stairstep_leg_count'] = Request::input('stairstep_leg_count');
             $insert['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
             $insert['commission_multiplier'] = Request::input('commission_multiplier');
+            $insert['direct_rank_bonus'] = Request::input('direct_rank_bonus');
             $insert['shop_id'] = $this->user_info->shop_id;
             Tbl_mlm_stairstep_settings::insert($insert);
             $data['response_status'] = "success_add_stairstep";
@@ -1479,6 +1500,7 @@ class MLM_PlanController extends Member
             $update['stairstep_leg_count'] = Request::input('stairstep_leg_count');
             $update['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
             $update['commission_multiplier'] = Request::input('commission_multiplier');
+            $update['direct_rank_bonus'] = Request::input('direct_rank_bonus');
             Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
             $data['response_status'] = "success_edit_stairstep";
         }

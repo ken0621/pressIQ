@@ -78,10 +78,10 @@ class Mlm_complan_manager
         {   
             $computed_points = 0;
 
-            if($slot_stairstep->stairstep_bonus != 0)
+            if($slot_stairstep->direct_rank_bonus != 0)
             {
-                $computed_points = ($slot_stairstep->stairstep_bonus/100) * $stairstep_direct_points;
-                $percentage      = $slot_stairstep->stairstep_bonus;
+                $computed_points = ($slot_stairstep->direct_rank_bonus/100) * $stairstep_direct_points;
+                $percentage      = $slot_stairstep->direct_rank_bonus;
             }  
         }
         else
@@ -105,21 +105,21 @@ class Mlm_complan_manager
                 
                 if($slot_stairstep)
                 {                       
-                    if($slot_stairstep->stairstep_bonus > $percentage && $slot_stairstep->stairstep_bonus != 0)
+                    if($slot_stairstep->direct_rank_bonus > $percentage && $slot_stairstep->direct_rank_bonus != 0)
                     { 
-                        $reduced_percent = $slot_stairstep->stairstep_bonus - $percentage;
+                        $reduced_percent = $slot_stairstep->direct_rank_bonus - $percentage;
                         if($reduced_percent > 0)
                         {
                             $computed_points = (($reduced_percent)/100) * $stairstep_direct_points;
                             $old_percentage  = $percentage;
-                            $percentage      = $slot_stairstep->stairstep_bonus;
+                            $percentage      = $slot_stairstep->direct_rank_bonus;
                         }  
                     }
                 }
 
                 if($computed_points > 0)
                 {             
-                    $array['points_log_complan']        = "STAIRSTEP_DIRECT";
+                    $array['points_log_complan']        = "STAIRSTEP_GPV";
                     $array['points_log_level']          = $placement->sponsor_tree_level;
                     $array['points_log_slot']           = $slot_recipient->slot_id;
                     $array['points_log_Sponsor']        = $slot_info->slot_id;
@@ -129,6 +129,7 @@ class Mlm_complan_manager
                     $array['points_log_type']           = 'SGPV';
                     $array['points_log_from']           = 'Slot Creation';
                     $array['points_log_points']         = $computed_points;
+                    $array['original_from_complan']     = "STAIRSTEP_DIRECT";
 
                     
                     $slot_logs_id = Mlm_slot_log::slot_log_points_array($array);
@@ -156,18 +157,28 @@ class Mlm_complan_manager
 
         if($check_points)
         {
-            $direct_referral_rpv = $slot_info->direct_referral_rpv;
+            $direct_referral_rpv      = $slot_info->direct_referral_rpv;
+            $direct_referral_rgpv     = $slot_info->direct_referral_rgpv;
+            $direct_referral_spv      = $slot_info->direct_referral_spv;
+            $direct_referral_sgpv     = $slot_info->direct_referral_sgpv;
+            $direct_referral_self_rpv = $slot_info->direct_referral_self_rpv;
+            $direct_referral_self_spv = $slot_info->direct_referral_self_spv;
         }
         else
         {
-            $direct_referral_rpv = 0;
+            $direct_referral_rpv      = 0;
+            $direct_referral_rgpv     = 0;
+            $direct_referral_spv      = 0;
+            $direct_referral_sgpv     = 0; 
+            $direct_referral_self_rpv = 0; 
+            $direct_referral_self_spv = 0; 
         }
         
         if($include_self)
         {   
-            if($direct_referral_rpv != 0 && $include_self->direct_referral_pv_initial_rpv == 1)
+            if($direct_referral_self_rpv != 0)
             {
-                $array['points_log_complan']        = "DIRECT_REFERRAL_PV";
+                $array['points_log_complan']        = "RANK_PV";
                 $array['points_log_level']          = 0;
                 $array['points_log_slot']           = $slot_info->slot_id;
                 $array['points_log_Sponsor']        = $slot_info->slot_id;
@@ -176,11 +187,34 @@ class Mlm_complan_manager
                 $array['points_log_converted_date'] = Carbon::now();
                 $array['points_log_type']           = 'RPV';
                 $array['points_log_from']           = 'Slot Creation';
-                $array['points_log_points']         = $direct_referral_rpv;
+                $array['points_log_points']         = $direct_referral_self_rpv;
+                $array['original_from_complan']     = "DIRECT_REFERRAL_PV";
 
                 $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
 
                 $insert_rank_log["rank_original_amount"] = $direct_referral_rpv;
+                $insert_rank_log["rank_percentage_used"] = 0;
+                $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
+                Tbl_rank_points_log::insert($insert_rank_log);
+            }           
+
+            if($direct_referral_self_spv != 0)
+            {
+                $array['points_log_complan']        = "STAIRSTEP_PV";
+                $array['points_log_level']          = 0;
+                $array['points_log_slot']           = $slot_info->slot_id;
+                $array['points_log_Sponsor']        = $slot_info->slot_id;
+                $array['points_log_date_claimed']   = Carbon::now();
+                $array['points_log_converted']      = 0;
+                $array['points_log_converted_date'] = Carbon::now();
+                $array['points_log_type']           = 'SPV';
+                $array['points_log_from']           = 'Slot Creation';
+                $array['points_log_points']         = $direct_referral_self_spv;
+                $array['original_from_complan']     = "DIRECT_REFERRAL_PV";
+
+                $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
+
+                $insert_rank_log["rank_original_amount"] = $direct_referral_spv;
                 $insert_rank_log["rank_percentage_used"] = 0;
                 $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
                 Tbl_rank_points_log::insert($insert_rank_log);
@@ -199,11 +233,10 @@ class Mlm_complan_manager
             {
                 if($slot_info->direct_referral_rpv != null || $slot_info->direct_referral_rpv != 0)
                 {
-                    /* DIRECT INCOME LIMIT */
 
                     if($direct_referral_rpv != 0)
                     {
-                        $array['points_log_complan']        = "DIRECT_REFERRAL_PV";
+                        $array['points_log_complan']        = "RANK_PV";
                         $array['points_log_level']          = $sponsor_tree->sponsor_tree_level;
                         $array['points_log_slot']           = $slot_sponsor->slot_id;
                         $array['points_log_Sponsor']        = $slot_info->slot_id;
@@ -213,10 +246,33 @@ class Mlm_complan_manager
                         $array['points_log_type']           = 'RPV';
                         $array['points_log_from']           = 'Slot Creation';
                         $array['points_log_points']         = $direct_referral_rpv;
+                        $array['original_from_complan']     = "DIRECT_REFERRAL_PV";
 
                         $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
 
                         $insert_rank_log["rank_original_amount"] = $direct_referral_rpv;
+                        $insert_rank_log["rank_percentage_used"] = 0;
+                        $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
+                        Tbl_rank_points_log::insert($insert_rank_log);
+                    }
+
+                    if($direct_referral_spv != 0)
+                    {
+                        $array['points_log_complan']        = "STAIRSTEP_PV";
+                        $array['points_log_level']          = $sponsor_tree->sponsor_tree_level;
+                        $array['points_log_slot']           = $slot_sponsor->slot_id;
+                        $array['points_log_Sponsor']        = $slot_info->slot_id;
+                        $array['points_log_date_claimed']   = Carbon::now();
+                        $array['points_log_converted']      = 0;
+                        $array['points_log_converted_date'] = Carbon::now();
+                        $array['points_log_type']           = 'SPV';
+                        $array['points_log_from']           = 'Slot Creation';
+                        $array['points_log_points']         = $direct_referral_spv;
+                        $array['original_from_complan']     = "DIRECT_REFERRAL_PV";
+
+                        $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
+
+                        $insert_rank_log["rank_original_amount"] = $direct_referral_spv;
                         $insert_rank_log["rank_percentage_used"] = 0;
                         $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
                         Tbl_rank_points_log::insert($insert_rank_log);

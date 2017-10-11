@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/main.css">
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
     <!-- EXTERNAL CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick.css">
@@ -520,6 +521,7 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
 
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/wow/js/wow.min.js"></script>
+        <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
 
     <script>
           new WOW().init();

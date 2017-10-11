@@ -70,8 +70,13 @@
           <td><center><a href="" class='underline'><span>{{$slot->slot_no}}</span></a></center></td>
           <td><center>{{$slot->stairstep_name ? $slot->stairstep_name : '---'}}</center></td>
           <td style="{{$slot->rank_personal_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_pv') ? 'color:green' : 'color:red' }}"><center>{{$slot->rank_personal_points}} of {{App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_pv')}}</center></td>
-          <td style="{{$slot->rank_group_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv') ? 'color:green' : 'color:red' }}"><center>{{$slot->rank_group_points}} of {{App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv')}}</center></td>
-          <td><center><input type="checkbox" name="name1" disabled  {{$slot->rank_personal_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_pv') && $slot->rank_group_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv') && App\Globals\Mlm_member::rank_count_leg($shop_id,$slot->slot_id) >= $slot->stairstep_leg_id ? 'checked' : ''}} />&nbsp;</center></td>
+          @if($include_rpv_on_rgpv == 1)
+            <td style="{{($slot->rank_group_points + $slot->rank_personal_points) >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv') ? 'color:green' : 'color:red' }}"><center>{{$slot->rank_group_points + $slot->rank_personal_points}} of {{App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv')}}</center></td>
+            <td><center><input type="checkbox" name="name1" disabled  {{$slot->rank_personal_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_pv') && ($slot->rank_group_points + $slot->rank_personal_points) >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv') && App\Globals\Mlm_member::rank_count_leg($shop_id,$slot->slot_id) >= $slot->stairstep_leg_id ? 'checked' : ''}} />&nbsp;</center></td>
+          @else
+            <td style="{{$slot->rank_group_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv') ? 'color:green' : 'color:red' }}"><center>{{$slot->rank_group_points}} of {{App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv')}}</center></td>
+            <td><center><input type="checkbox" name="name1" disabled  {{$slot->rank_personal_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_pv') && $slot->rank_group_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv') && App\Globals\Mlm_member::rank_count_leg($shop_id,$slot->slot_id) >= $slot->stairstep_leg_id ? 'checked' : ''}} />&nbsp;</center></td>
+          @endif
         </tr>
       @endforeach
     </tbody>

@@ -11,6 +11,10 @@ function floatvalser($amount)
     }
     
 }
+function hasWord($word, $txt) {
+    $patt = "/(?:^|[^a-zA-Z])" . preg_quote($word, '/') . "(?:$|[^a-zA-Z])/i";
+    return preg_match($patt, $txt);
+}
 function time_ago($datetime, $full = false) {
     $now = new DateTime;
     $ago = new DateTime($datetime);

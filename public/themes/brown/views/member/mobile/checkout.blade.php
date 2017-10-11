@@ -193,9 +193,9 @@
                                                 <div class="item-title label">Province</div>
                                                 <div class="item-input">
                                                     <select name="customer_state">
-                                                        @foreach($_locale as $locale)
-            											<option value="{{ $locale->locale_name }}">{{ $locale->locale_name }}</option>
-            											@endforeach
+                                                      @foreach($_locale as $locale)
+            											               <option value="{{ $locale->locale_name }}">{{ $locale->locale_name }}</option>
+            											         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -206,7 +206,7 @@
                                             <div class="item-inner">
                                                 <div class="item-title label">Complete Shipping Address</div>
                                                 <div class="item-input">
-                                                    <textarea name="customer_street" placeholder="Type your complete address here"></textarea>
+                                                    <textarea required="required" name="customer_street" placeholder="Type your complete address here"></textarea>
                                                 </div>
                                             </div>
                                         </div>

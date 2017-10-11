@@ -11,6 +11,7 @@ use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_rank_update;
+use App\Models\Tbl_mlm_plan_setting;
 use App\Models\Tbl_rank_update_slot;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Mlm_complan_manager;
@@ -41,7 +42,8 @@ class MLM_RankController extends Member
 								  	   ->groupBy("slot_id")
 							  	  	   ->get();    	
 // dd($data);
-  		$data["_history"]   = Tbl_rank_update::where('shop_id',$shop_id)->get();
+  		$data["_history"]   		   = Tbl_rank_update::where('shop_id',$shop_id)->get();
+		$data["include_rpv_on_rgpv"]   = Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first()->include_rpv_on_rgpv;
   		// dd($data); 
     	
 
@@ -88,8 +90,8 @@ class MLM_RankController extends Member
     	$old_rank_id    		 	= 0;
     	$new_rank_id    		 	= 0;
     	$required_leg_update_id  	= 0;
-    	$required_leg_update_count  = 0;
-
+    	$required_leg_update_count 	= 0;
+    	$include_rpv_on_rgpv       	= Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first()->include_rpv_on_rgpv;
     	$rank_update    = Tbl_rank_update::where("shop_id",$shop_id)
     											  ->where("complete",0)
     											  ->where("rank_update_id",$rank_update_id)
@@ -116,6 +118,11 @@ class MLM_RankController extends Member
 				if(!$grpv)
 				{
 					$grpv = 0;
+				}
+
+				if($include_rpv_on_rgpv == 1)
+				{
+					$grpv = $grpv + $rpv;
 				}
                                                    
 				$slot_stairstep        = Tbl_mlm_stairstep_settings::where("stairstep_id",$slot_info->stairstep_rank)->first();

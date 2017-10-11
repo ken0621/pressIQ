@@ -14,6 +14,4 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::any('/transactions_list','Member\TransactionController@transaction_list');
 	Route::any('/transactions_list/table','Member\TransactionController@transaction_list_table');
 	Route::any('/transactions_list/view/{id}','Member\TransactionController@view_pdf');
-
-	Route::any('/transactions_list/payref', 'Member\TransactionController@payref');
 });

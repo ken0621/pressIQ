@@ -76,25 +76,4 @@ class EmployeeLoginController extends Controller
 		
 	}
 
-	public function employee(){
-
-		$data['page']	= 'Home';
-		return view('member.payroll2.employee_dashboard.employee',$data);
-	}
-	public function employee_profile(){
-
-		$data['page']	= 'Profile';
-
-		return view('member.payroll2.employee_dashboard.employee_profile',$data);
-	}
-	public function employee_leave_application(){
-
-		$data['page']	= 'Leave Application';
-		return view('member.payroll2.employee_dashboard.employee_leave_application',$data);
-	}
-	public function employee_summary_of_leave(){
-
-		$data['page']	= 'Summary of Leave';
-		return view('member.payroll2.employee_dashboard.employee_summary_of_leave',$data);
-	}
 }

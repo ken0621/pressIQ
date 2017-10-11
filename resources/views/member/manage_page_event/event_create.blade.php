@@ -33,17 +33,20 @@
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="checkbox">
                                         <label>Available For :</label>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                        <input type="text" name="event_number_attendee" class="form-control input-sm" placeholder="No." value="{{$event->event_number_attendee or ''}}">
+                                </div>
+                                <div class="col-md-3">
                                     <div class="checkbox">
                                       <label><input type="checkbox" value="1" name="event_member" {{isset($event_member) ? ($event_member != null ? 'checked' : '') :''}}>Members</label>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="checkbox">
                                       <label><input type="checkbox" value="1" name="event_guest" {{isset($event_guest) ? ($event_guest != null ? 'checked' : '') :''}}>Guest</label>
                                     </div>

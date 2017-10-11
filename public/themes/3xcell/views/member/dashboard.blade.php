@@ -58,30 +58,45 @@
 				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
 				<div class="sub-container">
 					<div class="chart-legend">
-						@foreach($_wallet_plan as $plan)
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
-							</div>
-						@endforeach
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Wholesale Commission</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
+						</div>
 					</div>
-
+					<div class="chart-legend">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Personal Rebates</span><span class="value">{{ $wallet->display_complan_rank_repurchase_cashback }}</span></div>
+						</div>
+					</div>
+					<div class="chart-legend">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Performace Commission</span><span class="value">{{ $wallet->display_complan_stairstep }}</span></div>
+						</div>
+					</div>
 				</div>
 
 				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
-					@if(count($_point_plan) > 0)
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
-						@foreach($_point_plan as $plan)
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+							<div class="name"><span>Rank PV</span><span class="value">{{ $points->display_rank_pv }}</span></div>
 						</div>
-						@endforeach
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Rank Group PV</span><span class="value">{{ $points->display_rank_gpv }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Stair Step PV</span><span class="value">{{ $points->display_stairstep_pv }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Stair Step Group PV</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
+						</div>
 					</div>
-					@else
-						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
-					@endif
 				</div>
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">

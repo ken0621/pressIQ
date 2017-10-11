@@ -285,10 +285,12 @@ class MLM2
 			}
 		}
 
-		$return["_wallet"]->complan_triangle 		= 0;
-		$return["_wallet"]->complan_direct 			= 0;
-		$return["_wallet"]->complan_builder 		= 0;
-		$return["_wallet"]->complan_leader 			= 0;
+		$return["_wallet"]->complan_triangle 					= 0;
+		$return["_wallet"]->complan_direct 						= 0;
+		$return["_wallet"]->complan_builder 					= 0;
+		$return["_wallet"]->complan_leader 						= 0;
+		$return["_wallet"]->complan_rank_repurchase_cashback 	= 0;
+		$return["_wallet"]->complan_stairstep 					= 0;
 
 		$return["_wallet_plan"] = $_plan;
 		
@@ -309,6 +311,11 @@ class MLM2
 
 		$return["_points"]->brown_builder_points 	= 0;
 		$return["_points"]->brown_leader_points 	= 0;
+
+		$return["_points"]->rank_pv 				= 0;
+		$return["_points"]->rank_gpv 				= 0;
+		$return["_points"]->stairstep_pv 			= 0;
+		$return["_points"]->stairstep_gpv 			= 0;
 		$return["_point_plan"] = $_plan_points;
 
 		$return["slot_count"] = 0;

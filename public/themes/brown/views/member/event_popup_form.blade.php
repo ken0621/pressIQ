@@ -8,28 +8,28 @@
 	<div class="modal-body clearfix">
 		<div class="form-group clearfix">
 			<div class="col-md-4">
-				<input type="text" class="form-control input-sm" placeholder="FAMILY NAME" name="reservee_fname" value="{{$customer_details->last_name or ''}}">
+				<input type="text" class="form-control" placeholder="FAMILY NAME" name="reservee_fname" value="{{$customer_details->last_name or ''}}">
 			</div>
 			<div class="col-md-4">
-				<input type="text" class="form-control input-sm" placeholder="FIRST NAME" name="reservee_mname">
+				<input type="text" class="form-control" placeholder="FIRST NAME" name="reservee_mname" value="{{$customer_details->first_name or ''}}">
 			</div>
 			<div class="col-md-4">
-				<input type="text" class="form-control input-sm" placeholder="MIDDLE NAME" name="reservee_lname">
+				<input type="text" class="form-control" placeholder="MIDDLE NAME" name="reservee_lname" value="{{$customer_details->middle_name or ''}}">
 			</div>
 		</div>
 		<div class="form-group clearfix">
 			<div class="col-md-12">
-				<textarea class="form-control" placeholder="ADDRESS" name="reservee_address" style="height: 150px"></textarea>
+				<textarea class="form-control" placeholder="ADDRESS" name="reservee_address" style="height: 150px">{{$customer_address->customer_street or '' }} {{$customer_address->customer_city or '' }} {{$customer_address->customer_state or ''}}</textarea>
 			</div>
 		</div>
 		<div class="form-group clearfix">
 			<div class="col-md-12">
-				<input type="text" class="form-control input-sm" name="reservee_contact" placeholder="CONTACT INFO (Email/Mobile Number)">
+				<input type="text" class="form-control" name="reservee_contact" placeholder="CONTACT INFO (Email/Mobile Number)" value="{{$customer_details->email or ''}}">
 			</div>
 		</div>
 		<div class="form-group clearfix">
 			<div class="col-md-12">
-				<input type="text" class="form-control input-sm" name="reservee_enrollers_code" placeholder="ENROLLERS CODE">
+				<input type="text" class="form-control" name="reservee_enrollers_code" placeholder="ENROLLERS CODE">
 			</div>
 		</div>
 	</div>

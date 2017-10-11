@@ -3,6 +3,7 @@ namespace App\Globals;
 
 use App\Models\Tbl_shop_event;
 use App\Models\Tbl_shop_event_reserved;
+
 /**
  * 
  *
@@ -19,15 +20,37 @@ class ShopEvent
 	{
 		return Tbl_shop_event::where('event_id',$id)->update($update);
 	}
-	public static function get($shop_id, $archived = 0, $get = 0)
+	public static function get($shop_id, $archived = 0, $get = 0, $date = null, $customer_id = null, $type = array())
 	{
 		$data = Tbl_shop_event::where('event_shop_id',$shop_id)->where('archived', $archived);
 		if($get != 0)
 		{
 			$data->take($get);
 		}
+		if($date)
+		{
+			$date_now = date('Y-m-d', strtotime($date));
+			$data->where('event_date','>=',$date_now);
+		}
+		if(count($type) > 0)
+		{
+			$data->whereIn('event_attendee',$type);
+		}
 
 		$return = $data->orderBy('event_date','ASC')->get();
+
+		if($customer_id)
+		{
+			foreach ($return as $key => $value) 
+			{
+				$return[$key]->is_reserved = 0;
+				$check = Tbl_shop_event_reserved::where('customer_id',$customer_id)->where('event_id',$value->event_id)->first();
+				if($check)
+				{
+					$return[$key]->is_reserved = 1;
+				}
+			}
+		}
 
 		return $return;
 	}
@@ -48,23 +71,43 @@ class ShopEvent
 	public static function reserved_seat($event_id, $customer_id = 0, $data)
 	{
 		$return = null;
-		if($customer_id != 0)
+		$event_number_attendee = Tbl_shop_event::where('event_id', $event_id)->value('event_number_attendee');
+		$count = Tbl_shop_event_reserved::where('event_id', $event_id)->count();
+		
+		if($count < $event_number_attendee)
 		{
-			$check = Tbl_shop_event_reserved::where('customer_id',$customer_id)->where('event_id',$event_id)->first();
-
-			if($check)
+			$check_code = Tbl_shop_event_reserved::where('event_id', $event_id)->where("reservee_enrollers_code",$data['reservee_enrollers_code'])->count();
+			if(!$check_code)
 			{
-				$return .= "Already reserved a seat"; 
+				if($customer_id != 0)
+				{
+					$check = Tbl_shop_event_reserved::where('customer_id',$customer_id)->where('event_id',$event_id)->first();
+
+					if($check)
+					{
+						$return .= "Already reserved a seat"; 
+					}
+					else
+					{
+						$data['event_id'] = $event_id;
+						$data['customer_id'] = $customer_id;
+						$return = Tbl_shop_event_reserved::insertGetId($data);
+					}
+				}
+				else
+				{
+					$data['event_id'] = $event_id;
+					$return = Tbl_shop_event_reserved::insertGetId($data);
+				}
 			}
 			else
 			{
-				$data['customer_id'] = $customer_id;
-				$return = Tbl_shop_event_reserved::insertGetId($data);
+				$return .= "Enrollers code already used";
 			}
 		}
 		else
 		{
-			$return = Tbl_shop_event_reserved::insertGetId($data);
+			$return .= "All seats are already reserved";
 		}
 
 		return $return;

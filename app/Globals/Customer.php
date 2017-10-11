@@ -84,8 +84,8 @@ class Customer
     
 	public static function info($id = 0, $shop_id = 0, $order_id = 0)
 	{
-        $data['customer'] = Tbl_customer::join('tbl_country','tbl_country.country_id','=','tbl_customer.country_id')->where('tbl_customer.customer_id',$id)->first();
-        $data['shipping'] = Tbl_customer_address::join('tbl_country','tbl_country.country_id','=','tbl_customer_address.country_id')->where('tbl_customer_address.customer_id',$id)->where('tbl_customer_address.purpose','shipping')->where('tbl_customer_address.archived',0)->first();
+        $data['customer'] = Tbl_customer::leftjoin('tbl_country','tbl_country.country_id','=','tbl_customer.country_id')->where('tbl_customer.customer_id',$id)->first();
+        $data['shipping'] = Tbl_customer_address::leftjoin('tbl_country','tbl_country.country_id','=','tbl_customer_address.country_id')->where('tbl_customer_address.customer_id',$id)->where('tbl_customer_address.purpose','shipping')->where('tbl_customer_address.archived',0)->first();
         $data['other'] = Tbl_customer_other_info::where('customer_id',$id)->first();
         // $tax_exempt = $data['customer']->taxt_exempt;
         $tax_exempt = 0;

@@ -332,7 +332,7 @@ class Mlm_complan_manager_repurchase
 
         if($rank_points != 0)
         {
-            $array['points_log_complan']        = "RANK";
+            $array['points_log_complan']        = "RANK_PV";
             $array['points_log_level']          = 0;
             $array['points_log_slot']           = $slot_info->slot_id;
             $array['points_log_Sponsor']        = $slot_info->slot_id;
@@ -342,6 +342,7 @@ class Mlm_complan_manager_repurchase
             $array['points_log_type']           = 'RPV';
             $array['points_log_from']           = 'Product Repurchase';
             $array['points_log_points']         = $rank_points;
+            $array['original_from_complan']     = "RANK";
 
             $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
 
@@ -389,7 +390,7 @@ class Mlm_complan_manager_repurchase
 
             if($rank_bonus != 0)
             {
-                    $array['points_log_complan']        = "RANK";
+                    $array['points_log_complan']        = "RANK_GPV";
                     $array['points_log_level']          = $tree->sponsor_tree_level;
                     $array['points_log_slot']           = $slot_recipient->slot_id;
                     $array['points_log_Sponsor']        = $slot_info->slot_id;
@@ -399,6 +400,7 @@ class Mlm_complan_manager_repurchase
                     $array['points_log_type']           = 'RGPV';
                     $array['points_log_from']           = 'Product Repurchase';
                     $array['points_log_points']         = $rank_bonus;
+                    $array['original_from_complan']     = "RANK";
 
                     $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
                     
@@ -444,7 +446,7 @@ class Mlm_complan_manager_repurchase
         $percentage             = null;
         if($stairstep_points != 0)
         {
-            $array['points_log_complan'] = "STAIRSTEP";
+            $array['points_log_complan'] = "STAIRSTEP_PV";
             $array['points_log_level'] = 0;
             $array['points_log_slot'] = $slot_info->slot_id;
             $array['points_log_Sponsor'] = $slot_info->slot_id;
@@ -454,6 +456,7 @@ class Mlm_complan_manager_repurchase
             $array['points_log_type'] = 'SPV';
             $array['points_log_from'] = 'Product Repurchase';
             $array['points_log_points'] = $stairstep_points;
+            $array['original_from_complan'] = "STAIRSTEP";
 
             $slot_logs_id = Mlm_slot_log::slot_log_points_array($array);
 
@@ -515,7 +518,7 @@ class Mlm_complan_manager_repurchase
 
                 if($computed_points > 0)
                 {             
-                    $array['points_log_complan']        = "STAIRSTEP";
+                    $array['points_log_complan']        = "STAIRSTEP_GPV";
                     $array['points_log_level']          = $placement->sponsor_tree_level;
                     $array['points_log_slot']           = $slot_recipient->slot_id;
                     $array['points_log_Sponsor']        = $slot_info->slot_id;
@@ -525,6 +528,7 @@ class Mlm_complan_manager_repurchase
                     $array['points_log_type']           = 'SGPV';
                     $array['points_log_from']           = 'Product Repurchase';
                     $array['points_log_points']         = $computed_points;
+                    $array['original_from_complan']     = "STAIRSTEP";
 
                     
                     $slot_logs_id = Mlm_slot_log::slot_log_points_array($array);

@@ -33,5 +33,5 @@
 {{-- GLOBALS --}}
 <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
 <script type="text/javascript" src="/assets/front/js/globalv2.js"></script>
-<script type="text/javascript" src="/assets/front/js/global.js"></script>
+{{-- <script type="text/javascript" src="/assets/front/js/global.js"></script> --}}
 <script type="text/javascript" src="/assets/front/js/global_cart.js"></script>

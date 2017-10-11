@@ -10,6 +10,10 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name='B-verify' content='8b63efb2920a681d6f877a59a414659d09831140' />
+        <!-- FOR GOOGLE LOGIN -->
+        <meta name="google-signin-client_id" content="{{$google_app_id or ''}}">
+        <input type="hidden" name="" class="google_app_id" value="{{$google_app_id or ''}}">
+        <!-- END GOOGLE LOGIN -->
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
@@ -82,8 +86,13 @@
                         <div class="holder">
                             <img src="/themes/{{ $shop_theme }}/img/header/card.png">
                         </div>
-                        <div class="shopping-cart-container">
-                            <div class="shopping-cart"><img src="/themes/{{ $shop_theme }}/img/header/cart-icon.png"> <span class="badge mini-cart-quantity">{{ $global_cart['sale_information']['total_quantity'] }}</span> <span>P </span> <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }}</span>
+                        <div class="shopping-cart-container text-center popup" link="/cartv2" size="lg">
+                            <div class="shopping-cart">
+                                <img src="/themes/{{ $shop_theme }}/img/header/cart-icon.png">
+{{--                                 <span class="badge mini-cart-quantity">{{ $global_cart['sale_information']['total_quantity'] }}</span>
+                                <span>P </span>
+                                <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }}
+                                </span> --}}
                             </div>
                             <div class="container-cart mini-cart">
                                 <div class="text-center"><span class="cart-loader text-center"><img style="height: 50px; margin: auto;" src="/assets/front/img/loader.gif"></span></div>
@@ -230,6 +239,10 @@
 
     @include("frontend.gfoot")
     <script src="/themes/{{ $shop_theme }}/js/custom_theme.js"></script>
+    <!-- FOR GOOGLE LOGIN -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <!-- END GOOGLE LOGIN -->
     @yield("js")
     </body>
 </html>

@@ -1,3 +1,4 @@
+@if($_method)
 <form method="post" class="form-payout-submit">
 	{{ csrf_field() }}
 	<div class="modal-header">
@@ -98,6 +99,9 @@
 		<button type="submit" class="btn btn-custom-primary" type="button"><i class="fa fa-pencil"></i> Update Payout Details</button>
 	</div>
 </form>
+@else
+	<div class="text-center" style="padding: 100px;">PAYOUT HASN'T BEEN SET YET - CONTACT THE ADMINISTRATOR</div>
+@endif
 
 <script type="text/javascript">
 	

@@ -199,7 +199,7 @@
 							<div>
 								<div class="per-item-container">
 									<div class="image-content-1">
-										<img class="item-image-large 1-1-ratio" src="{{ get_collection_first_image($collection) }}">
+										<img class="item-image-large" src="{{ get_collection_first_image($collection) }}">
 										<button type="button" onCLick="location.href='/product/view2/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>
@@ -477,7 +477,7 @@
 							<div>
 								<div class="per-item-container">
 									<div class="image-content-1">
-										<img class="item-image-large 1-1-ratio" src="{{ get_collection_first_image($collection) }}">
+										<img class="item-image-large" src="{{ get_collection_first_image($collection) }}">
 										<button type="button" onClick="location.href='/product/view2/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn">
 											<table>
 												<tbody>

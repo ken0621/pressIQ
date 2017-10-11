@@ -16,6 +16,47 @@ function profile()
 		add_event_info_conf_save();
 		add_event_picture_conf_save();
 		add_event_password_conf_save();
+		add_event_beneficiary_conf_save();
+	}
+	function add_event_beneficiary_conf_save()
+	{
+		$('.beneficiary-info-form').submit(function()
+		{
+			$(".beneficiary-info-form").find("button[type=submit]").html("<i class='fa fa-spinner fa-pulse fa-fw'></i> Update");
+
+			var form_data = $(".beneficiary-info-form").serialize();
+
+			$.ajax(
+			{
+				url      : "/members/profile-update-beneficiary",
+				dataType : "json",
+				data     : form_data,
+				type     : "post",
+				success: function(data)
+				{
+					if(data == "success")
+					{
+						$(".beneficiary-info-form").find("button[type=submit]").html("<i class='fa fa-save'></i> Update");
+						$(".beneficiary_success_message").removeClass("hidden");
+					}
+					else
+					{
+						var errors = '';
+
+						$.each(data, function(index, val) 
+						{
+							errors += '<li>'+val+'</li>';
+						});
+
+						$(".beneficiary_info_failed_message ul").append(errors);
+						$(".beneficiary_info_failed_message").removeClass("hidden");
+						$(".info-form").find("button[type=submit]").html("<i class='fa fa-save'></i> Update");
+					}
+				}
+			})
+
+			return false;
+		});
 	}
 	function add_event_reward_conf_save()
 	{

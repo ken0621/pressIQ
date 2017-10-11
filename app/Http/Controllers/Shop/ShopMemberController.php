@@ -15,6 +15,7 @@ use GuzzleHttp\Client;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\ShopEvent;
+use App\Globals\CustomerBeneficiary;
 use App\Globals\Customer;
 use App\Globals\MemberSlotGenealogy;
 use App\Rules\Uniqueonshop;
@@ -778,6 +779,38 @@ class ShopMemberController extends Shop
             }
             
             echo json_encode("success");
+        }
+        else
+        {
+            $result = $validator->errors();
+            echo json_encode($result);
+        }
+    }
+    public function postUpdateBeneficiary(Request $request)
+    {
+        $form = $request->all();
+        $validate['beneficiary_fname']       = 'required';
+        $validate['beneficiary_mname']       = 'required';
+        $validate['beneficiary_lname']       = 'required';
+        $validate['beneficiary_contact_no']  = 'required|numeric';
+        $validate['beneficiary_email']       = 'required|email';
+
+        $validator = Validator::make($form, $validate);
+        
+        if(!$validator->fails()) 
+        {
+            $update['beneficiary_fname']       = $request->beneficiary_fname;
+            $update['beneficiary_mname']       = $request->beneficiary_mname;
+            $update['beneficiary_lname']       = $request->beneficiary_lname;
+            $update['beneficiary_contact_no']  = $request->beneficiary_contact_no;
+            $update['beneficiary_email']       = $request->beneficiary_email;
+
+            $beneficiary_id = CustomerBeneficiary::create(Self::$customer_info->customer_id, $update);
+
+            if(is_numeric($beneficiary_id))
+            {
+                echo json_encode("success");
+            }
         }
         else
         {

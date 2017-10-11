@@ -280,29 +280,29 @@
 				   			</ul>
 				   		</div>
 				   	</div>
-				   	<form class="info-form">
+				   	<form class="beneficiary-info-form">
 				   		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 				   		<div class="row clearfix">
 				   			<div class="col-md-12">
 				   				<div class="form-group">
 				   					<label>First Name</label>
-				   					<input type="text" class="form-control" name="first_name" value="">
+				   					<input type="text" class="form-control" name="beneficiary_fname" value="">
 				   				</div>
 				   				<div class="form-group">
 				   					<label>Middle Name</label>
-				   					<input type="text" class="form-control" name="middle_name" value="">
+				   					<input type="text" class="form-control" name="beneficiary_mname" value="">
 				   				</div>
 				   				<div class="form-group">
 				   					<label>Last Name</label>
-				   					<input type="text" class="form-control" name="last_name" value="">
+				   					<input type="text" class="form-control" name="beneficiary_lname" value="">
 				   				</div>
 				   				<div class="form-group">
 				   					<label>Contact Number</label>
-				   					<input type="text" class="form-control" name="contact_number" value="">
+				   					<input type="text" class="form-control" name="beneficiary_contact_no" value="">
 				   				</div>
 				   				<div class="form-group">
 				   					<label>Email</label>
-				   					<input type="text" class="form-control" name="email" value="">
+				   					<input type="text" class="form-control" name="beneficiary_email" value="">
 				   				</div>
 				   			</div>
 				   			<div class="col-md-12">

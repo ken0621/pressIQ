@@ -14,14 +14,14 @@ use App\Globals\AuditTrail;
 
 use App\Globals\Settings;
 
-class EmployeeLoginController extends PayrollMember
+class EmployeeLoginController extends Controller
 {
 
 	public function logout()
 	{
 		Session::forget('payroll_employee_email');
 		Session::forget('payroll_employee_sss');
-		Session::forget('product_info');
+		
 		return Redirect::back();
 	}
 	public function employee_login()

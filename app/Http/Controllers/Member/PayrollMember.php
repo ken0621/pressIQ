@@ -23,4 +23,8 @@ use App\Globals\Mlm_seed;
 class PayrollMember extends Controller
 {
 
+	public function __construct()
+	{
+		
+	}
 }

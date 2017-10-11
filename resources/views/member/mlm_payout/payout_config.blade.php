@@ -9,6 +9,28 @@
 	        <div class="clearfix modal-body"> 
 	            <div class="form-horizontal">
 	                <div class="form-group">
+	                	<div class="text-center"><div style="font-weight: bold; padding-bottom: 10px; font-size: 16px;">PAYOUT CHARGES</div></div>
+						<div class="col-md-3">
+	                        <label for="basic-input">Tax (%)</label>
+	                        <input id="basic-input" value="{{ $settings->enchasment_settings_tax }}" class="form-control text-right" name="enchasment_settings_tax" placeholder="">
+	                    </div>
+						<div class="col-md-3">
+	                        <label for="basic-input">Service Charge (PHP)</label>
+	                        <input id="basic-input" value="{{ $settings->enchasment_settings_p_fee }}" class="form-control text-right" name="enchasment_settings_p_fee" placeholder="">
+	                    </div>
+
+	                    <div class="col-md-3">
+	                        <label for="basic-input">Other Charge (PHP)</label>
+	                        <input id="basic-input" value="{{ $settings->encashment_settings_o_fee }}" class="form-control text-right" name="encashment_settings_o_fee" placeholder="">
+	                    </div>
+	                    <div class="col-md-3">
+	                        <label for="basic-input">Minimum Encashment</label>
+	                        <input id="basic-input" value="{{ $settings->enchasment_settings_minimum }}" class="form-control text-right" name="enchasment_settings_minimum" placeholder="">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-horizontal" style="margin-top: 30px">
+	                <div class="form-group">
 	                    <div class="col-md-6">
 	                    	<div style="font-weight: bold; padding-bottom: 10px; font-size: 16px;">METHOD LIST</div>
 	                    	<div><label><input {{ hasWord('bank', $user_info->shop_payout_method) ? 'checked' : '' }} class="payout_method" value="bank" type="checkbox" name="payout_method[]"> BANK DEPOSIT</label></div>

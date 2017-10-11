@@ -212,7 +212,7 @@ class Payroll_BioImportController extends Member
 						$update['payroll_time_sheet_in'] 		= $value["time_in"];;
 						$update['payroll_time_sheet_out'] 		= $value["time_out"];;
 						$update['payroll_time_sheet_origin'] 	= $biometric_name;
-
+						
 						Tbl_payroll_time_sheet_record::insert($update);
 						
 						$overwritten++;
@@ -1011,53 +1011,42 @@ class Payroll_BioImportController extends Member
 
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','employee_name','date','time_in','time_out'));
 
-    	if(!isset($_time[0]['employee_no']))
-    	{
-    		$error["message"] = "Error in employee no";
-    		$error["data"] = $_time;
-    		dd($error);
-    	}
+    	$incomplete = 0;
 
-    	if(!isset($_time[0]['employee_name']))
-    	{
-    		$error["message"] = "Error in employee no";
-    		$error["data"] = $_time;
-    		dd($error);
-    	}
-
-    	if(!isset($_time[0]['time_in']))
-    	{
-    		$error["message"] = "Error in Time In";
-    		$error["data"] = $_time;
-    		dd($error);
-    	}
-
-    	if(!isset($_time[0]['time_out']))
-    	{
-    		$error["message"] = "Error in Time Out";
-    		$error["data"] = $_time;
-    		dd($error);
-    	}
-
-    	if(!isset($_time[0]['date']))
-    	{
-    		$error["message"] = "Error in Date";
-    		$error["data"] = $_time;
-    		dd($error);
-    	}
     	
     	if(isset($_time[0]['employee_no']) && isset($_time[0]['employee_name']) && isset($_time[0]['date']) && isset($_time[0]['time_in']) && isset($_time[0]['time_out']))
     	{
-    	
+
     	 foreach ($_time as $key => $value) 
     	 {
-    	 	if ($value['date'] != null) 
-    	 	{
-    	 		$date = date('Y-m-d', strtotime($value['date']->toDateTimeString()));
-    			$employee_number = $value["employee_no"];
 
-    	 		$_record[$date][$employee_number]['time_in']  = date('H:i:s', strtotime($value['time_in']->toDateTimeString()));
-				$_record[$date][$employee_number]['time_out'] = date('H:i:s', strtotime($value['time_out']->toDateTimeString()));
+    	 	if ($value['date'] != null && $value['time_in'] != null && $value['time_out'] != null && $value['employee_no'] != null) 
+    	 	{
+    	 		$employee_number = $value["employee_no"];
+    	 		if (is_object($value["date"])) 
+    	 		{
+    	 			$date = date('Y-m-d', strtotime($value['date']->toDateTimeString()));
+    	 		}
+    	 		else
+    	 		{
+    	 			$date = date('Y-m-d', strtotime($value['date']));
+    	 		}
+    	 		
+
+    	 		if(is_object($value["time_in"]) && is_object($value["time_out"]))
+	 			{
+			 		$_record[$date][$employee_number]['time_in']  = date('H:i:s', strtotime($value['time_in']->toDateTimeString()));
+					$_record[$date][$employee_number]['time_out'] = date('H:i:s', strtotime($value['time_out']->toDateTimeString()));	
+	 			}
+	 			else
+	 			{
+	 				$_record[$date][$employee_number]['time_in']  = date('H:i:s', strtotime($value['time_in']));
+					$_record[$date][$employee_number]['time_out'] = date('H:i:s', strtotime($value['time_out']));
+	 			}
+    	 	}
+    	 	else
+    	 	{
+    	 		$incomplete++;
     	 	}
     	 }
     	 

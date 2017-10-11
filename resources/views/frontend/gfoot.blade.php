@@ -34,3 +34,8 @@
 <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
 <script type="text/javascript" src="/assets/front/js/globalv2.js"></script>
 <script type="text/javascript" src="/assets/front/js/global_cart.js"></script>
+
+<!-- FOR GOOGLE LOGIN -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://apis.google.com/js/api:client.js"></script>
+<!-- END GOOGLE LOGIN -->

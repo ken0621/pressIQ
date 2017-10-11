@@ -1,3 +1,7 @@
+<!-- FOR GOOGLE LOGIN -->
+<meta name="google-signin-client_id" content="{{$google_app_id or ''}}">
+<input type="hidden" name="" class="google_app_id" value="{{$google_app_id or ''}}">
+<!-- END GOOGLE LOGIN -->
 <!-- BOOTSTRAP -->
 <link rel="stylesheet" href="/assets/initializr/css/bootstrap.min.css">
 <link rel="stylesheet" href="/assets/initializr/css/bootstrap-theme.min.css">

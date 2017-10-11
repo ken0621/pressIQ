@@ -212,7 +212,7 @@ class Payroll_BioImportController extends Member
 						$update['payroll_time_sheet_in'] 		= $value["time_in"];;
 						$update['payroll_time_sheet_out'] 		= $value["time_out"];;
 						$update['payroll_time_sheet_origin'] 	= $biometric_name;
-
+						
 						Tbl_payroll_time_sheet_record::insert($update);
 						
 						$overwritten++;

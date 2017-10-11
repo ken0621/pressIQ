@@ -1098,6 +1098,36 @@ footer
     	opacity: 1;
     	transition: all 0.2s;
     }
+    .new-add-to-cart-overlay
+    {
+    	position: absolute;
+    	top: 0;
+    	left: 0;
+    	right: 0;
+    	bottom: 0;
+    	width: 100%;
+    	height: 100%;
+    	opacity: 0;
+    	transition: 0.3s all ease;
+    	background-color: rgba(0,108,197,0.85);
+    	cursor: pointer;
+    	padding: 5px;
+    	table
+    	{
+    		th, td
+    		{
+    			border: 0;
+    			border: 1px solid #fff !important;
+    			color: #fff;
+    			font-size: 10px;
+    			font-weight: 400;
+    			padding: 8.5px 5px;
+    			white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+    		}
+    	}
+    }
 }
 
 
@@ -1119,6 +1149,10 @@ footer
 	{
 		opacity: 0.40;
 	}
+	.new-add-to-cart-overlay
+    {
+    	opacity: 1;
+    }
 }
 
 .global-modal

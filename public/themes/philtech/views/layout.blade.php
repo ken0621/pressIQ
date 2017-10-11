@@ -89,10 +89,10 @@
                         <div class="shopping-cart-container text-center popup" link="/cartv2" size="lg">
                             <div class="shopping-cart">
                                 <img src="/themes/{{ $shop_theme }}/img/header/cart-icon.png">
-{{--                                 <span class="badge mini-cart-quantity">{{ $global_cart['sale_information']['total_quantity'] }}</span>
-                                <span>P </span>
-                                <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }}
-                                </span> --}}
+                                <span class="badge mini-cart-quantity quantity-item-holder" style="width: 23px; height: 23px; padding-left: 0; padding-right: 0;">0</span>
+                                {{-- <span>P </span>
+                                <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }} --}}
+                                </span>
                             </div>
                             <div class="container-cart mini-cart">
                                 <div class="text-center"><span class="cart-loader text-center"><img style="height: 50px; margin: auto;" src="/assets/front/img/loader.gif"></span></div>

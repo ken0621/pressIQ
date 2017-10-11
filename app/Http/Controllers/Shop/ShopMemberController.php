@@ -15,6 +15,7 @@ use GuzzleHttp\Client;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\ShopEvent;
+use App\Globals\CustomerBeneficiary;
 use App\Globals\Customer;
 use App\Globals\MemberSlotGenealogy;
 use App\Rules\Uniqueonshop;
@@ -706,10 +707,13 @@ class ShopMemberController extends Shop
         $data["_country"]            = Tbl_country::get();
         $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
 
+        $data['beneficiary'] = null;
         if(Self::$customer_info)
         {
             $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["wallet"]             = $data["customer_summary"]["_wallet"];
+
+            $data['beneficiary'] = CustomerBeneficiary::first(Self::$customer_info->customer_id);
         }
 
 
@@ -785,6 +789,38 @@ class ShopMemberController extends Shop
             }
             
             echo json_encode("success");
+        }
+        else
+        {
+            $result = $validator->errors();
+            echo json_encode($result);
+        }
+    }
+    public function postProfileUpdateBeneficiary(Request $request)
+    {
+        $form = $request->all();
+        $validate['beneficiary_fname']       = 'required';
+        $validate['beneficiary_mname']       = 'required';
+        $validate['beneficiary_lname']       = 'required';
+        $validate['beneficiary_contact_no']  = 'required|numeric';
+        $validate['beneficiary_email']       = 'required|email';
+
+        $validator = Validator::make($form, $validate);
+        
+        if(!$validator->fails()) 
+        {
+            $update['beneficiary_fname']       = $request->beneficiary_fname;
+            $update['beneficiary_mname']       = $request->beneficiary_mname;
+            $update['beneficiary_lname']       = $request->beneficiary_lname;
+            $update['beneficiary_contact_no']  = $request->beneficiary_contact_no;
+            $update['beneficiary_email']       = $request->beneficiary_email;
+
+            $beneficiary_id = CustomerBeneficiary::create(Self::$customer_info->customer_id, $update);
+
+            if(is_numeric($beneficiary_id))
+            {
+                echo json_encode("success");
+            }
         }
         else
         {

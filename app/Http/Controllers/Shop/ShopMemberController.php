@@ -38,6 +38,7 @@ use App\Models\Tbl_mlm_slot_bank;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Models\Tbl_vmoney_wallet_logs;
+use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_payout_bank;
 use App\Globals\Currency;
 use App\Globals\Cart2;
@@ -177,8 +178,13 @@ class ShopMemberController extends Shop
         $data["page"] = "Verify Payout";
         $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
         
-        $tax = 10;
-        $charge = 100;
+        $payout_setting = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
+
+        $tax = $payout_setting->enchasment_settings_tax;
+        $service_charge = $payout_setting->enchasment_settings_p_fee;
+        $other_charge = $payout_setting->encashment_settings_o_fee;
+        $minimum = $payout_setting->enchasment_settings_minimum;
+
         $total_payout = 0;
 
         if(request()->isMethod("post"))
@@ -202,8 +208,7 @@ class ShopMemberController extends Shop
                 $_slot[$key]->display_request_amount = Currency::format($amount);
 
                 $tax_amount = ($tax / 100) * $amount;
-                $charge_amount = $charge;
-                $take_home = $amount - ($tax_amount + $charge_amount);
+                $take_home = $amount - ($tax_amount + $service_charge + $other_charge);
 
                 if($take_home < 0)
                 {
@@ -211,11 +216,13 @@ class ShopMemberController extends Shop
                 }
 
                 $_slot[$key]->tax_amount = $tax_amount;
-                $_slot[$key]->charge_amount = $charge_amount;
+                $_slot[$key]->service_charge = $service_charge;
+                $_slot[$key]->other_charge = $other_charge;
                 $_slot[$key]->take_home = $take_home;
 
                 $_slot[$key]->display_tax_amount = Currency::format($tax_amount);
-                $_slot[$key]->display_charge_amount = Currency::format($charge_amount);
+                $_slot[$key]->display_service_charge = Currency::format($service_charge);
+                $_slot[$key]->display_other_charge = Currency::format($other_charge);
                 $_slot[$key]->display_take_home = Currency::format($take_home);
 
                 if($take_home == 0)

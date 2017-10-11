@@ -47,7 +47,7 @@
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
+								<div class="name"><span>Total Earnings</span> {{ $wallet->display_total_earnings }}</div>
 							</div>
 						</div>
 					</div>

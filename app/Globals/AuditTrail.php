@@ -61,7 +61,8 @@ class AuditTrail
     }
     public static function record_logs($action ="", $source="", $source_id = 0 , $old_data ="" , $new_data="")
     {
-    	$insert_log["user_id"] = AuditTrail::getUser();
+    	
+        $insert_log["user_id"] = AuditTrail::getUser();
     	$insert_log["remarks"] = $action;
     	$insert_log["source"] = $source;
     	$insert_log["source_id"] = $source_id;
@@ -73,6 +74,7 @@ class AuditTrail
         if($insert_log["user_id"])
         {
     		$id = Tbl_audit_trail::insertGetId($insert_log);
+            
 
     		return $id;
         }
@@ -988,7 +990,11 @@ class AuditTrail
 
     public static function getAudit_data()
     {        
-        $audit_trail = Tbl_audit_trail::user()->select(DB::raw('tbl_audit_trail.created_at as audit_created_at, tbl_user.created_at as user_created_at, tbl_audit_trail.* , tbl_user.*'))->orderBy("tbl_audit_trail.created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(15);
+
+        // old query
+        // $audit_trail = Tbl_audit_trail::user()->orderBy("tbl_audit_trail.created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(15);
+         $audit_trail = Tbl_audit_trail::user()->select(DB::raw('tbl_audit_trail.created_at as audit_created_at, tbl_user.created_at as user_created_at, tbl_audit_trail.* , tbl_user.*'))->orderBy("tbl_audit_trail.created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(15);
+      
 
         foreach ($audit_trail as $key => $value) 
         {            
@@ -1427,7 +1433,7 @@ class AuditTrail
                     $transaction_amount = currency("PHP",$amount);                    
                 }
             }
-
+           
 
             $audit_trail[$key]->user = $value->user_first_name." ".$value->user_last_name;
             $audit_trail[$key]->action = $value->remarks;
@@ -1446,12 +1452,16 @@ class AuditTrail
                 else
                 {
                     $audit_trail[$key]->action = "";
+
+                    // $audit_trail[$key]->transaction_txt = "Transaction not found.";
+
                     $audit_trail[$key]->transaction_txt = ucwords(str_replace("_", " ",$value->remarks));
                 }
             }
             $audit_trail[$key]->transaction_date = $transaction_date;
             $audit_trail[$key]->transaction_client = $transaction_client;
             $audit_trail[$key]->transaction_amount = $transaction_amount;
+            
         }
         // dd($old[1]["inv_overall_price"]);
         //dd($audit_trail[$key]->user);

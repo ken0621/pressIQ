@@ -12,11 +12,13 @@ use Crypt;
 use Session;
 use DB;
 use App\Globals\AuditTrail;
+use App\Http\Controllers\Member\PayrollMember;
 
 use App\Globals\Settings;
 
 
-class EmployeeController extends Controller{
+
+class EmployeeController extends PayrollMember{
 
 	public function employee(){
 

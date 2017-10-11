@@ -135,7 +135,7 @@
                             @endif
                             <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
                             <!--<li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>-->
-                            <li><a href="/inspirers">Inspirer Page Login</a></li>
+                            <li><a href="/inspirers">Inspirer Page</a></li>
                             <li><a href="#">Health Technology</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
@@ -223,7 +223,7 @@
                         <div class="container">
                             <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">Brown</a>
                             <!--<a href="javascript:">Phone Accessories</a>-->
-                            <a href="/inspirers">Inspirer Page Login</a>
+                            <a href="/inspirers">Inspirer Page</a>
                             <a href="javascript:">Health Technology</a>
                         </div>
                     </div>
@@ -509,14 +509,15 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/match-height.js"></script>
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
+
+    <!-- FOR GOOGLE LOGIN -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://apis.google.com/js/api:client.js"></script>
+    <!-- END GOOGLE LOGIN -->
     <script type="text/javascript" src="/assets/js/cart.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/drawer.js"></script>
     <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
-
-
 
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/wow/js/wow.min.js"></script>
 
@@ -541,6 +542,9 @@
     //   });
     // }
     </script>
+
+
+    
     @yield("script")
     <!-- BEGIN JIVOSITE CODE -->
     <script type='text/javascript'>

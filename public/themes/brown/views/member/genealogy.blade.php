@@ -30,7 +30,7 @@
 		<i class="fa fa-spinner fa-spin fa-2x"></i>
 	</div>
 	<div class="animated fadeInUp genealogy-content">
-		<iframe  class="genealogy-frame" frameborder="0"  width="100%" height="440px"></iframe>
+		<iframe class="genealogy-frame" frameborder="0"  width="100%" height="440px"></iframe>
 	</div>
 </div>
 @endsection

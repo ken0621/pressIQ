@@ -709,7 +709,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_process_module";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Kim Briel Oraya";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
     
 
 
@@ -850,7 +850,7 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/loan_summary";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "kim";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Kimbriel Oraya";
 
          /* -- REPORT => PRODUCTS  */
         $code = "payroll-register-report";
@@ -859,7 +859,7 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/payroll_register_report";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "kim";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Kimbriel Oraya";
 
 
         /* -- REPORT => PRODUCTS  */
@@ -869,7 +869,7 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/payroll_ledger";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "kim";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Kimbriel Oraya";
 
         /* -- REPORT => PRODUCTS  */
         $code = "13th-Month-Pay";
@@ -878,16 +878,27 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/13th_month_pay";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "kim";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Kimbriel Oraya";
+
+
+    /* PAYROLL Biometric */
+    $code = "payroll-biometric";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Biometric";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_biometric";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Kimbriel Oraya";
+
 
     /* PAYROLL API */
     $code = "payroll-api";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll API";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_api";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Gullermo Tabligan";
+    $nav[$page]['submenu'][$code]['label']          = "Payroll API";
+    $nav[$page]['submenu'][$code]['code']           = $code;
+    $nav[$page]['submenu'][$code]['url']            = $path . $page . "/payroll_api";
+    $nav[$page]['submenu'][$code]['user_settings']  = ['access_page'];
+    $nav[$page]['submenu'][$code]['status']         = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer']      = "Gullermo Tabligan";
 
     /* PRODUCT */
     // $page = "product";  
@@ -1329,6 +1340,15 @@ function page_list()
     $nav[$page]['icon'] = "star";
     $nav[$page]['type']     = "menu";
     
+    /* -- MANAGE CONTENT => PAGE INFORMATION */
+    $code = "page-event";
+    $nav[$page]['submenu'][$code]['label'] = "Events";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/events";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Arcylen Garcia Gutierrez </span>";
+
     /* -- MANAGE CONTENT => PAGE INFORMATION */
     $code = "page-theme";
     $nav[$page]['submenu'][$code]['label'] = "Themes";

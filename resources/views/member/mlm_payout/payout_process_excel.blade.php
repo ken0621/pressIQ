@@ -7,6 +7,11 @@
                 <th style="text-align: left; width: 20;">SLOT NO</th>
                 <th style="text-align: left; width: 20;">METHOD</th>
                 <th style="text-align: left; width: 20;">CUSTOMER</th>
+                @if($method == "eon")
+                    <th style="text-align: left; width: 30;">EON ACCOUNT NAME</th>
+                    <th style="text-align: left; width: 30;">EON ACCOUNT NUMBER</th>
+                    <th style="text-align: left; width: 30;">EON CARD NUMBER</th>
+                @endif
                 <th style="text-align: right; width: 20;">PAYOUT AMOUNT</th>
                 <th style="text-align: right; width: 20;">SERVICE CHARGE</th>
                 <th style="text-align: right; width: 20;">OTHER CHARGE</th>
@@ -19,8 +24,13 @@
             <tr>
                 <td>{{ date("m/d/Y") }}</td>
                 <td>{{ $slot->slot_no }}</td>
-                <td>BANK DEPOSIT</td>
+                <td>{{ strtoupper($slot->customer_payout_method) }}</td>
                 <td>{{ $slot->first_name }} {{ $slot->last_name }}</td>
+                @if($method == "eon")
+                    <td>{{ $slot->slot_eon }}</td>
+                    <td>{{ $slot->slot_eon_account_no }}</td>
+                    <td>{{ "'" . $slot->slot_eon_card_no . "'" }}</td>
+                @endif
                 <td>{{ $slot->real_net }}</td>
                 <td>{{ $slot->real_service }}</td>
                 <td>{{ $slot->real_other }}</td>

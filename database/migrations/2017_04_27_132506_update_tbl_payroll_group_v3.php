@@ -24,8 +24,6 @@ class UpdateTblPayrollGroupV3 extends Migration
      */
     public function down()
     {
-        Schema::table('tbl_payroll_group', function (Blueprint $table) {
-            //
-        });
+       
     }
 }

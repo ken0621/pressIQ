@@ -578,7 +578,7 @@ class Item
     public static function generate_barcode($barcode = 0)
     {
         $return = $barcode;
-        $chk =  Tbl_item::where("item_barcode",$return)->get();
+        $chk =  Tbl_item::where("item_barcode",$return)->where('item_shop',Item::getShopId())->get();
         if(count($chk) > 1)
         {
             $num = '1234567890';
@@ -593,9 +593,9 @@ class Item
         $return = "";
         $text = "";
         $trail = Tbl_audit_trail::where("source","item")->where("source_id",$item_id)->orderBy("created_at","DESC")->get();
-        // dd($trail);
+       
         $last = null;
-        foreach ($trail as $key => $value) 
+        foreach ($trail as $key => $value)
         {
             $item_qty = 1;
             if(Purchasing_inventory_system::check())
@@ -606,7 +606,7 @@ class Item
             $amount = 0;
             if($old)
             {
-                if($item_data->item_price != $old[$key]["item_price"] || $old[$key]["item_price"] != 0)
+                if($item_data->item_price != $old[$key]["item_price"] && $old[$key]["item_price"] != 0)
                 {
                     $len = strlen($return);
                     
@@ -1665,6 +1665,7 @@ class Item
                                                  ->where('mlm_activation',$mlm_activation)
                                                  ->where('mlm_pin',$mlm_pin)
                                                  ->where('record_inventory_status',0)
+                                                 ->where('item_in_use','unused')
                                                  ->count();
         $return = false;
         if($ctr > 0)
@@ -1673,5 +1674,9 @@ class Item
         }
 
         return $return;
+    }
+    public static function type($item_id = 0)
+    {
+        return Tbl_item::where("item_id",$item_id)->value('item_type_id');
     }
 }

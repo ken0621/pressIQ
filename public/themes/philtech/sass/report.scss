@@ -5,6 +5,12 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
+.modal-content
+{
+	box-shadow: none !important;
+	-webkit-box-shadow: none !important;
+}
+
 .report-container
 {
 	font-family: $content-text;

@@ -20,9 +20,8 @@
 	</div>
 </div>
 @endsection
-@section("script")
+@section("js")
 <script type="text/javascript" src="/assets/member/js/google_script/google_script_auth.js"></script>
-
 <script>startApp();</script>
 @endsection
 @section("css")

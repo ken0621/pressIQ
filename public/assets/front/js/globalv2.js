@@ -57,7 +57,7 @@ function number_format(number)
 
 function image_crop(selector, width, height)
 {
-    $(selector).css("object-fit", "cover");
+    $(selector).css("object-fit", "contain");
     $(selector).keepRatio({ ratio: width/height, calculate: 'height' });
 }
 

@@ -353,7 +353,6 @@ class ShopMemberController extends Shop
         {
             $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
         }
-
         $data['show_fb'] = null;
         if(request("pass") == "123")
         {

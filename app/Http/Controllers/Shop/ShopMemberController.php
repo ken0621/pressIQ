@@ -353,7 +353,6 @@ class ShopMemberController extends Shop
         {
             $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
         }
-
         $data['show_fb'] = null;
         if(request("pass") == "123")
         {
@@ -607,7 +606,15 @@ class ShopMemberController extends Shop
             Self::store_login_session($insert["email"], $raw_password);
         }
 
-        return Redirect::to("/members")->send();
+        if(session("checkout_after_register"))
+        {
+            session()->forget("checkout_after_register");
+            return Redirect::to("/members/checkout")->send();
+        }
+        else
+        {
+            return Redirect::to("/members")->send();
+        }
     }
 
     public function getForgotPassword()
@@ -1055,7 +1062,18 @@ class ShopMemberController extends Shop
         $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
         $data["cart"]       = Cart2::get_cart_info();
         
-        return (Self::load_view_for_members("member.checkout", $data));
+        if(!Self::$customer_info)
+        {
+            $store["checkout_after_register"] = true;
+            session($store);
+            return redirect("/members/register");
+        }
+        else
+        {
+            return (Self::load_view_for_members("member.checkout", $data)); 
+        }
+
+        
     }
     public function postCheckout()
     {

@@ -14,8 +14,9 @@
 	            <tr>
 	                <th class="text-center">SLOT CODE</th>
 	                <th class="text-center" width="180px">REQUEST AMOUNT</th>
-	                <th class="text-center" width="150px;">TAX</th>
-	                <th class="text-center" width="150px;">OTHER CHARGE</th>
+	                <th class="text-center" width="120px;">TAX</th>
+	                <th class="text-center" width="120px;">SERVICE</th>
+	                <th class="text-center" width="120px;">OTHER</th>
 	                <th class="text-right" width="180px;">SUBTOTAL</th>
 	            </tr>
 	        </thead>
@@ -25,14 +26,15 @@
 	        		<td class="text-center">{{ $slot->slot_no }}</td>
 	        		<td class="text-center">{{ $slot->display_request_amount }}</td>
 	        		<td class="text-center">{{ $slot->display_tax_amount }}</td>
-	        		<td class="text-center">{{ $slot->display_charge_amount }}</td>
+	        		<td class="text-center">{{ $slot->display_service_charge }}</td>
+	        		<td class="text-center">{{ $slot->display_other_charge }}</td>
 	        		<td class="text-right">{{ $slot->display_take_home }}</td>
 	        	</tr>
 	        	@endforeach
 	        </tbody>
 	        <tfoot>
 	        	<tr>
-	        		<td colspan="4" class="text-right">TAKE HOME PAY</td>
+	        		<td colspan="5" class="text-right">TAKE HOME PAY</td>
 	        		<td class="text-right" style="font-weight: bold;">{{ $display_total_payout }}</td>
 	        	</tr>
 	        </tfoot>

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Session;
 use Validator;
 use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_payout_bank;
 use App\Models\Tbl_payout_bank_shop;
 use App\Models\Tbl_mlm_slot;
@@ -81,8 +82,19 @@ class MLM_PayoutController extends Member
 	}
 	public function getConfig()
 	{
-		$data["pate"] = "Payout Configuration";
-		$_bank = Tbl_payout_bank::get();
+		$shop_id 			= $this->user_info->shop_id;
+		$data["pate"] 		= "Payout Configuration";
+		$_bank 				= Tbl_payout_bank::get();
+		$data["settings"] 	= Tbl_mlm_encashment_settings::where("shop_id", $shop_id)->first();
+
+		if(!$data["settings"])
+		{
+			$data["settings"] = new stdClass();
+			$data["settings"]->encasment_settings_tax = 0;
+			$data["settings"]->encashment_settings_p_fee = 0;
+			$data["settings"]->encashment_settings_o_fee = 0;
+			$data["settings"]->encashment_settings_minimum = 0;
+		}
 
 		foreach($_bank as $key => $bank)
 		{
@@ -103,10 +115,33 @@ class MLM_PayoutController extends Member
 	}
 	public function postConfig()
 	{
+		$shop_id = $this->user_info->shop_id;
+
 		$response["response_status"] = "success";
 		$response["call_function"] = "payout_config_success";
 		$update_shop["shop_payout_method"] = serialize(request("payout_method"));
 		Tbl_shop::where("shop_id", $this->user_info->shop_id)->update($update_shop);
+
+		$check_settings_exist = Tbl_mlm_encashment_settings::where("shop_id", $shop_id)->first();
+
+		if($check_settings_exist)
+		{
+			$update["enchasment_settings_tax"] = doubleval(request("enchasment_settings_tax"));
+			$update["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
+			$update["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
+			$update["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
+
+			Tbl_mlm_encashment_settings::where("shop_id", $shop_id)->update($update);
+		}
+		else
+		{
+			$insert["enchasment_settings_tax"] = doubleval(request("enchasment_settings_tax"));
+			$insert["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
+			$insert["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
+			$insert["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
+
+			Tbl_mlm_encashment_settings::insert($insert);
+		}
 
 
 		Tbl_payout_bank_shop::where("shop_id", $this->user_info->shop_id)->delete();

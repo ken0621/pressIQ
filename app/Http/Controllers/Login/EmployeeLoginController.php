@@ -19,8 +19,8 @@ class EmployeeLoginController extends Controller
 
 	public function employee_logout()
 	{
-		Session::forget('user_email');
-		Session::forget('user_password');
+		Session::forget('employee_email');
+		Session::forget('employee_password');
 		
 		return Redirect::to("/employee_login");
 	}
@@ -41,8 +41,8 @@ class EmployeeLoginController extends Controller
 			
 			if ($employee_info) 
 			{
-				Session::put('user_email',$email);
-				Session::put('user_password',$password);
+				Session::put('employee_email',$email);
+				Session::put('employee_password',$password);
 
 				return Redirect::to("/employee");
 			}
@@ -53,15 +53,8 @@ class EmployeeLoginController extends Controller
 		}
 		else
 		{
-
 			return view('member.payroll2.employee_dashboard.employee_login', $data);
 		}
-
-
-
-
-		
-
 		// if($shop_id != null)
 		// {
 		// 	$data['shop_info'] = Tbl_shop::where('shop_id', $shop_id)->first();

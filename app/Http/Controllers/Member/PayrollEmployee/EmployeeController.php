@@ -23,7 +23,7 @@ class EmployeeController extends PayrollMember{
 	public function employee(){
 
 		$data['page']	= 'Home';
-
+		
 		return view('member.payroll2.employee_dashboard.employee',$data);
 	}
 	public function employee_profile(){

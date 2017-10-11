@@ -81,8 +81,18 @@ class MLM_PayoutController extends Member
 	}
 	public function getConfig()
 	{
+
 		$data["pate"] = "Payout Configuration";
 		$_bank = Tbl_payout_bank::get();
+
+		$data["settings"] = Tbl_mlm_encashment_settings::where("shop_id", $shop_id)->first();
+
+		if(!$data["settings"])
+		{
+			$data["settings"] = new stdClass();
+			$data["settings"]->encashment_settings_tax = 0;
+			$data["settings"]->encashment_settings_p_fee = 0;
+		}
 
 		foreach($_bank as $key => $bank)
 		{

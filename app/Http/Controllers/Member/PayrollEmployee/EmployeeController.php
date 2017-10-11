@@ -29,10 +29,7 @@ class EmployeeController extends PayrollMember{
 	public function employee_profile(){
 
 		$data['page']	= 'Profile';
-
-	
-
-
+		
 		return view('member.payroll2.employee_dashboard.employee_profile',$data);
 	}
 	public function employee_leave_application(){

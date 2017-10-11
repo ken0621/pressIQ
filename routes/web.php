@@ -139,7 +139,7 @@ Route::post('/createAccount', 'Frontend\HomeController@createAccount');
 
 
 Route::any('/employee_login', 'Login\EmployeeLoginController@employee_login');
-Route::any('/employee_logout', 'Login\EmployeeLoginController@employee_logut');
+Route::any('/employee_logout', 'Login\EmployeeLoginController@employee_logout');
 
 
 Route::any('/employee', 'Member\PayrollEmployee\EmployeeController@employee');

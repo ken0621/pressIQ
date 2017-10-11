@@ -25,6 +25,7 @@ class PayrollMember extends Controller
 
 	public function __construct()
 	{
+		dd();
 		$this->middleware(function ($request, $next)
 		{
 			if(!session('user_email') || !session('user_password'))

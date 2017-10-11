@@ -17,13 +17,14 @@ use App\Globals\Settings;
 class EmployeeLoginController extends Controller
 {
 
-	public function logout()
+	public function employee_logout()
 	{
-		Session::forget('payroll_employee_email');
-		Session::forget('payroll_employee_sss');
+		Session::forget('user_email');
+		Session::forget('user_password');
 		
-		return Redirect::back();
+		return Redirect::to("/employee_login");
 	}
+
 	public function employee_login()
 	{
 

@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Login;
+namespace App\Http\Controllers\Member\PayrollEmployee;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_payroll_employee_basic;
 
@@ -28,7 +28,7 @@ class EmployeeController extends Controller{
 
 		$data['page']	= 'Profile';
 
-		$data['employee_info'] = Tbl_payroll_employee_basic::where
+	
 
 
 		return view('member.payroll2.employee_dashboard.employee_profile',$data);

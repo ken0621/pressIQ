@@ -14,7 +14,7 @@ use App\Globals\AuditTrail;
 
 use App\Globals\Settings;
 
-class EmployeeLoginController extends Controller
+class EmployeeLoginController extends PayrollMember
 {
 
 	public function logout()
@@ -30,38 +30,20 @@ class EmployeeLoginController extends Controller
 		$shop_id = Settings::get_shop_id_url();
 		$data['shop_id'] = $shop_id;
 
-		if($shop_id != null)
-		{
-			$data['shop_info'] = Tbl_shop::where('shop_id', $shop_id)->first();
-			$data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->value('value');
-		}
-		Session::forget('product_info');
-		// return Crypt::decrypt('eyJpdiI6InJJUjR1NFlvVURmWURPajBMdnpldXc9PSIsInZhbHVlIjoidGJPRTRmRHZkTkNKZENSU2lWZ3p2UT09IiwibWFjIjoiY2VhNTU2OTMzNTE0OTE0YzMzOGIyMzE5Y2VjY2NhZDgzMDcwNmI5ZTgyZjNmYTUwOWEwZTQ0MDA4M2ZkMGMxOCJ9');
-		if(Request::isMethod("post"))
-		{
-			$user_info = Tbl_payroll_employee_basic::where("payroll_employee_email", Request::input("email"))->first();
 
-			/* CHECK E-MAIL EXIST */
-			if($user_info)
+		if(Request::isMethod("post")) 
+		{
+			$email 		= Request::input('email');
+			$password 	= Request::input('password');
+
+			$employee_info	= Tbl_payroll_employee_basic::where('payroll_employee_email',$email)->where('payroll_employee_sss',$password)->first();
+			
+			if ($employee_info) 
 			{
-				//$user_password = Crypt::decrypt($user_info->payroll_employee_sss);
-				$user_password = $user_info->payroll_employee_sss;
+				Session::put('user_email',$email);
+				Session::put('user_password',$password);
 
-				/* CHECK IF PASSWORD IS CORRECT */
-				if(Request::input("password") == $user_password)
-				{
-					/* SAVE SESSION THEN REDIRECT TO MEMBER'S AREA */
-					Session::put('payroll_employee_email', $user_info->payroll_employee_email);
-					Session::put('payroll_employee_last_name', $user_info->payroll_employee_sss);
-
-					AuditTrail::record_logs("Logged In");
-					
-					return Redirect::to("/employee");
-				}
-				else
-				{
-					return Redirect::to("/employee_login")->with('message', "The E-Mail / Password is incorrect.")->withInput();
-				}
+				return Redirect::to("/employee");
 			}
 			else
 			{
@@ -73,28 +55,57 @@ class EmployeeLoginController extends Controller
 
 			return view('member.payroll2.employee_dashboard.employee_login', $data);
 		}
+
+
+
+
+		
+
+		// if($shop_id != null)
+		// {
+		// 	$data['shop_info'] = Tbl_shop::where('shop_id', $shop_id)->first();
+		// 	$data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->value('value');
+		// }
+		// Session::forget('product_info');
+		// return Crypt::decrypt('eyJpdiI6InJJUjR1NFlvVURmWURPajBMdnpldXc9PSIsInZhbHVlIjoidGJPRTRmRHZkTkNKZENSU2lWZ3p2UT09IiwibWFjIjoiY2VhNTU2OTMzNTE0OTE0YzMzOGIyMzE5Y2VjY2NhZDgzMDcwNmI5ZTgyZjNmYTUwOWEwZTQ0MDA4M2ZkMGMxOCJ9');
+		// if(Request::isMethod("post"))
+		// {
+		// 	dd(Request::input("email"));
+		// 	$user_info = Tbl_payroll_employee_basic::where("payroll_employee_email", Request::input("email"))->first();
+
+		// 	/* CHECK E-MAIL EXIST */
+		// 	if($user_info)
+		// 	{
+		// 		//$user_password = Crypt::decrypt($user_info->payroll_employee_sss);
+		// 		$user_password = $user_info->payroll_employee_sss;
+
+		// 		/* CHECK IF PASSWORD IS CORRECT */
+		// 		if(Request::input("password") == $user_password)
+		// 		{
+		// 			/* SAVE SESSION THEN REDIRECT TO MEMBER'S AREA */
+		// 			Session::put('payroll_employee_email', $user_info->payroll_employee_email);
+		// 			Session::put('payroll_employee_last_name', $user_info->payroll_employee_sss);
+
+		// 			AuditTrail::record_logs("Logged In");
+					
+		// 			return Redirect::to("/employee");
+		// 		}
+		// 		else
+		// 		{
+		// 			return Redirect::to("/employee_login")->with('message', "The E-Mail / Password is incorrect.")->withInput();
+		// 		}
+		// 	}
+		// 	else
+		// 	{
+		// 		return Redirect::to("/employee_login")->with('message', "The E-Mail / Password is incorrect.")->withInput();
+		// 	}
+		// }
+		// else
+		// {
+
+		// 	return view('member.payroll2.employee_dashboard.employee_login', $data);
+		// }
 		
 	}
-
-	public function employee(){
-
-		$data['page']	= 'Home';
-		return view('member.payroll2.employee_dashboard.employee',$data);
-	}
-	public function employee_profile(){
-
-		$data['page']	= 'Profile';
-
-		return view('member.payroll2.employee_dashboard.employee_profile',$data);
-	}
-	public function employee_leave_application(){
-
-		$data['page']	= 'Leave Application';
-		return view('member.payroll2.employee_dashboard.employee_leave_application',$data);
-	}
-	public function employee_summary_of_leave(){
-
-		$data['page']	= 'Summary of Leave';
-		return view('member.payroll2.employee_dashboard.employee_summary_of_leave',$data);
-	}
+	
 }

@@ -89,11 +89,6 @@
 								<span class="member" style="color: red;">
 									 <strong>Error!</strong> {{ session('message') }}<br>
 								</span>
-							@else
-							<span class="member">
-								Not a Member?
-							</span>
-							<a href="register">Sign Up »</a>
 							@endif
 						@else
 							<span class="welcome-text">

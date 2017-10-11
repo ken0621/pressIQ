@@ -27,7 +27,10 @@ class EmployeeController extends Controller{
 	public function employee_profile(){
 
 		$data['page']	= 'Profile';
+
 		$data['employee_info'] = Tbl_payroll_employee_basic::where
+
+
 		return view('member.payroll2.employee_dashboard.employee_profile',$data);
 	}
 	public function employee_leave_application(){

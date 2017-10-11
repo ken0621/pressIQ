@@ -201,6 +201,11 @@ body{
 					font-size: 15px;
 					margin-top: 15px;
 					padding-right: 30px;
+
+					@media screen and (max-width: 375px)
+					{
+						font-size: 13px;
+					}
 				}
 			}
 		}
@@ -308,6 +313,14 @@ body{
 	{
 		padding-bottom: 350px !important;
 	}
+	@media screen and (max-width: 414px)
+	{
+		padding-bottom: 420px !important;
+	}
+	@media screen and (max-width: 320px)
+	{
+		padding-bottom: 520px !important;
+	}
 
 	.jca-title-container
 	{
@@ -317,6 +330,11 @@ body{
 			font-size: 25px;
 			color: #b07d2a;
 			margin-bottom: -8px;
+
+			@media screen and (max-width: 414px)
+			{
+				font-size: 18px;
+			}
 		}
 		.title-mission
 		{
@@ -326,6 +344,12 @@ body{
 			display: inline-block;
 			margin-bottom: 25px;
 			cursor: pointer;
+			
+			@media screen and (max-width: 414px)
+			{
+				font-size: 30px;
+			}
+
 		}
 		.title-vision
 		{
@@ -335,6 +359,11 @@ body{
 			margin-left: 20px;
 			margin-bottom: 25px;
 			cursor: pointer;
+
+			@media screen and (max-width: 414px)
+			{
+				font-size: 30px;
+			}
 		}
 	}
 	.mission-vision-container

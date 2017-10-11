@@ -1,4 +1,5 @@
 <?php
+Route::get('/ref/{id}', 'LeadController@ref');
 Route::any('/inspirers', 'SampleTesting@inspirer');
 Route::any('/inspirer', 'SampleTesting@inspirer');
 
@@ -140,10 +141,12 @@ Route::post('/createAccount', 'Frontend\HomeController@createAccount');
 
 Route::any('/employee_login', 'Login\EmployeeLoginController@employee_login');
 Route::any('/employee_logout', 'Login\EmployeeLoginController@employee_logut');
-Route::any('/employee', 'Login\EmployeeLoginController@employee');
-Route::any('/employee_profile', 'Login\EmployeeController@employee_profile');
-Route::any('/employee_leave_application', 'Login\EmployeeController@employee_leave_application');
-Route::any('/employee_summary_of_leave', 'Login\EmployeeController@employee_summary_of_leave');
+
+
+Route::any('/employee', 'Member\PayrollEmployee\EmployeeController@employee');
+Route::any('/employee_profile', 'Member\PayrollEmployee\EmployeeController@employee_profile');
+Route::any('/employee_leave_application', 'Member\PayrollEmployee\EmployeeController@employee_leave_application');
+Route::any('/employee_summary_of_leave', 'Member\PayrollEmployee\EmployeeController@employee_summary_of_leave');
 
 
 Route::group(array('prefix' => '/member/{page}/'), function()
@@ -203,6 +206,8 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::any('product_order/create_order/submit_payment_upload','Member\ProductOrderController@submit_payment_upload');
 	
 	Route::get('product_order2','Member\ProductOrderController2@index');
+	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
+	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
 	
 	//product order end
 });
@@ -413,6 +418,12 @@ Route::post('/member/item/warehouse/transfer_submit','Member\WarehouseController
 Route::any('/member/item/warehouse/archived/{id}','Member\WarehouseController@archived');
 Route::any('/member/item/warehouse/archive_submit','Member\WarehouseController@archived_submit');
 Route::any('/member/item/warehouse/view/{id}','Member\WarehouseController@view');
+
+Route::any('/member/item/warehouse/view_v2/{id}','Member\WarehouseController@view_v2');
+Route::any('/member/item/warehouse/view_v2/table/{id}','Member\WarehouseController@view_inventory_table');
+
+Route::any('/member/item/warehouse/view_v2/print/{id}/{type}','Member\WarehouseController@print_inventory');
+
 Route::any('/member/item/warehouse/refill','Member\WarehouseController@refill');
 Route::any('/member/item/warehouse/refill_submit','Member\WarehouseController@refill_submit');
 Route::any('/item/warehouse/refill/by_vendor/{warehouse_id}/{id}','Member\WarehouseController@refill_item_vendor');
@@ -443,6 +454,10 @@ Route::any('/member/item/warehouse/refill_log/{id}','Member\WarehouseController@
 Route::any('/member/item/warehouse/view_pdf/{id}','Member\WarehouseController@view_pdf');
 Route::any('/member/item/warehouse/stock_input_report/{id}','Member\WarehouseController@stock_input');
 /* END WAREHOUSE ARCY*/
+
+/* REFILL WAREHOUSE */
+AdvancedRoute::controller("/member/item/warehouse/v2/refill","Member\WarehouseRefillController");
+
 /* INVENTORY LOG*/
 Route::any('/member/item/inventory_log','Member\InventoryLogController@index');
 /*END INVENTORY LOG*/
@@ -1063,6 +1078,9 @@ AdvancedRoute::controller('/member/maintenance/app_keys', 'Member\SocialNetworki
 /* MEMBER COLUMNS */
 AdvancedRoute::controller('/member/columns', 'Member\ColumnsController');
 /* End */
+
+/* EVENTS */
+AdvancedRoute::controller('/member/page/events','Member\EventController');
 
 AdvancedRoute::controller('/tester','TesterController');
 

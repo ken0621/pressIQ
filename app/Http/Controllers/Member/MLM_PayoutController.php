@@ -6,7 +6,10 @@ use Carbon\Carbon;
 use Session;
 use Validator;
 use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Models\Tbl_payout_bank;
+use App\Models\Tbl_payout_bank_shop;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_shop;
 use App\Globals\Currency;
 use Redirect;
 use App\Globals\MLM2;
@@ -76,6 +79,54 @@ class MLM_PayoutController extends Member
 
 		return view('member.mlm_payout.payout_table', $data);
 	}
+	public function getConfig()
+	{
+		$data["pate"] = "Payout Configuration";
+		$_bank = Tbl_payout_bank::get();
+
+		foreach($_bank as $key => $bank)
+		{
+			$check = Tbl_payout_bank_shop::where("shop_id", $this->user_info->shop_id)->where("payout_bank_id", $bank->payout_bank_id)->first();
+			
+			if($check)
+			{
+				$_bank[$key]->enabled = true;
+			}
+			else
+			{
+				$_bank[$key]->enabled = false;
+			}
+		}
+
+		$data["_bank"] = $_bank;
+		return view('member.mlm_payout.payout_config', $data);
+	}
+	public function postConfig()
+	{
+		$response["response_status"] = "success";
+		$response["call_function"] = "payout_config_success";
+		$update_shop["shop_payout_method"] = serialize(request("payout_method"));
+		Tbl_shop::where("shop_id", $this->user_info->shop_id)->update($update_shop);
+
+
+		Tbl_payout_bank_shop::where("shop_id", $this->user_info->shop_id)->delete();
+
+		if(request("bank"))
+		{
+			foreach(request("bank") as $key => $payout_bank_id)
+			{
+				$insert_bank_shop[$key]["shop_id"] = $this->user_info->shop_id;
+				$insert_bank_shop[$key]["payout_bank_id"] = $payout_bank_id;
+			}
+		}
+
+		if(isset($insert_bank_shop))
+		{
+			Tbl_payout_bank_shop::insert($insert_bank_shop);
+		}
+		
+		return json_encode($response);
+	}
 	public function getImport()
 	{
 		return view("member.mlm_payout.payout_import");
@@ -139,15 +190,24 @@ class MLM_PayoutController extends Member
 		$total_payout 			= 0;
 		$total_net 				= 0;
 		$minimum_encashment		= $minimum;
-
+		$data["method"]			= $method;
 
 		if($source == "wallet")
 		{
-			$_slot = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet()->orderBy("customer_id", "asc")->get();
+			$slot_query = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet()->orderBy("customer_id", "asc");
+			
+			if($method == "eon")
+			{
+				$slot_query->where("customer_payout_method", "eon");
+				$slot_query->where("slot_eon", "!=", "");
+				$slot_query->where("slot_eon_account_no", "!=", "");
+			}
+			
+			$_slot = $slot_query->get();
 			
 			foreach($_slot as $key => $slot)
 			{
-				$earnings_as_of 	= Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->where("wallet_log_date_created", ">=", date("Y-m-d", strtotime($cutoff_date)))->sum("wallet_log_amount");
+				$earnings_as_of 	= Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->where("wallet_log_date_created", ">", date("Y-m-d", strtotime($cutoff_date) + 86400))->sum("wallet_log_amount");
 				$encashment_amount 	= $slot->current_wallet - $earnings_as_of;
 				$remaining 			= $slot->current_wallet - $encashment_amount;
 				$compute_net 		= $encashment_amount;
@@ -176,7 +236,6 @@ class MLM_PayoutController extends Member
 				$_slot[$key]->display_tax = Currency::format($tax);
 				$_slot[$key]->display_net = Currency::format($compute_net);
 
-
 				if($encashment_amount <= $minimum_encashment || $remaining < 0)
 				{
 					unset($_slot[$key]);
@@ -185,11 +244,9 @@ class MLM_PayoutController extends Member
 				{
 					$total_payout += $encashment_amount;
 					$total_net += $compute_net;
-
 				}
 			}
 		}
-
 
 		$data["total_payout"] = Currency::format($total_payout);
 		$data["total_net"] = Currency::format($total_net);

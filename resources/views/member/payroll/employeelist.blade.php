@@ -123,7 +123,6 @@
         </div>
       </div>
     </div>
-    
   </div>
   <div id="separated-employee-tab" class="tab-pane fade">
     <div class="form-horizontal">

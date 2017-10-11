@@ -16,14 +16,13 @@
 		<div class="right">
 			<div class="text-right">
 				<!-- <button type="button" class="btn btn-default"><i class="fa fa-bank"></i> PAYOUT METHOD</button> -->
-				<!-- <button type="button" class="btn btn-primary request-payout"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button> -->
+				<button onclick="action_load_link_to_modal('/members/request-payout','md')" type="button" class="btn btn-primary"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button>
 			</div>
 		</div>
 	</div>
 	<div class="wallet-encashment-content">
 		<div class="title">
 			Encashment History
-
 		</div>
 		<div class="table-holder table-responsive">
 			<table class="table table-striped">
@@ -33,7 +32,7 @@
 						<th class="text-center">SLOT</th>
 						<th class="text-center" width="100px">Method</th>
 						<th class="text-center" width="200px">Status</th>
-						<th class="text-right" width="180px">Amount</th>
+						<th class="text-right" width="180px">Take Home</th>
 						<th class="text-right" width="150px">Tax</th>
 						<th class="text-right" width="150px">Fee</th>
 						<th class="text-right" width="180px">Sub Total</th>

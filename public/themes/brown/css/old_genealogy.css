@@ -49,14 +49,14 @@
   pointer-events: none; }
 
 #info:after {
-  border-color: rgba(0, 0, 0, 0);
+  border-color: transparent;
   border-right-color: rgba(0, 0, 0, 0.3);
   border-width: 5px;
   top: 50%;
   margin-top: -5px; }
 
 #info:before {
-  border-color: rgba(0, 0, 0, 0);
+  border-color: transparent;
   border-right-color: rgba(0, 0, 0, 0.3);
   border-width: 6px;
   top: 50%;

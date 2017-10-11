@@ -167,5 +167,5 @@ function action_after_load()
 function onSearch()
 {
     var keyword = $('#keyword').val();
-    $("#submit_link").attr("href", "/product_search?keyword="+$('#keyword').val());
+    $("#submit_link").attr("href", "/product?search="+$('#keyword').val());
 }

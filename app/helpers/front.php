@@ -259,3 +259,49 @@ function get_cart_item_total_quantity($cart)
 {
     return isset($cart["sale_information"]["total_quantity"]) ? $cart["sale_information"]["total_quantity"] : 0;
 }
+
+function get_front_sidebar_icon($name, $shop_theme)
+{
+    switch ($name) 
+    {
+        case 'DTH PRODUCTS':
+            return '/themes/'. $shop_theme .'/img/sidebar/dth.png';
+        break;
+
+        case 'PREPAID CARDS':
+            return '/themes/'. $shop_theme .'/img/sidebar/card.png';
+        break;
+
+        case 'GADGETS':
+            return '/themes/'. $shop_theme .'/img/sidebar/gadgets.png';
+        break;
+
+        case 'ELECTRONICS':
+            return '/themes/'. $shop_theme .'/img/sidebar/electronics.png';
+        break;
+
+        case 'SERVICES':
+            return '/themes/'. $shop_theme .'/img/sidebar/services.png';
+        break;
+
+        case 'ENTERTAINMENT':
+            return '/themes/'. $shop_theme .'/img/sidebar/entertainment.png';
+        break;
+
+        case 'APPAREL':
+            return '/themes/'. $shop_theme .'/img/sidebar/apparel.png';
+        break;
+
+        case 'ACCESORIES':
+            return '/themes/'. $shop_theme .'/img/sidebar/accessories.png';
+        break;
+
+        case 'HEALTH & WELLNESS':
+            return '/themes/'. $shop_theme .'/img/sidebar/health.png';
+        break;
+        
+        default:
+            return '/themes/'. $shop_theme .'/img/sidebar/accessories.png';
+        break;
+    }
+}

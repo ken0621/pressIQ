@@ -157,6 +157,7 @@ class Shop extends Controller
                     if(Self::$customer_info->profile) 
                     {
                         $profile_image = "/" . Self::$customer_info->profile;
+                        $profile_image = str_replace("//", "/", $profile_image);
                     }
                     else
                     {

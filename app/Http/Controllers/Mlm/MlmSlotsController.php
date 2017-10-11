@@ -669,7 +669,9 @@ class MlmSlotsController extends Mlm
     }
     public function use_product_code()
     {
-        return view('mlm.slots.use_product_code');
+        $data['action'] = '/mlm/slot/use_product_code/validate';
+        $data['confirm_action'] = '/mlm/slot/use_product_code/to_slot';
+        return view('mlm.slots.use_product_code',$data);
     }
     public function use_product_code_validate()
     {
@@ -700,6 +702,8 @@ class MlmSlotsController extends Mlm
         $data['mlm_pin'] = Request::input('mlm_pin');
         $data['mlm_activation'] = Request::input('mlm_activation');
         $data["_slot"]    = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->get();
+        $data['action'] = '/mlm/slot/use_product_code/confirmation';
+        $data['confirm_action'] = '/mlm/slot/use_product_code/confirmation/submit';
 
         return view('mlm.slots.choose_slot',$data);
     }
@@ -721,6 +725,7 @@ class MlmSlotsController extends Mlm
         $data['slot_no'] = Request::input('slot_no');
         
         $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) in your Slot No <b>".$data['slot_no']."</b> ?";
+        $data['action'] = '/mlm/slot/use_product_code/confirmation/used';
 
         return view('mlm.slots.confirm_product_code',$data);
     }

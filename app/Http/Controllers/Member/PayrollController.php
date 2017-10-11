@@ -762,7 +762,7 @@ class PayrollController extends Member
                               // dd($insert);
 
                               $payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
-                              $new_data = AuditTrail::get_table_data("Tbl_payroll_employee_basic","payroll_employee_id",$payroll_employee_id);
+                              $new_data = AuditTrail::get_table_data("tbl_payroll_employee_basic","payroll_employee_id",$payroll_employee_id);
                                AuditTrail::record_logs("CREATED: Payroll Employee","Created Payroll Employee With Employee Name: ".Self::nullableToString($data['title_name']).' '.Self::nullableToString($data['first_name']).' '.Self::nullableToString($data['middle_name']).' '.Self::nullableToString($data['last_name']).' '.Self::nullableToString($data['suffix_name']),$payroll_employee_id,"",serialized($new_data));
                               /* EMPLOYEE BASIC INSERT END */
 
@@ -774,7 +774,7 @@ class PayrollController extends Member
                               $insert_contract['payroll_employee_contract_status']        = Self::getid($data['employment_status'],'employment_status');
                               
                               $payroll_contract_id=Tbl_payroll_employee_contract::insertGetId($insert_contract);
-                              $new_data = AuditTrail::get_table_data("Tbl_payroll_employee_basic","payroll_employee_id",$payroll_employee_id);
+                              $new_data = AuditTrail::get_table_data("tbl_payroll_employee_basic","payroll_employee_id",$payroll_employee_id);
                               AuditTrail::record_logs("CREATED: Payroll Contract","Payroll Employee Contract Employee ID #".$payroll_employee_id,$payroll_contract_id,"",$new_data);
 
                               /*   EMPLOYEE CONTRACT END */
@@ -1010,8 +1010,7 @@ class PayrollController extends Member
                $insert['payroll_requirements_date_upload']       = Carbon::now();
 
                $payroll_requirements_id = Tbl_payroll_requirements::insertGetId($insert);
-               AuditTrail::record_logs("UPLOAD: Payroll Requirement","Payroll Requirements Name: ".$requirement_original_name,"","","");
-
+               
                $data['path']                      = $path.'/'.$requirement_new_name;
                $data['original_name']             = $requirement_original_name;
                $data['extension']                 = $requirement_extension_name;
@@ -1068,8 +1067,7 @@ class PayrollController extends Member
 		$insert['payroll_employee_remarks'] 		= Request::input('payroll_employee_remarks');
           $insert['branch_location_id']                = Request::input('branch_location_id') != null ? Request::input('branch_location_id') : 0;
           $insert['shift_code_id']                     = Request::input('shift_code_id') != null ? Request::input('shift_code_id') : 0;
-		AuditTrail::record_logs("Adding Employee","Adding Employee with Name:".Request::input('payroll_employee_display_name'),Request::input('payroll_employee_number'),"","");
-          $payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
+		$payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
 
 
 		/* employee contract */
@@ -1080,8 +1078,7 @@ class PayrollController extends Member
 		$insert_contract['payroll_employee_contract_date_end'] 	= Request::input("payroll_employee_contract_date_end");
 		$insert_contract['payroll_employee_contract_status'] 		= Request::input("payroll_employee_contract_status");
 		$insert_contract['payroll_group_id'] 					= Request::input("payroll_group_id");
-          AuditTrail::record_logs("Adding Employee Contract","Adding Employee Contact with Employee ID #".$payroll_employee_id,$payroll_employee_id,"","");
-		Tbl_payroll_employee_contract::insert($insert_contract);
+          Tbl_payroll_employee_contract::insert($insert_contract);
 
 
 		/* employee salary details */
@@ -1201,9 +1198,9 @@ class PayrollController extends Member
           $insert_requirements['school_credentials_requirements_id']  = Request::input('school_credentials_requirements_id');
           $insert_requirements['has_valid_id']                             = $has_valid_id;
           $insert_requirements['valid_id_requirements_id']            = Request::input('valid_id_requirements_id');
-          $new_data = AuditTrail::get_table_data("Tbl_payroll_employee_requirements","","");
+          
           Tbl_payroll_employee_requirements::insert($insert_requirements);
-          AuditTrail::record_logs("INSERTING","Payroll Employee Requirements",$this->shop_id(),"",serialize($new_data));
+         
 
 
           $payroll_dependent_name       = Request::input('payroll_dependent_name');
@@ -1524,8 +1521,7 @@ class PayrollController extends Member
           $insert['payroll_group_id']                       = Request::input('payroll_group_id');
           $insert['payroll_employee_contract_status']       = Request::input('payroll_employee_contract_status');
           Tbl_payroll_employee_contract::insert($insert);
-          AuditTrail::record_logs("CREATED: Employee Contract","Employee Contract with Department ID #".Request::input('payroll_department_id'),"","","Tbl_payroll_employee_contract::insert($insert);");
-
+          
           $return['status'] = 'success';
           return json_encode($return);
      }
@@ -1648,7 +1644,7 @@ class PayrollController extends Member
      {
           $update['payroll_employee_salary_archived'] = Request::input('archived');
           $id                                               = Request::input('id');
-          $new_data = AuditTrail::get_table_data("Tbl_payroll_employee_salary","payroll_employee_salary_id",$id);
+          $new_data = AuditTrail::get_table_data("tbl_payroll_employee_salary","payroll_employee_salary_id",$id);
           Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$id)->update($update);
           AuditTrail::record_logs("DELETED: Payroll Employee Salary","Updating Payroll Employee with ID #".$id,$id,"",serialize($new_data));
 
@@ -1723,8 +1719,9 @@ class PayrollController extends Member
           $insert['deduct_philhealth_custom']     = $deduct_philhealth_custom;
           $insert['is_deduct_pagibig_default']    = $is_deduct_pagibig_default;
           $insert['deduct_pagibig_custom']        = $deduct_pagibig_custom;
-          AuditTrail::record_logs("CREATED: Employee Salary","Inserting Employee Salary with employee ID #".Request::input('payroll_employee_id'),Request::input('payroll_employee_id'),"","Tbl_payroll_employee_salary::insert($insert);");
-          Tbl_payroll_employee_salary::insert($insert);
+          $get_id = Tbl_payroll_employee_salary::insertGetId($insert);
+          AuditTrail::record_logs("CREATED: Employee Salary","Inserting Employee Salary with employee ID #".$get_id,$get_id,"","");
+          
           $return['status'] = 'success';
 		
 		return json_encode($return);
@@ -1764,16 +1761,13 @@ class PayrollController extends Member
           
 
           Tbl_payroll_employee_basic::where('payroll_employee_id',$payroll_employee_id)->update($update_basic);
-          AuditTrail::record_logs("EDITED: Payroll Employee Basic","Payroll Employee Name".Request::input('payroll_employee_display_name'),$payroll_employee_id,"","");
-
+          
           $payroll_dependent_name       = Request::input('payroll_dependent_name');
           $payroll_dependent_birthdate  = Request::input('payroll_dependent_birthdate');
           $payroll_dependent_relationship = Request::input('payroll_dependent_relationship');
 
           /* dependent insert */
-          $old = AuditTrail::get_table_data("Tbl_payroll_employee_dependent","payroll_employee_id",$payroll_employee_id);
           Tbl_payroll_employee_dependent::where('payroll_employee_id', $payroll_employee_id)->delete();
-          AuditTrail::record_logs("Deleting Employee Dependent","Deleting Employee Dependent with employee ID #".$payroll_employee_id,$payroll_employee_id,$old,"");
           $insert_dependent = array();
 
           $temp = "";
@@ -1801,7 +1795,6 @@ class PayrollController extends Member
 
           /* INSERT ALLOWANCES */
           Tbl_payroll_employee_allowance::where('payroll_employee_id',$payroll_employee_id)->delete();
-          AuditTrail::record_logs("DELETED : Payroll Employee Allowance","Deleting Payroll Employee Allowance with Employee ID #".$payroll_employee_id,"","","");
           $insert_allowance = array();
           if(Request::has('allowance'))
           {
@@ -1822,7 +1815,6 @@ class PayrollController extends Member
           /* INSERT PAYROLL LEAVE */
           $update_leave['payroll_leave_employee_is_archived'] = 1;
           Tbl_payroll_leave_employee::where('payroll_employee_id',$payroll_employee_id)->update($update_leave);
-          AuditTrail::record_logs("Updating Payroll Leave Employee","Updating Payroll Employee Leave with ID #".$payroll_employee_id." to archived=1",$payroll_employee_id,"","");
           if(Request::has('leave'))
           {
                $leave_insert = array();
@@ -3062,7 +3054,7 @@ class PayrollController extends Member
           $content  = Request::input('content');
           
           $update['payroll_deduction_type_name'] = $value;
-           $new_data = AuditTrail::get_table_data("Tbl_payroll_deduction_type","payroll_deduction_type_id",$content);
+           $new_data = AuditTrail::get_table_data("tbl_payroll_deduction_type","payroll_deduction_type_id",$content);
            AuditTrail::record_logs('Updating Payroll Deduction Type', 'Updating Payroll Deduction Type with Type ID #'.$content." with value:".$value,$content, "" ,$new_data);
           Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->update($update);
 
@@ -3072,7 +3064,7 @@ class PayrollController extends Member
      {
           $content = Request::input('content');
           $update['payroll_deduction_archived'] = Request::input('archived');
-          $new_data = AuditTrail::get_table_data("Tbl_payroll_deduction_type","payroll_deduction_type_id",$content);
+          $new_data = AuditTrail::get_table_data("tbl_payroll_deduction_type","payroll_deduction_type_id",$content);
            AuditTrail::record_logs('Updating Payroll Deduction Type', 'Updating Payroll Deduction Type with Type ID #'.$content." with archived to:".Request::input('archived'),$content, "" ,$new_data);
           
           Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->update($update);
@@ -3258,7 +3250,7 @@ class PayrollController extends Member
      {
           $update['payroll_deduction_archived']   = Request::input('archived');
           $id                                          = Request::input('id');
-          $old_data = AuditTrail::get_table_data("Tbl_payroll_deduction","payroll_deduction_id",$id);
+          $old_data = AuditTrail::get_table_data("tbl_payroll_deduction","payroll_deduction_id",$id);
           Tbl_payroll_deduction::where('payroll_deduction_id',$id)->update($update);
           AuditTrail::record_logs('Added Payroll deduction', 'payroll Deduction with deduction ID #'.$id. " to archived value: ".Request::input('archived'), $id ,"", serialize($old_data));
 
@@ -3285,7 +3277,7 @@ class PayrollController extends Member
           $update['payroll_deduction_remarks']    = Request::input('payroll_deduction_remarks');
 
           $update['expense_account_id']           = Request::input('expense_account_id');
-          $old_data = AuditTrail::get_table_data("Tbl_payroll_deduction","payroll_deduction_id",$payroll_deduction_id);
+          $old_data = AuditTrail::get_table_data("tbl_payroll_deduction","payroll_deduction_id",$payroll_deduction_id);
           Tbl_payroll_deduction::where('payroll_deduction_id',$payroll_deduction_id)->update($update);
            AuditTrail::record_logs('Updating Payroll deduction', 'payroll Deduction with deduction ID #'.$id. " to archived value: ".Request::input('archived'), $payroll_deduction_id ,"", serialize($old_data));
           $return['status']             = 'success';
@@ -3315,7 +3307,7 @@ class PayrollController extends Member
           $id = Request::input('id');
           $update['payroll_deduction_employee_archived'] = Request::input('archived');
 
-          $old_data = AuditTrail::get_table_data("Tbl_payroll_deduction_employee","payroll_deduction_employee_id",$id);
+          $old_data = AuditTrail::get_table_data("tbl_payroll_deduction_employee","payroll_deduction_employee_id",$id);
           Tbl_payroll_deduction_employee::where('payroll_deduction_employee_id', $id)->update($update);
           AuditTrail::record_logs('Added', 'Updating Payroll Deduction Employee with ID #'.$id." to archive value:".Request::input('archived'), $id ,"", serialize($old_data));
           $return['status']             = 'success';
@@ -3844,7 +3836,7 @@ class PayrollController extends Member
      {
           $id = Request::input('id');
           $update['payroll_leave_temp_archived'] = Request::input('archived');
-           $old_data = AuditTrail::get_table_data("Tbl_payroll_leave_temp","payroll_leave_temp_id",$id);
+           $old_data = AuditTrail::get_table_data("tbl_payroll_leave_temp","payroll_leave_temp_id",$id);
           Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $id)->update($update);
            AuditTrail::record_logs('Updating Payroll Leave temp', 'Updating Payroll Leave temp with ID #'.$id." To archive value=".Request::input('archived'), $id, "" ,serialize($old_data));
           $return['status']             = 'success';
@@ -3869,7 +3861,7 @@ class PayrollController extends Member
           $update['payroll_leave_temp_days_cap']  = Request::input('payroll_leave_temp_days_cap');
           $update['payroll_leave_temp_with_pay']  = Request::input('payroll_leave_temp_with_pay');
           $update['payroll_leave_temp_is_cummulative']      = Request::input('payroll_leave_temp_is_cummulative');
-          $old_data = AuditTrail::get_table_data("Tbl_payroll_leave_temp","payroll_leave_temp_id",$payroll_leave_temp_id);
+          $old_data = AuditTrail::get_table_data("tbl_payroll_leave_temp","payroll_leave_temp_id",$payroll_leave_temp_id);
           Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $payroll_leave_temp_id)->update($update);
           AuditTrail::record_logs('Updating Payroll Leave temp', 'Updating Payroll Leave temp with ID #'.$payroll_leave_temp_id." To Temp Name=".Request::input('payroll_leave_temp_name'), $payroll_leave_temp_id, "" ,serialize($old_data));
           $return['status']             = 'success';
@@ -3901,7 +3893,7 @@ class PayrollController extends Member
      {
           $id = Request::input('id');
           $update['payroll_leave_employee_is_archived'] = Request::input('archived');
-          $old_data = AuditTrail::get_table_data("Tbl_payroll_leave_employee","payroll_leave_employee_id",$id);
+          $old_data = AuditTrail::get_table_data("tbl_payroll_leave_employee","payroll_leave_employee_id",$id);
           Tbl_payroll_leave_employee::where('payroll_leave_employee_id', $id)->update($update);
           AuditTrail::record_logs('Updating Payroll Leave Employee', 'Updating Payroll Leave Employee with ID #'.$id." To archive value=".Request::input('archived'), $id, "" ,serialize($old_data));
           $return['status']             = 'success';
@@ -4344,7 +4336,7 @@ class PayrollController extends Member
           // {
           //   Tbl_payroll_group_rest_day::insert($insert_extra_day);
           // }
-          $old_data = AuditTrail::get_table_data("Tbl_payroll_shift","payroll_group_id",$payroll_group_id);
+          $old_data = AuditTrail::get_table_data("tbl_payroll_shift","payroll_group_id",$payroll_group_id);
           Tbl_payroll_shift::where('payroll_group_id', $payroll_group_id)->delete();
           AuditTrail::record_logs('Deleting payroll Shift', 'Deleting payroll Shift with ID #'.$payroll_group_id, $id, "" ,serialize($old_data));
 
@@ -4382,7 +4374,7 @@ class PayrollController extends Member
      {
           $payroll_group_id = Request::input('id');
           $update['payroll_group_archived'] = Request::input('archived');
-          $old_data = AuditTrail::get_table_data("Tbl_payroll_group","payroll_group_id",$payroll_group_id);
+          $old_data = AuditTrail::get_table_data("tbl_payroll_group","payroll_group_id",$payroll_group_id);
           Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->update($update);
           AuditTrail::record_logs('Updating Payroll Group', 'Updating Payroll Group temp with ID #'.$payroll_group_id." To archive value=".Request::input('archived'), $id, "" ,serialize($old_data));
           $return['status'] = 'success';
@@ -5722,7 +5714,7 @@ class PayrollController extends Member
           {
                /* UPDATE SHIFT CODE */
                $update_code['shift_code_name']    = Request::input('shift_code_name');
-               $old_data = AuditTrail::get_table_data("Tbl_payroll_shift_code","shift_code_id",$shift_code_id);
+               $old_data = AuditTrail::get_table_data("tbl_payroll_shift_code","shift_code_id",$shift_code_id);
                Tbl_payroll_shift_code::where("shop_id", Self::shop_id())->where("shift_code_id", $shift_code_id)->update($update_code);
                AuditTrail::record_logs('Updating Payroll Shift Code', 'Updating Payroll Shift Code with ID #'.$shift_code_id." To Shift Code Name value=".Request::input('shift_code_name'), $shift_code_id, "" ,serialize($old_data));
                $insert_shift = array();
@@ -6030,7 +6022,7 @@ class PayrollController extends Member
                foreach($_payroll_period_id as $payroll_period_id)
                {
                     $update['payroll_period_status'] = 'generated';
-                    $old_data = AuditTrail::get_table_data("Tbl_payroll_period","payroll_period_id",$payroll_period_id);
+                    $old_data = AuditTrail::get_table_data("tbl_payroll_period","payroll_period_id",$payroll_period_id);
                     Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
                     AuditTrail::record_logs('EDITED: Payroll Period', ' Payroll Period with ID #'.$payroll_period_id." To Period Status value=GENERATED", $payroll_period_id, "" ,serialize($old_data));
                }
@@ -6242,7 +6234,7 @@ class PayrollController extends Member
           $payroll_employee_id          = Request::input('payroll_employee_id');
           $payroll_period_company_id    = Request::input('payroll_period_company_id');
           $payroll_record_id            = array();
-          $new_old_data = AuditTrail::get_table_data("Tbl_payroll_13_month_compute","payroll_employee_id",$payroll_employee_id);
+          $new_old_data = AuditTrail::get_table_data("tbl_payroll_13_month_compute","payroll_employee_id",$payroll_employee_id);
           Tbl_payroll_13_month_compute::where('payroll_employee_id', $payroll_employee_id)->where('payroll_period_company_id', $payroll_period_company_id)->delete();
           AuditTrail::record_logs('DELETED', 'Payroll Process Leave with ID #'.$payroll_employee_id,$payroll_employee_id, $new_old_data , $new_old_data);
 

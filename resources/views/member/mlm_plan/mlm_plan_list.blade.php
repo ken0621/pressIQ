@@ -196,6 +196,16 @@
                                         </select>
                                     </td>
                                 </tr>
+                                
+                                <tr>
+                                    <td>New Generation Plan</td>
+                                    <td>
+                                        <select name="plan_settings_new_gen_placement" class="form-control">
+                                            <option value="1" {{$plan_settings->plan_settings_new_gen_placement == "1" ? 'selected' : ''}}>Enable</option>
+                                            <option value="0" {{$plan_settings->plan_settings_new_gen_placement == "0" ? 'selected' : ''}}>Disable</option>
+                                        </select>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>Membership Code Email</td>
                                     <td>

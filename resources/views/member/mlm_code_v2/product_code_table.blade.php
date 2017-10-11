@@ -35,7 +35,7 @@
                     <td class="text-center"><a size="md" class="popup" link="/member/mlm/code2/change_status?action=block&item_id={{$item->item_id}}&record_id={{$item->record_log_id}}">Block Code</a></td>
                     @endif
                 @else
-                <td class="text-center" colspan="3"><a href="javascript:">Used By SLOT NUMBER-{{strtoupper($item->slot_no)}}</a></td>
+                <td class="text-center" colspan="3"><a href="javascript:">{{$item->used_by}}</a></td>
                 @endif
             </tr>
             @endforeach

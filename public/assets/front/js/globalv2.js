@@ -32,14 +32,40 @@ function globalv2()
     }
     function document_ready()
     {
-        load_cart();
+        // load_cart();
         action_image_crop();
+        check_if_image_loaded_success();
     }
     function window_load()
     {
         if (typeof action_after_load == 'function') 
         {
             action_after_load();    
+        }
+    }
+    function check_if_image_loaded_success()
+    {
+        var check_url = document.location.origin;
+
+        if(check_url.indexOf(".dev"))
+        {
+            $("img").error(function(e)
+            {
+                var url_src= $(e.currentTarget).attr("src");
+
+                console.log("IMAGE ERROR " + url_src);
+
+                if(!$(e.currentTarget).hasClass("retried"))
+                {
+                    var url = document.location.origin;
+                    var live_url = url.replace(".dev", ".com");
+
+                    console.log("Redirect loading with LIVE PATH " + url_src);
+
+                    $(e.currentTarget).attr("src", live_url + url_src);
+                    $(e.currentTarget).addClass("retried");
+                }
+            });
         }
     }
 }
@@ -57,7 +83,7 @@ function number_format(number)
 
 function image_crop(selector, width, height)
 {
-    $(selector).css("object-fit", "contain");
+    $(selector).css("object-fit", "contain").css("object-position", "center");
     $(selector).keepRatio({ ratio: width/height, calculate: 'height' });
 }
 

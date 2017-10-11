@@ -51,8 +51,7 @@ class Ecom_Product
 		{
 			$shop_id = Ecom_Product::getShopId();
 		}
-
-		return Tbl_warehouse::where("main_warehouse", 2)->where("warehouse_shop_id", $shop_id)->value('warehouse_id');
+		return Tbl_warehouse::where("main_warehouse", 2)->where("warehouse_shop_id", $shop_id)->where('archived',0)->value('warehouse_id');
 	}
 
 	/**
@@ -67,7 +66,6 @@ class Ecom_Product
 		{
 			$shop_id = Ecom_Product::getShopId();
 		}
-		
 		$_product = Tbl_ec_product::where("eprod_shop_id", $shop_id)->where("archived", 0)->get()->toArray();
 		foreach($_product as $key=>$product)
 		{
@@ -260,6 +258,7 @@ class Ecom_Product
 			{
 				$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
 			}
+
 			//arcy get disc price
 			$get_min_price = [];
 			foreach($product["variant"] as $key2=>$variant)

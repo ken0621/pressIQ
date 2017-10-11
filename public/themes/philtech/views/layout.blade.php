@@ -10,6 +10,10 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name='B-verify' content='8b63efb2920a681d6f877a59a414659d09831140' />
+        <!-- FOR GOOGLE LOGIN -->
+        <meta name="google-signin-client_id" content="{{$google_app_id or ''}}">
+        <input type="hidden" name="" class="google_app_id" value="{{$google_app_id or ''}}">
+        <!-- END GOOGLE LOGIN -->
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
@@ -60,7 +64,7 @@
 
                         {{-- Search Bar --}}                          
                         <div class="search-bar">
-                            <form action="/product_search" method="get" id="form-search">
+                            <form action="/product" method="get" id="form-search">
                                 <div class="input-group">
                                      <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
                                      <span class="input-group-addon search-button" id="sizing-addon1">
@@ -235,6 +239,10 @@
 
     @include("frontend.gfoot")
     <script src="/themes/{{ $shop_theme }}/js/custom_theme.js"></script>
+    <!-- FOR GOOGLE LOGIN -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <!-- END GOOGLE LOGIN -->
     @yield("js")
     </body>
 </html>

@@ -17,7 +17,6 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
-        
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">

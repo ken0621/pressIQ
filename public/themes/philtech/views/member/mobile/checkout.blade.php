@@ -22,15 +22,8 @@
       <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/mobile/css/global.css">
    </head>
    <body>
-      <input type="hidden" class="mobile-mode">
-      <input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
-      <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
-      <input type="hidden" name="not_placed_yet" class="not_placed_yet" value="{{ $not_placed_yet or 0 }}" link="/members/enter-placement?slot_no={{ Crypt::encrypt($not_placed_slot->slot_id) }}&key={{ md5($not_placed_slot->slot_id . $not_placed_slot->slot_no) }}">
       <div class="statusbar-overlay"></div>
       <div class="panel-overlay"></div>
-      
-
-      
       <div class="panel panel-left panel-cover">
          <div class="view navbar-fixed">
             <div class="pages">
@@ -178,8 +171,7 @@
                   <div class="navbar">
                      <div class="navbar-inner">
                         <div class="left"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div>
-                        <div class="left">Dashboard</div>
-                        
+                        <div class="left">Checkout</div>
                         {{-- <div class="right">
                            <div class="text">3</div>
                            <img src="/themes/{{ $shop_theme }}/assets/mobile/img/notification.png">
@@ -187,248 +179,118 @@
                      </div>
                   </div>
                   <div class="page-content">
-                     <div class="dashboard-view">
-
-                        
-                        @if(!$mlm_member)
-                           @if(isset($check_unused_code))
-                           <div class="congrats-holder">
-                              <div class="title">CONGRATULATIONS!</div>
-                                 <div class="img">
-                                 <img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
-                              </div>
-                              <div class="desc">You are one step away from your membership!</div>
-                                 <div class="btn-container">
-                                 <button id="btn-notification" class="btn-verify-notification btn-congratulation btn-notification" type="button">Continue</button>
-                              </div>
-                           </div>
-                           @else
-                           <div class="non-member">
-                              <div class="row">
-                                 <div class="col-100">
-                                    <video controls="">
-                                       <source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
-                                    </video>
-                                 </div>
-                                 <div class="col-100">
-                                    <div class="join-container">
-                                       <div class="text">
-                                          <div class="text-header1">Join the Movement!</div>
-                                          <div class="text-header2">Enroll now and become one of us!</div>
-                                       </div>
-                                       <div class="btn-container">
-                                          <button class="product-add-cart btn-buy-a-kit" type="button" onClick="location.href='/cartv2/buy_kit_mobile/{{ $item_kit_id }}'">Enroll Now</button><br>
-                                          <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-                                          <button class="btn-enter-a-code">Enter a Code</button>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           @endif
-                        @else
-                           <div class="profile-holder">
-                              <table>
-                                 <tr>
-                                    <td class="img">
-                                       <img src="{{ $profile_image }}">
-                                    </td>
-                                    <td class="text">
-                                       <div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
-                                       <div class="sub">Member</div>
-                                    </td>
-                                 </tr>
-                              </table>
-                           </div>
-                           <div class="summary-holder">
-                              <div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
-                              <div class="body">
-                                 <div class="chart-legend">
-                                    <div class="row">
-                                       <!-- Each "cell" has col-[widht in percents] class -->
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color" style="background-color: #76b6ec"></div><span>Current Wallet</span></div>
-                                             <div class="name">{{ $wallet->display_current_wallet }}</div>
-                                          </div>
-                                       </div>
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color" style="background-color: #8E5EA2"></div><span>Total Pay-out</span></div>
-                                             <div class="name">{{ $wallet->display_total_payout }}</div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    
-                                    
-                                    <!--<div class="chart-holder">-->
-                                    <!--   <canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="150" height="150"></canvas>-->
-                                    <!--</div>-->
-                                    <div class="row">
-                                       <!-- Each "cell" has col-[widht in percents] class -->
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color"></div><span>Current Slot(s)</span></div>
-                                             <div class="name">{{ $customer_summary["display_slot_count"] }}</div>
-                                          </div>
-                                       </div>
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color"></div><span>Total Reward</span></div>
-                                             <div class="name">{{ $wallet->display_total_earnings }}</div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <div class="summary-holder">
-                              <div class="title"><i class="fa fa-table"></i> Reward Summary</div>
-                              <div class="body">
-                                 <div class="chart-legend">
-                                    <div class="row" style="text-align: center;">
-                                       <div class="col-100">
-                                          <div class="holder" style="text-align: center; display: inline-block;">
-                                             <div class="color-name"><div class="color"></div><span>Pairing Reward</span></span></div>
-                                             <div class="name">{{ $wallet->display_complan_triangle }}</div>
-                                          </div>
-                                       </div>
-                                       <div class="col-100">
-                                          <div class="holder" style="text-align: center; display: inline-block;">
-                                             <div class="color-name"><div class="color"></div><span>Direct Referral Bonus</span></div>
-                                             <div class="name">{{ $wallet->display_complan_direct }}</div>
-                                          </div>
-                                       </div>
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color"></div><span>Builder Reward</span></div>
-                                             <div class="name">{{ $wallet->display_complan_builder }}</div>
-                                          </div>
-                                       </div>
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color"></div><span>Leader Reward</span></div>
-                                             <div class="name">{{ $wallet->display_complan_leader }}</div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <div class="summary-holder">
-                              <div class="title"><i class="align-icon brown-icon-bar-chart"></i> Reward Points</div>
-                              <div class="body">
-                                 <div class="chart-legend">
-                                    <div class="row">
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color"></div><span>Builder Point(s)</span></div>
-                                             <div class="name">{{ $points->display_brown_builder_points }}</div>
-                                          </div>
-                                       </div>
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color"></div><span>Leader Point(s)</span></div>
-                                             <div class="name">{{ $points->display_brown_leader_points }}</div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <div class="summary-holder">
-                              <div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s)</div>
-                              <div class="body">
-                                 <div class="unilevel-holder">
-                                    @foreach($_slot as $slot)
-                                    <div class="holder">
-                                       <div class="row">
-                                          <div class="col-40 text-center">
-                                             <div class="label2">{{ $slot->slot_no }}</div>
-                                             <div class="label3">{{ $slot->display_total_earnings }}</div>
-                                             <div class="label3">{{ $slot->current_direct }} / {{ $slot->brown_next_rank_current }}</div>
-                                          </div>
-                                          <div class="col-60 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
-                                          <div class="col-40">
-                                             @if($slot->brown_next_rank != "NO NEXT RANK")
-                                             @if($slot->current_direct >= $slot->required_direct)
-                                             <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">DIRECT <b>QUALIFIED</b></div>
-                                             @else
-                                             <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_direct_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_direct_rank_percentage }}%);">DIRECT ({{ $slot->current_direct }}/{{ $slot->required_direct }})</div>
-                                             @endif
-                                             @else
-                                             <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
-                                             @endif
-                                          </div>
-                                          <div class="col-60">
-                                             @if($slot->brown_next_rank != "NO NEXT RANK")
-                                             @if($slot->brown_next_rank_current >= $slot->brown_next_rank_requirements)
-                                             <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">GROUP <b>QUALIFIED</b></div>
-                                             @else
-                                             <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">GROUP ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
-                                             @endif
-                                             @else
-                                             <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
-                                             @endif
-                                          </div>
-                                       </div>
-                                    </div>
-                                    @endforeach
-                                 </div>
-                              </div>
-                           </div>
-                        @endif
-                     </div>
+                    <form method="post">
+                    {{ csrf_field() }}
+                      <div class="checkout-view">
+                          <div class="holder">
+                              <div class="content-block-title">Fill Up Delivery Information</div>
+                              <div class="list-block" style="margin-bottom: 0;">
+                                <ul>
+                                    <!-- Text inputs -->
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">Province</div>
+                                                <div class="item-input">
+                                                    <select name="customer_state">
+                                                      @foreach($_locale as $locale)
+            											               <option value="{{ $locale->locale_name }}">{{ $locale->locale_name }}</option>
+            											         @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">Complete Shipping Address</div>
+                                                <div class="item-input">
+                                                    <textarea required="required" name="customer_street" placeholder="Type your complete address here"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                          </div>
+                          <div class="holder">
+                              <!-- CART SUMMARY -->
+    							<div class="cart-summary">
+    								<div class="top-title row no-gutter clearfix">
+    									<div class="col-33">
+    										<div class="per-title" style="border-bottom: 2px solid #63b944;">Product</div>									
+    									</div>
+    									<div class="col-33">
+    										<div class="per-title" style="border-bottom: 2px solid #ef5525;">Quantity</div>
+    									</div>
+    									<div class="col-33">
+    										<div class="per-title" style="border-bottom: 2px solid #6075f7;">Price</div>
+    									</div>
+    								</div>
+    								@if($cart)
+    								
+    									@foreach($cart["_item"] as $c)
+    									<!-- PER ITEM SUMMARY -->
+    									<div class="per-summary-content row no-gutter clearfix">
+    										<div class="col-33">
+    											<div class="per-summary-details">{{ $c->item_name }}</div>
+    										</div>
+    										<div class="col-33">
+    											<div class="per-summary-details">{{ $c->quantity }}</div>
+    										</div>
+    										<div class="col-33">
+    											<div class="per-summary-details">{{ $c->display_subtotal }}</div>
+    										</div>
+    									</div>
+    									@endforeach
+    									
+    									<!-- SUMMARY TOTAL CONTAINER -->
+    									<div class="total-container row no-gutter clearfix">
+    										<!-- SUBTOTAL -->
+    										<!--<div class="col-md-6">-->
+    										<!--	<div class="left-detail">Subtotal</div>-->
+    										<!--</div>-->
+    										<!--<div class="col-md-6">-->
+    										<!--	<div class="right-detail">{{ $cart["_total"]->display_total }}</div>-->
+    										<!--</div>-->
+    										<!-- TOTAL -->
+    										<div class="col-50">
+    											<div class="left-detail">Total</div>
+    										</div>
+    										<div class="col-50">
+    											<div class="right-detail">{{ $cart["_total"]->display_grand_total }}</div>
+    										</div>
+    									</div>
+    									<!-- SHIPPING FEE -->
+    									<div class="shipping-fee">Shipping Fee is included</div>
+    								@else
+    									<div class="text-center" style="padding: 50px;">CART IS EMPTY</div>
+    								@endif
+    							
+    							</div>
+                          </div>
+                          <div class="holder">
+                              <!-- PAYMENT OPTION -->
+							<div class="payment-option" style="margin-top: 0;">
+								<div class="top-title">How do you want to pay?</div>
+								<div class="option">
+									<div class="form-input">
+										<select name="method" required="required">
+											<option value="" hidden>Select Payment Method</option>
+											@foreach($_payment as $payment)
+												<option value="{{ $payment->link_reference_name }}">{{ $payment->method_name }}</option>
+											@endforeach
+										</select>	
+									</div>
+								</div>
+								<div class="button-container">
+									<button type="submit" class="button-proceed" id="proceed">Proceed</button>
+								</div>
+							</div>
+                          </div>
+                      </div>
                   </div>
-                  <!-- Code Popup -->
-                  <!--<div class="popup popup-code">-->
-                  <!--    <form method="post" class="submit-verify-sponsor">-->
-                  <!--       <div class="code-holder">-->
-                  <!--          <div class="modal-header">-->
-                  <!--              <div class="modal-title"><i class="fa fa-star"></i> SPONSOR</div>-->
-                  <!--          </div>-->
-                  <!--          <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>-->
-                  <!--          <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">-->
-                  <!--          <div class="output-container">-->
-                  <!--          </div>-->
-                  <!--          <div class="btn-container">-->
-                  <!--              <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>-->
-                  <!--          </div>-->
-                  <!--       </div>-->
-                  <!--   </form>-->
-                  <!--</div>-->
-                  <!-- Verification Popup -->
-                  <!--<div class="popup popup-verification">-->
-                  <!--    <div class="verification-holder">-->
-                  <!--       <div class="modal-header">-->
-                  <!--           <div class="modal-title"><i class="fa fa-shield"></i> CODE VERIFICATION</div>-->
-                  <!--       </div>-->
-                  <!--       <div class="modal-body">-->
-                  <!--           <div class="message message-return-code-verify"></div>-->
-                  <!--           <form method="post" class="code-verification-form">-->
-                  <!--               <div>-->
-                  <!--                   <div class="labeld">Pin Code</div>-->
-                  <!--                   <input class="input input-pin text-center" name="pin" type="text" value="{{$mlm_pin or ''}}">-->
-                  <!--               </div>-->
-                  <!--               <div>-->
-                  <!--                   <div class="labeld">Activation</div>-->
-                  <!--                   <input class="input input-activation text-center" name="activation" type="text" value="{{$mlm_activation or ''}}">-->
-                  <!--               </div>-->
-                  <!--               <div class="btn-container">-->
-                  <!--                   <button id="btn-proceed-2" class="btn-proceed-2" type='submit'><i class="fa fa-angle-double-right"></i> Proceed</button>-->
-                  <!--               </div>-->
-                  <!--           </form>-->
-                  <!--       </div>-->
-                  <!--    </div>-->
-                  <!--</div>-->
-                  <!-- Final Verification Popup -->
-                  <!--<div class="popup final-popup-verification">-->
-                  <!--    <form method="post" class="submit-verify-sponsor">-->
-                  <!--       <div class="verification-holder">-->
-                  <!--          <div class="load-final-verification"></div>-->
-                  <!--       </div>-->
-                  <!--   </form>-->
-                  <!--</div>-->
                </div>
             </div>
          </div>
@@ -607,15 +469,5 @@
       <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
       <!-- GLOBAL JS -->
       <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/js/global.js"></script>
-      <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.1"></script>
-      <script type="text/javascript">
-         var myApp = new Framework7();
-         var $$ = Dom7;
-      </script>
-      <!-- BEGIN JIVOSITE CODE -->
-      <script type='text/javascript'>
-      (function(){ var widget_id = 'OcvyPjoHBr';var d=document;var w=window;function l(){ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
-      </script>
-      <!-- END JIVOSITE CODE -->
    </body>
 </html>

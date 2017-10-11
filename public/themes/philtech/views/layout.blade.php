@@ -64,7 +64,7 @@
 
                         {{-- Search Bar --}}                          
                         <div class="search-bar">
-                            <form action="/product_search" method="get" id="form-search">
+                            <form action="/product" method="get" id="form-search">
                                 <div class="input-group">
                                      <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
                                      <span class="input-group-addon search-button" id="sizing-addon1">

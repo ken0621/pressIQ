@@ -15,7 +15,7 @@
 						@foreach($_categories as $category)
 						<div class="button-shop">
 							<div class="text" style="cursor: pointer;" onClick="location.href='/product?type={{ $category['type_id'] }}'">
-								{{-- <img src="/themes/{{ $shop_theme }}/img/sidebar/dth.png"> --}}
+								<img src="{{ get_front_sidebar_icon($category['type_name'], $shop_theme) }}">
 								<span>{{ $category['type_name'] }}</span>
 							</div>
 							@if($category['subcategory'])
@@ -170,6 +170,7 @@
 				<div class="breadcrumbs">
 					<div class="holder"><a href="/">HOME</a></div>
 					<div class="holder">•</div>
+					@if(count($breadcrumbs) > 0)
 					@foreach($breadcrumbs as $breadcrumb)
 						@if($loop->last)
 							<div class="holder active"><a href="/product?type={{ $breadcrumb["type_id"] }}">{{ $breadcrumb["type_name"] }}</a></div>
@@ -178,6 +179,9 @@
 							<div class="holder">•</div>
 						@endif
 					@endforeach
+					@else
+					<div class="holder active"><a href="javascript:">SEARCH</a></div>
+					@endif
 				</div>
 				<!-- FEATURED TODAY -->
 					<div class="featured-container" style="margin-top: 0;">

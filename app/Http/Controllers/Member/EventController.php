@@ -8,7 +8,7 @@ use App\Globals\ShopEvent;
 /**
  * 
  *
- * @author ARCYLEN
+ * @author ARCYLEN GARCIA GUTIERREZ
  */
 
 class EventController extends Member

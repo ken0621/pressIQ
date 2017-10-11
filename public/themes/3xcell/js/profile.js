@@ -25,7 +25,7 @@ function profile()
 			$(".beneficiary-info-form").find("button[type=submit]").html("<i class='fa fa-spinner fa-pulse fa-fw'></i> Update");
 
 			var form_data = $(".beneficiary-info-form").serialize();
-
+			
 			$.ajax(
 			{
 				url      : "/members/profile-update-beneficiary",

@@ -281,28 +281,28 @@
 				   		</div>
 				   	</div>
 				   	<form class="beneficiary-info-form">
-				   		<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				   		<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				   		<div class="row clearfix">
 				   			<div class="col-md-12">
 				   				<div class="form-group">
 				   					<label>First Name</label>
-				   					<input type="text" class="form-control" name="beneficiary_fname" value="">
+				   					<input type="text" class="form-control" name="beneficiary_fname" value="{{$beneficiary->beneficiary_fname or ''}}">
 				   				</div>
 				   				<div class="form-group">
 				   					<label>Middle Name</label>
-				   					<input type="text" class="form-control" name="beneficiary_mname" value="">
+				   					<input type="text" class="form-control" name="beneficiary_mname" value="{{$beneficiary->beneficiary_mname or ''}}">
 				   				</div>
 				   				<div class="form-group">
 				   					<label>Last Name</label>
-				   					<input type="text" class="form-control" name="beneficiary_lname" value="">
+				   					<input type="text" class="form-control" name="beneficiary_lname" value="{{$beneficiary->beneficiary_lname or ''}}">
 				   				</div>
 				   				<div class="form-group">
 				   					<label>Contact Number</label>
-				   					<input type="text" class="form-control" name="beneficiary_contact_no" value="">
+				   					<input type="text" class="form-control" name="beneficiary_contact_no" value="{{$beneficiary->beneficiary_contact_no or ''}}">
 				   				</div>
 				   				<div class="form-group">
 				   					<label>Email</label>
-				   					<input type="text" class="form-control" name="beneficiary_email" value="">
+				   					<input type="text" class="form-control" name="beneficiary_email" value="{{$beneficiary->beneficiary_email or ''}}">
 				   				</div>
 				   			</div>
 				   			<div class="col-md-12">

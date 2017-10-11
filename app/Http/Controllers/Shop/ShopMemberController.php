@@ -700,10 +700,13 @@ class ShopMemberController extends Shop
         $data["_country"]            = Tbl_country::get();
         $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
 
+        $data['beneficiary'] = null;
         if(Self::$customer_info)
         {
             $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["wallet"]             = $data["customer_summary"]["_wallet"];
+
+            $data['beneficiary'] = CustomerBeneficiary::first(Self::$customer_info->customer_id);
         }
 
 
@@ -786,7 +789,7 @@ class ShopMemberController extends Shop
             echo json_encode($result);
         }
     }
-    public function postUpdateBeneficiary(Request $request)
+    public function postProfileUpdateBeneficiary(Request $request)
     {
         $form = $request->all();
         $validate['beneficiary_fname']       = 'required';

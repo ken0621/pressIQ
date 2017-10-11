@@ -139,6 +139,11 @@ Route::post('/createAccount', 'Frontend\HomeController@createAccount');
 
 
 Route::any('/employee_login', 'Login\EmployeeLoginController@employee_login');
+Route::any('/employee_logout', 'Login\EmployeeLoginController@employee_logut');
+Route::any('/employee', 'Login\EmployeeLoginController@employee');
+Route::any('/employee_profile', 'Login\EmployeeController@employee_profile');
+Route::any('/employee_leave_application', 'Login\EmployeeController@employee_leave_application');
+Route::any('/employee_summary_of_leave', 'Login\EmployeeController@employee_summary_of_leave');
 
 
 Route::group(array('prefix' => '/member/{page}/'), function()

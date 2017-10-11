@@ -98,7 +98,7 @@ class ShopMemberController extends Shop
                 }
             }
 
-            $data['_event'] = ShopEvent::get($this->shop_info->shop_id,0 , 3);
+            $data['_event'] = ShopEvent::get($this->shop_info->shop_id,0 ,3);
         }
         
         $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
@@ -110,6 +110,70 @@ class ShopMemberController extends Shop
         $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);
 
         return Self::load_view_for_members('member.view_events', $data);
+    }
+    public function getEventReserve(Request $request)
+    {
+        $data['page'] = "Reserve a Seat";
+        $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);
+        $data['action'] = '/members/event-reserve-submit';
+
+        $data['customer_details'] = null;
+        $data['customer_address'] = null;
+        if(Self::$customer_info)
+        {
+            $customer = Customer::info(Self::$customer_info->customer_id, $this->shop_info->shop_id);
+            $data['customer_details'] = $customer['customer'];
+            $data['customer_address'] = $customer['shipping'];
+        }
+        return Self::load_view_for_members('member.event_popup_form', $data);
+    }
+    public function postEventReserveSubmit(Request $request)
+    {
+        $validate['reservee_fname']             = 'required';
+        $validate['reservee_mname']             = 'required';
+        $validate['reservee_lname']             = 'required';
+        $validate['reservee_address']           = 'required';
+        $validate['reservee_contact']           = 'required';
+        $validate['reservee_enrollers_code']    = 'required';
+
+        $validator = Validator::make($form, $validate);
+        
+        $return['status'] = null;
+        $return['status_message'] = null;
+        if(!$validator->fails()) 
+        {
+            $insert['reservee_fname']           = $request->reservee_fname;
+            $insert['reservee_mname']           = $request->reservee_mname;
+            $insert['reservee_lname']           = $request->reservee_lname;
+            $insert['reservee_address']         = $request->reservee_address;
+            $insert['reservee_contact']         = $request->reservee_contact;
+            $insert['reservee_enrollers_code']  = $request->reservee_enrollers_code;
+
+            $return_id = ShopEvent::reserved_seat(Self::$customer_info->customer_id, $insert);
+
+            if(is_numeric($return_id))
+            {
+                $return['status'] = 'error';
+                $return['call_function'] = 'success_reserve';
+            }
+            else
+            {                
+                $return['status'] = 'error';
+                $return['status_message'] = $return_id;
+            }
+        }
+        else
+        {
+            $message = null;
+            foreach($validator->errors()->all() as $error)
+            {
+                $message .= "<div>" . $error . "</div>";
+            }
+            $return['status'] = 'error';
+            $return['status_message'] = $message;
+        }
+
+        return json_encode($return);
     }
     public function getLead()
     {

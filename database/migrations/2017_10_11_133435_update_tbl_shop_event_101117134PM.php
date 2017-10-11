@@ -14,7 +14,19 @@ class UpdateTblShopEvent101117134PM extends Migration
     public function up()
     {
         Schema::table('tbl_shop_event', function (Blueprint $table) {
-            $table->integer('event_number_attendee');
+            $table->integer('event_number_attendee')->after('event_attendee');
+        }); 
+        Schema::table('tbl_shop_event_reserved', function (Blueprint $table) {
+            $table->dropForeign('tbl_shop_event_reserved_customer_id_foreign');
+        });
+        Schema::table('tbl_shop_event_reserved', function (Blueprint $table) {
+            $table->integer('customer_id')->nullable()->default(0)->change();
+            $table->string('reservee_fname');
+            $table->string('reservee_mname');
+            $table->string('reservee_lname');
+            $table->string('reservee_address');
+            $table->string('reservee_contact');
+            $table->string('reservee_enrollers_code');
         });
     }
 

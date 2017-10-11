@@ -205,7 +205,7 @@
 												<div class="description">{{$event->event_sub_title}}</div>
 												<div class="action">
 													<a class="popup" size="md" link="/members/event-details?id={{$event->event_id}}"><i class="fa fa-check-circle"></i> Details</a> 
-													<a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
+													<a class="popup" size="md" link="/members/event-reserve?id={{$event->event_id}}"><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
 												</div>
 											</div>
 										</div>

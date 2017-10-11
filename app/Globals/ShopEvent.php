@@ -2,6 +2,7 @@
 namespace App\Globals;
 
 use App\Models\Tbl_shop_event;
+use App\Models\Tbl_shop_event_reserved;
 /**
  * 
  *
@@ -43,5 +44,29 @@ class ShopEvent
 		}
 
 		return ShopEvent::update_event($id, $update);
+	}
+	public static function reserved_seat($event_id, $customer_id = 0, $data)
+	{
+		$return = null;
+		if($customer_id != 0)
+		{
+			$check = Tbl_shop_event_reserved::where('customer_id',$customer_id)->where('event_id',$event_id)->first();
+
+			if($check)
+			{
+				$return .= "Already reserved a seat"; 
+			}
+			else
+			{
+				$data['customer_id'] = $customer_id;
+				$return = Tbl_shop_event_reserved::insertGetId($data);
+			}
+		}
+		else
+		{
+			$return = Tbl_shop_event_reserved::insertGetId($data);
+		}
+
+		return $return;
 	}
 }

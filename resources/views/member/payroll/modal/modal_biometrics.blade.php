@@ -26,7 +26,7 @@
 				<option value="ZKTeco- YH 803A (UPS)">ZKTeco- YH 803A (UPS)</option>
 				<option value="Touchlink V1">Touchlink BT3TFT</option>
 				<option value="ANVIZ Biometrics EP Series">ANVIZ Biometrics EP Series</option>
-				<!-- <option value="C7">C7</option> -->
+				
 			</select>
 		</div>
 

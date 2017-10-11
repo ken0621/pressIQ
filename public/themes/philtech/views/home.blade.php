@@ -14,7 +14,7 @@
 						@foreach($_categories as $category)
 						<div class="button-shop">
 							<div class="text" style="cursor: pointer;" onClick="location.href='/product?type={{ $category['type_id'] }}'">
-								{{-- <img src="/themes/{{ $shop_theme }}/img/sidebar/dth.png"> --}}
+								<img src="{{ get_front_sidebar_icon($category['type_name'], $shop_theme) }}">
 								<span>{{ $category['type_name'] }}</span>
 							</div>
 							@if($category['subcategory'])
@@ -199,17 +199,29 @@
 							<div>
 								<div class="per-item-container">
 									<div class="image-content-1">
-										<img class="item-image-large 1-1-ratio" src="{{ get_collection_first_image($collection) }}">
-										<button type="button" onCLick="location.href='/product/view2/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn">
-											<table>
-												<tbody>
-													<tr>
-														<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-														<td class="text">View More</td>
-													</tr>
-												</tbody>
-											</table>
-										</button>
+										<img class="item-image-large" src="{{ get_collection_first_image($collection) }}">
+										<div onClick="location.href='/product/view2/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-overlay">
+											@if(count($collection['product']['variant'][0]['mlm_discount']) > 0)
+				                            <div>
+				                                <table class="table" style="font-size: 12px;">
+				                                    <thead>
+				                                        <tr>
+				                                            <th>Membership</th>
+				                                            <th>Price</th>
+				                                        </tr>
+				                                    </thead>
+				                                    <tbody>
+				                                        @foreach($collection['product']['variant'][0]['mlm_discount'] as $key => $mlm_discount)
+				                                        <tr>
+				                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
+				                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+				                                        </tr>
+				                                        @endforeach
+				                                    </tbody>
+				                                </table>
+				                            </div>
+				                            @endif
+										</div>
 									</div>
 									<div class="item-details">
 										<a href="/product/view2/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ get_collection_first_name($collection) }}</div></a>
@@ -477,17 +489,29 @@
 							<div>
 								<div class="per-item-container">
 									<div class="image-content-1">
-										<img class="item-image-large 1-1-ratio" src="{{ get_collection_first_image($collection) }}">
-										<button type="button" onClick="location.href='/product/view2/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn">
-											<table>
-												<tbody>
-													<tr>
-														<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-														<td class="text">View More</td>
-													</tr>
-												</tbody>
-											</table>
-										</button>
+										<img class="item-image-large" src="{{ get_collection_first_image($collection) }}">
+										<div onClick="location.href='/product/view2/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-overlay">
+											@if(count($collection['product']['variant'][0]['mlm_discount']) > 0)
+				                            <div>
+				                                <table class="table" style="font-size: 12px;">
+				                                    <thead>
+				                                        <tr>
+				                                            <th>Membership</th>
+				                                            <th>Price</th>
+				                                        </tr>
+				                                    </thead>
+				                                    <tbody>
+				                                        @foreach($collection['product']['variant'][0]['mlm_discount'] as $key => $mlm_discount)
+				                                        <tr>
+				                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
+				                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+				                                        </tr>
+				                                        @endforeach
+				                                    </tbody>
+				                                </table>
+				                            </div>
+				                            @endif
+										</div>
 									</div>
 									<div class="item-details">
 										<a href="/product/view2/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>

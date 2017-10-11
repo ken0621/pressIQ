@@ -12,7 +12,7 @@ function custom_theme()
 		$(document).ready(function()
 		{
 			action_match_height();
-			event_show_cart();
+			// event_show_cart();
 			action_fit_text();
 			action_slick();
 			ready_load_ecom_cart();
@@ -167,5 +167,5 @@ function action_after_load()
 function onSearch()
 {
     var keyword = $('#keyword').val();
-    $("#submit_link").attr("href", "/product_search?keyword="+$('#keyword').val());
+    $("#submit_link").attr("href", "/product?search="+$('#keyword').val());
 }

@@ -507,10 +507,13 @@
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/main.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/match-height.js"></script>
-    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
+    <script type="text/javascript" src="/assets/front/external_js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
+
+    <!-- FOR GOOGLE LOGIN -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://apis.google.com/js/api:client.js"></script>
+    <!-- END GOOGLE LOGIN -->
     <script type="text/javascript" src="/assets/js/cart.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/drawer.js"></script>
     <script type="text/javascript" src="/assets/front/js/global_function.js"></script>

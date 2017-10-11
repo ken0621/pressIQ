@@ -15,7 +15,7 @@
 						@foreach($_categories as $category)
 						<div class="button-shop">
 							<div class="text" style="cursor: pointer;" onClick="location.href='/product?type={{ $category['type_id'] }}'">
-								{{-- <img src="/themes/{{ $shop_theme }}/img/sidebar/dth.png"> --}}
+								<img src="{{ get_front_sidebar_icon($category['type_name'], $shop_theme) }}">
 								<span>{{ $category['type_name'] }}</span>
 							</div>
 							@if($category['subcategory'])
@@ -170,6 +170,7 @@
 				<div class="breadcrumbs">
 					<div class="holder"><a href="/">HOME</a></div>
 					<div class="holder">•</div>
+					@if(count($breadcrumbs) > 0)
 					@foreach($breadcrumbs as $breadcrumb)
 						@if($loop->last)
 							<div class="holder active"><a href="/product?type={{ $breadcrumb["type_id"] }}">{{ $breadcrumb["type_name"] }}</a></div>
@@ -178,6 +179,9 @@
 							<div class="holder">•</div>
 						@endif
 					@endforeach
+					@else
+					<div class="holder active"><a href="javascript:">SEARCH</a></div>
+					@endif
 				</div>
 				<!-- FEATURED TODAY -->
 					<div class="featured-container" style="margin-top: 0;">
@@ -206,49 +210,34 @@
 									<div class="per-item-container">
 										<div class="image-content-1">
 											{{-- <div class="item-image-large" style="background-image: url({{ get_product_first_image($product) }})"></div> --}}
-											<img style="width: 100%;" class="4-3-ratio" src="{{ get_product_first_image($product) }}">
-											<button type="button" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'" class="new-add-to-cart-button btn" >
-											<table>
-												<tbody>
-													<tr>
-														<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-														<td class="text">View More</td>
-													</tr>
-												</tbody>
-											</table>
-										</button>
+											<img style="width: 100%;" class="1-1-ratio" src="{{ get_product_first_image($product) }}">
+											<div onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'" class="new-add-to-cart-overlay">
+												@if(count($product['variant'][0]['mlm_discount']) > 0)
+					                            <div>
+					                                <table class="table" style="font-size: 12px;">
+					                                    <thead>
+					                                        <tr>
+					                                            <th>Membership</th>
+					                                            <th>Price</th>
+					                                        </tr>
+					                                    </thead>
+					                                    <tbody>
+					                                        @foreach($product['variant'][0]['mlm_discount'] as $key => $mlm_discount)
+					                                        <tr>
+					                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
+					                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+					                                        </tr>
+					                                        @endforeach
+					                                    </tbody>
+					                                </table>
+					                            </div>
+					                            @endif
+											</div>
 										</div>
 										<div class="item-details">
 											<div class="item-title"><a href="/product/view2/{{ $product['eprod_id'] }}">{{ $product['eprod_name'] }}</a></div>
-											<!-- <div class="rating">
-												<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-												<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-												<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-												<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-												<img src="/themes/{{ $shop_theme }}/img/star-disable.png">
-											</div> -->
 											<div class="item-price">&#8369; {{ $product['min_price'] == $product['max_price'] ? number_format($product['max_price'], 2) : number_format($product['min_price'], 2) . ' - ' . number_format($product['max_price'], 2) }}</div>
 										</div>
-										{{-- @if(count($product['variant'][0]['mlm_discount']) > 0)
-			                            <div style="margin-top: 15px;">
-			                                <table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 12px;">
-			                                    <thead>
-			                                        <tr>
-			                                            <th>Membership</th>
-			                                            <th>Price</th>
-			                                        </tr>
-			                                    </thead>
-			                                    <tbody>
-			                                        @foreach($product['variant'][0]['mlm_discount'] as $key => $mlm_discount)
-			                                        <tr>
-			                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
-			                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
-			                                        </tr>
-			                                        @endforeach
-			                                    </tbody>
-			                                </table>
-			                            </div>
-			                            @endif --}}
 									</div>
 								</div>
 								@endforeach

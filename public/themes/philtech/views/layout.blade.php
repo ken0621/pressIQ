@@ -10,25 +10,19 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name='B-verify' content='8b63efb2920a681d6f877a59a414659d09831140' />
+        <!-- FOR GOOGLE LOGIN -->
+        <meta name="google-signin-client_id" content="{{$google_app_id or ''}}">
+        <input type="hidden" name="" class="google_app_id" value="{{$google_app_id or ''}}">
+        <!-- END GOOGLE LOGIN -->
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
-        <!-- BOOTSTRAP -->
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
-        <!-- FONT AWESOME -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
-        <!-- SLICK CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick.css">
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick-theme.css">
+        
         <!-- GLOBAL CSS -->
+        @include("frontend.ghead")
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-        <link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
         <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
-        <!-- Brown Custom Icon -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
-        <!-- THEME COLOR -->
-        <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
+        
         <!-- OTHER CSS -->
         @yield("css")
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
@@ -70,7 +64,7 @@
 
                         {{-- Search Bar --}}                          
                         <div class="search-bar">
-                            <form action="/product_search" method="get" id="form-search">
+                            <form action="/product" method="get" id="form-search">
                                 <div class="input-group">
                                      <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
                                      <span class="input-group-addon search-button" id="sizing-addon1">
@@ -92,8 +86,14 @@
                         <div class="holder">
                             <img src="/themes/{{ $shop_theme }}/img/header/card.png">
                         </div>
-                        <div class="shopping-cart-container">
-                            <div class="shopping-cart"><img src="/themes/{{ $shop_theme }}/img/header/cart-icon.png"> <span class="badge mini-cart-quantity">{{ $global_cart['sale_information']['total_quantity'] }}</span> <span>P </span> <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }}</span></div>
+                        <div class="shopping-cart-container text-center popup" link="/cartv2" size="lg">
+                            <div class="shopping-cart">
+                                <img src="/themes/{{ $shop_theme }}/img/header/cart-icon.png">
+                                <span class="badge mini-cart-quantity quantity-item-holder" style="width: 23px; height: 23px; padding-left: 0; padding-right: 0;">0</span>
+                                {{-- <span>P </span>
+                                <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }} --}}
+                                </span>
+                            </div>
                             <div class="container-cart mini-cart">
                                 <div class="text-center"><span class="cart-loader text-center"><img style="height: 50px; margin: auto;" src="/assets/front/img/loader.gif"></span></div>
                             </div>
@@ -236,17 +236,13 @@
         </div>
     </div>
     <div class="multiple_global_modal_container"></div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
-    <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/match-height.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global_cart.js"></script>
+
+    @include("frontend.gfoot")
     <script src="/themes/{{ $shop_theme }}/js/custom_theme.js"></script>
+    <!-- FOR GOOGLE LOGIN -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <!-- END GOOGLE LOGIN -->
     @yield("js")
     </body>
 </html>

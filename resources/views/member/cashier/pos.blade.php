@@ -61,8 +61,9 @@
                         <div class="col-md-12">
                             <div class="input-group">
                               <span style="background-color: #eee" class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-                              <input type="text" class="form-control" placeholder="Enter Customer Name" aria-describedby="basic-addon1">
+                              <input type="text" class="form-control event_search_customer" placeholder="Enter Customer Name" aria-describedby="basic-addon1">
                             </div>
+                            <div class="pos-search-container-customer"></div>
                         </div>
                     </div>
                 @else

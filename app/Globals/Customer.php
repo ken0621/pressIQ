@@ -96,7 +96,8 @@ class Customer
         return $data;
 	}
 	
-	public static function search($str = '', $shop_id = 0, $archived = 0){
+	public static function search($str = '', $shop_id = 0, $archived = 0)
+	{
 		if($str != '' && $str != null){
     		$data['_customer'] = Tbl_customer_search::join('tbl_customer','tbl_customer.customer_id','=','tbl_customer_search.customer_id')
     						->join('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
@@ -114,7 +115,18 @@ class Customer
     	// dd($shop_id);
     	return $data;
 	}
+	public static function search_get($shop_id, $keyword = '')
+	{
+		$return = Tbl_customer::where('shop_id', $shop_id);
 
+		if($keyword != '')
+		{
+			$return->leftjoin("tbl_customer_search","tbl_customer_search.customer_id","=","tbl_customer.customer_id")
+				   ->where("tbl_customer_search.body", "LIKE", "%" . $keyword . "%");
+		}
+
+		return $return->get();
+	}
 	public static function getAllCustomer($for_tablet = false)
 	{
 		$shop_id = Customer::getShopId();

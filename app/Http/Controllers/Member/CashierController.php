@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Member;
 use App\Globals\Cart2;
 use App\Globals\Item;
+use App\Globals\Customer;
 use Request;
 
 class CashierController extends Member
@@ -31,6 +32,18 @@ class CashierController extends Member
         Item::get_search($data["keyword"]);
         $data["_item"]   = Item::get($data["shop_id"]);
         return view("member.cashier.pos_search_item", $data);
+    }
+    public function pos_search_customer()
+    {
+        $data['_customer'] = Customer::search_get($this->user_info->shop_id, Request::input("customer_keyword"));
+        $data["shop_id"] = $this->user_info->shop_id;
+        $data["keyword"] = Request::input("customer_keyword");
+
+        return view("member.cashier.pos_search_customer", $data);
+    }
+    public function pos_scan_customer()
+    {
+        dd(123);
     }
     public function pos_scan_item()
     {

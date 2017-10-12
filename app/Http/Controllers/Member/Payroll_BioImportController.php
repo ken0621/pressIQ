@@ -84,7 +84,7 @@ class Payroll_BioImportController extends Member
 
 		if($biometric == 'Mustard Seed')
 		{
-			return Self::import_mustard_seed($file, $company);
+			return Self::import_mustard_seed_v2($file, $company);
 		}
 
 		if($biometric == 'Touchlink V1')
@@ -151,18 +151,28 @@ class Payroll_BioImportController extends Member
 
 	public function save_time_record($_time_record, $company ,$shop_id, $biometric_name)
 	{
+		
 		$success = 0;
 		$failed = 0;
 		$incomplete = 0;
 		$overwritten = 0;
-		
+		// dd($_time_record);
 		foreach ($_time_record as $date => $time_record) 
 		{
 			foreach ($time_record as $employee_number => $value) 
 			{
+				$check_employee = null;
 
-				$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("shop_id", Self::shop_id())->first();
-				
+				if($company != '' || $company != 0 || $company != null) 
+				{
+					$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("payroll_employee_company_id", $company)->where("shop_id", Self::shop_id())->first();
+				}
+				else
+				{
+
+					$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("shop_id", Self::shop_id())->first();
+				}
+
 				if ($check_employee) 
 				{
 					/* Get Tbl payroll time sheet data  */
@@ -204,6 +214,8 @@ class Payroll_BioImportController extends Member
 					}
 					else
 					{
+						$time_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->get();
+						
 						Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->delete();
 						
 						$update = null;
@@ -1013,7 +1025,6 @@ class Payroll_BioImportController extends Member
 
     	$incomplete = 0;
 
-    	
     	if(isset($_time[0]['employee_no']) && isset($_time[0]['employee_name']) && isset($_time[0]['date']) && isset($_time[0]['time_in']) && isset($_time[0]['time_out']))
     	{
 
@@ -1198,9 +1209,61 @@ class Payroll_BioImportController extends Member
 	    	}
     	}
 
-
     	return $message;
+    }
 
+    public function import_mustard_seed_v2($file, $company)
+    {
+    	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('company_code','employee_no','date','in_1','out_1','in_2','out_2','in_3','out_3','in_4','out_4','in_5','out_5','in_6','out_6'));
+
+    	$incomplete = 0;
+    	
+    	if(isset($_time[0]['company_code']) && isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['in_1']) && isset($_time[0]['out_1']) && isset($_time[0]['in_2']) && isset($_time[0]['out_2']) && isset($_time[0]['in_3']) && isset($_time[0]['out_3']))
+    	{
+
+    		
+
+    	 foreach ($_time as $key => $value) 
+    	 {
+
+    	 	if ($value['date'] != null && $value['in_1'] != null && $value['out_1'] != null && $value['employee_no'] != null) 
+    	 	{
+    	 		$employee_number = $value["employee_no"];
+    	 		if (is_object($value["date"])) 
+    	 		{
+    	 			$date = date('Y-m-d', strtotime($value['date']->toDateTimeString()));
+    	 		}
+    	 		else
+    	 		{
+    	 			$date = date('Y-m-d', strtotime($value['date']));
+    	 		}
+    	 		
+
+    	 		if(is_object($value["in_1"]) && is_object($value["out_1"]))
+	 			{
+			 		$_record[$date][$employee_number]['time_in']  = date('H:i:s', strtotime($value['in_1']->toDateTimeString()));
+					$_record[$date][$employee_number]['time_out'] = date('H:i:s', strtotime($value['out_1']->toDateTimeString()));	
+	 			}
+	 			else
+	 			{
+	 				$_record[$date][$employee_number]['time_in']  = date('H:i:s', strtotime($value['in_1']));
+					$_record[$date][$employee_number]['time_out'] = date('H:i:s', strtotime($value['out_1']));
+	 			}
+    	 	}
+    	 	else
+    	 	{
+    	 		$incomplete++;
+    	 	}
+    	 }
+    	 
+    	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "ANVIZ Biometrics EP Series");
+   
+    	 echo "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
+    	}
+    	else
+    	{
+    		echo "<div>INVALID FILE FORMAT</div>";
+    	}
     }
 
 

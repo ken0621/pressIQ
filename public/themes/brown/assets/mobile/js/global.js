@@ -9,6 +9,14 @@ function global()
 		$(document).ready(function()
 		{
 			document_ready();
+			// Initialize App  
+			var myApp = new Framework7();
+			        
+			// Initialize View          
+			var mainView = myApp.addView('.view-main')          
+			        
+			// Load page from about.html file to main View:
+			mainView.router.loadPage('/members/profile');
 		});
 	}
 

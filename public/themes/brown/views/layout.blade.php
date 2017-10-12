@@ -474,42 +474,7 @@
 
     @include("frontend.gfoot")
 
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
-
-    <!-- FOR GOOGLE LOGIN -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="https://apis.google.com/js/api:client.js"></script>
-    <!-- END GOOGLE LOGIN -->
-    <script type="text/javascript" src="/assets/js/cart.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/drawer.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
-
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/wow/js/wow.min.js"></script>
-
-    <script>
-          new WOW().init();
-    </script>
-
-    <script type="text/javascript">
-    $(".date-picker").datepicker({
-    dateFormat:"yy-mm-dd"
-    });
-    // $('.brown-sign-out').unbind('click');
-    // $('.brown-sign-out').bind('click', function()
-    // {
-    //   signOut();
-    // });
-    // function signOut()
-    // {
-    //   var auth2 = gapi.auth2.getAuthInstance();
-    //   auth2.signOut().then(function () {
-    //     console.log('User signed out.');
-    //   });
-    // }
-    </script>
-
-
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     
     @yield("script")
     <!-- BEGIN JIVOSITE CODE -->

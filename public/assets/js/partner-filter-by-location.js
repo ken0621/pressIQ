@@ -1,6 +1,7 @@
 $(document).ready(function(){
 	$('#locationDropdown').on('change', function(e){
 		var locationVal = $(this).val();
+		alert(locationVal);
 		$('#spinningLoader').show();
 		$('.partner-result').hide();
 

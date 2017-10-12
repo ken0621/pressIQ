@@ -27,7 +27,7 @@ use Request;
 use Session;
 use Validator;
 use Redirect;
-use Carbon\carbon;
+use Carbon\Carbon;
 
 class Transaction
 {
@@ -356,6 +356,11 @@ class Transaction
         $store["get_transaction_slot_id"] = true;
         session($store);
     }
+    public static function get_transaction_customer_details_v2()
+    {
+        $store["get_transaction_customer_details_v2"] = true;
+        session($store);
+    }
     
     public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0)
     {
@@ -389,7 +394,6 @@ class Transaction
             $data->where('transaction_number', "LIKE", "%" . $search_keyword . "%");
         }
         
-        
         if(session('get_transaction_customer_details'))
         {
             $data->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
@@ -397,7 +401,15 @@ class Transaction
             $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
             $data->groupBy("tbl_customer.customer_id");
         }
-        
+
+        if(session('get_transaction_customer_details_v2'))
+        {
+            $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
+            $data->leftJoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id');
+            $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
+            $data->groupBy("tbl_transaction_list.transaction_list_id");
+        }
+
         if($paginate)
         {
             $data = $data->paginate($paginate);
@@ -481,6 +493,7 @@ class Transaction
         session()->forget('get_transaction_date');
         session()->forget('get_transaction_payment_method');
         session()->forget('get_transaction_slot_id');
+        session()->forget('get_transaction_customer_details_v2');
 
         return $data;
     }

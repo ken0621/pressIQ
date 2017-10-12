@@ -31,9 +31,10 @@
 							<div class="info-title">
 								Quantity
 							</div>
-							<input class="input-quantity" variant-id="{{ $product['variant'][0]['evariant_id'] }}" type="number" name="quantity" min="1" step="1" value="1">
+							<input class="input-quantity" onChange="$(this).siblings('.product-add-cart').attr('quantity', $(this).val())" type="number" name="quantity" min="1" step="1" value="1">
+							<div class="add-to-cart-button product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}" quantity="1"><span><i class="fa fa-cart-plus" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>ADD TO CART</span></div>
 						</div>
-						<div class="add-to-cart-button" variant-id="{{ $product['variant'][0]['evariant_id'] }}"><span><i class="fa fa-cart-plus" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>ADD TO CART</span></div>
+						
 						<!-- <div class="share-product">
 							<div class="info-title">Share This Product</div>
 							<div class="share-button-container">
@@ -133,7 +134,7 @@ $(document).ready(function()
 <script type="text/javascript" src="/assets/front/js/zoom.js"></script>
 <script type="text/javascript">
 var product_image = ".single-product-img";
-var button_cart = ".add-to-cart-button";
+var button_cart = ".add-to-cart-buttons";
 var product_container = ".content";
 var product_quantity = ".input-quantity";
 var cart_holder = '.cart-dropdown';

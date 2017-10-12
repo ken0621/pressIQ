@@ -117,9 +117,6 @@
 </div>
 
 
-
-
-
 @endsection
 @section("css")
 @yield("member_css")

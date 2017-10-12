@@ -29,9 +29,12 @@
          <div>
             <select class="select-company-name pull-right form-control" style="width: 300px">    
                 <option value="0">All Company</option>
-                @foreach($_company as $company)
-                    <option value="{{ $company->payroll_company_id }}">{{ $company->payroll_company_name }}</option>
-                @endforeach
+                  @foreach($_company as $company)
+                  <option value="{{$company['company']->payroll_company_id}}">{{$company['company']->payroll_company_name}}</option> 
+                    @foreach($company['branch'] as $branch)
+                        <option value="{{$branch->payroll_company_id}}">&nbsp;&nbsp;• {{$branch->payroll_company_name}}</option>
+                    @endforeach
+                  @endforeach
             </select>
         </div>
         <div class="form-group tab-content panel-body employee-container">

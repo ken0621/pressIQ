@@ -72,4 +72,12 @@ class Tbl_payroll_time_keeping_approved extends Model
 		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
 		return $query;
 	}
+	//james
+	public function scopeBasicfilter($query,$payroll_employee_company_id)
+	{
+
+		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
+		$query->where('tbl_payroll_employee_basic.payroll_employee_company_id',$payroll_employee_company_id);
+		return $query;
+	}
 }

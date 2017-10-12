@@ -3,7 +3,7 @@
         <div class="navbar-inner">
             <div class="left"><a href="index.html" class="back link icon-only"><i class="icon icon-back"></i></a></div>
             <div class="center">Profile</div>
-            <div class="right"><a href="#" class="open-panel link icon-only"><i class="icon-ellipsis-vertical"></i></a></div>
+            <div class="right"><a href="#" data-popover=".popover-profile" class="link open-popover"><img class="menu-button" src="/themes/{{ $shop_theme }}/assets/mobile/img/menu.png"></a></div>
         </div>
     </div>
     <div class="page-content">

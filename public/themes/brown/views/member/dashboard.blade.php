@@ -1,6 +1,16 @@
 @extends("member.member_layout")
 @section("member_content")
 
+@if($customer->customer_payout_method == "unset")
+	@if($mlm_member)
+	<div class="top-message-warning for-payout" onclick="action_load_link_to_modal('/members/payout-setting', 'lg')">
+		<div class="message-warning text-center"><b>Warning!</b> You won't be receiving your payout until you setup your <b>payout details</b>. Click here to set it up right away. </div>
+	</div>
+	@endif
+@endif
+
+
+
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
@@ -49,7 +59,7 @@
 		                    <div class="btn-container">
 		                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br>
 		                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-		                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code" onclick="action_load_link_to_modal('/members/enter-code')">Enter a Code</button></a>
+		                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 		                    </div>
 		                </div>
 		            </div>
@@ -72,142 +82,6 @@
 	</div>
 @else
 	<div class="dashboard" style="overflow: hidden;">
-		<!-- <div class="row clearfix">
-			<div class="col-md-6">
-				<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
-				<div class="sub-container">
-					<div class="table-holder">
-						<div class="chart-legend">
-							<div class="holder">
-								<div class="color" style="background-color: #76b6ec"></div>
-								<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
-							</div>
-							<div class="holder">
-								<div class="color" style="background-color: #8E5EA2"></div>
-								<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
-							</div>
-							<div class="chart-holder">
-								<canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="400" height="400"></canvas>
-							</div>
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
-							</div>
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
-							</div>
-						</div>
-		
-						<table class="table hidden">
-							<thead>
-								<tr>
-									<th width="33.3333333333%">Level</th>
-									<th width="33.3333333333%">Count</th>
-									<th width="33.3333333333%">Percentage</th>
-								</tr>
-							</thead>
-							<tbody class="table-body">
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">
-									<td>1</td>
-									<td>2/2</td>
-									<td>100%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">
-									<td>2</td>
-									<td>4/4</td>
-									<td>100%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">
-									<td>4</td>
-									<td>8/8</td>
-									<td>100%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">
-									<td>5</td>
-									<td>16/16</td>
-									<td>100%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 98.875%, rgb(237, 237, 237) 98.875%);">
-									<td>6</td>
-									<td>31/32</td>
-									<td>98.875%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 40.625%, rgb(237, 237, 237) 40.625%);">
-									<td>7</td>
-									<td>26/64</td>
-									<td>40.625%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 28.90625%, rgb(237, 237, 237) 28.90625%);">
-									<td>8</td>
-									<td>37/128</td>
-									<td>28.90625%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 20.3125%, rgb(237, 237, 237) 20.3125%);">
-									<td>9</td>
-									<td>52/256</td>
-									<td>20.3125%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 13.4765625%, rgb(237, 237, 237) 13.4765625%);">
-									<td>10</td>
-									<td>69/512</td>
-									<td>13.4765625%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 4.1015625%, rgb(237, 237, 237) 4.1015625%);">
-									<td>11</td>
-									<td>42/1024</td>
-									<td>4.1015625%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 1.953125%, rgb(237, 237, 237) 1.953125%);">
-									<td>12</td>
-									<td>40/2048</td>
-									<td>1.953125%</td>	
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		
-			<div class="col-md-6">
-				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
-				<div class="sub-container">
-					<div class="chart-legend">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Pairing Reward</span> {{ $wallet->display_complan_triangle }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Direct Referral Bonus</span> {{ $wallet->display_complan_direct }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Builder Reward</span> {{ $wallet->display_complan_builder }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Leader Reward</span> {{ $wallet->display_complan_leader }}</div>
-						</div>
-					</div>
-		
-				</div>
-		
-				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
-				<div class="sub-container">
-					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Builder Point(s)</span> {{ $points->display_brown_builder_points }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Leader Point(s)</span> {{ $points->display_brown_leader_points }}</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> -->
 		<!-- WALLET SUMMARY -->
 		<div class="row clearfix">
 			<div class="col-md-3">
@@ -272,6 +146,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
@@ -295,8 +170,6 @@
 						</div>
 					</div>	
 				</div>
-			</div>
-			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
@@ -310,6 +183,70 @@
 						</div>
 					</div>
 				</div>
+
+
+			</div>
+			<div class="animated fadeInUp col-md-6">
+				<div class="title"><i class="align-icon fa fa-newspaper-o"></i> Upcoming Events</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="min-height: 310px; max-height: auto;">
+						<div class="events-container">
+							<div class="event-list">
+								@if(isset($_event))
+									@if(count($_event) > 0)
+										@foreach($_event as $event)
+										<div class="event clearfix">
+											<div class="date">
+												<div class="day">{{date('d', strtotime($event->event_date))}}</div>
+												<div class="month">{{date('F', strtotime($event->event_date))}}</div>
+											</div>
+											<div class="detail">
+												<div class="titles">{{$event->event_title}}</div>
+												<div class="description">{{$event->event_sub_title}}</div>
+												<div class="action">
+													<a class="popup" size="md" link="/members/event-details?id={{$event->event_id}}"><i class="fa fa-check-circle"></i> Details</a> 
+													<a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
+												</div>
+											</div>
+										</div>
+										@endforeach
+									@else
+									<div class="event clearfix text-center">
+										<div style="padding: 100px 30px;">NO EVENT POSTED YET</div>
+									</div>
+									@endif
+								@endif
+								{{-- <div class="event clearfix">
+									<div class="date">
+										<div class="day">22</div>
+										<div class="month">OCTOBER</div>
+									</div>
+									<div class="detail">
+										<div class="titles">Entereneural Branding</div>
+										<div class="description">This event will be lead by Jonathan Petalber.</div>
+										<div class="action">
+											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
+										</div>
+									</div>
+								</div>
+								<div class="event clearfix">
+									<div class="date">
+										<div class="day">28</div>
+										<div class="month">OCTOBER</div>
+									</div>
+									<div class="detail">
+										<div class="titles">Transformational Leadership</div>
+										<div class="description">Works with subordinates to identify needed change.</div>
+										<div class="action">
+											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
+										</div>
+									</div>
+								</div> --}}
+							</div>
+						</div>
+					</div>
+				</div> 
+				
 			</div>
 		</div>
 
@@ -425,6 +362,39 @@
 			</div>
 		</div>
 
+		<!-- Popup Academy -->
+	    <div class="popup-academy">
+	        <div id="academy-modal" class="modal academy-modal fade">
+	            <div class="modal-lg modal-dialog">
+	                <div class="modal-content">
+	                    
+	                    <div class="modal-header">
+	                    	<div class="container">
+								<div class="row clearfix">
+							        <div class="col-md-4">
+							        	<div class="logo-container">
+							        		Logo Here
+							        	</div>
+							        </div>
+
+							        <div class="cold-md-8">
+							        	<div class="header-container">
+							        		<h2>BROWN&PROUD ACADEMY</h2>
+							        		<h3>MATERCLASS IN CREATIVE ENTREPRENEURSHIP</h3>
+							        	</div>
+							        </div>
+								</div>
+							</div>
+					    </div>
+
+						<div class="modal-body">
+							
+						</div>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
 
 	    <!-- Success -->
 	    <div class="popup-success">
@@ -446,7 +416,7 @@
 @endsection
 
 @section("member_script")
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.0"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.1"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 <script>
 
@@ -514,8 +484,6 @@ $(document).ready(function()
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css">
-
-
 
 
 <style type="text/css">

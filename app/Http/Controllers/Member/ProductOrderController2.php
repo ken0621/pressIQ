@@ -33,9 +33,18 @@ class ProductOrderController2 extends Member
     }
     public function payref()
     {
-        Transaction::get_transaction_customer_details();
+        /* Session */
+        session()->forget('get_transaction_filter_customer_id');
+        session()->forget('get_transaction_customer_details');
+        session()->forget('get_transaction_date');
+        session()->forget('get_transaction_payment_method');
+        session()->forget('get_transaction_slot_id');
+        session()->forget('get_transaction_customer_details_v2');
+
+        Transaction::get_transaction_customer_details_v2();
         Transaction::get_transaction_payment_method();
         Transaction::get_transaction_slot_id();
+
         $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'receipt', '', 0);
         foreach ($data["_transaction"] as $key => $value) 
         {
@@ -44,6 +53,7 @@ class ProductOrderController2 extends Member
                 unset($data["_transaction"][$key]);
             }
         }
+
         Excel::create('Paymaya Report', function($excel) use ($data)
         {
             $excel->sheet('Paymaya', function($sheet) use ($data)
@@ -55,9 +65,18 @@ class ProductOrderController2 extends Member
     }
     public function draref()
     {
-        Transaction::get_transaction_customer_details();
+        /* Session */
+        session()->forget('get_transaction_filter_customer_id');
+        session()->forget('get_transaction_customer_details');
+        session()->forget('get_transaction_date');
+        session()->forget('get_transaction_payment_method');
+        session()->forget('get_transaction_slot_id');
+        session()->forget('get_transaction_customer_details_v2');
+        
+        Transaction::get_transaction_customer_details_v2();
         Transaction::get_transaction_payment_method();
         Transaction::get_transaction_slot_id();
+
         $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'receipt', '', 0);
         foreach ($data["_transaction"] as $key => $value) 
         {
@@ -66,6 +85,7 @@ class ProductOrderController2 extends Member
                 unset($data["_transaction"][$key]);
             }
         }
+
         Excel::create('Dragonpay Report', function($excel) use ($data)
         {
             $excel->sheet('Dragonpay', function($sheet) use ($data)

@@ -23,6 +23,7 @@ class PayrollAPIController extends Member
         
         $data["app_key"] = $shop_key;
         $data["app_secret"] = md5($shop_id . "-" . $data["app_key"]);
+        
         return view("member.payroll2.api", $data);
     }
     public function generaterandomkey($len)

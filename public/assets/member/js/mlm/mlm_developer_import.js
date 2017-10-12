@@ -76,7 +76,7 @@ function mlm_developer_import()
 					}
 					else
 					{
-						$("#global_modal").modal("hide");
+						//$("#global_modal").modal("hide");
 						mlm_developer.action_load_data();
 					}
 				}

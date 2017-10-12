@@ -13,6 +13,8 @@ use App\Globals\Ecom_Product;
 use App\Globals\Cards;
 use App\Globals\Ec_brand;
 use App\Globals\Payment;
+use Jenssegers\Agent\Agent;
+
 
 class ShopHomeController extends Shop
 {
@@ -26,7 +28,28 @@ class ShopHomeController extends Shop
         {
         	$data["_brand"] = Ec_brand::getAllBrands($this->shop_info->shop_id);
         }
+
+        /* Philtech Exclusive */
+        if ($this->shop_info->shop_theme == "philtech") 
+        {
+            $data["_categories"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+        }
+
+
+        $view = "home";
+
+        $agent = new Agent();
+
+        if($agent->isMobile())
+        {
+            $new_view = "mobile." . $view;
+            
+            if(view()->exists($new_view))
+            {
+                $view = $new_view;
+            }
+        }
      	
-        return view("home", $data);
+        return view($view, $data);
     }
 }

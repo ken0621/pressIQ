@@ -37,7 +37,7 @@
 									</div>
 								@endif
 								<!-- SEND BUTTON -->
-								<button type="submit">SEND</button>
+								<button type="btn submit">SEND</button>
 							</div>
 						</div>
 					</form>

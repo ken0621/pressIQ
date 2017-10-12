@@ -43,10 +43,12 @@
                     <table class="table table-bordered table-condensed">
                         <thead>
                             <tr>
-                                <th>Warehouse Name</th>
+                                <th class="text-center">Warehouse Name</th>
+                                @if($pis == null)
                                 <th class="text-center">Total Holding Items</th>
                                 <th>Total Selling Price</th>
                                 <th>Total Cost Price</th>
+                                @endif
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -54,17 +56,24 @@
                         @if($_warehouse != null)
                             @foreach($_warehouse as $warehouse)
                             <tr>
-                                <td>{{$warehouse->warehouse_name}}</td>
+                                <td class="text-center">{{$warehouse->warehouse_name}}</td>
+
+                                @if($pis == null)
                                 <td class="text-center">{{number_format($warehouse->total_qty)}} item(s)</td>
                                 <td>{{currency("PHP",$warehouse->total_selling_price)}}</td>
                                 <td>{{currency("PHP",$warehouse->total_cost_price)}}</td>
+                                @endif
                                 <td class="text-center">
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
+                                        @if($pis == null)
                                         <li><a size="lg" link="/member/item/warehouse/view/{{$warehouse->warehouse_id}}" href="javascript:" class="popup">View Warehouse</a></li>
+                                        @else
+                                        <li><a href="/member/item/warehouse/view_v2/{{$warehouse->warehouse_id}}" >View Warehouse</a></li>
+                                        @endif
                                         <li><a target="_blank" href="/member/item/warehouse/xls/{{$warehouse->warehouse_id}}">Export to Excel</a></li>
                                         @if($enable_serial != null)
                                             @if($enable_serial == "enable")
@@ -93,10 +102,12 @@
                     <table class="table table-bordered table-condensed">
                         <thead>
                             <tr>
-                                <th>Warehouse Name</th>
+                                <th class="text-center">Warehouse Name</th>
+                                @if($pis == null)
                                 <th class="text-center">Total Holding Items</th>
                                 <th>Total Selling Price</th>
                                 <th>Total Cost Price</th>
+                                @endif
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -104,10 +115,12 @@
                         @if($_warehouse_archived != null)
                             @foreach($_warehouse_archived as $warehouse_archived)
                             <tr>
-                                <td>{{$warehouse_archived->warehouse_name}}</td>
+                                <td class="text-center">{{$warehouse_archived->warehouse_name}}</td>
+                                @if($pis == null)
                                 <td class="text-center">{{number_format($warehouse_archived->total_qty)}}</td>
                                 <td>{{currency("PHP",$warehouse_archived->total_selling_price)}}</td>
                                 <td>{{currency("PHP",$warehouse_archived->total_cost_price)}}</td>
+                                @endif
                                 <td class="text-center">
                                     <a href="javascript:" link="/member/item/warehouse/restore/{{$warehouse_archived->warehouse_id}}" href="javascript:" class="popup">RESTORE</a>
                                 </td>

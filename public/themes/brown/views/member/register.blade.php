@@ -27,7 +27,7 @@
 									</div>
 								</div>
 							</div>
-						</td>
+					</td>
 					</tr>
 					<tr>
 						<td class="c1">
@@ -42,23 +42,23 @@
 								<div class="form-group">
 									<div class="register-label">EMAIL</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="email" name="email" placeholder="Type Your Email Here" value="{{ old('email') }}">
+										<input class="form-control input-sm" type="email" name="email" placeholder="Type Your Email Here" value="{{ $dummy['email'] or old('email') }}">
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="register-label">CUSTOMER NAME</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="text" name="first_name" placeholder="First Name" value="{{ old('first_name') }}">
+										<input class="form-control input-sm" type="text" name="first_name" placeholder="First Name" value="{{ $dummy['first_name'] or old('first_name') }}">
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="form-input">
-										<input class="form-control input-sm" type="text" name="middle_name" placeholder="Middle Name" value="{{ old('middle_name') }}">
+										<input class="form-control input-sm" type="text" name="middle_name" placeholder="Middle Name" value="{{ $dummy['middle_name'] or old('middle_name') }}">
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="form-input">
-										<input class="form-control input-sm" type="text" name="last_name" placeholder="Last Name" value="{{ old('last_name') }}">
+										<input class="form-control input-sm" type="text" name="last_name" placeholder="Last Name" value="{{ $dummy['last_name'] or old('last_name') }}">
 									</div>
 								</div>
 								<div class="form-group">
@@ -111,21 +111,23 @@
 								@endif
 								
 								<div class="form-group">
-									<div class="register-label">CONTACT</div>
+									<div class="register-label">CONTACT NUMBER</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="text" name="contact" value="{{ old('contact') }}">
+										<input class="form-control input-sm" type="text" name="contact" value="{{ $dummy['contact'] or old('contact') }}">
 									</div>
 								</div>
+								
 								<div class="form-group">
 									<div class="register-label">PASSWORD</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="password" name="password" value="">
+										<input class="form-control input-sm" type="password" name="password" value="{{ $dummy['password'] or '' }}">
 									</div>
 								</div>
+								
 								<div class="form-group">
 									<div class="register-label">REPEAT PASSWORD</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="password" name="password_confirmation" value="">
+										<input class="form-control input-sm" type="password" name="password_confirmation" value="{{ $dummy['password'] or '' }}">
 									</div>
 								</div>
 								<div class="form-group clearfix" style="margin-top: 15px;">

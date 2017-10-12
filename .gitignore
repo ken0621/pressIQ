@@ -13,7 +13,6 @@ yarn-error.log
 /public/upload/*
 /public/uploads/*
 /config/snappy.php
-/config/session.php
 /config/debugbar.php
 composer.lock
 composer.lock

@@ -120,6 +120,7 @@ class MLM_PlanController extends Member
             $update['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
             $update['plan_settings_upgrade_slot'] = Request::input('plan_settings_upgrade_slot');
             $update['plan_settings_default_downline_rule'] = Request::input('plan_settings_default_downline_rule');
+            $update['plan_settings_new_gen_placement'] = Request::input('plan_settings_new_gen_placement');
     		// end
     		
     		// update settings
@@ -608,6 +609,34 @@ class MLM_PlanController extends Member
             Tbl_mlm_plan::insert($insert);
         }
 
+        if($count == 26)
+        {
+             // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "DIRECT_REFERRAL_PV";
+            $insert['marketing_plan_name'] = "Direct Referral PV";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Direct Referral PV";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+
+        if($count == 27)
+        {
+             // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "STAIRSTEP_DIRECT";
+            $insert['marketing_plan_name'] = "Stairstep Direct";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Stairstep Direct";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+
 
         // end basic complan
         
@@ -962,15 +991,99 @@ class MLM_PlanController extends Member
                 $data['response_status'] = "warning";
                 $data['warning_validator'] = $validator->messages();
             }
-        }	    
+        }       
         elseif(isset($_POST['membership_points_direct_pass_up']))
-	    {
-	    	
-	        $validate['membership_id'] = Request::input("membership_id");
+        {
+            
+            $validate['membership_id'] = Request::input("membership_id");
             $validate['membership_points_direct_pass_up'] = Request::input("membership_points_direct_pass_up");
             
             $rules['membership_id']                     = "required";
             $rules['membership_points_direct_pass_up']  = "required";
+            
+            
+            $validator = Validator::make($validate,$rules);
+            if ($validator->passes())
+            {
+                $count = Tbl_membership_points::where('membership_id', $validate['membership_id'])->count();
+                if($count == 0)
+                {
+                    $insert['membership_id'] = $validate['membership_id'];
+                    $insert['membership_points_direct_pass_up'] = $validate['membership_points_direct_pass_up'];
+                    Tbl_membership_points::insert($insert);
+                }
+                else
+                {
+                    $update['membership_points_direct_pass_up'] = $validate['membership_points_direct_pass_up'];
+                    Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
+                }
+            }
+            else
+            {
+                $data['response_status'] = "warning";
+                $data['warning_validator'] = $validator->messages();
+            }
+        }	    
+        elseif(isset($_POST['direct_referral_rpv']))
+        {
+            
+            $validate['membership_id']            = Request::input("membership_id");
+            $validate['direct_referral_rpv']      = Request::input("direct_referral_rpv");
+            $validate['direct_referral_rgpv']     = Request::input("direct_referral_rgpv");
+            $validate['direct_referral_spv']      = Request::input("direct_referral_spv");
+            $validate['direct_referral_sgpv']     = Request::input("direct_referral_sgpv");
+            $validate['direct_referral_self_rpv'] = Request::input("direct_referral_self_rpv");
+            $validate['direct_referral_self_spv'] = Request::input("direct_referral_self_spv");
+            
+            $rules['membership_id']               = "required";
+            $rules['direct_referral_rpv']         = "required";
+            $rules['direct_referral_rgpv']        = "required";
+            $rules['direct_referral_spv']         = "required";
+            $rules['direct_referral_sgpv']        = "required";
+            $rules['direct_referral_self_rpv']    = "required";
+            $rules['direct_referral_self_spv']    = "required";
+            
+            
+            $validator = Validator::make($validate,$rules);
+            if ($validator->passes())
+            {
+                $count = Tbl_membership_points::where('membership_id', $validate['membership_id'])->count();
+                if($count == 0)
+                {
+                    $insert['membership_id']             = $validate['membership_id'];
+                    $insert['direct_referral_rpv']       = $validate['direct_referral_rpv'];
+                    $insert['direct_referral_rgpv']      = $validate['direct_referral_rgpv'];
+                    $insert['direct_referral_spv']       = $validate['direct_referral_spv'];
+                    $insert['direct_referral_sgpv']      = $validate['direct_referral_sgpv'];
+                    $insert['direct_referral_self_rpv']  = $validate['direct_referral_rpv'];
+                    $insert['direct_referral_self_spv']  = $validate['direct_referral_spv'];
+                    Tbl_membership_points::insert($insert);
+                }
+                else
+                {
+                    $update['direct_referral_rpv']      = $validate['direct_referral_rpv'];
+                    $update['direct_referral_rgpv']     = $validate['direct_referral_rgpv'];
+                    $update['direct_referral_spv']      = $validate['direct_referral_spv'];
+                    $update['direct_referral_sgpv']     = $validate['direct_referral_sgpv'];
+                    $update['direct_referral_self_rpv'] = $validate['direct_referral_self_rpv'];
+                    $update['direct_referral_self_spv'] = $validate['direct_referral_self_spv'];
+                    Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
+                }
+            }
+            else
+            {
+                $data['response_status'] = "warning";
+                $data['warning_validator'] = $validator->messages();
+            }
+        }        
+        elseif(isset($_POST['stairstep_direct_points']))
+	    {
+	    	
+	        $validate['membership_id'] = Request::input("membership_id");
+            $validate['stairstep_direct_points'] = Request::input("stairstep_direct_points");
+            
+            $rules['membership_id']                     = "required";
+            $rules['stairstep_direct_points']  = "required";
             
     	    
     	    $validator = Validator::make($validate,$rules);
@@ -980,12 +1093,12 @@ class MLM_PlanController extends Member
         	    if($count == 0)
         	    {
         	        $insert['membership_id'] = $validate['membership_id'];
-                    $insert['membership_points_direct_pass_up'] = $validate['membership_points_direct_pass_up'];
+                    $insert['stairstep_direct_points'] = $validate['stairstep_direct_points'];
             	    Tbl_membership_points::insert($insert);
         	    }
         	    else
         	    {
-                    $update['membership_points_direct_pass_up'] = $validate['membership_points_direct_pass_up'];
+                    $update['stairstep_direct_points'] = $validate['stairstep_direct_points'];
             	    Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
         	    }
         	}
@@ -1281,11 +1394,12 @@ class MLM_PlanController extends Member
 
     public static function rank($shop_id)
     {
-        $data['membership']      = Tbl_membership::getactive(0, $shop_id)->get();
-        $data['basic_settings']  = MLM_PlanController::basic_settings('RANK');
-        $data['stair_get']       = MLM_PlanController::get_rank($shop_id);
-        $data['stair_count']     = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->count();
-        $data['points_settings'] = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->orderBy("stairstep_points_level","ASC ")->get();
+        $data['membership']          = Tbl_membership::getactive(0, $shop_id)->get();
+        $data['basic_settings']      = MLM_PlanController::basic_settings('RANK');
+        $data['stair_get']           = MLM_PlanController::get_rank($shop_id);
+        $data['include_rpv_on_rgpv'] = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->include_rpv_on_rgpv; 
+        $data['stair_count']         = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->count();
+        $data['points_settings']     = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->orderBy("stairstep_points_level","ASC ")->get();
         // dd($data);
         return view('member.mlm_plan.configure.rank', $data);
     }
@@ -1299,8 +1413,8 @@ class MLM_PlanController extends Member
            // $shop_id =  Member::$user_info->shop_id;
         }
         $data['rank'] = Tbl_mlm_stairstep_settings::where('shop_id', $shop_id)->get();
-        $data['rank_count'] = Tbl_mlm_stairstep_settings::count() + 1;
-        $data['rank_count_new'] = Tbl_mlm_stairstep_settings::count() + 2;
+        $data['rank_count'] = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->count() + 1;
+        $data['rank_count_new'] = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->count() + 2;
         return view('member.mlm_plan.configure.stairstep_get', $data);
     }
 
@@ -1336,6 +1450,7 @@ class MLM_PlanController extends Member
             $insert['stairstep_leg_count'] = Request::input('stairstep_leg_count');
             $insert['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
             $insert['commission_multiplier'] = Request::input('commission_multiplier');
+            $insert['direct_rank_bonus'] = Request::input('direct_rank_bonus');
             $insert['shop_id'] = $this->user_info->shop_id;
             Tbl_mlm_stairstep_settings::insert($insert);
             $data['response_status'] = "success_add_stairstep";
@@ -1385,6 +1500,7 @@ class MLM_PlanController extends Member
             $update['stairstep_leg_count'] = Request::input('stairstep_leg_count');
             $update['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
             $update['commission_multiplier'] = Request::input('commission_multiplier');
+            $update['direct_rank_bonus'] = Request::input('direct_rank_bonus');
             Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
             $data['response_status'] = "success_edit_stairstep";
         }
@@ -1428,6 +1544,16 @@ class MLM_PlanController extends Member
             }
         }   
 
+        $data['response_status'] = "success";
+
+        echo json_encode($data);          
+    }
+
+    public function save_include()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $update["include_rpv_on_rgpv"] = Request::input("include_rpv_on_rgpv");
+        Tbl_mlm_plan_setting::where("shop_id",$shop_id)->update($update); 
         $data['response_status'] = "success";
 
         echo json_encode($data);          
@@ -2688,5 +2814,31 @@ class MLM_PlanController extends Member
 
         $data['response_status'] = "success";
         echo json_encode($data);  
+    }
+
+    public static function direct_referral_pv($shop_id)
+    {
+        $data['membership']                     = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['basic_settings']                 = MLM_PlanController::basic_settings('DIRECT_REFERRAL_PV');
+        $data['direct_referral_pv_initial_rpv'] = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->direct_referral_pv_initial_rpv; 
+        return view('member.mlm_plan.configure.direct_referral_pv', $data);
+    }
+
+    public function save_include_direct_referral()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $update["direct_referral_pv_initial_rpv"] = Request::input("direct_referral_pv_initial_rpv");
+        Tbl_mlm_plan_setting::where("shop_id",$shop_id)->update($update); 
+        $data['response_status'] = "success";
+
+        echo json_encode($data);          
+    }
+    
+    public function stairstep_direct($shop_id)
+    {
+        $data['membership']                     = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['basic_settings']                 = MLM_PlanController::basic_settings('STAIRSTEP_DIRECT');
+        // $data['direct_referral_pv_initial_rpv'] = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->direct_referral_pv_initial_rpv; 
+        return view('member.mlm_plan.configure.stairstep_direct', $data);
     }
 }

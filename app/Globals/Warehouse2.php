@@ -593,6 +593,7 @@ class Warehouse2
             $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
                                                    ->where("record_item_id",$item_id)
                                                    ->where("record_inventory_status",0)
+                                                   ->where("item_in_use",'unused')
                                                    ->value('record_log_id');
             if($serial_qty > 0)
             {
@@ -602,6 +603,7 @@ class Warehouse2
                                                    ->where("record_item_id",$item_id)
                                                    ->where("record_inventory_status",0)
                                                    ->where("record_serial_number",$serial[$ctr_qty])
+                                                   ->where("item_in_use",'unused')
                                                    ->value('record_log_id');
             }
             Warehouse2::insert_item_history($id);
@@ -762,6 +764,7 @@ class Warehouse2
         $insert['record_consume_ref_id']     = isset($consume['id']) ? $consume['id'] : 0;
         $insert['record_inventory_status']   = 1;
         $insert['record_log_date_updated']   = Carbon::now();
+        $insert['item_in_use']               = 'used';
        
         Warehouse2::insert_item_history($recor_log_id);
         Tbl_warehouse_inventory_record_log::where('record_log_id',$recor_log_id)->update($insert);

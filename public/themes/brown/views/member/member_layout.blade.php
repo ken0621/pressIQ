@@ -55,6 +55,8 @@
 						<li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
 							<a href="/members/network"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Network List</span></div></a>
 						</li>
+						
+
 						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>
@@ -66,6 +68,11 @@
 								</li>
 							</ul>
 						</li>
+						
+						<!--<li class="{{ Request::segment(2) == "network" ? "active" : "" }}">-->
+						<!--	<a href="/members/lead-list"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>My Leads</span></div></a>-->
+						<!--</li>-->
+						
 						<!-- <li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
 							<a href="/members/slot"><div class="nav-holder"><div class="icon brown-icon-cubes"></div> <span>My Slots</span></div></a>
 						</li> -->
@@ -92,12 +99,8 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
 @endsection
+
 @section("css")
 @yield("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member.css">

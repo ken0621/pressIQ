@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/main.css">
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
     <!-- EXTERNAL CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick.css">
@@ -135,7 +136,7 @@
                             @endif
                             <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
                             <!--<li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>-->
-                            <li><a href="/inspirers">Inspirer Page Login</a></li>
+                            <li><a href="/inspirers">Inspirer Page</a></li>
                             <li><a href="#">Health Technology</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
@@ -223,7 +224,7 @@
                         <div class="container">
                             <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">Brown</a>
                             <!--<a href="javascript:">Phone Accessories</a>-->
-                            <a href="/inspirers">Inspirer Page Login</a>
+                            <a href="/inspirers">Inspirer Page</a>
                             <a href="javascript:">Health Technology</a>
                         </div>
                     </div>
@@ -507,18 +508,20 @@
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/main.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/match-height.js"></script>
-    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
+    <script type="text/javascript" src="/assets/front/external_js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
+
+    <!-- FOR GOOGLE LOGIN -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://apis.google.com/js/api:client.js"></script>
+    <!-- END GOOGLE LOGIN -->
     <script type="text/javascript" src="/assets/js/cart.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/drawer.js"></script>
     <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
 
-
-
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/wow/js/wow.min.js"></script>
+        <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
 
     <script>
           new WOW().init();
@@ -541,6 +544,9 @@
     //   });
     // }
     </script>
+
+
+    
     @yield("script")
     <!-- BEGIN JIVOSITE CODE -->
     <script type='text/javascript'>

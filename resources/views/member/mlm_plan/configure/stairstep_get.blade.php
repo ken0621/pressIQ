@@ -26,7 +26,7 @@
                 <input type="number" class="form-control" name="stairstep_required_gv" value="{{$value->stairstep_required_gv}}">
             </div>            
             <div class="col-md-2">
-                <label for="stairstep_required_gv">Required Personal Sales Maintenance</label>
+                <label for="stairstep_required_gv">Personal Sales Maintenance</label>
                 <input type="number" class="form-control" name="stairstep_pv_maintenance" value="{{$value->stairstep_pv_maintenance}}">
             </div>            
             <div class="col-md-2">
@@ -36,7 +36,13 @@
             <div class="col-md-1">
                 <label for="stairstep_bonus">Bonus</label>
                 <input type="number" class="form-control" name="stairstep_bonus" value="{{$value->stairstep_bonus}}">
-            </div>
+            </div>               
+            <div class="col-md-12"></div>
+            <div class="col-md-5"></div>        
+            <div class="col-md-2">
+                <label for="direct_rank_bonus">Direct Bonus</label>
+                <input type="number" class="form-control" name="direct_rank_bonus" value="{{$value->direct_rank_bonus}}">
+            </div>   
             <div class="col-md-2">
                 <label for="stairstep_leg_id">Leg Rank</label>
                 <select name="stairstep_leg_id" class="form-control">
@@ -50,7 +56,7 @@
                 <label for="stairstep_leg_count">Leg Count</label>
                 <input type="number" class="form-control" name="stairstep_leg_count" value="{{$value->stairstep_leg_count}}">
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1 pull-right">
                 <br>
                 <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_stairstep({{$key}})">Save</a>
             </div>
@@ -85,7 +91,7 @@
             <input type="number" class="form-control" name="stairstep_required_gv" value="0">
         </div>
         <div class="col-md-2">
-                <label for="stairstep_required_gv">Required Personal Sales Maintenance</label>
+                <label for="stairstep_required_gv">Personal Sales Maintenance</label>
                 <input type="number" class="form-control" name="stairstep_pv_maintenance" value="">
         </div>            
         <div class="col-md-2">
@@ -95,6 +101,12 @@
         <div class="col-md-1">
             <label for="stairstep_bonus">Bonus</label>
             <input type="number" class="form-control" name="stairstep_bonus" value="0">
+        </div>       
+        <div class="col-md-12"></div>
+        <div class="col-md-5"></div>
+        <div class="col-md-2">
+            <label for="direct_rank_bonus">Direct Bonus</label>
+            <input type="number" class="form-control" name="direct_rank_bonus" value="0">
         </div>
         <div class="col-md-2">
             <label for="stairstep_leg_id">Leg Rank</label>
@@ -109,7 +121,7 @@
             <label for="stairstep_leg_count">Leg Count</label>
             <input type="number" class="form-control" name="stairstep_leg_count" value="0">
         </div>
-        <div class="col-md-1">
+        <div class="col-md-1 pull-right">
             <br>
             <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="save_stairstep()">Save</a>
         </div>

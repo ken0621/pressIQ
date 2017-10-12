@@ -19,7 +19,7 @@
 									</div>
 									<div class="text-right social-button">
 										<a href="{{$fb_login_url or '#'}}" class="holder fb">
-											<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign up with Facebook</div>
+											<div class="name"><i style="color: #fff;" class="fa fa-facebook" aria-hidden="true"></i> Sign up with Facebook</div>
 										</a>
 										<a href="javascript:" class="holder gp" id="customBtn">
 											<div class="name"><i class="fa fa-google-plus" aria-hidden="true"></i> Sign up with Google+</div>

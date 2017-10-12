@@ -26,15 +26,18 @@ use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_mlm_binary_report;
+use App\Models\Tbl_stairstep_points_log;
 use App\Models\Tbl_brown_rank;
 use App\Models\Tbl_advertisement_bonus_settings;
 use App\Globals\Mlm_gc;
 use App\Globals\Mlm_complan_manager_repurchasev2;
 use App\Models\Tbl_mlm_gc;
 use App\Models\Tbl_mlm_binary_pairing_log;
+use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_direct_pass_up_settings;
 use App\Models\Tbl_leadership_advertisement_points;
 use App\Models\Tbl_leadership_advertisement_settings;
+use App\Models\Tbl_rank_points_log;
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
 use Schema;
@@ -50,6 +53,234 @@ use App\Globals\Membership_code;
 use App\Globals\Binary_pairing;
 class Mlm_complan_manager
 {   
+    public static function stairstep_direct($slot_info)
+    {
+        $slot_info     = Tbl_mlm_slot::where("slot_id", $slot_info->slot_id)->customer()->membership()->first();
+        $shop_id       = $slot_info->shop_id;
+        $check_points  = Tbl_membership_points::where("membership_id",$slot_info->slot_membership)->first();
+
+        if($check_points)
+        {
+            $stairstep_direct_points = $check_points->stairstep_direct_points;
+        }
+        else
+        {
+            $stairstep_direct_points = 0;
+        }
+
+
+        $stairstep_group_points = 
+        $percentage             = null;
+
+        $slot_stairstep      = Tbl_mlm_stairstep_settings::where("stairstep_id",$slot_info->stairstep_rank)->first();
+
+        if($slot_stairstep)
+        {   
+            $computed_points = 0;
+
+            if($slot_stairstep->direct_rank_bonus != 0)
+            {
+                $computed_points = ($slot_stairstep->direct_rank_bonus/100) * $stairstep_direct_points;
+                $percentage      = $slot_stairstep->direct_rank_bonus;
+            }  
+        }
+        else
+        {
+            $percentage = 0;
+        }
+        
+        $reduced_by      = $slot_info;
+        $check_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->first();
+        $sponsor_tree    = Tbl_tree_sponsor::where("sponsor_tree_child_id",$slot_info->slot_id)->orderBy("sponsor_tree_level","ASC")->get();
+
+        if($check_stairstep)
+        {
+            foreach($sponsor_tree as $placement)
+            {
+                $slot_recipient  = Mlm_compute::get_slot_info($placement->sponsor_tree_parent_id);
+                $reduced_percent = 0;
+                $computed_points = 0;
+                $old_percentage  = 0;
+                $slot_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$slot_recipient->stairstep_rank)->first();
+                
+                if($slot_stairstep)
+                {                       
+                    if($slot_stairstep->direct_rank_bonus > $percentage && $slot_stairstep->direct_rank_bonus != 0)
+                    { 
+                        $reduced_percent = $slot_stairstep->direct_rank_bonus - $percentage;
+                        if($reduced_percent > 0)
+                        {
+                            $computed_points = (($reduced_percent)/100) * $stairstep_direct_points;
+                            $old_percentage  = $percentage;
+                            $percentage      = $slot_stairstep->direct_rank_bonus;
+                        }  
+                    }
+                }
+
+                if($computed_points > 0)
+                {             
+                    $array['points_log_complan']        = "STAIRSTEP_GPV";
+                    $array['points_log_level']          = $placement->sponsor_tree_level;
+                    $array['points_log_slot']           = $slot_recipient->slot_id;
+                    $array['points_log_Sponsor']        = $slot_info->slot_id;
+                    $array['points_log_date_claimed']   = Carbon::now();
+                    $array['points_log_converted']      = 0;
+                    $array['points_log_converted_date'] = Carbon::now();
+                    $array['points_log_type']           = 'SGPV';
+                    $array['points_log_from']           = 'Slot Creation';
+                    $array['points_log_points']         = $computed_points;
+                    $array['original_from_complan']     = "STAIRSTEP_DIRECT";
+
+                    
+                    $slot_logs_id = Mlm_slot_log::slot_log_points_array($array);
+
+                    $insert_stairstep_logs["stairstep_points_amount"]       = $stairstep_direct_points;
+                    $insert_stairstep_logs["stairstep_percentage"]          = $percentage;
+                    $insert_stairstep_logs["stairstep_reduced_percentage"]  = $old_percentage;
+                    $insert_stairstep_logs["stairstep_reduced_by_id"]       = $reduced_by->slot_id;
+                    $insert_stairstep_logs["stairstep_reduced_rank"]        = $reduced_by->stairstep_rank;
+                    $insert_stairstep_logs["stairstep_cause_id"]            = $slot_info->slot_id;
+                    $insert_stairstep_logs["current_rank"]                  = $slot_recipient->stairstep_rank;
+                    $insert_stairstep_logs["slot_points_log_id"]            = $slot_logs_id;
+                    Tbl_stairstep_points_log::insert($insert_stairstep_logs);
+
+                    $reduced_by = $slot_recipient;
+                }
+            }
+        }
+    }
+
+    public static function direct_referral_pv($slot_info)
+    {
+        $include_self = Tbl_mlm_plan_setting::where("shop_id",$slot_info->shop_id)->first(); 
+        $check_points = Tbl_membership_points::where("membership_id",$slot_info->slot_membership)->first();
+
+        if($check_points)
+        {
+            $direct_referral_rpv      = $slot_info->direct_referral_rpv;
+            $direct_referral_rgpv     = $slot_info->direct_referral_rgpv;
+            $direct_referral_spv      = $slot_info->direct_referral_spv;
+            $direct_referral_sgpv     = $slot_info->direct_referral_sgpv;
+            $direct_referral_self_rpv = $slot_info->direct_referral_self_rpv;
+            $direct_referral_self_spv = $slot_info->direct_referral_self_spv;
+        }
+        else
+        {
+            $direct_referral_rpv      = 0;
+            $direct_referral_rgpv     = 0;
+            $direct_referral_spv      = 0;
+            $direct_referral_sgpv     = 0; 
+            $direct_referral_self_rpv = 0; 
+            $direct_referral_self_spv = 0; 
+        }
+        
+        if($include_self)
+        {   
+            if($direct_referral_self_rpv != 0)
+            {
+                $array['points_log_complan']        = "RANK_PV";
+                $array['points_log_level']          = 0;
+                $array['points_log_slot']           = $slot_info->slot_id;
+                $array['points_log_Sponsor']        = $slot_info->slot_id;
+                $array['points_log_date_claimed']   = Carbon::now();
+                $array['points_log_converted']      = 0;
+                $array['points_log_converted_date'] = Carbon::now();
+                $array['points_log_type']           = 'RPV';
+                $array['points_log_from']           = 'Slot Creation';
+                $array['points_log_points']         = $direct_referral_self_rpv;
+                $array['original_from_complan']     = "DIRECT_REFERRAL_PV";
+
+                $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
+
+                $insert_rank_log["rank_original_amount"] = $direct_referral_rpv;
+                $insert_rank_log["rank_percentage_used"] = 0;
+                $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
+                Tbl_rank_points_log::insert($insert_rank_log);
+            }           
+
+            if($direct_referral_self_spv != 0)
+            {
+                $array['points_log_complan']        = "STAIRSTEP_PV";
+                $array['points_log_level']          = 0;
+                $array['points_log_slot']           = $slot_info->slot_id;
+                $array['points_log_Sponsor']        = $slot_info->slot_id;
+                $array['points_log_date_claimed']   = Carbon::now();
+                $array['points_log_converted']      = 0;
+                $array['points_log_converted_date'] = Carbon::now();
+                $array['points_log_type']           = 'SPV';
+                $array['points_log_from']           = 'Slot Creation';
+                $array['points_log_points']         = $direct_referral_self_spv;
+                $array['original_from_complan']     = "DIRECT_REFERRAL_PV";
+
+                $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
+
+                $insert_rank_log["rank_original_amount"] = $direct_referral_spv;
+                $insert_rank_log["rank_percentage_used"] = 0;
+                $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
+                Tbl_rank_points_log::insert($insert_rank_log);
+            }
+        }
+
+
+
+        $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_info->slot_id)->parent_info()->get();
+
+        foreach($_sponsor_tree as $sponsor_tree)
+        {
+            $slot_sponsor = Tbl_mlm_slot::where('slot_id', $sponsor_tree->slot_id)->membership()->first();
+            /* CHECK IF SLOT RECIPIENT EXIST */
+            if($slot_sponsor)
+            {
+                if($slot_info->direct_referral_rpv != null || $slot_info->direct_referral_rpv != 0)
+                {
+
+                    if($direct_referral_rpv != 0)
+                    {
+                        $array['points_log_complan']        = "RANK_PV";
+                        $array['points_log_level']          = $sponsor_tree->sponsor_tree_level;
+                        $array['points_log_slot']           = $slot_sponsor->slot_id;
+                        $array['points_log_Sponsor']        = $slot_info->slot_id;
+                        $array['points_log_date_claimed']   = Carbon::now();
+                        $array['points_log_converted']      = 0;
+                        $array['points_log_converted_date'] = Carbon::now();
+                        $array['points_log_type']           = 'RPV';
+                        $array['points_log_from']           = 'Slot Creation';
+                        $array['points_log_points']         = $direct_referral_rpv;
+                        $array['original_from_complan']     = "DIRECT_REFERRAL_PV";
+
+                        $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
+
+                        $insert_rank_log["rank_original_amount"] = $direct_referral_rpv;
+                        $insert_rank_log["rank_percentage_used"] = 0;
+                        $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
+                        Tbl_rank_points_log::insert($insert_rank_log);
+                    }
+
+                    if($direct_referral_spv != 0)
+                    {
+                        $array['points_log_complan']        = "STAIRSTEP_PV";
+                        $array['points_log_level']          = $sponsor_tree->sponsor_tree_level;
+                        $array['points_log_slot']           = $slot_sponsor->slot_id;
+                        $array['points_log_Sponsor']        = $slot_info->slot_id;
+                        $array['points_log_date_claimed']   = Carbon::now();
+                        $array['points_log_converted']      = 0;
+                        $array['points_log_converted_date'] = Carbon::now();
+                        $array['points_log_type']           = 'SPV';
+                        $array['points_log_from']           = 'Slot Creation';
+                        $array['points_log_points']         = $direct_referral_spv;
+                        $array['original_from_complan']     = "DIRECT_REFERRAL_PV";
+
+                        $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
+
+                        $insert_rank_log["rank_original_amount"] = $direct_referral_spv;
+                        $insert_rank_log["rank_percentage_used"] = 0;
+                        $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
+                        Tbl_rank_points_log::insert($insert_rank_log);
+                    }
+                }
+            }  
+        } 
+    }
     public static function advertisement_bonus($slot_info)
     {
         $settings_tree = Tbl_tree_placement::child($slot_info->slot_id)->distinct_level()->parentslot()->get();
@@ -278,14 +509,17 @@ class Mlm_complan_manager
                 $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('DIRECT', $slot_info->shop_id); 
                 Mlm_slot_log::slot_array($arry_log);
 
-                if(Self::plan_check_if_enabled($slot_info->shop_id, "BROWN_RANK")->marketing_plan_enable == 1)
+                if(Self::plan_check_if_enabled($slot_info->shop_id, "BROWN_RANK"))
                 {
-                    /* LEADER REWARD FOR BROWN RANK */
-                    $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_sponsor->slot_id)->parent_info()->get();
-
-                    foreach($_sponsor_tree as $sponsor_tree)
+                    if(Self::plan_check_if_enabled($slot_info->shop_id, "BROWN_RANK")->marketing_plan_enable == 1)
                     {
-                        Mlm_complan_manager_repurchasev2::brown_leader_reward($sponsor_tree, $slot_sponsor , "Direct Referral", $direct_points_given);
+                        /* LEADER REWARD FOR BROWN RANK */
+                        $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_sponsor->slot_id)->parent_info()->get();
+
+                        foreach($_sponsor_tree as $sponsor_tree)
+                        {
+                            Mlm_complan_manager_repurchasev2::brown_leader_reward($sponsor_tree, $slot_sponsor , "Direct Referral", $direct_points_given);
+                        }
                     }
                 }
             }

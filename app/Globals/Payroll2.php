@@ -2808,13 +2808,17 @@ class Payroll2
 		else if($time_spent==0 && $_time["day_type"] != "rest_day" && $_time["day_type"] != "extra_day")
 		{
 			$cola_daily_deduction = $cola;
-			$cola = $cola - $cola;
+			
 		}
 
 		//for daily fixed cola
 		if ($time_spent==0) 
 		{
 			$daily_cola = $daily_cola - $daily_cola;
+
+			//debugging report: from else if in top to here
+			$cola = $cola - $cola;
+			//debugging report: from else if in top to here
 		}
 		
 		/*breakdown deduction*/
@@ -2832,6 +2836,8 @@ class Payroll2
 			$cola_daily_deduction = ($undertime_float * $cola_rate_per_hour);
 			$cola = $cola - ($undertime_float * $cola_rate_per_hour);
 		}
+
+
 		$return->cola_daily 		  = $daily_cola;
 		$return->cola_day_pay 		  = $cola;
 		$return->cola_plus_daily_rate = $daily_rate+$cola;
@@ -3468,7 +3474,7 @@ class Payroll2
 		}
 		
 		
-
+		
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
 		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
@@ -4363,7 +4369,6 @@ class Payroll2
 	{
 		$total_cola = 0;
 
-		
 		foreach($data["cutoff_input"] as $cutoff_input)
 		{
 			$total_cola += $cutoff_input->compute->cola;
@@ -4752,7 +4757,7 @@ class Payroll2
 			array_push($return->_breakdown, $val);
 			$val = null;
 		}
-
+		
 		$deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
 			
 		if(isset($deduction["deduction"]))

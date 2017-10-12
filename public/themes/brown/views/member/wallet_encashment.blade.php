@@ -15,8 +15,7 @@
 		</div>
 		<div class="animated fadeInRight right">
 			<div class="text-right">
-<!-- 				<button type="button" class="btn btn-default"><i class="fa fa-bank"></i> PAYOUT METHOD</button>
-				<button type="button" class="btn btn-primary request-payout"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button> -->
+				<button onclick="action_load_link_to_modal('/members/payout-setting', 'lg')" type="button" class="btn btn-gear"><i class="fa fa-bank"></i> PAYOUT SETTINGS</button>
 			</div>
 		</div>
 	</div>

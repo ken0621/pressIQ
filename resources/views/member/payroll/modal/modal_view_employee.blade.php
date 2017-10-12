@@ -420,7 +420,7 @@
                 </div>
               </div>
               <div id="requirements" class="tab-pane fade">
-                <div class="form-horizontal">
+                {{-- <div class="form-horizontal">
                   <div class="form-group">
                     <div class="col-md-12">
                       <table class="table table-condensed">
@@ -529,7 +529,7 @@
                       </table>
                     </div>
                   </div>
-                </div>
+                </div> --}}
               </div>
               <div id="dependents" class="tab-pane fade form-horizontal">
                 <div class="form-group">

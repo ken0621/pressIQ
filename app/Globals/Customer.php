@@ -38,6 +38,35 @@ class Customer
 		Tbl_customer::insert($info);
 		return true;	
 	}
+	public static function scan_customer($shop_id, $id = 0)
+	{
+		$return = null;
+		if($id)
+		{
+			$check_slot = Tbl_mlm_slot::where('slot_no',$id)->where('shop_id',$shop_id)->value('slot_owner');
+
+			if($check_slot)
+			{
+				$return = Customer::get_info_membership($shop_id, $check_slot);
+			}
+			else
+			{
+				$check_customer = Customer::get_info_membership($shop_id, $id);
+
+				if($check_customer)
+				{
+					$return = $check_customer;
+				}
+			}
+
+		}
+
+		return $return;
+	}
+	public static function get_info_membership($shop_id, $customer_id)
+	{
+		return Tbl_customer::membership()->where("customer_id", $customer_id)->where("tbl_customer.shop_id", $shop_id)->first();
+	}
 	public static function check_account($shop_id, $email, $password = '')
 	{
 		$check_account =  Tbl_customer::where("shop_id", $shop_id)->where("email", $email)->first();
@@ -84,7 +113,7 @@ class Customer
     
 	public static function info($id = 0, $shop_id = 0, $order_id = 0)
 	{
-        $data['customer'] = Tbl_customer::leftjoin('tbl_country','tbl_country.country_id','=','tbl_customer.country_id')->where('tbl_customer.customer_id',$id)->first();
+        $data['customer'] = Tbl_customer::membership()->leftjoin('tbl_country','tbl_country.country_id','=','tbl_customer.country_id')->where('tbl_customer.customer_id',$id)->first();
         $data['shipping'] = Tbl_customer_address::leftjoin('tbl_country','tbl_country.country_id','=','tbl_customer_address.country_id')->where('tbl_customer_address.customer_id',$id)->where('tbl_customer_address.purpose','shipping')->where('tbl_customer_address.archived',0)->first();
         $data['other'] = Tbl_customer_other_info::where('customer_id',$id)->first();
         // $tax_exempt = $data['customer']->taxt_exempt;
@@ -125,7 +154,7 @@ class Customer
 				   ->where("tbl_customer_search.body", "LIKE", "%" . $keyword . "%");
 		}
 
-		return $return->get();
+		return $return->groupBy('tbl_customer.customer_id')->get();
 	}
 	public static function getAllCustomer($for_tablet = false)
 	{

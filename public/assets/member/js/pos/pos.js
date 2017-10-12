@@ -29,7 +29,24 @@ function pos()
 		event_remote_item_from_cart();
 		action_convert_price_level_to_global_drop_list();
 		event_change_global_discount();
+		action_load_detach_customer();
 
+	}
+	function action_load_detach_customer()
+	{
+		$("body").on('click', '.detach-customer', function()
+		{
+			customer_loading();
+			$.ajax({
+				url : '/member/cashier/pos/remove_customer',
+				data : {},
+				type : 'get',
+				success : function (data)
+				{
+					action_load_customer_info();
+				}
+			});
+		});
 	}
 	function table_loading()
 	{
@@ -110,7 +127,7 @@ function pos()
 	}
 	function event_search_customer()
 	{
-		$(".event_search_customer").keyup(function(e)
+		$("body").on("keyup", ".event_search_customer", function(e)
 		{
 			if(e.which == 13) //ENTER KEY
 			{
@@ -155,8 +172,8 @@ function pos()
 	{
 		$(".event_search_customer").val("");
 		$(".event_search_customer").attr("disabled", "disabled");
-		$(".button-scan").find(".scan-load").show();
-		$(".button-scan").find(".scan-icon").hide();
+		$(".customer-button-scan").find(".customer-scan-load").show();
+		$(".customer-button-scan").find(".customer-scan-icon").hide();
 
 		scandata_customer = {};
 		scandata_customer.customer_id = $customer_id;
@@ -167,18 +184,17 @@ function pos()
 			url			: "/member/cashier/pos/scan_customer",
 			dataType	: "json",
 			type 		: "post",
-			data 		: scandata,
+			data 		: scandata_customer,
 			success 	: function(data)
 			{
 				$(".event_search_customer").removeAttr("disabled");
-				$(".button-scan").find(".scan-load").hide();
-				$(".button-scan").find(".scan-icon").show();
+				$(".customer-button-scan").find(".customer-scan-load").hide();
+				$(".customer-button-scan").find(".customer-scan-icon").show();
 
 				if(data.status == "success")
 				{
-					toastr.success("<b>SUCCESS!</b><br>" + data.message);
 					success_audio.play();
-					action_load_item_table();
+					action_load_customer_info(data.price_level_id);
 				}
 				else if(data.status == "error")
 				{
@@ -189,8 +205,8 @@ function pos()
 			error : function(data)
 			{
 				$(".event_search_customer").removeAttr("disabled");
-				$(".button-scan").find(".scan-load").hide();
-				$(".button-scan").find(".scan-icon").show();
+				$(".customer-button-scan").find(".customer-scan-load").hide();
+				$(".customer-button-scan").find(".customer-scan-icon").show();
 				toastr.error("An error occured during scan - please contact system administrator");
 				$(".event_search_customer").focus();
 			}
@@ -386,6 +402,27 @@ function pos()
 		$(".pos-search-container").hide();
 		$(".pos-search-container-customer").hide();
 		clearTimeout(item_search_delay_timer);
+	}
+	function action_load_customer_info(price_level_id = '')
+	{
+		if($(".customer-container").text() != "")
+		{
+			customer_loading();
+		}
+		else
+		{
+			$(".customer-container").html(get_loader_html());
+		}
+		
+		$(".customer-container").load("/member/cashier/pos/customer", function()
+		{
+			$(".customer-container").css("opacity", 1);
+			$('.price-level-select').val(price_level_id).change();
+		});
+	}
+	function customer_loading()
+	{
+		$(".customer-container").css("opacity", 0.3);
 	}
 	function action_load_item_table()
 	{

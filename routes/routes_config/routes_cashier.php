@@ -11,6 +11,8 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	/* CUSTOMER */
 	Route::any('/pos/search_customer','Member\CashierController@pos_search_customer');
 	Route::any('/pos/scan_customer','Member\CashierController@pos_scan_customer');
+	Route::any('/pos/customer','Member\CashierController@customer');
+	Route::any('/pos/remove_customer','Member\CashierController@remove_customer');
 
 	Route::any('/transactions','Member\TransactionController@index');
 	Route::any('/transactions/view_list/{transaction_id}','Member\TransactionController@view_list');

@@ -11,7 +11,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name='B-verify' content='8b63efb2920a681d6f877a59a414659d09831140' />
       
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+        {{-- PHILTECH ICON --}}
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/icon/philtech-icon.png" type="image/png"/>
+
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
         <!-- GLOBAL CSS -->

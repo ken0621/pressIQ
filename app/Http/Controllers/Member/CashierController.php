@@ -2,7 +2,9 @@
 namespace App\Http\Controllers\Member;
 use App\Globals\Cart2;
 use App\Globals\Item;
+use App\Globals\Customer;
 use Request;
+use Session;
 
 class CashierController extends Member
 {
@@ -13,6 +15,12 @@ class CashierController extends Member
         $data["cart"]           = $_items = Cart2::get_cart_info();
         $data["_price_level"]   = Item::list_price_level($this->user_info->shop_id);
         $data["current_level"]  = ($data["cart"]["info"] ? $data["cart"]["info"]->price_level_id : 0);
+        
+        if(Session::has('customer_id'))
+        {
+            $data['customer'] = Customer::info(Session::get('customer_id'), $this->user_info->shop_id);
+            $data['exist'] = $data['customer'];
+        }
         
        	return view("member.cashier.pos", $data);
     }
@@ -31,6 +39,52 @@ class CashierController extends Member
         Item::get_search($data["keyword"]);
         $data["_item"]   = Item::get($data["shop_id"]);
         return view("member.cashier.pos_search_item", $data);
+    }
+    public function pos_search_customer()
+    {
+        $data['_customer'] = Customer::search_get($this->user_info->shop_id, Request::input("customer_keyword"));
+        $data["shop_id"] = $this->user_info->shop_id;
+        $data["keyword"] = Request::input("customer_keyword");
+
+        return view("member.cashier.pos_search_customer", $data);
+    }
+    public function pos_scan_customer()
+    {
+        $data["shop_id"]        = $shop_id = $this->user_info->shop_id;
+        $data["customer_id"]    = $customer_id = Request::input("customer_id");
+        $data["customer"]       = $item = Customer::scan_customer($data["shop_id"], $data["customer_id"]);
+
+        if($data["customer"])
+        {
+            Session::put('customer_id', $data['customer']->customer_id);
+            $return["status"]   = "success";
+            $return["message"]  = "";
+            $return["price_level_id"] = $data['customer']->membership_price_level;
+        }
+        else
+        {
+            $return["status"]   = "error";
+            $return["message"]  = "The Customer you scanned didn't match any record.";
+        }
+
+        echo json_encode($return);
+    }
+    public function remove_customer()
+    {
+        Session::forget('customer_id');
+        $return['status'] = 'success';
+
+        return json_encode($return);
+    }
+    public function customer()
+    {
+        $data = [];
+        if(Session::has('customer_id'))
+        {
+            $data = Customer::info(Session::get('customer_id'), $this->user_info->shop_id);
+            $data['exist'] = $data;   
+        }
+        return view('member.cashier.pos_customer_info',$data);
     }
     public function pos_scan_item()
     {

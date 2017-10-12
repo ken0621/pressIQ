@@ -144,6 +144,59 @@
         <div class="line"></div>
         <div class="text">{{ get_content($shop_theme_info, 'home', 'home_best_seller_title') }}</div>
     </div>
+    <div class="container">
+      <div class="best-ads row-no-padding clearfix">
+        <div class="col-md-4 col-sm-4 col-xs-4">
+          <a href="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad1_link') }}">
+            <div class="per-ads">
+              <img src="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad1') }}">
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-4">
+          <a href="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad2_link') }}">
+            <div class="per-ads">
+              <img src="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad2') }}">
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-4">
+          <a href="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad3_link') }}">
+            <div class="per-ads">
+              <img src="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad3') }}">
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-4">
+          <a href="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad4_link') }}">
+            <div class="per-ads">
+              <img src="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad4') }}">
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-4">
+          <a href="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad5_link') }}">
+            <div class="per-ads">
+              <img src="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad5') }}">
+            </div>
+          </a>
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-2">
+          <a href="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad6_link') }}">
+            <div class="per-ads">
+              <img src="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad6') }}">
+            </div>
+          </a>
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-2">
+          <a href="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad7_link') }}">
+            <div class="per-ads">
+              <img src="{{ get_content($shop_theme_info, 'home', 'home_best_seller_ad7') }}">
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
     <div class="best-content container">
         @foreach(limit_foreach(get_collection_random(get_content($shop_theme_info, "home", "home_best_seller"), $shop_id), 8) as $collection)
         <div class="holder col-md-3 col-sm-6">

@@ -60,4 +60,4 @@
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script> -->
 <script src="/assets/external/xlsx.core.min.js"></script>
-<script src="/assets/member/js/mlm/mlm_developer_import.js"></script>
+<script src="/assets/member/js/mlm/mlm_developer_import.js?version=10"></script>

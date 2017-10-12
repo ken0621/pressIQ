@@ -38,7 +38,7 @@
 											<div class="register-label">EMAIL</div>
 
 											<div class="form-input">
-												<input class="form-control input-sm" type="email" name="email" value="{{old('email')}}" placeholder="Type Your Email Here">
+												<input class="form-control input-sm" type="email" name="email" placeholder="Type Your Email Here">
 											</div>
 										<div class="holder">
 											<button type="submit" class="btn btn-brown">Get New Password</button>

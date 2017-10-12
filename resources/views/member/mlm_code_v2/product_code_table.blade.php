@@ -16,21 +16,26 @@
                 <td class="text-center">{{$item->mlm_pin}}</td>
                 <td class="text-center">{{$item->mlm_activation}}</td>
                 <td class="text-center">{{$item->item_name}}</td>
-                @if($item->record_consume_ref_name == 'reserved')
-                <td class="text-center"><a size="md" class="popup" link="/member/mlm/code2/change_status?action=cancel_reservation&item_id={{$item->item_id}}&record_id={{$item->record_log_id}}">Cancel Reservation</a></td>
+                
+                @if($item->item_in_use == 'unused')
+                    @if($item->record_consume_ref_name == 'reserved')
+                    <td class="text-center"><a size="md" class="popup" link="/member/mlm/code2/change_status?action=cancel_reservation&item_id={{$item->item_id}}&record_id={{$item->record_log_id}}">Cancel Reservation</a></td>
+                    @else
+                    <td class="text-center"><a size="md" class="popup" link="/member/mlm/code2/change_status?action=reserved&item_id={{$item->item_id}}&record_id={{$item->record_log_id}}">Reserve</a></td>
+                    @endif
+    
+                    @if($item->record_inventory_status == 0)
+                    <td class="text-center"><a href="">Use Code</a></td>
+                    @else
+                    <td class="text-center"></td>
+                    @endif
+                    @if($item->record_consume_ref_name == 'block')
+                    <td class="text-center"><a size="md" class="popup" link="/member/mlm/code2/change_status?action=unblock_code&item_id={{$item->item_id}}&record_id={{$item->record_log_id}}">Unblock Code</a></td>
+                    @else
+                    <td class="text-center"><a size="md" class="popup" link="/member/mlm/code2/change_status?action=block&item_id={{$item->item_id}}&record_id={{$item->record_log_id}}">Block Code</a></td>
+                    @endif
                 @else
-                <td class="text-center"><a size="md" class="popup" link="/member/mlm/code2/change_status?action=reserved&item_id={{$item->item_id}}&record_id={{$item->record_log_id}}">Reserve</a></td>
-                @endif
-
-                @if($item->record_inventory_status == 0)
-                <td class="text-center"><a href="">Use Code</a></td>
-                @else
-                <td class="text-center"></td>
-                @endif
-                @if($item->record_consume_ref_name == 'block')
-                <td class="text-center"><a size="md" class="popup" link="/member/mlm/code2/change_status?action=unblock_code&item_id={{$item->item_id}}&record_id={{$item->record_log_id}}">Unblock Code</a></td>
-                @else
-                <td class="text-center"><a size="md" class="popup" link="/member/mlm/code2/change_status?action=block&item_id={{$item->item_id}}&record_id={{$item->record_log_id}}">Block Code</a></td>
+                <td class="text-center" colspan="3"><a href="javascript:">{{$item->used_by}}</a></td>
                 @endif
             </tr>
             @endforeach

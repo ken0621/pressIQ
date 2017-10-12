@@ -100,6 +100,9 @@ use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_time_keeping_approved_breakdown;
 use App\Models\Tbl_payroll_time_keeping_approved_performance;
 
+use App\Globals\AuditTrail;
+use App\Models\Tbl_audit_trail;
+
 class PayrollDeductionController extends Member
 {
 
@@ -171,7 +174,7 @@ class PayrollDeductionController extends Member
      {
           $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
           $data["default_expense"] = Tbl_chart_of_account::where("account_number", 66000)
-                                             ->where("account_shop_id", Self::shop_id())->value("account_id");
+                                   ->where("account_shop_id", Self::shop_id())->value("account_id");
           $array = array();
           Session::put('employee_deduction_tag',$array);
 
@@ -192,7 +195,9 @@ class PayrollDeductionController extends Member
           $insert['payroll_deduction_category']   = Request::input('payroll_deduction_category');
           $insert['payroll_deduction_type_name']  = Request::input('payroll_deduction_type_name');
           $insert['shop_id']                           = Self::shop_id();
+
           $id = Tbl_payroll_deduction_type::insertGetId($insert);
+          AuditTrail::record_logs('CREATED: Payroll Deduction Type', 'Payroll Deduction Type Name: '.Request::input('payroll_deduction_type_name'), "", "" ,"");
 
           $type = Request::input('payroll_deduction_category');
 
@@ -224,7 +229,11 @@ class PayrollDeductionController extends Member
           $content  = Request::input('content');
           
           $update['payroll_deduction_type_name'] = $value;
+          $deduct = Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->first();
+          
           Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->update($update);
+          AuditTrail::record_logs('EDITED: Payroll Deduction Type', 'Payroll Deduction Type Name: '.$deduct->payroll_deduction_type_name. " to Value ".Request::input('payroll_holiday_name'), "", "" ,"");
+
 
      }
 
@@ -232,7 +241,11 @@ class PayrollDeductionController extends Member
      {
           $content = Request::input('content');
           $update['payroll_deduction_archived'] = Request::input('archived');
+           $deduct = Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->first();
+          
           Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->update($update);
+         AuditTrail::record_logs('DELETED: Payroll Deduction Type', 'Payroll Deduction Type Name: '.$deduct->payroll_deduction_type_name, "", "" ,"");
+
      }
 
      public function ajax_deduction_type()
@@ -256,7 +269,7 @@ class PayrollDeductionController extends Member
 
      public function modal_save_deduction()
      {
-          $insert['shop_id']                           = Self::shop_id();
+          $insert['shop_id']                      = Self::shop_id();
           $insert['payroll_deduction_type']       = Request::input('payroll_deduction_type');
           $insert['payroll_deduction_name']       = Request::input('payroll_deduction_name');
           $insert['payroll_deduction_amount']     = Request::input('payroll_deduction_amount');
@@ -265,15 +278,16 @@ class PayrollDeductionController extends Member
           $insert['payroll_deduction_date_filed'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_filed')));
           $insert['payroll_deduction_date_start'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_start')));
           $insert['payroll_deduction_period']     = Request::input('payroll_deduction_period');
-          $insert['payroll_deduction_category']     = Request::input('payroll_deduction_category');
-          $insert['payroll_deduction_terms']    = Request::input('payroll_deduction_terms');
+          $insert['payroll_deduction_category']   = Request::input('payroll_deduction_category');
+          $insert['payroll_deduction_terms']      = Request::input('payroll_deduction_terms');
           $insert['payroll_deduction_number_of_payments']   = Request::input('payroll_deduction_number_of_payments');
          
-
          //payroll_deduction_category
 
           //dd($insert);
           $deduction_id = Tbl_payroll_deduction_v2::insertGetId($insert);
+          AuditTrail::record_logs('CREATED: Payroll Deduction V2', 'Payroll Deduction Type Name: '.Request::input('payroll_deduction_name')." Deduction Type: ".Request::input('payroll_deduction_type'), "", "" ,"");
+
           if(Session::has('employee_deduction_tag'))
           {
                $employee_tag = Session::get('employee_deduction_tag');
@@ -283,6 +297,9 @@ class PayrollDeductionController extends Member
                     $insert_employee['payroll_deduction_id']         = $deduction_id;
                     $insert_employee['payroll_employee_id']          = $tag;
                     Tbl_payroll_deduction_employee_v2::insert($insert_employee);
+                    $tagged = Tbl_payroll_employee_basic::where('payroll_employee_id',$employee_tag)->first();
+                    AuditTrail::record_logs('Added: Payroll Deduction V2 Tagged ', 'Payroll Deduction Employee Name: '.$tagged->payroll_employee_display_name, "", "" ,"");
+
                }
           }
 
@@ -338,6 +355,9 @@ class PayrollDeductionController extends Member
           if($deduction_id != 0 && $insert_tag != '')
           {
                Tbl_payroll_deduction_employee_v2::insert($insert_tag);
+               $tagged = Tbl_payroll_employee_basic::where('payroll_employee_id',$employee_tag)->first();
+               AuditTrail::record_logs('Added: Payroll Deduction V2 Tagged ', 'Payroll Deduction Employee Name: '.$tagged->payroll_employee_display_name, "", "" ,"");
+
           }
           else
           {
@@ -416,6 +436,8 @@ class PayrollDeductionController extends Member
           $update['payroll_deduction_archived']   = Request::input('archived');
           $id                                     = Request::input('id');
           Tbl_payroll_deduction_v2::where('payroll_deduction_id',$id)->update($update);
+          $tagged = Tbl_payroll_deduction_v2::where('payroll_deduction_id',$id)->first();
+          AuditTrail::record_logs('DELETED: Payroll Deduction V2', 'Payroll Deduction Type Name: '.$tagged->payroll_deduction_name, "", "" ,"");
           $return['status']             = 'success';
           $return['function_name']      = 'payrollconfiguration.reload_deductionv2';
           $return['from']               = 'archive-deduction';
@@ -441,6 +463,7 @@ class PayrollDeductionController extends Member
           $update['payroll_deduction_number_of_payments']   = Request::input('payroll_deduction_number_of_payments');
 
           Tbl_payroll_deduction_v2::where('payroll_deduction_id',$payroll_deduction_id)->update($update);
+          AuditTrail::record_logs('EDITED: Payroll Deduction V2', 'Payroll Deduction Name: '.Request::input('payroll_deduction_name'), "", "" ,"");
 
           $return['status']             = 'success';
           $return['function_name']      = 'payrollconfiguration.reload_deductionv2';
@@ -470,9 +493,10 @@ class PayrollDeductionController extends Member
      {
           $id = Request::input('id');
           $update['payroll_deduction_employee_archived'] = Request::input('archived');
-
-
           Tbl_payroll_deduction_employee_v2::where('payroll_deduction_employee_id', $id)->update($update);
+          $pdev = Tbl_payroll_deduction_employee_v2::where('payroll_deduction_employee_id', $id)->first();
+          $pdev1 = Tbl_payroll_employee_basic::where('payroll_employee_id',$pdev->payroll_employee_id)->first();
+          AuditTrail::record_logs('DELETED: Payroll Deduction Employee V2', 'Payroll Deduction Employee V2 with employee ID #'.$id ." and Employee Name: ".$pdev1 ->payroll_employee_display_name, "", "" ,"");
 
           $return['status']             = 'success';
           $return['function_name']      = 'modal_create_deduction.reload_tag_employeev2';
@@ -561,7 +585,6 @@ class PayrollDeductionController extends Member
           $data = $query->get();
           return $data;
      }
-
 
      public static function get_deduction_by_type_config($shop_id = 0, $deduction_type='',$archive = 0)
      {

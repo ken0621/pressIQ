@@ -144,6 +144,14 @@ class Mlm_slot_log
 		if(isset($array['points_log_leve_end']))
 		{
 			$insert['points_log_leve_end'] = $array['points_log_leve_end'];
+		}		
+		if(isset($array['points_log_leve_end']))
+		{
+			$insert['points_log_leve_end'] = $array['points_log_leve_end'];
+		}		
+		if(isset($array['original_from_complan']))
+		{
+			$insert['original_from_complan'] = $array['original_from_complan'];
 		}
 		if($insert['points_log_type'] == "SGPV" || $insert['points_log_type'] == "SPV" || $insert['points_log_type'] == "RPV" || $insert['points_log_type'] == "RGPV")
 		{

@@ -38,6 +38,10 @@ class Warehouse2
 	{
 		return session('warehouse_id_'.$shop_id);
 	}
+	public static function get_main_warehouse($shop_id)
+	{
+	    return Tbl_warehouse::where('warehouse_shop_id',$shop_id)->where('main_warehouse',1)->where('archived',0)->value('warehouse_id');
+	}
     public static function get_item_qty($warehouse_id, $item_id)
     {
         $count = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
@@ -123,7 +127,6 @@ class Warehouse2
     }
     public static function transfer($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array(), $inventory_history = '')
     {
-
         $return = Warehouse2::transfer_validation($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial);
       
         if(!$return)
@@ -596,6 +599,7 @@ class Warehouse2
             $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
                                                    ->where("record_item_id",$item_id)
                                                    ->where("record_inventory_status",0)
+                                                   ->where("item_in_use",'unused')
                                                    ->value('record_log_id');
             if($serial_qty > 0)
             {
@@ -605,6 +609,7 @@ class Warehouse2
                                                    ->where("record_item_id",$item_id)
                                                    ->where("record_inventory_status",0)
                                                    ->where("record_serial_number",$serial[$ctr_qty])
+                                                   ->where("item_in_use",'unused')
                                                    ->value('record_log_id');
             }
             Warehouse2::insert_item_history($id);
@@ -630,6 +635,36 @@ class Warehouse2
         Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
 
         return $return;
+    }
+    public static function sold_kit($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $sold = array())
+    {
+        $ctr_inventory = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                               ->where("record_item_id",$item_id)
+                                               ->where("record_consume_ref_id",0)
+                                               ->where("record_inventory_status",0)
+                                               ->count('record_log_id');
+        $return = null;
+        if($ctr_inventory > 0)
+        {
+            $insert['record_shop_id']            = $shop_id;
+            $insert['record_item_id']            = $item_id;
+            $insert['record_warehouse_id']       = $warehouse_id;
+            $insert['record_item_remarks']       = $remarks;
+            $insert['record_consume_ref_name']   = isset($sold['name']) ? $sold['name'] : '';
+            $insert['record_consume_ref_id']     = isset($sold['id']) ? $sold['id'] : 0;
+            $insert['record_log_date_updated']   = Carbon::now();
+    
+            $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
+                                                   ->where("record_inventory_status",0)
+                                                   ->value('record_log_id');
+            
+            Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
+            
+            Warehouse2::insert_item_history($id);
+            
+            return $id;
+        }
     }
     public static function consume_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item)
     {
@@ -735,6 +770,7 @@ class Warehouse2
         $insert['record_consume_ref_id']     = isset($consume['id']) ? $consume['id'] : 0;
         $insert['record_inventory_status']   = 1;
         $insert['record_log_date_updated']   = Carbon::now();
+        $insert['item_in_use']               = 'used';
        
         Warehouse2::insert_item_history($recor_log_id);
         Tbl_warehouse_inventory_record_log::where('record_log_id',$recor_log_id)->update($insert);

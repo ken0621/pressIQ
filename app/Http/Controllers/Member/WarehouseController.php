@@ -9,6 +9,7 @@ use App\Globals\Vendor;
 use App\Globals\Pdf_global;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_warehouse_inventory;
+use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_inventory_slip;
@@ -20,6 +21,7 @@ use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\Manufacturer;
 use Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -185,6 +187,8 @@ class WarehouseController extends Member
                 }
             }
             $data["enable_serial"] = Tbl_settings::where("shop_id",$this->user_info->shop_id)->where("settings_key","item_serial")->value("settings_value");
+
+            $data['pis'] = Purchasing_inventory_system::check();
 
             return view("member.warehouse.warehouse_list",$data);
         }
@@ -533,7 +537,7 @@ class WarehouseController extends Member
     }
     public function refill_item_vendor($warehouse_id,$vendor_id)
     {        
-            $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)
+        $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)
                                                                             ->where("type_shop",$this->user_info->shop_id)
                                                                             ->get();
         $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$warehouse_id)->first();
@@ -1316,6 +1320,50 @@ class WarehouseController extends Member
         
         return json_encode($data);
         
+    }
+    public function view_v2($warehouse_id)
+    {
+        $type = 'bundle';
+        $data = Warehouse::get_inventory_item($warehouse_id, $type);
+
+        $data['pis'] = Purchasing_inventory_system::check();
+        $data['warehouse_id'] = $warehouse_id;
+        $data['warehouse'] = Tbl_warehouse::where('warehouse_id',$warehouse_id)->first();
+        $data['page'] = "View Warehouse";
+        $data['warehouse_name'] = 'Main Warehouse';
+        $data["_manufacturer"]   = Manufacturer::getAllManufaturer();
+
+        return view("member.warehouse.warehouse_view_v2",$data);
+    }
+    public function print_inventory($warehouse_id, $type = '')
+    {
+        $manufacturer_id = Request::input('m_id');
+        $data = Warehouse::get_inventory_item($warehouse_id, $type, $manufacturer_id);
+        $data['type'] = $type;
+        $data['pis'] = Purchasing_inventory_system::check();
+        $data['owner'] = Tbl_warehouse::shop()->where('warehouse_id',$warehouse_id)->first();
+        $data['manufacturer_name'] = Tbl_manufacturer::where('manufacturer_id',$manufacturer_id)->value('manufacturer_name');
+
+        // return view("member.warehouse.warehouse_inventory_print",$data);
+
+        $pdf = view("member.warehouse.warehouse_inventory_print",$data);
+        return Pdf_global::show_pdf($pdf);
+    }
+    public function view_inventory_table($warehouse_id = 0)
+    {
+        $type = 'bundle';
+        $manufacturer_id = Request::input('m_id');
+        if(Request::input('type'))
+        {
+            $type = Request::input('type');   
+        }
+
+        $data = Warehouse::get_inventory_item($warehouse_id, $type, $manufacturer_id);
+        $data['pis'] = Purchasing_inventory_system::check();
+        $data['warehouse_id'] = $warehouse_id;
+        $data['warehouse'] = Tbl_warehouse::where('warehouse_id',$warehouse_id)->first();
+
+        return view("member.warehouse.warehouse_view_v2_inventory_table",$data);
     }
 
     /**

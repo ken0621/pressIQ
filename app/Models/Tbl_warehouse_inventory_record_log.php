@@ -18,6 +18,10 @@ class Tbl_warehouse_inventory_record_log extends Model
     {
         return $query->leftjoin('tbl_membership','tbl_item.membership_id','=','tbl_membership.membership_id');
     }
+    public function scopeSlotinfo($query)
+    {
+        return $query->leftjoin('tbl_mlm_slot','tbl_mlm_slot.slot_id','=','tbl_warehouse_inventory_record_log.mlm_slot_id_created');
+    }
     public function scopeWarehouse($query)
     {
     	return $query->leftjoin('tbl_warehouse','warehouse_id','=','record_warehouse_id');

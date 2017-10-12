@@ -6,33 +6,20 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page }}</title>
+        <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page or '' }}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/3xcell-icon.png"" type="image/png"/>
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">  
-        <!-- BOOTSTRAP -->
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
-        <!-- FONT AWESOME -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
-        <!-- SLICK CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick.css">
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick-theme.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-        <link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
-        <!-- THEME COLOR -->
-        <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
-        <!-- PARALLAX -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
-        
-        <!-- LIGHTBOX -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/lightbox/css/lightbox.css">
-
+        @include("frontend.ghead")
+       
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
@@ -74,26 +61,33 @@
                         <i class="fa fa-google-plus-square" aria-hidden="true"></i>
                     </span>
                 </div> 
-                @if($customer_info_a)
+               @if($customer)
                <div class="login-container">
                    <div class="login-button">
-                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/mlm">MY ACCOUNT</a></span>
+                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/members">MY ACCOUNT</a></span>
                    </div>
+               </div>
+              <div class="join-us-container">
+                   <a href="/members/logout">
+                       <div class="join-us-button">
+                           <span>LOGOUT</span>
+                       </div>
+                   </a>
                </div>
                @else
                 <div class="login-container">
                    <div class="login-button">
-                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/mlm/login">LOGIN</a></span>
+                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/members/login">LOGIN</a></span>
                    </div>
                </div>
-               @endif
                <div class="join-us-container">
-                   <a href="/mlm/register">
+                   <a href="/members/register">
                        <div class="join-us-button">
                            <img src="/themes/{{ $shop_theme }}/img/button-icon1.png"><span>&nbsp;&nbsp;JOIN US TODAY</span>
                        </div>
                    </a>
                </div>
+               @endif
            </div>
         </div>
     </div>
@@ -240,11 +234,11 @@
                             <li><a href="/gallery" class="head-button link-nav">GALLERY</a></li>
                             <li><a href="/contact" class="head-button link-nav">CONTACT US</a></li>
                             <li class="cart-hover">
-                                <a class="link-nav"><span><img class="cart-header" src="/themes/{{ $shop_theme }}/img/cart-header.png"></span></a>
+                                <a class="link-nav popup" link="/cartv2" size="lg"><span><img class="cart-header" src="/themes/{{ $shop_theme }}/img/cart-header.png"></span></a>
                                 <!-- CART DROPDOWN -->
-                                <div class="cart-dropdown" style="display: none;">
+                                {{-- <div class="cart-dropdown" style="display: none;">
                                     
-                                </div>
+                                </div> --}}
                             </li>
                         </ul>
                     </nav>
@@ -310,130 +304,12 @@
             </div>
         </div>
     </footer>
-    
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
-    <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/match-height.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
-    {{-- GLOBALS --}}
-    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/globalv2.js"></script>
-    {{-- GLOBALS --}}
-    <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/figuesslider.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
-
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/lightbox/js/lightbox.js"></script>
+    @include("frontend.gfoot")
 
     <!-- FB WIDGET -->
     <div id="fb-root"></div>
-    <script>
-        (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10";
-        fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    </script>
-
-    <script type="text/javascript">
-        $window = $(window);
-        $window.scroll(function() {
-          $scroll_position = $window.scrollTop();
-            if ($scroll_position > 32.2167) { 
-                $('.header-container').addClass('header-fixed');
-                $('.subheader-container').addClass('header-fixed');
-
-                header_height = $('.your-header').innerHeight();
-                $('body').css('padding-top' , header_height);
-            } else {
-                $('body').css('padding-top' , '0');
-                $('.header-container').removeClass('header-fixed');
-                $('.subheader-container').removeClass('header-fixed');
-            }
-         });
-
-    </script>
-
-    <script type="text/javascript">
-            
-            $('.slider3').diyslider({
-                width: "580px", // width of the slider
-                height: "120px", // height of the slider
-                display: 5, // number of slides you want it to display at once
-                loop: false // disable looping on slides
-                }); // this is all you need!
-
-        // use buttons to change slide
-        $('#gotoleft').bind("click", function(){
-            // Go to the previous slide
-            $('.slider3').diyslider("move", "back");
-        });
-        $('#gotoright').unbind("click")
-        $('#gotoright').bind("click", function(){
-            // Go to the previous slide
-            $('.slider3').diyslider("move", "forth");
-        });
-
-        /*PRODUCT HOVER TOGGLE*/
-
-        $('.product-hover').hover(function()
-        {
-            $('.product-dropdown').stop();
-            $('.product-dropdown').fadeIn(400);
-        },
-        function()
-        {
-            $('.product-dropdown').stop();
-            $('.product-dropdown').fadeOut(400);
-        });
-
-        $('.company-hover').hover(function()
-        {
-            $('.company-dropdown').stop();
-            $('.company-dropdown').fadeIn(400);
-        },
-        function()
-        {
-            $('.company-dropdown').stop();
-            $('.company-dropdown').fadeOut(400);
-        });
-
-        $('.cart-hover').hover(function()
-        {
-            $('.cart-dropdown').stop();
-            $('.cart-dropdown').fadeIn(400);
-        },
-        function()
-        {
-            $('.cart-dropdown').stop();
-            $('.cart-dropdown').fadeOut(400);
-        });
-
-
-        // NAVIRINO CLICK TOGGLE
-        $(".menu-nav").click(function()
-        {
-            $(".navirino").toggle("slow");
-        });
-
-
-        // COMPANY CLICK TOGGLE
-        $(".company-hover").click(function()
-        {
-            $(".minimize-cat-holder").toggle("slow");
-        });
-
-        // PRODUCT CLICK TOGGLE
-        $(".product-hover").click(function()
-        {
-            $(".minimize-product-holder").toggle("slow");
-        });        
-
-    </script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+    <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
 
     @yield("js")
     </body>

@@ -54,21 +54,21 @@
 					<div>
 						<div class="form-group col-md-12">
 							<label>PROVINCE</label>
-							<select firstload="true" default="{{ isset($shipping_address->state_id) ? $shipping_address->state_id : null }}" class="form-control load-location" name="customer_state" level="1"></select>
+							<select firstload="true" required default="{{ isset($shipping_address->state_id) ? $shipping_address->state_id : null }}" class="form-control load-location" name="customer_state" level="1"></select>
 						</div>
 						<div class="form-group col-md-12">
 							<label>CITY / MUNICIPALITY</label>
-							<select firstload="true" default="{{ isset($shipping_address->city_id) ? $shipping_address->city_id : null }}" class="form-control load-location" name="customer_city" level="2"></select>
+							<select firstload="true" required default="{{ isset($shipping_address->city_id) ? $shipping_address->city_id : null }}" class="form-control load-location" name="customer_city" level="2"></select>
 						</div>
 					</div>
 					<div>
 						<div class="form-group col-md-12">
 							<label>BARANGAY</label>
-							<select firstload="true" default="{{ isset($shipping_address->zipcode_id) ? $shipping_address->zipcode_id : null }}" class="form-control load-location" name="customer_zip" level="3"></select>
+							<select firstload="true" required default="{{ isset($shipping_address->zipcode_id) ? $shipping_address->zipcode_id : null }}" class="form-control load-location" name="customer_zip" level="3"></select>
 						</div>
 						<div class="form-group col-md-12">
 							<label>ADDRESS</label>
-							<textarea style="resize: none;" class="form-control" required type="text" name="customer_street">{{ isset($shipping_address->customer_street) ? $shipping_address->customer_street : null }}</textarea>
+							<textarea style="resize: none;" required class="form-control" required type="text" name="customer_street">{{ isset($shipping_address->customer_street) ? $shipping_address->customer_street : null }}</textarea>
 						</div>
 					</div>
 				</div>

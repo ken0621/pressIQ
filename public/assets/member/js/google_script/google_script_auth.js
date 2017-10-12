@@ -26,7 +26,7 @@ var startApp = function()
         },
         function(error) 
         {
-          alert(JSON.stringify(error, undefined, 2));
+          console.log(JSON.stringify(error, undefined, 2));
         });
   }
 function sign_in(googleUser)

@@ -17,6 +17,8 @@ use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_item_discount;
 use App\Models\Tbl_mlm_plan;
+use App\Models\Tbl_mlm_stairstep_settings;
+use App\Models\Tbl_rank_repurchase_cashback_item;
 
 use App\Globals\Utilities;
 use App\Globals\Mlm_plan;
@@ -36,7 +38,7 @@ class MLM_ProductController extends Member
         
         $data['active_plan_product_repurchase'] = Mlm_plan::get_all_active_plan_repurchase($shop_id);
 	    $data['membership_active'] = Tbl_membership::getactive(0, $shop_id)->get();
-
+        $data['rank_settings'] = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->get();
 	    // setup product on first try : no error on leftjoin
 	    $_inventory = Tbl_item::where("tbl_item.shop_id",$shop_id);
 
@@ -96,9 +98,35 @@ class MLM_ProductController extends Member
             foreach($data['membership_active'] as $key2 => $value2)
             {
                 $item_points[$value2->membership_id] = Tbl_mlm_item_points::where('item_id', $value->item_id)->where('membership_id', $value2->membership_id)->first();
+            }      
+            
+            foreach($data['rank_settings'] as $key2 => $value2)
+            {
+                $rank_cashback[$value2->stairstep_id] = Tbl_rank_repurchase_cashback_item::where('item_id', $value->item_id)->where('rank_id', $value2->stairstep_id)->first();
             }
-            $_inventory[$key]->item_points = $item_points;
+
+            $_inventory[$key]->item_points   = $item_points;
+
+            if (isset($item_points))
+            {
+                $_inventory[$key]->item_points   = $item_points;
+            }
+            else
+            {
+                $_inventory[$key]->item_points   = null;
+            }
+            
+
+            if (isset($rank_cashback)) 
+            {
+                $_inventory[$key]->rank_cashback = $rank_cashback;
+            }
+            else
+            {
+                $_inventory[$key]->rank_cashback = null;
+            }
         }
+        // dd($_inventory);
 	    $data['active'] = [];
         $add_count      = count($data['active_plan_product_repurchase']);
 	    foreach($data['active_plan_product_repurchase'] as $key => $value)
@@ -118,12 +146,20 @@ class MLM_ProductController extends Member
                 $data['active'][$add_count]        = "RANK_GROUP";
                 $data['active_label'][$add_count]  = "Rank Group Bonus"; 
                 $add_count++;
+            }            
+            else if($value->marketing_plan_code == "REPURCHASE_CASHBACK")
+            {
+                $data['active'][$add_count]        = "RANK_REPURCHASE_CASHBACK";
+                $data['active_label'][$add_count]  = "Rank Repurchase Cashback"; 
+                $add_count++;
             }
 	    }
 
-	    $data['item'] 		 = $this->iteminventory($_inventory, $data['active']);
-	    $data['_inventory']  = $_inventory;	    
-        $data['item_search'] = $item_search;
+        $data['item']          = $this->iteminventory($_inventory, $data['active']);
+        $data['_inventory']    = $_inventory;       
+        $data['item_search']   = $item_search;
+        // dd($data);
+        
         return view('member.mlm_product.product', $data);
     }
 
@@ -146,6 +182,22 @@ class MLM_ProductController extends Member
                     Tbl_mlm_item_points::insert($insert);
                 }
             }
+        }   
+
+        $rank = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->get();
+        foreach($rank as $key => $value)
+        {
+            foreach($arr as $key2 => $value2)
+            {
+                $c = Tbl_rank_repurchase_cashback_item::where('item_id', $value2->item_id)->where('rank_id', $value->stairstep_id)->count();
+                if($c == 0)
+                {
+                    $insert_rank_cashback['amount']  = 0;
+                    $insert_rank_cashback['item_id'] = $value2->item_id;
+                    $insert_rank_cashback['rank_id'] = $value->stairstep_id;
+                    Tbl_rank_repurchase_cashback_item::insert($insert_rank_cashback);
+                }
+            }
         }
     }
 
@@ -161,7 +213,8 @@ class MLM_ProductController extends Member
 	        {
 	           $item[$key][$value2]       =  $inventory->$value2;
 	        }
-            $item[$key]['points'] = $inventory->item_points;
+            $item[$key]['points']        = $inventory->item_points;
+            $item[$key]['rank_cashback'] = $inventory->rank_cashback;
 
 	        $item[$key]['item_id']   	   	   	  = $inventory->item_id;
 	        $item[$key]['item_name'] 	   		  = $inventory->item_name;
@@ -201,8 +254,9 @@ class MLM_ProductController extends Member
         $update 								= null;
         $membership = Tbl_membership::getactive(0, $shop_id)->get();
 
-        $points = Request::input('membership_points');
-
+        $points                 = Request::input('membership_points');
+        $rank_cashback_points   = Request::input('rank_cashback_points');
+        $_rank                  = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->get();
         foreach($membership as $key2 => $value2)
         {
             foreach($data['active_plan_product_repurchase'] as $key => $value)
@@ -218,6 +272,14 @@ class MLM_ProductController extends Member
                     else if($value->marketing_plan_code == "RANK")
                     {
                         $update["RANK_GROUP"] = $points["RANK_GROUP"][$value2->membership_id]; 
+                    }                    
+                    else if($value->marketing_plan_code == "REPURCHASE_CASHBACK")
+                    {
+                        foreach($_rank as $rank)
+                        {
+                            $update_rank_cashback['amount']  = $rank_cashback_points[$rank->stairstep_id];
+                            Tbl_rank_repurchase_cashback_item::where("item_id",Request::input("item_id"))->where("rank_id",$rank->stairstep_id)->update($update_rank_cashback);
+                        } 
                     }
 
 

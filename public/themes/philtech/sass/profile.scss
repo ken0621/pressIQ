@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
@@ -5,6 +7,19 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
+.btn-lblue
+{
+	@include transition(0.2s);
+	background-color: inherit;
+	border: 1px solid #006CC5;
+	color: #006CC5;
+
+	&:hover
+	{
+		background-color: #006CC5;
+		color: #fff;
+	}
+}
 
 .profile-container
 {
@@ -90,7 +105,7 @@ $text-dark: #272c2f;
 			font-weight: $regular;
 			margin-top: 5px;
 		}
-		.green
+		/* .green
 		{
 			border-color: #63b944;
 		}
@@ -101,7 +116,7 @@ $text-dark: #272c2f;
 		.orange
 		{
 			border-color: #ed5639;
-		}
+		} */
 	}
 	.profile-about
 	{
@@ -137,16 +152,28 @@ $text-dark: #272c2f;
 			{
 				color: $text-light;
 				font-size: 15px;
+
 				.btn-orange
 				{
-					background-color: #ed5639;
-					color: #fff;
+					@include transition(0.2s);
+
+					background-color: inherit;
+					border: 1px solid #ed5639;
+					color: #ed5639;
+					font-weight: $semi-bold;
+
+					&:hover
+					{
+						background-color: #ed5639;
+						color: #fff;
+					}
 				}
-				.btn
+
+				/* .btn
 				{
 					padding: 7.5px 15px;
 					font-size: 13px;
-				}
+				} */
 			}
 			@media screen and (max-width: 500px)
 			{
@@ -227,9 +254,10 @@ $text-dark: #272c2f;
 						background-color: #fff;
 					}
 				}
+
 				&.active
 				{
-					border-bottom: 2.5px solid #78513e;
+					border-bottom: 2.5px solid #FF8500;
 					a
 					{
 						font-weight: $regular;
@@ -333,7 +361,7 @@ $text-dark: #272c2f;
 	.modal-header
 	{
 		border: 0;
-		background-color: #665750;
+		background-color: #006CC5;
 		.modal-title
 		{
 			color: #ffffff;

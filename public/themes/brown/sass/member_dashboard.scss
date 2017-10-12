@@ -2,10 +2,9 @@ $content-text: 'Rubik', sans-serif;
 $light: 300;
 $regular: 400;
 $medium: 500;
-$semi-bold: 600;
 $bold: 700;
-$text-light: #777;
-$text-dark: #272c2f;
+$text-light: #585858;
+$text-dark: #404040;
 
 @mixin transition($transition)
 {
@@ -14,6 +13,157 @@ $text-dark: #272c2f;
 	  -o-transition: all $transition ease-in-out;
 	  transition: all $transition ease-in-out;
 }
+
+.top-message-warning
+{
+	background-color: #7c0000;
+	color: #fff;
+	padding: 10px;
+	margin-bottom: 20px;
+	border-radius: 2px;
+	opacity: 0.8;
+	cursor: pointer;
+
+	&:hover
+	{
+		opacity: 1.0;
+	}
+}
+
+.events-container
+{
+	.event-list
+	{
+
+		.event
+		{
+			position: relative;
+			margin-bottom: 5px;
+			padding-bottom: 5px;
+			border-bottom: 2px dotted #eee;
+			cursor: default;
+			padding: 5px;
+			border-radius: 3px;
+
+			.overlay 
+			{
+			  position: relative;
+			}
+			
+			.box
+			{
+			  width:100px;
+			  height:100px;
+			  display: inline-block;
+			  vertical-align: top;
+			  margin-top: 10px;
+			  position: relative;
+			}
+
+			.overlay:before
+			{
+			  position: absolute;
+			  content:" ";
+			  top:0;
+			  left:0;
+			  width:100%;
+			  height:100%;
+			  display: none;
+			  z-index:0;
+			}
+
+			.overlay:before
+			{
+			  display: block;
+			}
+
+			.black:before
+			{
+			  background-color: rgba(0,0,0,0.5);
+			}
+
+			.date
+			{
+				width: 100px;
+				height: 100px;
+				opacity: 0.6;
+				color: #fff;
+				text-align: center;
+				padding: 10px;
+				float: left;
+				border-radius: 3px;
+				
+				.day
+				{
+					font-size: 45px;
+					margin-top: -5px;
+				}
+
+				.month
+				{
+					font-size: 16px;
+					margin-top: -10px;
+				}
+
+			}
+			
+			.detail
+			{
+				float: right;
+				width: calc(100% - 110px);
+				padding-top: 5px;
+
+				.titles
+				{
+					font-weight: bold;
+					text-transform: uppercase;
+				}
+				.description
+				{
+
+				}
+				.action
+				{
+					position: absolute;
+					bottom: 10px;
+					right: 5px;
+
+					a
+					{
+						padding: 5px 5px;
+						font-size: 16px;
+						display: inline-block;
+						text-decoration: none;
+						color: #128DD3;
+						opacity: 0.5;
+						border-radius: 3px;
+						&:hover
+						{
+							opacity: 1.0;
+						}
+					}
+				}
+			}
+
+			&:hover
+			{
+				background-color: #fafafa;
+
+				.date
+				{
+					opacity: 0.8;
+				}
+			}
+
+			&:last-child
+			{
+				border-bottom: none;
+				padding-bottom: 0;
+			}
+		}
+	}
+}
+
 
 .dashboard
 {
@@ -62,7 +212,7 @@ $text-dark: #272c2f;
 			}
 			h2
 			{
-				font-size: 26px !important;
+				font-size: 18px !important;
 			}
 		}
 	}
@@ -83,7 +233,7 @@ $text-dark: #272c2f;
 			}
 			h2
 			{
-				font-size: 26px !important;
+				font-size: 18px !important;
 			}
 		}
 	}
@@ -104,7 +254,7 @@ $text-dark: #272c2f;
 			}
 			h2
 			{
-				font-size: 26px !important;
+				font-size: 18px !important;
 			}
 		}
 	}
@@ -125,7 +275,7 @@ $text-dark: #272c2f;
 			}
 			h2
 			{
-				font-size: 26px !important;
+				font-size: 18px !important;
 			}
 		}
 	}
@@ -156,7 +306,7 @@ $text-dark: #272c2f;
 			//mixin
 			@include transition(0.2s);
 
-			font-weight: bold;
+			font-weight: $bold;
 			font-size: 14px;
 			text-decoration: none;
 			margin-top: 3px;
@@ -197,7 +347,7 @@ $text-dark: #272c2f;
 						color: #344049;
 						font-size: 14px;
 						padding-bottom: 15px;
-						font-weight: bold;
+						font-weight: $bold;
 						text-transform: uppercase;
 					}
 				}
@@ -258,7 +408,7 @@ $text-dark: #272c2f;
 				vertical-align: middle;
 				font-size: 15px;
 				letter-spacing: 0.5px;
-				font-weight: bold;
+				font-weight: $regular;
 				font-family: $content-text;
 				color: #3E95CD;
 
@@ -267,7 +417,6 @@ $text-dark: #272c2f;
 					color: #333;
 					width: 200px;
 					display: inline-block;
-					font-weight: normal;
 				}
 			}
 		}
@@ -380,9 +529,9 @@ $text-dark: #272c2f;
 
 				.name
 				{
-					color: #344049;
+					color: $text-dark;
 					font-size: 16px;
-					font-weight: 600;
+					font-weight: $medium;
 				}
 				.email
 				{
@@ -411,9 +560,20 @@ $text-dark: #272c2f;
 			padding-left: 30px;
 			.message
 			{
-				color: #344049;
+				color: $text-light;
 				font-size: 16px;
 				margin-bottom: 5px;
+				b 
+				{
+					font-weight: $medium;
+					color: $text-dark;
+					a 
+					{
+						color: #768997;
+						font-weight: $medium;
+					}
+				}
+
 			}
 			.date
 			{
@@ -469,6 +629,76 @@ $text-dark: #272c2f;
 	}
 }
 
+.dashboard-top
+{
+	video 
+	{
+		width: 100%;
+	}
+	.join-container
+	{
+		.text-header1
+		{
+			font-weight: $medium !important;
+			color: $text-dark !important;
+		}
+	}
+}
+
+.dashboard-bottom
+{
+	font-weight: $regular !important;
+
+	.text-header
+	{
+		font-weight: $medium !important;
+		color: $text-dark !important;
+	}
+
+	.profile-info-container
+	{
+		.prof-info-text-header
+		{
+			font-weight: $medium !important;
+			color: $text-dark !important;
+		}
+	}
+}
+/* ACADEMY CONTAINER */
+/* .academy-container
+{
+	img
+	{
+		width: 100%;
+		margin-bottom: 20px;
+	}
+	.left-section
+	{
+		input
+		{
+			border-color: #b5a195 !important;
+			margin-top: 5px !important;
+			box-shadow: none !important;
+			border-radius: 0 !important;
+		}
+		.address
+		{
+			max-width: 100%;
+			min-width: 100%;
+			min-height: 60px;
+			max-height: 60px;
+			border-color: #b5a195 !important;
+			margin-top: 5px !important;
+			border-radius: 0 !important;
+			box-shadow: none !important;
+		}
+
+	}
+	.right-section
+	{
+		padding-left: 10px !important;
+	}
+} */
 /* Success */
 .popup-success
 {
@@ -497,7 +727,7 @@ $text-dark: #272c2f;
 
 			.text-header
 			{
-				font-weight: bold;
+				font-weight: $bold;
 				font-size: 25px;
 				color: #344049;
 				padding-top: 5px;
@@ -513,8 +743,8 @@ $text-dark: #272c2f;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: "Arial";
-				font-weight: bold;
+				//font-family: "Arial";
+				font-weight: $bold;
 				font-size: 13px;
 				padding-bottom: 20px;
 
@@ -527,6 +757,45 @@ $text-dark: #272c2f;
 					border-radius: 2px;
 				}
 			}
+		}
+	}
+}
+
+/* POPUP */
+.congrats-holder
+{
+	text-align: center;
+	.title
+	{
+		color: #1aa3c4;
+		font-size: 24px;
+		letter-spacing: 1px;
+	}
+	.img
+	{
+		text-align: center;
+		margin: 25px 0;
+		img
+		{
+			max-width: 100%;
+		}
+	}
+	.desc
+	{
+		color: #404040;
+		font-size: 15px;
+		letter-spacing: 0.25px;
+		margin-bottom: 25px;
+	}
+	.btn-container
+	{
+		.btn-notification
+		{
+			border: 2px solid #693d28 !important;
+			background-color: transparent !important;
+			color: #693d28 !important;
+			font-size: 15px !important;
+			font-weight: 500 !important;
 		}
 	}
 }

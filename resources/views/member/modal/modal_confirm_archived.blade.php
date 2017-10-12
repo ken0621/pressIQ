@@ -11,6 +11,7 @@
 		@else
 		<input type="hidden" class="payroll_deduction_type" value="">
 		@endif
+
 	</div>
 	<div class="modal-body form-horizontal">
 		{!!isset($html) ? $html : ''!!}

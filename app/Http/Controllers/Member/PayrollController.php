@@ -4336,18 +4336,17 @@ class PayrollController extends Member
           // {
           //   Tbl_payroll_group_rest_day::insert($insert_extra_day);
           // }
-          $old_data = AuditTrail::get_table_data("tbl_payroll_shift","payroll_group_id",$payroll_group_id);
+
           Tbl_payroll_shift::where('payroll_group_id', $payroll_group_id)->delete();
-          AuditTrail::record_logs('Deleting payroll Shift', 'Deleting payroll Shift with ID #'.$payroll_group_id, $id, "" ,serialize($old_data));
 
           if(!empty($insert_shift))
           {
                Tbl_payroll_shift::insert($insert_shift);
           }
 
-
           $return['status'] = 'success';
           $return['function_name'] = 'payrollconfiguration.reload_payroll_group';
+
           return json_encode($return);
      }
 

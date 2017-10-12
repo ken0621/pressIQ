@@ -42,7 +42,7 @@
 								<!-- PER ITEM -->
 								@if(count($_product) > 0)
 									@foreach($_product as $product)
-									<a href="/product/view/{{ $product['eprod_id'] }}">
+									<a href="/product/view2/{{ $product['eprod_id'] }}">
 										<div class="col-md-4 col-sm-6">
 											<div class="per-item">
 												<div class="image-container">

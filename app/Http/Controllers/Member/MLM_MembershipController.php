@@ -15,6 +15,7 @@ use App\Models\Tbl_membership_package_has;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_product;
 use App\Models\Tbl_item;
+use App\Models\Tbl_price_level;
 use App\Globals\Utilities;
 use App\Globals\AuditTrail;
 use App\Globals\Item;
@@ -59,7 +60,8 @@ class MLM_MembershipController extends Member
         $access = Utilities::checkAccess('mlm-membership', 'create_new_membership');
         if($access == 1)
         {
-            return view('member.mlm_membership.mlm_membership_add');
+            $data['_price_level'] = Tbl_price_level::where('shop_id', $this->user_info->shop_id)->get();
+            return view('member.mlm_membership.mlm_membership_add',$data);
         }
         else
         {
@@ -72,12 +74,14 @@ class MLM_MembershipController extends Member
         $validate['shop_id'] = $data['user_info']->shop_id;
         $validate['membership_name'] = Request::input('membership_name');
         $validate['membership_price'] = Request::input('membership_price');
+
         $rules['membership_name'] = 'required';
     	$rules['membership_price'] = 'required|integer|min:1';
     	$rules['shop_id'] = 'required';
     	$validator = Validator::make($validate,$rules);
     	if ($validator->passes())
     	{
+            $insert['membership_price_level'] = Request::input('membership_price_level');
     	    $insert['membership_name'] = Request::input('membership_name');
     	    $insert['membership_price'] = Request::input('membership_price');
     	    $insert['shop_id']= $data['user_info']->shop_id;
@@ -107,6 +111,7 @@ class MLM_MembershipController extends Member
             }
             $shop_id = $this->user_info->shop_id;
             $data["page"] = "Membership Edit";
+            $data['_price_level'] = Tbl_price_level::where('shop_id', $this->user_info->shop_id)->get();
             $data['membership'] = Tbl_membership::id($membership_id)->first();
             $data['membership_packages'] = Tbl_membership_package::where('membership_id', $membership_id)->where('membership_package_archive', 0)->get();
             $data['packages_view']= $this->get_packages_with_view($membership_id);
@@ -191,6 +196,7 @@ class MLM_MembershipController extends Member
     	{
     	    $update['membership_name'] = $input['membership_name'];
     	    $update['membership_price'] = $input['membership_price'];
+            $update['membership_price_level'] = $input['membership_price_level'];
     	    Tbl_membership::id($input['membership_id'])->update($update);
 
             $new_membership_data = Tbl_membership::where("membership_id",$input['membership_id'])->first()->toArray();

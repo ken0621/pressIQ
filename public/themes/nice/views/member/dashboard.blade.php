@@ -95,9 +95,6 @@
 								<div class="color" style="background-color: #8E5EA2"></div>
 								<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
 							</div>
-							<div class="chart-holder">
-								<canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="400" height="400"></canvas>
-							</div>
 							<div class="holder">
 								<div class="color"></div>
 								<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
@@ -108,6 +105,30 @@
 							</div>
 						</div>
 					</div>
+				</div>
+
+				<div class="title">Binary Points</div>
+				<div class="sub-container">
+                    <div class="table-responsive">
+                        <table style="margin-top: 5px;" class="table table-condensed">
+                            <thead style="text-transform: uppercase">
+                                <tr>
+                                    <th class="text-center">SLOT</th>
+                                    <th class="text-center">POINT (LEFT)</th>
+                                    <th class="text-center">POINT (RIGHT)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	@foreach($_slot as $slot)
+                                <tr>
+                                    <td class="text-center">{{ $slot->slot_no }}</td>
+                                    <td class="text-center">{{ number_format($slot->slot_binary_left, 2) }}</td>
+                                    <td class="text-center">{{ number_format($slot->slot_binary_right, 2) }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 				</div>
 			</div>
 
@@ -139,29 +160,7 @@
 					@endif
 				</div>
 
-				<div class="title">Binary Points</div>
-				<div class="sub-container">
-                    <div class="table-responsive">
-                        <table style="margin-top: 5px;" class="table table-condensed">
-                            <thead style="text-transform: uppercase">
-                                <tr>
-                                    <th class="text-center">SLOT</th>
-                                    <th class="text-center">POINT (LEFT)</th>
-                                    <th class="text-center">POINT (RIGHT)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            	@foreach($_slot as $slot)
-                                <tr>
-                                    <td class="text-center">{{ $slot->slot_no }}</td>
-                                    <td class="text-center">{{ number_format($slot->slot_binary_left, 2) }}</td>
-                                    <td class="text-center">{{ number_format($slot->slot_binary_right, 2) }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-				</div>
+
 				
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">

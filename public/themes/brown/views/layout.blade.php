@@ -13,6 +13,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
     <!-- FONTS -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet">
@@ -20,28 +21,11 @@
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,700" rel="stylesheet">
 
-    <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/main.css">
-    <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
-    <!-- EXTERNAL CSS -->
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick.css">
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick-theme.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
+    @include("frontend.ghead")
+
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css">
-    <!-- PARALLAX -->
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
-    <!-- WOW JS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/wow/css/animate.css">
-    <!-- Brown Custom Icon -->
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
-    <!-- WOW JS -->
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/wow/css/animate.css">
 
     @yield("css")
 </head>
@@ -487,67 +471,14 @@
             </div>
         </div>
     </div>
-    {{-- END GLOBALS POPUP --}}
-    {{-- START GLOBAL MODAL --}}
-    <div id="global_modal" class="modal fade" role="dialog" >
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content modal-content-global clearfix">
-            </div>
-        </div>
-    </div>
-    {{-- END GLOBAL MODAL --}}
-    {{-- GLOBAL MULTIPLE MODAL --}}
-    <div class="multiple_global_modal_container"></div>
-    {{-- END GLOBAL MULTIPLE MODAL --}}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
-    <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/bootstrap-dropdown.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="/themes/{{ $shop_theme }}/assets/initializr/js/main.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/match-height.js"></script>
-    <script type="text/javascript" src="/assets/front/external_js/jquery.keep-ratio.min.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
 
-    <!-- FOR GOOGLE LOGIN -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="https://apis.google.com/js/api:client.js"></script>
-    <!-- END GOOGLE LOGIN -->
-    <script type="text/javascript" src="/assets/js/cart.js"></script>
+    @include("frontend.gfoot")
+
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/drawer.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
-
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/wow/js/wow.min.js"></script>
-        <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
-
-    <script>
-          new WOW().init();
-    </script>
-
-    <script type="text/javascript">
-    $(".date-picker").datepicker({
-    dateFormat:"yy-mm-dd"
-    });
-    // $('.brown-sign-out').unbind('click');
-    // $('.brown-sign-out').bind('click', function()
-    // {
-    //   signOut();
-    // });
-    // function signOut()
-    // {
-    //   var auth2 = gapi.auth2.getAuthInstance();
-    //   auth2.signOut().then(function () {
-    //     console.log('User signed out.');
-    //   });
-    // }
-    </script>
-
-
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     
     @yield("script")
+    
     <!-- BEGIN JIVOSITE CODE -->
     <script type='text/javascript'>
     (function(){ var widget_id = 'OcvyPjoHBr';var d=document;var w=window;function l(){ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();

@@ -1,9 +1,9 @@
-<div data-page="index" class="page">
+<div data-page="profile" class="page">
     <div class="navbar">
         <div class="navbar-inner">
             <div class="left"><a href="index.html" class="back link icon-only"><i class="icon icon-back"></i></a></div>
             <div class="center">Profile</div>
-            <div class="right"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div>
+            <div class="right"><a href="#" data-popover=".popover-profile" class="link open-popover"><img class="menu-button" src="/themes/{{ $shop_theme }}/assets/mobile/img/menu.png"></a></div>
         </div>
     </div>
     <div class="page-content">
@@ -48,7 +48,13 @@
                 <table>
                     <tr>
                         <td><i class="fa fa-calendar" aria-hidden="true"></i> Date Joined</td>
-                        <td>{{ $profile->created_date }}</td>
+                        @if($profile->created_date)
+                            <td>{{ date("F, d, Y", strtotime($profile->created_date)) }}</td>
+                        @elseif($profile->created_at)
+                            <td>{{ date("F, d, Y", strtotime($profile->created_at)) }}</td>
+                        @elseif($profile->updated_at)
+                            <td>{{ date("F, d, Y", strtotime($profile->updated_at)) }}</td>
+                        @endif
                     </tr>
                     <tr>
                         <td><i class="fa fa-map-marker" aria-hidden="true"></i> Location</td>

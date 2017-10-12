@@ -79,7 +79,7 @@ class MlmDeveloperController extends Member
         foreach($_slot as $key => $slot)
         {
             $total_gc = Tbl_mlm_gc::where("mlm_gc_slot", $slot->slot_id)->value("mlm_gc_amount");
-
+          
         	$data["_slot"][$key] = $slot;
             $data["_slot"][$key]->customer = "<a href='javascript:'  link='/member/customer/customeredit/" . $slot->customer_id . "' class='popup' size='lg'>" . strtoupper($slot->first_name) . " " . strtoupper($slot->last_name) . '</a>';
             $data["_slot"][$key]->display_slot_no = '<a target="_blank" href="/members/autologin?email=' . $slot->email . '&password=' . $slot->password . '">' . $slot->slot_no . '</a>';
@@ -89,7 +89,7 @@ class MlmDeveloperController extends Member
         	$data["_slot"][$key]->current_wallet_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->current_wallet) . "</a>";
         	$data["_slot"][$key]->total_earnings_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->total_earnings) . "</a>";
         	$data["_slot"][$key]->total_payout_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->total_payout * -1) . "</a>";
-            $data["_slot"][$key]->total_gc_format = Currency::format(0);
+            $data["_slot"][$key]->total_gc_format = Currency::format($total_gc);
             $data["_slot"][$key]->display_slot_binary_left = number_format($slot->slot_binary_left);
             $data["_slot"][$key]->display_slot_binary_right = number_format($slot->slot_binary_right);
             $data["_slot"][$key]->display_date = date("F d, Y", strtotime($slot->slot_created_date));

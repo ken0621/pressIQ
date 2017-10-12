@@ -138,6 +138,31 @@
 						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
 					@endif
 				</div>
+
+				<div class="title">Binary Points</div>
+				<div class="sub-container">
+                    <div class="table-responsive">
+                        <table style="margin-top: 5px;" class="table table-condensed">
+                            <thead style="text-transform: uppercase">
+                                <tr>
+                                    <th class="text-center">SLOT</th>
+                                    <th class="text-center">POINT (LEFT)</th>
+                                    <th class="text-center">POINT (RIGHT)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	@foreach($_slot as $slot)
+                                <tr>
+                                    <td class="text-center">{{ $slot->slot_no }}</td>
+                                    <td class="text-center">{{ number_format($slot->slot_binary_left, 2) }}</td>
+                                    <td class="text-center">{{ number_format($slot->slot_binary_right, 2) }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+				</div>
+				
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
@@ -146,6 +171,9 @@
 				</div>
 			</div>
 		</div>
+
+
+
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="title">Newest Direct Referrals</div>

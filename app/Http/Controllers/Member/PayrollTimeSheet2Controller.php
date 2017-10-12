@@ -889,7 +889,7 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function income_summary($period_company_id, $employee_id)
 	{
-
+		
 		$data["date"] = $date = Tbl_payroll_period_company::sel($period_company_id)->value('payroll_period_start');
 		$data["group"] = $group = $this->db_get_current_employee_contract($employee_id, $date);
 

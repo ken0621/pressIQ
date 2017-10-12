@@ -1,3 +1,7 @@
+<!-- FOR GOOGLE LOGIN -->
+<meta name="google-signin-client_id" content="{{$google_app_id or ''}}">
+<input type="hidden" name="" class="google_app_id" value="{{$google_app_id or ''}}">
+<!-- END GOOGLE LOGIN -->
 <!-- BOOTSTRAP -->
 <link rel="stylesheet" href="/assets/initializr/css/bootstrap.min.css">
 <link rel="stylesheet" href="/assets/initializr/css/bootstrap-theme.min.css">
@@ -20,5 +24,7 @@
 <link rel="stylesheet" type="text/css" href="/assets/lightbox/css/lightbox.css">
 <!-- WOW JS -->
 <link rel="stylesheet" type="text/css" href="/assets/wow/css/animate.css">
+{{-- TOASTER --}}
+<link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
 <!-- THEME COLOR -->
 <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">

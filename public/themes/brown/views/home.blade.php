@@ -468,7 +468,6 @@
 @endsection
 @section("script")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
-<script src="js/wow.min.js"></script>
 <script>
 	new WOW().init();
 </script>

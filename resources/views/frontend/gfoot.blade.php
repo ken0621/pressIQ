@@ -21,7 +21,7 @@
 <script type="text/javascript" src="/assets/front/external_js/parallax.js"></script>
 <script type="text/javascript" src="/assets/front/external_js/scrollspy.js"></script>
 <script type="text/javascript" src="/assets/front/external_js/jquery.keep-ratio.min.js"></script>
-<script type="text/javascript" src="/assets/front/external_js/drawer.js"></script>
+<script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
 {{-- SLICK --}}
 <script type="text/javascript" src="/assets/slick/slick.min.js"></script>
 {{-- LIGHTBOX --}}
@@ -40,3 +40,8 @@
 <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
 <script type="text/javascript" src="/assets/front/js/globalv2.js"></script>
 <script type="text/javascript" src="/assets/front/js/global_cart.js"></script>
+
+<!-- FOR GOOGLE LOGIN -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://apis.google.com/js/api:client.js"></script>
+<!-- END GOOGLE LOGIN -->

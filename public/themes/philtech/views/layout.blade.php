@@ -38,7 +38,7 @@
         <div class="header-nav-top">
             <div class="container">
                 <div class="holder"><a href="/about">COMPANY</a></div>
-                <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "legalities_gallery") }}">BUSINESS PRESENTATION</a></div>
+                <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
                 <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 
                 @if($customer)
@@ -203,7 +203,7 @@
                         <li><a href="javascript:" onClick="alert('Under Development');">Career</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">Events</a></li>
                         <li class="{{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">Legalities</a></li>
-                        <li><a href="{{ get_content($shop_theme_info, "legalities", "legalities_gallery") }}">Business Presentation</a></li>
+                        <li><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">Business Presentation</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
                     </ul>
                 </div>

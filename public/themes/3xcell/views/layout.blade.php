@@ -14,6 +14,7 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         @include("frontend.ghead")
@@ -307,6 +308,7 @@
     <!-- FB WIDGET -->
     <div id="fb-root"></div>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+    <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
 
     @yield("js")
     </body>

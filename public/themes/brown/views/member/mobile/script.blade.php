@@ -10,23 +10,122 @@
         <div class="content-block">Integer mollis nulla id nibh elementum finibus. Maecenas eget fermentum ipsum. Sed sagittis condimentum nisl at tempus. Duis lacus libero, laoreet vitae ligula a, aliquet eleifend sapien. Nullam sodales viverra sodales.</div>
     </div>
 </div>
-<!-- Profile popover -->
+
+<!-- Profile Popover -->
 <div class="popover popover-profile">
     <div class="popover-angle"></div>
     <div class="popover-inner">
         <div class="profile-ul">
             <ul>
-                <li><a href="javascript:">Basic Information</a></li>
-                <li><a href="javascript:">Contact Information</a></li>
+                <li><a href="#" data-popup=".popup-basic-info" class="open-popup">Basic Information</a></li>
+                <li><a href="javascript:">Rewards Configuration</a></li>
                 <li><a href="javascript:">Profile Picture</a></li>
                 <li><a href="javascript:">Password</a></li>
-                <li><a href="javascript:">Encashment</a></li>
-                <li><a href="javascript:">Brown ID</a></li>
             </ul>
         </div>
     </div>
 </div>
-<!-- JQUERY -->
+{{-- Basic Information Popup --}}
+<div class="popup popup-basic-info">
+    <div class="content-block">
+        <a href="#" class="close-popup">&laquo; Back</a>
+        <div class="list-block">
+            <ul>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title floating-label">First Name</div>
+                            <div class="item-input">
+                                <input type="text" name="name">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title floating-label">Middle Name</div>
+                            <div class="item-input">
+                                <input type="text" name="name">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title floating-label">Last Name</div>
+                            <div class="item-input">
+                                <input type="text" name="name">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title floating-label">Birth Date</div>
+                            <div class="item-input">
+                                <input type="text" name="name">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title floating-label">Country</div>
+                            <div class="item-input">
+                                <input type="text" name="name">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title floating-label">Province</div>
+                            <div class="item-input">
+                                <input type="text" name="name">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title floating-label">City</div>
+                            <div class="item-input">
+                                <input type="text" name="name">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title floating-label">Barangay</div>
+                            <div class="item-input">
+                                <input type="text" name="name">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title floating-label">Full Address</div>
+                            <div class="item-input">
+                                <input type="text" name="name">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/framework7/dist/js/framework7.js"></script>
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/js/kitchen-sink.js"></script>

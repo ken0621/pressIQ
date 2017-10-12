@@ -9,8 +9,23 @@ function membership() {
         save_membership();
         update_membership();
         add_new_package();
+        initialize_select();
     }
-    function save_membership(){
+    function initialize_select()
+    {
+        $(".select-price-level").globalDropList(
+        {  
+            hasPopup                : "true",
+            link                    : "/member/item/price_level/add",
+            link_size               : "lg",
+            width                   : "100%",
+            maxHeight               : "129px",
+            placeholder             : "Select a Price Level",
+            no_result_message       : "No result found!"
+        });
+    }
+    function save_membership()
+    {
         $(".save_membership").unbind("click");
         $(".save_membership").bind("click", function () {
             $('#save_membership_form').submit();
@@ -67,4 +82,12 @@ function membership() {
     		}
     	});
     }
+}
+
+function new_price_level_save_done(data)
+{
+    $("#global_modal").modal("hide");
+    $(".select-price-level").append('<option value="' + data.price_level_id + '">' + data.price_level_name + '</option>');
+    $(".select-price-level").globalDropList("reload");
+    $(".select-price-level").val(data.price_level_id).change();
 }

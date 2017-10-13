@@ -65,6 +65,9 @@
                                                 <h4>{{ucwords($event->event_title)}}</h4>
                                             </div>
                                             <div class="sub-title">{{date('M d, Y',strtotime($event->event_date))}}</div>
+                                            <div>
+                                                <a link="/member/page/events/reservee-list?id={{$event->event_id}}" class="popup" size="md">{{number_format($event->reservee_total_count)}} Total Reserved</a>
+                                            </div>
                                         </td>
                                         <td class="text-center">
                                             <div class="btn-group">
@@ -72,8 +75,8 @@
                                                     Action <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-custom">
-                                                        <li><a class="popup" size="lg" link='/member/page/events/create?id={{$event->event_id}}'>Edit </a></li>
-                                                        <li><a class="popup" size="md" link='/member/page/events/confirm-archived?id={{$event->event_id}}&action=archived'> Archived </a> </li>
+                                                    <li><a class="popup" size="lg" link='/member/page/events/create?id={{$event->event_id}}'>Edit </a></li>
+                                                    <li><a class="popup" size="md" link='/member/page/events/confirm-archived?id={{$event->event_id}}&action=archived'> Archived </a> </li>
                                                 </ul>
                                             </div>
                                         </td>

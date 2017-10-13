@@ -323,6 +323,8 @@ Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@re
 Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');
 Route::post('member/mlm/developer/sample_upload', 'Member\MlmDeveloperController@sample_upload');
 Route::any('member/mlm/developer/myTest', 'Member\MlmDeveloperController@myTest');
+Route::any('member/mlm/developer/recompute', 'Member\MlmDeveloperController@recompute');
+Route::any('member/mlm/developer/recompute_reset', 'Member\MlmDeveloperController@recompute_reset');
 
 Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');
 Route::any('member/mlm/developer/popup_slot_created', 'Member\MlmDeveloperController@popup_slot_created');

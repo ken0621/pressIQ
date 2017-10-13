@@ -11,10 +11,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name='B-verify' content='8b63efb2920a681d6f877a59a414659d09831140' />
       
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+        {{-- PHILTECH ICON --}}
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/icon/philtech-icon.png" type="image/png"/>
+
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
-        
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
@@ -35,9 +37,9 @@
     <div class="header-nav clearfix">
         <div class="header-nav-top">
             <div class="container">
-                <div class="holder"><a href="javascript:">COMPANY</a></div>
-                <div class="holder"><a href="javascript:">BUSINESS PRESENTATION</a></div>
-                <div class="holder"><a href="javascript:">NEWS</a></div>
+                <div class="holder"><a href="/about">COMPANY</a></div>
+                <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
+                <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 
                 @if($customer)
                 <div class="holder"><a href="/members">MY ACCOUNT</a></div>
@@ -201,7 +203,7 @@
                         <li><a href="javascript:" onClick="alert('Under Development');">Career</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">Events</a></li>
                         <li class="{{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">Legalities</a></li>
-                        <li><a href="https://drive.google.com/file/d/0B9C_Tfe9UZCmemJFeXA3dWRyYjVKOVY1MlVkUlNiWlVDang4/view">Business Presentation</a></li>
+                        <li><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">Business Presentation</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
                     </ul>
                 </div>

@@ -115,4 +115,9 @@ class Tbl_customer extends Model
     {
         return $query->where("shop_id", $shop_id);
     }
+    public function scopeMembership($query)
+    {
+        return $query->leftjoin('tbl_mlm_slot','slot_owner','=','customer_id')
+                     ->leftjoin('tbl_membership','membership_id','=','slot_membership');
+    }
 }

@@ -2244,7 +2244,7 @@ class Payroll2
 		$overtime_float 	= Self::time_float($_time['overtime']);
 		$night_diff_float 	= Self::time_float($_time['night_differential']);
 		$extra_float 		= Self::time_float($_time['extra_day_hours']);
-		
+		$leave_float		= Self::time_float($_time["leave_hours"]);
 		$overtime = 0;
 		$nightdiff = 0;
 		$breakdown_deduction = 0;
@@ -2252,7 +2252,7 @@ class Payroll2
 		$additional_rate = 1;
 		$cola_true_rate = $cola;
 
-
+	
 		if ($_time['is_holiday'] == 'not_holiday') 
 		{
 			if ($rest_float != 0) 
@@ -2552,7 +2552,7 @@ class Payroll2
 		$undertime 			= 0;
 
 		//compute cola
-		$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type);
+		$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type, $leave_float);
 
 		//no time in monthly
 		if($time_spent==0 && $compute_type=="monthly")
@@ -2774,7 +2774,7 @@ class Payroll2
 		
 	}
 	
-	public static function compute_income_day_pay_cola ($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="")
+	public static function compute_income_day_pay_cola ($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="", $leave_float = 0)
 	{
 		$return = new stdClass();
 		$total_day_income 		= $daily_rate ;
@@ -2804,17 +2804,21 @@ class Payroll2
 				$cola =	$cola * 2;
 			}
 		}
-
-		else if($time_spent==0 && $_time["day_type"] != "rest_day" && $_time["day_type"] != "extra_day")
+		if($time_spent==0 && $_time["day_type"] != "rest_day" && $_time["day_type"] != "extra_day" && $leave_float == 0)
 		{
-			$cola_daily_deduction = $cola;
-			$cola = $cola - $cola;
-		}
 
+			$cola_daily_deduction = $cola;		
+		}
+		
+		
 		//for daily fixed cola
 		if ($time_spent==0) 
 		{
 			$daily_cola = $daily_cola - $daily_cola;
+
+			//debugging report: from else if in top to here
+			$cola = $cola - $cola;
+			//debugging report: from else if in top to here
 		}
 		
 		/*breakdown deduction*/
@@ -2832,6 +2836,8 @@ class Payroll2
 			$cola_daily_deduction = ($undertime_float * $cola_rate_per_hour);
 			$cola = $cola - ($undertime_float * $cola_rate_per_hour);
 		}
+
+
 		$return->cola_daily 		  = $daily_cola;
 		$return->cola_day_pay 		  = $cola;
 		$return->cola_plus_daily_rate = $daily_rate+$cola;
@@ -4363,7 +4369,6 @@ class Payroll2
 	{
 		$total_cola = 0;
 
-		
 		foreach($data["cutoff_input"] as $cutoff_input)
 		{
 			$total_cola += $cutoff_input->compute->cola;
@@ -4466,11 +4471,11 @@ class Payroll2
 				$total_cola = $data["salary"]->monthly_cola;
 			}
 		}
-
+		
 		foreach ($data["cutoff_input"] as $key => $cutoff_input) 
 		{
 			$total_cola = $total_cola - $cutoff_input->compute->total_day_cola_deduction;
-			$total_cola = $total_cola - $cutoff_input->compute->total_day_cola_addition;
+			$total_cola = $total_cola + $cutoff_input->compute->total_day_cola_addition;
 		}
 
 		$val["label"] = "COLA";
@@ -4550,7 +4555,6 @@ class Payroll2
 					$actual_gross_pay += $data['cutoff_compute']->cutoff_cola;
 					$d['cola'] = $data['cutoff_compute']->cutoff_cola;
 				}
-
 
 				$overtime = 0;
 				$special_holiday = 0;

@@ -1,8 +1,12 @@
 @extends("member.member_layout")
 @section("member_content")
 
+
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
+<input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
+<input type="hidden" name="not_placed_yet" class="not_placed_yet" value="{{ $not_placed_yet or 0 }}" link="/members/enter-placement?slot_no={{ Crypt::encrypt($not_placed_slot->slot_id) }}&key={{ md5($not_placed_slot->slot_id . $not_placed_slot->slot_no) }}">
+
 @if(!$mlm_member)
 	<div class="dashboard">
 	    <!-- TOP DASHBOARD-->
@@ -22,7 +26,7 @@
 	                    <div class="btn-container">
 	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+	                        <a href="#" id="btn-enter-a-code"><button onclick="action_load_link_to_modal('/members/enter-code')" class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
 	                </div>
 	            </div>
@@ -85,7 +89,7 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right btn-enter-a-code">Create New Slot</a></div>
+				<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('members/enter-code')">Create New Slot</a></div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">
@@ -96,9 +100,6 @@
 							<div class="holder">
 								<div class="color" style="background-color: #8E5EA2"></div>
 								<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
-							</div>
-							<div class="chart-holder">
-								<canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="400" height="400"></canvas>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
@@ -130,24 +131,31 @@
 							<div class="name"><span>Gift Certificate</span><span class="value">PHP 0.00</span></div>
 						</div>
 					</div>
-
 				</div>
 
-{{-- 				<div class="title">Reward Points</div>
+				<div class="title">Binary Points</div>
 				<div class="sub-container">
-					@if(count($_point_plan) > 0)
-					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
-						@foreach($_point_plan as $plan)
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
-						</div>
-						@endforeach
-					</div>
-					@else
-						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
-					@endif
-				</div> --}}
+                    <div class="table-responsive">
+                        <table style="margin-top: 5px;" class="table table-condensed">
+                            <thead style="text-transform: uppercase">
+                                <tr>
+                                    <th class="text-center">SLOT</th>
+                                    <th class="text-center">POINT (LEFT)</th>
+                                    <th class="text-center">POINT (RIGHT)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	@foreach($_slot as $slot)
+                                <tr>
+                                    <td class="text-center">{{ $slot->slot_no }}</td>
+                                    <td class="text-center">{{ number_format($slot->slot_binary_left, 2) }}</td>
+                                    <td class="text-center">{{ number_format($slot->slot_binary_right, 2) }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+				</div>
 			</div>
 		</div>
 		<div class="row clearfix">
@@ -165,7 +173,7 @@
 							</div>	
 							<div class="text">
 								<div class="pull-left">
-									<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+									<div style="max-width: 250px;" class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
 									<div class="email">{{ $direct->slot_no }}</div>
 									<div class="date">{{ $direct->time_ago }}</div>
 								</div>
@@ -234,108 +242,10 @@
 	    </div>
 	</div>
 @endif
-
-<!--  Enter a code -->
-<div class="popup-enter-a-code">
-    <div id="enter-a-code-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-star"></i> SPONSOR</h4>
-                </div>
-                <div class="modal-body">
-                    <form method="post" class="submit-verify-sponsor">
-                        <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>
-                        <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
-                        <div class="output-container">
-                            
-                        </div>
-                        <div class="btn-container">
-                            <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Proceed 1 -->
-<div class="popup-proceed1">
-    <div id="proceed-modal-1" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content load-final-verification">
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Proceed 2 -->
-<div class="popup-proceed2">
-    <div id="proceed-modal-2" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-shield"></i> CODE VERIFICATION</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="message message-return-code-verify"></div>
-                    <form class="code-verification-form">
-                        <div>
-                            <div class="labeld">Pin Code</div>
-                            <input class="input input-pin text-center" name="pin" type="text">
-                        </div>
-                        <div>
-                            <div class="labeld">Activation</div>
-                            <input class="input input-activation text-center" name="activation" type="text">
-                        </div>
-                        <div class="btn-container">
-                            <button id="btn-proceed-2" class="btn-proceed-2"><i class="fa fa-angle-double-right"></i> Proceed</button>
-                        </div>
-                    </form>
-                </div>
-              </div>
-          </div>
-      </div>
-  </div>
-<!-- MANUAL PLACING OF SLOT -->
-<div class="popup-verify-placement">
-    <div id="slot-placement-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-shield"></i> MANUAL PLACEMENT</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="message message-return-slot-placement-verify"></div>
-                    <form class="slot-placement-form">
-                        <div>
-                            <div class="labeld">Slot Placement</div>
-                            <input class="input input-slot-placement text-center" name="slot_placement" type="text">
-                            <input class="chosen_slot_id" name="chosen_slot_id" type="hidden">
-                        </div>
-                        <div>
-                            <div class="labeld">Slot Position</div>
-                            <select class="input input-slot-position text-center" name="slot_position" type="text" style="text-align-last:center;">
-                            	<option value="left">LEFT</option>
-                            	<option value="right">RIGHT</option>
-                            </select>
-                        </div>
-                        <div class="btn-container">
-                            <button id="check_placement" class="btn-verify-placement">VERIFY</button>
-                        </div>
-                    </form>
-                </div>
-              </div>
-          </div>
-      </div>
-  </div>
 @endsection
 
 @section("member_script")
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
+<script type="text/javascript" src="/assets/member/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 <script>
 

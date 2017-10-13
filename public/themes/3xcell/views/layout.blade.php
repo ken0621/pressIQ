@@ -108,7 +108,11 @@
                 <!-- NAVIGATION -->
                     <nav class="navirino clearfix">
                         <ul>
+                            @if($customer_info)
                             <li><a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a></li>
+                            @else
+                            <li><a href="/members" class="head-button link-nav {{ Request::segment(1) == 'members' ? 'active' : '' }}" id="home">MY ACCOUNT</a></li>
+                            @endif
                             <li class="product-hover">
                                 <a class="head-button link-nav">PRODUCTS</a>
 

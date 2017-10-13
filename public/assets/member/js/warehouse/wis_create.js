@@ -26,7 +26,16 @@ function wis_create()
 		event_remote_item_from_cart();
 		event_change_global_discount();
 		event_change_quantity();
+		event_submit_form();
 
+	}
+	function event_submit_form()
+	{
+		$('.save-button').unbind('click')
+		$('.save-button').bind('click', function()
+		{
+			$('.form-to-submit-add').submit();
+		});
 	}
 	function table_loading()
 	{

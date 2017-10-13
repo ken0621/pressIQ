@@ -128,6 +128,19 @@ class WarehouseTransfer
 	}
 	public static function create_wis($shop_id, $remarks, $_item)
 	{
+        $validate = null;
+        $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+        foreach ($_item as $key => $value)
+        {
+            $serial = isset($value['serial']) ? $value['serial'] : null;
+            $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+        }
 
+        if(!$validate)
+        {
+
+        }
+
+        return $validate;
 	}
 }

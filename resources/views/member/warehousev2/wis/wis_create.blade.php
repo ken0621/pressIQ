@@ -11,7 +11,7 @@
             </h1>
             <div class="text-right">
                 <a class="btn btn-custom-white panel-buttons">Cancel</a>
-                <button class="btn btn-primary panel-buttons" type="submit">Save</button>
+                <button class="btn btn-primary panel-buttons save-button" type="button">Save</button>
             </div>
         </div>
     </div>

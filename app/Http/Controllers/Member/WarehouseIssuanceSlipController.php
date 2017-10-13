@@ -31,7 +31,7 @@ class WarehouseIssuanceSlipController extends Member
     public function getCreate()
     {
     	$data['page'] = 'CREATE - WIS';
-        
+
     	return view('member.warehousev2.wis.wis_create',$data);
     }
     public function getTableItem()
@@ -88,10 +88,30 @@ class WarehouseIssuanceSlipController extends Member
     public function postCreateSubmit(Request $request)
     {
         $remarks = $request->remarks;
-        $_item = Session::get('wis_item');
+        $items = Session::get('wis_item');
         $shop_id = $this->user_info->shop_id;
 
-        $return = WarehouseTransfer::create_wis($shop_id, $remarks, $_item);
+        $_item = null;
+        foreach ($items as $key => $value) 
+        {
+            $_item[$key] = null;
+            $_item[$key]['item_id'] = $value['item_id'];
+            $_item[$key]['quantity'] = $value['item_quantity'];
+            $_item[$key]['remarks'] = 'wis';
+            $_item[$key]['serial'] = $value['item_serial'];
+        }
+
+        $val = WarehouseTransfer::create_wis($shop_id, $remarks, $_item);
+        $return = null;
+        if(is_numeric($val))
+        {
+            $return['status'] = 'success';
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $val;
+        }
 
         return json_encode($return);
     }

@@ -550,7 +550,7 @@ class Warehouse2
         $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
         if($quantity > $inventory_qty)
         {
-            $return .= "The quantity is not enough to consume. <br>";
+            $return .= "The quantity of ITEM No. <b>".$item_id."</b> is not enough to consume. <br>";
         }
 
         return $return;

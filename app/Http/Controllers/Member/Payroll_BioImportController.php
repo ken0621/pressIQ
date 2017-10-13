@@ -101,44 +101,40 @@ class Payroll_BioImportController extends Member
 
 	public function import_anviz_biometrics_ep_series($file, $company)
 	{
-		$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('column1', 'column2','column3', 'column4','column5', 'column6','column7', 'column8','column9', 'column10', 'column11'));
+		$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('no.', 'name','datetime', 'status','status_name'));
 		
-		if(isset($_time[0]['column1']) && isset($_time[0]['column2']) && isset($_time[0]['column3']) && isset($_time[0]['column4']) && isset($_time[0]['column5']) && isset($_time[0]['column6']) && isset($_time[0]['column7']) && isset($_time[0]['column8']) && isset($_time[0]['column9']) && isset($_time[0]['column10']))
+		if(isset($_time[0]['no.']) && isset($_time[0]['name']) && isset($_time[0]['datetime']) && isset($_time[0]['status']) && isset($_time[0]['status_name']))
 		{
-		
+
 		 foreach ($_time as $key => $value) 
 		 {
-		 	
-		 	if($value["column1"] != "No.")
-		 	{
-		 		
-				$date = date("Y-m-d", strtotime($value["column3"]));
-				$time = date("H:i:s", strtotime($value["column3"]));
-				
-				if (!isset($_record[$date][$value["column1"]])) 
-				{
-					$_record[$date][$value["column1"]]['time_in']  = $time;
-					$_record[$date][$value["column1"]]['time_out'] = $time;
-					$_record[$date][$value["column1"]]['record_debugging_time_in']   = "first record";
-					$_record[$date][$value["column1"]]['record_debugging_time_out']   = "first record";
-				}
-				else
-				{
-					if ($_record[$date][$value["column1"]]['time_in'] > $time) 
-					{
-						$_record[$date][$value["column1"]]['record_debugging_time_in']   = "DATE: ".$date."  time in record: ".$_record[$date][$value["column1"]]['time_in']." > ".$time . " change time in ";
-						$_record[$date][$value["column1"]]['time_in'] = $time;
-					}
 
-					if ($_record[$date][$value["column1"]]["time_out"] < $time) 
-					{
-						$_record[$date][$value["column1"]]['record_debugging_time_out']   = "DATE: ".$date."  time out record: ".$_record[$date][$value["column1"]]['time_out']." > ".$time . " change time out ";
-						$_record[$date][$value["column1"]]['time_out'] = $time;
-					}
+			$date = date("Y-m-d", strtotime($value["datetime"]));
+			$time = date("H:i:s", strtotime($value["datetime"]));
+			
+			if (!isset($_record[$date][$value["no."]])) 
+			{
+				$_record[$date][$value["no."]]['time_in']  = $time;
+				$_record[$date][$value["no."]]['time_out'] = $time;
+				$_record[$date][$value["no."]]['record_debugging_time_in'][]   = "first record";
+				$_record[$date][$value["no."]]['record_debugging_time_out'][]   = "first record";
+			}
+			else
+			{
+				if ($_record[$date][$value["no."]]['time_in'] > $time) 
+				{
+					$_record[$date][$value["no."]]['record_debugging_time_in'][]   = "DATE: ".$date."  time in record: ".$_record[$date][$value["no."]]['time_in']." > ".$time . " change time in ";
+					$_record[$date][$value["no."]]['time_in'] = $time;
 				}
-		 	}
+
+				if ($_record[$date][$value["no."]]["time_out"] < $time) 
+				{
+					$_record[$date][$value["no."]]['record_debugging_time_out'][]   = "DATE: ".$date."  time out record: ".$_record[$date][$value["no."]]['time_out']." > ".$time . " change time out ";
+					$_record[$date][$value["no."]]['time_out'] = $time;
+				}
+			}
+
 		 }
-		 
 		 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "ANVIZ Biometrics EP Series");
 		 
 		 echo "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
@@ -241,12 +237,12 @@ class Payroll_BioImportController extends Member
 		$data["failed"] = $failed;
 		$data["overwritten"] = $overwritten;
 
-		if ($success != 0 || $overwritten != 0) 
-		{
-			$count_inserted = $success + $overwritten;
-			$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company)->first();
-	   		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using import_mustard_seed   Template.', "", "" ,"");	
-		}
+		// if ($success != 0 || $overwritten != 0) 
+		// {
+		// 	$count_inserted = $success + $overwritten;
+		// 	$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company)->first();
+	 //   		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using import_mustard_seed   Template.', "", "" ,"");	
+		// }
 		
 		
 		return $data;

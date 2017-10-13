@@ -548,6 +548,7 @@ class MlmDeveloperController extends Member
             {
                 $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
                 Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+                $return_position = "success";
             }
         }
 

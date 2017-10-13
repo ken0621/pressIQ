@@ -61,7 +61,7 @@ class WarehouseTransfer
 			/* SEARCH FOR OTHER ITEM NUMBER HERE*/
 
 			/* - WAREHOUSE SERIAL - */
-			$a = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',Warehouse::get_current_warehouse($shop_id))->where('record_shop_id', $shop_id)->where('record_serial_number',$item_code)->value('record_item_id');
+			$a = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',Warehouse2::get_current_warehouse($shop_id))->where('record_shop_id', $shop_id)->where('record_serial_number',$item_code)->value('record_item_id');
 			if($a)
 			{
 				$data['item_id'] = $a;

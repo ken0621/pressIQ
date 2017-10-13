@@ -8,15 +8,7 @@
             <th width="50px"></th>
         </tr>
     </thead>
-    @if(count($_wis_item) < 0)
-    <tbody>
-        <tr>
-            <td colspan="6" class="text-center">NO ITEM YET</td>
-        </tr>
-    </tbody>
-    <input class="table-amount-due" type="hidden" value="PHP 0.00">
-    <input class="table-grand-total" type="hidden" value="PHP 0.00">
-    @else
+    @if(count($_wis_item) > 0)
         <tbody  class="item-cart-pos">
             @foreach($_wis_item as $item)
             <tr class="item-info" item_id="{{ $item['item_id'] }}">
@@ -39,5 +31,13 @@
             </tr>
             @endforeach
         </tbody>
+    @else
+        <tbody>
+            <tr>
+                <td colspan="6" class="text-center">NO ITEM YET</td>
+            </tr>
+        </tbody>
+        <input class="table-amount-due" type="hidden" value="PHP 0.00">
+        <input class="table-grand-total" type="hidden" value="PHP 0.00">
     @endif
 </table>

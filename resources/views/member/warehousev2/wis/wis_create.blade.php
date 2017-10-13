@@ -2,8 +2,6 @@
 @section('content')
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<form class="global-submit form-to-submit-add" action="/member/item/warehouse/wis/create-submit" method="post">
-<input type="hidden" name="_token" value="{{csrf_token()}}">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -32,6 +30,14 @@
                 </div>
             </div>
         </div>
+       
+    </div>
+</div>
+
+<form class="global-submit form-to-submit-add" action="/member/item/warehouse/wis/create-submit" method="post">
+<input type="hidden" name="_token" value="{{csrf_token()}}">
+<div class="panel panel-default panel-block panel-title-block">
+    <div class="panel-body form-horizontal">
         <div class="form-group">
             <div class="col-md-12">
                 <label>Remarks</label>
@@ -40,12 +46,7 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="panel panel-default panel-block panel-title-block">
-    <div class="panel-body form-horizontal">
-        <div class="row">
+        <div class="form-group">
             <div class="col-md-12">
                 <div class="load-item-table-pos"></div>
             </div>

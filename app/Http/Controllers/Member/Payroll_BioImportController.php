@@ -1226,7 +1226,7 @@ class Payroll_BioImportController extends Member
     	 		$time_in  = "";
     	 		$time_out = "";
 
-    	 		$column_in_out = array('in_1','in_2','in_3','in_4','in_5','in_6','out_1','out_2','out_3','out_4','out_5','out_6');
+    	 		
 			 	if (is_object($time["date"])) 
     	 		{
     	 			$date = date('Y-m-d', strtotime($time['date']->toDateTimeString()));
@@ -1246,7 +1246,8 @@ class Payroll_BioImportController extends Member
     	 			$_record[$date][$employee_number]['time_out']	= date('H:i:s', strtotime($time["out_1"]));
     	 		}
 
-    			/*foreach ($time as $key => $value) 
+    	 		/*$column_in_out = array('in_1','in_2','in_3','in_4','in_5','in_6','out_1','out_2','out_3','out_4','out_5','out_6');
+    			foreach ($time as $key => $value) 
     			{
 
     				

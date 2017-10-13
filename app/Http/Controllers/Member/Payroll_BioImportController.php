@@ -1216,12 +1216,6 @@ class Payroll_BioImportController extends Member
     	
     	if(isset($_time[0]['company_code']) && isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['in_1']) && isset($_time[0]['out_1']) && isset($_time[0]['in_2']) && isset($_time[0]['out_2']) && isset($_time[0]['in_3']) && isset($_time[0]['out_3']))
     	{
-
-    		
-
-    	 foreach ($_time as $key => $value) 
-    	 {
-
     	 	if ($value['date'] != null && $value['in_1'] != null && $value['out_1'] != null && $value['employee_no'] != null) 
     	 	{
     	 		$employee_number = $value["employee_no"];

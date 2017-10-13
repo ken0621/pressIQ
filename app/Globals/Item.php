@@ -1616,9 +1616,12 @@ class Item
         }
         $validate_consume = Warehouse2::consume_bulk($shop_id, $warehouse_id, 'assemble_item', $item_id, 'Consume Item upon assembling membership kit Item#'.$item_id, $_item);
 
-        $source['name'] = 'assemble_item';
-        $source['id'] = $item_id;
-        $validate_consume .= Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, 'Refill Item upon assembling membership kit Item#'.$item_id, $source);
+        if(!$validate_consume)
+        {
+            $source['name'] = 'assemble_item';
+            $source['id'] = $item_id;
+            $validate_consume .= Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, 'Refill Item upon assembling membership kit Item#'.$item_id, $source);            
+        }
 
         return $validate_consume;
     } 

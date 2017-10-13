@@ -1213,70 +1213,51 @@ class Payroll_BioImportController extends Member
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('company_code','employee_no','date','in_1','out_1','in_2','out_2','in_3','out_3','in_4','out_4','in_5','out_5','in_6','out_6'));
 
     	$incomplete = 0;
-    	$_record = null;
-    	$time_records = null;
+
+    	$_record = array();
     	if(isset($_time[0]['company_code']) && isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['in_1']) && isset($_time[0]['out_1']) && isset($_time[0]['in_2']) && isset($_time[0]['out_2']) && isset($_time[0]['in_3']) && isset($_time[0]['out_3']))
     	{
+
+    	 $column_in_out = array('in_1','in_2','in_3','in_4','in_5','in_6','out_1','out_2','out_3','out_4','out_5','out_6');
     	 foreach ($_time as $key => $time) 
     	 {
+    	 	$employee_number = $time["employee_no"];
 
-    	 	if ($time['date'] != null && $time['in_1'] != null && $time['out_1'] != null && $time['employee_no'] != null) 
+	 		if (is_object($time["date"])) 
+	 		{
+	 			$date = date('Y-m-d', strtotime($time['date']->toDateTimeString()));
+	 		}
+	 		else
+	 		{
+	 			$date = date('Y-m-d', strtotime($time['date']));
+	 		}
+
+	 		if ($time['date'] != null && $time['in_1'] != null && $time['out_1'] != null && $time['employee_no'] != null) 
     	 	{
-    	 		$employee_number = $time["employee_no"];
-    	 		$time_in  = "";
-    	 		$time_out = "";
 
-    	 		
-			 	if (is_object($time["date"])) 
-    	 		{
-    	 			$date = date('Y-m-d', strtotime($time['date']->toDateTimeString()));
-    	 		}
-    	 		else
-    	 		{
-    	 			$date = date('Y-m-d', strtotime($time['date']));
-    	 		}
-    	 		if (is_object($time["in_1"]) || is_object($time["in_2"])) 
-    	 		{
-    	 			$_record[$date][$employee_number]['time_in']	= date('H:i:s', strtotime($time["in_1"]->toDateTimeString()));
-    	 			$_record[$date][$employee_number]['time_out']	= date('H:i:s', strtotime($time["out_1"]->toDateTimeString()));
-    	 		}
-    	 		else
-    	 		{
-    	 			$_record[$date][$employee_number]['time_in']	= date('H:i:s', strtotime($time["in_1"]));
-    	 			$_record[$date][$employee_number]['time_out']	= date('H:i:s', strtotime($time["out_1"]));
-    	 		}
-
-    	 		/*$column_in_out = array('in_1','in_2','in_3','in_4','in_5','in_6','out_1','out_2','out_3','out_4','out_5','out_6');
-    			foreach ($time as $key => $value) 
-    			{
-
-    				
-    				
-					if (in_array($key, $column_in_out)) 
+				foreach ($time as $key => $value) 
+				{				
+					if (in_array($key, $column_in_out) && $value!=null) 
 					{
 						$time_record = null;			
 						if (is_object($value)) 
 						{
 							$time_record = date('H:i:s', strtotime($value->toDateTimeString())); 
-							$time_records[] = $time_records;
-
 						}
 						else
 						{
 							$time_record = date('H:i:s', strtotime($value)); 
-							$time_records[] = $time_records;
 						}
 
-						
+
 						if (!isset($_record[$date][$employee_number]['time_in'])) 
 						{
 							
 							$_record[$date][$employee_number]['time_in']   = $time_record;
- 							$_record[$date][$employee_number]['time_out']  = $time_record;
+							$_record[$date][$employee_number]['time_out']  = $time_record;
 						}
 						else
 						{
- 							
 							if ($_record[$date][$employee_number]['time_in']  > $time_record)
 							{
 								$_record[$date][$employee_number]['time_in'] = $time_record;
@@ -1287,14 +1268,13 @@ class Payroll_BioImportController extends Member
 							}
 						}
 					}
-    			}*/
-    			
-    		
-    	 	}
-    	 	else
-    	 	{
-    	 		$incomplete++;
-    	 	}
+					
+				}
+			}
+			else
+			{
+				$incomplete++;
+			}
     	 }
     	 
     	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "ANVIZ Biometrics EP Series");

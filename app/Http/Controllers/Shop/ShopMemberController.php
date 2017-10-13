@@ -770,6 +770,7 @@ class ShopMemberController extends Shop
         $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
         $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["_country"]            = Tbl_country::get();
+        $data["_locale"]             = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
         $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
 
         $data['beneficiary'] = null;
@@ -789,16 +790,16 @@ class ShopMemberController extends Shop
     public function postProfileUpdateInfo(Request $request)
     {
         $form = $request->all();
-        $validate['first_name'] = 'required';
-        $validate['middle_name'] = 'required';
-        $validate['last_name'] = 'required';
-        $validate['b_month'] = 'required';
-        $validate['b_day'] = 'required';
-        $validate['b_year'] = 'required';
+        // $validate['first_name'] = 'required';
+        // $validate['middle_name'] = 'required';
+        // $validate['last_name'] = 'required';
+        // $validate['b_month'] = 'required';
+        // $validate['b_day'] = 'required';
+        // $validate['b_year'] = 'required';
         $validate['country_id'] = 'required';
-        $validate['customer_state'] = 'required';
-        $validate['customer_city'] = 'required';
-        $validate['customer_zipcode'] = 'required';
+        // $validate['customer_state'] = 'required';
+        // $validate['customer_city'] = 'required';
+        // $validate['customer_zipcode'] = 'required';
         $validate['customer_street'] = 'required';
 
         $validator = Validator::make($form, $validate);
@@ -806,11 +807,31 @@ class ShopMemberController extends Shop
         if (!$validator->fails()) 
         {           
             /* Birthday Fix */
-            $birthday = date("Y-m-d", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year));
+            if ($request->birthdate) 
+            {
+                $birthday = date("Y-m-d", strtotime($request->birthdate));
+            }
+            else
+            {
+                $birthday = date("Y-m-d", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year)); 
+            }
+            
             /* Customer Data */
-            $insert_customer["first_name"]  = $request->first_name;
-            $insert_customer["middle_name"] = $request->middle_name;
-            $insert_customer["last_name"]   = $request->last_name;
+            if($request->first_name)
+            {
+                $insert_customer["first_name"]  = $request->first_name;
+            }
+            
+            if ($request->middle_name) 
+            {
+                $insert_customer["middle_name"] = $request->middle_name;
+            }
+
+            if ($request->last_name) 
+            {
+                $insert_customer["last_name"]   = $request->last_name;
+            }
+            
             $insert_customer["b_day"]       = $birthday;
             $insert_customer["birthday"]    = $birthday;
             $insert_customer["country_id"]  = $request->country_id;
@@ -833,14 +854,14 @@ class ShopMemberController extends Shop
             $insert_customer_address["state_id"] = $request->customer_state;
             $insert_customer_address["city_id"] = $request->customer_city;
             $insert_customer_address["barangay_id"] = $request->customer_zipcode;
-
+            
             $exist = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
-
+            
             if ($exist) 
             {
                 /* Update */
                 $insert_customer_address["updated_at"] = Carbon::now();
-
+                
                 Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->update($insert_customer_address);
             }
             else
@@ -937,7 +958,7 @@ class ShopMemberController extends Shop
                 if( $upload_success ) 
                 {
                    $exist = Tbl_customer::where("customer_id", $customer_id)->first();
-                   if ($exist->profile) 
+                   if (isset($exist->profile) && $exist->profile) 
                    {
                        $delete_file = $exist->profile;
                        File::delete($delete_file);

@@ -6,6 +6,7 @@ use App\Globals\Manufacturer;
 use App\Globals\Accounting;
 use App\Globals\Warehouse2;
 use App\Globals\Columns;
+use App\Globals\Utilities;
 use Request;
 use Session;
 
@@ -13,11 +14,19 @@ class ItemControllerV2 extends Member
 {
 	public function list()
 	{
- 		$data["page"] 		 	= "Item List";
-		$data["_item_type"]     = Item::get_item_type_list();
-		$data["_item_category"] = Item::getItemCategory($this->user_info->shop_id);
+        $access = Utilities::checkAccess('item-list-v2', 'access_page');
+        if($access == 1)
+        { 
+	 		$data["page"] 		 	= "Item List";
+			$data["_item_type"]     = Item::get_item_type_list();
+			$data["_item_category"] = Item::getItemCategory($this->user_info->shop_id);
 
-		return view("member.itemv2.list_item", $data);
+			return view("member.itemv2.list_item", $data);
+		}
+        else
+        {
+            return $this->show_no_access();
+        }
 	}
 	public function list_table()
 	{
@@ -188,9 +197,18 @@ class ItemControllerV2 extends Member
 	}
 	public function add_item()
 	{
-		$data = $this->get_item();
+		$access = Utilities::checkAccess('item-list-v2', 'add');
+        if($access == 1)
+        { 
+			$data = $this->get_item();
 
-		return view("member.itemv2.add_item",$data);
+			return view("member.itemv2.add_item",$data);
+		}
+		else
+		{
+
+            return $this->show_no_access_modal();
+		}
 	}
 	public function add_item_submit()
 	{
@@ -200,9 +218,17 @@ class ItemControllerV2 extends Member
 	}
 	public function edit_item()
 	{
-		$data = $this->get_item();
+		$access = Utilities::checkAccess('item-list-v2', 'edit');
+        if($access == 1)
+        { 
+			$data = $this->get_item();
 
-		return view("member.itemv2.add_item",$data);
+			return view("member.itemv2.add_item",$data);
+		}
+		else
+		{
+            return $this->show_no_access_modal();
+		}
 	}
 	public function edit_item_submit()
 	{
@@ -330,12 +356,21 @@ class ItemControllerV2 extends Member
 		return 'success';
 	}
 	public function refill_item()
-	{
-		$item_id = Request::input('item_id');
-		$data['item'] = Item::info($item_id);
-		$data['refill_submit'] = '/member/item/v2/refill_submit';
+	{		
+		$access = Utilities::checkAccess('item-list-v2', 'refill-item');
+        if($access == 1)
+        { 
+			$item_id = Request::input('item_id');
+			$data['item'] = Item::info($item_id);
+			$data['refill_submit'] = '/member/item/v2/refill_submit';
 
-		return view('member.itemv2.refill_item',$data);
+			return view('member.itemv2.refill_item',$data);
+		}
+		else
+		{
+
+            return $this->show_no_access_modal();
+		}
 	}
 	public function refill_submit()
 	{

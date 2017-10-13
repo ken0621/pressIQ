@@ -85,7 +85,11 @@ Route::any('/member/mlm/plan/wallet/type/add', 'Member\MLM_PlanController@add_wa
 Route::any('/member/mlm/plan/binary/edit/membership/points', 'Member\MLM_PlanController@edit_binary_membership_points');//Luke
 Route::any('/member/mlm/plan/binary/get/membership/pairing/{membership_id}', 'Member\MLM_PlanController@get_binary_pairing_combination'); //Luke
 Route::any('/member/mlm/plan/binary/edit/membership/pairing/save', 'Member\MLM_PlanController@save_binary_pairing_combinartion'); //Luke
-/* start binary PLAN */
+
+
+/* start advertisement plan */
+Route::any('/member/mlm/plan/advertisement_bonus/settings/submit', 'Member\MLM_PlanController@advertisement_bonus_submit'); //Erwin
+Route::any('/member/mlm/plan/leadership_advertisement_bonus/settings/submit', 'Member\MLM_PlanController@leadership_advertisement_bonus_submit'); //Erwin
 
 /* start indirect PLAN */
 Route::any('/member/mlm/plan/indirect/edit/settings/{membership_id}', 'Member\MLM_PlanController@edit_indirect_setting');//Luke
@@ -100,6 +104,9 @@ Route::any('/member/mlm/plan/rank/get', 'Member\MLM_PlanController@get_rank');//
 Route::any('/member/mlm/plan/rank/save', 'Member\MLM_PlanController@save_rank');//Erwin
 Route::any('/member/mlm/plan/rank/edit/save', 'Member\MLM_PlanController@edit_save_rank');//Erwin
 Route::any('/member/mlm/plan/rank/edit/save_level', 'Member\MLM_PlanController@save_rank_level');//Erwin
+Route::any('/member/mlm/plan/rank/edit/save_include', 'Member\MLM_PlanController@save_include');//Erwin
+
+Route::any('/member/mlm/plan/direct_referral_pv/edit/save_include_direct_referral', 'Member\MLM_PlanController@save_include_direct_referral');//Erwin
 
 /* start stairstep PLAN */
 // Route::any('/member/mlm/plan/stairstep/get', 'Member\MLM_PlanController@get_stairstep');//Luke
@@ -314,6 +321,8 @@ Route::post('member/mlm/developer/import', 'Member\MlmDeveloperController@import
 Route::get('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
 Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase_submit');
 Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');
+Route::post('member/mlm/developer/sample_upload', 'Member\MlmDeveloperController@sample_upload');
+Route::any('member/mlm/developer/myTest', 'Member\MlmDeveloperController@myTest');
 
 Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');
 Route::any('member/mlm/developer/popup_slot_created', 'Member\MlmDeveloperController@popup_slot_created');

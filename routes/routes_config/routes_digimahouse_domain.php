@@ -11,6 +11,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/cart/clear', 'Shop\ShopCartController@clear_cart');
 	Route::get('/product', 'Shop\ShopProductController@index');
 	Route::get('/product/view/{id}', 'Shop\ShopProductContentController@index');
+	Route::get('/product/view2/{id}', 'Shop\ShopProductContent2Controller@index');
 	Route::get('/product/variant', 'Shop\ShopProductContentController@variant');
 	Route::get('/product/search', 'Shop\ShopProductContentController@search');
 	Route::get('/about', 'Shop\ShopAboutController@index');
@@ -103,6 +104,8 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/partner-filtering-location', 'Shop\ShopPartnersController@partnerFilterByLocation');
 	Route::get('/legalities', 'Shop\ShopLegalitiesController@index');
 
+	Route::get('/manual_checkout', 'Shop\ShopManualCheckout@index');
+
 	/* Cart V2 */
 	Route::get('/cartv2', 'Shop\ShopCart2Controller@index');
 	Route::get('/cartv2/add', 'Shop\ShopCart2Controller@add_cart');
@@ -110,4 +113,5 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/cartv2/update', 'Shop\ShopCart2Controller@update_cart');
 	Route::get('/cartv2/clear', 'Shop\ShopCart2Controller@clear_cart');
 	Route::get('/cartv2/quantity', 'Shop\ShopCart2Controller@quantity_cart');
+	Route::get("/cartv2/buy_kit_mobile/{id}", 'Shop\ShopCart2Controller@buy_kit_mobile');
 }

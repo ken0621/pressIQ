@@ -20,12 +20,35 @@ body{
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-size: cover;
+
+	@media screen and (max-width: 991px)
+	{
+		background-image: none !important;
+		height: 400px;
+	}
+	@media screen and (max-width: 414px)
+	{
+		background-image: none !important;
+		height: 350px;
+	}
+
 	.container {
 		position: relative;
 		.caption-logo-container {
 			position: absolute;
 			top: 100px;
 			right: 17%;
+			img 
+			{
+				width: 100%;
+			}
+
+			@media screen and (max-width: 991px)
+			{
+				width: 50% !important;
+				right: 25% !important;
+				top: 50px;
+			}
 		}
 		.caption-container {
 			text-align: center;
@@ -43,6 +66,24 @@ body{
 					margin-top: -10px;
 				}
 			}
+			@media screen and (max-width: 991px)
+			{
+				top: 282px;
+				right: 26%;
+				h1
+				{
+					font-size: 27px;
+				}
+			}
+			@media screen and (max-width: 414px)
+			{
+				top: 170px;
+				right: 5%;
+				h1
+				{
+					font-size: 27px;
+				}
+			}
 		}
 	}
 }
@@ -50,6 +91,7 @@ body{
 .wrapper-1 {
 	font-family: $content-text;
 	padding: 25px 0px;
+	overflow: hidden;
 
 	.title-container {
 		text-align: center;
@@ -79,8 +121,15 @@ body{
 		}
 		.image-container {
 			padding-left: 85px;
+
+			@media screen and (max-width: 991px)
+			{
+				padding-left: 0px;
+			}
+
 			img {
 				width: 100%;
+				height: auto;
 			}
 		}
 	}
@@ -104,14 +153,19 @@ body{
 		}
 	}
 	.content-container {
-		padding: 25px 0px 50px 0px;
+		padding: 25px 0px 15px 0px;
 
 		.per-image-container {
 			position: relative;
 			font-family: $content-text;
 			overflow: hidden;
+			
+			@media screen and (max-width: 991px)
+			{
+				margin-top: 10px;
+			}
+
 			&:hover {
-				cursor: pointer;
 				img {
 					-moz-transform: scale(1.1);
 					-webkit-transform: scale(1.1);
@@ -147,9 +201,277 @@ body{
 					font-size: 15px;
 					margin-top: 15px;
 					padding-right: 30px;
+
+					@media screen and (max-width: 375px)
+					{
+						font-size: 13px;
+					}
 				}
+			}
+		}
+	}
+	.jca-title-container
+	{
+		text-align: center;
+		border-bottom: 1px solid #dedede;
+		padding-bottom: 35px;
+		.main-title
+		{
+			font-family: "Railway Medium", sans-serif;
+			font-size: 30px;
+			color: #b07d2a;
+			margin-bottom: 5px;
+			.shade-green
+			{
+				color: #019771;
+			}
+		}
+		.sub-title
+		{
+			font-family: "Open Sans Regular", sans-serif;
+			font-size: 15px;
+			color: #555555;
+			.shade-black
+			{
+				color: #1c1c1c;
+			}
+		}
+	}
+	.bulleted-list-container
+	{
+		display: inline-block;
+		padding: 15px 0px 15px 0px;
+		border-bottom: 1px solid #dedede;
+		.bulleted-list::before
+		{
+			content: "";
+			background-color: #b07d2a;
+			line-height: 1em;
+			width: .5em;
+			height: .5em;
+			float: left;
+			margin: .40em .25em 0;
+		}
+		.bulleted-list
+		{
+			display: inline-block;
+			.list-content
+			{
+				font-family: "Open Sans Regular", sans-serif;
+				float: right;
+				width: 93%;
+				font-size: 15px;
+			}
+		}
+	}
+	.button-container
+	{
+		text-align: center;
+		padding: 48px 0px 19px 0px;
+		.legalities-button
+		{
+			border: 1px solid #019771;
+			background-color: transparent;
+			padding: 0px;
+			.button-img
+			{
+				display: inline-block;
+				background-color: #019771;
+				padding: 7px 10px 7px 10px;
+				vertical-align: bottom;
+			}
+			.button-name
+			{
+				display: inline-block;
+				font-family: "Raleway Bold", sans-serif;
+				font-size: 15px;
+				color: #019771;
+				font-weight: bold;
+				margin-bottom: 6px;
+				vertical-align: super;
+				padding: 0px 25px 0px 10px;
 			}
 		}
 	}
 }
 
+
+.wrapper-3
+{
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: right;
+	margin-top: 50px;
+	padding-bottom: 40px;
+
+	@media screen and (max-width: 991px)
+	{
+		background-image: none !important;
+		padding-bottom: 135px !important;
+	}
+	@media screen and (max-width: 991px)
+	{
+		padding-bottom: 350px !important;
+	}
+	@media screen and (max-width: 414px)
+	{
+		padding-bottom: 420px !important;
+	}
+	@media screen and (max-width: 320px)
+	{
+		padding-bottom: 520px !important;
+	}
+
+	.jca-title-container
+	{
+		.title-company
+		{
+			font-family: "Raleway Regular", sans-serif;
+			font-size: 25px;
+			color: #b07d2a;
+			margin-bottom: -8px;
+
+			@media screen and (max-width: 414px)
+			{
+				font-size: 18px;
+			}
+		}
+		.title-mission
+		{
+			font-size: 40px;
+			// color: #019771;
+			color: #acacac;
+			display: inline-block;
+			margin-bottom: 25px;
+			cursor: pointer;
+			
+			@media screen and (max-width: 414px)
+			{
+				font-size: 30px;
+			}
+
+		}
+		.title-vision
+		{
+			font-size: 40px;
+			color: #acacac;
+			display: inline-block;
+			margin-left: 20px;
+			margin-bottom: 25px;
+			cursor: pointer;
+
+			@media screen and (max-width: 414px)
+			{
+				font-size: 30px;
+			}
+		}
+	}
+	.mission-vision-container
+	{
+		height: 438.6px;
+		.sub-title
+		{
+			font-size: 20px;
+			color: #019771;
+			margin-bottom: -5px;
+		}
+		.content
+		{
+			font-size: 15px;
+			color: #555555;
+			text-align: justify;
+			margin-bottom: 30px;
+		}
+		.bulleted-list:before
+		{
+			content: "";
+			background-color: #b07d2a;
+			line-height: 1em;
+			width: .5em;
+			height: .5em;
+			float: left;
+			margin: .40em .25em 0;
+			.content
+			{
+				font-size: 15px;
+				color: #555555;
+				text-align: justify;
+				margin-bottom: 30px;
+			}
+		}
+		.bulleted-list
+		{
+			display: inline-block;
+			.content
+			{
+				font-size: 15px;
+				color: #555555;
+				text-align: justify;
+				margin-bottom: 30px;
+			}
+		}
+		.list-content
+		{
+			padding-left:15px;
+		}
+	}
+
+
+	.img-background
+	{
+		width: 445px;
+		height: 514px;
+		margin-left: 98px;
+		margin-top: 34px;
+		max-width: 445px;
+		max-height: 514px;
+		// width: 100%;
+	}
+}
+
+.wrapper-4
+{
+	background-color: #f4f4f4;
+	font-family: "Open Sans",sans-serif;
+	padding: 25px 0px;
+	overflow: hidden;
+
+	.jca-title-container
+	{
+		text-align: center;
+		padding: 30px 0px 45px 0px;
+		.main-title
+		{
+			font-family: "Raleway Medium", sans-serif;
+			font-size: 30px;
+			color: #b07d2a;
+			.shade-green
+			{
+				color: #019771;
+			}
+		}
+	}
+	.products-services-container
+	{
+		padding: 0px 0px 40px 0px;
+		.products-services-img
+		{
+			width: 100%;
+		}
+		.img-title
+		{
+			font-size: 15px;
+			text-align: center;
+			color: #019771;
+			margin-top: 20px;
+			width: 90%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+}
+
+.highlighted
+{
+	color: #019771 !important;
+}

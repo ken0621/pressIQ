@@ -1,4 +1,4 @@
-<form class="global-submit" method="POST" action="/mlm/slot/use_product_code/confirmation/used">
+<form class="global-submit" method="POST" action="{{$action}}">
     <input type="hidden" value="{{csrf_token()}}" name="_token">
     <input type="hidden" value="{{$mlm_pin}}" name="mlm_pin">
     <input type="hidden" value="{{$mlm_activation}}" name="mlm_activation">

@@ -1,15 +1,15 @@
 @extends("member.member_layout")
 @section("member_content")
-<div class="profile-container">
+<div class="profile-container" style="overflow: hidden;">
 	<div class="row clearfix row-no-padding">
-		<div class="col-md-4 left match-height load-profile">
+		<div class="animated fadeInUp col-md-4 left match-height load-profile">
 			<div class="load-profile-holder">
 				<div class="profile-main">
-					<div class="img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
-					<div class="name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
-					<div class="sub">{{ $profile->email }}</div>
+					<div class="animated zoomIn img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
+					<div class="animated slideInUp name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
+					<div class="animated slideInUp sub">{{ $profile->email }}</div>
 				</div>
-				<div class="profile-status">
+				<div class="animated fadeInUp profile-status">
 					<table>
 						<tr>
 							<td class="blue">
@@ -25,9 +25,9 @@
 				</div>
 				@if($mlm == 1)
 				<div class="profile-lead">
-					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
+					{{-- <a data-toggle="modal" data-target="#leads_modal" href="javascript:">
 						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
-					</a>
+					</a> --}}
 					<!-- Modal -->
 					<div id="leads_modal" class="modal fade leads-modal" role="dialog">
 					   <div class="modal-dialog">
@@ -50,14 +50,20 @@
 					</div>
 				</div>
 				@endif
-				<div class="profile-about">
+				<div class="animated fadeInUp profile-about">
 					<div class="title">About Me</div>
 					<table>
 						<tr>
 							<td>
 								<img src="/themes/{{ $shop_theme }}/img/calendar.png"> Date Joined
 							</td>
-							<td>{{ $profile->created_date }}</td>
+							@if($profile->created_date)
+	                            <td>{{ date("F, d, Y", strtotime($profile->created_date)) }}</td>
+	                        @elseif($profile->created_at)
+	                            <td>{{ date("F, d, Y", strtotime($profile->created_at)) }}</td>
+	                        @elseif($profile->updated_at)
+	                            <td>{{ date("F, d, Y", strtotime($profile->updated_at)) }}</td>
+	                        @endif
 						</tr>
 						<tr>
 							<td>
@@ -73,7 +79,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-8 right match-height">
+		<div class="animated fadeInRight col-md-8 right match-height">
 			<div class="profile-form">
 				<ul class="nav nav-tabs">
 				   <li class="active"><a data-toggle="tab" href="#basic_info">Basic Info</a></li>
@@ -119,7 +125,7 @@
 							   				<div class="date-holder">
 												<select name="b_month" class="form-control">
 													@for($ctr = 1; $ctr <= 12; $ctr++)
-													<option {{ date("mm", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
+													<option {{ date("m", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
 													@endfor
 												</select>
 											</div>

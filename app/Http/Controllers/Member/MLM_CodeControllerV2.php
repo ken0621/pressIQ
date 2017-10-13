@@ -4,6 +4,7 @@ use App\Globals\Item;
 use App\Globals\MLM2;
 use App\Globals\Warehouse2;
 use App\Globals\Pdf_global;
+use App\Globals\Customer;
 
 use App\Globals\BarcodeGenerator;
 use Redirect;
@@ -38,6 +39,21 @@ class MLM_CodeControllerV2 extends Member
     public function membership_code_table(Request $request)
     {   
         $data['_assembled_item_kit'] = Item::get_assembled_kit(0, $request->item_kit_id, $request->item_membership_id, $request->search_keyword, $request->status,10);
+
+        foreach ($data['_assembled_item_kit'] as $key => $value) 
+        {
+            $data['_assembled_item_kit'][$key]->used_by = null;
+            if($value->record_consume_ref_name == 'customer_product_code')
+            {
+                $customer_info = Customer::info($value->record_consume_ref_id, $this->user_info->shop_id)['customer'];
+                $data['_assembled_item_kit'][$key]->used_by = 'Used By Customer - '.ucwords($customer_info->first_name.' '.$customer_info->last_name);
+            }
+            if($value->record_consume_ref_name == 'transaction_list')
+            {
+                $data['_assembled_item_kit'][$key]->used_by = 'Used By SLOT NUMBER-'.strtoupper($value->slot_no).'';
+            }
+        }
+
         return view("member.mlm_code_v2.membership_code_table", $data);
 
     }
@@ -116,6 +132,11 @@ class MLM_CodeControllerV2 extends Member
             {
                 Item::disassemble_membership_kit($value);
             }
+            
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_dissamble';
+            
+            return json_encode($return);
         }
         else
         {
@@ -169,6 +190,20 @@ class MLM_CodeControllerV2 extends Member
     public function product_code_table(Request $request)
     {
         $data['_item_product_code'] = Item::get_all_item_record_log($request->search_keyword, $request->status, 10);
+        foreach ($data['_item_product_code'] as $key => $value) 
+        {
+            $data['_item_product_code'][$key]->used_by = null;
+            if($value->record_consume_ref_name == 'customer_product_code')
+            {
+                $customer_info = Customer::info($value->record_consume_ref_id, $this->user_info->shop_id)['customer'];
+                $data['_item_product_code'][$key]->used_by = 'Used By Customer - '.ucwords($customer_info->first_name.' '.$customer_info->last_name);
+            }
+            if($value->record_consume_ref_name == 'transaction_list')
+            {
+                $data['_item_product_code'][$key]->used_by = 'Used By SLOT NUMBER-'.strtoupper($value->slot_no);
+            }
+        }
+
         return view("member.mlm_code_v2.product_code_table",$data);
     }
     public function print_codes(Request $request)
@@ -206,15 +241,15 @@ class MLM_CodeControllerV2 extends Member
         $r['membership_kit'] = $request->membership_kit ? '' : 'hidden';
         $rt = serialize($r); 
 
-        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit);
+        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&print_limit='.$request->print_limit.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit);
     }
     public function print(Request $request)
     {
         $data['on_show'] = unserialize($request->Y);
-        $data['_item_product_code'] = Item::get_all_item_record_log('', $request->status);
+        $data['_item_product_code'] = Item::get_all_item_record_log('', $request->status, $request->print_limit);
         if($request->t == 'membership_code')
         {
-            $data['_item_product_code'] = Item::get_assembled_kit(0,$request->membership_kit,$request->membership,'',$request->status);
+            $data['_item_product_code'] = Item::get_assembled_kit(0,$request->membership_kit,$request->membership,'',$request->status, $request->print_limit);
         }
         $pdf = view('member.mlm_code_v2.print_code_pdf', $data);
         return Pdf_global::show_pdf($pdf);

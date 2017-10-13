@@ -13,13 +13,14 @@ function encashment()
 	}
 	function document_ready()
 	{
-		add_event_request_payout_clicked();
+		event_request_payout_clicked();
 	}
-	function add_event_request_payout_clicked()
+	function event_request_payout_clicked()
 	{
-		$(".request-payout").click(function()
-		{
-			$("#wallet-encashmnet-modal").modal("show");
-		});
+		
+	}
+	function action_request_payout_clicked()
+	{
+		
 	}
 }

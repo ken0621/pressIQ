@@ -23,67 +23,75 @@ class ShopCart2Controller extends Shop
 
         /* Get Cart */
         $data["cart"] = Cart2::get_cart_info();
-
+        
         /* Return View */
         return view("cart_modal", $data);
     }
     public function set_cart_key($request)
     {
+        /* Define Cart Key and Customer ID */
+        if(Self::$customer_info)
+        {
+            $customer_id = Self::$customer_info->customer_id;
+        }
+        else
+        {
+            $customer_id = 0;
+        }
+
         /* Get Active Cart */
         $active_cart_key = Cart2::get_cart_key();
 
         if (!$active_cart_key) 
         {
-            /* Define Cart Key and Customer ID */
-            if(Self::$customer_info)
-            {   
+            if ($customer_id != 0) 
+            {
                 $cart_key = "customer-" . Self::$customer_info->customer_id;
-                $customer_id = Self::$customer_info->customer_id;
             }
             else
             {
                 $cart_key = "customer-" . time();
-                $customer_id = 0;
             }
 
             /* Set Cart Key */
             Cart2::set_cart_key($cart_key);
-
-            $key    = "price_level_id";
-            $value  = "0";
-
-            /* Set Customer ID */
-            Cart2::set($key, $value);
-
-            $key    = "customer_id";
-            $value  = $customer_id;
-
-            /* Set Invoice ID */
-            Cart2::set($key, $value);
-
-            $key    = "invoice_id";
-            $value  = "0";
-
-            /* Set Receipt ID */
-            Cart2::set($key, $value);
-
-            $key    = "receipt_id";
-            $value  = "0";
-
-            /* Set Shipping Fee */
-            Cart2::set($key, $value);
-
-            $key    = "shipping_fee";
-            $value  = "0";
-
-            /* Set Discount */
-            Cart2::set($key, $value);
-
-            $key    = "global_discount";
-            $value  = "0";
-
-            Cart2::set($key, $value);
         }
+
+        /* Set Price Level */
+        $key    = "price_level_id";
+        $value  = "0";
+
+        Cart2::set($key, $value);
+
+        /* Set Customer ID */
+        $key    = "customer_id";
+        $value  = $customer_id;
+
+        Cart2::set($key, $value);
+
+        /* Set Invoice ID */
+        $key    = "invoice_id";
+        $value  = "0";
+
+        Cart2::set($key, $value);
+
+        /* Set Receipt ID */
+        $key    = "receipt_id";
+        $value  = "0";
+
+        Cart2::set($key, $value);
+
+        /* Set Shipping Fee */
+        $key    = "shipping_fee";
+        $value  = "0";
+
+        Cart2::set($key, $value);
+
+        /* Set Discount */
+        $key    = "global_discount";
+        $value  = "0";
+
+        Cart2::set($key, $value);
     }
     public function add_cart(Request $request)
     {
@@ -133,5 +141,22 @@ class ShopCart2Controller extends Shop
         $quantity = Cart2::get_cart_quantity();
         
         return response()->json($quantity);
+    }
+    public function buy_kit_mobile(Request $request, $item_id)
+    {
+        /* Set Cart Key */
+        $this->set_cart_key($request);
+        
+        /* Clear Cart */
+        Cart2::clear_cart();
+
+        /* Define Item */
+        $quantity = 1;
+        $shop_id = 5;
+        
+        /* Add to Cart */
+        Cart2::add_item_to_cart($shop_id, $item_id, $quantity);
+        
+        return Redirect::to("/members/checkout");
     }
 }

@@ -14,7 +14,11 @@ class Tbl_mlm_slot extends Model
     {
         return $query->where("slot_id", $slot_id);
     }
-    
+
+    public function scopeBank($query)
+    {
+        $query->leftJoin("tbl_mlm_slot_bank", "tbl_mlm_slot_bank.slot_id", "=", "tbl_mlm_slot.slot_id");
+    }
     public function scopeMembership($query)
     {
         $query->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership');
@@ -52,5 +56,10 @@ class Tbl_mlm_slot extends Model
         // ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_slot.slot_owner')
         // ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_slot.slot_owner')
 	    return $query;
+    }
+    public function scopeInfo($query)
+    {
+        $query->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
+        return $query;
     }
 }

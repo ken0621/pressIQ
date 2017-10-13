@@ -14,9 +14,9 @@
 					<td class="c2">
 						<div class="register-form">
 							<div class="text-right social-button">
-								<a href="{{$fb_login_url or '#'}}" class="holder fb">
+								<!-- <a href="{{$fb_login_url or '#'}}" class="holder fb">
 									<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
-								</a>
+								</a> -->
 								<a href="javascript:" class="holder gp" id="customBtn">
 									<div class="name "><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
 								</a>
@@ -43,7 +43,7 @@
 								<div class="form-group">
 									<div class="register-label">EMAIL</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="email" name="email" placeholder="Type Your Email Here" value="">
+										<input class="form-control input-sm" type="text" name="email" placeholder="Type Your Email Here" value="">
 									</div>
 								</div>
 								<div class="form-group">

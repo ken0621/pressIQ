@@ -12,8 +12,13 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_online_pymnt_api;
 use App\Models\Tbl_item;
 use App\Models\Tbl_payment_logs;
+use App\Models\Tbl_transaction;
+use App\Models\Tbl_transaction_list;
 use App\Globals\Cart2;
 use App\Globals\Cart;
+use App\Globals\Payment;
+use App\Globals\Warehouse2;
+use App\Globals\Transaction;
 // IPAY 88
 use App\IPay88\RequestPayment;
 // DRAGON PAY
@@ -28,6 +33,7 @@ use App\Globals\PayMaya\Checkout\User;
 use App\Globals\PayMaya\Model\Checkout\ItemAmountDetails;
 use App\Globals\PayMaya\Model\Checkout\ItemAmount;
 use App\Globals\PayMaya\Core\Constants;
+use Crypt;
 
 class Payment
 {
@@ -85,10 +91,13 @@ class Payment
 		return $return;
 	}
 
-	public static function payment_redirect($shop_id, $key, $success, $failed, $debug)
+	public static function payment_redirect($shop_id, $key, $transaction_list_id, $success, $failed, $debug = false)
 	{
 		/* Testing Purposes */
-		Self::testing_cart($shop_id);
+        if ($debug) 
+        {
+            Self::testing_cart($shop_id);
+        }
 
 		/* Get Cart */
 		$cart = Cart2::get_cart_info();
@@ -123,11 +132,11 @@ class Payment
 			            switch ($method_information->link_reference_name)
 			            {
 			                case 'paypal2': dd("UNDER DEVELOPMENT"); break;
-			                case 'paymaya': return Self::method_paymaya($cart, $shop_id, $api, $success, $failed); break;
+			                case 'paymaya': return Self::method_paymaya($cart, $shop_id, $api, $transaction_list_id, $success, $failed); break;
 			                case 'paynamics': dd("UNDER DEVELOPMENT"); break;
-			                case 'dragonpay': dd("UNDER DEVELOPMENT"); break;
+			                case 'dragonpay': return Self::method_dragonpay($cart, $shop_id, $api, $transaction_list_id, $success, $failed); break;
 			                case 'ipay88': dd("UNDER DEVELOPMENT"); break;
-			                case 'other': dd("UNDER DEVELOPMENT");  break;
+			                case 'other': return Self::method_other($cart, $shop_id, $api, $transaction_list_id, $success, $failed);  break;
 			                case 'e_wallet': dd("UNDER DEVELOPMENT"); break;
 			                case 'cashondelivery': dd("UNDER DEVELOPMENT"); break;
 			                default: dd("UNDER DEVELOPMENT"); break;
@@ -153,12 +162,93 @@ class Payment
 			return "No item in cart";
 		}
 	}
-
+  public static function method_other($cart, $shop_id, $api, $transaction_list_id,$success, $failed)
+  {
+    return redirect("/manual_checkout?tid=" . Crypt::encrypt($transaction_list_id))->send();
+  }
 	/** Payment Method **/
-	public static function method_paymaya($cart, $shop_id, $api, $success, $failed)
+	public static function method_dragonpay($cart, $shop_id, $api, $transaction_list_id,$success, $failed)
+    {
+        /* Set Summary */
+        foreach ($cart["_item"] as $key => $value) 
+        {
+            if ($key != count($cart["_item"])) 
+            {
+                $product_summary = "Product #" . $value->item_name . " (x" . $value->quantity . ") - " . $value->item_price_display . "";
+            }
+            else
+            {
+                $product_summary = "Product #" . $value->item_name . " (x" . $value->quantity . ") - " . $value->item_price_display . ", ";
+            }
+        }
+        
+        /* Set API Details */
+        if (get_domain() == "c9users.io") 
+		{
+		    $merchant_id  = "MYPHONE";
+            $merchant_key = "Ez9MiNqWBS2BHuO";
+		}
+		else
+		{
+		    $merchant_id  = $api->api_client_id;
+            $merchant_key = $api->api_secret_id;
+		}
+
+        /* Request Set */
+        $requestpayment    = new Dragon_RequestPayment($merchant_key);
+        
+        $request["txnid"]  = $transaction_list_id;            // Transaction ID
+        $request["amount"] = $cart["_total"]->grand_total; // Amount
+        $request["ccy"]    = "PHP";                        // Currency
+        $request["description"] = $product_summary;        // Summary
+        $request["email"] = "";                            // Email
+        
+        /* Request Construct */
+        $dragon_request = array(
+            'merchantid'    => $requestpayment->setMerchantId($merchant_id),
+            'txnid'         => $requestpayment->setTxnId($request['txnid']),
+            'amount'        => $requestpayment->setAmount($request['amount']),
+            'ccy'           => $requestpayment->setCcy($request['ccy']),
+            'description'   => $requestpayment->setDescription($request['description']),
+            'email'         => $requestpayment->setEmail($request['email']),
+            'digest'        => $requestpayment->getdigest(),
+            'param1'        => $success,
+            'param2'        => $failed
+        );
+        
+        
+        /* Insert Logs */
+        $insert["payment_log_type"] 	  = "sent";
+        $insert["payment_log_method"] 	  = "dragonpay";
+        $insert["payment_log_created"] 	  = Carbon::now();
+        $insert["payment_log_url"] 		  = "NO URL PROVIDED";
+        $insert["payment_log_data"] 	  = serialize($dragon_request);
+        $insert["payment_log_ip_address"] = get_ip_address();
+        $insert["transaction_list_id"]    = $transaction_list_id;
+        Self::insert_logs($insert, $shop_id);
+        
+        Cart2::clear_cart();
+        
+        /* Request Transaction */
+        Dragon_RequestPayment::make($merchant_key, $dragon_request); 
+    }
+	
+	public static function method_paymaya($cart, $shop_id, $api, $transaction_list_id, $success, $failed)
 	{
 		/* Init Paymaya */
-        PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "SANDBOX");
+		if (get_domain() == "c9users.io") 
+		{
+		    $environment = "SANDBOX";
+		    PayMayaSDK::getInstance()->initCheckout("pk-sEt9FzRUWI2PCBI2axjZ7xdBHoPiVDEEWSulD78CW9c", "sk-cJFYCGhH4stZZTS52Z3dpNbrpRyu6a9iJaBiVlcIqZ5", $environment);
+		}
+		else
+		{
+		  $environment = "PRODUCTION";
+		  PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, $environment);
+
+		    //$environment = "SANDBOX";
+		    //PayMayaSDK::getInstance()->initCheckout("pk-sEt9FzRUWI2PCBI2axjZ7xdBHoPiVDEEWSulD78CW9c", "sk-cJFYCGhH4stZZTS52Z3dpNbrpRyu6a9iJaBiVlcIqZ5", $environment);
+		}
 
         /* Customization */
         $shopCustomization = new Customization();
@@ -170,57 +260,57 @@ class Payment
         $shopCustomization->set();
 
         /* Set Webhook */
-        $webhook = Webhook::retrieve();
+  //       $webhook = Webhook::retrieve();
 
-		$webhook_success = "/payment/paymaya/webhook/success";
-		$webhook_failure = "/payment/paymaya/webhook/failure";
-		$webhook_cancel = "/payment/paymaya/webhook/cancel";
+		// $webhook_success = "/payment/paymaya/webhook/success";
+		// $webhook_failure = "/payment/paymaya/webhook/failure";
+		// $webhook_cancel = "/payment/paymaya/webhook/cancel";
 
-        if (isset($webhook) && $webhook && count($webhook) > 0) 
-        {
-            foreach ($webhook as $value) 
-            {
-                if ($value->name == "CHECKOUT_SUCCESS") 
-                {
-                    $updateWebhook = new Webhook();
-                    $updateWebhook->name = Webhook::CHECKOUT_SUCCESS;
-                    $updateWebhook->id = $value->id;
-                    $updateWebhook->callbackUrl = URL::to($webhook_success);
-                    $updateWebhook->delete();
-                }
-                elseif($value->name == "CHECKOUT_FAILURE")
-                {
-                    $updateWebhook = new Webhook();
-                    $updateWebhook->name = Webhook::CHECKOUT_FAILURE;
-                    $updateWebhook->id = $value->id;
-                    $updateWebhook->callbackUrl = URL::to($webhook_failure);
-                    $updateWebhook->delete();
-                }
-                elseif($value->name == "CHECKOUT_DROPOUT")
-                {
-                    $updateWebhook = new Webhook();
-                    $updateWebhook->name = Webhook::CHECKOUT_DROPOUT;
-                    $updateWebhook->id = $value->id;
-                    $updateWebhook->callbackUrl = URL::to($webhook_cancel);
-                    $updateWebhook->delete();
-                }
-            }
-        }
+  //       if (isset($webhook) && $webhook && count($webhook) > 0) 
+  //       {
+  //           foreach ($webhook as $value) 
+  //           {
+  //               if ($value->name == "CHECKOUT_SUCCESS") 
+  //               {
+  //                   $updateWebhook = new Webhook();
+  //                   $updateWebhook->name = Webhook::CHECKOUT_SUCCESS;
+  //                   $updateWebhook->id = $value->id;
+  //                   $updateWebhook->callbackUrl = URL::to($webhook_success);
+  //                   $updateWebhook->delete();
+  //               }
+  //               elseif($value->name == "CHECKOUT_FAILURE")
+  //               {
+  //                   $updateWebhook = new Webhook();
+  //                   $updateWebhook->name = Webhook::CHECKOUT_FAILURE;
+  //                   $updateWebhook->id = $value->id;
+  //                   $updateWebhook->callbackUrl = URL::to($webhook_failure);
+  //                   $updateWebhook->delete();
+  //               }
+  //               elseif($value->name == "CHECKOUT_DROPOUT")
+  //               {
+  //                   $updateWebhook = new Webhook();
+  //                   $updateWebhook->name = Webhook::CHECKOUT_DROPOUT;
+  //                   $updateWebhook->id = $value->id;
+  //                   $updateWebhook->callbackUrl = URL::to($webhook_cancel);
+  //                   $updateWebhook->delete();
+  //               }
+  //           }
+  //       }
         
-        $successWebhook = new Webhook();
-        $successWebhook->name = Webhook::CHECKOUT_SUCCESS;
-        $successWebhook->callbackUrl = URL::to($webhook_success);
-        $successWebhook->register();
+  //       $successWebhook = new Webhook();
+  //       $successWebhook->name = Webhook::CHECKOUT_SUCCESS;
+  //       $successWebhook->callbackUrl = URL::to($webhook_success);
+  //       $successWebhook->register();
         
-        $failureWebhook = new Webhook();
-        $failureWebhook->name = Webhook::CHECKOUT_FAILURE;
-        $failureWebhook->callbackUrl = URL::to($webhook_failure);
-        $failureWebhook->register();
+  //       $failureWebhook = new Webhook();
+  //       $failureWebhook->name = Webhook::CHECKOUT_FAILURE;
+  //       $failureWebhook->callbackUrl = URL::to($webhook_failure);
+  //       $failureWebhook->register();
         
-        $cancelWebhook = new Webhook();
-        $cancelWebhook->name = Webhook::CHECKOUT_DROPOUT;
-        $cancelWebhook->callbackUrl = URL::to($webhook_cancel);
-        $cancelWebhook->register();
+  //       $cancelWebhook = new Webhook();
+  //       $cancelWebhook->name = Webhook::CHECKOUT_DROPOUT;
+  //       $cancelWebhook->callbackUrl = URL::to($webhook_cancel);
+  //       $cancelWebhook->register();
         
         /* Set Variable */
         $itemCheckout = new Checkout();
@@ -230,6 +320,7 @@ class Payment
         $total = 0;
 
         /* Set Item */
+        $ctr = 0;
         foreach ($cart["_item"] as $key => $value) 
         {
         	/* Get Item Details */
@@ -260,13 +351,15 @@ class Payment
             $total += $product->item_price * $value->quantity;
 
             /* Set Item Details */
-            $item[$key] = new Item();
-            $item[$key]->name = $product->item_name;
-            $item[$key]->code = $product->item_sku;
-            $item[$key]->description = $product->item_sales_information ? $product->item_sales_information : "Product #" . $product->item_id;
-            $item[$key]->quantity = (string)$value->quantity;
-            $item[$key]->amount = $itemAmount;
-            $item[$key]->totalAmount = $itemTotalAmount;
+            $item[$ctr] = new Item();
+            $item[$ctr]->name = $product->item_name;
+            $item[$ctr]->code = $product->item_sku;
+            $item[$ctr]->description = $product->item_sales_information ? $product->item_sales_information : "Product #" . $product->item_id;
+            $item[$ctr]->quantity = (string)$value->quantity;
+            $item[$ctr]->amount = $itemAmount;
+            $item[$ctr]->totalAmount = $itemTotalAmount;
+
+            $ctr++;
         }
 
         /* Set Total Amount Value */
@@ -275,7 +368,7 @@ class Payment
         /* Set Item Checkout */
         $itemCheckout->items = $item;
         $itemCheckout->totalAmount = $totalAmount;
-        $itemCheckout->requestReferenceNumber = $shop_id . time();
+        $itemCheckout->requestReferenceNumber = (string)$transaction_list_id;
 
         /* Set Item Checkout URL */
         $itemCheckout->redirectUrl = array(
@@ -288,16 +381,18 @@ class Payment
         $insert["payment_log_type"] 	  = "sent";
         $insert["payment_log_method"] 	  = "paymaya";
         $insert["payment_log_created"] 	  = Carbon::now();
-        $insert["payment_log_url"] 		  = Constants::CHECKOUT_SANDBOX_URL;
+        $insert["payment_log_url"] 		  = $environment == "SANDBOX" ? Constants::CHECKOUT_SANDBOX_URL : Constants::CHECKOUT_PRODUCTION_URL;
         $insert["payment_log_data"] 	  = serialize($itemCheckout);
         $insert["payment_log_ip_address"] = get_ip_address();
+        $insert["transaction_list_id"]    = $transaction_list_id;
         Self::insert_logs($insert, $shop_id);
 
         $itemCheckout->execute();
 
         // echo $itemCheckout->id; // Checkout ID
         // echo $itemCheckout->url; // Checkout URL
-
+        Cart2::clear_cart();
+            
         return Redirect::to($itemCheckout->url)->send();
 	}
 
@@ -384,6 +479,7 @@ class Payment
         DB::table("tbl_ipay88_temp")->insert($temp);
 
         // Cart::clear_all($shop_id);
+        Cart2::clear_cart();
         
         RequestPayment::make($data["merchantKey"], $ipay88request);  
     }
@@ -440,9 +536,119 @@ class Payment
     /** Logs **/
     public static function logs($shop_id, $limit)
     {
-    	return Tbl_payment_logs::select("payment_log_id", "payment_log_type", "payment_log_method", "payment_log_created", "payment_log_url", "payment_log_data", "payment_log_ip_address")
+    	$_logs = Tbl_payment_logs::select("transaction_list_id","payment_log_id", "payment_log_url","payment_log_type", "payment_log_method", "payment_log_created", "payment_log_url", "payment_log_data", "payment_log_ip_address")
 						       ->where("shop_id", $shop_id)
 						       ->take($limit)
+						       ->orderBy("payment_log_id", "desc")
 						       ->get();
+						       
+		foreach($_logs as $key => $log)
+		{
+		    $tx = Tbl_transaction_list::where("transaction_list_id", $log->transaction_list_id)->value('transaction_number');
+		   //dd($tx);
+		    
+		    $_logs[$key] = $log;
+		    $_logs[$key]->display_date = date("F d, Y - h:i A", strtotime($log->payment_log_created));
+		    $_logs[$key]->display_transaction_list_id = $log->transaction_list_id . "<br>" . $tx;
+		}
+		
+		return $_logs;
+    }
+
+    public static function done($data, $from)
+    {
+        /* Insert Logs */
+        $insert["payment_log_type"]       = "received";
+        $insert["payment_log_method"]     = $from;
+        $insert["payment_log_created"]    = Carbon::now();
+        $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "Unknown");
+        $insert["payment_log_data"]       = serialize($data);
+        $insert["payment_log_ip_address"] = get_ip_address();
+        
+        try
+        {
+            if($from == "paymaya")
+            {
+                $transaction_list_id            = $data["requestReferenceNumber"];
+                $insert["transaction_list_id"]  = $transaction_list_id;
+                $transaction_list               = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->first();
+                $shop_id                        = $transaction_list->shop_id;
+                
+                if($data["paymentStatus"] == "PAYMENT_SUCCESS")
+                {
+                    $transaction_type                                   = "RECEIPT";
+                    $transaction_id                                     = $transaction_list->transaction_id;
+                    $transaction_date                                   = Carbon::now();
+                    $source                                             = $transaction_list_id;
+                    
+                    Transaction::create_update_transaction_details(serialize($data));
+                    $transaction_list_id = Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, "+", $source);
+                    Transaction::consume_in_warehouse($shop_id, $transaction_list_id);
+                    
+                }
+                elseif($data["paymentStatus"] == "PAYMENT_FAIL" || $data["paymentStatus"] == "AUTH_FAILURE" || $data["paymentStatus"] == "PAYMENT_FAILURE" || $data["paymentStatus"] == "EXPIRED")
+                {
+                    $transaction_type                                   = "FAILED";
+                    $transaction_id                                     = $transaction_list->transaction_id;
+                    $transaction_date                                   = Carbon::now();
+                    $source                                             = $transaction_list_id;
+                    
+                    Transaction::create_update_transaction_details(serialize($data));
+                    $transaction_list_id = Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, null, $source);
+                }
+            }
+            elseif($from == "dragonpay")
+            {
+                $transaction_list_id            = $data["txnid"];
+                $insert["transaction_list_id"]  = $transaction_list_id;
+                $transaction_list               = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->first();
+                $shop_id                        = $transaction_list->shop_id;
+                
+                if($data["status"] == "S")
+                {
+                    $transaction_type                                   = "RECEIPT";
+                    $transaction_id                                     = $transaction_list->transaction_id;
+                    $transaction_date                                   = Carbon::now();
+                    $source                                             = $transaction_list_id;
+                    
+                    Transaction::create_update_transaction_details(serialize($data));
+                    $transaction_list_id = Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, "+", $source);
+                    Transaction::consume_in_warehouse($shop_id, $transaction_list_id);
+                }
+                elseif($data["status"] == "P")
+                {
+                    $transaction_type                                   = "PENDING";
+                    $transaction_id                                     = $transaction_list->transaction_id;
+                    $transaction_date                                   = Carbon::now();
+                    $source                                             = $transaction_list_id;
+                    
+                    Transaction::create_update_transaction_details(serialize($data));
+                    $transaction_list_id = Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, null, $source);
+                }
+                elseif($data["status"] == "F")
+                {
+                    $transaction_type                                   = "FAILED";
+                    $transaction_id                                     = $transaction_list->transaction_id;
+                    $transaction_date                                   = Carbon::now();
+                    $source                                             = $transaction_list_id;
+                    
+                    Transaction::create_update_transaction_details(serialize($data));
+                    $transaction_list_id = Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, null, $source);
+                }
+            }
+            else
+            {
+                $shop_id = 5;
+            }
+            
+            Payment::insert_logs($insert, $shop_id);
+        }
+        catch(\Exception $e)
+        {
+            $insert["payment_log_type"] = "error";
+            $insert["payment_log_data"] = serialize($e->getMessage());
+            $shop_id                    = 5;
+            Payment::insert_logs($insert, $shop_id);
+        }
     }
 }

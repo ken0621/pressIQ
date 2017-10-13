@@ -17,6 +17,19 @@ function product_code()
 	{
 		action_load_table();
 		event_load_search();
+		add_event_pagination();
+	}
+	function add_event_pagination()
+	{
+		$("body").on("click", ".pagination a", function(e)
+		{
+			$url = $(e.currentTarget).attr("href");
+			var url = new URL($url);
+			$page = url.searchParams.get("page");
+			load_table_data.page = $page;
+			action_load_table();
+			return false;
+		});
 	}
 	function action_load_table()
 	{

@@ -22,6 +22,12 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-12">
+                            <label for="">Limit</label>
+                            <input type="number" max="100" name="print_limit" class='form-control' value='100'/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
                             <select name="status" class="form-control">
                                 <option value="">Unused</option>
                                 <option value="reserved">Reserved</option>

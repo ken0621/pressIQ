@@ -1,9 +1,12 @@
-$content-text: 'Arimo', sans-serif;
+$content-text: 'Rubik', sans-serif;
+$light: 300;
 $regular: 400;
+$medium: 500;
 $semi-bold: 600;
 $bold: 700;
-$text-light: #777;
-$text-dark: #272c2f;
+$text-light: #585858;
+$text-dark: #404040;
+
 
 .genealogy-container
 {
@@ -39,7 +42,7 @@ $text-dark: #272c2f;
 				{
 					color: $text-dark;
 					font-size: 21px;
-					font-weight: $bold;
+					font-weight: $regular;
 				}
 				.sub
 				{
@@ -72,7 +75,7 @@ $text-dark: #272c2f;
 					box-shadow: none;
 					color: $text-dark;
 					font-size: 15px;
-					font-weight: $bold;
+					font-weight: $medium;
 					border: 1px solid #cecece;
 					border-radius: 2px;
 				}
@@ -84,4 +87,9 @@ $text-dark: #272c2f;
 	{
 		margin-top: 25px;
 	}
+
+}
+.genealogy-frame
+{
+	border: 2px solid #ddd;
 }

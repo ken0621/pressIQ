@@ -13,7 +13,9 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_ec_product;
-    
+use App\Models\Tbl_ec_order;
+use App\Models\Tbl_transaction;
+use App\Models\Tbl_transaction_list;
 use App\Globals\Accounting;
 use App\Globals\Account;
 use App\Globals\Invoice;
@@ -25,11 +27,13 @@ use App\Globals\Sms;
 use App\Globals\PayrollJournalEntries;
 use App\Globals\Payroll;
 use App\Globals\Report;
+use App\Globals\Cart2;
 use App\Globals\Utilities;
 use Facebook\Facebook as Facebook;
 use Facebook\Exceptions\FacebookResponseException as FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException as FacebookSDKException;
-
+use App\Globals\Transaction;
+use App\Globals\Payment;
 use Request;
 use Carbon\Carbon;
 use Session;
@@ -40,6 +44,14 @@ use DB;
 
 class TesterController extends Controller
 {
+    public function getTestingPayment()
+    {
+        $from = 'paymaya';
+        $data["requestReferenceNumber"] = 1;
+        $data["paymentStatus"] = "PAYMENT_SUCCESS";
+        dd(Payment::done($data, $from));
+    }
+
     public function connection_test()
     {
         $_test = DB::table("tbl_connection_test")->orderBy("connection_test_id", "desc")->limit(5)->get();

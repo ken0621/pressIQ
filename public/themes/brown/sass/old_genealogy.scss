@@ -2,6 +2,8 @@ $content-text: 'Arimo', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
+$ps-color: #422311;
+$fs-color: #16185B;
 
 /*Now the CSS*/ 
 *
@@ -18,16 +20,12 @@ $bold: 700;
 
 .tree-container
 {
-    //background-image: url("../img/bg.jpg");
-    background: -webkit-linear-gradient(rgb(236,232,197),rgb(176,137,106),rgb(71,59,69)); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient( rgb(236,232,197),rgb(176,137,106),rgb(71,59,69)); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(rgb(236,232,197),rgb(176,137,106),rgb(71,59,69)); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(rgb(236,232,197),rgb(176,137,106),rgb(71,59,69)); /* Standard syntax (must be last) */
+    background-image: url("../../../assets/member/img/bg.jpg");
 }
 
 .downline, .parent-reference
 {
-    width: 130px !important;
+    width: 50px !important;
 }
 
 #info
@@ -151,12 +149,12 @@ $bold: 700;
 
 .tree li span.PS
 {
-    background-color:#422311;
+    background-color: $ps-color;
 }
 
 .tree li span.FS
 {
-    background-color: #CC5351;
+    background-color: $fs-color;
 }
 
 .tree li span.VC

@@ -76,10 +76,7 @@
                                 </th>
                                 @if(isset($active_label))
                                     @foreach($active_label as $key => $value)
-                                        <th><small>{{$value}}</small></th>
-                                        @if($value == "STAIRSTEP")
-                                            <th><small>STAIRSTEP GROUP</small></th>
-                                        @endif
+                                        <th><small>{{$value}}</small></th>                               
                                     @endforeach
                                 @endif
                                 <th>
@@ -113,17 +110,31 @@
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}" form="formvariant{{$variant['item_id']}}">
                                     <input type="hidden" name="item_id" value="{{$variant['item_id']}}" form="formvariant{{$variant['item_id']}}">
                                     @foreach($active as $key => $value)
-                                        <td>
-                                        <div class="col-md-12 hide">
-                                            <input type="number" class="form-control " name="{{$value}}" value="{{$variant[$value]}}" form="formvariant{{$variant['item_id']}}">
-                                        </div>    
-                                        @foreach($membership_active as $key2 => $value2)
-                                        <div class="col-md-12">
-                                           <small><label>{{$value2->membership_name}}</label> </small>
-                                           <input type="number" class="form-control input-sm" name="membership_points[{{$value}}][{{$value2->membership_id}}]" value="{{$variant['points'][$value2->membership_id]->$value}}" form="formvariant{{$variant['item_id']}}">
-                                        </div>
-                                        @endforeach
-                                        </td>
+                                        @if($value == "RANK_REPURCHASE_CASHBACK")
+                                            <td style="min-width: 125px;">
+                                                <div class="col-md-12 hide">
+                                                    <input type="number" class="form-control " name="{{$value}}" value="{{$variant[$value]}}" form="formvariant{{$variant['item_id']}}">
+                                                </div>    
+                                                @foreach($rank_settings as $key2 => $value2)
+                                                <div class="col-md-12">
+                                                   <small><label>{{$value2->stairstep_name}}</label> </small>
+                                                   <input type="text" class="form-control input-sm" name="rank_cashback_points[{{$value2->stairstep_id}}]" value="{{$variant['rank_cashback'][$value2->stairstep_id]->amount}}" form="formvariant{{$variant['item_id']}}">
+                                                </div>
+                                                @endforeach
+                                            </td>
+                                        @else
+                                            <td>
+                                                <div class="col-md-12 hide">
+                                                    <input type="number" class="form-control " name="{{$value}}" value="{{$variant[$value]}}" form="formvariant{{$variant['item_id']}}">
+                                                </div>    
+                                                @foreach($membership_active as $key2 => $value2)
+                                                <div class="col-md-12">
+                                                   <small><label>{{$value2->membership_name}}</label> </small>
+                                                   <input type="number" class="form-control input-sm" name="membership_points[{{$value}}][{{$value2->membership_id}}]" value="{{$variant['points'][$value2->membership_id]->$value}}" form="formvariant{{$variant['item_id']}}">
+                                                </div>
+                                                @endforeach
+                                            </td>
+                                        @endif   
                                     @endforeach
                                 </form>    
                             @endif

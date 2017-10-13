@@ -578,7 +578,7 @@ class Item
     public static function generate_barcode($barcode = 0)
     {
         $return = $barcode;
-        $chk =  Tbl_item::where("item_barcode",$return)->get();
+        $chk =  Tbl_item::where("item_barcode",$return)->where('item_shop',Item::getShopId())->get();
         if(count($chk) > 1)
         {
             $num = '1234567890';
@@ -593,9 +593,9 @@ class Item
         $return = "";
         $text = "";
         $trail = Tbl_audit_trail::where("source","item")->where("source_id",$item_id)->orderBy("created_at","DESC")->get();
-        // dd($trail);
+       
         $last = null;
-        foreach ($trail as $key => $value) 
+        foreach ($trail as $key => $value)
         {
             $item_qty = 1;
             if(Purchasing_inventory_system::check())
@@ -606,7 +606,7 @@ class Item
             $amount = 0;
             if($old)
             {
-                if($item_data->item_price != $old[$key]["item_price"] || $old[$key]["item_price"] != 0)
+                if($item_data->item_price != $old[$key]["item_price"] && $old[$key]["item_price"] != 0)
                 {
                     $len = strlen($return);
                     
@@ -1514,7 +1514,7 @@ class Item
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
-        $query = Tbl_warehouse_inventory_record_log::where('record_inventory_status',0)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
+        $query = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
         
         if($search_keyword)
         {
@@ -1526,16 +1526,17 @@ class Item
         }
         else if($status == 'used')
         {
-            $query->where('record_inventory_status', 1);
+            $query->where('item_in_use', 'used');
         }
         else if($status == 'sold')
         {
-            $query->where('record_consume_ref_id','!=', 0);
+            $query->where('record_consume_ref_id','!=', 0)->where('item_in_use','unused');
         }
         else
         {
-            $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->orWhere('record_consume_ref_name','');
+            $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused');
         }  
+
         if($paginate != 0)
         {
             $data = $query->paginate($paginate);
@@ -1544,18 +1545,21 @@ class Item
         {
             $data = $query->get();            
         }
-
         return $data;
+    }
+    public static function get_first_assembled_kit($shop_id)
+    {
+        return Tbl_item::where('shop_id',$shop_id)->where('item_type_id',5)->value('item_id');
     }
     public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
-        $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
+        $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
         if($record_id > 0)
         {
-            $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->where('record_log_id',$record_id)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
+            $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->slotinfo()->where('record_log_id',$record_id)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
         }
 
         if($item_kit_id)
@@ -1577,15 +1581,15 @@ class Item
         }
         else if($status == 'used')
         {
-            $query->where('record_consume_ref_name','used');
+            $query->where('item_in_use','used');
         }
         else if($status == 'sold')
         {
-            $query->where('record_consume_ref_id','!=', 0);
+            $query->where('record_consume_ref_id','!=', 0)->where('item_in_use','unused');
         }
         else
         {
-            $query->where('record_inventory_status',0)->where('record_consume_ref_name',null);
+            $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused');
         }  
 
 
@@ -1661,6 +1665,7 @@ class Item
                                                  ->where('mlm_activation',$mlm_activation)
                                                  ->where('mlm_pin',$mlm_pin)
                                                  ->where('record_inventory_status',0)
+                                                 ->where('item_in_use','unused')
                                                  ->count();
         $return = false;
         if($ctr > 0)
@@ -1669,5 +1674,9 @@ class Item
         }
 
         return $return;
+    }
+    public static function type($item_id = 0)
+    {
+        return Tbl_item::where("item_id",$item_id)->value('item_type_id');
     }
 }

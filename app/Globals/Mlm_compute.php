@@ -56,7 +56,6 @@ class Mlm_compute
         $slot_info = Mlm_compute::get_slot_info($slot_id);
         // slot_info must have membership info and membership_points;
         // <-- error if not -->
-
 	    // Sponsor Tree
         // not redundant, needed two slot_info for retainment of loop
         /* CHECK IF IT IS A SLOT CREATION OR USED FOR UPGRADING SLOT */
@@ -105,6 +104,7 @@ class Mlm_compute
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')
             ->get();
+
             if($slot_info->slot_status == 'PS')
             {
                 foreach($plan_settings as $key => $value)
@@ -187,6 +187,13 @@ class Mlm_compute
                 $price              = $data["price"];
                 $plan               = strtolower($points_title);
                 Mlm_complan_manager_repurchasev2::$plan($slot_info, $price);
+            }           
+            else if($points_title == "REPURCHASE_CASHBACK")
+            {      
+                $cashback       = $data["REPURCHASE_CASHBACK"];
+                $rank_cashback  = $data["RANK_REPURCHASE_CASHBACK"];
+                $plan           = strtolower($points_title);
+                Mlm_complan_manager_repurchasev2::$plan($slot_info, $cashback,$rank_cashback);
             }
             else
             {

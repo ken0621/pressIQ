@@ -7,7 +7,7 @@
 	<table class="table table-bordered table-striped table-condensed">
 		<thead>
 			<tr>
-				<th class="text-center"><input onChange="action_check_all_checkbox();" class="all-checkbox-check" type="checkbox" ></th>
+				<th class="text-center"><!-- <input onChange="action_check_all_checkbox();" class="all-checkbox-check" type="checkbox" > --></th>
 				<th>ACCOUNT #</th>
 				<th>AMOUNT</th>
 				<th>NAME</th>

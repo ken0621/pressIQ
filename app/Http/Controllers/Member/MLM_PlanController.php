@@ -1451,6 +1451,7 @@ class MLM_PlanController extends Member
             $insert['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
             $insert['commission_multiplier'] = Request::input('commission_multiplier');
             $insert['direct_rank_bonus'] = Request::input('direct_rank_bonus');
+            $insert['stairstep_rebates_bonus'] = Request::input('stairstep_rebates_bonus');
             $insert['shop_id'] = $this->user_info->shop_id;
             Tbl_mlm_stairstep_settings::insert($insert);
             $data['response_status'] = "success_add_stairstep";
@@ -1501,6 +1502,7 @@ class MLM_PlanController extends Member
             $update['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
             $update['commission_multiplier'] = Request::input('commission_multiplier');
             $update['direct_rank_bonus'] = Request::input('direct_rank_bonus');
+            $update['stairstep_rebates_bonus'] = Request::input('stairstep_rebates_bonus');
             Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
             $data['response_status'] = "success_edit_stairstep";
         }

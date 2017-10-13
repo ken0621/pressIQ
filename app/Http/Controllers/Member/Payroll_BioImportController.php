@@ -151,7 +151,6 @@ class Payroll_BioImportController extends Member
 
 	public function save_time_record($_time_record, $company ,$shop_id, $biometric_name)
 	{
-		
 		$success = 0;
 		$failed = 0;
 		$incomplete = 0;
@@ -235,8 +234,8 @@ class Payroll_BioImportController extends Member
 					$failed++;
 				}
 			}
+			
 		}
-		
 		$data["success"] = $success;
 		$data["failed"] = $failed;
 		$data["overwritten"] = $overwritten;
@@ -500,9 +499,9 @@ class Payroll_BioImportController extends Member
     public function import_zkteco_TX628($file, $company)
     {
     	$_test = file($file, FILE_IGNORE_NEW_LINES);
-
-    	$temp = preg_split("/[\t]/", $_test[0]);
     	
+    	$temp = preg_split("/[\t]/", $_test[0]);
+ 		
     	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
 
     	if(isset($temp[0]) && isset($temp[1]) && isset($temp[2]) && isset($temp[3]) && isset($temp[4]) && isset($temp[5]))
@@ -585,8 +584,6 @@ class Payroll_BioImportController extends Member
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('no','datetime'));
     	if(isset($_time[0]['no']) && isset($_time[0]['datetime']))
     	{
-
-
 	    	$success_count = 0;
 	    	$temp_date = '';
 	    	$insert_time_record = array();
@@ -640,7 +637,6 @@ class Payroll_BioImportController extends Member
 	    			}
 	    			
 	    		}
-	    		
 	    	}
 	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
 	    	if(!empty($insert_time_record))
@@ -1217,43 +1213,68 @@ class Payroll_BioImportController extends Member
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('company_code','employee_no','date','in_1','out_1','in_2','out_2','in_3','out_3','in_4','out_4','in_5','out_5','in_6','out_6'));
 
     	$incomplete = 0;
-    	
+
+    	$_record = array();
     	if(isset($_time[0]['company_code']) && isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['in_1']) && isset($_time[0]['out_1']) && isset($_time[0]['in_2']) && isset($_time[0]['out_2']) && isset($_time[0]['in_3']) && isset($_time[0]['out_3']))
     	{
 
-    		
-
-    	 foreach ($_time as $key => $value) 
+    	 $column_in_out = array('in_1','in_2','in_3','in_4','in_5','in_6','out_1','out_2','out_3','out_4','out_5','out_6');
+    	 foreach ($_time as $key => $time) 
     	 {
+    	 	$employee_number = $time["employee_no"];
 
-    	 	if ($value['date'] != null && $value['in_1'] != null && $value['out_1'] != null && $value['employee_no'] != null) 
-    	 	{
-    	 		$employee_number = $value["employee_no"];
-    	 		if (is_object($value["date"])) 
-    	 		{
-    	 			$date = date('Y-m-d', strtotime($value['date']->toDateTimeString()));
-    	 		}
-    	 		else
-    	 		{
-    	 			$date = date('Y-m-d', strtotime($value['date']));
-    	 		}
-    	 		
+	 		if (is_object($time["date"])) 
+	 		{
+	 			$date = date('Y-m-d', strtotime($time['date']->toDateTimeString()));
+	 		}
+	 		else
+	 		{
+	 			$date = date('Y-m-d', strtotime($time['date']));
+	 		}
 
-    	 		if(is_object($value["in_1"]) && is_object($value["out_1"]))
-	 			{
-			 		$_record[$date][$employee_number]['time_in']  = date('H:i:s', strtotime($value['in_1']->toDateTimeString()));
-					$_record[$date][$employee_number]['time_out'] = date('H:i:s', strtotime($value['out_1']->toDateTimeString()));	
-	 			}
-	 			else
-	 			{
-	 				$_record[$date][$employee_number]['time_in']  = date('H:i:s', strtotime($value['in_1']));
-					$_record[$date][$employee_number]['time_out'] = date('H:i:s', strtotime($value['out_1']));
-	 			}
-    	 	}
-    	 	else
+	 		if ($time['date'] != null && $time['in_1'] != null && $time['out_1'] != null && $time['employee_no'] != null) 
     	 	{
-    	 		$incomplete++;
-    	 	}
+
+				foreach ($time as $key => $value) 
+				{				
+					if (in_array($key, $column_in_out) && $value!=null) 
+					{
+						$time_record = null;			
+						if (is_object($value)) 
+						{
+							$time_record = date('H:i:s', strtotime($value->toDateTimeString())); 
+						}
+						else
+						{
+							$time_record = date('H:i:s', strtotime($value)); 
+						}
+
+
+						if (!isset($_record[$date][$employee_number]['time_in'])) 
+						{
+							
+							$_record[$date][$employee_number]['time_in']   = $time_record;
+							$_record[$date][$employee_number]['time_out']  = $time_record;
+						}
+						else
+						{
+							if ($_record[$date][$employee_number]['time_in']  > $time_record)
+							{
+								$_record[$date][$employee_number]['time_in'] = $time_record;
+							}
+							if ($_record[$date][$employee_number]['time_out'] < $time_record) 
+							{
+								$_record[$date][$employee_number]['time_out'] = $time_record;
+							}
+						}
+					}
+					
+				}
+			}
+			else
+			{
+				$incomplete++;
+			}
     	 }
     	 
     	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "ANVIZ Biometrics EP Series");

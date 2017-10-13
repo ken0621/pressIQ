@@ -499,9 +499,9 @@ class Payroll_BioImportController extends Member
     public function import_zkteco_TX628($file, $company)
     {
     	$_test = file($file, FILE_IGNORE_NEW_LINES);
-
-    	$temp = preg_split("/[\t]/", $_test[0]);
     	
+    	$temp = preg_split("/[\t]/", $_test[0]);
+ 		
     	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
 
     	if(isset($temp[0]) && isset($temp[1]) && isset($temp[2]) && isset($temp[3]) && isset($temp[4]) && isset($temp[5]))
@@ -1214,6 +1214,7 @@ class Payroll_BioImportController extends Member
 
     	$incomplete = 0;
     	$_record = null;
+    	$time_records = null;
     	if(isset($_time[0]['company_code']) && isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['in_1']) && isset($_time[0]['out_1']) && isset($_time[0]['in_2']) && isset($_time[0]['out_2']) && isset($_time[0]['in_3']) && isset($_time[0]['out_3']))
     	{
     	 foreach ($_time as $key => $time) 
@@ -1234,9 +1235,21 @@ class Payroll_BioImportController extends Member
     	 		{
     	 			$date = date('Y-m-d', strtotime($time['date']));
     	 		}
+    	 		if (is_object($time["in_1"]) || is_object($time["in_2"])) 
+    	 		{
+    	 			$_record[$date][$employee_number]['time_in']	= date('H:i:s', strtotime($time["in_1"]->toDateTimeString()));
+    	 			$_record[$date][$employee_number]['time_out']	= date('H:i:s', strtotime($time["out_1"]->toDateTimeString()));
+    	 		}
+    	 		else
+    	 		{
+    	 			$_record[$date][$employee_number]['time_in']	= date('H:i:s', strtotime($time["in_1"]));
+    	 			$_record[$date][$employee_number]['time_out']	= date('H:i:s', strtotime($time["out_1"]));
+    	 		}
 
-    			foreach ($time as $key => $value) 
+    			/*foreach ($time as $key => $value) 
     			{
+
+    				
     				
 					if (in_array($key, $column_in_out)) 
 					{
@@ -1244,17 +1257,19 @@ class Payroll_BioImportController extends Member
 						if (is_object($value)) 
 						{
 							$time_record = date('H:i:s', strtotime($value->toDateTimeString())); 
+							$time_records[] = $time_records;
 
 						}
 						else
 						{
 							$time_record = date('H:i:s', strtotime($value)); 
+							$time_records[] = $time_records;
 						}
 
-
+						
 						if (!isset($_record[$date][$employee_number]['time_in'])) 
 						{
-
+							
 							$_record[$date][$employee_number]['time_in']   = $time_record;
  							$_record[$date][$employee_number]['time_out']  = $time_record;
 						}
@@ -1271,15 +1286,16 @@ class Payroll_BioImportController extends Member
 							}
 						}
 					}
-    			}
+    			}*/
     			
-    			dd($_record);
+    		
     	 	}
     	 	else
     	 	{
     	 		$incomplete++;
     	 	}
     	 }
+    	 
     	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "ANVIZ Biometrics EP Series");
    
     	 echo "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";

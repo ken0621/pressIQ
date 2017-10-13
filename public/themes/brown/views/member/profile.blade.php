@@ -57,7 +57,13 @@
 							<td>
 								<img src="/themes/{{ $shop_theme }}/img/calendar.png"> Date Joined
 							</td>
-							<td>{{ $profile->created_date }}</td>
+							@if($profile->created_date)
+	                            <td>{{ date("F, d, Y", strtotime($profile->created_date)) }}</td>
+	                        @elseif($profile->created_at)
+	                            <td>{{ date("F, d, Y", strtotime($profile->created_at)) }}</td>
+	                        @elseif($profile->updated_at)
+	                            <td>{{ date("F, d, Y", strtotime($profile->updated_at)) }}</td>
+	                        @endif
 						</tr>
 						<tr>
 							<td>

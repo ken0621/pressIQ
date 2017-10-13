@@ -342,6 +342,7 @@
 		</div>
 	</div> -->
 	<!-- LIVE HEALTHY BE WEALTHY -->
+	
 	<div class="bot-container-2">
 		<div class="container">
 			<div class="content-container row clearfix">
@@ -357,15 +358,18 @@
 							{{ get_content($shop_theme_info, "home", "home_division_7_description") }}
 						</p>
 					</div>
-					<a href="/mlm/register" style="text-decoration: none;">
+					@if(!$mlm_member)
+					<a href="/members/register" style="text-decoration: none;">
 						<div class="join-button">
 							<img src="/themes/{{ $shop_theme }}/img/join-icon.png"><span>JOIN US TODAY</span>
 						</div>
 					</a>
+					@endif
 				</div>
 			</div>
 		</div>
 	</div>
+	
 
 	<!-- SCROLL TO TOP -->
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>

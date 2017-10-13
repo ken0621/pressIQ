@@ -54,53 +54,11 @@
     </div>
     <div class="col-md-4">
         <!-- CUSTOMER NAME -->
-        <div class="panel panel-default panel-block panel-title-block">
+        <div class="panel panel-default panel-block panel-title-block ">
             <div class="panel-body form-horizontal">
-                @if(!isset($exist))
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="input-group">
-                              <span style="background-color: #eee" class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-                              <input type="text" class="form-control" placeholder="Enter Customer Name" aria-describedby="basic-addon1">
-                            </div>
-                        </div>
-                    </div>
-                @else
-                    <div class="row" style="padding-bottom: 15px;">
-                        <div class="col-md-4 avatar-container">
-                            <img class="cashier-avatar" src="/assets/member/images/user.png">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="customer-name text-bold">EL CHARRO FOOD, INC.</div>
-                            <div class="customer-name">
-                                <div class="row">
-                                    <div class="col-md-5">Customer</div>
-                                    <div class="col-md-7">1235</div>
-                                </div>
-                                <div class="customer-name">
-                                    <div class="row">
-                                        <div class="col-md-5">Phone</div>
-                                        <div class="col-md-7">(63) 916 0456</div>
-                                    </div>
-                                </div>
-                                <div class="customer-name">
-                                    <div class="row">
-                                        <div class="col-md-5">Balance</div>
-                                        <div class="col-md-7">PHP 1,250.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row pos-customer-action-button text-center">
-                        <div class="col-md-6">
-                            <a class="btn btn-custom-white full-width"><i class="fa fa-edit"></i> Update Customer</a>
-                        </div>
-                        <div class="col-md-6">
-                            <a class="btn btn-custom-white full-width"><i class="fa fa-close"></i> Detach</a>
-                        </div>
-                    </div>
-                @endif
+                <div class="customer-container">
+                    @include('member.cashier.pos_customer_info')
+                </div>
             </div>
         </div>
 

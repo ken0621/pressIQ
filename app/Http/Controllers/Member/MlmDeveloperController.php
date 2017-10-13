@@ -724,7 +724,6 @@ class MlmDeveloperController extends Member
     public function recompute_reset()
     {
         $shop_id = $this->user_info->shop_id;
-        Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_plan", "DIRECT")->delete();
-        Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_plan", "BINARY")->delete();
+        Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_amount", ">=", 0)->delete();
     }
-} 
+}

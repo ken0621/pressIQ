@@ -9,6 +9,10 @@ select, button
 {
 	font-family: "Rubik", sans-serif;
 }
+.text-center
+{
+	text-align: center;
+}
 .page
 {
 	.navbar
@@ -39,6 +43,11 @@ select, button
 					width: 19px;
 					top: 4px;
 				}
+			}
+			.menu-button
+			{
+				height: 20px;
+				width: auto !important;		
 			}
 		}
 		/* Sidebar */
@@ -85,6 +94,33 @@ select, button
 			}
 		}
 	}
+}
+.profile-ul
+{
+	ul
+	{
+		margin: 0;
+		padding: 0;
+		li
+		{
+			display: block;
+			a
+			{
+				display: block;
+				padding: 12.5px 15px;
+				font-size: 16px;
+				font-weight: 500;
+				color: #1a1a1a;
+			}
+		}
+	}
+}
+.popover-profile
+{
+    right: 0 !important;
+    left: auto !important;
+    border-radius: 0;
+    top: 56px !important;
 }
 
 .page-content
@@ -601,6 +637,122 @@ select, button
 						}
 					}
 				}	
+			}
+		}
+	}
+	.genealogy-view
+	{
+		@include panel-container();
+		padding: 15px;
+		.holder
+		{
+			.row-holder
+			{
+				position: relative;
+				.circle
+				{
+					background-color: $color-1;
+					cursor: pointer;
+					height: 55px;
+					width: 55px;
+					text-decoration: none;					
+					font-size: 16px;
+					border-radius: 100%;
+					color: #fff;
+					margin: auto;
+					.text
+					{
+						width: 100%;
+						padding-top: 16px;
+						text-align: center;
+						font-weight: 500;
+					}
+					&::before
+					{
+						content: '';
+						position: absolute;
+						top: 100%;
+						left: 50%;
+						border-left: 1px solid $color-2;
+						width: 0;
+						height: 20px;
+					}
+				}
+				&.one
+				{
+					.circle
+					{
+
+					}
+				}
+				&.two
+				{
+					text-align: center;
+					.circle-holder
+					{
+						display: inline-block;
+						padding: 15px 25px;
+						margin-top: 19px;
+						position: relative;
+						padding-bottom: 0;
+						&::before
+						{
+							content: '';
+							position: absolute;
+							top: 0;
+							left: 50%;
+							border-left: 1px solid #422311;
+							width: 50%;
+							height: 20px;
+						}
+						.circle
+						{
+							&:first-child
+							{
+								margin-left: 0;
+							}
+							&:last-child
+							{
+								margin-right: 0;
+							}
+							&::after
+							{
+								content: '';
+								position: absolute;
+								top: 0;
+								right: 50%;
+								border-top: 1px solid #422311;
+								width: 50%;
+								height: 20px;
+							}
+						}
+						&:first-child
+						{
+							margin-right: -2px;
+							.circle::after
+							{
+								right: 0 !important;
+							}
+						}
+						&:last-child
+						{
+							margin-left: -1px;
+						}
+					}
+				}
+			}
+			&:last-child
+			{
+				.row-holder
+				{
+					.circle
+					{
+						&:before
+						{
+							display: none;
+						}
+					}
+				}
 			}
 		}
 	}

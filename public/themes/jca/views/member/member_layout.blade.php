@@ -68,9 +68,6 @@
 						</li>
 						@else
 						@endif
-						<li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
-							<a href="/members/order"><div class="nav-holder"><div class="icon brown-icon-bag"></div> <span>Orders</span></div></a>
-						</li>
 					</ul>
 				</div>
 			</div>

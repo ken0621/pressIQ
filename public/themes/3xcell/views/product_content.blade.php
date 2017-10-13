@@ -76,31 +76,36 @@
 				</div>
 			</div>
 			<!-- PACKAGE -->
+			@if(isset($_package))
 			<div class="related-products-container">
 				<div class="title-container">
 					<div class="title">You May Also Like This</div>
 					<div class="line-bot"></div>
 				</div>
+				
 				<div class="per-item-container row clearfix">
 					<!-- PER ITEM -->
-					@foreach(limit_foreach($_package, 4) as $package)
-					<div class="col-md-3">
-						<div class="per-item" style="cursor: pointer;" onClick="location.href='/product/view/{{ $related['eprod_id'] }}'">
-							<div class="image-container">
-								<img src="{{ get_product_first_image($package) }}">
-							</div>
-							<div class="detail-container">
-								<div class="item-name">
-									{{ get_product_first_name($package) }}
+					@if(count($_package) > 0)
+						@foreach(limit_foreach($_package, 4) as $package)
+						<div class="col-md-3">
+							<div class="per-item" style="cursor: pointer;" onClick="location.href='/product/view/{{ $related['eprod_id'] }}'">
+								<div class="image-container">
+									<img src="{{ get_product_first_image($package) }}">
 								</div>
-								<div class="price-container">PHP {{ get_product_first_price($package) }}</div>
-								<div class="button-container">SHOP NOW</div>
+								<div class="detail-container">
+									<div class="item-name">
+										{{ get_product_first_name($package) }}
+									</div>
+									<div class="price-container">PHP {{ get_product_first_price($package) }}</div>
+									<div class="button-container">SHOP NOW</div>
+								</div>
 							</div>
 						</div>
-					</div>
-					@endforeach
+						@endforeach
+					@endif
 				</div>
 			</div>
+			@endif
 		</div>
 	</div>
 </div>

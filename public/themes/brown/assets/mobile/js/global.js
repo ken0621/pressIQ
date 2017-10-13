@@ -10,65 +10,131 @@ function global()
 		{
 			document_ready();
 		});
+
+		myApp.onPageInit('index', page_ready());
+
+		myApp.onPageInit('profile', function()
+		{
+			event_profile_update_form();
+			event_reward_update_form();
+			event_picture_update_form();
+			event_password_update_form();
+		});
 	}
 
 	function document_ready()
 	{
-		action_chart_js();
+		
 	}
 
-	function action_chart_js()
+	function page_ready()
 	{
-		if (document.getElementById("income_summary") != null) 
+		// mainView.router.loadPage('/members/profile');
+	}
+
+	function event_profile_update_form()
+	{
+		$$('form.ajax-submit.profile-update-form').off('form:success');
+        $$('form.ajax-submit.profile-update-form').on('form:success', function(e)
+        {
+            action_profile_update_form(e);
+        });
+	}
+
+	function action_profile_update_form(x)
+	{
+		var xhr = x.detail.xhr; // actual XHR object
+        var data = x.detail.data; // Ajax response from action file
+        var data = JSON.parse(data);
+
+        if (data == "success") 
+        {
+        	myApp.addNotification({
+		        message: 'Successfully Updated!'
+		    });
+        }
+        else
+        {
+        	$.each(data, function(index, val) 
+        	{
+        		 myApp.addNotification({
+			        message: val
+			    });
+        	});
+        }
+	}
+
+	function event_reward_update_form()
+	{
+		$$('form.ajax-submit.reward-update-form').off('form:success');
+        $$('form.ajax-submit.reward-update-form').on('form:success', function(e)
+        {
+            action_profile_update_form(e);
+        });
+	}
+
+	function event_picture_update_form()
+	{
+		$(".upload-profile").unbind("change");
+		$(".upload-profile").bind("change", function()
 		{
-			$wallet = $(".chart-income").attr("wallet") == 0 ? 1 : $(".chart-income").attr("wallet");
-			$payout = $(".chart-income").attr("payout") == 0 ? 1 : $(".chart-income").attr("payout");
+			$(".tab-pane").css("opacity", "0.5");
+			$(".upload-profile").unbind("change");	
+		    readURL(this);
+		});
+	}
 
-			var ctx = document.getElementById("income_summary").getContext('2d');
+	function action_picture_update_form()
+	{
+		var upload_data = new FormData($(".profile-picture-form")[0]);
 
-			var myDoughnutChart = new Chart(ctx,
+		$.ajax({
+			url      	: '/members/profile-update-picture',
+			data     	: upload_data,
+			dataType 	: 'json',
+			async    	: false,
+			type     	: 'post',
+			processData : false,
+			contentType : false,
+			success:function(response)
 			{
-			    type: 'doughnut',
-			    data: {
-			        labels: ["Red", "Blue"],
-			        datasets: [{
-			            label: '# of Votes',
-			            data: [$payout, $wallet],
-			            backgroundColor: [
-			                'rgba(142, 94, 162, 1)',
-			                'rgba(62, 149, 205, 1)'
-			            ],
-			            borderColor: [
-			                'rgba(142, 94, 162, 1)',
-			                'rgba(62, 149, 205, 1)'
-			            ],
-			            borderWidth: 1
-			        }]
-			    },
-			    options: 
-			    {
-			      legend: 
-			      {
-			        responsive: true,
-			        display: false,
-			      },
-			      tooltips: 
-			      {
-			        callbacks: 
-			        {
-			          label: function(tooltipItems, data) 
-			          {
-			            var sum = data.datasets[0].data.reduce(add, 0);
-			            function add(a, b) {
-			              return a + b;
-			            }
+				event_picture_update_form();
+			},
+		});
+	}
 
-			            return data.datasets[0].data[tooltipItems.index];
-			          },
-			        }
-			      }
-			    }
-			});
-		}
+	function readURL(input) 
+	{
+	    if (input.files && input.files[0]) 
+	    {
+	        var reader = new FileReader();
+	        
+	        reader.onload = function (e) 
+	        {
+				var filename = $(input).val().split('\\').pop();
+				console.log(filename,$('.file-name'));
+				var lastIndex = filename.lastIndexOf("\\");   
+				$('.file-name').text(filename);
+
+	        	console.log(e.target);
+	            $('.img-upload').attr('src', e.target.result);
+
+	            $(".tab-pane").css("opacity", "1");
+	            action_picture_update_form();
+
+	            event_picture_update_form();
+	        }
+	        
+	        reader.readAsDataURL(input.files[0]);
+	    }
+	}
+
+	function event_password_update_form()
+	{
+		$$('form.ajax-submit.password-update-form').off('form:success');
+        $$('form.ajax-submit.password-update-form').on('form:success', function(e)
+        {
+            action_profile_update_form(e);
+        });
 	}
 }

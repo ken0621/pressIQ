@@ -81,7 +81,11 @@ class WarehouseTransfer
 		$data[$item_id]['item_name'] = Item::info($item_id)->item_name;
 		$data[$item_id]['item_sku'] = Item::info($item_id)->item_sku;
 		$data[$item_id]['item_quantity'] = $quantity;
-		$data[$item_id]['item_serial'][0] = $serial;
+		$data[$item_id]['item_serial'] = null;
+		if($serial != '')
+		{
+			$data[$item_id]['item_serial'][0] = $serial;
+		}
 
 		$check = Session::get('wis_item');
 		if(count($check) > 0)
@@ -93,14 +97,22 @@ class WarehouseTransfer
 				$data[$item_id]['item_sku'] = Item::info($item_id)->item_sku;
 				$data[$item_id]['item_quantity'] = $first_data[$item_id]['item_quantity'] + $quantity;
 
-				foreach ($first_data[$item_id]['item_serial'] as $key => $value) 
+				if(count($first_data[$item_id]['item_serial']) > 0)
 				{
-					if($value != $serial)
+					foreach ($first_data[$item_id]['item_serial'] as $key => $value) 
 					{
-						$data[$item_id]['item_serial'][$key] = $value;
+						if($serial != '')
+						{
+							if($value != $serial)
+							{
+								$data[$item_id]['item_serial'][$key] = $value;
+							}						
+						}
 					}
+
+					$data[$item_id]['item_serial'][count($first_data[$item_id]['item_serial']) + 1] = $serial;
 				}
-				$data[$item_id]['item_serial'][count($first_data[$item_id]['item_serial']) + 1] = $serial;
+
 
 				unset(Session::get('wis_item')[$item_id]);
 			}

@@ -18,7 +18,7 @@
                 </td>
                 <td class="text-center">{{ $item['warehouse_qty'] }}</td>
                 <td class="text-center">
-                    <input type="text" class="form-control text-right" name="item_quantity[{{$item['item_id']}}]" value="{{ $item['item_quantity'] }}">
+                    <input type="text" class="form-control text-right quantity-item" item-id="{{$item['item_id']}}" name="item_quantity[{{$item['item_id']}}]" value="{{ $item['item_quantity'] }}">
                 </td>
                 <td class="text-center">
                     @if(count($item['item_serial']) > 0)

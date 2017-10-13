@@ -25,11 +25,22 @@ function wis_create()
 		event_click_search_result();
 		event_remote_item_from_cart();
 		event_change_global_discount();
+		event_change_quantity();
 
 	}
 	function table_loading()
 	{
 		$(".load-item-table-pos").css("opacity", 0.3);
+	}
+	function event_change_quantity()
+	{
+		$("body").on("keyup", ".quantity-item", function(e)
+		{
+			var item_id = $(e.currentTarget).attr('item-id');
+			var quantity = $(e.currentTarget).val();
+
+			console.log('quantity-change-here');
+		});
 	}
 	function event_change_global_discount()
 	{
@@ -89,7 +100,7 @@ function wis_create()
 	}
 	function event_search_item()
 	{
-		$(".event_search_item").keyup(function(e)
+		$("body").on('keyup', '.event_search_item' ,function(e)
 		{
 			if(e.which == 13) //ENTER KEY
 			{

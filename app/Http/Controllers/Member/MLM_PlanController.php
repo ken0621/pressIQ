@@ -1394,12 +1394,13 @@ class MLM_PlanController extends Member
 
     public static function rank($shop_id)
     {
-        $data['membership']          = Tbl_membership::getactive(0, $shop_id)->get();
-        $data['basic_settings']      = MLM_PlanController::basic_settings('RANK');
-        $data['stair_get']           = MLM_PlanController::get_rank($shop_id);
-        $data['include_rpv_on_rgpv'] = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->include_rpv_on_rgpv; 
-        $data['stair_count']         = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->count();
-        $data['points_settings']     = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->orderBy("stairstep_points_level","ASC ")->get();
+        $data['membership']             = Tbl_membership::getactive(0, $shop_id)->get();
+        $data['basic_settings']         = MLM_PlanController::basic_settings('RANK');
+        $data['stair_get']              = MLM_PlanController::get_rank($shop_id);
+        $data['include_rpv_on_rgpv']    = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->include_rpv_on_rgpv; 
+        $data['rank_real_time_update']  = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->rank_real_time_update; 
+        $data['stair_count']            = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->count();
+        $data['points_settings']        = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->orderBy("stairstep_points_level","ASC ")->get();
         // dd($data);
         return view('member.mlm_plan.configure.rank', $data);
     }
@@ -1554,7 +1555,8 @@ class MLM_PlanController extends Member
     public function save_include()
     {
         $shop_id = $this->user_info->shop_id;
-        $update["include_rpv_on_rgpv"] = Request::input("include_rpv_on_rgpv");
+        $update["include_rpv_on_rgpv"] = Request::input("include_rpv_on_rgpv") ? Request::input("include_rpv_on_rgpv") : 0 ;
+        $update["rank_real_time_update"] = Request::input("rank_real_time_update") ? Request::input("rank_real_time_update") : 0;
         Tbl_mlm_plan_setting::where("shop_id",$shop_id)->update($update); 
         $data['response_status'] = "success";
 

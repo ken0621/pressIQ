@@ -228,6 +228,6 @@ class WarehouseTransfer
     }
     public static function create_rr($shop_id, $wis_id)
     {
-
+    	
     }
 }

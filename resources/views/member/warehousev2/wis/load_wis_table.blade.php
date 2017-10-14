@@ -27,13 +27,13 @@
                         <tr>
                             <td class="text-center">{{$wis->wis_id}}</td>
                             <td class="text-center">{{$wis->wis_number}}</td>
-                            <td class="text-center">{{$wis->issued_qty}}</td>
+                            <td class="text-center">{{$wis->issued_qty}} pc(s)</td>
                             @if($wis->wis_status == 'confirm')
                             <td class="text-center">{{$wis->receiver_code}}</td>
                             @endif
                             @if($wis->wis_status == 'received')
-                            <td class="text-center">{{$wis->total_received_qty}}</td>
-                            <td class="text-center">{{$wis->total_remaining_qty}}</td>
+                            <td class="text-center">{{$wis->total_received_qty}} pc(s)</td>
+                            <td class="text-center">{{$wis->total_remaining_qty}} pc(s)</td>
                             @endif
 
                             @if($wis->wis_status == 'pending')

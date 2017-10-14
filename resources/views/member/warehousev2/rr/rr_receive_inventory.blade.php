@@ -1,7 +1,8 @@
 @extends('member.layout')
 @section('content')
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<form class="global-submit" method="post" action="/member/item/warehouse/rr/receive-inventory-submit">
+<input type="hidden" name="_token" value="{{ csrf_token() }}">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -11,7 +12,7 @@
             </h1>
             <div class="text-right">
                 <a class="btn btn-custom-white panel-buttons">Cancel</a>
-                <a class="btn btn-primary panel-buttons">Save</a>
+                <button type="submit" class="btn btn-primary panel-buttons">Receive</button>
             </div>
         </div>
     </div>
@@ -19,10 +20,16 @@
 
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal">
-        <div class="form-group tab-content panel-body warehouse-container">
+        <div class="form-group tab-content panel-body">
+            <div class="col-md-6">
+                <label>RR#</label>
+                <input type="text" class="form-control" name="rr_number">
+            </div>
+        </div>
+        <div class="form-group tab-content panel-body">
             <div class="col-md-12">
                 <label>Remarks</label>
-                <textarea class="form-control"></textarea>
+                <textarea class="form-control" name="rr_remarks"></textarea>
             </div>
         </div>
         <div class="form-group tab-content panel-body warehouse-container">
@@ -35,22 +42,18 @@
                                 <th class="text-center">ITEM SKU</th>
                                 <th class="text-center">ISSUED QTY</th>
                                 <th class="text-center">RECEIVED QTY</th>
-                                <th class="text-center"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>GSATHDDECODER300</td>
-                                <td>3</td>
-                                <td><input type="text" class="form-control text-right" name="" value="3"></td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>GSATHDDECODER500</td>
-                                <td>10</td>
-                                <td><input type="text" class="form-control text-right" name="" value="3"></td>
-                                <td>7</td>
-                            </tr>
+                            @if(count($wis_item) > 0)
+                                @foreach($wis_item as $item)
+                                <tr>
+                                    <td>{{$item->item_sku}}</td>
+                                    <td>{{$item->wis_item_quantity}} pc(s)</td>
+                                    <td><input type="text" class="form-control text-right" name="rr_item_quantity[{{$item->item_id}}]" value="0"></td>
+                                </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -58,4 +61,5 @@
         </div>
     </div>
 </div>
+</form>
 @endsection

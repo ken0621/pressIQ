@@ -210,4 +210,24 @@ class WarehouseTransfer
 
         return $code;
     }
+    public static function check_wis($shop_id, $warehouse_id, $receiver_code)
+    {
+    	$check = Tbl_warehouse_issuance_report::where('wis_shop_id',$shop_id)->where('wis_from_warehouse', $warehouse_id)->where('receiver_code',$receiver_code)->first();
+
+    	$return = null;
+    	if($check)
+    	{
+    		$return = $check->wis_id;
+    	}
+    	else
+    	{
+    		$return = 'Code does not match any record.';
+    	}
+
+    	return $return;
+    }
+    public static function create_rr($shop_id, $wis_id)
+    {
+
+    }
 }

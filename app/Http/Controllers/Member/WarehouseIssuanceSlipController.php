@@ -123,6 +123,7 @@ class WarehouseIssuanceSlipController extends Member
         {
             $return['status'] = 'success';
             $return['call_function'] = 'success_create_wis';
+            Session::forget('wis_item');
         }
         else
         {

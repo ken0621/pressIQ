@@ -33,3 +33,7 @@
     </div>
 </div>
 @endsection
+
+@section('script')
+<script type="text/javascript" src="/assets/member/js/warehouse/rr.js"></script>
+@endsection

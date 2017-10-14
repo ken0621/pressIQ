@@ -39,6 +39,10 @@
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal">
         <div class="form-group">
+            <div class="col-md-6">
+                <label>WIS#</label>
+                <input type="text" name="wis_number" class="form-control">
+            </div>
             <div class="col-md-12">
                 <label>Remarks</label>
                 <div>

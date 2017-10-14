@@ -71,7 +71,7 @@ class WarehouseTransfer
 
 		return $data;
 	}
-	public static function add_item_to_list($shop_id, $item_id, $quantity = 1, $serial = '')
+	public static function add_item_to_list($shop_id, $item_id, $quantity = 1, $serial = '', $is_change_qty = 0)
 	{
 		$first_data = Session::get('wis_item'); 
 
@@ -96,6 +96,10 @@ class WarehouseTransfer
 				$data[$item_id]['item_name'] = Item::info($item_id)->item_name;
 				$data[$item_id]['item_sku'] = Item::info($item_id)->item_sku;
 				$data[$item_id]['item_quantity'] = $first_data[$item_id]['item_quantity'] + $quantity;
+				if($is_change_qty == 1)
+				{
+					$data[$item_id]['item_quantity'] = $quantity;
+				}
 
 				if(count($first_data[$item_id]['item_serial']) > 0)
 				{
@@ -126,10 +130,11 @@ class WarehouseTransfer
 
 		Session::put('wis_item', $data);
 	}
-	public static function create_wis($shop_id, $remarks, $_item)
+	public static function create_wis($shop_id, $remarks, $ins, $_item)
 	{
         $validate = null;
-        $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+        $warehouse_id = $ins['wis_from_warehouse'];
+        // dd($_item);
         foreach ($_item as $key => $value)
         {
             $serial = isset($value['serial']) ? $value['serial'] : null;
@@ -138,7 +143,28 @@ class WarehouseTransfer
 
         if(!$validate)
         {
+        	$wis_id = Tbl_warehouse_issuance_report::insertGetId($ins);
+        	$reference_name = 'wis';
 
+        	$return = Warehouse2::consume_bulk($shop_id, $warehouse_id, $reference_name, $wis_id ,$remarks ,$_item);
+
+        	if(!$return)
+        	{
+        		$get_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','wis')->where('record_consume_ref_id',$wis_id)->get();
+
+        		$ins_report_item = null;
+        		foreach ($get_item as $key_item => $value_item)
+        		{
+        			$ins_report_item[$key_item]['wis_id'] = $wis_id;
+        			$ins_report_item[$key_item]['record_log_item_id'] = $value_item->record_log_id;
+        		}
+
+        		if($ins_report_item)
+        		{
+        			Tbl_warehouse_issuance_report_item::insert($ins_report_item);
+        			$validate = 1;
+        		}
+        	}
         }
 
         return $validate;

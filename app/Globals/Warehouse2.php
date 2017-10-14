@@ -692,7 +692,6 @@ class Warehouse2
     /* PARAM
         $code[0]['mlm_pin']
         $code[0]['mlm_activation']
-
      */
     public static function consume_bulk_product_codes($shop_id = 0, $codes = array(), $consume = array())
     {

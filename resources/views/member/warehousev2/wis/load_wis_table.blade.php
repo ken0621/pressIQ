@@ -38,7 +38,15 @@
 
                             @if($wis->wis_status == 'pending')
                             <td>
-                                
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-custom">
+                                        <li ><a href="/member/item/warehouse/wis/print/{{$wis->wis_id}}"> Print </a></li>
+                                        <li><a href="javascript:">Confirm</a></li>
+                                    </ul>
+                                </div>                                
                             </td>
                             @endif
                         </tr>

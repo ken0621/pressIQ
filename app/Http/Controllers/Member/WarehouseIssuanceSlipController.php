@@ -85,11 +85,23 @@ class WarehouseIssuanceSlipController extends Member
 
         return view('member.warehousev2.wis.wis_serial',$data);
     }
+    public function getChangeQuantity(Request $request)
+    {
+        $shop_id = $this->user_info->shop_id;
+        WarehouseTransfer::add_item_to_list($shop_id, $request->item_id, $request->qty, '',1);
+
+        echo json_encode('success');
+    }   
     public function postCreateSubmit(Request $request)
     {
-        $remarks = $request->remarks;
+        $remarks = $request->wis_remarks;
         $items = Session::get('wis_item');
         $shop_id = $this->user_info->shop_id;
+
+        $ins_wis['wis_shop_id'] = $shop_id;
+        $ins_wis['wis_number'] = $request->wis_number;
+        $ins_wis['wis_from_warehouse'] = Warehouse2::get_current_warehouse($shop_id);
+        $ins_wis['wis_remarks'] = $remarks;
 
         $_item = null;
         foreach ($items as $key => $value) 
@@ -101,11 +113,12 @@ class WarehouseIssuanceSlipController extends Member
             $_item[$key]['serial'] = $value['item_serial'];
         }
 
-        $val = WarehouseTransfer::create_wis($shop_id, $remarks, $_item);
+        $val = WarehouseTransfer::create_wis($shop_id, $remarks,$ins_wis , $_item);
         $return = null;
         if(is_numeric($val))
         {
             $return['status'] = 'success';
+            $return['call_function'] = 'success_create_wis';
         }
         else
         {

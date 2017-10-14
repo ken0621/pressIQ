@@ -130,6 +130,10 @@ class WarehouseTransfer
 
 		Session::put('wis_item', $data);
 	}
+	public static function update_wis($shop_id, $wis_id, $up)
+	{
+		return Tbl_warehouse_issuance_report::where('wis_shop_id',$shop_id)->where('wis_id',$wis_id)->update($up);
+	}
 	public static function create_wis($shop_id, $remarks, $ins, $_item)
 	{
         $validate = null;
@@ -183,4 +187,27 @@ class WarehouseTransfer
 	{
         return Tbl_warehouse::shop()->where('warehouse_id',$warehouse_id)->first();
 	}
+	public static function get_code($shop_id)
+	{
+        $code = strtoupper(str_random(6));
+
+        $ctr = Tbl_warehouse_issuance_report::where("wis_shop_id",$shop_id)->where('receiver_code',$code)->count();
+        if($ctr > 0)
+        {
+            $code = Self::check_code($shop_id, strtoupper(str_random(6)));
+        }
+
+        return $code;
+	}
+
+    public static function check_code($shop_id, $code = '')
+    {
+        $ctr = Tbl_warehouse_issuance_report::where("wis_shop_id",$shop_id)->where('receiver_code',$code)->count();
+        if($ctr > 0)
+        {
+            $code = Self::check_code($shop_id, strtoupper(str_random(6)));
+        }
+
+        return $code;
+    }
 }

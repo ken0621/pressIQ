@@ -145,10 +145,27 @@ class WarehouseIssuanceSlipController extends Member
     }
     public function getConfirm(Request $request, $wis_id)
     {
-        return view('member.warehousev2.wis.wis_confirm');
+        $data['wis_id'] = $wis_id;
+        $data['wis'] = WarehouseTransfer::get_wis_data($wis_id);
+
+        return view('member.warehousev2.wis.wis_confirm', $data);
     }
-    public function postConfirmSubmit()
+    public function postConfirmSubmit(Request $request)
     {
-        
+        $wis_id = $request->wis_id;
+        $up['wis_status'] = $request->wis_status;
+        $up['confirm_image'] = $request->confirm_image;
+        $up['receiver_code'] = WarehouseTransfer::get_code($this->user_info->shop_id);
+
+        $return = WarehouseTransfer::update_wis($this->user_info->shop_id, $wis_id, $up);
+
+        $data = null;
+        if($return)
+        {
+            $data['status'] = 'success';
+            $data['call_function'] = 'success_confirm'; 
+        }
+
+        return json_encode($data);
     }
 }

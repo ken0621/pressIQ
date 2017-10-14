@@ -24,3 +24,15 @@ function change_status(status)
 {
 	$('.wis-container').load('/member/item/warehouse/wis/load-wis-table?status='+status+' .wis-table');
 }
+function success_confirm(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success('Success');
+		setInterval(function()
+		{
+			location.reload();
+		},2000);
+	}
+
+}

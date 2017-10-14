@@ -60,7 +60,8 @@ class MLM_StairstepController extends Member
     								  	->leftjoin("tbl_mlm_stairstep_settings","tbl_mlm_stairstep_settings.stairstep_id","=","tbl_mlm_slot.stairstep_rank")
     								  	->leftJoin("tbl_mlm_slot_points_log","tbl_mlm_slot_points_log.points_log_slot","=","tbl_mlm_slot.slot_id")
     								  	->select("*",DB::raw("SUM( ( CASE WHEN points_log_type = 'SGPV' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS stairstep_points")
-    								  				,DB::raw("SUM( ( CASE WHEN points_log_type = 'SPV' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS personal_stairstep"))
+    								  				,DB::raw("SUM( ( CASE WHEN points_log_type = 'SPV' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS personal_stairstep")
+                                                    ,DB::raw("SUM( ( CASE WHEN points_log_type = 'SRB' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS stairstep_rebates_bonus"))
     								  	->groupBy("slot_id")
 								  	  	->get();
     								  	// ->where("points_log_date_claimed",">=",Carbon::parse($start)->format("Y-m-d 00:00:00"))
@@ -164,21 +165,27 @@ class MLM_StairstepController extends Member
 				$sgpv =  Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
 						   					    ->where('points_log_date_claimed',">=",$start)
 						   					    ->where('points_log_date_claimed',"<=",$end)
-						   					    ->where("points_log_complan","STAIRSTEP")
 						   					    ->where("points_log_type","SGPV")
 						   					    ->where("points_log_converted","0")
 						   					    ->sum("points_log_points");		
 
-		    	$spv  =  Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
+                $spv  =  Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
+                                                ->where('points_log_date_claimed',">=",$start)
+                                                ->where('points_log_date_claimed',"<=",$end)
+                                                ->where("points_log_type","SPV")
+                                                ->where("points_log_converted","0")
+                                                ->sum("points_log_points");
+
+		    	$srb  =  Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
 						   					    ->where('points_log_date_claimed',">=",$start)
 						   					    ->where('points_log_date_claimed',"<=",$end)
-						   					    ->where("points_log_complan","STAIRSTEP")
-						   					    ->where("points_log_type","SPV")
+						   					    ->where("points_log_type","SRB")
 						   					    ->where("points_log_converted","0")
 						   					    ->sum("points_log_points");
 
 				$settings         = Tbl_mlm_stairstep_settings::where("stairstep_id",$list->stairstep_rank)->first();
-				$give_wallet      = 0;
+                $give_wallet      = 0;
+				$give_srb         = 0;
 				if($settings)
 				{
 					if($settings->commission_multiplier != 0)
@@ -186,21 +193,33 @@ class MLM_StairstepController extends Member
 						$maintenance 	  = $settings->stairstep_pv_maintenance;
 						if($spv >= $maintenance)
 						{
-							$give_wallet = $settings->commission_multiplier * $sgpv;
-							if($give_wallet != 0)
+                            $give_wallet = $settings->commission_multiplier * $sgpv;
+                            if($give_wallet != 0)
+                            {
+                                $wallet_log_details = "Your slot ".$list->slot_no." earned ".$give_wallet." from Stairstep Bonus";                     
+                                Mlm_slot_log::slot($list->slot_id, $list->slot_id, $wallet_log_details, $give_wallet, "STAIRSTEP", "released",Carbon::now());                      
+                            }							
+
+                            $give_srb = $srb;
+							if($give_srb != 0)
 							{
-		   						$wallet_log_details = "Your slot ".$list->slot_no." earned ".$give_wallet." from Stairstep Bonus";    				   
-		   						Mlm_slot_log::slot($list->slot_id, $list->slot_id, $wallet_log_details, $give_wallet, "STAIRSTEP", "released",Carbon::now());   				   
+		   						$wallet_log_details = "Your slot ".$list->slot_no." earned ".$give_srb." from Rebates Bonus";    				   
+		   						Mlm_slot_log::slot($list->slot_id, $list->slot_id, $wallet_log_details, $give_srb, "STAIRSTEP", "released",Carbon::now());   				   
 							}
 						}
 					}
 				}	
 
 				$update_log["points_log_converted"] = 1; 
-		    	Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
+                Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
+                                           ->whereBetween('points_log_date_claimed', array($start, $end))
+                                           ->where("points_log_type","SGPV")
+                                           ->where("points_log_converted","0")
+                                           ->update($update_log);		
+
+                Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
 					    				   ->whereBetween('points_log_date_claimed', array($start, $end))
-					    				   ->where("points_log_complan","STAIRSTEP")
-					    				   ->where("points_log_type","SGPV")
+					    				   ->where("points_log_type","SRB")
 					    				   ->where("points_log_converted","0")
 					    				   ->update($update_log);
 

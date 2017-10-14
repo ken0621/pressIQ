@@ -348,7 +348,6 @@ class Mlm_complan_manager_repurchasev2
                 // ADD OLD BINARY POINTS + NEW BINARY POINTS
 
                 $binary[$tree->placement_tree_position] = $binary[$tree->placement_tree_position] + $binary['points']; 
-
                 // End
                 $update['slot_binary_left'] =   $binary["left"];
                 $update['slot_binary_right'] =  $binary["right"];
@@ -460,6 +459,7 @@ class Mlm_complan_manager_repurchasev2
         $stairstep_points       = $points;
         $stairstep_group_points = $group_points;
         $percentage             = null;
+        
         if($stairstep_points != 0)
         {
             $array['points_log_complan'] = "STAIRSTEP_PV";
@@ -500,6 +500,29 @@ class Mlm_complan_manager_repurchasev2
                 $computed_points = ($slot_stairstep->stairstep_bonus/100) * $stairstep_group_points;
                 $percentage      = $slot_stairstep->stairstep_bonus;
             }  
+
+            if($slot_stairstep->stairstep_rebates_bonus != 0 && $stairstep_points != 0)
+            {
+                $stairstep_rebates_bonus = $slot_stairstep->stairstep_rebates_bonus;
+                $rebates_bonus           = ($stairstep_rebates_bonus/100) * $stairstep_points;
+
+                if($rebates_bonus != 0)
+                {
+                    $array['points_log_complan']        = "STAIRSTEP_REBATES_BONUS";
+                    $array['points_log_level']          = 0;
+                    $array['points_log_slot']           = $slot_info->slot_id;
+                    $array['points_log_Sponsor']        = $slot_info->slot_id;
+                    $array['points_log_date_claimed']   = Carbon::now();
+                    $array['points_log_converted']      = 0;
+                    $array['points_log_converted_date'] = Carbon::now();
+                    $array['points_log_type']           = 'SRB';
+                    $array['points_log_from']           = 'Product Repurchase';
+                    $array['points_log_points']         = $rebates_bonus;
+                    $array['original_from_complan']     = "STAIRSTEP";
+
+                    $slot_logs_id = Mlm_slot_log::slot_log_points_array($array);
+                }
+            }
         }
         else
         {

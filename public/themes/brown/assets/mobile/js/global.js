@@ -28,14 +28,13 @@ function global()
 	{
 		$("body").on("click", ".back-index", function()
 		{
-			alert(123);
 			action_back_index();
 		})
 	}
 
 	function action_back_index()
 	{
-		mainView.router.back("/members");
+		mainView.router.loadPage('/members')
 	}
 
 	function event_profile_update_form()

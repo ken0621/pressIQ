@@ -727,7 +727,6 @@ class Payroll_BioImportController extends Member
 	    		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using zkteco_yh803aups   Template.', "", "" ,"");
 	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
 	    	}
-	    	
 	    	// return $message;
     	}
 

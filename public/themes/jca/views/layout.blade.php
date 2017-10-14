@@ -18,6 +18,11 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">   
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+
+        <!-- LIGHTSPEEDBOX -->
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/lsb.css">
+        
+
         @include("frontend.ghead")
         <!-- OTHER CSS -->
         @yield("css")
@@ -186,6 +191,12 @@
     </div>
     
     @include("frontend.gfoot")
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/lightspeedbox/lsb.min.js"></script>
+    <script> 
+      $(window).load(function() { 
+        $.fn.lightspeedBox(); 
+      }); 
+    </script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
 

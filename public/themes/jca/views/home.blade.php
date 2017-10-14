@@ -199,16 +199,28 @@
             <div class="products-services-container">
                 <div class="content-container row clearfix">
                     <div class="col-md-4">
-                        <img class="products-services-img" src="/themes/{{ $shop_theme }}/img/product&services-001.png">
-                        <p class="animated fadeInLeft img-title">Swiss Apple Stem Cell Soap with Glutathione and Collagen</p>
+                        <!-- <img class="products-services-img" src="/themes/{{ $shop_theme }}/img/product&services-001.png">
+                        <p class="animated fadeInLeft img-title">Swiss Apple Stem Cell Soap with Glutathione and Collagen</p> -->
+                        <a href="/themes/{{ $shop_theme }}/img/product&services-001.png" class="lsb-preview" data-lsb-group="gallery1">
+                            <img class="products-services-img" src="/themes/{{ $shop_theme }}/img/product&services-001.png" alt="Swiss Apple Stem Cell Soap with Glutathione and Collagen">
+                            <p class="animated fadeInLeft img-title">Swiss Apple Stem Cell Soap with Glutathione and Collagen</p>
+                        </a>
                     </div>
                     <div class="col-md-4">
-                        <img class="products-services-img" src="/themes/{{ $shop_theme }}/img/product&services-002.png">
-                        <p class="animated fadeInLeft img-title">Swiss Apple Stem Cell Serum</p>
+                        <!-- <img class="products-services-img" src="/themes/{{ $shop_theme }}/img/product&services-002.png">
+                        <p class="animated fadeInLeft img-title">Swiss Apple Stem Cell Serum</p> -->
+                        <a href="/themes/{{ $shop_theme }}/img/product&services-002.png" class="lsb-preview" data-lsb-group="gallery1">
+                            <img class="products-services-img" src="/themes/{{ $shop_theme }}/img/product&services-002.png" alt="Swiss Apple Stem Cell Serum">
+                            <p class="animated fadeInLeft img-title">Swiss Apple Stem Cell Serum</p>
+                        </a>
                     </div>
                     <div class="col-md-4">
-                        <img class="products-services-img" src="/themes/{{ $shop_theme }}/img/product&services-003.png">
-                        <p class="animated fadeInLeft img-title">Stem Cell Anti-Aging Injectable</p>
+                        <!-- <img class="products-services-img" src="/themes/{{ $shop_theme }}/img/product&services-003.png">
+                        <p class="animated fadeInLeft img-title">Stem Cell Anti-Aging Injectable</p> -->
+                        <a href="/themes/{{ $shop_theme }}/img/product&services-003.png" class="lsb-preview" data-lsb-group="gallery1">
+                            <img class="products-services-img" src="/themes/{{ $shop_theme }}/img/product&services-003.png" alt="Stem Cell Anti-Aging Injectable">
+                            <p class="animated fadeInLeft img-title">Stem Cell Anti-Aging Injectable</p>
+                        </a>
                     </div>
                 </div>
             </div>

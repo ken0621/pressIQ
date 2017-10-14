@@ -44,7 +44,7 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-custom">
                                         <li ><a href="/member/item/warehouse/wis/print/{{$wis->wis_id}}"> Print </a></li>
-                                        <li><a href="javascript:">Confirm</a></li>
+                                        <li><a class="popup" link="/member/item/warehouse/wis/confirm/{{$wis->wis_id}}" size="md">Confirm</a></li>
                                     </ul>
                                 </div>                                
                             </td>

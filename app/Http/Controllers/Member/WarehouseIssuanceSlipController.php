@@ -11,6 +11,9 @@ use App\Globals\Warehouse2;
 use App\Globals\Item;
 
 use Session;
+use Carbon\Carbon;
+use App\Globals\Pdf_global;
+
 class WarehouseIssuanceSlipController extends Member
 {
     public function getIndex(Request $request)
@@ -24,7 +27,7 @@ class WarehouseIssuanceSlipController extends Member
     public function getLoadWisTable(Request $request)
     {
         $data['status'] = isset($request->status) ? $request->status : 'pending';
-        $data['_wis'] = WarehouseTransfer::get_all_wis($this->user_info->shop_id);
+        $data['_wis'] = WarehouseTransfer::get_all_wis($this->user_info->shop_id, $data['status']);
 
         return view('member.warehousev2.wis.load_wis_table',$data);
     }
@@ -102,6 +105,7 @@ class WarehouseIssuanceSlipController extends Member
         $ins_wis['wis_number'] = $request->wis_number;
         $ins_wis['wis_from_warehouse'] = Warehouse2::get_current_warehouse($shop_id);
         $ins_wis['wis_remarks'] = $remarks;
+        $ins_wis['created_at'] = Carbon::now();
 
         $_item = null;
         foreach ($items as $key => $value) 
@@ -128,9 +132,23 @@ class WarehouseIssuanceSlipController extends Member
 
         return json_encode($return);
     }
-    public function getConfirm()
+    public function getPrint(Request $request, $wis_id)
     {
-
+        $data['wis'] = WarehouseTransfer::get_wis_data($wis_id);
+        $data['wis_item'] = WarehouseTransfer::get_wis_item($wis_id);
+        $data['user'] = $this->user_info;
+        $data['owner'] = WarehouseTransfer::get_warehouse_data($data['wis']->wis_from_warehouse);
+        
+        // return view('member.warehousev2.wis.print_wis', $data);
+        $pdf = view('member.warehousev2.wis.print_wis', $data);
+        return Pdf_global::show_pdf($pdf,null,$data['wis']->wis_number);
+    }
+    public function getConfirm(Request $request, $wis_id)
+    {
         return view('member.warehousev2.wis.wis_confirm');
+    }
+    public function postConfirmSubmit()
+    {
+        
     }
 }

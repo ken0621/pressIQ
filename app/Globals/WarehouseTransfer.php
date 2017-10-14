@@ -169,4 +169,18 @@ class WarehouseTransfer
 
         return $validate;
 	}
+	public static function get_wis_data($wis_id)
+	{
+		return Tbl_warehouse_issuance_report::where('wis_id',$wis_id)->first();
+	}
+	public static function get_wis_item($wis_id)
+	{
+        $return_item = Tbl_warehouse_inventory_record_log::item()->inventory()->where('record_consume_ref_name','wis')->where('record_consume_ref_id',$wis_id)->groupBy('record_item_id')->get();
+
+		return $return_item;
+	}
+	public static function get_warehouse_data($warehouse_id)
+	{
+        return Tbl_warehouse::shop()->where('warehouse_id',$warehouse_id)->first();
+	}
 }

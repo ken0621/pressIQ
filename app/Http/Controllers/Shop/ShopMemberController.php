@@ -1707,7 +1707,7 @@ class ShopMemberController extends Shop
             $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
             $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $new_slot_no);
             
-            $return = Item::check_product_code($shop_id, $data["pin"], $data["activation"]);
+            $return = Item::check_unused_product_code($shop_id, $data["pin"], $data["activation"]);
 
             if($return)
             {

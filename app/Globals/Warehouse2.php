@@ -54,6 +54,13 @@ class Warehouse2
                                                    ->count();
         return $count;
     }
+    public static function get_item_qty_transfer($warehouse_id, $item_id)
+    {
+        $count = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
+                                                   ->count();
+        return $count;
+    }
     public static function check_warehouse_existence($shop_id, $warehouse_id = 0)
     {
         return Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
@@ -79,7 +86,7 @@ class Warehouse2
         $item_data = Item::get_item_details($item_id);
         if(Warehouse2::check_warehouse_existence($shop_id, $wh_from) && Warehouse2::check_warehouse_existence($shop_id, $wh_to))
         {
-            $warehouse_qty = Warehouse2::get_item_qty($wh_from, $item_id);
+            $warehouse_qty = Warehouse2::get_item_qty_transfer($wh_from, $item_id);
 
             if($item_data)
             {

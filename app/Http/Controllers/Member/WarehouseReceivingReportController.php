@@ -9,6 +9,7 @@ use App\Globals\Warehouse2;
 use App\Globals\WarehouseTransfer;
 
 use Session;
+use Carbon\Carbon;
 class WarehouseReceivingReportController extends Member
 {
     public function getIndex()
@@ -57,6 +58,36 @@ class WarehouseReceivingReportController extends Member
     }
     public function postReceiveInventorySubmit(Request $request)
     {
-        dd($request->rr_item_quantity);
+        $shop_id = $this->user_info->shop_id;
+        $ins_rr['rr_shop_id'] = $shop_id;
+        $ins_rr['rr_number'] = $request->rr_number;
+        $ins_rr['wis_id'] = Session::get('wis_id');
+        $ins_rr['warehouse_id'] = Warehouse2::get_current_warehouse($shop_id);
+        $ins_rr['rr_remarks'] = $request->rr_remarks;
+        $ins_rr['created_at'] = Carbon::now();
+
+        $wis_data = WarehouseTransfer::get_wis_data(Session::get('wis_id'));
+
+        $_item = $request->rr_item_quantity;
+
+        $return = null;
+        foreach ($_item as $key => $value) 
+        {
+            $return .= Warehouse2::transfer_validation($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $key, $value, 'rr');
+        }
+
+        $data = null;
+        if(!$retrun)
+        {
+
+        }
+        else
+        {
+            $data['status'] = 'error';
+            $data['status_message'] = $return;
+        }
+
+        return json_encode($data);
+
     }
 }

@@ -113,6 +113,16 @@
                                  </div>
                               </a>
                            </li>
+                           <li>
+                              <a href="/members/order" class="item-link close-panel">
+                                 <div class="item-content">
+                                    <div class="item-media"><i class="icon brown-icon-bag"></i></div>
+                                    <div class="item-inner">
+                                       <div class="item-title">Orders</div>
+                                    </div>
+                                 </div>
+                              </a>
+                           </li>
                            @endif
                            <li>
                               <a href="javascript:" onClick="location.href='/members/logout'" class="item-link close-panel">

@@ -50,7 +50,10 @@
                                 <tr>
                                     <td>{{$item->item_sku}}</td>
                                     <td>{{$item->wis_item_quantity}} pc(s)</td>
-                                    <td><input type="text" class="form-control text-right" name="rr_item_quantity[{{$item->item_id}}]" value="0"></td>
+                                    <td>
+                                        <input type="hidden" name="wis_item_quantity[{{$item->item_id}}]" value="{{$item->wis_item_quantity}}">
+                                        <input type="text" class="form-control text-right" name="rr_item_quantity[{{$item->item_id}}]" value="0">
+                                    </td>
                                 </tr>
                                 @endforeach
                             @endif

@@ -103,10 +103,10 @@ class Warehouse2
                 {
                     $return .= 'The item '.$item_data->item_name.' does not exist in this warehouse. <br>';                
                 }
-                if($warehouse_qty < $quantity)
-                {
-                    $return .= 'The quantity of '.$item_data->item_name.' is not enough to transfer <br>';
-                }
+                // if($warehouse_qty < $quantity)
+                // {
+                //     $return .= 'The quantity of '.$item_data->item_name.' is not enough to transfer <br>';
+                // }
                 $serial_qty = count($serial);
                 if($serial_qty > 0)
                 {

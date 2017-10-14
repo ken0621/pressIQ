@@ -73,6 +73,11 @@ class WarehouseReceivingReportController extends Member
         $return = null;
         foreach ($_item as $key => $value) 
         {
+            if($request->wis_item_quantity[$key] < $value)
+            {
+                $return .= "The ITEM no ".$key." is not enough to transfer <br>";
+            }
+            
             $return .= Warehouse2::transfer_validation($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $key, $value, 'rr');
         }
 

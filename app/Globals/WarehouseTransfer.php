@@ -200,6 +200,15 @@ class WarehouseTransfer
 
 		return $return_item;
 	}
+	public static function print_wis_item($wis_id)
+	{
+		return Tbl_warehouse_issuance_report_item::inventory_item()->where('wis_id',$wis_id)->groupBy('record_item_id')->get();
+	}
+	public static function print_rr_item($rr_id)
+	{
+		return Tbl_warehouse_receiving_report_item::inventory_item()->where('rr_id',$rr_id)->groupBy('record_item_id')->get();
+	}
+
 	public static function get_warehouse_data($warehouse_id)
 	{
         return Tbl_warehouse::shop()->where('warehouse_id',$warehouse_id)->first();

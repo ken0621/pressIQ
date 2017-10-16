@@ -136,7 +136,7 @@ class WarehouseIssuanceSlipController extends Member
     public function getPrint(Request $request, $wis_id)
     {
         $data['wis'] = WarehouseTransfer::get_wis_data($wis_id);
-        $data['wis_item'] = WarehouseTransfer::get_wis_item($wis_id);
+        $data['wis_item'] = WarehouseTransfer::print_wis_item($wis_id);
         $data['user'] = $this->user_info;
         $data['owner'] = WarehouseTransfer::get_warehouse_data($data['wis']->wis_from_warehouse);
         

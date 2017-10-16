@@ -26,6 +26,10 @@
         <div class="col-md-12 pull">
             <label for="include_rpv_on_rgpv">Include RPV on RGPV</label>
             <input type="checkbox" id="include_rpv_on_rgpv" name="include_rpv_on_rgpv" value="1" {{$include_rpv_on_rgpv == 1 ? 'checked' : ''}}>
+        </div>         
+        <div class="col-md-12 pull">
+            <label for="rank_real_time_update">Real-time update</label>
+            <input type="checkbox" id="rank_real_time_update" name="rank_real_time_update" value="1" {{$rank_real_time_update == 1 ? 'checked' : ''}}>
         </div> 
         <div class="col-md-1 pull-right">
             <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="save_include()">Save</a>

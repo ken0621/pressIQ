@@ -46,7 +46,7 @@
 									<a href="/members/genealogy?mode=binary"><div class="nav-holder"> &nbsp;&nbsp;<span>Binary Tree</span></div></a>
 								</li>
 								<li>
-									<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"> &nbsp;&nbsp;<span>Unilevel Tree</span></div></a>
+									<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"> &nbsp;&nbsp;<span>Sponsor Tree</span></div></a>
 								</li>
 
 							</ul>
@@ -68,9 +68,6 @@
 						</li>
 						@else
 						@endif
-						<li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
-							<a href="/members/order"><div class="nav-holder"><div class="icon brown-icon-bag"></div> <span>Orders</span></div></a>
-						</li>
 					</ul>
 				</div>
 			</div>

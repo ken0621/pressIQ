@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+    'default' => env('FILESYSTEM_DRIVER', 'ftp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -63,6 +63,12 @@ return [
             'bucket' => env('AWS_BUCKET'),
         ],
 
+        'ftp' => [
+            'driver'   => 'ftp',
+            'host'     => 'digimaweb.solutions',
+            'username' => 'uploadthirdparty@digimaweb.solutions',
+            'password' => '8ert8Tw_hD}0',
+        ],
     ],
 
 ];

@@ -1,4 +1,4 @@
-@if($_slot)
+@if($_table)
     <table class="table table-bordered table-condensed custom-column-table">
         <thead>
             <tr>
@@ -17,7 +17,7 @@
                 @endforeach
         </tbody>
     </table>
-    <div class="pull-right paginat">{!! $_table_raw->render() !!}</div>
+    <div class="pull-right paginat">{!! $_raw_table->render() !!}</div>
 @else
-    <div class="text-center" style="padding: 200px 0">NO RESULT FOUND</div>
+    <div class="text-center" style="padding: 100px 0">NO RESULT FOUND</div>
 @endif

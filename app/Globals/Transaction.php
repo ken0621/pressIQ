@@ -36,6 +36,11 @@ class Transaction
         $store["create_update_transaction_details"] = $details;
         session($store);
     }
+    public static function create_update_proof($details)
+    {
+        $store["create_update_proof"] = $details;
+        session($store);
+    }
     public static function create_set_method($method)
     {
         $store["create_set_method"] = $method;
@@ -153,17 +158,12 @@ class Transaction
             }
             
             $return = $transaction_list_id;
-            
-            
-            
             Self::update_transaction_balance($transaction_id);
         }
         else
         {
             $return = "CARTY IS EMPTY";
         }
-
-
 
         return $return;
     }
@@ -188,6 +188,12 @@ class Transaction
         {
             $update["transaction_details"] = session('create_update_transaction_details');
             session()->forget('create_update_transaction_details');
+        }
+
+        if(session('create_update_proof'))
+        {
+            $update["transaction_payment_proof"] = session('create_update_proof');
+            session()->forget('create_update_proof');
         }
         
         if($balance == 0)
@@ -221,6 +227,11 @@ class Transaction
             case 'PENDING':
                 $prefix = "PENDING-";
             break;
+
+            case 'PROOF':
+                $prefix = "PROOF-";
+            break;
+
 
             default:
                 $prefix = "";

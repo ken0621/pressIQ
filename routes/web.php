@@ -195,6 +195,8 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::any('product_order/create_order/submit_payment_upload','Member\ProductOrderController@submit_payment_upload');
 	
 	Route::get('product_order2','Member\ProductOrderController2@index');
+	Route::post('product_order2/table','Member\ProductOrderController2@table');
+	Route::get('product_order2/proof','Member\ProductOrderController2@proof');
 	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
 	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
 	

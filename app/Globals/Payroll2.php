@@ -2631,7 +2631,7 @@ class Payroll2
 			
 			/*End Undertime Deduction Computation*/
 			
-			/*Start Undertime Deduction Computation*/
+			/*Start late Deduction Computation*/
 			if ($late_float != 0)
 			{
 				$late_rate = 0;
@@ -2670,7 +2670,7 @@ class Payroll2
 				$breakdown_deduction += $return->_breakdown_deduction["late"]["rate"];
 			}
 			
-			/*End Undertime Deduction Computation*/
+			/*End late Deduction Computation*/
 			
 		
 		}

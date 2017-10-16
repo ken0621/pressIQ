@@ -183,7 +183,7 @@ class MLM_StairstepController extends Member
 						   					    ->where("points_log_type","SRB")
 						   					    ->where("points_log_converted","0")
 						   					    ->sum("points_log_points");
-                                                dd($dynamic_compression);
+
 				$settings         = Tbl_mlm_stairstep_settings::where("stairstep_id",$list->stairstep_rank)->first();
                 $give_wallet      = 0;
 				$give_srb         = 0;

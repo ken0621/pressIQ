@@ -47,7 +47,7 @@ class WarehouseTransfer
 
 		foreach ($data as $key => $value) 
 		{
-			$count = Tbl_warehouse_inventory_record_log::where('record_source_ref_name','wis')->where('record_source_ref_id',$value->wis_id)->count();
+			$count = Tbl_warehouse_receiving_report::wis()->inventory_item()->where('tbl_warehouse_receiving_report.wis_id',$value->wis_id)->count();
 
 			$data[$key]->total_received_qty = $count;
 		}

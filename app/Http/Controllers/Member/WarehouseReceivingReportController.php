@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Globals\Warehouse2;
 use App\Globals\WarehouseTransfer;
+use App\Globals\Pdf_global;
 
 use Session;
 use Carbon\Carbon;
@@ -15,6 +16,8 @@ class WarehouseReceivingReportController extends Member
     public function getIndex()
     {
     	$data['page'] = "Receiving Report";
+        $data['_rr'] = WarehouseTransfer::get_all_rr($this->user_info->shop_id);
+        Session::forget('wis_id');
     	return view('member.warehousev2.rr.rr_list',$data);
     }
     public function getReceiveCode()
@@ -71,20 +74,34 @@ class WarehouseReceivingReportController extends Member
         $_item = $request->rr_item_quantity;
 
         $return = null;
+
+        $items = null;
         foreach ($_item as $key => $value) 
         {
             if($request->wis_item_quantity[$key] < $value)
             {
                 $return .= "The ITEM no ".$key." is not enough to transfer <br>";
             }
-            
-            $return .= Warehouse2::transfer_validation($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $key, $value, 'rr');
+
+            $items[$key]['item_id'] = $key;
+            $items[$key]['quantity'] = $value;
+            $items[$key]['remarks'] = 'Transfer item no. '.$key.' from WIS -('.$wis_data->wis_number.')';
         }
 
         $data = null;
-        if(!$retrun)
+        if(!$return)
         {
-
+            $val = WarehouseTransfer::create_rr($shop_id, $ins_rr['wis_id'], $ins_rr, $items);
+            if(!$val)
+            {
+                $data['status'] = 'success';
+                $data['call_function'] = 'success_rr';                
+            }
+            else
+            {
+                $data['status'] = 'error';
+                $data['status_message'] = $val;
+            }
         }
         else
         {
@@ -94,5 +111,15 @@ class WarehouseReceivingReportController extends Member
 
         return json_encode($data);
 
+    }
+    public function getPrint(Request $request, $rr_id)
+    {
+        $data['rr'] = WarehouseTransfer::get_rr_data($rr_id);
+        $data['rr_item'] = WarehouseTransfer::get_rr_item($data['rr']->wis_id);
+        $data['user'] = $this->user_info;
+        $data['owner'] = WarehouseTransfer::get_warehouse_data($data['rr']->warehouse_id);
+        
+        $pdf = view('member.warehousev2.rr.print_rr', $data);
+        return Pdf_global::show_pdf($pdf,null,$data['rr']->rr_number);
     }
 }

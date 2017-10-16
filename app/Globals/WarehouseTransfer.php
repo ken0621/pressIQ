@@ -45,11 +45,18 @@ class WarehouseTransfer
 		$data = Tbl_warehouse_issuance_report::inventory_item()->where('wis_shop_id',$shop_id)->where('wis_status', $status)->groupBy
 		('tbl_warehouse_issuance_report.wis_id')->get();
 
+		foreach ($data as $key => $value) 
+		{
+			$count = Tbl_warehouse_inventory_record_log::where('record_source_ref_name','wis')->where('record_source_ref_id',$value->wis_id)->count();
+
+			$data[$key]->total_received_qty = $count;
+		}
+
 		return $data;
 	}
-	public static function get_all_rr($shop_id = 0, $status = 'pending')
+	public static function get_all_rr($shop_id = 0)
 	{
-		return Tbl_warehouse_receiving_report::where('rr_shop_id',$shop_id)->where('rr_status', $status)->get();
+		return Tbl_warehouse_receiving_report::wis()->inventory_item()->where('rr_shop_id',$shop_id)->groupBy('tbl_warehouse_receiving_report.rr_id')->get();
 	}
 	public static function scan_item($shop_id, $item_code)
 	{
@@ -183,6 +190,16 @@ class WarehouseTransfer
 
 		return $return_item;
 	}
+	public static function get_rr_data($rr_id)
+	{
+		return Tbl_warehouse_receiving_report::where('rr_id',$rr_id)->first();
+	}
+	public static function get_rr_item($wis_id)
+	{
+        $return_item = Tbl_warehouse_inventory_record_log::item()->inventory()->where('record_source_ref_name','wis')->where('record_source_ref_id',$wis_id)->groupBy('record_item_id')->get();
+
+		return $return_item;
+	}
 	public static function get_warehouse_data($warehouse_id)
 	{
         return Tbl_warehouse::shop()->where('warehouse_id',$warehouse_id)->first();
@@ -226,8 +243,52 @@ class WarehouseTransfer
 
     	return $return;
     }
-    public static function create_rr($shop_id, $wis_id)
+    public static function create_rr($shop_id, $wis_id, $ins_rr, $_item = array())
     {
-    	
+    	$return = null;
+
+        $wis_data = WarehouseTransfer::get_wis_data($wis_id);
+    	foreach ($_item as $key => $value) 
+    	{
+        	$return .= Warehouse2::transfer_validation($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $value['item_id'], $value['quantity'], 'rr');
+    	}
+
+    	if(!$return)
+    	{
+	        $source['name'] = 'wis';
+	        $source['id'] = $ins_rr['wis_id'];    		
+
+        	$val = Warehouse2::transfer_bulk($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $_item, $ins_rr['rr_remarks'], $source);
+
+        	if(!$val)
+        	{
+        		$rr_id = Tbl_warehouse_receiving_report::insertGetId($ins_rr);
+        		$get_item = Tbl_warehouse_inventory_record_log::where('record_source_ref_name','wis')->where('record_source_ref_id',$wis_id)->get();
+
+        		$ins_report_item = null;
+        		foreach ($get_item as $key_item => $value_item)
+        		{
+        			$ins_report_item[$key_item]['rr_id'] = $rr_id;
+        			$ins_report_item[$key_item]['record_log_item_id'] = $value_item->record_log_id;
+        		}
+
+        		if($ins_report_item)
+        		{
+    				Tbl_warehouse_receiving_report_item::insert($ins_report_item);
+
+    				if($wis_data->wis_status == 'confirm')
+    				{
+	    				$udpate_wis['wis_status'] = 'received';
+	    				WarehouseTransfer::update_wis($shop_id, $wis_id, $udpate_wis);	
+    				}
+        		}
+        	}
+
+        	return $val;
+    	}
+    	else
+    	{
+    		return $return;
+    	}
     }
 }

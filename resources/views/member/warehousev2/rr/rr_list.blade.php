@@ -27,7 +27,38 @@
 
         <div class="form-group tab-content panel-body warehouse-container">
             <div id="all" class="tab-pane fade in active">
-                
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>RR Number</th>
+                                <th>Total Receive Items</th>
+                                <th>From</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(count($_rr) > 0)
+                                @foreach($_rr as $key => $rr)
+                                <tr>
+                                    <td>{{$key+1}}</td>
+                                    <td>{{$rr->rr_number}}</td>
+                                    <td>{{$rr->received_qty}} pc(s)</td>
+                                    <td>{{$rr->wis_number}}</td>
+                                    <td class="text-center">
+                                        <a href="/member/item/warehouse/rr/print/{{$rr->rr_id}}">Print</a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            @else
+                            <tr>
+                                <td colspan="5" class="text-center">No Item Receive Yet</td>
+                            </tr>
+                            @endif                            
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>        
     </div>

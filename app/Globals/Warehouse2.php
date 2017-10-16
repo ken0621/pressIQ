@@ -155,7 +155,7 @@ class Warehouse2
                     $update['record_source_ref_name'] = $source['name'];
                     $update['record_source_ref_id'] = $source['id'];
 
-                    if($source['name'] == 'wis')
+                    if($source['name'] == 'rr')
                     {
                         $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->where('record_consume_ref_name',$source['name'])->where('record_consume_ref_id',$source['id'])->first();
                     }
@@ -204,6 +204,8 @@ class Warehouse2
                 Warehouse2::insert_inventory_history($shop_id, $wh_to, $inventory_rr, $history_rr);
 
             }
+
+            Warehouse2::update_inventory_count($wh_to, 0, $item_id, $quantity);
         }
         return $return;
     }

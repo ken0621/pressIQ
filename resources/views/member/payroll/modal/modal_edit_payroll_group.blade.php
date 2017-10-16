@@ -331,7 +331,7 @@
 											</div>
 											<div class="col-md-6">
 												<small>Deduction Late Percentage</small>
-												<input type="number" name="payroll_late_deduction" class="form-control text-right" value="{{$group->payroll_late_deduction}}">
+												<input type="number" name="payroll_late_deduction" class="form-control text-right" value="{{$group->payroll_late_deduction}}" step="any">
 											</div>
 										</div>
 									</div>
@@ -374,7 +374,7 @@
 											</div>
 											<div class="col-md-6">
 												<small>Deduction Undertime Percentage</small>
-												<input type="number" name="payroll_under_time_deduction" step="any" value="{{$group->payroll_under_time_deduction}}" class="form-control text-right">
+												<input type="number" name="payroll_under_time_deduction" step="any" value="{{$group->payroll_under_time_deduction}}" class="form-control text-right" step="any">
 											</div>
 										</div>
 									</div>

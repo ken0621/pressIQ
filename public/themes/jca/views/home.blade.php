@@ -191,7 +191,7 @@
         </div>
     </div>
     <!-- COMPANY PRODUCT -->
-    <div id="products" class="wrapper-4">
+    <!-- <div id="products" class="wrapper-4">
         <div class="container">
             <div class="jca-title-container wow fadeInDown">
                 <p class="main-title"><font class="shade-green">Products &</font> Services</p>
@@ -213,7 +213,78 @@
                 </div>
             </div>
         </div>
+    </div> -->
+
+    <div id="products" class="wrapper-4">
+        <div class="container">
+            <div class="jca-title-container wow fadeInDown">
+                <p class="main-title"><font class="shade-green">Products &</font> Services</p>
+            </div>
+            <div class="products-services-container">
+                <div class="content-container row clearfix">
+                    <div class="col-md-12">
+                        <img src="/themes/{{ $shop_theme }}/img/products-img.png">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="wrapper-5">
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-md-6">
+                    <div class="img-container">
+                        <img src="/themes/{{ $shop_theme }}/img/stem-img.png">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="details-container">
+                        <div class="header">Swiss Apple Stem Cell Soap<br>with <span>Glutathione and Collagen</span></div>
+                        <div class="sub-header">
+                            <span>Contents:</span> Swiss Apple Stem Cell, Glutathione and Collagen
+                        </div>
+                        <div class="benefits">
+                            <div class="header">Benefits: </div>
+                            
+                            <ul>
+                                <li>Increases skin stem cell vitality and longevity</li>
+                                <li>Helps treat skin problems like hyperpigmentation, acne or pimple scars, uneven skin tone</li>
+                                <li>Fights all unwanted signs of aging</li>
+                                <li>Reduces wrinkles and fine-lines</li>
+                                <li>Reveals younger and glowing, youthful skin</li>
+                                <li>Maintains the health and elasticity of the skin</li>
+                                <li>Provides freshness and gives your skin soft and clean feeling</li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrapper-6">
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-md-6">
+                    <div class="details-container">
+                        <div class="header">Lorem Ipsum <span>Dolor</span></div>
+                        <div class="details">
+                            <p><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit ex fugiat, porro! Harum odit obcaecati illum quos rem perferendis consectetur debitis. Omnis beatae ab sed aliquid vel dolores impedit eius.</span><span>Ab harum, mollitia expedita iste obcaecati. Quisquam eaque quia rem obcaecati, at eos voluptates neque eius libero eligendi. Amet, libero veniam? Nulla modi porro, libero. In corporis facilis, ea possimus?</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="img-container">
+                        <img src="/themes/{{ $shop_theme }}/img/product&services-003.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>

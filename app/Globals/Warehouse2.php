@@ -202,7 +202,6 @@ class Warehouse2
 
                 Warehouse2::insert_inventory_history($shop_id, $wh_from, $inventory_wis, $history_wis);
                 Warehouse2::insert_inventory_history($shop_id, $wh_to, $inventory_rr, $history_rr);
-
             }
 
             Warehouse2::update_inventory_count($wh_to, 0, $item_id, $quantity);

@@ -15,7 +15,6 @@ class UpdateTblMembership1012832AM extends Migration
     {
         Schema::table('tbl_membership', function (Blueprint $table) {
             $table->integer('membership_price_level')->nullable()->unsigned()->after('membership_price');
-
             $table->foreign('membership_price_level')->references('price_level_id')->on('tbl_price_level');
         });
     }

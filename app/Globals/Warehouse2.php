@@ -17,15 +17,16 @@ use App\Models\Tbl_inventory_history_items;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_audit_trail;
+use App\Models\Tbl_price_level;
+use App\Models\Tbl_price_level_item;
+use App\Models\Tbl_sub_warehouse;
+use App\Models\Tbl_settings;
+
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Tablet_global;
 use App\Globals\Currency;
-use App\Models\Tbl_price_level;
-use App\Models\Tbl_price_level_item;
-use App\Models\Tbl_sub_warehouse;
-use App\Models\Tbl_settings;
 use Session;
 use DB;
 use Carbon\carbon;
@@ -33,6 +34,10 @@ use App\Globals\Merchant;
 use Validator;
 class Warehouse2
 {   
+    public static function get_all_warehouse($shop_id)
+    {
+        return Tbl_warehouse::where('warehouse_shop_id',$shop_id)->where('archived',0)->get();
+    }
 	public static function get_current_warehouse($shop_id)
 	{
 		return session('warehouse_id_'.$shop_id);
@@ -46,6 +51,13 @@ class Warehouse2
         $count = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
                                                    ->where("record_item_id",$item_id)
                                                    ->where("record_inventory_status",0)
+                                                   ->count();
+        return $count;
+    }
+    public static function get_item_qty_transfer($warehouse_id, $item_id)
+    {
+        $count = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
                                                    ->count();
         return $count;
     }
@@ -74,7 +86,7 @@ class Warehouse2
         $item_data = Item::get_item_details($item_id);
         if(Warehouse2::check_warehouse_existence($shop_id, $wh_from) && Warehouse2::check_warehouse_existence($shop_id, $wh_to))
         {
-            $warehouse_qty = Warehouse2::get_item_qty($wh_from, $item_id);
+            $warehouse_qty = Warehouse2::get_item_qty_transfer($wh_from, $item_id);
 
             if($item_data)
             {
@@ -91,10 +103,10 @@ class Warehouse2
                 {
                     $return .= 'The item '.$item_data->item_name.' does not exist in this warehouse. <br>';                
                 }
-                if($warehouse_qty < $quantity)
-                {
-                    $return .= 'The quantity of '.$item_data->item_name.' is not enough to transfer <br>';
-                }
+                // if($warehouse_qty < $quantity)
+                // {
+                //     $return .= 'The quantity of '.$item_data->item_name.' is not enough to transfer <br>';
+                // }
                 $serial_qty = count($serial);
                 if($serial_qty > 0)
                 {
@@ -124,23 +136,40 @@ class Warehouse2
 
         return $return;
     }
-    public static function transfer($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array(), $inventory_history = '')
+    public static function transfer($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array(), $inventory_history = '', $source = array())
     {
         $return = Warehouse2::transfer_validation($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial);
       
         if(!$return)
         {
-            $return['status'] = null;
-            $return['message'] = null;
+            $return = null;
             for ($ctr_qty = 0; $ctr_qty < $quantity ; $ctr_qty++)
-            {
+            {                
                 $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->first();
                 if(count($serial) > 0)
                 {
                     $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->where('record_serial_number',$serial[$ctr_qty])->first();
                 }
+                if(isset($source['name']) && isset($source['id']))
+                {   
+                    $update['record_source_ref_name'] = $source['name'];
+                    $update['record_source_ref_id'] = $source['id'];
+
+                    if($source['name'] == 'wis')
+                    {
+                        $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->where('record_consume_ref_name',$source['name'])->where('record_consume_ref_id',$source['id'])->first();
+                    }
+                    if(count($serial) > 0)
+                    {
+                        $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->where('record_consume_ref_name',$source['name'])->where('record_consume_ref_id',$source['id'])->where('record_serial_number',$serial[$ctr_qty])->first();
+                    }
+                        
+                }
                 Warehouse2::insert_item_history($get_data->record_log_id);
 
+                $update['record_inventory_status'] = 0;
+                $update['record_consume_ref_name'] = null;
+                $update['record_consume_ref_id'] = 0;
                 $update['record_warehouse_id'] = $wh_to;
                 $update['record_item_remarks'] = $remarks;
                 $update['record_log_date_updated'] = Carbon::now();
@@ -175,12 +204,10 @@ class Warehouse2
                 Warehouse2::insert_inventory_history($shop_id, $wh_to, $inventory_rr, $history_rr);
 
             }
-
-            $return['status'] = 'success';
         }
         return $return;
     }
-    public static function transfer_bulk($shop_id, $wh_from, $wh_to, $_item, $remarks = '')
+    public static function transfer_bulk($shop_id, $wh_from, $wh_to, $_item, $remarks = '', $source = array())
     {
         $validate = null;
         foreach ($_item as $key => $value)
@@ -216,7 +243,7 @@ class Warehouse2
                 $history_rr[$key]['quantity'] = $value['quantity'];
                 $history_rr[$key]['item_remarks'] = $value['remarks'];
 
-                $validate = Warehouse2::transfer($shop_id, $wh_from, $wh_to, $value['item_id'], $value['quantity'], $value['remarks'], $serial, 'inventory_history_recorded');
+                $validate = Warehouse2::transfer($shop_id, $wh_from, $wh_to, $value['item_id'], $value['quantity'], $value['remarks'], $serial, 'inventory_history_recorded', $source);
             }
 
             Warehouse2::insert_inventory_history($shop_id, $wh_from, $inventory_wis, $history_wis);
@@ -545,7 +572,7 @@ class Warehouse2
         $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
         if($quantity > $inventory_qty)
         {
-            $return .= "The quantity is not enough to consume. <br>";
+            $return .= "The quantity of ITEM No. <b>".$item_id."</b> is not enough to consume. <br>";
         }
 
         return $return;
@@ -687,7 +714,6 @@ class Warehouse2
     /* PARAM
         $code[0]['mlm_pin']
         $code[0]['mlm_activation']
-
      */
     public static function consume_bulk_product_codes($shop_id = 0, $codes = array(), $consume = array())
     {

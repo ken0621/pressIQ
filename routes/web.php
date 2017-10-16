@@ -452,6 +452,21 @@ AdvancedRoute::controller("/member/item/warehouse/v2/refill","Member\WarehouseRe
 /* INVENTORY LOG*/
 Route::any('/member/item/inventory_log','Member\InventoryLogController@index');
 /*END INVENTORY LOG*/
+
+
+/* WAREHOUSE V2*/
+AdvancedRoute::controller('/member/item/v2/warehouse', 'Member\WarehouseControllerV2');
+/* End */
+
+/* WIS */
+AdvancedRoute::controller('/member/item/warehouse/wis', 'Member\WarehouseIssuanceSlipController');
+/* End */
+
+/* RR */
+AdvancedRoute::controller('/member/item/warehouse/rr', 'Member\WarehouseReceivingReportController');
+/* End */
+
+
 /* START PIS ARCY*/
 Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
 

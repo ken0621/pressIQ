@@ -446,6 +446,7 @@ function load_cart(hide)
 
         if(!hide)
         {
+            alert(123);
             $('.add-to-cart').prop("disabled", false);
             $('.add-to-cart').removeClass("disabled");
         }

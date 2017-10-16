@@ -336,7 +336,7 @@
 
 <script type="text/javascript" src="resources/assets/flexslider/js/jquery.flexslider.js"></script>
 
-<script type="text/javascript" src="resources/assets/frontend/js/single_product.js"></script>
+<script type="text/javascript" src="resources/assets/frontend/js/single_product.js?version=1"></script>
 
 <script type="text/javascript" src="resources/assets/frontend/js/zoom.js"></script>
 

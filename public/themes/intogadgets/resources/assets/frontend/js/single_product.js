@@ -85,6 +85,8 @@ function event_select_variation()
 
 function action_select_variation(e)
 {
+	$('.single-product-holder').css("opacity", "0.5");
+	
 	var selected = $(e.currentTarget).closest(".single-product-content").attr("variant-id");
 	var product_id = $(e.currentTarget).attr("product-id");
 	var variant_label = $(e.currentTarget).attr("variant-label");
@@ -108,8 +110,8 @@ function action_select_variation(e)
 
 		$('.loader-variation').fadeIn(400, function()
 		{
-			$('.add-to-cart').prop("disabled", false);
-			$('.add-to-cart').removeClass("disabled");
+			// $('.add-to-cart').prop("disabled", false);
+			// $('.add-to-cart').removeClass("disabled");
 		});
 	}
 	else
@@ -157,6 +159,7 @@ function action_select_variation(e)
 			{
 				if (data.variation.inventory_status == "out of stock") 
 				{
+					$('.single-order-availability').html('Out Of Stock');
 					$('.add-to-cart').prop("disabled", true);
 					$('.add-to-cart').addClass("disabled");	
 				}
@@ -169,7 +172,7 @@ function action_select_variation(e)
 			}
 
 			$(".loader-variation").fadeOut();
-		
+			$('.single-product-holder').css("opacity", "1");
 		}
 		else if (data.result == 'fail')
 		{
@@ -186,7 +189,8 @@ function action_select_variation(e)
 					$('.single-order-availability').html('In Stock')
 				}
 				
-				$(".loader-variation").fadeOut();	
+				$(".loader-variation").fadeOut();
+				$('single-product-holder').css("opacity", "1");	
 			}
 		}
 		else
@@ -195,6 +199,7 @@ function action_select_variation(e)
 			if (toload == true) 
 			{
 				$(".loader-variation").fadeOut();
+				$('single-product-holder').css("opacity", "1");
 			}
 		}
 	})

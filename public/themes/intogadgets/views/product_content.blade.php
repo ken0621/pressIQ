@@ -25,7 +25,7 @@
    <div class="single-product-container row">
       <input class="variation" type="hidden" name="variation" value=''>
       <input type="hidden" class="variation_id" name="variation_id" value=''>
-      <div class="single-product-holder" style="padding: 0;">
+      <div class="single-product-holder" style="padding: 0; transition: 0.3s all ease;">
          @foreach($product_variant['image'] as $key => $image)
          <img class="single-product-img key-{{$key}} {{ $key == 0 ? '' : 'hide' }} {{$ctr != 0 ? '' : 'first-img'}}" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
          @endforeach
@@ -37,7 +37,7 @@
             @endforeach
          </div>
       </div>
-      <div class="single-product-holder border" style="position: relative;">
+      <div class="single-product-holder border" style="position: relative; transition: 0.3s all ease;">
          <div class="single-order-header">{{ $product["eprod_name"] }}</div>
          <div class="single-order-sub">
             Categories: <a href="/product?type={{ $product['eprod_category_id'] }}">{{ $category['type_name'] }}</a>

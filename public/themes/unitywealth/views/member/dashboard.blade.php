@@ -124,23 +124,6 @@
 							</div>
 						@endforeach
 					</div>
-
-				</div>
-
-				<div class="title">Reward Points</div>
-				<div class="sub-container">
-					@if(count($_point_plan) > 0)
-					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
-						@foreach($_point_plan as $plan)
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
-						</div>
-						@endforeach
-					</div>
-					@else
-						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
-					@endif
 				</div>
 			</div>
 		</div>

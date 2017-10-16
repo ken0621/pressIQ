@@ -1662,6 +1662,21 @@ class Item
 
         return $mlm_activation;
     }
+    public static function check_unused_product_code($shop_id = 0, $mlm_pin = '', $mlm_activation = '')
+    {
+        $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
+                                                 ->where('mlm_activation',$mlm_activation)
+                                                 ->where('mlm_pin',$mlm_pin)
+                                                 ->where('item_in_use','unused')
+                                                 ->count();
+        $return = false;
+        if($ctr > 0)
+        {
+            $return = true;
+        }
+
+        return $return;
+    }
     public static function check_product_code($shop_id = 0, $mlm_pin = '', $mlm_activation = '')
     {
         $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)

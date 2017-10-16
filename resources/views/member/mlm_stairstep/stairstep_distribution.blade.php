@@ -49,7 +49,7 @@
           </span>
         </div>
       </div>
-      <div class="col-md-3 pull-right">
+<!--       <div class="col-md-3 pull-right">
         <div class="input-group stylish-input-group pull-right">
           <input type="text" class="form-control pull-right"  placeholder="Search" >
           <span class="input-group-addon">
@@ -58,7 +58,7 @@
             </button>  
           </span>
         </div>
-      </div>
+      </div> -->
     </form>
   </div>
   <br>        

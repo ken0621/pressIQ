@@ -223,6 +223,15 @@
                                             <option value="1" {{$plan_settings->plan_settings_email_product_code == 1 ? 'selected' : ''}}>Enable</option>
                                         </select>
                                     </td>
+                                </tr>                               
+                                <tr>
+                                    <td>Placement Required</td>
+                                    <td>
+                                        <select name="plan_settings_placement_required" class="form-control">
+                                            <option value="1" {{$plan_settings->plan_settings_placement_required == 1 ? 'selected' : ''}}>Required</option>
+                                            <option value="0" {{$plan_settings->plan_settings_placement_required == 0 ? 'selected' : ''}}>Not Required</option>
+                                        </select>
+                                    </td>
                                 </tr>
                             </tbody>
                         

@@ -21,7 +21,7 @@ function global()
 	function page_ready()
 	{
 		event_back_index();
-		mainView.router.loadPage('/members/order');
+		// mainView.router.loadPage('/members/order');
 	}
 
 	function event_back_index()

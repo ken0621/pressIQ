@@ -154,6 +154,7 @@ class Mlm_complan_manager
     {
         $include_self = Tbl_mlm_plan_setting::where("shop_id",$slot_info->shop_id)->first(); 
         $check_points = Tbl_membership_points::where("membership_id",$slot_info->slot_membership)->first();
+        $rank_real_time_update  = Tbl_mlm_plan_setting::where("shop_id",$slot_info->shop_id)->first()->rank_real_time_update; 
 
         if($check_points)
         {
@@ -196,6 +197,11 @@ class Mlm_complan_manager
                 $insert_rank_log["rank_percentage_used"] = 0;
                 $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
                 Tbl_rank_points_log::insert($insert_rank_log);
+
+                if($rank_real_time_update == 1)
+                {
+                    Mlm_complan_manager_repurchasev2::real_time_rank_upgrade($slot_info);
+                }
             }           
 
             if($direct_referral_self_spv != 0)
@@ -254,6 +260,11 @@ class Mlm_complan_manager
                         $insert_rank_log["rank_percentage_used"] = 0;
                         $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
                         Tbl_rank_points_log::insert($insert_rank_log);
+
+                        if($rank_real_time_update == 1)
+                        {
+                            Mlm_complan_manager_repurchasev2::real_time_rank_upgrade($slot_sponsor);
+                        }
                     }
 
                     if($direct_referral_spv != 0)

@@ -2607,9 +2607,10 @@ class Payroll2
 					$undertime_deduction = $group->payroll_under_time_deduction;
 					$undertime_minutes = Self::convert_time_in_minutes($_time['undertime']);
 					
-					if ($group->payroll_undertime_parameter == "Hour") 
+					if ($group->payroll_under_time_parameter == "Hour") 
 					{
 						$undertime_interval = $undertime_interval * 60;
+
 					}
 
 					if ($undertime_minutes >= $undertime_interval) 
@@ -2619,7 +2620,7 @@ class Payroll2
 						$undertime_rate = $daily_rate * $undertime_percentage_deduction;
 					}
 				}
-
+				
 				$return->_breakdown_deduction["undertime"]["rate"] = $undertime_rate;
 				$return->_breakdown_deduction["undertime"]["time"] = $_time['undertime'];
 				$return->_breakdown_deduction["undertime"]["hour"] = $_time['undertime'];

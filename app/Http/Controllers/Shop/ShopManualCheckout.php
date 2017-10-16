@@ -8,9 +8,9 @@ class ShopManualCheckout extends Shop
 {
     public function index()
     {
-        $transaction_list_id    = Crypt::decrypt(request("tid"));
-        $transaction_list       = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->first();
+        $transaction_list_id 	= Crypt::decrypt(request("tid"));
+        $data["transaction"] 	= $transaction_list = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->first();
 
-        dd($transaction_list);
+        return view("member2.manual_checkout", $data);
     }
 }

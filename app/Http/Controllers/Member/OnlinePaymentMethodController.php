@@ -47,7 +47,17 @@ class OnlinePaymentMethodController extends Member
 					$data["_gateway"][$key]->gateway_first_label = "Merchant ID";
 					$data["_gateway"][$key]->gateway_second_label = "Merchant Key";
 				break;
+
+				case 'manual1':
+					$data["_gateway"][$key]->gateway_first_label = "Reference List";
+					$data["_gateway"][$key]->gateway_second_label = "Instruction";
+				break;
 				
+				case 'manual2':
+					$data["_gateway"][$key]->gateway_first_label = "Reference List";
+					$data["_gateway"][$key]->gateway_second_label = "Instruction";
+				break;
+
 				default:
 					$data["_gateway"][$key]->gateway_first_label = "Client ID";
 					$data["_gateway"][$key]->gateway_second_label = "Secret ID";

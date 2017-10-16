@@ -12,12 +12,14 @@
 		
 		<div class="form-group">
 			<div class="col-md-12">
+
 				<ul class="nav nav-tabs nav-tabs-custom">
 					<li class="active"><a data-toggle="tab" href="#basic">Basic</a></li>
 					<li><a data-toggle="tab" href="#deduction-basis">Deduction Basis</a></li>
 					<li><a data-toggle="tab" href="#over-time-rates">Over Time Rates</a></li>
 					<li><a data-toggle="tab" href="#shifting">Shifting</a></li>
 				</ul>
+
 				<div class="tab-content tab-content-custom tab-pane-div margin-bottom-0">
 					<div id="basic" class="tab-pane fade in active form-horizontal">
 						<div class="form-group">
@@ -320,7 +322,6 @@
 													<input type="number" name="payroll_late_interval" class="form-control late-param-change late-param-number text-right" value="{{$group->payroll_late_interval}}">
 													<span class="input-group-btn" style="width: 100px">
 														<select class="form-control late-param-change late-param-select" name="payroll_late_parameter">
-															<option value="Second" {{$group->payroll_late_parameter == 'Second' ? '' : ''}}>Second</option>
 															<option value="Minute" {{$group->payroll_late_parameter == 'Minute' ? '' : ''}}>Minute</option>
 															<option value="Hour" {{$group->payroll_late_parameter == 'Hour' ? '' : ''}}>Hour</option>
 														</select>
@@ -329,7 +330,7 @@
 
 											</div>
 											<div class="col-md-6">
-												<small>Deduction for every (<span class="late-label-param">0</span>)</small>
+												<small>Deduction Late Percentage</small>
 												<input type="number" name="payroll_late_deduction" class="form-control text-right" value="{{$group->payroll_late_deduction}}">
 											</div>
 										</div>
@@ -364,7 +365,6 @@
 													<input type="number" name="payroll_under_time_interval" class="form-control late-param-change late-param-number text-right" value="{{$group->payroll_under_time_interval}}" step="any">
 													<span class="input-group-btn" style="width: 100px">
 														<select class="form-control late-param-change late-param-select" name="payroll_under_time_parameter">
-															<option value="Second" {{$group->payroll_under_time_parameter == 'Second' ? 'selected="selected"':''}}>Second</option>
 															<option value="Minute" {{$group->payroll_under_time_parameter == 'Minute' ? 'selected="selected"':''}}>Minute</option>
 															<option value="Hour" {{$group->payroll_under_time_parameter == 'Hour' ? 'selected="selected"':''}}>Hour</option>
 														</select>
@@ -373,7 +373,7 @@
 
 											</div>
 											<div class="col-md-6">
-												<small>Deduction for every (<span class="under-time-label-param">0</span>)</small>
+												<small>Deduction Undertime Percentage</small>
 												<input type="number" name="payroll_under_time_deduction" step="any" value="{{$group->payroll_under_time_deduction}}" class="form-control text-right">
 											</div>
 										</div>

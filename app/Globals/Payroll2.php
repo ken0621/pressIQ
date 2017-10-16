@@ -2251,7 +2251,10 @@ class Payroll2
 		$breakdown_addition = 0;
 		$additional_rate = 1;
 		$cola_true_rate = $cola;
+		$payroll_late_category = $group->payroll_late_category;
+		$payroll_late_category = $group->payroll_under_time_category;
 
+		
 	
 		if ($_time['is_holiday'] == 'not_holiday') 
 		{
@@ -2590,26 +2593,85 @@ class Payroll2
 
 		elseif($_time["is_absent"] == false && ($_time['day_type'] != 'rest_day'))
 		{
-			if($late_float != 0)
+			/*Start Undertime Deduction Computation*/
+			if ($undertime_float != 0) 
 			{
-				$return->_breakdown_deduction["late"]["time"] = $_time['late']; 
-				$return->_breakdown_deduction["late"]["rate"] = ($late_float * $hourly_rate)  * $additional_rate; 
-				$return->_breakdown_deduction["late"]["hour"] = $_time['late']; 
-				$total_day_income = $total_day_income - $return->_breakdown_deduction["late"]["rate"];
-				$late = $return->_breakdown_deduction["late"]["rate"];
-				$breakdown_deduction += $return->_breakdown_deduction["late"]["rate"];
-			}
+				$undertime_rate = 0;
+				if ($group->payroll_under_time_category == 'Base on Salary') 
+				{
+					$undertime_rate = ($undertime_float * $hourly_rate) * $additional_rate; 
+				}
+				else if ($group->payroll_under_time_category == 'Custom') 
+				{
+					$undertime_interval  = $group->payroll_under_time_interval;
+					$undertime_deduction = $group->payroll_under_time_deduction;
+					$undertime_minutes = Self::convert_time_in_minutes($_time['undertime']);
+					
+					if ($group->payroll_undertime_parameter == "Hour") 
+					{
+						$undertime_interval = $undertime_interval * 60;
+					}
 
-		
-			if($undertime_float != 0)
-			{
-				$return->_breakdown_deduction["undertime"]["time"] = $_time['undertime']; 
-				$return->_breakdown_deduction["undertime"]["rate"] = ($undertime_float * $hourly_rate) * $additional_rate; 
+					if ($undertime_minutes >= $undertime_interval) 
+					{
+						$undertime_multiplier = (int) @($undertime_minutes / $undertime_interval);
+						$undertime_percentage_deduction = ($undertime_multiplier * $undertime_deduction) / 100;
+						$undertime_rate = $daily_rate * $undertime_percentage_deduction;
+					}
+				}
+
+				$return->_breakdown_deduction["undertime"]["rate"] = $undertime_rate;
+				$return->_breakdown_deduction["undertime"]["time"] = $_time['undertime'];
 				$return->_breakdown_deduction["undertime"]["hour"] = $_time['undertime'];
 				$total_day_income = $total_day_income - $return->_breakdown_deduction["undertime"]["rate"];
 				$undertime = $return->_breakdown_deduction["undertime"]["rate"];
 				$breakdown_deduction += $return->_breakdown_deduction["undertime"]["rate"];
 			}
+			
+			/*End Undertime Deduction Computation*/
+			
+			/*Start Undertime Deduction Computation*/
+			if ($late_float != 0)
+			{
+				$late_rate = 0;
+				if ($group->payroll_late_category == 'Base on Salary') 
+				{
+					if($late_float != 0)
+					{
+						$late_rate = ($late_float * $hourly_rate)  * $additional_rate;
+					}
+				}
+				else if ($group->payroll_late_category == 'Custom')
+				{
+
+					$late_interval  = $group->payroll_late_interval;
+					$late_deduction = $group->payroll_late_deduction;
+					$late_minutes = Self::convert_time_in_minutes($_time['late']);
+					
+					if ($group->payroll_late_parameter == "Hour") 
+					{
+						$late_interval = $late_interval * 60;
+					}
+
+					if ($late_minutes >= $late_interval) 
+					{
+						$late_multiplier = (int) @($late_minutes / $late_interval);
+						$late_percentage_deduction = ($late_multiplier * $late_deduction) / 100;
+						$late_rate = $daily_rate * $late_percentage_deduction;
+					}
+				}
+				
+				$return->_breakdown_deduction["late"]["rate"] = $late_rate;
+				$return->_breakdown_deduction["late"]["time"] = $_time['late']; 
+				$return->_breakdown_deduction["late"]["hour"] = $_time['late']; 
+				$total_day_income = $total_day_income - $return->_breakdown_deduction["late"]["rate"];
+				$late = $return->_breakdown_deduction["late"]["rate"];
+				$breakdown_deduction += $return->_breakdown_deduction["late"]["rate"];
+			}
+			
+			/*End Undertime Deduction Computation*/
+			
+		
 		}
 
 		// dd($subtotal_after_addition);

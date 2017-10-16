@@ -56,7 +56,7 @@ class WarehouseTransfer
 	}
 	public static function get_all_rr($shop_id = 0)
 	{
-		return Tbl_warehouse_receiving_report::wis()->inventory_item()->where('rr_shop_id',$shop_id)->groupBy('tbl_warehouse_receiving_report.rr_id')->get();
+		return Tbl_warehouse_receiving_report::wis()->inventory_item()->where('rr_shop_id',$shop_id)->groupBy('tbl_warehouse_receiving_report.rr_id')->orderBy('tbl_warehouse_receiving_report.rr_id','DESC')->get();
 	}
 	public static function scan_item($shop_id, $item_code)
 	{

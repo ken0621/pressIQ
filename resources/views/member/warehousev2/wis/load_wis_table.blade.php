@@ -37,7 +37,7 @@
                             @endif
 
                             @if($wis->wis_status == 'pending')
-                            <td>
+                            <td class="text-center">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action <span class="caret"></span>

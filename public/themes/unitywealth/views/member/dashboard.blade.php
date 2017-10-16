@@ -28,7 +28,6 @@
 	            </div>
 	        </div>
 	    </div>
-
 	    <!-- BOTTOM DASHBOARD -->
 	    <!-- <div class="dashboard-bottom">
 	        <div class="text-header">Profile Information</div>

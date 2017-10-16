@@ -2616,7 +2616,7 @@ class Payroll2
 					if ($undertime_minutes >= $undertime_interval) 
 					{
 						$undertime_multiplier = (int) @($undertime_minutes / $undertime_interval);
-						$undertime_percentage_deduction = ($undertime_multiplier * $undertime_deduction) / 100;
+						$undertime_percentage_deduction = ($undertime_multiplier * $undertime_deduction);
 						$undertime_rate = $daily_rate * $undertime_percentage_deduction;
 					}
 				}
@@ -2657,7 +2657,7 @@ class Payroll2
 					if ($late_minutes >= $late_interval) 
 					{
 						$late_multiplier = (int) @($late_minutes / $late_interval);
-						$late_percentage_deduction = ($late_multiplier * $late_deduction) / 100;
+						$late_percentage_deduction = ($late_multiplier * $late_deduction);
 						$late_rate = $daily_rate * $late_percentage_deduction;
 					}
 				}

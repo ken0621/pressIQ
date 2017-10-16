@@ -210,25 +210,28 @@
 				</div>
 			</div>
 		</div> -->
-		<div class="fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/brown-banner.jpg');" data-img-width="1600" data-img-height="1395" data-diff="100">
+		<div class="fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/brown-banner.jpg');" data-img-width="1600" data-img-height="907" data-diff="100">
 			<div class="container">
-				<div class="top-container">
-					<h1 class="animated fadeInDown" data-wow-delay="0.3s">www.brown.com.ph</h1>
-					<h2 class="animated fadeInUp" data-wow-delay="0.3s">Change Starts Here</h2>
-					<video autoplay class="animated zoomInDown" width="803" height="450">
-						<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
-					</video>
-					<!-- 16:9 aspect ratio -->
-					<!--<div style="max-width: 803px; margin: auto;">-->
-					<!--	<div class="embed-responsive embed-responsive-16by9 animated zoomInDown" style="margin-top: 25px;">-->
-					<!--	  <div class="overlay"></div>-->
-				 <!--       	<video autoplay="" controls="">-->
-					<!--			<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">-->
-					<!--		</video>-->
-					<!--	</div>-->
-					<!--</div>-->
-					<h3 class="animated fadeInUp">It’s not the color of your skin, but the color of your heart.</h3>
-					<div onclick="location.href='/members/register'" class="join-button animated fadeInUp">JOIN THE MOVEMENT</div>
+				<div class="row clearfix">
+					<div class="col-md-8 left-container">
+						<video autoplay class="animated zoomInDown" width="803" height="450">
+							<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
+						</video>
+						<!-- 16:9 aspect ratio -->
+						<!--<div style="max-width: 803px; margin: auto;">-->
+						<!--	<div class="embed-responsive embed-responsive-16by9 animated zoomInDown" style="margin-top: 25px;">-->
+						<!--	  <div class="overlay"></div>-->
+					 <!--       	<video autoplay="" controls="">-->
+						<!--			<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">-->
+						<!--		</video>-->
+						<!--	</div>-->
+						<!--</div>-->
+						<h1>Turn Your Spending Into Earnings!</h1>
+						<div onclick="location.href='/members/register'" class="join-button animated fadeInUp">JOIN THE MOVEMENT</div>
+					</div>
+					<div class="col-md-4 right-container">
+						<img src="/themes/{{ $shop_theme }}/img/left-ads.png">
+					</div>
 				</div>
 			</div>
 		</div>
@@ -239,24 +242,7 @@
 			<img src="/themes/{{ $shop_theme }}/img/brown-video.png">
 		</div> -->
 		<div class="container">
-			<div class="row clearfix">
-				<img class="wow fadeInUp" style="width: 100%; margin-top: 20px;"  data-wow-offset="50" data-wow-delay="0.2s" src="/themes/{{ $shop_theme }}/img/front-popup-img.jpg">
-			</div>
-			<div class="row clearfix">
-				<div class="col-md-6 col-sm-6">
-					<div class="img-container wow fadeInLeft" data-wow-offset="50" data-wow-delay="0.2s">
-						<img src="/themes/{{ $shop_theme }}/img/add-phone.png">
-					</div>
-				</div>
-				<div class="col-md-6 col-sm-6">
-					<div class="detail-container wow fadeInRight" data-wow-offset="10" data-wow-delay="0.3s">
-						<h2>Introducing</h2>
-						<h1>THE BROWN EDITION</h1>
-						<h2>A PHONE FILIPINOS CAN BE PROUD OF</h2>
-						<P>Brown promotes a future that is mindful<BR>of the needs of every Filipino. </P>
-					</div>
-				</div>
-			</div>
+			
 		</div>
 	</div>
 	<!-- FEATURES -->

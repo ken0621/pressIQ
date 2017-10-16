@@ -605,12 +605,12 @@ button
 }
 header
 {
-	background-color: #422311;
-	color: #dac5a6;
+	background-color: #402a21;
+	color: #e5d8b5;
 	transition: margin-left .5s;
 	.header-top
 	{
-		background-color: #301e10;
+		background-color: #301f19;
 		text-align: right;
 		font-weight: 300;
 		.holder
@@ -619,7 +619,7 @@ header
 			vertical-align: top;
 			font-size: 12px;
 			padding: 7.5px 15px;
-			color: #dac5a6;
+			color: #e5d8b5;
 			cursor: pointer;
 			&.active, &:hover, &:focus
 			{
@@ -634,7 +634,7 @@ header
 	}
 	.header-middle
 	{
-		border-bottom: 1px solid #553929;
+		border-bottom: 1px solid #534038;
 		.logo
 		{
 			cursor: pointer;
@@ -649,7 +649,7 @@ header
 			.form-control
 			{
 				border-radius: 15px;
-				background-color: #4c2e1d;
+				background-color: #4a352c;
 				border: 0;
 				outline: none;
 				color: #fff;
@@ -747,7 +747,8 @@ header
 						{
 							a
 							{
-								background-color: #4c2e1d;
+								background-color: #402a21;
+								color: #fff !important;
 							}
 						}
 						a
@@ -755,7 +756,7 @@ header
 							text-shadow: none;	
 							font-size: 13px;
 							font-weight: 300;
-							color: #dac5a6;
+							color: #e5d8b5;
 						}
 					}
 				}
@@ -826,7 +827,7 @@ header
 			width: 100%;
 			a
 			{
-				color: #dac5a6;
+				color: #e5d8b5;
 				font-size: 13px;
 				font-weight: 300;
 				padding: 10px 15px;
@@ -887,7 +888,7 @@ header
 				display: inline-block;
 				vertical-align: middle;
 				font-size: 20px;
-				color: #dac5a6;
+				color: #e5d8b5;
 				height: 25px;
 			}
 		}
@@ -906,7 +907,7 @@ header
 				display: inline-block;
 				vertical-align: middle;
 				font-size: 20px;
-				color: #dac5a6;
+				color: #e5d8b5;
 				height: 21px;
 			}
 		}
@@ -985,7 +986,7 @@ footer
 				a
 				{
 					font-size: 11px;
-					color: #dac5a6;
+					color: #e5d8b5;
 					font-weight: 300;
 					&:active, &:focus, &:hover
 					{

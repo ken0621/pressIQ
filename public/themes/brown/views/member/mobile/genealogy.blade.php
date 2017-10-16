@@ -1,7 +1,7 @@
 <div data-page="genealogy" class="page">
     <div class="navbar">
         <div class="navbar-inner">
-            <div class="left"><a href="index.html" class="back link icon-only"><i class="icon icon-back"></i></a></div>
+            <div class="left"><a href="/members" class="back link icon-only"><i class="icon icon-back"></i></a></div>
             <div class="center">Genealogy</div>
             {{-- <div class="right"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div> --}}
         </div>

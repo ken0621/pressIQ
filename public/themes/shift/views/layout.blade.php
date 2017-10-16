@@ -306,6 +306,7 @@
             $(".title-mission").removeClass("highlighted");
             
         });
+        
         $(".title-mission").click(function()
         {
             $("#vision").addClass("hide");

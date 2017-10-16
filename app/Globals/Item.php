@@ -1616,9 +1616,12 @@ class Item
         }
         $validate_consume = Warehouse2::consume_bulk($shop_id, $warehouse_id, 'assemble_item', $item_id, 'Consume Item upon assembling membership kit Item#'.$item_id, $_item);
 
-        $source['name'] = 'assemble_item';
-        $source['id'] = $item_id;
-        $validate_consume .= Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, 'Refill Item upon assembling membership kit Item#'.$item_id, $source);
+        if(!$validate_consume)
+        {
+            $source['name'] = 'assemble_item';
+            $source['id'] = $item_id;
+            $validate_consume .= Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, 'Refill Item upon assembling membership kit Item#'.$item_id, $source);            
+        }
 
         return $validate_consume;
     } 
@@ -1658,6 +1661,21 @@ class Item
         }
 
         return $mlm_activation;
+    }
+    public static function check_unused_product_code($shop_id = 0, $mlm_pin = '', $mlm_activation = '')
+    {
+        $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
+                                                 ->where('mlm_activation',$mlm_activation)
+                                                 ->where('mlm_pin',$mlm_pin)
+                                                 ->where('item_in_use','unused')
+                                                 ->count();
+        $return = false;
+        if($ctr > 0)
+        {
+            $return = true;
+        }
+
+        return $return;
     }
     public static function check_product_code($shop_id = 0, $mlm_pin = '', $mlm_activation = '')
     {

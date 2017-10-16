@@ -52,6 +52,17 @@ class ShopEvent
 			}
 		}
 
+		foreach ($return as $key => $value) 
+		{
+			$total_count = Tbl_shop_event_reserved::where('event_id',$value->event_id)->count();
+			$customer_count = Tbl_shop_event_reserved::where('customer_id', '!=', null)->where('event_id',$value->event_id)->count();
+			$guest_count = Tbl_shop_event_reserved::where('customer_id', '=', null)->where('event_id',$value->event_id)->count();
+
+			$return[$key]->reservee_total_count = $total_count;
+			$return[$key]->reservee_guest_count = $guest_count;
+			$return[$key]->reservee_customer_count = $customer_count;
+		}
+
 		return $return;
 	}
 	public static function first($shop_id, $event_id)
@@ -67,6 +78,10 @@ class ShopEvent
 		}
 
 		return ShopEvent::update_event($id, $update);
+	}
+	public static function get_all_reservee($event_id)
+	{
+		return Tbl_shop_event_reserved::where('event_id',$event_id)->get();
 	}
 	public static function reserved_seat($event_id, $customer_id = 0, $data)
 	{

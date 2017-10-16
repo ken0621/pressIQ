@@ -203,4 +203,10 @@ class EventController extends Member
 
     	return json_encode($return);
 	}
+	public function getReserveeList(Request $request)
+	{
+		$data['_reservee'] = ShopEvent::get_all_reservee($request->id);
+
+		return view('member.manage_page_event.event_reservee_list',$data);
+	}
 }

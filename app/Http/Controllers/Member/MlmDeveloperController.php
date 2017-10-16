@@ -39,11 +39,6 @@ class MlmDeveloperController extends Member
 
     public function myTest()
     {
-        // $data = Tbl_membership_code::join("tbl_mlm_slot","tbl_mlm_slot.slot_no","=","tbl_membership_code.membership_activation_code")->where("used",0)->get();
-        // foreach($data as $d)
-        // {
-        //     echo "</br>".$d->slot_no;
-        // }
         $data =  $plan_settings = Tbl_mlm_plan::where('shop_id', $this->user_info->shop_id)
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')
@@ -553,6 +548,7 @@ class MlmDeveloperController extends Member
             {
                 $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
                 Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+                $return_position = "success";
             }
         }
 
@@ -710,4 +706,26 @@ class MlmDeveloperController extends Member
 
         return $data;
     }
-} 
+    public function recompute()
+    {
+        if(Request::isMethod("post"))
+        {
+            $slot_id = request("slot_id");
+            Mlm_compute::entry($slot_id);
+        }
+        else
+        {
+            $data["page"] = "Recompute";
+            $shop_id = $this->user_info->shop_id;
+            $data["_slot"] = Tbl_mlm_slot::where("shop_id", $shop_id)->get();
+            $data["count"] = Tbl_mlm_slot::where("shop_id", $shop_id)->count();
+            return view("member.mlm_developer.modal_recompute", $data);
+        }
+    }
+    public function recompute_reset()
+    {
+        $shop_id = $this->user_info->shop_id;
+        Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_amount", ">=", 0)->delete();
+        Tbl_mlm_slot_points_log::where("tbl_mlm_slot.shop_id", $shop_id)->join("tbl_mlm_slot", "tbl_mlm_slot.slot_id", "=", "tbl_mlm_slot_points_log.points_log_slot")->delete();
+    }
+}

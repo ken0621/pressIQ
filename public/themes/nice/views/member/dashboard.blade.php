@@ -83,7 +83,7 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right btn-enter-a-code">Create New Slot</a></div>
+				<div class="title">Wallet Summary <a href="javascript:" onclick="action_load_link_to_modal('/members/enter-code')" class="title-button pull-right btn-enter-a-code">Create New Slot</a></div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">
@@ -144,24 +144,7 @@
 						@endforeach
 					</div>
 				</div>
-				<div class="title">Reward Points</div>
-				<div class="sub-container">
-					@if(count($_point_plan) > 0)
-					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
-						@foreach($_point_plan as $plan)
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
-						</div>
-						@endforeach
-					</div>
-					@else
-						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
-					@endif
-				</div>
 
-
-				
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">

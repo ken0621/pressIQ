@@ -28,7 +28,11 @@ class Mlm_slot_log
 {   
 	public static function slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on)
 	{
-
+		$check_slot = Tbl_mlm_slot::where("slot_id",$wallet_log_slot)->first();
+		if($check_slot)
+		{
+			$insert['shop_id'] = $check_slot->shop_id; 
+		}
 		$insert['wallet_log_slot'] = $wallet_log_slot; 
 		$insert['wallet_log_slot_sponsor'] = $wallet_log_slot_sponsor; 
 		$insert['wallet_log_date_created'] = Carbon::now(); 

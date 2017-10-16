@@ -11,6 +11,7 @@ use File;
 use Image;
 use Mail;
 use DB;
+use URL;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 use App\Globals\Payment;
@@ -40,6 +41,7 @@ use App\Models\Tbl_locale;
 use App\Models\Tbl_vmoney_wallet_logs;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_payout_bank;
+use App\Models\Tbl_online_pymnt_api;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -51,6 +53,17 @@ use Google_Client;
 use Google_Service_Drive;
 use Google_Service_Plus;
 use stdClass;
+
+// PAYMAYA
+use App\Globals\PayMaya\PayMayaSDK;
+use App\Globals\PayMaya\API\Checkout;
+use App\Globals\PayMaya\API\Customization;
+use App\Globals\PayMaya\API\Webhook;
+use App\Globals\PayMaya\Core\CheckoutAPIManager;
+use App\Globals\PayMaya\Checkout\User;
+use App\Globals\PayMaya\Model\Checkout\ItemAmountDetails;
+use App\Globals\PayMaya\Model\Checkout\ItemAmount;
+use App\Globals\PayMaya\Core\Constants;
 
 class ShopMemberController extends Shop
 {
@@ -770,6 +783,7 @@ class ShopMemberController extends Shop
         $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
         $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["_country"]            = Tbl_country::get();
+        $data["_locale"]             = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
         $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
 
         $data['beneficiary'] = null;
@@ -789,16 +803,16 @@ class ShopMemberController extends Shop
     public function postProfileUpdateInfo(Request $request)
     {
         $form = $request->all();
-        $validate['first_name'] = 'required';
-        $validate['middle_name'] = 'required';
-        $validate['last_name'] = 'required';
-        $validate['b_month'] = 'required';
-        $validate['b_day'] = 'required';
-        $validate['b_year'] = 'required';
+        // $validate['first_name'] = 'required';
+        // $validate['middle_name'] = 'required';
+        // $validate['last_name'] = 'required';
+        // $validate['b_month'] = 'required';
+        // $validate['b_day'] = 'required';
+        // $validate['b_year'] = 'required';
         $validate['country_id'] = 'required';
-        $validate['customer_state'] = 'required';
-        $validate['customer_city'] = 'required';
-        $validate['customer_zipcode'] = 'required';
+        // $validate['customer_state'] = 'required';
+        // $validate['customer_city'] = 'required';
+        // $validate['customer_zipcode'] = 'required';
         $validate['customer_street'] = 'required';
 
         $validator = Validator::make($form, $validate);
@@ -806,11 +820,31 @@ class ShopMemberController extends Shop
         if (!$validator->fails()) 
         {           
             /* Birthday Fix */
-            $birthday = date("Y-m-d", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year));
+            if ($request->birthdate) 
+            {
+                $birthday = date("Y-m-d", strtotime($request->birthdate));
+            }
+            else
+            {
+                $birthday = date("Y-m-d", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year)); 
+            }
+            
             /* Customer Data */
-            $insert_customer["first_name"]  = $request->first_name;
-            $insert_customer["middle_name"] = $request->middle_name;
-            $insert_customer["last_name"]   = $request->last_name;
+            if($request->first_name)
+            {
+                $insert_customer["first_name"]  = $request->first_name;
+            }
+            
+            if ($request->middle_name) 
+            {
+                $insert_customer["middle_name"] = $request->middle_name;
+            }
+
+            if ($request->last_name) 
+            {
+                $insert_customer["last_name"]   = $request->last_name;
+            }
+            
             $insert_customer["b_day"]       = $birthday;
             $insert_customer["birthday"]    = $birthday;
             $insert_customer["country_id"]  = $request->country_id;
@@ -833,14 +867,14 @@ class ShopMemberController extends Shop
             $insert_customer_address["state_id"] = $request->customer_state;
             $insert_customer_address["city_id"] = $request->customer_city;
             $insert_customer_address["barangay_id"] = $request->customer_zipcode;
-
+            
             $exist = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
-
+            
             if ($exist) 
             {
                 /* Update */
                 $insert_customer_address["updated_at"] = Carbon::now();
-
+                
                 Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->update($insert_customer_address);
             }
             else
@@ -937,7 +971,7 @@ class ShopMemberController extends Shop
                 if( $upload_success ) 
                 {
                    $exist = Tbl_customer::where("customer_id", $customer_id)->first();
-                   if ($exist->profile) 
+                   if (isset($exist->profile) && $exist->profile) 
                    {
                        $delete_file = $exist->profile;
                        File::delete($delete_file);
@@ -1673,7 +1707,7 @@ class ShopMemberController extends Shop
             $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
             $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $new_slot_no);
             
-            $return = Item::check_product_code($shop_id, $data["pin"], $data["activation"]);
+            $return = Item::check_unused_product_code($shop_id, $data["pin"], $data["activation"]);
 
             if($return)
             {
@@ -1878,5 +1912,81 @@ class ShopMemberController extends Shop
         }
 
         return json_encode($return);
+    }
+    public function getWebhook()
+    {
+        /* API Details */
+        $shop_id = $this->shop_info->shop_id;
+        $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)
+                                   ->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")
+                                   ->where("gateway_code_name", "paymaya")
+                                   ->first();
+                                   
+        /* Init Paymaya */
+        if (get_domain() == "c9users.io" || get_domain() == "digimahouse.dev") 
+        {
+            $environment = "SANDBOX";
+            PayMayaSDK::getInstance()->initCheckout("pk-sEt9FzRUWI2PCBI2axjZ7xdBHoPiVDEEWSulD78CW9c", "sk-cJFYCGhH4stZZTS52Z3dpNbrpRyu6a9iJaBiVlcIqZ5", $environment);
+        }
+        else
+        {
+            $environment = "PRODUCTION";
+            PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, $environment);
+        }
+
+        /* Set Webhook */
+        $webhook = Webhook::retrieve();
+
+        $webhook_success = "/payment/paymaya/webhook/success";
+        $webhook_failure = "/payment/paymaya/webhook/failure";
+        $webhook_cancel = "/payment/paymaya/webhook/cancel";
+
+        if (isset($webhook) && $webhook && count($webhook) > 0) 
+        {
+            foreach ($webhook as $value) 
+            {
+                if ($value->name == "CHECKOUT_SUCCESS") 
+                {
+                    $updateWebhook = new Webhook();
+                    $updateWebhook->name = Webhook::CHECKOUT_SUCCESS;
+                    $updateWebhook->id = $value->id;
+                    $updateWebhook->callbackUrl = URL::to($webhook_success);
+                    $updateWebhook->delete();
+                }
+                elseif($value->name == "CHECKOUT_FAILURE")
+                {
+                    $updateWebhook = new Webhook();
+                    $updateWebhook->name = Webhook::CHECKOUT_FAILURE;
+                    $updateWebhook->id = $value->id;
+                    $updateWebhook->callbackUrl = URL::to($webhook_failure);
+                    $updateWebhook->delete();
+                }
+                elseif($value->name == "CHECKOUT_DROPOUT")
+                {
+                    $updateWebhook = new Webhook();
+                    $updateWebhook->name = Webhook::CHECKOUT_DROPOUT;
+                    $updateWebhook->id = $value->id;
+                    $updateWebhook->callbackUrl = URL::to($webhook_cancel);
+                    $updateWebhook->delete();
+                }
+            }
+        }
+        
+        $successWebhook = new Webhook();
+        $successWebhook->name = Webhook::CHECKOUT_SUCCESS;
+        $successWebhook->callbackUrl = URL::to($webhook_success);
+        $successWebhook->register();
+        
+        $failureWebhook = new Webhook();
+        $failureWebhook->name = Webhook::CHECKOUT_FAILURE;
+        $failureWebhook->callbackUrl = URL::to($webhook_failure);
+        $failureWebhook->register();
+        
+        $cancelWebhook = new Webhook();
+        $cancelWebhook->name = Webhook::CHECKOUT_DROPOUT;
+        $cancelWebhook->callbackUrl = URL::to($webhook_cancel);
+        $cancelWebhook->register();
+
+        dd(Webhook::retrieve());
     }
 }

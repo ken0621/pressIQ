@@ -280,10 +280,10 @@ class Item
                 $return .= 'Income account does not exist. <br>';            
             }            
         }
-        if(count($_item) <= 0)
-        {
-            $return .= 'Please add items to bundle. <br>';  
-        }
+        // if(count($_item) <= 0)
+        // {
+        //     $return .= 'Please add items to bundle. <br>';  
+        // }
 
         return $return;
     }
@@ -294,13 +294,17 @@ class Item
         $insert['item_date_created'] = Carbon::now();
        
         $item_id = Tbl_item::insertGetId($insert);
-        foreach ($_item as $key => $value) 
-        {
-            $ins_item['bundle_bundle_id'] = $item_id;
-            $ins_item['bundle_item_id'] = $value['item_id'];
-            $ins_item['bundle_qty'] = $value['quantity'];
 
-            Tbl_item_bundle::insert($ins_item);
+        if(count($_item) > 0)
+        {
+            foreach ($_item as $key => $value) 
+            {
+                $ins_item['bundle_bundle_id'] = $item_id;
+                $ins_item['bundle_item_id'] = $value['item_id'];
+                $ins_item['bundle_qty'] = $value['quantity'];
+
+                Tbl_item_bundle::insert($ins_item);
+            }
         }
 
         $return['item_id']       = $item_id;
@@ -987,7 +991,16 @@ class Item
             array_push($limit_array, (int)$ans);
         }
 
-        return min($limit_array);
+        if($limit_array)
+        {
+            return min($limit_array);
+        }
+        else
+        {
+            return -1;
+        }
+
+        
     }
     public static function get_item_bundle_price($item_id = null)
     {

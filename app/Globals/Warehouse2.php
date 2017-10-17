@@ -155,16 +155,14 @@ class Warehouse2
                 {   
                     $update['record_source_ref_name'] = $source['name'];
                     $update['record_source_ref_id'] = $source['id'];
-
-                    if($source['name'] == 'rr')
+                    if($source['name'] == 'wis')
                     {
                         $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->where('record_consume_ref_name',$source['name'])->where('record_consume_ref_id',$source['id'])->first();
                     }
                     if(count($serial) > 0)
                     {
                         $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->where('record_consume_ref_name',$source['name'])->where('record_consume_ref_id',$source['id'])->where('record_serial_number',$serial[$ctr_qty])->first();
-                    }
-                        
+                    }                        
                 }
                 Warehouse2::insert_item_history($get_data->record_log_id);
 

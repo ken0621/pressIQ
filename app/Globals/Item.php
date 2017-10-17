@@ -1060,7 +1060,6 @@ class Item
     {
         $_item_bundle = Tbl_item_bundle::where("bundle_bundle_id", $item_id)->get();
         $_item = array();
-
         foreach($_item_bundle as $item_bundle)
         {  
             if($warehouse_id)

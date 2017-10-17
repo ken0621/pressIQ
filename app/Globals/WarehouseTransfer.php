@@ -282,8 +282,8 @@ class WarehouseTransfer
     	{
         	$rr_id = Tbl_warehouse_receiving_report::insertGetId($ins_rr);
 
-	        $source['name'] = 'rr';
-	        $source['id'] = $rr_id;	
+	        $source['name'] = 'wis';
+	        $source['id'] = $wis_id;	
 
         	$val = Warehouse2::transfer_bulk($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $_item, $ins_rr['rr_remarks'], $source);
 

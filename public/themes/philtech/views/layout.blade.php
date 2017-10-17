@@ -260,16 +260,6 @@
         </div>
       </div>
     </div>
-
-    <div id="global_modal" class="modal fade" role="dialog" >
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content modal-content-global clearfix">
-            </div>
-        </div>
-    </div>
-    <div class="multiple_global_modal_container"></div>
-
     @include("frontend.gfoot")
     <script src="/themes/{{ $shop_theme }}/js/custom_theme.js"></script>
    

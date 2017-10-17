@@ -31,6 +31,7 @@ use App\Models\Tbl_inventory_serial_number;
 use Session;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
+use App\Globals\Warehouse2;
 use Validator;
 use Excel;
 use DB;

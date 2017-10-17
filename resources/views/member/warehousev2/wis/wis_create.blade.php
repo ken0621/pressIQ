@@ -10,7 +10,7 @@
                 <span class="page-title">CREATE - Warehouse Issuance Slip</span>
             </h1>
             <div class="text-right">
-                <a class="btn btn-custom-white panel-buttons">Cancel</a>
+                <a class="btn btn-custom-white panel-buttons" href="/member/item/warehouse/wis">Cancel</a>
                 <button class="btn btn-primary panel-buttons save-button" type="button">Save</button>
             </div>
         </div>
@@ -71,26 +71,26 @@
                         <tbody class="draggable tbody-item">
                             <tr class="tr-draggable">
                                 <td>
-                                    <select class="form-control droplist-item input-sm" name="cmline_item_id[]" >
+                                    <select class="form-control droplist-item input-sm" name="item_id[]" >
                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                         <option class="hidden" value="" />
                                     </select>
                                 </td>
-                                <td><textarea class="form-control txt-desc" name="cmline_description[]"></textarea></td>
+                                <td><textarea class="form-control txt-desc" name="item_remarks[]"></textarea></td>
                                 <td class="text-center"><label class="txt-remaining-qty"></label> </td>
-                                <td><input class="form-control number-input" type="text" name="cmline_qty[]"/></td>
+                                <td><input class="form-control number-input" type="text" name="item_quantity[]"/></td>
                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                             </tr>
                             <tr class="tr-draggable">
                                 <td>
-                                    <select class="form-control droplist-item input-sm" name="cmline_item_id[]" >
+                                    <select class="form-control droplist-item input-sm" name="item_id[]" >
                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                         <option class="hidden" value="" />
                                     </select>
                                 </td>
-                                <td><textarea class="form-control txt-desc" name="cmline_description[]"></textarea></td>
+                                <td><textarea class="form-control txt-desc" name="item_remarks[]"></textarea></td>
                                 <td class="text-center"><label class="txt-remaining-qty"></label> </td>
-                                <td><input class="form-control number-input" type="text" name="cmline_qty[]"/></td>
+                                <td><input class="form-control number-input" type="text" name="item_quantity[]"/></td>
                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                             </tr>
                         </tbody>
@@ -108,14 +108,14 @@
     <table class="div-item-row-script-item hide">
         <tr class="tr-draggable">
             <td>
-                <select class="form-control select-item input-sm pull-left" name="cmline_item_id[]" >
+                <select class="form-control select-item input-sm pull-left" name="item_id[]" >
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                     <option class="hidden" value="" />
                 </select>
             </td>
-            <td><textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea></td>
+            <td><textarea class="textarea-expand txt-desc" name="item_remarks[]"></textarea></td>
             <td class="text-center"><label class="txt-remaining-qty"></label> </td>
-            <td><input class="text-center number-input txt-qty compute" type="text" name="cmline_qty[]"/></td>
+            <td><input class="text-center number-input txt-qty compute" type="text" name="item_quantity[]"/></td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>

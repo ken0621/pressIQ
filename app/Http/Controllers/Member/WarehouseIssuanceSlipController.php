@@ -99,6 +99,7 @@ class WarehouseIssuanceSlipController extends Member
     {
         $remarks = $request->wis_remarks;
         $items = Session::get('wis_item');
+        $items = $request->item_id;
         $shop_id = $this->user_info->shop_id;
 
         $ins_wis['wis_shop_id'] = $shop_id;
@@ -110,11 +111,13 @@ class WarehouseIssuanceSlipController extends Member
         $_item = null;
         foreach ($items as $key => $value) 
         {
-            $_item[$key] = null;
-            $_item[$key]['item_id'] = $value['item_id'];
-            $_item[$key]['quantity'] = $value['item_quantity'];
-            $_item[$key]['remarks'] = 'wis';
-            $_item[$key]['serial'] = $value['item_serial'];
+            if($value)
+            {
+                $_item[$key] = null;
+                $_item[$key]['item_id'] = $value;
+                $_item[$key]['quantity'] = $request->item_quantity[$key];
+                $_item[$key]['remarks'] = $request->item_remarks[$key];
+            }
         }
 
         $val = WarehouseTransfer::create_wis($shop_id, $remarks,$ins_wis , $_item);

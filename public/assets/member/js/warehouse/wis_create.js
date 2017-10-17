@@ -55,7 +55,10 @@ function wis_create()
             },
             onChangeValue : function()
             {
-            	action_load_item_info($(this));
+            	if($(this).val() != '')
+            	{
+            		action_load_item_info($(this));
+            	}
             }
 		});
 		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
@@ -69,7 +72,10 @@ function wis_create()
             },
             onChangeValue : function()
             {
-            	action_load_item_info($(this));
+            	if($(this).val() != '')
+            	{
+            		action_load_item_info($(this));
+            	}
             }
         });
 	}

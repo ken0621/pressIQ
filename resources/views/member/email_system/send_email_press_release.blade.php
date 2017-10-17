@@ -16,38 +16,52 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block">
   <header class="header_email">
-    <div class="panel-body form-horizontal">
-      <div class="form-group">
-        <div class="container">
-          <ul class="list-inline inline">
-            <li class=""><a href="#"><big>Create</big><small> New Release</small></a></li>
-            <li class="choose"><a href="#"><big>Choose</big><small> recipients</small></a></li>
-            <li><a href="#"><big>Send</big><small> Release </small></a></li>
-          </ul>
-        </div>
-      </div>
+    <div class="panel-body form-horizontal tab_header">
+        <div class="form-group">
+           <ul class="nav nav-pills">
+        <li class=""><a href="/member/page/press_release_email/create_press_release"><big class="big">Create</big><small class="small"> New Release</small></a></li>
+        <li class="choose"><a href="/member/page/press_release_email/choose_recipient_press_release"><big class="big">Choose</big><small class="small"> recipients</small></a></li>
+        <li class="active"><a href="/member/page/press_release_email/view_send_email_press_release"><big class="big">Send</big><small class="small"> Release </small></a></li>
+      </ul>     
+    </div>
     </div>
   </header>
 </head>
 <div class="box-body">
-  <button class="input_chose_email"> Email List </button>
+  <button class="input_chose_email btn btn-primary"> Email List </button>
   <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
-  <form  method ="post" action ="/member/page/press_release_email/save_email_press_release" role="form" class="form-horizontal" id="get_data_tinymce">
+  <form  name="myform" method ="POST" action = "/member/page/press_release_email/send_press_release" class="form-horizontal" id="get_data_tinymce1">
     {{csrf_field()}}
+      <div class="subject">
+      <div class="col-lg-6">
+        <input type="text" id="input_subject" placeholder="To" class="form-control email-to-container subject_email" name="to" value="{{$sent_email}}">
+      </div>
+    </div>
+    <br>
     <div class="subject">
+      <div class="col-lg-6">
+        <input type="text" placeholder="From" id="input_subject" class="form-control subject_email" name="from">
+      </div>
+    </div>
+    <br>
+      <div class="subject">
       <div class="col-lg-6">
         <input type="text" placeholder="subject" id="input_subject" class="form-control subject_email email-subject-container" name="subject">
       </div>
     </div>
     <br>
     <br>
+    <br>
+    <br>
+    <div class="textarea_container">
     <div class="tiny">
-      <textarea class="mce tiny email-content-container" id="texteditor">
+      <textarea class="mce tiny email-content-container" id="texteditor" style="margin-left: 10px !important; margin-right: 10px !important; margin-top: -10px !important;">
       </textarea>
     </div>
+    </div>
+    <button class="btn btn-primary continue" type ="submit"> send </button>
+    <button class="btn btn-primary preview"> preview </button>
   </form>
-  <button class="btn-primary preview"> preview </button>
-  <button class="btn-primary continue"><a href="/member/page/press_release_email/send_press_release" class ="con"> send </a></button>
 </div>
 <div class="modal fade" id="email_databaseModal" tabindex="-1" role="dialog" aria-labelledby="email_database_ModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -60,17 +74,16 @@
       </div>
       <div class="modal-body">
         <div class="container">
-          <table class="table table-inbox table-hover table_email_list" id="table_email_list">
+          <table class="table table-inbox table-hover table_email_list" id="table_email_list" style="table-layout: fixed;">
             <tbody>
               @foreach($_email_list as $email_list)
-              <tr class="unread">
-                <td class="view-message dont-show" onClick="pass_data({{$email_list->email_id}})" value="{{$email_list->email_id}}" email-id="{{$email_list->email_id}}">
-                  {{$email_list->email_title}}
+              <tr class="unread" email_id="{{$email_list->email_id}}">
+                <td class="view-message dont-show" value="{{$email_list->email_id}}" email-id="{{$email_list->email_id}}">
+                  <a>{{$email_list->email_title}}</a>
                   <!-- EXTRA LALAGYANAN PARA MAPASA MO YUNG DATA -->
                   <input type="hidden" class="email-subject-{{$email_list->email_id}}" value="{{$email_list->email_title}}">
-                  <input type="hidden" class="email-content-{{$email_list->email_id}}" value="{!! $email_list->email_content !!}">
                 </td>
-                <td class="view-message ">{!!$email_list->email_content!!}</td>
+                <td class="view-message" style="white-space: nowrap; display: none;">{!!$email_list->email_content!!}</td>
                 <td class="view-message  text-right">{{$email_list->email_time}}</td>
               </tr>
               @endforeach
@@ -85,6 +98,7 @@
     </div>
   </div>
 </div>
+<script src="http://malsup.github.com/jquery.form.js"></script>
 <script>
 $(".input_chose_email").click(function() {
 $('#email_databaseModal').modal('show');
@@ -92,7 +106,7 @@ $('#email_databaseModal').modal('show');
 });
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
 <script src="/email_assets/tinymce/js/tinymce/tinymce.min.js"></script>
 <script src="/email_assets/tinymce/js/tinymce/tinymce.js"></script>
 <script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
@@ -100,9 +114,11 @@ $('#email_databaseModal').modal('show');
 tinymce.init({
 selector: '.mce',  // change this value according to your HTML
 theme:'modern',
-plugins: "advlist autolink link image lists charmap print preview hr anchor pagebreak searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking table contextmenu directionality emoticons paste textcolor filemanager autoresize preview",
-toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent preview",
-toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor | print preview code | caption",
+menubar:false,
+branding:false,
+plugins: "autoresize preview",
+toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
+toolbar2: "| link unlink anchor | image media | forecolor backcolor | caption",
 });
 function submit_selected_image_done(data) {
 var image_path = data.image_data[0].image_path;
@@ -117,27 +133,34 @@ tinyMCE.execCommand('mceInsertContent',false,'<img src="'+image_path+'"/>');
 <script type="text/javascript" src="/email_assets/js/create_press_release.js"></script>
 <script type="text/javascript" src ="http://malsup.github.com/jquery.form.js"></script>
 <script>
-// function addRowHandlers() {
-// var rows = document.getElementById("table_email_list").rows;
-// for (i = 0; i < rows.length; i++) {
-// rows[i].onclick = function(){ return function(){
-// var title = this.cells[0].innerHTML;
-// var content = this.cells[1].innerHTML;
-// var time = this.cells[2].innerHTML;
-// tinymce.get('texteditor').setContent(content);
-// $('#email_databaseModal').modal('hide');
-// };}(rows[i]);
+function addRowHandlers(email_id) {
+var rows = document.getElementById("table_email_list").rows;
+for (i = 0; i < rows.length; i++) {
+rows[i].onclick = function (){ return function(){
+var email_id= $(this).attr("email_id");
+pass_data(email_id);
+var title = this.cells[0].innerHTML;
+var content = this.cells[1].innerHTML;
+var time = this.cells[2].innerHTML;
+tinymce.get('texteditor').setContent(content);
 
-// }
-// }
-// window.onload = addRowHandlers();
+/*function pass_data(email_id)  
+{
+  $('.email-subject-container').val($('.email-subject-'+email_id).val());
+$('#email_databaseModal').modal('hide');
+}*/
+};}(rows[i]);
+
+}
+}
+window.onload = addRowHandlers();
 // eto Yung Onclick na nasa TD pag-kinclick yun dto pupunta
 function pass_data(email_id)
 {
-  $('.email-subject-container').val($('.email-subject-'+email_id).val());
-  $('.email-content-container').val($('.email-content-'+email_id).val());
+$('.email-subject-container').val($('.email-subject-'+email_id).val());
+  
+  /*$('.email-to-container').val($('.email-content-'+email_id).val());*/
 $('#email_databaseModal').modal('hide');
 }
-</script>
 </script>
 @endsection

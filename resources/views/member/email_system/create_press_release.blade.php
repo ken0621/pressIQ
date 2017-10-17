@@ -15,16 +15,14 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block">
     <header class="header_email">
-    <div class="panel-body form-horizontal">
+    <div class="panel-body form-horizontal tab_header">
         <div class="form-group">
-        	<div class="container">
-           <ul class="list-inline inline">
-		    <li class=""><a href="#"><big>Create</big><small> New Release</small></a></li>
-		    <li class="choose"><a href="#"><big>Choose</big><small> recipients</small></a></li>
-		    <li><a href="#"><big>Send</big><small> Release </small></a></li>
-		  </ul>
-		</div>
-        </div>     
+           <ul class="nav nav-pills">
+		    <li class="active"><a href="/member/page/press_release_email/create_press_release"><big class="big">Create</big><small class="small"> New Release</small></a></li>
+		    <li class="choose"><a href="/member/page/press_release_email/choose_recipient_press_release"><big class="big">Choose</big><small class="small"> recipients</small></a></li>
+		    <li><a href="/member/page/press_release_email/view_send_email_press_release"><big class="big">Send</big><small class="small"> Release </small></a></li>
+		  </ul>     
+    </div>
     </div>
     </header>
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -32,25 +30,29 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <div class="box-body">
- <button class="image-gallery" key="1234"> Image Gallery </button>
+ <button type= "button" class="image-gallery btn btn-primary gallery" key="1234"> Image Gallery </button>
 <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
                                           <form  method ="post" action ="/member/page/press_release_email/save_email_press_release" role="form" class="form-horizontal" id="get_data_tinymce">
                                             {{csrf_field()}}
                                               	<div class="subject">
-                                                  <div class="col-lg-6">
+                                                  <div class="col-lg-6 form-group form-inline">
+                                                    <label style="margin-left: 10px;">Subject:  </label>
                                                       <input type="text" placeholder="subject" id="input_subject" class="form-control subject_email" name="subject">
                                                   </div> 
                                               </div>
                                               <br>
                                               <br>
+                                              <div class="textarea_container">
                                               <div class="tiny">
-                                                <textarea class="mce tiny" id="texteditor">                
+                                                <textarea class="mce tiny" id="texteditor" style="margin-left: 10px !important; margin-right: 10px !important;">                
                                                 </textarea>
-                                                <input type="submit" value="Save">
+                                                <input type="submit" class="btn btn-primary save" value="Save">
+                                            </div>
                                             </div>
                                           </form>  
-                                          <button class="btn-primary preview"> preview </button>
-                                           <button class="btn-primary continue"><a href="/member/page/press_release_email/choose_recipient_press_release" class ="con"> continue </a></button>
+                                          <button class="btn-primary btn_preview_create_press_release btn btn-primary"> preview </button>
+                                           <button class="btn-primary create_press_releas_btn_continue btn btn-primary"><a href="/member/page/press_release_email/choose_recipient_press_release" class ="btn_continue" style="color:white !important;"> continue </a></button>
+</div>
 </div>
 
 <script src="/email_assets/tinymce/js/tinymce/tinymce.min.js"></script>
@@ -60,22 +62,13 @@
   tinymce.init({
   selector: '.mce',  // change this value according to your HTML
   theme:'modern',
-  /*toolbar: "insertfile undo redo bold italic  alignleft aligncenter alignright alignjustify  bullist numlist outdent indent link image",
-  plugins: "advlist anchor autolink autoresize autosave bbcode charmap code codesample colorpicker compat3x contextmenu directionality emoticons fullpage fullscreen help hr image imagetools importcss insertdatetime legacyoutput link media nonbreaking hr image imagetools importcss insertdatetime legacyoutput link media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textcolor textpattern toc visualblocks visualchars wordcount",*/
-  plugins: "advlist autolink link image lists charmap print preview hr anchor pagebreak searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking table contextmenu directionality emoticons paste textcolor filemanager autoresize preview",
-  toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent preview",
-  toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor | print preview code | caption",
-  /*image_caption: true,
-  image_advtab: true,
-
-  external_filemanager_path: "/email_assets/filemanager",
-  filemanager_title: "photos",
-  external_plugins:{"filemanager": "/email_assets/filemanager/plugin.min.js"},
-
-  visualblocks_default_state: true,
-
-  style_formats_autohide: true,
-  style_formats_merge: true,*/
+  menubar:false,
+  branding:false,
+  /*width : "640",*/  
+  plugins: "autoresize preview",
+  toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
+  toolbar2: "| link unlink anchor | image media | forecolor backcolor | print preview code | caption",
+    
 });
 
   function submit_selected_image_done(data) {
@@ -88,7 +81,7 @@
 }
 </script>
 <script type="text/javascript">
-	$('.preview').click(function(){
+	$('.btn_preview_create_press_release').click(function(){
 		 tinyMCE.activeEditor.execCommand('mcePreview');
 	});
 </script>

@@ -11,6 +11,7 @@ use Input;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_press_release_email;
 use App\Models\Tbl_press_release_recipient;
+use App\Models\Tbl_press_release_email_sent;
 use Mail;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -26,26 +27,37 @@ class Press_Release_Controller extends Member
     public function choose_recipient()
     {
 			$recipientResult = Tbl_press_release_recipient::select("*");
-            if(Request::input("recipient_name") != "")
+            if(Request::input("company_name") != "")
             {
-            	$recipientResult = $recipientResult->where("recipient_name",Request::input("recipient_name"));
+            	$recipientResult = $recipientResult->where("company_name",Request::input("company_name"));
             }
 
-            if(Request::input("recipient_email_address") != "")
+            if(Request::input("name") != "")
             {
             	// dd(Request::input());
-            	$recipientResult = $recipientResult->where('recipient_email_address',Request::input('recipient_email_address'));    	
+            	$recipientResult = $recipientResult->where('name',Request::input('name'));    	
             }
 
-            if(Request::input("recipient_position") != "")
+            if(Request::input("position") != "")
             {
-            	$recipientResult = $recipientResult->where('recipient_position',Request::input('recipient_position'));
+            	$recipientResult = $recipientResult->where('position',Request::input('position'));
             }
 
-            if(Request::input("recipient_group") != "")
+            if(Request::input("title_of_journalist") != "")
             {
-            	$recipientResult = $recipientResult->where('group_name',Request::input('recipient_group'));
+            	$recipientResult = $recipientResult->where('title_of_journalist',Request::input('title_of_journalist'));
             }
+
+            if(Request::input("country") != "")
+            {
+                $recipientResult = $recipientResult->where('country',Request::input('country'));
+            }
+
+            if(Request::input("industry_type") != "")
+            {
+                $recipientResult = $recipientResult->where('industry_type',Request::input('industry_type'));
+            }
+
 
             $data["_recipient_list"] = $recipientResult->paginate(7); 
             return view("member.email_system.choose_recipient",$data);
@@ -64,44 +76,76 @@ class Press_Release_Controller extends Member
 
     }
 
-    public function add_recipient()
-    {
-    	$insert['recipient_email_address']=Request::input('recipient');
-    	Tbl_press_release_recipient::insert($insert);
-    	return json_encode("success");
-    }
-
-
     public function view_send_email()
     {
-    	 $data["_email_list"]=Tbl_press_release_email::get();
+         $data["_email_list"]=Tbl_press_release_email::get();
+    	 $data["sent_email"] = Request::input('sent_email');
     	return view("member.email_system.send_email_press_release",$data);
     }
 
     public function send_email(Request $request)
     {
-    	/*dd(Request::input("content"));*/
-    	$data['tinymce_content'] = Request::input('content');
-    	$data['from']=Request::input('from');
-    	$data['to']=Request::input('to');
-    	$data['subject']=Request::input('title');
-    	Mail::send('member.email_system.email',$data, function($message) use ($data){
- 
-    		$message->from($data['from']);
-    		$message->to($data['to']);
-    		$message->subject($data['subject']);
-      });
-    	return json_encode("success");
+        try 
+        {
+            $insert['email_content'] = Request::input('content');
+            $insert['from']=Request::input('from');
+            $insert['to']=Request::input('to');
+            /*$insert['to']=explode(",",Request::input('to'));*/
+            $insert['email_title']=Request::input('subject');
+            $insert['email_time'] = date('Y-m-d');
+            Tbl_press_release_email_sent::insert($insert);
+
+            $data['tinymce_content'] = Request::input('content');
+            $data['from']=Request::input('from');
+            $data['to']=explode(",",Request::input('to'));
+            $data['subject']=Request::input('subject');
+            foreach($data['to'] as $to)
+            {
+                $data['to'] = $to;
+                Mail::send('member.email_system.email',$data, function($message) use ($data)
+                {
+                    $message->from($data['from']);
+                    $message->to("edwardguevarra2003@gmail.com");
+                    $message->subject($data['subject']);
+                });  
+            }
+       
+            return json_encode("success"); 
+        } 
+        catch (\Exception $e) 
+        {
+            dd($e->getMessages());
+        }
+        
 	}
-    public function press_view_email()
+    public function email_sent()
     {
-    	
-    	return view("member.email_system.view_press_release");
+    	$data['_sent_email']=Tbl_press_release_email_sent::get();
+    	return view("member.email_system.email_sent_press_release",$data);
     }
 
+    public function email_list()
+    {
+        $data['_list_email']=Tbl_press_release_email::get();
+        return view("member.email_system.email_list_press_release",$data);
+    }
 
+     public function recipient_list()
+    {
+        $data['_list_recipient']=Tbl_press_release_recipient::get();
+        return view("member.email_system.recipient_list_press_release",$data);
+    }
 
-
+    public function add_recipient()
+    {
+        $insert['recipient_name'] = Request::input('name');
+        $insert['recipient_email_address']=Request::input('email');
+        $insert['recipient_position'] = Request::input('position');
+        $insert['group_name'] = Request::input('group');
+        Tbl_press_release_recipient::insert($insert);
+        return 'success';
+        
+    }
 
 
 }

@@ -1291,6 +1291,61 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
+    /*Press Release Email System*/
+
+    $page = "press_release_email";
+    $nav[$page]['name']     = "Press Release";
+    $nav[$page]['segment']  = $page;
+    $nav[$page]['icon']     = "envelope";
+    $nav[$page]['type']     = "menu";
+
+    $code = "page-create-press-release";
+    $nav[$page]['submenu'][$code]['label'] = "Create Press Release";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path ."page/". $page . "/create_press_release";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page', 'activate_theme'];
+    $nav[$page]['submenu'][$code]['status'] = "Layout Only";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Ephraim Dognidon   </span>";
+
+    $code = "page-analytics-press-release";
+    $nav[$page]['submenu'][$code]['label'] = "Analytics";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path ."page/". $page . "/create_press_release";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page', 'activate_theme'];
+    $nav[$page]['submenu'][$code]['status'] = "Layout Only";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Ephraim Dognidon   </span>";
+
+    $segment = "page-view-press-release";
+    $nav[$page]['submenu'][$segment]['name']   = "View Press Release";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+          $code = "submenu-list-email-sent-press-release-sample";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Sent Emails";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path ."page/" . $page . "/email_sent_press_release";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "<span style='color: green'>Ephraim Dognidon   </span>";
+
+        $code = "submenu-list-emails-press-release-sample";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Email list";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . "page/" . $page . "/email_list_press_release";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "<span style='color: green'>Ephraim Dognidon   </span>";
+
+        $code = "submenu-recipient-list-press-release-sample";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Recipient List";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . "page/" . $page . "/recipient_list_press_release";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "<span style='color: green'>Ephraim Dognidon   </span>";
+
+
+
 
     /* MANAGE CONTENT  */
     $page = "page"; 
@@ -1333,34 +1388,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
 
     /* REWARD CONFIG */
-    $segment = "submenu-page-email";
-    $nav[$page]['submenu'][$segment]['name']   = "Press Release Email";
-    $nav[$page]['submenu'][$segment]['segment']= $segment;
-    $nav[$page]['submenu'][$segment]['type']   = "submenu";
-
-    $segment2 = "page-press-release";
-        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['name'] = "Press Release";
-        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['segment2'] = $segment2;
-        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['type'] = "submenu";
-
-
-        $code = "page-email-create";
-        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$code]['label'] = "Create Press Release";
-        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$code]['code'] = $code;
-        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$code]['url'] = $path . $page ."/press_release_email/create_press_release";
-        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$code]['user_settings'] = ['access_page', 'claim'];
-        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$code]['status'] = "Layout Only";
-        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$code]['developer'] = "<span style='color: blue'>Ephraim John Dognidon</span>";
-
-        $code = "page-email-view";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "View Press Release";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/press_release_email/view_press_release";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'claim'];
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout Only";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: blue'>Ephraim John Dognidon</span>";
-
-
+    
     // $code = "page-partnerview";
     // $nav[$page]['submenu'][$code]['label'] = "partnerview";
     // $nav[$page]['submenu'][$code]['code'] = $code;

@@ -1,3 +1,121 @@
+.email-content-container
+{
+    width: 98%;
+    margin-left: 10px;
+    margin-right: 20px !important;
+    margin-top: -53px;
+}
+
+.pagination_container
+{
+    /* margin-left: 780px; */
+    margin-top: -35px;
+}
+
+.view-message
+{
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis!important;
+}
+
+.btn_preview_create_press_release
+{
+    margin-top: -36px;
+    margin-left: 150px;
+    width: 120px;
+}
+
+.create_press_releas_btn_continue
+{
+    /* position: relative; */
+    margin-top: -36px;
+    margin-left: 15px;
+    width: 120px;
+}
+
+.input_chose_email
+{
+    margin-left: 10px;
+    margin-top: 20px;
+    width: 120px;  
+}
+
+.inputsubmit
+{
+  margin-left: 28px;
+  margin-top: 40px;
+  width: 642px !important;
+}
+
+.label-name
+{
+    margin-left: 30px;
+}
+
+.recipient_container
+{
+    margin-top: -528px;
+    margin-left: 765px!important;
+}
+
+.label-choose-recipient
+{
+    position: relative;
+    top: 128px;
+    left: -784px;
+}
+
+.input_chose_recipient
+{
+    position: relative;
+    top: 131px;
+    left: -786px;
+    width: 640px !important;
+    
+}
+.textarea_container
+{
+    width:98%;
+    margin-left: 10px;
+    margin-right: 20px !important;
+}
+
+.mce-tinymce.mce-container.mce-panel 
+{
+   border: 1px solid black !important;
+   border-right: 1px solid black !important;
+}
+
+.big
+{
+    font-size: 20px !important;
+}
+
+.small
+{
+    font-size:16px !important;
+}
+
+.tab_header
+{
+    margin-left: 10px;
+}
+
+.gallery
+{
+    margin-left: 10px;
+    margin-top: 17px;
+}
+
+.save
+{
+    position: relative;
+    left: 1px;
+    top: 7px;
+    width: 120px;
+}
+
 .table_email_list
 {
     width:855px !important;
@@ -37,7 +155,8 @@
 
 .input
 {
-    width:30% !important;
+    margin-left: 30px;
+    width:40% !important;
 }
 .select_email
 {
@@ -46,27 +165,34 @@
 
 .background
 {
-    height: 800px;
-    border: 1px solid white!important;
+    /* height: 600px;
+    border: 1px solid white!important; */
 }
 
 .con
 {
-    color:white;
+    position: relative;
+    left: 13px;
+    height: 39px;
+    width: 642px !important;
+    top: 30px;
+    color: white !important;
 }
 
 .continue
 {
-    position: absolute;
-    margin-left: 50px;
-    margin-top: -25px;
+    margin-left: 9px;
+    margin-top: 35px;
+    margin-bottom: 10px;
+    width: 120px;
 }
 
 .preview
 {
-    position: absolute;
-    margin-left: 124px;
-    margin-top: -25px;
+   margin-left: 10px;
+   margin-top: 35px;
+   width: 120px;
+   margin-bottom: 10px;
 }
 
 .subject_email
@@ -101,6 +227,7 @@
 #input_subject
 {
     margin-right: 20px;
+    width:480px;
 }
 
 .create_news

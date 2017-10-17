@@ -30,20 +30,56 @@ $(document).ready(function(){
   {		
 
 
-		var recipient_name = $('#recipient_name').val();
-		var recipient_email_address = $('#recipient_email_address').val();
-		var recipient_position = $('#recipient_position').val();
-		var recipient_group = $('#recipient_group').val();
-  	    var data = {recipient_group: recipient_group,recipient_name:recipient_name,recipient_email_address:recipient_email_address,recipient_position:recipient_position};
+		var company_name = $('#company_name').val();
+		var name = $('#name').val();
+		var position = $('#position').val();
+		var title_of_journalist = $('#title_of_journalist').val();
+    var country = $('#country').val();
+    var industry_type = $('#industry_type').val();
+  	var data = {company_name: company_name,name:name,position:position,title_of_journalist:title_of_journalist,country:country, industry_type:industry_type};
 		var url = addParams("/member/page/press_release_email/choose_recipient_press_release",data);
-		$(".recipient_container").load(url+" .recipient_container",function(){
+		$(".recipient_container").load(url+" .recipient_container2",function(){
 			$.getScript("/email_assets/js/list.js");
-			
-		});
-		/*{
-			
-			check_list();
-		}*/
+      /*$.getCss("/email_assets/email_css/create_email.css");*/
+    /*var myStylesLocation = "/email_assets/email_css/create_email.css";
+
+      $.get(myStylesLocation, function(css)
+    {
+   $('<style type="text/css"></style>')
+      .html(css)
+      .appendTo("header");
+      alert('123');
+    });*/
+});   
+
+});
+
+  var global_recipient_id = null;
+$(document).ready(function(){
+  $('#get_data_tinymce1').submit(function(e){
+    var ajaxdata = $("._token1").val();
+    var content = tinymce.get('texteditor').getContent();
+
+    $('#get_data_tinymce1').ajaxSubmit({
+         type: "POST",
+         url: '/member/page/press_release_email/send_press_release',
+         data: {ajaxdata:ajaxdata,content:content},
+         dataType:"json",
+         success: function(response){
+             if(response == 'success')
+             {
+              /*$('#myModal_email').modal('hide');*/
+              /*$('.from_email').val('');
+              $('.to_email').val('');*/
+              $('.subject_email').val('');
+              tinymce.get('texteditor').setContent('');
+              alert('message sent');
+             }
+         }
+    });
+
+    return false;
+  });
 });
 
 
@@ -163,12 +199,12 @@ var ajaxdata = {};
       {
       $url = $(e.currentTarget).attr("href"); //get URL (string)
       var url = new URL($url); //convert format URL
-      $page = url.searchParams.get("page"); //get the page in the URL
-      ajaxdata.page = $page;
-      ajaxdata.page = 1;
-      action_load_table($url,$page);
+       $(".recipient_container").load($url+" .recipient_container2",function(){
+      $.getScript("/email_assets/js/list.js");
+      });
       return false;
-    });
+      });
+
   
   var addParams = function( url, data )
   {
@@ -196,3 +232,5 @@ var ajaxdata = {};
 */
 
 
+
+ 

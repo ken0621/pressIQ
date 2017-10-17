@@ -14,76 +14,90 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block">
     <header class="header_email">
-    <div class="panel-body form-horizontal">
+    <div class="panel-body form-horizontal tab_header">
         <div class="form-group">
-            <div class="container">
-           <ul class="list-inline inline">
-            <li class=""><a href="#"><big>Create</big><small> New Release</small></a></li>
-            <li class="choose"><a href="#"><big>Choose</big><small> recipients</small></a></li>
-            <li><a href="#"><big>Send</big><small> Release </small></a></li>
-          </ul>
-        </div>
-        </div>     
+           <ul class="nav nav-pills">
+        <li class=""><a href="/member/page/press_release_email/create_press_release"><big class="big">Create</big><small class="small"> New Release</small></a></li>
+        <li class="choose active"><a href="/member/page/press_release_email/choose_recipient_press_release"><big class="big">Choose</big><small class="small"> recipients</small></a></li>
+        <li><a href="/member/page/press_release_email/view_send_email_press_release"><big class="big">Send</big><small class="small"> Release </small></a></li>
+      </ul>     
+    </div>
     </div>
     </header>
-</head>
     <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
-
-<div class="thumbnail background">                                          
-  <form method="post" action="/member/page/press_release_email/search_recipient_press_release">
-    <h4>Search By:</h4>
+                                      
+  <form name="myform" method="GET" action="/member/page/press_release_email/search_recipient_press_release" id="#pass_data">
+    <h4 style="margin-left: 10px;">Search By:</h4>
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Name</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control input" id= "recipient_name" name = "recipient_name" placeholder="Name">
+    <label class="label-name">Company Name</label>
+    <div class="">
+      <input type="text" class="form-control input col-md-6" id= "commpany_name" name = "company_name" placeholder="Company Name">
     </div>
   </div>
   <div class="form-group row">
-    <label for="inputPassword" class="col-sm-2 col-form-label">Email Address</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control input" id= "recipient_email_address" placeholder="Email Address">
+    <label for="inputPassword" class="label-name">Name</label>
+    <div class="">
+      <input type="text" class="form-control input col-md-6" id= "name" name="name" placeholder="Name">
     </div>
   </div>
   <div class="form-group row">
-    <label for="inputPassword" class="col-sm-2 col-form-label">Position</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control input" id= "recipient_position"  placeholder="Position">
+    <label for="inputPassword" class="label-name ">Position</label>
+    <div class="">
+      <input type="text" class="form-control input col-md-6" id= "position"  placeholder="Position" name="position">
     </div>
   </div>
   <div class="form-group row">
-    <label  class="col-sm-2 col-form-label">Group</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control input" id="recipient_group" placeholder="Name">
+    <label  class="label-name">Title of Journalist</label>
+    <div class="">
+      <input type="text" class="form-control input col-md-6" id="title_of_journalist" placeholder="Title of Journalist" name="title_of_journalist">
     </div>
   </div>
   <div class="form-group row">
-    <div class="col-sm-10">
-      <input type="button" value ="search" class="form-control input inputsubmit" id="inputsubmit" name="search">
+    <label  class="label-name">Country</label>
+    <div class="">
+      <input type="text" class="form-control input col-md-6" id="country" placeholder="country" name="country">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label  class="label-name">Industry Type</label>
+    <div class="">
+      <input type="text" class="form-control input col-md-6" id="industry_type" placeholder="industry_type" name="industry_type">
+    </div>
+  </div>
+  <div class="form-group chosen_recipient">
+   <!--  <label for="inputPassword" class="label-choose-recipient">Chosen Recipient</label> -->
+    <div class="">
+      <input type="hidden" class="form-control col-md-6 input_chose_recipient col-md-6" id="inputPassword" placeholder="Email Address" name="recipient_to">
+    </div>
+</div>
+  <div class="form-group row">
+    <div class="">
+      <button type="button" class="form-control inputsubmit btn btn-primary" id="inputsubmit" name="search">Search</button>
     </div>
   </div>
 </form>
-<div class="form-group chosen_recipient">
-    <label for="inputPassword" class="col-sm-2 col-form-label">Chosen Recipient</label>
-    <div class="">
-      <input type="text" class="form-control input_chose_recipient" id="inputPassword" placeholder="Email Address">
-    </div>
-</div>
-<div class="row recipient_container">
-<div class="col-xs-6 list">
+<button class="form-control btn-primary con" type="button" >Continue</button>
+<br>
+<br>
+<br>
+<div class="row recipient_container col-md-6">
+<div class="recipient_container2">
             <h3 class="text-center">Recipient Lists</h3>
             <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
-            @foreach($_recipient_list as $recipient_list)
             <div class="well" style="max-height: ;: 300px;overflow: auto;">
                 <ul class="list-group checked-list-box">
-                  <li class="list-group-item" type="checkbox" value="{{$recipient_list->recipient_id}}">{{$recipient_list->recipient_email_address}}</li>
+                  @foreach($_recipient_list as $recipient_list)
+                  <li class="list-group-item" type="checkbox" value="{{$recipient_list->recipient_id}}">{{$recipient_list->company_name}},{{$recipient_list->name}},{{$recipient_list->position}},{{$recipient_list->industry_type}}</li>
+                  @endforeach
                 </ul>
             </div>
-            @endforeach
+            <div class="pagination_container">
+              <?php echo $_recipient_list->render(); ?>
+           </div>
         </div>
     </div>
 </div>
-<button class="btn-primary"><a href ="/member/page/press_release_email/view_send_email_press_release" class="con"> Continue</a></button>
-</div>
+  
 <script src="/email_assets/js/create_press_release.js"></script>
 <script>
     $(".input_chose_email").click(function() {
@@ -91,5 +105,22 @@
             
     });
 </script>
+<!-- <script>
+    function dosubmit()
+{
+  document.myform.action = "member.email_system.view_send_email_press_release" +
+  document.myform.recipient_to.value;
+  window.event.returnValue = true;
+}
+</script> -->
+<script>
+    $('.con').click(function(event) {
+    var recipient_value = $('.input_chose_recipient').val();
+    var recipient_link = "/member/page/press_release_email/view_send_email_press_release?sent_email="+recipient_value;
 
+    window.location.href = recipient_link;
+
+    
+    });
+</script>
 @endsection

@@ -43,9 +43,19 @@ class WarehouseReceivingReportController extends Member
         }
         return json_encode($data);
     }
+    public function getReceiveItems(Request $request, $wis_id)
+    {
+        $check = WarehouseTransfer::get_wis_data($wis_id);
+        if($check)
+        {
+            Session::put('wis_id',$wis_id);
+            return redirect('/member/item/warehouse/rr/receive-inventory');
+        }
+    }
     public function getReceiveInventory()
     {
-        if(Session::has('wis_id'))
+        $check = WarehouseTransfer::get_wis_data(Session::get('wis_id'));
+        if($check)
         {
             $wis_id = Session::get('wis_id');
 

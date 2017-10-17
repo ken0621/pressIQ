@@ -100,15 +100,16 @@ button:hover
             padding: 0px 10px;
             color: #fff;
             display: inline-block;
-            &.sign
+
+            &.sign 
             {
-            	background-color: #d4b044;
-            	color: #fff;
-            	border-radius: 25px;
-            	padding: 2.5px 20px;
-            	margin-top: -7.5px;
-            	margin-bottom: -7.5px;
-            	margin-left: 10px;
+                background-color: #d4b044;
+                color: #fff;
+                border-radius: 25px;
+                padding: 2.5px 20px;
+                margin-top: -7.5px;
+                margin-bottom: -7.5px;
+                margin-left: 10px;
             }
         }
     }
@@ -189,9 +190,11 @@ button:hover
             .navirino 
             {
                 margin-top: 10px;
+
                 a 
                 {
                     @include transition(0.2s);
+
                     font-size: 13px;
                 }
             }
@@ -221,26 +224,27 @@ button:hover
         }
 
         a 
-	    {
-	        color: #fff;
-	        text-decoration: none;
-	        &:hover 
-	        {
-	            color: #d4b044;
-	            text-decoration: none;
-	            cursor: pointer;
-	        }
-	    }
+        {
+            color: #fff;
+            text-decoration: none;
 
-        &.active
-		{
-			a
-			{
-				color: #d4b044;
-				border-bottom: 1px solid #d4b044;
-				padding-bottom: 5px;
-			}
-		}
+            &:hover 
+            {
+                color: #d4b044;
+                text-decoration: none;
+                cursor: pointer;
+            }
+        }
+
+        &.active 
+        {
+            a 
+            {
+                color: #d4b044;
+                border-bottom: 1px solid #d4b044;
+                padding-bottom: 5px;
+            }
+        }
     }
 
     @media screen and (max-width: 900px) 
@@ -272,23 +276,6 @@ button:hover
     img 
     {
         width: 100%;
-    }
-
-    @media screen and (max-width: 991px) 
-    {
-        width: 75%;
-
-        img 
-        {
-            margin-top: -9px;
-            width: 100%;
-        }
-
-        > a 
-        {
-            display: inline-block;
-            float: left;
-        }
     }
 
     &:hover 

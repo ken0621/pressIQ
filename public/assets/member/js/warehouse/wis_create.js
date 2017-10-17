@@ -3,6 +3,7 @@ var load_item = null;
 var item_search_delay_timer;
 var settings_delay_timer;
 var keysearch = {};
+var global_tr_html = $(".div-script tbody").html();
 
 var success_audio = new Audio('/assets/sounds/success.mp3');
 var error_audio = new Audio('/assets/sounds/error.mp3');
@@ -20,14 +21,74 @@ function wis_create()
 	}
 	function document_ready()
 	{
-		action_load_item_table();
+		// action_load_item_table();
 		event_search_item();
 		event_click_search_result();
 		event_remote_item_from_cart();
 		event_change_global_discount();
 		event_change_quantity();
 		event_submit_form();
+		action_initialize_select();
+		action_lastclick_row();
+		event_remove_tr();
 
+	}
+	function event_remove_tr()
+	{		
+		$(document).on("click", ".remove-tr", function(e){
+		var len = $(".tbody-item .remove-tr").length;
+		if($(".tbody-item .remove-tr").length > 1)
+		{
+			$(this).parent().remove();
+		}
+		});
+	}
+	function action_initialize_select()
+	{
+		$('.droplist-item').globalDropList({
+			link : "/member/item/add",
+            width : "100%",
+            onCreateNew : function()
+            {
+            	// item_selected = $(this);
+            	// console.log($(this));
+            },
+            onChangeValue : function()
+            {
+            	action_load_item_info($(this));
+            }
+		});
+		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
+        {
+            link : "/member/item/add",
+            width : "100%",
+            maxHeight: "309px",
+            onCreateNew : function()
+            {
+            	// item_selected = $(this);
+            },
+            onChangeValue : function()
+            {
+            	action_load_item_info($(this));
+            }
+        });
+	}
+	function action_load_item_info($this)
+	{
+		$parent = $this.closest(".tr-draggable");
+		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
+		$parent.find(".txt-remaining-qty").html($this.find("option:selected").attr("inventory-count") + " pc(s)").change();
+	}
+	function action_lastclick_row()
+	{
+		$(document).on("click", "tbody.draggable tr:last td:not(.remove-tr)", function(){
+			action_lastclick_row_op();
+		});
+	}
+	function action_lastclick_row_op()
+	{
+		$("tbody.draggable").append(global_tr_html);
+		action_initialize_select();
 	}
 	function event_submit_form()
 	{

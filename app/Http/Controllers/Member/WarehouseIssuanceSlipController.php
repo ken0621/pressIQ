@@ -34,7 +34,7 @@ class WarehouseIssuanceSlipController extends Member
     public function getCreate()
     {
     	$data['page'] = 'CREATE - WIS';
-
+        $data['_item']  = Item::get_all_category_item([1,5]);
     	return view('member.warehousev2.wis.wis_create',$data);
     }
     public function getTableItem()

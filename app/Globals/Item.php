@@ -887,12 +887,18 @@ class Item
             foreach($_category[$key]['item_list'] as $key1=>$item_list)
             {
                 //  //cycy
-                if($item_list['item_type_id'] == 4)
+                if($item_list['item_type_id'] == 4 || $item_list['item_type_id'] == 5)
                 {
                    $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
                    $_category[$key]['item_list'][$key1]['item_cost'] = Item::get_item_bundle_cost($item_list['item_id']); 
                 }
                 $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
+
+                $_category[$key]['item_list'][$key1]['inventory_count'] = 0;
+                if($item_list['item_type_id'] == 1)
+                {
+                    $_category[$key]['item_list'][$key1]['inventory_count'] = Warehouse2::get_item_qty(Warehouse2::get_current_warehouse($shop_id), $item_list['item_id']);
+                }
             }
             $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }

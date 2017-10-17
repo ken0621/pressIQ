@@ -25,9 +25,7 @@
 				</div>
 				@if($mlm == 1)
 				<div class="profile-lead">
-					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
-						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
-					</a>
+
 					<!-- Modal -->
 					<div id="leads_modal" class="modal fade leads-modal" role="dialog">
 					   <div class="modal-dialog">

@@ -97,6 +97,19 @@ class Tbl_item extends Model
                      })
                      ->groupBy("item_id");
     }
+    public function scopeRecordloginventory($query, $warehouse_id = null)
+    {
+        return $query->selectRaw("*, IFNULL(sum(record_log_id),0) as log_count")
+                     ->leftjoin(DB::raw("(Select wi.* from tbl_warehouse_inventory_record_log wi INNER JOIN tbl_warehouse wh on wh.warehouse_id = wi.record_warehouse_id where wh.archived = 0) warehouse"), function($join) use ($warehouse_id)
+                     {
+                        $join->on("record_item_id","=","item_id");
+                        if($warehouse_id)
+                        {
+                            $join->on("warehouse.warehouse_id","=", DB::raw($warehouse_id));
+                        }
+                     })
+                     ->groupBy("item_id");
+    }
     public function scopeInventorylog($query)
     {
         return $query->leftjoin('tbl_warehouse_inventory_record_log','record_item_id','=','item_id');

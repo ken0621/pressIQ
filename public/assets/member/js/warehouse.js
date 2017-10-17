@@ -528,12 +528,24 @@ function merge_warehouse()
         data : {},
         success : function(all_item_inventory)
         {
-            ctr_item = all_item_inventory.length;
+            ctr_item = count(all_item_inventory);
             item_inventory = all_item_inventory;
             item_warehouse(item_inventory[key]);
         }
     });
 }
+
+function count(val_this) 
+{
+    var count = 0;
+    for(var prop in val_this) 
+    {
+        if(val_this.hasOwnProperty(prop))
+            count = count + 1;
+    }
+    return count;
+}
+
 function item_warehouse(item)
 {
     console.log(item);

@@ -378,7 +378,7 @@ class Warehouse2
 
         return $return;
     }
-    public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '')
+    public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '', $update_count = true)
     {
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
@@ -454,8 +454,10 @@ class Warehouse2
                 Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
             }
 
-
-            // Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, $quantity);
+            if($update_count == true)
+            {
+                Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, $quantity);
+            }
         }       
 
         return $return;
@@ -817,7 +819,7 @@ class Warehouse2
             Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
         }
 
-        // Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
+        Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
 
         return $return;
     }
@@ -908,7 +910,7 @@ class Warehouse2
         Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->update($update);
     }
 
-    public static function get_all_warehouse()
+    public static function get_all_warehousev2()
     {
         return Tbl_warehouse::selectRaw('warehouse_id, warehouse_shop_id')->where('archived',0)->get();        
     }

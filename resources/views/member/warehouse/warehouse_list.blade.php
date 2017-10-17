@@ -15,7 +15,7 @@
             </h1>
             <div class="text-right">
                 <p class="testing-text"></p>
-                <a class="btn btn-warning" onClick="merge_warehouse()">Merging Script</a>
+                <a class="btn btn-warning hide" onClick="merge_warehouse()">Merging Script</a>
                 <a class="btn btn-custom-white panel-buttons popup" link="/member/item/transferinventory" size="md" data-toggle="modal" data-target="#global_modal">Transfer Inventory</a>
                 <a class="btn btn-primary panel-buttons popup" link="/member/item/warehouse/add" size="lg" data-toggle="modal" data-target="#global_modal">Add Warehouse</a>
             </div>

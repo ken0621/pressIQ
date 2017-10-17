@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Member;
 
 use App\Globals\Transaction;
 use App\Globals\Columns;
+use App\Models\Tbl_transaction_list;
 use Excel;
 use DB;
 
@@ -14,22 +15,62 @@ class ProductOrderController2 extends Member
         $data["page"]       = "Product Orders";
         return view('member.product_order2.product_order2', $data);
     }
-    public function index_table()
+    public function table()
     {
-        $dummy              = Transaction::get_transaction_customer_details();
+        $shop_id            = $this->user_info->shop_id;
+        $dummy              = Transaction::get_transaction_customer_details_v2();
         $dummy              = Transaction::get_transaction_date();
-        $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt');
-        
-        $default[]          = ["RECEIPT NO.","transaction_number", true];
+        $active_tab         = request("_active_tab");
+
+        if($active_tab == "paid")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt');
+        }
+        elseif($active_tab == "unconfirmed")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof');
+        }
+        elseif($active_tab == "pending")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order');
+        }
+        else
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt');
+        }
+
+        foreach($data["_raw_table"] as $key => $raw_table)
+        {
+            $data["_raw_table"][$key]->action = "NO ACTION";
+
+            if($active_tab == "unconfirmed")
+            {
+                $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a> | ';
+                $data["_raw_table"][$key]->action .= '<a href="javascript:">CONFIRM</a> | ';
+                $data["_raw_table"][$key]->action .= '<a href="javascript:">REJECT</a>';
+            }
+        }
+
+        $default[]          = ["REF NO.","transaction_number", true];
         $default[]          = ["CUSTOMER.","first_name", true];
         $default[]          = ["DATE ORDERED","display_date_order", true];
         $default[]          = ["DATE PAID.","display_date_paid", true];
         $default[]          = ["DATE SHIPPED.","display_date_deliver", true];
         $default[]          = ["E-MAIL","email", true];
         $default[]          = ["CONTACT","phone_number", true];
+        $default[]          = ["ACTIONS","action", true];
         $data["_table"]     = Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "Order List V2", $data["_raw_table"], $default);
-        
+
         return view('member.global_table', $data);
+    }
+    public function proof()
+    {
+        $transaction_list_id    = request("id");
+        $transaction_list       = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
+        $proof                  = $transaction_list->transaction_payment_proof;
+
+        $url = $this->user_info->upload_server . $proof;
+        return redirect($url);
     }
     public function payref()
     {

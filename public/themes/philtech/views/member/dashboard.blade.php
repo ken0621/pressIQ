@@ -18,7 +18,7 @@
 	                        <!-- <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">BUY A KIT</button></a> -->
 	                        <!-- <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br> -->
 	                        <!-- <span class="or">OR</span> -->
-	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
+	                        <a href="javascript:" onclick="action_load_link_to_modal('/members/enter-code')" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
 	                    </div>
 	                </div>
 	            </div>
@@ -175,108 +175,10 @@
 	    </div>
 	</div>
 @endif
-
-<!--  Enter a code -->
-<div class="popup-enter-a-code">
-    <div id="enter-a-code-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-star"></i> SPONSOR</h4>
-                </div>
-                <div class="modal-body">
-                    <form method="post" class="submit-verify-sponsor">
-                        <div class="labels"><b>Enter a Slot Number</b></div>
-                        <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
-                        <div class="output-container">
-                            
-                        </div>
-                        <div class="btn-container">
-                            <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Proceed 1 -->
-<div class="popup-proceed1">
-    <div id="proceed-modal-1" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content load-final-verification">
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Proceed 2 -->
-<div class="popup-proceed2">
-    <div id="proceed-modal-2" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-shield"></i> CODE VERIFICATION</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="message message-return-code-verify"></div>
-                    <form class="code-verification-form">
-                        <div>
-                            <div class="labeld">Pin Code</div>
-                            <input class="input input-pin text-center" name="pin" type="text">
-                        </div>
-                        <div>
-                            <div class="labeld">Activation</div>
-                            <input class="input input-activation text-center" name="activation" type="text">
-                        </div>
-                        <div class="btn-container">
-                            <button id="btn-proceed-2" class="btn-proceed-2"><i class="fa fa-angle-double-right"></i> Proceed</button>
-                        </div>
-                    </form>
-                </div>
-              </div>
-          </div>
-      </div>
-  </div>
-<!-- MANUAL PLACING OF SLOT -->
-<div class="popup-verify-placement">
-    <div id="slot-placement-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-shield"></i> MANUAL PLACEMENT</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="message message-return-slot-placement-verify"></div>
-                    <form class="slot-placement-form">
-                        <div>
-                            <div class="labeld">Slot Placement</div>
-                            <input class="input input-slot-placement text-center" name="slot_placement" type="text">
-                            <input class="chosen_slot_id" name="chosen_slot_id" type="hidden">
-                        </div>
-                        <div>
-                            <div class="labeld">Slot Position</div>
-                            <select class="input input-slot-position text-center" name="slot_position" type="text" style="text-align-last:center;">
-                            	<option value="left">LEFT</option>
-                            	<option value="right">RIGHT</option>
-                            </select>
-                        </div>
-                        <div class="btn-container">
-                            <button id="check_placement" class="btn-verify-placement">VERIFY</button>
-                        </div>
-                    </form>
-                </div>
-              </div>
-          </div>
-      </div>
-  </div>
 @endsection
 
 @section("member_script")
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
+<script type="text/javascript" src="assets/member/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 @endsection
 

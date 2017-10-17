@@ -1,98 +1,98 @@
-body{
-	font-family: 'Open Sans', sans-serif;
-	background-color: #ededed;
-	color: #747474;
-}
-.top-1-container {
-	padding: 40px 0px 40px 0px;
-	background-color: #ededed;
+@import "variables";
+@import "mixin";
 
-	.title-container {
-		font-size: 18px;
-		font-weight: 600;
-		color: #1c1c1c;
+
+.contact
+{
+	.header
+	{
+		background-size: cover;
+		background-position: center;
+		padding: 150px 0 50px;
+		.first
+		{
+			font-size: 60px;
+			font-weight: 300;
+			color: #fff;
+			line-height: 50px;
+		}
+		.second
+		{
+			color: #d4b044;
+			font-size: 32.5px;
+			font-weight: 300;
+			line-height: 35px;
+		}
 	}
-}
-.top-2-container {
-	padding: 40px 0px 40px 0px;
-	background-color: white;
-
-	.content-container {
-		
-		.title-container {
-			font-size: 18px;
-			font-weight: 600;
-			color: #1c1c1c;
-		}
-
-		.location-content-container {
-			padding: 20px 0px 20px 0px;
-
-			.title-2-container {
-				color: #1c1c1c;
-				font-weight: 700;
-			}
-			.detail-container {
-				margin-top: 5px;
-				margin-bottom: 20px;
-				font-size: 13px;
+	section
+	{
+		.bread-crumb
+		{
+			background-color: #f0f0f0;
+			padding: 7.5px;
+			.holder
+			{
+				display: inline-block;
+				color: #666666;
+				font-size: 15px;
+				font-weight: 300;
+				margin: 0 5px;
 			}
 		}
-		
-		.fill-up-container {
-			width: 100%;
-			
-			.textfield-container {
-				width: 100%;
-				padding: 10px 0px 10px 0px;
-				color: #979797;
-
-				.form-control {
-					height: 40px;
-				    width: 100%;
-				    border-radius: 20px;
-				    color: #979797;
-				    font-size: 12px;
+		.title
+		{
+			color: #121212;
+			font-weight: 300;
+			font-size: 35px;
+			margin-top: 25px;
+			margin-bottom: 25px;
+		}
+		form
+		{
+			.form-group
+			{
+				label
+				{
+					color: #585858;
+					font-weight: 300;
+					font-size: 18px;
 				}
-				
-				button {
-					background-color: #48b920;
-					width: 30%;
-					text-align: center;
-					border-radius: 20px;
-					color: white;
-					border: none;
-					padding: 10px 0px 10px 0px;
+				.form-control
+				{
+					box-shadow: none;
+					border-radius: 1px;
+					border: 1px solid #c3c3c3;
+				}
+				textarea
+				{
+					height: 320px;
 				}
 			}
 		}
-	}
-}
-.bot-container {
-	padding: 40px 0px 40px 0px;
-	background-color: white;
-
-	.title-container {
-		font-size: 18px;
-		font-weight: 600;
-		color: #1c1c1c;
-	}
-	.content-container {
-		padding: 20px 0px 40px 0px;
-
-		.map-container {
-			width: 100%;
-			padding-right: 25px;
-
-			.map {
-				width: 100%;
-				border-radius: 20px;
-			}
+		#map
+		{
+			height: 300px;
+			margin-top: 25px;
 		}
-
-		.title-container {
-			font-size: 13px;
-			font-weight: 700;
+		.info-holder
+		{
+			.title
+			{
+				font-size: 15px;
+				font-weight: 300;
+				margin-bottom: 15px;
+				img
+				{
+					margin-right: 10px;
+				}
+			}
+			.desc
+			{
+				font-size: 15px;
+				font-weight: 300;
+				font-family: $content-text;
+				color: #585858;
+			}
 		}
 	}
 }

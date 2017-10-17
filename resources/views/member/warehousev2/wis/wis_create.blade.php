@@ -41,20 +41,20 @@
         <div class="form-group">
             <div class="col-md-4">
                 <label>Warehouse Destination</label>
-                <select required class="form-control select-warehouse" name="warehouse_id">
+                <select required class="form-control select-warehouse" name="destination_warehouse_id">
                     @foreach($_warehouse as $warehouse)
                         <option warehouse-address="{{$warehouse->warehouse_address}}" value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
                     @endforeach
                 </select>
             </div>
             <div class="col-md-4">
-                <label>WIS#</label>
+                <label>WIS Number</label>
                 <input type="text" name="wis_number" class="form-control">
             </div>
             <div class="col-md-6">
                 <label>Ship to</label>
                 <div>
-                    <textarea class="form-control txt-warehouse-address" name="wis_ship_to"></textarea>
+                    <textarea class="form-control txt-warehouse-address" name="destination_warehouse_address"></textarea>
                 </div>
             </div>
             <div class="col-md-6">

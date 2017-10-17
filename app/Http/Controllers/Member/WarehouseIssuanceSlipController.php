@@ -107,6 +107,8 @@ class WarehouseIssuanceSlipController extends Member
         $ins_wis['wis_number'] = $request->wis_number;
         $ins_wis['wis_from_warehouse'] = Warehouse2::get_current_warehouse($shop_id);
         $ins_wis['wis_remarks'] = $remarks;
+        $ins_wis['destination_warehouse_id'] = $request->destination_warehouse_id;
+        $ins_wis['destination_warehouse_address'] = $request->destination_warehouse_address;
         $ins_wis['created_at'] = Carbon::now();
 
         $_item = null;

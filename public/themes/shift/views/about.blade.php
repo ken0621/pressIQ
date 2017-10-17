@@ -26,9 +26,9 @@
     	</div>
     </section>
     <section class="second-row">
-    	<div class="container">
-    		<div class="title">Our <span>Team</span></div>
-	    	<div class="main">
+    	<div class="main clearfix">
+    		<div class="container">
+    			<div class="title">Our <span>Team</span></div>
 	    		<div class="img"><img class="img-responsive" src="/themes/{{ $shop_theme }}/img/team/main.png"></div>
 	    		<div class="name">Florentino Gemora Garcia</div>
 	    		<div class="sub">Vice President</div>
@@ -36,9 +36,11 @@
 	    		<div class="desc">His first employment was in January 1980 with a softdrinks company, Coca-Cola Bottlers Philippines, Inc. (Davao Plant). He rose from the ranks as a Route Salesman and 3 years after, he was promoted and was considered as the youngest District Sales Supervisor of Davao Coca-Cola Plant. With so much dedication in his work, accompanied with a track record of sales and administrative performance, he was promoted as Branch Manager in 1987. Ag ain, with ambitions to reach the top, he was promoted the following year as Regional Sales Manager in 1988. This time with Key Result Areas being achieved, he got numerous awards which includes Travel Incentives to Australia and other Asian Countries. In 1993, he was hired to be the Regional Manager of Pepsi-Cola Products Philippines to handle Eastern Visayas Operations.</div>
 	    		<div class="desc">In 1997, he shifted his management career as a Senior Regional Manager of Cebu with Ayala Plans, Inc. Though the products and services are intangible, he was able to bring the company to the limelight of success as TOP 3 in Sales; Administration and Recruitment Operations.</div>
 	    		<div class="desc">In 2007, he was hired as the pioneering General Manager of a networking company, Vital C Health Products, Inc. His experience in a networking company was very challenging because he was able to build a strong base of over 40,000 Distributors and created a great number of Millionaire Club Members. This is where he concluded that in MLM or Networking Business, ordinary people can earn extraordinary income!</div>
-	    	</div>
-	    	<div class="other">
-	    		<div class="row clearfix">
+    		</div>
+    	</div>
+    	<div class="other">
+    		<div class="container">
+    			<div class="row clearfix">
 	    			<div class="col-md-3">
 	    				<div class="img"><img class="img-responsive" src="/themes/{{ $shop_theme }}/img/team/1.png"></div>
 	    				<div class="name">Mitchel Despi Barawidan</div>
@@ -105,7 +107,7 @@
 	    				<div class="role">Sales Executive</div>
 	    			</div>
 	    		</div>
-	    	</div>
+    		</div>
     	</div>
     </section>
 </div>

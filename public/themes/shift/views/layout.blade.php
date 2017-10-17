@@ -64,7 +64,7 @@
                             <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a class="smoth-scroll" href="/">HOME</a></li>
                             <li class="{{ Request::segment(1) == "about" ? "active" : "" }}"><a class="smoth-scroll" href="/about">COMPANY</a></li>
                             <li class="{{ Request::segment(1) == "product" ? "active" : "" }}"><a class="smoth-scroll" href="#mission-vision">PRODUCTS</a></li>
-                            <li class="{{ Request::segment(1) == "contact" ? "active" : "" }}"><a class="smoth-scroll" href="#products">GET INTOUCH</a></li>
+                            <li class="{{ Request::segment(1) == "contact" ? "active" : "" }}"><a class="smoth-scroll" href="/contact">GET INTOUCH</a></li>
                         </ul>
                     </nav>
                 </div>

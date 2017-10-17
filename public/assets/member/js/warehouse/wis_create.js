@@ -35,12 +35,13 @@ function wis_create()
 	}
 	function event_remove_tr()
 	{		
-		$(document).on("click", ".remove-tr", function(e){
-		var len = $(".tbody-item .remove-tr").length;
-		if($(".tbody-item .remove-tr").length > 1)
+		$(document).on("click", ".remove-tr", function(e)
 		{
-			$(this).parent().remove();
-		}
+			var len = $(".tbody-item .remove-tr").length;
+			if($(".tbody-item .remove-tr").length > 1)
+			{
+				$(this).parent().remove();
+			}
 		});
 	}
 	function action_initialize_select()
@@ -48,6 +49,7 @@ function wis_create()
 		$('.droplist-item').globalDropList({
 			link : "/member/item/add",
             width : "100%",
+            placeholder : 'Search Item...',
             onCreateNew : function()
             {
             	// item_selected = $(this);
@@ -61,11 +63,19 @@ function wis_create()
             	}
             }
 		});
+		$('.select-warehouse').globalDropList({
+	        hasPopup : 'false',
+	        width    : '100%',
+	        onChangeValue : function()
+	        {
+	        	$('.txt-warehouse-address').text($(this).find("option:selected").attr('warehouse-address'));
+	        }
+    	});
 		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
             link : "/member/item/add",
             width : "100%",
-            maxHeight: "309px",
+            placeholder : 'Search Item...',
             onCreateNew : function()
             {
             	// item_selected = $(this);

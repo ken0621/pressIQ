@@ -473,5 +473,12 @@ function new_price_level_save_done(data)
 }
 function success_process_sale(data)
 {
-	
+	if(data.status == 'success')
+	{
+		toastr.success('Success Process Sales');
+		setInterval(function()
+		{
+			location.href = '/member/cashier/transactions_list?receipt_id='+data.receipt_id;
+		},2000);
+	}	
 }

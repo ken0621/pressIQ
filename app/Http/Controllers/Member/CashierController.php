@@ -180,7 +180,10 @@ class CashierController extends Member
                     }
                     if(is_numeric($validate))
                     {
+                        Session::forget('customer_id');
+                        Cart2::clear_cart();
                         $return['status'] = 'success';
+                        $return['receipt_id'] = $transaction_list_id;
                         $return['call_function'] = 'success_process_sale';
                     }
                     else

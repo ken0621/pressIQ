@@ -1,6 +1,7 @@
 @extends('member.layout')
 @section('content')
 <div class="panel panel-default panel-block panel-title-block">
+    <input type="hidden" name="" class="view-receipt" value="{{Request::input('receipt_id')}}">
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
     <div class="panel-heading">
         <div>

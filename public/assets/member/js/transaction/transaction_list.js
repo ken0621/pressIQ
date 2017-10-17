@@ -19,6 +19,14 @@ function transaction_list()
 		add_event_pagination();
 		event_initialize_select();
 		event_load_search();
+		action_onload_view_receipt();
+	}
+	function action_onload_view_receipt()
+	{
+		if($('.view-receipt').val() != '')
+		{			
+            action_load_link_to_modal('/member/cashier/transactions/view_item/'+$('.view-receipt').val(), 'md');
+		}
 	}
 	function event_initialize_select()
 	{

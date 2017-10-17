@@ -12,48 +12,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">   
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700" rel="stylesheet"> 
-        <!-- BOOTSTRAP -->
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
-        <!-- FONT AWESOME -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
-        <!-- SLICK CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick.css">
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick-theme.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
+        @include("frontend.ghead")
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-        <link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
-        <!-- THEME COLOR -->
-        <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
-        <!-- PARALLAX -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
-        <!-- Brown Custom Icon -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
-        <!-- LIGHTBOX -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/lightbox/css/lightbox.css">
-        <!-- WOW JS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/wow/css/animate.css">
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
-
         <!-- OTHER CSS -->
         @yield("css")
-        <style type="text/css">
-        .content
-        {
-            background-color: transparent;
-        }
-        .navbar.sticky
-        {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-        }
-        </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
@@ -73,8 +38,8 @@
                 <span>yourcompany.email</span>
             </div>
             <div class="right-container">
-                <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span>
                 <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span>
+                <span class="smoth-scroll sign" style="cursor: pointer;" onClick="location.href='/members/login'">SIGN IN</span>
             </div>
             @endif
         </div>
@@ -96,17 +61,10 @@
                 <!-- NAVIGATION -->
                     <nav class="navirino">
                         <ul>
-                            @if(Request::segment(1)=="members")
-                                <li><a class="smoth-scroll" href="/#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="/#aboutus">COMPANY</a></li>
-                                <li><a class="smoth-scroll" href="/#mission-vision">PRODUCTS</a></li>
-                                <li><a class="smoth-scroll" href="/#products">GET INTOUCH</a></li>
-                            @else
-                                <li><a class="smoth-scroll" href="#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="#aboutus">COMPANY</a></li>
-                                <li><a class="smoth-scroll" href="#mission-vision">PRODUCTS</a></li>
-                                <li><a class="smoth-scroll" href="#products">GET INTOUCH</a></li>
-                            @endif
+                            <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a class="smoth-scroll" href="/">HOME</a></li>
+                            <li class="{{ Request::segment(1) == "about" ? "active" : "" }}"><a class="smoth-scroll" href="/about">COMPANY</a></li>
+                            <li class="{{ Request::segment(1) == "product" ? "active" : "" }}"><a class="smoth-scroll" href="#mission-vision">PRODUCTS</a></li>
+                            <li class="{{ Request::segment(1) == "contact" ? "active" : "" }}"><a class="smoth-scroll" href="/contact">GET INTOUCH</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -116,7 +74,9 @@
     
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
-       @yield("content")
+        <div class="content">
+            @yield("content")
+        </div>
     </div>
 
     <!-- FOOTER -->
@@ -150,41 +110,21 @@
             </div>
         </div>
     </footer>
-    <div class="container">
-        <div class="bottom">                           
-            <div class="ftr-title">© SHIFT Business Corporation. All Right Reserved</div>
+    
+    <div class="bottom clearfix">      
+        <div class="container">                     
+            <div class="ftr-title">© {{ date("Y") }} SHIFT Business Corporation. All Right Reserved</div>
             <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
         </div>
     </div>
-    
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
-    <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/match-height.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
-    {{-- GLOBALS --}}
-    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/globalv2.js"></script>
-    {{-- GLOBALS --}}
+
+    @include("frontend.gfoot")
+
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/figuesslider.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
-
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/lightbox/js/lightbox.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/scrollspy.js"></script>
-    <script src="/themes/{{ $shop_theme }}/assets/easing/jquery.easing.min.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/wow/js/wow.min.js"></script>
-
-    <script>
-          new WOW().init();
-    </script>
-
-    <!-- FROM HOME.BLADE -->
-    <!-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css"> -->
 
     <!-- FB WIDGET -->
     <div id="fb-root"></div>
+<<<<<<< HEAD
     <script>
         (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
@@ -330,8 +270,9 @@
     {{-- GLOBAL MULTIPLE MODAL --}}
     <div class="multiple_global_modal_container"></div>
     {{-- END GLOBAL MULTIPLE MODAL --}}
+=======
+>>>>>>> mod_edw_front_shift
 
-    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
     @yield("script")
     </body>
 </html>

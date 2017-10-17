@@ -45,7 +45,7 @@
         <div class="title">Your Opportunity</div>
         <div class="sub">If you like the brands we have, we would like to ask you to join our ever increasing team of distributors and become our partner in promoting S.H.I.F.T.! A very good and competitive compensation package comes with it. A perfect way to add an extra flow of cash in your basket. To find out more, contact any of our TEAM LEADERS or DIRECTORS.</div>
         <div class="row clearfix">
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
                 <div class="opportunity-holder">
                     <div class="title"><img src="/themes/{{ $shop_theme }}/img/icon/cloud.png"> Downloadable Forms</div>
                     <ul>
@@ -57,7 +57,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
                 <div class="opportunity-holder">
                     <div class="title"><img src="/themes/{{ $shop_theme }}/img/icon/powerpoint.png"> Shift Business Presentation</div>
                     <ul>
@@ -69,7 +69,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-12">
                 <div class="opportunity-holder">
                     <div class="title">
                         {{-- <img src="/themes/{{ $shop_theme }}/img/icon/cup.png"> --}}

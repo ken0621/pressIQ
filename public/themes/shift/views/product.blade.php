@@ -9,7 +9,7 @@
 <section class="main">
     <div class="container">
         <div class="row clearfix">
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-6">
                 <div class="holder">
                     <div class="img"><img src="/themes/{{ $shop_theme }}/img/brand.jpg"></div>
                     <div class="name match-height">Cellcare Health Supplement</div>
@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-6">
                 <div class="holder">
                     <div class="img"><img src="/themes/{{ $shop_theme }}/img/brand.jpg"></div>
                     <div class="name match-height">Cellcare Health Supplement</div>
@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-6">
                 <div class="holder">
                     <div class="img"><img src="/themes/{{ $shop_theme }}/img/brand.jpg"></div>
                     <div class="name match-height">Cellcare Health Supplement</div>
@@ -36,7 +36,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-6">
                 <div class="holder">
                     <div class="img"><img src="/themes/{{ $shop_theme }}/img/brand.jpg"></div>
                     <div class="name match-height">Cellcare Health Supplement</div>
@@ -45,7 +45,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-6">
                 <div class="holder">
                     <div class="img"><img src="/themes/{{ $shop_theme }}/img/brand.jpg"></div>
                     <div class="name match-height">Cellcare Health Supplement</div>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-6">
                 <div class="holder">
                     <div class="img"><img src="/themes/{{ $shop_theme }}/img/brand.jpg"></div>
                     <div class="name match-height">Cellcare Health Supplement</div>
@@ -63,7 +63,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-6">
                 <div class="holder">
                     <div class="img"><img src="/themes/{{ $shop_theme }}/img/brand.jpg"></div>
                     <div class="name match-height">Cellcare Health Supplement</div>
@@ -72,7 +72,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-6">
                 <div class="holder">
                     <div class="img"><img src="/themes/{{ $shop_theme }}/img/brand.jpg"></div>
                     <div class="name match-height">Cellcare Health Supplement</div>

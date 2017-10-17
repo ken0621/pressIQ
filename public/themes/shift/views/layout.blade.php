@@ -19,6 +19,8 @@
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <!-- OTHER CSS -->
         @yield("css")
+        {{-- RESPONSIVE CSS --}}
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css">
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
@@ -47,8 +49,8 @@
     <div class="header-container">
         <div class="container">
             <div class="row clearfix">
-                <div class="col-md-2">
-                    <div class="image-logo-holder">
+                <div class="col-md-2 col-sm-12">
+                    <div class="image-logo-holder clearfix">
                         <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/shift-logo.png"></a>                       
                     </div>
                     <div class="menu-nav">
@@ -84,12 +86,12 @@
         <div class="container">
             <div class="footer-container">
                 <div class="upper row clearfix">
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-sm-6">
                         <div class="inner-content">
                             <img src="/themes/{{ $shop_theme }}/img/footer-banner.jpg">
                         </div>
                     </div>
-                     <div class="col-md-4">
+                     <div class="col-md-4 col-sm-6">
                          <div class="inner-content">
                              <div class="inner-content-title">Information</div>
                              <p>FAQ</p>
@@ -98,7 +100,7 @@
                              <p>Company</p>
                          </div>
                      </div> 
-                     <div class="col-md-4">
+                     <div class="col-md-4 col-sm-12">
                          <div class="inner-content">
                              <div class="inner-content-title">Contact Information</div>
                              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. </p>

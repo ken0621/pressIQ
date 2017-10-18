@@ -80,7 +80,7 @@ class Warehouse2
         return $prefix.sprintf("%'.05d", $history_ctr+1);
 
     }
-    public static function transfer_validation($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array())
+    public static function transfer_validation($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array(), $source = array(), $to = array())
     {
         $return = null;
 
@@ -92,7 +92,21 @@ class Warehouse2
             if($item_data)
             {
                 $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->first();
-                 if(is_numeric($quantity) == false)
+
+                if(isset($source['name']) && isset($source['id']) && isset($to['name']) && isset($to['id']))
+                {   
+                    if($source['name'] == 'wis')
+                    {
+                        $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->where('record_consume_ref_name',$source['name'])->where('record_consume_ref_id',$source['id'])->first();
+                        $truck_qty = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->where('record_consume_ref_name',$source['name'])->where('record_consume_ref_id',$source['id'])->count();
+                    }
+
+                    if($truck_qty < $quantity)
+                    {
+                        $return .= 'The quantity of '.$item_data->item_name.' is not enough to transfer <br>';
+                    }
+                }
+                if(is_numeric($quantity) == false)
                 { 
                     $return .= "The quantity must be a number. <br>";
                 }
@@ -213,7 +227,7 @@ class Warehouse2
         foreach ($_item as $key => $value)
         {
             $serial = isset($value['serial']) ? $value['serial'] : array();
-            $validate .= Warehouse2::transfer_validation($shop_id, $wh_from, $wh_to, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+            $validate .= Warehouse2::transfer_validation($shop_id, $wh_from, $wh_to, $value['item_id'], $value['quantity'], $value['remarks'], $serial, $source, $to);
         }
 
         if(!$validate)

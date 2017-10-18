@@ -20,19 +20,21 @@ use App\Globals\Settings;
 
 class EmployeeController extends PayrollMember{
 
+	public function employee_info()
+	{
+		return $this->employee_info;
+	}
+
 	public function employee(){
 
 		$data['page']	= 'Home';
-
+		
 		return view('member.payroll2.employee_dashboard.employee',$data);
 	}
 	public function employee_profile(){
 
 		$data['page']	= 'Profile';
-
-	
-
-
+		
 		return view('member.payroll2.employee_dashboard.employee_profile',$data);
 	}
 	public function employee_leave_application(){

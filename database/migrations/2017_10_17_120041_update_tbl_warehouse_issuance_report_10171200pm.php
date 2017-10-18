@@ -18,7 +18,7 @@ class UpdateTblWarehouseIssuanceReport10171200pm extends Migration
             $table->text('destination_warehouse_address')->after('wis_number');
             $table->integer('destination_warehouse_id')->nullable()->unsigned()->after('wis_number');
 
-            $table->foreign('destination_warehouse_id')->OnReference('warehouse_id')->on('tbl_warehouse');
+            $table->foreign('destination_warehouse_id')->references('warehouse_id')->on('tbl_warehouse');
         });
     }
 

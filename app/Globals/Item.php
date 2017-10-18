@@ -1646,6 +1646,7 @@ class Item
     public static function disassemble_membership_kit($record_log_id)
     {
         $record_data = Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->first();
+        $qty = Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->count();
 
         if($record_data)
         {
@@ -1653,7 +1654,9 @@ class Item
            foreach ($item_list as $key => $value) 
            {
                 Warehouse2::consume_update('assemble_item', $record_data->record_item_id, $value->bundle_item_id, $value->bundle_qty);
+                Warehouse2::update_inventory_count($record_data->record_warehouse_id, $record_log_id, $value->bundle_item_id, $value->bundle_qty);
            }
+           Warehouse2::update_inventory_count($record_data->record_warehouse_id, $record_log_id, $record_data->record_item_id, -($qty));
 
            Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->delete();
         }

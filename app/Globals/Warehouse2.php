@@ -587,6 +587,7 @@ class Warehouse2
     public static function consume_update($ref_name, $ref_id, $item_id, $quantity)
     {
         $data = Tbl_warehouse_inventory_record_log::where("record_consume_ref_name",$ref_name)->where("record_consume_ref_id",$ref_id)->get();
+        
         for ($ctr_qty = 0; $ctr_qty < $quantity ; $ctr_qty ++) 
         { 
             $update['record_consume_ref_name'] = '';

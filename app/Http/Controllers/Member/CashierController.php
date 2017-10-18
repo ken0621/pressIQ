@@ -19,6 +19,7 @@ class CashierController extends Member
         $data["cart"]           = $_items = Cart2::get_cart_info();
         $data["_price_level"]   = Item::list_price_level($this->user_info->shop_id);
         $data["current_level"]  = ($data["cart"]["info"] ? $data["cart"]["info"]->price_level_id : 0);
+        $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
         
         if(Session::has('customer_id'))
         {
@@ -134,6 +135,7 @@ class CashierController extends Member
         $transaction_new["transaction_reference_id"]        = Session::get('customer_id');
         $transaction_type                                   = "ORDER";
         $transaction_date                                   = Carbon::now();
+        $destination_warehouse_id                           = Request::input('destination_warehouse_id');
 
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
         $return = null;
@@ -144,6 +146,11 @@ class CashierController extends Member
             foreach ($cart["_item"] as $key => $value)
             {
                 $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity,'Consume');
+            }
+
+            if(!$destination_warehouse_id && $consume_inventory == 'wis')
+            {
+                $validate .= 'Please choose a warehouse destination <br>';
             }
 
             if(!$validate)
@@ -166,6 +173,7 @@ class CashierController extends Member
                         $ins_wis['wis_shop_id'] = $shop_id;
                         $ins_wis['wis_number'] = $get_transaction_list->transaction_number;
                         $ins_wis['wis_from_warehouse'] = $warehouse_id;
+                        $ins_wis['destination_warehouse_id'] = Request::input('destination_warehouse_id');
                         $ins_wis['wis_remarks'] = $remarks;
                         $ins_wis['created_at'] = Carbon::now();
 

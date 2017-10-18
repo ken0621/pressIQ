@@ -58,6 +58,26 @@ class CustomerController extends Member
             return $this->show_no_access();
         }
 	}
+
+    public function bulk_archive()
+    {
+        $data["_customer"]  = Customer::getAllCustomer();
+
+        return view("member.customer.bulk_archive", $data);
+    }
+
+    public function bulk_archive_post()
+    {
+        $customer_id = Request::input('customer_id');
+
+        foreach ($customer_id as $key => $value) 
+        {
+            $update["archived"] = 1;
+            Tbl_customer::where("customer_id", $value)->where("shop_id", $this->user_info->shop_id)->update($update);
+        }
+
+        return Redirect::back();
+    }
 	
 	public function customerlist($archived = 0, $IsWalkin = 0)
     {

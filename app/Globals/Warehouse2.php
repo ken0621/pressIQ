@@ -25,6 +25,7 @@ use App\Models\Tbl_settings;
 
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
+use App\Globals\Warehouse;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Tablet_global;
 use App\Globals\Currency;

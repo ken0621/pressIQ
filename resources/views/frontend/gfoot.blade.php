@@ -26,6 +26,8 @@
 <script type="text/javascript" src="/assets/slick/slick.min.js"></script>
 {{-- LIGHTBOX --}}
 <script type="text/javascript" src="/assets/lightbox/js/lightbox.js"></script>
+<!-- LIGHTSPEEDBOX -->
+<script type="text/javascript" src="/assets/lightspeedbox/lsb.min.js"></script>
 {{-- EASING --}}
 <script type="text/javascript" src="/assets/easing/jquery.easing.min.js"></script>
 {{-- WOW --}}

@@ -131,47 +131,7 @@
 						</div>
 						<div class="col-md-8">
 							<div class="event-detail-container">
-								<div class="title max-lines-title">Lorem ipsum dolor sit amet, conse tetuer adipiscing elit.</div>
-								<div class="date"><span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>OCTOBER 20, 2017</span></div>
-								<div class="desc">
-									<p class="max-lines-desc">
-										Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="per-event row clearfix">
-						<div class="col-md-4">
-							<div class="event-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/event2.jpg">
-							</div>
-						</div>
-						<div class="col-md-8">
-							<div class="event-detail-container">
-								<div class="title max-lines-title">Lorem ipsum dolor sit amet, conse tetuer adipiscing elit.</div>
-								<div class="date"><span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>OCTOBER 20, 2017</span></div>
-								<div class="desc">
-									<p class="max-lines-desc">
-										Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="per-event row clearfix">
-						<div class="col-md-4">
-							<div class="event-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/event3.jpg">
-							</div>
-						</div>
-						<div class="col-md-8">
-							<div class="event-detail-container">
-								<div class="title max-lines-title">Lorem ipsum dolor sit amet, conse tetuer adipiscing elit.</div>
+								<div class="title max-lines-title">MCE CLASS MODULE 3&4</div>
 								<div class="date"><span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>OCTOBER 20, 2017</span></div>
 								<div class="desc">
 									<p class="max-lines-desc">

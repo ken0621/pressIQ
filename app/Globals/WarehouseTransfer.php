@@ -47,7 +47,7 @@ class WarehouseTransfer
 
 		foreach ($data as $key => $value) 
 		{
-			$count = Tbl_warehouse_inventory_record_log::where('record_source_ref_name','wis')->where('record_source_ref_id',$value->wis_id)->count();
+			$count = Tbl_warehouse_receiving_report::wis()->inventory_item()->where('tbl_warehouse_receiving_report.wis_id',$value->wis_id)->count();
 
 			$data[$key]->total_received_qty = $count;
 		}
@@ -152,6 +152,12 @@ class WarehouseTransfer
             $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
         }
 
+        $check = Tbl_warehouse_issuance_report::where('wis_number',$ins['wis_number'])->where('wis_shop_id',$shop_id)->first();
+        if($check)
+        {
+        	$validate .= 'WIS number already exist';
+        }
+
         if(!$validate)
         {
         	$wis_id = Tbl_warehouse_issuance_report::insertGetId($ins);
@@ -180,9 +186,13 @@ class WarehouseTransfer
 
         return $validate;
 	}
+    public static function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
+    }
 	public static function get_wis_data($wis_id)
 	{
-		return Tbl_warehouse_issuance_report::where('wis_id',$wis_id)->first();
+		return Tbl_warehouse_issuance_report::where('wis_shop_id',WarehouseTransfer::getShopId())->where('wis_id',$wis_id)->first();
 	}
 	public static function get_wis_item($wis_id)
 	{
@@ -200,6 +210,15 @@ class WarehouseTransfer
 
 		return $return_item;
 	}
+	public static function print_wis_item($wis_id)
+	{
+		return Tbl_warehouse_issuance_report_item::inventory_item()->where('wis_id',$wis_id)->groupBy('record_item_id')->get();
+	}
+	public static function print_rr_item($rr_id)
+	{
+		return Tbl_warehouse_receiving_report_item::inventory_item()->where('rr_id',$rr_id)->groupBy('record_item_id')->get();
+	}
+
 	public static function get_warehouse_data($warehouse_id)
 	{
         return Tbl_warehouse::shop()->where('warehouse_id',$warehouse_id)->first();
@@ -248,22 +267,43 @@ class WarehouseTransfer
     	$return = null;
 
         $wis_data = WarehouseTransfer::get_wis_data($wis_id);
+
+        if($wis_data->destination_warehouse_id)
+        {
+	        if($wis_data->destination_warehouse_id != $ins_rr['warehouse_id'])
+	        {
+	        	$warehouse_name = Warehouse2::check_warehouse_existence($shop_id, $ins_rr['warehouse_id'])->warehouse_name;
+	        	$return .= '<b>'.ucfirst($warehouse_name).'</b> is not supposed to received items in this WIS - ('.$wis_data->wis_number.')';
+	        }   
+        }
+
     	foreach ($_item as $key => $value) 
     	{
         	$return .= Warehouse2::transfer_validation($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $value['item_id'], $value['quantity'], 'rr');
     	}
 
+
+        $check = Tbl_warehouse_receiving_report::where('rr_number',$ins_rr['rr_number'])->where('rr_shop_id',$shop_id)->first();
+        if($check)
+        {
+        	$return .= 'RR number already exist';
+        }
+
     	if(!$return)
     	{
-	        $source['name'] = 'wis';
-	        $source['id'] = $ins_rr['wis_id'];    		
+        	$rr_id = Tbl_warehouse_receiving_report::insertGetId($ins_rr);
 
-        	$val = Warehouse2::transfer_bulk($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $_item, $ins_rr['rr_remarks'], $source);
+	        $source['name'] = 'wis';
+	        $source['id'] = $wis_id;	
+
+	        $to['name'] = 'rr';
+	        $to['id'] = $rr_id;	
+
+        	$val = Warehouse2::transfer_bulk($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $_item, $ins_rr['rr_remarks'], $source, $to);
 
         	if(!$val)
         	{
-        		$rr_id = Tbl_warehouse_receiving_report::insertGetId($ins_rr);
-        		$get_item = Tbl_warehouse_inventory_record_log::where('record_source_ref_name','wis')->where('record_source_ref_id',$wis_id)->get();
+        		$get_item = Tbl_warehouse_inventory_record_log::where('record_source_ref_name','rr')->where('record_source_ref_id',$rr_id)->get();
 
         		$ins_report_item = null;
         		foreach ($get_item as $key_item => $value_item)

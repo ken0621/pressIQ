@@ -219,6 +219,25 @@ class ShopMemberController extends Shop
     }
     public function getRequestPayout()
     {
+        $settings = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
+        if ($settings->encashment_settings_schedule != 0) 
+        {
+            if (date("j") != $settings->encashment_settings_schedule) 
+            {
+                echo '<div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+                    </div>';
+
+                echo "<h3 class='text-center' style='margin: 25px 0;'>You can only request payout every " . ordinal($settings->encashment_settings_schedule) . " day of the month.</h3>";
+                
+                echo '<div class="modal-footer">
+                        <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>';
+                die();
+            }
+        }
+        
         $data["page"] = "Request Payout";
         $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
         return view("member2.request_payout", $data);
@@ -329,7 +348,7 @@ class ShopMemberController extends Shop
                         $date       = date("m/d/Y");
                         $status     = "PENDING";
 
-                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $charge_amount, $other, $date, $status);
+                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
                     }
                 }
 

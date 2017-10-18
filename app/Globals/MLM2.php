@@ -16,6 +16,7 @@ use App\Models\Tbl_rank_repurchase_cashback_item;
 use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_mlm_stairstep_settings;
+use App\Models\Tbl_mlm_plan_setting;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
@@ -442,7 +443,10 @@ class MLM2
 			}
 		});
 
-		$query->where("wallet_log_amount", ">", 0);
+		if($shop_id != 52)
+		{
+			$query->where("wallet_log_amount", ">", 0);
+		}
 
 		
 
@@ -577,7 +581,7 @@ class MLM2
 
 
 			default:
-				$message = $reward->wallet_log_plan;
+				$message = $reward->wallet_log_details;
 			break;
 		}
 
@@ -1174,21 +1178,29 @@ class MLM2
 	}
 	public static function check_sponsor_have_placement($shop_id,$slot_id)
 	{
-		$sponsor = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
-		if($sponsor)
-		{	
-	    	if(($sponsor->slot_placement == 0 || $sponsor->slot_placement == null) && ($sponsor->slot_sponsor != null || $sponsor->slot_sponsor != 0))
-	    	{
-	    		$proceed = 0;
-	    	}
-	    	else
-	    	{
-	    		$proceed = 1;
-	    	}
+		$setting = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
+		if($setting->plan_settings_placement_required == 1)
+		{
+			$sponsor = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
+			if($sponsor)
+			{	
+		    	if(($sponsor->slot_placement == 0 || $sponsor->slot_placement == null) && ($sponsor->slot_sponsor != null || $sponsor->slot_sponsor != 0))
+		    	{
+		    		$proceed = 0;
+		    	}
+		    	else
+		    	{
+		    		$proceed = 1;
+		    	}
+			}
+			else
+			{
+				$proceed = 0;
+			}
 		}
 		else
 		{
-			$proceed = 0;
+			$proceed = 1;
 		}
 
         // if($check_sponsor->slot_placement == 0 || $check_sponsor->slot_placement == null)

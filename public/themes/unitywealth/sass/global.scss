@@ -209,7 +209,7 @@ button:hover{
 
 	@media screen and (max-width: 991px)
 	{
-		width: 75%;
+		width: 33%;
 		img 
 		{
 			margin-top: -9px;
@@ -222,6 +222,12 @@ button:hover{
 			float: left;
 		}
 	}
+
+	@media screen and (max-width: 420px)
+	{
+		width: 65%;
+	}
+
 	&:hover{
 		cursor: pointer;
 	}
@@ -236,7 +242,7 @@ button:hover{
 		padding: 7.5px 12px 7.5px 12px;
 		margin-left: auto;
 		margin-top: 20px;
-		background-color: #019771;
+		background-color: #77b93f;
 		span
 		{
 			display: block;

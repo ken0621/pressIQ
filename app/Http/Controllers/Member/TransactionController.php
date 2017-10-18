@@ -53,7 +53,7 @@ class TransactionController extends Member
         
         return view("member.transaction.transaction_item", $data);
     }
-    public function transaction_list()
+    public function transaction_list(Request $request)
     {
         $data['_type'] = Transaction::get_all_transaction_type();
         

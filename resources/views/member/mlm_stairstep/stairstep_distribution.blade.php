@@ -49,7 +49,7 @@
           </span>
         </div>
       </div>
-      <div class="col-md-3 pull-right">
+<!--       <div class="col-md-3 pull-right">
         <div class="input-group stylish-input-group pull-right">
           <input type="text" class="form-control pull-right"  placeholder="Search" >
           <span class="input-group-addon">
@@ -58,7 +58,7 @@
             </button>  
           </span>
         </div>
-      </div>
+      </div> -->
     </form>
   </div>
   <br>        
@@ -234,6 +234,19 @@
 @section('script')
 <script type="text/javascript">
 
+  $('.start_picker').keypress(function(e)
+  {
+      if ( e.which == 13 ) return false;
+      //or...
+      if ( e.which == 13 ) e.preventDefault();
+  });
+  
+  $('.end_picker').keypress(function(e)
+  {
+      if ( e.which == 13 ) return false;
+      //or...
+      if ( e.which == 13 ) e.preventDefault();
+  });
   $(".submit_btn_distribute").click(function() 
   {
     $("#distribute_form").submit();

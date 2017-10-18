@@ -195,6 +195,8 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::any('product_order/create_order/submit_payment_upload','Member\ProductOrderController@submit_payment_upload');
 	
 	Route::get('product_order2','Member\ProductOrderController2@index');
+	Route::post('product_order2/table','Member\ProductOrderController2@table');
+	Route::get('product_order2/proof','Member\ProductOrderController2@proof');
 	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
 	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
 	
@@ -1072,6 +1074,10 @@ AdvancedRoute::controller('/member/ecommerce/trackings', 'Member\TrackingsContro
 
 
 /* MEMBER SHIPPING*/
+AdvancedRoute::controller('/member/warehouse/migration', 'Member\WarehouseMigrateController');
+/* End */
+
+/* MEMBER SHIPPING*/
 AdvancedRoute::controller('/member/register/shipping', 'MemberController');
 /* End */
 
@@ -1162,3 +1168,7 @@ include_once('routes_config/routes_item.php');
 
 /* Members Area */
 include_once('routes_config/routes_members_area.php');
+
+
+Route::get('/ref/{id}', 'Shop\LeadController@ref');
+Route::get('/{id}', 'Shop\LeadController@ref');

@@ -115,7 +115,7 @@ button:hover{
 		{
 			position: fixed;
 			width: 100%;
-			z-index: 999;
+			z-index: 29;
 			top: 0;
 			border-bottom: 1px solid #dedede;
 		}
@@ -301,6 +301,7 @@ button:hover{
 				vertical-align: top;
 				width: 21px;
 				text-align: right;
+
 				.jca-footer-icon
 				{
 						
@@ -318,6 +319,12 @@ button:hover{
 				margin-left: 14px;
 				margin-bottom: 10px;
 			}
+				
+			a
+			{
+				text-decoration: none;
+			}
+
 			.footer-detail-list
 			{
 				font-family: "Raleway Regular", sans-serif;
@@ -325,6 +332,11 @@ button:hover{
 				margin: 0px;
 				color: #ffffff;
 				margin-bottom: 5px;
+
+				&:hover
+				{
+					color: #BCBCBC;
+				}
 			}
 		}
 	}
@@ -620,7 +632,7 @@ button:hover{
     right: 20px;
     display: none;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 99;
+    z-index: 29;
     &:hover{
     	cursor: pointer;
     }

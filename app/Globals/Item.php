@@ -343,7 +343,7 @@ class Item
     /* READ DATA */
     public static function get($shop_id = 0, $paginate = false, $archive = 0)
     {
-        $query = Tbl_item::where("tbl_item.shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->um_multi()->membership();
+        $query = Tbl_item::where("tbl_item.shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->membership();
 
         if(session("get_inventory"))
         {
@@ -371,12 +371,12 @@ class Item
         /* CHECK IF THERE IS PAGINATION */
         if($paginate)
         {
-            $_item = $query->paginate($paginate);
+            $_item = $query->groupBy('tbl_item.item_id')->paginate($paginate);
             session(['item_pagination' => $_item->render()]);
         }
         else
         {
-            $_item = $query->get();
+            $_item = $query->groupBy('tbl_item.item_id')->get();
         }
 
         /* ITEM ADDITIONAL DATA */

@@ -88,35 +88,46 @@ class WarehouseReceivingReportController extends Member
         $items = null;
         foreach ($_item as $key => $value) 
         {
-            if($request->wis_item_quantity[$key] < $value)
+            if($value)
             {
-                $return .= "The ITEM no ".$key." is not enough to transfer <br>";
-            }
+                if($request->wis_item_quantity[$key] < $value)
+                {
+                    $return .= "The ITEM no ".$key." is not enough to transfer <br>";
+                }
 
-            $items[$key]['item_id'] = $key;
-            $items[$key]['quantity'] = $value;
-            $items[$key]['remarks'] = 'Transfer item no. '.$key.' from WIS -('.$wis_data->wis_number.')';
+                $items[$key]['item_id'] = $key;
+                $items[$key]['quantity'] = $value;
+                $items[$key]['remarks'] = 'Transfer item no. '.$key.' from WIS -('.$wis_data->wis_number.')';                
+            }
         }
 
         $data = null;
-        if(!$return)
+        if(count($items) > 0)
         {
-            $val = WarehouseTransfer::create_rr($shop_id, $ins_rr['wis_id'], $ins_rr, $items);
-            if(!$val)
+            if(!$return)
             {
-                $data['status'] = 'success';
-                $data['call_function'] = 'success_rr';                
+                $val = WarehouseTransfer::create_rr($shop_id, $ins_rr['wis_id'], $ins_rr, $items);
+                if(!$val)
+                {
+                    $data['status'] = 'success';
+                    $data['call_function'] = 'success_rr';                
+                }
+                else
+                {
+                    $data['status'] = 'error';
+                    $data['status_message'] = $val;
+                }
             }
             else
             {
                 $data['status'] = 'error';
-                $data['status_message'] = $val;
+                $data['status_message'] = $return;
             }
         }
         else
         {
             $data['status'] = 'error';
-            $data['status_message'] = $return;
+            $data['status_message'] = "You don't have any items to receive.";
         }
 
         return json_encode($data);

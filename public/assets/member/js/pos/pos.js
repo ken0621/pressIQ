@@ -112,6 +112,11 @@ function pos()
 			hasPopup : "false",
 			width    : '100%'		
 		});
+
+		$('.select-warehouse').globalDropList({
+	        hasPopup : 'false',
+	        width    : '100%'
+    	});
 	}
 	function event_remote_item_from_cart()
 	{
@@ -334,6 +339,12 @@ function pos()
 			action_scan_item($item_id);
 			action_hide_search();
 		});
+		$("body").on("click", ".pos-customer-search-result", function(e)
+		{
+			$customer_id = $(e.currentTarget).attr("customer_id");
+			action_scan_customer($customer_id);
+			action_hide_search();
+		});
 	}
 	function action_scan_item($item_id)
 	{
@@ -462,6 +473,18 @@ function pos()
 	{
 		return '<div style="padding: ' + $padding + 'px; font-size: 20px;" class="text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>';
 	}
+}
+
+function toggle_destination(className) 
+{
+    if($('.wis-click').prop('checked'))
+    {
+    	$(className).slideDown();
+    }
+    else 
+    {
+    	$(className).slideUp();
+    }
 }
 
 function new_price_level_save_done(data)

@@ -3,6 +3,7 @@ var account_selected = '';
 var item_selected; 
 var item_type = null;
 var global_tr_html = $(".div-script tbody").html();
+var global_tr_html_group = $(".div-script-group tbody").html();
 var cat_type = '';
 function item()
 {
@@ -317,16 +318,78 @@ function item()
 
     function event_add_tr()
     {
-        $(document).on("click", ".add-tr", function(e){
-            $("tbody.tbody-item").append(global_tr_html);
-            action_trigger_select_plugin();
+        $(document).off("click", ".add-tr-bundle");
+        $(document).on("click", ".add-tr-bundle", function(e){
+            $("tbody.tbody-item-bundle").append(global_tr_html);
+            action_trigger_select_plugin_bundle();
+        });
+        $(document).off("click", ".add-tr-group");
+        $(document).on("click", ".add-tr-group", function(e){
+            $("tbody.tbody-item-group").append(global_tr_html_group);
+            action_trigger_select_plugin_group();
         });
     }
-    
-    function action_trigger_select_plugin()
+    function action_trigger_select_plugin_group()
     {
-        action_select_plugin_item(".tbody-item tr:last select.select-item");
-        action_select_plugin_um(".tbody-item tr:last select.select-um-one");
+        $(".tbody-item-group .tr-group-row:last select.drop-down-item-group").globalDropList(
+        {
+            link        : '/member/item/add',
+            link_size   : 'lg',
+            hasPopup    : 'false',
+            width       : "100%",
+            maxHeight   : "309px",
+            placeholder : 'Item',
+            onCreateNew : function()
+            {
+                item_selected = $(this);
+            },
+            onChangeValue: function()
+            {
+                action_load_item_info($(this));
+            }
+        });
+        $(".tbody-item-group .tr-group-row:last select.select-um-one").globalDropList(
+        {
+            width       : '100%',
+            hasPopup    : "false",
+            placeholder : 'Unit of Measurement',
+            onChangeValue : function()
+            {
+                var option = $('option:selected', this).attr('abbrev');
+                $(".abbreviation").text(option);
+            }
+        });
+    }
+    function action_trigger_select_plugin_bundle()
+    {
+        $(".tbody-item-bundle .tr-bundle-row:last select.drop-down-item-bundle").globalDropList(
+        {
+            link        : '/member/item/add',
+            link_size   : 'lg',
+            hasPopup    : 'false',
+            width       : "100%",
+            maxHeight   : "309px",
+            placeholder : 'Item',
+            onCreateNew : function()
+            {
+                item_selected = $(this);
+            },
+            onChangeValue: function()
+            {
+                action_load_item_info($(this));
+            }
+        });
+        $(".tbody-item-bundle .tr-bundle-row:last select.select-um-one").globalDropList(
+        {
+            width       : '100%',
+            hasPopup    : "false",
+            placeholder : 'Unit of Measurement',
+            onChangeValue : function()
+            {
+                var option = $('option:selected', this).attr('abbrev');
+                $(".abbreviation").text(option);
+            }
+        });        
     }
 
     function action_remain_only_one_add()

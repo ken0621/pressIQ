@@ -68,6 +68,8 @@
 
 				</div>
 
+
+
 				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
 					@if(count($_point_plan) > 0)
@@ -88,6 +90,25 @@
 					<div class="chart-legend text-center">
 						<button class="btn btn-lblue" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 					</div>
+				</div>
+
+
+
+			</div>
+
+			<div class="col-md-12">
+				<div class="title">Replicated Link</div>
+				<div class="sub-container">
+						@foreach($_slot as $slot)
+						<div class="holder">
+							<div class="row clearfix">
+								<div class="col-sm-12 text-center">
+									<div class="label2">{{ $slot->slot_no }}</div>
+									<div class="label3"> <a href="javascript:" onclick="action_load_link_to_modal('/members/lead?slot_no={{ $slot->slot_no }}')"> VIEW LEAD LINK</a></b></div>
+								</div>
+							</div>
+						</div>
+						@endforeach
 				</div>
 			</div>
 		</div>

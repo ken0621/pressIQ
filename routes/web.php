@@ -1170,3 +1170,7 @@ include_once('routes_config/routes_item.php');
 
 /* Members Area */
 include_once('routes_config/routes_members_area.php');
+
+
+Route::get('/ref/{id}', 'Shop\LeadController@ref');
+Route::get('/{id}', 'Shop\LeadController@ref');

@@ -127,8 +127,18 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-4 text-right" for="email">Consume Item</label>
                                 <div class="col-sm-8">
-                                    <label class="radio-inline"><input type="radio" name="consume_inventory" checked value="instant">Instant</label>
-                                    <label class="radio-inline"><input type="radio"  name="consume_inventory" value="wis">WIS</label>
+                                    <label class="radio-inline"><input type="radio" onclick="toggle_destination('.warehouse-destination')"  name="consume_inventory" checked value="instant">Instant</label>
+                                    <label class="radio-inline"><input type="radio" class="wis-click" onclick="toggle_destination('.warehouse-destination')"  name="consume_inventory" value="wis">WIS</label>
+                                </div>
+                            </div>
+                            <div class="form-group warehouse-destination" style="display: none">
+                                <label class="control-label col-sm-4 text-right" for="email">Warehouse Destination</label>
+                                <div class="col-sm-8"> 
+                                    <select class="form-control select-warehouse" name="destination_warehouse_id">
+                                        @foreach($_warehouse as $warehouse)
+                                            <option warehouse-address="{{$warehouse->warehouse_address}}" value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group">

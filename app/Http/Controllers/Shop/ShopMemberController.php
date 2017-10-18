@@ -348,7 +348,7 @@ class ShopMemberController extends Shop
                         $date       = date("m/d/Y");
                         $status     = "PENDING";
 
-                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $charge_amount, $other, $date, $status);
+                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
                     }
                 }
 

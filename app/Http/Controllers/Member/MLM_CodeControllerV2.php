@@ -95,11 +95,11 @@ class MLM_CodeControllerV2 extends Member
         $item_id            = $request->item_id;
         $quantity           = ($request->quantity <= 0 ? 1 : $request->quantity);
         $warehouse_id       = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+        Item::get_inventory($warehouse_id);
         $item_info          = Item::info($item_id);
         $_item              = Item::get_item_from_bundle($item_id, $warehouse_id);
         $_new_item          = null;
         $data["allowed"]    = "true";
-
         foreach($_item as $key => $item)
         {
             $_new_item[$key]                = $item;

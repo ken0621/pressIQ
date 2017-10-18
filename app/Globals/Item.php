@@ -343,7 +343,7 @@ class Item
     /* READ DATA */
     public static function get($shop_id = 0, $paginate = false, $archive = 0)
     {
-        $query = Tbl_item::where("tbl_item.shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->um_multi()->membership();
+        $query = Tbl_item::where("tbl_item.shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->membership();
 
         if(session("get_inventory"))
         {
@@ -371,12 +371,12 @@ class Item
         /* CHECK IF THERE IS PAGINATION */
         if($paginate)
         {
-            $_item = $query->paginate($paginate);
+            $_item = $query->groupBy('tbl_item.item_id')->paginate($paginate);
             session(['item_pagination' => $_item->render()]);
         }
         else
         {
-            $_item = $query->get();
+            $_item = $query->groupBy('tbl_item.item_id')->get();
         }
 
         /* ITEM ADDITIONAL DATA */
@@ -887,12 +887,18 @@ class Item
             foreach($_category[$key]['item_list'] as $key1=>$item_list)
             {
                 //  //cycy
-                if($item_list['item_type_id'] == 4)
+                if($item_list['item_type_id'] == 4 || $item_list['item_type_id'] == 5)
                 {
                    $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
                    $_category[$key]['item_list'][$key1]['item_cost'] = Item::get_item_bundle_cost($item_list['item_id']); 
                 }
                 $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
+
+                $_category[$key]['item_list'][$key1]['inventory_count'] = 0;
+                if($item_list['item_type_id'] == 1)
+                {
+                    $_category[$key]['item_list'][$key1]['inventory_count'] = Warehouse2::get_item_qty(Warehouse2::get_current_warehouse($shop_id), $item_list['item_id']);
+                }
             }
             $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }
@@ -1054,7 +1060,6 @@ class Item
     {
         $_item_bundle = Tbl_item_bundle::where("bundle_bundle_id", $item_id)->get();
         $_item = array();
-
         foreach($_item_bundle as $item_bundle)
         {  
             if($warehouse_id)
@@ -1641,6 +1646,7 @@ class Item
     public static function disassemble_membership_kit($record_log_id)
     {
         $record_data = Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->first();
+        $qty = Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->count();
 
         if($record_data)
         {
@@ -1648,7 +1654,9 @@ class Item
            foreach ($item_list as $key => $value) 
            {
                 Warehouse2::consume_update('assemble_item', $record_data->record_item_id, $value->bundle_item_id, $value->bundle_qty);
+                Warehouse2::update_inventory_count($record_data->record_warehouse_id, $record_log_id, $value->bundle_item_id, $value->bundle_qty);
            }
+           Warehouse2::update_inventory_count($record_data->record_warehouse_id, $record_log_id, $record_data->record_item_id, -($qty));
 
            Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->delete();
         }

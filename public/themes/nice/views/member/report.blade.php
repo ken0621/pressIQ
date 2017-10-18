@@ -34,17 +34,19 @@
 			  		<tbody>
 			  			@if(count($_rewards) > 0)
 				  			@foreach($_rewards as $reward)
-				  			<tr>
-				  				<td class="text-center">
-				  					<div><b>{{ $reward->display_date }}</b></div>
-				  					<div>{{ $reward->time_ago }}</div>
-				  				</td>
-				  				<td class="text-center">
-				  					<div>{{ $reward->slot_no }}</div>
-				  				</td>
-				  				<td class="text-left">{!! $reward->log !!}</td>
-				  				<td class="text-right"><b>{!! $reward->display_wallet_log_amount !!}</b></td>
-				  			</tr>
+					  			@if($reward->wallet_log_plan != "BINARY_SINGLE_LINE")
+						  			<tr>
+						  				<td class="text-center">
+						  					<div><b>{{ $reward->display_date }}</b></div>
+						  					<div>{{ $reward->time_ago }}</div>
+						  				</td>
+						  				<td class="text-center">
+						  					<div>{{ $reward->slot_no }}</div>
+						  				</td>
+						  				<td class="text-left">{!! $reward->log !!}</td>
+						  				<td class="text-right"><b>{!! $reward->display_wallet_log_amount !!}</b></td>
+						  			</tr>
+					  			@endif
 				  			@endforeach
 				  		@else
 				  			<tr class="text-center" >

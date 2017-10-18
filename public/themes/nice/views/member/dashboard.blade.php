@@ -136,14 +136,19 @@
 				<div class="title">Reward Summary</div>
 				<div class="sub-container">
 					<div class="chart-legend">
-						@foreach($_wallet_plan as $plan)
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
-							</div>
-						@endforeach
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Binary Pairing Reward</span><span class="value">{{ $wallet->display_complan_binary }}</span></div>
+						</div>
+					</div>
+					<div class="chart-legend">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Repurchase Cashback</span><span class="value">{{ $wallet->display_complan_repurchase_cashback }}</span></div>
+						</div>
 					</div>
 				</div>
+
 
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
@@ -180,7 +185,7 @@
 								@if($direct->distributed == 1)
 									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
 								@else
-									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+									<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 								@endif
 							</div>
 						</div>

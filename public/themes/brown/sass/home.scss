@@ -446,8 +446,9 @@ body{
 		}
 		.detail-container
 		{
-			margin-left: 180px;
+			margin-left: 220px;
 			margin-top: 111px;
+			padding-right: 125px;
 			@media screen and (max-width: 1300px)
 			{
 				margin-left: 100px;
@@ -485,58 +486,90 @@ body{
 	.wrapper-4
 	{
 		padding: 45px 0px;
-		color: #585858;
+		color: $text-light;
 		font-weight: $light;
-		overflow: hidden;
 		background-color: #fff;
 
-		.bottom-container
+		.title-container
 		{
-			.title
+			font-size: 30px;
+			
+			.text-1
 			{
-				@media screen and (max-width: 479px)
-				{
-					text-align: center;
-				}
+				color: #402a21;
 			}
-			.featured-title-holder
+			.text-2
 			{
-				font-size: 40px;
-				color: #404040;
-				margin: 0;
-				font-weight: $light !important;
+				color: #585858;
 			}
-			.product-holder
+		}
+		.event-holder
+		{
+			padding: 55px 0 20px 0;
+
+			.per-event
 			{
-				img
+				margin-bottom: 40px;
+
+				.event-img-container
 				{
-					max-width: 100%;
-					display: block;
-					margin: auto;
-				}
-			}
-			.product-details
-			{
-				text-align: center;
-				p 
-				{
-					margin: 0;
+					img 
+					{
+						width: 100%;
+					}
 				}
 
-				.product-name
+				.event-detail-container
 				{
-					font-size: 21px;
-					color: #404040;
-				}
-				.product-spec
-				{
-					font-size: 15px;
-				}
-				.product-price
-				{
-					font-size: 21px;
-					color: #ed5639;
-					font-weight: $regular;
+
+					.max-lines-title
+					{
+						display: block; /* or inline-block */
+						text-overflow: ellipsis;
+						word-wrap: break-word;
+						overflow: hidden;
+						max-height: 2.4em;
+						line-height: 1.2em;
+					}
+					.max-lines-desc
+					{
+						display: block; /* or inline-block */
+						text-overflow: ellipsis;
+						word-wrap: break-word;
+						overflow: hidden;
+						max-height: 3.6em;
+						line-height: 1.2em;
+					}
+
+					.title 
+					{
+						font-size: 21px;
+						color: #404040;
+						&:hover
+						{
+							cursor: pointer;
+							text-decoration: underline;
+						}
+					}
+					.date
+					{
+						margin-top: 5px;
+						span
+						{
+							font-size: 13px;
+							font-weight: $regular;
+							color: #402a21;
+						}
+					}
+					.desc
+					{
+						p 
+						{
+							margin-top: 15px;
+							font-size: 15px;
+							letter-spacing: 0.5px;
+						}
+					}
 				}
 			}
 		}

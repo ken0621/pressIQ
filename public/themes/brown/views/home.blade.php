@@ -116,93 +116,70 @@
 			<!--</div>-->
 		</div>
 	</div>
-	<!-- THE PRODUCTS -->
-	<div class="wrapper-4 hidden">
+	<!-- EVENTS -->
+	<div class="wrapper-4">
 		<div class="container">
-			<div class="bottom-container">
-				<div class="featured-title-holder wow fadeInDown" data-wow-offset="10" data-wow-delay="0.3s">
-					<p class="title">THE PRODUCT</p>
+			<div class="title-container"><span class="text-1">UPCOMING</span>&nbsp;<span class="text-2">EVENTS</span></div>	
+			<div class="event-holder row clearfix">
+				<!-- PER EVENT -->
+				<div class="col-md-6">
+					<div class="per-event row clearfix">
+						<div class="col-md-4">
+							<div class="event-img-container">
+								<img src="/themes/{{ $shop_theme }}/img/event1.jpg">
+							</div>
+						</div>
+						<div class="col-md-8">
+							<div class="event-detail-container">
+								<div class="title max-lines-title">Lorem ipsum dolor sit amet, conse tetuer adipiscing elit.</div>
+								<div class="date"><span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>OCTOBER 20, 2017</span></div>
+								<div class="desc">
+									<p class="max-lines-desc">
+										Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="product-carousel wow fadeInUp" data-wow-offset="10" data-wow-delay="0.2s">
-					<div>
-						<div class="product-holder">
-							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/item1.png"></a>
+				<div class="col-md-6">
+					<div class="per-event row clearfix">
+						<div class="col-md-4">
+							<div class="event-img-container">
+								<img src="/themes/{{ $shop_theme }}/img/event2.jpg">
+							</div>
 						</div>
-						<div class="product-details">
-							<p class="product-name">Brown 1</p>
-							<p class="product-spec">4.7 HD IPS DISPLAY</p>
-							<p class="product-price">P 9,500.00</p>
-						</div>	
+						<div class="col-md-8">
+							<div class="event-detail-container">
+								<div class="title max-lines-title">Lorem ipsum dolor sit amet, conse tetuer adipiscing elit.</div>
+								<div class="date"><span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>OCTOBER 20, 2017</span></div>
+								<div class="desc">
+									<p class="max-lines-desc">
+										Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+									</p>
+								</div>
+							</div>
+						</div>
 					</div>
-					<div>
-						<div class="product-holder">
-							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/item2.png"></a>
+				</div>
+				<div class="col-md-6">
+					<div class="per-event row clearfix">
+						<div class="col-md-4">
+							<div class="event-img-container">
+								<img src="/themes/{{ $shop_theme }}/img/event3.jpg">
+							</div>
 						</div>
-						<div class="product-details">
-							<p class="product-name">Brown 2</p>
-							<p class="product-spec">5.0 HD IPS DISPLAY</p>
-							<p class="product-price">P 9,500.00</p>
-						</div>		
-					</div>
-					<div>
-						<div class="product-holder">
-							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/item3.png"></a>
+						<div class="col-md-8">
+							<div class="event-detail-container">
+								<div class="title max-lines-title">Lorem ipsum dolor sit amet, conse tetuer adipiscing elit.</div>
+								<div class="date"><span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>OCTOBER 20, 2017</span></div>
+								<div class="desc">
+									<p class="max-lines-desc">
+										Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+									</p>
+								</div>
+							</div>
 						</div>
-						<div class="product-details">
-							<p class="product-name">Brown Tab 1</p>
-							<p class="product-spec">8mp Front Camera</p>
-							<p class="product-price">P 9,500.00</p>
-						</div>		
-					</div>
-					<div>
-						<div class="product-holder">
-							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/item4.png"></a>
-						</div>
-						<div class="product-details">
-							<p class="product-name">Brown 1 Plus</p>
-							<p class="product-spec">13 MP Back Camera</p>
-							<p class="product-price">P 12,000.00</p>
-						</div>		
-					</div>
-					<div>
-						<div class="product-holder">
-							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/item1.png"></a>
-						</div>
-						<div class="product-details">
-							<p class="product-name">Brown 1</p>
-							<p class="product-spec">4.7 HD IPS DISPLAY</p>
-							<p class="product-price">P 9,500.00</p>
-						</div>	
-					</div>
-					<div>
-						<div class="product-holder">
-							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/item2.png"></a>
-						</div>
-						<div class="product-details">
-							<p class="product-name">Brown 2</p>
-							<p class="product-spec">5.0 HD IPS DISPLAY</p>
-							<p class="product-price">P 9,500.00</p>
-						</div>	
-					</div>
-					<div>
-						<div class="product-holder">
-							<img src="/themes/{{ $shop_theme }}/img/item3.png">
-						</div>
-						<div class="product-details">
-							<p class="product-name">Brown Tab 1</p>
-							<p class="product-spec">8mp Front Camera</p>
-							<p class="product-price">P 9,500.00</p>
-						</div>	
-					</div>
-					<div>
-						<div class="product-holder">
-							<img src="/themes/{{ $shop_theme }}/img/item4.png">
-						</div>
-						<div class="product-details">
-							<p class="product-name">Brown 1 Plus</p>
-							<p class="product-spec">13 MP Back Camera</p>
-							<p class="product-price">P 12,000.00</p>
-						</div>	
 					</div>
 				</div>
 			</div>

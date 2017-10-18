@@ -1,13 +1,13 @@
-/* Responsiveness */
+/* MOBILE DEVICES */
 
-/* TABLETS */
+/* START TABLET */
 @media screen and (max-width: 768px)
 {
 	.header-fixed.header-container
 	{
 	    position: fixed;
 	    width: 100%;
-	    z-index: 999;
+	    z-index: 29;
 	    top: 0;
 	    border-bottom: 1px solid #dedede;
 	}
@@ -24,8 +24,15 @@
 	{
 	    padding: 0px 0px 50px 0px;
 	}
-}
 
+	#bottom-footer .footer-container .jca-footer-title-container .footer-title
+	{
+	    margin-top: 20px;
+	}
+}/* END TABLETS */
+
+
+/* START MOBILE LARGE */
 @media screen and (max-width: 425px)
 {
 
@@ -33,7 +40,7 @@
 	{
 	    position: fixed;
 	    width: 100%;
-	    z-index: 999;
+	    z-index: 29;
 	    top: 0;
 	    border-bottom: 1px solid #dedede;
 	}
@@ -49,15 +56,16 @@
 	{
 	    float: left;
 	}
-}
+}/* END MOBILE LARGE */
 
+/* START MOBILE MEDIUM */
 @media screen and (max-width: 375px)
 {
 	.header-fixed.header-container
 	{
 	    position: fixed;
 	    width: 100%;
-	    z-index: 999;
+	    z-index: 29;
 	    top: 0;
 	    border-bottom: 1px solid #dedede;
 	}
@@ -89,15 +97,16 @@
 	{
 	    float: left;
 	}
-}
+}/* END MOBILE MEDIUM */
 
+/* START MOBILE SMALL */
 @media screen and (max-width: 320px)
 {
 	.header-fixed.header-container
 	{
 	    position: fixed;
 	    width: 100%;
-	    z-index: 999;
+	    z-index: 29;
 	    top: 0;
 	    border-bottom: 1px solid #dedede;
 	}
@@ -111,4 +120,4 @@
 	{
 	   margin-left: 5px;
 	}
-}
+}/* END MOBILE SMALL */

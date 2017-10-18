@@ -22,6 +22,8 @@
 <link rel="stylesheet" type="text/css" href="/assets/brown-icon/styles.css">
 <!-- LIGHTBOX -->
 <link rel="stylesheet" type="text/css" href="/assets/lightbox/css/lightbox.css">
+<!-- LIGHTSPEEDBOX -->
+<link rel="stylesheet" type="text/css" href="/assets/lightspeedbox/lsb.css">
 <!-- WOW JS -->
 <link rel="stylesheet" type="text/css" href="/assets/wow/css/animate.css">
 {{-- TOASTER --}}

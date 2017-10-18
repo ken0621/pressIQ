@@ -45,7 +45,7 @@ class ItemControllerV2 extends Member
 		Item::get_search($search);
 		Item::get_inventory($warehouse_id);
 
-		$data["_item"]		= Item::get($this->user_info->shop_id, 5);
+		$data["_item"]		= Item::get($this->user_info->shop_id, 5, $archived);
 		$data["pagination"] = Item::get_pagination();
 		$data["archive"]	= $archived == 1 ? "restore" : "archive";
 		

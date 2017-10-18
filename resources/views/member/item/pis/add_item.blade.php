@@ -443,9 +443,9 @@
                                 <th width="5%"></th>
                             </tr>
                         </thead>
-                        <tbody class="tbody-item">
-                            <tr>
-                                <td class="text-center add-tr cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
+                        <tbody class="tbody-item-bundle">
+                            <tr class="tr-bundle-row">
+                                <td class="text-center add-tr-bundle cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
                                 <td>
                                     <select class="form-control drop-down-item select-item input-sm pull-left" name="bundle_item_id[]" required>
                                         @include("member.load_ajax_data.load_item_category", ['add_search' => "", '_item' => $_item_to_bundle])
@@ -540,11 +540,11 @@
                                 <th width="5%"></th>
                             </tr>
                         </thead>
-                        <tbody class="tbody-item">
-                            <tr>
-                                <td class="text-center add-tr cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
+                        <tbody class="tbody-item-group">
+                            <tr class="tr-group-row">
+                                <td class="text-center add-tr-group cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
                                 <td>
-                                    <select class="form-control drop-down-item select-item input-sm pull-left" name="bundle_item_id[]" required>
+                                    <select class="form-control drop-down-item input-sm pull-left" name="bundle_item_id[]" required>
                                         @include("member.load_ajax_data.load_item_category", ['add_search' => "", '_item' => $_item_to_bundle])
                                     </select>
                                 </td>
@@ -570,10 +570,30 @@
 
 <div class="div-script">
     <table class="div-item-row-script hide">
-        <tr>
-            <td class="text-center add-tr cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
+        <tr class="tr-bundle-row">
+            <td class="text-center add-tr-bundle cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
             <td>
-                <select class="form-control select-item input-sm pull-left" name="bundle_item_id[]" required>
+                <select class="form-control drop-down-item-bundle input-sm pull-left" name="bundle_item_id[]" required>
+                    @include("member.load_ajax_data.load_item_category", ['add_search' => "", '_item' => $_item_to_bundle])
+                </select>
+            </td>
+            <td>
+                <select class="form-control select-um-one input-sm pull-left" name="bundle_um_id[]">
+                    <option value=""></option> 
+                </select>
+            </td>   
+            <td><input class="text-center form-control input-sm" type="text" name="bundle_qty[]"/></td>
+            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+        </tr>
+    </table>
+</div>
+
+<div class="div-script-group">
+    <table class="div-item-row-group-script hide">
+        <tr class="tr-group-row">
+            <td class="text-center add-tr-group cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
+            <td>
+                <select class="form-control drop-down-item-group input-sm pull-left" name="bundle_item_id[]" required>
                     @include("member.load_ajax_data.load_item_category", ['add_search' => "", '_item' => $_item_to_bundle])
                 </select>
             </td>

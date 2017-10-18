@@ -1,7 +1,7 @@
 <div data-page="report" class="page">
     <div class="navbar">
         <div class="navbar-inner">
-            <div class="left"><a href="index.html" class="back link icon-only"><i class="icon icon-back"></i></a></div>
+            <div class="left"><a href="/members" class="back link icon-only"><i class="icon icon-back"></i></a></div>
             <div class="center">Reports</div>
             {{-- <div class="right"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div> --}}
         </div>
@@ -15,7 +15,7 @@
                     </div>
                     <div class="col-50">
                         <select>
-                            <option>23</option>
+                            <option>All Slots</option>
                         </select>
                     </div>
                 </div>
@@ -41,6 +41,9 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="select-holder">
+                {!! session('notification_paginate') !!}
             </div>
         </div>
     </div>

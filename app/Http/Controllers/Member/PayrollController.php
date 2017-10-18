@@ -4185,6 +4185,7 @@ class PayrollController extends Member
           }
 
           $payroll_group_before_tax                         = 0;
+          
           if(Request::has('payroll_group_before_tax'))
           {
                $payroll_group_before_tax = Request::has('payroll_group_before_tax');

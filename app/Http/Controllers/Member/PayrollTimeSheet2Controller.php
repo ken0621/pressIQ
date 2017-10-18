@@ -56,7 +56,7 @@ class PayrollTimeSheet2Controller extends Member
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
 		$data["company"] = $this->db_get_company_period_information($period_id);
 		$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_company_id);
-
+	
 		return view('member.payroll2.employee_summary', $data);
 	}
 	public function index_redirect_if_time_keeping_does_not_exist($period_id)
@@ -889,10 +889,9 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function income_summary($period_company_id, $employee_id)
 	{
-		
+
 		$data["date"] = $date = Tbl_payroll_period_company::sel($period_company_id)->value('payroll_period_start');
 		$data["group"] = $group = $this->db_get_current_employee_contract($employee_id, $date);
-
 
 		if(!$group)
 		{

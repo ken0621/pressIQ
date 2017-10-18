@@ -8,7 +8,7 @@
 			</div>
 			<div class="text">
 				<div class="name">Network List</div>
-				<div class="sub">List of network on your <b>SOLID TREE</b></div>
+				<div class="sub">List of network on your <b>SPONSOR TREE</b></div>
 			</div>
 		</div>
 		<div class="right">

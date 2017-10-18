@@ -33,6 +33,7 @@ use App\Globals\PayMaya\Checkout\User;
 use App\Globals\PayMaya\Model\Checkout\ItemAmountDetails;
 use App\Globals\PayMaya\Model\Checkout\ItemAmount;
 use App\Globals\PayMaya\Core\Constants;
+use Crypt;
 
 class Payment
 {
@@ -135,7 +136,8 @@ class Payment
 			                case 'paynamics': dd("UNDER DEVELOPMENT"); break;
 			                case 'dragonpay': return Self::method_dragonpay($cart, $shop_id, $api, $transaction_list_id, $success, $failed); break;
 			                case 'ipay88': dd("UNDER DEVELOPMENT"); break;
-			                case 'other': dd("UNDER DEVELOPMENT");  break;
+			                case 'manual1': return Self::method_other($cart, $shop_id, $api, $transaction_list_id, $success, $failed);  break;
+                      case 'manual2': return Self::method_other($cart, $shop_id, $api, $transaction_list_id, $success, $failed);  break;
 			                case 'e_wallet': dd("UNDER DEVELOPMENT"); break;
 			                case 'cashondelivery': dd("UNDER DEVELOPMENT"); break;
 			                default: dd("UNDER DEVELOPMENT"); break;
@@ -161,7 +163,10 @@ class Payment
 			return "No item in cart";
 		}
 	}
-
+  public static function method_other($cart, $shop_id, $api, $transaction_list_id,$success, $failed)
+  {
+    return redirect("/manual_checkout?tid=" . Crypt::encrypt($transaction_list_id))->send();
+  }
 	/** Payment Method **/
 	public static function method_dragonpay($cart, $shop_id, $api, $transaction_list_id,$success, $failed)
     {

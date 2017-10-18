@@ -30,11 +30,9 @@
 <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/framework7/dist/js/framework7.js"></script>
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/js/kitchen-sink.js"></script>
-{{-- EXTERNAL JS --}}
-<script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 <!-- GLOBAL JS -->
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/js/global.js"></script>
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member_mobile.js?version=2.1"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.1"></script>
 <!-- BEGIN JIVOSITE CODE -->
 <script type='text/javascript'>
 (function(){ var widget_id = 'OcvyPjoHBr';var d=document;var w=window;function l(){ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();

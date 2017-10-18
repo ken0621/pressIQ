@@ -77,6 +77,7 @@ function mlm_developer_import()
 					else
 					{
 						//$("#global_modal").modal("hide");
+						$(".tr-slot-import-data[key=" + pointer + "]").fadeOut('fast');
 						mlm_developer.action_load_data();
 					}
 				}

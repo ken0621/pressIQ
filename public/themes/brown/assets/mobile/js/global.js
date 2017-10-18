@@ -1,4 +1,5 @@
 var global = new global();
+var mainView = myApp.addView('.view-main');
 
 function global()
 {
@@ -8,28 +9,35 @@ function global()
 	{
 		$(document).ready(function()
 		{
-			document_ready();
+			page_ready();
 		});
 
-		myApp.onPageInit('index', page_ready());
-
-		myApp.onPageInit('profile', function()
-		{
-			event_profile_update_form();
+        myApp.onPageInit('profile', function(page)
+        {
+            event_profile_update_form();
 			event_reward_update_form();
 			event_picture_update_form();
 			event_password_update_form();
-		});
-	}
-
-	function document_ready()
-	{
-		
+        });
 	}
 
 	function page_ready()
 	{
-		// mainView.router.loadPage('/members/profile');
+		event_back_index();
+		// mainView.router.loadPage('/members/order');
+	}
+
+	function event_back_index()
+	{
+		$("body").on("click", ".back-index", function()
+		{
+			action_back_index();
+		})
+	}
+
+	function action_back_index()
+	{
+		mainView.router.back({url: "/members",force: true,ignoreCache: true});
 	}
 
 	function event_profile_update_form()

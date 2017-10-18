@@ -580,7 +580,7 @@ class MLM2
 
 
 			default:
-				$message = $reward->wallet_log_plan;
+				$message = $reward->wallet_log_details;
 			break;
 		}
 

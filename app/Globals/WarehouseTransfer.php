@@ -267,10 +267,18 @@ class WarehouseTransfer
     	$return = null;
 
         $wis_data = WarehouseTransfer::get_wis_data($wis_id);
+
+        if($wis_data->destination_warehouse_id != $ins_rr['warehouse_id'])
+        {
+        	$warehouse_name = Warehouse2::check_warehouse_existence($shop_id, $ins_rr['warehouse_id'])->warehouse_name;
+        	$return .= '<b>'.ucfirst($warehouse_name).'</b> is not supposed to received items in this WIS - ('.$wis_data->wis_number.')';
+        }
+
     	foreach ($_item as $key => $value) 
     	{
         	$return .= Warehouse2::transfer_validation($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $value['item_id'], $value['quantity'], 'rr');
     	}
+
 
         $check = Tbl_warehouse_receiving_report::where('rr_number',$ins_rr['rr_number'])->where('rr_shop_id',$shop_id)->first();
         if($check)

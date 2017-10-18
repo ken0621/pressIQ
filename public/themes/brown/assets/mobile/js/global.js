@@ -7,15 +7,18 @@ function global()
 
 	function init()
 	{
-		myApp.onPageInit('index', page_ready());
-
-		myApp.onPageInit('profile', function()
+		$(document).ready(function()
 		{
-			event_profile_update_form();
+			page_ready();
+		});
+
+        myApp.onPageInit('profile', function(page)
+        {
+            event_profile_update_form();
 			event_reward_update_form();
 			event_picture_update_form();
 			event_password_update_form();
-		});
+        });
 	}
 
 	function page_ready()
@@ -34,7 +37,7 @@ function global()
 
 	function action_back_index()
 	{
-		mainView.router.loadPage('/members')
+		mainView.router.back({url: "/members",force: true,ignoreCache: true});
 	}
 
 	function event_profile_update_form()

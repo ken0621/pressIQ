@@ -11,7 +11,7 @@
                 <span class="page-title">Receiving Inventory</span>
             </h1>
             <div class="text-right">
-                <a class="btn btn-custom-white panel-buttons">Cancel</a>
+                <a class="btn btn-custom-white panel-buttons" href="/member/item/warehouse/rr">Cancel</a>
                 <button type="submit" class="btn btn-primary panel-buttons">Receive</button>
             </div>
         </div>

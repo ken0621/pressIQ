@@ -12,13 +12,13 @@
                 @if($_empties != null)
                     @foreach($_empties as $keys => $empties)
                     <tr class="tr-draggable tr-draggable-html count_row">
-                        <td class="text-center">
+                        <td>
                             <label class="count-select">{{$empties["item_sku"]}}</label>
                         </td>
-                        <td class="text-center">
+                        <td>
                             <label class="count-select">{{$empties["item_barcode"]}}</label>
                         </td>
-                        <td class="text-center">
+                        <td>
                             <label >{{$empties["item_actual_stock_um"]}}</label>
                         </td>
                     </tr>

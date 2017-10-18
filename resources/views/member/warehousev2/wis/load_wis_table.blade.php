@@ -16,7 +16,7 @@
                         t-center">TOTAL RECEIVED INVENTORY</th>
                         <th class="text-center">TOTAL REMAINING INVENTORY</th>
                         @endif
-                        @if($status == 'pending')
+                        @if($status == 'pending' || $status == 'confirm')
                         <th></th>
                         @endif
                     </tr>
@@ -46,7 +46,19 @@
                                         <li ><a href="/member/item/warehouse/wis/print/{{$wis->wis_id}}"> Print </a></li>
                                         <li><a class="popup" link="/member/item/warehouse/wis/confirm/{{$wis->wis_id}}" size="md">Confirm</a></li>
                                     </ul>
-                                </div>                                
+                                </div>
+                            </td>
+                            @elseif($wis->wis_status == 'confirm')
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-custom">
+                                        <li ><a href="/member/item/warehouse/wis/print/{{$wis->wis_id}}"> Print </a></li>
+                                        <li><a href="/member/item/warehouse/rr/receive-items/{{$wis->wis_id}}">Receive</a></li>
+                                    </ul>
+                                </div>
                             </td>
                             @endif
                         </tr>

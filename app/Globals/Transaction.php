@@ -36,6 +36,11 @@ class Transaction
         $store["create_update_transaction_details"] = $details;
         session($store);
     }
+    public static function create_update_proof($details)
+    {
+        $store["create_update_proof"] = $details;
+        session($store);
+    }
     public static function create_set_method($method)
     {
         $store["create_set_method"] = $method;
@@ -51,7 +56,6 @@ class Transaction
         {
             $cart = null;
         }
-        
         
         if($cart || $source != null) //INSERT ONLY IF CART IS NOT ZERO OR THERE IS SOURCE
         {
@@ -153,21 +157,16 @@ class Transaction
             }
             
             $return = $transaction_list_id;
-            
-            
-            
             Self::update_transaction_balance($transaction_id);
         }
         else
         {
-            $return = "CARTY IS EMPTY";
+            $return = "CART IS EMPTY";
         }
-
-
 
         return $return;
     }
-    public static function consume_in_warehouse($shop_id, $transaction_list_id)
+    public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit')
     {
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
         
@@ -177,8 +176,16 @@ class Transaction
         $consume['id'] = $transaction_list_id;
         foreach ($get_item as $key => $value) 
         {
-            Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, 'Enroll kit', $consume);
+            Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
         }
+    }
+    public static function get_transaction_item($transaction_list_id)
+    {
+        return Tbl_transaction_item::where('transaction_list_id', $transaction_list_id)->get();
+    }
+    public static function get_data_transaction_list($transaction_list_id)
+    {
+        return Tbl_transaction_list::where('transaction_list_id', $transaction_list_id)->first();
     }
     public static function update_transaction_balance($transaction_id)
     {
@@ -188,6 +195,12 @@ class Transaction
         {
             $update["transaction_details"] = session('create_update_transaction_details');
             session()->forget('create_update_transaction_details');
+        }
+
+        if(session('create_update_proof'))
+        {
+            $update["transaction_payment_proof"] = session('create_update_proof');
+            session()->forget('create_update_proof');
         }
         
         if($balance == 0)
@@ -221,6 +234,11 @@ class Transaction
             case 'PENDING':
                 $prefix = "PENDING-";
             break;
+
+            case 'PROOF':
+                $prefix = "PROOF-";
+            break;
+
 
             default:
                 $prefix = "";

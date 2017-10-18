@@ -234,6 +234,19 @@
 @section('script')
 <script type="text/javascript">
 
+  $('.start_picker').keypress(function(e)
+  {
+      if ( e.which == 13 ) return false;
+      //or...
+      if ( e.which == 13 ) e.preventDefault();
+  });
+  
+  $('.end_picker').keypress(function(e)
+  {
+      if ( e.which == 13 ) return false;
+      //or...
+      if ( e.which == 13 ) e.preventDefault();
+  });
   $(".submit_btn_distribute").click(function() 
   {
     $("#distribute_form").submit();

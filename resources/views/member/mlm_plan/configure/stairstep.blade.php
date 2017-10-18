@@ -16,6 +16,24 @@
     </div>
 </div>
 {!! $basic_settings !!}
+<div class="panel panel-default">
+  <div class="panel-body">
+
+    <form class="global-submit" method="post" id="save_dynamic" action="/member/mlm/plan/stairstep/edit/save_dynamic">
+        {!! csrf_field() !!}
+        <div class="col-md-12 pull">
+            <label for="stairstep_dynamic_compression">Dynamic Compression</label>
+            <input type="checkbox" id="stairstep_dynamic_compression" name="stairstep_dynamic_compression" value="1" {{$stairstep_dynamic_compression == 1 ? 'checked' : ''}}>
+        </div>         
+        <div class="col-md-1 pull-right">
+            <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="save_dynamic()">Save</a>
+        </div> 
+    </form>       
+
+  </div>
+</div>
+
+
 @endsection
 
 @section('script')
@@ -27,9 +45,9 @@ function load_stair()
     $('.stair_body').html('<td colspan="6"><center><div style="margin: 100px auto;" class="loader-16-gray"></div></center></td>');
 	$('.stair_body').load('/member/mlm/plan/stairstep/get');
 }
-function save_stairstep()
+function save_dynamic()
 {
- $('#save_stairstep').submit();   
+ $('#save_dynamic').submit();   
 }
 function edit_stairstep(key)
 {

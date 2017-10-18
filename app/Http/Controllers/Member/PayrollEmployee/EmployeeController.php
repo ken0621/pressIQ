@@ -20,6 +20,11 @@ use App\Globals\Settings;
 
 class EmployeeController extends PayrollMember{
 
+	public function employee_info()
+	{
+		return $this->employee_info;
+	}
+
 	public function employee(){
 
 		$data['page']	= 'Home';

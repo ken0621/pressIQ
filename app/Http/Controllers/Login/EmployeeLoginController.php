@@ -37,7 +37,7 @@ class EmployeeLoginController extends Controller
 			$email 		= Request::input('email');
 			$password 	= Request::input('password');
 
-			$employee_info	= Tbl_payroll_employee_basic::where('payroll_employee_email',$email)->where('payroll_employee_sss',$password)->first();
+			$employee_info	= Tbl_payroll_employee_basic::where('payroll_employee_email',$email)->where('payroll_employee_tin',$password)->first();
 			
 			if ($employee_info) 
 			{

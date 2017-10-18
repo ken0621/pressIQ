@@ -23,7 +23,7 @@ use Carbon\Carbon;
 use App\Globals\Mlm_seed;
 class PayrollMember extends Controller
 {
-	public $user_info;
+	public $employee_info;
 
 	public function __construct()
 	{
@@ -38,7 +38,8 @@ class PayrollMember extends Controller
 			{
 				$employee_email 	= session('employee_email');
 				$employee_password	= session('employee_password');
-				
+				$employee_info	= Tbl_payroll_employee_basic::where('payroll_employee_email',$employee_email)->where('payroll_employee_tin',$employee_password)->first();
+				$this->employee_info = $employee_info;
 			}
 
 			

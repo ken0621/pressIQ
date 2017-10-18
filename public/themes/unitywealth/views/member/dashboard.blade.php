@@ -135,8 +135,6 @@
 								<div class="col-sm-12 text-center">
 									<div class="label2">{{ $slot->slot_no }}</div>
 									<div class="label3"> <a href="javascript:" onclick="action_load_link_to_modal('/members/lead?slot_no={{ $slot->slot_no }}')"> VIEW LEAD LINK</a></b></div>
-									<div class="label3">{{ $slot->display_total_earnings }}</div>
-									{{-- $slot->current_direct }} / {{ $slot->brown_next_rank_current --}}
 								</div>
 							</div>
 						</div>

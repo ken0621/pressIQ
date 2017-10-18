@@ -136,14 +136,19 @@
 				<div class="title">Reward Summary</div>
 				<div class="sub-container">
 					<div class="chart-legend">
-						@foreach($_wallet_plan as $plan)
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
-							</div>
-						@endforeach
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Binary Pairing Reward</span><span class="value">{{ $wallet->display_complan_binary }}</span></div>
+						</div>
+					</div>
+					<div class="chart-legend">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Repurchase Cashback</span><span class="value">{{ $wallet->display_complan_repurchase_cashback }}</span></div>
+						</div>
 					</div>
 				</div>
+
 
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">

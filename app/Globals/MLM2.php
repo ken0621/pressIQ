@@ -442,7 +442,10 @@ class MLM2
 			}
 		});
 
-		$query->where("wallet_log_amount", ">", 0);
+		if($shop_id != 52)
+		{
+			$query->where("wallet_log_amount", ">", 0);
+		}
 
 		
 

@@ -48,6 +48,7 @@ class Member extends Controller
 					/* CHECK IF PASSWORD IS NOT CORRECT - REDIRECT TO FRONTPAGE */
 					$decrypted_session_password = Crypt::decrypt(session("user_password"));
 					$decrypted_db_password = Crypt::decrypt($user_info->user_password);
+
 					if($decrypted_db_password != $decrypted_session_password)
 					{
 						return Redirect::to('/')->send();
@@ -154,7 +155,6 @@ class Member extends Controller
 			}
 			else
 			{
-				
 				$data["frontend_domain"] = $this->user_info->shop_key . "." . get_domain();
 			}
 

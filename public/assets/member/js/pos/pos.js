@@ -339,6 +339,12 @@ function pos()
 			action_scan_item($item_id);
 			action_hide_search();
 		});
+		$("body").on("click", ".pos-customer-search-result", function(e)
+		{
+			$customer_id = $(e.currentTarget).attr("customer_id");
+			action_scan_customer($customer_id);
+			action_hide_search();
+		});
 	}
 	function action_scan_item($item_id)
 	{

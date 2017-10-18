@@ -11,25 +11,22 @@
 				<input class="payment-proof" type="file" name="proofupload">
 			</form>
 		</div>
-
 	</div>
 </div>
 
 <div class="wrapper-2">
-	<div class="container">
+	<div class="container-fluid">
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="account-list-container">
 					<div class="text-header">ACCOUNT LIST</div>
-					<div class="content">{!! $api->api_client_id !!}
-					</div>
+					<div class="content">{!! $api->api_client_id !!}</div>
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="step-by-step-container">
 					<div class="text-header">STEP BY STEP INSTRUCTION</div>
-					<div class="content">{!! $api->api_secret_id !!}
-					</div>
+					<div class="content">{!! $api->api_secret_id !!}</div>
 				</div>
 			</div>
 		</div>
@@ -39,6 +36,7 @@
 <!-- BOOTSTRAP -->
 <link rel="stylesheet" href="/assets/initializr/css/bootstrap.min.css">
 <link rel="stylesheet" href="/assets/initializr/css/bootstrap-theme.min.css">
+
 <!-- GOOGLE FONT -->
 <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/assets/member/css/manual_checkout.css">

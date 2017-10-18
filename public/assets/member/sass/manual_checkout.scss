@@ -66,12 +66,15 @@ $medium: 500;
 	{
 		background-color: #fff;
 		border-radius: 4px;
+		min-height: 650;
+		max-height: 650;
 
 		.text-header
 		{
 			font-weight: $medium;
+			font-size: 16px;
 			color: #006cc5;
-			padding: 15px;
+			padding: 15px 0px 15px 0px;
 			margin: 0px 20px 0px 20px;
 			text-align: center;
 			border-bottom: 2px solid #d2d2d2;

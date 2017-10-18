@@ -139,22 +139,22 @@
                             <p class="footer-title">Quick Links</p>
                         </div>
                         <div class="jca-footer-details-container">
-                            <a href="#">
+                            <a href="javascript:">
                                 <p class="footer-detail-list">Company Policy</p>
                             </a>
-                            <a href="#">
+                            <a href="javascript:">
                                 <p class="footer-detail-list">Dealer’s Policy</p>
                             </a>
-                            <a href="#">
+                            <a href="javascript:">
                                 <p class="footer-detail-list">Disclaimer</p>
                             </a>
-                            <a href="#">
+                            <a href="javascript:">
                                <p class="footer-detail-list">Terms & Condition</p> 
                             </a>
-                            <a href="#">
+                            <a href="javascript:">
                                 <p class="footer-detail-list">Privacy Policy</p>
                             </a>
-                            <a href="#">
+                            <a href="javascript:">
                                 <p class="footer-detail-list">Product Policy</p>
                             </a>
                         </div>

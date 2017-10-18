@@ -45,6 +45,20 @@
 	                    </div>
 	                </div>
 	            </div>
+	            <div class="form-horizontal">
+	                <div class="form-group">
+	                	<div class="text-center"><div style="font-weight: bold; padding-bottom: 10px; font-size: 16px; margin-top: 25px;">SCHEDULED REQUEST PAYOUT</div></div>
+						<div class="col-md-12">
+	                        <label for="basic-input">Schedule</label>
+	                        <select class="form-control" name="encashment_settings_schedule">
+	                        	<option value="0" {{ 0 == $settings->encashment_settings_schedule ? "selected" : "" }}>No Schedule</option>
+	                        	@for($i = 1; $i <= 30; $i++)
+	                        		<option value="{{ $i }}" {{ $i == $settings->encashment_settings_schedule ? "selected" : "" }}>Every {{ ordinal($i) }} of the Month</option>
+	                        	@endfor
+	                        </select>
+	                    </div>
+	                </div>
+	            </div>
 	        </div>
 		</div>
 	</div>

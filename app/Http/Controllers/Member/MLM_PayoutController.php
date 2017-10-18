@@ -130,6 +130,7 @@ class MLM_PayoutController extends Member
 			$update["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
 			$update["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$update["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
+			$update["encashment_settings_schedule"] = request("encashment_settings_schedule");
 
 			Tbl_mlm_encashment_settings::where("shop_id", $shop_id)->update($update);
 		}
@@ -139,6 +140,7 @@ class MLM_PayoutController extends Member
 			$insert["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
 			$insert["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$insert["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
+			$insert["encashment_settings_schedule"] = request("encashment_settings_schedule");
 
 			Tbl_mlm_encashment_settings::insert($insert);
 		}

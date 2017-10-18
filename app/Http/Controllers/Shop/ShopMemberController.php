@@ -233,7 +233,6 @@ class ShopMemberController extends Shop
                 
                 echo '<div class="modal-footer">
                         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                        <button type="submit" class="btn btn-primary btn-custom-primary"><i class="fa fa-angle-double-right"></i> Request Payout</button>
                     </div>';
                 die();
             }

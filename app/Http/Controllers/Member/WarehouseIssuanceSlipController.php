@@ -34,7 +34,8 @@ class WarehouseIssuanceSlipController extends Member
     public function getCreate()
     {
     	$data['page'] = 'CREATE - WIS';
-
+        $data['_item']  = Item::get_all_category_item([1,5]);
+        $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
     	return view('member.warehousev2.wis.wis_create',$data);
     }
     public function getTableItem()
@@ -99,22 +100,27 @@ class WarehouseIssuanceSlipController extends Member
     {
         $remarks = $request->wis_remarks;
         $items = Session::get('wis_item');
+        $items = $request->item_id;
         $shop_id = $this->user_info->shop_id;
 
         $ins_wis['wis_shop_id'] = $shop_id;
         $ins_wis['wis_number'] = $request->wis_number;
         $ins_wis['wis_from_warehouse'] = Warehouse2::get_current_warehouse($shop_id);
         $ins_wis['wis_remarks'] = $remarks;
+        $ins_wis['destination_warehouse_id'] = $request->destination_warehouse_id;
+        $ins_wis['destination_warehouse_address'] = $request->destination_warehouse_address;
         $ins_wis['created_at'] = Carbon::now();
 
         $_item = null;
         foreach ($items as $key => $value) 
         {
-            $_item[$key] = null;
-            $_item[$key]['item_id'] = $value['item_id'];
-            $_item[$key]['quantity'] = $value['item_quantity'];
-            $_item[$key]['remarks'] = 'wis';
-            $_item[$key]['serial'] = $value['item_serial'];
+            if($value)
+            {
+                $_item[$key] = null;
+                $_item[$key]['item_id'] = $value;
+                $_item[$key]['quantity'] = $request->item_quantity[$key];
+                $_item[$key]['remarks'] = $request->item_remarks[$key];
+            }
         }
 
         $val = WarehouseTransfer::create_wis($shop_id, $remarks,$ins_wis , $_item);

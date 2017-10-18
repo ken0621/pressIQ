@@ -152,6 +152,12 @@ class WarehouseTransfer
             $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
         }
 
+        $check = Tbl_warehouse_issuance_report::where('wis_number',$ins['wis_number'])->where('wis_shop_id',$shop_id)->first();
+        if($check)
+        {
+        	$validate .= 'WIS number already exist';
+        }
+
         if(!$validate)
         {
         	$wis_id = Tbl_warehouse_issuance_report::insertGetId($ins);
@@ -180,9 +186,13 @@ class WarehouseTransfer
 
         return $validate;
 	}
+    public static function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
+    }
 	public static function get_wis_data($wis_id)
 	{
-		return Tbl_warehouse_issuance_report::where('wis_id',$wis_id)->first();
+		return Tbl_warehouse_issuance_report::where('wis_shop_id',WarehouseTransfer::getShopId())->where('wis_id',$wis_id)->first();
 	}
 	public static function get_wis_item($wis_id)
 	{
@@ -262,16 +272,23 @@ class WarehouseTransfer
         	$return .= Warehouse2::transfer_validation($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $value['item_id'], $value['quantity'], 'rr');
     	}
 
+        $check = Tbl_warehouse_receiving_report::where('rr_number',$ins_rr['rr_number'])->where('rr_shop_id',$shop_id)->first();
+        if($check)
+        {
+        	$return .= 'RR number already exist';
+        }
+
     	if(!$return)
     	{
+        	$rr_id = Tbl_warehouse_receiving_report::insertGetId($ins_rr);
+
 	        $source['name'] = 'wis';
-	        $source['id'] = $ins_rr['wis_id'];    		
+	        $source['id'] = $wis_id;	
 
         	$val = Warehouse2::transfer_bulk($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $_item, $ins_rr['rr_remarks'], $source);
 
         	if(!$val)
         	{
-        		$rr_id = Tbl_warehouse_receiving_report::insertGetId($ins_rr);
         		$get_item = Tbl_warehouse_inventory_record_log::where('record_source_ref_name','wis')->where('record_source_ref_id',$wis_id)->get();
 
         		$ins_report_item = null;

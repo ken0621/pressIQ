@@ -3,6 +3,7 @@
 	<h2>{{strtoupper($owner->shop_key)}}</h2>
 	<h3>{{strtoupper($owner->warehouse_name)}}</h3>
 	<div>{{ucwords($owner->warehouse_address)}}</div>
+    <div>Warehouse Issuance Slip</div>
 </div>
 <table  style="width: 100%">
     <tr>

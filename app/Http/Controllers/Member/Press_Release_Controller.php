@@ -58,6 +58,7 @@ class Press_Release_Controller extends Member
                 $recipientResult = $recipientResult->where('industry_type',Request::input('industry_type'));
             }
 
+<<<<<<< HEAD
 
 
 
@@ -65,6 +66,10 @@ class Press_Release_Controller extends Member
             $data['_list_country']=Tbl_press_release_recipient::distinct()->get(['country']);
             $data["_recipient_list"] = $recipientResult->paginate(7); 
 
+=======
+            $data["_recipient_list"] = $recipientResult->get();
+            $data["_recipient_country"] = $recipientResult->select('country')->distinct()->get();
+>>>>>>> a864d7cbb7d836c68780f458743a3df235e251fe
             return view("member.email_system.choose_recipient",$data);
 
     
@@ -112,7 +117,7 @@ class Press_Release_Controller extends Member
                 Mail::send('member.email_system.email',$data, function($message) use ($data)
                 {
                     $message->from($data['from']);
-                    $message->to("edwardguevarra2003@gmail.com");
+                    $message->to("edwardguevarra2003@gmail");
                     $message->subject($data['subject']);
                 });  
             }

@@ -2,9 +2,6 @@
 @section('content')
 <link rel="stylesheet" type="text/css" href="/email_assets/email_css/create_email.css">
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
- <link rel="stylesheet" type="text/css" href="/email_assets/email_css/style.css">
-<link rel="stylesheet" type="text/css" href="/email_assets/email_css/prism.css"> 
-<link rel="stylesheet" type="text/css" href="/email_assets/email_css/chosen.css">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -32,46 +29,39 @@
                                       
   <form name="myform" method="GET" action="/member/page/press_release_email/search_recipient_press_release" id="#pass_data">
     <h4 style="margin-left: 10px;">Search By:</h4>
-  <div class="form-group row">
-    <label class="label-name">Company Name</label>
-    <div class="">
-          <select data-placeholder="Country" class="chosen-select" multiple tabindex="4" id="company_name" name="company_name">
-          @foreach($_list_country as $country_list)
-            <option value="{{$country_list->country}}">{{$country_list->country}}</option>
-          @endforeach
-          </select>
-    </div>
 
+  <div class="form-group row">
+  <label  class="label-name">Country</label>
+  <br>
+  <select class="selectpicker" id="filter">
+   <option value="1">Select All</option>
+   @foreach($_recipient_country as $recipient_country)
+    <option value="{{$recipient_country->country}}">{{$recipient_country->country}}</option>
+    @endforeach
+  </select>
+>>>>>>> a864d7cbb7d836c68780f458743a3df235e251fe
   </div>
   <div class="form-group row">
-    <label for="inputPassword" class="label-name">Name</label>
+    <label for="inputPassword" class="label-name">Company Name</label>
     <div class="">
-      <input type="text" class="form-control input col-md-6" id= "name" name="name" placeholder="Name">
+      <input type="text" class="form-control input col-md-6" id= "company_name" name="name" placeholder="Comapany Name">
     </div>
   </div>
   <div class="form-group row">
     <label for="inputPassword" class="label-name ">Position</label>
     <div class="">
-        <select class="form-control input col-md-6"  id="position" name="position" placeholder="Position">
-<!--           @foreach($_list_country as $country_list)
-            <option value="{{$country_list->country}}">{{$country_list->country}}</option>
-          @endforeach -->
+<!--         <select class="form-control input col-md-6"  id="position" name="position" placeholder="Position">
+
           <option >1</option>
               <option >1</option>
                   <option >1</option>
-        </select>
+        </select> -->
     </div>
   </div>
   <div class="form-group row">
     <label  class="label-name">Title of Journalist</label>
     <div class="">
       <input type="text" class="form-control input col-md-6" id="title_of_journalist" placeholder="Title of Journalist" name="title_of_journalist">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label  class="label-name">Country</label>
-    <div class="">
-      <input type="text" class="form-control input col-md-6" id="country" placeholder="country" name="country">
     </div>
   </div>
   <div class="form-group row">
@@ -107,9 +97,6 @@
                   @endforeach
                 </ul>
             </div>
-            <div class="pagination_container">
-              <?php echo $_recipient_list->render(); ?>
-           </div>
         </div>
     </div>
 </div>
@@ -143,12 +130,33 @@
     });
 
 
-    $('#company_name').change(function(event) {
-      $("#position").empty();
-      var country = this.value;
+    // $('#company_name').change(function(event) {
+    //   $("#position").empty();
+    //   var country = this.value;
 
         
 
-    });
+    // }); 
 </script>
+<!-- <script>
+
+  selectAll();
+
+$('#filter').change(function()
+{
+
+  if($("#filter option[value='1']").is(':selected'))
+  {
+     selectAll();
+  }
+
+})
+
+function selectAll()
+{
+  /*$('#filter > option').attr("selected", "selected");*/
+   $('#filter option').prop('selected', true);
+   $("#filter option[value='1']").prop('selected', false);
+}
+</script> -->
 @endsection

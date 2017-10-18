@@ -1,3 +1,45 @@
+.checked-list-box
+{
+    overflow-y: scroll !important;
+    height: 450px;
+}
+
+.selectpicker_type_of_industry
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
+.selectpicker_title
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
+.selectpicker_position
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
+.selectpicker_company_name
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
+
+.selectpicker
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
 .email-content-container
 {
     width: 98%;
@@ -9,7 +51,7 @@
 .pagination_container
 {
     /* margin-left: 780px; */
-    margin-top: -35px;
+    margin-top: -11px;
 }
 
 .view-message
@@ -55,8 +97,9 @@
 
 .recipient_container
 {
-    margin-top: -528px;
-    margin-left: 765px!important;
+    position: absolute !important;
+    left: 745px !important;
+    top: 245px;
 }
 
 .label-choose-recipient

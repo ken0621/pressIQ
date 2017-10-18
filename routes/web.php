@@ -147,6 +147,17 @@ Route::any('/employee', 'Member\PayrollEmployee\EmployeeController@employee');
 Route::any('/employee_profile', 'Member\PayrollEmployee\EmployeeController@employee_profile');
 Route::any('/employee_leave_application', 'Member\PayrollEmployee\EmployeeController@employee_leave_application');
 Route::any('/employee_summary_of_leave', 'Member\PayrollEmployee\EmployeeController@employee_summary_of_leave');
+Route::any('/employee_overtime_application', 'Member\PayrollEmployee\EmployeeController@employee_overtime_application');
+Route::any('/employee_official_business', 'Member\PayrollEmployee\EmployeeController@employee_official_business');
+Route::any('/company_details', 'Member\PayrollEmployee\EmployeeController@company_details');
+Route::any('/authorization_access_leave', 'Member\PayrollEmployee\EmployeeController@authorization_access_leave');
+Route::any('/authorization_access_over_time', 'Member\PayrollEmployee\EmployeeController@authorization_access_over_time');
+Route::any('/authorization_access_official_business', 'Member\PayrollEmployee\EmployeeController@authorization_access_official_business');
+Route::any('/employee_leave_management', 'Member\PayrollEmployee\EmployeeController@employee_leave_management');
+Route::any('/employee_overtime_management', 'Member\PayrollEmployee\EmployeeController@employee_overtime_management');
+Route::any('/employee_official_business_management', 'Member\PayrollEmployee\EmployeeController@employee_official_business_management');
+Route::any('/employee_time_keeping', 'Member\PayrollEmployee\EmployeeController@employee_time_keeping');
+
 
 
 Route::group(array('prefix' => '/member/{page}/'), function()

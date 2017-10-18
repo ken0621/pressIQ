@@ -14,7 +14,7 @@ use App\Globals\AuditTrail;
 
 use App\Globals\Settings;
 
-class EmployeeLoginController extends PayrollMember
+class EmployeeLoginController extends Controller
 {
 
 	public function logout()

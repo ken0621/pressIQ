@@ -285,11 +285,14 @@ class WarehouseTransfer
 	        $source['name'] = 'wis';
 	        $source['id'] = $wis_id;	
 
-        	$val = Warehouse2::transfer_bulk($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $_item, $ins_rr['rr_remarks'], $source);
+	        $to['name'] = 'rr';
+	        $to['id'] = $rr_id;	
+
+        	$val = Warehouse2::transfer_bulk($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $_item, $ins_rr['rr_remarks'], $source, $to);
 
         	if(!$val)
         	{
-        		$get_item = Tbl_warehouse_inventory_record_log::where('record_source_ref_name','wis')->where('record_source_ref_id',$wis_id)->get();
+        		$get_item = Tbl_warehouse_inventory_record_log::where('record_source_ref_name','rr')->where('record_source_ref_id',$rr_id)->get();
 
         		$ins_report_item = null;
         		foreach ($get_item as $key_item => $value_item)

@@ -59,8 +59,15 @@ class Press_Release_Controller extends Member
             }
 
 
+
+
+
+            $data['_list_country']=Tbl_press_release_recipient::distinct()->get(['country']);
             $data["_recipient_list"] = $recipientResult->paginate(7); 
+
             return view("member.email_system.choose_recipient",$data);
+
+    
     }
 
 

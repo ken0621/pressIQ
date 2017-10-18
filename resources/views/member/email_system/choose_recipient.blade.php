@@ -2,6 +2,9 @@
 @section('content')
 <link rel="stylesheet" type="text/css" href="/email_assets/email_css/create_email.css">
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <link rel="stylesheet" type="text/css" href="/email_assets/email_css/style.css">
+<link rel="stylesheet" type="text/css" href="/email_assets/email_css/prism.css"> 
+<link rel="stylesheet" type="text/css" href="/email_assets/email_css/chosen.css">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -12,6 +15,7 @@
         </div>
     </div>
 </div>
+
 <div class="panel panel-default panel-block panel-title-block">
     <header class="header_email">
     <div class="panel-body form-horizontal tab_header">
@@ -31,8 +35,13 @@
   <div class="form-group row">
     <label class="label-name">Company Name</label>
     <div class="">
-      <input type="text" class="form-control input col-md-6" id= "commpany_name" name = "company_name" placeholder="Company Name">
+          <select data-placeholder="Country" class="chosen-select" multiple tabindex="4" id="company_name" name="company_name">
+          @foreach($_list_country as $country_list)
+            <option value="{{$country_list->country}}">{{$country_list->country}}</option>
+          @endforeach
+          </select>
     </div>
+
   </div>
   <div class="form-group row">
     <label for="inputPassword" class="label-name">Name</label>
@@ -43,7 +52,14 @@
   <div class="form-group row">
     <label for="inputPassword" class="label-name ">Position</label>
     <div class="">
-      <input type="text" class="form-control input col-md-6" id= "position"  placeholder="Position" name="position">
+        <select class="form-control input col-md-6"  id="position" name="position" placeholder="Position">
+<!--           @foreach($_list_country as $country_list)
+            <option value="{{$country_list->country}}">{{$country_list->country}}</option>
+          @endforeach -->
+          <option >1</option>
+              <option >1</option>
+                  <option >1</option>
+        </select>
     </div>
   </div>
   <div class="form-group row">
@@ -67,7 +83,7 @@
   <div class="form-group chosen_recipient">
    <!--  <label for="inputPassword" class="label-choose-recipient">Chosen Recipient</label> -->
     <div class="">
-      <input type="hidden" class="form-control col-md-6 input_chose_recipient col-md-6" id="inputPassword" placeholder="Email Address" name="recipient_to">
+      <input type="text" class="form-control col-md-6 input_chose_recipient col-md-6" id="inputPassword" placeholder="Email Address" name="recipient_to">
     </div>
 </div>
   <div class="form-group row">
@@ -99,6 +115,9 @@
 </div>
   
 <script src="/email_assets/js/create_press_release.js"></script>
+  <script src="/email_assets/js/chosen.jquery.js" type="text/javascript"></script>
+  <script src="/email_assets/js/prism.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/email_assets/js/init.js" type="text/javascript" charset="utf-8"></script>
 <script>
     $(".input_chose_email").click(function() {
         $('#email_databaseModal').modal('show');
@@ -121,6 +140,15 @@
     window.location.href = recipient_link;
 
     
+    });
+
+
+    $('#company_name').change(function(event) {
+      $("#position").empty();
+      var country = this.value;
+
+        
+
     });
 </script>
 @endsection

@@ -86,6 +86,8 @@ $(function () {
             var data_container = this.closest(".list-group-item");
             return  $(data_container).text();
         }).get();
+        
+        console.log(string);
         $('.input_chose_recipient').val(string);
     }).trigger('change');
 });

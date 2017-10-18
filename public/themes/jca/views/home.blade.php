@@ -215,16 +215,14 @@
         </div>
     </div> -->
 
-    <div id="products" class="wrapper-4">
+    <div id="products" class="wrapper-4" style="overflow: hidden;">
         <div class="container">
-            <div class="jca-title-container wow fadeInDown">
+            <div class="jca-title-container wow animated fadeInDown">
                 <p class="main-title"><font class="shade-green">Products &</font> Services</p>
             </div>
             <div class="products-services-container">
-                <div class="content-container row clearfix">
-                    <div class="col-md-12">
-                        <img src="/themes/{{ $shop_theme }}/img/products-img.png">
-                    </div>
+                <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
+                    <img src="/themes/{{ $shop_theme }}/img/products-img.png">
                 </div>
             </div>
         </div>
@@ -234,20 +232,20 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-6">
-                    <div class="img-container">
+                    <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
                         <img src="/themes/{{ $shop_theme }}/img/stem-img.png">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="details-container">
-                        <div class="header">Swiss Apple Stem Cell Soap<br>with <span>Glutathione and Collagen</span></div>
-                        <div class="sub-header">
+                        <div class="wow animated fadeInRight header" data-wow-delay=".3s">Swiss Apple Stem Cell Soap with <span>Glutathione and Collagen</span></div>
+                        <div class="wow animated fadeInRight sub-header" data-wow-delay=".4s">
                             <span>Contents:</span> Swiss Apple Stem Cell, Glutathione and Collagen
                         </div>
                         <div class="benefits">
-                            <div class="header">Benefits: </div>
+                            <div class="wow animated fadeInRight header" data-wow-delay=".5s">Benefits: </div>
                             
-                            <ul>
+                            <ul class="wow animated fadeInRight" data-wow-delay=".6s">
                                 <li>Increases skin stem cell vitality and longevity</li>
                                 <li>Helps treat skin problems like hyperpigmentation, acne or pimple scars, uneven skin tone</li>
                                 <li>Fights all unwanted signs of aging</li>
@@ -264,19 +262,19 @@
         </div>
     </div>
 
-    <div class="wrapper-6">
+    <div class="wrapper-6" style="overflow: hidden;">
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="details-container">
-                        <div class="header">Lorem Ipsum <span>Dolor</span></div>
-                        <div class="details">
+                        <div class="wow animated fadeInLeft header">Lorem Ipsum <span>Dolor</span></div>
+                        <div class="wow animated fadeInLeft details" data-wow-delay=".2s">
                             <p><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit ex fugiat, porro! Harum odit obcaecati illum quos rem perferendis consectetur debitis. Omnis beatae ab sed aliquid vel dolores impedit eius.</span><span>Ab harum, mollitia expedita iste obcaecati. Quisquam eaque quia rem obcaecati, at eos voluptates neque eius libero eligendi. Amet, libero veniam? Nulla modi porro, libero. In corporis facilis, ea possimus?</span></p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="img-container">
+                    <div class="wow animated fadeInRight img-container" data-wow-delay=".3s">
                         <img src="/themes/{{ $shop_theme }}/img/product&services-003.png">
                     </div>
                 </div>
@@ -292,6 +290,7 @@
 
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css">
 @endsection
 
 @section("script")

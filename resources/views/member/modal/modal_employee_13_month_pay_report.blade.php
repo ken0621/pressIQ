@@ -9,8 +9,9 @@
 		<div class="form-group">
 		    <label>Basis</label>
 		    <select class="form-control" name="payroll_13th_month_pay_basis" >
-		    	<option value="gross_pay">Gross Pay</option>
-		    	<option value="net_pay">Net Pay</option>
+		    	<option value="gross_pay">Gross Basic Pay</option>
+		    	<option value="net_pay">Net Basic Pay</option>
+		    	<option value="monthly_rate">Monthly Rate</option>
 		    </select>
 	  	</div>
 	  	<div class="form-group">

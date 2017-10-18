@@ -217,7 +217,7 @@ body{
 		padding-bottom: 35px;
 		.main-title
 		{
-			font-family: "Railway Medium", sans-serif;
+			font-family: $display-text;
 			font-size: 30px;
 			color: #b07d2a;
 			margin-bottom: 5px;
@@ -228,7 +228,7 @@ body{
 		}
 		.sub-title
 		{
-			font-family: "Open Sans Regular", sans-serif;
+			font-family: $content-text;
 			font-size: 15px;
 			color: #555555;
 			.shade-black
@@ -257,7 +257,7 @@ body{
 			display: inline-block;
 			.list-content
 			{
-				font-family: "Open Sans Regular", sans-serif;
+				font-family: $content-text;
 				float: right;
 				width: 93%;
 				font-size: 15px;
@@ -283,7 +283,7 @@ body{
 			.button-name
 			{
 				display: inline-block;
-				font-family: "Raleway Bold", sans-serif;
+				font-family: $display-text;
 				font-size: 15px;
 				color: #019771;
 				font-weight: bold;
@@ -326,7 +326,7 @@ body{
 	{
 		.title-company
 		{
-			font-family: "Raleway Regular", sans-serif;
+			font-family: $display-text;
 			font-size: 25px;
 			color: #b07d2a;
 			margin-bottom: -8px;
@@ -338,6 +338,7 @@ body{
 		}
 		.title-mission
 		{
+			font-family: $display-text;
 			font-size: 40px;
 			// color: #019771;
 			color: #acacac;
@@ -353,6 +354,7 @@ body{
 		}
 		.title-vision
 		{
+			font-family: $display-text;
 			font-size: 40px;
 			color: #acacac;
 			display: inline-block;
@@ -371,12 +373,14 @@ body{
 		height: 438.6px;
 		.sub-title
 		{
+			font-family: $display-text;
 			font-size: 20px;
 			color: #019771;
 			margin-bottom: -5px;
 		}
 		.content
 		{
+			font-family: $content-text;
 			font-size: 15px;
 			color: #555555;
 			text-align: justify;
@@ -391,8 +395,10 @@ body{
 			height: .5em;
 			float: left;
 			margin: .40em .25em 0;
+
 			.content
 			{
+				font-family: $content-text;
 				font-size: 15px;
 				color: #555555;
 				text-align: justify;
@@ -402,8 +408,10 @@ body{
 		.bulleted-list
 		{
 			display: inline-block;
+
 			.content
 			{
+				font-family: $content-text;
 				font-size: 15px;
 				color: #555555;
 				text-align: justify;
@@ -432,7 +440,6 @@ body{
 .wrapper-4
 {
 	background-color: #f4f4f4;
-	font-family: "Open Sans",sans-serif;
 	padding: 25px 0px;
 	overflow: hidden;
 
@@ -442,7 +449,7 @@ body{
 		padding: 30px 0px 45px 0px;
 		.main-title
 		{
-			font-family: "Raleway Medium", sans-serif;
+			font-family: $display-text;
 			font-size: 30px;
 			color: #b07d2a;
 			.shade-green
@@ -454,10 +461,24 @@ body{
 	.products-services-container
 	{
 		padding: 0px 0px 40px 0px;
-		.products-services-img
+		text-align: center;
+
+		.img-container
 		{
-			width: 100%;
+			width: 50%;
+			margin: auto;
+
+			img 
+			{
+				width: 100%;
+			}
+
+			@media screen and (max-width: 414px)
+			{
+				width: 100%;
+			}
 		}
+
 		.img-title
 		{
 			font-size: 15px;
@@ -468,6 +489,110 @@ body{
 			margin-left: auto;
 			margin-right: auto;
 		}
+	}
+}
+
+.wrapper-5
+{	
+	.img-container
+	{
+		padding: 50px 0px 50px 0px;
+		text-align: center;
+	}
+
+	.details-container
+	{
+		padding: 50px 0px 50px 0px;
+		font-family: $display-text;
+
+		.header
+		{
+
+			font-weight: $regular;
+			font-size: 25px;
+			color: #019771;
+
+			span
+			{
+				color: #b07d2a;
+			}
+		}
+
+		.sub-header
+		{
+			padding: 20px 0px 20px 0px;
+			font-weight: $regular;
+			font-size: 20px;
+			color: #1e1c21;
+
+			span
+			{
+				color: #019771
+			}
+		}
+
+		.benefits
+		{
+			padding: 20px 0px 20px 0px;
+
+			.header
+			{
+				font-family: $display-text;
+				font-weight: $regular;
+				font-size: 15px;
+			}
+
+			ul
+			{
+				@extend .header;
+				font-family: $content-text;
+				padding-top: 20px;
+				
+				li
+				{
+					color: #555555;
+				}
+			}
+		}
+	}
+}
+
+.wrapper-6
+{
+	
+	background-color: #f4f4f4;
+
+	.details-container
+	{
+		padding: 50px 0px 50px 0px;
+
+		.header
+		{
+			font-family: $display-text;
+			font-weight: $regular;
+			font-size: 25px;
+			color: #019771;
+
+			span
+			{
+				color: #b07d2a;
+			}
+		}
+
+		.details
+		{
+			font-family: $content-text;
+			padding: 20px 0px 20px 0px;
+			font-weight: $regular;
+			font-size: 15px;
+			color: #555555;
+		}
+	}
+
+	.img-container
+	{
+		padding: 50px 0px 50px 0px;
+		text-align: center;
 	}
 }
 

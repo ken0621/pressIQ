@@ -7,13 +7,21 @@ use App\IPay88\RequestForm;*/
 
 class RequestPayment
 {
-    // public static $paymentUrl = 'https://sandbox.ipay88.com.ph/epayment/entry.asp';
     public static $paymentUrl = 'https://payment.ipay88.com.ph/epayment/entry.asp';
 
 	private $merchantKey;
 
 	public function __construct($merchantKey)
     {
+    	if (get_domain() == "c9users.io") 
+    	{
+    		self::$paymentUrl = "https://sandbox.ipay88.com.ph/epayment/entry.asp";
+    	}
+    	else 
+    	{
+    		self::$paymentUrl = "https://payment.ipay88.com.ph/epayment/entry.asp";
+    	}
+    	
     	$this->merchantKey = $merchantKey;
     }
 

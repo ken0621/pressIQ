@@ -3,7 +3,6 @@
 		<div style="font-size: 25px;"><b>{{ str_pad($transaction->transaction_number, 8, '0', STR_PAD_LEFT) }}</b></div>
 		<div style="color: red; font-size: 20px;">{{ $transaction_total }}</div>
 
-
 		<div style="margin-top: 10px;">E-Mail for this link has been sent to your e-mail address.<br>You can click below to upload your proof of payment.</div>
 		<div style="margin-top: 20px">
 			<div style="border: 1px solid #eee; display: inline-block; padding: 15px; border-radius: 3px; cursor: pointer;">

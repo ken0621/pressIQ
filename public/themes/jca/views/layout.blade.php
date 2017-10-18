@@ -139,12 +139,24 @@
                             <p class="footer-title">Quick Links</p>
                         </div>
                         <div class="jca-footer-details-container">
-                            <p class="footer-detail-list">Company Policy</p>
-                            <p class="footer-detail-list">Dealer’s Policy</p>
-                            <p class="footer-detail-list">Disclaimer</p>
-                            <p class="footer-detail-list">Terms & Condition</p>
-                            <p class="footer-detail-list">Privacy Policy</p>
-                            <p class="footer-detail-list">Product Policy</p>
+                            <a href="#">
+                                <p class="footer-detail-list">Company Policy</p>
+                            </a>
+                            <a href="#">
+                                <p class="footer-detail-list">Dealer’s Policy</p>
+                            </a>
+                            <a href="#">
+                                <p class="footer-detail-list">Disclaimer</p>
+                            </a>
+                            <a href="#">
+                               <p class="footer-detail-list">Terms & Condition</p> 
+                            </a>
+                            <a href="#">
+                                <p class="footer-detail-list">Privacy Policy</p>
+                            </a>
+                            <a href="#">
+                                <p class="footer-detail-list">Product Policy</p>
+                            </a>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -152,13 +164,35 @@
                             <p class="footer-title">Overview</p>
                         </div>
                         <div class="jca-footer-details-container">
-                            <p class="footer-detail-list">Marketing Plan</p>
-                            <p class="footer-detail-list">Packages</p>
-                            <p class="footer-detail-list">Product Packages</p>
-                            <p class="footer-detail-list">Direct Selling</p>
-                            <p class="footer-detail-list">Unilevel</p>
-                            <p class="footer-detail-list">Sales Comission</p>
-                            <p class="footer-detail-list">Overide Sales Comission</p>
+
+                            <a href="/themes/{{ $shop_theme }}/img/overview/marketing_plan.png" class="lsb-preview"> 
+                                <p class="footer-detail-list">Marketing Plan</p>
+                            </a>
+                            
+                            <a href="/themes/{{ $shop_theme }}/img/overview/packages.png" class="lsb-preview"> 
+                                <p class="footer-detail-list">Packages</p>
+                            </a>
+                            
+                            <a href="/themes/{{ $shop_theme }}/img/overview/product_packages.png" class="lsb-preview"> 
+                                <p class="footer-detail-list">Product Packages</p>
+                            </a>
+
+                            <a href="/themes/{{ $shop_theme }}/img/overview/direct_selling.png" class="lsb-preview"> 
+                                <p class="footer-detail-list">Direct Selling</p>
+                            </a>
+                            
+                            <a href="/themes/{{ $shop_theme }}/img/overview/unilevel.png" class="lsb-preview"> 
+                                <p class="footer-detail-list">Unilevel</p>
+                            </a>
+                            
+                            <a href="/themes/{{ $shop_theme }}/img/overview/sales_commission.png" class="lsb-preview"> 
+                                <p class="footer-detail-list">Sales Comission</p>
+                            </a>
+
+                            <a href="/themes/{{ $shop_theme }}/img/overview/override.png" class="lsb-preview"> 
+                                <p class="footer-detail-list">Overide Sales Comission</p>
+                            </a>
+
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -166,12 +200,21 @@
                             <p class="footer-title">Product Portfolio</p>
                         </div>
                         <div class="jca-footer-details-container">
-                            <p class="footer-detail-list">JCA Wellness Body Cream</p>
-                            <p class="footer-detail-list">JCA Wellness Day Cream</p>
-                            <p class="footer-detail-list">JCA Wellness Night Cream</p>
-                            <p class="footer-detail-list">Swiss Apple Stemcell Cerum</p>
-                            <p class="footer-detail-list">Swiss Apple Stemcell Soap with</p>
-                            <p class="footer-detail-list">gulthathione and collagen</p>
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/body_cream.png" class="lsb-preview"> 
+                                <p class="footer-detail-list">JCA Wellness Body Cream</p>
+                            </a>
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/day_cream.png" class="lsb-preview"> 
+                                <p class="footer-detail-list">JCA Wellness Day Cream</p>
+                            </a>
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/night_cream.png" class="lsb-preview"> 
+                                <p class="footer-detail-list">JCA Wellness Night Cream</p>
+                            </a>
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/stem_cell_serum.png" class="lsb-preview"> 
+                                <p class="footer-detail-list">Swiss Apple Stemcell Cerum</p>
+                            </a>
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/stem_cell_soap.png" class="lsb-preview"> 
+                                <p class="footer-detail-list">Swiss Apple Stemcell Soap with gulthathione and collagen</p>
+                            </a>
                         </div>
                     </div> 
                 </div>
@@ -190,5 +233,10 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
 
     @yield("script")
+    <script> 
+      $(window).load(function() { 
+        $.fn.lightspeedBox(); 
+      }); 
+    </script> 
     </body>
 </html>

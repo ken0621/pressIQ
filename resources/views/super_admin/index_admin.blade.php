@@ -74,14 +74,14 @@
       
       <div class="widget-content">
         
-        <table class="table table-striped table-bordered info_table" style="height:450px;">
+        <table class="table-striped table-bordered info_table" style="height:450px;">
           <thead>
             <tr>
-              <th class="table-head">Name</th>
-              <th class="table-head">Address</th>
-              <th class="table-head">Zip Code</th>
-              <th class="table-head">City</th>
-              <th class="table-head">Contact Number</th>
+              <th class="table-head_index1">Name</th>
+              <th class="table-head_index1">Address</th>
+              <th class="table-head_index1">Zip Code</th>
+              <th class="table-head_index1">City</th>
+              <th class="table-head_index1">Contact Number</th>
             </tr>
           </thead>
           <tbody >
@@ -210,7 +210,8 @@
                 </div>
               </li>
             </ul>
-          </div>          
+          </div>   
+          <br>       
         <!-- quick email widget -->
         <div class="box box-info">
           <div class="box-header">

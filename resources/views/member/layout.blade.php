@@ -470,6 +470,7 @@
         }
         </script>
         <script type="text/javascript" src="/assets/member/js/jquery-ui.js"></script>
+        <script src="/email_assets/js/list.js"></script>
         @yield('script')
     </body>
 </html>

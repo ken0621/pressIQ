@@ -52,7 +52,7 @@
       <!-- Wrapper for slides -->
       <div class="carousel-inner">
         <div class="item active">
-          <img src="/themes/digimahouse_landingpage/img/img-slider-1.png" alt="Los Angeles">
+          <img class= "background-carousel" src="/themes/digimahouse_landingpage/img/img-slider-1.png" alt="Los Angeles">
           <div class="container text">
             <div class="carousel-caption">
             <h3 class= "p1" style ="white-space: nowrap"><b>Digima House ERP Online</b></h3>

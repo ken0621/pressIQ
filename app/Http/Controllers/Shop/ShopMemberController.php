@@ -219,6 +219,26 @@ class ShopMemberController extends Shop
     }
     public function getRequestPayout()
     {
+        $settings = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
+        if ($settings->encashment_settings_schedule != 0) 
+        {
+            if (date("j") != $settings->encashment_settings_schedule) 
+            {
+                echo '<div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+                    </div>';
+
+                echo "<h3 class='text-center' style='margin: 25px 0;'>You can only request payout every " . ordinal($settings->encashment_settings_schedule) . " day of the month.</h3>";
+                
+                echo '<div class="modal-footer">
+                        <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button type="submit" class="btn btn-primary btn-custom-primary"><i class="fa fa-angle-double-right"></i> Request Payout</button>
+                    </div>';
+                die();
+            }
+        }
+        
         $data["page"] = "Request Payout";
         $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
         return view("member2.request_payout", $data);

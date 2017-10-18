@@ -20,10 +20,15 @@ use App\Globals\Settings;
 
 class EmployeeController extends PayrollMember{
 
+	public function employee_info()
+	{
+		return $this->employee_info;
+	}
+
 	public function employee(){
 
 		$data['page']	= 'Home';
-
+		
 		return view('member.payroll2.employee_dashboard.employee',$data);
 	}
 	public function employee_profile(){

@@ -14,16 +14,17 @@ use App\Globals\AuditTrail;
 
 use App\Globals\Settings;
 
-class EmployeeLoginController extends PayrollMember
+class EmployeeLoginController extends Controller
 {
 
-	public function logout()
+	public function employee_logout()
 	{
-		Session::forget('payroll_employee_email');
-		Session::forget('payroll_employee_sss');
-		Session::forget('product_info');
-		return Redirect::back();
+		Session::forget('employee_email');
+		Session::forget('employee_password');
+		
+		return Redirect::to("/employee_login");
 	}
+
 	public function employee_login()
 	{
 
@@ -36,12 +37,12 @@ class EmployeeLoginController extends PayrollMember
 			$email 		= Request::input('email');
 			$password 	= Request::input('password');
 
-			$employee_info	= Tbl_payroll_employee_basic::where('payroll_employee_email',$email)->where('payroll_employee_sss',$password)->first();
+			$employee_info	= Tbl_payroll_employee_basic::where('payroll_employee_email',$email)->where('payroll_employee_tin',$password)->first();
 			
 			if ($employee_info) 
 			{
-				Session::put('user_email',$email);
-				Session::put('user_password',$password);
+				Session::put('employee_email',$email);
+				Session::put('employee_password',$password);
 
 				return Redirect::to("/employee");
 			}
@@ -52,15 +53,8 @@ class EmployeeLoginController extends PayrollMember
 		}
 		else
 		{
-
 			return view('member.payroll2.employee_dashboard.employee_login', $data);
 		}
-
-
-
-
-		
-
 		// if($shop_id != null)
 		// {
 		// 	$data['shop_info'] = Tbl_shop::where('shop_id', $shop_id)->first();

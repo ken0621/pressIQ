@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tbl_user;
 use App\Models\Tbl_user_position;
 use App\Models\Tbl_user_warehouse_access;
+use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_warehouse;
 
 use App\Globals\Account;
@@ -22,9 +23,27 @@ use Carbon\Carbon;
 use App\Globals\Mlm_seed;
 class PayrollMember extends Controller
 {
+	public $employee_info;
 
 	public function __construct()
 	{
 		
+		$this->middleware(function ($request, $next)
+		{
+			if(!session('employee_email') || !session('employee_password'))
+			{
+				return Redirect::to("/employee_login")->send();
+			}
+			else
+			{
+				$employee_email 	= session('employee_email');
+				$employee_password	= session('employee_password');
+				$employee_info	= Tbl_payroll_employee_basic::where('payroll_employee_email',$employee_email)->where('payroll_employee_tin',$employee_password)->first();
+				$this->employee_info = $employee_info;
+			}
+
+			
+			return $next($request);
+		});
 	}
 }

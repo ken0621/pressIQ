@@ -30,11 +30,11 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="{{ (Request::segment(2)=='') ? 'active' : ''  }}"><a href="/employee">Home<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
+        <li class="{{ (Request::segment(2)=='')          ? 'active' : ''  }}"><a href="/employee">Home<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
         <li class="{{ (Request::segment(2) == 'profile') ? 'active' : ''  }}"><a href="/employee_profile">Profile<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>
         <li class="{{ (Request::segment(2) == 'message') ? 'active' : ''  }}"><a href="/employee_leave_application">Leave Application<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil"></span></a></li>
         <li class="{{ (Request::segment(2) == 'message') ? 'active' : ''  }}"><a href="/employee_summary_of_leave">Summary of Leave<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-list-alt"></span></a></li>
-        <li class="{{ (Request::segment(2) == 'message') ? 'active' : ''  }}"><a href="/employee_login">Logout<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-off"></span></a></li>
+        <li class="{{ (Request::segment(2) == 'message') ? 'active' : ''  }}"><a href="/employee_logout">Logout<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-off"></span></a></li>
       </ul>
     </div>
   </div>

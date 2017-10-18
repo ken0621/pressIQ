@@ -42,6 +42,7 @@ class ProductOrderController2 extends Member
         foreach($data["_raw_table"] as $key => $raw_table)
         {
             $data["_raw_table"][$key]->action = "NO ACTION";
+            $data["_raw_table"][$key]->name = $raw_table->first_name . " " . $raw_table->last_name;
 
             if($active_tab == "unconfirmed")
             {
@@ -52,7 +53,7 @@ class ProductOrderController2 extends Member
         }
 
         $default[]          = ["REF NO.","transaction_number", true];
-        $default[]          = ["CUSTOMER.","first_name", true];
+        $default[]          = ["CUSTOMER NAME","name", true];
         $default[]          = ["DATE ORDERED","display_date_order", true];
         $default[]          = ["DATE PAID.","display_date_paid", true];
         $default[]          = ["DATE SHIPPED.","display_date_deliver", true];

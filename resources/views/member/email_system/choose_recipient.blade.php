@@ -28,16 +28,33 @@
                                       
   <form name="myform" method="GET" action="/member/page/press_release_email/search_recipient_press_release" id="#pass_data">
     <h4 style="margin-left: 10px;">Search By:</h4>
-  <div class="form-group row">
-    <label class="label-name">Company Name</label>
+
+    <!-- <div class="form-group row">
+    <label  class="label-name">Country</label>
     <div class="">
-      <input type="text" class="form-control input col-md-6" id= "commpany_name" name = "company_name" placeholder="Company Name">
+      <input type="text" class="form-control input col-md-6" id="country" placeholder="country" name="country">
     </div>
+      </div> -->
+  <div class="form-group row">
+  <label  class="label-name">Country</label>
+  <br>
+  <select class="selectpicker" id="filter">
+    <option value="1">Select All</option>
+   @foreach($_recipient_country as $recipient_country)
+    <option value="{{$recipient_country->country}}">{{$recipient_country->country}}</option>
+    @endforeach
+  </select>
   </div>
   <div class="form-group row">
     <label for="inputPassword" class="label-name">Name</label>
     <div class="">
       <input type="text" class="form-control input col-md-6" id= "name" name="name" placeholder="Name">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="inputPassword" class="label-name">Company Name</label>
+    <div class="">
+      <input type="text" class="form-control input col-md-6" id= "company_name" name="name" placeholder="Comapany Name">
     </div>
   </div>
   <div class="form-group row">
@@ -50,12 +67,6 @@
     <label  class="label-name">Title of Journalist</label>
     <div class="">
       <input type="text" class="form-control input col-md-6" id="title_of_journalist" placeholder="Title of Journalist" name="title_of_journalist">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label  class="label-name">Country</label>
-    <div class="">
-      <input type="text" class="form-control input col-md-6" id="country" placeholder="country" name="country">
     </div>
   </div>
   <div class="form-group row">
@@ -122,5 +133,24 @@
 
     
     });
+</script>
+<script>
+
+  selectAll();
+
+$('#filter').change(function(){
+
+  if($("#filter option[value='1']").is(':selected'))
+  {
+     selectAll();
+  }
+
+})
+
+function selectAll()
+{
+   $('#filter option').prop('selected', true);
+   $("#filter option[value='1']").prop('selected', false);
+}
 </script>
 @endsection

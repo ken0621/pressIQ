@@ -59,7 +59,8 @@ class Press_Release_Controller extends Member
             }
 
 
-            $data["_recipient_list"] = $recipientResult->paginate(7); 
+            $data["_recipient_list"] = $recipientResult->paginate(7);
+            $data["_recipient_country"] = $recipientResult->select('country')->distinct()->paginate(7);
             return view("member.email_system.choose_recipient",$data);
     }
 
@@ -105,7 +106,7 @@ class Press_Release_Controller extends Member
                 Mail::send('member.email_system.email',$data, function($message) use ($data)
                 {
                     $message->from($data['from']);
-                    $message->to("edwardguevarra2003@gmail.com");
+                    $message->to("edwardguevarra2003@gmail");
                     $message->subject($data['subject']);
                 });  
             }

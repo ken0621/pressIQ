@@ -1,3 +1,10 @@
+.selectpicker
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
 .email-content-container
 {
     width: 98%;
@@ -9,7 +16,7 @@
 .pagination_container
 {
     /* margin-left: 780px; */
-    margin-top: -35px;
+    margin-top: -11px;
 }
 
 .view-message
@@ -55,8 +62,9 @@
 
 .recipient_container
 {
-    margin-top: -528px;
-    margin-left: 765px!important;
+    position: absolute !important;
+    left: 745px !important;
+    top: 245px;
 }
 
 .label-choose-recipient

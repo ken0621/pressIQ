@@ -900,6 +900,7 @@ class PayrollTimeSheet2Controller extends Member
 		if($check_approved)
 		{
 			$data = $this->compute_process_cutoff($check_approved);
+			// dd($this->compute_process_cutoff($check_approved));
 			$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
 
 			if($computation_type != "Flat Rate")

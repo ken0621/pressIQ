@@ -14,7 +14,7 @@
            			<td class="text-center"><input type="checkbox" name=""></td>
            			<td class="text-center">{{ $employee->payroll_employee_number }}</td>
            			<td class="text-center">{{$employee->payroll_employee_first_name}} {{$employee->payroll_employee_last_name}}</td>
-           			<td class="text-center">{{ $employee->payroll_company_name }}</td>
+           			<td class="text-center">{{ payroll_currency($employee->grand_total_13th_month_pay) }}</td>
            			<td class="text-center"><a href="/member/payroll/reports/employee_13_month_pay_report/{{$employee->payroll_employee_id}}">View Details</a></td>
            		</tr>
            	@endforeach

@@ -58,9 +58,8 @@ class Press_Release_Controller extends Member
                 $recipientResult = $recipientResult->where('industry_type',Request::input('industry_type'));
             }
 
-
-            $data["_recipient_list"] = $recipientResult->paginate(7);
-            $data["_recipient_country"] = $recipientResult->select('country')->distinct()->paginate(7);
+            $data["_recipient_list"] = $recipientResult->get();
+            $data["_recipient_country"] = $recipientResult->select('country')->distinct()->get();
             return view("member.email_system.choose_recipient",$data);
     }
 

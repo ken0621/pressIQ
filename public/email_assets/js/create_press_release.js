@@ -30,7 +30,7 @@ $(document).ready(function(){
   {		
 
 
-		var company_name = $('#company_name').val();
+		var company_name = $('.selectpicker_company_name').val();
 		var name = $('#name').val();
 		var position = $('#position').val();
 		var title_of_journalist = $('#title_of_journalist').val();
@@ -195,7 +195,7 @@ $(document).ready(function(){
 
 
 
-var ajaxdata = {};
+/*var ajaxdata = {};
       $("body").on("click", ".pagination a", function(e)
       {
       $url = $(e.currentTarget).attr("href"); //get URL (string)
@@ -204,7 +204,7 @@ var ajaxdata = {};
       $.getScript("/email_assets/js/list.js");
       });
       return false;
-      });
+      });*/
 
   
   var addParams = function( url, data )

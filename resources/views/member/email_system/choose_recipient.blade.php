@@ -39,17 +39,11 @@
   <label  class="label-name">Country</label>
   <br>
   <select class="selectpicker" id="filter">
-    <option value="1">Select All</option>
+   <option value="1">Select All</option>
    @foreach($_recipient_country as $recipient_country)
     <option value="{{$recipient_country->country}}">{{$recipient_country->country}}</option>
     @endforeach
   </select>
-  </div>
-  <div class="form-group row">
-    <label for="inputPassword" class="label-name">Name</label>
-    <div class="">
-      <input type="text" class="form-control input col-md-6" id= "name" name="name" placeholder="Name">
-    </div>
   </div>
   <div class="form-group row">
     <label for="inputPassword" class="label-name">Company Name</label>
@@ -102,9 +96,6 @@
                   @endforeach
                 </ul>
             </div>
-            <div class="pagination_container">
-              <?php echo $_recipient_list->render(); ?>
-           </div>
         </div>
     </div>
 </div>
@@ -134,11 +125,12 @@
     
     });
 </script>
-<script>
+<!-- <script>
 
   selectAll();
 
-$('#filter').change(function(){
+$('#filter').change(function()
+{
 
   if($("#filter option[value='1']").is(':selected'))
   {
@@ -149,8 +141,9 @@ $('#filter').change(function(){
 
 function selectAll()
 {
+  /*$('#filter > option').attr("selected", "selected");*/
    $('#filter option').prop('selected', true);
    $("#filter option[value='1']").prop('selected', false);
 }
-</script>
+</script> -->
 @endsection

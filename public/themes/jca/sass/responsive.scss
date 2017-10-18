@@ -1,6 +1,6 @@
-/* Responsiveness */
+/* MOBILE DEVICES */
 
-/* TABLETS */
+/* START TABLET */
 @media screen and (max-width: 768px)
 {
 	.header-fixed.header-container
@@ -24,8 +24,10 @@
 	{
 	    padding: 0px 0px 50px 0px;
 	}
-}
+}/* END TABLETS */
 
+
+/* START MOBILE LARGE */
 @media screen and (max-width: 425px)
 {
 
@@ -49,8 +51,9 @@
 	{
 	    float: left;
 	}
-}
+}/* END MOBILE LARGE */
 
+/* START MOBILE MEDIUM */
 @media screen and (max-width: 375px)
 {
 	.header-fixed.header-container
@@ -89,8 +92,9 @@
 	{
 	    float: left;
 	}
-}
+}/* END MOBILE MEDIUM */
 
+/* START MOBILE SMALL */
 @media screen and (max-width: 320px)
 {
 	.header-fixed.header-container
@@ -111,4 +115,4 @@
 	{
 	   margin-left: 5px;
 	}
-}
+}/* END MOBILE SMALL */

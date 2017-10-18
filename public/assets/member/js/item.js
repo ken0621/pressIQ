@@ -318,10 +318,12 @@ function item()
 
     function event_add_tr()
     {
+        $(document).off("click", ".add-tr-bundle");
         $(document).on("click", ".add-tr-bundle", function(e){
             $("tbody.tbody-item-bundle").append(global_tr_html);
             action_trigger_select_plugin_bundle();
         });
+        $(document).off("click", ".add-tr-group");
         $(document).on("click", ".add-tr-group", function(e){
             $("tbody.tbody-item-group").append(global_tr_html_group);
             action_trigger_select_plugin_group();

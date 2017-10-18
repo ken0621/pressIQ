@@ -51,6 +51,7 @@
 						<div class="col-md-12">
 	                        <label for="basic-input">Schedule</label>
 	                        <select class="form-control" name="encashment_settings_schedule">
+	                        	<option value="0" {{ 0 == $settings->encashment_settings_schedule ? "selected" : "" }}>No Schedule</option>
 	                        	@for($i = 1; $i <= 30; $i++)
 	                        		<option value="{{ $i }}" {{ $i == $settings->encashment_settings_schedule ? "selected" : "" }}>Every {{ ordinal($i) }} of the Month</option>
 	                        	@endfor

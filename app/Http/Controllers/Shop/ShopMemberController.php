@@ -42,6 +42,7 @@ use App\Models\Tbl_vmoney_wallet_logs;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_payout_bank;
 use App\Models\Tbl_online_pymnt_api;
+use App\Models\Tbl_mlm_plan_setting;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -1737,7 +1738,14 @@ class ShopMemberController extends Shop
                     $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
                     MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
 
+                    $setting = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
                     $slot_id = $create_slot;
+
+                    if($setting->plan_settings_placement_required == 0)
+                    {
+                        MLM2::entry($shop_id,$slot_id);
+                    }
+                    
                     $store["get_success_mode"] = "success";
                     session($store);
                     echo json_encode("success");

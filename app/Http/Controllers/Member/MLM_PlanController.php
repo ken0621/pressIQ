@@ -83,12 +83,12 @@ class MLM_PlanController extends Member
     	// end input from form
     	   
     	// Validator rules
-    	$rules['plan_settings_prefix_count'] = "required";
+    	//$rules['plan_settings_prefix_count'] = "required";
 		$rules['plan_settings_enable_mlm'] = "required";
 		$rules['plan_settings_enable_replicated'] = "required";
 		$rules['plan_settings_slot_id_format'] = "required";
-		$rules['plan_settings_format'] = "required";
-		$rules['plan_settings_prefix_count'] = "required";
+		//$rules['plan_settings_format'] = "required";
+		//$rules['plan_settings_prefix_count'] = "required";
         $rules['plan_settings_use_item_code'] = "required";
         $rules['plan_settings_email_membership_code'] = 'required';
         $rules['plan_settings_email_product_code'] = 'required';

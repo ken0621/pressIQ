@@ -9,7 +9,7 @@
                     <div class="embed-responsive embed-responsive-16by9">
                         <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/sy655Z-7TZE?autoplay=1" allowfullscreen="" frameborder="0">              </iframe>
                     </div>
-                    <div class="btn-container animated fadeInDown">GET FREE ACCESS</div>
+                    <a href="/members/register"><div class="btn-container animated fadeInDown">GET FREE ACCESS</div></a>
                 </div>
             </div>
         </div>

@@ -24,7 +24,7 @@ class Press_Release_Controller extends Member
     	return view("member.email_system.create_press_release");
     }
 
-    public function choose_recipient()
+    public function choose_recipient(Request $request)
     {
 			$recipientResult = Tbl_press_release_recipient::select("*");
             if(Request::input("company_name") != "")
@@ -58,21 +58,14 @@ class Press_Release_Controller extends Member
                 $recipientResult = $recipientResult->where('industry_type',Request::input('industry_type'));
             }
 
-<<<<<<< HEAD
 
-
-
-
-            $data['_list_country']=Tbl_press_release_recipient::distinct()->get(['country']);
-            $data["_recipient_list"] = $recipientResult->paginate(7); 
-
-=======
             $data["_recipient_list"] = $recipientResult->get();
             $data["_recipient_country"] = $recipientResult->select('country')->distinct()->get();
->>>>>>> a864d7cbb7d836c68780f458743a3df235e251fe
+
             return view("member.email_system.choose_recipient",$data);
 
     
+     
     }
 
 

@@ -33,18 +33,17 @@
   <div class="form-group row">
   <label  class="label-name">Country</label>
   <br>
-  <select class="selectpicker" id="filter">
+  <select class="selectpicker" id="country" id="filter">
    <option value="1">Select All</option>
    @foreach($_recipient_country as $recipient_country)
     <option value="{{$recipient_country->country}}">{{$recipient_country->country}}</option>
     @endforeach
   </select>
->>>>>>> a864d7cbb7d836c68780f458743a3df235e251fe
   </div>
   <div class="form-group row">
     <label for="inputPassword" class="label-name">Company Name</label>
     <div class="">
-      <input type="text" class="form-control input col-md-6" id= "company_name" name="name" placeholder="Comapany Name">
+      <input type="text" class="form-control input col-md-6" id="company_name" name="name" placeholder="Company Name">
     </div>
   </div>
   <div class="form-group row">
@@ -129,14 +128,6 @@
     
     });
 
-
-    // $('#company_name').change(function(event) {
-    //   $("#position").empty();
-    //   var country = this.value;
-
-        
-
-    // }); 
 </script>
 <!-- <script>
 

@@ -1027,7 +1027,6 @@ class PayrollReportController extends Member
 					{
 						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
 						{
-							
 							if ($value->time_output["leave_hours"] == '00:00:00') 
 							{
 								if ($lbl == 'late') 
@@ -1047,7 +1046,6 @@ class PayrollReportController extends Member
 						}
 					}
 				}
-
 
 				$data["_employee"][$key]->overtime 			= $overtime;
 				$data["_employee"][$key]->regular_holiday 	= $regular_holiday;

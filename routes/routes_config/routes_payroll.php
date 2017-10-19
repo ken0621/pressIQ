@@ -588,8 +588,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_reports/view_report/{id}','Member\PayrollController@view_report');
 	Route::any('/payroll_reports/download_excel_report','Member\PayrollController@download_excel_report');
 	Route::any('/payroll_reports/date_change_report','Member\PayrollController@date_change_report');
-
-
 	/* PAYROLL REPORTS END */
 
 

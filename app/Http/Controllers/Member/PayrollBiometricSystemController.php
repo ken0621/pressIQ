@@ -143,7 +143,6 @@ class PayrollBiometricSystemController extends Member
 			}
 		}
 
-	
 		$data["imported_count"]	= count($_insert);
 
 		// return view('member.payroll2.payroll_biometric_imported_data_table',$data);

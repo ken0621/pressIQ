@@ -140,6 +140,10 @@
 		{
 			width: 50% !important;
 		}
+		.head-title
+		{
+			padding-bottom: 20px !important;
+		}
 	}	
 </style>
 

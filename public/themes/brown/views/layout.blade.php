@@ -118,9 +118,9 @@
                         <ul class="nav navbar-nav">
 
                             @if($customer)
-                            <li class="{{ Request::segment(1) == "members" ? "active" : "" }}"><a href="/members">My Account</a></li>
+                            <li class="{{ Request::segment(1) == "members" ? "active" : "" }}"><a href="/members">MY ACCOUNT</a></li>
                             @endif
-                            
+
                             <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">HOME</a></li>
                             <!--<li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>-->
                             <!-- <li><a href="">STORE</a></li> -->

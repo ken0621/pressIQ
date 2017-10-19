@@ -5,17 +5,16 @@
 		</div>
 	</div>
 	<div class="col-md-4">
-		<div class="event-details" style="padding: 40px 15px 15px 15px; text-align: center; position: relative;">
-			<h1 style="font-size: 24px; font-weight: 300; margin-top: 50px; color: #404040;">{{ $event->event_title }}</h1>
+		<div class="event-details">
+			<h1>{{ $event->event_title }}</h1>
 			<div class="date">
 				<span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span style="font-weight: 400; color: #585858;">OCTOBER 20, 2017</span>
 			</div>
-			<p style="font-size: 15px; font-weight: 300; color: #585858; margin-top: 25px;">
+			<p>
 				Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
 			</p>
 			<a href="">
-				<div class="reserve-btn" style="width: 90%; background-color: #402a21; text-align: center; padding: 12px 0; color: #fff; font-weight: 300;
-				position: absolute; top: 540px;">
+				<div class="reserve-btn">
 					RESERVE A SEAT
 				</div>
 			</a>
@@ -31,6 +30,37 @@
 	<img src="/themes/{{ $shop_theme }}/img/mob-close.png">
 </div>
 <style type="text/css">
+	.event-details
+	{
+		padding: 40px 15px 15px 15px;
+		text-align: center;
+		position: relative;
+		color: #404040;
+	}
+	h1
+	{
+		font-size: 24px;
+		font-weight: 300;
+		margin-top: 50px;
+	}
+	p
+	{
+		font-size: 15px;
+		font-weight: 300;
+		color: #585858;
+		margin-top: 25px;
+	}
+	.reserve-btn
+	{
+		width: 90%;
+		background-color: #402a21;
+		text-align: center;
+		padding: 12px 0;
+		color: #fff;
+		font-weight: 300;
+		position: absolute;
+		top: 540px;
+	}
 	.reserve-btn-2
 	{
 		width: 100%;
@@ -49,7 +79,7 @@
 		cursor: pointer;
 		background-color: #493026 !important;
 	}
-	@media screen and (max-width: 425px)
+	@media screen and (max-width: 991px)
 	{
 		.event-details
 		{

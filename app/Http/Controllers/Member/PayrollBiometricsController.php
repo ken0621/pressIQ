@@ -134,9 +134,9 @@ class PayrollBiometricsController
 						$insert["payroll_time_date"] 	= $key_date;
 						
 
-						$insert_time["payroll_biometric_record_id"] = Tbl_payroll_biometric_record::insertGetId($insert);
-						$insert_time["payroll_time_in"] 		= 	$value["time_in"];
-						$insert_time["payroll_time_out"] 		= $value["time_out"];
+						$insert_time["payroll_biometric_record_id"] = 	Tbl_payroll_biometric_record::insertGetId($insert);
+						$insert_time["payroll_time_in"] 			= 	$value["time_in"];
+						$insert_time["payroll_time_out"] 			= 	$value["time_out"];
 
 						Tbl_payroll_biometric_time_sheet::insert($insert_time);
 					}

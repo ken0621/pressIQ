@@ -63,7 +63,7 @@
 
 
         <form class="global-submit form-process-sale" action="/member/cashier/pos/process_sale" method="post">
-        <input class="token" type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input class="token" type="hidden" id="_token" name="_token" value="{{ csrf_token() }}">
             <!-- TOTAL -->
             <div class="panel panel-default panel-block panel-title-block big-total">
                 <div class="panel-body form-horizontal">

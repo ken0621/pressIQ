@@ -1,19 +1,19 @@
 <div class="modal-body row-no-padding clearfix" style="padding: 0; position: relative;">
 	<div class="col-md-8">
 		<div class="event-image">
-			<img style="width: 100%;" src="/themes/{{ $shop_theme }}/img/event1.jpg">
+			<img style="width: 100%;" src="{{$event->event_thumbnail_image}}">
 		</div>
 	</div>
 	<div class="col-md-4">
 		<div class="event-details">
 			<h1>{{ $event->event_title }}</h1>
 			<div class="date">
-				<span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span style="font-weight: 400; color: #585858;">OCTOBER 20, 2017</span>
+				<span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span style="font-weight: 400; color: #585858;">{{strtoupper(date('F d, Y', strtotime($event->event_date)))}}</span>
 			</div>
 			<p>
-				Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+				{!! $event->event_description !!}
 			</p>
-			<a href="">
+			<a  class="popup" size="md" link="{!! isset($reserve_seat_btn) ? $reserve_seat_btn : '/members/event-reserve?id='.$event->event_id !!}">
 				<div class="reserve-btn">
 					RESERVE A SEAT
 				</div>
@@ -23,7 +23,9 @@
 </div>
 <div class="modal-footer" style="display: none;">
 	<div class="reserve-btn-2">
-		RESERVE A SEAT
+		<a class="popup" size="md" link="{!! isset($reserve_seat_btn) ? $reserve_seat_btn : '/members/event-reserve?id='.$event->event_id !!}">
+			RESERVE A SEAT
+		</a>
 	</div>
 </div>
 <div class="mob-close" style="display: none;" data-dismiss="modal">

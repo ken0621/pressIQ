@@ -11,9 +11,9 @@
 			<div class="col-md-8">
 				<div class="head-title">
 					<h1>BROWN&PROUD ACADEMY</h1>
-					<h2>MASTERCLASS IN CREATIVE ENTREPRENEURSHIP</h2>
-					<h3>OFFICIAL MCE APPLICATION FORM</h3>
-					<h2>BATCH 001 (OCT 14, 21,28 2017)</h2>
+					<h2>{{$event->event_title}}</h2>
+					<h3>OFFICIAL APPLICATION FORM</h3>
+					<h2>{{strtoupper(date('M d, Y', strtotime($event->event_date)))}}</h2>
 				</div>
 			</div>
 		</div>
@@ -45,7 +45,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<div class="reg-button" type="submit">SUBMIT</div>
+		<div  ><button class="reg-button" type="submit">SUBMIT</button> </div>
 	</div>
 </form>
 <div class="mob-close" style="display: none;" data-dismiss="modal">

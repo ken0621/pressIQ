@@ -73,7 +73,7 @@
 						<div class="caption-container">
 							<h1>THE BROWN SPEAKER</h1>
 							<h2>UNLEASH THE NATIVE BASS!</h2>
-							<p>Brown promotes a future that is mindful of the needs of every Filipino.</p>
+							<p>Brown proudly designed a unique style of speakers that mirrors the culture of a true filipino.</p>
 							<!-- <div class="button-brown">SHOP NOW</div> -->
 						</div>
 					</div>
@@ -87,8 +87,8 @@
 					<div class="col-md-6">
 						<div class="caption-container">
 							<h1>BROWN'S DTV DONGLES</h1>
-							<h2>LOREM IPSUM DOLOR SIT</h2>
-							<p>Brown promotes a future that is mindful of the needs of every Filipino.</p>
+							<h2>THE FUTURE STYLE REVEALED</h2>
+							<p>Let your passion comes to our culture. Brown's DTV Dongles promotes a native looks that embraces Filipino Culture</p>
 							<!-- <div class="button-brown">SHOP NOW</div> -->
 						</div>
 					</div>

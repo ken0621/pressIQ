@@ -87,12 +87,18 @@
 <br>
 <div class="row recipient_container col-md-6">
 <div class="recipient_container2">
-            <h3 class="text-center">Recipient Lists</h3>
+            <h3 class="text-center recipient_text">Recipient Lists</h3>
             <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
-            <div class="well" style="max-height: ;: 300px;overflow: auto;">
-                <ul class="list-group checked-list-box">
+            <div class="well box" style="max-height: ;: 300px;overflow: auto;">
+              <button type="button" class="check-all btn btn-primary" onClick="selectall(this)">Check All</button>
+                <ul class="list-group check_list">
                   @foreach($_recipient_list as $recipient_list)
-                  <li class="list-group-item" type="checkbox" value="{{$recipient_list->recipient_id}}">{{$recipient_list->company_name}},{{$recipient_list->name}},{{$recipient_list->position}},{{$recipient_list->industry_type}}</li>
+                  <li  class="list-group-item tocheck" name="foo" value="{{$recipient_list->recipient_id}}">
+                    <div class="checkbox">
+                    <input type = "checkbox" class="tocheck">
+                    {{$recipient_list->company_name}},{{$recipient_list->name}},{{$recipient_list->position}},{{$recipient_list->industry_type}}
+                  </div>
+                </li>
                   @endforeach
                 </ul>
             </div>
@@ -125,6 +131,7 @@
     
     });
 </script>
+
 <!-- <script>
 
   selectAll();
@@ -147,3 +154,4 @@ function selectAll()
 }
 </script> -->
 @endsection
+

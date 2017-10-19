@@ -75,9 +75,10 @@ $(function () {
         });
         $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
     });
+
 });
 
-
+    function check(){
     $(document).ready(function(){
     $checks = $(":checkbox");
     $checks.on('change', function() {
@@ -91,3 +92,30 @@ $(function () {
         $('.input_chose_recipient').val(string);
     }).trigger('change');
 });
+}
+  
+    function selectall()
+    {
+    $('.tocheck').prop('checked','checked')
+    }
+
+  /*function selectall(source) {
+  checkboxes = document.getElementsByName('foo');
+  alert($(checkboxes).text());
+  $('input[type="checkbox"]').attr("checked", "checked");
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    this.checked = true;   
+    checkboxes[i].checked = source.checked;
+    alert('123s');
+      
+    }
+}*/
+
+  
+
+/*$( '.recipient_container .check-all' ).click( function () {
+    alert('123');
+    $( '.recipient_container2 input[type="checkbox"]' ).prop('checked', this.checked)
+  })
+*/
+

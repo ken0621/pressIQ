@@ -1,7 +1,25 @@
-.checked-list-box
+.recipient_text
 {
+    position:relative;
+    top:-25px;
+}
+.check-all
+{
+    width: 175px;
+}
+.box
+{
+    position: relative;
+    top:-15px;
+}
+
+.check_list
+{
+    height: 380px;
     overflow-y: scroll !important;
-    height: 450px;
+    margin-top: 35px
+    
+
 }
 
 .selectpicker_type_of_industry
@@ -99,7 +117,8 @@
 {
     position: absolute !important;
     left: 745px !important;
-    top: 245px;
+    top: 258px;
+    height:500px;
 }
 
 .label-choose-recipient

@@ -38,7 +38,6 @@ $(document).ready(function(){
     var industry_type = $('#industry_type').val();
   	var data = {company_name: company_name,name:name,position:position,title_of_journalist:title_of_journalist,country:country, industry_type:industry_type};
 		var url = addParams("/member/page/press_release_email/choose_recipient_press_release",data);
-    alert(url);
 		$(".recipient_container").load(url+" .recipient_container2",function(){
 			$.getScript("/email_assets/js/list.js");
       /*$.getCss("/email_assets/email_css/create_email.css");*/

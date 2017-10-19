@@ -120,11 +120,11 @@
                             @endif -->
                             <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">HOME</a></li>
                             <!--<li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>-->
-                            <li><a href="">STORE</a></li>
-                            <li><a href="">THE ACADEMY</a></li>
-                            <li><a href="">INSPIRERS</a></li>
-                            <li><a href="">INTERNET OF THINGS</a></li>
-                            <li><a href="">EVENTS</a></li>
+                            <!-- <li><a href="">STORE</a></li> -->
+                            <!-- <li><a href="">THE ACADEMY</a></li> -->
+                            <li><a href="/inspirers">INSPIRERS</a></li>
+                            <!-- <li><a href="">INTERNET OF THINGS</a></li> -->
+                            <!-- <li><a href="">EVENTS</a></li> -->
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">

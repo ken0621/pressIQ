@@ -128,7 +128,7 @@
 						@foreach($_event as $event)
 						<div class="col-md-4">
 							<div class="event-img-container wow fadeInUp" data-wow-delay="0.2s">
-								<a href="javascript" class="popup" size="lg" link="/events/view_details?id={{$event->event_id}}"><img src="{{$event->event_thumbnail_image}}"></a>
+								<a href="javascript:" class="popup" size="lg" link="/events/view_details?id={{$event->event_id}}"><img src="{{$event->event_thumbnail_image}}"></a>
 							</div>
 						</div>
 						<div class="col-md-8">

@@ -193,7 +193,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>Brown & Proud</b> movement</div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>Philtech Global, Inc.</b></div>
 	                    </div>
 	                </div>
 	            </div>

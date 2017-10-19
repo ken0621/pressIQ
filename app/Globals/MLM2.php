@@ -291,6 +291,7 @@ class MLM2
 		$return["_wallet"]->complan_direct 						= 0;
 		$return["_wallet"]->complan_builder 					= 0;
 		$return["_wallet"]->complan_leader 						= 0;
+		$return["_wallet"]->complan_repurchase_cashback 		= 0;
 		$return["_wallet"]->complan_rank_repurchase_cashback 	= 0;
 		$return["_wallet"]->complan_stairstep 					= 0;
 

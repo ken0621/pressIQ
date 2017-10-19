@@ -64,37 +64,6 @@
         <input class="table-grand-total" type="hidden" value="{{ $cart["_total"]->display_grand_total }}">
     @endif
 </table>
-<div id="changeQuantity">
+<div id="changeQuantity hidden">
     <input type="text" class="form-control text-right" name="">
 </div>
-<script type="text/javascript">
-    $(document).ready(function()
-    {
-        event_load_popover();
-        action_click_change_qty();
-    });
-    function action_click_change_qty()
-    {
-        $('body').on('click','.td-change-qty', function(e)
-        {
-            var item_id = $(e.currentTarget).attr('item-id');
-            $('.input-qty-'+item_id).removeClass('hidden');
-            $('.change-quantity.'+item_id).addClass('hidden');
-        });
-    }
-    function event_load_popover()
-    {
-        $('[data-toggle="popover"]').popover(
-        {
-            placement: 'top',
-            title: 'Change Quantity',
-            html: true,
-            content:  $('#changeQuantity').html()
-        }).on('click', getDetails());
-    }
-    function getDetails()
-    {
-
-    }
-</script>
-

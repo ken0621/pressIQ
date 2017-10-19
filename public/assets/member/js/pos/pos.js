@@ -33,7 +33,33 @@ function pos()
 		event_click_process_sale();
 		action_hide_popover();
 		event_change_quantity();
+
+        event_load_popover();
+        action_click_change_qty();
 	}
+	function action_click_change_qty()
+    {
+        $('body').on('click','.td-change-qty', function(e)
+        {
+            var item_id = $(e.currentTarget).attr('item-id');
+            $('.input-qty-'+item_id).removeClass('hidden');
+            $('.change-quantity.'+item_id).addClass('hidden');
+        });
+    }
+    function event_load_popover()
+    {
+        $('[data-toggle="popover"]').popover(
+        {
+            placement: 'top',
+            title: 'Change Quantity',
+            html: true,
+            content:  $('#changeQuantity').html()
+        }).on('click', getDetails());
+    }
+    function getDetails()
+    {
+
+    }
 	function action_hide_popover()
 	{
 	    $('body').on('click', function (e) 

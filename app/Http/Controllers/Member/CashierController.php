@@ -6,6 +6,7 @@ use App\Globals\Customer;
 use App\Globals\Transaction;
 use App\Globals\WarehouseTransfer;
 use App\Globals\Warehouse2;
+use App\Globals\Utilities;
 use Request;
 use Session;
 use Carbon\Carbon;
@@ -20,6 +21,7 @@ class CashierController extends Member
         $data["_price_level"]   = Item::list_price_level($this->user_info->shop_id);
         $data["current_level"]  = ($data["cart"]["info"] ? $data["cart"]["info"]->price_level_id : 0);
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
+        $data['_salesperson'] = Utilities::get_all_users($this->user_info->shop_id, $this->user_info->user_id);
         
         if(Session::has('customer_id'))
         {

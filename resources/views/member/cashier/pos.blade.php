@@ -100,7 +100,13 @@
                                 <label class="control-label col-sm-4 text-right" for="email">Sales Person</label>
                                 <div class="col-sm-8">
                                     <select class="form-control input-sm">
-                                        <option>Guillermo Tabligan</option>
+                                        @if(count($_salesperson) > 0)
+                                            @foreach($_salesperson as $sp)
+                                            <option>{{ucwords($sp->user_first_name.' '.$sp->user_last_name)}}</option>
+                                            @endforeach
+                                        @else
+                                        <option>No Sales Person Yet</option>
+                                        @endif
                                     </select>
                                 </div>
                             </div>

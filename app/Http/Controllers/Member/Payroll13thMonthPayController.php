@@ -85,7 +85,7 @@ class Payroll13thMonthPayController extends Member
 		$parameter['shop_id'] 				= $this->shop_id();
 		$data["_employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
 		$data["basis"] = unserialize(Request::input('employee_13_month_basis'));
-
+		unserialize(Request::input('employee_13_month_basis'));
 		$this->employees_compute_13th_month_pay($data);
 
 		return view('member.payrollreport.payroll_13th_month_pay_table_v2',$data);
@@ -97,7 +97,9 @@ class Payroll13thMonthPayController extends Member
 		$data["_period"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id)
 		->where("tbl_payroll_period_company.payroll_period_status","!=","pending")
 		->get();
-		// dd($data["_period"]);
+		$data['basis']    =	unserialize(Request::input('basis'));
+		$data = $this->compute_13th_month_pay($data);
+		// dd($data);
 		return view('member.payrollreport.payroll_13th_month_pay_report_v2',$data);
 	}
 
@@ -111,7 +113,7 @@ class Payroll13thMonthPayController extends Member
 		$data["_period"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($data["basis"]['payroll_employee_id'])
 		->where("tbl_payroll_period_company.payroll_period_status","!=","pending")
 		->get();
-		dd($data["_period"]);
+		
 		$data = $this->compute_13th_month_pay($data);
 		
 		return view('member.payrollreport.payroll_13th_month_pay_report_table_v2',$data);
@@ -119,7 +121,6 @@ class Payroll13thMonthPayController extends Member
 
 	public function modal_employee_13_month_pay_report()
 	{
-		
 		return view('member.modal.modal_employee_13_month_pay_report');
 	}
 
@@ -138,18 +139,36 @@ class Payroll13thMonthPayController extends Member
 
 	public function compute_13th_month_pay($data)
 	{
-		$basis = $data["basis"]["payroll_13th_month_pay_basis"];
+		$basis = $data["basis"];
 		
-		$grand_total_13th_month_basis = 0;
+		$grand_total_13th_month_pay = 0;
 
 		foreach ($data["_period"] as $key_period => $period) 
 		{
 			$payroll_13th_month_basis = 0;
 
-			$payroll_13th_month_basis += $period[$basis];
-			// dd($period);
-			// dd(unserialize($period['cutoff_breakdown']));
-			// dd($period->cutoff_breakdown);
+
+			if ($basis["payroll_13th_month_pay_basis"] == "net_pay") 
+			{
+				$payroll_13th_month_basis += $period["net_pay"];
+			}
+
+
+			if ($basis["payroll_13th_month_pay_basis"] == "gross_pay") 
+			{
+				if (isset($period->cutoff_compute)) 
+				{
+					$gross_basic_pay = unserialize($period->cutoff_compute);
+					
+					if (isset($gross_basic_pay->cutoff_rate)) 
+					{
+						$payroll_13th_month_basis += $gross_basic_pay->cutoff_rate;
+					}
+				}
+			}
+
+
+
 			if (isset($period->cutoff_breakdown)) 
 			{
 				$period_cutoff_breakdown = unserialize($period->cutoff_breakdown);
@@ -175,52 +194,73 @@ class Payroll13thMonthPayController extends Member
 							}
 						}
 					}
+
+					if (isset($data["basis"]["late"])) 
+					{
+						if ($breakdown["label"] == "late") 
+						{
+							$payroll_13th_month_basis += $breakdown["amount"];
+						}
+					}
+
+					if (isset($data["basis"]["absent"])) 
+					{
+						if ($breakdown["label"] == "absent") 
+						{
+							$payroll_13th_month_basis += $breakdown["amount"];
+						}
+					}
+
+					if (isset($data["basis"]["undertime"])) 
+					{
+						if ($breakdown["label"] == "undertime") 
+						{
+							$payroll_13th_month_basis += $breakdown["amount"];
+						}
+					}
 				}
 			}
 
+
+
 			if (isset($period->cutoff_input)) 
 			{
+
 				$_cutoff_input_breakdown = unserialize($period->cutoff_input);
 				
-		
-				$special_holiday = 0;
-				$regular_holiday = 0;
-				
-
-				// $ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
-				// $nd_category = array('Legal Holiday Rest Day ND','Legal Holiday ND','Special Holiday Rest Day ND','Special Holiday ND','Rest Day ND','Night Differential');
-				// $rd_category = array('Rest Day','Legal Holiday Rest Day','Special Holiday Rest Day');
 				foreach ($_cutoff_input_breakdown as $value) 
 				{
-					if (isset($employee->cutoff_input)) 
+
+					if (isset($value->compute->_breakdown_addition)) 
 					{
-
-						if (isset($data["basis"]["special_holiday"]))
+						foreach ($value->compute->_breakdown_addition as $lbl => $values) 
 						{
-							if ($lbl == 'Special Holiday' || $lbl == 'Special Holiday Rest Day') 
+							if (isset($basis['special_holiday'])) 
 							{
-								$payroll_13th_month_basis += $values['rate'];
+								if ($lbl == 'Legal Holiday' || $lbl == 'Legal Holiday Rest Day') 
+								{
+									$payroll_13th_month_basis += $values['rate'];
+								}
+							}
+							if (isset($basis['regular_holiday'])) 
+							{
+								if ($lbl == 'Special Holiday' || $lbl == 'Special Holiday Rest Day') 
+								{
+									$payroll_13th_month_basis += $values['rate'];
+								}
 							}
 						}
-
-						if (isset($data["basis"]["regular_holiday"]))
-						{
-							
-							if ($lbl == 'Legal Holiday' || $lbl == 'Legal Holiday Rest Day') 
-							{
-								$payroll_13th_month_basis += $values['rate'];
-							}
-						}
-
 					}
 				}
 			}
 
 			$data['_period'][$key_period]->payroll_13th_month_basis 		= $payroll_13th_month_basis;
 			$data['_period'][$key_period]->payroll_13th_month_contribution 	= @( $payroll_13th_month_basis / 12);
+			$grand_total_13th_month_pay += @($payroll_13th_month_basis/12);
 		}
 
-		$data['grand_total_13th_month_basis'] = $grand_total_13th_month_basis;
+		$data['grand_total_13th_month_pay'] = $grand_total_13th_month_pay;
+
 		return $data;
 	}
 
@@ -235,6 +275,8 @@ class Payroll13thMonthPayController extends Member
 			$_period  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee->payroll_employee_id)
 			->where("tbl_payroll_period_company.payroll_period_status","!=","pending")
 			->get();
+
+			$employee_info = Tbl_payroll_employee_contract::Group()->where('tbl_payroll_employee_contract.payroll_employee_id',$employee->payroll_employee_id)->first();
 
 			foreach ($_period as $period_key => $period) 
 			{

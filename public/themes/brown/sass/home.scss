@@ -401,10 +401,12 @@ body{
 
 			.caption-container
 			{
-				margin-top: 35px;
+				margin-top: 85px;
+
 				@media screen and (max-width: 991px)
 				{
 					text-align: center;
+					margin-top: 35px !important;
 					h1
 					{
 						font-size: 24px !important;
@@ -583,6 +585,11 @@ body{
 		font-weight: $light;
 		background-color: #fff;
 
+		@media screen and (max-width: 991px)
+		{
+			padding-bottom: 20px !important;
+		}
+
 		.title-container
 		{
 			font-size: 30px;
@@ -618,7 +625,7 @@ body{
 					{
 						width: 100%;
 					}
-					@media screen and (max-width: 450px)
+					@media screen and (max-width: 991px)
 					{
 						width: 60% !important;
 						margin: auto !important;
@@ -627,7 +634,7 @@ body{
 
 				.event-detail-container
 				{
-					@media screen and (max-width: 450px)
+					@media screen and (max-width: 991px)
 					{
 						margin-top: 20px !important;
 						text-align: center !important;

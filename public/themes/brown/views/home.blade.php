@@ -1,14 +1,13 @@
 @extends("layout")
 @section("content")
-<div class="bts-popup" role="alert">
+<!-- <div class="bts-popup" role="alert">
     <div class="bts-popup-container">
 		
 		<div class="button-container">
 			<div class="link-btn"><a href="">ENROLL NOW</a></div>
 		</div>
     </div>
-</div>
-
+</div> -->
 <div class="content">
 	<div class="wrapper-1">
 		<div class="fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/brown-banner.jpg');" data-img-width="1600" data-img-height="907" data-diff="100">

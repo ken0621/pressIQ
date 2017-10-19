@@ -71,21 +71,24 @@ class Payroll13thMonthPayController extends Member
 		$parameter['company_id']			= 0;
 		$parameter['employement_status']	= 0;
 		$parameter['shop_id'] 				= $this->shop_id();
-		$data["_employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
+
+		$data["_employee"] 					= Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
+		$data['_company']    				= Payroll::company_heirarchy(Self::shop_id());
 
 		return view("member.payrollreport.payroll_13th_month_pay_v2", $data );
 	}
 
 	public function employees_13th_month_pay_table()
 	{
-		
 		$parameter['date']					= date('Y-m-d');
 		$parameter['company_id']			= 0;
 		$parameter['employement_status']	= 0;
 		$parameter['shop_id'] 				= $this->shop_id();
-		$data["_employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
-		$data["basis"] = unserialize(Request::input('employee_13_month_basis'));
-		unserialize(Request::input('employee_13_month_basis'));
+
+		$data["_employee"] 					= Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
+		$data["basis"] 						= unserialize(Request::input('employee_13_month_basis'));
+		
+		/*unserialize(Request::input('employee_13_month_basis'));*/
 		$this->employees_compute_13th_month_pay($data);
 
 		return view('member.payrollreport.payroll_13th_month_pay_table_v2',$data);

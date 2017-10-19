@@ -10,7 +10,7 @@
                 Payroll 13th Month Pay Report
                 </small>
             </h1>
-            <button class="btn btn-primary pull-right modal-13th-pay-basis-button" data-id = "{{$employee->payroll_employee_id}}">Compute 13th Month Pay</button>
+            {{-- <button class="btn btn-primary pull-right modal-13th-pay-basis-button" data-id = "{{$employee->payroll_employee_id}}">Compute 13th Month Pay</button> --}}
             {{-- <a href="#"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a> --}}
         </div>
     </div>

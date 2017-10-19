@@ -12,12 +12,9 @@
 
             <div class="row clearfix">
                 <div class="login-form-content">
-                    
                         <input type="text" class="form-control username-input" placeholder="Username" style="font-size: 13px; font-weight: 600;">
                         <input type="text" class="form-control password-input" placeholder="Password" style="font-size: 13px; font-weight: 600;">
-
                         <button id="login-button">LOGIN</button>
-                    
                 </div>
             </div>
             

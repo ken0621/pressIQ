@@ -444,13 +444,8 @@ class Warehouse2
                 {
                     $insert[$ctr_qty]['record_serial_number'] = $serial[$ctr_qty];
                 }
+                Tbl_warehouse_inventory_record_log::insert($insert[$ctr_qty]);
             }
-            if($insert)
-            {
-
-                Tbl_warehouse_inventory_record_log::insert($insert);
-            }
-
 
             if(!$inventory_history)
             {

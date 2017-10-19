@@ -49,6 +49,11 @@
 								<div class="color"></div>
 								<div class="name"><span>Total Earnings</span> {{ $wallet->display_total_earnings }}</div>
 							</div>
+
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Total Points</span> {{ $wallet->display_total_points }}</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -188,7 +193,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>Brown & Proud</b> movement</div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>Philtech Global, Inc.</b></div>
 	                    </div>
 	                </div>
 	            </div>

@@ -26,6 +26,7 @@ use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_period_company;
+use App\Models\Tbl_payroll_employee_contract;
 
 
 use App\Globals\AuditTrail;
@@ -607,28 +608,28 @@ class PayrollReportController extends Member
 
 		$total_deduction_employee 	= 0;
 
-		$_other_deduction 			= null;
-		$_addition 					= null;
-		$_deduction 				= null;
+		$_other_deduction 					= null;
+		$_addition 							= null;
+		$_deduction 						= null;
 
-		$deduction_total 					= 0;
-		$cola_total 						= 0;
-		$sss_ee_total 						= 0;
-		$sss_er_total 						= 0;
-		$sss_ec_total 						= 0;
-		$hdmf_ee_total 						= 0;
-		$hdmf_er_total 						= 0;
-		$philhealth_ee_total 				= 0;
-		$philhealth_er_total 				= 0;
-		$witholding_tax_total 				= 0;
-		$adjustment_deduction_total 		= 0;
-		$adjustment_allowance_total 		= 0;
-		$allowance_total 					= 0;
-		$cash_bond_total 					= 0;
-		$cash_advance_total					= 0;
-		$hdmf_loan_total					= 0;
-		$sss_loan_total						= 0;
-		$other_loans_total					= 0;
+		$deduction_total 				= 0;
+		$cola_total 					= 0;
+		$sss_ee_total 					= 0;
+		$sss_er_total 					= 0;
+		$sss_ec_total 					= 0;
+		$hdmf_ee_total 					= 0;
+		$hdmf_er_total 					= 0;
+		$philhealth_ee_total 			= 0;
+		$philhealth_er_total 			= 0;
+		$witholding_tax_total 			= 0;
+		$adjustment_deduction_total 	= 0;
+		$adjustment_allowance_total 	= 0;
+		$allowance_total 				= 0;
+		$cash_bond_total 				= 0;
+		$cash_advance_total				= 0;
+		$hdmf_loan_total				= 0;
+		$sss_loan_total					= 0;
+		$other_loans_total				= 0;
 
 		$overtime_total 		 			= 0;
 		$special_holiday_total 				= 0;
@@ -640,15 +641,15 @@ class PayrollReportController extends Member
 		$nightdiff_total 		 			= 0;
 		$restday_total 		 				= 0;
 
-		$total_adjsutment_allowance			= 0;
-		$total_adjsutment_bonus				= 0;
-		$total_adjsutment_commission		= 0;
-		$total_adjsutment_incentives		= 0;
-		$total_adjsutment_cash_advance		= 0;
-		$total_adjsutment_cash_bond			= 0;
-		$total_adjsutment_additions			= 0;
-		$total_adjsutment_deductions		= 0;
-		$total_adjsutment_others			= 0;
+		$total_adjsutment_allowance		= 0;
+		$total_adjsutment_bonus			= 0;
+		$total_adjsutment_commission	= 0;
+		$total_adjsutment_incentives	= 0;
+		$total_adjsutment_cash_advance	= 0;
+		$total_adjsutment_cash_bond		= 0;
+		$total_adjsutment_additions		= 0;
+		$total_adjsutment_deductions	= 0;
+		$total_adjsutment_others		= 0;
 
 		$time_total_time_spent				= 0;
 		$time_total_overtime				= 0;
@@ -664,13 +665,12 @@ class PayrollReportController extends Member
 
 		foreach($data["_employee"] as $key => $employee)
 		{
-			
-			
+			$payroll_group_salary_computation = Tbl_payroll_employee_contract::Group()->where('tbl_payroll_employee_contract.payroll_employee_id',$employee->payroll_employee_id)->first();
+
 			$total_basic 	+= $employee->net_basic_pay;
 			$total_gross 	+= $employee->gross_pay;
 			$total_net 		+= $employee->net_pay;
 			$total_tax 		+= $employee->tax_ee;
-
 
 			$total_er = $employee->sss_er + $employee->philhealth_er +  $employee->pagibig_er;
 			$total_ee = $employee->sss_ee + $employee->philhealth_ee +  $employee->pagibig_ee;
@@ -708,13 +708,21 @@ class PayrollReportController extends Member
 				$data["_employee"][$key]->time_overtime 			= $time_performance["overtime"]["time"];
 				$data["_employee"][$key]->time_night_differential 	= $time_performance["night_differential"]["time"];
 				$data["_employee"][$key]->time_leave_hours 			= $time_performance["leave_hours"]["time"];
-				$data["_employee"][$key]->time_undertime 			= $time_performance["undertime"]["time"];
-				$data["_employee"][$key]->time_late 				= $time_performance["late"]["time"];
 				$data["_employee"][$key]->time_regular_holiday 		= $time_performance["regular_holiday"]["float"];
 				$data["_employee"][$key]->time_special_holiday 		= $time_performance["special_holiday"]["float"];
-				$data["_employee"][$key]->time_absent 				= $time_performance["absent"]["float"];
 
-				
+				if ($payroll_group_salary_computation->payroll_group_code != "Flat Rate") 
+				{
+					$data["_employee"][$key]->time_absent 			= $time_performance["absent"]["float"];
+					$data["_employee"][$key]->time_undertime 		= $time_performance["undertime"]["time"];
+					$data["_employee"][$key]->time_late 			= $time_performance["late"]["time"];
+				}
+				else
+				{
+					$data["_employee"][$key]->time_absent 			= 0;
+					$data["_employee"][$key]->time_undertime 		= 0;
+					$data["_employee"][$key]->time_late 			= 0;
+				}
 
 				$time_total_time_spent				+= $time_performance["time_spent"]["time"];
 				$time_total_overtime				+= $time_performance["overtime"]["time"];
@@ -867,7 +875,6 @@ class PayrollReportController extends Member
 								$adjsutment_others 		+= $breakdown["amount"];
 							}
 						}
-
 					}
 					if (isset($breakdown["record_type"])) 
 					{
@@ -1014,7 +1021,7 @@ class PayrollReportController extends Member
 						}
 					}
 
-					if (isset($value->compute->_breakdown_deduction)) 
+					if (isset($value->compute->_breakdown_deduction) && $payroll_group_salary_computation->payroll_group_code != "Flat Rate") 
 					{
 						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
 						{

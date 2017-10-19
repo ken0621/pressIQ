@@ -87,7 +87,6 @@
 @section("script")
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxUPGcHnXCbz4npefm3cHzEcikYCKkcUI"></script>
 <script type="text/javascript">
-	var location   = new google.maps.LatLng(50.0875726, 14.4189987);
 	var contentString = '<div class="info-window">' +
 		                '<h3>Info Window Content</h3>' +
 		                '<div class="info-content">' +

@@ -703,7 +703,7 @@ class PayrollReportController extends Member
 			{
 
 				$time_performance = unserialize($employee->cutoff_breakdown)->_time_breakdown;
-
+				
 				$data["_employee"][$key]->time_spent 				= $time_performance["time_spent"]["time"];
 				$data["_employee"][$key]->time_overtime 			= $time_performance["overtime"]["time"];
 				$data["_employee"][$key]->time_night_differential 	= $time_performance["night_differential"]["time"];
@@ -728,11 +728,16 @@ class PayrollReportController extends Member
 				$time_total_overtime				+= $time_performance["overtime"]["time"];
 				$time_total_night_differential		+= $time_performance["night_differential"]["time"];
 				$time_total_leave_hours				+= $time_performance["leave_hours"]["time"];
-				$time_total_undertime				+= $time_performance["undertime"]["time"];
-				$time_total_late					+= $time_performance["late"]["time"];
 				$time_total_regular_holiday			+= $time_performance["regular_holiday"]["float"];
 				$time_total_special_holiday			+= $time_performance["special_holiday"]["float"];
-				$time_total_absent					+= $time_performance["absent"]["float"];
+				
+				if ($payroll_group_salary_computation->payroll_group_code != "Flat Rate") 
+				{
+					$time_total_undertime				+= $time_performance["undertime"]["time"];
+					$time_total_late					+= $time_performance["late"]["time"];
+					$time_total_absent					+= $time_performance["absent"]["float"];
+				}
+				
 			}
 
 
@@ -924,8 +929,6 @@ class PayrollReportController extends Member
 				$data["_employee"][$key]->hdmf_loan					= $hdmf_loan;
 				$data["_employee"][$key]->other_loans				= $other_loans;
 
-
-
 				$data["_employee"][$key]->adjsutment_allowance 		= $adjsutment_allowance;
 				$data["_employee"][$key]->adjsutment_bonus 			= $adjsutment_bonus;
 				$data["_employee"][$key]->adjsutment_commission 	= $adjsutment_commission;
@@ -954,8 +957,8 @@ class PayrollReportController extends Member
 				$allowance_total				+= $allowance;
 				$cash_bond_total				+= $cash_bond;
 				$cash_advance_total				+= $cash_advance;
-				$hdmf_loan_total				+= $sss_loan;
-				$sss_loan_total					+= $hdmf_loan;
+				$hdmf_loan_total				+= $hdmf_loan;
+				$sss_loan_total					+= $sss_loan;
 				$other_loans_total				+= $other_loans;
 
 				$total_adjsutment_allowance			+= $adjsutment_allowance;
@@ -967,7 +970,6 @@ class PayrollReportController extends Member
 				$total_adjsutment_additions			+= $adjsutment_additions;
 				$total_adjsutment_deductions		+= $adjsutment_deductions;
 				$total_adjsutment_others			+= $adjsutment_others;
-
 			}
 
 
@@ -1021,17 +1023,18 @@ class PayrollReportController extends Member
 						}
 					}
 
-					if (isset($value->compute->_breakdown_deduction) && $payroll_group_salary_computation->payroll_group_code != "Flat Rate") 
+					if (isset($value->compute->_breakdown_deduction)) 
 					{
 						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
 						{
+							
 							if ($value->time_output["leave_hours"] == '00:00:00') 
 							{
 								if ($lbl == 'late') 
 								{
 									$late += $values['rate'];
 								}
-								if ($lbl == 'absent') 
+								if ($lbl == 'absent' && $payroll_group_salary_computation->payroll_group_code != "Flat Rate") 
 								{
 									$absent += $values['rate'];
 								}

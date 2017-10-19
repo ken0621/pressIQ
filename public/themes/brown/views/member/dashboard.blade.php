@@ -196,7 +196,7 @@
 									@if(count($_event) > 0)
 										@foreach($_event as $event)
 										<div class="event clearfix">
-											<div style="background-image: url('{{$event->event_thumbnail_image}}'); background-size: cover; background-repeat: no-repeat;" class="box overlay black">
+											<div onclick="action_load_link_to_modal('/members/event-details?id={{$event->event_id}}', 'lg')" style="background-image: url('{{$event->event_thumbnail_image}}'); background-size: cover; background-repeat: no-repeat;" class="box overlay black">
 												<div class="date">
 													<div class="day">{{date('d', strtotime($event->event_date))}}</div>
 													<div class="month">{{date('F', strtotime($event->event_date))}}</div>

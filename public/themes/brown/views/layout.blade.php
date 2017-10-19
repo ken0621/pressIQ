@@ -24,8 +24,8 @@
     @include("frontend.ghead")
 
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?v=5.0">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css?v=5.0">
 
     @yield("css")
 </head>

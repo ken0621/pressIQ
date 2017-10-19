@@ -151,11 +151,11 @@ class Payroll_BioImportController extends Member
 
 	public function save_time_record($_time_record, $company ,$shop_id, $biometric_name)
 	{
-		$success = 0;
-		$failed = 0;
-		$incomplete = 0;
-		$overwritten = 0;
-		// dd($_time_record);
+		$success 		= 0;
+		$failed 		= 0;
+		$incomplete 	= 0;
+		$overwritten 	= 0;
+
 		foreach ($_time_record as $date => $time_record) 
 		{
 			foreach ($time_record as $employee_number => $value) 
@@ -168,7 +168,6 @@ class Payroll_BioImportController extends Member
 				}
 				else
 				{
-
 					$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("shop_id", Self::shop_id())->first();
 				}
 
@@ -236,6 +235,7 @@ class Payroll_BioImportController extends Member
 			}
 			
 		}
+
 		$data["success"] = $success;
 		$data["failed"] = $failed;
 		$data["overwritten"] = $overwritten;
@@ -384,8 +384,6 @@ class Payroll_BioImportController extends Member
     				$_record[$key_employee]->employee_record[$key_date]->status = "<span style='color: red;'>Invalid Employee Number</span>";
     			}
     		}
-
-
     	}
 
     	$data["record_success"] = $success;

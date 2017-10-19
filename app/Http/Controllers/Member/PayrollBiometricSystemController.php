@@ -78,7 +78,7 @@ class PayrollBiometricSystemController extends Member
 
 	public function biometric_import_record()
 	{
-		$data["date_from"] 	= $date["date_from"] 	= Carbon::parse(Request::input('date_from'))->format("Y-m-d");
+		$data["date_from"] 	= 	$date["date_from"] 	= Carbon::parse(Request::input('date_from'))->format("Y-m-d");
 		$data["date_to"]	= 	$date["date_to"] 	= Carbon::parse(Request::input('date_to'))->format("Y-m-d");
 		$shop_id = $this->user_info->shop_id;
 

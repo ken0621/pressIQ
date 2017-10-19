@@ -153,6 +153,24 @@ class Customer
 			$return->leftjoin("tbl_customer_search","tbl_customer_search.customer_id","=","tbl_customer.customer_id")
 				   ->where("tbl_customer_search.body", "LIKE", "%" . $keyword . "%");
 		}
+		$query = $return;
+		if($query->count() <= 0)
+		{
+			$return = Tbl_customer::where('shop_id', $shop_id);
+			$return->where('tbl_customer.first_name','LIKE', "%" . $keyword . "%");
+		}
+		$query2 = $return;
+		if($query2->count() <= 0)
+		{	
+			$return = Tbl_customer::where('shop_id', $shop_id);
+			$return->where('tbl_customer.last_name','LIKE', "%" . $keyword . "%");
+		}
+		$query1 = $return;
+		if($query1->count() <= 0)
+		{
+			$return = Tbl_customer::where('shop_id', $shop_id);
+			$return->where('tbl_customer.middle_name','LIKE', "%" . $keyword . "%");
+		}
 
 		return $return->groupBy('tbl_customer.customer_id')->get();
 	}

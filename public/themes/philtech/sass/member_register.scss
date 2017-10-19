@@ -344,9 +344,38 @@ body
 			color: $text-dark;
 			font-size: 13px;
 			font-weight: 600;
-			white-space: pre-wrap;
+			//white-space: pre-wrap;
 			height: 420px;
 			overflow-y: auto;
+
+			.header
+			{
+				font-size: 15px;
+				font-weight: $semi-bold;
+				padding-bottom: 10px;
+			}
+			
+			.reviews
+			{
+				.title
+				{
+					font-weight: $semi-bold;
+					font-size: 13px;
+					padding-bottom: 10px;
+					padding-top: 10px;
+				}
+
+				.para-container
+				{
+					font-weight: $regular;
+				}
+			}
+
+			.risk, .share-protect, .product-desc, .condition, .privacy, .electonics, .copyright, .trade, .license, .membership
+			{
+				@extend .reviews;
+			}
+
 		}
 	}
 	.modal-footer

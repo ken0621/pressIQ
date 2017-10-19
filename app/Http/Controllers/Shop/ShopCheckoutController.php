@@ -76,24 +76,24 @@ class ShopCheckoutController extends Shop
                     /* Success */
                     if($request['Status'] == 1)
                     {
-                        $payment_status = 1;
-                        $order_status   = "Processing";
-                        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id, 1, is_serialized($temp->cart) ? unserialize($temp->cart) : null);
+                        // $payment_status = 1;
+                        // $order_status   = "Processing";
+                        // $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id, 1, is_serialized($temp->cart) ? unserialize($temp->cart) : null);
                         
-                        $ipay88_logs["order_id"] = $order_id;
+                        // $ipay88_logs["order_id"] = $order_id;
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
                        
                         /* Confirmed Payment */
-                        $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
+                        // $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
 
                         /* EMAIL SUCCESSFUL ORDER */
-                        $pass_data["order_details"] = $order;
-                        $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->groupBy("ec_order_id")->get();
-                        $pass_data["order_status"] = $order_status; 
-                        Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
+                        // $pass_data["order_details"] = $order;
+                        // $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->groupBy("ec_order_id")->get();
+                        // $pass_data["order_status"] = $order_status; 
+                        // Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
 
                         /* Redirect */
-                        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
+                        return Redirect::to('/order_placed')->send();
                     } 
                     elseif($request['Status'] == 6)
                     {
@@ -608,32 +608,34 @@ class ShopCheckoutController extends Shop
         $order = Request::input('order');
         if (!$order) 
         {
-            return Redirect::to("/");
+            return view("order_placed", $data);
         }
-
-        $order_id = unserialize(Crypt::decrypt($order));
-    
-        $data['order_data'] = Tbl_ec_order::where("ec_order_id",$order_id)->first();
-
-        $data['coupon_disc'] = Cart::get_coupon_discount($data['order_data']->coupon_id, $data['order_data']->total);
-
-        $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
-                                           ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
-                                           ->get();
-
-        $data['summary'] = [];
-        $subtotal = 0;
-        $shipping = 0;
-        $total = 0;
-
-        foreach ($data['_order'] as $key => $value) 
+        else
         {
-            $subtotal += $value->total;
-        }
+            $order_id = unserialize(Crypt::decrypt($order));
         
-        $data['summary']['subtotal'] = $subtotal;
-        $data['order_id'] = $order_id;
-
-        return view("order_placed", $data);
+            $data['order_data'] = Tbl_ec_order::where("ec_order_id",$order_id)->first();
+    
+            $data['coupon_disc'] = Cart::get_coupon_discount($data['order_data']->coupon_id, $data['order_data']->total);
+    
+            $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
+                                               ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
+                                               ->get();
+    
+            $data['summary'] = [];
+            $subtotal = 0;
+            $shipping = 0;
+            $total = 0;
+    
+            foreach ($data['_order'] as $key => $value) 
+            {
+                $subtotal += $value->total;
+            }
+            
+            $data['summary']['subtotal'] = $subtotal;
+            $data['order_id'] = $order_id;
+            
+            return view("order_placed", $data);
+        }
     }
 }

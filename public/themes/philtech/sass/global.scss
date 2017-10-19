@@ -1368,3 +1368,82 @@ footer
         font-size: 12px !important;
     }
 }
+
+.popup-enter-a-code
+{
+	.labels
+	{
+		font-size: 16px;
+		text-align: center;
+	}
+	.input-verify-sponsor
+	{
+		width: 100%;
+		border: 1px solid #ddd;
+		margin-top: 15px;
+		height: 35px;
+	}
+	.btn-container
+	{
+		text-align: center;
+		.btn-verify
+		{
+			color: #fff;
+			background-color: #006CC5;
+			padding: 10px 40px;
+			border-radius: 2px;
+			border: 0px !important;
+			-webkit-transition: all 0.2s ease-in-out;
+			-moz-transition: all 0.2s ease-in-out;
+			-o-transition: all 0.2s ease-in-out;
+			transition: all 0.2s ease-in-out;
+			width: 100%;
+			margin-top: 20px;
+			text-transform: uppercase;
+		}
+	}
+}
+
+.popup-proceed2 .modal-content .modal-body .btn-container .btn-proceed-2
+{
+	background-color: #006CC5 !important;
+}
+
+.error-message
+{
+	color: red;
+	text-align: center;
+	margin-top: 15px;
+}
+
+.card
+{
+	border: 1px solid #DDDDDD;
+	margin-top: 15px;
+	padding: 15px 0;
+	.profile-image
+	{
+		text-align: center;
+		img
+		{
+			max-width: 100%;
+		}
+	}
+	.info
+	{
+		margin-left: 10px;
+		.name
+		{
+			font-size: 16px;
+		}
+		.email
+		{
+			font-size: 14px;
+			font-weight: 700;
+		}
+		.slotno
+		{
+			font-size: 14px;
+		}
+	}
+}

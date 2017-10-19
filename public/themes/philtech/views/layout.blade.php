@@ -19,7 +19,7 @@
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1">
         <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
         
         <!-- OTHER CSS -->
@@ -260,16 +260,6 @@
         </div>
       </div>
     </div>
-
-    <div id="global_modal" class="modal fade" role="dialog" >
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content modal-content-global clearfix">
-            </div>
-        </div>
-    </div>
-    <div class="multiple_global_modal_container"></div>
-
     @include("frontend.gfoot")
     <script src="/themes/{{ $shop_theme }}/js/custom_theme.js"></script>
    

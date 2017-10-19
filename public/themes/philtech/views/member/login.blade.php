@@ -13,6 +13,7 @@
 					</td>
 					<td class="c2">
 						@include('member2.include_login')
+						
 					</td>
 				</tr>
 			</tbody>

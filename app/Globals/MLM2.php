@@ -264,6 +264,7 @@ class MLM2
 		$return["_wallet"]->current_wallet = 0;
 		$return["_wallet"]->total_earnings = 0;
 		$return["_wallet"]->total_payout = 0;
+		$return["_wallet"]->total_points = 0;
 
 
 		$_plan = Tbl_mlm_slot_wallet_log::groupBy("wallet_log_plan")->where("shop_id", $shop_id)->get();
@@ -312,7 +313,6 @@ class MLM2
 
 		$return["_points"]->brown_builder_points 	= 0;
 		$return["_points"]->brown_leader_points 	= 0;
-
 		$return["_points"]->rank_pv 				= 0;
 		$return["_points"]->rank_gpv 				= 0;
 		$return["_points"]->stairstep_pv 			= 0;
@@ -347,6 +347,7 @@ class MLM2
 
 			$_slot_points = Tbl_mlm_slot_points_log::where("points_log_slot", $slot->slot_id)->get();
 
+
 			foreach($_slot_points as $slot_points)
 			{
 				$wallet_plan = strtolower($slot_points->points_log_complan);
@@ -358,6 +359,8 @@ class MLM2
 				{
 					$return["_points"]->$wallet_plan += $slot_points->points_log_points;
 				}
+
+				$return["_wallet"]->total_points += $slot_points->points_log_points;
 			}
 		}
 
@@ -380,6 +383,7 @@ class MLM2
 
 		$return["_slot"] = $_slot;
 		$return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
+		$return["_wallet"]->display_total_points = number_format($return["_wallet"]->total_points, 2) . " POINT(S)";;
 
 		return $return;
 	}

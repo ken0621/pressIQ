@@ -126,7 +126,7 @@
 					<div class="per-event row clearfix">
 						@if(count($_event) > 0)
 						@foreach($_event as $event)
-						<a href="javascript:" class="popup" size="lg" link="/events/view_details?id={{$event->event_id}}">
+						<a  href="javascript:" class="clearfix popup" size="lg" link="/events/view_details?id={{$event->event_id}}">
 							<div class="col-md-4">
 								<div class="event-img-container wow fadeInUp" data-wow-delay="0.2s">
 									<img src="{{$event->event_thumbnail_image}}">

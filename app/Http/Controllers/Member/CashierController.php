@@ -156,6 +156,7 @@ class CashierController extends Member
         $shop_id                                            = $this->user_info->shop_id;
         $transaction_new["transaction_reference_table"]     = "tbl_customer";
         $transaction_new["transaction_reference_id"]        = Session::get('customer_id');
+        $transaction_new["transaction_sales_person"]        = Request::input('transaction_sales_person');
         $transaction_type                                   = "ORDER";
         $transaction_date                                   = Carbon::now();
         $destination_warehouse_id                           = Request::input('destination_warehouse_id');

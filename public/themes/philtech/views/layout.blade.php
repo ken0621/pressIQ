@@ -65,7 +65,7 @@
                         <div class="search-bar">
                             <form action="/product" method="get" id="form-search">
                                 <div class="input-group">
-                                     <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
+                                     <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" name="search" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
                                      <span class="input-group-addon search-button" id="sizing-addon1">
                                         <a href="" onclick="onSearch();" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>                          
                                      </span>
@@ -144,7 +144,7 @@
                     <div class="search-bar">
                         <form action="/product" method="get" id="form-search">
                             <div class="input-group">
-                                <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1">
+                                <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" name="search" id="keyword" aria-describedby="sizing-addon1">
                                 <span class="input-group-addon search-button" id="sizing-addon1">
                                     <a href="" onclick="onSearch();" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>
                                 </span>

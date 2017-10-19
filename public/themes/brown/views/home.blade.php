@@ -124,6 +124,7 @@
 				<!-- PER EVENT -->
 				<div class="col-md-6 col-xs-12">
 					<div class="per-event row clearfix">
+						@if(count($_event) > 0)
 						@foreach($_event as $event)
 						<div class="col-md-4">
 							<div class="event-img-container wow fadeInUp" data-wow-delay="0.2s">
@@ -135,13 +136,16 @@
 								<a class="popup" size="lg" link="/events/view_details?id={{$event->event_id}}"><div class="title max-lines-title">{{strtoupper($event->event_title)}}</div></a>
 								<div class="date"><span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>{{strtoupper(date('F d, Y', strtotime($event->event_date)))}}</span></div>
 								<div class="desc">
-									<p class="max-lines-desc">
+									<div class="max-lines-desc">
 										{!! $event->event_description !!}
-									</p>
+									</div>
 								</div>
 							</div>
 						</div>
 						@endforeach
+						@else
+						<p class="no-event">Events are coming soon! See you there...</p>
+						@endif
 					</div>
 				</div>
 			</div>

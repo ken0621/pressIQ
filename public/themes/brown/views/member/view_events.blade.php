@@ -1,7 +1,7 @@
 <div class="modal-body row-no-padding clearfix" style="padding: 0; position: relative;">
 	<div class="col-md-8">
 		<div class="event-image">
-			<img style="width: 100%;" src="{{$event->event_thumbnail_image}}">
+			<img style="width: 100%;" src="{{$event->event_banner_image}}">
 		</div>
 	</div>
 	<div class="col-md-4">
@@ -23,7 +23,7 @@
 </div>
 <div class="modal-footer" style="display: none;">
 	<div class="reserve-btn-2">
-		<a class="popup" size="md" link="{!! isset($reserve_seat_btn) ? $reserve_seat_btn : '/members/event-reserve?id='.$event->event_id !!}">
+		<a style="text-decoration: none; color: #fff !important;" class="popup" size="md" link="{!! isset($reserve_seat_btn) ? $reserve_seat_btn : '/members/event-reserve?id='.$event->event_id !!}">
 			RESERVE A SEAT
 		</a>
 	</div>

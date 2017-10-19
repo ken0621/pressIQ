@@ -117,6 +117,7 @@
 		width: 100%;
 		color: #fff;
 		font-weight: 400;
+		border: none;
 	}
 	.reg-button:hover
 	{

@@ -594,7 +594,7 @@ body{
 		.title-container
 		{
 			font-size: 30px;
-			@media screen and (max-width: 450px)
+			@media screen and (max-width: 991px)
 			{
 				text-align: center !important;
 			}
@@ -688,6 +688,15 @@ body{
 							font-size: 15px;
 							letter-spacing: 0.5px;
 						}
+					}
+				}
+				.no-event
+				{
+					padding-left: 15px;
+					font-size: 18px;
+					@media screen and (max-width: 991px)
+					{
+						text-align: center;
 					}
 				}
 			}

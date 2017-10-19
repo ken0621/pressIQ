@@ -114,7 +114,6 @@ class Payroll13thMonthPayController extends Member
 
 	public function modal_employee_13_month_pay_report()
 	{
-		
 		return view('member.modal.modal_employee_13_month_pay_report');
 	}
 

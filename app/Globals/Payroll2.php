@@ -4583,6 +4583,14 @@ class Payroll2
 					$val["add.net_pay"] = false;
 					$val["deduct.net_pay"] = false;
 				}
+				elseif ($allowance->payroll_allowance_category == "Hidden") {
+					$val["add.gross_pay"] = false;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = false;
+					$val["add.net_pay"] = true;
+					$val["deduct.net_pay"] = false;
+				}
 				else
 				{
 					$val["add.gross_pay"] = true;
@@ -4742,7 +4750,7 @@ class Payroll2
 					$val["add.net_pay"] = true;
 					$val["deduct.net_pay"] = false;
 				}
-			
+				
 				array_push($return->_breakdown, $val);
 				$val = null;
 			}

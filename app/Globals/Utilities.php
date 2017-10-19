@@ -65,6 +65,15 @@ class Utilities
     {
         return Utilities::filterPageListSub(page_list(), $position_id);
     }
+    public static function get_all_users($shop_id, $user_id = 0)
+    {
+        $users = Tbl_user::where("user_shop", $shop_id)->get(); 
+        if($user_id != 0)
+        {
+            $users = Tbl_user::where("user_shop", $shop_id)->where('user_id',$user_id)->get(); 
+        }
+        return $users;
+    }
     public static function filterPageListSub($page_list, $position_id)
     {
         $_page_list         = $page_list;

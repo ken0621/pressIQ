@@ -15,7 +15,8 @@
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-8 left-container">
-						<video autoplay class="animated zoomInDown" width="803" height="450">
+						<div class="head-caption" style="display: none;">www.brown.com.ph</div>
+						<video autoplay class="animated zoomInDown">
 							<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
 						</video>
 						<!-- 16:9 aspect ratio -->
@@ -45,7 +46,7 @@
 	<!-- INTRODUCING BROWN -->
 	<div class="wrapper-2">
 		<div class="container">
-			<div class="title-container"><span class="text-1">BROWN</span>&nbsp;<span class="text-2">PRODUCTS</span></div>
+			<div class="title-container wow fadeInLeft"><span class="text-1">BROWN</span>&nbsp;<span class="text-2">PRODUCTS</span></div>
 			<div class="single-slide">
 				<div class="per-slide-container row clearfix">
 					<div class="col-md-6">
@@ -59,7 +60,7 @@
 							<h1>THE BROWN EDITION</h1>
 							<h2>A PHONE FILIPINOS CAN BE PROUD OF</h2>
 							<p>Brown promotes a future that is mindful of the needs of every Filipino.</p>
-							<div class="button-brown">SHOP NOW</div>
+							<!-- <div class="button-brown">SHOP NOW</div> -->
 						</div>
 					</div>
 				</div>
@@ -74,7 +75,7 @@
 							<h1>THE BROWN SPEAKER</h1>
 							<h2>UNLEASH THE NATIVE BASS!</h2>
 							<p>Brown promotes a future that is mindful of the needs of every Filipino.</p>
-							<div class="button-brown">SHOP NOW</div>
+							<!-- <div class="button-brown">SHOP NOW</div> -->
 						</div>
 					</div>
 				</div>
@@ -89,7 +90,7 @@
 							<h1>BROWN'S DTV DONGLES</h1>
 							<h2>LOREM IPSUM DOLOR SIT</h2>
 							<p>Brown promotes a future that is mindful of the needs of every Filipino.</p>
-							<div class="button-brown">SHOP NOW</div>
+							<!-- <div class="button-brown">SHOP NOW</div> -->
 						</div>
 					</div>
 				</div>
@@ -119,19 +120,19 @@
 	<!-- EVENTS -->
 	<div class="wrapper-4">
 		<div class="container">
-			<div class="title-container"><span class="text-1">UPCOMING</span>&nbsp;<span class="text-2">EVENTS</span></div>	
+			<div class="title-container wow fadeInLeft"><span class="text-1">UPCOMING</span>&nbsp;<span class="text-2">EVENTS</span></div>	
 			<div class="event-holder row clearfix">
 				<!-- PER EVENT -->
-				<div class="col-md-6">
+				<div class="col-md-6 col-xs-12">
 					<div class="per-event row clearfix">
-						<div class="col-md-4">
-							<div class="event-img-container">
+						<div class="col-md-4 col-xs-4">
+							<div class="event-img-container wow fadeInUp" data-wow-delay="0.2s">
 								<img src="/themes/{{ $shop_theme }}/img/event1.jpg">
 							</div>
 						</div>
-						<div class="col-md-8">
-							<div class="event-detail-container">
-								<div class="title max-lines-title">MCE CLASS MODULE 3&4</div>
+						<div class="col-md-8 col-xs-8">
+							<div class="event-detail-container wow fadeInRight" data-wow-delay="0.3s">
+								<a class="popup" size="lg"><div class="title max-lines-title">MCE CLASS MODULE 3&4</div></a>
 								<div class="date"><span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>OCTOBER 20, 2017</span></div>
 								<div class="desc">
 									<p class="max-lines-desc">

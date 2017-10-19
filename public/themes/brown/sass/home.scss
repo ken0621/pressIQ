@@ -93,6 +93,25 @@ body{
 		{
 			padding: 50px 0px;
 			
+			@media screen and (max-width: 450px)
+			{
+				padding: 25px 0px;
+			}
+			
+			.head-caption
+			{
+				text-align: center;
+				color: #fff;
+				font-weight: $bold;
+				font-size: 24px;
+				@media screen and (max-width: 991px)
+				{
+					display: block !important;
+					padding-bottom: 15px;
+				}
+			}
+
+
 			video
 			{
 				width: 100%;
@@ -102,6 +121,11 @@ body{
 			{
 				font-weight: $light;
 				text-align: center;
+				
+				@media screen and (max-width: 450px)
+				{
+					font-size: 24px !important;
+				}
 			}
 
 			.join-button
@@ -121,6 +145,11 @@ body{
 				{
 					cursor: pointer;
 				}
+
+				@media screen and (max-width: 450px)
+				{
+					width: 90%;
+				}
 			}
 
 		}
@@ -128,6 +157,13 @@ body{
 		{
 			padding-top: 52px;
 			padding-left: 60px;
+			@media screen and (max-width: 991px)
+			{
+				padding-left: 0 !important;
+				text-align: center;
+				padding-bottom: 25px;
+				padding-right: 0 !important;
+			}
 			
 			.join-button
 			{
@@ -336,6 +372,11 @@ body{
 		.title-container
 		{
 			font-size: 41px;
+			@media screen and (max-width: 991px)
+			{
+				font-size: 30px;
+				text-align: center;
+			}
 			
 			.text-1
 			{
@@ -361,6 +402,27 @@ body{
 			.caption-container
 			{
 				margin-top: 35px;
+				@media screen and (max-width: 991px)
+				{
+					text-align: center;
+					h1
+					{
+						font-size: 24px !important;
+					}
+					h2
+					{
+						font-size: 21px !important;
+					}
+					p 
+					{
+						font-size: 15px !important;
+					}
+					.button-brown
+					{
+						width: 90% !important;
+						margin: auto !important;
+					}
+				}
 
 				h1
 				{
@@ -404,6 +466,22 @@ body{
 		{
 			width: 10px !important;
 			height: 18px !important;
+		}
+		.slick-next
+		{
+			@media screen and (max-width: 450px)
+			{
+				right: 0 !important;
+				z-index: 99;	
+			}
+		}
+		.slick-prev
+		{
+			@media screen and (max-width: 450px)
+			{
+				left: 0 !important;
+				z-index: 99;	
+			}
 		}
 	}
 
@@ -462,6 +540,12 @@ body{
 				display: inline-block;
 				margin-left: 0;
 				margin-bottom: 40px;
+				padding: 0px 100px !important;
+				margin-top: 40px !important;
+			}
+			@media screen and (max-width: 450px)
+			{
+				padding: 0px 15px !important;
 			}
 			.title-container
 			{
@@ -479,6 +563,10 @@ body{
 			{
 				font-size: 18px;
 				margin-top: 20px;
+				@media screen and (max-width: 991px)
+				{
+					font-size: 15px !important;
+				}
 			}
 		}
 	}
@@ -493,6 +581,10 @@ body{
 		.title-container
 		{
 			font-size: 30px;
+			@media screen and (max-width: 450px)
+			{
+				text-align: center !important;
+			}
 			
 			.text-1
 			{
@@ -537,7 +629,7 @@ body{
 						text-overflow: ellipsis;
 						word-wrap: break-word;
 						overflow: hidden;
-						max-height: 3.6em;
+						max-height: 4.8em;
 						line-height: 1.2em;
 					}
 

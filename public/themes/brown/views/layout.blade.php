@@ -114,10 +114,13 @@
                         </button>
                     </div>
                     <div class="collapse navbar-collapse" id="myNavbar" style="padding-left: 0 !important;">
+
                         <ul class="nav navbar-nav">
-                            <!-- @if($customer)
+
+                            @if($customer)
                             <li class="{{ Request::segment(1) == "members" ? "active" : "" }}"><a href="/members">My Account</a></li>
-                            @endif -->
+                            @endif
+                            
                             <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">HOME</a></li>
                             <!--<li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>-->
                             <!-- <li><a href="">STORE</a></li> -->

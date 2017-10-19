@@ -302,7 +302,7 @@
 
 @endsection
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?v=1.0">
 <style type="text/css">
 .now-height
 {

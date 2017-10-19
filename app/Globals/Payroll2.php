@@ -4583,6 +4583,14 @@ class Payroll2
 					$val["add.net_pay"] = false;
 					$val["deduct.net_pay"] = false;
 				}
+				elseif ($allowance->payroll_allowance_category == "Hidden") {
+					$val["add.gross_pay"] = false;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = false;
+					$val["add.net_pay"] = true;
+					$val["deduct.net_pay"] = false;
+				}
 				else
 				{
 					$val["add.gross_pay"] = true;
@@ -4710,10 +4718,9 @@ class Payroll2
 
 				// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
 
-
 				if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
 				{
-					$val["amount"] = $val["amount"] * $return->_time_breakdown["day_spent"]["float"];
+					$val["amount"] = $val["amount"] * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
 				}
 
 				if($allowance->payroll_allowance_category == "Taxable")
@@ -4742,7 +4749,7 @@ class Payroll2
 					$val["add.net_pay"] = true;
 					$val["deduct.net_pay"] = false;
 				}
-			
+				
 				array_push($return->_breakdown, $val);
 				$val = null;
 			}

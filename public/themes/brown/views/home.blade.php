@@ -125,12 +125,12 @@
 				<!-- PER EVENT -->
 				<div class="col-md-6 col-xs-12">
 					<div class="per-event row clearfix">
-						<div class="col-md-4 col-xs-4">
+						<div class="col-md-4">
 							<div class="event-img-container wow fadeInUp" data-wow-delay="0.2s">
 								<img src="/themes/{{ $shop_theme }}/img/event1.jpg">
 							</div>
 						</div>
-						<div class="col-md-8 col-xs-8">
+						<div class="col-md-8">
 							<div class="event-detail-container wow fadeInRight" data-wow-delay="0.3s">
 								<a class="popup" size="lg"><div class="title max-lines-title">MCE CLASS MODULE 3&4</div></a>
 								<div class="date"><span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>OCTOBER 20, 2017</span></div>

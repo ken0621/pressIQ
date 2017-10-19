@@ -32,7 +32,7 @@
 					</div>
 					<div class="col-md-4 right-container">
 						<img style="cursor: pointer;" onclick="location.href='/members/register'" src="/themes/{{ $shop_theme }}/img/left-ads.png">
-						<div class="join-button animated fadeInUp">
+						<div class="join-button animated fadeInUp hidden">
 							<!-- <span>ENROLL</span><span>&nbsp;&nbsp;<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
 							</span> -->
 							VISIT ACADEMY

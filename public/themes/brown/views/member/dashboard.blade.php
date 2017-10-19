@@ -206,7 +206,7 @@
 												<div class="titles">{{$event->event_title}}</div>
 												<div class="description">{{$event->event_sub_title}}</div>
 												<div class="action">
-													<a style="cursor: pointer;" class="popup" size="md" link="/members/event-details?id={{$event->event_id}}"><i class="fa fa-check-circle"></i> Details</a>
+													<a style="cursor: pointer;" class="popup" size="lg" link="/members/event-details?id={{$event->event_id}}"><i class="fa fa-check-circle"></i> Details</a>
 													@if($event->is_reserved == 0) 
 													<a style="cursor: pointer;" class="popup" size="md" link="/members/event-reserve?id={{$event->event_id}}"><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
 													@else

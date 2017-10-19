@@ -22,8 +22,13 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/career/success', 'Shop\ShopCareerController@success'); //EDWARD GUEVARRA
 	Route::get('/how', 'Shop\ShopHowController@index'); //EDWARD GUEVARRA
 	Route::get('/youwin', 'Shop\ShopYouWinController@index'); //EDWARD GUEVARRA
+
 	Route::get('/events', 'Shop\ShopEventsController@index'); //EDWARD GUEVARRA
 	Route::get('/events/view/{id}', 'Shop\ShopEventsController@view'); //EDWARD GUEVARRA
+	Route::any('/events/view_details','Shop\ShopEventsController@view_details'); // ARCY
+	Route::any('/events/event_reserve','Shop\ShopEventsController@event_reserve'); // ARCY
+	Route::any('/events/event_reserve_submit','Shop\ShopEventsController@event_reserve_submit'); // ARCY
+
 	Route::get('/policy', 'Shop\ShopPolicyController@index'); //EDWARD GUEVARRA
 	Route::get('/testimony', 'Shop\ShopTestimonyController@index'); //EDWARD GUEVARRA
 	Route::get('/runruno', 'Shop\ShopAboutController@runruno'); //EDWARD GUEVARRA

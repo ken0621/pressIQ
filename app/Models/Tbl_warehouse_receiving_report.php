@@ -18,4 +18,8 @@ class Tbl_warehouse_receiving_report extends Model
         $query->selectRaw("*, count(rr_item_id) as received_qty")->leftjoin("tbl_warehouse_receiving_report_item","tbl_warehouse_receiving_report.rr_id", "=", "tbl_warehouse_receiving_report_item.rr_id");
         return $query;
     }
+    public function scopeWarehouse_item($query)
+    {
+        return $query->leftjoin('tbl_warehouse_inventory_record_log','tbl_warehouse_receiving_report_item.record_log_item_id','=','record_item_id');        
+    }
 }

@@ -56,6 +56,18 @@ class Warehouse2
                                                    ->count();
         return $count;
     }
+    public static function get_transaction_item($transaction_ref_name = '', $transaction_ref_id = 0)
+    {
+        return Tbl_warehouse_inventory_record_log::where('record_consume_ref_name',$transaction_ref_name)
+                                                   ->where('record_consume_ref_id', $transaction_ref_id)
+                                                   ->get(); 
+    }
+    public static function get_source_transaction_item($transaction_ref_name = '', $transaction_ref_id = 0)
+    {
+        return Tbl_warehouse_inventory_record_log::where('record_source_ref_name',$transaction_ref_name)
+                                                   ->where('record_source_ref_id', $transaction_ref_id)
+                                                   ->get(); 
+    }
     public static function get_item_qty_transfer($warehouse_id, $item_id)
     {
         $count = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)

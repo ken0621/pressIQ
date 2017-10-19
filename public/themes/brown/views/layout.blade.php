@@ -113,15 +113,18 @@
                         <span class="icon-bar"></span>
                         </button>
                     </div>
-                    <div class="collapse navbar-collapse" id="myNavbar">
+                    <div class="collapse navbar-collapse" id="myNavbar" style="padding-left: 0 !important;">
                         <ul class="nav navbar-nav">
-                            @if($customer)
+                            <!-- @if($customer)
                             <li class="{{ Request::segment(1) == "members" ? "active" : "" }}"><a href="/members">My Account</a></li>
-                            @endif
-                            <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
+                            @endif -->
+                            <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">HOME</a></li>
                             <!--<li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>-->
-                            <li><a href="/inspirers">Inspirer Page</a></li>
-                            <li><a href="#">Health Technology</a></li>
+                            <!-- <li><a href="">STORE</a></li> -->
+                            <!-- <li><a href="">THE ACADEMY</a></li> -->
+                            <li><a href="/inspirers">INSPIRERS</a></li>
+                            <!-- <li><a href="">INTERNET OF THINGS</a></li> -->
+                            <!-- <li><a href="">EVENTS</a></li> -->
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">

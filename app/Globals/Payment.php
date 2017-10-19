@@ -19,6 +19,7 @@ use App\Globals\Cart;
 use App\Globals\Payment;
 use App\Globals\Warehouse2;
 use App\Globals\Transaction;
+use App\Globals\Mail_global;
 // IPAY 88
 use App\IPay88\RequestPayment;
 // DRAGON PAY
@@ -137,7 +138,7 @@ class Payment
 			                case 'dragonpay': return Self::method_dragonpay($cart, $shop_id, $api, $transaction_list_id, $success, $failed); break;
 			                case 'ipay88': dd("UNDER DEVELOPMENT"); break;
 			                case 'manual1': return Self::method_other($cart, $shop_id, $api, $transaction_list_id, $success, $failed);  break;
-                      case 'manual2': return Self::method_other($cart, $shop_id, $api, $transaction_list_id, $success, $failed);  break;
+                            case 'manual2': return Self::method_other($cart, $shop_id, $api, $transaction_list_id, $success, $failed);  break;
 			                case 'e_wallet': dd("UNDER DEVELOPMENT"); break;
 			                case 'cashondelivery': dd("UNDER DEVELOPMENT"); break;
 			                default: dd("UNDER DEVELOPMENT"); break;
@@ -165,6 +166,27 @@ class Payment
 	}
   public static function method_other($cart, $shop_id, $api, $transaction_list_id,$success, $failed)
   {
+    $list = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->where("shop_id", $shop_id)->first();
+    if ($list) 
+    {
+        $transaction = Tbl_transaction::where("transaction_id", $list->transaction_id)->where("shop_id", $shop_id)->where("transaction_reference_table", "tbl_customer")->first();
+        if ($transaction) 
+        {
+            $customer = Tbl_customer::where("customer_id", $transaction->transaction_reference_id)->first();
+            if ($customer) 
+            {
+                $email_template = null;
+                $email_content["subject"] = "Payment Instruction for Order Ref: " . $list->transaction_number;
+                $email_content["content"] = "<h2>Dear Customer,</h2>
+<p>Good day and thank you for using this mode of payment. Please click on the link below to visit the uploading of proof of payment tab:</p>
+<p><a href='" . URL::to("/manual_checkout?tid=" . Crypt::encrypt($transaction_list_id)) . "'>" . URL::to("/manual_checkout?tid=" . Crypt::encrypt($transaction_list_id)) . "</a></p>
+<p>For payment inquiries, you may call, email or chat with us.</p>";
+                $email_address = $customer->email;
+                Mail_global::send_email($email_template, $email_content, $shop_id, $email_address);
+            }
+        }
+    }
+    dd("Sent");
     return redirect("/manual_checkout?tid=" . Crypt::encrypt($transaction_list_id))->send();
   }
 	/** Payment Method **/

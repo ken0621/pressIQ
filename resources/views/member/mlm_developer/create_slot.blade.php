@@ -8,14 +8,14 @@
          <div class="form-group">
             <div class="col-md-12">            
                 <label>SPONSOR</label>
-                <input name="sponsor" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)">
+                <input name="sponsor" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)" autocomplete="off">
             </div>
         </div>
         @if($binary_enabled == 1 && $binary_auto == 0)
         <div class="form-group">
             <div class="col-md-6">            
                 <label>PLACEMENT</label>
-                <input name="placement" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)">
+                <input name="placement" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)" autocomplete="off">
             </div>
             <div class="col-md-6">            
                 <label>POSITION</label>

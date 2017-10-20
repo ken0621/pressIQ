@@ -1,10 +1,9 @@
-$content-text: 'Arimo', sans-serif;
 $light: 300;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
-$text-light: #777;
-$text-dark: #272c2f;
+$text-light: #585858;
+$text-dark: #404040;
 
 body{
 	font-family: 'Rubik', sans-serif;
@@ -89,277 +88,109 @@ body{
 	color: #fff;
 
 	.wrapper-1 {
-
-		.top-container {
-			position: relative;
-			padding: 45px 0px 45px 0px;
-			text-align: center;
-			overflow: hidden;
+		
+		.left-container
+		{
+			padding: 50px 0px;
 			
-			h1
+			@media screen and (max-width: 450px)
 			{
-				font-family: 'Droid Sans', sans-serif;
-				font-size: 27px;
+				padding: 25px 0px;
+			}
+			
+			.head-caption
+			{
+				text-align: center;
+				color: #fff;
 				font-weight: $bold;
-				margin: 0;
-			}
-			h2
-			{
-				font-size: 45px;
-				font-weight: $light;
-				margin: 0;
-				color: #dac5a6;
-				letter-spacing: 0.5px;
-
-				@media screen and (max-width: 700px)
+				font-size: 24px;
+				@media screen and (max-width: 991px)
 				{
-					font-size: 32px;
-				}
-
-				@media screen and (max-width: 414px)
-				{
-					font-size: 32px;
-				}
-
-				@media screen and (max-width: 360px)
-				{
-					font-size: 28px;
+					display: block !important;
+					padding-bottom: 15px;
 				}
 			}
-			h3
-			{
-				font-size: 21px;
-				font-weight: $light;
-				margin: 0;
-				letter-spacing: 0.5px;
-				margin-top: 15px;
-			}
+
 
 			video
 			{
-				margin-top: 25px;
-				@media screen and (max-width: 803px)
+				width: 100%;
+			}
+			
+			h1
+			{
+				font-weight: $light;
+				text-align: center;
+				
+				@media screen and (max-width: 450px)
 				{
-					width: 100%;
-					height: auto;
+					font-size: 24px !important;
 				}
 			}
 
 			.join-button
 			{
-				margin: auto;
-				margin-top: 15px;
-				max-width: 228px;
-				padding: 10px 0px;
+				width: 25%;
 				text-align: center;
+				color: #fff;
+				background-color: transparent;
 				border: 1px solid #fff;
+				border-radius: 50px;
+				padding: 10px 0px;
+				/* margin-left: 39%; */
+				margin: auto;
+				margin-top: 20px;
 
 				&:hover
 				{
 					cursor: pointer;
 				}
 
+				@media screen and (max-width: 450px)
+				{
+					width: 90%;
+				}
 			}
 
-
-			/* .slider-container {
-
-				position: relative;
-
-				img
-				{
-					max-width: 100%;
-					height: auto;
-
-					@media screen and (max-width: 414px)
-					{
-						margin-left: 35px;
-					}
-
-					@media screen and (max-width: 360px)
-					{
-						margin-left: 18px;
-					}
-
-					@media screen and (max-width: 320px)
-					{
-						margin-left: 30px;
-					}
-				}
-
-				.caption-container {
-
-					position: absolute;
-					left: 10%;
-					bottom: 35%;
-
-					@media screen and (max-width: 700px)
-					{
-						position: absolute;
-						text-align: center;
-						margin-bottom: 50px;
-					}
-
-					@media screen and (max-width: 600px)
-					{
-						position: absolute;
-						text-align: center;
-						margin-bottom: 50px;
-						top: 100px;
-					}
-					
-					@media screen and (max-width: 414px)
-					{
-						position: absolute;
-						text-align: center;
-						margin-bottom: 50px;
-						top: 50px;
-					}
-
-					@media screen and (max-width: 360px)
-					{
-						position: absolute;
-						text-align: center;
-						margin-bottom: 50px;
-						top: 40px;
-					}
-
-					@media screen and (max-width: 320px)
-					{
-						position: absolute;
-						text-align: center;
-						margin-bottom: 50px;
-						top: 30px;
-					}
-
-					h1
-					{
-						font-size: 45px;
-						font-weight: 700;
-						color: #1c1c1c;
-
-						@media screen and (max-width: 600px)
-						{
-							font-size: 35px;
-						}
-
-						@media screen and (max-width: 414px)
-						{
-							font-size: 30px;
-						}
-
-						@media screen and (max-width: 360px)
-						{
-							font-size: 25px;
-						}
-					}
-
-					h2
-					{
-						margin-top: -15px;
-						font-size: 35px;
-						font-weight: 400;
-						color: #1c1c1c;
-
-						@media screen and (max-width: 600px)
-						{
-							font-size: 30px;
-						}
-
-						@media screen and (max-width: 414px)
-						{
-							font-size: 25px;
-						}
-
-						@media screen and (max-width: 360px)
-						{
-							font-size: 20px;
-						}
-					}
-
-					h3
-					{
-						font-size: 25px;
-						font-weight: 400;
-						color: #693d28;
-
-						@media screen and (max-width: 600px)
-						{
-							font-size: 20px;
-						}
-
-						@media screen and (max-width: 414px)
-						{
-							font-size: 15px;
-						}
-
-						@media screen and (max-width: 360px)
-						{
-							font-size: 12px;
-						}
-					}
-
-					h4
-					{
-						font-size: 15px;
-						font-weight: 400;
-						color: #7d7d7d;	
-
-						@media screen and (max-width: 600px)
-						{
-							font-size: 12px;
-						}
-
-						@media screen and (max-width: 414px)
-						{
-							font-size: 10px;
-						}
-
-						@media screen and (max-width: 360px)
-						{
-							font-size: 8px;
-						}
-					}
-				}
-			}
-			.right-ads
-			{
-				text-align: center;
-
-				.ad-container 
-				{
-					position: relative;
-					margin-top: 10px;
-					border: 1px solid #e0e0e0;
-					max-width: 355px;
-					display: inline-block;
-
-					img
-					{
-						max-width: 100%;
-					}
-
-					.button-container {
-						width: 35%;
-						position: absolute;
-						left: 5%;
-						top: 40%;
-
-					}
-					.button-container2 {
-						width: 35%;
-						position: absolute;
-						right: 8%;
-						top: 50%;
-
-					}
-
-					&:first-child {
-						margin-top: 0;
-					}
-				}
-			} */
 		}
+		.right-container
+		{
+			padding-top: 52px;
+			padding-left: 60px;
+			@media screen and (max-width: 991px)
+			{
+				padding-left: 0 !important;
+				text-align: center;
+				padding-bottom: 25px;
+				padding-right: 0 !important;
+			}
+			
+			.join-button
+			{
+				width: 65%;
+				text-align: center;
+				color: #fff;
+				background-color: #4a352c;
+				border-radius: 50px;
+				padding: 10px 0px;
+				/* margin-left: 39%; */
+				margin: auto;
+				margin-top: 37px;
+
+				i 
+				{
+					font-size: 15px;
+				}
+
+				&:hover
+				{
+					cursor: pointer;
+					background-color: #4e3930;
+				}
+			}
+
+		}
+
 		.mid-container 
 		{
 			.browseby-title-holder
@@ -529,93 +360,139 @@ body{
 
 	.wrapper-2 
 	{
-		color: #585858;
+		color: $text-light;
 		font-weight: $light;
-		overflow: hidden;
+		padding: 25px 0px;
+
 		@media screen and (max-width: 991px)
 		{
 			margin: 25px 0;
 		}
-		.img-container
+
+		.title-container
 		{
-			padding: 75px;
-			max-width: 555px;
-			margin: auto;
+			font-size: 41px;
 			@media screen and (max-width: 991px)
 			{
-				padding: 15px;
-			}
-			@media screen and (max-width: 768px)
-			{
-				max-width: 300px;
-			}
-			img 
-			{
-				width: 100%;
-			}
-		}
-		.detail-container
-		{
-			margin-top: 125px;
-			@media screen and (max-width: 991px)
-			{
-				margin-top: 15px;
-			}
-			@media screen and (max-width: 768px)
-			{
+				font-size: 30px;
 				text-align: center;
 			}
-			h1
+			
+			.text-1
 			{
-				padding-top: 10px;
-				font-size: 40px;
-				color: #404040;
-				margin: 0;
-				font-weight: $light !important;
-				@media screen and (max-width: 991px)
-				{
-					font-size: 30px;
-				}
+				color: #402a21;
 			}
-			h2
+			.text-2
 			{
-				font-size: 21px;
-				margin: 0;
-				font-weight: $light !important;
-				@media screen and (max-width: 991px)
-				{
-					font-size: 16px;
-				}
-			}
-			p 
-			{
-				margin-top: 20px;
-				font-size: 21px;
-				line-height: 130%;
-				@media screen and (max-width: 991px)
-				{
-					font-size: 16px;
-				}
+				color: #585858;
 			}
 		}
-		/* .intro
+		.per-slide-container
 		{
-			background-size: cover;
+			padding-top: 25px;
+			
+			.bp-container 
+			{
+				img
+				{
+					width: 100%;
+				}
+			}
 
-		    img
-		    {
-		    	width: 100%;
-		    	height: auto;
-		    }
-		} */
+			.caption-container
+			{
+				margin-top: 85px;
+
+				@media screen and (max-width: 991px)
+				{
+					text-align: center;
+					margin-top: 35px !important;
+					h1
+					{
+						font-size: 24px !important;
+					}
+					h2
+					{
+						font-size: 21px !important;
+					}
+					p 
+					{
+						font-size: 15px !important;
+					}
+					.button-brown
+					{
+						width: 90% !important;
+						margin: auto !important;
+					}
+				}
+
+				h1
+				{
+					font-weight: $light;
+					font-size: 36px;
+					margin: 0;
+					color: #404040;
+				}
+				h2
+				{
+					font-size: 21px;
+					margin: 0;
+					font-weight: $light;
+				}
+				p 
+				{
+					font-size: 18px;
+					margin-top: 20px;
+				}
+
+				.button-brown
+				{
+					padding: 10px 0px;
+					border-radius: 50px;
+					background-color: #402a21;
+					color: #fff;
+					width: 25%;
+					text-align: center;
+					margin-top: 20px;
+					
+					&:hover
+					{
+						cursor: pointer;
+						background-color: #482f25;
+					}
+				}
+			}
+
+		}
+		.slick-prev,.slick-next
+		{
+			width: 10px !important;
+			height: 18px !important;
+		}
+		.slick-next
+		{
+			@media screen and (max-width: 450px)
+			{
+				right: 0 !important;
+				z-index: 99;	
+			}
+		}
+		.slick-prev
+		{
+			@media screen and (max-width: 450px)
+			{
+				left: 0 !important;
+				z-index: 99;	
+			}
+		}
 	}
 
 	.wrapper-3
 	{
-		color: #585858;
+		color: #fff;
 		font-weight: $light;
 		overflow: hidden;
-		background-color: #efefef;
+		background-color: #402a21;
 		@media screen and (max-width: 991px)
 		{
 			display: table;
@@ -649,11 +526,13 @@ body{
 		}
 		.detail-container
 		{
-			margin-left: 180px;
-			margin-top: 40px;
-			@media screen and (max-width: 1300px)
+			margin-left: 220px;
+			margin-top: 111px;
+			padding-right: 125px;
+			@media screen and (max-width: 1366px)
 			{
 				margin-left: 100px;
+				margin-top: 55px;
 			}
 			@media screen and (max-width: 1199px)
 			{
@@ -664,46 +543,38 @@ body{
 				display: inline-block;
 				margin-left: 0;
 				margin-bottom: 40px;
+				padding: 0px 100px !important;
+				margin-top: 40px !important;
 			}
-			table,th,td
+			@media screen and (max-width: 450px)
 			{
-				margin-top: 20px;
-				border-collapse: collapse;
-				font-size: 18px;
-				padding: 0px 10px;
-
-				@media screen and (max-width: 420px)
-				{
-					font-size: 13px !important;
-				}
-				@media screen and (max-width: 320px)
-				{
-					font-size: 13px !important;
-				}
-
-				i 
-				{
-					font-size: 6px;
-					padding-right: 10px;
-					vertical-align: middle;
-					margin-top: -3px;
-				}
-
-				th 
-				{
-					font-size: 21px;
-					font-weight: $light;
-					padding-bottom: 10px;
-					color: #404040;
-				}
+				padding: 0px 15px !important;
 			}
-
 			.title-container
 			{
 				font-size: 40px;
-				color: #404040;
+				color: #fff;
 				margin: 0;
 				font-weight: $light !important;
+
+				@media screen and (max-width: 991px)
+				{
+					font-size: 30px !important;
+				}
+
+				.text-1
+				{
+					color: #e5d8b5;
+				}
+			}
+			p 
+			{
+				font-size: 18px;
+				margin-top: 20px;
+				@media screen and (max-width: 991px)
+				{
+					font-size: 15px !important;
+				}
 			}
 		}
 	}
@@ -711,58 +582,121 @@ body{
 	.wrapper-4
 	{
 		padding: 45px 0px;
-		color: #585858;
+		color: $text-light;
 		font-weight: $light;
-		overflow: hidden;
 		background-color: #fff;
 
-		.bottom-container
+		@media screen and (max-width: 991px)
 		{
-			.title
+			padding-bottom: 20px !important;
+		}
+
+		.title-container
+		{
+			font-size: 30px;
+			@media screen and (max-width: 991px)
 			{
-				@media screen and (max-width: 479px)
-				{
-					text-align: center;
-				}
+				text-align: center !important;
 			}
-			.featured-title-holder
+			
+			.text-1
 			{
-				font-size: 40px;
-				color: #404040;
-				margin: 0;
-				font-weight: $light !important;
+				color: #402a21;
 			}
-			.product-holder
+			.text-2
 			{
-				img
-				{
-					max-width: 100%;
-					display: block;
-					margin: auto;
-				}
+				color: #585858;
 			}
-			.product-details
+		}
+		.event-holder
+		{
+			padding: 55px 0 20px 0;
+			@media screen and (max-width: 450px)
 			{
-				text-align: center;
-				p 
+				padding: 20px 0 !important;
+			}
+
+			.per-event
+			{
+				margin-bottom: 40px;
+
+				.event-img-container
 				{
-					margin: 0;
+					img 
+					{
+						width: 100%;
+					}
+					@media screen and (max-width: 991px)
+					{
+						width: 60% !important;
+						margin: auto !important;
+					}
 				}
 
-				.product-name
+				.event-detail-container
 				{
-					font-size: 21px;
-					color: #404040;
+					@media screen and (max-width: 991px)
+					{
+						margin-top: 20px !important;
+						text-align: center !important;
+					}
+
+					.max-lines-title
+					{
+						display: block; /* or inline-block */
+						text-overflow: ellipsis;
+						word-wrap: break-word;
+						overflow: hidden;
+						max-height: 2.4em;
+						line-height: 1.2em;
+					}
+					.max-lines-desc
+					{
+						display: block; /* or inline-block */
+						text-overflow: ellipsis;
+						word-wrap: break-word;
+						overflow: hidden;
+						line-height: 1.2em;
+					}
+
+					.title 
+					{
+						font-size: 21px;
+						color: #404040;
+						&:hover
+						{
+							cursor: pointer;
+							text-decoration: underline;
+						}
+					}
+					.date
+					{
+						margin-top: 5px;
+						span
+						{
+							font-size: 13px;
+							font-weight: $regular;
+							color: #402a21;
+						}
+					}
+					.desc
+					{
+						p 
+						{
+							margin-top: 15px;
+							font-size: 15px;
+							letter-spacing: 0.5px;
+						}
+					}
 				}
-				.product-spec
+				.no-event
 				{
-					font-size: 15px;
-				}
-				.product-price
-				{
-					font-size: 21px;
-					color: #ed5639;
-					font-weight: $regular;
+					padding-left: 15px;
+					font-size: 18px;
+					@media screen and (max-width: 991px)
+					{
+						text-align: center;
+					}
 				}
 			}
 		}
@@ -909,6 +843,7 @@ body{
 		{
 			background-color: #fff;
 			margin-bottom: 25px;
+
 			&.pad
 			{
 				padding: 10px;
@@ -959,15 +894,23 @@ body{
 				overflow: hidden;
 				letter-spacing: 0.5px;
 			}
-			.more
+			.caption-container
 			{
-				color: #404040;
-				font-size: 11px;
-				font-weight: 700;
-				padding-left: 25px;
-				padding-bottom: 25px;
-				display: block;
-				margin-top: 15px;
+				min-height: 181px;
+				p 
+				{
+					padding: 0 24px 20px 24px;
+					color: $text-light;
+					letter-spacing: 0.5px;
+				}
+				.morecontent span 
+				{
+				    display: none;
+				}
+				.morelink 
+				{
+				    display: block;
+				}
 			}
 		}
 

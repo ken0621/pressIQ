@@ -141,15 +141,49 @@ class ShopEvent
             }
         }
 
-        $content = null;
+        $content = "";
+
+        $all_attendees = Tbl_shop_event_reserved::where('event_id',$event_id)->orderBy('reservation_id','DESC')->get();
+
+        $list = "<table><thead><th>#</th>
+				<th>Name</th>
+				<th>Contact Details</th>
+				<th>Enrollers Code</th>
+				<th></th></thead><tbody>";
+        foreach ($all_attendees as $attendees_key => $attendees_value) 
+        {
+        	$type = "Guest";
+			if($attendees_value->customer_id != null)
+			{
+				$type = "Member";
+			}		
+        	$list .= "<tr>
+						<td>". $attendees_key+1 ."</td>
+						<td>".ucwords($attendees_value->reservee_fname. ' '.$attendees_value->reservee_mname.' '.$attendees_value->reservee_lname)."</td>
+						<td>".$attendees_value->reservee_contact."</td>
+						<td>
+							<div>".strtoupper($attendees_value->reservee_enrollers_code)."</div>
+						</td>
+						<td>
+							<div>".$type."</div>
+						</td>
+					</tr>"; 
+        }
+        $lsit .= "</tbody></table>";
+
 
         $all_user = Tbl_user::where('user_shop', $shop_id)->get();
 
-        foreach ($all_user as $key => $value) 
-        {
-        	$email_address = $value->user_email;
+        // foreach ($all_user as $key => $value) 
+        // {
+        	// $email_address = $value->user_email;
+        	$email_address = 'arcylen103095@gmail.com';
 
-        }
+        // }
+        $email['subject'] = "A Reservee Registered !";
+        $email['content'] = $list;
+
+        Mail_global::send_email($template, $email, $shop_id, $email_address);
 
 	}
 }

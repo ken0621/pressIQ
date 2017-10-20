@@ -1313,7 +1313,7 @@ function page_list()
     $nav[$page]['submenu'][$segment1]['submenu'][$code]['developer'] = "<span style='color: green'>Ephraim Dognidon   </span>";
 
     $code = "submenu-list-emails-press-release-sample";
-        $nav[$page]['submenu'][$segment1]['submenu'][$code]['label']       = "Email list";
+        $nav[$page]['submenu'][$segment1]['submenu'][$code]['label']       = "Draft Press Release";
         $nav[$page]['submenu'][$segment1]['submenu'][$code]['code']        = $code;
         $nav[$page]['submenu'][$segment1]['submenu'][$code]['url']         = $path . "page/" . $page . "/email_list_press_release";
         $nav[$page]['submenu'][$segment1]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -1334,7 +1334,7 @@ function page_list()
     $nav[$page]['submenu'][$segment]['type']   = "submenu";
 
         $code = "submenu-list-email-sent-press-release-sample";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Sent Emails";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Archive Press Release";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path ."page/" . $page . "/email_sent_press_release";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];

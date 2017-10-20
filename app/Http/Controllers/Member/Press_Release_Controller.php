@@ -27,40 +27,28 @@ class Press_Release_Controller extends Member
     public function choose_recipient(Request $request)
     {
 			$recipientResult = Tbl_press_release_recipient::select("*");
-            if(Request::input("company_name") != "")
-            {
-            	$recipientResult = $recipientResult->where("company_name",Request::input("company_name"));
-            }
-
-            if(Request::input("name") != "")
-            {
-            	// dd(Request::input());
-            	$recipientResult = $recipientResult->where('name',Request::input('name'));    	
-            }
-
-            if(Request::input("position") != "")
-            {
-            	$recipientResult = $recipientResult->where('position',Request::input('position'));
-            }
-
+    
             if(Request::input("title_of_journalist") != "")
             {
-            	$recipientResult = $recipientResult->where('title_of_journalist',Request::input('title_of_journalist'));
+            	$recipientResult = $recipientResult->whereIn('title_of_journalist',Request::input('title_of_journalist'));
             }
 
             if(Request::input("country") != "")
             {
-                $recipientResult = $recipientResult->where('country',Request::input('country'));
+                $recipientResult = $recipientResult->whereIn('country',Request::input('country'));
             }
 
             if(Request::input("industry_type") != "")
             {
-                $recipientResult = $recipientResult->where('industry_type',Request::input('industry_type'));
+                $recipientResult = $recipientResult->whereIn('industry_type',Request::input('industry_type'));
             }
 
 
             $data["_recipient_list"] = $recipientResult->get();
             $data["_recipient_country"] = $recipientResult->select('country')->distinct()->get();
+
+            $data["_title_of_journalist"] = $recipientResult->select('title_of_journalist')->distinct()->get();
+            $data["_type_of_industry"] = $recipientResult->select('industry_type')->distinct()->get();
 
             return view("member.email_system.choose_recipient",$data);
 
@@ -158,5 +146,11 @@ class Press_Release_Controller extends Member
         
     }
 
+    /*public function get_recipient_info()
+    {
+        $email_address=
+
+    }
+*/
 
 }

@@ -86,6 +86,7 @@ $(function () {
     $checks.on('change', function() {
         var string = $checks.filter(":checked").map(function(i,v)
         {
+            var email = $('.email_add').val();
             var data_container = this.closest(".list-group-item");
             return  $(data_container).text();
         }).get();
@@ -98,7 +99,7 @@ $(function () {
 
     function selectall()
     {
-        // if(document.getElementById("to_check").checked == false){
+
             $('.to_check').prop('checked','checked');
                 $checks = $(":checkbox");
                 $checks.on('change', function() {
@@ -110,21 +111,24 @@ $(function () {
                     $('.input_chose_recipient').val(string);
                     }).trigger('change');
                 
-        // }
-        // else{
-        //      $('.to_check').prop('checked', false);
-        // }
+
 
     }
 
 
-        //    var myArr = [];
-        // $('#wa li').each(function (i) {
 
-        //   myArr.push($(this).text());
-        // });
-        
-        // alert(myArr);
+
+    $('.to_check').prop('checked','checked')
+    $checks = $(":checkbox");
+    $checks.on('change', function() {
+        var string = $checks.filter(":checked").map(function(i,v)
+        {
+            var data_container = this.closest(".list-group-item");
+            return  $(data_container).text();
+        }).get();
+        $('.input_chose_recipient').val(string);
+    }).trigger('change');
+    }
 
 
    /* function click_checkbox()

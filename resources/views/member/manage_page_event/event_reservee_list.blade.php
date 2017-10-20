@@ -9,6 +9,7 @@
 				<tr>
 					<th>#</th>
 					<th>Name</th>
+					<th>Contact Details</th>
 					<th>Enrollers Code</th>
 					<th></th>
 				</tr>				
@@ -19,6 +20,7 @@
 					<tr>
 						<td>{{$key+1}}</td>
 						<td>{{ucwords($reservee->reservee_fname. ' '.$reservee->reservee_mname.' '.$reservee->reservee_lname)}}</td>
+						<td>{{$reservee->reservee_contact}}</td>
 						<td>
 							<div>{{strtoupper($reservee->reservee_enrollers_code)}}</div>
 						</td>
@@ -43,3 +45,4 @@
 <div class="modal-footer">
 	<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
 </div>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>

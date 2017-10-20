@@ -80,13 +80,24 @@ class Payroll13thMonthPayController extends Member
 
 	public function employees_13th_month_pay_table()
 	{
+
+		$company_id = Request::input('company_id');
 		$parameter['date']					= date('Y-m-d');
 		$parameter['company_id']			= 0;
 		$parameter['employement_status']	= 0;
 		$parameter['shop_id'] 				= $this->shop_id();
 
-		$data["_employee"] 					= Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
-		$data["basis"] 						= unserialize(Request::input('employee_13_month_basis'));
+
+		if ($company_id != 0 ) 
+		{
+			$data["_employee"] 	= Tbl_payroll_employee_basic::selemployee($parameter)->where("tbl_payroll_employee_basic.payroll_employee_company_id",$company_id)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
+		}
+		else
+		{
+			$data["_employee"] 	= Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
+		}
+
+		$data["basis"] 	= unserialize(Request::input('employee_13_month_basis'));
 		
 		/*unserialize(Request::input('employee_13_month_basis'));*/
 		$this->employees_compute_13th_month_pay($data);

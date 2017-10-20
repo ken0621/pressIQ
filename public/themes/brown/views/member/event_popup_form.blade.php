@@ -48,7 +48,7 @@
 	<div class="modal-footer">
 		<div ><button class="reg-button" type="submit">SUBMIT</button> </div>
 	</div>
-	<div class="mob-close" style="display: none;" data-dismiss="modal">
+	<div class="mob-close" data-dismiss="modal">
 		<img src="/themes/{{ $shop_theme }}/img/mob-close.png">
 	</div>
 </form>
@@ -126,6 +126,12 @@
 		cursor: pointer;
 		background-color: #603a23 !important;
 	}
+	.events-popup .mob-close
+		{
+			position: absolute;
+			top: 0;
+			right: 0;
+		}
 	@media screen and (max-width: 991px)
 	{
 		.events-popup .primary-fill
@@ -134,7 +140,6 @@
 		}
 		.events-popup .mob-close
 		{
-			display: block !important;
 			position: absolute;
 			top: 5px;
 			right: 3px;

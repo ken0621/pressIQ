@@ -30,7 +30,7 @@
 		</div>
 	</a>
 	</div>
-	<div class="mob-close" style="display: none;" data-dismiss="modal">
+	<div class="mob-close" data-dismiss="modal">
 		<img src="/themes/{{ $shop_theme }}/img/mob-close.png">
 	</div>
 </div>
@@ -111,6 +111,12 @@
 		cursor: pointer;
 		background-color: #493026 !important;
 	}
+	.view-events-popup .mob-close
+	{
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
 	@media screen and (max-width: 991px)
 	{
 		.view-events-popup .event-details
@@ -127,7 +133,6 @@
 		}
 		.view-events-popup .mob-close
 		{
-			display: block !important;
 			position: absolute;
 			top: 5px;
 			right: 3px;

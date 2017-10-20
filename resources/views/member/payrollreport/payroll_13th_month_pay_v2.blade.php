@@ -10,7 +10,16 @@
                	select employee
                 </small>
             </h1>
-            <button class="btn btn-primary pull-right modal-13th-pay-basis-button">Compute 13th Month Pay</button>
+             <button class="btn btn-primary pull-right modal-13th-pay-basis-button">Compute 13th Month Pay</button>
+            <select class="form-control filter-change filter-change-company pull-right" style="width: 250px; margin-right: 10px;">
+              <option value="0">Select Company</option>
+              @foreach($_company as $company)
+              <option value="{{$company['company']->payroll_company_id}}">{{$company['company']->payroll_company_name}}</option> 
+                @foreach($company['branch'] as $branch)
+                <option value="{{$branch->payroll_company_id}}">&nbsp;&nbsp;• {{$branch->payroll_company_name}}</option>
+                @endforeach
+              @endforeach
+            </select>
         </div>
     </div>
 </div>

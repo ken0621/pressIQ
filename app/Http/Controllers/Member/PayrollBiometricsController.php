@@ -55,7 +55,6 @@ class PayrollBiometricsController
 		
 		$return = null;
 		
-
 		if ($check_access->shop_api_key) 
 		{
 			$shop_id 	= $check_access->shop_id;
@@ -83,7 +82,8 @@ class PayrollBiometricsController
 			$time = date("H:i:s", strtotime($value->DateTimeRecord));
 
 
-			if (!isset($employee_in_out[$date][$value->EmployeeID])) {
+			if (!isset($employee_in_out[$date][$value->EmployeeID])) 
+			{
 				$employee_in_out[$date][$value->EmployeeID]['time_in'] = $time;
 				$employee_in_out[$date][$value->EmployeeID]['time_out'] = $time;
 			}
@@ -100,7 +100,6 @@ class PayrollBiometricsController
 				}
 			}
 		}
-
 
 		foreach ($employee_in_out as $key_date => $time_record) 
 		{
@@ -124,16 +123,14 @@ class PayrollBiometricsController
 						$insert_time["payroll_time_out"] 				= $value["time_out"];
 
 						Tbl_payroll_biometric_time_sheet::insert($insert_time);
-
 					}
 					else
 					{
 						$insert["shop_id"] 				= $shop_id;
 						$insert["payroll_employee_id"] 	= $employee_info["payroll_employee_id"];
-						$insert["payroll_company_id"] 	= $employee_info["payroll_employee_company_id"];
+						$insert["payroll_company_id"] 	= $branch_id;
 						$insert["payroll_time_date"] 	= $key_date;
 						
-
 						$insert_time["payroll_biometric_record_id"] = 	Tbl_payroll_biometric_record::insertGetId($insert);
 						$insert_time["payroll_time_in"] 			= 	$value["time_in"];
 						$insert_time["payroll_time_out"] 			= 	$value["time_out"];

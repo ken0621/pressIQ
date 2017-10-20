@@ -3,7 +3,10 @@ namespace App\Globals;
 
 use App\Models\Tbl_shop_event;
 use App\Models\Tbl_shop_event_reserved;
+use App\Models\Tbl_email_template;
+use App\Models\Tbl_user;
 
+use App\Globals\Mail_global;
 /**
  * 
  *
@@ -126,5 +129,27 @@ class ShopEvent
 		}
 
 		return $return;
+	}
+	public static function send_email_reservee($shop_id = 0, $event_id = 0)
+	{
+		$template = Tbl_email_template::where("shop_id", $shop_id)->first();
+        if(isset($template->header_image))
+        {
+            if (!File::exists(public_path() . $data['template']->header_image))
+            {
+                $template->header_image = null;
+            }
+        }
+
+        $content = null;
+
+        $all_user = Tbl_user::where('user_shop', $shop_id)->get();
+
+        foreach ($all_user as $key => $value) 
+        {
+        	$email_address = $value->user_email;
+
+        }
+
 	}
 }

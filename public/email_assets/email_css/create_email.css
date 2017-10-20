@@ -1,3 +1,18 @@
+.panel-background
+{
+    height:700px !important;   
+}
+
+.select_container
+{
+    margin-left: 30px !important;
+}
+.chosen-container
+{
+    margin-top: 10px !important;
+    margin-right: 300px !important;
+}
+
 .recipient_text
 {
     position:relative;

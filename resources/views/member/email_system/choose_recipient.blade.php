@@ -12,7 +12,7 @@
         </div>
     </div>
 </div>
-<div class="panel panel-default panel-block panel-title-block">
+<div class="panel panel-default panel-block panel-title-block panel-background">
     <header class="header_email">
     <div class="panel-body form-horizontal tab_header">
         <div class="form-group">
@@ -38,36 +38,33 @@
   <div class="form-group row">
   <label  class="label-name">Country</label>
   <br>
-  <select class="selectpicker" id="filter">
-   <option value="1">Select All</option>
-   @foreach($_recipient_country as $recipient_country)
-    <option value="{{$recipient_country->country}}">{{$recipient_country->country}}</option>
-    @endforeach
-  </select>
-  </div>
-  <div class="form-group row">
-    <label for="inputPassword" class="label-name">Company Name</label>
-    <div class="">
-      <input type="text" class="form-control input col-md-6" id= "company_name" name="name" placeholder="Comapany Name">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="inputPassword" class="label-name ">Position</label>
-    <div class="">
-      <input type="text" class="form-control input col-md-6" id= "position"  placeholder="Position" name="position">
-    </div>
+  <div class ="select_container">
+  <select class="names" id="country" multiple data-placeholder="choose country" >
+  @foreach($_recipient_country as $recipient_country)
+  <option value="{{$recipient_country->country}}">{{$recipient_country->country}}</option>
+  @endforeach
+</select>
+</div>
   </div>
   <div class="form-group row">
     <label  class="label-name">Title of Journalist</label>
-    <div class="">
-      <input type="text" class="form-control input col-md-6" id="title_of_journalist" placeholder="Title of Journalist" name="title_of_journalist">
-    </div>
+    <div class ="select_container">
+    <select class="names" multiple data-placeholder="choose title of Journalist" id="title_of_journalist" >
+    @foreach($_title_of_journalist as $title_of_journalist)
+    <option value="{{$title_of_journalist->title_of_journalist}}">{{$title_of_journalist->title_of_journalist}}</option>
+    @endforeach
+    </select>
+  </div>
   </div>
   <div class="form-group row">
     <label  class="label-name">Industry Type</label>
-    <div class="">
-      <input type="text" class="form-control input col-md-6" id="industry_type" placeholder="industry_type" name="industry_type">
-    </div>
+    <div class ="select_container">
+    <select class="names" multiple data-placeholder="choose Industry Type" id="industry_type">
+    @foreach($_type_of_industry as $industry_type)
+    <option value="{{$industry_type->industry_type}}">{{$industry_type->industry_type}}</option>
+    @endforeach
+    </select>
+  </div>
   </div>
   <div class="form-group chosen_recipient">
    <!--  <label for="inputPassword" class="label-choose-recipient">Chosen Recipient</label> -->
@@ -93,11 +90,10 @@
               <button type="button" class="check-all btn btn-primary" onClick="selectall(this)">Check All</button>
                 <ul class="list-group check_list">
                   @foreach($_recipient_list as $recipient_list)
-                  <li  class="list-group-item tocheck" name="foo" value="{{$recipient_list->recipient_id}}">
-                    <div class="checkbox">
-                    <input type = "checkbox" class="tocheck">
-                    {{$recipient_list->company_name}},{{$recipient_list->name}},{{$recipient_list->position}},{{$recipient_list->industry_type}}
-                  </div>
+                  <li  class="list-group-item tocheck" name="foo"> 
+                    <input type = "checkbox" class="to_check" id="check">
+                    {{$recipient_list->company_name}}{{$recipient_list->name}}{{$recipient_list->position}}{{$recipient_list->industry_type}}
+                    <input type="hidden" class = "email_add" value="{{$recipient_list->research_email_address}}">
                 </li>
                   @endforeach
                 </ul>
@@ -107,6 +103,8 @@
 </div>
   
 <script src="/email_assets/js/create_press_release.js"></script>
+<script src="/email_assets/js/chosen.jquery.js"></script>
+<script src="/email_assets/js/chosen.jquery.min.js"></script>
 <script>
     $(".input_chose_email").click(function() {
         $('#email_databaseModal').modal('show');
@@ -122,6 +120,19 @@
 }
 </script> -->
 <script>
+  $(document).ready(function(e) {
+    $('.names').chosen({
+    width:"40.7%"
+    });
+    
+  });
+
+  $('#select_all_country').click(function(){
+    alert('123');
+    $('#country').prop('selected', true); // Selects all options
+});
+</script>
+<script>
     $('.con').click(function(event) {
     var recipient_value = $('.input_chose_recipient').val();
     var recipient_link = "/member/page/press_release_email/view_send_email_press_release?sent_email="+recipient_value;
@@ -134,24 +145,15 @@
 
 <!-- <script>
 
-  selectAll();
+  $('select').chosen({width: "300px"});
 
-$('#filter').change(function()
-{
-
-  if($("#filter option[value='1']").is(':selected'))
-  {
-     selectAll();
-  }
-
-})
-
-function selectAll()
-{
-  /*$('#filter > option').attr("selected", "selected");*/
-   $('#filter option').prop('selected', true);
-   $("#filter option[value='1']").prop('selected', false);
-}
+$('.chosen-toggle').each(function(index) {
+console.log(index);
+    $(this).on('click', function(){
+    console.log($(this).parent().find('option').text());
+         $(this).parent().find('option').prop('selected', $(this).hasClass('select')).parent().trigger('chosen:updated');
+    });
+});
 </script> -->
 @endsection
 

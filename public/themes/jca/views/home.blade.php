@@ -332,7 +332,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?updated2">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?updated3">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css">
 @endsection
 

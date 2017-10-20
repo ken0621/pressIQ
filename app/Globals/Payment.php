@@ -186,7 +186,7 @@ class Payment
             }
         }
     }
-    dd("Sent");
+    
     return redirect("/manual_checkout?tid=" . Crypt::encrypt($transaction_list_id))->send();
   }
 	/** Payment Method **/

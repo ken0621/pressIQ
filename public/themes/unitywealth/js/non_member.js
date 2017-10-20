@@ -19,6 +19,7 @@ function non_member()
 		add_event_process_slot_creation();
 		add_event_submit_verify_placement();
 		add_event_process_slot_placement();
+		add_event_click_buy_kit();
 	}
 	function add_event_process_slot_creation()
 	{
@@ -269,5 +270,17 @@ function non_member()
 				}
 			});
 		});
+	}
+	function add_event_click_buy_kit()
+	{
+		$(".btn-buy-a-kit").off("click");
+		$(".btn-buy-a-kit").on("click", function()
+		{
+			action_click_buy_kit();
+		});
+	}
+	function action_click_buy_kit()
+	{
+		alert(123);
 	}
 }

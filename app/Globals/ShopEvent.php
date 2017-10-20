@@ -179,16 +179,22 @@ class ShopEvent
         }
         $list .= "</tbody></table>";
 
-        $all_user = Tbl_user::where('user_shop', $shop_id)->get();
+        $all_user = Tbl_user::where('user_shop', $shop_id)->get()->toArray();
         if($shop_id == 5)
         {
-        	$all_user = Tbl_user::where('user_shop', $shop_id)->where('user_level',5)->get();
+        	// $all_user = Tbl_user::where('user_shop', $shop_id)->where('user_level',5)->get();
+        	$all_user[0]['user_email'] = 'jonathan@brown.com.ph';
+        	$all_user[1]['user_email'] = 'jason@brown.com.ph';
+        	$all_user[2]['user_email'] = 'archie@myphone.com.ph';
+        	$all_user[3]['user_email'] = 'cio@digimaweb.solutions';
+        	$all_user[4]['user_email'] = 'ceo@digimaweb.solutions';
+        	$all_user[5]['user_email'] = 'raymond.fajardo@digimaweb.solutions';
         }
 
         foreach ($all_user as $key => $value) 
         {
-        	$email_address = $value->user_email;
-	        $email['subject'] = "A Reservee Registered !";
+        	$email_address = $value['user_email'];
+	        $email['subject'] = "A New Reservee Registered !";
 	        $email['content'] = $content.$list;
 
 	        Mail_global::send_email($template, $email, $shop_id, $email_address);

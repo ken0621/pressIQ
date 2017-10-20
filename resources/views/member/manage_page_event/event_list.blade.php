@@ -66,7 +66,7 @@
                                             </div>
                                             <div class="sub-title">{{date('M d, Y',strtotime($event->event_date))}}</div>
                                             <div>
-                                                <a link="/member/page/events/reservee-list?id={{$event->event_id}}" class="popup" size="md">{{number_format($event->reservee_total_count)}} Total Reserved</a>
+                                                <a link="/member/page/events/reservee-list?id={{$event->event_id}}" class="popup" size="lg">{{number_format($event->reservee_total_count)}} Total Reserved</a>
                                             </div>
                                         </td>
                                         <td class="text-center">

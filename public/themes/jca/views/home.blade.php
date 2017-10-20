@@ -99,22 +99,17 @@
             </div>
             <div class="bulleted-list-container">
                 <div class="content-container row clearfix">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <li class="wow fadeInLeft bulleted-list" data-wow-delay=".2s">
                             <p class="list-content">Membership ID which entitles the distributor up to 36 % Lifetime Discount on all JCA Wellness Products upon repeat purchase</p>
                         </li>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <li class="wow fadeInLeft bulleted-list" data-wow-delay=".3s">
                             <p class="list-content">Package worth almost 9,000 pesos for a Standard Package, 27,000 pesos for a Premium Package and 63,000 pesos for a VIP Package</p>
                         </li>
                     </div>
-                    <div class="col-md-3">
-                        <li class="wow fadeInLeft bulleted-list" data-wow-delay=".4s">
-                            <p class="list-content">Opportunity to earn 15,000 a day, 90,000 a week, 360,000 a month for Override Sales Commission</p>
-                        </li>
-                    </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <li class="wow fadeInLeft bulleted-list" data-wow-delay=".5s">
                             <p class="list-content">Product Gift Certificates for JCA Wellness Product Purchases</p>
                         </li>

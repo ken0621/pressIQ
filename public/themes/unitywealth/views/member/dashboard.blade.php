@@ -20,8 +20,8 @@
 	                        <!-- <div class="text-header2">Enroll now and become one of us!</div> -->
 	                    </div>
 	                    <div class="btn-container">
-	                        <button class="btn-buy-a-kit" type="button">Buy a Kit</button><br>
-	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
+	                        {{-- <button class="btn-buy-a-kit" type="button">Buy a Kit</button><br>
+	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br> --}}
 	                        <a href="#" id="btn-enter-a-code"><button onclick="action_load_link_to_modal('members/enter-code')" class="btn-enter-a-code">ENTER A CODE</button></a>
 	                    </div>
 	                </div>

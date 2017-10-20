@@ -45,3 +45,4 @@
 <div class="modal-footer">
 	<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
 </div>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>

@@ -364,11 +364,11 @@ class Mail_global
                         $m->to($data["mail_to"], $data['mail_username'])->subject($data["subject"]);
                     });
 
-                    Mail::send('emails.full_body', $data, function ($m) use ($data) 
-                    {
-                        $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
-                        $m->to("arcylen103095@gmail.com", $data['mail_username'])->subject($data["subject"]);
-                    });
+                    // Mail::send('emails.full_body', $data, function ($m) use ($data) 
+                    // {
+                    //     $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                    //     $m->to("arcylen103095@gmail.com", $data['mail_username'])->subject($data["subject"]);
+                    // });
                 }
                 
                 $result = 1;

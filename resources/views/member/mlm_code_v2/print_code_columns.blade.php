@@ -57,7 +57,7 @@
                     </div>
                     @else
                     <div class="form-group">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <select name="item_id" class="form-control">
                                 <option value="">All Items</option>
                             @foreach($_items as $item)

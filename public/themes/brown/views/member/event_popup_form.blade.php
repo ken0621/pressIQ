@@ -1,4 +1,4 @@
-<form class="global-submit" method="post" action="{{$action}}">
+<form class="global-submit events-popup" method="post" action="{{$action}}">
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 	<input type="hidden" name="event_id" value="{{ $event->event_id or '' }}">
 	<div class="modal-body clearfix">
@@ -30,7 +30,8 @@
 		</div>
 		<div class="form-group clearfix">
 			<div class="col-md-12">
-				<textarea class="form-control" placeholder="ADDRESS" name="reservee_address" style="height: 150px">{{$customer_address->customer_street or '' }} {{$customer_address->customer_city or '' }} {{$customer_address->customer_state or ''}}</textarea>
+				<div style="color: #a1a1a1;">ADDRESS:</div>
+				<textarea class="form-control" placeholder="Address" name="reservee_address" style="height: 150px">{{$customer_address->customer_street or '' }} {{$customer_address->customer_city or '' }} {{$customer_address->customer_state or ''}}</textarea>
 			</div>
 		</div>
 		<div class="form-group clearfix">
@@ -45,37 +46,38 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<div  ><button class="reg-button" type="submit">SUBMIT</button> </div>
+		<div ><button class="reg-button" type="submit">SUBMIT</button> </div>
+	</div>
+	<div class="mob-close" style="display: none;" data-dismiss="modal">
+		<img src="/themes/{{ $shop_theme }}/img/mob-close.png">
 	</div>
 </form>
-<div class="mob-close" style="display: none;" data-dismiss="modal">
-	<img src="/themes/{{ $shop_theme }}/img/mob-close.png">
-</div>
-
 <style type="text/css">
-	.modal-content-global
+	.events-popup .modal-content-global
 	{
 		border-radius: 0 !important;
 	}
-	.modal-body
+	.events-popup .modal-body
 	{
 		padding-top: 0 !important;
+		border-radius: 6px;
+		overflow: hidden;
 	}
-	.top-head
+	.events-popup .top-head
 	{
 		background-color: #593620 !important;
 		margin-bottom: 15px;
 	}
-	.header-logo
+	.events-popup .header-logo
 	{
 		text-align: center;
 	}
-	.head-title
+	.events-popup .head-title
 	{
 		text-align: center;
 		margin-top: 20px;
 	}
-	h1
+	.events-popup h1
 	{
 		font-size: 24px;
 		font-weight: 500;
@@ -83,7 +85,7 @@
 		margin: 0;
 		padding-bottom: 10px;
 	}
-	h2
+	.events-popup h2
 	{
 		font-size: 13px;
 		font-weight: 400;
@@ -91,7 +93,7 @@
 		margin: 0;
 		padding-bottom: 10px;
 	}
-	h3
+	.events-popup h3
 	{
 		font-size: 15px;
 		font-weight: 400;
@@ -99,17 +101,17 @@
 		margin: 0;
 		padding-bottom: 10px;
 	}
-	.form-control
+	.events-popup .form-control
 	{
 		border-radius: 0 !important;
 		border: 1px solid #b5a195 !important;
 		font-weight: 300;
 	}
-	.h-logo
+	.events-popup .h-logo
 	{
 		width: 100%;
 	}
-	.reg-button
+	.events-popup .reg-button
 	{
 		background-color: #593620;
 		padding: 10px 0;
@@ -119,29 +121,29 @@
 		font-weight: 400;
 		border: none;
 	}
-	.reg-button:hover
+	.events-popup .reg-button:hover
 	{
 		cursor: pointer;
 		background-color: #603a23 !important;
 	}
 	@media screen and (max-width: 991px)
 	{
-		.primary-fill
+		.events-popup .primary-fill
 		{
 			margin-bottom: 12px;
 		}
-		.mob-close
+		.events-popup .mob-close
 		{
 			display: block !important;
 			position: absolute;
 			top: 5px;
 			right: 3px;
 		}
-		.h-logo
+		.events-popup .h-logo
 		{
 			width: 50% !important;
 		}
-		.head-title
+		.events-popup .head-title
 		{
 			padding-bottom: 20px !important;
 		}

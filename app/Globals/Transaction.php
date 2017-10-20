@@ -11,6 +11,9 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_warehouse_issuance_report;
+use App\Models\Tbl_warehouse_receiving_report;
+use App\Models\Tbl_warehouse_receiving_report_item;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_sponsor;
 
@@ -31,6 +34,40 @@ use Carbon\Carbon;
 
 class Transaction
 {
+
+    public static function get_transaction_item_code($transaction_list_id)
+    {
+        $list = Tbl_transaction_list::salesperson()->transaction()->where('transaction_list_id',$transaction_list_id)->first();
+        $check = Tbl_warehouse_issuance_report::where('wis_number',$list->transaction_number)->first();
+        $ref_name = 'transaction_list';
+        $ref_id = $transaction_list_id;
+        $_item = null;
+        if($check)
+        {
+            $ref_name = 'wis';
+            $ref_id = $check->wis_id;
+
+            $_rr = Tbl_warehouse_receiving_report::where('wis_id',$check->wis_id)->get();
+
+            foreach ($_rr as $rrkey => $rrvalue)
+            {
+                $_rr_item = Warehouse2::get_source_transaction_item('rr',$rrvalue->rr_id);
+                foreach ($_rr_item as $key_rr => $value_rr) 
+                {
+                    $_item[$value_rr->record_item_id][$rrkey.$key_rr.'rr']['item_pin'] = $value_rr->mlm_pin;
+                    $_item[$value_rr->record_item_id][$rrkey.$key_rr.'rr']['item_activation'] = $value_rr->mlm_activation;
+                }
+            }
+        }
+        $items = Warehouse2::get_transaction_item($ref_name, $ref_id);
+        foreach ($items as $key => $value) 
+        {
+            $_item[$value->record_item_id][$key]['item_pin'] = $value->mlm_pin;
+            $_item[$value->record_item_id][$key]['item_activation'] = $value->mlm_activation;
+        }
+        
+        return $_item;
+    }    
     public static function create_update_transaction_details($details)
     {
         $store["create_update_transaction_details"] = $details;
@@ -48,6 +85,7 @@ class Transaction
     }
     public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null)
     {
+        $transaction_sales_person = isset($transaction_id["transaction_sales_person"]) ? $transaction_id["transaction_sales_person"] : null;
         if($source == null)
         {
             $cart = Cart2::get_cart_info();
@@ -56,7 +94,6 @@ class Transaction
         {
             $cart = null;
         }
-        
         
         if($cart || $source != null) //INSERT ONLY IF CART IS NOT ZERO OR THERE IS SOURCE
         {
@@ -75,7 +112,6 @@ class Transaction
 
                 $transaction_id = Tbl_transaction::insertGetId($insert_transaction);
             }
-
             /* INSERT NEW LIST */
             $insert_list["transaction_id"]              = $transaction_id;
             $insert_list["shop_id"]                     = $shop_id;
@@ -84,6 +120,7 @@ class Transaction
             $insert_list["transaction_date_created"]    = Carbon::now();
             $insert_list["transaction_date_updated"]    = Carbon::now();
             $insert_list["transaction_type"]            = $transaction_type;
+            $insert_list["transaction_sales_person"]    = $transaction_sales_person;
             $insert_list["transaction_number"]          =  ($transaction_number ? $transaction_number :  Self::generate_transaction_number($shop_id, $transaction_type));
             
 
@@ -162,12 +199,12 @@ class Transaction
         }
         else
         {
-            $return = "CARTY IS EMPTY";
+            $return = "CART IS EMPTY";
         }
 
         return $return;
     }
-    public static function consume_in_warehouse($shop_id, $transaction_list_id)
+    public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit')
     {
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
         
@@ -177,8 +214,16 @@ class Transaction
         $consume['id'] = $transaction_list_id;
         foreach ($get_item as $key => $value) 
         {
-            Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, 'Enroll kit', $consume);
+            Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
         }
+    }
+    public static function get_transaction_item($transaction_list_id)
+    {
+        return Tbl_transaction_item::where('transaction_list_id', $transaction_list_id)->get();
+    }
+    public static function get_data_transaction_list($transaction_list_id)
+    {
+        return Tbl_transaction_list::where('transaction_list_id', $transaction_list_id)->first();
     }
     public static function update_transaction_balance($transaction_id)
     {
@@ -372,7 +417,6 @@ class Transaction
         $store["get_transaction_customer_details_v2"] = true;
         session($store);
     }
-    
     public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0)
     {
         $data = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id);

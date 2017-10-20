@@ -2,8 +2,6 @@
 
 Route::group(array('prefix' => '/member/payroll'), function()
 {
-
-	
 	//audit_trail_transaction
 	Route::any('/employee_list/modal_view_all_transaction/{id}/{uid}','Member\PayrollController@modal_view_all_transaction');
 	//audit_trail_transaction
@@ -48,6 +46,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/*START 13th month pay*/
 	Route::any('/reports/13th_month_pay','Member\Payroll13thMonthPayController@index');
+	Route::any('/reports/employees_13th_month_pay_table','Member\Payroll13thMonthPayController@employees_13th_month_pay_table');
+	Route::any('/reports/modal_employee_13_month_pay_report','Member\Payroll13thMonthPayController@modal_employee_13_month_pay_report');
+
+
 	Route::any('/reports/employee_13_month_pay_report/{employee_id}','Member\Payroll13thMonthPayController@employee_13_month_pay_report');
 	Route::any('/reports/modal_employee_13_month_pay_report/{employee_id}','Member\Payroll13thMonthPayController@modal_employee_13_month_pay_report');
 	Route::any('/reports/employee_13_month_pay_basis_submit','Member\Payroll13thMonthPayController@employee_13_month_pay_basis_submit');
@@ -585,8 +587,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_reports/view_report/{id}','Member\PayrollController@view_report');
 	Route::any('/payroll_reports/download_excel_report','Member\PayrollController@download_excel_report');
 	Route::any('/payroll_reports/date_change_report','Member\PayrollController@date_change_report');
-
-
 	/* PAYROLL REPORTS END */
 
 

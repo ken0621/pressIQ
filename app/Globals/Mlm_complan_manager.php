@@ -306,28 +306,48 @@ class Mlm_complan_manager
                 {
                     $parent_slot = Tbl_mlm_slot::where("slot_id",$tree->slot_id)->first();
                     $amount_given = $setting->advertisement_income;
-                    if($parent_slot->advertisement_bonus_distributed == 0 && $amount_given != 0)
+                    $amount_given_gc = $setting->advertisement_income_gc;
+                    if($parent_slot->advertisement_bonus_distributed == 0)
                     {
                         $required_downline = pow(2,$level_end);
                         $current_downline  = Tbl_tree_placement::where("placement_tree_parent_id",$tree->slot_id)->where("placement_tree_level",$level_end)->count();   
                         if($required_downline == $current_downline)
                         {
-                            $log_array['earning']    = $amount_given;
-                            $log_array['level']      = $level_end;
-                            $log_array['level_tree'] = 'Binary Tree';
-                            $log_array['complan']    = 'ADVERTISEMENT_BONUS';
+                            if($amount_given != 0)
+                            {
+                                $log_array['earning']    = $amount_given;
+                                $log_array['level']      = $level_end;
+                                $log_array['level_tree'] = 'Binary Tree';
+                                $log_array['complan']    = 'ADVERTISEMENT_BONUS';
 
-                            $log = Mlm_slot_log::log_constructor($parent_slot, $slot_info,  $log_array);
+                                $log = Mlm_slot_log::log_constructor($parent_slot, $slot_info,  $log_array);
 
-                            $arry_log['wallet_log_slot']         = $parent_slot->slot_id;
-                            $arry_log['shop_id']                 = $parent_slot->shop_id;
-                            $arry_log['wallet_log_slot_sponsor'] = $parent_slot->slot_id;
-                            $arry_log['wallet_log_details']      = $log;
-                            $arry_log['wallet_log_amount']       = $amount_given;
-                            $arry_log['wallet_log_plan']         = "ADVERTISEMENT_BONUS";
-                            $arry_log['wallet_log_status']       = "n_ready";   
-                            $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('ADVERTISEMENT_BONUS', $parent_slot->shop_id); 
-                            Mlm_slot_log::slot_array($arry_log);
+                                $arry_log['wallet_log_slot']         = $parent_slot->slot_id;
+                                $arry_log['shop_id']                 = $parent_slot->shop_id;
+                                $arry_log['wallet_log_slot_sponsor'] = $parent_slot->slot_id;
+                                $arry_log['wallet_log_details']      = $log;
+                                $arry_log['wallet_log_amount']       = $amount_given;
+                                $arry_log['wallet_log_plan']         = "ADVERTISEMENT_BONUS";
+                                $arry_log['wallet_log_status']       = "n_ready";   
+                                $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('ADVERTISEMENT_BONUS', $parent_slot->shop_id); 
+                                Mlm_slot_log::slot_array($arry_log);
+                            }
+
+                            if($amount_given_gc != 0)
+                            {
+                                $array['points_log_complan'] = "ADVERTISEMENT_BONUS";
+                                $array['points_log_level'] = $tree->placement_tree_level;
+                                $array['points_log_slot'] = $parent_slot->slot_id;
+                                $array['points_log_Sponsor'] = $slot_info->slot_id;
+                                $array['points_log_date_claimed'] = Carbon::now();
+                                $array['points_log_converted'] = 0;
+                                $array['points_log_converted_date'] = Carbon::now();
+                                $array['points_log_type'] = 'GC';
+                                $array['points_log_from'] = 'Slot Creation';
+                                $array['points_log_points'] = $amount_given_gc;
+
+                                Mlm_slot_log::slot_log_points_array($array);
+                            }
 
                             $update_slot["advertisement_bonus_distributed"] = 1;
                             Tbl_mlm_slot::where("slot_id",$parent_slot->slot_id)->update($update_slot);
@@ -493,13 +513,20 @@ class Mlm_complan_manager
                 $direct_points_gc_given = $slot_info->membership_points_direct_gc;
                 if($direct_points_gc_given != 0)
                 {
-                    $insert_direct_gc["gc_log_amount"]  = $direct_points_gc_given;
-                    $insert_direct_gc["slot_id"]        = $slot_sponsor->slot_id;
-                    $insert_direct_gc["shop_id"]        = $slot_info->shop_id;
-                    $insert_direct_gc["date_created"]   = Carbon::now();
-                    $insert_direct_gc["gc_claimed"]     = 0;
-                    Tbl_direct_gc_logs::insert($insert_direct_gc);
 
+                   /* NEW GC VERSION : ERWIN */
+                    $array_gc['points_log_complan'] = "DIRECT";
+                    $array_gc['points_log_level'] = 1;
+                    $array_gc['points_log_slot'] = $slot_sponsor->slot_id;
+                    $array_gc['points_log_Sponsor'] = $slot_info->slot_id;
+                    $array_gc['points_log_date_claimed'] = Carbon::now();
+                    $array_gc['points_log_converted'] = 0;
+                    $array_gc['points_log_converted_date'] = Carbon::now();
+                    $array_gc['points_log_type'] = 'GC';
+                    $array_gc['points_log_from'] = 'Slot Creation';
+                    $array_gc['points_log_points'] = $direct_points_gc_given;
+
+                    Mlm_slot_log::slot_log_points_array($array_gc);
                 }
 
 
@@ -915,16 +942,19 @@ class Mlm_complan_manager
                     foreach ($slot_tree as $key => $slot) 
                     {
                         # code...
-                        $log = "You have Earned " . $bonus . ". from Binary Single Line Bonus. Sponsor: " . $slot_info->slot_no;
-                        $arry_log['wallet_log_slot']            = $slot->slot_id;
-                        $arry_log['shop_id']                    = $slot->shop_id;
-                        $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
-                        $arry_log['wallet_log_details']         = $log;
-                        $arry_log['wallet_log_amount']          = $bonus;
-                        $arry_log['wallet_log_plan']            = "BINARY_SINGLE_LINE";
-                        $arry_log['wallet_log_status']          = "released";   
-                        $arry_log['wallet_log_claimbale_on']    = Carbon::now(); 
-                        Mlm_slot_log::slot_array($arry_log);  
+                        if($bonus != 0)
+                        {
+                            $log = "You have Earned " . $bonus . ". from Binary Single Line Bonus. Sponsor: " . $slot_info->slot_no;
+                            $arry_log['wallet_log_slot']            = $slot->slot_id;
+                            $arry_log['shop_id']                    = $slot->shop_id;
+                            $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
+                            $arry_log['wallet_log_details']         = $log;
+                            $arry_log['wallet_log_amount']          = $bonus;
+                            $arry_log['wallet_log_plan']            = "BINARY_SINGLE_LINE";
+                            $arry_log['wallet_log_status']          = "released";   
+                            $arry_log['wallet_log_claimbale_on']    = Carbon::now(); 
+                            Mlm_slot_log::slot_array($arry_log);  
+                        }
                     }
                 }
             }
@@ -1278,14 +1308,30 @@ class Mlm_complan_manager
                                         $binary_pairing_log['pairing_type'] = 'GC';
                                         Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
 
-                                        $insert_gc_vou['mlm_gc_tag']       = "5THPAIR";
-                                        $insert_gc_vou['mlm_gc_code']      = Mlm_gc::random_code_generator(8, $slot->slot_id, $insert_gc_vou['mlm_gc_tag']);
-                                        $insert_gc_vou['mlm_gc_amount']    = $gc_income;
-                                        $insert_gc_vou['mlm_gc_member']    = $slot->slot_owner;
-                                        $insert_gc_vou['mlm_gc_slot']      = $slot->slot_id;
-                                        $insert_gc_vou['mlm_gc_date']      = Carbon::now();
-                                        $insert_gc_vou['mlm_gc_used']      = 0;
-                                        Mlm_gc::insert_gc($insert_gc_vou);
+
+                                        /* NEW GC VERSION : ERWIN */
+                                        $array_gc['points_log_complan'] = "BINARY";
+                                        $array_gc['points_log_level'] = $slot->placement_tree_level;
+                                        $array_gc['points_log_slot'] = $slot->slot_id;
+                                        $array_gc['points_log_Sponsor'] = $slot_info->slot_id;
+                                        $array_gc['points_log_date_claimed'] = Carbon::now();
+                                        $array_gc['points_log_converted'] = 0;
+                                        $array_gc['points_log_converted_date'] = Carbon::now();
+                                        $array_gc['points_log_type'] = 'GC';
+                                        $array_gc['points_log_from'] = 'Slot Creation';
+                                        $array_gc['points_log_points'] = $gc_income;
+
+                                        Mlm_slot_log::slot_log_points_array($array_gc);
+
+
+                                        // $insert_gc_vou['mlm_gc_tag']       = "5THPAIR";
+                                        // $insert_gc_vou['mlm_gc_code']      = Mlm_gc::random_code_generator(8, $slot->slot_id, $insert_gc_vou['mlm_gc_tag']);
+                                        // $insert_gc_vou['mlm_gc_amount']    = $gc_income;
+                                        // $insert_gc_vou['mlm_gc_member']    = $slot->slot_owner;
+                                        // $insert_gc_vou['mlm_gc_slot']      = $slot->slot_id;
+                                        // $insert_gc_vou['mlm_gc_date']      = Carbon::now();
+                                        // $insert_gc_vou['mlm_gc_used']      = 0;
+                                        // Mlm_gc::insert_gc($insert_gc_vou);
                                     }
                                 }
                                 // update slot

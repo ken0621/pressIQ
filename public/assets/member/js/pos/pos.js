@@ -30,7 +30,53 @@ function pos()
 		action_convert_price_level_to_global_drop_list();
 		event_change_global_discount();
 		action_load_detach_customer();
+		event_click_process_sale();
+		action_hide_popover();
+		event_change_quantity();
 
+        event_load_popover();
+        action_click_change_qty();
+	}
+	function action_click_change_qty()
+    {
+        $('body').on('click','.td-change-qty', function(e)
+        {
+            var item_id = $(e.currentTarget).attr('item-id');
+            $('.input-qty-'+item_id).removeClass('hidden');
+            $('.change-quantity.'+item_id).addClass('hidden');
+        });
+    }
+    function event_load_popover()
+    {
+        $('[data-toggle="popover"]').popover(
+        {
+            placement: 'top',
+            title: 'Change Quantity',
+            html: true,
+            content:  $('#changeQuantity').html()
+        }).on('click', getDetails());
+    }
+    function getDetails()
+    {
+
+    }
+	function action_hide_popover()
+	{
+	    $('body').on('click', function (e) 
+	    {
+	        //did not click a popover toggle or popover
+	        if ($(e.target).data('toggle') !== 'popover' && $(e.target).parents('.popover.in').length === 0) 
+	        { 
+	            $('[data-toggle="popover"]').popover('hide');
+	        }
+	    });
+    }
+	function event_click_process_sale()
+	{
+		$('body').on('click','.btn-process-sale', function()
+		{
+			$('.form-process-sale').submit();
+		});
 	}
 	function action_load_detach_customer()
 	{
@@ -101,6 +147,15 @@ function pos()
 				action_set_cart_info("price_level_id", $(".price-level-select").val());
 			}
 		});
+		$('.payment-method-select').globalDropList({
+			hasPopup : "false",
+			width    : '100%'		
+		});
+
+		$('.select-warehouse').globalDropList({
+	        hasPopup : 'false',
+	        width    : '100%'
+    	});
 	}
 	function event_remote_item_from_cart()
 	{
@@ -123,6 +178,26 @@ function pos()
 					action_load_item_table();
 				}
 			});
+		});
+	}
+	function event_change_quantity()
+	{
+		$("body").on("keyup", ".input-change-qty", function(e)
+		{
+			var qty_item_id = $(e.currentTarget).attr('item-id');
+			var qty = $(e.currentTarget).val();
+			if(e.which == 13) //ENTER KEY
+			{
+				$.ajax({
+					url : '/member/cashier/pos/change_qty',
+					type : 'post',
+					data : {item_id : qty_item_id, qty : qty, _token : $('#_token').val()},
+					success : function()
+					{
+						action_load_item_table();
+					}
+				})
+			}
 		});
 	}
 	function event_search_customer()
@@ -323,6 +398,12 @@ function pos()
 			action_scan_item($item_id);
 			action_hide_search();
 		});
+		$("body").on("click", ".pos-customer-search-result", function(e)
+		{
+			$customer_id = $(e.currentTarget).attr("customer_id");
+			action_scan_customer($customer_id);
+			action_hide_search();
+		});
 	}
 	function action_scan_item($item_id)
 	{
@@ -453,10 +534,33 @@ function pos()
 	}
 }
 
+function toggle_destination(className) 
+{
+    if($('.wis-click').prop('checked'))
+    {
+    	$(className).slideDown();
+    }
+    else 
+    {
+    	$(className).slideUp();
+    }
+}
+
 function new_price_level_save_done(data)
 {
 	$("#global_modal").modal("hide");
 	$(".price-level-select").append('<option value="' + data.price_level_id + '">' + data.price_level_name + '</option>');
 	$(".price-level-select").globalDropList("reload");
 	$(".price-level-select").val(data.price_level_id).change();
+}
+function success_process_sale(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success('Success Process Sales');
+		setInterval(function()
+		{
+			location.href = '/member/cashier/transactions_list?receipt_id='+data.receipt_id;
+		},2000);
+	}	
 }

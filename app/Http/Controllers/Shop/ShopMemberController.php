@@ -42,6 +42,7 @@ use App\Models\Tbl_vmoney_wallet_logs;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_payout_bank;
 use App\Models\Tbl_online_pymnt_api;
+use App\Models\Tbl_mlm_plan_setting;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -115,6 +116,7 @@ class ShopMemberController extends Shop
         }
         
         $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
+        $data["item_kit"]    = Item::get_all_assembled_kit($this->shop_info->shop_id);
 
         return Self::load_view_for_members('member.dashboard', $data);
     }
@@ -219,9 +221,111 @@ class ShopMemberController extends Shop
     }
     public function getRequestPayout()
     {
-        $data["page"] = "Request Payout";
-        $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
-        return view("member2.request_payout", $data);
+        $settings = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
+        $allow = false;
+
+        if ($settings->encashment_settings_schedule_type != "none") 
+        {
+            if (is_serialized($settings->encashment_settings_schedule)) 
+            {
+                foreach (unserialize($settings->encashment_settings_schedule) as $key => $value) 
+                {
+                    if ($value == "true") 
+                    {
+                        if ($settings->encashment_settings_schedule_type == "weekly") 
+                        {
+                            if ($key == date("w")) 
+                            {
+                                $allow = true;
+                            }
+                        }
+                        elseif($settings->encashment_settings_schedule_type == "monthly")
+                        {
+                            if ($key == date("j")) 
+                            {
+                                $allow = true;
+                            }
+                        }
+                        else
+                        {
+                            $allow = true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        if ($allow) 
+        {
+            $data["page"] = "Request Payout";
+            $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            return view("member2.request_payout", $data);
+        }
+        else
+        {
+            if (is_serialized($settings->encashment_settings_schedule)) 
+            {
+                if ($settings->encashment_settings_schedule_type == "weekly") 
+                {
+                    echo '<div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                            <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+                        </div>';
+
+                    echo "<h3 class='text-center' style='margin: 25px 0;'>You can only request payout every ";
+                    foreach (unserialize($settings->encashment_settings_schedule) as $key0 => $value0) 
+                    {
+                        if ($value0 == "true") 
+                        {
+                            echo date('l', strtotime("Sunday +{$key0} days")) . " ";
+                        }
+                    }
+                    echo ".</h3>";
+                    
+                    echo '<div class="modal-footer">
+                            <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        </div>';
+
+                    die();
+                }
+                elseif($settings->encashment_settings_schedule_type == "monthly")
+                {
+                    echo '<div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                            <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+                        </div>';
+
+                    echo "<h3 class='text-center' style='margin: 25px 0;'>You can only request payout every ";
+                    foreach (unserialize($settings->encashment_settings_schedule) as $key0 => $value0) 
+                    {
+                        if ($value0 == "true") 
+                        {
+                            echo ordinal($key0) . " ";
+                        }
+                    }
+                    echo "day of the month.</h3>";
+                    
+                    echo '<div class="modal-footer">
+                            <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        </div>';
+
+                    die();
+                }
+            }
+            else
+            {
+                echo '<div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+                    </div>';
+
+                echo "<h3 class='text-center' style='margin: 25px 0;'>You are not allowed to request payout right now.";
+                
+                echo '<div class="modal-footer">
+                        <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>';
+            }
+        }
     }
     public function postRequestPayout()
     {
@@ -329,7 +433,7 @@ class ShopMemberController extends Shop
                         $date       = date("m/d/Y");
                         $status     = "PENDING";
 
-                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $charge_amount, $other, $date, $status);
+                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
                     }
                 }
 
@@ -1718,7 +1822,14 @@ class ShopMemberController extends Shop
                     $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
                     MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
 
+                    $setting = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
                     $slot_id = $create_slot;
+
+                    if($setting->plan_settings_placement_required == 0)
+                    {
+                        MLM2::entry($shop_id,$slot_id);
+                    }
+                    
                     $store["get_success_mode"] = "success";
                     session($store);
                     echo json_encode("success");

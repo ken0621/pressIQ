@@ -30,8 +30,7 @@ class TransactionController extends Member
             $_transaction[$key]->transaction_count = count($_list) . " TRANSACTION(S)";
         }
         
-        $data["_transaction"] = $_transaction;
-        
+        $data["_transaction"] = $_transaction;        
     
         return view("member.transaction.transaction", $data);
     }
@@ -46,14 +45,14 @@ class TransactionController extends Member
         $data['shop_key'] = strtoupper($this->user_info->shop_key);
         $data['shop_address'] = ucwords($this->user_info->shop_street_address.' '.$this->user_info->shop_city.', '.$this->user_info->shop_zip);
         
-        $data['list'] = Tbl_transaction_list::transaction()->where('transaction_list_id',$transaction_list_id)->first();
+        $data['list'] = Tbl_transaction_list::salesperson()->transaction()->where('transaction_list_id',$transaction_list_id)->first();
         $data['_item'] = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
         $data['customer_name'] = Transaction::getCustomerNameTransaction($data['list']->transaction_id);
         $data['transaction_details'] = unserialize($data["list"]->transaction_details);
         
         return view("member.transaction.transaction_item", $data);
     }
-    public function transaction_list()
+    public function transaction_list(Request $request)
     {
         $data['_type'] = Transaction::get_all_transaction_type();
         
@@ -91,6 +90,25 @@ class TransactionController extends Member
         }
         
         $html = view("member.transaction.view_pdf", $data);
+        $pdf = Pdf_global::show_pdfv2($html);
+        return $pdf;
+    }
+    public function view_receipt(Request $request, $transaction_list_id)
+    {        
+        $data['shop_key']            = strtoupper($this->user_info->shop_key);
+        $data['shop_address']        = ucwords($this->user_info->shop_street_address.' '.$this->user_info->shop_city.', '.$this->user_info->shop_zip);
+
+        $data['list'] = Tbl_transaction_list::salesperson()->transaction()->where('transaction_list_id',$transaction_list_id)->first();
+        $data['_item'] = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
+        $data['customer_name'] = Transaction::getCustomerNameTransaction($data['list']->transaction_id);
+        $data['transaction_details'] = unserialize($data["list"]->transaction_details);
+        $data['customer_info']       = Transaction::getCustomerInfoTransaction($data['list']->transaction_id);
+        $data['customer_address']    = Transaction::getCustomerAddressTransaction($data['list']->transaction_id);
+
+        $data['_codes']    = Transaction::get_transaction_item_code($transaction_list_id);
+
+
+        $html = view("member.transaction.all_shop_receipt_pdf", $data);
         $pdf = Pdf_global::show_pdfv2($html);
         return $pdf;
     }

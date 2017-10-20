@@ -903,6 +903,8 @@ AdvancedRoute::controller('/member/report', 'Member\ReportControllerV2');
 
 /* Customer */
 Route::get('/member/customer','Customer\CustomerController@index');
+Route::get('/member/customer/bulk_archive','Member\CustomerController@bulk_archive');
+Route::post('/member/customer/bulk_archive','Member\CustomerController@bulk_archive_post');
 Route::get('/member/customer/list','Member\CustomerController@index');
 Route::any('/member/customer/modalcreatecustomer','Member\CustomerController@modalcreatecustomer');
 Route::post('/member/customer/insertcustomer','Member\CustomerController@insertcustomer');
@@ -1168,3 +1170,7 @@ include_once('routes_config/routes_item.php');
 
 /* Members Area */
 include_once('routes_config/routes_members_area.php');
+
+
+Route::get('/ref/{id}', 'Shop\LeadController@ref');
+Route::get('/{id}', 'Shop\LeadController@ref');

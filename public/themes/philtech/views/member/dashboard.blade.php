@@ -49,6 +49,11 @@
 								<div class="color"></div>
 								<div class="name"><span>Total Earnings</span> {{ $wallet->display_total_earnings }}</div>
 							</div>
+
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Total Points</span> {{ $wallet->display_total_points }}</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -67,6 +72,8 @@
 					</div>
 
 				</div>
+
+
 
 				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
@@ -88,6 +95,25 @@
 					<div class="chart-legend text-center">
 						<button class="btn btn-lblue" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 					</div>
+				</div>
+
+
+
+			</div>
+
+			<div class="col-md-12">
+				<div class="title">Replicated Link</div>
+				<div class="sub-container">
+						@foreach($_slot as $slot)
+						<div class="holder">
+							<div class="row clearfix">
+								<div class="col-sm-12 text-center">
+									<div class="label2">{{ $slot->slot_no }}</div>
+									<div class="label3"> <a href="javascript:" onclick="action_load_link_to_modal('/members/lead?slot_no={{ $slot->slot_no }}')"> VIEW LEAD LINK</a></b></div>
+								</div>
+							</div>
+						</div>
+						@endforeach
 				</div>
 			</div>
 		</div>
@@ -128,7 +154,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
+					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)
@@ -167,7 +193,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>Brown & Proud</b> movement</div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>Philtech Global, Inc.</b></div>
 	                    </div>
 	                </div>
 	            </div>

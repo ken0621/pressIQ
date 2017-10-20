@@ -275,7 +275,7 @@
                             <span>Contents:</span> Swiss Apple Stem Cell, Glutathione and Collagen
                         </div>
                         <div class="benefits">
-                            <div class="wow animated fadeInRight header" data-wow-delay=".5s" style="font-size: 13px;">Benefits: </div>
+                            <div class="wow animated fadeInRight header" data-wow-delay=".5s">Benefits: </div>
                             <ul class="wow animated fadeInRight" data-wow-delay=".6s">
                                 <li>Increases skin stem cell vitality and longevity</li>
                                 <li>Helps treat skin problems like hyperpigmentation, acne or pimple scars, uneven skin tone</li>
@@ -299,7 +299,7 @@
                     <div class="details-container">
                         <div class="wow animated fadeInLeft header">Stem Cell Therapy-&nbsp;<span>The Anti-Aging and Rejuvenation Therapy</span></div>
                         <div class="benefits">
-                            <div class="wow animated fadeInRight header" data-wow-delay=".5s">Benefits: </div>
+                            <div class="wow animated fadeInRight header" data-wow-delay=".5s" style="font-size: 15px;">Benefits: </div>
                             <ul class="wow animated fadeInRight" data-wow-delay=".6s">
                                 <li>Solves skin problems and eliminate wrinkles, acne, eye bags, moisturize dry skin, stimulate skin cell renewal, promote blood circulation.</li>
                                 <li>Helps to improve the aging problem, high blood pressure, diabetes, stomach ulcers, migraine headaches and arthritis</li>

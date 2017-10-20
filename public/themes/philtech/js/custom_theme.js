@@ -13,7 +13,7 @@ function custom_theme()
 		{
 			action_match_height();
 			// event_show_cart();
-			action_fit_text();
+			// action_fit_text();
 			action_slick();
 			ready_load_ecom_cart();
 			ready_load_mini_ecom_cart();

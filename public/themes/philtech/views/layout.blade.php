@@ -17,13 +17,18 @@
 
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
+
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
+
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1">
         <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
         
         <!-- OTHER CSS -->
         @yield("css")
+
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css">
+        
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
@@ -42,10 +47,12 @@
                 <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 
                 @if($customer)
+                <div class="wata"></div>
                 <div class="holder"><a href="/members">MY ACCOUNT</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="/members/logout">LOGOUT</a></div>
                 @else
+                <div class="wata"></div>
                 <div class="holder"><a href="/members/login">LOGIN</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="/members/register">REGISTER</a></div>

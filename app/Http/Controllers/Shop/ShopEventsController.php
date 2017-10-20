@@ -8,6 +8,7 @@ use Redirect;
 use View;
 use Validator;
 use Carbon\Carbon;
+use File;
 
 use App\Models\Tbl_post;
 use App\Globals\Post;
@@ -83,7 +84,8 @@ class ShopEventsController extends Shop
             }
             else
             {                
-                $return['status'] = 'error';
+                $return['status'] = 'error_status';
+                $return['call_function'] = 'success_reserve';
                 $return['status_message'] = $return_id;
             }
         }
@@ -94,7 +96,8 @@ class ShopEventsController extends Shop
             {
                 $message .= "<div>" . $error . "</div>";
             }
-            $return['status'] = 'error';
+            $return['status'] = 'error_status';
+            $return['call_function'] = 'success_reserve';
             $return['status_message'] = $message;
         }
 

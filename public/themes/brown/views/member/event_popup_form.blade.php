@@ -18,6 +18,11 @@
 			</div>
 		</div>
 		<div class="form-group clearfix">
+			<div class="error-message-content hidden">
+				
+			</div>
+		</div>
+		<div class="form-group clearfix">
 			<div class="col-md-4">
 				<input type="text" class="form-control primary-fill" placeholder="FAMILY NAME" name="reservee_lname" value="{{$customer_details->last_name or ''}}">
 			</div>
@@ -46,7 +51,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<div ><button class="reg-button" type="submit">SUBMIT</button> </div>
+		<div ><button class="reg-button reserved-submit" type="button">SUBMIT</button> </div>
 	</div>
 	<div class="mob-close" data-dismiss="modal">
 		<img src="/themes/{{ $shop_theme }}/img/mob-close.png">
@@ -62,6 +67,14 @@
 		padding-top: 0 !important;
 		border-radius: 6px;
 		overflow: hidden;
+	}
+	.events-popup .error-message-content
+	{
+		color: red;
+		text-align: center;
+		border: 1px solid #B5A195;
+		font-size: 13px;
+		font-weight: 400 !important;
 	}
 	.events-popup .top-head
 	{
@@ -156,6 +169,13 @@
 </style>
 
 <script type="text/javascript">
+	$('.reserved-submit').unbind('click');
+	$('.reserved-submit').bind('click', function(e)
+	{
+		$(e.currentTarget).css('opacity',0.3);
+		$(e.currentTarget).html('Reserving...');
+		$('.events-popup').submit();
+	});
 	function success_reserve(data)
 	{
 		if(data.status == 'success')
@@ -165,6 +185,13 @@
 		    {
 		    	location.reload();
 		    },2000);
+		}
+		if(data.status == 'error_status')
+		{
+			$('.reserved-submit').css('opacity',1);
+			$('.reserved-submit').html('SUBMIT');
+			$('.error-message-content').removeClass('hidden');
+			$('.error-message-content').html(data.status_message);
 		}
 	}
 </script>

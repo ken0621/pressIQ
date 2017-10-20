@@ -18,7 +18,7 @@ function global_function()
         add_event_global_popup();
         add_event_global_submit();
         add_event_global_onclose_popup();
-        add_event_overlay_fix();
+        // add_event_overlay_fix();
         select_current_warehouse();
         add_event_global_submit_for_page();
 

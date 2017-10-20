@@ -99,10 +99,10 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-4 text-right" for="email">Sales Person</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control input-sm">
+                                    <select class="form-control input-sm" name="transaction_sales_person">
                                         @if(count($_salesperson) > 0)
                                             @foreach($_salesperson as $sp)
-                                            <option>{{ucwords($sp->user_first_name.' '.$sp->user_last_name)}}</option>
+                                            <option value="{{$sp->user_id}}">{{ucwords($sp->user_first_name.' '.$sp->user_last_name)}}</option>
                                             @endforeach
                                         @else
                                         <option>No Sales Person Yet</option>

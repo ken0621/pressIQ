@@ -41,12 +41,6 @@ class PayrollBiometricsController
 {
 	public function save_data()
 	{
-		/*
-		$app_key = Request::input("appkey");
-		$app_secret = Request::input("appsecret");
-		$branch_id = Request::input("branchid");
-		*/
-
 		$app_key 		= Request::input("appkey");
 		$app_secret 	= Request::input("appsecret");
 		$branch_id 		= Request::input("branchid");
@@ -66,7 +60,7 @@ class PayrollBiometricsController
 			$return 	= "failed";
 		}
 		
-		echo $return /*json_encode($employee_record)*/;
+		echo $return;
 	}
 
 

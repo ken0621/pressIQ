@@ -58,7 +58,7 @@
                     @else
                     <div class="form-group">
                         <div class="col-md-6">
-                            <select name="membership_kit" class="form-control">
+                            <select name="item_id" class="form-control">
                                 <option value="">All Items</option>
                             @foreach($_items as $item)
                                 <option value="{{ $item->item_id }}">{{ $item->item_name }}</option>

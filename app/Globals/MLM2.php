@@ -321,6 +321,7 @@ class MLM2
 		$return["_points"]->binary 					= 0;
 		$return["_points"]->direct 					= 0;
 		$return["_points"]->advertisement_bonus 	= 0;
+		$return["_points"]->maintenance 			= 0;
 		$return["_point_plan"] = $_plan_points;
 
 		$return["slot_count"] = 0;

@@ -20,65 +20,55 @@
 	                        <!-- <div class="text-header2">Enroll now and become one of us!</div> -->
 	                    </div>
 	                    <div class="btn-container">
-	                        {{-- <button class="btn-buy-a-kit" type="button">Buy a Kit</button><br>
-	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br> --}}
-	                        <a href="#" id="btn-enter-a-code"><button onclick="action_load_link_to_modal('members/enter-code')" class="btn-enter-a-code">ENTER A CODE</button></a>
+	                        <button class="btn-buy-a-kit" type="button">Buy a Kit</button><br>
+	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
+	                        <a href="#" id="btn-enter-a-code"><button style="margin-top: 0;" onclick="action_load_link_to_modal('members/enter-code')" class="btn-enter-a-code">ENTER A CODE</button></a>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
 	    </div>
-	    <!-- BOTTOM DASHBOARD -->
-	    <!-- <div class="dashboard-bottom">
-	        <div class="text-header">Profile Information</div>
-	        <div class="row clearfix">
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic1 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Personal Information</div>
-	                        </div>
-	                        
-	                    </div>
-	                    <div class="personal-info-container">
-	                        <div><label>Name </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Email </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Birthday </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Contact </label><span>Lorem Ipsum Dolor</span></div>
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic2 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-shipping.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Default Shipping Address</div>
-	                        </div>
-	                    </div>
-	                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae similique nulla amet illum labore nostrum sapiente fugiat, pariatur ipsa distinctio.</p>
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic3 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-billing.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Default Billing Address</div>
-	                        </div>
-	                    </div>
-	                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos quibusdam nesciunt, dolor culpa architecto enim ratione error ipsum, animi sunt.</p>
-	                </div>
-	            </div>
-	        </div>
-	    </div> -->
+	    
+	    <style type="text/css">
+	    .unity-kit .kit-holder .name
+	    {
+	    	font-size: 14px;
+	    	font-weight: 700;
+	    	margin-bottom: 15px;
+	    }
+	    .unity-kit .kit-holder .btn
+	    {
+	    	width: 100%;
+	    }
+	    </style>
+		<!-- Modal -->
+		<div id="unity_kit" class="modal fade unity-kit" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Buy a Kit</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row clearfix">
+							@foreach($item_kit as $key => $kit)
+							<div class="col-md-3">
+								<div class="kit-holder">
+									<div class="name match-height">{{ $key }}</div>
+									<div class="btn-holder"><button type="button" class="btn btn-primary" onClick="location.href='/cartv2/buy_kit_mobile/{{ $kit }}'">BUY</button></div>
+								</div>
+							</div>
+							@endforeach
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 @else
 	<div class="dashboard">
@@ -239,52 +229,54 @@ $(document).ready(function()
 	$wallet = $(".chart-income").attr("wallet");
 	$payout = $(".chart-income").attr("payout");
 
-	var ctx = document.getElementById("income_summary").getContext('2d');
-
-	var myDoughnutChart = new Chart(ctx,
+	if (document.getElementById("income_summary") != null) 
 	{
-	    type: 'doughnut',
-	    data: {
-	        labels: ["Red", "Blue"],
-	        datasets: [{
-	            label: '# of Votes',
-	            data: [$payout, $wallet],
-	            backgroundColor: [
-	                'rgba(142, 94, 162, 1)',
-	                'rgba(62, 149, 205, 1)'
-	            ],
-	            borderColor: [
-	                'rgba(142, 94, 162, 1)',
-	                'rgba(62, 149, 205, 1)'
-	            ],
-	            borderWidth: 1
-	        }]
-	    },
-	    options: 
-	    {
-	      legend: 
-	      {
-	        responsive: true,
-	        display: false,
-	      },
-	      tooltips: 
-	      {
-	        callbacks: 
-	        {
-	          label: function(tooltipItems, data) 
-	          {
-	            var sum = data.datasets[0].data.reduce(add, 0);
-	            function add(a, b) {
-	              return a + b;
-	            }
+		var ctx = document.getElementById("income_summary").getContext('2d');
 
-	            return data.datasets[0].data[tooltipItems.index];
-	          },
-	        }
-	      }
-	    }
-	});
+		var myDoughnutChart = new Chart(ctx,
+		{
+		    type: 'doughnut',
+		    data: {
+		        labels: ["Red", "Blue"],
+		        datasets: [{
+		            label: '# of Votes',
+		            data: [$payout, $wallet],
+		            backgroundColor: [
+		                'rgba(142, 94, 162, 1)',
+		                'rgba(62, 149, 205, 1)'
+		            ],
+		            borderColor: [
+		                'rgba(142, 94, 162, 1)',
+		                'rgba(62, 149, 205, 1)'
+		            ],
+		            borderWidth: 1
+		        }]
+		    },
+		    options: 
+		    {
+		      legend: 
+		      {
+		        responsive: true,
+		        display: false,
+		      },
+		      tooltips: 
+		      {
+		        callbacks: 
+		        {
+		          label: function(tooltipItems, data) 
+		          {
+		            var sum = data.datasets[0].data.reduce(add, 0);
+		            function add(a, b) {
+		              return a + b;
+		            }
 
+		            return data.datasets[0].data[tooltipItems.index];
+		          },
+		        }
+		      }
+		    }
+		});
+	}
 });
 
 // And for a doughnut chart
@@ -304,7 +296,22 @@ $(document).ready(function()
 		$(".chosen_slot_id").val($(this).attr("place_slot_id"));
 		$("#slot-placement-modal").modal("show");
 	});
+
+	add_event_click_buy_kit();
 });
+
+function add_event_click_buy_kit()
+{
+	$(".btn-buy-a-kit").off("click");
+	$(".btn-buy-a-kit").on("click", function()
+	{
+		action_click_buy_kit();
+	});
+}
+function action_click_buy_kit()
+{
+	$("#unity_kit").modal();
+}
 
 </script>
 @endsection

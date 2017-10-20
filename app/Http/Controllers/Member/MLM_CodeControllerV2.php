@@ -229,6 +229,8 @@ class MLM_CodeControllerV2 extends Member
 
         Item::get_filter_type(5);
         $data["_item_kit"] = Item::get($this->user_info->shop_id);
+        Item::get_filter_type(1);
+        $data["_items"] = Item::get($this->user_info->shop_id);
         $data["_membership"] = MLM2::membership($this->user_info->shop_id);
 
         return view("member.mlm_code_v2.print_code_columns",$data);

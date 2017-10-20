@@ -74,7 +74,7 @@
 			</div>
 
 			<div class="col-md-6">
-				<div class="title">Reward Summary</div>
+				<div class="title">Cash Reward Summary</div>
 				<div class="sub-container">
 					<div class="chart-legend">
 						<div class="holder">
@@ -84,10 +84,6 @@
 						<div class="holder">
 							<div class="color"></div>
 							<div class="name"><span>Direct Referral</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Gift Certificate</span><span class="value">PHP 0.00</span></div>
 						</div>
 					</div>
 				</div>

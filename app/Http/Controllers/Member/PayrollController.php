@@ -5194,6 +5194,77 @@ class PayrollController extends Member
      {
           $file  = Request::file('file');
           $data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
+          $_shift = null;
+
+          $current_teacher = "";
+          $teacher_key = -1;
+          $subject_key = 0;
+
+          foreach ($data as  $value)
+          {
+               /* CHANGE ARRAY PER TEACHER */
+               if($current_teacher != $value->teacher_id)
+               {
+                    /* INITIALIZE DATA FOR EVERY TEACHER */
+                    $subject_key = 0;
+                    $teacher_key++;
+                    $current_teacher = $value->teacher_id;  
+                    $_shift[$teacher_key]["teacher_id"] = $value->teacher_id;
+                    $_d["monday"] = null;
+                    $_d["tuesday"] = null;
+                    $_d["wednesday"] = null;
+                    $_d["thursday"] = null;
+                    $_d["friday"] = null;
+                    $_d["saturday"] = null;
+                    $_shift[$teacher_key]["schedule"] = $_d;
+               }
+
+               /* GET DAYS */
+               $_day = Self::get_days_based_on_string_day($value->days);
+
+               foreach($_day as $day)
+               {
+                    $time["in"] = date("h:i A", strtotime($value->time_from));
+                    $time["out"] = date("h:i A", strtotime($value->time_to));
+                    $_shift[$teacher_key]["schedule"][$day][] = $time;
+               }
+          }
+
+          /* SORT TIME PER DAY */
+          
+
+
+
+
+
+          dd($_shift);
+     }
+     public function get_days_based_on_string_day($daystring)
+     {
+          $return = null;
+
+          $_day["thursday"] = "TH";
+          $_day["monday"] = "M";
+          $_day["tuesday"] = "T";
+          $_day["wednesday"] = "W";
+          $_day["friday"] = "F";
+          $_day["saturday"] = "S";
+
+          foreach($_day as $key => $day)
+          {
+               if (strpos($daystring, $day) !== false)
+               {
+                    $return[] = $key;
+                    $daystring = str_replace($day, "", $daystring);
+               }
+          } 
+
+          return $return;
+     }
+     public function import_modal_shift_global_backup()
+     {
+          $file  = Request::file('file');
+          $data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
           $key = 0;
           $tc = 0;
           $count=0;

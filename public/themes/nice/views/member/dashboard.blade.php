@@ -132,6 +132,9 @@
 				</div>
 			</div>
 
+
+
+
 			<div class="col-md-6">
 				<div class="title">Reward Summary</div>
 				<div class="sub-container">
@@ -156,6 +159,18 @@
 						<button class="btn btn-default" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 					</div>
 				</div>
+
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
+						</div>
+					</div>
+				</div>
+
+
 			</div>
 		</div>
 
@@ -220,7 +235,7 @@
 								</div>
 								@endforeach
 							@else
-								<div class="text-center" style="padding: 20px">You don't have any reward yet.</div>
+								<div class="text-center" style="padding: 20px">You don't have any pyet.</div>
 							@endif
 						</div>
 					</div>

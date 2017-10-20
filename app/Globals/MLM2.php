@@ -318,6 +318,9 @@ class MLM2
 		$return["_points"]->rank_gpv 				= 0;
 		$return["_points"]->stairstep_pv 			= 0;
 		$return["_points"]->stairstep_gpv 			= 0;
+		$return["_points"]->binary 					= 0;
+		$return["_points"]->direct 					= 0;
+		$return["_points"]->advertisement_bonus 	= 0;
 		$return["_point_plan"] = $_plan_points;
 
 		$return["slot_count"] = 0;

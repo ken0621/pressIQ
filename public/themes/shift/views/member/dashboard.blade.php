@@ -148,20 +148,34 @@
 
 				</div>
 
-				<div class="title">Reward Points</div>
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
-					@if(count($_point_plan) > 0)
-					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
-						@foreach($_point_plan as $plan)
+					<div class="chart-legend" style="max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
 						</div>
-						@endforeach
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Advertisement GC</span><span class="value">{{ $points->display_advertisement_bonus}}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Rank PV</span><span class="value">{{ $points->display_rank_pv }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Rank Group PV</span><span class="value">{{ $points->display_rank_gpv }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Stair Step PV</span><span class="value">{{ $points->display_stairstep_pv }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Stair Step Group PV</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
+						</div>
 					</div>
-					@else
-						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
-					@endif
 				</div>
 			</div>
 		</div>

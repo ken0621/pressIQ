@@ -54,11 +54,11 @@ class PayrollBiometricsController
 		$check_access 	= Tbl_shop::where('shop_api_key',$app_key)->first();
 		
 		$return = null;
-		
+		$employee_record = null;
 		if ($check_access->shop_api_key) 
 		{
 			$shop_id 	= $check_access->shop_id;
-			$this->import_data_from_biometric($_time_in_out, $shop_id);
+			/*$employee_record =  */$this->import_data_from_biometric($_time_in_out, $shop_id, $branch_id);
 			$return 	= "success";
 		}
 		else
@@ -66,11 +66,11 @@ class PayrollBiometricsController
 			$return 	= "failed";
 		}
 		
-		echo $return;
+		echo $return /*json_encode($employee_record)*/;
 	}
 
 
-	public function import_data_from_biometric($_time_in_out, $shop_id)
+	public function import_data_from_biometric($_time_in_out, $shop_id, $branch_id)
 	{	
 		$employee_in_out = null;
 		$insert = null;
@@ -101,6 +101,7 @@ class PayrollBiometricsController
 			}
 		}
 
+		
 		foreach ($employee_in_out as $key_date => $time_record) 
 		{
 			foreach ($time_record as $key => $value) 
@@ -173,7 +174,8 @@ class PayrollBiometricsController
 			$time = date("H:i:s", strtotime($value->DateTimeRecord));
 
 
-			if (!isset($employee_in_out[$date][$value->EmployeeID])) {
+			if (!isset($employee_in_out[$date][$value->EmployeeID])) 
+			{
 				$employee_in_out[$date][$value->EmployeeID]['time_in'] = $time;
 				$employee_in_out[$date][$value->EmployeeID]['time_out'] = $time;
 			}

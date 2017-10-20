@@ -4,10 +4,10 @@
 <!-- Media Slider -->
     <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/top-image.png')">
         <div class="container">
-            <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption.png"></div>
+            <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption2.png"></div>
             <div class="caption-container animated fadeInDown">
-                <h1>Your road to financial wellness</h1>
-                <h1>Lifestyle at it’s finest!</h1>
+                <p class="head-text">Your road to financial wellness</p>
+                <p class="head-text">Lifestyle at it’s finest!</p>
             </div>
         </div>
     </div>
@@ -122,10 +122,12 @@
                 </div>
             </div>
             <div class="button-container">
-                <button class="legalities-button wow fadeInUp">
-                    <img class="button-img" src="/themes/{{ $shop_theme }}/img/legalities-icon-button.png">
-                    <p class="button-name">LEGALITIES</p>
-                </button>
+                <a href="/themes/{{ $shop_theme }}/img/legalities-file.jpg" class="lsb-preview">
+                    <button class="legalities-button wow fadeInUp">
+                        <img class="button-img" src="/themes/{{ $shop_theme }}/img/legalities-icon-button.png">
+                        <p class="button-name">LEGALITIES</p>
+                    </button>
+                </a>
             </div>
         </div>
     </div>
@@ -244,7 +246,6 @@
                         </div>
                         <div class="benefits">
                             <div class="wow animated fadeInRight header" data-wow-delay=".5s">Benefits: </div>
-                            
                             <ul class="wow animated fadeInRight" data-wow-delay=".6s">
                                 <li>Increases skin stem cell vitality and longevity</li>
                                 <li>Helps treat skin problems like hyperpigmentation, acne or pimple scars, uneven skin tone</li>
@@ -254,7 +255,6 @@
                                 <li>Maintains the health and elasticity of the skin</li>
                                 <li>Provides freshness and gives your skin soft and clean feeling</li>
                             </ul>
-
                         </div>
                     </div>
                 </div>
@@ -267,9 +267,22 @@
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="details-container">
-                        <div class="wow animated fadeInLeft header">Lorem Ipsum <span>Dolor</span></div>
-                        <div class="wow animated fadeInLeft details" data-wow-delay=".2s">
-                            <p><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit ex fugiat, porro! Harum odit obcaecati illum quos rem perferendis consectetur debitis. Omnis beatae ab sed aliquid vel dolores impedit eius.</span><span>Ab harum, mollitia expedita iste obcaecati. Quisquam eaque quia rem obcaecati, at eos voluptates neque eius libero eligendi. Amet, libero veniam? Nulla modi porro, libero. In corporis facilis, ea possimus?</span></p>
+                        <div class="wow animated fadeInLeft header">Stem Cell Therapy-&nbsp;<span>The Anti-Aging and Rejuvenation Therapy</span></div>
+                        <div class="benefits">
+                            <div class="wow animated fadeInRight header" data-wow-delay=".5s">Benefits: </div>
+                            <ul class="wow animated fadeInRight" data-wow-delay=".6s">
+                                <li>Solves skin problems and eliminate wrinkles, acne, eye bags, moisturize dry skin, stimulate skin cell renewal, promote blood circulation.</li>
+                                <li>Helps to improve the aging problem, high blood pressure, diabetes, stomach ulcers, migraine headaches and arthritis</li>
+                                <li>Invigorates the body, improves sexual desire and prevents impotence</li>
+                                <li>Helps to improve lack of vitality, fatigue and poor physical symptoms</li>
+                                <li>Premature aging and wear of the organs, such as brain, heart, lungs, kidneys and digestive system.</li>
+                                <li>Reduces the effect of anemia</li>
+                                <li>After surgery to promote wound healing and reduce recovery time</li>
+                                <li>Restores the normal function for hormone secretion</li>
+                                <li>Regulating the autonomic nervous system, enhance the immune system</li>
+                                <li>Stimulate he muscles, skin, collagen, bone and cartilage and nerve tissue for normal growth regeneration and repair</li>
+                                <li>Recuperation from labour, eases menopause syndrome and regulates menstruation</li>
+                            </ul>
                         </div>
                     </div>
                 </div>

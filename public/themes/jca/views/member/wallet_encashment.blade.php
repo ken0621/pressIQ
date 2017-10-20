@@ -45,7 +45,7 @@
 		  				<td class="text-center">
 		  					<div>{{ $encashment->slot_no }}</div>
 		  				</td>
-						<td class="text-center">{!! $encashment->log !!}</td>
+						<td class="text-center">{!! $encashment->wallet_log_plan !!}</td>
 						<td class="text-center"><b>{{ $encashment->wallet_log_payout_status }}</b></td>
 						<td class="text-right"><b>{!! $encashment->display_wallet_log_request !!}</b></td>
 						<td class="text-right">{!! $encashment->display_wallet_log_tax !!}</td>

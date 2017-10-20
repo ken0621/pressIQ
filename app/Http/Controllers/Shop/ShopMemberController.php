@@ -116,6 +116,7 @@ class ShopMemberController extends Shop
         }
         
         $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
+        $data["item_kit"]    = Item::get_all_assembled_kit($this->shop_info->shop_id);
 
         return Self::load_view_for_members('member.dashboard', $data);
     }
@@ -174,7 +175,8 @@ class ShopMemberController extends Shop
             }
             else
             {                
-                $return['status'] = 'error';
+                $return['status'] = 'error_status';
+                $return['call_function'] = 'success_reserve';
                 $return['status_message'] = $return_id;
             }
         }
@@ -185,7 +187,8 @@ class ShopMemberController extends Shop
             {
                 $message .= "<div>" . $error . "</div>";
             }
-            $return['status'] = 'error';
+            $return['status'] = 'error_status';
+            $return['call_function'] = 'success_reserve';
             $return['status_message'] = $message;
         }
 

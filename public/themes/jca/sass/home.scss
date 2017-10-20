@@ -506,7 +506,24 @@ body{
 }
 
 .wrapper-5
-{	
+{
+
+	.mobile-view
+	{
+		display: none;
+		@media screen and (max-width: 991px)
+		{
+			display: block !important;
+		}
+	}
+	.mobile-view-2
+	{
+		@media screen and (max-width: 991px)
+		{
+			display: none !important;
+		}
+	}
+
 	.img-container
 	{
 		padding: 50px 0px 50px 0px;

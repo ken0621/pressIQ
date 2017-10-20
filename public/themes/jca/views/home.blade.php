@@ -49,7 +49,7 @@
             <div class="title-container">
                 <div class="wow fadeInDown title-container">
                     <span>Why</span>
-                    <span>JCA International</span>
+                    <span>JCA Wellness</span>
                 </div>
             </div>
             <div class="content-container row clearfix">
@@ -94,19 +94,19 @@
                 </div>
             </div>
             <div class="jca-title-container">
-                <p class="main-title wow fadeInDown" data-wow-delay=".2s"><font class="shade-green">Benefits In</font> JCA International</p>
-                <p class="sub-title wow fadeInDown" data-wow-delay=".4s"><font class="shade-black">BENEFITS</font> of becoming a Member of JCA Wellness International </p>
+                <p class="main-title wow fadeInDown" data-wow-delay=".2s"><font class="shade-green">Benefits In</font> JCA Wellness</p>
+                <p class="sub-title wow fadeInDown" data-wow-delay=".4s"><font class="shade-black">BENEFITS</font> of becoming a Member of JCA Wellness</p>
             </div>
             <div class="bulleted-list-container">
                 <div class="content-container row clearfix">
                     <div class="col-md-4">
                         <li class="wow fadeInLeft bulleted-list" data-wow-delay=".2s">
-                            <p class="list-content">Membership ID which entitles the distributor up to 36 % Lifetime Discount on all JCA Wellness Products upon repeat purchase</p>
+                            <p class="list-content">Membership ID which entitles the distributor up to 40% Lifetime Discount on all JCA Wellness Products upon repeat purchase</p>
                         </li>
                     </div>
                     <div class="col-md-4">
                         <li class="wow fadeInLeft bulleted-list" data-wow-delay=".3s">
-                            <p class="list-content">Package worth almost 9,000 pesos for a Standard Package, 27,000 pesos for a Premium Package and 63,000 pesos for a VIP Package</p>
+                            <p class="list-content">Opportunity to earn 15,000 a day, 90,000 a week, 360,000 a month for Override Sales Commission</p>
                         </li>
                     </div>
                     <div class="col-md-4">
@@ -227,6 +227,41 @@
 
     <div class="wrapper-5">
         <div class="container">
+            
+            <div class="row clearfix">
+                <div class="col-md-6 mobile-view">
+                    <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
+                        <img src="/themes/{{ $shop_theme }}/img/serum.png">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="details-container">
+                        <div class="wow animated fadeInRight header" data-wow-delay=".3s">Swiss Apple&nbsp;<span>Stem Cell Serum</span></div>
+                        <div class="wow animated fadeInRight sub-header" data-wow-delay=".4s">
+                            <span>Contents:</span>&nbsp;5% pure Swiss Apple Stem Cell Serum
+                        </div>
+                        <div class="benefits">
+                            <div class="wow animated fadeInRight header" data-wow-delay=".5s">Benefits: </div>
+                            <ul class="wow animated fadeInRight" data-wow-delay=".6s">
+                                <li>It enhances UV protection and helps in fighting skin radicals that causes skin damage.</li>
+                                <li>Fights all unwanted signs of aging.</li>
+                                <li>Reduces wrinkles and fine-lines.</li>
+                                <li>Reveals younger and glowing, youthful skin.</li>
+                                <li>Improves skin firmness.</li>
+                                <li>Gives your skin soft and better feeling after every use.</li>
+                                <li>The kind of serum without the sticky feel PLUS it can be absorbed by the skin easily.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mobile-view-2">
+                    <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
+                        <img src="/themes/{{ $shop_theme }}/img/serum.png">
+                    </div>
+                </div>
+            </div>
+
+
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
@@ -240,7 +275,7 @@
                             <span>Contents:</span> Swiss Apple Stem Cell, Glutathione and Collagen
                         </div>
                         <div class="benefits">
-                            <div class="wow animated fadeInRight header" data-wow-delay=".5s">Benefits: </div>
+                            <div class="wow animated fadeInRight header" data-wow-delay=".5s" style="font-size: 13px;">Benefits: </div>
                             <ul class="wow animated fadeInRight" data-wow-delay=".6s">
                                 <li>Increases skin stem cell vitality and longevity</li>
                                 <li>Helps treat skin problems like hyperpigmentation, acne or pimple scars, uneven skin tone</li>

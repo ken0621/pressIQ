@@ -2,6 +2,9 @@
 @section('content')
 <link rel="stylesheet" type="text/css" href="/email_assets/email_css/create_email.css">
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <link rel="stylesheet" type="text/css" href="/email_assets/email_css/style.css">
+  <link rel="stylesheet" type="text/css" href="/email_assets/email_css/prism.css">
+   <link rel="stylesheet" type="text/css" href="/email_assets/email_css/chosen.css">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -28,12 +31,12 @@
     <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
                                       
   <form name="myform" method="GET" action="/member/page/press_release_email/search_recipient_press_release" id="#pass_data">
-    <h4 style="margin-left: 10px;">Search By:</h4>
+    <h4 style="margin-left: 10px;margin-bottom: 20px;">Search By:</h4>
 
   <div class="form-group row">
   <label  class="label-name">Country</label>
   <br>
-  <select class="selectpicker" id="country" id="filter">
+  <select class="form-control input col-md-6" id="country" id="filter">
    <option value="1">Select All</option>
    @foreach($_recipient_country as $recipient_country)
     <option value="{{$recipient_country->country}}">{{$recipient_country->country}}</option>
@@ -41,20 +44,10 @@
   </select>
   </div>
   <div class="form-group row">
-    <label for="inputPassword" class="label-name">Company Name</label>
-    <div class="">
-      <input type="text" class="form-control input col-md-6" id="company_name" name="name" placeholder="Company Name">
-    </div>
-  </div>
-  <div class="form-group row">
     <label for="inputPassword" class="label-name ">Position</label>
     <div class="">
-<!--         <select class="form-control input col-md-6"  id="position" name="position" placeholder="Position">
-
-          <option >1</option>
-              <option >1</option>
-                  <option >1</option>
-        </select> -->
+        <select class="form-control input col-md-6"  id="position" name="position" placeholder="Position">
+        </select>
     </div>
   </div>
   <div class="form-group row">
@@ -65,8 +58,15 @@
   </div>
   <div class="form-group row">
     <label  class="label-name">Industry Type</label>
-    <div class="">
-      <input type="text" class="form-control input col-md-6" id="industry_type" placeholder="industry_type" name="industry_type">
+    <div class="multi">
+
+          <select data-placeholder="Choose Industry" class="chosen-select" id="industry_type" name="industry_type" multiple tabindex="4">
+            <option value=""></option>
+            <option value="United States">United States</option>
+            <option value="United Kingdom">United Kingdom</option>
+            <option value="Afghanistan">Afghanistan</option>
+            <option value="Aland Islands">Aland Islands</option>
+          </select>
     </div>
   </div>
   <div class="form-group chosen_recipient">
@@ -91,11 +91,11 @@
             <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
             <div class="well box" style="max-height: ;: 300px;overflow: auto;">
               <button type="button" class="check-all btn btn-primary" onClick="selectall(this)">Check All</button>
-                <ul class="list-group check_list">
+                <ul class="list-group check_list" id="wa">
                   @foreach($_recipient_list as $recipient_list)
-                  <li  class="list-group-item tocheck" name="foo" value="{{$recipient_list->recipient_id}}">
+                  <li class="list-group-item tocheck" name="foo" id="em" value="{{$recipient_list->recipient_id}}">
                     <div class="checkbox">
-                    <input type = "checkbox" class="tocheck">
+                    <input type = "checkbox" id="to_check" class="to_check">
                     {{$recipient_list->company_name}},{{$recipient_list->name}},{{$recipient_list->position}},{{$recipient_list->industry_type}}
                   </div>
                 </li>
@@ -126,14 +126,64 @@
 </script> -->
 <script>
     $('.con').click(function(event) {
-    var recipient_value = $('.input_chose_recipient').val();
-    var recipient_link = "/member/page/press_release_email/view_send_email_press_release?sent_email="+recipient_value;
 
-    window.location.href = recipient_link;
+            // if(document.getElementById("to_check").checked == true){
+            //             var myArr = [];
+            //              $('#wa li').each(function (i) {
 
-    
+            //                 var texts = $(this).text();
+            //                 // var array = texts.split(",");
+            //                 myArr.push($(this).attr('value'));
+
+            //             })
+
+                            var recipient_value =  $('.input_chose_recipient').val(string);;
+                            var recipient_link = "/member/page/press_release_email/view_send_email_press_release?sent_email="+recipient_value;
+
+                            window.location.href = recipient_link;
+              // }
+              // else{
+              //   alert("Please select email_recipient");
+              // }
+
+
+
     });
 
+
+  // //get position 
+  //   $(document).ready(function() {
+  //       $('#country').on('change', function() {
+  //           var country = this.value;
+  //           if(country){
+  //               $.ajax({
+  //                   url: '/member/page/press_release_email/choose_recipient_press_release/ajax',
+  //                   type: "GET",
+  //                   data:{country:country},
+  //                   dataType: "json",
+  //                   success:function(data) {
+                       
+
+  //                       $('select[name="position"]').empty();
+  //                       $.each(data, function(key, value) {
+  //                              $('select[name="position"]').append(
+  //                                   $('<option>', { value : value.position, text : value.position })
+  //                               );
+                                                            
+  //                       });
+
+  //                   }
+  //               });
+  //           }else{
+  
+  //           }
+  //       });
+  //   });
+
+    // $('#country').click(function(event) {
+    // var wa = $(".chosen-select").val();
+    // alert(wa);
+    // });
 </script>
 
 <!-- <script>

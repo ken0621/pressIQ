@@ -68,6 +68,12 @@ class Press_Release_Controller extends Member
      
     }
 
+    public function myformAjax(Request $request)
+    {
+
+        $position =Tbl_press_release_recipient::select('position')->where('country',Request::input('country'))->distinct()->get();
+        return json_encode($position);
+    }
 
     public function save_email()
     {

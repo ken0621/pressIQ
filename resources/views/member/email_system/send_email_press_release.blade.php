@@ -28,13 +28,18 @@
   </header>
 </head>
 <div class="box-body">
+
+<!--   <form method="POST" action="'/member/page/press_release_email/send_press_release/getemail" >
+      <input type="text" id="ids" value="{{$sent_email}}">
+  </form> -->
+
   <button class="input_chose_email btn btn-primary"> Email List </button>
   <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
   <form  name="myform" method ="POST" action = "/member/page/press_release_email/send_press_release" class="form-horizontal" id="get_data_tinymce1">
     {{csrf_field()}}
       <div class="subject">
       <div class="col-lg-6">
-        <input type="text" id="input_subject" placeholder="To" class="form-control email-to-container subject_email" name="to" value="{{$sent_email}}">
+        <input type="text" id="input_subject" placeholder="To" class="form-control email-to-container subject_email" name="to" value="">
       </div>
     </div>
     <br>

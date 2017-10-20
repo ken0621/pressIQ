@@ -1,5 +1,5 @@
 $(function () {
-    $('.list-group.checked-list-box .list-group-item').each(function () {
+    $('.list-group .list-group-item .tocheck').each(function () {
         
         // Settings
         var $widget = $(this),
@@ -78,8 +78,10 @@ $(function () {
 
 });
 
-    function check(){
+   
     $(document).ready(function(){
+    $('#check').click(function(event) {
+    });
     $checks = $(":checkbox");
     $checks.on('change', function() {
         var string = $checks.filter(":checked").map(function(i,v)
@@ -87,17 +89,57 @@ $(function () {
             var data_container = this.closest(".list-group-item");
             return  $(data_container).text();
         }).get();
-        
-        console.log(string);
         $('.input_chose_recipient').val(string);
     }).trigger('change');
 });
-}
+
   
+
+
     function selectall()
     {
-    $('.tocheck').prop('checked','checked')
+        // if(document.getElementById("to_check").checked == false){
+            $('.to_check').prop('checked','checked');
+                $checks = $(":checkbox");
+                $checks.on('change', function() {
+                    var string = $checks.filter(":checked").map(function(i,v)
+                    {
+                        var data_container = this.closest(".list-group-item");
+                        return  $(data_container).text();
+                    }).get();
+                    $('.input_chose_recipient').val(string);
+                    }).trigger('change');
+                
+        // }
+        // else{
+        //      $('.to_check').prop('checked', false);
+        // }
+
     }
+
+
+        //    var myArr = [];
+        // $('#wa li').each(function (i) {
+
+        //   myArr.push($(this).text());
+        // });
+        
+        // alert(myArr);
+
+
+   /* function click_checkbox()
+    {
+         $checks = $(":checkbox");
+    $checks.on('change', function() {
+        var string = $checks.filter(":checked").map(function(i,v)
+        {
+            var data_container = this.closest(".list-group-item");
+            return  $(data_container).text();
+        }).get();
+        $('.input_chose_recipient').val(string);
+    }).trigger('change');
+}           */
+    
 
   /*function selectall(source) {
   checkboxes = document.getElementsByName('foo');
@@ -118,4 +160,3 @@ $(function () {
     $( '.recipient_container2 input[type="checkbox"]' ).prop('checked', this.checked)
   })
 */
-

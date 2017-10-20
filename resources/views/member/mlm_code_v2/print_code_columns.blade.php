@@ -55,6 +55,17 @@
                             </select>
                         </div>
                     </div>
+                    @else
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <select name="item_id" class="form-control">
+                                <option value="">All Items</option>
+                            @foreach($_items as $item)
+                                <option value="{{ $item->item_id }}">{{ $item->item_name }}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
                     @endif
                 </div>
             </div>

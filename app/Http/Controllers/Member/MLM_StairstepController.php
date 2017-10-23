@@ -10,6 +10,8 @@ use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_shop;
+use App\Models\Tbl_flushed_wallet;
+use App\Models\Tbl_mlm_plan_setting;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Mlm_complan_manager;
 use Crypt;
@@ -60,7 +62,8 @@ class MLM_StairstepController extends Member
     								  	->leftjoin("tbl_mlm_stairstep_settings","tbl_mlm_stairstep_settings.stairstep_id","=","tbl_mlm_slot.stairstep_rank")
     								  	->leftJoin("tbl_mlm_slot_points_log","tbl_mlm_slot_points_log.points_log_slot","=","tbl_mlm_slot.slot_id")
     								  	->select("*",DB::raw("SUM( ( CASE WHEN points_log_type = 'SGPV' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS stairstep_points")
-    								  				,DB::raw("SUM( ( CASE WHEN points_log_type = 'SPV' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS personal_stairstep"))
+    								  				,DB::raw("SUM( ( CASE WHEN points_log_type = 'SPV' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS personal_stairstep")
+                                                    ,DB::raw("SUM( ( CASE WHEN points_log_type = 'SRB' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS stairstep_rebates_bonus"))
     								  	->groupBy("slot_id")
 								  	  	->get();
     								  	// ->where("points_log_date_claimed",">=",Carbon::parse($start)->format("Y-m-d 00:00:00"))
@@ -78,9 +81,10 @@ class MLM_StairstepController extends Member
 
     public function distribution_submit()
     {
-    	$start  	= Carbon::parse(Request::input("start_date"))->format("Y-m-d 00:00:00");
-    	$end    	= Carbon::parse(Request::input("end_date"))->format("Y-m-d 23:59:59");
-    	$shop_id	= $this->getShopId();
+    	$start  	      = Carbon::parse(Request::input("start_date"))->format("Y-m-d 00:00:00");
+    	$end    	      = Carbon::parse(Request::input("end_date"))->format("Y-m-d 23:59:59");
+    	$shop_id	      = $this->getShopId();
+        $dynamic_settings = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->stairstep_dynamic_compression; 
 
     	if($start && $end)
     	{
@@ -159,26 +163,37 @@ class MLM_StairstepController extends Member
 		}
 		else if($data["status"] == "Success")
 		{
+            $dynamic_compression = null;
+            $dynamic_slot        = null;
+            $dynamic_ctr         = 0;
+
 			foreach($slot_lists as $list)
 			{
+                $total_dynamic = 0;
 				$sgpv =  Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
 						   					    ->where('points_log_date_claimed',">=",$start)
 						   					    ->where('points_log_date_claimed',"<=",$end)
-						   					    ->where("points_log_complan","STAIRSTEP")
 						   					    ->where("points_log_type","SGPV")
 						   					    ->where("points_log_converted","0")
 						   					    ->sum("points_log_points");		
 
-		    	$spv  =  Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
+                $spv  =  Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
+                                                ->where('points_log_date_claimed',">=",$start)
+                                                ->where('points_log_date_claimed',"<=",$end)
+                                                ->where("points_log_type","SPV")
+                                                ->where("points_log_converted","0")
+                                                ->sum("points_log_points");
+
+		    	$srb  =  Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
 						   					    ->where('points_log_date_claimed',">=",$start)
 						   					    ->where('points_log_date_claimed',"<=",$end)
-						   					    ->where("points_log_complan","STAIRSTEP")
-						   					    ->where("points_log_type","SPV")
+						   					    ->where("points_log_type","SRB")
 						   					    ->where("points_log_converted","0")
 						   					    ->sum("points_log_points");
 
 				$settings         = Tbl_mlm_stairstep_settings::where("stairstep_id",$list->stairstep_rank)->first();
-				$give_wallet      = 0;
+                $give_wallet      = 0;
+				$give_srb         = 0;
 				if($settings)
 				{
 					if($settings->commission_multiplier != 0)
@@ -186,21 +201,62 @@ class MLM_StairstepController extends Member
 						$maintenance 	  = $settings->stairstep_pv_maintenance;
 						if($spv >= $maintenance)
 						{
-							$give_wallet = $settings->commission_multiplier * $sgpv;
-							if($give_wallet != 0)
+                            if($dynamic_settings == 1)
+                            {
+                                if($dynamic_ctr != 0)
+                                {
+                                    foreach($dynamic_compression as $key => $compress)
+                                    {
+                                        $wallet_log_details = "Your slot ".$list->slot_no." earned ".$dynamic_compression[$key]." from Dynamic Compression";                     
+                                        Mlm_slot_log::slot($list->slot_id, $dynamic_slot[$key], $wallet_log_details, $dynamic_compression[$key], "DYNAMIC_COMPRESSION", "released",Carbon::now()); 
+                                        unset($dynamic_compression[$key]);
+                                        unset($dynamic_slot[$key]);
+                                        $total_dynamic = $total_dynamic + $dynamic_compression;
+                                        $dynamic_ctr--;
+                                    }
+                                }
+                            }
+
+                            $give_wallet = $settings->commission_multiplier * $sgpv;
+                            if($give_wallet != 0)
+                            {
+                                $wallet_log_details = "Your slot ".$list->slot_no." earned ".$give_wallet." from Stairstep Bonus";                     
+                                Mlm_slot_log::slot($list->slot_id, $list->slot_id, $wallet_log_details, $give_wallet, "STAIRSTEP", "released",Carbon::now());                      
+                            }							
+
+                            $give_srb = $srb;
+							if($give_srb != 0)
 							{
-		   						$wallet_log_details = "Your slot ".$list->slot_no." earned ".$give_wallet." from Stairstep Bonus";    				   
-		   						Mlm_slot_log::slot($list->slot_id, $list->slot_id, $wallet_log_details, $give_wallet, "STAIRSTEP", "released",Carbon::now());   				   
+		   						$wallet_log_details = "Your slot ".$list->slot_no." earned ".$give_srb." from Rebates Bonus";    				   
+		   						Mlm_slot_log::slot($list->slot_id, $list->slot_id, $wallet_log_details, $give_srb, "REBATES_BONUS", "released",Carbon::now());   				   
 							}
 						}
+                        else
+                        {
+                            if($dynamic_settings == 1)
+                            {
+                                $give_wallet = $settings->commission_multiplier * $sgpv;
+                                if($give_wallet != 0)
+                                {
+                                    $dynamic_compression[$dynamic_ctr] = $give_wallet;
+                                    $dynamic_slot[$dynamic_ctr]        = $list->slot_id;
+                                    $dynamic_ctr++;
+                                }
+                            }
+                        }
 					}
 				}	
 
 				$update_log["points_log_converted"] = 1; 
-		    	Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
+                Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
+                                           ->whereBetween('points_log_date_claimed', array($start, $end))
+                                           ->where("points_log_type","SGPV")
+                                           ->where("points_log_converted","0")
+                                           ->update($update_log);		
+
+                Tbl_mlm_slot_points_log::where("points_log_slot",$list->slot_id)
 					    				   ->whereBetween('points_log_date_claimed', array($start, $end))
-					    				   ->where("points_log_complan","STAIRSTEP")
-					    				   ->where("points_log_type","SGPV")
+					    				   ->where("points_log_type","SRB")
 					    				   ->where("points_log_converted","0")
 					    				   ->update($update_log);
 
@@ -210,7 +266,7 @@ class MLM_StairstepController extends Member
 				$insert_distribute_slot["processed_personal_pv"]    = $spv;
 				$insert_distribute_slot["processed_required_pv"]    = $settings ? $settings->stairstep_pv_maintenance : 0;
 				$insert_distribute_slot["processed_multiplier"]     = $settings ? $settings->commission_multiplier : 0;
-				$insert_distribute_slot["processed_earned"]  	    = $give_wallet ? $give_wallet : 0;
+				$insert_distribute_slot["processed_earned"]  	    = $give_wallet ? $give_wallet + $total_dynamic : 0 + $total_dynamic;
 				$insert_distribute_slot["processed_status"]  	    = 1;
 
 
@@ -220,6 +276,20 @@ class MLM_StairstepController extends Member
         	$update_distribute["complete"]     = 1;
 			Tbl_stairstep_distribute::where("stairstep_distribute_id",$distribute_id)->update($update_distribute);
 
+
+            if($dynamic_ctr != 0)
+            {
+                foreach($dynamic_compression as $key => $compress)
+                {
+                    $insert_flushed["flushed_amount"]       = $dynamic_compression[$key];
+                    $insert_flushed["flushed_by"]           = 0;
+                    $insert_flushed["shop_id"]              = $shop_id;
+                    $insert_flushed["flushed_date_created"] = Carbon::now();
+                    $insert_flushed["flushed_by_slot"]      = $dynamic_slot[$key];
+                    $insert_flushed["complan"]              = "DYNAMIC_COMPRESSION";
+                    Tbl_flushed_wallet::insert($insert_flushed);
+                }
+            }
 
 			return Redirect::to("/member/mlm/stairstep/distribution")->with('Success','Distribution success');
 		}  	

@@ -15,7 +15,7 @@ class UpdateTblCustomer91817 extends Migration
     {
         Schema::table('tbl_customer', function (Blueprint $table)
         {
-            $table->string("downline_rule")->default("manual");
+            $table->string("downline_rule")->default("auto");
             $table->string("autoplacement_rule")->default("autofill");
         });
     }

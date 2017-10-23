@@ -19,32 +19,36 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label for="basic-input">Tax (%)</label>
-                            <input type="text" class="form-control" name="tax" value="10">
+                            <input type="text" class="form-control" name="tax" value="{{ isset($settings->enchasment_settings_tax) ? $settings->enchasment_settings_tax : 0 }}">
                         </div>
                         <div class="col-md-6">
                             <label for="basic-input">Service Charge (PHP)</label>
-                            <input type="text" class="form-control" name="service-charge" value="100">
+                            <input type="text" class="form-control" name="service-charge" value="{{ isset($settings->enchasment_settings_p_fee) ? $settings->enchasment_settings_p_fee : 0 }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
                             <label for="basic-input">Other Charge (PHP)</label>
-                            <input type="text" class="form-control" name="other-charge" value="0">
+                            <input type="text" class="form-control" name="other-charge" value="{{ isset($settings->encashment_settings_o_fee) ? $settings->encashment_settings_o_fee : 0 }}">
                         </div>
                         <div class="col-md-6">
                             <label for="basic-input">Minimum Payout (PHP)</label>
-                            <input type="text" class="form-control" name="minimum" value="1000">
+                            <input type="text" class="form-control" name="minimum" value="{{ isset($settings->enchasment_settings_minimum) ? $settings->enchasment_settings_minimum : 0 }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
                             <label for="basic-input">Cutoff Date</label>
-                            <input type="text" class="form-control" name="cutoff-date" value="{{ date('m/d/Y') }}">
+                            <input type="text" class="form-control datepicker" name="cutoff-date" value="{{ date('m/d/Y') }}">
                         </div>
                         <div class="col-md-6">
                             <label for="basic-input">Method</label>
                             <select class="form-control" name="method">
-                                <option value="all">All Method</option>
+                                <option value="all">Don't Filter Method</option>
+                                <option value="unset">Unset Payout Method</option>
+                                <option value="eon">Eon Card</option>
+                                <option value="bank">Bank</option>
+                                <option value="bank">Cheque</option>
                             </select>
                         </div>
                     </div>
@@ -57,3 +61,7 @@
         <button type="submit" class="btn btn-primary btn-custom-primary"  type="button"><i class="fa fa-check"></i> Process Payout</button>
     </div>
 </form>
+
+<script type="text/javascript">
+    $(".datepicker").datepicker();
+</script>

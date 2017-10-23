@@ -244,7 +244,7 @@ body
 				}
 				span
 				{
-					color: #693d28;
+					color: #006CC5;
 				}
 			}
 			.choice
@@ -259,6 +259,13 @@ body
 						display: block;
 					}
 				}
+
+				.btn
+				{
+					background-color: #006CC5;
+					color: #fff;
+				}
+
 				.or
 				{
 					color: $text-light;
@@ -273,7 +280,7 @@ body
 				}
 				.login-href
 				{
-					color: #422311;
+					color: #006CC5;
 					font-size: 15px;
 					font-weight: $regular;
 					@media screen and (max-width: 370px)

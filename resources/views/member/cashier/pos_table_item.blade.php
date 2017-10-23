@@ -3,7 +3,7 @@
         <tr>
             <th class="text-left" width="250px">ITEM NAME</th>
             <th class="text-center" width="180px">PRICE</th>
-            <th class="text-center">QTY</th>
+            <th class="text-center" width="100px">QTY</th>
             <th class="text-center">DISCOUNT</th>
             <th class="text-right" width="180px">AMOUNT</th>
             <th width="50px"></th>
@@ -26,7 +26,10 @@
                     <div class="item-sku">{{ $item->item_sku }}</div>
                 </td>
                 <td class="text-center">{{ $item->display_item_price }}</td>
-                <td class="text-center"><a href="javascript:">{{ $item->quantity }}</a></td>
+                <td class="text-center td-change-qty" item-id={{ $item->item_id }}>
+                  <!--   <a href="javascript:" class="change-quantity {{ $item->item_id }}" item-id="{{ $item->item_id }}">{{ $item->quantity }}</a> -->
+                    <input type="text" class="text-right form-control input-change-qty" item-id="{{ $item->item_id }}" value="{{ $item->quantity }}">
+                </td>
                 <td class="text-center"><a href="javascript:">{{ $item->discount }} %</a></td>
                 <td class="text-right">{{ $item->display_subtotal }}</td>
                 <td class="text-center red-button remove-item-from-cart"><i class="fa fa-close fa-fw"></i></td>
@@ -57,8 +60,10 @@
                 <td class="text-center red-button"></td>
             </tr>
         </tfoot>
-        <input class="table-amount-due" type="hidden" value="{{  $cart["_total"]->display_grand_total }}">
-        <input class="table-grand-total" type="hidden" value="{{  $cart["_total"]->display_grand_total }}">
+        <input class="table-amount-due" type="hidden" value="{{ $cart["_total"]->display_grand_total }}">
+        <input class="table-grand-total" type="hidden" value="{{ $cart["_total"]->display_grand_total }}">
     @endif
 </table>
-
+<div id="changeQuantity hidden">
+    <input type="text" class="form-control text-right" name="">
+</div>

@@ -364,7 +364,7 @@ class UnitMeasurement
     {
         if ($fix == 1) 
         {
-            $unit_m = Tbl_unit_measurement_multi::where("multi_id",$multi_id)->where("is_base", 0)->first();
+            $unit_m = Tbl_unit_measurement_multi::where("multi_um_id",$multi_id)->where("is_base", 0)->first();
         }
         else
         {

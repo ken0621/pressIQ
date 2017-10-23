@@ -3,12 +3,14 @@ namespace App\Globals;
 use App\Models\Tbl_variant;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_search;
+use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_order;
 use App\Models\Tbl_order_item;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer_other_info;
 use App\Globals\Tablet_global;
+use App\Globals\Mlm_plan;
 use DB;
 use Carbon\Carbon;
 use Request;
@@ -18,8 +20,52 @@ class Customer
 	public static function register($shop_id, $info)
 	{
 		$info["shop_id"] = $shop_id;
+		$plan_settings = Mlm_plan::get_settings($shop_id);
+		$info["downline_rule"] = $plan_settings->plan_settings_default_downline_rule;
+		
+		if(session("lead_sponsor"))
+		{
+			$slot_info = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", session("lead_sponsor"))->first();
+			
+			if($slot_info)
+			{
+				$info["customer_lead"] = $slot_info->slot_id;
+			}
+			
+			session()->forget("lead_sponsor");
+		}
+		
 		Tbl_customer::insert($info);
 		return true;	
+	}
+	public static function scan_customer($shop_id, $id = 0)
+	{
+		$return = null;
+		if($id)
+		{
+			$check_slot = Tbl_mlm_slot::where('slot_no',$id)->where('shop_id',$shop_id)->value('slot_owner');
+
+			if($check_slot)
+			{
+				$return = Customer::get_info_membership($shop_id, $check_slot);
+			}
+			else
+			{
+				$check_customer = Customer::get_info_membership($shop_id, $id);
+
+				if($check_customer)
+				{
+					$return = $check_customer;
+				}
+			}
+
+		}
+
+		return $return;
+	}
+	public static function get_info_membership($shop_id, $customer_id)
+	{
+		return Tbl_customer::membership()->where("customer_id", $customer_id)->where("tbl_customer.shop_id", $shop_id)->first();
 	}
 	public static function check_account($shop_id, $email, $password = '')
 	{
@@ -67,8 +113,8 @@ class Customer
     
 	public static function info($id = 0, $shop_id = 0, $order_id = 0)
 	{
-        $data['customer'] = Tbl_customer::join('tbl_country','tbl_country.country_id','=','tbl_customer.country_id')->where('tbl_customer.customer_id',$id)->first();
-        $data['shipping'] = Tbl_customer_address::join('tbl_country','tbl_country.country_id','=','tbl_customer_address.country_id')->where('tbl_customer_address.customer_id',$id)->where('tbl_customer_address.purpose','shipping')->where('tbl_customer_address.archived',0)->first();
+        $data['customer'] = Tbl_customer::membership()->leftjoin('tbl_country','tbl_country.country_id','=','tbl_customer.country_id')->where('tbl_customer.customer_id',$id)->first();
+        $data['shipping'] = Tbl_customer_address::leftjoin('tbl_country','tbl_country.country_id','=','tbl_customer_address.country_id')->where('tbl_customer_address.customer_id',$id)->where('tbl_customer_address.purpose','shipping')->where('tbl_customer_address.archived',0)->first();
         $data['other'] = Tbl_customer_other_info::where('customer_id',$id)->first();
         // $tax_exempt = $data['customer']->taxt_exempt;
         $tax_exempt = 0;
@@ -79,7 +125,8 @@ class Customer
         return $data;
 	}
 	
-	public static function search($str = '', $shop_id = 0, $archived = 0){
+	public static function search($str = '', $shop_id = 0, $archived = 0)
+	{
 		if($str != '' && $str != null){
     		$data['_customer'] = Tbl_customer_search::join('tbl_customer','tbl_customer.customer_id','=','tbl_customer_search.customer_id')
     						->join('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
@@ -97,7 +144,36 @@ class Customer
     	// dd($shop_id);
     	return $data;
 	}
+	public static function search_get($shop_id, $keyword = '')
+	{
+		$return = Tbl_customer::where('shop_id', $shop_id);
 
+		if($keyword != '')
+		{
+			$return->leftjoin("tbl_customer_search","tbl_customer_search.customer_id","=","tbl_customer.customer_id")
+				   ->where("tbl_customer_search.body", "LIKE", "%" . $keyword . "%");
+		}
+		$query = $return;
+		if($query->count() <= 0)
+		{
+			$return = Tbl_customer::where('shop_id', $shop_id);
+			$return->where('tbl_customer.first_name','LIKE', "%" . $keyword . "%");
+		}
+		$query2 = $return;
+		if($query2->count() <= 0)
+		{	
+			$return = Tbl_customer::where('shop_id', $shop_id);
+			$return->where('tbl_customer.last_name','LIKE', "%" . $keyword . "%");
+		}
+		$query1 = $return;
+		if($query1->count() <= 0)
+		{
+			$return = Tbl_customer::where('shop_id', $shop_id);
+			$return->where('tbl_customer.middle_name','LIKE', "%" . $keyword . "%");
+		}
+
+		return $return->groupBy('tbl_customer.customer_id')->get();
+	}
 	public static function getAllCustomer($for_tablet = false)
 	{
 		$shop_id = Customer::getShopId();

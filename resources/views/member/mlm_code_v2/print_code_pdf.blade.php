@@ -12,3 +12,6 @@
 	@endforeach
 	</tr>
 </table>
+<style type="text/css">
+	tr { page-break-inside: avoid; }
+</style>

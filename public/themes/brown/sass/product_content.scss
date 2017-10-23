@@ -1,3 +1,12 @@
+$content-text: 'Rubik', sans-serif;
+$light: 300;
+$regular: 400;
+$medium: 500;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #585858;
+$text-dark: #404040;
+
 .zoomLens
 {
 	cursor: zoom-in !important;
@@ -30,9 +39,9 @@
 				{
 					.product-title
 					{
-						color: #1c1c1c;
+						color: $text-dark;
 						font-size: 20px;
-						font-weight: 600;
+						font-weight: $regular;
 						border-bottom: 1px solid #dbdbdb;
 						padding-bottom: 10px;
 					}
@@ -111,8 +120,8 @@
 						{
 							.desc
 							{
-								color: #636363;
-								font-size: 13px;
+								color: $text-light;
+								font-size: 15px;
 								font-weight: 400;
 								margin-bottom: 20px;
 							}
@@ -122,9 +131,9 @@
 								padding-bottom: 15px;
 								.spec-title
 								{
-									color: #1c1c1c;
-									font-weight: 600;
-									font-size: 13px;
+									color: $text-dark;
+									font-weight: $medium;
+									font-size: 15px;
 								}
 								.spec-list
 								{
@@ -158,14 +167,14 @@
 								margin-top: 20px;
 								color: #2a8900;
 								font-size: 13px;
-								font-weight: 600;
+								font-weight: $regular;
 								margin-bottom: 10px;
 							}
 							.price
 							{
-								color: #1c1c1c;
-								font-size: 20px;
-								font-weight: 600;
+								color: $text-dark;
+								font-size: 21px;
+								font-weight: $regular;
 							}
 							.qty-add-cart
 							{
@@ -177,9 +186,9 @@
 									margin-top: 15px;
 									.qty-title
 									{
-										color: #6e6e6e;
+										color: $text-light;
 										font-size: 13px;
-										font-weight: 600;
+										font-weight: $medium;
 										margin-bottom: 5px;
 									}
 									.qty-input
@@ -203,7 +212,7 @@
 										background-color: #ff5400;
 										color: #fff;
 										font-size: 13px;
-										font-weight: 600;
+										font-weight: $medium;
 										border-radius: 0;
 										padding: 10px 25px;
 									}
@@ -216,18 +225,18 @@
 						margin-top: 75px;
 						.feature-title
 						{
-							color: #1c1c1c;
-							font-size: 13px;
-							font-weight: 600;
+							color: $text-dark;
+							font-size: 18px;
+							font-weight: $regular;
 							border-bottom: 1px solid #dbdbdb;
 							padding-bottom: 20px;
 							margin-bottom: 20px;
 						}
 						p
 						{
-							color: #656565;
-							font-size: 13px;
-							font-weight: 400;
+							color: $text-light;
+							font-size: 15px;
+							font-weight: $regular;
 							margin-bottom: 25px;
 						}
 					}
@@ -247,11 +256,11 @@
 				{
 					.side-title
 					{
-						color: #1c1c1c;
-						font-weight: 600;
+						color: $text-dark;
+						font-weight: $medium;
 						border-bottom: 1px solid #dbdbdb;
 						padding-bottom: 10px;
-						font-size: 13px;
+						font-size: 15px;
 					}
 					.side-content
 					{
@@ -279,9 +288,9 @@
 							}
 							.name
 							{
-								color: #1c1c1c;
-								font-size: 15px;
-								font-weight: 700;
+								color: $text-dark;
+								font-size: 18px;
+								font-weight: $regular;
 								margin-top: 15px;
 							}
 							.sub
@@ -294,7 +303,7 @@
 							{
 								color: #ff4200;
 								font-size: 15px;
-								font-weight: 600;
+								font-weight: $medium;
 								margin-top: 5px;
 							}
 						}

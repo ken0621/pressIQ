@@ -76,15 +76,17 @@ function mlm_developer_import()
 					}
 					else
 					{
-						$("#global_modal").modal("hide");
+						//$("#global_modal").modal("hide");
+						$(".tr-slot-import-data[key=" + pointer + "]").fadeOut('fast');
 						mlm_developer.action_load_data();
 					}
 				}
 				else
 				{
 					$target_source.find(".status").html("<span style='color: red'>" + data.message +"</span>");
+					next_pointer = pointer + 1;
+					action_import_slot_data(next_pointer);
 				}
-				
 			}
 		});
 	}

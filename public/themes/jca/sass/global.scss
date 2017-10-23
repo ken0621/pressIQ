@@ -96,12 +96,8 @@ button:hover{
 		padding-bottom: 12px;
 	}
 
-	nav{
-		a.active{
-			color: #2161c8;
-		}
-	}
 }
+
 
 /* HEADER-FIXED */
 .header-fixed
@@ -112,7 +108,7 @@ button:hover{
 		{
 			position: fixed;
 			width: 100%;
-			z-index: 999;
+			z-index: 29;
 			top: 0;
 			border-bottom: 1px solid #dedede;
 		}
@@ -121,33 +117,78 @@ button:hover{
 			margin-bottom: 87px;
 		}
 	}
+	.navirino
+	{
+		ul
+		{
+			a.active 
+			{
+				color: #019771 !important;
+			}
+		}
+	}
 }
 
-nav{
+.navirino{
 	float: right;
 	margin-top: 25px;
 	font-size: 15px;
+
+	@media screen and (max-width: 900px)
+	{
+		margin-top: 50px;
+		float: left;
+		width: 100%;
+		display: none;
+
+		ul 
+		{
+			list-style:none;
+			padding-left:10px;
+
+			li 
+			{
+				padding: 10px 0px;
+				border-bottom: 1px solid #efefef;
+			}
+		}
+	}
 	
 	li {
 		display: inline-block;
 		padding: 0px 10px;
-	}
 
-	a {
+		@media screen and (max-width: 991px)
+		{
+			display: block;
+		}
+	}
+	a 
+	{
 		color: #1c1c1c;
-		&:hover {
+		&:hover
+		{
 			color: #019771;
 			text-decoration: none;
 			cursor: pointer;
 		}
 	}
+
 }
 
 
 .image-logo-holder{
 	text-align: center;
+
 	@media screen and (max-width: 991px)
 	{
+		width: 75%;
+		img 
+		{
+			margin-top: -9px;
+			width: 100%;
+		}
+
 		> a
 		{
 			display: inline-block;
@@ -157,30 +198,27 @@ nav{
 	&:hover{
 		cursor: pointer;
 	}
-	.menu-nav
+}
+.menu-nav
+{
+	display: none;
+	@media screen and (max-width: 991px)
 	{
-		display: none;
-		@media screen and (max-width: 991px)
+		display: block;
+		width: 50px;
+		padding: 7.5px 12px 7.5px 12px;
+		margin-left: auto;
+		margin-top: 20px;
+		background-color: #019771;
+		span
 		{
 			display: block;
-			width: 50px;
-			padding: 7.5px 9px 7.5px 9px;
-			margin-left: auto;
-			margin-top: 15px;
+			height: 3px;
 			background-color: #fff;
-			border: 2px solid #786044;
-			span
-			{
-				display: block;
-				height: 3px;
-				background-color: #786044;
-				margin: 5px 0;
-			}
+			margin: 5px 0;
 		}
 	}
 }
-
-
 
 .row-no-padding
 {
@@ -268,6 +306,7 @@ nav{
 				vertical-align: top;
 				width: 21px;
 				text-align: right;
+
 				.jca-footer-icon
 				{
 						
@@ -285,6 +324,12 @@ nav{
 				margin-left: 14px;
 				margin-bottom: 10px;
 			}
+				
+			a
+			{
+				text-decoration: none;
+			}
+
 			.footer-detail-list
 			{
 				font-family: "Raleway Regular", sans-serif;
@@ -292,6 +337,11 @@ nav{
 				margin: 0px;
 				color: #ffffff;
 				margin-bottom: 5px;
+
+				&:hover
+				{
+					color: #BCBCBC;
+				}
 			}
 		}
 	}
@@ -587,7 +637,7 @@ nav{
     right: 20px;
     display: none;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 99;
+    z-index: 29;
     &:hover{
     	cursor: pointer;
     }

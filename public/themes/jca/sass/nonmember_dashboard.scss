@@ -1,4 +1,7 @@
-$content-text: 'Open Sans', sans-serif;
+@import "../../../assets/front/sass/mixin";
+
+
+$content-text: 'Raleway', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
@@ -9,28 +12,22 @@ $text-dark: #272c2f;
 /* Dashboard Top */
 .dashboard-top
 {
-
-	.img-container
-	{
-		img
-		{
-			width: 100%;
-			height: auto;
-		}
-	}
-
+	
 	.join-container
 	{
 		font-family: $content-text;
-		border: 1px solid #dfdfdf;
 		padding: 15px;
-		min-height: 403px;
-		max-height: 403px;
+		min-height: 588px;
+		max-height: 588px;
+		background-repeat: no-repeat;
+		background-size: cover;
 
 		.btn-text
 		{
 			width: 100%;
 			white-space: normal;
+			padding: 70px 0px 0px 80px;
+
 			@media screen and (min-width: 991px)
 			{
 				text-align: left;
@@ -38,17 +35,17 @@ $text-dark: #272c2f;
 
 			.text-header1
 			{
-				font-weight: $bold;
-				font-size: 21px;
-				color: $text-dark;
+				font-weight: $regular;
+				font-size: 45px;
+				color: #fff;
 				word-break: break-all;
 			}
 
 			.text-header2
 			{
 				font-weight: $regular;
-				font-size: 15px;
-				color: $text-light;
+				font-size: 24px;
+				color: #fff;
 				letter-spacing: 0.2px;
 				word-break: break-all;
 			}
@@ -56,39 +53,28 @@ $text-dark: #272c2f;
 
     	.btn-container
     	{
-    		text-align: center;
+    		//text-align: center;
 			padding: 63px 0px 0px 0px;
 			font-family: $content-text;
 			font-weight: $semi-bold;
 			font-size: 13px;
-		
-			.btn-buy-a-kit
-			{
-				color: #fff;
-				background-color: #693d28;
-				padding: 12px 40px 12px 40px;
-				border: 2px solid #693d28;
-				border-radius: 2px;
-			}
-			
-			img
-			{
-				padding: 20px 0px 20px 0px;
-			}
-			
-			a
-			{
-				border: none !important;
-			}
+			margin-left: 80px;
 
 			.btn-enter-a-code
 			{
-				color: #693d28;
+				@include transition(0.2s);
+				color: #fff;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
-				border: 2px solid #693d28;
+				border: 2px solid #fff;
 				border-radius: 2px;
 				//margin-bottom: 65px;
+				
+				&:hover
+				{
+					background-color: #019771;
+				}
+
 			}
 		}
 
@@ -97,6 +83,7 @@ $text-dark: #272c2f;
 			text-align: center;
 			max-height: auto;
 			min-height: auto;
+
 			.btn-text
 			{
 				display: inline-block;
@@ -127,6 +114,7 @@ $text-dark: #272c2f;
 			}
 		}
 	}
+
 }
 
 /* Dashboard Bottom */
@@ -243,7 +231,7 @@ $text-dark: #272c2f;
 		background-color: #fff;
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #B17D2A;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -376,7 +364,7 @@ $text-dark: #272c2f;
 				.btn-verify
 				{
 					color: #fff;
-					background-color: #f02432;
+					background-color: #B17D2A;
 					padding: 12px 25px;
 					border: none;
 					border-radius: 2px;
@@ -412,7 +400,7 @@ $text-dark: #272c2f;
 		
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #B17D2A;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -505,7 +493,7 @@ $text-dark: #272c2f;
 		background-color: #fff;
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #B17D2A;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -575,7 +563,7 @@ $text-dark: #272c2f;
 				width: 100%;
 				font-size: 16px;
 				border: none;
-				border: 1px solid #693d28;
+				border: 1px solid #B17D2A;
 				margin: 5px 0px;
 				margin-bottom: 15px;
 				padding: 5px;
@@ -595,7 +583,7 @@ $text-dark: #272c2f;
 				.btn-proceed-2
 				{
 					color: #fff;
-					background-color: #693d28;
+					background-color: #B17D2A;
 					padding: 10px 40px;
 					border-radius: 2px;
 					border: 0px !important;

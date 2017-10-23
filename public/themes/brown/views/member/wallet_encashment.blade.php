@@ -1,8 +1,8 @@
 @extends("member.member_layout")
 @section("member_content")
-<div class="wallet-encashment">
-	<div class="animated fadeInRight main-member-header clearfix">
-		<div class="left">
+<div class="wallet-encashment" style="overflow: hidden;">
+	<div class="main-member-header clearfix">
+		<div class="animated fadeInLeft left">
 			<div class="icon">
 				<img src="/themes/{{ $shop_theme }}/img/wallet-encashment.png">
 			</div>
@@ -13,10 +13,9 @@
 				<div class="sub">In this tab you can request/view encashment history. </div>
 			</div>
 		</div>
-		<div class="right">
+		<div class="animated fadeInRight right">
 			<div class="text-right">
-<!-- 				<button type="button" class="btn btn-default"><i class="fa fa-bank"></i> PAYOUT METHOD</button>
-				<button type="button" class="btn btn-primary request-payout"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button> -->
+				<button onclick="action_load_link_to_modal('/members/payout-setting', 'lg')" type="button" class="btn btn-gear"><i class="fa fa-bank"></i> PAYOUT SETTINGS</button>
 			</div>
 		</div>
 	</div>
@@ -29,36 +28,48 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th class="text-left">Release Date</th>
-						<th class="text-center" width="200px">Method</th>
-						<th class="text-center" width="200px">Amount</th>
-						<th class="text-left" width="200px">Tax</th>
-						<th class="text-right" width="200px">Sub Total</th>
+						<th class="text-left" width="200px">Date</th>
+						<th class="text-center">SLOT</th>
+						<th class="text-center" width="100px">Method</th>
+						<th class="text-center" width="200px">Status</th>
+						<th class="text-right" width="180px">Amount</th>
+						<th class="text-right" width="150px">Tax</th>
+						<th class="text-right" width="150px">Fee</th>
+						<th class="text-right" width="180px">Sub Total</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td class="text-left">October 12, 2017</td>
-						<td class="text-center">REQUESTED (EON)</td>
-						<td class="text-center"><b>PHP 15,000.00</b></td>
-						<td class="text-left">10% (PHP 1,500.00)</td>
-						<td class="text-right"><a href='javascript:'><b>PHP 13,500.00</b></a></td>
-					</tr>
-					<tr>
-						<td class="text-left">October 17, 2017</td>
-						<td class="text-center">WALLET PURCHASE</td>
-						<td class="text-center"><b>PHP 1,000.00</b></td>
-						<td class="text-left">12% (PHP 120.00)</td>
-						<td class="text-right"><a href='javascript:'><b>PHP 880.00</b></a></td>
-					</tr>
+					@if(count($_encashment) > 0)
+						@foreach($_encashment as $encashment)
+						<tr>
+							<td class="text-left">{{ $encashment->display_date }}</td>
+			  				<td class="text-center">
+			  					<div>{{ $encashment->slot_no }}</div>
+			  				</td>
+							<td class="text-center">{!! $encashment->log !!}</td>
+							<td class="text-center"><b>{{ $encashment->wallet_log_payout_status }}</b></td>
+							<td class="text-right"><b>{!! $encashment->display_wallet_log_request !!}</b></td>
+							<td class="text-right">{!! $encashment->display_wallet_log_tax !!}</td>
+							<td class="text-right">{!! $encashment->display_wallet_log_service_charge !!}</td>
+							<td class="text-right"><a href='javascript:'><b>{!! $encashment->display_wallet_log_amount !!}</b></a></td>
+						</tr>
+						@endforeach
+					@else
+						<tr>
+							<td class="text-center" style="padding: 50px;" colspan="8">NO PAYOUT RELEASE YET</td>
+						</tr>
+					@endif
 				</tbody>
-				<tfoot style="background-color: #f3f3f3; font-size: 16px;">
+				<tfoot style="background-color: #f3f3f3; font-size: 15px;">
 					<tr>
+						<td class="text-right"></td>
+						<td class="text-right"></td>
+						<td class="text-right"></td>
+						<td class="text-right"></td>
 						<td class="text-right"></td>
 						<td class="text-center"></td>
-						<td class="text-center"><b>PHP 16,000.00</b></td>
-						<td class="text-right"></td>
-						<td class="text-right"><b>PHP 14,380.00</b></td>
+						<td class="text-center"><b></b></td>
+						<td class="text-right"><b>{{ $total_payout }}</b></td>
 					</tr>
 				</tfoot>
 			</table>

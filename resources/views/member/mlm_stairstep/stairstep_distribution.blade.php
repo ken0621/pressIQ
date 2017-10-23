@@ -49,7 +49,7 @@
           </span>
         </div>
       </div>
-      <div class="col-md-3 pull-right">
+<!--       <div class="col-md-3 pull-right">
         <div class="input-group stylish-input-group pull-right">
           <input type="text" class="form-control pull-right"  placeholder="Search" >
           <span class="input-group-addon">
@@ -58,7 +58,7 @@
             </button>  
           </span>
         </div>
-      </div>
+      </div> -->
     </form>
   </div>
   <br>        
@@ -71,6 +71,7 @@
         <th><center>Current Personal-PV</center></th>
         <th><center>Required Personal-PV</center></th>
         <th><center>Stair Step Points</center></th>
+        <th><center>Stair Rebates Bonus</center></th>
         <th><center>Comission</center></th>
       </tr>
     </thead>
@@ -83,7 +84,8 @@
         <td><center>{{$slot->personal_stairstep}}</center></td>
         <td><center>{{$slot->stairstep_pv_maintenance ? $slot->stairstep_pv_maintenance : "0"}}</center></td>
         <td><center>{{$slot->stairstep_points}}</center></td>
-        <td><center>{{$slot->personal_stairstep >= $slot->stairstep_pv_maintenance && $slot->commission_multiplier != 0 ? $slot->stairstep_points * $slot->commission_multiplier : 0}}</center></td>
+        <td><center>{{$slot->stairstep_rebates_bonus}}</center></td>
+        <td><center>{{$slot->personal_stairstep >= $slot->stairstep_pv_maintenance && $slot->commission_multiplier != 0 ? ($slot->stairstep_points * $slot->commission_multiplier) + $slot->stairstep_rebates_bonus: 0}}</center></td>
       </tr>
     @endforeach
     </tbody>
@@ -232,6 +234,19 @@
 @section('script')
 <script type="text/javascript">
 
+  $('.start_picker').keypress(function(e)
+  {
+      if ( e.which == 13 ) return false;
+      //or...
+      if ( e.which == 13 ) e.preventDefault();
+  });
+  
+  $('.end_picker').keypress(function(e)
+  {
+      if ( e.which == 13 ) return false;
+      //or...
+      if ( e.which == 13 ) e.preventDefault();
+  });
   $(".submit_btn_distribute").click(function() 
   {
     $("#distribute_form").submit();

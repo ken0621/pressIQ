@@ -106,7 +106,25 @@ class MLM_ProductController extends Member
             }
 
             $_inventory[$key]->item_points   = $item_points;
-            $_inventory[$key]->rank_cashback = $rank_cashback;
+
+            if (isset($item_points))
+            {
+                $_inventory[$key]->item_points   = $item_points;
+            }
+            else
+            {
+                $_inventory[$key]->item_points   = null;
+            }
+            
+
+            if (isset($rank_cashback)) 
+            {
+                $_inventory[$key]->rank_cashback = $rank_cashback;
+            }
+            else
+            {
+                $_inventory[$key]->rank_cashback = null;
+            }
         }
         // dd($_inventory);
 	    $data['active'] = [];
@@ -128,12 +146,19 @@ class MLM_ProductController extends Member
                 $data['active'][$add_count]        = "RANK_GROUP";
                 $data['active_label'][$add_count]  = "Rank Group Bonus"; 
                 $add_count++;
+            }            
+            else if($value->marketing_plan_code == "REPURCHASE_CASHBACK")
+            {
+                $data['active'][$add_count]        = "RANK_REPURCHASE_CASHBACK";
+                $data['active_label'][$add_count]  = "Rank Repurchase Cashback"; 
+                $add_count++;
             }
 	    }
 
-	    $data['item'] 		   = $this->iteminventory($_inventory, $data['active']);
-	    $data['_inventory']    = $_inventory;	    
+        $data['item']          = $this->iteminventory($_inventory, $data['active']);
+        $data['_inventory']    = $_inventory;       
         $data['item_search']   = $item_search;
+        // dd($data);
         
         return view('member.mlm_product.product', $data);
     }

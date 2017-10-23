@@ -1,81 +1,44 @@
 @extends("member.member_layout")
 @section("member_content")
 
+
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
+<input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
+<input type="hidden" name="not_placed_yet" class="not_placed_yet" value="{{ $not_placed_yet or 0 }}" link="/members/enter-placement?slot_no={{ Crypt::encrypt($not_placed_slot->slot_id) }}&key={{ md5($not_placed_slot->slot_id . $not_placed_slot->slot_no) }}">
+
 @if(!$mlm_member)
 	<div class="dashboard">
 	    <!-- TOP DASHBOARD-->
-	    <div class="dashboard-top">
+	    <!-- <div class="dashboard-top" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-dash.png')">
 	        <div class="row clearfix">
-	            <div class="col-md-8">
-	                <div class="img-container">
-	                    <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
-	                </div>
-	            </div>
 	            <div class="col-md-4">
 	                <div class="join-container">
 	                    <div class="btn btn-text">
-	                        <div class="text-header1">Join the Movement!</div>
-	                        <div class="text-header2">Enroll now and become one of us!</div>
+	                        <div class="text-header1">Not yet a Member?</div>
+	                        <div class="text-header2">Join Us Now!</div>
 	                    </div>
 	                    <div class="btn-container">
 	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+	                        <a href="#" id="btn-enter-a-code"><button onclick="action_load_link_to_modal('/members/enter-code')" class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
-	    </div>
+	    </div> -->
 
-	    <!-- BOTTOM DASHBOARD -->
-	    <div class="dashboard-bottom">
-	        <div class="text-header">Profile Information</div>
+	    <div class="dashboard-top">
 	        <div class="row clearfix">
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic1 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Personal Information</div>
-	                        </div>
-	                        
+	            <div class="col-md-12">
+	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-dash.png')">
+	                    <div class="btn btn-text">
+	                        <div class="text-header1">Not yet a Member?</div>
+	                        <div class="text-header2">Join Us Now!</div>
 	                    </div>
-	                    <div class="personal-info-container">
-	                        <div><label>Name </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Email </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Birthday </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Contact </label><span>Lorem Ipsum Dolor</span></div>
+	                    <div class="btn-container">
+	                        <a href="#" id="btn-enter-a-code"><button onclick="action_load_link_to_modal('/members/enter-code')" class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic2 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-shipping.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Default Shipping Address</div>
-	                        </div>
-	                    </div>
-	                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae similique nulla amet illum labore nostrum sapiente fugiat, pariatur ipsa distinctio.</p>
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic3 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-billing.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Default Billing Address</div>
-	                        </div>
-	                    </div>
-	                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos quibusdam nesciunt, dolor culpa architecto enim ratione error ipsum, animi sunt.</p>
 	                </div>
 	            </div>
 	        </div>
@@ -85,7 +48,7 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Wallet Summary</div>
+				<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('members/enter-code')">Create New Slot</a></div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">
@@ -96,9 +59,6 @@
 							<div class="holder">
 								<div class="color" style="background-color: #8E5EA2"></div>
 								<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
-							</div>
-							<div class="chart-holder">
-								<canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="400" height="400"></canvas>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
@@ -114,33 +74,64 @@
 			</div>
 
 			<div class="col-md-6">
-				<div class="title">Reward Summary</div>
+				<div class="title">Cash Reward Summary</div>
 				<div class="sub-container">
 					<div class="chart-legend">
-						@foreach($_wallet_plan as $plan)
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
-							</div>
-						@endforeach
-					</div>
-
-				</div>
-
-				<div class="title">Reward Points</div>
-				<div class="sub-container">
-					@if(count($_point_plan) > 0)
-					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
-						@foreach($_point_plan as $plan)
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+							<div class="name"><span>Binary Pairing</span><span class="value">{{ $wallet->display_complan_binary }}</span></div>
 						</div>
-						@endforeach
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Direct Referral</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
+						</div>
 					</div>
-					@else
-						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
-					@endif
+				</div>
+
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
+						</div>
+					</div>
+					<div class="chart-legend" style="max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Direct GC</span><span class="value">{{ $points->display_direct }}</span></div>
+						</div>
+					</div>
+					<div class="chart-legend" style="max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Maintenance GC</span><span class="value">{{ $points->display_maintenance }}</span></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="title">Binary Points</div>
+				<div class="sub-container">
+                    <div class="table-responsive">
+                        <table style="margin-top: 5px;" class="table table-condensed">
+                            <thead style="text-transform: uppercase">
+                                <tr>
+                                    <th class="text-center">SLOT</th>
+                                    <th class="text-center">POINT (LEFT)</th>
+                                    <th class="text-center">POINT (RIGHT)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	@foreach($_slot as $slot)
+                                <tr>
+                                    <td class="text-center">{{ $slot->slot_no }}</td>
+                                    <td class="text-center">{{ number_format($slot->slot_binary_left, 2) }}</td>
+                                    <td class="text-center">{{ number_format($slot->slot_binary_right, 2) }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 				</div>
 			</div>
 		</div>
@@ -159,7 +150,7 @@
 							</div>	
 							<div class="text">
 								<div class="pull-left">
-									<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+									<div style="max-width: 250px;" class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
 									<div class="email">{{ $direct->slot_no }}</div>
 									<div class="date">{{ $direct->time_ago }}</div>
 								</div>
@@ -181,7 +172,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)
@@ -220,7 +211,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>Brown & Proud</b> movement</div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>JCA Wellness</b></div>
 	                    </div>
 	                </div>
 	            </div>
@@ -228,108 +219,10 @@
 	    </div>
 	</div>
 @endif
-
-<!--  Enter a code -->
-<div class="popup-enter-a-code">
-    <div id="enter-a-code-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-star"></i> SPONSOR</h4>
-                </div>
-                <div class="modal-body">
-                    <form method="post" class="submit-verify-sponsor">
-                        <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>
-                        <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
-                        <div class="output-container">
-                            
-                        </div>
-                        <div class="btn-container">
-                            <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Proceed 1 -->
-<div class="popup-proceed1">
-    <div id="proceed-modal-1" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content load-final-verification">
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Proceed 2 -->
-<div class="popup-proceed2">
-    <div id="proceed-modal-2" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-shield"></i> CODE VERIFICATION</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="message message-return-code-verify"></div>
-                    <form class="code-verification-form">
-                        <div>
-                            <div class="labeld">Pin Code</div>
-                            <input class="input input-pin text-center" name="pin" type="text">
-                        </div>
-                        <div>
-                            <div class="labeld">Activation</div>
-                            <input class="input input-activation text-center" name="activation" type="text">
-                        </div>
-                        <div class="btn-container">
-                            <button id="btn-proceed-2" class="btn-proceed-2"><i class="fa fa-angle-double-right"></i> Proceed</button>
-                        </div>
-                    </form>
-                </div>
-              </div>
-          </div>
-      </div>
-  </div>
-<!-- MANUAL PLACING OF SLOT -->
-<div class="popup-verify-placement">
-    <div id="slot-placement-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-shield"></i> MANUAL PLACEMENT</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="message message-return-slot-placement-verify"></div>
-                    <form class="slot-placement-form">
-                        <div>
-                            <div class="labeld">Slot Placement</div>
-                            <input class="input input-slot-placement text-center" name="slot_placement" type="text">
-                            <input class="chosen_slot_id" name="chosen_slot_id" type="hidden">
-                        </div>
-                        <div>
-                            <div class="labeld">Slot Position</div>
-                            <select class="input input-slot-position text-center" name="slot_position" type="text" style="text-align-last:center;">
-                            	<option value="left">LEFT</option>
-                            	<option value="right">RIGHT</option>
-                            </select>
-                        </div>
-                        <div class="btn-container">
-                            <button id="check_placement" class="btn-verify-placement">VERIFY</button>
-                        </div>
-                    </form>
-                </div>
-              </div>
-          </div>
-      </div>
-  </div>
 @endsection
 
 @section("member_script")
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
+<script type="text/javascript" src="/assets/member/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 <script>
 

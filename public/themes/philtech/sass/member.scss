@@ -66,7 +66,7 @@
 		}
 		.sidebar
 		{
-			background-color: #16185b;
+			background-color: #006CC5;
 			width: 300px;
 			position: absolute;
 			left: 0;
@@ -122,11 +122,14 @@
 					vertical-align: middle;
 					text-align: left;
 					margin-left: 15px;
+					max-width: 150px;
+
 					.name
 					{
 						color: #fff;
 						font-size: 14px;
 						font-weight: 700;
+						
 					}
 					.sub
 					{
@@ -196,10 +199,10 @@
 							{
 								.nav-holder
 								{
-									background-color: #1F262C;
+									background-color: #FF8500;
 									color: #fff;
 									text-decoration: none;
-									border-color: #1F262C;
+									border-color: #FF8500;
 									.icon 
 									{
 										color: #fff;
@@ -224,7 +227,7 @@
 							{
 								> .nav-holder
 								{
-									background-color: #1F262C;
+									background-color: #FF8500;
 									color: #fff;
 									text-decoration: none;
 									border-color: #1F262C;
@@ -264,7 +267,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #242d34;
+										background-color: #006CC5;
 										span, &:before
 										{
 											opacity: 0.5;
@@ -293,7 +296,7 @@
 			&.small
 			{
 				width: 80px;
-				background-color: #262874;
+				background-color: #006CC5;
 				.shadow
 				{
 					display: none;
@@ -357,7 +360,7 @@
 								{
 									.nav-holder
 									{
-										background-color: rgba(0,0,0,0.2);
+										background-color: rgb(255,133,0);
 										.icon
 										{
 											img

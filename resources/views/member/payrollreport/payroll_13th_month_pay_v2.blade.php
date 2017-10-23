@@ -10,35 +10,24 @@
                	select employee
                 </small>
             </h1>
+             <button class="btn btn-primary pull-right modal-13th-pay-basis-button">Compute 13th Month Pay</button>
+            <select class="form-control filter-change filter-change-company pull-right" style="width: 250px; margin-right: 10px;">
+              <option value="0">Select Company</option>
+              @foreach($_company as $company)
+              <option value="{{$company['company']->payroll_company_id}}">{{$company['company']->payroll_company_name}}</option> 
+                @foreach($company['branch'] as $branch)
+                <option value="{{$branch->payroll_company_id}}">&nbsp;&nbsp;• {{$branch->payroll_company_name}}</option>
+                @endforeach
+              @endforeach
+            </select>
         </div>
     </div>
 </div>
 <div class="form-group order-tags load-data" target="value-id-1"></div>
     <div class="clearfix">
         <div class="col-md-12">
-            <div class="table-responsive" id="value-id-1">
-				<table class="table table-bordered table-striped table-condensed">
-				        <thead style="text-transform: uppercase">
-				            <tr>
-				                <th class="text-center" width="50px"><input type="checkbox" name=""></th>
-				                <th class="text-center" width="100px">NO.</th>
-				                <th class="text-center">Employee Name</th>
-				                <th class="text-center" width="150px">Company</th>
-				                <th class="text-center" ></th>
-				            </tr>
-				        </thead>
-				        <tbody>
-				           	@foreach($_employee as $employee)
-				           		<tr>
-				           			<td class="text-center"><input type="checkbox" name=""></td>
-				           			<td class="text-center">{{ $employee->payroll_employee_number }}</td>
-				           			<td class="text-center">{{$employee->payroll_employee_first_name}} {{$employee->payroll_employee_last_name}}</td>
-				           			<td class="text-center">{{ $employee->payroll_company_name }}</td>
-				           			<td class="text-center"><a href="/member/payroll/reports/employee_13_month_pay_report/{{$employee->payroll_employee_id}}">View Employee</a></td>
-				           		</tr>
-				           	@endforeach
-				        </tbody>
-				</table>
+            <div class="table-responsive employees-13th-month-pay" id="value-id-1">
+				
       		</div>
         </div>
     </div>
@@ -46,4 +35,5 @@
 @endsection
 @section('script')
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
+<script type="text/javascript" src="/assets/member/payroll/js/payroll_employees_13th_month_pay.js"></script>
 @endsection

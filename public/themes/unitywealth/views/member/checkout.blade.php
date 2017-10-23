@@ -19,7 +19,7 @@
 				<div class="bottom-container-content">
 					<div class="row clearfix">
 						<!-- DELIVERY INFORMATION -->
-						<div class="col-md-8">
+						<div class="col-md-8 hidden">
 							<div class="delivery-information">
 								<div class="title-container">
 									Fill Up Delivery Information
@@ -71,7 +71,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-4"></div>
+						<div class="col-md-4 text-center">
 							<!-- CART SUMMARY -->
 							<div class="cart-summary">
 								<div class="top-title row-no-padding clearfix">

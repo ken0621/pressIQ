@@ -14,6 +14,7 @@ use App\Models\Tbl_press_release_recipient;
 use App\Models\Tbl_press_release_email_sent;
 use Mail;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Globals\Settings;
 
 class Press_Release_Controller extends Member
 {
@@ -72,6 +73,8 @@ class Press_Release_Controller extends Member
 
     public function send_email(Request $request)
     {
+        Settings::set_mail_setting($this->user_info->shop_id);
+
         try 
         {
             $insert['email_content'] = Request::input('content');
@@ -92,7 +95,7 @@ class Press_Release_Controller extends Member
                 Mail::send('member.email_system.email',$data, function($message) use ($data)
                 {
                     $message->from($data['from']);
-                    $message->to("edwardguevarra2003@gmail");
+                    $message->to($data['to']);
                     $message->subject($data['subject']);
                 });  
             }

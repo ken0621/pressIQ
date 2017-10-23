@@ -156,6 +156,11 @@ class Payroll_BioImportController extends Member
 		$incomplete 	= 0;
 		$overwritten 	= 0;
 
+		$_success[] 		= null;
+		$_failed[] 			= null;
+		$_incomplete[] 		= null;
+		$_overwritten[] 	= null;
+
 		foreach ($_time_record as $date => $time_record) 
 		{
 			foreach ($time_record as $employee_number => $value) 
@@ -164,7 +169,7 @@ class Payroll_BioImportController extends Member
 
 				if($company != '' || $company != 0 || $company != null) 
 				{
-					$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("payroll_employee_company_id", $company)->where("shop_id", Self::shop_id())->first();
+					$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("shop_id", Self::shop_id())->first();
 				}
 				else
 				{
@@ -207,7 +212,7 @@ class Payroll_BioImportController extends Member
 		    			}
 
 						Tbl_payroll_time_sheet_record::insert($insert_time);
-					
+						$_success[] = $time_record;
 						$success++;
 					}
 					else
@@ -224,18 +229,19 @@ class Payroll_BioImportController extends Member
 						$update['payroll_time_sheet_origin'] 	= $biometric_name;
 						
 						Tbl_payroll_time_sheet_record::insert($update);
-						
+						$_overwritten[] = $time_record;
 						$overwritten++;
 					}
 				}
 				else
 				{
 					$failed++;
+					$_failed[] = $time_record;
 				}
 			}
 			
 		}
-
+		
 		$data["success"] = $success;
 		$data["failed"] = $failed;
 		$data["overwritten"] = $overwritten;
@@ -1273,7 +1279,7 @@ class Payroll_BioImportController extends Member
 				$incomplete++;
 			}
     	 }
-    	 
+    	
     	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "ANVIZ Biometrics EP Series");
    
     	 echo "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";

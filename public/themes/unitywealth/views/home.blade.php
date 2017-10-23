@@ -28,7 +28,7 @@ $(document).ready(function($) {
     
         /*TEXT FADEOUT*/
         $(window).scroll(function(){
-                $(".caption-container, .caption-logo-container").css("opacity", 1 - $(window).scrollTop() / 250);
+            $(".caption-container, .caption-logo-container").css("opacity", 1 - $(window).scrollTop() / 250);
         });
 
         //START MISSION AND VISION
@@ -40,6 +40,7 @@ $(document).ready(function($) {
             $(".title-mission").removeClass("highlighted");
             
         });
+        
         $(".title-mission").click(function()
         {
             $("#vision").addClass("hide");

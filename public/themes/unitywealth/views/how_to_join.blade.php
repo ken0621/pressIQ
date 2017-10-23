@@ -41,7 +41,6 @@
 						<div class="description-content">
 							<p>
 								{!! get_content($shop_theme_info, "How-To-Join", "howtojoin_division2_description") !!}
-
 							</p>
 						</div>
 					</div>
@@ -106,7 +105,7 @@ $(document).ready(function()
     $(window).scroll(function(){
     	$(".top-1-content").css("opacity", 1 - $(window).scrollTop() / 250);
   	});
-  	
+
 });
 </script>
 @endsection

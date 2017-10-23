@@ -100,7 +100,6 @@
 	            </div>
 	        </div>
 	    </div> -->
-
 	</div>
 @else
 	<div class="dashboard">
@@ -461,7 +460,7 @@ input:-webkit-autofill {
   .popup-verify-placement .modal-content {
     background-color: #eee; }
     .popup-verify-placement .modal-content .modal-header {
-      background-color: #693d28;
+      background-color: #353739;
       border-top-left-radius: 3px;
       border-top-right-radius: 3px; }
       .popup-verify-placement .modal-content .modal-header .close {
@@ -483,7 +482,7 @@ input:-webkit-autofill {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #693d28;
+        border: 1px solid #353739;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -494,14 +493,14 @@ input:-webkit-autofill {
         margin: 10px 0px;
         padding: 10px; }
       .popup-verify-placement .modal-content .modal-body .labeld {
-        color: #693d28;
+        color: #353739;
         text-align: center;
         text-transform: uppercase; }
       .popup-verify-placement .modal-content .modal-body select {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #693d28;
+        border: 1px solid #353739;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -514,10 +513,10 @@ input:-webkit-autofill {
         text-transform: uppercase;
         padding-bottom: 20px; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement {
-          color: #693d28;
+          color: #353739;
           background-color: #fff;
           padding: 10px 40px;
-          border: 2px solid #693d28;
+          border: 2px solid #353739;
           border-radius: 2px;
           opacity: 0.9;
           -webkit-transition: all 0.2s ease-in-out;
@@ -529,7 +528,7 @@ input:-webkit-autofill {
           text-transform: uppercase; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement:hover {
           color: #fff;
-          background-color: #693d28;
+          background-color: #353739;
           opacity: 1.0; }
 </style>
 @endsection

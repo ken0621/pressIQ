@@ -76,7 +76,7 @@
                            <li>
                               <a href="javascript:" class="item-link close-panel">
                                  <div class="item-content">
-                                    <div class="item-media"><i class="icon brown-icon-profile"></i></div>
+                                    <div class="item-media"><i class="fa fa-video-camera"></i></div>
                                     <div class="item-inner">
                                        <div class="item-title">Video</div>
                                     </div>
@@ -86,7 +86,7 @@
                            <li>
                               <a href="javascript:" class="item-link close-panel">
                                  <div class="item-content">
-                                    <div class="item-media"><i class="icon brown-icon-profile"></i></div>
+                                    <div class="item-media"><i class="fa fa-book"></i></div>
                                     <div class="item-inner">
                                        <div class="item-title">Ebooks</div>
                                     </div>
@@ -96,7 +96,7 @@
                            <li>
                               <a href="/members/products" class="item-link close-panel">
                                  <div class="item-content">
-                                    <div class="item-media"><i class="icon brown-icon-profile"></i></div>
+                                    <div class="item-media"><i class="fa fa-play"></i></div>
                                     <div class="item-inner">
                                        <div class="item-title">Products</div>
                                     </div>
@@ -106,7 +106,7 @@
                            <li>
                               <a href="/members/certificate" class="item-link close-panel">
                                  <div class="item-content">
-                                    <div class="item-media"><i class="icon brown-icon-profile"></i></div>
+                                    <div class="item-media"><i class="fa fa-certificate"></i></div>
                                     <div class="item-inner">
                                        <div class="item-title">Certificate</div>
                                     </div>
@@ -286,41 +286,39 @@
                               </table>
                            </div>
                            <div class="summary-holder">
-                              <div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
+                              <div class="title">Wallet Summary <!-- <a href="javascript:" class="title-button pull-right btn-enter-a-code">Create New Slot</a> --></div>
                               <div class="body">
-                                 <div class="chart-legend">
-                                    <div class="row">
-                                       <!-- Each "cell" has col-[widht in percents] class -->
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color" style="background-color: #76b6ec"></div><span>Current Wallet</span></div>
-                                             <div class="name">{{ $wallet->display_current_wallet }}</div>
+                                 <div class="table-holder">
+                                    <div class="chart-legend">
+                                       <div class="row">
+                                          <div class="col-50">
+                                             <div class="holder">
+                                                <div class="color" style="background-color: #019771"></div>
+                                                <div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
+                                             </div>
                                           </div>
-                                       </div>
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color" style="background-color: #8E5EA2"></div><span>Total Pay-out</span></div>
-                                             <div class="name">{{ $wallet->display_total_payout }}</div>
+                                          <div class="col-50">
+                                             <div class="holder">
+                                                <div class="color" style="background-color: #8E5EA2"></div>
+                                                <div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
+                                             </div>
                                           </div>
-                                       </div>
-                                    </div>
-                                    
-                                    
-                                    <!--<div class="chart-holder">-->
-                                    <!--   <canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="150" height="150"></canvas>-->
-                                    <!--</div>-->
-                                    <div class="row">
-                                       <!-- Each "cell" has col-[widht in percents] class -->
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color"></div><span>Current Slot(s)</span></div>
-                                             <div class="name">{{ $customer_summary["display_slot_count"] }}</div>
+                                         <div class="col-100">
+                                            <div class="chart-holder">
+                                               <canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="400" height="400"></canvas>
+                                            </div>
+                                         </div>
+                                          <div class="col-50">
+                                             <div class="holder">
+                                                <div class="color"></div>
+                                                <div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
+                                             </div>
                                           </div>
-                                       </div>
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color"></div><span>Total Reward</span></div>
-                                             <div class="name">{{ $wallet->display_total_earnings }}</div>
+                                          <div class="col-50">
+                                             <div class="holder">
+                                                <div class="color"></div>
+                                                <div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
+                                             </div>
                                           </div>
                                        </div>
                                     </div>
@@ -328,33 +326,17 @@
                               </div>
                            </div>
                            <div class="summary-holder">
-                              <div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+                              <div class="title">Reward Summary</div>
                               <div class="body">
                                  <div class="chart-legend">
                                     <div class="row" style="text-align: center;">
                                        <div class="col-100">
-                                          <div class="holder" style="text-align: center; display: inline-block;">
-                                             <div class="color-name"><div class="color"></div><span>Pairing Reward</span></span></div>
-                                             <div class="name">{{ $wallet->display_complan_triangle }}</div>
-                                          </div>
-                                       </div>
-                                       <div class="col-100">
-                                          <div class="holder" style="text-align: center; display: inline-block;">
-                                             <div class="color-name"><div class="color"></div><span>Direct Referral Bonus</span></div>
-                                             <div class="name">{{ $wallet->display_complan_direct }}</div>
-                                          </div>
-                                       </div>
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color"></div><span>Builder Reward</span></div>
-                                             <div class="name">{{ $wallet->display_complan_builder }}</div>
-                                          </div>
-                                       </div>
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color"></div><span>Leader Reward</span></div>
-                                             <div class="name">{{ $wallet->display_complan_leader }}</div>
-                                          </div>
+                                          @foreach($_wallet_plan as $plan)
+                                             <div class="holder">
+                                                <div class="color"></div>
+                                                <div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+                                             </div>
+                                          @endforeach
                                        </div>
                                     </div>
                                  </div>

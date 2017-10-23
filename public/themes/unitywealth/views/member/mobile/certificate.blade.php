@@ -8,7 +8,9 @@
     </div>
     <div class="page-content">
 		<div class="certificate-view">
-			
+			<div class="img-container">
+                <img src="/themes/{{ $shop_theme }}/img/certificate.png">
+            </div>
 		</div>
     </div>
 </div>

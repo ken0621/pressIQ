@@ -7,6 +7,10 @@
         </div>
     </div>
     <div class="page-content">
-	
+	   <div class="products-view">
+        <div class="img-container">
+            <img src="/themes/{{ $shop_theme }}/img/product.png">
+        </div>
+       </div>
     </div>
 </div>

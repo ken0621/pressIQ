@@ -940,9 +940,34 @@ select, button
 			}
 		}
 	}
+	.products-view
+	{
+		.img-container
+		{
+			text-align: center;
+			vertical-align: middle;
+
+			img
+			{
+				width: 50%;
+			}
+
+		}
+	}
+
 	.certificate-view
 	{
+		.img-container
+		{
+			text-align: center;
+			vertical-align: middle;
 
+			img
+			{
+				width: 100%;
+			}
+
+		}
 	}
 	/* Sidebar */
 	&.sidebar-left
@@ -971,7 +996,7 @@ select, button
 						{
 							.item-media
 							{
-								.icon
+								.icon, .fa
 								{
 									opacity: 0.5;
 									font-size: 25px;
@@ -1126,7 +1151,7 @@ select, button
 {
     .modal-header
     {
-    	background-color: #422311;
+    	background-color: #00A4E6;
 	    padding: 15px;
 		.modal-title
 		{
@@ -1280,7 +1305,7 @@ select, button
     	{
     		font-size: 18px;
     		width: 100%;
-    		background-color: #5E341B;
+    		background-color: #00A4E6;
     		color: #fff;
     		padding: 7px;
     		font-weight: bold;
@@ -1299,7 +1324,7 @@ select, button
 {
 	.modal-header
     {
-    	background-color: #422311;
+    	background-color: #00A4E6;
 	    padding: 15px;
 		.modal-title
 		{
@@ -1334,7 +1359,7 @@ select, button
 			margin-bottom: 27px;
 			font-size: 13px !important;
 			letter-spacing: 0.3px;
-			color: #613922 !important;
+			color: #00A4E6 !important;
 		}
 		.value-set
 		{

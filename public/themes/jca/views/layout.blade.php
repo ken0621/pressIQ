@@ -86,6 +86,11 @@
                                 <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
                                 <li><a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a></li>
                                 <li><a class="smoth-scroll" href="/#products">PRODUCTS</a></li>
+                            @elseif(Request::segment(1)=="terms_and_conditions")
+                                <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                                <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
+                                <li><a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a></li>
+                                <li><a class="smoth-scroll" href="/#products">PRODUCTS</a></li>    
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
@@ -134,14 +139,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <!-- <div class="col-md-2">
                         <div class="jca-footer-title-container">
                             <p class="footer-title">Quick Links</p>
                         </div>
                         <div class="jca-footer-details-container">
-                            <a href="javascript:">
-                                <p class="footer-detail-list">Company Policy</p>
-                            </a>
                             <a href="javascript:">
                                 <p class="footer-detail-list">Dealer’s Policy</p>
                             </a>
@@ -158,62 +160,60 @@
                                 <p class="footer-detail-list">Product Policy</p>
                             </a>
                         </div>
-                    </div>
-                    <div class="col-md-3">
+                    </div> -->
+                    <div class="col-md-4">
                         <div class="jca-footer-title-container">
                             <p class="footer-title">Overview</p>
                         </div>
                         <div class="jca-footer-details-container">
 
-                            <a href="/themes/{{ $shop_theme }}/img/overview/marketing_plan.png" class="lsb-preview"> 
+                            <a href="/themes/{{ $shop_theme }}/img/overview/marketing-plan.jpg" class="lsb-preview"> 
                                 <p class="footer-detail-list">Marketing Plan</p>
                             </a>
                             
-                            <a href="/themes/{{ $shop_theme }}/img/overview/packages.png" class="lsb-preview"> 
+                            <a href="/themes/{{ $shop_theme }}/img/overview/packages.jpg" class="lsb-preview"> 
                                 <p class="footer-detail-list">Packages</p>
                             </a>
                             
-                            <a href="/themes/{{ $shop_theme }}/img/overview/product_packages.png" class="lsb-preview"> 
+                            <a href="/themes/{{ $shop_theme }}/img/overview/product-packages.jpg" class="lsb-preview"> 
                                 <p class="footer-detail-list">Product Packages</p>
                             </a>
 
-                            <a href="/themes/{{ $shop_theme }}/img/overview/direct_selling.png" class="lsb-preview"> 
+                            <a href="/themes/{{ $shop_theme }}/img/overview/product-packages-2.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Product Packages (8,000 Standard Package)</p>
+                            </a>
+
+                            <a href="/themes/{{ $shop_theme }}/img/overview/direct-selling.jpg" class="lsb-preview"> 
                                 <p class="footer-detail-list">Direct Selling</p>
                             </a>
                             
-                            <a href="/themes/{{ $shop_theme }}/img/overview/unilevel.png" class="lsb-preview"> 
-                                <p class="footer-detail-list">Unilevel</p>
-                            </a>
-                            
-                            <a href="/themes/{{ $shop_theme }}/img/overview/sales_commission.png" class="lsb-preview"> 
-                                <p class="footer-detail-list">Sales Comission</p>
+                            <a href="/themes/{{ $shop_theme }}/img/overview/sales-commission.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Sales Commission</p>
                             </a>
 
-                            <a href="/themes/{{ $shop_theme }}/img/overview/override.png" class="lsb-preview"> 
-                                <p class="footer-detail-list">Overide Sales Comission</p>
+                            <a href="/themes/{{ $shop_theme }}/img/overview/overide-sales-comission.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Overide Sales Commission</p>
+                            </a>
+
+                            <a href="/terms_and_conditions"> 
+                                <p class="footer-detail-list">General Terms and Conditions</p>
                             </a>
 
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="jca-footer-title-container">
                             <p class="footer-title">Product Portfolio</p>
                         </div>
                         <div class="jca-footer-details-container">
-                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/body_cream.png" class="lsb-preview"> 
-                                <p class="footer-detail-list">JCA Wellness Body Cream</p>
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-serum.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Swiss Apple Stem Cell Serum</p>
                             </a>
-                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/day_cream.png" class="lsb-preview"> 
-                                <p class="footer-detail-list">JCA Wellness Day Cream</p>
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-soap.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Swiss Apple Stem Cell Soap with Glutathione and Collagen</p>
                             </a>
-                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/night_cream.png" class="lsb-preview"> 
-                                <p class="footer-detail-list">JCA Wellness Night Cream</p>
-                            </a>
-                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/stem_cell_serum.png" class="lsb-preview"> 
-                                <p class="footer-detail-list">Swiss Apple Stemcell Cerum</p>
-                            </a>
-                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/stem_cell_soap.png" class="lsb-preview"> 
-                                <p class="footer-detail-list">Swiss Apple Stemcell Soap with gulthathione and collagen</p>
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-services.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Stem Cell Therapy- The Anti-Aging and Rejuvenation Therapy</p>
                             </a>
                         </div>
                     </div> 
@@ -223,7 +223,7 @@
     </footer>
     <div class="container">
         <div class="bottom">                           
-            <div class="ftr-title">© JCA International Corporation. All Right Reserved</div>
+            <div class="ftr-title">© JCA Wellness International Corp. All Right Reserved</div>
             <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
         </div>
     </div>

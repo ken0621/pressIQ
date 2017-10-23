@@ -122,7 +122,7 @@
 					<div class="wow-title">
 						<span class="orange">SPECIAL</span><span class="blue">OFFERS</span>
 					</div>
-					<div class="item-container">
+					<div class="item-container clearfix">
 						@foreach(get_collection(get_content($shop_theme_info, "home", "special_offers"), $shop_id) as $collection)
 							<div class="row-no-padding clearfix per-item">
 								<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
@@ -167,7 +167,7 @@
 			<div class="col-md-9">
 				<div class="grid-holder">
 					<div class="row-no-padding clearfix">
-						<div class="col-md-8">
+						<div class="col-xs-8">
 							<div class="grid-1">
 								<div class="single-slide">
 									<div>
@@ -179,7 +179,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4">
+						<div class="col-xs-4">
 							<div class="grid-2">
 								<img src="/themes/{{ $shop_theme }}/img/slide/banner2.png">
 							</div>
@@ -774,7 +774,7 @@ $(document).ready(function()
   	  arrows: true,
   	  prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/left-carousel.jpg'>",
       nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/right-carousel.jpg'>",
-       pauseOnHover: false
+      pauseOnHover: false
 	});
 
 	$('.add-slider .add-top').slick({

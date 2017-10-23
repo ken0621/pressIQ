@@ -63,6 +63,16 @@ function custom_theme()
 			arrows: false,
 			autoplay: true,
   			autoplaySpeed: 2000,
+			responsive: [
+				{
+					breakpoint: 991,
+					settings: 
+					{
+						slidesToShow: 3,
+						slidesToScroll: 1
+					}
+				}
+			]
 		})
 
 		$(document).on('click', '.hot-deals-container .left-container-title .scroll-button a', function(event) 

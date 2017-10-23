@@ -55,6 +55,10 @@
     {
         font-size: 14px !important;
     }
+    .wow-title
+    {
+        font-size: 18px;
+    }
 }
 
 @media (max-width: 768px) 
@@ -102,6 +106,15 @@
     .shopping-cart-container
     {
         width: 100%;
+    }
+    .item-container .per-item
+    {
+        float: left;
+        width: 50%;
+    }
+    .item-container
+    {
+        margin-bottom: 15px;
     }
 }
 
@@ -152,5 +165,8 @@
 
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) 
 {
-    
+    .header-nav .header-nav-top .holder a
+    {
+        font-size: 11px;
+    }
 }

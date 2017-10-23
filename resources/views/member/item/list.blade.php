@@ -67,7 +67,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($_item as $item)
+                                @foreach($_item as $key => $item)
                                 <tr>
                                     <td>{{$item->item_id}}</td>
                                     <td>{{$item->item_name}}</td>

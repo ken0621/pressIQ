@@ -175,7 +175,8 @@ class ShopMemberController extends Shop
             }
             else
             {                
-                $return['status'] = 'error';
+                $return['status'] = 'error_status';
+                $return['call_function'] = 'success_reserve';
                 $return['status_message'] = $return_id;
             }
         }
@@ -186,7 +187,8 @@ class ShopMemberController extends Shop
             {
                 $message .= "<div>" . $error . "</div>";
             }
-            $return['status'] = 'error';
+            $return['status'] = 'error_status';
+            $return['call_function'] = 'success_reserve';
             $return['status_message'] = $message;
         }
 

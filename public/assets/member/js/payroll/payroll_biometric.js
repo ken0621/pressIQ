@@ -50,6 +50,8 @@ function payroll_biometric()
 	{
 		var date_from = $('.date_from').val()
 		var date_to = $('.date_to').val();
+		
+
 		$.ajax({
 			url		:  '/member/payroll/payroll_biometric/biometric_record_table',
 			data	: {date_from : date_from, date_to : date_to},
@@ -66,13 +68,16 @@ function payroll_biometric()
 	{
 		var date_from = $('.date_from').val()
 		var date_to = $('.date_to').val();
+		var company_id = $('.change-company-import').val();
+		$('.modal-loader').removeClass('hidden');
 		$.ajax({
 			url		:  '/member/payroll/payroll_biometric/biometric_import_record',
-			data	: {date_from : date_from, date_to : date_to},
+			data	: {date_from : date_from, date_to : date_to, company_id : company_id},
 			type	: 'GET',
 			success : function(result)
 			{
 				$('.report-import').html(result);
+				$('.modal-loader').addClass('hidden');
 			}
 		});
 	}

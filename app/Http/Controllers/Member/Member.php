@@ -48,6 +48,7 @@ class Member extends Controller
 					/* CHECK IF PASSWORD IS NOT CORRECT - REDIRECT TO FRONTPAGE */
 					$decrypted_session_password = Crypt::decrypt(session("user_password"));
 					$decrypted_db_password = Crypt::decrypt($user_info->user_password);
+
 					if($decrypted_db_password != $decrypted_session_password)
 					{
 						return Redirect::to('/')->send();
@@ -83,7 +84,7 @@ class Member extends Controller
 							$check_exist   = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->where("warehouse_id",$check_session)->first();
 							if(!$check_exist)
 							{
-								$current_warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->orderBy("main_warehouse","DESC")->first();
+								$current_warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->orderBy("warehouse_id","ASC")->first();
 							}
 							else
 							{
@@ -119,11 +120,11 @@ class Member extends Controller
 						$this->current_warehouse = $current_warehouse;
 						if($is_dev == 1)
 						{
-							$warehouse_list  = Tbl_warehouse::inventory()->orderBy("main_warehouse","DESC")->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get(); 
+							$warehouse_list  = Tbl_warehouse::inventory()->orderBy("main_warehouse","ASC")->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->where('tbl_warehouse.archived',0)->get(); 
 						}
 						else
 						{
-							$warehouse_list  = Tbl_warehouse::inventory()->join("tbl_user_warehouse_access","tbl_user_warehouse_access.warehouse_id","=","tbl_warehouse.warehouse_id")->where("tbl_user_warehouse_access.user_id",$user_info->user_id)->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get(); 
+							$warehouse_list  = Tbl_warehouse::inventory()->join("tbl_user_warehouse_access","tbl_user_warehouse_access.warehouse_id","=","tbl_warehouse.warehouse_id")->where("tbl_user_warehouse_access.user_id",$user_info->user_id)->where('tbl_warehouse.archived',0)->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get(); 
 						}
 
 						View::share('user_info', $user_info);
@@ -154,7 +155,6 @@ class Member extends Controller
 			}
 			else
 			{
-				
 				$data["frontend_domain"] = $this->user_info->shop_key . "." . get_domain();
 			}
 

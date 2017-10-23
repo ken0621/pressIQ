@@ -10,6 +10,14 @@ body
 	background-color: #ededed;
 }
 
+@mixin transition($transition)
+{
+	  -webkit-transition: all $transition ease-in-out;
+	  -moz-transition: all $transition ease-in-out;
+	  -o-transition: all $transition ease-in-out;
+	  transition: all $transition ease-in-out;
+}
+
 .register
 {
 	font-family: $content-text;
@@ -263,7 +271,13 @@ body
 				}
 				span
 				{
-					color: #693d28;
+					@include transition(0.2s);
+					color: #B17D2A;
+
+					&:hover
+					{
+						color: #019771;
+					}
 				}
 			}
 			.choice
@@ -273,6 +287,7 @@ body
 				{
 					text-align: center;
 				}
+
 				.holder
 				{
 					display: inline-block;
@@ -281,21 +296,33 @@ body
 					{
 						display: block;
 					}
-					a {
-						color: $text-dark !important;
+					a
+					{
+						@include transition(0.2s);
+						/* color: $text-dark !important; */
 						font-weight: $regular;
-						color: #422311 !important;
+						color: #B17D2A !important;
 						font-size: 15px !important;
+
+						&:hover
+						{
+							color: #019771 !important;
+						}
 					}
 					.btn-brown 
 					{
+						@include transition(0.2s);
+						background-color: #B17D2A;
+						color: #fff;
+
 						@media screen and (max-width: 991px)
 						{
 							width: 100%;
 						}
 						&:hover 
 						{
-							background-color: #613922;
+							background-color: #019771;
+							color: #fff;
 						}
 					}
 				}
@@ -312,9 +339,11 @@ body
 				}
 				.login-href
 				{
-					color: #693d28;
+					@include transition(0.2s);
+					color: #019771 !important;
 					font-size: 13px;
 					font-weight: 600;
+
 					@media screen and (max-width: 991px)
 					{
 						display: block;
@@ -329,7 +358,7 @@ body
 {
 	.modal-header
 	{
-		background-color: #693d28;
+		background-color: #B17D2A;
 		color: #fff;
 		font-size: 13px;
 		font-weight: 600;
@@ -340,10 +369,36 @@ body
 		{
 			color: $text-dark;
 			font-size: 13px;
-			font-weight: 600;
-			white-space: pre-wrap;
+			//white-space: pre-wrap;
 			height: 420px;
 			overflow-y: auto;
+
+			.header
+			{
+				font-size: 15px;
+				font-weight: $semi-bold;
+				padding-bottom: 10px;
+			}
+			
+			.introduction
+			{
+				.title
+				{
+					font-weight: $semi-bold;
+					font-size: 13px;
+					padding-bottom: 10px;
+				}
+
+				.para-container
+				{
+					font-weight: $regular;
+				}
+			}
+
+			.personal-info, .share-protect, .contact-us, .disclaimer, .dealers-policy
+			{
+				@extend .introduction;
+			}
 		}
 	}
 	.modal-footer
@@ -363,11 +418,23 @@ body
 		}
 		.btn-semi
 		{
-			background-color: #693d28;
+			@include transition(0.2s);
+			background-color: #B17D2A;
+
+			&:hover
+			{
+				background-color: #f34e4e;
+			}
 		}
 		.btn-pure
 		{
-			background-color: #462211;
+			@include transition(0.2s);
+			background-color: #B17D2A;
+
+			&:hover
+			{
+				background-color: #019771;
+			}
 		}
 	}
 }

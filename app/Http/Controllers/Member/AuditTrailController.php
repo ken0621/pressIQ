@@ -55,7 +55,12 @@ class AuditTrailController extends Member
         //dd($date_to);
         if ($keyword == '')
         {
-            $data["_audit"] = AuditTrail::getAudit_data();    
+            $data["_audit"] = AuditTrail::getAudit_data();  
+            // $data["_audit"] = Tbl_audit_trail::
+            //                 where("audit_shop_id",AuditTrail::getShopId())
+            //                 ->orderBy("tbl_audit_trail.audit_trail_id","DESC")
+            //                 ->paginate(15);  
+            //                 // dd($data);
         } 
         else
         {

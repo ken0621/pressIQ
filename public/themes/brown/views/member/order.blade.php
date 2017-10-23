@@ -1,8 +1,8 @@
 @extends("member.member_layout")
 @section("member_content")
 <div class="member-order">
-	<div class="animated fadeInRight main-member-header clearfix">
-		<div class="left">
+	<div class="main-member-header clearfix">
+		<div class="animated fadeInLeft left">
 			<div class="icon">
 				<div class="brown-icon-orders"></div>
 			</div>
@@ -10,128 +10,56 @@
 				<div class="name">My Orders</div>
 			</div>
 		</div>
-		<div class="right">
-			
+		<div class="animated fadeInRight right">
 		</div>
 	</div>
 	<div class="order-content">
-		<div class="animated fadeInUp holder">
-			<table>
-				<tr>
-					<td class="img">
-						<img src="/themes/{{ $shop_theme }}/img/product-placeholder.png">
-					</td>
-					<td class="info">
-						<div class="first-row clearfix">
-							<div class="name">Order #1</div>
-							<div class="button">
-								<button class="btn btn-orange">View Invoice</button>
+		@if(count($_order) > 0)
+			@foreach($_order as $key => $order)
+			<div class="animated fadeInUp holder">
+				<table>
+					<tr>
+						<td class="img">
+							<img src="/themes/{{ $shop_theme }}/img/product-placeholder.png">
+						</td>
+						<td class="info">
+							<div class="first-row clearfix">
+								<div class="name">{{ $order->transaction_number }}</div>
+								<div class="button">
+									<button class="btn btn-orange popup" type='button' link='/members/order-details/{{ $order->transaction_list_id }}' size='lg'>View Order Details</button>
+								</div>
 							</div>
-						</div>
-						<table>
-							<tr>
-								<td class="detail-label">Order Status:</td>
-								<td class="detail-value">Pending</td>
-							</tr>
-							<tr>
-								<td class="detail-label">Customer Email:</td>
-								<td class="detail-value">julia@solidgroup.com.ph</td>
-							</tr>
-							<tr>
-								<td class="detail-label">Payment Status:</td>
-								<td class="detail-value">Unpaid</td>
-							</tr>
-							<tr>
-								<td class="detail-label">Billing Address:</td>
-								<td class="detail-value">20 Somerset St McKinley Hill Village Taguig City 1634, Pinagsamahan, Taguig City, Metro Manila</td>
-							</tr>
-							<tr>
-								<td class="detail-label">Tracking Number:</td>
-								<td class="detail-value">5432154321</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<div class="animated fadeInUp holder">
-			<table>
-				<tr>
-					<td class="img">
-						<img src="/themes/{{ $shop_theme }}/img/product-placeholder.png">
-					</td>
-					<td class="info">
-						<div class="first-row clearfix">
-							<div class="name">Order #1</div>
-							<div class="button">
-								<button class="btn btn-orange">View Invoice</button>
-							</div>
-						</div>
-						<table>
-							<tr>
-								<td class="detail-label">Order Status:</td>
-								<td class="detail-value">Pending</td>
-							</tr>
-							<tr>
-								<td class="detail-label">Customer Email:</td>
-								<td class="detail-value">julia@solidgroup.com.ph</td>
-							</tr>
-							<tr>
-								<td class="detail-label">Payment Status:</td>
-								<td class="detail-value">Unpaid</td>
-							</tr>
-							<tr>
-								<td class="detail-label">Billing Address:</td>
-								<td class="detail-value">20 Somerset St McKinley Hill Village Taguig City 1634, Pinagsamahan, Taguig City, Metro Manila</td>
-							</tr>
-							<tr>
-								<td class="detail-label">Tracking Number:</td>
-								<td class="detail-value">5432154321</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<div class="animated fadeInUp holder">
-			<table>
-				<tr>
-					<td class="img">
-						<img src="/themes/{{ $shop_theme }}/img/product-placeholder.png">
-					</td>
-					<td class="info">
-						<div class="first-row clearfix">
-							<div class="name">Order #1</div>
-							<div class="button">
-								<button class="btn btn-orange">View Invoice</button>
-							</div>
-						</div>
-						<table>
-							<tr>
-								<td class="detail-label">Order Status:</td>
-								<td class="detail-value">Pending</td>
-							</tr>
-							<tr>
-								<td class="detail-label">Customer Email:</td>
-								<td class="detail-value">julia@solidgroup.com.ph</td>
-							</tr>
-							<tr>
-								<td class="detail-label">Payment Status:</td>
-								<td class="detail-value">Unpaid</td>
-							</tr>
-							<tr>
-								<td class="detail-label">Billing Address:</td>
-								<td class="detail-value">20 Somerset St McKinley Hill Village Taguig City 1634, Pinagsamahan, Taguig City, Metro Manila</td>
-							</tr>
-							<tr>
-								<td class="detail-label">Tracking Number:</td>
-								<td class="detail-value">5432154321</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-		</div>
+							<table>
+								<tr>
+									<td class="detail-label">Payment Status:</td>
+									<td class="detail-value"><b>{{ strtoupper($order->payment_status) }}</b></td>
+								</tr>
+								<tr>
+									<td class="detail-label">Delivery Status:</td>
+									<td class="detail-value"><b>{{ strtoupper($order->order_status) }}</b></td>
+								</tr>
+								<tr>
+									<td class="detail-label">Customer Email:</td>
+									<td class="detail-value">{{ $order->email }}</td>
+								</tr>
+								<tr>
+									<td class="detail-label">Tracking Number:</td>
+									<td class="detail-value">NO TRACKING NUMBER YET</td>
+								</tr>
+								
+								<tr>
+									<td class="detail-label">Payment Method:</td>
+									<td class="detail-value"><b>{{ strtoupper($order->payment_method) }}</b></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+			@endforeach
+		@else
+			<div class="text-center" style="padding: 100px;">You don't have any order yet.</div>
+		@endif
 	</div>
 </div>
 @endsection

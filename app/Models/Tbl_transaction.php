@@ -7,4 +7,5 @@ class Tbl_transaction extends Model
 {
 	protected $table = 'tbl_transaction';
 	protected $primaryKey = "transaction_id";
+	public $timestamps = false;
 }

@@ -1,17 +1,74 @@
-$content-text: 'Arimo', sans-serif;
+$content-text: 'Rubik', sans-serif;
+$light: 300;
 $regular: 400;
+$medium: 500;
 $semi-bold: 600;
 $bold: 700;
-$text-light: #777;
-$text-dark: #272c2f;
+$text-light: #585858;
+$text-dark: #404040;
 
 body
 {
-	font-family: 'Droid Sans', sans-serif;
+	font-family: 'Rubik', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	font-smoothing: antialiased;
 	font-weight: 400;
+	color: $text-dark;
+
+}
+
+
+.btn-def-white
+{
+	border: 2px solid #ddd;
+	background-color: #fff;
+	color: $text-dark;
+	&:hover
+	{
+		border: 2px solid $text-dark;
+	}
+}
+.btn-custom-primary
+{
+	background-color: #722f09 !important;
+	color: #fff;
+	opacity: 0.7;
+
+	&:hover
+	{
+		color: #fff;
+		opacity: 1.0;
+	}
+}
+
+
+@mixin transition($transition)
+{
+  	-webkit-transition: all $transition ease-in-out;
+  	-moz-transition: all $transition ease-in-out;
+  	-o-transition: all $transition ease-in-out;
+  	transition: all $transition ease-in-out;
+}/* apply @inlude transition(0.2s); */
+
+
+.embed-responsive
+{
+	position: relative;
+	.overlay
+	{
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: transparent;
+		z-index: 2;
+	}
+	.embed-responsive-item
+	{
+		z-index: 1;
+	}
 }
 
 button
@@ -26,7 +83,7 @@ button
 	background-color: #502d19;
 	padding: 7.5px 25px;
 	border-radius: 25px;
-	font-weight: 600;
+	font-weight: $medium;
 	&:hover
 	{
 		color: #fff;
@@ -122,7 +179,7 @@ button
 
 			.modal-title
 			{
-				font-weight: $semi-bold;
+				font-weight: $regular;
 				color: #FFF;
 			}
 		}
@@ -136,8 +193,8 @@ button
 					th
 					{
 						background-color: #ece8e8;
-						color: #272c2f;
-						font-weight: 600;
+						color: $text-dark;
+						font-weight: $regular;
 						font-size: 15px;
 						border-bottom: 0;
 						text-align: center;
@@ -355,7 +412,7 @@ button
 			{
 				color: $text-dark;
 				font-size: 13px;
-				font-weight: $bold;
+				font-weight: $medium;
 			}
 			.email
 			{
@@ -373,7 +430,7 @@ button
 				{
 					color: #ffffff;
 					font-size: 13px;
-					font-weight: 600;
+					font-weight: $regular;
 					border-radius: 3px;
 					text-align: center;
 					padding: 5px 15px;
@@ -548,12 +605,12 @@ button
 }
 header
 {
-	background-color: #422311;
-	color: #dac5a6;
+	background-color: #402a21;
+	color: #e5d8b5;
 	transition: margin-left .5s;
 	.header-top
 	{
-		background-color: #301e10;
+		background-color: #301f19;
 		text-align: right;
 		font-weight: 300;
 		.holder
@@ -562,7 +619,7 @@ header
 			vertical-align: top;
 			font-size: 12px;
 			padding: 7.5px 15px;
-			color: #dac5a6;
+			color: #e5d8b5;
 			cursor: pointer;
 			&.active, &:hover, &:focus
 			{
@@ -577,7 +634,7 @@ header
 	}
 	.header-middle
 	{
-		border-bottom: 1px solid #553929;
+		border-bottom: 1px solid #534038;
 		.logo
 		{
 			cursor: pointer;
@@ -592,7 +649,7 @@ header
 			.form-control
 			{
 				border-radius: 15px;
-				background-color: #4c2e1d;
+				background-color: #4a352c;
 				border: 0;
 				outline: none;
 				color: #fff;
@@ -690,7 +747,8 @@ header
 						{
 							a
 							{
-								background-color: #4c2e1d;
+								background-color: #402a21;
+								color: #fff !important;
 							}
 						}
 						a
@@ -698,7 +756,7 @@ header
 							text-shadow: none;	
 							font-size: 13px;
 							font-weight: 300;
-							color: #dac5a6;
+							color: #e5d8b5;
 						}
 					}
 				}
@@ -719,7 +777,7 @@ header
 	top: 0;
 	left: 0;
 	right: 0;
-	background-color: #301e10;
+	background-color: #301f19;
 	height: 50px;
 	width: 100%;
 	z-index: 1000;
@@ -731,7 +789,7 @@ header
 	.relative
 	{
 		position: relative;
-		background-color: #301E10;
+		background-color: #301f19;
 	}
 	.left
 	{
@@ -761,7 +819,7 @@ header
 		.list-category
 		{
 			margin-top: -2px;
-			background-color: #422311;
+			background-color: #402a21;
 			position: absolute;
 			top: 100%;
 			left: 0;
@@ -769,11 +827,17 @@ header
 			width: 100%;
 			a
 			{
-				color: #dac5a6;
+				color: #e5d8b5;
 				font-size: 13px;
 				font-weight: 300;
 				padding: 10px 15px;
 				display: inline-block;
+				text-decoration: none;
+			}
+			a:hover
+			{
+				color: #fff;
+				cursor: pointer;
 			}
 		}
 	}
@@ -830,7 +894,7 @@ header
 				display: inline-block;
 				vertical-align: middle;
 				font-size: 20px;
-				color: #dac5a6;
+				color: #e5d8b5;
 				height: 25px;
 			}
 		}
@@ -849,7 +913,7 @@ header
 				display: inline-block;
 				vertical-align: middle;
 				font-size: 20px;
-				color: #dac5a6;
+				color: #e5d8b5;
 				height: 21px;
 			}
 		}
@@ -887,7 +951,7 @@ header
 /* Footer */
 footer
 {
-	background-color: #422311;
+	background-color: #301f19;
 	padding: 35px 0;
 	.holder
 	{
@@ -928,7 +992,7 @@ footer
 				a
 				{
 					font-size: 11px;
-					color: #dac5a6;
+					color: #e5d8b5;
 					font-weight: 300;
 					&:active, &:focus, &:hover
 					{
@@ -942,6 +1006,7 @@ footer
 		{
 			.holder
 			{
+				@include transition(0.2s);
 				background-color: #5d4239;
 				color: #fff;
 				padding: 10px;
@@ -953,13 +1018,52 @@ footer
 				display: inline-block;
 				text-align: center;
 				margin: 0 2.5px;
+				cursor: pointer;
+
 				&:first-child
 				{
 					margin-left: 0;
+					&:hover
+					{
+						background-color: #3B5998;
+						
+						i
+						{
+							@include transition(0.2s);
+							font-size: 24px;
+						}
+					}
+
 				}
+				
+				&:nth-child(2)
+				{
+					&:hover
+					{
+						background-color: #1DA1F3;
+
+						i
+						{
+							@include transition(0.2s);
+							font-size: 24px;
+						}
+					}
+				}
+
 				&:last-child
 				{
 					margin-right: 0;
+
+					&:hover
+					{
+						background-color: #CD486B;
+
+						i
+						{
+							@include transition(0.2s);
+							font-size: 24px;
+						}
+					}
 				}
 			}
 		}
@@ -973,6 +1077,7 @@ footer
 		color: #1c1c1c;
 		font-size: 13px;
 		margin-bottom: 15px;
+		font-weight: $regular !important;
 	}
 	.payment-container
 	{

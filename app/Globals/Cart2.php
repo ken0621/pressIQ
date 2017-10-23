@@ -5,6 +5,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_cart;
 use App\Models\Tbl_cart_info;
+use App\Models\Tbl_transaction_item;
 use Session;
 use Carbon\Carbon;
 use App\Globals\Currency;
@@ -63,7 +64,7 @@ class Cart2
 	public static function set_payment_method_information($payment_method_info)
 	{
 	}
-	public static function add_item_to_cart($shop_id, $item_id, $quantity)
+	public static function add_item_to_cart($shop_id, $item_id, $quantity, $change_qty = false)
 	{
 		$cart_key = Self::get_cart_key();
 
@@ -74,6 +75,10 @@ class Cart2
 			if($check_cart) //ITEM EXIST IN CART
 			{
 				$update["quantity"] = $check_cart->quantity + $quantity;
+				if($change_qty == true)
+				{
+					$update["quantity"] = $quantity;
+				}
 				Tbl_cart::where("cart_id", $check_cart->cart_id)->update($update);
 			}
 			else //ITEM DOES NOT EXIST IN CART
@@ -107,7 +112,8 @@ class Cart2
 		$cart_key = Self::get_cart_key();
 		$total = 0;
 		$grand_total = 0;
-
+		$_cart = null;
+		
 		if($cart_key)
 		{
 			$_cart 			= Tbl_cart::where("unique_id_per_pc", $cart_key)->where("status", "Not Processed")->get();
@@ -143,16 +149,20 @@ class Cart2
 				Item::get_apply_price_level($cart_info->price_level_id);
 				
 				$item_info 							= Item::info($cart->product_id);
-				$_cart[$key] 						= $cart;
-				$_cart[$key]->item_id 				= $item_info->item_id;
-				$_cart[$key]->item_name 			= $item_info->item_name;
-				$_cart[$key]->item_sku 				= $item_info->item_sku;
-				$_cart[$key]->item_price 			= $item_info->item_price;
-				$_cart[$key]->discount 				= 0;
-				$_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
-				$_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->item_price);
-				$_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
-				$total += $_cart[$key]->subtotal;
+				
+				if ($item_info) 
+				{
+					$_cart[$key] 						= $cart;
+					$_cart[$key]->item_id 				= $item_info->item_id;
+					$_cart[$key]->item_name 			= $item_info->item_name;
+					$_cart[$key]->item_sku 				= $item_info->item_sku;
+					$_cart[$key]->item_price 			= $item_info->item_price;
+					$_cart[$key]->discount 				= 0;
+					$_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
+					$_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->item_price);
+					$_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
+					$total += $_cart[$key]->subtotal;
+				}
 			}
 
 			$grand_total = $total;
@@ -203,18 +213,24 @@ class Cart2
 			$_cart = Tbl_cart::where("unique_id_per_pc", $cart_key)->where("status", "Not Processed")->get();
  		}
 
-		if(count($_cart) > 0)
+		if(isset($_cart) && count($_cart) > 0)
 		{
 			foreach($_cart as $key => $cart)
 			{
 				$quantity += $cart->quantity;
 			}
 		}
+		else
+		{
+			$quantity = 0;
+		}
 
 		return $quantity;
 	}
 	public static function clear_cart()
 	{
+		$cart_key = Self::get_cart_key();
+		Tbl_cart::where("unique_id_per_pc", $cart_key)->delete();
 	}
 	public static function validate_cart()
 	{
@@ -242,5 +258,16 @@ class Cart2
 	}
 	public static function clear_customer()
 	{
+	}
+	public static function copy_item_from_cart_transaction($shop_id, $transaction_list_id)
+	{
+		Self::clear_cart();
+		
+        $_item = Tbl_transaction_item::where("transaction_list_id", $transaction_list_id)->get();
+        
+        foreach($_item as $item)
+        {
+            Self::add_item_to_cart($shop_id, $item->item_id, $item->quantity);
+        }
 	}
 }

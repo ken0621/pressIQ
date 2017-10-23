@@ -164,4 +164,10 @@ class ShopAboutController extends Shop
            return Redirect::to('/jobs#popup4');
         }
     }
+
+    public function replicated()
+    {
+        $data["page"] = "replicated";
+        return view("replicated", $data);
+    } 
 }

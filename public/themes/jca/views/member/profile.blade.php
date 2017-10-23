@@ -77,7 +77,6 @@
 			<div class="profile-form">
 				<ul class="nav nav-tabs">
 				   <li class="active"><a data-toggle="tab" href="#basic_info">Basic Info</a></li>
-				   <li><a data-toggle="tab" href="#contact_info">Reward Configuration</a></li>
 				   <li><a data-toggle="tab" href="#profile_picture">Profile Picture</a></li>
 				   @if($allowed_change_pass)
 				   <li><a data-toggle="tab" href="#password">Password</a></li>
@@ -119,7 +118,7 @@
 							   				<div class="date-holder">
 												<select name="b_month" class="form-control">
 													@for($ctr = 1; $ctr <= 12; $ctr++)
-													<option {{ date("mm", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
+													<option {{ date("m", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
 													@endfor
 												</select>
 											</div>

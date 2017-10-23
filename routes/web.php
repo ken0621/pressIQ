@@ -1,4 +1,8 @@
 <?php
+Route::get('/ref/{id}', 'LeadController@ref');
+Route::any('/inspirers', 'SampleTesting@inspirer');
+Route::any('/inspirer', 'SampleTesting@inspirer');
+
 Route::any('/ncabot', 'SampleTesting@ncabot');
 Route::any('/oliver/{id}', 'SampleTesting@index');
 Route::any('/oliver/samp2', 'SampleTesting@samp2');
@@ -28,6 +32,7 @@ Route::get('/barcode', 'MemberController@barcodes');
 Route::any('/login/geturl', 'Member\TesterController@test_login'); 
 
 Route::get('member/register/session', 'MemberController@session');
+Route::get('member/login', 'MemberController@login');
 Route::get('member/register', 'MemberController@register');
 Route::post('member/register/submit', 'MemberController@register_post');
 
@@ -90,6 +95,10 @@ Route::any('/member/developer/documentation', 'Member\Developer_DocumentationCon
 
 Route::any('/member/developer/auto_entry', 'Member\Developer_AutoentryController@index'); //EVERYONE
 Route::post('/member/developer/auto_entry/instant_add_slot', 'Member\Developer_AutoentryController@instant_add_slot'); //EVERYONE
+Route::any('/member/developer/auto_entry_independent/', 'Member\Developer_AutoentryController@index_independent'); //EVERYONE
+Route::post('/member/developer/auto_entry_independent/create_slot', 'Member\Developer_AutoentryController@independent_create_slot'); //EVERYONE
+Route::any('/member/developer/single_entry/', 'Member\Developer_AutoentryController@single_entry'); //EVERYONE
+Route::any('/member/developer/single_entry/submit', 'Member\Developer_AutoentryController@single_entry_submit'); //EVERYONE
 
 Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
 Route::any('/member/developer/simulate/submit', 'Member\Developer_RematrixController@simulate_submit'); //EVERYONE
@@ -103,6 +112,8 @@ Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Devel
 Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/recompute', 'Member\Developer_StatusController@recompute'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/recompute/membership_matching', 'Member\Developer_StatusController@recompute_membership_matching'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/payment_logs', 'Member\Developer_StatusController@payment_logs'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/payment_logs/{id}', 'Member\Developer_StatusController@payment_logs_data'); //GUILLERMO TABLIGAN
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */
@@ -182,6 +193,13 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::post('product_order/create_order/update_invoice','Member\ProductOrderController@update_invoice');
 	Route::get('product_order/create_order/submit_coupon','Member\ProductOrderController@submit_coupon');
 	Route::any('product_order/create_order/submit_payment_upload','Member\ProductOrderController@submit_payment_upload');
+	
+	Route::get('product_order2','Member\ProductOrderController2@index');
+	Route::post('product_order2/table','Member\ProductOrderController2@table');
+	Route::get('product_order2/proof','Member\ProductOrderController2@proof');
+	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
+	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
+	
 	//product order end
 });
 
@@ -391,6 +409,12 @@ Route::post('/member/item/warehouse/transfer_submit','Member\WarehouseController
 Route::any('/member/item/warehouse/archived/{id}','Member\WarehouseController@archived');
 Route::any('/member/item/warehouse/archive_submit','Member\WarehouseController@archived_submit');
 Route::any('/member/item/warehouse/view/{id}','Member\WarehouseController@view');
+
+Route::any('/member/item/warehouse/view_v2/{id}','Member\WarehouseController@view_v2');
+Route::any('/member/item/warehouse/view_v2/table/{id}','Member\WarehouseController@view_inventory_table');
+
+Route::any('/member/item/warehouse/view_v2/print/{id}/{type}','Member\WarehouseController@print_inventory');
+
 Route::any('/member/item/warehouse/refill','Member\WarehouseController@refill');
 Route::any('/member/item/warehouse/refill_submit','Member\WarehouseController@refill_submit');
 Route::any('/item/warehouse/refill/by_vendor/{warehouse_id}/{id}','Member\WarehouseController@refill_item_vendor');
@@ -421,9 +445,28 @@ Route::any('/member/item/warehouse/refill_log/{id}','Member\WarehouseController@
 Route::any('/member/item/warehouse/view_pdf/{id}','Member\WarehouseController@view_pdf');
 Route::any('/member/item/warehouse/stock_input_report/{id}','Member\WarehouseController@stock_input');
 /* END WAREHOUSE ARCY*/
+
+/* REFILL WAREHOUSE */
+AdvancedRoute::controller("/member/item/warehouse/v2/refill","Member\WarehouseRefillController");
+
 /* INVENTORY LOG*/
 Route::any('/member/item/inventory_log','Member\InventoryLogController@index');
 /*END INVENTORY LOG*/
+
+
+/* WAREHOUSE V2*/
+AdvancedRoute::controller('/member/item/v2/warehouse', 'Member\WarehouseControllerV2');
+/* End */
+
+/* WIS */
+AdvancedRoute::controller('/member/item/warehouse/wis', 'Member\WarehouseIssuanceSlipController');
+/* End */
+
+/* RR */
+AdvancedRoute::controller('/member/item/warehouse/rr', 'Member\WarehouseReceivingReportController');
+/* End */
+
+
 /* START PIS ARCY*/
 Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
 
@@ -860,6 +903,8 @@ AdvancedRoute::controller('/member/report', 'Member\ReportControllerV2');
 
 /* Customer */
 Route::get('/member/customer','Customer\CustomerController@index');
+Route::get('/member/customer/bulk_archive','Member\CustomerController@bulk_archive');
+Route::post('/member/customer/bulk_archive','Member\CustomerController@bulk_archive_post');
 Route::get('/member/customer/list','Member\CustomerController@index');
 Route::any('/member/customer/modalcreatecustomer','Member\CustomerController@modalcreatecustomer');
 Route::post('/member/customer/insertcustomer','Member\CustomerController@insertcustomer');
@@ -1031,6 +1076,10 @@ AdvancedRoute::controller('/member/ecommerce/trackings', 'Member\TrackingsContro
 
 
 /* MEMBER SHIPPING*/
+AdvancedRoute::controller('/member/warehouse/migration', 'Member\WarehouseMigrateController');
+/* End */
+
+/* MEMBER SHIPPING*/
 AdvancedRoute::controller('/member/register/shipping', 'MemberController');
 /* End */
 
@@ -1041,6 +1090,9 @@ AdvancedRoute::controller('/member/maintenance/app_keys', 'Member\SocialNetworki
 /* MEMBER COLUMNS */
 AdvancedRoute::controller('/member/columns', 'Member\ColumnsController');
 /* End */
+
+/* EVENTS */
+AdvancedRoute::controller('/member/page/events','Member\EventController');
 
 AdvancedRoute::controller('/tester','TesterController');
 
@@ -1118,3 +1170,7 @@ include_once('routes_config/routes_item.php');
 
 /* Members Area */
 include_once('routes_config/routes_members_area.php');
+
+
+Route::get('/ref/{id}', 'Shop\LeadController@ref');
+Route::get('/{id}', 'Shop\LeadController@ref');

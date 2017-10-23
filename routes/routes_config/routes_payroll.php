@@ -2,8 +2,6 @@
 
 Route::group(array('prefix' => '/member/payroll'), function()
 {
-
-	
 	//audit_trail_transaction
 	Route::any('/employee_list/modal_view_all_transaction/{id}/{uid}','Member\PayrollController@modal_view_all_transaction');
 	//audit_trail_transaction
@@ -28,8 +26,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/modal_loan_summary_report/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@modal_loan_summary');
 	Route::any('/reports/export_loan_summary_report_to_excel/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@export_loan_summary_report_to_excel');
 	Route::any('/reports/table_company_loan_summary','Member\PayrollReportController@table_company_loan_summary');
-
-	/*END loan summar report*/
+	/*END loan summary report*/
 
 	/*START payroll ledger*/
 	Route::any('/reports/payroll_ledger','Member\PayrollLedger@index');
@@ -51,8 +48,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/employees_13th_month_pay_table','Member\Payroll13thMonthPayController@employees_13th_month_pay_table');
 	Route::any('/reports/modal_employee_13_month_pay_report','Member\Payroll13thMonthPayController@modal_employee_13_month_pay_report');
 
-	
+
 	Route::any('/reports/employee_13_month_pay_report/{employee_id}','Member\Payroll13thMonthPayController@employee_13_month_pay_report');
+	Route::any('/reports/modal_employee_13_month_pay_report/{employee_id}','Member\Payroll13thMonthPayController@modal_employee_13_month_pay_report');
 	Route::any('/reports/employee_13_month_pay_basis_submit','Member\Payroll13thMonthPayController@employee_13_month_pay_basis_submit');
 	Route::any('/reports/employee_13_month_pay_report_table','Member\Payroll13thMonthPayController@employee_13_month_pay_report_table');
 	/*END 13th month pay*/
@@ -588,8 +586,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_reports/view_report/{id}','Member\PayrollController@view_report');
 	Route::any('/payroll_reports/download_excel_report','Member\PayrollController@download_excel_report');
 	Route::any('/payroll_reports/date_change_report','Member\PayrollController@date_change_report');
-
-
 	/* PAYROLL REPORTS END */
 
 

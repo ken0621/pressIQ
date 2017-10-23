@@ -2,8 +2,9 @@
     <table class="digima-table">
         <thead >
             <tr>
-                <th class="text-center" style="width: 40px">ITEM SKU</th>
-                <th class="text-center" style="width: 40px">ITEM BARCODE</th>
+                <th style="width: 10px" class="text-center">#</th>
+                <th class="text-center" style="width: 100px">ITEM DETAILS</th>
+                <th class="text-center" style="width: 300px">ITEM DESCRIPTION</th>
                 <th class="text-center" style="width: 100px;">ACTUAL STOCKS</th>
                 @if($pis != 0)
                 <th class="text-center" style="width: 100px;">SIR STOCKS</th>
@@ -16,11 +17,15 @@
                 @if($_inventory != null)
                     @foreach($_inventory as $keys => $inventory)
                     <tr class="tr-draggable tr-draggable-html count_row">
+                        <td>{{$keys+1}}</td>
                         <td>
-                            <label class="count-select">{{$inventory["item_sku"]}}</label>
+                            <label class="count-select">
+                                <div><strong>{{$inventory["item_sku"]}}</strong> </div>
+                                <small>{{$inventory["item_barcode"]}}</small>
+                            </label>
                         </td>
                         <td>
-                            <label class="count-select">{{$inventory["item_barcode"]}}</label>
+                            <p>{{$inventory["item_description"]}}</p>
                         </td>
                         <td>
                             <label >{{$inventory["item_actual_stock_um"]}}</label>

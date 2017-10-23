@@ -73,20 +73,34 @@ class PayrollBiometricSystemController extends Member
 
 	public function modal_import_biometric()
 	{
-		return view('member.modal.modal_import_biometric');
+		$data["_company"] = Payroll::company_heirarchy($this->user_info->shop_id);
+		// dd($data["_company"]);
+		return view('member.modal.modal_import_biometric',$data);
 	}
 
 	public function biometric_import_record()
 	{
 		$data["date_from"] 	= 	$date["date_from"] 	= Carbon::parse(Request::input('date_from'))->format("Y-m-d");
 		$data["date_to"]	= 	$date["date_to"] 	= Carbon::parse(Request::input('date_to'))->format("Y-m-d");
+		$data["company_id"] = 	Request::input('company_id');
 		$shop_id = $this->user_info->shop_id;
-
-		$data["_biometric_record"] = Tbl_payroll_biometric_record::getalldata($this->user_info->shop_id)
-		->whereBetween('tbl_payroll_biometric_record.payroll_time_date',array($date["date_from"],$date["date_to"]))
-		->orderBy('tbl_payroll_employee_basic.payroll_employee_number','asc')
-		->get();
-
+		
+		if ($data["company_id"] != 0) 
+		{
+			$data["_biometric_record"] = Tbl_payroll_biometric_record::getalldata($this->user_info->shop_id)
+			->where('tbl_payroll_biometric_record.payroll_company_id',$data["company_id"])
+			->whereBetween('tbl_payroll_biometric_record.payroll_time_date',array($date["date_from"],$date["date_to"]))
+			->orderBy('tbl_payroll_employee_basic.payroll_employee_number','asc')
+			->get();
+		}
+		else
+		{
+			$data["_biometric_record"] = Tbl_payroll_biometric_record::getalldata($this->user_info->shop_id)
+			->whereBetween('tbl_payroll_biometric_record.payroll_time_date',array($date["date_from"],$date["date_to"]))
+			->orderBy('tbl_payroll_employee_basic.payroll_employee_number','asc')
+			->get();
+		}
+		
 		$_insert = null;
 		$_update = null;
 
@@ -143,7 +157,6 @@ class PayrollBiometricSystemController extends Member
 			}
 		}
 
-	
 		$data["imported_count"]	= count($_insert);
 
 		// return view('member.payroll2.payroll_biometric_imported_data_table',$data);

@@ -74,7 +74,7 @@
 			</div>
 
 			<div class="col-md-6">
-				<div class="title">Reward Summary</div>
+				<div class="title">Cash Reward Summary</div>
 				<div class="sub-container">
 					<div class="chart-legend">
 						<div class="holder">
@@ -85,9 +85,27 @@
 							<div class="color"></div>
 							<div class="name"><span>Direct Referral</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
 						</div>
+					</div>
+				</div>
+
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Gift Certificate</span><span class="value">PHP 0.00</span></div>
+							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
+						</div>
+					</div>
+					<div class="chart-legend" style="max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Direct GC</span><span class="value">{{ $points->display_direct }}</span></div>
+						</div>
+					</div>
+					<div class="chart-legend" style="max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Maintenance GC</span><span class="value">{{ $points->display_maintenance }}</span></div>
 						</div>
 					</div>
 				</div>
@@ -154,7 +172,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)

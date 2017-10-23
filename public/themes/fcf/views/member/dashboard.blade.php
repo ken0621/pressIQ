@@ -295,7 +295,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
+					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@foreach($_recent_rewards as $recent_reward)

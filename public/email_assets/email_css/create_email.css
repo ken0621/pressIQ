@@ -1,3 +1,109 @@
+#input_title_create {
+    margin-top: 0px;
+    margin-right: 20px;
+    width: 480px;
+}
+
+#input_field
+{
+    margin-top: -88px;
+    margin-right: 20px;
+    width: 480px;
+}
+
+#input_title {
+    margin-top: -83px;
+    margin-right: 20px;
+    width: 480px;
+}
+
+.title_email
+{
+    margin-left: 22px;
+    width: 479px!important;
+}
+
+
+.texteditor
+{
+    margin-top: 0px;
+}
+
+.panel-background
+{
+    height:700px !important;   
+}
+
+.select_container
+{
+    margin-left: 30px !important;
+}
+.chosen-container
+{
+    margin-top: 10px !important;
+    margin-right: 300px !important;
+}
+
+.recipient_text
+{
+    position:relative;
+    top:-25px;
+}
+.check-all
+{
+    width: 175px;
+}
+.box
+{
+    position: relative;
+    top:-15px;
+}
+
+.check_list
+{
+    height: 380px;
+    overflow-y: scroll !important;
+    margin-top: 35px
+    
+
+}
+
+.selectpicker_type_of_industry
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
+.selectpicker_title
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
+.selectpicker_position
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
+.selectpicker_company_name
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
+
+.selectpicker
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
 .email-content-container
 {
     width: 98%;
@@ -9,7 +115,7 @@
 .pagination_container
 {
     /* margin-left: 780px; */
-    margin-top: -35px;
+    margin-top: -11px;
 }
 
 .view-message
@@ -36,8 +142,9 @@
 
 .input_chose_email
 {
-    margin-left: 10px;
-    margin-top: 20px;
+    position: absolute;
+    top: 495px;
+    left: 18px;
     width: 120px;  
 }
 
@@ -55,8 +162,10 @@
 
 .recipient_container
 {
-    margin-top: -528px;
-    margin-left: 765px!important;
+    position: absolute !important;
+    left: 745px !important;
+    top: 258px;
+    height:500px;
 }
 
 .label-choose-recipient
@@ -77,6 +186,7 @@
 .textarea_container
 {
     width:98%;
+    margin-top: -28px;
     margin-left: 10px;
     margin-right: 20px !important;
 }
@@ -104,8 +214,8 @@
 
 .gallery
 {
-    margin-left: 10px;
-    margin-top: 17px;
+    margin-left: -740px;
+    margin-top: 60px;
 }
 
 .save

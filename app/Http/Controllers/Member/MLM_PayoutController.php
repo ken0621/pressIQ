@@ -15,6 +15,7 @@ use App\Globals\Currency;
 use Redirect;
 use App\Globals\MLM2;
 use Excel;
+use stdClass;
 
 class MLM_PayoutController extends Member
 {
@@ -89,11 +90,13 @@ class MLM_PayoutController extends Member
 
 		if(!$data["settings"])
 		{
-			$data["settings"] = new stdClass();
-			$data["settings"]->encasment_settings_tax = 0;
-			$data["settings"]->encashment_settings_p_fee = 0;
+			$data["settings"] = new \stdClass();
+			$data["settings"]->enchasment_settings_tax = 0;
+			$data["settings"]->enchasment_settings_p_fee = 0;
 			$data["settings"]->encashment_settings_o_fee = 0;
-			$data["settings"]->encashment_settings_minimum = 0;
+			$data["settings"]->enchasment_settings_minimum = 0;
+			$data["settings"]->encashment_settings_schedule_type = "none";
+			$data["settings"]->encashment_settings_schedule = "";
 		}
 
 		foreach($_bank as $key => $bank)
@@ -130,7 +133,8 @@ class MLM_PayoutController extends Member
 			$update["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
 			$update["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$update["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
-			$update["encashment_settings_schedule"] = request("encashment_settings_schedule");
+			$update["encashment_settings_schedule_type"] = request("encashment_settings_schedule_type");
+			$update["encashment_settings_schedule"] = serialize(request("encashment_settings_schedule"));
 
 			Tbl_mlm_encashment_settings::where("shop_id", $shop_id)->update($update);
 		}
@@ -140,7 +144,8 @@ class MLM_PayoutController extends Member
 			$insert["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
 			$insert["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$insert["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
-			$insert["encashment_settings_schedule"] = request("encashment_settings_schedule");
+			$insert["encashment_settings_schedule_type"] = request("encashment_settings_schedule_type");
+			$update["encashment_settings_schedule"] = serialize(request("encashment_settings_schedule"));
 
 			Tbl_mlm_encashment_settings::insert($insert);
 		}

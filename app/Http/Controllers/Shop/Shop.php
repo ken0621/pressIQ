@@ -186,6 +186,8 @@ class Shop extends Controller
             });
         }
 
+        Settings::set_mail_setting($this->shop_info->shop_id);
+
         $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
 
         View::share("slot_now", Self::$slot_now);

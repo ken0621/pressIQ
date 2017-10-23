@@ -31,8 +31,8 @@
 						<div onclick="location.href='/members/register'" class="join-button animated fadeInUp">JOIN THE MOVEMENT</div>	
 					</div>
 					<div class="col-md-4 right-container">
-						<img src="/themes/{{ $shop_theme }}/img/left-ads.png">
-						<div class="join-button animated fadeInUp">
+						<img style="cursor: pointer;" onclick="location.href='/members/register'" src="/themes/{{ $shop_theme }}/img/left-ads.png">
+						<div class="join-button animated fadeInUp hidden">
 							<!-- <span>ENROLL</span><span>&nbsp;&nbsp;<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
 							</span> -->
 							VISIT ACADEMY
@@ -128,12 +128,12 @@
 						@foreach($_event as $event)
 						<div class="col-md-4">
 							<div class="event-img-container wow fadeInUp" data-wow-delay="0.2s">
-								<img src="{{$event->event_thumbnail_image}}">
+								<a href="javascript:" class="popup" size="lg" link="/events/view_details?id={{$event->event_id}}"><img src="{{$event->event_thumbnail_image}}"></a>
 							</div>
 						</div>
 						<div class="col-md-8">
 							<div class="event-detail-container wow fadeInRight" data-wow-delay="0.3s">
-								<a class="popup" size="lg" link="/events/view_details?id={{$event->event_id}}"><div class="title max-lines-title">{{strtoupper($event->event_title)}}</div></a>
+								<a href="javascript:" class="popup" size="lg" link="/events/view_details?id={{$event->event_id}}"><div class="title max-lines-title">{{strtoupper($event->event_title)}}</div></a>
 								<div class="date"><span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>{{strtoupper(date('F d, Y', strtotime($event->event_date)))}}</span></div>
 								<div class="desc">
 									<div class="max-lines-desc">
@@ -302,7 +302,7 @@
 
 @endsection
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?v=1.0">
 <style type="text/css">
 .now-height
 {

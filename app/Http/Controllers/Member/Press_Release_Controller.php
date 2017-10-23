@@ -14,6 +14,7 @@ use App\Models\Tbl_press_release_recipient;
 use App\Models\Tbl_press_release_email_sent;
 use Mail;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Globals\Settings;
 
 class Press_Release_Controller extends Member
 {
@@ -27,47 +28,35 @@ class Press_Release_Controller extends Member
     public function choose_recipient()
     {
 			$recipientResult = Tbl_press_release_recipient::select("*");
-            if(Request::input("company_name") != "")
-            {
-            	$recipientResult = $recipientResult->where("company_name",Request::input("company_name"));
-            }
-
-            if(Request::input("name") != "")
-            {
-            	// dd(Request::input());
-            	$recipientResult = $recipientResult->where('name',Request::input('name'));    	
-            }
-
-            if(Request::input("position") != "")
-            {
-            	$recipientResult = $recipientResult->where('position',Request::input('position'));
-            }
-
+    
             if(Request::input("title_of_journalist") != "")
             {
-            	$recipientResult = $recipientResult->where('title_of_journalist',Request::input('title_of_journalist'));
+            	$recipientResult = $recipientResult->whereIn('title_of_journalist',Request::input('title_of_journalist'));
             }
 
             if(Request::input("country") != "")
             {
-                $recipientResult = $recipientResult->where('country',Request::input('country'));
+                $recipientResult = $recipientResult->whereIn('country',Request::input('country'));
             }
 
             if(Request::input("industry_type") != "")
             {
-                $recipientResult = $recipientResult->where('industry_type',Request::input('industry_type'));
+                $recipientResult = $recipientResult->whereIn('industry_type',Request::input('industry_type'));
             }
 
-
-            $data["_recipient_list"] = $recipientResult->paginate(7); 
+            $data["_recipient_list"] = $recipientResult->get();
+            $data["_recipient_country"] = $recipientResult->select('country')->distinct()->get();
+            $data["_title_of_journalist"] = $recipientResult->select('title_of_journalist')->distinct()->get();
+            $data["_type_of_industry"] = $recipientResult->select('industry_type')->distinct()->get();
             return view("member.email_system.choose_recipient",$data);
     }
 
 
     public function save_email()
     {
+        $insert['email_title'] = Request::input('title');
     	$insert['email_content'] = Request::input('content');
-    	$insert['email_title']=Request::input('subject');
+    	$insert['email_subject']=Request::input('subject');
     	$insert['email_time'] = date('Y-m-d');
     	Tbl_press_release_email::insert($insert);
     	return json_encode("success");
@@ -85,13 +74,16 @@ class Press_Release_Controller extends Member
 
     public function send_email(Request $request)
     {
+
+            Settings::set_mail_setting($user_info->shop_id);
         try 
         {
             $insert['email_content'] = Request::input('content');
             $insert['from']=Request::input('from');
             $insert['to']=Request::input('to');
             /*$insert['to']=explode(",",Request::input('to'));*/
-            $insert['email_title']=Request::input('subject');
+            $insert['email_title']=Request::input('title');
+            $insert['email_subject']=Request::input('subject');
             $insert['email_time'] = date('Y-m-d');
             Tbl_press_release_email_sent::insert($insert);
 
@@ -105,7 +97,7 @@ class Press_Release_Controller extends Member
                 Mail::send('member.email_system.email',$data, function($message) use ($data)
                 {
                     $message->from($data['from']);
-                    $message->to("edwardguevarra2003@gmail.com");
+                    $message->to($data['to']);
                     $message->subject($data['subject']);
                 });  
             }
@@ -147,5 +139,44 @@ class Press_Release_Controller extends Member
         
     }
 
+    /*public function get_recipient_info()
+    {
+        $email_address=
 
+    }
+*/
+    public function analytics()
+    {
+        $curl = curl_init();
+
+          curl_setopt_array($curl, array(
+          CURLOPT_URL => "https://mandrillapp.com/api/1.0/users/info.json?key=cKQiemfNNB-5xm98HhcNzw",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "GET",
+          CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+          ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) 
+        {
+          echo "cURL Error #:" . $err;
+        } 
+        else 
+        {
+        $data['array'] = json_decode($response);
+        dd($data);
+        }
+        return view("member.email_system.analytics_press_release",$data);
+    }
 }

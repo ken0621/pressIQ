@@ -12,8 +12,9 @@
 <table class="" style="width: 100%">
 	<thead>
             <tr>
-                <th style="width: 100px">ITEM SKU</th>
-                <th style="width: 100px">ITEM BARCODE</th>
+                <th style="width: 10px">#</th>
+                <th style="width: 100px">ITEM DETAILS</th>
+                <th style="width: 300px">ITEM DESCRIPTION</th>
                 <th style="width: 100px;">ACTUAL STOCKS</th>
                 @if($pis != 0)
                 <th style="width: 100px;">SIR STOCKS</th>
@@ -26,11 +27,13 @@
                 @if($warehouse_item_bundle != null)
                 @foreach($warehouse_item_bundle as $keys => $w_bundle_item)
                 <tr class="tr-draggable tr-draggable-html count_row">
+                    <td>{{$keys+1}}</td>
                     <td>
-                        {{$w_bundle_item["bundle_item_name"]}}
+                        <div><strong>{{$w_bundle_item["bundle_item_name"]}}</strong> </div>
+                        <small>{{$w_bundle_item["bundle_item_bardcode"]}}</small>
                     </td>
-                    <td>
-                        {{$w_bundle_item["bundle_item_bardcode"]}}
+                    <td >
+                        <p> {{ $w_bundle_item['bundle_item_description'] }}</p>
                     </td>
                     <td>
                         {{$w_bundle_item["bundle_actual_stocks_um"]}}
@@ -56,8 +59,9 @@
 <table class="" style="width: 100%">
 	 <thead >
             <tr>
-                <th style="width: 100px">ITEM SKU</th>
-                <th style="width: 100px">ITEM BARCODE</th>
+                <th style="width: 10px">#</th>
+                <th style="width: 100px">ITEM DETAILS</th>
+                <th style="width: 300px">ITEM DESCRIPTION</th>
                 <th style="width: 100px;">ACTUAL STOCKS</th>
                 @if($pis != 0)
                 <th style="width: 100px;">SIR STOCKS</th>
@@ -70,11 +74,13 @@
                 @if($_inventory != null)
                     @foreach($_inventory as $keys => $inventory)
                     <tr class="tr-draggable tr-draggable-html count_row">
+                        <td>{{$keys+1}}</td>
                         <td>
-                            {{$inventory["item_sku"]}}
+                            <div><strong>{{$inventory["item_sku"]}}</strong> </div>
+                            <small>{{$inventory["item_barcode"]}}</small>
                         </td>
                         <td>
-                            {{$inventory["item_barcode"]}}
+                            <p>{{$inventory["item_description"]}}</p>
                         </td>
                         <td>
                             {{$inventory["item_actual_stock_um"]}}
@@ -100,8 +106,9 @@
 <table class="" style="width: 100%">
 	  <thead >
             <tr>
-                <th style="width: 100px">ITEM SKU</th>
-                <th style="width: 100px">ITEM BARCODE</th>
+                <th style="width: 10px">#</th>
+                <th style="width: 100px">ITEM DETAILS</th>
+                <th style="width: 300px">ITEM DESCRIPTION</th>
                 <th style="width: 100px;">ACTUAL STOCKS</th>
             </tr>
         </thead>
@@ -110,12 +117,18 @@
             @if($_empties != null)
                 @foreach($_empties as $keys => $empties)
                 <tr class="tr-draggable tr-draggable-html count_row">
-                    <td class="text-center">
-                        {{$empties["item_sku"]}}
-                    </td>
-                    <td>
-                        {{$empties["item_barcode"]}}
-                    </td>
+                    <td>{{$keys+1}}</td>
+                        <td>
+                            <label class="count-select"></label>
+
+                            <label class="count-select">
+                                <div><strong>{{$empties["item_sku"]}}</strong> </div>
+                                <small>{{$empties["item_barcode"]}}</small>
+                            </label>
+                        </td>
+                        <td>
+                            <p>{{$empties["item_description"]}}</p>
+                        </td>
                     <td>
                         {{$empties["item_actual_stock_um"]}}
                     </td>

@@ -667,11 +667,6 @@ class PayrollReportController extends Member
 		{
 			$payroll_group_salary_computation = Tbl_payroll_employee_contract::Group()->where('tbl_payroll_employee_contract.payroll_employee_id',$employee->payroll_employee_id)->first();
 
-			$total_basic 	+= $employee->net_basic_pay;
-			$total_gross 	+= $employee->gross_pay;
-			$total_net 		+= $employee->net_pay;
-			$total_tax 		+= $employee->tax_ee;
-
 			$total_er = $employee->sss_er + $employee->philhealth_er +  $employee->pagibig_er;
 			$total_ee = $employee->sss_ee + $employee->philhealth_ee +  $employee->pagibig_ee;
 			$total_ec = $employee->sss_ec;
@@ -1027,7 +1022,6 @@ class PayrollReportController extends Member
 					{
 						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
 						{
-							
 							if ($value->time_output["leave_hours"] == '00:00:00') 
 							{
 								if ($lbl == 'late') 
@@ -1047,7 +1041,6 @@ class PayrollReportController extends Member
 						}
 					}
 				}
-
 
 				$data["_employee"][$key]->overtime 			= $overtime;
 				$data["_employee"][$key]->regular_holiday 	= $regular_holiday;
@@ -1123,6 +1116,12 @@ class PayrollReportController extends Member
 					}
 				}
 			}
+			
+			$employee->net_basic_pay = $employee->net_basic_pay - $leave_pay; 
+			$total_basic 	+= $employee->net_basic_pay;
+			$total_gross 	+= $employee->gross_pay;
+			$total_net 		+= $employee->net_pay;
+			$total_tax 		+= $employee->tax_ee;
 		}
 
 		$data["total_basic"] 						= $total_basic;

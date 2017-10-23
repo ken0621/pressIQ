@@ -4,10 +4,10 @@
 <!-- Media Slider -->
     <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/top-image.png')">
         <div class="container">
-            <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption.png"></div>
+            <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption2.png"></div>
             <div class="caption-container animated fadeInDown">
-                <h1>Your road to financial wellness</h1>
-                <h1>Lifestyle at it’s finest!</h1>
+                <p class="head-text">Your road to financial wellness</p>
+                <p class="head-text">Lifestyle at it’s finest!</p>
             </div>
         </div>
     </div>
@@ -23,15 +23,9 @@
                     <div class="content-title wow fadeInUp">JCA WELLNESS INTERNATIONAL CORP</div>
                     <div class="context">
                         <p class="wow fadeInLeft">
-                            JCA Wellness International Corporation is a company that’s founded by group
-                            of entrepreneurs that’s driven to build a global community that will bring
-                            various business opportunities to aspiring entrepreneurs, to provide products
-                            and services that will enhance one’s beauty and wellness and to teach every
-                            aspiring entrepreneurs the various ways of earning.<br><br>
+                            JCA Wellness International Corporation is a company founded by group of entrepreneurs that is driven to build a global community that will bring various business opportunities to aspiring entrepreneurs, to provide products and services that will enhance one’s beauty and wellness and to teach every aspiring entrepreneurs the various ways of earning.<br><br>
 
-                            JCA Wellness International Corporation is currently building its network in
-                            Raffles Corporate Center in Emerald Ave. Ortigas Pasig City and is starting to
-                            grow its market in the Philippines and to other countries.
+                            JCA Wellness International Corporation is currently building its network in Raffles Corporate Center in Emerald Ave. Ortigas Pasig City and is starting to grow its market in the Philippines and to other countries.
                         </p>
                     </div>
                 </div>
@@ -49,7 +43,7 @@
             <div class="title-container">
                 <div class="wow fadeInDown title-container">
                     <span>Why</span>
-                    <span>JCA International</span>
+                    <span>JCA Wellness</span>
                 </div>
             </div>
             <div class="content-container row clearfix">
@@ -94,27 +88,22 @@
                 </div>
             </div>
             <div class="jca-title-container">
-                <p class="main-title wow fadeInDown" data-wow-delay=".2s"><font class="shade-green">Benefits In</font> JCA International</p>
-                <p class="sub-title wow fadeInDown" data-wow-delay=".4s"><font class="shade-black">BENEFITS</font> of becoming a Member of JCA Wellness International </p>
+                <p class="main-title wow fadeInDown" data-wow-delay=".2s"><font class="shade-green">Benefits In</font> JCA Wellness</p>
+                <p class="sub-title wow fadeInDown" data-wow-delay=".4s"><font class="shade-black">BENEFITS</font> of becoming a Member of JCA Wellness</p>
             </div>
             <div class="bulleted-list-container">
                 <div class="content-container row clearfix">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <li class="wow fadeInLeft bulleted-list" data-wow-delay=".2s">
-                            <p class="list-content">Membership ID which entitles the distributor up to 36 % Lifetime Discount on all JCA Wellness Products upon repeat purchase</p>
+                            <p class="list-content">Membership ID which entitles the distributor up to 40% Lifetime Discount on all JCA Wellness Products upon repeat purchase</p>
                         </li>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <li class="wow fadeInLeft bulleted-list" data-wow-delay=".3s">
-                            <p class="list-content">Package worth almost 9,000 pesos for a Standard Package, 27,000 pesos for a Premium Package and 63,000 pesos for a VIP Package</p>
-                        </li>
-                    </div>
-                    <div class="col-md-3">
-                        <li class="wow fadeInLeft bulleted-list" data-wow-delay=".4s">
                             <p class="list-content">Opportunity to earn 15,000 a day, 90,000 a week, 360,000 a month for Override Sales Commission</p>
                         </li>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <li class="wow fadeInLeft bulleted-list" data-wow-delay=".5s">
                             <p class="list-content">Product Gift Certificates for JCA Wellness Product Purchases</p>
                         </li>
@@ -122,10 +111,12 @@
                 </div>
             </div>
             <div class="button-container">
-                <button class="legalities-button wow fadeInUp">
-                    <img class="button-img" src="/themes/{{ $shop_theme }}/img/legalities-icon-button.png">
-                    <p class="button-name">LEGALITIES</p>
-                </button>
+                <a href="/themes/{{ $shop_theme }}/img/legalities-file.jpg" class="lsb-preview">
+                    <button class="legalities-button wow fadeInUp">
+                        <img class="button-img" src="/themes/{{ $shop_theme }}/img/legalities-icon-button.png">
+                        <p class="button-name">LEGALITIES</p>
+                    </button>
+                </a>
             </div>
         </div>
     </div>
@@ -230,6 +221,41 @@
 
     <div class="wrapper-5">
         <div class="container">
+            
+            <div class="row clearfix">
+                <div class="col-md-6 mobile-view">
+                    <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
+                        <img src="/themes/{{ $shop_theme }}/img/serum.png">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="details-container">
+                        <div class="wow animated fadeInRight header" data-wow-delay=".3s">Swiss Apple&nbsp;<span>Stem Cell Serum</span></div>
+                        <div class="wow animated fadeInRight sub-header" data-wow-delay=".4s">
+                            <span>Contents:</span>&nbsp;5% pure Swiss Apple Stem Cell Serum
+                        </div>
+                        <div class="benefits">
+                            <div class="wow animated fadeInRight header" data-wow-delay=".5s">Benefits: </div>
+                            <ul class="wow animated fadeInRight" data-wow-delay=".6s">
+                                <li>It enhances UV protection and helps in fighting skin radicals that causes skin damage.</li>
+                                <li>Fights all unwanted signs of aging.</li>
+                                <li>Reduces wrinkles and fine-lines.</li>
+                                <li>Reveals younger and glowing, youthful skin.</li>
+                                <li>Improves skin firmness.</li>
+                                <li>Gives your skin soft and better feeling after every use.</li>
+                                <li>The kind of serum without the sticky feel PLUS it can be absorbed by the skin easily.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mobile-view-2">
+                    <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
+                        <img src="/themes/{{ $shop_theme }}/img/serum.png">
+                    </div>
+                </div>
+            </div>
+
+
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
@@ -244,7 +270,6 @@
                         </div>
                         <div class="benefits">
                             <div class="wow animated fadeInRight header" data-wow-delay=".5s">Benefits: </div>
-                            
                             <ul class="wow animated fadeInRight" data-wow-delay=".6s">
                                 <li>Increases skin stem cell vitality and longevity</li>
                                 <li>Helps treat skin problems like hyperpigmentation, acne or pimple scars, uneven skin tone</li>
@@ -254,7 +279,6 @@
                                 <li>Maintains the health and elasticity of the skin</li>
                                 <li>Provides freshness and gives your skin soft and clean feeling</li>
                             </ul>
-
                         </div>
                     </div>
                 </div>
@@ -267,9 +291,22 @@
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="details-container">
-                        <div class="wow animated fadeInLeft header">Lorem Ipsum <span>Dolor</span></div>
-                        <div class="wow animated fadeInLeft details" data-wow-delay=".2s">
-                            <p><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit ex fugiat, porro! Harum odit obcaecati illum quos rem perferendis consectetur debitis. Omnis beatae ab sed aliquid vel dolores impedit eius.</span><span>Ab harum, mollitia expedita iste obcaecati. Quisquam eaque quia rem obcaecati, at eos voluptates neque eius libero eligendi. Amet, libero veniam? Nulla modi porro, libero. In corporis facilis, ea possimus?</span></p>
+                        <div class="wow animated fadeInLeft header">Stem Cell Therapy-&nbsp;<span>The Anti-Aging and Rejuvenation Therapy</span></div>
+                        <div class="benefits">
+                            <div class="wow animated fadeInRight header" data-wow-delay=".5s" style="font-size: 15px;">Benefits: </div>
+                            <ul class="wow animated fadeInRight" data-wow-delay=".6s">
+                                <li>Solves skin problems and eliminate wrinkles, acne, eye bags, moisturize dry skin, stimulate skin cell renewal, promote blood circulation.</li>
+                                <li>Helps to improve the aging problem, high blood pressure, diabetes, stomach ulcers, migraine headaches and arthritis</li>
+                                <li>Invigorates the body, improves sexual desire and prevents impotence</li>
+                                <li>Helps to improve lack of vitality, fatigue and poor physical symptoms</li>
+                                <li>Premature aging and wear of the organs, such as brain, heart, lungs, kidneys and digestive system.</li>
+                                <li>Reduces the effect of anemia</li>
+                                <li>After surgery to promote wound healing and reduce recovery time</li>
+                                <li>Restores the normal function for hormone secretion</li>
+                                <li>Regulating the autonomic nervous system, enhance the immune system</li>
+                                <li>Stimulate he muscles, skin, collagen, bone and cartilage and nerve tissue for normal growth regeneration and repair</li>
+                                <li>Recuperation from labour, eases menopause syndrome and regulates menstruation</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -289,7 +326,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?updated3">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css">
 @endsection
 

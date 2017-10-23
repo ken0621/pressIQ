@@ -24,8 +24,8 @@
     @include("frontend.ghead")
 
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?v=5.0">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css?v=5.0">
 
     @yield("css")
 </head>
@@ -114,10 +114,13 @@
                         </button>
                     </div>
                     <div class="collapse navbar-collapse" id="myNavbar" style="padding-left: 0 !important;">
+
                         <ul class="nav navbar-nav">
-                            <!-- @if($customer)
-                            <li class="{{ Request::segment(1) == "members" ? "active" : "" }}"><a href="/members">My Account</a></li>
-                            @endif -->
+
+                            @if($customer)
+                            <li class="{{ Request::segment(1) == "members" ? "active" : "" }}"><a href="/members">MY ACCOUNT</a></li>
+                            @endif
+
                             <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">HOME</a></li>
                             <!--<li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>-->
                             <!-- <li><a href="">STORE</a></li> -->

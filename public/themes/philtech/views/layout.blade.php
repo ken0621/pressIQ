@@ -30,15 +30,28 @@
     <div class="loader" style="display: none;">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
-        <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
     <!-- HEADER -->
     <div class="header-nav clearfix">
         <div class="header-nav-top">
             <div class="container">
                 <div class="holder"><a href="/about">COMPANY</a></div>
+                @if($mlm_member)
+                <div class="holder">
+                    <div class="dropdown">
+                      <a class="">BUSINESS PRESENTATION</a>
+                      <div class="dropdown-content">
+                        <a href="https://drive.google.com/open?id=0B_zVgtlTtv89dU1Ub2toMXBLc2M">MILLIONAIRE SYSTEM</a>
+                        <a href="https://drive.google.com/open?id=0B_zVgtlTtv89ZzlKSnI3ckpxd1k">PRIVILEGE CARD PRESENTATION</a>
+                        <a href="https://drive.google.com/open?id=0B_zVgtlTtv89RDVSZ2QteUwzaVE">TRADITIONAL BUSINESS PRESENTATION</a>
+                      </div>
+                    </div>
+                </div>
+                @else
                 <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
+                @endif
                 <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 
                 @if($customer)
@@ -65,7 +78,7 @@
                         <div class="search-bar">
                             <form action="/product" method="get" id="form-search">
                                 <div class="input-group">
-                                     <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
+                                     <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" name="search" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
                                      <span class="input-group-addon search-button" id="sizing-addon1">
                                         <a href="" onclick="onSearch();" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>                          
                                      </span>
@@ -144,7 +157,7 @@
                     <div class="search-bar">
                         <form action="/product" method="get" id="form-search">
                             <div class="input-group">
-                                <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1">
+                                <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" name="search" id="keyword" aria-describedby="sizing-addon1">
                                 <span class="input-group-addon search-button" id="sizing-addon1">
                                     <a href="" onclick="onSearch();" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>
                                 </span>

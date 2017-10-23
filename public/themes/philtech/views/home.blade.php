@@ -389,10 +389,10 @@
 						<div class="col-md-4 match-height">
 							<div class="per-item-container">
 								<div class="row clearfix">
-									<div class="col-md-6 col-sm-12">
+									<div class="col-md-6 col-xs-6">
 										<a href="#"><img class="item-image-small 4-3-ratio" style="width: 100%;" src="{{ get_collection_first_image($collection) }}"></a>
 									</div>
-									<div class="col-md-6 col-sm-12">
+									<div class="col-md-6 col-xs-6">
 										<div class="item-details" style="padding-top: 0;">
 											<a href="/product/view2/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
 											<div class="item-price">{{ get_collection_first_price($collection) }}</div>

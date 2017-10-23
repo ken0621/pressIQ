@@ -193,13 +193,13 @@
     <footer>
         <div class="container ftr">
             <div class="row clearfix">
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-4 col-sm-6 match-height">
                     <div class="img-footer">
                         <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech.jpg">
                     </div>
                     <p>PHILTECH, INC. “We provide Business” Is a subsidiary company of ZENAR TELECOMS, INC. with highly experienced both in retail and distribution of technology industry for almost 20years. PHILTE... <a style="color: #fff" href="/about">See more</a></p>
                 </div> 
-                <div class="col-md-2 col-sm-6">
+                <div class="col-md-2 col-sm-6 match-height">
                     <div class="btm-title">INFORMATION</div>
                     <ul>
                         <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partners</a></li>
@@ -214,7 +214,7 @@
                         <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
                     </ul>
                 </div>
-                <div class="col-md-2 col-sm-6">
+                <div class="col-md-2 col-sm-6 match-height">
                     <div class="btm-title">SHOP</div>
                     <ul>
                         <li><a href="javascript:">DTH Products</a></li>
@@ -228,7 +228,7 @@
                         <li><a href="javascript:">Health & Wellness</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-4 col-sm-6 match-height">
                     <div class="btm-title">CONTACT US</div>
                     <table>
                         <tr>

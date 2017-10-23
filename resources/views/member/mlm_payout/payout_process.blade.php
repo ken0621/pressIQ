@@ -19,21 +19,21 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label for="basic-input">Tax (%)</label>
-                            <input type="text" class="form-control" name="tax" value="{{ $settings->enchasment_settings_tax }}">
+                            <input type="text" class="form-control" name="tax" value="{{ isset($settings->enchasment_settings_tax) ? $settings->enchasment_settings_tax : 0 }}">
                         </div>
                         <div class="col-md-6">
                             <label for="basic-input">Service Charge (PHP)</label>
-                            <input type="text" class="form-control" name="service-charge" value="{{ $settings->enchasment_settings_p_fee }}">
+                            <input type="text" class="form-control" name="service-charge" value="{{ isset($settings->enchasment_settings_p_fee) ? $settings->enchasment_settings_p_fee : 0 }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
                             <label for="basic-input">Other Charge (PHP)</label>
-                            <input type="text" class="form-control" name="other-charge" value="{{ $settings->encashment_settings_o_fee }}">
+                            <input type="text" class="form-control" name="other-charge" value="{{ isset($settings->encashment_settings_o_fee) ? $settings->encashment_settings_o_fee : 0 }}">
                         </div>
                         <div class="col-md-6">
                             <label for="basic-input">Minimum Payout (PHP)</label>
-                            <input type="text" class="form-control" name="minimum" value="{{ $settings->enchasment_settings_minimum }}">
+                            <input type="text" class="form-control" name="minimum" value="{{ isset($settings->enchasment_settings_minimum) ? $settings->enchasment_settings_minimum : 0 }}">
                         </div>
                     </div>
                     <div class="form-group">

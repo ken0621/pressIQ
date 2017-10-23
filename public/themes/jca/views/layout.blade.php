@@ -206,13 +206,13 @@
                             <p class="footer-title">Product Portfolio</p>
                         </div>
                         <div class="jca-footer-details-container">
-                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/pp-serum.jpg" class="lsb-preview"> 
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-serum.jpg" class="lsb-preview"> 
                                 <p class="footer-detail-list">Swiss Apple Stem Cell Serum</p>
                             </a>
-                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/pp-soap.jpg" class="lsb-preview"> 
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-soap.jpg" class="lsb-preview"> 
                                 <p class="footer-detail-list">Swiss Apple Stem Cell Soap with Glutathione and Collagen</p>
                             </a>
-                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/pp-services.jpg" class="lsb-preview"> 
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-services.jpg" class="lsb-preview"> 
                                 <p class="footer-detail-list">Stem Cell Therapy- The Anti-Aging and Rejuvenation Therapy</p>
                             </a>
                         </div>

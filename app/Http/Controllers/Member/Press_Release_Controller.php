@@ -74,7 +74,7 @@ class Press_Release_Controller extends Member
 
     public function send_email(Request $request)
     {
-            /*Settings::set_mail_setting($shop_id);*/
+            Settings::set_mail_setting($user_info->shop_id);
         try 
         {
             $insert['email_content'] = Request::input('content');
@@ -174,6 +174,7 @@ class Press_Release_Controller extends Member
         else 
         {
         $data['array'] = json_decode($response);
+        dd($data);
         }
         return view("member.email_system.analytics_press_release",$data);
     }

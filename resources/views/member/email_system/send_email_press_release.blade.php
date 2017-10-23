@@ -27,30 +27,34 @@
     </div>
   </header>
 </head>
+<button class="input_chose_email btn btn-primary"> Email List </button>
 <div class="box-body">
-  <button class="input_chose_email btn btn-primary"> Email List </button>
   <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
   <form  name="myform" method ="POST" action = "/member/page/press_release_email/send_press_release" class="form-horizontal" id="get_data_tinymce1">
     {{csrf_field()}}
       <div class="subject">
       <div class="col-lg-6">
-        <input type="text" id="input_subject" placeholder="To" class="form-control email-to-container subject_email" name="to" value="{{$sent_email}}">
+        <input type="hidden" id="input_subject" placeholder="To" class="form-control email-to-container subject_email" name="to" value="{{$sent_email}}">
       </div>
     </div>
     <br>
     <div class="subject">
       <div class="col-lg-6">
-        <input type="text" placeholder="From" id="input_subject" class="form-control subject_email" name="from">
+        <input type="text" id="input_title" placeholder="Title" class="form-control email-to-container subject_email email-title-container" name="title">
+      </div>
+    </div>
+    <br>
+    <div class="subject">
+      <div class="col-lg-6">
+        <input type="text" placeholder="From" id="input_field" class="form-control subject_email" name="from">
       </div>
     </div>
     <br>
       <div class="subject">
       <div class="col-lg-6">
-        <input type="text" placeholder="subject" id="input_subject" class="form-control subject_email email-subject-container" name="subject">
+        <input type="text" placeholder="subject" id="input_field" class="form-control subject_email email-subject-container" name="subject">
       </div>
     </div>
-    <br>
-    <br>
     <br>
     <br>
     <div class="textarea_container">
@@ -79,9 +83,10 @@
               @foreach($_email_list as $email_list)
               <tr class="unread" email_id="{{$email_list->email_id}}">
                 <td class="view-message dont-show" value="{{$email_list->email_id}}" email-id="{{$email_list->email_id}}">
-                  <a>{{$email_list->email_title}}</a>
+                  <a>{{$email_list->email_subject}}</a>
                   <!-- EXTRA LALAGYANAN PARA MAPASA MO YUNG DATA -->
-                  <input type="hidden" class="email-subject-{{$email_list->email_id}}" value="{{$email_list->email_title}}">
+                  <input type="hidden" class="email-subject-{{$email_list->email_id}}" value="{{$email_list->email_subject}}">
+                  <input type="hidden" class="email-title-{{$email_list->email_id}}" value="{{$email_list->email_title}}">
                 </td>
                 <td class="view-message" style="white-space: nowrap; display: none;">{!!$email_list->email_content!!}</td>
                 <td class="view-message  text-right">{{$email_list->email_time}}</td>
@@ -158,6 +163,7 @@ window.onload = addRowHandlers();
 function pass_data(email_id)
 {
 $('.email-subject-container').val($('.email-subject-'+email_id).val());
+$('.email-title-container').val($('.email-title-'+email_id).val());
   
   /*$('.email-to-container').val($('.email-content-'+email_id).val());*/
 $('#email_databaseModal').modal('hide');

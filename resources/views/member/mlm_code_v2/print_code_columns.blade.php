@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <label for="">Limit</label>
-                            <input type="number" max="100" name="print_limit" class='form-control' value='100'/>
+                            <input type="number" max="1000" name="print_limit" class='form-control' value='100'/>
                         </div>
                     </div>
                     <div class="form-group">

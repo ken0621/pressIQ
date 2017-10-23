@@ -41,12 +41,13 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="logo wow fadeInDown">
-								<h1>
-									<img src="assets/img/count-down-logo.png">
-								</h1>
+								<img style="width: 30%;" src="assets/img/count-down-logo.png">
 							</div>
-							<h2 class="wow fadeInLeftBig">We Are Updating</h2>
-							<div class="timer wow fadeInUp">
+							<!-- <h2 class="wow fadeInLeftBig">We Are Updating</h2> -->
+							<div class="wow fadeInDown">
+								<img style="width: 25%;" src="assets/img/product.png">
+							</div>
+							<div style="margin-top: 10px;" class="timer wow fadeInUp">
 								<div class="days-wrapper">
 									<span class="days"></span> <br>days
 								</div>

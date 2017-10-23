@@ -85,14 +85,14 @@
                         <ul>
                             @if(Request::segment(1)=="members")
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="/#aboutus">COMPANY</a></li>
+                                <li><a class="smoth-scroll" href="/#company">COMPANY</a></li>
                                 <li><a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a></li>
-                                <li><a class="smoth-scroll" href="/#products">CONTACT US</a></li>
+                                <li><a class="smoth-scroll" href="/#contact">CONTACT US</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="#aboutus">COMPANY</a></li>
+                                <li><a class="smoth-scroll" href="#company">COMPANY</a></li>
                                 <li><a class="smoth-scroll" href="#mission-vision">MISSION & VISION</a></li>
-                                <li><a class="smoth-scroll" href="#products">CONTACT US</a></li>
+                                <li><a class="smoth-scroll" href="#contact">CONTACT US</a></li>
                             @endif
                         </ul>
                     </nav>

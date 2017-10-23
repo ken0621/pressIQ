@@ -26,18 +26,24 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Email Address</th>
+      <th>Company Name</th>
       <th>Position</th>
-      <th>Group name</th>
+      <th>Title of Journalist</th>
+      <th>Country</th>
+      <th>Industry Type</th>
     </tr>
   </thead>
   <tbody>
     @foreach($_list_recipient as $list_recipient)
     <tr>
-      <td>{{$list_recipient->recipient_name}}</td>
-      <td>{{$list_recipient->recipient_email_address}}</td>
-      <td>{{$list_recipient->recipient_position}}</td>
-      <td>{{$list_recipient->group_name}}</td>
+      <td>{{$list_recipient->name}}</td>
+      <td>{{$list_recipient->company_name}}</td>
+      <td>{{$list_recipient->position}}</td>
+      <td>{{$list_recipient->title_of_journalist}}</td>
+      <td>{{$list_recipient->country}}</td>
+      <td>{{$list_recipient->industry_type}}</td>
+    </tr>
+    </tr>
     </tr>
     @endforeach
   </tbody>

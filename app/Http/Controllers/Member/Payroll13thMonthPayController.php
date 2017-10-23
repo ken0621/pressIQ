@@ -82,10 +82,13 @@ class Payroll13thMonthPayController extends Member
 	{
 
 		$company_id = Request::input('company_id');
+		
 		$parameter['date']					= date('Y-m-d');
 		$parameter['company_id']			= 0;
 		$parameter['employement_status']	= 0;
 		$parameter['shop_id'] 				= $this->shop_id();
+
+		$data["basis"] 	= unserialize(Request::input('employee_13_month_basis'));
 
 
 		if ($company_id != 0 ) 
@@ -97,7 +100,7 @@ class Payroll13thMonthPayController extends Member
 			$data["_employee"] 	= Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
 		}
 
-		$data["basis"] 	= unserialize(Request::input('employee_13_month_basis'));
+		
 		
 		/*unserialize(Request::input('employee_13_month_basis'));*/
 		$this->employees_compute_13th_month_pay($data);
@@ -288,6 +291,7 @@ class Payroll13thMonthPayController extends Member
 
 			$_period  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee->payroll_employee_id)
 			->where("tbl_payroll_period_company.payroll_period_status","!=","pending")
+			->where("tbl_payroll_period.year_contribution",$basis["payroll_13th_month_pay_year"])
 			->get();
 
 			$employee_info = Tbl_payroll_employee_contract::Group()->where('tbl_payroll_employee_contract.payroll_employee_id',$employee->payroll_employee_id)->first();

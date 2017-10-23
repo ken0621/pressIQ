@@ -169,5 +169,11 @@ class ShopAboutController extends Shop
     {
         $data["page"] = "replicated";
         return view("replicated", $data);
+    }
+
+    public function terms_and_conditions()
+    {
+        $data["page"] = "terms_and_conditions";
+        return view("terms_and_conditions", $data);
     } 
 }

@@ -962,7 +962,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Item List V2";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/v2";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','add_auto_approve', 'can_approve_item_request', 'can_edit_other_item'];
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','refill-item','add_auto_approve', 'can_approve_item_request', 'can_edit_other_item'];
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
 
@@ -1012,6 +1012,39 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','transfer','refill','adjust','add-serial','archived','restore','merchantwarehouse'];
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+
+    /* -- ITEM => WAREHOUSE V2  */
+    // $code = "item-warehouse-v2";
+    // $nav[$page]['submenu'][$code]['label'] = "Warehouse V2";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/v2/warehouse";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','transfer','refill','adjust','add-serial','archived','restore','merchantwarehouse'];
+    // $nav[$page]['submenu'][$code]['status'] = "Still developing";
+    // $nav[$page]['submenu'][$code]['developer'] = "Arcylen Garcia Gutierrez";
+
+        $segment = "submenu-warehouse-v2";
+        $nav[$page]['submenu'][$segment]['name']   = "Warehouse V2";
+        $nav[$page]['submenu'][$segment]['segment']= $segment;
+        $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+             /* -- WAREHOUSE - WIS */
+            $code = "warehouse-issuance-slip";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Warehouse Issuance Slip";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/warehouse/wis";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','issue','confirm'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+             /* -- WAREHOUSE - WIS */
+            $code = "warehouse-receiving-report";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Receiving Report";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/warehouse/rr";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','received'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
     /* -- ITEM => INVENTORY LOGS  */
     $code = "item-inventory-log";
@@ -1332,6 +1365,61 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
+    /*Press Release Email System*/
+
+    $page = "press_release_email";
+    $nav[$page]['name']     = "Press Release";
+    $nav[$page]['segment']  = $page;
+    $nav[$page]['icon']     = "envelope";
+    $nav[$page]['type']     = "menu";
+
+    $code = "page-create-press-release";
+    $nav[$page]['submenu'][$code]['label'] = "Create Press Release";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path ."page/". $page . "/create_press_release";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page', 'activate_theme'];
+    $nav[$page]['submenu'][$code]['status'] = "Layout Only";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Ephraim Dognidon   </span>";
+
+    $code = "page-analytics-press-release";
+    $nav[$page]['submenu'][$code]['label'] = "Analytics";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path ."page/". $page . "/create_press_release";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page', 'activate_theme'];
+    $nav[$page]['submenu'][$code]['status'] = "Layout Only";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Ephraim Dognidon   </span>";
+
+    $segment = "page-view-press-release";
+    $nav[$page]['submenu'][$segment]['name']   = "View Press Release";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+          $code = "submenu-list-email-sent-press-release-sample";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Sent Emails";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path ."page/" . $page . "/email_sent_press_release";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "<span style='color: green'>Ephraim Dognidon   </span>";
+
+        $code = "submenu-list-emails-press-release-sample";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Email list";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . "page/" . $page . "/email_list_press_release";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "<span style='color: green'>Ephraim Dognidon   </span>";
+
+        $code = "submenu-recipient-list-press-release-sample";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Recipient List";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . "page/" . $page . "/recipient_list_press_release";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "<span style='color: green'>Ephraim Dognidon   </span>";
+
+
+
 
     /* MANAGE CONTENT  */
     $page = "page"; 
@@ -1382,6 +1470,8 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
 
+    /* REWARD CONFIG */
+    
     // $code = "page-partnerview";
     // $nav[$page]['submenu'][$code]['label'] = "partnerview";
     // $nav[$page]['submenu'][$code]['code'] = $code;

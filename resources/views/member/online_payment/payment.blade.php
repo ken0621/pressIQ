@@ -145,6 +145,18 @@
 								                <div class="col-md-12">
 								            		<button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
 								            	</div>
+						            		@elseif($gateway->gateway_code_name == 'manual1' || $gateway->gateway_code_name == 'manual2' )
+								                <div class="form-group col-md-12">
+								                    <label>{{ $gateway->gateway_first_label }}</label>
+								                    <textarea class="form-control input-sm" name="api_client_id">{{$gateway->api_client_id or ''}}</textarea>
+								                </div>
+								                <div class="form-group col-md-12">
+								                    <label>{{ $gateway->gateway_second_label }}</label>
+								                    <textarea class="form-control input-sm" name="api_secret_id">{{$gateway->api_secret_id or ''}}</textarea>
+								                </div>
+								                <div class="col-md-12">
+								            		<button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
+								            	</div>
 						            		@elseif($gateway->gateway_code_name != 'other')
 								                <div class="form-group col-md-12">
 								                    <label>{{ $gateway->gateway_first_label }}</label>

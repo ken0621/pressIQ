@@ -10,18 +10,13 @@
 @if(!$mlm_member)
 	<div class="dashboard">
 	    <!-- TOP DASHBOARD-->
-	    <div class="dashboard-top">
+	    <!-- <div class="dashboard-top" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-dash.png')">
 	        <div class="row clearfix">
-	            <div class="col-md-8">
-	                <div class="img-container">
-	                    <img src="/themes/{{ $shop_theme }}/img/db-img.png">
-	                </div>
-	            </div>
 	            <div class="col-md-4">
 	                <div class="join-container">
 	                    <div class="btn btn-text">
-	                        <div class="text-header1">Enroll Now!</div>
-	                        <div class="text-header2">and become one of us!</div>
+	                        <div class="text-header1">Not yet a Member?</div>
+	                        <div class="text-header2">Join Us Now!</div>
 	                    </div>
 	                    <div class="btn-container">
 	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
@@ -31,55 +26,19 @@
 	                </div>
 	            </div>
 	        </div>
-	    </div>
+	    </div> -->
 
-	    <!-- BOTTOM DASHBOARD -->
-	    <div class="dashboard-bottom">
-	        <div class="text-header">Profile Information</div>
+	    <div class="dashboard-top">
 	        <div class="row clearfix">
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic1 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/personal-info.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Personal Information</div>
-	                        </div>
-	                        
+	            <div class="col-md-12">
+	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-dash.png')">
+	                    <div class="btn btn-text">
+	                        <div class="text-header1">Not yet a Member?</div>
+	                        <div class="text-header2">Join Us Now!</div>
 	                    </div>
-	                    <div class="personal-info-container">
-	                        <div><label>Name </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Email </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Birthday </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Contact </label><span>Lorem Ipsum Dolor</span></div>
+	                    <div class="btn-container">
+	                        <a href="#" id="btn-enter-a-code"><button onclick="action_load_link_to_modal('/members/enter-code')" class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic2 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/default-shipping.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Default Shipping Address</div>
-	                        </div>
-	                    </div>
-	                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae similique nulla amet illum labore nostrum sapiente fugiat, pariatur ipsa distinctio.</p>
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic3 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/default-billing.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Default Billing Address</div>
-	                        </div>
-	                    </div>
-	                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos quibusdam nesciunt, dolor culpa architecto enim ratione error ipsum, animi sunt.</p>
 	                </div>
 	            </div>
 	        </div>
@@ -115,7 +74,7 @@
 			</div>
 
 			<div class="col-md-6">
-				<div class="title">Reward Summary</div>
+				<div class="title">Cash Reward Summary</div>
 				<div class="sub-container">
 					<div class="chart-legend">
 						<div class="holder">
@@ -126,9 +85,27 @@
 							<div class="color"></div>
 							<div class="name"><span>Direct Referral</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
 						</div>
+					</div>
+				</div>
+
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Gift Certificate</span><span class="value">PHP 0.00</span></div>
+							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
+						</div>
+					</div>
+					<div class="chart-legend" style="max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Direct GC</span><span class="value">{{ $points->display_direct }}</span></div>
+						</div>
+					</div>
+					<div class="chart-legend" style="max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Maintenance GC</span><span class="value">{{ $points->display_maintenance }}</span></div>
 						</div>
 					</div>
 				</div>
@@ -195,7 +172,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)

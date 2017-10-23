@@ -15,6 +15,7 @@ use App\Globals\Currency;
 use Redirect;
 use App\Globals\MLM2;
 use Excel;
+use stdClass;
 
 class MLM_PayoutController extends Member
 {
@@ -86,14 +87,16 @@ class MLM_PayoutController extends Member
 		$data["pate"] 		= "Payout Configuration";
 		$_bank 				= Tbl_payout_bank::get();
 		$data["settings"] 	= Tbl_mlm_encashment_settings::where("shop_id", $shop_id)->first();
-
+		
 		if(!$data["settings"])
 		{
 			$data["settings"] = new stdClass();
-			$data["settings"]->encasment_settings_tax = 0;
-			$data["settings"]->encashment_settings_p_fee = 0;
+			$data["settings"]->enchasment_settings_tax = 0;
+			$data["settings"]->enchasment_settings_p_fee = 0;
 			$data["settings"]->encashment_settings_o_fee = 0;
-			$data["settings"]->encashment_settings_minimum = 0;
+			$data["settings"]->enchasment_settings_minimum = 0;
+			$data["settings"]->encashment_settings_schedule_type = "none";
+			$data["settings"]->encashment_settings_schedule = "";
 		}
 
 		foreach($_bank as $key => $bank)
@@ -130,6 +133,8 @@ class MLM_PayoutController extends Member
 			$update["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
 			$update["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$update["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
+			$update["encashment_settings_schedule_type"] = request("encashment_settings_schedule_type");
+			$update["encashment_settings_schedule"] = serialize(request("encashment_settings_schedule"));
 
 			Tbl_mlm_encashment_settings::where("shop_id", $shop_id)->update($update);
 		}
@@ -139,6 +144,8 @@ class MLM_PayoutController extends Member
 			$insert["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
 			$insert["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$insert["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
+			$insert["encashment_settings_schedule_type"] = request("encashment_settings_schedule_type");
+			$update["encashment_settings_schedule"] = serialize(request("encashment_settings_schedule"));
 
 			Tbl_mlm_encashment_settings::insert($insert);
 		}
@@ -211,7 +218,8 @@ class MLM_PayoutController extends Member
 	}
 	public function getProcess()
 	{
-		return view("member.mlm_payout.payout_process");
+		$data["settings"] = Tbl_mlm_encashment_settings::where("shop_id", $this->user_info->shop_id)->first();
+		return view("member.mlm_payout.payout_process", $data);
 	}
 	public function anyProcessOutput()
 	{
@@ -227,59 +235,72 @@ class MLM_PayoutController extends Member
 		$minimum_encashment		= $minimum;
 		$data["method"]			= $method;
 
-		if($source == "wallet")
+
+		$slot_query = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet()->orderBy("customer_id", "asc");
+
+		if($method == "eon")
 		{
-			$slot_query = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet()->orderBy("customer_id", "asc");
-			
-			if($method == "eon")
-			{
-				$slot_query->where("customer_payout_method", "eon");
-				$slot_query->where("slot_eon", "!=", "");
-				$slot_query->where("slot_eon_account_no", "!=", "");
-			}
-			
-			$_slot = $slot_query->get();
-			
-			foreach($_slot as $key => $slot)
+			$slot_query->where("customer_payout_method", "eon");
+			$slot_query->where("slot_eon", "!=", "");
+			$slot_query->where("slot_eon_account_no", "!=", "");
+		}
+
+		$_slot = $slot_query->get();
+		
+		foreach($_slot as $key => $slot)
+		{
+			if($source == "wallet")
 			{
 				$earnings_as_of 	= Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->where("wallet_log_date_created", ">", date("Y-m-d", strtotime($cutoff_date) + 86400))->sum("wallet_log_amount");
+				
 				$encashment_amount 	= $slot->current_wallet - $earnings_as_of;
 				$remaining 			= $slot->current_wallet - $encashment_amount;
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
 				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
+			}
+			else
+			{
+				
+				$earnings_as_of 	= Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->where("wallet_log_date_created", "<", date("Y-m-d", strtotime($cutoff_date) + 86400))->where("wallet_log_payout_status", "PENDING")->sum("wallet_log_amount");
+				$encashment_amount 	= $earnings_as_of * -1;
+
+				$minimum_encashment = 0;
+				$remaining 			= $slot->current_wallet;
+				$compute_net 		= $encashment_amount;
+				$tax 				= (($encashment_amount * ($tax_amount/100)));
+				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
+			}
+
+			$_slot[$key]->real_wallet 		= number_format($slot->current_wallet, 2, '.', '');
+			$_slot[$key]->real_earnings 	= number_format($slot->total_earnings, 2, '.', '');
+			$_slot[$key]->real_payout 		= number_format($slot->total_payout, 2, '.', '');
+			$_slot[$key]->real_encash 		= number_format($encashment_amount, 2, '.', '');
+			$_slot[$key]->real_remaining 	= number_format($remaining, 2, '.', '');
+			$_slot[$key]->real_service 		= number_format($service_charge, 2, '.', '');
+			$_slot[$key]->real_other 		= number_format($other_charge, 2, '.', '');
+			$_slot[$key]->real_tax 			= number_format($tax, 2, '.', '');
+			$_slot[$key]->real_net 			= number_format($compute_net, 2, '.', '');
 
 
-				$_slot[$key]->real_wallet 		= number_format($slot->current_wallet, 2, '.', '');
-				$_slot[$key]->real_earnings 	= number_format($slot->total_earnings, 2, '.', '');
-				$_slot[$key]->real_payout 		= number_format($slot->total_payout, 2, '.', '');
-				$_slot[$key]->real_encash 		= number_format($encashment_amount, 2, '.', '');
-				$_slot[$key]->real_remaining 	= number_format($remaining, 2, '.', '');
-				$_slot[$key]->real_service 		= number_format($service_charge, 2, '.', '');
-				$_slot[$key]->real_other 		= number_format($other_charge, 2, '.', '');
-				$_slot[$key]->real_tax 			= number_format($tax, 2, '.', '');
-				$_slot[$key]->real_net 			= number_format($compute_net, 2, '.', '');
+			$_slot[$key]->display_wallet = Currency::format($slot->current_wallet);
+			$_slot[$key]->display_earnings = Currency::format($slot->total_earnings);
+			$_slot[$key]->display_payout = Currency::format($slot->total_payout);
+			$_slot[$key]->display_encash = Currency::format($encashment_amount);
+			$_slot[$key]->display_remaining = Currency::format($remaining);
+			$_slot[$key]->display_service = Currency::format($service_charge);
+			$_slot[$key]->display_other = Currency::format($other_charge);
+			$_slot[$key]->display_tax = Currency::format($tax);
+			$_slot[$key]->display_net = Currency::format($compute_net);
 
-
-				$_slot[$key]->display_wallet = Currency::format($slot->current_wallet);
-				$_slot[$key]->display_earnings = Currency::format($slot->total_earnings);
-				$_slot[$key]->display_payout = Currency::format($slot->total_payout);
-				$_slot[$key]->display_encash = Currency::format($encashment_amount);
-				$_slot[$key]->display_remaining = Currency::format($remaining);
-				$_slot[$key]->display_service = Currency::format($service_charge);
-				$_slot[$key]->display_other = Currency::format($other_charge);
-				$_slot[$key]->display_tax = Currency::format($tax);
-				$_slot[$key]->display_net = Currency::format($compute_net);
-
-				if($encashment_amount <= $minimum_encashment || $remaining < 0)
-				{
-					unset($_slot[$key]);
-				}
-				else
-				{
-					$total_payout += $encashment_amount;
-					$total_net += $compute_net;
-				}
+			if($encashment_amount <= $minimum_encashment || $remaining < 0)
+			{
+				unset($_slot[$key]);
+			}
+			else
+			{
+				$total_payout += $encashment_amount;
+				$total_net += $compute_net;
 			}
 		}
 

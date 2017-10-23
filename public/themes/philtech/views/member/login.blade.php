@@ -6,13 +6,14 @@
 		<table>
 			<tbody>
 				<tr>
-					<td class="c1" style="background-color: #ddd;">
+					<td class="c1">
 						<div class="register-side">
-					
+							<img src="/themes/{{ $shop_theme }}/img/philtech-login.png">
 						</div>
 					</td>
 					<td class="c2">
 						@include('member2.include_login')
+						
 					</td>
 				</tr>
 			</tbody>

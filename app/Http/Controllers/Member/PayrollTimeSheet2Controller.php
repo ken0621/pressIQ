@@ -56,7 +56,7 @@ class PayrollTimeSheet2Controller extends Member
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
 		$data["company"] = $this->db_get_company_period_information($period_id);
 		$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_company_id);
-
+	
 		return view('member.payroll2.employee_summary', $data);
 	}
 	public function index_redirect_if_time_keeping_does_not_exist($period_id)
@@ -112,7 +112,6 @@ class PayrollTimeSheet2Controller extends Member
 
 		$data["period_id"] = $period_id;
 
-
 		if($data["compute_type"] == "Flat Rate")
 		{
 			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
@@ -120,10 +119,11 @@ class PayrollTimeSheet2Controller extends Member
 		else
 		{
 			return view('member.payroll2.employee_timesheet', $data);
-		}	
+		}
 	}
 	public function approve_timesheets($period_id = 0, $employee_id = 0)
 	{
+
 		if(Request::input("period_id") != 0)
 		{
 			$period_id = Request::input("period_id");
@@ -131,9 +131,6 @@ class PayrollTimeSheet2Controller extends Member
 			$payroll_period_id = Request::input("payroll_period_id");
 		}
 		
-		
-		
-
 		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
 		
@@ -153,6 +150,7 @@ class PayrollTimeSheet2Controller extends Member
 		//add payment in deduction
 		PayrollDeductionController::approve_deduction_payment($period_id,$employee_id,$payroll_period_id);
 		return json_encode(Request::input());	
+
 	}
 	
 	
@@ -413,11 +411,9 @@ class PayrollTimeSheet2Controller extends Member
 
 			$return = $this->timesheet_process_daily_info_record($employee_id, $date, $approved, $_record, $timesheet_db->payroll_time_sheet_id, $payroll_period_company_id, $timesheet_db->time_keeping_approved,  $timesheet_db->custom_shift,  $timesheet_db->custom_shift_id);
 		
-
 			$return->source = "";
 			$return->branch = "";
 			$return->payroll_time_sheet_id = 0;
-
 		}
 		else
 		{
@@ -432,6 +428,7 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		dd($message);
 	}
+
 	public function timesheet_process_daily_info_record($employee_id, $date, $approved, $_time, $payroll_time_sheet_id, $payroll_period_company_id, $time_keeping_approved, $custom_shift, $custom_shift_id)
 	{
 
@@ -903,6 +900,7 @@ class PayrollTimeSheet2Controller extends Member
 		if($check_approved)
 		{
 			$data = $this->compute_process_cutoff($check_approved);
+			// dd($this->compute_process_cutoff($check_approved));
 			$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
 
 			if($computation_type != "Flat Rate")

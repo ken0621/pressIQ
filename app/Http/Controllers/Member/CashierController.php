@@ -3,8 +3,13 @@ namespace App\Http\Controllers\Member;
 use App\Globals\Cart2;
 use App\Globals\Item;
 use App\Globals\Customer;
+use App\Globals\Transaction;
+use App\Globals\WarehouseTransfer;
+use App\Globals\Warehouse2;
+use App\Globals\Utilities;
 use Request;
 use Session;
+use Carbon\Carbon;
 
 class CashierController extends Member
 {
@@ -15,6 +20,8 @@ class CashierController extends Member
         $data["cart"]           = $_items = Cart2::get_cart_info();
         $data["_price_level"]   = Item::list_price_level($this->user_info->shop_id);
         $data["current_level"]  = ($data["cart"]["info"] ? $data["cart"]["info"]->price_level_id : 0);
+        $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
+        $data['_salesperson'] = Utilities::get_all_users($this->user_info->shop_id, $this->user_info->user_id);
         
         if(Session::has('customer_id'))
         {
@@ -106,6 +113,27 @@ class CashierController extends Member
 
         echo json_encode($return);
     }
+    public function pos_change_qty()
+    {
+        $data["shop_id"]    = $shop_id = $this->user_info->shop_id;
+        $data["item_id"]    = $item_id = Request::input("item_id");
+        $quantity           = Request::input("qty");
+        $data["item"]       = $item = Cart2::scan_item($data["shop_id"], $data["item_id"]);
+
+        if($data["item"])
+        {
+            $return["status"]   = "success";
+            $return["message"]  = "Item Number " .  $item->item_id . " has been added.";
+            Cart2::add_item_to_cart($shop_id, $item_id, $quantity, true);
+        }
+        else
+        {
+            $return["status"]   = "error";
+            $return["message"]  = "The ITEM you scanned didn't match any record.";
+        }
+
+        echo json_encode($return);
+    }
     public function set_cart_info($key, $value)
     {
         $cart_key           = Cart2::get_cart_key();
@@ -119,5 +147,96 @@ class CashierController extends Member
         $return["status"] = "success";
         $return["item_id"] = $item_id;
         echo json_encode($return);
+    }
+    public function process_sale()
+    {
+        $cart = Cart2::get_cart_info();
+        $consume_inventory                                  = Request::input('consume_inventory');
+        $method                                             = Request::input('payment_method');
+        $shop_id                                            = $this->user_info->shop_id;
+        $transaction_new["transaction_reference_table"]     = "tbl_customer";
+        $transaction_new["transaction_reference_id"]        = Session::get('customer_id');
+        $transaction_new["transaction_sales_person"]        = Request::input('transaction_sales_person');
+        $transaction_type                                   = "ORDER";
+        $transaction_date                                   = Carbon::now();
+        $destination_warehouse_id                           = Request::input('destination_warehouse_id');
+
+        $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+        $return = null;
+        $validate = null;
+
+        if($cart)
+        {   
+            foreach ($cart["_item"] as $key => $value)
+            {
+                $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity,'Consume');
+            }
+
+            if(!$destination_warehouse_id && $consume_inventory == 'wis')
+            {
+                $validate .= 'Please choose a warehouse destination <br>';
+            }
+
+            if(!$validate)
+            {                
+                Transaction::create_set_method($method);
+                $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
+
+                if(is_numeric($transaction_list_id))
+                {
+                    $get_transaction_list = Transaction::get_data_transaction_list($transaction_list_id);
+                    $get_item = Transaction::get_transaction_item($transaction_list_id);
+                    $remarks = 'Consume in Transaction Number : '.$get_transaction_list->transaction_number;
+                    if($consume_inventory == 'instant')
+                    {
+                        Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks);
+                        $validate = 1;
+                    }
+                    if($consume_inventory == 'wis')
+                    {
+                        $ins_wis['wis_shop_id'] = $shop_id;
+                        $ins_wis['wis_number'] = $get_transaction_list->transaction_number;
+                        $ins_wis['wis_from_warehouse'] = $warehouse_id;
+                        $ins_wis['destination_warehouse_id'] = Request::input('destination_warehouse_id');
+                        $ins_wis['wis_remarks'] = $remarks;
+                        $ins_wis['created_at'] = Carbon::now();
+
+                        $_item = null;
+                        foreach ($get_item as $key_item => $value_item) 
+                        {
+                            $_item[$key_item]['item_id'] = $value_item->item_id;
+                            $_item[$key_item]['quantity'] = $value_item->quantity;
+                            $_item[$key_item]['remarks'] = 'wis';
+                        }
+                        $validate = WarehouseTransfer::create_wis($shop_id, $remarks, $ins_wis, $_item);
+                    }
+                    if(is_numeric($validate))
+                    {
+                        Session::forget('customer_id');
+                        Cart2::clear_cart();
+                        $return['status'] = 'success';
+                        $return['receipt_id'] = $transaction_list_id;
+                        $return['call_function'] = 'success_process_sale';
+                    }
+                    else
+                    {
+                        $return['status'] = 'error';
+                        $return['status_message'] = $validate;
+                    }
+                } 
+            }
+            else
+            {
+                $return['status'] = 'error';
+                $return['status_message'] = $validate;
+            }
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = 'CART IS EMPTY';
+        }
+
+        return json_encode($return);
     }
 }

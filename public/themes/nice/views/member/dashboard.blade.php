@@ -83,7 +83,7 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right btn-enter-a-code">Create New Slot</a></div>
+				<div class="title">Wallet Summary <a href="javascript:" onclick="action_load_link_to_modal('/members/enter-code')" class="title-button pull-right btn-enter-a-code">Create New Slot</a></div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">
@@ -132,42 +132,45 @@
 				</div>
 			</div>
 
+
+
+
 			<div class="col-md-6">
 				<div class="title">Reward Summary</div>
 				<div class="sub-container">
 					<div class="chart-legend">
-						@foreach($_wallet_plan as $plan)
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
-							</div>
-						@endforeach
-					</div>
-				</div>
-				<div class="title">Reward Points</div>
-				<div class="sub-container">
-					@if(count($_point_plan) > 0)
-					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
-						@foreach($_point_plan as $plan)
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+							<div class="name"><span>Binary Pairing Reward</span><span class="value">{{ $wallet->display_complan_binary }}</span></div>
 						</div>
-						@endforeach
 					</div>
-					@else
-						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
-					@endif
+					<div class="chart-legend">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Repurchase Cashback</span><span class="value">{{ $wallet->display_complan_repurchase_cashback }}</span></div>
+						</div>
+					</div>
 				</div>
 
 
-				
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
 						<button class="btn btn-default" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 					</div>
 				</div>
+
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
+						</div>
+					</div>
+				</div>
+
+
 			</div>
 		</div>
 
@@ -197,7 +200,7 @@
 								@if($direct->distributed == 1)
 									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
 								@else
-									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+									<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 								@endif
 							</div>
 						</div>
@@ -210,7 +213,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)
@@ -232,7 +235,7 @@
 								</div>
 								@endforeach
 							@else
-								<div class="text-center" style="padding: 20px">You don't have any reward yet.</div>
+								<div class="text-center" style="padding: 20px">You don't have any pyet.</div>
 							@endif
 						</div>
 					</div>

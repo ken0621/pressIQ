@@ -101,39 +101,39 @@ class Payroll_BioImportController extends Member
 
 	public function import_anviz_biometrics_ep_series($file, $company)
 	{
-		$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('column1', 'column2','column3', 'column4','column5', 'column6','column7', 'column8','column9', 'column10', 'column11'));
+		$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('no.', 'name','datetime', 'status','status_name'));
 		
-		if(isset($_time[0]['column1']) && isset($_time[0]['column2']) && isset($_time[0]['column3']) && isset($_time[0]['column4']) && isset($_time[0]['column5']) && isset($_time[0]['column6']) && isset($_time[0]['column7']) && isset($_time[0]['column8']) && isset($_time[0]['column9']) && isset($_time[0]['column10']))
+		if(isset($_time[0]['no.']) && isset($_time[0]['name']) && isset($_time[0]['datetime']) && isset($_time[0]['status']) && isset($_time[0]['status_name']))
 		{
 		
 		 foreach ($_time as $key => $value) 
 		 {
 		 	
-		 	if($value["column1"] != "No.")
+		 	if($value["no."] != "no.")
 		 	{
 		 		
-				$date = date("Y-m-d", strtotime($value["column3"]));
-				$time = date("H:i:s", strtotime($value["column3"]));
+				$date = date("Y-m-d", strtotime($value["datetime"]));
+				$time = date("H:i:s", strtotime($value["datetime"]));
 				
-				if (!isset($_record[$date][$value["column1"]])) 
+				if (!isset($_record[$date][$value["no."]])) 
 				{
-					$_record[$date][$value["column1"]]['time_in']  = $time;
-					$_record[$date][$value["column1"]]['time_out'] = $time;
-					$_record[$date][$value["column1"]]['record_debugging_time_in']   = "first record";
-					$_record[$date][$value["column1"]]['record_debugging_time_out']   = "first record";
+					$_record[$date][$value["no."]]['time_in']  = $time;
+					$_record[$date][$value["no."]]['time_out'] = $time;
+					$_record[$date][$value["no."]]['record_debugging_time_in']   = "first record";
+					$_record[$date][$value["no."]]['record_debugging_time_out']   = "first record";
 				}
 				else
 				{
-					if ($_record[$date][$value["column1"]]['time_in'] > $time) 
+					if ($_record[$date][$value["no."]]['time_in'] > $time) 
 					{
-						$_record[$date][$value["column1"]]['record_debugging_time_in']   = "DATE: ".$date."  time in record: ".$_record[$date][$value["column1"]]['time_in']." > ".$time . " change time in ";
-						$_record[$date][$value["column1"]]['time_in'] = $time;
+						$_record[$date][$value["no."]]['record_debugging_time_in']   = "DATE: ".$date."  time in record: ".$_record[$date][$value["no."]]['time_in']." > ".$time . " change time in ";
+						$_record[$date][$value["no."]]['time_in'] = $time;
 					}
 
-					if ($_record[$date][$value["column1"]]["time_out"] < $time) 
+					if ($_record[$date][$value["no."]]["time_out"] < $time) 
 					{
-						$_record[$date][$value["column1"]]['record_debugging_time_out']   = "DATE: ".$date."  time out record: ".$_record[$date][$value["column1"]]['time_out']." > ".$time . " change time out ";
-						$_record[$date][$value["column1"]]['time_out'] = $time;
+						$_record[$date][$value["no."]]['record_debugging_time_out']   = "DATE: ".$date."  time out record: ".$_record[$date][$value["no."]]['time_out']." > ".$time . " change time out ";
+						$_record[$date][$value["no."]]['time_out'] = $time;
 					}
 				}
 		 	}
@@ -151,11 +151,13 @@ class Payroll_BioImportController extends Member
 
 	public function save_time_record($_time_record, $company ,$shop_id, $biometric_name)
 	{
+
 		$success = 0;
 		$failed = 0;
 		$incomplete = 0;
 		$overwritten = 0;
 		// dd($_time_record);
+
 		foreach ($_time_record as $date => $time_record) 
 		{
 			foreach ($time_record as $employee_number => $value) 
@@ -168,7 +170,6 @@ class Payroll_BioImportController extends Member
 				}
 				else
 				{
-
 					$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("shop_id", Self::shop_id())->first();
 				}
 
@@ -236,6 +237,7 @@ class Payroll_BioImportController extends Member
 			}
 			
 		}
+
 		$data["success"] = $success;
 		$data["failed"] = $failed;
 		$data["overwritten"] = $overwritten;
@@ -384,8 +386,6 @@ class Payroll_BioImportController extends Member
     				$_record[$key_employee]->employee_record[$key_date]->status = "<span style='color: red;'>Invalid Employee Number</span>";
     			}
     		}
-
-
     	}
 
     	$data["record_success"] = $success;
@@ -727,7 +727,6 @@ class Payroll_BioImportController extends Member
 	    		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using zkteco_yh803aups   Template.', "", "" ,"");
 	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
 	    	}
-	    	
 	    	// return $message;
     	}
 
@@ -1213,6 +1212,7 @@ class Payroll_BioImportController extends Member
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('company_code','employee_no','date','in_1','out_1','in_2','out_2','in_3','out_3','in_4','out_4','in_5','out_5','in_6','out_6'));
 
     	$incomplete = 0;
+
     	$_record = null;
     	$time_records = null;
     	if(isset($_time[0]['company_code']) && isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['in_1']) && isset($_time[0]['out_1']) && isset($_time[0]['in_2']) && isset($_time[0]['out_2']) && isset($_time[0]['in_3']) && isset($_time[0]['out_3']))
@@ -1225,7 +1225,6 @@ class Payroll_BioImportController extends Member
     	 		$employee_number = $time["employee_no"];
     	 		$time_in  = "";
     	 		$time_out = "";
-
     	 		
 			 	if (is_object($time["date"])) 
     	 		{
@@ -1249,9 +1248,6 @@ class Payroll_BioImportController extends Member
     	 		/*$column_in_out = array('in_1','in_2','in_3','in_4','in_5','in_6','out_1','out_2','out_3','out_4','out_5','out_6');
     			foreach ($time as $key => $value) 
     			{
-
-    				
-    				
 					if (in_array($key, $column_in_out)) 
 					{
 						$time_record = null;			
@@ -1264,19 +1260,19 @@ class Payroll_BioImportController extends Member
 						else
 						{
 							$time_record = date('H:i:s', strtotime($value)); 
+
 							$time_records[] = $time_records;
 						}
 
-						
 						if (!isset($_record[$date][$employee_number]['time_in'])) 
 						{
 							
 							$_record[$date][$employee_number]['time_in']   = $time_record;
+
  							$_record[$date][$employee_number]['time_out']  = $time_record;
 						}
 						else
 						{
- 							
 							if ($_record[$date][$employee_number]['time_in']  > $time_record)
 							{
 								$_record[$date][$employee_number]['time_in'] = $time_record;
@@ -1287,6 +1283,7 @@ class Payroll_BioImportController extends Member
 							}
 						}
 					}
+
     			}*/
     			
     		
@@ -1295,6 +1292,7 @@ class Payroll_BioImportController extends Member
     	 	{
     	 		$incomplete++;
     	 	}
+
     	 }
     	 
     	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "ANVIZ Biometrics EP Series");

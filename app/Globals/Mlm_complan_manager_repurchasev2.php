@@ -27,6 +27,8 @@ use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_triangle_repurchase_tree;
 use App\Models\Tbl_stairstep_points_log;
 use App\Models\Tbl_rank_points_log;
+use App\Models\Tbl_rank_update;
+use App\Models\Tbl_rank_update_slot;
 use App\Models\Tbl_brown_rank;
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
@@ -348,7 +350,6 @@ class Mlm_complan_manager_repurchasev2
                 // ADD OLD BINARY POINTS + NEW BINARY POINTS
 
                 $binary[$tree->placement_tree_position] = $binary[$tree->placement_tree_position] + $binary['points']; 
-
                 // End
                 $update['slot_binary_left'] =   $binary["left"];
                 $update['slot_binary_right'] =  $binary["right"];
@@ -367,6 +368,7 @@ class Mlm_complan_manager_repurchasev2
         $rank_points            = $points;
         $rank_group_points      = $group_points;
         $percentage             = null;
+        $rank_real_time_update  = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->rank_real_time_update; 
 
         if($rank_points != 0)
         {
@@ -388,6 +390,11 @@ class Mlm_complan_manager_repurchasev2
             $insert_rank_log["rank_percentage_used"] = 0;
             $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
             Tbl_rank_points_log::insert($insert_rank_log);
+
+            if($rank_real_time_update == 1)
+            {
+                Mlm_complan_manager_repurchasev2::real_time_rank_upgrade($slot_info);
+            }
         }
 
         $array               = null;
@@ -448,6 +455,11 @@ class Mlm_complan_manager_repurchasev2
                         $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
                         Tbl_rank_points_log::insert($insert_rank_log);
                     }
+
+                    if($rank_real_time_update == 1)
+                    {
+                        Mlm_complan_manager_repurchasev2::real_time_rank_upgrade($slot_recipient);
+                    }
             }
         } 
     }
@@ -460,6 +472,7 @@ class Mlm_complan_manager_repurchasev2
         $stairstep_points       = $points;
         $stairstep_group_points = $group_points;
         $percentage             = null;
+        
         if($stairstep_points != 0)
         {
             $array['points_log_complan'] = "STAIRSTEP_PV";
@@ -500,6 +513,29 @@ class Mlm_complan_manager_repurchasev2
                 $computed_points = ($slot_stairstep->stairstep_bonus/100) * $stairstep_group_points;
                 $percentage      = $slot_stairstep->stairstep_bonus;
             }  
+
+            if($slot_stairstep->stairstep_rebates_bonus != 0 && $stairstep_points != 0)
+            {
+                $stairstep_rebates_bonus = $slot_stairstep->stairstep_rebates_bonus;
+                $rebates_bonus           = ($stairstep_rebates_bonus/100) * $stairstep_points;
+
+                if($rebates_bonus != 0)
+                {
+                    $array['points_log_complan']        = "STAIRSTEP_REBATES_BONUS";
+                    $array['points_log_level']          = 0;
+                    $array['points_log_slot']           = $slot_info->slot_id;
+                    $array['points_log_Sponsor']        = $slot_info->slot_id;
+                    $array['points_log_date_claimed']   = Carbon::now();
+                    $array['points_log_converted']      = 0;
+                    $array['points_log_converted_date'] = Carbon::now();
+                    $array['points_log_type']           = 'SRB';
+                    $array['points_log_from']           = 'Product Repurchase';
+                    $array['points_log_points']         = $rebates_bonus;
+                    $array['original_from_complan']     = "STAIRSTEP";
+
+                    $slot_logs_id = Mlm_slot_log::slot_log_points_array($array);
+                }
+            }
         }
         else
         {
@@ -835,6 +871,126 @@ class Mlm_complan_manager_repurchasev2
                     
                 }
                 
+            }
+        }
+    }
+
+    public static function real_time_rank_upgrade($slot_info)
+    {
+        $shop_id                    = $slot_info->shop_id;
+        $slot_id                    = $slot_info->slot_id;
+        $old_rank_id                = 0;
+        $new_rank_id                = 0;
+        $required_leg_update_id     = 0;
+        $required_leg_update_count  = 0;
+        $include_rpv_on_rgpv        = Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first()->include_rpv_on_rgpv;
+
+        // Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id","<",$slot->slot_id)->orderBy("slot_id","DESC")->first();                                          
+        $slot_info      = Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->first();
+
+        if($slot_info)
+        {       
+            $old_rank_id    = $slot_info->stairstep_rank;
+            $rpv                   = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
+                                                            ->where("points_log_type","RPV")
+                                                            ->sum("points_log_points");
+
+            $grpv                  = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
+                                                            ->where("points_log_type","RGPV")   
+                                                            ->sum("points_log_points");                                         
+            if(!$rpv)
+            {
+                $rpv = 0;
+            }   
+            if(!$grpv)
+            {
+                $grpv = 0;
+            }
+
+            if($include_rpv_on_rgpv == 1)
+            {
+                $grpv = $grpv + $rpv;
+            }
+                                               
+            $slot_stairstep        = Tbl_mlm_stairstep_settings::where("stairstep_id",$slot_info->stairstep_rank)->first();
+            $slot_stairstep_get    = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)
+                                                               ->where("stairstep_required_pv","<=",$rpv)
+                                                               ->where("stairstep_required_gv","<=",$grpv)
+                                                               ->orderBy("stairstep_level","DESC")
+                                                               ->get();
+
+            $sponsor_tree    = Tbl_tree_sponsor::where("sponsor_tree_child_id",$slot_id)->orderBy("sponsor_tree_level","ASC")->get();
+            $percentage      = null;
+            $check_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->first();
+            $slot_pv         = $rpv;
+
+            $check_if_change = 0;
+            foreach($slot_stairstep_get as $slot_stairstep_new)
+            {
+                if(!$slot_stairstep)
+                {
+                    $check_stair_level = 0;
+                }
+                else
+                {
+                    $check_stair_level = $slot_stairstep->stairstep_level;
+                }
+
+                if($slot_stairstep_new->stairstep_level > $check_stair_level)
+                {
+                    if($slot_stairstep_new->stairstep_leg_id != 0)
+                    {
+                        $leg_count = Tbl_tree_sponsor::where("sponsor_tree_parent_id",$slot_id)->child_info()->where("stairstep_rank",$slot_stairstep_new->stairstep_leg_id)->count();
+                        if($leg_count >= $slot_stairstep_new->stairstep_leg_count)
+                        {
+                            $update_slot["stairstep_rank"] = $slot_stairstep_new->stairstep_id;
+                            $new_rank_id                   = $slot_stairstep_new->stairstep_id;
+                            $required_leg_update_count     = $leg_count;
+                            $required_leg_update_id        = $slot_stairstep_new->stairstep_leg_id;
+                            Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
+                            $check_if_change = 1;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        $update_slot["stairstep_rank"] = $slot_stairstep_new->stairstep_id;
+                        $new_rank_id                   = $slot_stairstep_new->stairstep_id;
+                        Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
+                        $check_if_change = 1;
+                        break;
+                    }
+                }
+            }
+
+            if($new_rank_id == 0)
+            {
+                $new_rank_id = $old_rank_id;
+            }
+
+            if($new_rank_id != $old_rank_id)
+            {
+                $insert["total_slots"]      = Tbl_mlm_slot::where("shop_id",$shop_id)->count();
+                $insert["shop_id"]          = $shop_id;             
+                $insert["date_created"]     = Carbon::now();    
+                $insert["real_time_update"] = 1;    
+                $rank_update_id             = Tbl_rank_update::insertGetId($insert);
+
+                $insert_update_rank["rank_update_id"]           = $rank_update_id;              
+                $insert_update_rank["slot_id"]                  = $slot_id;
+                $insert_update_rank["rank_personal_pv"]         = $rpv;
+                $insert_update_rank["rank_group_pv"]            = $grpv;
+                $insert_update_rank["required_leg_rank_id"]     = $required_leg_update_id;
+                $insert_update_rank["current_leg_rank_count"]   = $required_leg_update_count;
+                $insert_update_rank["new_rank_id"]              = $new_rank_id;                 
+                $insert_update_rank["old_rank_id"]              = $old_rank_id;                 
+                $insert_update_rank["date_created"]             = Carbon::now();
+
+                Tbl_rank_update_slot::insert($insert_update_rank);
+                              
+
+                $update_rank_update["complete"] = 1;
+                Tbl_rank_update::where("rank_update_id",$rank_update_id)->update($update_rank_update);                     
             }
         }
     }

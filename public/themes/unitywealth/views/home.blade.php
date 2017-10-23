@@ -6,7 +6,7 @@
         <div class="container">
             <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption.png"></div>
             <div class="caption-container">
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                <!-- <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p> -->
             </div>
             <div class="btn-container animated fadeInDown">SHOW MORE</div>
             <span class="animated fadeInDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>

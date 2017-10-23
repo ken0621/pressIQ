@@ -15,6 +15,7 @@ use App\Globals\Currency;
 use Redirect;
 use App\Globals\MLM2;
 use Excel;
+use stdClass;
 
 class MLM_PayoutController extends Member
 {
@@ -91,9 +92,11 @@ class MLM_PayoutController extends Member
 		{
 			$data["settings"] = new stdClass();
 			$data["settings"]->enchasment_settings_tax = 0;
-			$data["settings"]->encashment_settings_p_fee = 0;
+			$data["settings"]->enchasment_settings_p_fee = 0;
 			$data["settings"]->encashment_settings_o_fee = 0;
-			$data["settings"]->encashment_settings_minimum = 0;
+			$data["settings"]->enchasment_settings_minimum = 0;
+			$data["settings"]->encashment_settings_schedule_type = "none";
+			$data["settings"]->encashment_settings_schedule = "";
 		}
 
 		foreach($_bank as $key => $bank)

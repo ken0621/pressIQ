@@ -1527,7 +1527,7 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
-    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0)
+    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0, $item_id = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1553,7 +1553,11 @@ class Item
         else
         {
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused');
-        }  
+        }
+        if($item_id != 0)
+        {
+            $query->where('tbl_item.item_id',$item_id);
+        }
 
         if($paginate != 0)
         {

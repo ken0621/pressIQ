@@ -5,10 +5,8 @@ use App\Models\Tbl_shop_event;
 use App\Models\Tbl_shop_event_reserved;
 use App\Models\Tbl_user;
 use App\Models\Tbl_email_template;
-
-use App\Globals\Mail_global;
 use File;
-
+use App\Globals\Mail_global;
 /**
  * 
  *
@@ -150,7 +148,6 @@ class ShopEvent
 
 		return $return;
 	}
-
 	public static function send_email_reservee($shop_id = 0, $event_id = 0)
 	{
 		$template = Tbl_email_template::where("shop_id", $shop_id)->first();
@@ -161,12 +158,12 @@ class ShopEvent
                 $template->header_image = null;
             }
         }
-
         $content = "<div style='text-align'><h3>A NEW RESERVEE REGISTERED</h3></div><br><br>";
 
         $all_attendees = Tbl_shop_event_reserved::where('event_id',$event_id)->orderBy('reservation_id','DESC')->get();
 
         $list = "<table style='width:100%;border: 1px solid #000;'><thead style='padding:20px;'><tr><th width='20px'>#</th><th width='300px'>Name</th><th width='200px'>Contact Details</th><th width='100px'>Enrollers Code</th><th width='100px'></th></tr></thead><tbody>";
+
         foreach ($all_attendees as $attendees_key => $attendees_value) 
         {
         	$type = "Guest";
@@ -199,6 +196,5 @@ class ShopEvent
 
 	        Mail_global::send_email($template, $email, $shop_id, $email_address);
         }
-
 	}
 }

@@ -2,6 +2,7 @@ var payroll_employees_13th_month_pay = new payroll_employees_13th_month_pay();
 var basis = "";
 var company_id = 0;
 var token = "";
+var year = "";
 function payroll_employees_13th_month_pay()
 {
 	init();
@@ -37,7 +38,7 @@ function payroll_employees_13th_month_pay()
 			if (basis != "") 
 			{
 				company_id = $('.filter-change-company').val();
-				load_13th_month_pay_table(basis,token,company_id);
+				load_13th_month_pay_table(basis, token, company_id);
 			}
 		});
 	}
@@ -49,13 +50,15 @@ function submit_done(data)
 		token = data._token;
 		basis = data.employee_13_month_basis;
 		company_id = $('.filter-change-company').val();
-		load_13th_month_pay_table(data.employee_13_month_basis,data._token,company_id);
+
+		load_13th_month_pay_table(data.employee_13_month_basis, data._token, company_id, data.payroll_13th_month_pay_year);
 		data.element.modal("hide");
 	}
 }
 
-function load_13th_month_pay_table(employee_13_month_basis,_token,company_id)
+function load_13th_month_pay_table(employee_13_month_basis, _token, company_id)
 {
+	console.log(year);
 	$('.modal-loader').removeClass('hidden');
 	$.ajax({
 		url		: '/member/payroll/reports/employees_13th_month_pay_table',

@@ -59,9 +59,9 @@
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
 
 							<ul>
-								<li>
+								<!-- <li>
 									<a href="/members/genealogy?mode=binary"><div class="nav-holder"> &nbsp;&nbsp;<span>Binary Tree</span></div></a>
-								</li>
+								</li> -->
 								<li>
 									<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"> &nbsp;&nbsp;<span>Unilevel Tree</span></div></a>
 								</li>

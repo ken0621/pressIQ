@@ -41,6 +41,7 @@
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
+        
     <div class="loader hide">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>

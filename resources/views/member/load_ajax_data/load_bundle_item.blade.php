@@ -2,8 +2,9 @@
     <table class="digima-table">
         <thead >
             <tr>
-                <th class="text-center" style="width: 40px">ITEM SKU</th>
-                <th class="text-center" style="width: 40px">ITEM BARCODE</th>
+                <th style="width: 10px" class="text-center">#</th>
+                <th class="text-center" style="width: 100px">ITEM DETAILS</th>
+                <th class="text-center" style="width: 300px">ITEM DESCRIPTION</th>
                 <th class="text-center" style="width: 100px;">ACTUAL STOCKS</th>
                 @if($pis != 0)
                 <th class="text-center" style="width: 100px;">SIR Stocks</th>
@@ -16,11 +17,15 @@
                 @if($warehouse_item_bundle != null)
                     @foreach($warehouse_item_bundle as $keys => $w_bundle_item)
                     <tr class="tr-draggable tr-draggable-html count_row">
-                        <td >
-                            <label class="count-select">{{$w_bundle_item["bundle_item_name"]}}</label>
+                        <td>{{$keys+1}}</td>
+                        <td>
+                            <label class="count-select">
+                                <div><strong>{{$w_bundle_item["bundle_item_name"]}}</strong> </div>
+                                <small>{{$w_bundle_item["bundle_item_bardcode"]}}</small>
+                            </label>
                         </td>
                         <td >
-                            <label class="count-select">{{$w_bundle_item["bundle_item_bardcode"]}}</label>
+                            <p> {{ $w_bundle_item['bundle_item_description'] }}</p>
                         </td>
                         <td >
                             <label >{{$w_bundle_item["bundle_actual_stocks_um"]}}</label>

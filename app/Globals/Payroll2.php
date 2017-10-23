@@ -1896,7 +1896,6 @@ class Payroll2
 				}
 				else
 				{
-
 					$leave_hours_consumed   = $target_hours;
 					$is_absent 				= false;
 					$time_spent 			= $target_hours;

@@ -14,6 +14,7 @@ use App\Models\Tbl_press_release_recipient;
 use App\Models\Tbl_press_release_email_sent;
 use Mail;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Globals\Settings;
 
 class Press_Release_Controller extends Member
 {
@@ -53,8 +54,9 @@ class Press_Release_Controller extends Member
 
     public function save_email()
     {
+        $insert['email_title'] = Request::input('title');
     	$insert['email_content'] = Request::input('content');
-    	$insert['email_title']=Request::input('subject');
+    	$insert['email_subject']=Request::input('subject');
     	$insert['email_time'] = date('Y-m-d');
     	Tbl_press_release_email::insert($insert);
     	return json_encode("success");
@@ -72,13 +74,15 @@ class Press_Release_Controller extends Member
 
     public function send_email(Request $request)
     {
+            /*Settings::set_mail_setting($shop_id);*/
         try 
         {
             $insert['email_content'] = Request::input('content');
             $insert['from']=Request::input('from');
             $insert['to']=Request::input('to');
             /*$insert['to']=explode(",",Request::input('to'));*/
-            $insert['email_title']=Request::input('subject');
+            $insert['email_title']=Request::input('title');
+            $insert['email_subject']=Request::input('subject');
             $insert['email_time'] = date('Y-m-d');
             Tbl_press_release_email_sent::insert($insert);
 
@@ -92,7 +96,7 @@ class Press_Release_Controller extends Member
                 Mail::send('member.email_system.email',$data, function($message) use ($data)
                 {
                     $message->from($data['from']);
-                    $message->to("edwardguevarra2003@gmail");
+                    $message->to($data['to']);
                     $message->subject($data['subject']);
                 });  
             }
@@ -140,5 +144,37 @@ class Press_Release_Controller extends Member
 
     }
 */
+    public function analytics()
+    {
+        $curl = curl_init();
 
+          curl_setopt_array($curl, array(
+          CURLOPT_URL => "https://mandrillapp.com/api/1.0/users/info.json?key=cKQiemfNNB-5xm98HhcNzw",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "GET",
+          CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+          ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) 
+        {
+          echo "cURL Error #:" . $err;
+        } 
+        else 
+        {
+        $data['array'] = json_decode($response);
+        }
+        return view("member.email_system.analytics_press_release",$data);
+    }
 }

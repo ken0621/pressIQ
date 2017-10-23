@@ -5210,12 +5210,13 @@ class PayrollController extends Member
                     $teacher_key++;
                     $current_teacher = $value->teacher_id;  
                     $_shift[$teacher_key]["teacher_id"] = $value->teacher_id;
-                    $_d["monday"] = null;
-                    $_d["tuesday"] = null;
-                    $_d["wednesday"] = null;
-                    $_d["thursday"] = null;
-                    $_d["friday"] = null;
-                    $_d["saturday"] = null;
+                    $_d["Sun"] = null;
+                    $_d["Mon"] = null;
+                    $_d["Tue"] = null;
+                    $_d["Wed"] = null;
+                    $_d["Thu"] = null;
+                    $_d["Fri"] = null;
+                    $_d["Sat"] = null;
                     $_shift[$teacher_key]["schedule"] = $_d;
                }
 
@@ -5231,24 +5232,94 @@ class PayrollController extends Member
           }
 
           /* SORT TIME PER DAY */
+          foreach($_shift as $key => $shift)
+          {
+               /* EACH DAY */
+               foreach($shift["schedule"] as $day => $_time)
+               {
+                    $temptime = null;
+
+                    if($_time) //STORE TO ARRAY INT FORMAT
+                    {
+                         foreach($_time as $time)
+                         {
+                             $temptime[strtotime($time["in"])] = $time; 
+                         }
+
+                         ksort($temptime);
+                    }
+
+                    $_shift[$key]["schedule"][$day] = $temptime; //SAVE SORTED SCHEDULE TO NEW ARRAY
+               }
+          }
+
+          /* IMPORT ARRAY TO DATABASE */
+          $shop_id = $this->user_info->shop_id;
+
+          foreach($_shift as $shift)
+          {
+               $payroll_employee_number = $shift["teacher_id"];
+               $shift_code_name = "import_" . $payroll_employee_number;
+
+               /* DELETE SHIFT OVERRIDE */
+               Tbl_payroll_shift_code::where("shift_code_name", $shift_code_name)->where("shop_id", $shop_id)->delete();
+       
+               /* INSERT SHIFT CODE */
+               $insert_code["shift_code_name"] = $shift_code_name;
+               $insert_code["shift_archived"] = 0;
+               $insert_code["shop_id"] = $shop_id;
+               $shift_code_id = Tbl_payroll_shift_code::insertGetId($insert_code);
+
+               /* INSERT SHIFT DAY */  
+               foreach($shift["schedule"] as $day => $_time)
+               {
+                    $insert_day["shift_day"] = $day;
+                    $insert_day["shift_target_hours"] = 0;
+                    $insert_day["shift_rest_day"] = $_time == null ? 1 : 0;
+                    $insert_day["shift_code_id"] = $shift_code_id;
+
+                    $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
+
+                    /* INSERT SHIFT TIME */
+                    if($_time)
+                    {
+                         foreach($_time as $time)
+                         {
+                              $insert_time["shift_day_id"] = $shift_day_id;
+                              $insert_time["shift_work_start"] = date("H:i:s", strtotime($time["in"]));
+                              $insert_time["shift_work_end"] = date("H:i:s", strtotime($time["out"]));
+
+                              Tbl_payroll_shift_time::insert($insert_time);
+                         }
+                    }
+               }
+
+               /* UPDATE EMPLOYEE SHIFT CODE */
+               $employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $payroll_employee_number)->where("shop_id", $shop_id)->first();
           
-
-
-
-
-
-          dd($_shift);
+               if($employee)
+               {
+                    $update_employee["shift_code_id"] = $shift_code_id;
+                    Tbl_payroll_employee_basic::where("payroll_employee_id", $employee->payroll_employee_id)->update($update_employee);
+                   
+                    echo "<div style='color: green;'><b>" . $payroll_employee_number . "</b> shift has been updated.<div>";
+               }
+               else
+               {
+                    echo "<div style='color: red;'><b>" . $payroll_employee_number . "</b> can't be found.</div>";
+               }
+          }
      }
      public function get_days_based_on_string_day($daystring)
      {
           $return = null;
 
-          $_day["thursday"] = "TH";
-          $_day["monday"] = "M";
-          $_day["tuesday"] = "T";
-          $_day["wednesday"] = "W";
-          $_day["friday"] = "F";
-          $_day["saturday"] = "S";
+          $_day["Thu"] = "TH";
+          $_day["Mon"] = "M";
+          $_day["Tue"] = "T";
+          $_day["Wed"] = "W";
+          $_day["Fri"] = "F";
+          $_day["Sat"] = "S";
 
           foreach($_day as $key => $day)
           {

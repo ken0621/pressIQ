@@ -77,7 +77,7 @@
 	</div>
 </div>
 
-<!-- MANUAL PLACING OF SLOT -->
+
 <div class="popup-wallet-encashment">
     <div id="wallet-encashmnet-modal" class="modal fade">
         <div class="modal-md modal-dialog">

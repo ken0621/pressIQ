@@ -8,14 +8,25 @@
 		<h4 class="modal-title">13TH MONTH PAY BASIS</h4>
 	</div>
 	<div class="modal-body clearfix">
-		<div class="form-group">
-		    <label>Basis</label>
-		    <select class="form-control" name="payroll_13th_month_pay_basis" >
-		    	<option value="gross_pay">Gross Basic Pay</option>
-		    	<option value="net_pay">Net Basic Pay</option>
-		    	<option value="monthly_rate">Monthly Rate</option>
-		    </select>
-	  	</div>
+		<div class="row">
+				
+			  	<div class="form-group col-md-6" >
+				    <label>Basis</label>
+				    <select class="form-control" name="payroll_13th_month_pay_basis" >
+				    	<option value="gross_pay">Gross Basic Pay</option>
+				    	<option value="net_pay">Net Basic Pay</option>
+				    	<option value="monthly_rate">Monthly Rate</option>
+				    </select>
+			  	</div>
+			  	<div class="form-group col-md-6" style="margin-left: 10px;">
+				    <label>Year</label>
+				    <select class="form-control" name="payroll_13th_month_pay_year" >
+				    	<option value="2017">2017</option>
+				    	<option value="2018">2018</option>
+				    	<option value="2019">2019</option>
+				    </select>
+			  	</div>
+		</div>
 	  	<div class="form-group">
 	  		<label>Additions (+)</label>
 	  		<div class="row">

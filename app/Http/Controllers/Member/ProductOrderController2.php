@@ -3,9 +3,11 @@ namespace App\Http\Controllers\Member;
 
 use App\Globals\Transaction;
 use App\Globals\Columns;
+use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_transaction_list;
 use Excel;
 use DB;
+use Request;
 
 class ProductOrderController2 extends Member
 {
@@ -13,6 +15,9 @@ class ProductOrderController2 extends Member
     {
         $shop_id            = $this->user_info->shop_id;
         $data["page"]       = "Product Orders";
+        $data["shop_id"]    = $shop_id;
+        $data["_method"]    = Tbl_online_pymnt_method::where("method_shop_id", $shop_id)->get();
+
         return view('member.product_order2.product_order2', $data);
     }
     public function table()
@@ -119,6 +124,27 @@ class ProductOrderController2 extends Member
         Transaction::get_transaction_payment_method();
         Transaction::get_transaction_slot_id();
 
+        $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'receipt', '', 0);
+        foreach ($data["_transaction"] as $key => $value) 
+        {
+            if ($value->payment_method != "dragonpay") 
+            {
+                unset($data["_transaction"][$key]);
+            }
+        }
+
+        Excel::create('Dragonpay Report', function($excel) use ($data)
+        {
+            $excel->sheet('Dragonpay', function($sheet) use ($data)
+            {
+                $sheet->loadView('member.product_order2.payment.draref', $data);
+            });
+        })
+        ->download('xls');
+    }
+    public function export()
+    {
+        dd(Request::input("method"));
         $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'receipt', '', 0);
         foreach ($data["_transaction"] as $key => $value) 
         {

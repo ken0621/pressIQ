@@ -68,6 +68,10 @@ class Transaction
         
         return $_item;
     }    
+    public static function get_transaction()
+    {
+        
+    }
     public static function create_update_transaction_details($details)
     {
         $store["create_update_transaction_details"] = $details;

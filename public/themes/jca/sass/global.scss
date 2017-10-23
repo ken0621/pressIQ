@@ -96,13 +96,6 @@ button:hover{
 		padding-bottom: 12px;
 	}
 
-	nav
-	{
-		a.active
-		{
-			color: #019771;
-		}
-	}
 }
 
 
@@ -122,6 +115,16 @@ button:hover{
 		&.subheader-container
 		{
 			margin-bottom: 87px;
+		}
+	}
+	.navirino
+	{
+		ul
+		{
+			a.active 
+			{
+				color: #019771 !important;
+			}
 		}
 	}
 }
@@ -160,15 +163,17 @@ button:hover{
 			display: block;
 		}
 	}
-
-	a {
+	a 
+	{
 		color: #1c1c1c;
-		&:hover {
+		&:hover
+		{
 			color: #019771;
 			text-decoration: none;
 			cursor: pointer;
 		}
 	}
+
 }
 
 

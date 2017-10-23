@@ -38,6 +38,7 @@ class Warehouse
             $bundle_data[$key]["bundle_id"] = $value->item_id;
             $bundle_data[$key]["bundle_item_name"] = $value->item_name;
             $bundle_data[$key]["bundle_item_bardcode"] = $value->item_barcode;
+            $bundle_data[$key]["bundle_item_description"] = $value->item_sales_information;
             $bundle_data[$key]["bundle_item_um"] = $value->item_measurement_id;
             $bundle_data[$key]["bundle_actual_stocks"] = null;
             $bundle_data[$key]["bundle_actual_stocks_um"] = null;
@@ -146,6 +147,7 @@ class Warehouse
             $item_data = Item::info($value->product_id);
             $_return[$key]['item_name'] = $item_data->item_name;
             $_return[$key]['item_sku'] = $item_data->item_sku;
+            $_return[$key]['item_description'] = $item_data->item_sales_information;
             $_return[$key]['item_barcode'] = $item_data->item_barcode;
             $_return[$key]['item_actual_stock'] = null;
             $_return[$key]['item_actual_stock_um'] = null;

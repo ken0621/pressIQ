@@ -3836,12 +3836,15 @@ class Payroll2
 		
 		foreach($return->_breakdown as $breakdown)
 		{
-			if($breakdown["add.gross_pay"] == true)
+			if($breakdown["label"] != "Leave Pay")
 			{
-				$return->gross_pay_total += $breakdown["amount"];
-				$breakdown["mode"] = "plus";
-				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
-				array_push($return->_gross_pay_breakdown, $breakdown);	
+				if($breakdown["add.gross_pay"] == true)
+				{
+					$return->gross_pay_total += $breakdown["amount"];
+					$breakdown["mode"] = "plus";
+					$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+					array_push($return->_gross_pay_breakdown, $breakdown);	
+				}
 			}
 
 			if($breakdown["deduct.gross_pay"] == true)
@@ -5557,9 +5560,9 @@ class Payroll2
 		$data['total_gross_pay']	= $cutoff_compute->cutoff_basic;
 		$data['obj']				= array();
 		
-		
 		if(isset($cutoff_compute->_breakdown_addition_summary))
 		{
+
 			foreach($cutoff_compute->_breakdown_addition_summary as $key => $amount)
 			{
 				$temp['name']	= $key;

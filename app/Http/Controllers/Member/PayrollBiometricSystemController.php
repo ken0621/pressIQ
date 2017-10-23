@@ -83,9 +83,8 @@ class PayrollBiometricSystemController extends Member
 		$data["date_from"] 	= 	$date["date_from"] 	= Carbon::parse(Request::input('date_from'))->format("Y-m-d");
 		$data["date_to"]	= 	$date["date_to"] 	= Carbon::parse(Request::input('date_to'))->format("Y-m-d");
 		$data["company_id"] = 	Request::input('company_id');
-		
-
 		$shop_id = $this->user_info->shop_id;
+		
 		if ($data["company_id"] != 0) 
 		{
 			$data["_biometric_record"] = Tbl_payroll_biometric_record::getalldata($this->user_info->shop_id)

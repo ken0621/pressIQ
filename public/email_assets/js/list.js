@@ -1,5 +1,5 @@
 $(function () {
-    $('.list-group.checked-list-box .list-group-item').each(function () {
+    $('.list-group .list-group-item .tocheck').each(function () {
         
         // Settings
         var $widget = $(this),
@@ -75,10 +75,31 @@ $(function () {
         });
         $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
     });
+
 });
 
-
+   
     $(document).ready(function(){
+    $('#check').click(function(event) {
+    });
+    $checks = $(":checkbox");
+    $checks.on('change', function() {
+        var string = $checks.filter(":checked").map(function(i,v)
+        {
+            var email = $('.email_add').val();
+            var data_container = this.closest(".list-group-item");
+            return  $(data_container).text();
+        }).get();
+        $('.input_chose_recipient').val(string);
+    }).trigger('change');
+});
+
+  
+
+
+    function selectall()
+    {
+    $('.to_check').prop('checked','checked')
     $checks = $(":checkbox");
     $checks.on('change', function() {
         var string = $checks.filter(":checked").map(function(i,v)
@@ -88,4 +109,39 @@ $(function () {
         }).get();
         $('.input_chose_recipient').val(string);
     }).trigger('change');
-});
+    }
+
+   /* function click_checkbox()
+    {
+         $checks = $(":checkbox");
+    $checks.on('change', function() {
+        var string = $checks.filter(":checked").map(function(i,v)
+        {
+            var data_container = this.closest(".list-group-item");
+            return  $(data_container).text();
+        }).get();
+        $('.input_chose_recipient').val(string);
+    }).trigger('change');
+}           */
+    
+
+  /*function selectall(source) {
+  checkboxes = document.getElementsByName('foo');
+  alert($(checkboxes).text());
+  $('input[type="checkbox"]').attr("checked", "checked");
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    this.checked = true;   
+    checkboxes[i].checked = source.checked;
+    alert('123s');
+      
+    }
+}*/
+
+  
+
+/*$( '.recipient_container .check-all' ).click( function () {
+    alert('123');
+    $( '.recipient_container2 input[type="checkbox"]' ).prop('checked', this.checked)
+  })
+*/
+

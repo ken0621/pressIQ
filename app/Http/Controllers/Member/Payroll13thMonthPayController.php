@@ -373,8 +373,6 @@ class Payroll13thMonthPayController extends Member
 					}
 				}
 
-
-
 				if (isset($period->cutoff_input)) 
 				{
 

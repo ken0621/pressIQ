@@ -521,7 +521,6 @@ class PayrollReportController extends Member
 		}
 		else
 		{
-
 			$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
 			$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->get();
 			$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
@@ -533,8 +532,6 @@ class PayrollReportController extends Member
 			$data['payroll_employee_company_id_filter'] = $payroll_employee_company_id ;
 			return view('member.payrollreport.payroll_register_report_period_filter',$data);
 	    }
-	    
-
 	}
 
 	public function payroll_register_report_export_excel($period_company_id)
@@ -568,13 +565,13 @@ class PayrollReportController extends Member
 		// dd($id.$uid);
 		$period_company_id = $id;
 		$payroll_employee_company_id = $uid;
-        $data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
 		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->get();
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
 		$data['filter_company'] = Tbl_payroll_company::where('payroll_company_id',$payroll_employee_company_id)->first();
 		$data = $this->get_total_payroll_register($data);
+        $data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
 		
 		Excel::create($data["company"]->payroll_company_name." - ".$data['filter_company']->payroll_company_name,function($excel) use ($data)
 		{
@@ -666,11 +663,6 @@ class PayrollReportController extends Member
 		foreach($data["_employee"] as $key => $employee)
 		{
 			$payroll_group_salary_computation = Tbl_payroll_employee_contract::Group()->where('tbl_payroll_employee_contract.payroll_employee_id',$employee->payroll_employee_id)->first();
-
-			$total_basic 	+= $employee->net_basic_pay;
-			$total_gross 	+= $employee->gross_pay;
-			$total_net 		+= $employee->net_pay;
-			$total_tax 		+= $employee->tax_ee;
 
 			$total_er = $employee->sss_er + $employee->philhealth_er +  $employee->pagibig_er;
 			$total_ee = $employee->sss_ee + $employee->philhealth_ee +  $employee->pagibig_ee;
@@ -1121,6 +1113,12 @@ class PayrollReportController extends Member
 					}
 				}
 			}
+			
+			$employee->net_basic_pay = $employee->net_basic_pay - $leave_pay; 
+			$total_basic 	+= $employee->net_basic_pay;
+			$total_gross 	+= $employee->gross_pay;
+			$total_net 		+= $employee->net_pay;
+			$total_tax 		+= $employee->tax_ee;
 		}
 
 		$data["total_basic"] 						= $total_basic;

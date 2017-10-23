@@ -23,15 +23,9 @@
                     <div class="content-title wow fadeInUp">JCA WELLNESS INTERNATIONAL CORP</div>
                     <div class="context">
                         <p class="wow fadeInLeft">
-                            JCA Wellness International Corporation is a company that’s founded by group
-                            of entrepreneurs that’s driven to build a global community that will bring
-                            various business opportunities to aspiring entrepreneurs, to provide products
-                            and services that will enhance one’s beauty and wellness and to teach every
-                            aspiring entrepreneurs the various ways of earning.<br><br>
+                            JCA Wellness International Corporation is a company founded by group of entrepreneurs that is driven to build a global community that will bring various business opportunities to aspiring entrepreneurs, to provide products and services that will enhance one’s beauty and wellness and to teach every aspiring entrepreneurs the various ways of earning.<br><br>
 
-                            JCA Wellness International Corporation is currently building its network in
-                            Raffles Corporate Center in Emerald Ave. Ortigas Pasig City and is starting to
-                            grow its market in the Philippines and to other countries.
+                            JCA Wellness International Corporation is currently building its network in Raffles Corporate Center in Emerald Ave. Ortigas Pasig City and is starting to grow its market in the Philippines and to other countries.
                         </p>
                     </div>
                 </div>

@@ -41,6 +41,7 @@
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
+        
     <div class="loader hide">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
@@ -84,14 +85,14 @@
                         <ul>
                             @if(Request::segment(1)=="members")
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="/#aboutus">COMPANY</a></li>
+                                <li><a class="smoth-scroll" href="/#company">COMPANY</a></li>
                                 <li><a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a></li>
-                                <li><a class="smoth-scroll" href="/#products">CONTACT US</a></li>
+                                <li><a class="smoth-scroll" href="/#contact">CONTACT US</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="#aboutus">COMPANY</a></li>
+                                <li><a class="smoth-scroll" href="#company">COMPANY</a></li>
                                 <li><a class="smoth-scroll" href="#mission-vision">MISSION & VISION</a></li>
-                                <li><a class="smoth-scroll" href="#products">CONTACT US</a></li>
+                                <li><a class="smoth-scroll" href="#contact">CONTACT US</a></li>
                             @endif
                         </ul>
                     </nav>

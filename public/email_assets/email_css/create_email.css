@@ -1,3 +1,78 @@
+.panel-background
+{
+    height:700px !important;   
+}
+
+.select_container
+{
+    margin-left: 30px !important;
+}
+.chosen-container
+{
+    margin-top: 10px !important;
+    margin-right: 300px !important;
+}
+
+.recipient_text
+{
+    position:relative;
+    top:-25px;
+}
+.check-all
+{
+    width: 175px;
+}
+.box
+{
+    position: relative;
+    top:-15px;
+}
+
+.check_list
+{
+    height: 380px;
+    overflow-y: scroll !important;
+    margin-top: 35px
+    
+
+}
+
+.selectpicker_type_of_industry
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
+.selectpicker_title
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
+.selectpicker_position
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
+.selectpicker_company_name
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
+
+.selectpicker
+{
+    height: 39px;
+    margin-left: 29px;
+    width: 640px;
+}
+
 .email-content-container
 {
     width: 98%;
@@ -9,7 +84,7 @@
 .pagination_container
 {
     /* margin-left: 780px; */
-    margin-top: -35px;
+    margin-top: -11px;
 }
 
 .view-message
@@ -55,8 +130,10 @@
 
 .recipient_container
 {
-    margin-top: -528px;
-    margin-left: 765px!important;
+    position: absolute !important;
+    left: 745px !important;
+    top: 258px;
+    height:500px;
 }
 
 .label-choose-recipient

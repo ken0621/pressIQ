@@ -30,13 +30,11 @@ $(document).ready(function(){
   {		
 
 
-		var company_name = $('#company_name').val();
-		var name = $('#name').val();
-		var position = $('#position').val();
+		var country = $('#country').val();
 		var title_of_journalist = $('#title_of_journalist').val();
-    var country = $('#country').val();
     var industry_type = $('#industry_type').val();
-  	var data = {company_name: company_name,name:name,position:position,title_of_journalist:title_of_journalist,country:country, industry_type:industry_type};
+    alert(industry_type);
+  	var data = {title_of_journalist:title_of_journalist,country:country, industry_type:industry_type};
 		var url = addParams("/member/page/press_release_email/choose_recipient_press_release",data);
 		$(".recipient_container").load(url+" .recipient_container2",function(){
 			$.getScript("/email_assets/js/list.js");
@@ -194,7 +192,7 @@ $(document).ready(function(){
 
 
 
-var ajaxdata = {};
+/*var ajaxdata = {};
       $("body").on("click", ".pagination a", function(e)
       {
       $url = $(e.currentTarget).attr("href"); //get URL (string)
@@ -203,7 +201,7 @@ var ajaxdata = {};
       $.getScript("/email_assets/js/list.js");
       });
       return false;
-      });
+      });*/
 
   
   var addParams = function( url, data )

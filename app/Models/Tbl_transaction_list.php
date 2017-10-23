@@ -12,7 +12,7 @@ class Tbl_transaction_list extends Model
 	
 	public function scopeTransaction($query)
 	{
-		return $query->join("tbl_transaction", "tbl_transaction.transaction_id", "=", "tbl_transaction_list.transaction_id");
+		return $query->leftjoin("tbl_transaction", "tbl_transaction.transaction_id", "=", "tbl_transaction_list.transaction_id");
 	}
 	public function scopeSalesperson($query)
 	{

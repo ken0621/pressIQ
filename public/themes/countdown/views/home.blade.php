@@ -31,6 +31,17 @@
 		{
 			display: none !important;
 		}
+		@media screen and (max-width: 450px)
+		{
+			.top-logo
+			{
+				width: 75% !important;
+			}
+			.product-img
+			{
+				width: 50% !important;
+			}
+		}
 		</style>
 	</head>
 	<body>
@@ -39,13 +50,13 @@
 			<div class="inner-bg" style="height: 100%; position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-image: url('assets/img/front-img2.jpg'); background-size: cover;">
 				<div class="container">
 					<div class="row">
-						<div class="col-sm-12">
+						<div class="col-sm-12 col-xs-12">
 							<div class="logo wow fadeInDown">
-								<img style="width: 30%;" src="assets/img/count-down-logo.png">
+								<img class="top-logo" style="width: 30%;" src="assets/img/count-down-logo.png">
 							</div>
 							<!-- <h2 class="wow fadeInLeftBig">We Are Updating</h2> -->
 							<div class="wow fadeInDown">
-								<img style="width: 25%;" src="assets/img/product.png">
+								<img class="product-img" style="width: 25%;" src="assets/img/product.png">
 							</div>
 							<div style="margin-top: 10px;" class="timer wow fadeInUp">
 								<div class="days-wrapper">

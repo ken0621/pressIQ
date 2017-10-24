@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblSentEmailPressRelease101217 extends Migration
+class TblPressReleaseEmail extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateTblSentEmailPressRelease101217 extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_sent_email_press_release', function (Blueprint $table) {
+        Schema::create('tbl_press_release_email', function (Blueprint $table) {
             $table->increments('email_id');
-            $table->string('email_content');
             $table->string('email_title');
-            $table->string('to');
-            $table->string('from');
+            $table->string('email_content');
+            $table->string('email_subject');
             $table->string('email_time');
-            $table->timestamps();
+            $table->timestamp('created_at');
         });
     }
 
@@ -31,6 +30,6 @@ class CreateTblSentEmailPressRelease101217 extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_sent_email_press_release');
+        //
     }
 }

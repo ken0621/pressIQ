@@ -217,13 +217,39 @@ class Transaction
             Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
         }
     }
+    public static function consume_in_warehouse_validation($shop_id, $transaction_list_id, $remarks = 'Enroll kit')
+    {
+        $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
+        
+        $get_item = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
+        
+        $return = null;
+        foreach ($get_item as $key => $value) 
+        {
+            $return .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks);
+        }
+
+        return $return;
+    }
     public static function get_transaction_item($transaction_list_id)
     {
         return Tbl_transaction_item::where('transaction_list_id', $transaction_list_id)->get();
     }
-    public static function get_data_transaction_list($transaction_list_id)
+    public static function get_data_transaction_list($transaction_list_id, $type = null)
     {
-        return Tbl_transaction_list::where('transaction_list_id', $transaction_list_id)->first();
+        $data = Tbl_transaction_list::transaction()->where('transaction_list_id', $transaction_list_id);
+
+        if(session('get_transaction_customer_details_v2'))
+        {
+            $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
+            $data->leftJoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id');
+            $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
+            $data->groupBy("tbl_transaction_list.transaction_list_id");
+        }
+
+        session()->forget('get_transaction_customer_details_v2');
+
+        return $data->first();
     }
     public static function update_transaction_balance($transaction_id)
     {
@@ -240,7 +266,7 @@ class Transaction
             $update["transaction_payment_proof"] = session('create_update_proof');
             session()->forget('create_update_proof');
         }
-        
+
         if($balance == 0)
         {
             $update["payment_status"] = "paid";
@@ -433,7 +459,14 @@ class Transaction
         {
             if($transaction_type != 'all')
             {
-                $data->where('transaction_type', $transaction_type);
+                if($transaction_type == 'proof')
+                {
+                    $data->where('transaction_type', $transaction_type)->where('payment_status','pending');
+                }
+                else
+                {
+                    $data->where('transaction_type', $transaction_type);
+                }
             }
         }
         
@@ -548,8 +581,6 @@ class Transaction
         session()->forget('get_transaction_date');
         session()->forget('get_transaction_payment_method');
         session()->forget('get_transaction_slot_id');
-        session()->forget('get_transaction_customer_details_v2');
-
         return $data;
     }
     public static function get_all_transaction_type()

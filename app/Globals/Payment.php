@@ -674,4 +674,22 @@ class Payment
             Payment::insert_logs($insert, $shop_id);
         }
     }
+    public static function manual_confirm_payment($shop_id, $transaction_list_id = 0)
+    {
+      $consume_validation = Transaction::consume_in_warehouse_validation($shop_id, $transaction_list_id);
+      if(!$consume_validation)
+      {
+        $transaction_list                                   = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->first();
+        $transaction_type                                   = "RECEIPT";
+        $transaction_id                                     = $transaction_list->transaction_id;
+        $transaction_date                                   = Carbon::now();
+        $source                                             = $transaction_list_id;
+        
+        // Transaction::create_update_transaction_details(serialize($data));
+        $transaction_list_id = Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, "+", $source);
+        Transaction::consume_in_warehouse($shop_id, $transaction_list_id);
+      }
+
+      return $consume_validation;
+    }
 }

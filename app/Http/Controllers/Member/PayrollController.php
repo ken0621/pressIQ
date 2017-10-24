@@ -5309,6 +5309,8 @@ class PayrollController extends Member
                     echo "<div style='color: red;'><b>" . $payroll_employee_number . "</b> can't be found.</div>";
                }
           }
+
+          dd($_shift);
      }
      public function get_days_based_on_string_day($daystring)
      {

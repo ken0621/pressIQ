@@ -35,7 +35,7 @@
     {{csrf_field()}}
       <div class="subject">
       <div class="col-lg-6">
-<input name="first_name" type="text" value={{implode(",", $mail)}}>      </div>
+<input name="first_name" type="text" value={{implode(",", $mail)}}>    </div>
     </div>
     <br>
     <div class="subject">

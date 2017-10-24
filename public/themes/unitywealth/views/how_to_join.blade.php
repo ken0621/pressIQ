@@ -10,69 +10,68 @@
 		</div>
 	</div>
 	<!-- CONTENT -->
-		<div class="mid-content">
-			<div class="container">
-				<!-- PER DETAIL -->
-				<div class="detail-container row clearfix">
-					<div class="col-md-6">
-						<div class="description-container">
-							<div class="title-container">{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division1_title") }}
-								<div class="line-bot"></div>
-							</div>
-							<div class="description-content">
-								<p>
-									{!! get_content($shop_theme_info, "How-To-Join", "howtojoin_division1_description") !!}
-								</p>
-							</div>
+	<div class="mid-content">
+		<div class="container">
+			<!-- PER DETAIL -->
+			<div class="detail-container row clearfix">
+				<div class="col-md-6">
+					<div class="description-container">
+						<div class="title-container">{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division1_title") }}
+							<div class="line-bot"></div>
 						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="img-container">
-							<img src="{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division1_img") }}">
+						<div class="description-content">
+							<p>
+								{!! get_content($shop_theme_info, "How-To-Join", "howtojoin_division1_description") !!}
+							</p>
 						</div>
 					</div>
 				</div>
-				<div class="detail-container row clearfix">
-					<div class="col-md-6">
-						<div class="description-container">
-							<div class="title-container">{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division2_title") }}
-								<div class="line-bot-2"></div>
-							</div>
-							<div class="description-content">
-								<p>
-									{!! get_content($shop_theme_info, "How-To-Join", "howtojoin_division2_description") !!}
-
-								</p>
-							</div>
-						</div>
+				<div class="col-md-6">
+					<div class="img-container">
+						<img src="{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division1_img") }}">
 					</div>
-					<div class="col-md-6">
-						<div class="img-container">
-							<img src="{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division2_img") }}">
+				</div>
+			</div>
+			<div class="detail-container row clearfix">
+				<div class="col-md-6">
+					<div class="description-container">
+						<div class="title-container">{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division2_title") }}
+							<div class="line-bot-2"></div>
+						</div>
+						<div class="description-content">
+							<p>
+								{!! get_content($shop_theme_info, "How-To-Join", "howtojoin_division2_description") !!}
+							</p>
 						</div>
 					</div>
 				</div>
-				<div class="detail-container row clearfix">
-					<div class="col-md-6">
-						<div class="description-container">
-							<div class="title-container">{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division3_title") }}
-								<div class="line-bot-3"></div>
-							</div>
-							<div class="description-content">
-								<p>									
-									{!! get_content($shop_theme_info, "How-To-Join", "howtojoin_division3_description") !!}
-								</p>
-							</div>
+				<div class="col-md-6">
+					<div class="img-container">
+						<img src="{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division2_img") }}">
+					</div>
+				</div>
+			</div>
+			<div class="detail-container row clearfix">
+				<div class="col-md-6">
+					<div class="description-container">
+						<div class="title-container">{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division3_title") }}
+							<div class="line-bot-3"></div>
+						</div>
+						<div class="description-content">
+							<p>									
+								{!! get_content($shop_theme_info, "How-To-Join", "howtojoin_division3_description") !!}
+							</p>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="img-container">
-				
-						</div>
+				</div>
+				<div class="col-md-6">
+					<div class="img-container">
+						
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	<!-- SCROLL TO TOP -->
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
@@ -103,9 +102,10 @@ $(document).ready(function()
     });
 
     /*SCROLL TEXT FADE OUT*/
-	    $(window).scroll(function(){
-	    	$(".top-1-content").css("opacity", 1 - $(window).scrollTop() / 250);
-	  	});
+    $(window).scroll(function(){
+    	$(".top-1-content").css("opacity", 1 - $(window).scrollTop() / 250);
+  	});
+
 });
 </script>
 @endsection

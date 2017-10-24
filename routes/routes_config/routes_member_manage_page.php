@@ -27,7 +27,7 @@ Route::any('/member/page/press_release_email/create_press_release', 'Member\Pres
 Route::any('/member/page/press_release_email/send_press_release', 'Member\Press_Release_Controller@send_email');
 Route::any('/member/page/press_release_email/save_email_press_release', 'Member\Press_Release_Controller@save_email');
 Route::any('/member/page/press_release_email/choose_recipient_press_release', 'Member\Press_Release_Controller@choose_recipient');
-Route::any('/member/page/press_release_email/search_recipient_press_release', 'Member\Press_Release_Controller@search_recipient');
+/*Route::any('/member/page/press_release_email/search_recipient_press_release', 'Member\Press_Release_Controller@search_recipient');*/
 Route::any('/member/page/press_release_email/add_recipient_press_release', 'Member\Press_Release_Controller@add_recipient');
 Route::any('/member/page/press_release_email/email_sent_press_release', 'Member\Press_Release_Controller@email_sent');
 Route::any('/member/page/press_release_email/email_list_press_release', 'Member\Press_Release_Controller@email_list');

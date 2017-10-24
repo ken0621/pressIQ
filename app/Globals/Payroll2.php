@@ -1399,12 +1399,11 @@ class Payroll2
 			/*Start trigger if leave*/
 			if ($is_absent==true) 
 			{
-				
 				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
 				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
 				if ($target_minutes > $leave_minutes) 
 				{
-					$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
+					// $under_time 			= Payroll::time_diff($leave_hours,$target_hours);
 					$leave_hours_consumed   = $leave_hours;
 					$time_spent             = $leave_hours;
 					$is_absent 				= false;
@@ -1888,14 +1887,13 @@ class Payroll2
 				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
 				if ($target_minutes > $leave_minutes) 
 				{
-					$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
+					// $under_time 			= Payroll::time_diff($leave_hours,$target_hours);
 					$leave_hours_consumed   = $leave_hours;
 					$time_spent             = $leave_hours;	
 					$is_absent 				= false;
 				}
 				else
 				{
-
 					$leave_hours_consumed   = $target_hours;
 					$is_absent 				= false;
 					$time_spent 			= $target_hours;
@@ -3854,7 +3852,6 @@ class Payroll2
 				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
 				array_push($return->_gross_pay_breakdown, $breakdown);	
 			}
-			
 		}
 
 		return $return;

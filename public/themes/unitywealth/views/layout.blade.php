@@ -29,6 +29,8 @@
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/style.css">
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/media-queries.css">
 
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">

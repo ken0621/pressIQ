@@ -87,6 +87,7 @@
                                     <li>
                                         <a href="/members/profile">Profile</a>
                                     </li>
+                                    @if($mlm_member)
                                     <li>
                                         <a href="javascript:">Videos</a>
                                     </li>
@@ -111,6 +112,8 @@
                                     <li>
                                         <a href="/members/wallet-encashment">Wallet Encashment</a>
                                     </li>
+                                    @else
+                                    @endif
                                 </ul>
                             </nav>
                     </div>

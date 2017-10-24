@@ -163,15 +163,9 @@ class Payroll_BioImportController extends Member
 			foreach ($time_record as $employee_number => $value) 
 			{
 				$check_employee = null;
-
-				if($company != '' || $company != 0 || $company != null) 
-				{
-					$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("payroll_employee_company_id", $company)->where("shop_id", Self::shop_id())->first();
-				}
-				else
-				{
-					$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("shop_id", Self::shop_id())->first();
-				}
+				$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("shop_id", Self::shop_id())->first();
+				
+				
 
 				if ($check_employee) 
 				{

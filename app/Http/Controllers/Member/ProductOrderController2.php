@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Member;
 use App\Globals\Transaction;
 use App\Globals\Columns;
 use App\Models\Tbl_online_pymnt_method;
+use App\Globals\Payment;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_online_pymnt_link;
 use Excel;
@@ -56,7 +57,7 @@ class ProductOrderController2 extends Member
             if($active_tab == "unconfirmed")
             {
                 $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a> | ';
-                $data["_raw_table"][$key]->action .= '<a href="javascript:">CONFIRM</a> | ';
+                $data["_raw_table"][$key]->action .= '<a link="/member/ecommerce/product_order2/confirm_payment?id='. $raw_table->transaction_list_id .'" class="popup" size="md">CONFIRM</a> | ';
                 $data["_raw_table"][$key]->action .= '<a href="javascript:">REJECT</a>';
             }
         }
@@ -146,6 +147,7 @@ class ProductOrderController2 extends Member
         })
         ->download('xls');
     }
+
     public function export()
     {
         /* Session */
@@ -181,5 +183,33 @@ class ProductOrderController2 extends Member
             });
         })
         ->download('xls');
+    }
+
+    public function confirm_payment()
+    {
+        $shop_id            = $this->user_info->shop_id;
+        $data["page"]       = "Confirm Product Orders";
+        $transaction_list_id    = request("id");
+        Transaction::get_transaction_customer_details_v2();
+        $data['transaction'] = Transaction::get_data_transaction_list($transaction_list_id);
+
+        return view('member.product_order2.confirm_product_order2', $data);        
+    }
+    
+    public function confirm_payment_submit()
+    {
+        $val = Payment::manual_confirm_payment($this->user_info->shop_id, request('transaction_list_id'));
+        if(!$val)
+        {
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_confirm';            
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $val;
+        }
+
+        return json_encode($return);
     }
 }

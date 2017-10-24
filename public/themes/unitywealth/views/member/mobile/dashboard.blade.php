@@ -7,7 +7,7 @@
       <meta name="apple-mobile-web-app-capable" content="yes">
       <meta name="apple-mobile-web-app-status-bar-style" content="black">
       <meta name="theme-color" content="#2196f3">
-      <title>Brown</title>
+      <title>Unity Wealth</title>
       <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/dist/css/framework7.material.css">
       <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/dist/css/framework7.material.colors.css">
       <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
@@ -29,8 +29,7 @@
       <div class="statusbar-overlay"></div>
       <div class="panel-overlay"></div>
       
-
-      
+   
       <div class="panel panel-left panel-cover">
          <div class="view navbar-fixed">
             <div class="pages">

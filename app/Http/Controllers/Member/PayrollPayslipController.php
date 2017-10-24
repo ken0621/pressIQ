@@ -87,8 +87,20 @@ class PayrollPayslipController extends Member
 		// 		$data['new_employee'][$key][$keys] = (object)$values;
 		// 	}
 		// }
-		//return view('member.payroll.payroll_payslipv1', $data);
-		$pdf = view('member.payroll.payroll_payslipv1', $data);
-        return Pdf_global::show_pdf($pdf);
-     }
+		//return view('member.payroll.payroll_ntc_payslip', $data);
+		
+			/*$pdf = view('member.payroll.payroll_ntc_payslip', $data);
+        	return Pdf_global::show_pdf($pdf);*/
+
+		if(Self::shop_id() == 38 )
+		{
+			$pdf = view('member.payroll.payroll_ntc_payslip', $data);
+        	return Pdf_global::show_pdf($pdf, 'landscape');
+		}
+		else
+		{
+			$pdf = view('member.payroll.payroll_payslipv1', $data);
+	        return Pdf_global::show_pdf($pdf);
+    	}
+    }
 }

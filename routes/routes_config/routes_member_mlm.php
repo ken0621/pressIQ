@@ -328,6 +328,10 @@ Route::any('member/mlm/developer/myTest', 'Member\MlmDeveloperController@myTest'
 Route::any('member/mlm/developer/recompute', 'Member\MlmDeveloperController@recompute');
 Route::any('member/mlm/developer/recompute_reset', 'Member\MlmDeveloperController@recompute_reset');
 
+Route::get('member/mlm/developer/redistribute', 'Member\MlmDeveloperController@redistribute');
+Route::post('member/mlm/developer/redistribute', 'Member\MlmDeveloperController@redistribute_submit');
+
+
 Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');
 Route::any('member/mlm/developer/popup_slot_created', 'Member\MlmDeveloperController@popup_slot_created');
 Route::any('member/mlm/developer/popup_earnings', 'Member\MlmDeveloperController@popup_earnings');

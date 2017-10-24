@@ -21,6 +21,7 @@
 
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
 
         <!-- COUNTDOWN TIMER -->
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/bootstrap/css/bootstrap.min.css">
@@ -77,6 +78,47 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-3">
+                    <div class="wrapper">
+                        <input type="checkbox" id="navigation" />
+                            <label for="navigation">
+                                +
+                            </label>
+
+                            <nav>
+                                <ul>
+                                    <li>
+                                        <a href="/members">Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a href="/members/profile">Profile</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:">Videos</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:">Ebook</a>
+                                    </li>
+                                    <li>
+                                        <a href="/members/products">Products</a>
+                                    </li>
+                                    <li>
+                                        <a href="/members/certificate">Certificate</a>
+                                    </li>
+                                    <li>
+                                        <a href="/members/genealogy?mode=sponsor">Unilevel Tree</a>
+                                    </li>
+                                    <li>
+                                        <a href="/members/report">Reports</a>
+                                    </li>
+                                    <li>
+                                        <a href="/members/network">Network</a>
+                                    </li>
+                                    <li>
+                                        <a href="/members/wallet-encashment">Wallet Encashment</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                    </div>
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/">
                             <img src="/themes/{{ $shop_theme }}/img/header-logo.png">

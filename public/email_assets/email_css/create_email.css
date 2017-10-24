@@ -1,34 +1,3 @@
-#input_title_create {
-    margin-top: 0px;
-    margin-right: 20px;
-    width: 480px;
-}
-
-#input_field
-{
-    margin-top: -88px;
-    margin-right: 20px;
-    width: 480px;
-}
-
-#input_title {
-    margin-top: -83px;
-    margin-right: 20px;
-    width: 480px;
-}
-
-.title_email
-{
-    margin-left: 22px;
-    width: 479px!important;
-}
-
-
-.texteditor
-{
-    margin-top: 0px;
-}
-
 .panel-background
 {
     height:700px !important;   
@@ -142,9 +111,8 @@
 
 .input_chose_email
 {
-    position: absolute;
-    top: 495px;
-    left: 18px;
+    margin-left: 10px;
+    margin-top: 20px;
     width: 120px;  
 }
 
@@ -186,7 +154,6 @@
 .textarea_container
 {
     width:98%;
-    margin-top: -28px;
     margin-left: 10px;
     margin-right: 20px !important;
 }
@@ -214,8 +181,8 @@
 
 .gallery
 {
-    margin-left: -740px;
-    margin-top: 60px;
+    margin-left: 10px;
+    margin-top: 17px;
 }
 
 .save

@@ -69,9 +69,8 @@ $(function () {
     $('#get-checked-data').on('click', function(event) {
         event.preventDefault(); 
         var checkedItems = {}, counter = 0;
-        $("#li li").each(function(idx, li) {
+        $("#check-list-box li.active").each(function(idx, li) {
             checkedItems[counter] = $(li).text();
-            alert($(li).text());
             counter++;
         });
         $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
@@ -100,20 +99,16 @@ $(function () {
 
     function selectall()
     {
-        if(document.getElementById("check").checked == false){
-            $('.to_check').prop('checked','checked');
-            $checks = $(":checkbox");
-            $checks.on('change', function() {
-                var string = $checks.filter(":checked").map(function(i,v)
-                {
-                    var data_container = this.closest(".list-group-item");
-                    return  $(data_container).text();
-                }).get();
-                $('.input_chose_recipient').val(string);
-            }).trigger('change');
-        }else{
-            $('.to_check').prop('checked', false);
-        }
+    $('.to_check').prop('checked','checked')
+    $checks = $(":checkbox");
+    $checks.on('change', function() {
+        var string = $checks.filter(":checked").map(function(i,v)
+        {
+            var data_container = this.closest(".list-group-item");
+            return  $(data_container).text();
+        }).get();
+        $('.input_chose_recipient').val(string);
+    }).trigger('change');
     }
 
    /* function click_checkbox()

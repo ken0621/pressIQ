@@ -33,6 +33,5 @@ Route::any('/member/page/press_release_email/email_sent_press_release', 'Member\
 Route::any('/member/page/press_release_email/email_list_press_release', 'Member\Press_Release_Controller@email_list');
 Route::any('/member/page/press_release_email/recipient_list_press_release', 'Member\Press_Release_Controller@recipient_list');
 Route::any('/member/page/press_release_email/view_send_email_press_release', 'Member\Press_Release_Controller@view_send_email');
-Route::any('/member/page/press_release_email/analytics_email_press_release', 'Member\Press_Release_Controller@analytics');
 
 

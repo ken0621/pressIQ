@@ -25,7 +25,6 @@
     <table class="table table-hover">
   <thead>
     <tr>
-      <th>Title</th>
       <th>Subject</th>
       <th>Email Content</th>
       <th>Date</th>
@@ -35,7 +34,6 @@
     @foreach($_list_email as $list_email)
     <tr>
       <td>{{$list_email->email_title}}</td>
-      <td>{{$list_email->email_subject}}</td>
       <td>{!!$list_email->email_content!!}</td>
       <td>{{$list_email->email_time}}</td>
     </tr>

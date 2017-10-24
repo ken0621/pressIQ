@@ -120,6 +120,16 @@ class ShopMemberController extends Shop
 
         return Self::load_view_for_members('member.dashboard', $data);
     }
+    public function getProducts()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.products', $data);
+    }
+    public function getCertificate()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.certificate', $data);
+    }
     public function getEventDetails(Request $request)
     {
         $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);
@@ -1829,7 +1839,9 @@ class ShopMemberController extends Shop
 
                     if($setting->plan_settings_placement_required == 0)
                     {
-                        MLM2::entry($shop_id,$slot_id);
+                        $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+                        Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1);
+                        MLM2::entry($shop_id, $slot_id);
                     }
                     
                     $store["get_success_mode"] = "success";

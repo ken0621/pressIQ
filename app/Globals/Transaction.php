@@ -413,6 +413,15 @@ class Transaction
         }
         return $customer_address;
     }
+    public static function getCustomerTransaction($transaction_id = 0)
+    {
+        $transaction = null;
+        if($transaction_id)
+        {
+            $transaction = Tbl_transaction::where('transaction_id',$transaction_id)->first();
+        }
+        return $transaction;
+    }
     public static function get_transaction_filter_customer($customer_id) //filter result of transaction list by customer
     {
         $store["get_transaction_filter_customer_id"] = $customer_id;

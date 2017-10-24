@@ -22,6 +22,13 @@
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
 
+        <!-- COUNTDOWN TIMER -->
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/animate.css">
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/form-elements.css">
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/style.css">
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/media-queries.css">
+
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
@@ -177,6 +184,14 @@
     @include("frontend.gfoot")
     {{-- GLOBALS --}}
     <script src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+
+    <!-- COUNTDOWN TIMER -->
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery-1.10.2.min.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.backstretch.min.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.countdown.min.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/wow.min.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/scripts.js?version=1"></script>
+
     <!-- FB WIDGET -->
     <div id="fb-root"></div>
     @yield("script")

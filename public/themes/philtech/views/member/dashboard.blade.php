@@ -3,7 +3,10 @@
 
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
+
+
 @if(!$mlm_member)
+	<!-- NON-MLM MEMBER -->
 	<div class="dashboard">
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
@@ -26,6 +29,7 @@
 	    </div>
 	</div>
 @else
+	<!-- MLM MEMBER -->
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">

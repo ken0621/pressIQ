@@ -7,7 +7,10 @@
             <div class="row clearfix">
                 <div class="col-md-9 col-xs-12 media-wrapper">
                     <div class="embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/sy655Z-7TZE?autoplay=1&showinfo=0&controls=0" controls="0" allowfullscreen="" frameborder="0">              </iframe>
+                        <!-- <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/sy655Z-7TZE?autoplay=1&showinfo=0&controls=0" controls="0" allowfullscreen="" frameborder="0">                            
+                        </iframe> -->
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/rzyKBUX18Wc?ecver=1&controls=0" controls="0" frameborder="0" allowfullscreen>
+                        </iframe>
                     </div>
                     <a href="/members/register"><div class="btn-container animated fadeInDown">GET FREE ACCESS</div></a>
                 </div>

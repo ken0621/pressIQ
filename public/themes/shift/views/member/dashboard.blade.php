@@ -100,13 +100,12 @@
 	            </div>
 	        </div>
 	    </div> -->
-
 	</div>
 @else
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Wallet Summary</div>
+				<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right btn-enter-a-code">Create New Slot</a></div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">
@@ -148,20 +147,34 @@
 
 				</div>
 
-				<div class="title">Reward Points</div>
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
-					@if(count($_point_plan) > 0)
-					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
-						@foreach($_point_plan as $plan)
+					<div class="chart-legend" style="max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
 						</div>
-						@endforeach
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Advertisement GC</span><span class="value">{{ $points->display_advertisement_bonus}}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Rank PV</span><span class="value">{{ $points->display_rank_pv }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Rank Group PV</span><span class="value">{{ $points->display_rank_gpv }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Stair Step PV</span><span class="value">{{ $points->display_stairstep_pv }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Stair Step Group PV</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
+						</div>
 					</div>
-					@else
-						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
-					@endif
 				</div>
 			</div>
 		</div>
@@ -202,7 +215,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)
@@ -447,7 +460,7 @@ input:-webkit-autofill {
   .popup-verify-placement .modal-content {
     background-color: #eee; }
     .popup-verify-placement .modal-content .modal-header {
-      background-color: #693d28;
+      background-color: #353739;
       border-top-left-radius: 3px;
       border-top-right-radius: 3px; }
       .popup-verify-placement .modal-content .modal-header .close {
@@ -469,7 +482,7 @@ input:-webkit-autofill {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #693d28;
+        border: 1px solid #353739;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -480,14 +493,14 @@ input:-webkit-autofill {
         margin: 10px 0px;
         padding: 10px; }
       .popup-verify-placement .modal-content .modal-body .labeld {
-        color: #693d28;
+        color: #353739;
         text-align: center;
         text-transform: uppercase; }
       .popup-verify-placement .modal-content .modal-body select {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #693d28;
+        border: 1px solid #353739;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -500,10 +513,10 @@ input:-webkit-autofill {
         text-transform: uppercase;
         padding-bottom: 20px; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement {
-          color: #693d28;
+          color: #353739;
           background-color: #fff;
           padding: 10px 40px;
-          border: 2px solid #693d28;
+          border: 2px solid #353739;
           border-radius: 2px;
           opacity: 0.9;
           -webkit-transition: all 0.2s ease-in-out;
@@ -515,7 +528,7 @@ input:-webkit-autofill {
           text-transform: uppercase; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement:hover {
           color: #fff;
-          background-color: #693d28;
+          background-color: #353739;
           opacity: 1.0; }
 </style>
 @endsection

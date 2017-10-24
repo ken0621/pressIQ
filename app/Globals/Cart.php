@@ -1409,7 +1409,7 @@ class Cart
   
         DB::table("tbl_ipay88_temp")->insert($temp);
 
-        // Cart::clear_all($shop_id);
+        Cart::clear_all($shop_id);
         
         RequestPayment::make($data["merchantKey"], $ipay88request);  
     }

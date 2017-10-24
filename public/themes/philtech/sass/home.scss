@@ -1,9 +1,3 @@
-.content
-{
-	padding-top: 0px;
-	padding-bottom: 35px;
-	margin-top: 10px;
-}
 .grid-holder
 {
 	.grid-1
@@ -28,10 +22,6 @@
 			margin-bottom: 0;
 		}
 	}
-}
-.item-container
-{
-	padding-top: 20px;
 }
 .add-slider
 {
@@ -280,9 +270,14 @@
     	padding-left: 15px;
     	padding-right: 15px;
     }
+    .item-title
+    {
+    	min-height: 63px;
+    }
     .item-price
     {
-    	padding-top: 14px;
+    	padding-top: 0px;
+    	margin-top: 0px;
     }
 
     .new-arrivals
@@ -397,5 +392,16 @@
 			max-width: 100%;
 			padding: 0 20px;
 		}
+	}
+
+	.slick-next
+	{
+		right: 0 !important;
+		z-index: 10;
+	}
+	.slick-prev
+	{
+		left: 0 !important;
+		z-index: 10;
 	}
 }

@@ -33,9 +33,13 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="col-md-6 padding-lr-1">
+            <div class="col-md-3 padding-lr-1">
               <small>Employee number</small>
               <input type="text" name="payroll_employee_number" class="form-control" required value="{{$employee->payroll_employee_number}}">
+            </div>
+            <div class="col-md-3 padding-lr-1">
+              <small>Biometric number</small>
+              <input type="text" name="payroll_employee_biometic_number" class="form-control" required value="{{$employee->payroll_employee_number}}">
             </div>
             <div class="col-md-6 padding-lr-1">
               <small>ATM No.</small>
@@ -420,7 +424,7 @@
                 </div>
               </div>
               <div id="requirements" class="tab-pane fade">
-                <div class="form-horizontal">
+                {{-- <div class="form-horizontal">
                   <div class="form-group">
                     <div class="col-md-12">
                       <table class="table table-condensed">
@@ -529,7 +533,7 @@
                       </table>
                     </div>
                   </div>
-                </div>
+                </div> --}}
               </div>
               <div id="dependents" class="tab-pane fade form-horizontal">
                 <div class="form-group">

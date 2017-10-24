@@ -56,7 +56,7 @@ class PayrollTimeSheet2Controller extends Member
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
 		$data["company"] = $this->db_get_company_period_information($period_id);
 		$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_company_id);
-
+	
 		return view('member.payroll2.employee_summary', $data);
 	}
 	public function index_redirect_if_time_keeping_does_not_exist($period_id)
@@ -94,11 +94,11 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function timesheet($period_id, $employee_id)
 	{
-		// dd();
 		$data["page"]					= "Employee Timesheet";
 		$data["employee_id"]			= $this->$employee_id = $employee_id;
 		$data["employee_info"]			= $this->db_get_employee_information($employee_id); 
 		$data["company_period"] 		= $this->db_get_company_period_information($period_id);
+
 		$data["show_period_start"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_start));
 		$data["show_period_end"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
 		$data["_timesheet"] 			= Payroll2::timesheet_info($data["company_period"], $employee_id);
@@ -116,14 +116,14 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
 		}
-		
 		else
 		{
 			return view('member.payroll2.employee_timesheet', $data);
-		}	
+		}
 	}
 	public function approve_timesheets($period_id = 0, $employee_id = 0)
 	{
+
 		if(Request::input("period_id") != 0)
 		{
 			$period_id = Request::input("period_id");
@@ -131,9 +131,6 @@ class PayrollTimeSheet2Controller extends Member
 			$payroll_period_id = Request::input("payroll_period_id");
 		}
 		
-		//add payment in deduction
-		PayrollDeductionController::approve_deduction_payment($period_id,$employee_id,$payroll_period_id);
-
 		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
 		
@@ -149,8 +146,11 @@ class PayrollTimeSheet2Controller extends Member
 			Tbl_payroll_time_keeping_approved_daily_breakdown::insertBreakdown($time_keeping_approve_id, $compute_cutoff["cutoff_input"]);
 			Tbl_payroll_time_keeping_approved_performance::insertBreakdown($time_keeping_approve_id, $compute_cutoff["cutoff_breakdown"]->_time_breakdown);
 		}
-
+		
+		//add payment in deduction
+		PayrollDeductionController::approve_deduction_payment($period_id,$employee_id,$payroll_period_id);
 		return json_encode(Request::input());	
+
 	}
 	
 	
@@ -411,11 +411,9 @@ class PayrollTimeSheet2Controller extends Member
 
 			$return = $this->timesheet_process_daily_info_record($employee_id, $date, $approved, $_record, $timesheet_db->payroll_time_sheet_id, $payroll_period_company_id, $timesheet_db->time_keeping_approved,  $timesheet_db->custom_shift,  $timesheet_db->custom_shift_id);
 		
-
 			$return->source = "";
 			$return->branch = "";
 			$return->payroll_time_sheet_id = 0;
-
 		}
 		else
 		{
@@ -430,6 +428,7 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		dd($message);
 	}
+
 	public function timesheet_process_daily_info_record($employee_id, $date, $approved, $_time, $payroll_time_sheet_id, $payroll_period_company_id, $time_keeping_approved, $custom_shift, $custom_shift_id)
 	{
 
@@ -763,6 +762,7 @@ class PayrollTimeSheet2Controller extends Member
 		{
  			$this->approve_timesheets($period_company_id, $employee_id); //DELETE TIMESHEET
  			$this->approve_timesheets($period_company_id, $employee_id); //RE-POPULATE TIME SHEET
+
 			$payroll_time_keeping_approved_info = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
 		}
 
@@ -804,10 +804,10 @@ class PayrollTimeSheet2Controller extends Member
 		$from = $data["start_date"] = $company_period->payroll_period_start;
 		$to = $data["end_date"] = $company_period->payroll_period_end;
 		
+		
 		while($from <= $to)
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
-
 			$_timesheet[$from] = Payroll2::timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);
 			
 			//check if approved
@@ -900,6 +900,7 @@ class PayrollTimeSheet2Controller extends Member
 		if($check_approved)
 		{
 			$data = $this->compute_process_cutoff($check_approved);
+			// dd($this->compute_process_cutoff($check_approved));
 			$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
 
 			if($computation_type != "Flat Rate")
@@ -913,21 +914,23 @@ class PayrollTimeSheet2Controller extends Member
 					$computation_type = "Daily Rate";
 				}
 			}
+
 		}		
 		else
 		{
 			$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
 			$data["computation_type"] 	= $computation_type = $group->payroll_group_salary_computation;
 		}
+
 		// dd($this->compute_whole_cutoff($period_company_id, $employee_id));
 		$data["employee_salary"] 		= tbl_payroll_employee_salary::where("payroll_employee_id", $employee_id);
 		$data["employee_id"] 			= $employee_id;
 		$data["employee_info"] 			= $this->db_get_employee_information($employee_id); 
 		$check_approved 				= Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
 		$data["time_keeping_approved"]  = $check_approved ? true : false;
-		$data["employee_salary"]   		=  $this->get_salary($employee_id,$data["start_date"]);
-		$data['access_salary_rate'] 	=  Utilities::checkAccess('payroll-timekeeping','salary_rates');
-		dd($data);
+		$data["employee_salary"]   		= $this->get_salary($employee_id,$data["start_date"]);
+		$data['access_salary_rate'] 	= Utilities::checkAccess('payroll-timekeeping','salary_rates');
+	
 		switch ($computation_type)
 		{
 			case "Daily Rate":
@@ -1008,7 +1011,7 @@ class PayrollTimeSheet2Controller extends Member
 			$insert["payroll_employee_id"] 				= $employee_id;
 			$insert["payroll_period_company_id"]		= $period_company_id;
 			$insert["payroll_adjustment_name"] 			= Request::input("adjustment_name");
-			$insert["payroll_adjustment_category"] 		= Request::input("adjustment_type");
+			$insert["payroll_adjustment_category"] 		=  Request::input("adjustment_category"); //Request::input("adjustment_type");
 			$insert["payroll_adjustment_amount"] 		= Request::input("adjustment_amount");
 			$insert["adjustment_setting"] 				= Request::input("adjustment_setting");
 

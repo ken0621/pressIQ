@@ -11,6 +11,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/cart/clear', 'Shop\ShopCartController@clear_cart');
 	Route::get('/product', 'Shop\ShopProductController@index');
 	Route::get('/product/view/{id}', 'Shop\ShopProductContentController@index');
+	Route::get('/product/view2/{id}', 'Shop\ShopProductContent2Controller@index');
 	Route::get('/product/variant', 'Shop\ShopProductContentController@variant');
 	Route::get('/product/search', 'Shop\ShopProductContentController@search');
 	Route::get('/about', 'Shop\ShopAboutController@index');
@@ -21,8 +22,13 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/career/success', 'Shop\ShopCareerController@success'); //EDWARD GUEVARRA
 	Route::get('/how', 'Shop\ShopHowController@index'); //EDWARD GUEVARRA
 	Route::get('/youwin', 'Shop\ShopYouWinController@index'); //EDWARD GUEVARRA
+
 	Route::get('/events', 'Shop\ShopEventsController@index'); //EDWARD GUEVARRA
 	Route::get('/events/view/{id}', 'Shop\ShopEventsController@view'); //EDWARD GUEVARRA
+	Route::any('/events/view_details','Shop\ShopEventsController@view_details'); // ARCY
+	Route::any('/events/event_reserve','Shop\ShopEventsController@event_reserve'); // ARCY
+	Route::any('/events/event_reserve_submit','Shop\ShopEventsController@event_reserve_submit'); // ARCY
+
 	Route::get('/policy', 'Shop\ShopPolicyController@index'); //EDWARD GUEVARRA
 	Route::get('/testimony', 'Shop\ShopTestimonyController@index'); //EDWARD GUEVARRA
 	Route::get('/runruno', 'Shop\ShopAboutController@runruno'); //EDWARD GUEVARRA
@@ -50,7 +56,9 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/item_payment', 'Shop\ShopItemPaymentController@item_payment'); //MARK FIGS
 	Route::get('/payment_success', 'Shop\ShopItemPaymentController@payment_success'); //MARK FIGS
 
+	Route::get('/replicated', 'Shop\ShopAboutController@replicated'); //MARK FIGS
 
+	Route::get('/terms_and_conditions', 'Shop\ShopAboutController@terms_and_conditions'); //MARK FIGS
 
 	Route::get('/signin', 'Shop\ShopLoginController@signin'); //ROMMEL C.
 
@@ -102,6 +110,10 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/partners', 'Shop\ShopPartnersController@index');
 	Route::get('/partner-filtering-location', 'Shop\ShopPartnersController@partnerFilterByLocation');
 	Route::get('/legalities', 'Shop\ShopLegalitiesController@index');
+
+	Route::get('/manual_checkout', 'Shop\ShopManualCheckout@index');
+	Route::post('/manual_checkout', 'Shop\ShopManualCheckout@submit_proof');
+	Route::get('/manual_checkout/success', 'Shop\ShopManualCheckout@success');
 
 	/* Cart V2 */
 	Route::get('/cartv2', 'Shop\ShopCart2Controller@index');

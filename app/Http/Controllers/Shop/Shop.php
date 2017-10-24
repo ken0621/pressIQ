@@ -96,7 +96,7 @@ class Shop extends Controller
 
         $this->shop_theme_info  = $shop_theme_info;
 
-        if ($this->shop_theme == "ecommerce-1" || $this->shop_theme == "intogadgets" || $this->shop_theme == "3xcell")
+        if ($this->shop_theme == "ecommerce-1" || $this->shop_theme == "intogadgets")
         {
             $this->middleware(function ($request, $next)
             {  
@@ -135,7 +135,7 @@ class Shop extends Controller
             View::share("_categories", $product_category);
         }
         
-        if ($this->shop_theme != "ecommerce-1" && $this->shop_theme != "intogadgets" && $this->shop_theme != "3xcell")
+        if ($this->shop_theme != "ecommerce-1" && $this->shop_theme != "intogadgets")
         {
             $this->middleware(function ($request, $next)
             {  
@@ -157,6 +157,7 @@ class Shop extends Controller
                     if(Self::$customer_info->profile) 
                     {
                         $profile_image = "/" . Self::$customer_info->profile;
+                        $profile_image = str_replace("//", "/", $profile_image);
                     }
                     else
                     {
@@ -184,6 +185,8 @@ class Shop extends Controller
                 return $next($request);
             });
         }
+
+        Settings::set_mail_setting($this->shop_info->shop_id);
 
         $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
 

@@ -1,6 +1,7 @@
 @extends('member.layout')
 @section('content')
 <div class="panel panel-default panel-block panel-title-block">
+    <input type="hidden" name="" class="view-receipt" value="{{Request::input('receipt_id')}}">
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
     <div class="panel-heading">
         <div>
@@ -12,8 +13,8 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</button>
-                <button onclick="location.href='/member/cashier/transactions_list/payref'" class="btn btn-primary"><i class="fa fa-star"></i> Paymaya Reference</button>
+                <a href="javascript:" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</a>
+                <a href="javascript:" target="_blank" class="btn btn-primary"><i class="fa fa-star"></i> Primary Command</a>
             </div>
         </div>
     </div>

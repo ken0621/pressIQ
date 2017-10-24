@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $content-text2: 'Raleway', sans-serif;
 $regular: 400;
@@ -5,14 +7,6 @@ $semi-bold: 600;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
-
-@mixin transition($transition)
-{
-	  -webkit-transition: all $transition ease-in-out;
-	  -moz-transition: all $transition ease-in-out;
-	  -o-transition: all $transition ease-in-out;
-	  transition: all $transition ease-in-out;
-}
 
 .dashboard
 {
@@ -43,23 +37,13 @@ $text-dark: #272c2f;
 
 		.title-button
 		{
-			//mixin
 			@include transition(0.2s);
-
-			font-weight: bold;
+			font-weight: $bold;
 			font-size: 14px;
 			text-decoration: none;
 			margin-top: 3px;
 			text-transform: uppercase;
-			opacity: 0;
-		}
-
-		&:hover
-		{
-			.title-button
-			{
-				opacity: 1;
-			}
+			/* opacity: 0; */
 		}
 	}
 
@@ -87,7 +71,7 @@ $text-dark: #272c2f;
 						color: #344049;
 						font-size: 14px;
 						padding-bottom: 15px;
-						font-weight: bold;
+						font-weight: $bold;
 						text-transform: uppercase;
 					}
 				}
@@ -143,7 +127,7 @@ $text-dark: #272c2f;
 				vertical-align: middle;
 				font-size: 15px;
 				letter-spacing: 0.5px;
-				font-weight: bold;
+				font-weight: $bold;
 				font-family: $content-text;
 				color: #019771;
 
@@ -361,7 +345,7 @@ $text-dark: #272c2f;
 	{
 		.modal-header
 		{
-			background-color: #693d28;
+			background-color: #B17D2A;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 			.modal-title
@@ -398,17 +382,17 @@ $text-dark: #272c2f;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: "Arial";
-				font-weight: bold;
+				font-family: $content-text2;
+				font-weight: $bold;
 				font-size: 13px;
 				padding-bottom: 20px;
 
 				.btn-ok
 				{
 					color: #fff;
-					background-color: #693d28;
+					background-color: #B17D2A;
 					padding: 12px 60px;
-					border: 2px solid #693d28;
+					border: 2px solid #B17D2A;
 					border-radius: 2px;
 				}
 			}

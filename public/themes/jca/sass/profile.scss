@@ -5,7 +5,6 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
-
 .profile-container
 {
 	font-family: $content-text;
@@ -267,10 +266,12 @@ $text-dark: #272c2f;
 						}
 					}
 				}
+				
 				.btn-holder
 				{
 					text-align: right;
 					margin-top: 15px;
+
 					.btn-brown
 					{
 						border-radius: 2.5px;

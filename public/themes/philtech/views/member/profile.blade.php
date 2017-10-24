@@ -25,9 +25,7 @@
 				</div>
 				@if($mlm == 1)
 				<div class="profile-lead">
-					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
-						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
-					</a>
+
 					<!-- Modal -->
 					<div id="leads_modal" class="modal fade leads-modal" role="dialog">
 					   <div class="modal-dialog">
@@ -77,7 +75,6 @@
 			<div class="profile-form">
 				<ul class="nav nav-tabs">
 				   <li class="active"><a data-toggle="tab" href="#basic_info">Basic Info</a></li>
-				   <li><a data-toggle="tab" href="#contact_info">Reward Configuration</a></li>
 				   <li><a data-toggle="tab" href="#profile_picture">Profile Picture</a></li>
 				   @if($allowed_change_pass)
 				   <li><a data-toggle="tab" href="#password">Password</a></li>
@@ -168,7 +165,7 @@
 						   		</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-brown" type="submit">Update</button>
+							   			<button class="btn btn-lblue" type="submit"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -195,7 +192,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button type="submit" class="submit-button btn btn-brown"><i class="fa fa-save"></i> Update</button>
+							   			<button type="submit" class="submit-button btn btn-lblue"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -259,7 +256,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-brown" type="submit">Update</button>
+							   			<button class="btn btn-lblue" type="submit"><i class="fa fa-pencil"></i>  Update</button>
 							   		</div>
 						   		</div>
 					   		</div>

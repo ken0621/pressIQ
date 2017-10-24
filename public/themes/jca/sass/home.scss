@@ -36,8 +36,9 @@ body{
 		position: relative;
 		.caption-logo-container {
 			position: absolute;
-			top: 100px;
-			right: 17%;
+			width: 49%;
+			top: 90px;
+			right: 8%;
 			img 
 			{
 				width: 100%;
@@ -45,9 +46,15 @@ body{
 
 			@media screen and (max-width: 991px)
 			{
-				width: 50% !important;
-				right: 25% !important;
-				top: 50px;
+				width: 45%;
+				position: static;
+				margin: auto;
+				margin-top: 75px;
+			}
+			@media screen and (max-width: 450px)
+			{
+				width: 75%;	
+				top: 80%;
 			}
 		}
 		.caption-container {
@@ -55,7 +62,7 @@ body{
 			position: absolute;
 			top: 350px;
 			right: 0;
-			h1 {
+			.head-text {
 				font-family: $display-text;
 				font-size: 55px;
 				font-weight: $light;
@@ -68,20 +75,26 @@ body{
 			}
 			@media screen and (max-width: 991px)
 			{
-				top: 282px;
-				right: 26%;
-				h1
+				width: 100%;
+				position: static;
+				margin-top: 20px;
+				.head-text
 				{
-					font-size: 27px;
+					font-size: 36px;
 				}
 			}
-			@media screen and (max-width: 414px)
+			@media screen and (max-width: 450px)
 			{
-				top: 170px;
-				right: 5%;
-				h1
+				.head-text
 				{
-					font-size: 27px;
+					font-size: 26px;
+				}
+			}
+			@media screen and (max-width: 375px)
+			{
+				.head-text
+				{
+					font-size: 21px;
 				}
 			}
 		}
@@ -201,6 +214,11 @@ body{
 					font-size: 15px;
 					margin-top: 15px;
 					padding-right: 30px;
+
+					@media screen and (max-width: 375px)
+					{
+						font-size: 13px;
+					}
 				}
 			}
 		}
@@ -210,9 +228,10 @@ body{
 		text-align: center;
 		border-bottom: 1px solid #dedede;
 		padding-bottom: 35px;
+		padding-top: 75px;
 		.main-title
 		{
-			font-family: "Railway Medium", sans-serif;
+			font-family: $display-text;
 			font-size: 30px;
 			color: #b07d2a;
 			margin-bottom: 5px;
@@ -223,7 +242,7 @@ body{
 		}
 		.sub-title
 		{
-			font-family: "Open Sans Regular", sans-serif;
+			font-family: $content-text;
 			font-size: 15px;
 			color: #555555;
 			.shade-black
@@ -252,7 +271,7 @@ body{
 			display: inline-block;
 			.list-content
 			{
-				font-family: "Open Sans Regular", sans-serif;
+				font-family: $content-text;
 				float: right;
 				width: 93%;
 				font-size: 15px;
@@ -278,7 +297,7 @@ body{
 			.button-name
 			{
 				display: inline-block;
-				font-family: "Raleway Bold", sans-serif;
+				font-family: $display-text;
 				font-size: 15px;
 				color: #019771;
 				font-weight: bold;
@@ -308,33 +327,59 @@ body{
 	{
 		padding-bottom: 350px !important;
 	}
+	@media screen and (max-width: 414px)
+	{
+		padding-bottom: 420px !important;
+	}
+	@media screen and (max-width: 320px)
+	{
+		padding-bottom: 520px !important;
+	}
 
 	.jca-title-container
 	{
 		.title-company
 		{
-			font-family: "Raleway Regular", sans-serif;
+			font-family: $display-text;
 			font-size: 25px;
 			color: #b07d2a;
 			margin-bottom: -8px;
+
+			@media screen and (max-width: 414px)
+			{
+				font-size: 18px;
+			}
 		}
 		.title-mission
 		{
+			font-family: $display-text;
 			font-size: 40px;
 			// color: #019771;
 			color: #acacac;
 			display: inline-block;
 			margin-bottom: 25px;
 			cursor: pointer;
+			
+			@media screen and (max-width: 414px)
+			{
+				font-size: 30px;
+			}
+
 		}
 		.title-vision
 		{
+			font-family: $display-text;
 			font-size: 40px;
 			color: #acacac;
 			display: inline-block;
 			margin-left: 20px;
 			margin-bottom: 25px;
 			cursor: pointer;
+
+			@media screen and (max-width: 414px)
+			{
+				font-size: 30px;
+			}
 		}
 	}
 	.mission-vision-container
@@ -342,12 +387,14 @@ body{
 		height: 438.6px;
 		.sub-title
 		{
+			font-family: $display-text;
 			font-size: 20px;
 			color: #019771;
 			margin-bottom: -5px;
 		}
 		.content
 		{
+			font-family: $content-text;
 			font-size: 15px;
 			color: #555555;
 			text-align: justify;
@@ -362,8 +409,10 @@ body{
 			height: .5em;
 			float: left;
 			margin: .40em .25em 0;
+
 			.content
 			{
+				font-family: $content-text;
 				font-size: 15px;
 				color: #555555;
 				text-align: justify;
@@ -373,8 +422,10 @@ body{
 		.bulleted-list
 		{
 			display: inline-block;
+
 			.content
 			{
+				font-family: $content-text;
 				font-size: 15px;
 				color: #555555;
 				text-align: justify;
@@ -403,7 +454,6 @@ body{
 .wrapper-4
 {
 	background-color: #f4f4f4;
-	font-family: "Open Sans",sans-serif;
 	padding: 25px 0px;
 	overflow: hidden;
 
@@ -413,7 +463,7 @@ body{
 		padding: 30px 0px 45px 0px;
 		.main-title
 		{
-			font-family: "Raleway Medium", sans-serif;
+			font-family: $display-text;
 			font-size: 30px;
 			color: #b07d2a;
 			.shade-green
@@ -425,10 +475,24 @@ body{
 	.products-services-container
 	{
 		padding: 0px 0px 40px 0px;
-		.products-services-img
+		text-align: center;
+
+		.img-container
 		{
-			width: 100%;
+			width: 50%;
+			margin: auto;
+
+			img 
+			{
+				width: 100%;
+			}
+
+			@media screen and (max-width: 414px)
+			{
+				width: 100%;
+			}
 		}
+
 		.img-title
 		{
 			font-size: 15px;
@@ -439,6 +503,150 @@ body{
 			margin-left: auto;
 			margin-right: auto;
 		}
+	}
+}
+
+.wrapper-5
+{
+
+	.mobile-view
+	{
+		display: none;
+		@media screen and (max-width: 991px)
+		{
+			display: block !important;
+		}
+	}
+	.mobile-view-2
+	{
+		@media screen and (max-width: 991px)
+		{
+			display: none !important;
+		}
+	}
+
+	.img-container
+	{
+		padding: 50px 0px 50px 0px;
+		text-align: center;
+	}
+
+	.details-container
+	{
+		padding: 50px 0px 50px 0px;
+		font-family: $display-text;
+
+		.header
+		{
+
+			font-weight: $regular;
+			font-size: 25px;
+			color: #019771;
+
+			span
+			{
+				color: #b07d2a;
+			}
+		}
+
+		.sub-header
+		{
+			padding: 20px 0px 20px 0px;
+			font-weight: $regular;
+			font-size: 20px;
+			color: #1e1c21;
+
+			span
+			{
+				color: #019771
+			}
+		}
+
+		.benefits
+		{
+			padding: 20px 0px 20px 0px;
+
+			.header
+			{
+				font-family: $display-text;
+				font-weight: $regular;
+				font-size: 15px;
+			}
+
+			ul
+			{
+				@extend .header;
+				font-family: $content-text;
+				padding-top: 20px;
+				
+				li
+				{
+					color: #555555;
+				}
+			}
+		}
+	}
+}
+
+.wrapper-6
+{
+	
+	background-color: #f4f4f4;
+
+	.details-container
+	{
+		padding: 50px 0px 50px 0px;
+
+		.header
+		{
+			font-family: $display-text;
+			font-weight: $regular;
+			font-size: 25px;
+			color: #019771;
+
+			span
+			{
+				color: #b07d2a;
+			}
+		}
+		.benefits
+		{
+			padding: 20px 0px 20px 0px;
+
+			.header
+			{
+				font-family: $display-text;
+				font-weight: $regular;
+				font-size: 15px;
+			}
+
+			ul
+			{
+				@extend .header;
+				font-family: $content-text;
+				padding-top: 20px;
+				
+				li
+				{
+					color: #555555;
+				}
+			}
+		}
+
+		.details
+		{
+			font-family: $content-text;
+			padding: 20px 0px 20px 0px;
+			font-weight: $regular;
+			font-size: 15px;
+			color: #555555;
+		}
+	}
+
+	.img-container
+	{
+		padding: 50px 0px 50px 0px;
+		text-align: center;
 	}
 }
 

@@ -16,14 +16,13 @@
 		<div class="right">
 			<div class="text-right">
 				<!-- <button type="button" class="btn btn-default"><i class="fa fa-bank"></i> PAYOUT METHOD</button> -->
-				<!-- <button type="button" class="btn btn-primary request-payout"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button> -->
+				<button onclick="action_load_link_to_modal('/members/request-payout','md')" type="button" class="btn btn-primary"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button>
 			</div>
 		</div>
 	</div>
 	<div class="wallet-encashment-content">
 		<div class="title">
 			Encashment History
-
 		</div>
 		<div class="table-holder table-responsive">
 			<table class="table table-striped">
@@ -33,7 +32,7 @@
 						<th class="text-center">SLOT</th>
 						<th class="text-center" width="100px">Method</th>
 						<th class="text-center" width="200px">Status</th>
-						<th class="text-right" width="180px">Amount</th>
+						<th class="text-right" width="180px">Take Home</th>
 						<th class="text-right" width="150px">Tax</th>
 						<th class="text-right" width="150px">Fee</th>
 						<th class="text-right" width="180px">Sub Total</th>
@@ -46,7 +45,7 @@
 		  				<td class="text-center">
 		  					<div>{{ $encashment->slot_no }}</div>
 		  				</td>
-						<td class="text-center">{!! $encashment->log !!}</td>
+						<td class="text-center">{!! $encashment->wallet_log_plan !!}</td>
 						<td class="text-center"><b>{{ $encashment->wallet_log_payout_status }}</b></td>
 						<td class="text-right"><b>{!! $encashment->display_wallet_log_request !!}</b></td>
 						<td class="text-right">{!! $encashment->display_wallet_log_tax !!}</td>
@@ -78,7 +77,7 @@
 	</div>
 </div>
 
-<!-- MANUAL PLACING OF SLOT -->
+
 <div class="popup-wallet-encashment">
     <div id="wallet-encashmnet-modal" class="modal fade">
         <div class="modal-md modal-dialog">

@@ -280,10 +280,10 @@ class Item
                 $return .= 'Income account does not exist. <br>';            
             }            
         }
-        if(count($_item) <= 0)
-        {
-            $return .= 'Please add items to bundle. <br>';  
-        }
+        // if(count($_item) <= 0)
+        // {
+        //     $return .= 'Please add items to bundle. <br>';  
+        // }
 
         return $return;
     }
@@ -294,13 +294,17 @@ class Item
         $insert['item_date_created'] = Carbon::now();
        
         $item_id = Tbl_item::insertGetId($insert);
-        foreach ($_item as $key => $value) 
-        {
-            $ins_item['bundle_bundle_id'] = $item_id;
-            $ins_item['bundle_item_id'] = $value['item_id'];
-            $ins_item['bundle_qty'] = $value['quantity'];
 
-            Tbl_item_bundle::insert($ins_item);
+        if(count($_item) > 0)
+        {
+            foreach ($_item as $key => $value) 
+            {
+                $ins_item['bundle_bundle_id'] = $item_id;
+                $ins_item['bundle_item_id'] = $value['item_id'];
+                $ins_item['bundle_qty'] = $value['quantity'];
+
+                Tbl_item_bundle::insert($ins_item);
+            }
         }
 
         $return['item_id']       = $item_id;
@@ -339,7 +343,7 @@ class Item
     /* READ DATA */
     public static function get($shop_id = 0, $paginate = false, $archive = 0)
     {
-        $query = Tbl_item::where("tbl_item.shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->um_multi()->membership();
+        $query = Tbl_item::where("tbl_item.shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->membership();
 
         if(session("get_inventory"))
         {
@@ -367,12 +371,12 @@ class Item
         /* CHECK IF THERE IS PAGINATION */
         if($paginate)
         {
-            $_item = $query->paginate($paginate);
+            $_item = $query->groupBy('tbl_item.item_id')->paginate($paginate);
             session(['item_pagination' => $_item->render()]);
         }
         else
         {
-            $_item = $query->get();
+            $_item = $query->groupBy('tbl_item.item_id')->get();
         }
 
         /* ITEM ADDITIONAL DATA */
@@ -578,7 +582,7 @@ class Item
     public static function generate_barcode($barcode = 0)
     {
         $return = $barcode;
-        $chk =  Tbl_item::where("item_barcode",$return)->get();
+        $chk =  Tbl_item::where("item_barcode",$return)->where('item_shop',Item::getShopId())->get();
         if(count($chk) > 1)
         {
             $num = '1234567890';
@@ -593,9 +597,9 @@ class Item
         $return = "";
         $text = "";
         $trail = Tbl_audit_trail::where("source","item")->where("source_id",$item_id)->orderBy("created_at","DESC")->get();
-        // dd($trail);
+       
         $last = null;
-        foreach ($trail as $key => $value) 
+        foreach ($trail as $key => $value)
         {
             $item_qty = 1;
             if(Purchasing_inventory_system::check())
@@ -606,7 +610,7 @@ class Item
             $amount = 0;
             if($old)
             {
-                if($item_data->item_price != $old[$key]["item_price"] || $old[$key]["item_price"] != 0)
+                if($item_data->item_price != $old[$key]["item_price"] && $old[$key]["item_price"] != 0)
                 {
                     $len = strlen($return);
                     
@@ -883,12 +887,18 @@ class Item
             foreach($_category[$key]['item_list'] as $key1=>$item_list)
             {
                 //  //cycy
-                if($item_list['item_type_id'] == 4)
+                if($item_list['item_type_id'] == 4 || $item_list['item_type_id'] == 5)
                 {
                    $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
                    $_category[$key]['item_list'][$key1]['item_cost'] = Item::get_item_bundle_cost($item_list['item_id']); 
                 }
                 $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
+
+                $_category[$key]['item_list'][$key1]['inventory_count'] = 0;
+                if($item_list['item_type_id'] == 1)
+                {
+                    $_category[$key]['item_list'][$key1]['inventory_count'] = Warehouse2::get_item_qty(Warehouse2::get_current_warehouse($shop_id), $item_list['item_id']);
+                }
             }
             $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }
@@ -987,7 +997,16 @@ class Item
             array_push($limit_array, (int)$ans);
         }
 
-        return min($limit_array);
+        if($limit_array)
+        {
+            return min($limit_array);
+        }
+        else
+        {
+            return -1;
+        }
+
+        
     }
     public static function get_item_bundle_price($item_id = null)
     {
@@ -1041,7 +1060,6 @@ class Item
     {
         $_item_bundle = Tbl_item_bundle::where("bundle_bundle_id", $item_id)->get();
         $_item = array();
-
         foreach($_item_bundle as $item_bundle)
         {  
             if($warehouse_id)
@@ -1509,7 +1527,7 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
-    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0)
+    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0, $item_id = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1535,7 +1553,11 @@ class Item
         else
         {
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused');
-        }  
+        }
+        if($item_id != 0)
+        {
+            $query->where('tbl_item.item_id',$item_id);
+        }
 
         if($paginate != 0)
         {
@@ -1550,6 +1572,10 @@ class Item
     public static function get_first_assembled_kit($shop_id)
     {
         return Tbl_item::where('shop_id',$shop_id)->where('item_type_id',5)->value('item_id');
+    }
+    public static function get_all_assembled_kit($shop_id)
+    {
+        return Tbl_item::where('shop_id',$shop_id)->where('item_type_id',5)->where("archived", 0)->pluck('item_id', 'item_name');
     }
     public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0)
     {
@@ -1616,15 +1642,19 @@ class Item
         }
         $validate_consume = Warehouse2::consume_bulk($shop_id, $warehouse_id, 'assemble_item', $item_id, 'Consume Item upon assembling membership kit Item#'.$item_id, $_item);
 
-        $source['name'] = 'assemble_item';
-        $source['id'] = $item_id;
-        $validate_consume .= Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, 'Refill Item upon assembling membership kit Item#'.$item_id, $source);
+        if(!$validate_consume)
+        {
+            $source['name'] = 'assemble_item';
+            $source['id'] = $item_id;
+            $validate_consume .= Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, 'Refill Item upon assembling membership kit Item#'.$item_id, $source);            
+        }
 
         return $validate_consume;
     } 
     public static function disassemble_membership_kit($record_log_id)
     {
         $record_data = Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->first();
+        $qty = Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->count();
 
         if($record_data)
         {
@@ -1632,7 +1662,9 @@ class Item
            foreach ($item_list as $key => $value) 
            {
                 Warehouse2::consume_update('assemble_item', $record_data->record_item_id, $value->bundle_item_id, $value->bundle_qty);
+                Warehouse2::update_inventory_count($record_data->record_warehouse_id, $record_log_id, $value->bundle_item_id, $value->bundle_qty);
            }
+           Warehouse2::update_inventory_count($record_data->record_warehouse_id, $record_log_id, $record_data->record_item_id, -($qty));
 
            Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->delete();
         }
@@ -1659,12 +1691,12 @@ class Item
 
         return $mlm_activation;
     }
-    public static function check_product_code($shop_id = 0, $mlm_pin = '', $mlm_activation = '')
+    public static function check_unused_product_code($shop_id = 0, $mlm_pin = '', $mlm_activation = '')
     {
         $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
                                                  ->where('mlm_activation',$mlm_activation)
                                                  ->where('mlm_pin',$mlm_pin)
-                                                 ->where('record_inventory_status',0)
+                                                 ->where('item_in_use','unused')
                                                  ->count();
         $return = false;
         if($ctr > 0)
@@ -1673,5 +1705,25 @@ class Item
         }
 
         return $return;
+    }
+    public static function check_product_code($shop_id = 0, $mlm_pin = '', $mlm_activation = '')
+    {
+        $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
+                                                 ->where('mlm_activation',$mlm_activation)
+                                                 ->where('mlm_pin',$mlm_pin)
+                                                 ->where('record_inventory_status',0)
+                                                 ->where('item_in_use','unused')
+                                                 ->count();
+        $return = false;
+        if($ctr > 0)
+        {
+            $return = true;
+        }
+
+        return $return;
+    }
+    public static function type($item_id = 0)
+    {
+        return Tbl_item::where("item_id",$item_id)->value('item_type_id');
     }
 }

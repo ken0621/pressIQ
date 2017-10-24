@@ -104,6 +104,11 @@ Route::any('/member/mlm/plan/rank/get', 'Member\MLM_PlanController@get_rank');//
 Route::any('/member/mlm/plan/rank/save', 'Member\MLM_PlanController@save_rank');//Erwin
 Route::any('/member/mlm/plan/rank/edit/save', 'Member\MLM_PlanController@edit_save_rank');//Erwin
 Route::any('/member/mlm/plan/rank/edit/save_level', 'Member\MLM_PlanController@save_rank_level');//Erwin
+Route::any('/member/mlm/plan/rank/edit/save_include', 'Member\MLM_PlanController@save_include');//Erwin
+
+Route::any('/member/mlm/plan/stairstep/edit/save_dynamic', 'Member\MLM_PlanController@save_dynamic');//Erwin
+
+Route::any('/member/mlm/plan/direct_referral_pv/edit/save_include_direct_referral', 'Member\MLM_PlanController@save_include_direct_referral');//Erwin
 
 /* start stairstep PLAN */
 // Route::any('/member/mlm/plan/stairstep/get', 'Member\MLM_PlanController@get_stairstep');//Luke
@@ -319,6 +324,9 @@ Route::get('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@rep
 Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase_submit');
 Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');
 Route::post('member/mlm/developer/sample_upload', 'Member\MlmDeveloperController@sample_upload');
+Route::any('member/mlm/developer/myTest', 'Member\MlmDeveloperController@myTest');
+Route::any('member/mlm/developer/recompute', 'Member\MlmDeveloperController@recompute');
+Route::any('member/mlm/developer/recompute_reset', 'Member\MlmDeveloperController@recompute_reset');
 
 Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');
 Route::any('member/mlm/developer/popup_slot_created', 'Member\MlmDeveloperController@popup_slot_created');

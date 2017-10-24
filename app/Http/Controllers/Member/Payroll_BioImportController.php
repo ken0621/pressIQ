@@ -221,7 +221,7 @@ class Payroll_BioImportController extends Member
 
 						if($company != '' || $company != 0 || $company != null)
 		    			{
-		    				$insert_time['payroll_company_id'] = $company;
+		    				$update['payroll_company_id'] = $company;
 		    			}
 						
 						Tbl_payroll_time_sheet_record::insert($update);

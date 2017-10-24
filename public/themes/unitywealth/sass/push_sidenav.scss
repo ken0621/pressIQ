@@ -33,7 +33,7 @@
             transition:all 200ms ease-in;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
-        
+
         nav ul{
             width:250px;
             height:100%;
@@ -101,8 +101,54 @@
 }
 
 
+
+@media screen and (max-width: 768px)
+{
+    /* HEADER-FIXED */
+    .header-fixed
+    {
+        @media screen and (min-width: 991px)
+        {
+            &.header-container
+            {
+                position: fixed;
+                width: 100%;
+                z-index: 999;
+                top: 0;
+                border-bottom: 1px solid #dedede;
+            }
+            &.subheader-container
+            {
+                margin-bottom: 87px;
+            }
+        }
+    }
+}
+
+
 @media screen and (max-width: 425px)
 {
+
+    /* HEADER-FIXED */
+    .header-fixed
+    {
+        @media screen and (min-width: 991px)
+        {
+            &.header-container
+            {
+                position: fixed;
+                width: 100%;
+                z-index: 999;
+                top: 0;
+                border-bottom: 1px solid #dedede;
+            }
+            &.subheader-container
+            {
+                margin-bottom: 87px;
+            }
+        }
+    }
+
     .image-logo-holder
     {
        margin: auto;
@@ -113,6 +159,27 @@
 
 @media screen and (max-width: 320px)
 {
+
+    /* HEADER-FIXED */
+    .header-fixed
+    {
+        @media screen and (min-width: 991px)
+        {
+            &.header-container
+            {
+                position: fixed;
+                width: 100%;
+                z-index: 999;
+                top: 0;
+                border-bottom: 1px solid #dedede;
+            }
+            &.subheader-container
+            {
+                margin-bottom: 87px;
+            }
+        }
+    }
+
     .subheader-container .right-container span {
         padding: 0px 5px;
     }

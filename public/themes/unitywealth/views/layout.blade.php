@@ -11,7 +11,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {{-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> --}}
-        <link rel="icon" href="/themes/{{ $shop_theme }}/img/unity-wealth-icon.png"" type="image/png" />
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/unity-wealth-icon.png" type="image/png" />
 
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">
@@ -74,10 +74,13 @@
             <div class="row clearfix">
                 <div class="col-md-3">
                     <div class="wrapper">
+                        
                         <input type="checkbox" id="navigation" />
+                            @if(request()->segment(1) != "replicated")
                             <label for="navigation">
                                 +
                             </label>
+                            @endif
 
                             <nav>
                                 <ul>
@@ -122,11 +125,13 @@
                             <img src="/themes/{{ $shop_theme }}/img/header-logo.png">
                         </a>                       
                     </div>
+                    @if(request()->segment(1) != "replicated")
                     <div class="menu-nav">
                         <span></span>
                         <span></span>
                         <span></span>
                     </div>
+                    @endif
                 </div>
                 <div class="col-md-9">
                 <!-- NAVIGATION -->

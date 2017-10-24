@@ -4,6 +4,7 @@
             <tr>
                 <th class="text-center"><input type="checkbox" name=""></th>
                 <th class="text-center">NO.</th>
+                <th class="text-center">Biometric No.</th>
                 <th class="text-center">Employee Name</th>
                 <th class="text-center">Current<br>Payroll Group</th>
                 <th class="text-center">Current<br>Shift</th>
@@ -21,6 +22,7 @@
                 <tr>
                     <th class="text-center"><input type="checkbox" name=""></th>
                     <td class="text-center">{!! $employee->payroll_employee_number == "" ? "<span style='color: red;'>00</span>" : $employee->payroll_employee_number !!}</td>
+                    <td class="text-center">{!! $employee->payroll_employee_biometric_number == "" ? "<span style='color: red;'>00</span>" : $employee->payroll_employee_biometric_number !!}</td>
                     <!-- EMPLOYEE NAME -->
                     <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/employee_list/modal_employee_view/{{ $employee->payroll_employee_id }}?source_page=time_keeping','lg')">{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_last_name }}</a></td>
                     <!-- PAYROLL GROUP -->
@@ -58,6 +60,8 @@
                 <tr>
                     <th class="text-center"><input type="checkbox" name=""></th>
                     <td class="text-center">{!! $employee->payroll_employee_number == "" ? "<span style='color: red;'>00</span>" : $employee->payroll_employee_number !!}</td>
+                    <td class="text-center">{!! $employee->payroll_employee_biometric_number == "" ? "<span style='color: red;'>00</span>" : $employee->payroll_employee_biometric_number !!}</td>
+
                     <!-- EMPLOYEE NAME -->
                     <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/employee_list/modal_employee_view/{{ $employee->payroll_employee_id }}?source_page=time_keeping','lg')">{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_last_name }}</a></td>
                     <!-- PAYROLL GROUP -->

@@ -36,7 +36,7 @@
           </div>
           <div class="col-md-3 padding-lr-1">
             <small>Biometric number</small>
-            <input type="text" name="payroll_employee_biometic_number" class="form-control" required/>
+            <input type="text" name="payroll_employee_biometric_number" class="form-control" required/>
           </div>
           <div class="col-md-6 padding-lr-1">
             <small>ATM No.</small>

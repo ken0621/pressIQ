@@ -13,7 +13,9 @@ class UpdateTblPayrollEmployeeBasic102420171011 extends Migration
      */
     public function up()
     {
-        
+        Schema::table('tbl_payroll_employee_basic', function (Blueprint $table) {
+            $table->integer('payroll_employee_biometric_number')->unsigned()->nullable()->after('payroll_employee_number');
+        });
     }
 
     /**

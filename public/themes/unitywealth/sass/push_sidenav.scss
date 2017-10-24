@@ -55,10 +55,10 @@
             padding:12px 15px;
             font-weight:300;
             letter-spacing:2px;
-            border-bottom:1px solid #FFF;
+            border-bottom:1px solid rgba(255,255,255,0.2);
         }
         nav a:hover{
-            background:#111;
+            background:#7EBC4A;
         }
         label{
             display:block;
@@ -100,55 +100,8 @@
     }
 }
 
-
-
-@media screen and (max-width: 768px)
-{
-    /* HEADER-FIXED */
-    .header-fixed
-    {
-        @media screen and (min-width: 991px)
-        {
-            &.header-container
-            {
-                position: fixed;
-                width: 100%;
-                z-index: 999;
-                top: 0;
-                border-bottom: 1px solid #dedede;
-            }
-            &.subheader-container
-            {
-                margin-bottom: 87px;
-            }
-        }
-    }
-}
-
-
 @media screen and (max-width: 425px)
 {
-
-    /* HEADER-FIXED */
-    .header-fixed
-    {
-        @media screen and (min-width: 991px)
-        {
-            &.header-container
-            {
-                position: fixed;
-                width: 100%;
-                z-index: 999;
-                top: 0;
-                border-bottom: 1px solid #dedede;
-            }
-            &.subheader-container
-            {
-                margin-bottom: 87px;
-            }
-        }
-    }
-
     .image-logo-holder
     {
        margin: auto;
@@ -159,26 +112,6 @@
 
 @media screen and (max-width: 320px)
 {
-
-    /* HEADER-FIXED */
-    .header-fixed
-    {
-        @media screen and (min-width: 991px)
-        {
-            &.header-container
-            {
-                position: fixed;
-                width: 100%;
-                z-index: 999;
-                top: 0;
-                border-bottom: 1px solid #dedede;
-            }
-            &.subheader-container
-            {
-                margin-bottom: 87px;
-            }
-        }
-    }
 
     .subheader-container .right-container span {
         padding: 0px 5px;

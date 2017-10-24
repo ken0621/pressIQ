@@ -21,9 +21,8 @@
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
 
         <!-- COUNTDOWN TIMER -->
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/animate.css">
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/form-elements.css">
+        {{-- <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/form-elements.css"> --}}
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/style.css">
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/media-queries.css">    
         
@@ -106,9 +105,9 @@
                                     <li>
                                         <a href="/members/report">Reports</a>
                                     </li>
-                                    <li>
+                                    <!-- <li>
                                         <a href="/members/network">Network</a>
-                                    </li>
+                                    </li> -->
                                     <li>
                                         <a href="/members/wallet-encashment">Wallet Encashment</a>
                                     </li>
@@ -223,15 +222,30 @@
     
     @include("frontend.gfoot")
     {{-- GLOBALS --}}
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
 
     <!-- COUNTDOWN TIMER -->
-    <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery-1.10.2.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.backstretch.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.countdown.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/countdown/wow.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/countdown/scripts.js?version=1"></script>
+
+    <script type="text/javascript">
+        $window = $(window);
+        $window.scroll(function() {
+          $scroll_position = $window.scrollTop();
+            if ($scroll_position > 100) { 
+                $('.header-container').addClass('header-fixed');
+
+                header_height = $('.your-header').innerHeight();
+                $('body').css('padding-top' , header_height);
+            } else {
+                $('.header-container').removeClass('header-fixed');
+                $('body').css('padding-top' , '0');
+            }
+         });
+
+    </script>
 
     <!-- FB WIDGET -->
     <div id="fb-root"></div>

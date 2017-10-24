@@ -4,7 +4,7 @@ jQuery(document).ready(function() {
     /*
         Fullscreen background
     */
-    $.backstretch("assets/img/philtech-countdown-img.jpg");
+    // $.backstretch("assets/img/philtech-countdown-img.jpg");
     
     /*
         Wow

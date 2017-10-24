@@ -9,8 +9,8 @@
   <!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">
-          <i class="fa fa-table"></i> Overtime Management
-          <a href="javascript:" onClick="action_load_link_to_modal('/employee_overtime_application', 'lg')"><button class="btn btn-default pull-right">Create Overtime</button></a>
+          <i class="fa fa-table"></i> Leave Management
+          <a href="/create_employee_overtime"><button class="btn btn-default pull-right">Create Employee Overtime</button></a>
         </div>
         <div class="card-body">
           <div class="table-responsive">
@@ -18,21 +18,21 @@
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Position</th>
-                  <th>Office</th>
-                  <th>Age</th>
-                  <th>Start date</th>
-                  <th>Salary</th>
+                  <th>Date of Application</th>
+                  <th>OT From</th>
+                  <th>To</th>
+                  <th>No. of hours</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
                   <th>Name</th>
-                  <th>Position</th>
-                  <th>Office</th>
-                  <th>Age</th>
-                  <th>Start date</th>
-                  <th>Salary</th>
+                  <th>Date of Application</th>
+                  <th>OT From</th>
+                  <th>To</th>
+                  <th>No. of hours</th>
+                  <th>Status</th>
                 </tr>
               </tfoot>
               <tbody>

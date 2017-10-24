@@ -9,13 +9,13 @@
 <div id="main-wrapper">
     <div class="row">
         <div class="col-md-3">
-            <img src="/assets/logo.jpg" class="center-block" alt="Digima Web Solutions">
-            <h3 class="text-center">Digima Web Solutions</h3>
+            <img src="{{ $company->payroll_company_logo }}" class="center-block" alt="{{ $company->payroll_company_name }}" height="200" width="200">
+            <h3 class="text-center">{{ $company->payroll_company_name }}</h3>
             <hr>
             <ul class="list-unstyled text-center">
-                <li><p><i class="fa fa-map-marker" style="font-size:18px;color:#ff1a1a"></i> Tower 1 Unit 1525 The Linear, Mayapis St. corner Malugay & Yakal Sts., San Antonio Village, Makati City</p></li>
-                <li><p><i class="fa fa-phone-square" style="font-size:18px"></i> 09123456789</p></li>
-                <li><p><i class="fa fa-envelope m-r-xs" style="color:#4db8ff"></i><a href="#"> email@yahoo.com</a></p></li>
+                <li><p><i class="fa fa-map-marker" style="font-size:18px;color:#ff1a1a"></i> {{ $company->payroll_company_address }}</p></li>
+                <li><p><i class="fa fa-phone-square" style="font-size:18px"></i> {{ $company->payroll_company_contact}} </p></li>
+                <li><p><i class="fa fa-envelope m-r-xs" style="color:#4db8ff"></i><a href="#"> {{ $company->payroll_company_email }} </a></p></li>
             </ul>
         </div>
         <div class="col-md-9 m-t-lg">

@@ -9,8 +9,8 @@
   <!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">
-          <i class="fa fa-table"></i> Overtime Management
-          <a href="javascript:" onClick="action_load_link_to_modal('/employee_overtime_application', 'lg')"><button class="btn btn-default pull-right">Create Overtime</button></a>
+          <i class="fa fa-table"></i> Approver
+          <a href="/create_employee_approver"><button class="btn btn-default pull-right">Create Approver</button></a>
         </div>
         <div class="card-body">
           <div class="table-responsive">

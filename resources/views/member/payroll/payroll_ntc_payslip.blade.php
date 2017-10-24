@@ -20,7 +20,7 @@
           td
           {
             padding: 5px !important;
-            font-size: 10px;
+            font-size: 8px;
             line-height: 11px;
           }
           .payslip-wrapper
@@ -51,7 +51,7 @@
      
         
           @foreach($_employee as $key => $employee)
-          <div class="col-md-6">
+          <div class="col-md-4">
               <div class="payslip-wrapper page">
                 <div class="main-content-holder">
                   <div class="row" >
@@ -151,7 +151,7 @@
                 </div>
               </div>
           </div>
-          @endforeach   
+          @endforeach
       </div>
     </div>
     </body>

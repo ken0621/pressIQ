@@ -18,6 +18,10 @@
   <link href="assets/employee/css/sb-admin.css" rel="stylesheet">
   <link href="assets/employee/css/employee_profile.css" rel="stylesheet">
 
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -84,16 +88,16 @@
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents">
             <li>
-              <a href="navbar.html">Leave</a>
+              <a class="nav-link" href="authorized_access_leave">Leave</a>
             </li>
             <li>
-              <a href="cards.html">OverTime</a>
+              <a class="nav-link" href="authorized_access_over_time">OverTime</a>
             </li>
             <li>
-              <a href="cards.html">OB</a>
+              <a class="nav-link" href="authorized_access_official_business">OB</a>
             </li>
             <li>
-              <a href="cards.html">Approver</a>
+              <a class="nav-link" href="authorized_access_approver">Approver</a>
             </li>
           </ul>
         </li>
@@ -237,7 +241,7 @@
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+            <a class="btn btn-primary" href="/employee_logout">Logout</a>
           </div>
         </div>
       </div>
@@ -257,12 +261,17 @@
     <!-- Custom scripts for this page-->
     <script src="assets/employee/js/sb-admin-datatables.min.js"></script>
     <script src="assets/employee/js/sb-admin-charts.min.js"></script>
+    <script src="assets/employee/js/global_function.js"></script>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    {{-- MODAL --}}
+    <div id="global_modal" class="modal fade" role="dialog" >
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content modal-content-global clearfix">
+            </div>
+        </div>
+    </div>
+    <div class="multiple_global_modal_container"></div>
   </div>
 </body>
 

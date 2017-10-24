@@ -45,88 +45,63 @@
         </style>
     </head>
     <body>
+<div style="vertical-align: top; text-align: center;">
 
-    <div style="vertical-align: top; text-align: center;">
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-6 text-center">
+    	<img src="{{ $employee_company->payroll_company_logo }}" class="center-block" alt="{{ $employee_company->payroll_company_name }}" height="150" width="150">
+	</div>
+    <div class="col-md-6">
+        <div style="font-weight: bold; font-size: 16px;">{{ $employee_company->payroll_company_name }}</div>
+        <div>{{ $employee_company->payroll_company_address }}</div>
+    </div>
+</div>
       <div class="clearfix">
-     
-        
-          @foreach($_employee as $key => $employee)
-          <div class="col-md-6">
+          <div class="col-md-12">
               <div class="payslip-wrapper page">
                 <div class="main-content-holder">
-                  <div class="row" >
-                    <div class="col-md-12 text-center" style="font-weight: bold; font-size: 16px;">{{ strtoupper($company->payroll_company_name) }}</div>
-                    <div class="col-md-12" style="margin-top: 10px;">
-                        <div>{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</div>
-                        <div>{{ $show_period_start }} - {{ $show_period_end }}</div>
-                        @if($show_release_date != 'not specified')
-                        <div>Release Date: {{ $show_release_date }}</div>
-                        @endif
-                    </div>
-                  </div>
-
                   <div class="row" style="margin-top: 20px; text-align: left;">
                       <div class="col-md-12">
                           <table style="width: 100%;" class="table table-bordered">
                               <tbody>
                                   <tr>
                                       <td width="40%" style="font-weight: bold;">BASIC PAY</td>
-                                      <td width="30%" style="font-weight: bold;" class="text-right">{{ payroll_currency($employee->net_basic_pay) }}</td>
+                                      <td width="30%" style="font-weight: bold;" class="text-right"></td>
                                       <td width="30%" style="font-weight: bold;"></td>
                                   </tr>
 
                                   <!-- ADDITION TO GET GROSS -->
-                                  @foreach($employee->cutoff_breakdown->_gross_pay_breakdown as $breakdown)
+                                  
                                   <tr>
-                                      <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                      <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                      <td></td>
+                                      <td class="text-right"></td>
                                       <td></td>
                                   </tr>
-                                  @endforeach
-
                                   <tr style="font-weight: bold;">
                                       <td style="font-weight: bold;">GROSS SALARY</td>
                                       <td style="font-weight: bold;"></td>
-                                      <td style="font-weight: bold;" class="text-right">{{ payroll_currency($employee->gross_pay) }}</td>
+                                      <td style="font-weight: bold;" class="text-right"></td>
                                   </tr>
-
-                                  @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
-                                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
-                                    @else
-                                      <tr>
-                                          <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                          <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
-                                          <td></td>
-                                      </tr>
-                                    @endif
-                                  @endforeach
-
-
-
-                                  @foreach($employee->cutoff_breakdown->_net_pay_breakdown as $breakdown)
-                                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
-                                    @else
-                                      <tr>
-                                          <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                          <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
-                                          <td></td>
-                                      </tr>
-                                    @endif
-                                  @endforeach
-
-
+                                  <tr>
+                                      <td></td>
+                                      <td class="text-right"></td>
+                                      <td></td>
+                                  </tr>
+                                  <tr>
+                                      <td></td>
+                                      <td class="text-right"></td>
+                                      <td></td>
+                                  </tr>
                                   <tr>
                                       <td>TOTAL DEDUCTION</td>
                                       <td></td>
-                                      <td class="text-right">{{ payroll_currency($employee->total_deduction) }}</td>
+                                      <td class="text-right"></td>
                                   </tr>
-
                                   <tr style="font-weight: bold;">
                                       <td style="font-weight: bold;">TAKE HOME PAY</td>
                                       <td style="font-weight: bold;"></td>
-                                      <td style="font-weight: bold;" class="text-right">{{ payroll_currency($employee->net_pay) }}</td>
+                                      <td style="font-weight: bold;" class="text-right"></td>
                                   </tr>
-
                                   <div>
                                   </div>
                               </tbody>
@@ -138,12 +113,10 @@
                       <div class="col-md-12">
                         <table style="width: 100%;" class="table table-bordered">
                               <tbody>
-                                  @foreach($employee->cutoff_breakdown->_time_breakdown as $key => $time_breakdown)
-                                      <tr>
-                                          <td style="text-transform:uppercase">{{ str_replace("_"," ",$key) }}</td>
-                                          <td class="text-right">{{ $time_breakdown["time"] }}</td>
-                                      </tr>
-                                  @endforeach
+                                  <tr>
+                                      <td style="text-transform:uppercase"></td>
+                                      <td class="text-right"></td>
+                                  </tr>
                               </tbody>
                           </table>
                       </div>
@@ -151,9 +124,8 @@
                 </div>
               </div>
           </div>
-          @endforeach   
       </div>
     </div>
+
     </body>
 </html>
-

@@ -42,7 +42,7 @@ class PayrollMember extends Controller
 				$this->employee_info = $employee_info;
 			}
 
-			
+			//dd($employee_info);
 			return $next($request);
 		});
 	}

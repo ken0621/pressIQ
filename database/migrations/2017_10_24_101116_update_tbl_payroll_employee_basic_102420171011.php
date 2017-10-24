@@ -13,10 +13,7 @@ class UpdateTblPayrollEmployeeBasic102420171011 extends Migration
      */
     public function up()
     {
-         Schema::table('tbl_mlm_plan_setting', function (Blueprint $table) 
-        {
-            $table->tinyInteger("stairstep_dynamic_compression")->default(0);
-        });
+        
     }
 
     /**

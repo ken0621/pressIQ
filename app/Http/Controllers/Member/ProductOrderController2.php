@@ -5,6 +5,7 @@ use App\Globals\Transaction;
 use App\Globals\Columns;
 use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_transaction_list;
+use App\Models\Tbl_online_pymnt_link;
 use Excel;
 use DB;
 use Request;
@@ -16,8 +17,11 @@ class ProductOrderController2 extends Member
         $shop_id            = $this->user_info->shop_id;
         $data["page"]       = "Product Orders";
         $data["shop_id"]    = $shop_id;
-        $data["_method"]    = Tbl_online_pymnt_method::where("method_shop_id", $shop_id)->get();
-
+        $data["_method"]    = Tbl_online_pymnt_link::where("link_shop_id", $shop_id)
+                                                    ->leftJoin("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_code_name", "=", "tbl_online_pymnt_link.link_reference_name")
+                                                    ->groupBy("link_reference_name")
+                                                    ->get();
+        
         return view('member.product_order2.product_order2', $data);
     }
     public function table()
@@ -144,21 +148,36 @@ class ProductOrderController2 extends Member
     }
     public function export()
     {
-        dd(Request::input("method"));
-        $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'receipt', '', 0);
+        /* Session */
+        session()->forget('get_transaction_filter_customer_id');
+        session()->forget('get_transaction_customer_details');
+        session()->forget('get_transaction_date');
+        session()->forget('get_transaction_payment_method');
+        session()->forget('get_transaction_slot_id');
+        session()->forget('get_transaction_customer_details_v2');
+        
+        Transaction::get_transaction_customer_details_v2();
+
+        $method = Request::input("method");
+        $data["method"] = $method;
+        $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'order', '', 0);
         foreach ($data["_transaction"] as $key => $value) 
         {
-            if ($value->payment_method != "dragonpay") 
+            $transaction = Transaction::getCustomerTransaction($value->transaction_id);
+            if ($transaction) 
             {
-                unset($data["_transaction"][$key]);
+                if ($transaction->payment_method != $method) 
+                {
+                    unset($data["_transaction"][$key]);
+                }
             }
         }
-
-        Excel::create('Dragonpay Report', function($excel) use ($data)
+        
+        Excel::create('Order Report', function($excel) use ($data)
         {
-            $excel->sheet('Dragonpay', function($sheet) use ($data)
+            $excel->sheet('Order', function($sheet) use ($data)
             {
-                $sheet->loadView('member.product_order2.payment.draref', $data);
+                $sheet->loadView('member.product_order2.payment.export', $data);
             });
         })
         ->download('xls');

@@ -26,7 +26,7 @@
                             @if(count($_method) > 0)
                                 <ul class="dropdown-menu">
                                     @foreach($_method as $method)
-                                    <li><a href="/member/ecommerce/product_order2/export?method={{ $method->method_id }}" target="_blank">{{ $method->method_name }}</a></li>
+                                    <li><a href="/member/ecommerce/product_order2/export?method={{ $method->gateway_code_name }}" target="_blank">{{ $method->gateway_name }}</a></li>
                                     @endforeach
                                 </ul>
                             @else

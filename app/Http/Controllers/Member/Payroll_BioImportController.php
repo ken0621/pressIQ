@@ -829,16 +829,13 @@ class Payroll_BioImportController extends Member
 			    				{
 			    					$insert_record['payroll_time_sheet_out'] = date('H:i:s', strtotime($final_date['time_out']));
 			    				}
-			    				
 			    			}
-
 			    			$count_record = Tbl_payroll_time_sheet_record::wherearray($insert_record)->count();
 			    			if($count_record == 0)
 			    			{
 			    				array_push($insert_time_record, $insert_record);
 			    			}
 		    			}
-		    			
 		    		}
 	    		}
 	    	}

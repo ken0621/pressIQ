@@ -30,23 +30,16 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <div class="box-body">
+ <button type= "button" class="image-gallery btn btn-primary gallery" key="1234"> Image Gallery </button>
 <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
                                           <form  method ="post" action ="/member/page/press_release_email/save_email_press_release" role="form" class="form-horizontal" id="get_data_tinymce">
                                             {{csrf_field()}}
-                                                <div class="subject">
-                                                  <div class="col-lg-6 form-group form-inline">
-                                                    <label style="margin-left: 10px;">Title:  </label>
-                                                      <input type="text" placeholder="title" id="input_title_create" class="form-control title_email" name="title">
-                                                  </div> 
-                                              </div>
-                                              <br>
                                               	<div class="subject">
                                                   <div class="col-lg-6 form-group form-inline">
                                                     <label style="margin-left: 10px;">Subject:  </label>
                                                       <input type="text" placeholder="subject" id="input_subject" class="form-control subject_email" name="subject">
                                                   </div> 
                                               </div>
-                                              <button type= "button" class="image-gallery btn btn-primary gallery" key="1234"> Image Gallery </button>
                                               <br>
                                               <br>
                                               <div class="textarea_container">

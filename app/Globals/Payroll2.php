@@ -91,8 +91,6 @@ class Payroll2
 					$total_philhealth_er += $employee->philhealth_er;
 				}
 
-
-
 				$total_pagibig_ee_er = $total_pagibig_ee + $total_pagibig_er;
 				$total_sss_ee_er = $total_sss_ee + $total_sss_er + $total_sss_ec;
 				$total_philhealth_ee_er = $total_philhealth_ee + $total_philhealth_er;
@@ -2574,7 +2572,7 @@ class Payroll2
 				
 			}
 		}
-
+		
 		if($_time["is_absent"] == true)
 		{
 			$return->_breakdown_deduction["absent"]["time"] = ""; 

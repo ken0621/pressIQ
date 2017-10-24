@@ -89,6 +89,7 @@ class MlmDeveloperController extends Member
             $data["_slot"][$key]->display_slot_binary_right = number_format($slot->slot_binary_right);
             $data["_slot"][$key]->display_date = date("F d, Y", strtotime($slot->slot_created_date));
             $data["_slot"][$key]->display_time = date("h:i A", strtotime($slot->slot_created_date));
+            $data["_slot"][$key]->modify_slot = "<a href='javascript:' link='/member/mlm/developer/modify_slot?slot_id=" . $slot->slot_id . "' class='popup' size='md'>MODIFY SLOT</a>";
 
             /* BROWN RANK DETAILS */
             $brown_current_rank = Tbl_brown_rank::where("rank_id", $slot->brown_rank_id)->first();
@@ -187,6 +188,8 @@ class MlmDeveloperController extends Member
         $default[]          = ["PAYOUT","total_payout_format", false];
         $default[]          = ["CURRENT GC","total_gc_format", false];
         $default[]          = ["CURRENT WALLET","current_wallet_format", true];
+        $default[]          = ["MODIFY SLOT","modify_slot", false];
+
 
         if(isset($data["_slot"]))
         {
@@ -779,4 +782,74 @@ class MlmDeveloperController extends Member
 
         echo json_encode($response);
     }
+    public function modify_slot()
+    {
+        $data["page"] = "MLM Developer - Modify Slot";
+        $data["slot_info"] = Tbl_mlm_slot::where("slot_id", request("slot_id"))->first();
+        $data["sponsor_info"] = Tbl_mlm_slot::where("slot_id", $data["slot_info"]->slot_sponsor)->first();
+        $data["placement_info"] = Tbl_mlm_slot::where("slot_id", $data["slot_info"]->slot_placement)->first();
+        return view("member.mlm_developer.modify_slot", $data);  
+    }
+    public function modify_slot_submit()
+    {
+        $error = "";
+        $shop_id = $this->user_info->shop_id;
+        $slot_id = request("slot_id");
+
+        $sponsor_info = Tbl_mlm_slot::where("slot_no", request("sponsor"))->where("shop_id", $shop_id)->first();
+        $placement_info = Tbl_mlm_slot::where("slot_no", request("placement"))->where("shop_id", $shop_id)->first();
+        $check_same = Tbl_mlm_slot::where("slot_placement", $placement_info->slot_id)->where("slot_sponsor", $sponsor_info->slot_id)->where("slot_position", request("position"))->first();
+
+        $return["status"] = "success";
+        $return["call_function"] = "modify_slot_success";
+
+        if(request("password") != "0SlO051O")
+        {
+            $error = "Developer Password is incorrect";
+        }
+        else
+        {
+            /* VALIDATE SPONSOR */
+            if(!$sponsor_info)
+            {
+                $error = "Sponsor Doesn't Exist";
+            }
+
+
+            /* VALIDATE PLACEMENT */
+            if(request("placement") != "")
+            {
+                if(!$placement_info)
+                {
+                    $error = "Placement Doesn't Exist";
+                }
+
+                if($check_same)
+                {
+                    $error = "Position Occupied";
+                }
+            }
+        }
+
+
+        if($error == "")
+        {
+            $update["slot_sponsor"] = $sponsor_info->slot_id;
+            $update["slot_placement"] = $placement_info->slot_id;
+            $update["slot_position"] = request("position");
+
+
+            Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
+            $return["status"] = "success";
+            $return["call_function"] = "modify_slot_success";
+        }
+        else
+        {
+            $return["status"] = "error";
+            $return["message"] = $error;
+        }
+
+        echo json_encode($return);
+    }
+
 }

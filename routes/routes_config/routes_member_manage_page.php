@@ -28,9 +28,8 @@ Route::any('/member/page/press_release_email/send_press_release', 'Member\Press_
 Route::any('/member/page/press_release_email/save_email_press_release', 'Member\Press_Release_Controller@save_email');
 Route::any('/member/page/press_release_email/choose_recipient_press_release', 'Member\Press_Release_Controller@choose_recipient');
 
-Route::get('/member/page/press_release_email/choose_recipient_press_release/ajax','Member\Press_Release_Controller@myformAjax');
 
-// Route::get('/member/page/press_release_email/choose_recipient_press_release/email','Member\Press_Release_Controller@pass_email');
+
 /*Route::any('/member/page/press_release_email/search_recipient_press_release', 'Member\Press_Release_Controller@search_recipient');*/
 Route::any('/member/page/press_release_email/add_recipient_press_release', 'Member\Press_Release_Controller@add_recipient');
 Route::any('/member/page/press_release_email/email_sent_press_release', 'Member\Press_Release_Controller@email_sent');
@@ -38,4 +37,9 @@ Route::any('/member/page/press_release_email/email_list_press_release', 'Member\
 Route::any('/member/page/press_release_email/recipient_list_press_release', 'Member\Press_Release_Controller@recipient_list');
 Route::any('/member/page/press_release_email/view_send_email_press_release', 'Member\Press_Release_Controller@view_send_email');
 
+
+Route::any('/member/page/press_release_email/view_send_email_press_release/sent_email', 'Member\Press_Release_Controller@pass_id');
+
+
+// Route::any('/member/page/press_release_email/view_send_email_press_release/decrypt', 'Member\Press_Release_Controller@decrypt');
 

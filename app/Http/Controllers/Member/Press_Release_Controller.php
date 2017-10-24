@@ -14,6 +14,7 @@ use App\Models\Tbl_press_release_recipient;
 use App\Models\Tbl_press_release_email_sent;
 use Mail;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Crypt;
 
 class Press_Release_Controller extends Member
 {
@@ -21,16 +22,16 @@ class Press_Release_Controller extends Member
     public function press_create_email()
     {
 
-    	return view("member.email_system.create_press_release");
+        return view("member.email_system.create_press_release");
     }
 
-    public function choose_recipient(Request $request)
+    public function choose_recipient()
     {
-			$recipientResult = Tbl_press_release_recipient::select("*");
+            $recipientResult = Tbl_press_release_recipient::select("*");
     
             if(Request::input("title_of_journalist") != "")
             {
-            	$recipientResult = $recipientResult->whereIn('title_of_journalist',Request::input('title_of_journalist'));
+                $recipientResult = $recipientResult->whereIn('title_of_journalist',Request::input('title_of_journalist'));
             }
 
             if(Request::input("country") != "")
@@ -43,33 +44,37 @@ class Press_Release_Controller extends Member
                 $recipientResult = $recipientResult->whereIn('industry_type',Request::input('industry_type'));
             }
 
-
             $data["_recipient_list"] = $recipientResult->get();
             $data["_recipient_country"] = $recipientResult->select('country')->distinct()->get();
-
             $data["_title_of_journalist"] = $recipientResult->select('title_of_journalist')->distinct()->get();
             $data["_type_of_industry"] = $recipientResult->select('industry_type')->distinct()->get();
-
             return view("member.email_system.choose_recipient",$data);
-
-    
-     
     }
 
-    public function myformAjax(Request $request)
+
+    public function pass_id(Request $req)
     {
-
-        $position =Tbl_press_release_recipient::select('position')->where('country',Request::input('country'))->distinct()->get();
-        return json_encode($position);
+         
+        $data = Request::input('myArr');
+        Session::put('email', $data); 
+        return json_encode($data);
+        
     }
+
+    // public function decrypt(){
+    //     $data = Crypt::decrypt(Request::input('encryp'));
+    //     Session::get('wa');
+    //     return json_encode($data);
+    // }
+
 
     public function save_email()
     {
-    	$insert['email_content'] = Request::input('content');
-    	$insert['email_title']=Request::input('subject');
-    	$insert['email_time'] = date('Y-m-d');
-    	Tbl_press_release_email::insert($insert);
-    	return json_encode("success");
+        $insert['email_content'] = Request::input('content');
+        $insert['email_title']=Request::input('subject');
+        $insert['email_time'] = date('Y-m-d');
+        Tbl_press_release_email::insert($insert);
+        return json_encode("success");
 
 
 
@@ -78,8 +83,10 @@ class Press_Release_Controller extends Member
     public function view_send_email()
     {
          $data["_email_list"]=Tbl_press_release_email::get();
-    	 $data["sent_email"] = Request::input('sent_email');
-    	return view("member.email_system.send_email_press_release",$data);
+         $data["sent_email"] = Request::input('sent_email');
+         $data["mail"] = Session::get('email');
+         return view("member.email_system.send_email_press_release",$data);
+
     }
 
     public function send_email(Request $request)
@@ -116,11 +123,11 @@ class Press_Release_Controller extends Member
             dd($e->getMessages());
         }
         
-	}
+    }
     public function email_sent()
     {
-    	$data['_sent_email']=Tbl_press_release_email_sent::get();
-    	return view("member.email_system.email_sent_press_release",$data);
+        $data['_sent_email']=Tbl_press_release_email_sent::get();
+        return view("member.email_system.email_sent_press_release",$data);
     }
 
     public function email_list()

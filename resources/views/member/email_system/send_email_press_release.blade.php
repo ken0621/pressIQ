@@ -27,20 +27,15 @@
     </div>
   </header>
 </head>
+    <!--     <input type="text" id="input_subjects" placeholder="decrypts" class="form-control email-to-container subject_email" name="tos" value="{{print_r($mail)}}"> -->
 <div class="box-body">
-
-<!--   <form method="POST" action="'/member/page/press_release_email/send_press_release/getemail" >
-      <input type="text" id="ids" value="{{$sent_email}}">
-  </form> -->
-
   <button class="input_chose_email btn btn-primary"> Email List </button>
   <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
   <form  name="myform" method ="POST" action = "/member/page/press_release_email/send_press_release" class="form-horizontal" id="get_data_tinymce1">
     {{csrf_field()}}
       <div class="subject">
       <div class="col-lg-6">
-        <input type="text" id="input_subject" placeholder="To" class="form-control email-to-container subject_email" name="to" value="">
-      </div>
+<input name="first_name" type="text" value={{implode(",", $mail)}}>      </div>
     </div>
     <br>
     <div class="subject">
@@ -168,4 +163,34 @@ $('.email-subject-container').val($('.email-subject-'+email_id).val());
 $('#email_databaseModal').modal('hide');
 }
 </script>
+
+<script>
+
+
+// $( document ).ready(function() {
+
+//     var encryp = document.getElementById("input_subjects").value;
+//                $.ajax({
+//                      type: "GET",
+//                      url: "/member/page/press_release_email/view_send_email_press_release/decrypt",
+//                      data: {encryp:encryp},
+//                      dataType:"json",
+//                      success: function(data){
+ 
+//                       document.getElementById("input_subject").value = data;
+//                      }
+//                 });
+
+// });
+
+// $( document ).ready(function() {
+
+//     var putangemail = document.getElementById("input_subjects").value;
+
+//     var e = putangemail.split(',');
+//   alert(e);
+
+// });
+  </script>
+
 @endsection

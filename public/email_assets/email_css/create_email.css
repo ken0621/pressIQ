@@ -36,6 +36,7 @@
     
 
 }
+
 .selectpicker_type_of_industry
 {
     height: 39px;
@@ -308,14 +309,14 @@
 
 .create_news
 {
-	margin-left: 60px;
+    margin-left: 60px;
     font-size: 18px;
     margin-top: 5px;
 }
 
 .header_email
 {
-	border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
 }
 
 .mail-box {

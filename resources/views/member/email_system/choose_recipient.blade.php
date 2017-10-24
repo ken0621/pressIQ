@@ -2,9 +2,6 @@
 @section('content')
 <link rel="stylesheet" type="text/css" href="/email_assets/email_css/create_email.css">
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
- <link rel="stylesheet" type="text/css" href="/email_assets/email_css/style.css">
-  <link rel="stylesheet" type="text/css" href="/email_assets/email_css/prism.css">
-   <link rel="stylesheet" type="text/css" href="/email_assets/email_css/chosen.css">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -15,12 +12,7 @@
         </div>
     </div>
 </div>
-<<<<<<< HEAD
-
-<div class="panel panel-default panel-block panel-title-block">
-=======
 <div class="panel panel-default panel-block panel-title-block panel-background">
->>>>>>> 70834f420937c759c26d5f38f0d010951f2436de
     <header class="header_email">
     <div class="panel-body form-horizontal tab_header">
         <div class="form-group">
@@ -35,26 +27,17 @@
     <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
                                       
   <form name="myform" method="GET" action="/member/page/press_release_email/search_recipient_press_release" id="#pass_data">
-    <h4 style="margin-left: 10px;margin-bottom: 20px;">Search By:</h4>
+    <h4 style="margin-left: 10px;">Search By:</h4>
 
+    <!-- <div class="form-group row">
+    <label  class="label-name">Country</label>
+    <div class="">
+      <input type="text" class="form-control input col-md-6" id="country" placeholder="country" name="country">
+    </div>
+      </div> -->
   <div class="form-group row">
   <label  class="label-name">Country</label>
   <br>
-<<<<<<< HEAD
-  <select class="form-control input col-md-6" id="country" id="filter">
-   <option value="1">Select All</option>
-   @foreach($_recipient_country as $recipient_country)
-    <option value="{{$recipient_country->country}}">{{$recipient_country->country}}</option>
-    @endforeach
-  </select>
-  </div>
-  <div class="form-group row">
-    <label for="inputPassword" class="label-name ">Position</label>
-    <div class="">
-        <select class="form-control input col-md-6"  id="position" name="position" placeholder="Position">
-        </select>
-    </div>
-=======
   <div class ="select_container">
   <select class="names" id="country" multiple data-placeholder="choose country" >
   @foreach($_recipient_country as $recipient_country)
@@ -62,7 +45,6 @@
   @endforeach
 </select>
 </div>
->>>>>>> 70834f420937c759c26d5f38f0d010951f2436de
   </div>
   <div class="form-group row">
     <label  class="label-name">Title of Journalist</label>
@@ -76,18 +58,6 @@
   </div>
   <div class="form-group row">
     <label  class="label-name">Industry Type</label>
-<<<<<<< HEAD
-    <div class="multi">
-
-          <select data-placeholder="Choose Industry" class="chosen-select" id="industry_type" name="industry_type" multiple tabindex="4">
-            <option value=""></option>
-            <option value="United States">United States</option>
-            <option value="United Kingdom">United Kingdom</option>
-            <option value="Afghanistan">Afghanistan</option>
-            <option value="Aland Islands">Aland Islands</option>
-          </select>
-    </div>
-=======
     <div class ="select_container">
     <select class="names" multiple data-placeholder="choose Industry Type" id="industry_type">
     @foreach($_type_of_industry as $industry_type)
@@ -95,12 +65,11 @@
     @endforeach
     </select>
   </div>
->>>>>>> 70834f420937c759c26d5f38f0d010951f2436de
   </div>
   <div class="form-group chosen_recipient">
    <!--  <label for="inputPassword" class="label-choose-recipient">Chosen Recipient</label> -->
     <div class="">
-      <input type="text" class="form-control col-md-6 input_chose_recipient col-md-6" id="inputPassword" placeholder="Email Address" name="recipient_to">
+      <input type="hidden" class="form-control col-md-6 input_chose_recipient col-md-6" id="inputPassword" placeholder="Email Address" name="recipient_to">
     </div>
 </div>
   <div class="form-group row">
@@ -121,19 +90,11 @@
               <button type="button" class="check-all btn btn-primary" onClick="selectall(this)">Check All</button>
                 <ul class="list-group check_list" id="wa">
                   @foreach($_recipient_list as $recipient_list)
-
-                  <li class="list-group-item tocheck" name="foo" id="em" value="{{$recipient_list->recipient_id}}">
-                    <div class="checkbox">
-                    <input type = "checkbox" id="to_check" class="to_check">
-                    {{$recipient_list->company_name}},{{$recipient_list->name}},{{$recipient_list->position}},{{$recipient_list->industry_type}}
-                  </div>
-
-                  <li  class="list-group-item tocheck" name="foo"> 
-                    <input type = "checkbox" class="to_check" id="check">
+                  <li  class="list-group-item tocheck" name="foo" value="{{$recipient_list->research_email_address}}"> 
+                    <input type = "checkbox" name="check" class="to_check" id="check">
                     {{$recipient_list->company_name}}{{$recipient_list->name}}{{$recipient_list->position}}{{$recipient_list->industry_type}}
                     <input type="hidden" class = "email_add" value="{{$recipient_list->research_email_address}}">
-
-                </li>
+                  </li>
                   @endforeach
                 </ul>
             </div>
@@ -142,10 +103,8 @@
 </div>
   
 <script src="/email_assets/js/create_press_release.js"></script>
-
 <script src="/email_assets/js/chosen.jquery.js"></script>
 <script src="/email_assets/js/chosen.jquery.min.js"></script>
-
 <script>
     $(".input_chose_email").click(function() {
         $('#email_databaseModal').modal('show');
@@ -173,66 +132,50 @@
     $('#country').prop('selected', true); // Selects all options
 });
 </script>
+
+
+
 <script>
+
+
+
     $('.con').click(function(event) {
 
-            // if(document.getElementById("to_check").checked == true){
-            //             var myArr = [];
-            //              $('#wa li').each(function (i) {
+                        var myArr = [];
 
-            //                 var texts = $(this).text();
-            //                 // var array = texts.split(",");
-            //                 myArr.push($(this).attr('value'));
+                         $('#wa li').each(function (i) {
 
-            //             })
+                           if($(this).children().is(":checked") == true){
+                              myArr.push($(this).attr('value'));
+                           
+                           }else{
+                            
+                           }
 
-                            var recipient_value =  $('.input_chose_recipient').val(string);;
-                            var recipient_link = "/member/page/press_release_email/view_send_email_press_release?sent_email="+recipient_value;
+                        })
 
-                            window.location.href = recipient_link;
-              // }
-              // else{
-              //   alert("Please select email_recipient");
-              // }
+
+
+
+
+
+                $.ajax({
+                     type: "GET",
+                     url: "/member/page/press_release_email/view_send_email_press_release/sent_email",
+                     data: {myArr:myArr},
+                     dataType:"json",
+                     success: function(data){
+                                               // var recipient_value = myArr;
+                         var recipient_link = "/member/page/press_release_email/view_send_email_press_release";
+                          window.location.href = recipient_link;
+                     }  
+                });
 
 
 
     });
 
 
-  // //get position 
-  //   $(document).ready(function() {
-  //       $('#country').on('change', function() {
-  //           var country = this.value;
-  //           if(country){
-  //               $.ajax({
-  //                   url: '/member/page/press_release_email/choose_recipient_press_release/ajax',
-  //                   type: "GET",
-  //                   data:{country:country},
-  //                   dataType: "json",
-  //                   success:function(data) {
-                       
-
-  //                       $('select[name="position"]').empty();
-  //                       $.each(data, function(key, value) {
-  //                              $('select[name="position"]').append(
-  //                                   $('<option>', { value : value.position, text : value.position })
-  //                               );
-                                                            
-  //                       });
-
-  //                   }
-  //               });
-  //           }else{
-  
-  //           }
-  //       });
-  //   });
-
-    // $('#country').click(function(event) {
-    // var wa = $(".chosen-select").val();
-    // alert(wa);
-    // });
 </script>
 
 <!-- <script>
@@ -248,4 +191,3 @@ console.log(index);
 });
 </script> -->
 @endsection
-

@@ -1,43 +1,42 @@
 var global_recipient_id = null;
 $(document).ready(function(){
-	$('#get_data_tinymce').submit(function(e){
-		var ajaxdata = $("._token1").val();
-		var content = tinymce.get('texteditor').getContent();
+  $('#get_data_tinymce').submit(function(e){
+    var ajaxdata = $("._token1").val();
+    var content = tinymce.get('texteditor').getContent();
 
-		$('#get_data_tinymce').ajaxSubmit({
-		     type: "POST",
-		     url: '/member/page/press_release_email/save_email_press_release',
-		     data: {ajaxdata:ajaxdata,content:content},
-		     dataType:"json",
-		     success: function(response){
-		         if(response == 'success')
-		         {
-		         	/*$('#myModal_email').modal('hide');*/
-		         	/*$('.from_email').val('');
-		         	$('.to_email').val('');*/
-		         	$('.subject_email').val('');
-		         	tinymce.get('texteditor').setContent('');
-		         	alert('message save');
-		         }
-		     }
-		});
+    $('#get_data_tinymce').ajaxSubmit({
+         type: "POST",
+         url: '/member/page/press_release_email/save_email_press_release',
+         data: {ajaxdata:ajaxdata,content:content},
+         dataType:"json",
+         success: function(response){
+             if(response == 'success')
+             {
+              /*$('#myModal_email').modal('hide');*/
+              /*$('.from_email').val('');
+              $('.to_email').val('');*/
+              $('.subject_email').val('');
+              tinymce.get('texteditor').setContent('');
+              alert('message save');
+             }
+         }
+    });
 
-		return false;
-	});
+    return false;
+  });
 });
 
   $('.inputsubmit').click(function(e)
-  {		
+  {   
 
 
-		var country = $('#country').val();
-		var title_of_journalist = $('#title_of_journalist').val();
+    var country = $('#country').val();
+    var title_of_journalist = $('#title_of_journalist').val();
     var industry_type = $('#industry_type').val();
-    alert(industry_type);
-  	var data = {title_of_journalist:title_of_journalist,country:country, industry_type:industry_type};
-		var url = addParams("/member/page/press_release_email/choose_recipient_press_release",data);
-		$(".recipient_container").load(url+" .recipient_container2",function(){
-			$.getScript("/email_assets/js/list.js");
+    var data = {title_of_journalist:title_of_journalist,country:country, industry_type:industry_type};
+    var url = addParams("/member/page/press_release_email/choose_recipient_press_release",data);
+    $(".recipient_container").load(url+" .recipient_container2",function(){
+      $.getScript("/email_assets/js/list.js");
       /*$.getCss("/email_assets/email_css/create_email.css");*/
     /*var myStylesLocation = "/email_assets/email_css/create_email.css";
 
@@ -83,31 +82,31 @@ $(document).ready(function(){
 
 
 
-		/*$(document).ajaxComplete(function(){*/
-		  /*$.getScript('/email_assets/js/list.js', function() {
-		  alert('Load was performed.');*/
-		/*});*/
-		
+    /*$(document).ajaxComplete(function(){*/
+      /*$.getScript('/email_assets/js/list.js', function() {
+      alert('Load was performed.');*/
+    /*});*/
+    
 
 
 
-		// $.ajax({
-		// 	type: 'GET',
-		// 	url: '/member/page/press_release_email/search_recipient_press_release',
-		// 	data: {recipient_group: recipient_group,recipient_name:recipient_name,recipient_email_address:recipient_email_address,recipient_position:recipient_position},
-		// 	success:function(data)
-		// 	{
-		// 		$('.list').html(data);
-		// 	}
-		// });
+    // $.ajax({
+    //  type: 'GET',
+    //  url: '/member/page/press_release_email/search_recipient_press_release',
+    //  data: {recipient_group: recipient_group,recipient_name:recipient_name,recipient_email_address:recipient_email_address,recipient_position:recipient_position},
+    //  success:function(data)
+    //  {
+    //    $('.list').html(data);
+    //  }
+    // });
 
 
-	
+  
 
   /*check_list();
   function check_list()
-  {	
-  	$(function () {
+  { 
+    $(function () {
     $('.list-group.checked-list-box .list-group-item').each(function () {
         
         // Settings
@@ -228,7 +227,3 @@ $(document).ready(function(){
     
     });
 */
-
-
-
- 

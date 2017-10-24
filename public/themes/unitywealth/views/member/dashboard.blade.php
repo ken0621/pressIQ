@@ -5,6 +5,31 @@
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 @if(!$mlm_member)
 	<div class="dashboard">
+		@if(isset($check_unused_code))
+			<!--  CONGRATULATION -->
+			<div class="popup-notification">
+			    <div id="popup-notification-modal">
+		            <div class="modal-content">
+		                <!--<div class="modal-header">-->
+		                <!--    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+		                <!--    <h4 class="modal-title"><i class="fa fa-star"></i> CONGRATULATION</h4>-->
+		                <!--</div>-->
+		                <div class="modal-body">
+		                	<div class="congrats-holder">
+			                	<div class="title">CONGRATULATIONS!</div>
+			                    <div class="img">
+			                    	<img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
+			                    </div>
+			                    <div class="desc">You are one step away from your membership!</div>
+			                    <div class="btn-container">
+			                        <button id="btn-notification" class="btn-verify-notification btn-congratulation btn-notification" type="button">Continue</button>
+			                    </div>
+		                	</div>
+		                </div>
+		            </div>
+		        </div>
+			</div>
+    	@else
 	    <!-- TOP DASHBOARD-->
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
@@ -20,7 +45,7 @@
 	                        <!-- <div class="text-header2">Enroll now and become one of us!</div> -->
 	                    </div>
 	                    <div class="btn-container">
-	                        <button class="btn-buy-a-kit" type="button">Buy a Kit</button><br>
+	                        <button class="btn-buy-a-kit" type="button">Buy a Package</button><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
 	                        <a href="#" id="btn-enter-a-code"><button style="margin-top: 0;" onclick="action_load_link_to_modal('members/enter-code')" class="btn-enter-a-code">ENTER A CODE</button></a>
 	                    </div>
@@ -28,6 +53,7 @@
 	            </div>
 	        </div>
 	    </div>
+	    @endif
 	    
 	    <style type="text/css">
 	    .unity-kit .kit-holder .name
@@ -209,7 +235,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>JCA Wellness</b></div>
+	                        <div class="text-caption">You are now an official member of <br><b>Unity Wealth</b></div>
 	                    </div>
 	                </div>
 	            </div>

@@ -50,4 +50,17 @@ function global_table()
             action_load_table();
         });
     }
+    this.action_load_table = function()
+    {
+        action_load_table();
+    }
+}
+function success_confirm(data)
+{
+    if(data.status == 'success')
+    {
+        toastr.success("Success");
+        data.element.modal("hide");
+        global_table.action_load_table();
+    }
 }

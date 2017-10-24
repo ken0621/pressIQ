@@ -708,10 +708,15 @@ class MlmDeveloperController extends Member
     }
     public function recompute()
     {
+         $shop_id = $this->user_info->shop_id;
+
         if(Request::isMethod("post"))
         {
             $slot_id = request("slot_id");
-            Mlm_compute::entry($slot_id);
+            $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+            Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+            Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+            MLM2::entry($shop_id,$slot_id);
         }
         else
         {
@@ -726,6 +731,9 @@ class MlmDeveloperController extends Member
     {
         $shop_id = $this->user_info->shop_id;
         Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_amount", ">=", 0)->delete();
+        Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_plan", "=", "CD")->delete();
         Tbl_mlm_slot_points_log::where("tbl_mlm_slot.shop_id", $shop_id)->join("tbl_mlm_slot", "tbl_mlm_slot.slot_id", "=", "tbl_mlm_slot_points_log.points_log_slot")->delete();
+        Tbl_tree_sponsor::where("shop_id", $shop_id)->delete();
+        Tbl_tree_placement::where("shop_id", $shop_id)->delete();
     }
 }

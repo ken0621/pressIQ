@@ -211,13 +211,18 @@ class Payroll_BioImportController extends Member
 						$time_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->get();
 						
 						Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->delete();
-						
+
 						$update = null;
 						$update['payroll_time_sheet_id'] 		= $timesheet_db->payroll_time_sheet_id;
 						$update['payroll_company_id'] 			= $check_employee->payroll_employee_company_id;
 						$update['payroll_time_sheet_in'] 		= $value["time_in"];;
 						$update['payroll_time_sheet_out'] 		= $value["time_out"];;
 						$update['payroll_time_sheet_origin'] 	= $biometric_name;
+
+						if($company != '' || $company != 0 || $company != null)
+		    			{
+		    				$update['payroll_company_id'] = $company;
+		    			}
 						
 						Tbl_payroll_time_sheet_record::insert($update);
 						
@@ -1032,7 +1037,6 @@ class Payroll_BioImportController extends Member
     	 			$date = date('Y-m-d', strtotime($value['date']));
     	 		}
     	 		
-
     	 		if(is_object($value["time_in"]) && is_object($value["time_out"]))
 	 			{
 			 		$_record[$date][$employee_number]['time_in']  = date('H:i:s', strtotime($value['time_in']->toDateTimeString()));

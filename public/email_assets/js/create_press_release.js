@@ -15,7 +15,6 @@ $(document).ready(function(){
 		         	/*$('#myModal_email').modal('hide');*/
 		         	/*$('.from_email').val('');
 		         	$('.to_email').val('');*/
-              $('.title').val('');
 		         	$('.subject_email').val('');
 		         	tinymce.get('texteditor').setContent('');
 		         	alert('message save');
@@ -34,6 +33,7 @@ $(document).ready(function(){
 		var country = $('#country').val();
 		var title_of_journalist = $('#title_of_journalist').val();
     var industry_type = $('#industry_type').val();
+    alert(industry_type);
   	var data = {title_of_journalist:title_of_journalist,country:country, industry_type:industry_type};
 		var url = addParams("/member/page/press_release_email/choose_recipient_press_release",data);
 		$(".recipient_container").load(url+" .recipient_container2",function(){

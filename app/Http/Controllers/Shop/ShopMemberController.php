@@ -120,6 +120,16 @@ class ShopMemberController extends Shop
 
         return Self::load_view_for_members('member.dashboard', $data);
     }
+    public function getProducts()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.products', $data);
+    }
+    public function getCertificate()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.certificate', $data);
+    }
     public function getEventDetails(Request $request)
     {
         $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);

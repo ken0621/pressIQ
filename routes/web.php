@@ -473,6 +473,7 @@ AdvancedRoute::controller('/member/item/warehouse/rr', 'Member\WarehouseReceivin
 /* End */
 
 
+
 /* START PIS ARCY*/
 Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
 

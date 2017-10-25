@@ -20,9 +20,9 @@
       @foreach($_company_information as $company_information)
 
         <div class="col-md-3 col-sm-6" style="padding: 4px;">
-           <div class="partners-div clearfix" style="height: auto; padding-bottom: 15px;">
+           <div class="partners-div clearfix match-height" style="height: auto; padding-bottom: 15px;">
               <div class="partner-header">
-                 <img class="match-height" style="object-fit: contain;" src="{{ $company_information->company_logo }}" width="100%">
+                 <img style="object-fit: contain;" src="{{ $company_information->company_logo }}" width="100%">
               </div>
               <div class="partner-body">
                  <div style="text-align: center; padding: 30px 0px 30px 0px; font-weight: 700;">{{ $company_information->company_name }}
@@ -80,7 +80,7 @@
 
   .partners-div
   {
-    height:370px;
+    /*height:370px;*/
     background:#FFFFFF;
     margin-top: 2px;
   }

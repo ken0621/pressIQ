@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="thumb">
                                     @foreach($product_variant['image'] as $key => $image)
-                                    <div class="holder" style="cursor: pointer;" key="{{ $key }}" variant-id="{{ $product_variant['evariant_id'] }}"><img class="4-3-ratio" style="width: 100%; object-fit: cover;" class="item-image-small small-yellow-bag match-height" src="{{ $image['image_path'] }}"></div>
+                                    <div class="holder" style="cursor: pointer;" key="{{ $key }}" variant-id="{{ $product_variant['evariant_id'] }}"><img style="width: 100%; object-fit: cover;" class="item-image-small small-yellow-bag match-height" src="{{ $image['image_path'] }}"></div>
                                     @endforeach
                                 </div>
                             </div>
@@ -122,7 +122,7 @@
                     <div class="other-related"><span class="yellow">RELATED</span><span class="blue">PRODUCTS</span></div>
                     <div class="other-related-items row clearfix">
                         @foreach(limit_foreach($_related, 4) as $related)
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-sm-3 col-xs-6">
                             <div class="per-item-container">
                                 <div class="image-content-1">
                                     <img class="4-3-ratio item-image-large other-related-images" src="{{ get_product_first_image($related) }}">
@@ -184,9 +184,9 @@
                     <div class="wow-title">
                         <span class="orange">SPECIAL</span><span class="blue">OFFERS</span>
                     </div>
-                    <div class="item-container">
+                    <div class="item-container clearfix">
                         @foreach(get_collection(get_content($shop_theme_info, "home", "special_offers"), $shop_id) as $collection)
-                            <div class="row-no-padding clearfix per-item">
+                            <div class="row-no-padding clearfix per-item match-height">
                                 <div class="col-xs-4"><img style="width: 100%; padding-right: 10px;" class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
                                 <div class="col-xs-8">
                                     <div class=" item-details-container">

@@ -124,7 +124,7 @@
 					</div>
 					<div class="item-container clearfix">
 						@foreach(get_collection(get_content($shop_theme_info, "home", "special_offers"), $shop_id) as $collection)
-							<div class="row-no-padding clearfix per-item">
+							<div class="row-no-padding clearfix per-item match-height">
 								<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
 								<div class="col-xs-8">
 									<div class=" item-details-container">
@@ -774,7 +774,33 @@ $(document).ready(function()
   	  arrows: true,
   	  prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/left-carousel.jpg'>",
       nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/right-carousel.jpg'>",
-      pauseOnHover: false
+      pauseOnHover: false,
+      responsive: [
+			{
+				breakpoint: 991,
+				settings: 
+				{
+					slidesToShow: 3,
+					slidesToScroll: 1
+				}
+			},
+			{
+				breakpoint: 768,
+				settings: 
+				{
+					slidesToShow: 2,
+					slidesToScroll: 1
+				}
+			},
+			{
+				breakpoint: 376,
+				settings: 
+				{
+					slidesToShow: 1,
+					slidesToScroll: 1
+				}
+			}
+		]
 	});
 
 	$('.add-slider .add-top').slick({

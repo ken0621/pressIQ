@@ -59,6 +59,10 @@
     {
         font-size: 18px;
     }
+    #company-address p
+    {
+        word-break: break-all;
+    }
 }
 
 @media (max-width: 768px) 
@@ -160,6 +164,55 @@
     .header-nav .header-nav-top .wata
     {
         display: block;
+    }
+    .per-item-container .col-xs-6
+    {
+        width: 100%;
+        .item-title
+        {
+            margin-top: 15px;
+        }
+    }
+    .per-item .col-xs-4, .per-item .col-xs-8
+    {
+        width: 100%;
+        .item-title
+        {
+            margin-top: 15px;
+        }
+    }
+    footer .ftr
+    {
+        // text-align: center;
+    }
+    footer p
+    {
+        width: 100%;
+        max-width: none;
+    }
+    .img-footer img
+    {
+        margin: auto;
+    }
+    footer .col-sm-6
+    {
+        margin-top: 15px;
+    }
+    #bottom-footer
+    {
+        text-align: left;
+    }
+    #bottom-footer .bottom .ftr-title
+    {
+        float: none !important;
+    }
+    .pagination-top
+    {
+        position: static;
+    }
+    .featured-container .left-container-title
+    {
+        text-align: center;
     }
 }
 

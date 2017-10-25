@@ -46,7 +46,7 @@
         </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
-    <body>
+    <body class="pushmenu-push">
         
     <div class="loader hide">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
@@ -62,7 +62,7 @@
     
     <input type="checkbox" id="nav-trigger" class="nav-trigger" />
     <label for="nav-trigger"></label> -->
-    <div id="home" class="subheader-container site-wrap">
+    <div id="home" class="subheader-container">
         <div class="container">
             @if($customer)
             <!-- <div class="left-container"><span><i class="fa fa-envelope-o" aria-hidden="true"></i></span><span>company-email.here</span></div> -->
@@ -79,56 +79,22 @@
             @endif
         </div>
     </div>
-    <div class="header-container site-wrap">
+    <div class="header-container">
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-3">
-                    <div class="wrapper">
-                            <input type="checkbox" id="navigation" />
-                                @if(request()->segment(1) != "replicated")
-                                <label for="navigation">
-                                    +
-                                </label>
-                                @endif
 
-                                <nav>
-                                    <ul>
-                                        <li>
-                                            <a href="/members">Dashboard</a>
-                                        </li>
-                                        <li>
-                                            <a href="/members/profile">Profile</a>
-                                        </li>
-                                        @if($mlm_member)
-                                        <li>
-                                            <a href="javascript:">Videos</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:">Ebook</a>
-                                        </li>
-                                        <li>
-                                            <a href="/members/products">Products</a>
-                                        </li>
-                                        <li>
-                                            <a href="/members/certificate">Certificate</a>
-                                        </li>
-                                        <li>
-                                            <a href="/members/genealogy?mode=sponsor">Unilevel Tree</a>
-                                        </li>
-                                        <li>
-                                            <a href="/members/report">Reports</a>
-                                        </li>
-                                        <!-- <li>
-                                            <a href="/members/network">Network</a>
-                                        </li> -->
-                                        <li>
-                                            <a href="/members/wallet-encashment">Wallet Encashment</a>
-                                        </li>
-                                        @else
-                                        @endif
-                                    </ul>
-                                </nav>
-                        </div>
+                    <div id="nav_list" style="background-image: url('/themes/{{ $shop_theme }}/img/icon_nav.png');">MENU</div>
+
+                    <nav class="pushmenu pushmenu-left">
+                      <ul class="links">
+                        <li> <a href="#">Home</a> </li>
+                        <li> <a href="#">About</a> </li>
+                        <li> <a href="#">Projects</a> </li>
+                        <li> <a href="#">Blog</a> </li>
+                        <li> <a href="#">Contacts</a> </li>
+                      </ul>
+                    </nav>
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/">
                             <img src="/themes/{{ $shop_theme }}/img/header-logo.png">
@@ -163,78 +129,76 @@
             </div>
         </div>
     </div>
-    <div class="site-wrap">
-        <!-- CONTENT -->
-        <div id="scroll-to" class="clearfix">
-           @yield("content")
-        </div>
+    <!-- CONTENT -->
+    <div id="scroll-to" class="clearfix">
+       @yield("content")
+    </div>
 
-        <!-- FOOTER -->
-        <footer id="bottom-footer">
-            <div class="container">
-                <div class="footer-container">
-                    <div class="upper row clearfix">
-                        <div class="col-md-4">
-                            <div class="reach-us-holder">
-                                <div class="jca-footer-title-container">
-                                    <p class="footer-title">Reach Us</p>
-                                </div>
-                                <div class="jca-footer-details-container">
-                                    <div class="icon-holder">
-                                        <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/location-logo.png">
-                                    </div>
-                                    <p class="footer-details">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
-                                </div>
-                                <div class="jca-footer-details-container">
-                                    <div class="icon-holder">
-                                        <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/telephone-logo.png">
-                                    </div>
-                                    <p class="footer-details">(02)000-0000 | 0917-000-0000</p>
-                                </div>
-                                <div class="jca-footer-details-container">
-                                    <div class="icon-holder">
-                                        <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/mail-logo.png">
-                                    </div>
-                                    <p class="footer-details">unitywealth@gmail.com</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
+    <!-- FOOTER -->
+    <footer id="bottom-footer">
+        <div class="container">
+            <div class="footer-container">
+                <div class="upper row clearfix">
+                    <div class="col-md-4">
+                        <div class="reach-us-holder">
                             <div class="jca-footer-title-container">
-                                <p class="footer-title">Quick Links</p>
+                                <p class="footer-title">Reach Us</p>
                             </div>
                             <div class="jca-footer-details-container">
-                                <p class="footer-detail-list">Company Policy</p>
-                                <p class="footer-detail-list">Dealer’s Policy</p>
-                                <p class="footer-detail-list">Disclaimer</p>
-                                <p class="footer-detail-list">Terms & Condition</p>
-                                <p class="footer-detail-list">Privacy Policy</p>
-                                <p class="footer-detail-list">Product Policy</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="jca-footer-title-container">
-                                <p class="footer-title">Overview</p>
+                                <div class="icon-holder">
+                                    <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/location-logo.png">
+                                </div>
+                                <p class="footer-details">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
                             </div>
                             <div class="jca-footer-details-container">
-                                <p class="footer-detail-list">Marketing Plan</p>
-                                <p class="footer-detail-list">Packages</p>
-                                <p class="footer-detail-list">Product Packages</p>
-                                <p class="footer-detail-list">Direct Selling</p>
-                                <p class="footer-detail-list">Unilevel</p>
-                                <p class="footer-detail-list">Sales Comission</p>
-                                <p class="footer-detail-list">Overide Sales Comission</p>
+                                <div class="icon-holder">
+                                    <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/telephone-logo.png">
+                                </div>
+                                <p class="footer-details">(02)000-0000 | 0917-000-0000</p>
                             </div>
+                            <div class="jca-footer-details-container">
+                                <div class="icon-holder">
+                                    <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/mail-logo.png">
+                                </div>
+                                <p class="footer-details">unitywealth@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="jca-footer-title-container">
+                            <p class="footer-title">Quick Links</p>
+                        </div>
+                        <div class="jca-footer-details-container">
+                            <p class="footer-detail-list">Company Policy</p>
+                            <p class="footer-detail-list">Dealer’s Policy</p>
+                            <p class="footer-detail-list">Disclaimer</p>
+                            <p class="footer-detail-list">Terms & Condition</p>
+                            <p class="footer-detail-list">Privacy Policy</p>
+                            <p class="footer-detail-list">Product Policy</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="jca-footer-title-container">
+                            <p class="footer-title">Overview</p>
+                        </div>
+                        <div class="jca-footer-details-container">
+                            <p class="footer-detail-list">Marketing Plan</p>
+                            <p class="footer-detail-list">Packages</p>
+                            <p class="footer-detail-list">Product Packages</p>
+                            <p class="footer-detail-list">Direct Selling</p>
+                            <p class="footer-detail-list">Unilevel</p>
+                            <p class="footer-detail-list">Sales Comission</p>
+                            <p class="footer-detail-list">Overide Sales Comission</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </footer>
-        <div class="container">
-            <div class="bottom">                           
-                <div class="ftr-title">© UnityWealth. All Right Reserved</div>
-                <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
-            </div>
+        </div>
+    </footer>
+    <div class="container">
+        <div class="bottom">                           
+            <div class="ftr-title">© UnityWealth. All Right Reserved</div>
+            <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
         </div>
     </div>
     

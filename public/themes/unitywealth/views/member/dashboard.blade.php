@@ -233,7 +233,7 @@
 	            <div class="modal-md modal-dialog">
 	                <div class="modal-content">
 	                    <div class="modal-body">
-	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
+	                        {{-- <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div> --}}
 	                        <div class="text-header">Done!</div>
 	                        <div class="text-caption">You are now an official member of <br><b>Unity Wealth</b></div>
 	                    </div>

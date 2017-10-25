@@ -5,8 +5,9 @@
     <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/front-img2.jpg')">
         <div class="container">
             <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption.png"></div>
-            <!-- <div class="btn-container animated fadeInDown">SHOW MORE</div> -->
-            <span class="animated fadeInDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+            <div class="scroll-down-container">
+                <span class="animated fadeInDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>                
+            </div>
         </div>
     </div>
     <!-- SCROLL TO TOP -->

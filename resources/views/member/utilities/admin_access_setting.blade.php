@@ -1,5 +1,5 @@
 
-@foreach($_page as $key=>$page)
+@foreach($_page as $key => $page)
     <tr data-id="access-{{$page['segment'] or $page['code']}}" data-parent="{{ $page_parent or '' }}" >
         <td>
             <span >{!!$page['name'] or $page['label']!!} </span> 

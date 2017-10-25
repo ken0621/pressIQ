@@ -77,7 +77,7 @@
 	{
 		$target = $(".lslot[c=" + index + "]");
 
-		if($target)
+		if($target.length > 0)
 		{
 			var slot_no = $target.find(".slot-no").text();
 
@@ -107,7 +107,15 @@
 					$(".count").text(count);
 
 					recompute(index+1);
-				}
+				},
+		        error: function()
+		        {
+		            setTimeout(function()
+		            {
+		                // alert(123);
+		               recompute(index);
+		            }, 2000);
+		        }
 			});
 		}
 		else

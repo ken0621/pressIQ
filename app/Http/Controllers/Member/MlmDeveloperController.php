@@ -741,6 +741,15 @@ class MlmDeveloperController extends Member
 
         $update["slot_binary_left"] = 0;
         $update["slot_binary_right"] = 0;
+        $update["slot_wallet_all"] = 0;
+        $update["slot_wallet_current"] = 0;
+        $update["slot_pairs_current"] = 0;
+        $update["slot_pairs_gc"] = 0;
+        $update["slot_personal_points"] = 0;
+        $update["slot_group_points"] = 0;
+        $update["slot_upgrade_points"] = 0;
+        $update["stairstep_rank"] = 0;
+        $update["current_level"] = 0;
 
         Tbl_mlm_slot::where("shop_id",$shop_id)->update($update);
     }

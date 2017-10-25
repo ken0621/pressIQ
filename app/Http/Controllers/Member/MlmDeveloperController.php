@@ -712,14 +712,16 @@ class MlmDeveloperController extends Member
     public function recompute()
     {
         $shop_id = $this->user_info->shop_id;
-
         if(Request::isMethod("post"))
         {
             $slot_id = request("slot_id");
             $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
-            Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
-            Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
-            MLM2::entry($shop_id,$slot_id);
+            if($slot_info_e)
+            {            
+                Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+                Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+                MLM2::entry($shop_id,$slot_id);
+            }
         }
         else
         {

@@ -77,7 +77,7 @@
 	{
 		$target = $(".lslot[c=" + index + "]");
 
-		if($target)
+		if($target.length > 0)
 		{
 			var slot_no = $target.find(".slot-no").text();
 

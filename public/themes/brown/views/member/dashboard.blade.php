@@ -226,32 +226,6 @@
 									</div>
 									@endif
 								@endif
-								{{-- <div class="event clearfix">
-									<div class="date">
-										<div class="day">22</div>
-										<div class="month">OCTOBER</div>
-									</div>
-									<div class="detail">
-										<div class="titles">Entereneural Branding</div>
-										<div class="description">This event will be lead by Jonathan Petalber.</div>
-										<div class="action">
-											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
-										</div>
-									</div>
-								</div>
-								<div class="event clearfix">
-									<div class="date">
-										<div class="day">28</div>
-										<div class="month">OCTOBER</div>
-									</div>
-									<div class="detail">
-										<div class="titles">Transformational Leadership</div>
-										<div class="description">Works with subordinates to identify needed change.</div>
-										<div class="action">
-											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
-										</div>
-									</div>
-								</div> --}}
 							</div>
 						</div>
 					</div>

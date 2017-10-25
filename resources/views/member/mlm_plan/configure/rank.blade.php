@@ -120,46 +120,39 @@
 @section('script')
 <script type="text/javascript">
 $("#stairstep_level_count").val($("#stairstep_level_count").attr("perma_value"));
-function save_stairstep()
-{
- $('#save_stairstep').submit();   
-}
 function save_include()
 {
  $('#save_include').submit();   
 }
 function edit_stairstep(key)
 {  
-    // alert($("#edit_form"+key).attr("action"));
+    $.ajax(
+    {
+     type: "POST",
+      url: "/member/mlm/plan/rank/edit/save",
+      data: $("#edit_form"+key).serialize(),
+      success: function(data) 
+      {
+        data = jQuery.parseJSON(data);
 
-   //  $('#edit_form' + key).submit(function() 
-   //  {
-
-   //      $.ajax({
-   //       type: "POST",
-   //        url: "form_handler.php",
-   //        data: $(this).serialize(),
-   //        success: function() {
-   //          // callback code here
-   //         }
-   //      })
-
-   // })
-    $('#edit_form' + key).submit();
-   //  $('#edit_form' + key).submit(function(event)
-   //  {
-   //      alert(321);
-   //      event.preventDefault();
-   //      $.ajax({
-   //       type: "POST",
-   //        url: "/member/mlm/plan/rank/save",
-   //        data: $(this).serialize(),
-   //        success: function() 
-   //        {
-   //          alert("save success");
-   //        }
-   //      })
-   //  });
+        if(data.response_status == "success_edit_stairstep")
+        {
+            toastr.success(data.response_rank_name+" successfully saved.");
+        }
+        else
+        {
+            // console.log(data.response_warning);
+            $(data.response_warning).each(function( index, element ) 
+            {
+                toastr.error(element);
+            });
+        }
+      },
+      error: function()
+      {
+        toastr.error("Some error occurred");
+      }
+    });
 }
 function save_stairstep_level()
 {
@@ -207,8 +200,40 @@ load_stair();
 function load_stair()
 {
     $('.stair_body').html('<td colspan="6"><center><div style="margin: 100px auto;" class="loader-16-gray"></div></center></td>');
-    $('.stair_body').load('/member/mlm/plan/rank/get',function(){
+    $('.stair_body').load('/member/mlm/plan/rank/get',function()
+    {
         color_picker_function();
+    });
+}
+function save_stairstep()
+{
+    $.ajax(
+    {
+     type: "POST",
+      url: "/member/mlm/plan/rank/save",
+      data: $("#save_stairstep").serialize(),
+      success: function(data) 
+      {
+        data = jQuery.parseJSON(data);
+
+        if(data.response_status == "success_add_stairstep")
+        {
+            toastr.success(data.response_rank_name+" successfully saved.");
+            load_stair();
+        }
+        else
+        {
+            // console.log(data.response_warning);
+            $(data.response_warning).each(function( index, element ) 
+            {
+                toastr.error(element);
+            });
+        }
+      },
+      error: function()
+      {
+        toastr.error("Some error occurred");
+      }
     });
 }
 </script>

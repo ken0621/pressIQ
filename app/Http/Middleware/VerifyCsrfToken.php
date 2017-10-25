@@ -23,6 +23,8 @@ class VerifyCsrfToken extends Middleware
         '/member/payroll/api_login',
         '/member/mlm/developer/import',
         '/member/payroll/biometrics/save_data',
-        '/payment/paymaya/webhook/*'
+        '/payment/paymaya/webhook/*',
+        '/member/mlm/developer/recompute'
+
     ];
 }

@@ -67,6 +67,10 @@ button:hover{
 			padding: 0px 5px;
 			color: #fff;
 		}
+		@media screen and (max-width: 475px)
+		{
+			display: none;
+		}
 	}
 	.right-container {
 		float: right;
@@ -198,7 +202,7 @@ button:hover{
 
 		@media screen and (max-width: 991px)
 		{
-			display: block;
+			display: none;
 		}
 	}
 
@@ -222,11 +226,10 @@ button:hover{
 
 	@media screen and (max-width: 991px)
 	{
-		width: 75%;
+		width: 25%;
 		img 
 		{
-			margin-top: -9px;
-			width: 100%;
+			margin-top: -12px;
 		}
 
 		> a
@@ -235,6 +238,16 @@ button:hover{
 			float: left;
 		}
 	}
+
+	@media screen and (max-width: 475px)
+	{
+		width: 40%;
+		img 
+		{
+			margin-top: 0;
+		}
+	}
+
 	&:hover{
 		cursor: pointer;
 	}
@@ -249,7 +262,7 @@ button:hover{
 		padding: 7.5px 12px 7.5px 12px;
 		margin-left: auto;
 		margin-top: 20px;
-		background-color: #019771;
+		background-color: #02295e;
 		span
 		{
 			display: block;
@@ -257,6 +270,10 @@ button:hover{
 			background-color: #fff;
 			margin: 5px 0;
 		}
+	}
+	@media screen and (max-width: 475px)
+	{
+			margin-top: 10px;
 	}
 }
 

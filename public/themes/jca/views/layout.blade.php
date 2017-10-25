@@ -98,7 +98,7 @@
                                 <li><a class="smoth-scroll" href="#products">PRODUCTS</a></li>
                             @endif
                             <li>
-                                <a href="javascript:" class="popup" link="/cartv2" size="lg">CART</a>
+                                <a href="javascript:" class="popup cart-holder" link="/cartv2" size="lg"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="badge">1</span></a>
                             </li>
                         </ul>
                     </nav>

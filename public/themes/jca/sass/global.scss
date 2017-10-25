@@ -1330,3 +1330,38 @@ button:hover{
 		}
 	}
 }
+
+
+.cart-holder
+{
+	text-decoration: none;
+	position: relative;
+	.fa
+	{
+		color: #b87f38;
+		font-size: 18px;
+	}
+	.badge
+	{
+		background-color: #08966e;
+		position: absolute;
+		top: 12px;
+		left: 100%;
+		margin-left: 3px;
+		font-weight: 400;
+	}
+}
+
+.btn-primary
+{
+	background: none !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	border: 2px solid #b87f38 !important;
+	color: #b87f38 !important;
+	border-radius: 2px !important;
+	.fa
+	{
+		margin-left: 5px;
+	}
+}

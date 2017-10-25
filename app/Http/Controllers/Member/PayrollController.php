@@ -717,6 +717,7 @@ class PayrollController extends Member
           if(isset($first['company']) && isset($first['first_name']) && isset($first['department']) && isset($first['start_date']))
           {    
                $count = 0;
+
                foreach($_data as $data)
                {
                     $count_employee = Tbl_payroll_employee_basic::where('payroll_employee_company_id',Self::getid($data['company'], 'company'))
@@ -724,7 +725,6 @@ class PayrollController extends Member
                                                                ->where('payroll_employee_middle_name', Self::nullableToString($data['middle_name']))
                                                                ->where('payroll_employee_last_name',Self::nullableToString($data['last_name']))
                                                                ->count();
-                    // dd($count_employee);
                     if($count_employee == 0)
                     {
                          /* EMPLOYEE BASIC INSERT START */
@@ -762,8 +762,8 @@ class PayrollController extends Member
                               // dd($insert);
 
                               $payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
-                              $new_data = AuditTrail::get_table_data("tbl_payroll_employee_basic","payroll_employee_id",$payroll_employee_id);
-                               AuditTrail::record_logs("CREATED: Payroll Employee","Created Payroll Employee With Employee Name: ".Self::nullableToString($data['title_name']).' '.Self::nullableToString($data['first_name']).' '.Self::nullableToString($data['middle_name']).' '.Self::nullableToString($data['last_name']).' '.Self::nullableToString($data['suffix_name']),$payroll_employee_id,"",serialized($new_data));
+                              // $new_data = AuditTrail::get_table_data("tbl_payroll_employee_basic","payroll_employee_id",$payroll_employee_id);
+                              // AuditTrail::record_logs("CREATED: Payroll Employee","Created Payroll Employee With Employee Name: ".Self::nullableToString($data['title_name']).' '.Self::nullableToString($data['first_name']).' '.Self::nullableToString($data['middle_name']).' '.Self::nullableToString($data['last_name']).' '.Self::nullableToString($data['suffix_name']),$payroll_employee_id,"",serialized($new_data));
                               /* EMPLOYEE BASIC INSERT END */
 
                               /*   EMPLOYEE CONTRACT START */
@@ -774,8 +774,8 @@ class PayrollController extends Member
                               $insert_contract['payroll_employee_contract_status']        = Self::getid($data['employment_status'],'employment_status');
                               
                               $payroll_contract_id=Tbl_payroll_employee_contract::insertGetId($insert_contract);
-                              $new_data = AuditTrail::get_table_data("tbl_payroll_employee_basic","payroll_employee_id",$payroll_employee_id);
-                              AuditTrail::record_logs("CREATED: Payroll Contract","Payroll Employee Contract Employee ID #".$payroll_employee_id,$payroll_contract_id,"",$new_data);
+                              // $new_data = AuditTrail::get_table_data("tbl_payroll_employee_basic","payroll_employee_id",$payroll_employee_id);
+                              // AuditTrail::record_logs("CREATED: Payroll Contract","Payroll Employee Contract Employee ID #".$payroll_employee_id,$payroll_contract_id,"",$new_data);
 
                               /*   EMPLOYEE CONTRACT END */
 
@@ -790,7 +790,7 @@ class PayrollController extends Member
                               $insert_salary['payroll_employee_salary_sss']                    = Self::nullableToString($data['sss_salary'],'int');
                               $insert_salary['payroll_employee_salary_pagibig']                = Self::nullableToString($data['hdmf_salary'],'int');
                               $insert_salary['payroll_employee_salary_philhealth']        = Self::nullableToString($data['phic_salary'],'int');
-                              AuditTrail::record_logs("ADDED: Payroll Employee Salary","Added Payroll Employee Salary with employee ID #".$payroll_employee_id,$payroll_employee_id,"","");
+                              // AuditTrail::record_logs("ADDED: Payroll Employee Salary","Added Payroll Employee Salary with employee ID #".$payroll_employee_id,$payroll_employee_id,"","");
                               Tbl_payroll_employee_salary::insert($insert_salary);
                               
                               /* EMPLOYEE SALARY END */
@@ -804,7 +804,7 @@ class PayrollController extends Member
                               $insert_requirement['has_health_certificate']     = Self::yesNotoInt($data['health_certificateyn'],'int');
                               $insert_requirement['has_school_credentials']     = Self::yesNotoInt($data['school_credentialsyn'],'int');
                               $insert_requirement['has_valid_id']               = Self::yesNotoInt($data['valid_idyn'],'int');
-                              AuditTrail::record_logs("Adding Employee Requirements","Adding Payroll Employee Requirements with Employee ID #".$payroll_employee_id,$payroll_employee_id,"",serialize($new_data));
+                              // AuditTrail::record_logs("Adding Employee Requirements","Adding Payroll Employee Requirements with Employee ID #".$payroll_employee_id,$payroll_employee_id,"",serialize($new_data));
                               Tbl_payroll_employee_requirements::insert($insert_requirement);
                               /* EMPLOYEE  REQUIREMENTS END*/
                               
@@ -828,7 +828,7 @@ class PayrollController extends Member
                               if(!empty($insert_dependent))
                               {
                                    Tbl_payroll_employee_dependent::insert($insert_dependent);
-                                   AuditTrail::record_logs("CREATED: Payroll Employee Dependent","Payroll Employee Dependent #".$paroll_employee_id,$paroll_employee_id,"","");
+                                   // AuditTrail::record_logs("CREATED: Payroll Employee Dependent","Payroll Employee Dependent #".$paroll_employee_id,$paroll_employee_id,"","");
                               }
                               
                               $count++;
@@ -4261,7 +4261,7 @@ class PayrollController extends Member
           // $update['payroll_group_target_hour']                = Request::input('payroll_group_target_hour');
           // $update['payroll_group_start']                      = date('H:i:s',strtotime(Request::input('payroll_group_start')));
           // $update['payroll_group_end']                        = date('H:i:s',strtotime(Request::input('payroll_group_end')));
-
+          
           $update['payroll_under_time_category']  = Request::input("payroll_under_time_category");
           $update['payroll_under_time_interval']  = Request::input("payroll_under_time_interval");
           $update['payroll_under_time_parameter'] = Request::input("payroll_under_time_parameter");

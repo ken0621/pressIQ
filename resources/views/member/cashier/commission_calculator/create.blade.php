@@ -12,7 +12,7 @@
                         <div class="col-md-6">
                             <label>Select Customer</label>
                             <select class="select-customer form-control input-sm">
-                                <option>Ma.Christina Reyes</option>
+                                 @include('member.load_ajax_data.load_customer')
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Select Agent</label>
-                            <select class="select-customer form-control input-sm">
+                            <select class="select-agent form-control input-sm">
                                 <option>Juan Dela Cruz</option>
                             </select>
                         </div>
@@ -41,8 +41,8 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Select Property</label>
-                            <select class="select-customer form-control input-sm">
-                                <option>Duplex With Garage</option>
+                            <select class="select-property form-control input-sm">
+                                 @include("member.load_ajax_data.load_item_category")
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -170,3 +170,4 @@
         padding-top: 7px;
     }
 </style>
+<script type="text/javascript" src="/assets/member/js/create_commission_calculator.js"></script>

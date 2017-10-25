@@ -34,17 +34,38 @@ class MLM_RankController extends Member
     {
     	$shop_id = $this->getShopId();
     	$data["shop_id"] = $shop_id;
-    	$data["_slot"]   = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id",$shop_id)
-								  	   ->customer()
-								  	   ->leftjoin("tbl_mlm_stairstep_settings","tbl_mlm_stairstep_settings.stairstep_id","=","tbl_mlm_slot.stairstep_rank")
-								  	   ->leftJoin("tbl_mlm_slot_points_log","tbl_mlm_slot_points_log.points_log_slot","=","tbl_mlm_slot.slot_id")
-								  	   ->select("*",DB::raw("SUM(CASE WHEN points_log_type = 'RPV' THEN points_log_points ELSE 0 END) AS rank_personal_points"),DB::raw("SUM(CASE WHEN points_log_type = 'RGPV' THEN points_log_points ELSE 0 END) AS rank_group_points"))
-								  	   ->groupBy("slot_id")
-							  	  	   ->get();    	
-// dd($data);
+        $days_sub        = Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first()->rank_real_time_update_counter;
+        $data["_slot"]   = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id",$shop_id)
+								  	   ->customer();                                                                      
+	    if($days_sub != 0)
+	    {
+	    	$days_sub 		= $days_sub - 1;
+	        $start 			= Carbon::parse(Carbon::now()->startOfMonth())->subMonths($days_sub)->format("Y-m-d 00:00:00");
+	        $end   			= Carbon::parse(Carbon::now()->endOfMonth())->format("Y-m-d 23:59:59");
+	        $data["_slot"]  = $data["_slot"]->leftjoin("tbl_mlm_stairstep_settings","tbl_mlm_stairstep_settings.stairstep_id","=","tbl_mlm_slot.stairstep_rank")
+									  	    ->leftJoin("tbl_mlm_slot_points_log",function($join) use ($start,$end)
+									        {
+									            $join->on("tbl_mlm_slot_points_log.points_log_slot","=","tbl_mlm_slot.slot_id")
+									            	 ->where('tbl_mlm_slot_points_log.points_log_date_claimed',">=",$start)
+	        										 ->where('tbl_mlm_slot_points_log.points_log_date_claimed',"<=",$end);
+									        })
+									  	    ->select("*",DB::raw("SUM(CASE WHEN points_log_type = 'RPV' THEN points_log_points ELSE 0 END) AS rank_personal_points"),DB::raw("SUM(CASE WHEN points_log_type = 'RGPV' THEN points_log_points ELSE 0 END) AS rank_group_points"))
+									  	    ->groupBy("slot_id") 
+	        								->get();
+	    }
+	    else
+	    {
+	        $data["_slot"]  = $data["_slot"]->leftjoin("tbl_mlm_stairstep_settings","tbl_mlm_stairstep_settings.stairstep_id","=","tbl_mlm_slot.stairstep_rank")
+								  	   		->leftJoin("tbl_mlm_slot_points_log","tbl_mlm_slot_points_log.points_log_slot","=","tbl_mlm_slot.slot_id")
+								  	   		->select("*",DB::raw("SUM(CASE WHEN points_log_type = 'RPV' THEN points_log_points ELSE 0 END) AS rank_personal_points"),DB::raw("SUM(CASE WHEN points_log_type = 'RGPV' THEN points_log_points ELSE 0 END) AS rank_group_points"))
+								  	   		->groupBy("slot_id")
+								  	   		->get();
+	    }
+	
+
   		$data["_history"]   		   = Tbl_rank_update::where('shop_id',$shop_id)->get();
 		$data["include_rpv_on_rgpv"]   = Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first()->include_rpv_on_rgpv;
-  		// dd($data); 
+
     	
 
     	return view("member.mlm_rank.rank_update_stairstep",$data);
@@ -92,25 +113,43 @@ class MLM_RankController extends Member
     	$required_leg_update_id  	= 0;
     	$required_leg_update_count 	= 0;
     	$include_rpv_on_rgpv       	= Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first()->include_rpv_on_rgpv;
-    	$rank_update    = Tbl_rank_update::where("shop_id",$shop_id)
-    											  ->where("complete",0)
-    											  ->where("rank_update_id",$rank_update_id)
-    											  ->first();
+    	$rank_update    			= Tbl_rank_update::where("shop_id",$shop_id)
+    											 	 ->where("complete",0)
+    											 	 ->where("rank_update_id",$rank_update_id)
+    											 	 ->first();
     	// Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id","<",$slot->slot_id)->orderBy("slot_id","DESC")->first();										  
-		$slot_info      = Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->first();
+		$slot_info      			= Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->first();
 
 		if($slot_info)
 		{		
 			$old_rank_id    = $slot_info->stairstep_rank;
 	    	if($rank_update)
 	    	{
-	    		$rpv                   = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
-	    							   							->where("points_log_type","RPV")
-	    							   							->sum("points_log_points");
+	            $old_rank_id    = $slot_info->stairstep_rank;
+	            $rpv            = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
+	                                                     ->where("points_log_type","RPV");
+	                                                     
 
-	    		$grpv                  = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
-	    							   							->where("points_log_type","RGPV")	
-	    							   							->sum("points_log_points");				   							
+	            $grpv           = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
+	                                                     ->where("points_log_type","RGPV");
+	             
+	            $days_sub       = Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first()->rank_real_time_update_counter;
+	                   
+	            /* IF HAS RANGE FOR DATE FROM START TO END VARIABLE */                                                                     
+	            if($days_sub != 0)
+	            {
+	                $days_sub = $days_sub - 1;
+	                $start    = Carbon::parse(Carbon::now()->startOfMonth())->subMonths($days_sub)->format("Y-m-d 00:00:00");
+	                $end      = Carbon::parse(Carbon::now()->endOfMonth())->format("Y-m-d 23:59:59");
+	                $rpv      = $rpv->where('points_log_date_claimed',">=",$start)->where('points_log_date_claimed',"<=",$end)->sum("points_log_points");
+	                $grpv     = $grpv->where('points_log_date_claimed',">=",$start)->where('points_log_date_claimed',"<=",$end)->sum("points_log_points");
+	            }
+	            else
+	            {
+	                $rpv  = $rpv->sum("points_log_points");
+	                $grpv = $grpv->sum("points_log_points");
+	            }
+
 				if(!$rpv)
 				{
 					$rpv = 0;

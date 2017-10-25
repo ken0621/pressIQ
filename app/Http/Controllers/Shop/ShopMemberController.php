@@ -84,7 +84,7 @@ class ShopMemberController extends Shop
             $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
             $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 500);
             $data['mlm_pin'] = '';
             $data['mlm_activation'] = '';
             

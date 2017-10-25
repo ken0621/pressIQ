@@ -877,6 +877,7 @@ class Mlm_complan_manager_repurchasev2
 
     public static function real_time_rank_upgrade($slot_info)
     {
+  
         $shop_id                    = $slot_info->shop_id;
         $slot_id                    = $slot_info->slot_id;
         $old_rank_id                = 0;
@@ -886,18 +887,35 @@ class Mlm_complan_manager_repurchasev2
         $include_rpv_on_rgpv        = Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first()->include_rpv_on_rgpv;
 
         // Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id","<",$slot->slot_id)->orderBy("slot_id","DESC")->first();                                          
-        $slot_info      = Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->first();
+        $slot_info          = Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->first();
 
         if($slot_info)
         {       
             $old_rank_id    = $slot_info->stairstep_rank;
-            $rpv                   = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
-                                                            ->where("points_log_type","RPV")
-                                                            ->sum("points_log_points");
+            $rpv            = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
+                                                     ->where("points_log_type","RPV");
+                                                     
 
-            $grpv                  = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
-                                                            ->where("points_log_type","RGPV")   
-                                                            ->sum("points_log_points");                                         
+            $grpv           = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
+                                                     ->where("points_log_type","RGPV");
+             
+            $days_sub       = Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first()->rank_real_time_update_counter;
+                   
+            /* IF HAS RANGE FOR DATE FROM START TO END VARIABLE */                                                                     
+            if($days_sub != 0)
+            {
+                $days_sub = $days_sub - 1;
+                $start    = Carbon::parse(Carbon::now()->startOfMonth())->subMonths($days_sub)->format("Y-m-d 00:00:00");
+                $end      = Carbon::parse(Carbon::now()->endOfMonth())->format("Y-m-d 23:59:59");
+                $rpv      = $rpv->where('points_log_date_claimed',">=",$start)->where('points_log_date_claimed',"<=",$end)->sum("points_log_points");
+                $grpv     = $grpv->where('points_log_date_claimed',">=",$start)->where('points_log_date_claimed',"<=",$end)->sum("points_log_points");
+            }
+            else
+            {
+                $rpv  = $rpv->sum("points_log_points");
+                $grpv = $grpv->sum("points_log_points");
+            }
+
             if(!$rpv)
             {
                 $rpv = 0;

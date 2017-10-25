@@ -1112,7 +1112,7 @@ class MLM2
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')
             ->get();
-
+            // dd($slot_info,$slot_id);
             if($slot_info->slot_status == 'PS')
             {
                 foreach($plan_settings as $key => $value)

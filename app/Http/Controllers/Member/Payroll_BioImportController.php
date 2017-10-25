@@ -160,18 +160,15 @@ class Payroll_BioImportController extends Member
 		$overwritten = 0;
 		// dd($_time_record);
 
-		$_success[] 		= null;
-		$_failed[] 			= null;
-		$_incomplete[] 		= null;
-		$_overwritten[] 	= null;
-
 		foreach ($_time_record as $date => $time_record) 
 		{
 			foreach ($time_record as $employee_number => $value) 
 			{
 				$check_employee = null;
 
+
 				$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_biometric_number", $employee_number)->where("shop_id", Self::shop_id())->first();
+
 				
 				if (!$check_employee) 
 				{
@@ -214,7 +211,7 @@ class Payroll_BioImportController extends Member
 		    			}
 
 						Tbl_payroll_time_sheet_record::insert($insert_time);
-						$_success[] = $time_record;
+					
 						$success++;
 					}
 					else
@@ -231,19 +228,18 @@ class Payroll_BioImportController extends Member
 						$update['payroll_time_sheet_origin'] 	= $biometric_name;
 						
 						Tbl_payroll_time_sheet_record::insert($update);
-						$_overwritten[] = $time_record;
+						
 						$overwritten++;
 					}
 				}
 				else
 				{
 					$failed++;
-					$_failed[] = $time_record;
 				}
 			}
 			
 		}
-		
+
 		$data["success"] = $success;
 		$data["failed"] = $failed;
 		$data["overwritten"] = $overwritten;

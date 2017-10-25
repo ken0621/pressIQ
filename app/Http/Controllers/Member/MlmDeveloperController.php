@@ -47,7 +47,7 @@ class MlmDeveloperController extends Member
     }    
     public function index()
     {
-        $data["page"]           = "MLM Developer";
+        $data["page"] = "MLM Developer";
         return view("member.mlm_developer.mlm_developer", $data);
     }
     public function index_table()
@@ -89,6 +89,7 @@ class MlmDeveloperController extends Member
             $data["_slot"][$key]->display_slot_binary_right = number_format($slot->slot_binary_right);
             $data["_slot"][$key]->display_date = date("F d, Y", strtotime($slot->slot_created_date));
             $data["_slot"][$key]->display_time = date("h:i A", strtotime($slot->slot_created_date));
+            $data["_slot"][$key]->modify_slot = "<a href='javascript:' link='/member/mlm/developer/modify_slot?slot_id=" . $slot->slot_id . "' class='popup' size='md'>MODIFY SLOT</a>";
 
             /* BROWN RANK DETAILS */
             $brown_current_rank = Tbl_brown_rank::where("rank_id", $slot->brown_rank_id)->first();
@@ -187,6 +188,8 @@ class MlmDeveloperController extends Member
         $default[]          = ["PAYOUT","total_payout_format", false];
         $default[]          = ["CURRENT GC","total_gc_format", false];
         $default[]          = ["CURRENT WALLET","current_wallet_format", true];
+        $default[]          = ["MODIFY SLOT","modify_slot", false];
+
 
         if(isset($data["_slot"]))
         {
@@ -708,7 +711,7 @@ class MlmDeveloperController extends Member
     }
     public function recompute()
     {
-         $shop_id = $this->user_info->shop_id;
+        $shop_id = $this->user_info->shop_id;
 
         if(Request::isMethod("post"))
         {
@@ -736,4 +739,117 @@ class MlmDeveloperController extends Member
         Tbl_tree_sponsor::where("shop_id", $shop_id)->delete();
         Tbl_tree_placement::where("shop_id", $shop_id)->delete();
     }
+    public function redistribute()
+    {
+        $data["page"] = "MLM Developer - Redistribute";
+        return view("member.mlm_developer.redistribute", $data);
+    }
+    public function redistribute_submit()
+    {
+        $shop_id    = $this->user_info->shop_id;
+        $slot_no    = Request::input("slot_no");
+        $slot_info  = Tbl_mlm_slot::where("slot_no", $slot_no)->where("shop_id", $shop_id)->first();
+
+        if($slot_info)
+        {
+            $slot_id    = $slot_info->slot_id;
+            $setting    = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
+
+            Tbl_tree_placement::where("placement_tree_parent_id", $slot_id)->delete();
+            Tbl_tree_placement::where("placement_tree_child_id", $slot_id)->delete();
+            Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot_id)->delete();
+            Tbl_tree_sponsor::where("sponsor_tree_child_id", $slot_id)->delete();
+            Tbl_mlm_slot_wallet_log::where("wallet_log_slot_sponsor", $slot_id)->delete();
+            Tbl_mlm_slot_points_log::where("points_log_Sponsor", $slot_id)->delete();
+
+            $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+
+            if($setting->plan_settings_placement_required == 1)
+            {
+                Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+            }
+
+            Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1);
+            MLM2::entry($shop_id, $slot_id);
+            $response["status"] = "success";
+            $response["call_function"] = "redistribute_success";
+        }
+        else
+        {
+            $response["status"] = "error";
+            $response["message"] = "Slot Code you entered can't be found.";
+        }
+
+        echo json_encode($response);
+    }
+    public function modify_slot()
+    {
+        $data["page"] = "MLM Developer - Modify Slot";
+        $data["slot_info"] = Tbl_mlm_slot::where("slot_id", request("slot_id"))->first();
+        $data["sponsor_info"] = Tbl_mlm_slot::where("slot_id", $data["slot_info"]->slot_sponsor)->first();
+        $data["placement_info"] = Tbl_mlm_slot::where("slot_id", $data["slot_info"]->slot_placement)->first();
+        return view("member.mlm_developer.modify_slot", $data);  
+    }
+    public function modify_slot_submit()
+    {
+        $error = "";
+        $shop_id = $this->user_info->shop_id;
+        $slot_id = request("slot_id");
+
+        $sponsor_info = Tbl_mlm_slot::where("slot_no", request("sponsor"))->where("shop_id", $shop_id)->first();
+        $placement_info = Tbl_mlm_slot::where("slot_no", request("placement"))->where("shop_id", $shop_id)->first();
+        $check_same = Tbl_mlm_slot::where("slot_placement", $placement_info->slot_id)->where("slot_sponsor", $sponsor_info->slot_id)->where("slot_position", request("position"))->first();
+
+        $return["status"] = "success";
+        $return["call_function"] = "modify_slot_success";
+
+        if(request("password") != "0SlO051O")
+        {
+            $error = "Developer Password is incorrect";
+        }
+        else
+        {
+            /* VALIDATE SPONSOR */
+            if(!$sponsor_info)
+            {
+                $error = "Sponsor Doesn't Exist";
+            }
+
+
+            /* VALIDATE PLACEMENT */
+            if(request("placement") != "")
+            {
+                if(!$placement_info)
+                {
+                    $error = "Placement Doesn't Exist";
+                }
+
+                if($check_same)
+                {
+                    $error = "Position Occupied";
+                }
+            }
+        }
+
+
+        if($error == "")
+        {
+            $update["slot_sponsor"] = $sponsor_info->slot_id;
+            $update["slot_placement"] = $placement_info->slot_id;
+            $update["slot_position"] = request("position");
+
+
+            Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
+            $return["status"] = "success";
+            $return["call_function"] = "modify_slot_success";
+        }
+        else
+        {
+            $return["status"] = "error";
+            $return["message"] = $error;
+        }
+
+        echo json_encode($return);
+    }
+
 }

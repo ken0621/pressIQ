@@ -107,7 +107,15 @@
 					$(".count").text(count);
 
 					recompute(index+1);
-				}
+				},
+		        error: function()
+		        {
+		            setTimeout(function()
+		            {
+		                // alert(123);
+		               recompute(index);
+		            }, 2000);
+		        }
 			});
 		}
 		else

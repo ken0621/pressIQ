@@ -115,7 +115,6 @@
         </div>
     </div>
 </div>
-<form class="sample_from"></form>
 @endsection
 
 @section('script')
@@ -133,11 +132,6 @@ function edit_stairstep(key)
 {  
     // alert($("#edit_form"+key).attr("action"));
 
-    $(".sample_from").submit(function(event)
-    {
-          alert(123);
-          event.preventDefault();
-    });
    //  $('#edit_form' + key).submit(function() 
    //  {
 
@@ -151,7 +145,7 @@ function edit_stairstep(key)
    //      })
 
    // })
-   //  // $('#edit_form' + key).submit();
+    $('#edit_form' + key).submit();
    //  $('#edit_form' + key).submit(function(event)
    //  {
    //      alert(321);

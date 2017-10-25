@@ -4264,7 +4264,7 @@ class PayrollController extends Member
           // $update['payroll_group_target_hour']                = Request::input('payroll_group_target_hour');
           // $update['payroll_group_start']                      = date('H:i:s',strtotime(Request::input('payroll_group_start')));
           // $update['payroll_group_end']                        = date('H:i:s',strtotime(Request::input('payroll_group_end')));
-
+          
           $update['payroll_under_time_category']  = Request::input("payroll_under_time_category");
           $update['payroll_under_time_interval']  = Request::input("payroll_under_time_interval");
           $update['payroll_under_time_parameter'] = Request::input("payroll_under_time_parameter");

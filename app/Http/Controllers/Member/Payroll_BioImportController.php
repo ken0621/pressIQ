@@ -142,8 +142,8 @@ class Payroll_BioImportController extends Member
 		 }
 		 
 		 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "ANVIZ Biometrics EP Series");
-		 
-		 echo "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
+
+		 echo Self::import_report_table($data);
 		}
 		else
 		{
@@ -151,21 +151,52 @@ class Payroll_BioImportController extends Member
 		}
 	}
 
+	public function import_report_table($data)
+	{
+		$html = "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
+		$html .= "<table class='table'>
+					<thead>
+					      <tr>
+					        <th class='text-center'>DATE</th>
+					        <th class='text-center'>EMPLOYEE/BIOMETRIC NO.</th>
+					        <th class='text-center'>TIME IN</th>
+					        <th class='text-center'>TIME OUT</th>
+					        <th class='text-center'>STATUS</th>
+					      </tr>
+					</thead>
+					<tbody>";
+		foreach ($data['_report'] as $date => $report) 
+		{
+			foreach ($report as $employee_number => $value) 
+			{
+				$html .= "<tr>
+							<td class='text-center'>".$date."</td>
+							<td class='text-center'>".$employee_number."</td>
+							<td class='text-center'>".$value['time_in']."</td>
+							<td class='text-center'>".$value['time_out']."</td>
+							<td class='text-center'>".$value['status']."</td>
+						  </tr>";
+			}
+		}
+		$html .= "   </tbody>
+				  </table>";
+		return $html;
+	}
+
 	public function save_time_record($_time_record, $company ,$shop_id, $biometric_name)
 	{
-
 		$success = 0;
 		$failed = 0;
 		$incomplete = 0;
 		$overwritten = 0;
 		// dd($_time_record);
+		
 
 		foreach ($_time_record as $date => $time_record) 
 		{
 			foreach ($time_record as $employee_number => $value) 
 			{
 				$check_employee = null;
-
 
 				$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_biometric_number", $employee_number)->where("shop_id", Self::shop_id())->first();
 
@@ -175,6 +206,9 @@ class Payroll_BioImportController extends Member
 					$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("shop_id", Self::shop_id())->first();
 				}
 
+				$value['employee_number'] = $employee_number;
+				$value['date']			  = $date;
+				
 				if ($check_employee) 
 				{
 					/* Get Tbl payroll time sheet data  */
@@ -211,39 +245,50 @@ class Payroll_BioImportController extends Member
 		    			}
 
 						Tbl_payroll_time_sheet_record::insert($insert_time);
-					
+
+						
 						$success++;
+						$_time_record[$date][$employee_number]['status'] = 'INSERTED';
 					}
 					else
 					{
 						$time_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->get();
 						
 						Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->delete();
-						
+
 						$update = null;
 						$update['payroll_time_sheet_id'] 		= $timesheet_db->payroll_time_sheet_id;
 						$update['payroll_company_id'] 			= $check_employee->payroll_employee_company_id;
 						$update['payroll_time_sheet_in'] 		= $value["time_in"];;
 						$update['payroll_time_sheet_out'] 		= $value["time_out"];;
 						$update['payroll_time_sheet_origin'] 	= $biometric_name;
+
+						if($company != '' || $company != 0 || $company != null)
+		    			{
+		    				$update['payroll_company_id'] = $company;
+		    			}
 						
 						Tbl_payroll_time_sheet_record::insert($update);
-						
+
+
 						$overwritten++;
+						$_time_record[$date][$employee_number]['status'] = 'OVERWRITTEN';
 					}
 				}
 				else
 				{
+					$_time_record[$date][$employee_number]['status'] = 'FAILED WRONG EMPLOYEE NO.';
 					$failed++;
 				}
 			}
 			
 		}
-
+		
 		$data["success"] = $success;
 		$data["failed"] = $failed;
 		$data["overwritten"] = $overwritten;
-
+		$data['_report'] = $_time_record;
+		// dd($data['_report']);
 		if ($success != 0 || $overwritten != 0) 
 		{
 			$count_inserted = $success + $overwritten;
@@ -1052,7 +1097,6 @@ class Payroll_BioImportController extends Member
     	 			$date = date('Y-m-d', strtotime($value['date']));
     	 		}
     	 		
-
     	 		if(is_object($value["time_in"]) && is_object($value["time_out"]))
 	 			{
 			 		$_record[$date][$employee_number]['time_in']  = date('H:i:s', strtotime($value['time_in']->toDateTimeString()));
@@ -1070,9 +1114,9 @@ class Payroll_BioImportController extends Member
     	 	}
     	 }
     	 
-    	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "ANVIZ Biometrics EP Series");
-   
-    	 echo "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
+    	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "Manual Template");
+   		 
+   		 echo Self::import_report_table($data);
     	}
     	else
     	{
@@ -1309,9 +1353,10 @@ class Payroll_BioImportController extends Member
 
     	 }
     	
-    	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "ANVIZ Biometrics EP Series");
-   
-    	 echo "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
+    	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "Mustard Seed");
+   		 $html =  Self::import_report_table($data);
+   		 echo $html;
+    	 // echo "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
     	}
     	else
     	{

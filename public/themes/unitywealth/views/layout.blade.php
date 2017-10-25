@@ -15,13 +15,18 @@
 
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500" rel="stylesheet">    
-        
-        @include("frontend.ghead")
-
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500" rel="stylesheet">
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
 
+        <!-- COUNTDOWN TIMER -->
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/animate.css">
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/form-elements.css">
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/style.css">
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/media-queries.css">    
+        
+        @include("frontend.ghead")
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
@@ -50,13 +55,13 @@
     <div id="home" class="subheader-container">
         <div class="container">
             @if($customer)
-            <div class="left-container"><span><i class="fa fa-envelope-o" aria-hidden="true"></i></span><span>company-email.here</span></div>
+            <!-- <div class="left-container"><span><i class="fa fa-envelope-o" aria-hidden="true"></i></span><span>company-email.here</span></div> -->
             <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span><span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
             @else
-            <div class="left-container">
+            <!-- <div class="left-container">
                 <span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
                 <span>company-email.here</span>
-            </div>
+            </div> -->
             <div class="right-container">
                 <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span>
                 <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span>
@@ -176,7 +181,16 @@
     
     @include("frontend.gfoot")
     {{-- GLOBALS --}}
-    <script src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+
+    <!-- COUNTDOWN TIMER -->
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery-1.10.2.min.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.backstretch.min.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.countdown.min.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/wow.min.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/scripts.js?version=1"></script>
+
     <!-- FB WIDGET -->
     <div id="fb-root"></div>
     @yield("script")

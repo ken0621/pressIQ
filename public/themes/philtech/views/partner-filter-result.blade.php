@@ -4,7 +4,7 @@
 @foreach($partnerResult as $partnerResultItem)
 
   <div class="col-md-3 col-sm-6" style="padding: 4px;">
-     <div class="partners-div clearfix" style="height: auto; padding-bottom: 15px;">
+     <div class="partners-div clearfix match-height" style="height: auto; padding-bottom: 15px;">
         <div class="partner-header">
            <img class="match-height" style="object-fit: contain;" src="{{ $partnerResultItem->company_logo }}" width="100%">
         </div>

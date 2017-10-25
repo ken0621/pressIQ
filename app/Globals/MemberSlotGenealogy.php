@@ -19,6 +19,7 @@ use App\Models\Tbl_tree_placement;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_mlm_plan;
+use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_customer_search;

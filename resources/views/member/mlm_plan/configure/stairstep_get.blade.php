@@ -61,7 +61,7 @@
             </div>
             <div class="col-md-3">
                 <label for="stairstep_genealogy_color">Genealogy Color</label>
-                <input type="text" class="form-control jscolor" id="stairstep_genealogy_color" name="stairstep_genealogy_color" value="{{$rk->stairstep_genealogy_color == 'Default' ? '519fcd' : ltrim($rk->stairstep_genealogy_color, '#')}}">
+                <input type="text" class="form-control jscolor" id="stairstep_genealogy_color" name="stairstep_genealogy_color" value="{{$value->stairstep_genealogy_color == 'Default' ? '519fcd' : ltrim($value->stairstep_genealogy_color, '#')}}">
             </div> 
             <div class="col-md-1 pull-right">
                 <br>

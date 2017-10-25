@@ -17,14 +17,14 @@
                         </div>
                         <div class="col-md-6">
                             <label>Customer Email</label>
-                            <input type="text" class="form-control input-sm" name="">
+                            <input type="text" class="form-control input-sm customer-email" name="">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Select Agent</label>
                             <select class="select-agent form-control input-sm">
-                                <option>Juan Dela Cruz</option>
+                                <option commission-percent="8">Juan Dela Cruz</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -42,12 +42,12 @@
                         <div class="col-md-6">
                             <label>Select Property</label>
                             <select class="select-property form-control input-sm">
-                                 @include("member.load_ajax_data.load_item_category")
+                                 @include("member.load_ajax_data.load_item_category",['add_search' => ''])
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label>Total Selling Price</label>
-                            <input type="text" class="form-control input-sm" name="">
+                            <input type="text" class="form-control input-sm sales-price text-right" name="">
                         </div>
                     </div>                    
                     <div class="form-group">

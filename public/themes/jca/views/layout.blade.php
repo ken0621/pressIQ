@@ -97,6 +97,9 @@
                                 <li><a class="smoth-scroll" href="#mission-vision">MISSION & VISION</a></li>
                                 <li><a class="smoth-scroll" href="#products">PRODUCTS</a></li>
                             @endif
+                            <li>
+                                <a href="javascript:" class="popup" link="/cartv2" size="lg">CART</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>

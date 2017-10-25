@@ -149,7 +149,11 @@
 
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-6">
-				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+				<div class="title"><i class="fa fa-table"></i> Reward Summary
+					@if($allow_multiple_slot == 1)
+					<a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('members/enter-code')">Create New Slot</a>
+					@endif
+				</div>
 				<div class="sub-container" style="padding-bottom: 46px !important;">
 					<div class="chart-legend">
 						<div class="holder">

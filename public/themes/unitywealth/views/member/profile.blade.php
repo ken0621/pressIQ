@@ -97,18 +97,18 @@
 					   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					   		<div class="row clearfix">
 					   			<div class="col-md-6">
-					   				<div class="form-group">
-							   			<label>First Name</label>
-							   			<input type="text" class="form-control" name="first_name" value="{{ $profile->first_name }}">
-							   		</div>
-							   		<div class="form-group">
-							   			<label>Middle Name</label>
-							   			<input type="text" class="form-control" name="middle_name" value="{{ $profile->middle_name }}">
-							   		</div>
-							   		<div class="form-group">
-							   			<label>Last Name</label>
-							   			<input type="text" class="form-control" name="last_name" value="{{ $profile->last_name }}">
-							   		</div>
+					   				<!-- <div class="form-group">
+					   											   			<label>First Name</label>
+					   											   			<input type="text" class="form-control" name="first_name" value="{{ $profile->first_name }}">
+					   											   		</div>
+					   											   		<div class="form-group">
+					   											   			<label>Middle Name</label>
+					   											   			<input type="text" class="form-control" name="middle_name" value="{{ $profile->middle_name }}">
+					   											   		</div>
+					   											   		<div class="form-group">
+					   											   			<label>Last Name</label>
+					   											   			<input type="text" class="form-control" name="last_name" value="{{ $profile->last_name }}">
+					   											   		</div> -->
 							   		<div class="form-group">
 							   			<label>Birth Date</label>
 							   			<div style="margin-top: 5px;">

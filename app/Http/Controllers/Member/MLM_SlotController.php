@@ -28,6 +28,7 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_matching_log;
 use App\Models\Tbl_mlm_transfer_slot_log;
 use App\Models\Tbl_mlm_binary_pairing;
+use App\Models\Tbl_mlm_stairstep_settings;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
 use App\Globals\Mlm_plan;
@@ -463,7 +464,23 @@ class MLM_SlotController extends Member
         $data['r']         = Tbl_tree_placement::where('placement_tree_parent_id',$slot_id)->where('placement_tree_position','right')->count();
         if($data["slot"])
         {
-             $data["downline"] = $this->downline($slot_id);   
+             $data["downline"]  = $this->downline($slot_id);   
+             $stairstep         = Tbl_mlm_stairstep_settings::where("stairstep_id",$data["slot"]->stairstep_rank)->first();
+             if($stairstep)
+             {
+                if($stairstep->stairstep_genealogy_color == "Default")
+                {
+                    $data["genealogy_color"] = null;
+                }
+                else
+                {
+                    $data["genealogy_color"] = "background-color:".$stairstep->stairstep_genealogy_color;
+                }
+             }
+             else
+             {
+                $data["genealogy_color"] = null;
+             }
         }
         else
         {
@@ -552,8 +569,24 @@ class MLM_SlotController extends Member
             $l = Tbl_tree_placement::where('placement_tree_parent_id',$slot_info->slot_id)->where('placement_tree_position','left')->count();
             $r = Tbl_tree_placement::where('placement_tree_parent_id',$slot_info->slot_id)->where('placement_tree_position','right')->count();
             
+            $stairstep         = Tbl_mlm_stairstep_settings::where("stairstep_id",$slot_info->stairstep_rank)->first();
+            if($stairstep)
+            {
+               if($stairstep->stairstep_genealogy_color == "Default")
+               {
+                   $genealogy_color = null;
+               }
+               else
+               {
+                   $genealogy_color = "background-color:".$stairstep->stairstep_genealogy_color;
+               }
+            }
+            else
+            {
+               $genealogy_color = null;
+            }
 
-            $str_slot = '<span class="downline parent parent-reference PS SILVER" x="' . $slot_info->slot_id . '">';    
+            $str_slot = '<span class="downline parent parent-reference PS SILVER" x="' . $slot_info->slot_id . '" style="'.$genealogy_color.'">';    
 
 
 
@@ -627,7 +660,24 @@ class MLM_SlotController extends Member
             $r = Tbl_tree_placement::where('placement_tree_parent_id',$slot_info->slot_id)->where('placement_tree_position','right')->count();
             
 
-            $str_slot = '<span class="downline parent parent-reference PS SILVER" x="' . $slot_info->slot_id . '">';    
+            $stairstep         = Tbl_mlm_stairstep_settings::where("stairstep_id",$slot_info->stairstep_rank)->first();
+            if($stairstep)
+            {
+               if($stairstep->stairstep_genealogy_color == "Default")
+               {
+                   $genealogy_color = null;
+               }
+               else
+               {
+                   $genealogy_color = "background-color:".$stairstep->stairstep_genealogy_color;
+               }
+            }
+            else
+            {
+               $genealogy_color = null;
+            }
+
+            $str_slot = '<span class="downline parent parent-reference PS SILVER" x="' . $slot_info->slot_id . '" style="'.$genealogy_color.'">';    
 
 
 

@@ -11,17 +11,22 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {{-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> --}}
-        <link rel="icon" href="/themes/{{ $shop_theme }}/img/unity-wealth-icon.png"" type="image/png" />
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/unity-wealth-icon.png" type="image/png" />
 
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500" rel="stylesheet">    
-        
-        @include("frontend.ghead")
-
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500" rel="stylesheet">
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
 
+        <!-- COUNTDOWN TIMER -->
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/animate.css">
+        {{-- <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/form-elements.css"> --}}
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/style.css">
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/media-queries.css">    
+        
+        @include("frontend.ghead")
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
@@ -50,13 +55,13 @@
     <div id="home" class="subheader-container">
         <div class="container">
             @if($customer)
-            <div class="left-container"><span><i class="fa fa-envelope-o" aria-hidden="true"></i></span><span>company-email.here</span></div>
+            <!-- <div class="left-container"><span><i class="fa fa-envelope-o" aria-hidden="true"></i></span><span>company-email.here</span></div> -->
             <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span><span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
             @else
-            <div class="left-container">
+            <!-- <div class="left-container">
                 <span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
                 <span>company-email.here</span>
-            </div>
+            </div> -->
             <div class="right-container">
                 <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span>
                 <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span>
@@ -68,16 +73,65 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-3">
+                    <div class="wrapper">
+                        
+                        <input type="checkbox" id="navigation" />
+                            @if(request()->segment(1) != "replicated")
+                            <label for="navigation">
+                                +
+                            </label>
+                            @endif
+
+                            <nav>
+                                <ul>
+                                    <li>
+                                        <a href="/members">Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a href="/members/profile">Profile</a>
+                                    </li>
+                                    @if($mlm_member)
+                                    <li>
+                                        <a href="javascript:">Videos</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:">Ebook</a>
+                                    </li>
+                                    <li>
+                                        <a href="/members/products">Products</a>
+                                    </li>
+                                    <li>
+                                        <a href="/members/certificate">Certificate</a>
+                                    </li>
+                                    <li>
+                                        <a href="/members/genealogy?mode=sponsor">Unilevel Tree</a>
+                                    </li>
+                                    <li>
+                                        <a href="/members/report">Reports</a>
+                                    </li>
+                                    <!-- <li>
+                                        <a href="/members/network">Network</a>
+                                    </li> -->
+                                    <li>
+                                        <a href="/members/wallet-encashment">Wallet Encashment</a>
+                                    </li>
+                                    @else
+                                    @endif
+                                </ul>
+                            </nav>
+                    </div>
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/">
                             <img src="/themes/{{ $shop_theme }}/img/header-logo.png">
                         </a>                       
                     </div>
+                    @if(request()->segment(1) != "replicated")
                     <div class="menu-nav">
                         <span></span>
                         <span></span>
                         <span></span>
                     </div>
+                    @endif
                 </div>
                 <div class="col-md-9">
                 <!-- NAVIGATION -->
@@ -176,7 +230,31 @@
     
     @include("frontend.gfoot")
     {{-- GLOBALS --}}
-    <script src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+
+    <!-- COUNTDOWN TIMER -->
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.backstretch.min.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.countdown.min.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/wow.min.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/countdown/scripts.js?version=1"></script>
+
+    <script type="text/javascript">
+        $window = $(window);
+        $window.scroll(function() {
+          $scroll_position = $window.scrollTop();
+            if ($scroll_position > 100) { 
+                $('.header-container').addClass('header-fixed');
+
+                header_height = $('.your-header').innerHeight();
+                $('body').css('padding-top' , header_height);
+            } else {
+                $('.header-container').removeClass('header-fixed');
+                $('body').css('padding-top' , '0');
+            }
+         });
+
+    </script>
+
     <!-- FB WIDGET -->
     <div id="fb-root"></div>
     @yield("script")

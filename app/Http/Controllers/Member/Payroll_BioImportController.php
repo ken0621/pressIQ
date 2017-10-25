@@ -211,13 +211,18 @@ class Payroll_BioImportController extends Member
 						$time_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->get();
 						
 						Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->delete();
-						
+
 						$update = null;
 						$update['payroll_time_sheet_id'] 		= $timesheet_db->payroll_time_sheet_id;
 						$update['payroll_company_id'] 			= $check_employee->payroll_employee_company_id;
 						$update['payroll_time_sheet_in'] 		= $value["time_in"];;
 						$update['payroll_time_sheet_out'] 		= $value["time_out"];;
 						$update['payroll_time_sheet_origin'] 	= $biometric_name;
+
+						if($company != '' || $company != 0 || $company != null)
+		    			{
+		    				$update['payroll_company_id'] = $company;
+		    			}
 						
 						Tbl_payroll_time_sheet_record::insert($update);
 						
@@ -242,7 +247,6 @@ class Payroll_BioImportController extends Member
 			$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company)->first();
 	   		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using import_mustard_seed   Template.', "", "" ,"");	
 		}
-		
 		
 		return $data;
 	}
@@ -500,7 +504,6 @@ class Payroll_BioImportController extends Member
 
     	if(isset($temp[0]) && isset($temp[1]) && isset($temp[2]) && isset($temp[3]) && isset($temp[4]) && isset($temp[5]))
     	{
-
     		$success_count = 0;
 	    	$temp_date = '';
 	    	$insert_time_record = array();
@@ -552,7 +555,6 @@ class Payroll_BioImportController extends Member
 		    				array_push($insert_time_record, $temp_array);
 		    			}
 	    			}
-	    			
 	    		}
 	    		
 	    	}
@@ -565,7 +567,6 @@ class Payroll_BioImportController extends Member
 	    		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using zkteco TX628   Template.', "", "" ,"");
 	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
 	    	}
-
     	}
 
     	return $message;
@@ -1032,7 +1033,6 @@ class Payroll_BioImportController extends Member
     	 			$date = date('Y-m-d', strtotime($value['date']));
     	 		}
     	 		
-
     	 		if(is_object($value["time_in"]) && is_object($value["time_out"]))
 	 			{
 			 		$_record[$date][$employee_number]['time_in']  = date('H:i:s', strtotime($value['time_in']->toDateTimeString()));
@@ -1050,7 +1050,7 @@ class Payroll_BioImportController extends Member
     	 	}
     	 }
     	 
-    	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "ANVIZ Biometrics EP Series");
+    	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "Manual Template");
    
     	 echo "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
     	}
@@ -1289,7 +1289,7 @@ class Payroll_BioImportController extends Member
 
     	 }
     	
-    	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "ANVIZ Biometrics EP Series");
+    	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "Mustard Seed");
    
     	 echo "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
     	}

@@ -248,7 +248,6 @@ class Payroll_BioImportController extends Member
 	   		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using import_mustard_seed   Template.', "", "" ,"");	
 		}
 		
-		
 		return $data;
 	}
 
@@ -505,7 +504,6 @@ class Payroll_BioImportController extends Member
 
     	if(isset($temp[0]) && isset($temp[1]) && isset($temp[2]) && isset($temp[3]) && isset($temp[4]) && isset($temp[5]))
     	{
-
     		$success_count = 0;
 	    	$temp_date = '';
 	    	$insert_time_record = array();
@@ -557,7 +555,6 @@ class Payroll_BioImportController extends Member
 		    				array_push($insert_time_record, $temp_array);
 		    			}
 	    			}
-	    			
 	    		}
 	    		
 	    	}
@@ -570,7 +567,6 @@ class Payroll_BioImportController extends Member
 	    		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using zkteco TX628   Template.', "", "" ,"");
 	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
 	    	}
-
     	}
 
     	return $message;

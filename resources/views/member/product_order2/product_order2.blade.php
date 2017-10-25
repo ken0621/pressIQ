@@ -17,10 +17,24 @@
                     <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-upload"></i> Import Shipping</button>
                     <div class="dropdown" style="display: inline-block;">
                         <button class="btn btn-def-white btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-file-excel-o"></i> Export to Excel <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="/member/ecommerce/product_order2/payref" target="_blank">Paymaya</a></li>
-                            <li><a href="/member/ecommerce/product_order2/draref" target="_blank">Dragonpay</a></li>
-                        </ul>
+                        @if($shop_id == 5)
+                            <ul class="dropdown-menu">
+                                <li><a href="/member/ecommerce/product_order2/payref" target="_blank">Paymaya</a></li>
+                                <li><a href="/member/ecommerce/product_order2/draref" target="_blank">Dragonpay</a></li>
+                            </ul>
+                        @else
+                            @if(count($_method) > 0)
+                                <ul class="dropdown-menu">
+                                    @foreach($_method as $method)
+                                    <li><a href="/member/ecommerce/product_order2/export?method={{ $method->gateway_code_name }}" target="_blank">{{ $method->gateway_name }}</a></li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:">No Payment Method Available</a></li>
+                                </ul>
+                            @endif
+                        @endif
                     </div>
                     <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-truck"></i> Process Shipping</button>
                 </div>

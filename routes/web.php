@@ -138,6 +138,10 @@ Route::get('/logout', 'Login\MemberLoginController@logout');
 Route::any('/register', 'Login\MemberLoginController@register');
 Route::post('/createAccount', 'Frontend\HomeController@createAccount');
 
+
+Route::any('/employee_login', 'Login\EmployeeLoginController@employee_login');
+
+
 Route::group(array('prefix' => '/member/{page}/'), function()
 {
 	//order start
@@ -201,7 +205,7 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::post('product_order2/confirm_payment_submit','Member\ProductOrderController2@confirm_payment_submit');
 	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
 	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
-	
+	Route::get('product_order2/export','Member\ProductOrderController2@export');
 	//product order end
 });
 

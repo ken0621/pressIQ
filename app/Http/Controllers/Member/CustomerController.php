@@ -125,8 +125,10 @@ class CustomerController extends Member
         }
         $shop = $this->user_info;
 
-        if(Request::has('str') || $str != ""){
-            $data['_customer'] = Tbl_customer_search::search($str, $shop->shop_id, $arch)->paginate(20);
+        if(Request::has('str') || $str != "")
+        {
+            // $data['_customer'] = Tbl_customer_search::search($str, $shop->shop_id, $arch)->paginate(20);
+            $data['_customer'] = Customer::search_get($this->user_info->shop_id, $str, 20);
         }
         else{
             $data['_customer'] = $this->customerlist($arch);

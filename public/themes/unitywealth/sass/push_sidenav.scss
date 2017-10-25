@@ -10,7 +10,7 @@
         display: block;
         overflow: hidden;
 
-        section
+        .site-wrap
         {
             padding:30px 30px 30px 80px;
             -moz-transition:all 200ms ease-in;
@@ -91,7 +91,7 @@
         input[type="checkbox"]:checked ~ label{
             left:260px;
         }
-        input[type="checkbox"]:checked ~ section{
+        input[type="checkbox"]:checked ~ .site-wrap{
             -webkit-transform:translate3d(260px, 0, 0);
             -moz-transform:translate3d(260px, 0, 0);
             -o-transform:translate3d(260px, 0, 0);

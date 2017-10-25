@@ -122,9 +122,9 @@
 					<div class="wow-title">
 						<span class="orange">SPECIAL</span><span class="blue">OFFERS</span>
 					</div>
-					<div class="item-container">
+					<div class="item-container clearfix">
 						@foreach(get_collection(get_content($shop_theme_info, "home", "special_offers"), $shop_id) as $collection)
-							<div class="row-no-padding clearfix per-item">
+							<div class="row-no-padding clearfix per-item match-height">
 								<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
 								<div class="col-xs-8">
 									<div class=" item-details-container">
@@ -167,7 +167,7 @@
 			<div class="col-md-9">
 				<div class="grid-holder">
 					<div class="row-no-padding clearfix">
-						<div class="col-md-8">
+						<div class="col-xs-8">
 							<div class="grid-1">
 								<div class="single-slide">
 									<div>
@@ -179,7 +179,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4">
+						<div class="col-xs-4">
 							<div class="grid-2">
 								<img src="/themes/{{ $shop_theme }}/img/slide/banner2.png">
 							</div>
@@ -389,10 +389,10 @@
 						<div class="col-md-4 match-height">
 							<div class="per-item-container">
 								<div class="row clearfix">
-									<div class="col-md-6 col-sm-12">
+									<div class="col-md-6 col-xs-6">
 										<a href="#"><img class="item-image-small 4-3-ratio" style="width: 100%;" src="{{ get_collection_first_image($collection) }}"></a>
 									</div>
-									<div class="col-md-6 col-sm-12">
+									<div class="col-md-6 col-xs-6">
 										<div class="item-details" style="padding-top: 0;">
 											<a href="/product/view2/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
 											<div class="item-price">{{ get_collection_first_price($collection) }}</div>
@@ -774,7 +774,33 @@ $(document).ready(function()
   	  arrows: true,
   	  prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/left-carousel.jpg'>",
       nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/right-carousel.jpg'>",
-       pauseOnHover: false
+      pauseOnHover: false,
+      responsive: [
+			{
+				breakpoint: 991,
+				settings: 
+				{
+					slidesToShow: 3,
+					slidesToScroll: 1
+				}
+			},
+			{
+				breakpoint: 768,
+				settings: 
+				{
+					slidesToShow: 2,
+					slidesToScroll: 1
+				}
+			},
+			{
+				breakpoint: 376,
+				settings: 
+				{
+					slidesToShow: 1,
+					slidesToScroll: 1
+				}
+			}
+		]
 	});
 
 	$('.add-slider .add-top').slick({

@@ -17,13 +17,18 @@
 
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
+
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
+
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1">
         <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
         
         <!-- OTHER CSS -->
         @yield("css")
+
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css">
+        
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
@@ -55,10 +60,12 @@
                 <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 
                 @if($customer)
+                <div class="wata"></div>
                 <div class="holder"><a href="/members">MY ACCOUNT</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="/members/logout">LOGOUT</a></div>
                 @else
+                <div class="wata"></div>
                 <div class="holder"><a href="/members/login">LOGIN</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="/members/register">REGISTER</a></div>
@@ -199,13 +206,13 @@
     <footer>
         <div class="container ftr">
             <div class="row clearfix">
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-4 col-sm-6 match-height">
                     <div class="img-footer">
                         <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech.jpg">
                     </div>
                     <p>PHILTECH, INC. “We provide Business” Is a subsidiary company of ZENAR TELECOMS, INC. with highly experienced both in retail and distribution of technology industry for almost 20years. PHILTE... <a style="color: #fff" href="/about">See more</a></p>
                 </div> 
-                <div class="col-md-2 col-sm-6">
+                <div class="col-md-2 col-sm-6 match-height">
                     <div class="btm-title">INFORMATION</div>
                     <ul>
                         <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partners</a></li>
@@ -220,7 +227,7 @@
                         <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
                     </ul>
                 </div>
-                <div class="col-md-2 col-sm-6">
+                <div class="col-md-2 col-sm-6 match-height">
                     <div class="btm-title">SHOP</div>
                     <ul>
                         <li><a href="javascript:">DTH Products</a></li>
@@ -234,7 +241,7 @@
                         <li><a href="javascript:">Health & Wellness</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-4 col-sm-6 match-height">
                     <div class="btm-title">CONTACT US</div>
                     <table>
                         <tr>

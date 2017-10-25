@@ -5,7 +5,7 @@
 		<div class="members">
 			<div class="header hidden">
 				<div class="notification">
-					<img src="/themes/{{ $shop_theme }}/img/bell.png">
+					{{-- <img src="/themes/{{ $shop_theme }}/img/bell.png"> --}}
 					<span class="badge">500</span>
 				</div>
 				<div class="profile-dropdown">
@@ -84,9 +84,9 @@
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
 							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
+						<!-- <li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
 							<a href="/members/network"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Network List</span></div></a>
-						</li>
+						</li> -->
 						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>

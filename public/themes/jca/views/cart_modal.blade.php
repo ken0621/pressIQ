@@ -2,7 +2,7 @@
     <div class="modal-content cart">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title"><img src="/themes/{{ $shop_theme }}/img/cart.png"> My Shopping Cart</h4>
+            <h4 class="modal-title">My Shopping Cart</h4>
         </div>
         <div class="cart-loader-holder">
             <div style="margin: 50px auto;" class="cart-loader loader-16-gray hide"></div>

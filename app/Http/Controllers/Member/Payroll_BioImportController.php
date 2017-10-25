@@ -157,8 +157,10 @@ class Payroll_BioImportController extends Member
 					      <tr>
 					        <th class='text-center'>DATE</th>
 					        <th class='text-center'>EMPLOYEE/BIOMETRIC NO.</th>
+					        <th class='text-center'>COMPANY NAME</th>
 					        <th class='text-center'>TIME IN</th>
 					        <th class='text-center'>TIME OUT</th>
+					        <th class='text-center'>BIOMETRIC NAME</th>
 					        <th class='text-center'>STATUS</th>
 					      </tr>
 					</thead>
@@ -170,8 +172,10 @@ class Payroll_BioImportController extends Member
 				$html .= "<tr>
 							<td class='text-center'>".$date."</td>
 							<td class='text-center'>".$employee_number."</td>
+							<td class='text-center'>".$value['company_name']."</td>
 							<td class='text-center'>".$value['time_in']."</td>
 							<td class='text-center'>".$value['time_out']."</td>
+							<td class='text-center'>".$value['biometric_name']."</td>
 							<td class='text-center'>".$value['status']."</td>
 						  </tr>";
 			}
@@ -240,6 +244,8 @@ class Payroll_BioImportController extends Member
 						
 						$success++;
 						$_time_record[$date][$employee_number]['status'] = 'INSERTED';
+						$_time_record[$date][$employee_number]['biometric_name'] = $biometric_name;
+						$_time_record[$date][$employee_number]['company_name'] = Tbl_payroll_company::where('payroll_company_id',$insert_time['payroll_company_id'])->value('payroll_company_name');
 					}
 					else
 					{
@@ -264,11 +270,16 @@ class Payroll_BioImportController extends Member
 
 						$overwritten++;
 						$_time_record[$date][$employee_number]['status'] = 'OVERWRITTEN';
+						$_time_record[$date][$employee_number]['biometric_name'] = $biometric_name;
+						$_time_record[$date][$employee_number]['company_name'] = Tbl_payroll_company::where('payroll_company_id',$update['payroll_company_id'])->value('payroll_company_name');
 					}
 				}
 				else
 				{
 					$_time_record[$date][$employee_number]['status'] = 'FAILED WRONG EMPLOYEE NO.';
+					$_time_record[$date][$employee_number]['biometric_name'] = $biometric_name;
+					$_time_record[$date][$employee_number]['company_name'] = "";
+					
 					$failed++;
 				}
 			}

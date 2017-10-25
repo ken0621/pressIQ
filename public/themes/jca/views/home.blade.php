@@ -255,9 +255,9 @@
                     <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
                         <img src="/themes/{{ $shop_theme }}/img/serum.png">
                     </div>
-                    <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
+                    <!-- <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
                         <button class="btn btn-primary product-add-cart" item-id="2726" quantity="1">ADD TO CART <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -267,9 +267,9 @@
                     <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
                         <img src="/themes/{{ $shop_theme }}/img/stem-img.png">
                     </div>
-                    <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
+                    <!-- <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
                         <button class="btn btn-primary product-add-cart" item-id="2727" quantity="1">ADD TO CART <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-md-6">
                     <div class="details-container">
@@ -323,9 +323,9 @@
                     <div class="wow animated fadeInRight img-container" data-wow-delay=".3s">
                         <img src="/themes/{{ $shop_theme }}/img/product&services-003.png">
                     </div>
-                    <div class="text-center wow animated fadeInRight" data-wow-delay=".3s">
+                    <!-- <div class="text-center wow animated fadeInRight" data-wow-delay=".3s">
                         <button class="btn btn-primary product-add-cart" item-id="2728" quantity="1">ADD TO CART <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

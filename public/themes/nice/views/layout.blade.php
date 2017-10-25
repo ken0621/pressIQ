@@ -166,6 +166,23 @@
     @include("frontend.gfoot")
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+    
+    <!-- HEADER FIXED -->
+    <script type="text/javascript">
+        $window = $(window);
+        $window.scroll(function() {
+          $scroll_position = $window.scrollTop();
+            if ($scroll_position > 100) { 
+                $('.header-container').addClass('header-fixed');
+
+                header_height = $('.your-header').innerHeight();
+                $('body').css('padding-top' , header_height);
+            } else {
+                $('.header-container').removeClass('header-fixed');
+                $('body').css('padding-top' , '0');
+            }
+         });
+    </script>
 
     <!-- FB WIDGET -->
     <div id="fb-root"></div>

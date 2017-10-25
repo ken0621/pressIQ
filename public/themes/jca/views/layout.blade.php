@@ -135,7 +135,7 @@
                                 <div class="icon-holder">
                                     <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/mail-logo.png">
                                 </div>
-                                <p class="footer-details">jcainternationalcorp@gmail.com</p>
+                                <p class="footer-details">jcawellnessinternationalcorp@gmail.com</p>
                             </div>
                         </div>
                     </div>

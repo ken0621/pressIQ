@@ -22,7 +22,7 @@
 @section("script")
 
 <script type="text/javascript">
-$(document).ready(function($) {
+/*$(document).ready(function($) {
 
         //START MISSION AND VISION
         $(".title-vision").click(function()
@@ -41,7 +41,7 @@ $(document).ready(function($) {
             $(".title-vision").removeClass("highlighted");
         });
         //END MISSION ANF VISION
-});
+});*/
 </script>
 
 @endsection

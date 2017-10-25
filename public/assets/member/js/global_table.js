@@ -1,4 +1,5 @@
 var global_table = new global_table();
+var table_page = 1;
 
 function global_table()
 {
@@ -16,10 +17,24 @@ function global_table()
     {
         action_load_table();
         event_tab_change();
+        add_event_pagination();
+    }    
+    function add_event_pagination()
+    {
+        $("body").on("click", ".pagination a", function(e)
+        {
+            $url = $(e.currentTarget).attr("href");
+            var url = new URL($url);
+            $page = url.searchParams.get("page");
+            table_page = $page;
+            action_load_table();
+            return false;
+        });
     }
     function action_load_table()
     {
-        var currentLocation = window.location + "/table";
+        var currentLocation = window.location + "/table?page=" + table_page;
+
         $active_tab = $(".change-tab.active").attr("mode");
 
         $(".active-tab").val($active_tab);
@@ -47,6 +62,7 @@ function global_table()
         {
             $(".change-tab").removeClass("active");
             $(e.currentTarget).addClass("active");
+            table_page = 1;
             action_load_table();
         });
     }

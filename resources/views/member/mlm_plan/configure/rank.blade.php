@@ -1,5 +1,7 @@
 @extends('member.layout')
 @section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/css/bootstrap-colorpicker.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/css/bootstrap-colorpicker.min.css" />
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -34,7 +36,7 @@
         <div class="col-md-12 pull">
             <label for="rank_real_time_update_counter">Update month range (0 = All range)</label>
             <input type="number" class="form-control" id="rank_real_time_update_counter" name="rank_real_time_update_counter" value="{{$rank_real_time_update_counter}}">
-        </div> 
+        </div>         
         <div class="col-md-1 pull-right">
             <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="save_include()">Save</a>
         </div> 
@@ -113,17 +115,12 @@
         </div>
     </div>
 </div>
+<form class="sample_from"></form>
 @endsection
 
 @section('script')
 <script type="text/javascript">
-load_stair();
-$("#stairstep_level_count").val($("#stairstep_level_count").attr("perma_value"))
-function load_stair()
-{
-    $('.stair_body').html('<td colspan="6"><center><div style="margin: 100px auto;" class="loader-16-gray"></div></center></td>');
-    $('.stair_body').load('/member/mlm/plan/rank/get');
-}
+$("#stairstep_level_count").val($("#stairstep_level_count").attr("perma_value"));
 function save_stairstep()
 {
  $('#save_stairstep').submit();   
@@ -133,8 +130,42 @@ function save_include()
  $('#save_include').submit();   
 }
 function edit_stairstep(key)
-{
-    $('#edit_form' + key).submit();
+{  
+    // alert($("#edit_form"+key).attr("action"));
+
+    $(".sample_from").submit(function(event)
+    {
+          alert(123);
+          event.preventDefault();
+    });
+   //  $('#edit_form' + key).submit(function() 
+   //  {
+
+   //      $.ajax({
+   //       type: "POST",
+   //        url: "form_handler.php",
+   //        data: $(this).serialize(),
+   //        success: function() {
+   //          // callback code here
+   //         }
+   //      })
+
+   // })
+   //  // $('#edit_form' + key).submit();
+   //  $('#edit_form' + key).submit(function(event)
+   //  {
+   //      alert(321);
+   //      event.preventDefault();
+   //      $.ajax({
+   //       type: "POST",
+   //        url: "/member/mlm/plan/rank/save",
+   //        data: $(this).serialize(),
+   //        success: function() 
+   //        {
+   //          alert("save success");
+   //        }
+   //      })
+   //  });
 }
 function save_stairstep_level()
 {
@@ -174,6 +205,17 @@ function change_level_append(ito)
     }
     console.log(html_to_append_u);
     $('#stairstep_per_level').html(html_to_append_u);
+}
+</script>
+<script type="text/javascript" src="/assets/member/mlm_plan/color_picker.js"></script>
+<script type="text/javascript">
+load_stair();
+function load_stair()
+{
+    $('.stair_body').html('<td colspan="6"><center><div style="margin: 100px auto;" class="loader-16-gray"></div></center></td>');
+    $('.stair_body').load('/member/mlm/plan/rank/get',function(){
+        color_picker_function();
+    });
 }
 </script>
 @endsection

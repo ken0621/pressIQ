@@ -738,6 +738,11 @@ class MlmDeveloperController extends Member
         Tbl_mlm_slot_points_log::where("tbl_mlm_slot.shop_id", $shop_id)->join("tbl_mlm_slot", "tbl_mlm_slot.slot_id", "=", "tbl_mlm_slot_points_log.points_log_slot")->delete();
         Tbl_tree_sponsor::where("shop_id", $shop_id)->delete();
         Tbl_tree_placement::where("shop_id", $shop_id)->delete();
+
+        $update["slot_binary_left"] = 0;
+        $update["slot_binary_right"] = 0;
+
+        Tbl_mlm_slot::where("shop_id",$shop_id)->update($update);
     }
     public function redistribute()
     {

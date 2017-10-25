@@ -18,7 +18,8 @@
         <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500" rel="stylesheet">
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
+        <!-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css"> -->
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/new_sidenav.css">
 
         <!-- COUNTDOWN TIMER -->
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/animate.css">
@@ -73,53 +74,20 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-3">
-                    <div class="wrapper">
-                        
-                        <input type="checkbox" id="navigation" />
-                            @if(request()->segment(1) != "replicated")
-                            <label for="navigation">
-                                +
-                            </label>
-                            @endif
+                    
+                    <div class="nav-wrapper">
+                        <ul class="navigation">
+                            <li class="nav-item"><a href="#">Home</a></li>
+                            <li class="nav-item"><a href="#">Portfolio</a></li>
+                            <li class="nav-item"><a href="#">About</a></li>
+                            <li class="nav-item"><a href="#">Blog</a></li>
+                            <li class="nav-item"><a href="#">Contact</a></li>
+                        </ul>
 
-                            <nav>
-                                <ul>
-                                    <li>
-                                        <a href="/members">Dashboard</a>
-                                    </li>
-                                    <li>
-                                        <a href="/members/profile">Profile</a>
-                                    </li>
-                                    @if($mlm_member)
-                                    <li>
-                                        <a href="javascript:">Videos</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:">Ebook</a>
-                                    </li>
-                                    <li>
-                                        <a href="/members/products">Products</a>
-                                    </li>
-                                    <li>
-                                        <a href="/members/certificate">Certificate</a>
-                                    </li>
-                                    <li>
-                                        <a href="/members/genealogy?mode=sponsor">Unilevel Tree</a>
-                                    </li>
-                                    <li>
-                                        <a href="/members/report">Reports</a>
-                                    </li>
-                                    <!-- <li>
-                                        <a href="/members/network">Network</a>
-                                    </li> -->
-                                    <li>
-                                        <a href="/members/wallet-encashment">Wallet Encashment</a>
-                                    </li>
-                                    @else
-                                    @endif
-                                </ul>
-                            </nav>
+                        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+                        <label for="nav-trigger"></label>
                     </div>
+
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/">
                             <img src="/themes/{{ $shop_theme }}/img/header-logo.png">
@@ -153,7 +121,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
     
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">

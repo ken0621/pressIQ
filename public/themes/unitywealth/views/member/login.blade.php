@@ -43,7 +43,7 @@
 								<div class="form-group">
 									<div class="register-label">EMAIL / USERNAME</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="text" name="email" placeholder="Type youR Email / Username Here" value="">
+										<input class="form-control input-sm" type="text" name="email" placeholder="Type your Email / Username Here" value="">
 									</div>
 								</div>
 								<div class="form-group">

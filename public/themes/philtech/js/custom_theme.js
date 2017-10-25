@@ -13,7 +13,7 @@ function custom_theme()
 		{
 			action_match_height();
 			// event_show_cart();
-			action_fit_text();
+			// action_fit_text();
 			action_slick();
 			ready_load_ecom_cart();
 			ready_load_mini_ecom_cart();
@@ -63,6 +63,32 @@ function custom_theme()
 			arrows: false,
 			autoplay: true,
   			autoplaySpeed: 2000,
+			responsive: [
+				{
+					breakpoint: 991,
+					settings: 
+					{
+						slidesToShow: 3,
+						slidesToScroll: 1
+					}
+				},
+				{
+					breakpoint: 768,
+					settings: 
+					{
+						slidesToShow: 2,
+						slidesToScroll: 1
+					}
+				},
+				{
+					breakpoint: 376,
+					settings: 
+					{
+						slidesToShow: 1,
+						slidesToScroll: 1
+					}
+				}
+			]
 		})
 
 		$(document).on('click', '.hot-deals-container .left-container-title .scroll-button a', function(event) 

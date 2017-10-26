@@ -90,6 +90,7 @@ class MlmDeveloperController extends Member
             $data["_slot"][$key]->display_date = date("F d, Y", strtotime($slot->slot_created_date));
             $data["_slot"][$key]->display_time = date("h:i A", strtotime($slot->slot_created_date));
             $data["_slot"][$key]->modify_slot = "<a href='javascript:' link='/member/mlm/developer/modify_slot?slot_id=" . $slot->slot_id . "' class='popup' size='md'>MODIFY SLOT</a>";
+            $data["_slot"][$key]->allow_multiple_slot = "<input type='checkbox' ".($slot->allow_multiple_slot == 1 ? 'checked' : '')." customer-id='".$slot->customer_id."' class='allow-slot-change' name='allow_multiple_slot'/>";
 
             /* BROWN RANK DETAILS */
             $brown_current_rank = Tbl_brown_rank::where("rank_id", $slot->brown_rank_id)->first();
@@ -189,6 +190,7 @@ class MlmDeveloperController extends Member
         $default[]          = ["CURRENT GC","total_gc_format", false];
         $default[]          = ["CURRENT WALLET","current_wallet_format", true];
         $default[]          = ["MODIFY SLOT","modify_slot", false];
+        $default[]          = ["ALLOW MULTIPLE SLOT","allow_multiple_slot", false];
 
 
         if(isset($data["_slot"]))
@@ -202,6 +204,22 @@ class MlmDeveloperController extends Member
 
 
     	return view("member.mlm_developer.mlm_developer_table", $data);
+    }
+    public function allow_multiple_slot()
+    {
+        $customer_id = Request::input('customer_id');
+        $data = Tbl_customer::where('customer_id',$customer_id)->where('shop_id',$this->user_info->shop_id)->first();
+        if($data)
+        {
+            $update['allow_multiple_slot'] = 1;
+            if($data->allow_multiple_slot == 1)
+            {
+                $update['allow_multiple_slot'] = 0;
+            }
+
+            Tbl_customer::where('customer_id',$customer_id)->where('shop_id',$this->user_info->shop_id)->update($update);
+        }
+        return json_encode('success');
     }
     public function create_slot()
     {
@@ -814,7 +832,15 @@ class MlmDeveloperController extends Member
 
         $sponsor_info = Tbl_mlm_slot::where("slot_no", request("sponsor"))->where("shop_id", $shop_id)->first();
         $placement_info = Tbl_mlm_slot::where("slot_no", request("placement"))->where("shop_id", $shop_id)->first();
-        $check_same = Tbl_mlm_slot::where("slot_placement", $placement_info->slot_id)->where("slot_sponsor", $sponsor_info->slot_id)->where("slot_position", request("position"))->first();
+
+        if($placement_info)
+        {
+            $check_same = Tbl_mlm_slot::where("slot_placement", $placement_info->slot_id)->where("slot_position", request("position"))->first();
+        }
+        else
+        {
+            $check_same = null;
+        }
 
         $return["status"] = "success";
         $return["call_function"] = "modify_slot_success";
@@ -851,9 +877,13 @@ class MlmDeveloperController extends Member
         if($error == "")
         {
             $update["slot_sponsor"] = $sponsor_info->slot_id;
-            $update["slot_placement"] = $placement_info->slot_id;
-            $update["slot_position"] = request("position");
 
+            if(request("placement") != "")
+            {
+                $update["slot_placement"] = $placement_info->slot_id;
+            }
+            
+            $update["slot_position"] = request("position");
 
             Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
             $return["status"] = "success";

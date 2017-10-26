@@ -123,9 +123,9 @@
 					<div class="wow-title">
 						<span class="orange">SPECIAL</span><span class="blue">OFFERS</span>
 					</div>
-					<div class="item-container">
+					<div class="item-container clearfix">
 						@foreach(get_collection(get_content($shop_theme_info, "home", "special_offers"), $shop_id) as $collection)
-							<div class="row-no-padding clearfix per-item">
+							<div class="row-no-padding clearfix per-item match-height">
 								<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
 								<div class="col-xs-8">
 									<div class=" item-details-container">
@@ -206,11 +206,11 @@
 						</div>
 							<div class="featured-item-container row clearfix">	
 								@foreach($_product as $product)
-								<div class="col-md-3 match-height">
+								<div class="col-md-3 col-sm-3 col-xs-6 match-height">
 									<div class="per-item-container">
 										<div class="image-content-1">
 											{{-- <div class="item-image-large" style="background-image: url({{ get_product_first_image($product) }})"></div> --}}
-											<img style="width: 100%;" class="1-1-ratio" src="{{ get_product_first_image($product) }}">
+											<img style="display: block; margin: auto;" class="1-1-ratio" src="{{ get_product_first_image($product) }}">
 											<div onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'" class="new-add-to-cart-overlay">
 												@if(count($product['variant'][0]['mlm_discount']) > 0)
 					                            <div>

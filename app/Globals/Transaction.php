@@ -67,7 +67,7 @@ class Transaction
         }
         
         return $_item;
-    }    
+    }
     public static function create_update_transaction_details($details)
     {
         $store["create_update_transaction_details"] = $details;
@@ -216,7 +216,7 @@ class Transaction
         {
             $item_type = Item::get_item_type($value->item_id);
             /*INVENTORY TYPE*/
-            if($item_type == 1)
+            if($item_type == 1 || $item_type == 5)
             {
                 Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
             }

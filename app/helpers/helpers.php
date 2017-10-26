@@ -82,9 +82,9 @@ function c_time_to_int($time)
     $return = strtotime("01/01/70 " . $time . " UTC");
     return $return;
 }
-function word_to_code($code)
+function space_to_plus($code)
 {
-    $code = str_replace(" ", "-", $code);
+    $code = str_replace(" ", "+", $code);
     return $code;
 }
 function code_to_word($code)

@@ -18,7 +18,6 @@
 		                	<div class="congrats-holder">
 			                	<div class="title">CONGRATULATIONS!</div>
 			                    <div class="img">
-			                    	<img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
 			                    </div>
 			                    <div class="desc">You are one step away from your membership!</div>
 			                    <div class="btn-container">

@@ -818,17 +818,21 @@ class MlmDeveloperController extends Member
     }
     public function modify_slot()
     {
-        $data["page"] = "MLM Developer - Modify Slot";
-        $data["slot_info"] = Tbl_mlm_slot::where("slot_id", request("slot_id"))->first();
-        $data["sponsor_info"] = Tbl_mlm_slot::where("slot_id", $data["slot_info"]->slot_sponsor)->first();
+        $shop_id                = $this->user_info->shop_id;
+        $data["page"]           = "MLM Developer - Modify Slot";
+        $data["slot_info"]      = Tbl_mlm_slot::where("slot_id", request("slot_id"))->first();
+        $data["sponsor_info"]   = Tbl_mlm_slot::where("slot_id", $data["slot_info"]->slot_sponsor)->first();
         $data["placement_info"] = Tbl_mlm_slot::where("slot_id", $data["slot_info"]->slot_placement)->first();
-        return view("member.mlm_developer.modify_slot", $data);  
+        $data["_membership"]    = Tbl_membership::where("shop_id", $shop_id)->where("membership_archive", 0)->get();
+        
+        return view("member.mlm_developer.modify_slot", $data);
     }
     public function modify_slot_submit()
     {
         $error = "";
         $shop_id = $this->user_info->shop_id;
         $slot_id = request("slot_id");
+        $membership_id = request("membership_id");
 
         $sponsor_info = Tbl_mlm_slot::where("slot_no", request("sponsor"))->where("shop_id", $shop_id)->first();
         $placement_info = Tbl_mlm_slot::where("slot_no", request("placement"))->where("shop_id", $shop_id)->first();
@@ -841,6 +845,8 @@ class MlmDeveloperController extends Member
         {
             $check_same = null;
         }
+
+
 
         $return["status"] = "success";
         $return["call_function"] = "modify_slot_success";
@@ -868,7 +874,10 @@ class MlmDeveloperController extends Member
 
                 if($check_same)
                 {
-                    $error = "Position Occupied";
+                    if($check_same->slot_id != $slot_id)
+                    {
+                        $error = "Position Occupied";
+                    }
                 }
             }
         }
@@ -884,6 +893,7 @@ class MlmDeveloperController extends Member
             }
             
             $update["slot_position"] = request("position");
+            $update["slot_membership"] = request("membership_id");
 
             Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
             $return["status"] = "success";

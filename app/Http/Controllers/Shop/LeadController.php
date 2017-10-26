@@ -29,7 +29,7 @@ class LeadController extends Shop
 
             if(view()->exists("replicated"))
             {
-                return redirect("/replicated");
+                return view('replicated', $data);
             }
             else
             {

@@ -252,7 +252,6 @@
                 $('body').css('padding-top' , '0');
             }
          });
-
     </script>
 
     <!-- FB WIDGET -->

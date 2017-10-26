@@ -43,7 +43,7 @@
             <div class="title-container">
                 <div class="wow fadeInDown title-container">
                     <span>Why</span>
-                    <span>JCA Wellness</span>
+                    <span>JCA Wellness International</span>
                 </div>
             </div>
             <div class="content-container row clearfix">
@@ -55,7 +55,7 @@
                             <h1 class="wow fadeInLeft" data-wow-delay=".1s">We Believe</h1>
                             <div class="title-line"></div>
                             <p class="wow fadeInLeft" data-wow-delay=".3s">
-                                JCA International Corporation believes that natural health and wellness has the ability to change the lives of humanity. This inspired its founders to introduce a product that will provide opportunities to aspiring entrepreneurs ways.
+                                JCA Wellness International Corporation believes that natural health and wellness has the ability to change the lives of humanity. This inspired its founders to introduce a product that will provide opportunities to aspiring entrepreneurs ways.
                             </p>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                             <h1 class="wow fadeInLeft" data-wow-delay=".2s">We Are Safe</h1>
                             <div class="title-line"></div>
                             <p class="wow fadeInLeft" data-wow-delay=".4s">
-                                Instead of the usual chemical-based beauty and wellness products, JCA International Corporation’s products are 100% safe and organic that will definitely have an everlasting benefits to its buyers and users.
+                                Instead of the usual chemical-based beauty and wellness products, JCA Wellness International Corporation’s products are 100% safe and organic that will definitely have an everlasting benefits to its buyers and users.
                             </p>
                         </div>
                     </div>
@@ -88,25 +88,37 @@
                 </div>
             </div>
             <div class="jca-title-container">
-                <p class="main-title wow fadeInDown" data-wow-delay=".2s"><font class="shade-green">Benefits In</font> JCA Wellness</p>
-                <p class="sub-title wow fadeInDown" data-wow-delay=".4s"><font class="shade-black">BENEFITS</font> of becoming a Member of JCA Wellness</p>
+                <p class="main-title wow fadeInDown" data-wow-delay=".2s"><font class="shade-green">Benefits In</font> JCA Wellness International</p>
+                <p class="sub-title wow fadeInDown" data-wow-delay=".4s"><!-- <font class="shade-black">BENEFITS</font> --> BENEFITS OF BEING A MEMBER</p>
             </div>
             <div class="bulleted-list-container">
                 <div class="content-container row clearfix">
                     <div class="col-md-4">
-                        <li class="wow fadeInLeft bulleted-list" data-wow-delay=".2s">
-                            <p class="list-content">Membership ID which entitles the distributor up to 40% Lifetime Discount on all JCA Wellness Products upon repeat purchase</p>
-                        </li>
+                        <ul>
+                            <li class="liststyle wow animated fadeInLeft" data-wow-delay=".1s">
+                                <p class="content">
+                                   Membership ID which entitles the distributor up to 40% Lifetime Discount on all JCA Wellness International Products and Services upon repeat purchase
+                                </p>
+                            </li>
+                        </ul>
                     </div>
                     <div class="col-md-4">
-                        <li class="wow fadeInLeft bulleted-list" data-wow-delay=".3s">
-                            <p class="list-content">Opportunity to earn 15,000 a day, 90,000 a week, 360,000 a month for Override Sales Commission</p>
-                        </li>
+                        <ul>
+                            <li class="liststyle wow animated fadeInLeft" data-wow-delay=".2s">
+                                <p class="content">
+                                   Opportunity to earn 15,000 a day, 90,000 a week, 360,000 a month for Override Sales Commission
+                                </p>
+                            </li>
+                        </ul>
                     </div>
                     <div class="col-md-4">
-                        <li class="wow fadeInLeft bulleted-list" data-wow-delay=".5s">
-                            <p class="list-content">Product Gift Certificates for JCA Wellness Product Purchases</p>
-                        </li>
+                        <ul>
+                            <li class="liststyle wow animated fadeInLeft" data-wow-delay=".3s">
+                                <p class="content">
+                                   Product Gift Certificates for JCA Wellness International Products and Services Purchases
+                                </p>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -157,20 +169,31 @@
                         <div id="vision" class="mission-vision-container hide">
                             <div class="content-container row clearfix">
                                 <div class="col-md-6">
-                                    <li class="wow animated fadeInLeft bulleted-list" data-wow-duration="1s" data-wow-delay=".2s">
-                                        <p class="content">JCA Wellness International Corporation is working towards seeing itself grow into one of the most well-known network market that will expand globally.</p>
-                                    </li>
+                                    <ul>
+                                        <li class="liststyle wow animated fadeInLeft" data-wow-delay=".3s">
+                                            <p class="content">
+                                               JCA Wellness International Corporation is working towards seeing itself grow into one of the most well-known network market that will expand globally. 
+                                            </p>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <div class="col-md-6">
-
-                                    <li class="wow animated fadeInLeft bulleted-list" data-wow-duration="1s" data-wow-delay=".3s">
-                                        <p class="content">As this corporation will be build up by various entrepreneurs that focuses on building network, planning strategic ways to keep up with the market trends, innovating their organic products and to keep on building the trust and loyalty of its consumers and network.</p>
-                                    </li>
+                                    <ul>
+                                        <li class="liststyle wow animated fadeInLeft" data-wow-delay=".4s">
+                                            <p class="content">
+                                               As this corporation will be build up by various entrepreneurs that focuses on building network, planning strategic ways to keep up with the market trends, innovating their organic products and to keep on building the trust and loyalty of its consumers and network. 
+                                            </p>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <div class="col-md-6">
-                                    <li class="wow animated fadeInLeft bulleted-list" data-wow-duration="1s" data-wow-delay=".4s">
-                                        <p class="content">Through this work and strategies that will be applied, JCA Wellness International Corporation guarantees to fulfill its mission in the near future.</p>
-                                    </li>
+                                    <ul>
+                                        <li class="liststyle wow animated fadeInLeft" data-wow-delay=".5s">
+                                            <p class="content">
+                                               Through this work and strategies that will be applied, JCA Wellness International Corporation guarantees to fulfill its mission in the near future. 
+                                            </p>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -227,9 +250,9 @@
                     <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
                         <img src="/themes/{{ $shop_theme }}/img/serum.png">
                     </div>
-                    <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
+                    <!-- <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
                         <button class="btn btn-primary product-add-cart" item-id="2726" quantity="1">ADD TO CART <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-md-6">
                     <div class="details-container">
@@ -255,9 +278,9 @@
                     <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
                         <img src="/themes/{{ $shop_theme }}/img/serum.png">
                     </div>
-                    <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
+                    <!-- <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
                         <button class="btn btn-primary product-add-cart" item-id="2726" quantity="1">ADD TO CART <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -267,9 +290,9 @@
                     <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
                         <img src="/themes/{{ $shop_theme }}/img/stem-img.png">
                     </div>
-                    <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
+                    <!-- <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
                         <button class="btn btn-primary product-add-cart" item-id="2727" quantity="1">ADD TO CART <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-md-6">
                     <div class="details-container">
@@ -323,9 +346,9 @@
                     <div class="wow animated fadeInRight img-container" data-wow-delay=".3s">
                         <img src="/themes/{{ $shop_theme }}/img/product&services-003.png">
                     </div>
-                    <div class="text-center wow animated fadeInRight" data-wow-delay=".3s">
+                    <!-- <div class="text-center wow animated fadeInRight" data-wow-delay=".3s">
                         <button class="btn btn-primary product-add-cart" item-id="2728" quantity="1">ADD TO CART <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

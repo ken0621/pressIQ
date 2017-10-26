@@ -18,7 +18,6 @@
 		                	<div class="congrats-holder">
 			                	<div class="title">CONGRATULATIONS!</div>
 			                    <div class="img">
-			                    	<img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
 			                    </div>
 			                    <div class="desc">You are one step away from your membership!</div>
 			                    <div class="btn-container">
@@ -150,7 +149,7 @@
 							<div class="row clearfix">
 								<div class="col-sm-12 text-center">
 									<div class="label2">{{ $slot->slot_no }}</div>
-									<div class="label3"> <a href="javascript:" onclick="action_load_link_to_modal('/members/lead?slot_no={{ $slot->slot_no }}')"> VIEW LEAD LINK</a></b></div>
+									<div> <a href="javascript:" onclick="action_load_link_to_modal('/members/lead?slot_no={{ urlencode($slot->slot_no) }}','md')"> VIEW LEAD LINK</a></b></div>
 								</div>
 							</div>
 						</div>

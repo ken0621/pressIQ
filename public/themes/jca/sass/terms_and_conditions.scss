@@ -10,11 +10,12 @@ $text-dark: #1c1c1c;
 body{
 	background-color: transparent;
 	color: $text-light;
-	font-family: $content-text;
+	font-family: $display-text;
 }
 
 .wrapper-1
 {
+	font-family: $content-text;
 	background-color: #f4f4f4;
 	padding: 40px 0;
 	
@@ -28,7 +29,8 @@ body{
 
 .wrapper-2
 {
-	padding: 20px 0;
+	font-family: $content-text;
+	/* padding: 20px 0;
 	.title-2
 	{
 		color: $text-dark;
@@ -38,6 +40,6 @@ body{
 	.context
 	{
 
-	}
+	} */
 }
 

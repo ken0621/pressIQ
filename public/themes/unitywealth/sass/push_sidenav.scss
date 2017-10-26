@@ -58,9 +58,9 @@ $bold: 700;
 
      li
      {
-        margin-top: 30px;
-        border-bottom: 1px solid #fff;
-        padding: 0px 0px 5px 0px;
+        //margin-top: 30px;
+        border-bottom: 1px solid rgba(255,255,255, 0.5);
+        padding: 10px 0px;
 
         a
         {
@@ -69,7 +69,7 @@ $bold: 700;
             color: #f1f1f1;
             font-size: 16px;
             text-decoration: none;
-            line-height: 80%;
+            //line-height: 80%;
             //padding: 5px;
         }
     }
@@ -88,18 +88,18 @@ $bold: 700;
    display: block;
    position: absolute;
    //left: 20px;
-   bottom: -5px;
+   bottom: -10px;
    width: 0;
    height: 3px;
    background-color: #77b93f;
    -webkit-transition: width 0.3s ease;
    -moz-transition: width 0.3s ease;
    transition: width 0.3s ease;
-}
+} 
 
 .links li a:hover:after { width: 100%; }
 
-.links li a:active { color: #dbdbdb; }
+/* .links li a:active { color: #dbdbdb; } */
 
 .pushmenu-left
 { 

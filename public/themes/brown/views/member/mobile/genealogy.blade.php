@@ -8,7 +8,7 @@
     </div>
     <div class="page-content">
         <div class="genealogy-view">
-            {{-- <div class="holder">
+            <div class="holder">
                 <div class="row-holder one">
                     <div class="circle"><div class="text">YOU</div></div>
                 </div>
@@ -26,8 +26,40 @@
                         </div>
                     </div>
                 </div>
-            </div> --}}
-            <h1>Under Development</h1>
+            </div>
+            <div class="holder">
+                <div class="row">
+                    <div class="col-50">
+                        <div class="row-holder three" style="text-align: right;">
+                            <div class="circle-holder">
+                                <div class="circle">
+                                    <div class="text">3</div>
+                                </div>
+                            </div>
+                            <div class="circle-holder">
+                                <div class="circle">
+                                    <div class="text">4</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-50">
+                        <div class="row-holder three" style="text-align: left;">
+                            <div class="circle-holder">
+                                <div class="circle">
+                                    <div class="text">5</div>
+                                </div>
+                            </div>
+                            <div class="circle-holder">
+                                <div class="circle">
+                                    <div class="text">6</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- <h1>Under Development</h1> --}}
         </div>
     </div>
 </div>

@@ -866,6 +866,62 @@ select, button
 						}
 					}
 				}
+				&.three
+				{
+					text-align: center;
+					.circle-holder
+					{
+						display: inline-block;
+						padding: 15px 0px;
+						margin-top: 19px;
+						position: relative;
+						padding-bottom: 0;
+						&::before
+						{
+							content: '';
+							position: absolute;
+							top: 0;
+							left: 50%;
+							border-left: 1px solid #422311;
+							width: 50%;
+							height: 20px;
+						}
+						.circle
+						{
+							&:first-child
+							{
+								margin-left: 0;
+							}
+							&:last-child
+							{
+								margin-right: 0;
+							}
+							&::after
+							{
+								content: '';
+								position: absolute;
+								top: 0;
+								right: 50%;
+								border-top: 1px solid #422311;
+								width: 50%;
+								height: 20px;
+							}
+						}
+						&:first-child
+						{
+							margin-right: -2px;
+							padding-right: 15px;
+							.circle::after
+							{
+								right: 0 !important;
+							}
+						}
+						&:last-child
+						{
+							margin-left: -1px;
+						}
+					}
+				}
 			}
 			&:last-child
 			{

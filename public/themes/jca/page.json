@@ -27,14 +27,21 @@
 			"label":"Who Are We Context Title",
 			"type":"textbox",
 			"default":"JCA WELLNESS INTERNATIONAL CORP",
-			"size":"6"
+			"size":"4"
 		},
 		"home_who_are_we_context" :
 		{
 			"label":"Who Are We Context",
-			"type":"textarea",
-			"default":"JCA Wellness International Corporation is a company founded by group of entrepreneurs that is driven to build a global community that will bring various business opportunities to aspiring entrepreneurs, to provide products and services that will enhance one’s beauty and wellness and to teach every aspiring entrepreneurs the various ways of earning. JCA Wellness International Corporation is currently building its network in Raffles Corporate Center in Emerald Ave. Ortigas Pasig City and is starting to grow its market in the Philippines and to other countries.",
-			"size":"6"
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"home_who_are_we_image" :
+		{
+			"label":"Who Are We Right Image (515x338) Image Dimensions",
+			"type":"image",
+			"default":"/themes/jca/img/who-we-are-pic.png",
+			"size":"4"
 		},
 		"home_why_jca_wellness_title1" :
 		{
@@ -227,7 +234,7 @@
 		},
 		"home_item1_image" :
 		{
-			"label":"Products And Services Item 1",
+			"label":"Products And Services Item 1 Image (401x308)",
 			"type":"image",
 			"default":"/themes/jca/img/serum.png",
 			"size":"3"
@@ -262,11 +269,56 @@
 		},
 		"home_item2_image" :
 		{
-			"label":"Products And Services Item 2",
+			"label":"Products And Services Item 2 Image (401x308)",
 			"type":"image",
 			"default":"/themes/jca/img/stem-img.png",
 			"size":"3"
+		},
+		"home_item3_name_green" :
+		{
+			"label":"Products And Services Item 3 Name (Green Text) ",
+			"type":"textbox",
+			"default":"Stem Cell Therapy-",
+			"size":"3"
+		},
+		"home_item3_name_gold" :
+		{
+			"label":"Products And Services Item 3 Name (Gold Text) ",
+			"type":"textbox",
+			"default":"The Anti-Aging and Rejuvenation Therapy",
+			"size":"3"
+		},
+		"home_item3_benefits" :
+		{
+			"label":"Products And Services Item 3 Benefits",
+			"type":"tinymce",
+			"default":"",
+			"size":"3"
+		},
+		"home_item3_image" :
+		{
+			"label":"Products And Services Item 3 Image (401x308)",
+			"type":"image",
+			"default":"/themes/jca/img/product&services-003.png",
+			"size":"3"
 		}
 
+	},
+	"terms_and_conditions":
+	{
+		"terms_and_conditions_title" :
+		{
+			"label":"Terms and Conditions Title",
+			"type":"textbox",
+			"default":"General Terms and Conditions",
+			"size":"12"
+		},
+		"terms_and_conditions_context" :
+		{
+			"label":"Terms and Conditions Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
+		}
 	}
 }

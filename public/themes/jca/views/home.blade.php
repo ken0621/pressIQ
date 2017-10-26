@@ -2,12 +2,12 @@
 @section("content")
 <div class="content">
 <!-- Media Slider -->
-    <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/top-image.png')">
+    <div class="slider-wrapper" style="background-image: url('{{ get_content($shop_theme_info, "home", "home_banner") }}')">
         <div class="container">
             <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption2.png"></div>
             <div class="caption-container animated fadeInDown">
-                <p class="head-text">Your road to financial wellness</p>
-                <p class="head-text">Lifestyle at it’s finest!</p>
+                <p class="head-text">{{ get_content($shop_theme_info, "home", "home_banner_caption1") }}</p>
+                <p class="head-text">{{ get_content($shop_theme_info, "home", "home_banner_caption2") }}</p>
             </div>
         </div>
     </div>
@@ -20,18 +20,14 @@
             </div>
             <div class="content-container row clearfix">
                 <div class="col-md-6">
-                    <div class="content-title wow fadeInUp">JCA WELLNESS INTERNATIONAL CORP</div>
-                    <div class="context">
-                        <p class="wow fadeInLeft">
-                            JCA Wellness International Corporation is a company founded by group of entrepreneurs that is driven to build a global community that will bring various business opportunities to aspiring entrepreneurs, to provide products and services that will enhance one’s beauty and wellness and to teach every aspiring entrepreneurs the various ways of earning.<br><br>
-
-                            JCA Wellness International Corporation is currently building its network in Raffles Corporate Center in Emerald Ave. Ortigas Pasig City and is starting to grow its market in the Philippines and to other countries.
-                        </p>
+                    <div class="content-title wow fadeInUp">{{ get_content($shop_theme_info, "home", "home_who_are_we_title") }}</div>
+                    <div class="context wow fadeInLeft">
+                        {!! get_content($shop_theme_info, "home", "home_who_are_we_context") !!}
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="image-container wow fadeInRight">
-                        <img src="/themes/{{ $shop_theme }}/img/who-we-are-pic.png">
+                        <img src="{{ get_content($shop_theme_info, "home", "home_who_are_we_image") }}">
                     </div>
                 </div>
             </div>
@@ -52,10 +48,10 @@
                     <div class="per-image-container">
                         <img src="/themes/{{ $shop_theme }}/img/we-believe.png">
                         <div class="content-text-container">
-                            <h1 class="wow fadeInLeft" data-wow-delay=".1s">We Believe</h1>
+                            <h1 class="wow fadeInLeft" data-wow-delay=".1s">{{ get_content($shop_theme_info, "home", "home_why_jca_wellness_title1") }}</h1>
                             <div class="title-line"></div>
                             <p class="wow fadeInLeft" data-wow-delay=".3s">
-                                JCA Wellness International Corporation believes that natural health and wellness has the ability to change the lives of humanity. This inspired its founders to introduce a product that will provide opportunities to aspiring entrepreneurs ways.
+                                {{ get_content($shop_theme_info, "home", "home_why_jca_context1") }}
                             </p>
                         </div>
                     </div>
@@ -65,10 +61,10 @@
                     <div class="per-image-container">
                         <img src="/themes/{{ $shop_theme }}/img/we-are-safe.png">
                         <div class="content-text-container">
-                            <h1 class="wow fadeInLeft" data-wow-delay=".2s">We Are Safe</h1>
+                            <h1 class="wow fadeInLeft" data-wow-delay=".2s">{{ get_content($shop_theme_info, "home", "home_why_jca_wellness_title2") }}</h1>
                             <div class="title-line"></div>
                             <p class="wow fadeInLeft" data-wow-delay=".4s">
-                                Instead of the usual chemical-based beauty and wellness products, JCA Wellness International Corporation’s products are 100% safe and organic that will definitely have an everlasting benefits to its buyers and users.
+                                {{ get_content($shop_theme_info, "home", "home_why_jca_context2") }}
                             </p>
                         </div>
                     </div>
@@ -78,10 +74,10 @@
                     <div class="per-image-container">
                         <img src="/themes/{{ $shop_theme }}/img/we-aim.png">
                         <div class="content-text-container">
-                            <h1 class="wow fadeInLeft" data-wow-delay=".3s">We Aim</h1>
+                            <h1 class="wow fadeInLeft" data-wow-delay=".3s">{{ get_content($shop_theme_info, "home", "home_why_jca_wellness_title3") }}</h1>
                             <div class="title-line"></div>
                             <p class="wow fadeInLeft" data-wow-delay=".5s">
-                                Lastly, JCA Wellness International Corporation aims to deliver these broad selection of safe and organic products that will showcase its commitment to innovate today’s beauty and wellness.
+                                {{ get_content($shop_theme_info, "home", "home_why_jca_context3") }}
                             </p>
                         </div>
                     </div>
@@ -89,7 +85,9 @@
             </div>
             <div class="jca-title-container">
                 <p class="main-title wow fadeInDown" data-wow-delay=".2s"><font class="shade-green">Benefits In</font> JCA Wellness International</p>
-                <p class="sub-title wow fadeInDown" data-wow-delay=".4s"><!-- <font class="shade-black">BENEFITS</font> --> BENEFITS OF BEING A MEMBER</p>
+                <p class="sub-title wow fadeInDown" data-wow-delay=".4s">
+                    {{ get_content($shop_theme_info, "home", "home_benefits_subtitle") }}
+                </p>
             </div>
             <div class="bulleted-list-container">
                 <div class="content-container row clearfix">
@@ -97,7 +95,7 @@
                         <ul>
                             <li class="liststyle wow animated fadeInLeft" data-wow-delay=".1s">
                                 <p class="content">
-                                   Membership ID which entitles the distributor up to 40% Lifetime Discount on all JCA Wellness International Products and Services upon repeat purchase
+                                   {{ get_content($shop_theme_info, "home", "home_benefits_context1") }}
                                 </p>
                             </li>
                         </ul>
@@ -106,7 +104,7 @@
                         <ul>
                             <li class="liststyle wow animated fadeInLeft" data-wow-delay=".2s">
                                 <p class="content">
-                                   Opportunity to earn 15,000 a day, 90,000 a week, 360,000 a month for Override Sales Commission
+                                   {{ get_content($shop_theme_info, "home", "home_benefits_context2") }}
                                 </p>
                             </li>
                         </ul>
@@ -115,7 +113,7 @@
                         <ul>
                             <li class="liststyle wow animated fadeInLeft" data-wow-delay=".3s">
                                 <p class="content">
-                                   Product Gift Certificates for JCA Wellness International Products and Services Purchases
+                                   {{ get_content($shop_theme_info, "home", "home_benefits_context3") }}
                                 </p>
                             </li>
                         </ul>
@@ -123,7 +121,7 @@
                 </div>
             </div>
             <div class="button-container">
-                <a href="/themes/{{ $shop_theme }}/img/legalities-file.jpg" class="lsb-preview">
+                <a href="{{ get_content($shop_theme_info, "home", "home_legalities") }}" class="lsb-preview">
                     <button class="legalities-button wow fadeInUp">
                         <img class="button-img" src="/themes/{{ $shop_theme }}/img/legalities-icon-button.png">
                         <p class="button-name">LEGALITIES</p>
@@ -149,20 +147,36 @@
                         <div id="mission" class="mission-vision-container">
                             <div class="content-container row clearfix">
                                 <div class="col-md-6">
-                                    <p class="wow animated fadeInLeft sub-title" data-wow-delay=".2s">Bring innovation in the beauty and wellness market.</p>
-                                    <p class="wow animated fadeInLeft content" data-wow-delay=".2s">In this world full of chemical-based beauty and wellness product, JCA Wellness International Corp., aims to divert the market’s attention to change their usual beauty and wellness product to safe and organic products that will guarantee them a life-long benefits.</p>
+                                    <p class="wow animated fadeInLeft sub-title" data-wow-delay=".2s">
+                                        {{ get_content($shop_theme_info, "home", "home_mission_title1") }}
+                                    </p>
+                                    <p class="wow animated fadeInLeft content" data-wow-delay=".2s">
+                                        {{ get_content($shop_theme_info, "home", "home_mission_context1") }}
+                                    </p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="wow animated fadeInLeft sub-title" data-wow-delay=".3s">To build business opportunities that will start in the Philippines and provide financial freedom.</p>
-                                    <p class="wow animated fadeInLeft content" data-wow-delay=".3s">JCA Wellness International Corporation will start its initial market in the Philippines and it aims to help fellow aspiring Filipino entrepreneurs to start their business venture with the right products and the right investment.</p>
+                                    <p class="wow animated fadeInLeft sub-title" data-wow-delay=".3s">
+                                        {{ get_content($shop_theme_info, "home", "home_mission_title2") }}
+                                    </p>
+                                    <p class="wow animated fadeInLeft content" data-wow-delay=".3s">
+                                        {{ get_content($shop_theme_info, "home", "home_mission_context2") }}
+                                    </p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="wow animated fadeInLeft sub-title" data-wow-delay=".4s">To build a continuous brand and consumer loyalty.</p>
-                                    <p class="wow animated fadeInLeft content" data-wow-delay=".4s">As JCA Wellness International Corporation marks it image in the market as a company that focuses on using and promoting organic and safe products, it also aims to maintain the brand positioning and the consumer loyalty by continuously providing its product and taking care of its consumers as well.</p>
+                                    <p class="wow animated fadeInLeft sub-title" data-wow-delay=".4s">
+                                        {{ get_content($shop_theme_info, "home", "home_mission_title3") }}
+                                    </p>
+                                    <p class="wow animated fadeInLeft content" data-wow-delay=".4s">
+                                        {{ get_content($shop_theme_info, "home", "home_mission_context3") }}
+                                    </p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="wow animated fadeInLeft sub-title" data-wow-delay=".5s">To expand the network globally.</p>
-                                    <p class="wow animated fadeInLeft content" data-wow-delay=".5s">As this company will start its market in the Philippines, it also aims to go globally. It aims to build network, promote the products globally and give a higher opportunity to its future potential business partners.</p>
+                                    <p class="wow animated fadeInLeft sub-title" data-wow-delay=".5s">
+                                        {{ get_content($shop_theme_info, "home", "home_mission_title4") }}
+                                    </p>
+                                    <p class="wow animated fadeInLeft content" data-wow-delay=".5s">As this company will start its market in the Philippines, it also 
+                                        {{ get_content($shop_theme_info, "home", "home_mission_context4") }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +186,7 @@
                                     <ul>
                                         <li class="liststyle wow animated fadeInLeft" data-wow-delay=".3s">
                                             <p class="content">
-                                               JCA Wellness International Corporation is working towards seeing itself grow into one of the most well-known network market that will expand globally. 
+                                               {{ get_content($shop_theme_info, "home", "home_vision_context1") }} 
                                             </p>
                                         </li>
                                     </ul>
@@ -181,7 +195,7 @@
                                     <ul>
                                         <li class="liststyle wow animated fadeInLeft" data-wow-delay=".4s">
                                             <p class="content">
-                                               As this corporation will be build up by various entrepreneurs that focuses on building network, planning strategic ways to keep up with the market trends, innovating their organic products and to keep on building the trust and loyalty of its consumers and network. 
+                                               {{ get_content($shop_theme_info, "home", "home_vision_context2") }} 
                                             </p>
                                         </li>
                                     </ul>
@@ -190,7 +204,7 @@
                                     <ul>
                                         <li class="liststyle wow animated fadeInLeft" data-wow-delay=".5s">
                                             <p class="content">
-                                               Through this work and strategies that will be applied, JCA Wellness International Corporation guarantees to fulfill its mission in the near future. 
+                                               {{ get_content($shop_theme_info, "home", "home_vision_context3") }} 
                                             </p>
                                         </li>
                                     </ul>
@@ -236,7 +250,7 @@
             </div>
             <div class="products-services-container">
                 <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
-                    <img src="/themes/{{ $shop_theme }}/img/products-img.png">
+                    <img src="{{ get_content($shop_theme_info, "home", "home_products_and_services_image") }}">
                 </div>
             </div>
         </div>
@@ -248,7 +262,7 @@
             <div class="row clearfix">
                 <div class="col-md-6 mobile-view">
                     <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
-                        <img src="/themes/{{ $shop_theme }}/img/serum.png">
+                        <img src="{{ get_content($shop_theme_info, "home", "home_item1_image") }}">
                     </div>
                     <!-- <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
                         <button class="btn btn-primary product-add-cart" item-id="2726" quantity="1">ADD TO CART <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
@@ -256,27 +270,21 @@
                 </div>
                 <div class="col-md-6">
                     <div class="details-container">
-                        <div class="wow animated fadeInRight header" data-wow-delay=".3s">Swiss Apple&nbsp;<span>Stem Cell Serum</span></div>
+                        <div class="wow animated fadeInRight header" data-wow-delay=".3s">{{ get_content($shop_theme_info, "home", "home_item1_name_green") }}&nbsp;<span>{{ get_content($shop_theme_info, "home", "home_item1_name_gold") }}</span></div>
                         <div class="wow animated fadeInRight sub-header" data-wow-delay=".4s">
-                            <span>Contents:</span>&nbsp;5% pure Swiss Apple Stem Cell Serum
+                            <span>Contents:</span>&nbsp;{{ get_content($shop_theme_info, "home", "home_item1_contents") }}
                         </div>
                         <div class="benefits">
                             <div class="wow animated fadeInRight header" data-wow-delay=".5s">Benefits: </div>
-                            <ul class="wow animated fadeInRight" data-wow-delay=".6s">
-                                <li>It enhances UV protection and helps in fighting skin radicals that causes skin damage.</li>
-                                <li>Fights all unwanted signs of aging.</li>
-                                <li>Reduces wrinkles and fine-lines.</li>
-                                <li>Reveals younger and glowing, youthful skin.</li>
-                                <li>Improves skin firmness.</li>
-                                <li>Gives your skin soft and better feeling after every use.</li>
-                                <li>The kind of serum without the sticky feel PLUS it can be absorbed by the skin easily.</li>
-                            </ul>
+                            <div class="wow animated fadeInRight" data-wow-delay=".6s">
+                                {!! get_content($shop_theme_info, "home", "home_item1_benefits") !!}   
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 mobile-view-2">
                     <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
-                        <img src="/themes/{{ $shop_theme }}/img/serum.png">
+                        <img src="{{ get_content($shop_theme_info, "home", "home_item1_image") }}">
                     </div>
                     <!-- <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
                         <button class="btn btn-primary product-add-cart" item-id="2726" quantity="1">ADD TO CART <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
@@ -288,7 +296,7 @@
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="wow animated fadeInLeft img-container" data-wow-delay=".2s">
-                        <img src="/themes/{{ $shop_theme }}/img/stem-img.png">
+                        <img src="{{ get_content($shop_theme_info, "home", "home_item2_image") }}">
                     </div>
                     <!-- <div class="text-center wow animated fadeInLeft" data-wow-delay=".2s">
                         <button class="btn btn-primary product-add-cart" item-id="2727" quantity="1">ADD TO CART <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
@@ -296,21 +304,16 @@
                 </div>
                 <div class="col-md-6">
                     <div class="details-container">
-                        <div class="wow animated fadeInRight header" data-wow-delay=".3s">Swiss Apple Stem Cell Soap with <span>Glutathione and Collagen</span></div>
+                        <div class="wow animated fadeInRight header" data-wow-delay=".3s">{{ get_content($shop_theme_info, "home", "home_item2_name_green") }}<span>
+                        {{ get_content($shop_theme_info, "home", "home_item2_name_gold") }}</span></div>
                         <div class="wow animated fadeInRight sub-header" data-wow-delay=".4s">
-                            <span>Contents:</span> Swiss Apple Stem Cell, Glutathione and Collagen
+                            <span>Contents:</span>{{ get_content($shop_theme_info, "home", "home_item2_contents") }}
                         </div>
                         <div class="benefits">
-                            <div class="wow animated fadeInRight header" data-wow-delay=".5s">Benefits: </div>
-                            <ul class="wow animated fadeInRight" data-wow-delay=".6s">
-                                <li>Increases skin stem cell vitality and longevity</li>
-                                <li>Helps treat skin problems like hyperpigmentation, acne or pimple scars, uneven skin tone</li>
-                                <li>Fights all unwanted signs of aging</li>
-                                <li>Reduces wrinkles and fine-lines</li>
-                                <li>Reveals younger and glowing, youthful skin</li>
-                                <li>Maintains the health and elasticity of the skin</li>
-                                <li>Provides freshness and gives your skin soft and clean feeling</li>
-                            </ul>
+                            <div class="wow animated fadeInRight header" data-wow-delay=".5s">Benefits:</div>
+                            <div class="wow animated fadeInRight" data-wow-delay=".6s">
+                               {!! get_content($shop_theme_info, "home", "home_item2_benefits") !!} 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -323,28 +326,18 @@
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="details-container">
-                        <div class="wow animated fadeInLeft header">Stem Cell Therapy-&nbsp;<span>The Anti-Aging and Rejuvenation Therapy</span></div>
+                        <div class="wow animated fadeInLeft header">{{ get_content($shop_theme_info, "home", "home_item3_name_green") }}&nbsp;<span>{{ get_content($shop_theme_info, "home", "home_item3_name_gold") }}</span></div>
                         <div class="benefits">
                             <div class="wow animated fadeInRight header" data-wow-delay=".5s" style="font-size: 15px;">Benefits: </div>
-                            <ul class="wow animated fadeInRight" data-wow-delay=".6s">
-                                <li>Solves skin problems and eliminate wrinkles, acne, eye bags, moisturize dry skin, stimulate skin cell renewal, promote blood circulation.</li>
-                                <li>Helps to improve the aging problem, high blood pressure, diabetes, stomach ulcers, migraine headaches and arthritis</li>
-                                <li>Invigorates the body, improves sexual desire and prevents impotence</li>
-                                <li>Helps to improve lack of vitality, fatigue and poor physical symptoms</li>
-                                <li>Premature aging and wear of the organs, such as brain, heart, lungs, kidneys and digestive system.</li>
-                                <li>Reduces the effect of anemia</li>
-                                <li>After surgery to promote wound healing and reduce recovery time</li>
-                                <li>Restores the normal function for hormone secretion</li>
-                                <li>Regulating the autonomic nervous system, enhance the immune system</li>
-                                <li>Stimulate he muscles, skin, collagen, bone and cartilage and nerve tissue for normal growth regeneration and repair</li>
-                                <li>Recuperation from labour, eases menopause syndrome and regulates menstruation</li>
-                            </ul>
+                            <div class="wow animated fadeInRight" data-wow-delay=".6s">
+                               {!! get_content($shop_theme_info, "home", "home_item3_benefits") !!} 
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="wow animated fadeInRight img-container" data-wow-delay=".3s">
-                        <img src="/themes/{{ $shop_theme }}/img/product&services-003.png">
+                        <img src="{{ get_content($shop_theme_info, "home", "home_item3_image") }}">
                     </div>
                     <!-- <div class="text-center wow animated fadeInRight" data-wow-delay=".3s">
                         <button class="btn btn-primary product-add-cart" item-id="2728" quantity="1">ADD TO CART <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>

@@ -45,8 +45,7 @@ function customerlist()
 
 				clearTimeout(item_search_delay_timer);
 				item_search_delay_timer = setTimeout(function()
-				{
-					
+				{					
 					 search_ajax(url, data, target);
 				}, 500);
 

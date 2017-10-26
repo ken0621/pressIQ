@@ -832,7 +832,15 @@ class MlmDeveloperController extends Member
 
         $sponsor_info = Tbl_mlm_slot::where("slot_no", request("sponsor"))->where("shop_id", $shop_id)->first();
         $placement_info = Tbl_mlm_slot::where("slot_no", request("placement"))->where("shop_id", $shop_id)->first();
-        $check_same = Tbl_mlm_slot::where("slot_placement", $placement_info->slot_id)->where("slot_sponsor", $sponsor_info->slot_id)->where("slot_position", request("position"))->first();
+
+        if($placement_info)
+        {
+            $check_same = Tbl_mlm_slot::where("slot_placement", $placement_info->slot_id)->where("slot_position", request("position"))->first();
+        }
+        else
+        {
+            $check_same = null;
+        }
 
         $return["status"] = "success";
         $return["call_function"] = "modify_slot_success";
@@ -869,9 +877,13 @@ class MlmDeveloperController extends Member
         if($error == "")
         {
             $update["slot_sponsor"] = $sponsor_info->slot_id;
-            $update["slot_placement"] = $placement_info->slot_id;
-            $update["slot_position"] = request("position");
 
+            if(request("placement") != "")
+            {
+                $update["slot_placement"] = $placement_info->slot_id;
+            }
+            
+            $update["slot_position"] = request("position");
 
             Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
             $return["status"] = "success";

@@ -214,7 +214,21 @@ class Transaction
         $consume['id'] = $transaction_list_id;
         foreach ($get_item as $key => $value) 
         {
-            Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
+            $item_type = Item::get_item_type($value->item_id);
+            /*INVENTORY TYPE*/
+            if($item_type == 1)
+            {
+                Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
+            }
+            /*NONINVENTORY TYPE*/
+            if($item_type == 2)
+            {
+                $return = Warehouse2::refill($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
+                if(!$return)
+                {
+                    Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
+                }
+            }
         }
     }
     public static function consume_in_warehouse_validation($shop_id, $transaction_list_id, $remarks = 'Enroll kit')

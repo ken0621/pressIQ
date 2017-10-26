@@ -88,7 +88,7 @@
 					</div>
 				</div>
 
-				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="title">Reward Points</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="max-height: auto;">
 						<div class="holder">

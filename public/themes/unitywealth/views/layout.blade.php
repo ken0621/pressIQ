@@ -3,6 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -44,7 +45,7 @@
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
 <body class="pushmenu-push">
-    
+
     <div class="loader hide">
         <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
@@ -240,20 +241,7 @@
     <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.countdown.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/countdown/wow.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/countdown/scripts.js?version=1"></script>
-    <script type="text/javascript">
-    $window = $(window);
-    $window.scroll(function() {
-    $scroll_position = $window.scrollTop();
-    if ($scroll_position > 100) {
-    $('.header-container').addClass('header-fixed');
-    header_height = $('.your-header').innerHeight();
-    $('body').css('padding-top' , header_height);
-    } else {
-    $('.header-container').removeClass('header-fixed');
-    $('body').css('padding-top' , '0');
-    }
-    });
-    </script>
+    
     <!-- FB WIDGET -->
     <div id="fb-root"></div>
     @yield("script")

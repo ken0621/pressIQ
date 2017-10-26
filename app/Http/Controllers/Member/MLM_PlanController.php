@@ -1461,10 +1461,12 @@ class MLM_PlanController extends Member
             $insert['shop_id'] = $this->user_info->shop_id;
             Tbl_mlm_stairstep_settings::insert($insert);
             $data['response_status'] = "success_add_stairstep";
+            $data['response_rank_name'] = Request::input('stairstep_name');
         }
         else
         {
             $data['response_status'] = "warning";
+            $data['response_warning'] = $validator->messages()->all();
             $data['warning_validator'] = $validator->messages();
         }
         echo json_encode($data);
@@ -1512,10 +1514,12 @@ class MLM_PlanController extends Member
             $update['stairstep_genealogy_color'] = "#".Request::input('stairstep_genealogy_color');
             Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
             $data['response_status'] = "success_edit_stairstep";
+            $data['response_rank_name'] = Request::input('stairstep_name');
         }
         else
         {
             $data['response_status'] = "warning";
+            $data['response_warning'] = $validator->messages()->all();
             $data['warning_validator'] = $validator->messages();
         }
         echo json_encode($data);

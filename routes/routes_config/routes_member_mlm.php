@@ -334,6 +334,8 @@ Route::post('member/mlm/developer/redistribute', 'Member\MlmDeveloperController@
 Route::get('member/mlm/developer/modify_slot', 'Member\MlmDeveloperController@modify_slot');
 Route::post('member/mlm/developer/modify_slot', 'Member\MlmDeveloperController@modify_slot_submit');
 
+Route::any('member/mlm/developer/allow_multiple_slot', 'Member\MlmDeveloperController@allow_multiple_slot');
+
 
 
 Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');

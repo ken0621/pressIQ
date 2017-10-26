@@ -22,6 +22,23 @@ function mlm_developer()
 		action_load_table();
 		add_event_pagination();
 		add_event_search();
+		add_event_allow_slot();
+	}
+	function add_event_allow_slot()
+	{
+		$("body").on("click", ".allow-slot-change", function(e)
+		{
+			var customer_id = $(e.currentTarget).attr('customer-id');
+			$.ajax({
+				url : '/member/mlm/developer/allow_multiple_slot',
+				type : 'get',
+				data : {customer_id : customer_id},
+				success : function()
+				{
+					console.log('success');	
+				}
+			});
+		});
 	}
 	function add_event_search()
 	{

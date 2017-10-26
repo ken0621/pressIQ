@@ -256,25 +256,25 @@ body{
 		display: inline-block;
 		padding: 15px 0px 15px 0px;
 		border-bottom: 1px solid #dedede;
-		.bulleted-list::before
+		
+		ul
 		{
-			content: "";
-			background-color: #b07d2a;
-			line-height: 1em;
-			width: .5em;
-			height: .5em;
-			float: left;
-			margin: .40em .25em 0;
-		}
-		.bulleted-list
-		{
-			display: inline-block;
-			.list-content
+			padding-left: 10px;
+			list-style-type: square;
+			.liststyle
 			{
-				font-family: $content-text;
-				float: right;
-				width: 93%;
-				font-size: 15px;
+				color: #b17d2a;
+			}
+			li
+			{
+				p 
+				{
+					font-family: $content-text;
+					font-size: 15px;
+					color: #555555;
+					margin-bottom: 30px;
+					padding: 0 10px;
+				}
 			}
 		}
 	}
@@ -435,6 +435,22 @@ body{
 		.list-content
 		{
 			padding-left:15px;
+		}
+		ul
+		{
+			padding-left: 10px;
+			list-style-type: square;
+			.liststyle
+			{
+				color: #b17d2a;
+			}
+			li
+			{
+				p 
+				{
+
+				}
+			}
 		}
 	}
 

@@ -1928,9 +1928,6 @@ class Payroll2
 			}
 		}
 
-		
-
-		
 		//record if undertime
 		$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
 		$time_spent_in_minutes = Payroll2::convert_time_in_minutes($time_spent);

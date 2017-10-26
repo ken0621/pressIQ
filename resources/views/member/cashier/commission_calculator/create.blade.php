@@ -24,7 +24,7 @@
                         <div class="col-md-6">
                             <label>Select Agent</label>
                             <select class="select-agent form-control input-sm">
-                                <option commission-percent="8">Juan Dela Cruz</option>
+                                <option commission-percent="8" value="1">Juan Dela Cruz</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -47,17 +47,17 @@
                         </div>
                         <div class="col-md-6">
                             <label>Total Selling Price</label>
-                            <input type="text" class="form-control input-sm sales-price text-right" name="">
+                            <input type="text" class="number-input form-control input-sm sales-price text-right" name="">
                         </div>
                     </div>                    
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Downpayment</label>
-                            <input type="text" class="form-control input-sm text-right" name="" value="5%">
+                            <input type="text" class="form-control input-sm text-right downpayment compute-all" name="" value="15%">
                         </div>
                         <div class="col-md-6">
                             <label>Amount of Downpayment</label>
-                            <input type="text" class="form-control input-sm" name="">
+                            <input type="text" class="form-control text-right input-sm amount-downpayment" name="">
                         </div>
                     </div>
                     <div class="form-group">
@@ -65,7 +65,7 @@
                             <label>Discount</label>
                         </div>
                         <div class="col-md-6">
-                            <input type="text" class="form-control input-sm" name="">
+                            <input type="text" value="0.00" class="number-input form-control input-sm text-right discount compute-all" name="">
                         </div>
                     </div>
                 </div>
@@ -76,17 +76,19 @@
                             <h4><b>Net Downpayment :</b></h4>
                         </div>
                         <div class="col-md-6">
-                            <h4><div class="">Amount of NDP</div></h4>
+                            <h4><div class="amount-net-downpayment">Amount of NDP</div></h4>
                         </div>
                     </div>
                     <div class="form-group ">
                         <div class="col-md-6">
-                            <select class="select-customer form-control input-sm">
-                                <option>Downpayment Term</option>
+                            <select class="select-term text-right form-control input-sm">
+                                @for($i = 1; $i <= 30; $i++)
+                                <option value="{{$i}}" {{$i == 1 ? 'selected' : ''}}>{{$i}} Month{{$i == 1 ? '' : 's'}}</option>
+                                @endfor
                             </select>
                         </div>
                         <div class="col-md-6 text-center">
-                            <h4><div class="">Monthly Amort of DP</div></h4>
+                            <h4><div class="amount-monthly-amort-dp">Monthly Amort of DP</div></h4>
                         </div>
                     </div>
                     <div class="form-group">
@@ -95,11 +97,11 @@
                                 <label>Miscellaneous Fee</label>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control input-sm" name="">
+                                <input type="text" class="form-control text-right input-sm misc" name="" value="5%">
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
-                            <h4><div class="">Miscellaneous Amount</div></h4>
+                            <h4><div class="amount-misc">Miscellaneous Amount</div></h4>
                         </div>
                     </div>
                     <div class="form-group">
@@ -107,7 +109,7 @@
                             <h4><b>Loanable Amount :</b></h4>
                         </div>
                         <div class="col-md-6 text-center">
-                            <h4><div class="">Loanable Amount</div></h4>
+                            <h4><div class="amount-loanable">Loanable Amount</div></h4>
                         </div>
                     </div>
                     <div class="form-group">
@@ -115,7 +117,7 @@
                             <h4><b>Total Contract Price :</b></h4>
                         </div>
                         <div class="col-md-6 text-center">
-                            <h4><div class="">TCP Amount</div></h4>
+                            <h4><div class="amount-tcp">TCP Amount</div></h4>
                         </div>
                     </div>
                 </div>
@@ -126,7 +128,7 @@
                             <h4><b>Total Commission :</b></h4>
                         </div>
                         <div class="col-md-6 text-center">
-                            <a href="javascript:"><h4><div class="">TC Amount</div></h4></a>
+                            <a href="javascript:"><h4><div class="amount-tc">TC Amount</div></h4></a>
                         </div>
                     </div>
                     <div class="form-group">
@@ -135,7 +137,7 @@
                                 <label>NDP Commission</label>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control input-sm" name="">
+                                <input type="text" class="form-control input-sm text-right" value="60%" name="">
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
@@ -148,7 +150,7 @@
                                 <label>TCP Commission</label>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control input-sm" name="">
+                                <input type="text" class="form-control input-sm text-right" name="" value="40%">
                             </div>
                         </div>
                         <div class="col-md-6 text-center">

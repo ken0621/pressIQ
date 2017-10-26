@@ -84,7 +84,7 @@
             <div class="row clearfix">
                 <div class="col-md-3">
 
-                    <div id="nav_list" style="background-image: url('/themes/{{ $shop_theme }}/img/icon_nav.png');">MENU</div>
+                    <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
 
                     <nav class="pushmenu pushmenu-left">
                       <ul class="links">
@@ -100,12 +100,13 @@
                             <img src="/themes/{{ $shop_theme }}/img/header-logo.png">
                         </a>                       
                     </div>
+
                     @if(request()->segment(1) != "replicated")
-                    <div class="menu-nav">
+                    <!-- <div class="menu-nav">
                         <span></span>
                         <span></span>
                         <span></span>
-                    </div>
+                    </div> -->
                     @endif
                 </div>
                 <div class="col-md-9">

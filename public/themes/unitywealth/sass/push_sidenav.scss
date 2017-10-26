@@ -214,9 +214,11 @@
    background: url(icon_nav.png) no-repeat left top;
    cursor: pointer;
    height: 27px;
-   width: 33px;
-   text-indent: -99999em;
+   //width: 33px;
+   //text-indent: -99999em;
+   color: #000 !important;
  }
+
 
  nav-list.active { background-position: -331px top; }
 
@@ -229,3 +231,17 @@
  section.content {
    padding: 10px 20px;
  }
+
+@media screen and (max-width: 414px)
+{
+    .image-logo-holder
+    {
+        margin: auto;
+    }
+
+    .hamburger
+    {
+        color: #000;
+        font-size: 25px;
+    }
+}

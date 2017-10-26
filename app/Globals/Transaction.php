@@ -472,9 +472,13 @@ class Transaction
                 {
                     $data->where('transaction_type', $transaction_type)->where('payment_status','pending');
                 }
+                elseif($transaction_type == 'reject')
+                {
+                    $data->where('transaction_type','proof')->where('payment_status','reject')->where('order_status','reject');
+                }
                 else
                 {
-                    $data->where('transaction_type', $transaction_type);
+                    $data->where('transaction_type', $transaction_type)->where('order_status','!=','reject');
                 }
             }
         }

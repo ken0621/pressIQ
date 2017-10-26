@@ -39,8 +39,22 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-12">
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">
-            <div class="panel-heading clearfix append_filter">
-                
+            <div class="panel-heading clearfix">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Customer Name</th>
+                            <th>Membership Code</th>
+                            <th>Issued</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="append_filter">
+                        <tr>
+                            <td class="text-center" colspan="4">Select filter first.</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

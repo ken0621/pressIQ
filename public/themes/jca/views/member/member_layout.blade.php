@@ -45,9 +45,9 @@
 								<li>
 									<a href="/members/genealogy?mode=binary"><div class="nav-holder"> &nbsp;&nbsp;<span>Binary Tree</span></div></a>
 								</li>
-								<li>
+								<!-- <li>
 									<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"> &nbsp;&nbsp;<span>Unilevel Tree</span></div></a>
-								</li>
+								</li> -->
 
 							</ul>
 

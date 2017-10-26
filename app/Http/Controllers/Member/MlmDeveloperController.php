@@ -90,6 +90,7 @@ class MlmDeveloperController extends Member
             $data["_slot"][$key]->display_date = date("F d, Y", strtotime($slot->slot_created_date));
             $data["_slot"][$key]->display_time = date("h:i A", strtotime($slot->slot_created_date));
             $data["_slot"][$key]->modify_slot = "<a href='javascript:' link='/member/mlm/developer/modify_slot?slot_id=" . $slot->slot_id . "' class='popup' size='md'>MODIFY SLOT</a>";
+            $data["_slot"][$key]->distributed_income = "<a href='javascript:' link='/member/mlm/developer/distributed_income?slot_id=" . $slot->slot_id . "' class='popup' size='md'>DISTRIBUTED INCOME</a>";
             $data["_slot"][$key]->allow_multiple_slot = "<input type='checkbox' ".($slot->allow_multiple_slot == 1 ? 'checked' : '')." customer-id='".$slot->customer_id."' class='allow-slot-change' name='allow_multiple_slot'/>";
 
             /* BROWN RANK DETAILS */
@@ -190,6 +191,7 @@ class MlmDeveloperController extends Member
         $default[]          = ["CURRENT GC","total_gc_format", false];
         $default[]          = ["CURRENT WALLET","current_wallet_format", true];
         $default[]          = ["MODIFY SLOT","modify_slot", false];
+        $default[]          = ["DISTRIBUTED INCOME","distributed_income", false]; 
         $default[]          = ["ALLOW MULTIPLE SLOT","allow_multiple_slot", false];
 
 
@@ -279,6 +281,37 @@ class MlmDeveloperController extends Member
             $data["log_total"] = Currency::format($data["log_total"]);
 
             return view("member.mlm_developer.popup_earnings", $data);
+        }
+        else
+        {
+            $data["title"] = "NO EARNINGS";
+            $data["message"] = "This slot doesn't have any earnings yet.";
+            return view("error_modal", $data);
+        } 
+    }
+    public function distributed_income()
+    {
+        $data["page"] = "distributed_income";
+        $data["slot_info"] = Tbl_mlm_slot::where("slot_id", Request::input("slot_id"))->first();
+        $_wallet = Tbl_mlm_slot_wallet_log::where("wallet_log_slot_sponsor", Request::input("slot_id"))->orderBy("wallet_log_id", "asc")->get();
+        
+        if(count($_wallet) > 0)
+        {
+            $data["log_total"] = 0;
+            foreach($_wallet as $key => $wallet)
+            {
+                $recipient = Tbl_mlm_slot::where("slot_id", $wallet->wallet_log_slot)->customer()->first();
+                $data["_wallet"][$key] = $wallet;
+                $data["_wallet"][$key]->display_amount = Currency::format($wallet->wallet_log_amount);
+                $data["_wallet"][$key]->display_date = date("F d, Y - h:i A ", strtotime($wallet->wallet_log_date_created)); //October 24, 1991 (10:30 AM)
+                $data["log_total"] += $wallet->wallet_log_amount;
+                $data["_wallet"][$key]->distributed_to = $recipient->slot_no . " - " . $recipient->first_name . " " . $recipient->last_name;
+                $data["_wallet"][$key]->running_balance = Currency::format($data["log_total"]);
+            }
+
+            $data["log_total"] = Currency::format($data["log_total"]);
+
+            return view("member.mlm_developer.distributed_income", $data);
         }
         else
         {

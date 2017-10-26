@@ -14,6 +14,7 @@ use Crypt;
 use Session;
 use Response;
 use Input;
+use Storage;
 
 class ImageController extends Member
 {
@@ -34,15 +35,24 @@ class ImageController extends Member
 		$filename 			= str_random(15).".".$extension;
 		$destinationPath 	= 'uploads/'.$shop_key."-".$shop_id;
 
-		if(!File::exists($destinationPath)) 
-		{
-			$create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
-		}
-
-		$upload_success    = Input::file('file')->move($destinationPath, $filename);
-
+		// if(!File::exists($destinationPath)) 
+		// {
+		// 	$create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+		// }
+		// $upload_success    = Input::file('file')->move($destinationPath, $filename);
 		/* SAVE THE IMAGE PATH IN THE DATABASE */
-		$image_path = $destinationPath."/".$filename;
+		// $image_path = $destinationPath."/".$filename;
+
+		$image_path = Storage::putFile($destinationPath, Input::file('file'));
+
+		if ($image_path) 
+		{
+			$upload_success = true;
+		}
+		else
+		{
+			$upload_success = false;
+		}
 
 		$insert_image["image_path"] 		= "/" . $image_path; 
 		$insert_image["image_shop"] 		= $this->user_info->shop_id;

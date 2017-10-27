@@ -432,8 +432,8 @@ class MLM2
 
 		foreach($_direct as $key => $direct)
 		{
+			$_direct[$key]->display_date = date("F d, Y", strtotime($direct->slot_created_date));
 			$_direct[$key]->time_ago = time_ago($direct->slot_created_date);
-
 			$_direct[$key]->profile_image = ($direct->profile == "" ? "/themes/brown/img/user-placeholder.png" : $direct->profile);
 		}
 

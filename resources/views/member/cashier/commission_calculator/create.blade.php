@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-md-6">
                             <label>Total Selling Price</label>
-                            <input type="text" class="number-input form-control input-sm sales-price text-right" name="">
+                            <input type="text" class="number-input form-control input-sm sales-price text-right compute-all" name="">
                         </div>
                     </div>                    
                     <div class="form-group">
@@ -97,7 +97,7 @@
                                 <label>Miscellaneous Fee</label>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control text-right input-sm misc" name="" value="5%">
+                                <input type="text" class="form-control text-right input-sm misc compute-all" name="" value="5%">
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
@@ -137,11 +137,11 @@
                                 <label>NDP Commission</label>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control input-sm text-right" value="60%" name="">
+                                <input type="text" class="form-control input-sm text-right compute-all ndp-commission" value="60%" name="">
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
-                            <h4><div class="">NDP Commission Amount</div></h4>
+                            <h4><div class="amount-ndp">NDP Commission Amount</div></h4>
                         </div>
                     </div>
                     <div class="form-group">
@@ -150,11 +150,11 @@
                                 <label>TCP Commission</label>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control input-sm text-right" name="" value="40%">
+                                <input type="text" class="change-tcp form-control input-sm text-right compute-all tcp-commission" name="" value="40%">
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
-                            <h4><div class="">TCP Commission Amount</div></h4>
+                            <h4><div class="amount-tcp1">TCP Commission Amount</div></h4>
                         </div>
                     </div>
                 </div>

@@ -9,8 +9,15 @@ var tsp = 0;
 var discount = 0;
 var total_commission = 0;
 var payment_term = 1;
+
 var misc_string = 0;
 var misc = 0;
+
+var ndp_string = '';
+var ndp = 0;
+
+var tcp_string = '';
+var tcp = 0;
 
 function create_commission_calculator()
 {
@@ -29,6 +36,7 @@ function create_commission_calculator()
 		action_initialize_select();
 		action_load_datepicker();
 		event_compute_all();
+		event_change_tcp();
 	}
 	function action_load_datepicker()
 	{
@@ -106,6 +114,20 @@ function create_commission_calculator()
 			event_compute_commission();
 		});
 	}
+	function event_change_tcp()
+	{
+		$('.change-tcp').unbind('keyup');
+		$('.change-tcp').bind('keyup', function()
+		{
+			tcp_string = $(this).val();
+			/*Commission Percent*/
+			var tcp_percent = parseFloat(tcp_string.substring(0, tcp_string.indexOf('%')));
+			$('.ndp-commission').val((100 - tcp_percent)+'%');
+			ndp_string = (100 - tcp_percent)+'%';
+
+			event_compute_commission();
+		});
+	}
 	function event_compute_commission()
 	{
 		dp_string = $('.downpayment').val();
@@ -138,16 +160,32 @@ function create_commission_calculator()
 		$('.amount-loanable').html('P '+number_format(amount_loanable));
 		var amount_tcp = tsp + amount_misc;
 		$('.amount-tcp').html('P '+number_format(amount_tcp));
-		console.log(tsp +'-'+ discount+ '/'+ tax +'*'+ agent_commission_percent +'/'+ 100);
-		// var amount_tc = () / (tax * (agent_commission_percent / 100));
-		var sales1 =  tsp - discount;
-		var sales2 = tax * agent_commission_percent
-		console.log(agent_commission_percent);
-		console.log(sales1);
-		console.log(sales2);
-		$('.amount-tc').html('P '+ number_format(sales1/sales2));
+		var amount_tc = ((tsp - discount) / tax) * agent_commission_percent;
+		$('.amount-tc').html('P '+ number_format(amount_tc));
+		
+		tcp_string = $('.tcp-commission').val();
+		ndp_string = $('.ndp-commission').val();
+		/*Commission Percent*/
+		var ndp_percent = parseFloat(ndp_string.substring(0, ndp_string.indexOf('%')));
+		$('.tcp-commission').val((100 - ndp_percent)+'%');
+		tcp_string = (100 - ndp_percent)+'%';
 
 
+		tcp = 0;
+		if(tcp_string.indexOf('%') > 0)
+		{
+			tcp = (parseFloat(tcp_string.substring(0, tcp_string.indexOf('%'))) / 100);
+		}
+		var amount_tcp = amount_tc * tcp;
+		$('.amount-tcp1').html('P '+number_format(amount_tcp));
+
+		ndp = 0;
+		if(ndp_string.indexOf('%') > 0)
+		{
+			ndp = (parseFloat(ndp_string.substring(0, ndp_string.indexOf('%'))) / 100);
+		}
+		var amount_ndp = amount_tc * ndp;
+		$('.amount-ndp').html('P '+number_format(amount_ndp));
 	}
 	function event_accept_number_only()
 	{

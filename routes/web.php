@@ -1,4 +1,6 @@
 <?php
+AdvancedRoute::controller('/exam', 'ExamController');
+
 Route::get('/ref/{id}', 'LeadController@ref');
 Route::any('/inspirers', 'SampleTesting@inspirer');
 Route::any('/inspirer', 'SampleTesting@inspirer');
@@ -916,6 +918,7 @@ Route::get('/member/customer','Customer\CustomerController@index');
 Route::get('/member/customer/bulk_archive','Member\CustomerController@bulk_archive');
 Route::post('/member/customer/bulk_archive','Member\CustomerController@bulk_archive_post');
 Route::get('/member/customer/list','Member\CustomerController@index');
+Route::any('/member/customer/viewlead/{id}','Member\CustomerController@viewlead');
 Route::any('/member/customer/modalcreatecustomer','Member\CustomerController@modalcreatecustomer');
 Route::post('/member/customer/insertcustomer','Member\CustomerController@insertcustomer');
 Route::post('/member/customer/editcustomer','Member\CustomerController@editcustomer');

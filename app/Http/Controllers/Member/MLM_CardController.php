@@ -51,6 +51,7 @@ class MLM_CardController extends Member
             {
                 $color = 'discount';
             }
+
             $name = name_format_from_customer_info($slot);
             $membership_code = $slot->slot_no;    
             $data['color'] = $color;
@@ -133,9 +134,17 @@ class MLM_CardController extends Member
         ->where('tbl_mlm_slot.slot_id', $slot_id)
         ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_slot.slot_owner')
         ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-            
         ->membership()->customer()->first();
-        $card = Cards::card_all($slot);
+
+
+        if ($slot->membership_name == "Privilege Card") 
+        {
+            $card = Cards::discount_card2($slot);
+        }
+        else
+        {
+            $card = Cards::card_all($slot);
+        }
 
         return Pdf_global::show_image($card);
 	}

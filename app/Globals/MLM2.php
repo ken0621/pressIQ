@@ -432,8 +432,8 @@ class MLM2
 
 		foreach($_direct as $key => $direct)
 		{
+			$_direct[$key]->display_date = date("F d, Y", strtotime($direct->slot_created_date));
 			$_direct[$key]->time_ago = time_ago($direct->slot_created_date);
-
 			$_direct[$key]->profile_image = ($direct->profile == "" ? "/themes/brown/img/user-placeholder.png" : $direct->profile);
 		}
 
@@ -607,6 +607,12 @@ class MLM2
  		$mlm_member     = ($count_slots > 0 ? true : false);
  		return $mlm_member;
 	}
+	public static function is_privilage_card_holder($shop_id, $customer_id)
+	{
+ 		$membership 	= Tbl_mlm_slot::where("slot_owner", $customer_id)->where("shop_id", $shop_id)->value('slot_membership');
+ 		$privilage_card_holder = ($membership == 1 ? true : false);
+ 		return $privilage_card_holder;
+	}
 	public static function membership_info($shop_id, $membership_id)
 	{
 		$return = Tbl_membership::where("membership_archive", 0)->where("shop_id", $shop_id)->where("membership_id", $membership_id)->first();
@@ -643,6 +649,8 @@ class MLM2
 	}
 	public static function create_slot($shop_id, $customer_id, $membership_id, $sponsor, $slot_no = null, $slot_type = "PS")
 	{
+		$slot_creation_limit = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->max_slot_per_account;
+		$slot_creation_count = Tbl_mlm_slot::where("slot_owner",$customer_id)->count();
 		if($slot_no)
 		{
 			$insert["slot_no"] = $slot_no;
@@ -678,8 +686,11 @@ class MLM2
 											});
 
         $validator = Validator::make($insert, $rules);
-
-		if ($validator->fails())
+        if($slot_creation_limit != 0 && $slot_creation_count >= $slot_creation_limit)
+        {
+        	return "Your account cannot create more than ".$slot_creation_limit." slots";
+        }
+		else if ($validator->fails())
 		{
 			$errors = $validator->errors();
 			foreach ($errors->all() as $message)

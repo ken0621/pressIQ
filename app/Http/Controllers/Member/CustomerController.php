@@ -22,6 +22,7 @@ use App\Models\Tbl_payment_method;
 use App\Models\Tbl_term;
 use App\Models\Tbl_item;
 use App\Models\Tbl_delivery_method;
+use App\Models\Tbl_mlm_slot;
 use Session;
 use App\Globals\Customer;
 use App\Globals\Utilities;
@@ -58,7 +59,27 @@ class CustomerController extends Member
             return $this->show_no_access();
         }
 	}
+    public function viewlead($id)
+    {
+        if(request()->isMethod("post"))
+        {
+            $update["customer_lead"] = 0;
+            Tbl_customer::where("customer_id", $id)->where("shop_id", $this->user_info->shop_id)->update($update);
 
+            $return["status"] = "success";
+            $return["call_function"] = "clear_lead_success";
+            echo json_encode($return);
+        }
+        else
+        {
+            $data["page"] = "Lead";
+            $data["id"] = $id;
+            $customer = Tbl_customer::where("customer_id", $id)->first();
+            $data["lead"] = Tbl_mlm_slot::where("slot_id", $customer->customer_lead)->customer()->first();
+            return view("member.customer.view_lead", $data);
+        }
+
+    }
     public function bulk_archive()
     {
         $data["_customer"]  = Customer::getAllCustomer();

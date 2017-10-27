@@ -615,7 +615,7 @@ class Mlm_complan_manager_repurchasev2
 
     public static function repurchase_points($slot_info,$points)
     {
-        $membership_points_repurchase = 0;
+        $membership_points_repurchase = $points;
 
         if($membership_points_repurchase != 0)
         {

@@ -39,14 +39,14 @@
 		<div class="row clearfix">
 			<div class="col-md-2">
 			</div>
-			<div class="col-md-8 text-center">
+			<div class="col-md-8 content-wrapper">
 				<div class="sub-container text">
 					@if(count($_point_plan) > 0)
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						@foreach($_point_plan as $plan)
 						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+							
+							<div class="name" style="width: 100%;"><div class="color pull-left middle-pos"></div><span>{{ $plan->label }}</span> <span class="p-text">{{ $points->{ "display_" . $plan->string_plan } }}</span></div>
 						</div>
 						@endforeach
 					</div>
@@ -54,7 +54,7 @@
 						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
 					@endif
 				</div>
-				<div class="title">Enter Product Code</div>
+				<div class="title left-side">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
 						<button class="btn btn-lblue" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>

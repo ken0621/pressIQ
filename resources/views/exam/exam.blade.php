@@ -9,7 +9,7 @@
       <!-- Path to Framework7 Library CSS-->
       <link rel="stylesheet" href="/assets/mobile/framework7/dist/css/framework7.ios.min.css">
       <!-- Path to your custom app styles-->
-      <link rel="stylesheet" href="css/my-app.css">
+      <link rel="stylesheet" href="c/assets/exam/css/exam.css">
    </head>
    <body>
       <div class="statusbar-overlay"></div>
@@ -49,6 +49,12 @@
             <div class="pages navbar-through toolbar-through">
                <div data-page="index" class="page">
                   <div class="page-content">
+                        <div class="content-block-title">Welcome to Digima Career Assement Examination</div>
+                        <div class="card">
+                           <div class="card-content">
+                              <div class="card-content-inner">This is simple card with plain text. But card could contain its own header, footer, list view, image, and any elements inside.</div>
+                           </div>
+                        </div>
                   </div>
                </div>
             </div>
@@ -58,3 +64,4 @@
       <script type="text/javascript" src="/assets/exam/exam.js"></script>
    </body>
 </html>
+

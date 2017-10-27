@@ -117,9 +117,12 @@ class ShopMemberController extends Shop
             }
             $data['_event'] = ShopEvent::get($this->shop_info->shop_id ,0 ,3 ,Carbon::now(), Self::$customer_info->customer_id, ['all','members']);
 
-            if(MLM2::is_privilage_card_holder($this->shop_info->shop_id, Self::$customer_info->customer_id))
+            if($this->shop_info->shop_theme == 'philtech')
             {
-                return Self::load_view_for_members('member.privilage_card_holder_dashboard',$data);
+                if(MLM2::is_privilage_card_holder($this->shop_info->shop_id, Self::$customer_info->customer_id))
+                {
+                    return Self::load_view_for_members('member.privilage_card_holder_dashboard',$data);
+                }                
             }
         }
 

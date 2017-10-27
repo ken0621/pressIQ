@@ -60,6 +60,7 @@ class MLM_PlanController extends Member
         $data["page"] = "Membership";
         $data['mlm_plan'] = Tbl_mlm_plan::where('shop_id', $this->user_info->shop_id)->orderBy('marketing_plan_enable', 'DESC')->orderBy('marketing_plan_code', 'ASC')->get();
         $data['plan_settings'] = Tbl_mlm_plan_setting::where('shop_id', $this->user_info->shop_id)->first();
+        $data['membership_list'] = Tbl_membership::where('shop_id', $this->user_info->shop_id)->get();
         // end datas
         
         return view('member.mlm_plan.mlm_plan_list', $data);
@@ -111,19 +112,34 @@ class MLM_PlanController extends Member
             $old_marketing_plan = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->toArray();
 
     		// update column
-    		$update['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
-    		$update['plan_settings_enable_mlm'] = Request::input('plan_settings_enable_mlm');
-    		$update['plan_settings_enable_replicated'] = Request::input('plan_settings_enable_replicated');
-    		$update['plan_settings_slot_id_format'] = Request::input('plan_settings_slot_id_format');
-    		$update['plan_settings_format'] = Request::input('plan_settings_format');
-    		$update['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
-            $update['plan_settings_use_item_code'] = Request::input('plan_settings_use_item_code');
-            $update['plan_settings_email_membership_code'] = Request::input('plan_settings_email_membership_code');
-            $update['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
-            $update['plan_settings_upgrade_slot'] = Request::input('plan_settings_upgrade_slot');
-            $update['plan_settings_default_downline_rule'] = Request::input('plan_settings_default_downline_rule');
-            $update['plan_settings_new_gen_placement'] = Request::input('plan_settings_new_gen_placement');
-            $update['plan_settings_placement_required'] = Request::input('plan_settings_placement_required');
+    		$update['plan_settings_prefix_count']           = Request::input('plan_settings_prefix_count');
+    		$update['plan_settings_enable_mlm']             = Request::input('plan_settings_enable_mlm');
+    		$update['plan_settings_enable_replicated']      = Request::input('plan_settings_enable_replicated');
+    		$update['plan_settings_slot_id_format']         = Request::input('plan_settings_slot_id_format');
+    		$update['plan_settings_format']                 = Request::input('plan_settings_format');
+    		$update['plan_settings_prefix_count']           = Request::input('plan_settings_prefix_count');
+            $update['plan_settings_use_item_code']          = Request::input('plan_settings_use_item_code');
+            $update['plan_settings_email_membership_code']  = Request::input('plan_settings_email_membership_code');
+            $update['plan_settings_email_product_code']     = Request::input('plan_settings_email_product_code');
+            $update['plan_settings_upgrade_slot']           = Request::input('plan_settings_upgrade_slot');
+            $update['plan_settings_default_downline_rule']  = Request::input('plan_settings_default_downline_rule');
+            $update['plan_settings_new_gen_placement']      = Request::input('plan_settings_new_gen_placement');
+            $update['plan_settings_placement_required']     = Request::input('plan_settings_placement_required');
+            $update['max_slot_per_account']                 = Request::input('max_slot_per_account');
+            $update['enable_privilege_system']              = Request::input('enable_privilege_system');
+
+            $update_membership_privilege["membership_privilege"] = 0;
+            Tbl_membership::where("shop_id",$shop_id)->update($update_membership_privilege);
+
+            if(Request::input("enable_privilege_system") == 1)
+            {
+                if(Request::input("membership_chosen_id") != 0)
+                {
+                    $update_membership_privilege["membership_privilege"] = 1;
+                    Tbl_membership::where("shop_id",$shop_id)->where("membership_id",Request::input("membership_chosen_id"))->update($update_membership_privilege);
+                }
+            }
+
     		// end
     		
     		// update settings
@@ -1458,6 +1474,7 @@ class MLM_PlanController extends Member
             $insert['direct_rank_bonus'] = Request::input('direct_rank_bonus');
             $insert['stairstep_rebates_bonus'] = Request::input('stairstep_rebates_bonus');
             $insert['stairstep_genealogy_color'] = "#".Request::input('stairstep_genealogy_color');
+            $insert['stairstep_genealogy_border_color'] = "#".Request::input('stairstep_genealogy_border_color');
             $insert['shop_id'] = $this->user_info->shop_id;
             Tbl_mlm_stairstep_settings::insert($insert);
             $data['response_status'] = "success_add_stairstep";
@@ -1512,6 +1529,7 @@ class MLM_PlanController extends Member
             $update['direct_rank_bonus'] = Request::input('direct_rank_bonus');
             $update['stairstep_rebates_bonus'] = Request::input('stairstep_rebates_bonus');
             $update['stairstep_genealogy_color'] = "#".Request::input('stairstep_genealogy_color');
+            $update['stairstep_genealogy_border_color'] = "#".Request::input('stairstep_genealogy_border_color');
             Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
             $data['response_status'] = "success_edit_stairstep";
             $data['response_rank_name'] = Request::input('stairstep_name');

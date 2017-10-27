@@ -203,6 +203,9 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::get('product_order2/proof','Member\ProductOrderController2@proof');
 	Route::get('product_order2/confirm_payment','Member\ProductOrderController2@confirm_payment');
 	Route::post('product_order2/confirm_payment_submit','Member\ProductOrderController2@confirm_payment_submit');
+	Route::get('product_order2/reject_payment','Member\ProductOrderController2@reject_payment');
+	Route::post('product_order2/reject_payment_submit','Member\ProductOrderController2@reject_payment_submit');
+	
 	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
 	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
 	Route::get('product_order2/export','Member\ProductOrderController2@export');
@@ -471,6 +474,7 @@ AdvancedRoute::controller('/member/item/warehouse/wis', 'Member\WarehouseIssuanc
 /* RR */
 AdvancedRoute::controller('/member/item/warehouse/rr', 'Member\WarehouseReceivingReportController');
 /* End */
+
 
 
 /* START PIS ARCY*/
@@ -912,6 +916,7 @@ Route::get('/member/customer','Customer\CustomerController@index');
 Route::get('/member/customer/bulk_archive','Member\CustomerController@bulk_archive');
 Route::post('/member/customer/bulk_archive','Member\CustomerController@bulk_archive_post');
 Route::get('/member/customer/list','Member\CustomerController@index');
+Route::any('/member/customer/viewlead/{id}','Member\CustomerController@viewlead');
 Route::any('/member/customer/modalcreatecustomer','Member\CustomerController@modalcreatecustomer');
 Route::post('/member/customer/insertcustomer','Member\CustomerController@insertcustomer');
 Route::post('/member/customer/editcustomer','Member\CustomerController@editcustomer');

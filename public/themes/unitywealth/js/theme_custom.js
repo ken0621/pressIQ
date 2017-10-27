@@ -60,13 +60,32 @@ function theme_custom()
 	            $('.slider3').diyslider("move", "forth");
 	        });
 
+	        //Mel push menu
+	        /*$(document).ready(function() {
+        		$menuLeft = $('.pushmenu-left');
+        		$nav_list = $('#nav_list');
+        		
+        		$nav_list.click(function() {
+        			$(this).toggleClass('active');
+        			$('.pushmenu-push').toggleClass('pushmenu-push-toright');
+        			$menuLeft.toggleClass('pushmenu-open');
+        		});
+        	});*/
+
+    		$menuLeft = $('.pushmenu-left');
+    		$nav_list = $('#nav_list');
+    		
+    		$nav_list.click(function() {
+    			$(this).toggleClass('active');
+    			$('.pushmenu-push').toggleClass('pushmenu-push-toright');
+    			$menuLeft.toggleClass('pushmenu-open');
+    		});
 
 	        // NAVIRINO CLICK TOGGLE
 	        $(".menu-nav").click(function()
 	        {
 	            $(".navirino").toggle("slow");
 	        });
-
 
 	        /*PRODUCT HOVER TOGGLE*/
 	        $('.product-hover').hover(function()

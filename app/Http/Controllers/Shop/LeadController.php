@@ -15,7 +15,7 @@ class LeadController extends Shop
         });
 
       
-        $slot = Tbl_mlm_slot::where("slot_no", $slot_no)->where("shop_id", $this->shop_info->shop_id)->first();
+        $slot = Tbl_mlm_slot::where("slot_no", urldecode($slot_no))->where("shop_id", $this->shop_info->shop_id)->first();
 
         if(!$slot)
         {
@@ -29,7 +29,7 @@ class LeadController extends Shop
 
             if(view()->exists("replicated"))
             {
-                return redirect("/replicated");
+                return view('replicated', $data);
             }
             else
             {

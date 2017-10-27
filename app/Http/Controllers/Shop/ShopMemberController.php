@@ -84,9 +84,10 @@ class ShopMemberController extends Shop
             $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
             $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 500);
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data['allow_multiple_slot'] = Self::$customer_info->allow_multiple_slot;
             $data['mlm_pin'] = '';
-            $data['mlm_activation'] = '';
+            $data['mlm_activation'] = '';            
             
             if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
             {
@@ -119,6 +120,11 @@ class ShopMemberController extends Shop
         $data["item_kit"]    = Item::get_all_assembled_kit($this->shop_info->shop_id);
 
         return Self::load_view_for_members('member.dashboard', $data);
+    }
+    public function getDirect()
+    {
+        $data["_direct"] = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id);
+        return Self::load_view_for_members('member.direct', $data);
     }
     public function getProducts()
     {

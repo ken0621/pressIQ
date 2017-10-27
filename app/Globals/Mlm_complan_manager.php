@@ -627,7 +627,8 @@ class Mlm_complan_manager
                 /* COMPUTE FOR BONUS */
                 if(isset($indirect_level[$tree->membership_id][$tree->sponsor_tree_level]))
                 {
-                    $indirect_bonus = $indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level];    
+                    //$indirect_bonus = $indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level];
+                    $indirect_bonus = $indirect_level[$tree->membership_id][$tree->sponsor_tree_level];     
                 }
                 else
                 {

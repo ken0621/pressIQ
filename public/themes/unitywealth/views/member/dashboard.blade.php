@@ -178,13 +178,13 @@
 									<div class="date">{{ $direct->time_ago }}</div>
 								</div>
 							</div>
-							<div class="action pull-right">
+<!-- 							<div class="action pull-right">
 								@if($direct->distributed == 1)
 									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
 								@else
 									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 								@endif
-							</div>
+							</div> -->
 						</div>
 						@endforeach
 					@else

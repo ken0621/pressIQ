@@ -108,6 +108,7 @@
                                     <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
                                     <!-- <li><a href="/member/customer/transaction_list">Transaction List</a></li> -->
                                     <li><a href="/member/customer/estimate">Create Estimate</li>
+                                    <li><a class="popup" link="/member/customer/viewlead/{{$customer->customer_id}}" size="md" data-toggle="modal">View Lead</li>   
                                     <li><a href="/member/customer/details/{{$customer->customer_id1}}">View Customer Details</a></li>
                                     <li><a class="popup" link="/member/customer/customeredit/{{$customer->customer_id1}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
                                     <li><a class="active-toggle" data-content="{{$customer->customer_id1}}" data-target="#tr-customer-{{$customer->customer_id1}}" data-value="0" data-html="inactive">Make Inactive</a></li>

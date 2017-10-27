@@ -10,59 +10,59 @@
                 <div class="form-horizontal">
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label>Select Customer</label>
+                            <strong>Select Customer</strong>
                             <select class="select-customer form-control input-sm">
                                  @include('member.load_ajax_data.load_customer')
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label>Customer Email</label>
+                            <strong>Customer Email</strong>
                             <input type="text" class="form-control input-sm customer-email" name="">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label>Select Agent</label>
+                            <strong>Select Agent</strong>
                             <select class="select-agent form-control input-sm">
                                 <option commission-percent="8" value="1">Juan Dela Cruz</option>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <div class="col-md-6">
-                                <label>Start Date</label>
+                                <strong>Start Date</strong>
                                 <input type="text" class="form-control input-sm datepicker" name="">
                             </div>
                             <div class="col-md-6">
-                                <label>Due Date</label>
+                                <strong>Due Date</strong>
                                 <input type="text" class="form-control input-sm datepicker" name="">
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label>Select Property</label>
+                            <strong>Select Property</strong>
                             <select class="select-property form-control input-sm">
                                  @include("member.load_ajax_data.load_item_category",['add_search' => ''])
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label>Total Selling Price</label>
+                            <strong>Total Selling Price</strong>
                             <input type="text" class="number-input form-control input-sm sales-price text-right compute-all" name="">
                         </div>
                     </div>                    
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label>Downpayment</label>
+                            <strong>Downpayment</strong>
                             <input type="text" class="form-control input-sm text-right downpayment compute-all" name="" value="15%">
                         </div>
                         <div class="col-md-6">
-                            <label>Amount of Downpayment</label>
+                            <strong>Amount of Downpayment</strong>
                             <input type="text" class="form-control text-right input-sm amount-downpayment" name="">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6 text-right">
-                            <label>Discount</label>
+                            <strong>Discount</strong>
                         </div>
                         <div class="col-md-6">
                             <input type="text" value="0.00" class="number-input form-control input-sm text-right discount compute-all" name="">
@@ -94,7 +94,7 @@
                     <div class="form-group">
                         <div class="col-md-6 padding-top-here">
                             <div class="col-md-6">
-                                <label>Miscellaneous Fee</label>
+                                <strong>Miscellaneous Fee</strong>
                             </div>
                             <div class="col-md-6">
                                 <input type="text" class="form-control text-right input-sm misc compute-all" name="" value="5%">
@@ -134,7 +134,7 @@
                     <div class="form-group">
                         <div class="col-md-6 padding-top-here">
                             <div class="col-md-6">
-                                <label>NDP Commission</label>
+                                <strong>NDP Commission</strong>
                             </div>
                             <div class="col-md-6">
                                 <input type="text" class="form-control input-sm text-right compute-all ndp-commission" value="60%" name="">
@@ -147,7 +147,7 @@
                     <div class="form-group">
                         <div class="col-md-6 padding-top-here">
                             <div class="col-md-6">
-                                <label>TCP Commission</label>
+                                <strong>TCP Commission</strong>
                             </div>
                             <div class="col-md-6">
                                 <input type="text" class="change-tcp form-control input-sm text-right compute-all tcp-commission" name="" value="40%">

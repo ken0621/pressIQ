@@ -46,8 +46,9 @@
     <div id="home" class="subheader-container">
         <div class="container">
             @if($customer)
-            <div class="left-container"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span>
+            <div class="left-container">
                 @if(!$mlm_member)
+                    <span><i class="fa fa-heart-o" aria-hidden="true"></i></span>
                     <span>BECOME A MEMBER</span>
                 @endif
             </div>

@@ -126,9 +126,11 @@
         </div>
     </div> -->
     <div class="wrapper-2">
-        <p>
-            {!! get_content($shop_theme_info, "terms_and_conditions", "terms_and_conditions_context") !!}
-        </p>
+        <div class="container">
+            <p>
+                {!! get_content($shop_theme_info, "terms_and_conditions", "terms_and_conditions_context") !!}
+            </p>
+        </div>
     </div>
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>

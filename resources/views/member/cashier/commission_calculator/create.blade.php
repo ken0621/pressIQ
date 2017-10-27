@@ -171,7 +171,7 @@
         <div class="col-md-7 text-center">
             <div>TSP - DISCOUNT </div>
             <div style="border: 0.5px solid #000"></div>
-            <div><label class="c-amount-tax">Tax Exclu</label></div>
+            <div><label class="c-amount-tax">Tax Exclu</label></div> 
         </div>
         <div class="col-md-5">
             <div style="padding-top:10px">* Comm.</div>

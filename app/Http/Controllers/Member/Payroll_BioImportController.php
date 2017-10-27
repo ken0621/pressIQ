@@ -260,7 +260,7 @@ class Payroll_BioImportController extends Member
 							$time_in_record = $time_sheet_record->payroll_time_sheet_in;
 							$time_out_record = $time_sheet_record->payroll_time_sheet_out;
 
-							if(($time_in_record > $value["time_in"] && $value["time_in"] < $time_out_record) 
+							if(($time_in_record > $value["time_in"] && $value["time_outn"] < $time_out_record) 
 							|| ($time_in_record > $value["time_in"] && $value["time_out"] < $time_out_record)
 							|| ($time_in_record == $value["time_in"] && $value["time_out"] == $time_out_record)) 
 							{

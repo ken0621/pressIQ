@@ -636,7 +636,19 @@ class Mlm_complan_manager_repurchasev2
     public static function repurchase_cashback($slot_info,$points,$rank_points = 0)
     {
         $membership_points_repurchase_cashback = $points;
+        $check_privilege                       = Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first();
+        if($check_privilege)
+        {
+            $check_privilege = $check_privilege->enable_privilege_system;
+        }
+        else
+        {
+            $check_privilege = 0;
+        }
+
         
+        
+
         if($membership_points_repurchase_cashback != 0)
         {
             $log_array['earning'] = $membership_points_repurchase_cashback;

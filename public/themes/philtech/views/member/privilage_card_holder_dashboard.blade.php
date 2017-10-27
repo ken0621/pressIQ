@@ -32,9 +32,15 @@
 	<!-- MLM MEMBER -->
 	<div class="dashboard">
 		<div class="row clearfix">
-			<div class="col-md-6">
-				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
-				<div class="sub-container">
+			<div class="col-md-12">
+				<h4><img src="/themes/{{ $shop_theme }}/img/p-card.png"> Privilage Card Holder</h4>
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="col-md-2">
+			</div>
+			<div class="col-md-8 text-center">
+				<div class="sub-container text">
 					@if(count($_point_plan) > 0)
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						@foreach($_point_plan as $plan)

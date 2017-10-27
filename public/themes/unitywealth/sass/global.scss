@@ -142,7 +142,8 @@ button:hover{
 			}
 			.image-logo-holder
 			{
-				padding: 5px 0px;
+				margin:auto;
+				/* padding: 5px 0px; */
 
 				img
 				{
@@ -204,8 +205,8 @@ button:hover{
 	}
 }
 
-
 .image-logo-holder{
+	margin: auto;
 	text-align: center;
 	img
 	{

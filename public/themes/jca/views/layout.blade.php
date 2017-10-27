@@ -69,13 +69,13 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-2">
-                    <div class="image-logo-holder">
-                        <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/header-logo.png"></a>                       
-                    </div>
                     <div class="menu-nav">
                         <span></span>
                         <span></span>
                         <span></span>
+                    </div>
+                    <div class="image-logo-holder">
+                        <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/header-logo.png"></a>                       
                     </div>
                 </div>
                 <div class="col-md-10">

@@ -182,18 +182,18 @@ button:hover{
 
 	@media screen and (max-width: 991px)
 	{
-		width: 75%;
+		width: 55%;
+		margin: auto;
 		img 
 		{
-			margin-top: -9px;
 			width: 100%;
 		}
 
-		> a
+		/* > a
 		{
 			display: inline-block;
 			float: left;
-		}
+		} */
 	}
 	&:hover{
 		cursor: pointer;
@@ -207,14 +207,13 @@ button:hover{
 		display: block;
 		width: 50px;
 		padding: 7.5px 12px 7.5px 12px;
-		margin-left: auto;
-		margin-top: 20px;
-		background-color: #019771;
+		background-color: transparent;
+		float: left;
 		span
 		{
 			display: block;
 			height: 3px;
-			background-color: #fff;
+			background-color: #019771;
 			margin: 5px 0;
 		}
 	}

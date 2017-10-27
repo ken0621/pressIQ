@@ -31,7 +31,7 @@
 			<div class="logo"><img style="width: 200px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/philtech-logo.png"></div> --}}
 			<div class="barcode">
 				<div class="barcodeimg" style="background-color: #fff; padding: 7.5px 0;"><img src="{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/barcode?text={{ $membership_code }}&size=25"></div>
-				<div class="barcodetxt" style="font-size: 8px; margin-top: -5px; padding-bottom: 5px;">
+				<div class="barcodetxt" style="font-size: 12px; margin-top: -7.5px; padding-bottom: 2px;">
 					{{-- <span>Membership Code</span> --}}
 					<span>{{ $membership_code }}</span>
 				</div>
@@ -81,7 +81,7 @@
 </div> --}}
 
 <div class="{{ Request::input('pdf') == 'true' ? '' : '' }} clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 1000px;' : '' }}">
-	<div class="containers" style="{{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : 'margin-top: 15px;' }} height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/discount-back.jpg') !important; background-size: contain; background-position: center;">
+	<div class="containers" style="{{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : 'margin-top: 15px;' }} height: 285px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/discount-back.jpg') !important; background-size: contain; background-position: center;">
 		<div style="color: #fff; overflow: hidden; opacity: 0;" >
 			<div class="clearfix" style="text-align: center; margin-top: -6px;">
 				<h1 class="clearfix" style="margin: auto; margin-bottom: 5px; width: 100%; max-width: 100%; font-weight: 600; font-size: 30px !important;" >TERMS AND CONDITION</h1>

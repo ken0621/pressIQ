@@ -284,7 +284,7 @@
 			<div class="row clearfix">
 				<div class="animated fadeInUp col-md-12">
 					<div class="unilevel-holder">
-						<div class="title"><i class="fa fa-credit-card" aria-hidden="true"></i> Repurchase	</div>
+						<div class="title"><i class="fa fa-credit-card" aria-hidden="true"></i> Repurchase</div>
 						<div class="sub-container">
 							<div class="dashboard-top">
 					            <div class="join-container" style="border: 0; max-height: none; min-height: auto;">

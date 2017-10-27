@@ -133,7 +133,7 @@
                                 <div class="icon-holder">
                                     <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/telephone-logo.png">
                                 </div>
-                                <p class="footer-details">(02)631-6997 | 0926-649-4134 and 0946-561-9714</p>
+                                <p class="footer-details">(02)631-6997&nbsp;/&nbsp;0926-649-4134&nbsp;/&nbsp;0946-561-9714</p>
                             </div>
                             <div class="jca-footer-details-container">
                                 <div class="icon-holder">

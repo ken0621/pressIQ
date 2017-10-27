@@ -128,7 +128,7 @@
                             <h4><b>Total Commission :</b></h4>
                         </div>
                         <div class="col-md-6 text-center">
-                            <a href="javascript:"><h4><div class="amount-tc">TC Amount</div></h4></a>
+                            <a id="popover" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-tc">TC Amount</div></h4></a>
                         </div>
                     </div>
                     <div class="form-group">
@@ -166,6 +166,36 @@
     	<button class="btn btn-primary btn-custom-primary" type="button">Save</button>
     </div>
 </form>
+<div class="hidden row clearfix" id="computation-content">
+    <div style="width: 300px">
+        <div class="col-md-7 text-center">
+            <div>TSP - DISCOUNT </div>
+            <div style="border: 0.5px solid #000"></div>
+            <div><label class="c-amount-tax">Tax Exclu</label></div> 
+        </div>
+        <div class="col-md-5">
+            <div style="padding-top:10px">* Comm.</div>
+        </div>
+        <br>
+        <div class="col-md-7 text-center">
+            <div><label class="c-amount-tsp">1,000,000</label> - <label class="c-amount-disc">10,000</label> </div>
+            <div style="border: 0.5px solid #000"></div>
+            <div><label class="c-amount-tax">1.12</label></div>
+        </div>
+        <div class="col-md-5">
+            <div style="padding-top:10px">* <label class="c-amount-commission">8%</label></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#popover').popover({ 
+        html : true,
+        title: '<h4 style="padding:5px">Commission Computation</h4>',
+        content: function() {
+          return $("#computation-content").html();
+        }
+    });
+</script>
 <style type="text/css">
     .padding-top-here
     {

@@ -96,9 +96,13 @@ function create_commission_calculator()
 			}
 		});
 	}
-	function number_format(number)
+	function number_format(number, tofixed = true)
 	{
-	    var yourNumber = (parseFloat(number)).toFixed(2);
+	    var yourNumber = (parseFloat(number));
+		if(tofixed == true)
+		{
+	    	var yourNumber = (parseFloat(number)).toFixed(2);
+		}
 	    //Seperates the components of the number
 	    var n= yourNumber.toString().split(".");
 	    //Comma-fies the first part
@@ -186,6 +190,11 @@ function create_commission_calculator()
 		}
 		var amount_ndp = amount_tc * ndp;
 		$('.amount-ndp').html('P '+number_format(amount_ndp));
+
+		$('.c-amount-tsp').html(number_format(tsp, false));
+		$('.c-amount-disc').html(number_format(discount, false));
+		$('.c-amount-tax').html(number_format(tax));
+		$('.c-amount-commission').html((agent_commission_percent * 100) + '%');
 	}
 	function event_accept_number_only()
 	{

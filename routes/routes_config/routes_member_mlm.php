@@ -263,6 +263,7 @@ Route::any('/member/mlm/product_code/receipt/view/{id}', 'Member\MLM_ProductCode
 /* end MLM PRODUCT CODE */
 
 Route::get('member/mlm/card', 'Member\MLM_CardController@all_slot');
+Route::get('member/mlm/card/view', 'Member\MLM_CardController@view');
 Route::post('member/mlm/card/filter', 'Member\MLM_CardController@filter');
 Route::get('member/mlm/card/image/{slot}', 'Member\MLM_CardController@generate');
 Route::get('member/mlm/card/image/discount/{id}', 'Member\MLM_CardController@generate_discount');
@@ -341,4 +342,5 @@ Route::any('member/mlm/developer/allow_multiple_slot', 'Member\MlmDeveloperContr
 Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');
 Route::any('member/mlm/developer/popup_slot_created', 'Member\MlmDeveloperController@popup_slot_created');
 Route::any('member/mlm/developer/popup_earnings', 'Member\MlmDeveloperController@popup_earnings');
+Route::any('member/mlm/developer/distributed_income', 'Member\MlmDeveloperController@distributed_income');
 Route::any('member/mlm/developer/popup_points', 'Member\MlmDeveloperController@popup_points');

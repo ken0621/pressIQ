@@ -4,7 +4,11 @@
 		<h4 class="modal-title">{{ $membership->membership_name }}</h4>
 	</div>
 	<div class="modal-body clearfix">
-		@include("member.card.card")
+		@if($color == "discount")
+			@include("member.card.discount_card")
+		@else
+			@include("member.card.card")
+		@endif
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>

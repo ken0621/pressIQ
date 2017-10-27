@@ -42,7 +42,7 @@
 							<a href="javascript:">
 								<div class="nav-holder">
 								<!-- <div class="icon brown-icon-flow-tree"></div> -->
-								<div class="icon"><img class="binary-icon" style="margin-top: -8px;" src="/themes/{{ $shop_theme }}/img/binary-icon-nav.png"></div>
+								<div class="icon"><img style="margin-top: -8px; opacity: 1 !important;" src="/themes/{{ $shop_theme }}/img/binary-icon-nav.png"></div>
 								<span>Genealogy</span>
 							</div>
 							</a>

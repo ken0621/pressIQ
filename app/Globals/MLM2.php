@@ -607,6 +607,12 @@ class MLM2
  		$mlm_member     = ($count_slots > 0 ? true : false);
  		return $mlm_member;
 	}
+	public static function is_privilage_card_holder($shop_id, $customer_id)
+	{
+ 		$membership 	= Tbl_mlm_slot::where("slot_owner", $customer_id)->where("shop_id", $shop_id)->value('slot_membership');
+ 		$privilage_card_holder = ($membership == 1 ? true : false);
+ 		return $privilage_card_holder;
+	}
 	public static function membership_info($shop_id, $membership_id)
 	{
 		$return = Tbl_membership::where("membership_archive", 0)->where("shop_id", $shop_id)->where("membership_id", $membership_id)->first();

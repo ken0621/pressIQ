@@ -97,9 +97,10 @@
                                 <li><a class="smoth-scroll" href="#mission-vision">MISSION & VISION</a></li>
                                 <li><a class="smoth-scroll" href="#products">PRODUCTS</a></li>
                             @endif
-                            <li>
+                            <!-- SHOPPING CART ICON -->
+                            <!-- <li>
                                 <a href="javascript:" class="popup cart-holder" link="/cartv2" size="lg"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="badge quantity-item-holder">0</span></a>
-                            </li>
+                            </li> -->
                         </ul>
                     </nav>
                 </div>

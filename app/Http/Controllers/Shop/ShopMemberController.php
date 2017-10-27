@@ -85,8 +85,9 @@ class ShopMemberController extends Shop
             $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
             $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 500);
+            $data['allow_multiple_slot'] = Self::$customer_info->allow_multiple_slot;
             $data['mlm_pin'] = '';
-            $data['mlm_activation'] = '';
+            $data['mlm_activation'] = '';            
             
             if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
             {

@@ -5,8 +5,9 @@
 		<div class="left">
 			<input type="hidden" class="mode-genealogy" name="" value="{{$mode or ''}}">
 			
-			<div class="icon">
-				<div class="brown-icon-genealogy" style="font-size: 40px;"></div>
+			<div class="icon" style="margin-right: 0px !important;">
+				<!-- <div class="brown-icon-genealogy" style="font-size: 40px;"></div> -->
+				<div><img width="65%" src="/themes/{{$shop_theme}}/img/binary-icon.png" alt=""></div>
 			</div>
 			<div class="text">
 				<div class="name">Genealogy</div>

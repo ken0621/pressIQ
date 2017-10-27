@@ -149,7 +149,11 @@
 
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-6">
-				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+				<div class="title"><i class="fa fa-table"></i> Reward Summary
+					@if($allow_multiple_slot == 1)
+					<a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('members/enter-code')">Create New Slot</a>
+					@endif
+				</div>
 				<div class="sub-container" style="padding-bottom: 46px !important;">
 					<div class="chart-legend">
 						<div class="holder">
@@ -222,32 +226,6 @@
 									</div>
 									@endif
 								@endif
-								{{-- <div class="event clearfix">
-									<div class="date">
-										<div class="day">22</div>
-										<div class="month">OCTOBER</div>
-									</div>
-									<div class="detail">
-										<div class="titles">Entereneural Branding</div>
-										<div class="description">This event will be lead by Jonathan Petalber.</div>
-										<div class="action">
-											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
-										</div>
-									</div>
-								</div>
-								<div class="event clearfix">
-									<div class="date">
-										<div class="day">28</div>
-										<div class="month">OCTOBER</div>
-									</div>
-									<div class="detail">
-										<div class="titles">Transformational Leadership</div>
-										<div class="description">Works with subordinates to identify needed change.</div>
-										<div class="action">
-											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
-										</div>
-									</div>
-								</div> --}}
 							</div>
 						</div>
 					</div>

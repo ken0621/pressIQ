@@ -6,18 +6,18 @@
             <div class="main-title">General Terms and Conditions</div>
         </div>
     </div>
-    <div class="wrapper-2">
+    <!-- <div class="wrapper-2">
         <div class="container">
             <p class="title-2">Privacy Policy</p><br>
             <p class="title-2">Introduction</p><br>
             <p>
                 This privacy policy sets out rules for the collection, use and disclosure of personal information and how
                 JCA Wellness International Corp. uses and protects the information that you.<br><br>
-
+    
                 JCA Wellness International Corp. is committed to guaranteeing that your privacy is protected. Should we
                 ask you to provide certain information by which you can be identified when using the website, then you
                 can be assured that it will only be used in accordance with this privacy statement.<br><br>
-
+    
                 JCA Wellness International Corp. may change and update this policy from time to time and any
                 information we collect is not used and shared with this privacy statement.<br><br>
             </p>
@@ -85,7 +85,7 @@
             <p class="title-2">Dealers Policy:</p>
             <p style="padding-bottom: 40px;">
                 As a new member of JCA Wellness International Corp., I understand and agree to the following: THAT<br><br>
-
+    
                 1. I attest that I personally participated at JCA International Corp.<br><br>
                 2. As a JCA International Corp Member, I hereby understood that there is no required minimum
                 inventory that I need to maintain in order to sustain my status as a Member.<br><br>
@@ -94,7 +94,7 @@
                 are in accordance with the compensation scheme established in the JCA International Corp Marketing
                 Plan, provided, that I have achieved such sales performance in good faith, and that I have not violated
                 any of the provisions of the Distributorship Policy,<br><br>
-
+    
                 4. This Membership Contract limits a no employee – employer relationship between me and JCA
                 International Corp; neither that I may claim to be a legal representative of JCA International Corp, nor
                 bind JCA International Corp in any agreements other than those agreed herein;<br><br>
@@ -124,6 +124,11 @@
                 me.
             </p>
         </div>
+    </div> -->
+    <div class="wrapper-2">
+        <p>
+            {!! get_content($shop_theme_info, "terms_and_conditions", "terms_and_conditions_context") !!}
+        </p>
     </div>
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>

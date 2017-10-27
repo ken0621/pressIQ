@@ -3,8 +3,8 @@
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">  
 @endif
 <div class="{{ Request::input('pdf') == 'true' ? '' : 'row' }} clearfix">
-<div class="{{ Request::input('pdf') == 'true' ? '' : 'col-md-6' }} clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 450px;' : '' }}">
-	<div class="containers" style="overflow: hidden; {{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : '' }} ;height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}.jpg') !important;">
+<div class="clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 450px;' : '' }}">
+	<div class="containers" style="overflow: hidden; {{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : 'margin-top: 0;' }} ;height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}.jpg') !important;">
 		<div class="top-container clearfix">
 			<span class="website" style="font-weight: 700; letter-spacing: 0px;">{{ URL::to('/') }}</span>
 			<div class="logo"><img style="width: 200px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/philtech-logo-blue-2.png"></div>
@@ -33,8 +33,8 @@
 	</div>
 </div>
 
-<div class="{{ Request::input('pdf') == 'true' ? '' : 'col-md-6' }} clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 1000px;' : '' }}">
-	<div class="containers" style="{{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : '' }} height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}.jpg') !important;">
+<div class="clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 1000px;' : '' }}">
+	<div class="containers" style="{{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : 'margin-top: 15px;' }} height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}.jpg') !important;">
 		<div class="backdesu">
 			<div style="font-weight: 600;"><center>For inquiries, email at philtechglobalmainoffice@gmail.com</center></div>
 			<div class="signature">

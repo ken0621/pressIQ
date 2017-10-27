@@ -137,7 +137,7 @@
 		</div>
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Newest Direct Referrals</div>
+				<div class="title">Newest Direct Referrals  <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/direct'">View All Direct</a></div>
 				<div class="sub-container border-holder">
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>

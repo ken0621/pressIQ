@@ -44,9 +44,10 @@
 	                        <!-- <div class="text-header2">Enroll now and become one of us!</div> -->
 	                    </div>
 	                    <div class="btn-container">
-	                        <button class="btn-buy-a-kit" type="button">Buy a Package</button><br>
-	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-	                        <a href="#" id="btn-enter-a-code"><button style="margin-top: 0;" onclick="action_load_link_to_modal('members/enter-code')" class="btn-enter-a-code">ENTER A CODE</button></a>
+	                        <button class="btn-buy-a-kit" type="button">Activate My Account</button>
+	                        <!-- <br> -->
+	                        <!-- <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
+	                        <a href="#" id="btn-enter-a-code"><button style="margin-top: 0;" onclick="action_load_link_to_modal('members/enter-code')" class="btn-enter-a-code">ENTER A CODE</button></a> -->
 	                    </div>
 	                </div>
 	            </div>
@@ -178,13 +179,13 @@
 									<div class="date">{{ $direct->time_ago }}</div>
 								</div>
 							</div>
-							<div class="action pull-right">
+<!-- 							<div class="action pull-right">
 								@if($direct->distributed == 1)
 									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
 								@else
 									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 								@endif
-							</div>
+							</div> -->
 						</div>
 						@endforeach
 					@else

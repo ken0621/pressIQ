@@ -9,7 +9,7 @@
 <div id="main-wrapper">
     <div class="row">
         <div class="col-md-3">
-            <img src="{{ $company->payroll_company_logo }}" class="center-block" alt="{{ $company->payroll_company_name }}" height="200" width="200">
+            <img src="{{ $company->payroll_company_logo }}" class="rounded float-right" alt="{{ $company->payroll_company_name }}" height="200" width="200">
             <h3 class="text-center">{{ $company->payroll_company_name }}</h3>
             <hr>
             <ul class="list-unstyled text-center">

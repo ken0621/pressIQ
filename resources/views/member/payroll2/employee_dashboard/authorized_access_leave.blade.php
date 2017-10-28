@@ -6,6 +6,50 @@
     </li>
     <li class="breadcrumb-item active">{{ $page }}</li>
   </ol>
+
+<div class="panel panel-default panel-block panel-title-block panel-gray ">
+    <ul class="nav nav-tabs">
+        
+        <li class="active cursor-pointer change-tab approve-tab" mode="all"><a class="cursor-pointer"><i class="text-bold"> All </i></a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="pending"><a class="cursor-pointer"><i class="text-bold"> Pending </i></a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold"> Approved </i></a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="rejected"><a class="cursor-pointer"><i class="text-bold"> Rejected </i></a></li>
+        
+    </ul>
+    
+    <div class="search-filter-box">
+        <div class="col-md-4" style="padding: 10px">
+            <select class="form-control item_type company-change-event">
+              <option value="0">Type of Leave</option>
+              @foreach($_leave_name as $leave_name)
+                <option value="{{ $leave_name->payroll_leave_temp_id }}">{{ $leave_name->payroll_leave_temp_name }}</option>
+              @endforeach
+            </select>
+        </div>
+    </div>
+    
+    <div class="tab-content codes_container">
+        <div id="all" class="tab-pane fade in active">
+            <div class="form-group order-tags"></div>
+                <div class="clearfix">
+                    <div class="col-md-12">
+                        <div class="table-responsive load-table-employee-list">
+                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="/assets/member/js/payroll/payroll_timekeeping.js?version=10"></script>
+
+
+
+  
   <!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">

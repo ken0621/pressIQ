@@ -1,9 +1,8 @@
 
   <ol class="breadcrumb">
     <li class="breadcrumb-item">
-      <a href="/employee">Dashboard</a>
+      <a href="/employee">Update Information</a>
     </li>
-    <li class="breadcrumb-item active">{{ $page }}</li>
   </ol>
 
 <form class="form-horizontal" method="post" action="/update_employee_profile?payroll_employee_id={{$employee->payroll_employee_id}}">
@@ -14,12 +13,6 @@
     </div>
 @endif
 
-<div class="row">   
-	<div class="col-md-12">
-   		<h4 class="text-center">{{ $employee->payroll_employee_display_name }}</h4>
-		<p class="text-center">{{ $employee->payroll_jobtitle_name }}</p>
-	</div>
-</div>
 <div class="modal-body form-horizontal">
 	<div class="row">
 	    <div class="col-md-6">
@@ -38,15 +31,15 @@
 	<div class="row">
 		<div class="col-md-6">
 			<small>Address: Street</small>
-			<input class="form-control" name="street" placeholder="Street" value="{{ $employee->payroll_employee_street }}">
+			<input class="form-control" name="street" value="{{ $employee->payroll_employee_street }}">
 	  	</div>
 	  	<div class="col-md-3">
 			<small>City</small>
-			<input class="form-control" name="city" placeholder="City" value="{{ $employee->payroll_employee_city }}">
+			<input class="form-control" name="city" value="{{ $employee->payroll_employee_city }}">
 	  	</div>
 	  	<div class="col-md-3">
 			<small>State</small>
-			<input class="form-control" name="state" placeholder="State" value="{{ $employee->payroll_employee_state }}">
+			<input class="form-control" name="state" value="{{ $employee->payroll_employee_state }}">
 	  	</div>
 	</div>
 	<div class="row">

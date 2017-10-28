@@ -164,10 +164,10 @@ Route::any('/create_employee_official_business', 'Member\PayrollEmployee\Employe
 Route::any('/create_employee_approver', 'Member\PayrollEmployee\EmployeeController@create_employee_approver');
 Route::any('/edit_employee_profile', 'Member\PayrollEmployee\EmployeeController@edit_employee_profile');
 Route::any('/update_employee_profile', 'Member\PayrollEmployee\EmployeeController@update_employee_profile');
-Route::any('/employee_payslip/{period_company_id}','Member\PayrollEmployee\EmployeeController@employee_payslip');
-
+Route::any('/employee_payslip/{payroll_period_id}','Member\PayrollEmployee\EmployeeController@employee_payslip');
+Route::any('/employee_timesheet','Member\PayrollEmployee\EmployeeController@employee_timesheet');
 Route::any('/sample', 'Member\PayrollEmployee\EmployeeController@sample');
-
+Route::any('/updated_layout', 'Member\PayrollEmployee\EmployeeController@updated_layout');
 
 
 Route::group(array('prefix' => '/member/{page}/'), function()

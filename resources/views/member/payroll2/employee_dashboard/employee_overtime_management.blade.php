@@ -6,6 +6,38 @@
     </li>
     <li class="breadcrumb-item active">{{ $page }}</li>
   </ol>
+
+
+  <div class="panel panel-default panel-block panel-title-block panel-gray ">
+    <ul class="nav nav-tabs">
+        
+        <li class="active cursor-pointer change-tab approve-tab" mode="all"><a class="cursor-pointer"><i class="text-bold"> All </i></a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="pending"><a class="cursor-pointer"><i class="text-bold"> Pending </i></a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold"> Approved </i></a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="rejected"><a class="cursor-pointer"><i class="text-bold"> Rejected </i></a></li>
+        
+    </ul>
+
+    <div class="tab-content codes_container">
+        <div id="all" class="tab-pane fade in active">
+            <div class="form-group order-tags"></div>
+                <div class="clearfix">
+                    <div class="col-md-12">
+                        <div class="table-responsive load-table-employee-list">
+                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
   <!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">

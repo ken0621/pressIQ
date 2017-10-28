@@ -16,6 +16,14 @@
                     <th style="text-align: left; width: 30;">RECEIVER'S NAME</th>
                     <th style="text-align: left; width: 30;">RECEIVER'S CONTACT NUMBER</th>
                 @endif
+                @if($method == "coinsph")
+                    <th style="text-align: left; width: 30;">WALLET ADDRESS</th>
+                @endif
+                @if($method == "bank")
+                    <th style="text-align: left; width: 30;">BANK NAME</th>
+                    <th style="text-align: left; width: 30;">ACCOUNT NAME</th>
+                    <th style="text-align: left; width: 30;">ACCOUNT NUMBER</th>
+                @endif
                 <th style="text-align: right; width: 20;">PAYOUT AMOUNT</th>
                 <th style="text-align: right; width: 20;">SERVICE CHARGE</th>
                 <th style="text-align: right; width: 20;">OTHER CHARGE</th>
@@ -38,6 +46,14 @@
                 @if($method == "palawan_express")
                     <td>{{$slot->remittance_fname .' '.$slot->remittance_mname.' '.$slot->remittance_lname}}</td>
                     <td>{{$slot->remittance_contact_number}}</td>
+                @endif
+                @if($method == "coinsph")
+                    <td>{{$slot->wallet_address}}</td>
+                @endif
+                @if($method == "bank")
+                    <td>{{ $slot->payout_bank_name }}</td>
+                    <td>{{ $slot->bank_account_name }}</td>
+                    <td>{{ $slot->bank_account_number}}</td>
                 @endif
                 <td>{{ $slot->real_net }}</td>
                 <td>{{ $slot->real_service }}</td>

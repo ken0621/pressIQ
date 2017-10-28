@@ -9,7 +9,7 @@
       <!-- Path to Framework7 Library CSS-->
       <link rel="stylesheet" href="/assets/mobile/framework7/dist/css/framework7.ios.min.css">
       <!-- Path to your custom app styles-->
-      <link rel="stylesheet" href="css/my-app.css">
+      <link rel="stylesheet" href="/assets/exam/css/exam.css">
    </head>
    <body>
       <div class="statusbar-overlay"></div>
@@ -28,10 +28,7 @@
          <div class="view view-main">
             <div class="navbar">
                <div data-page="index" class="navbar-inner">
-                  <div class="center sliding">Digima - Career Assement Exam</div>
-                  <div class="right">
-                     <a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
-                  </div>
+                  <div class="center sliding">Digima Web Solutions, Inc.</div>
                </div>
                <div data-page="about" class="navbar-inner cached">
                   <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i><span>Back</span></a></div>
@@ -49,6 +46,21 @@
             <div class="pages navbar-through toolbar-through">
                <div data-page="index" class="page">
                   <div class="page-content">
+                     <!-- PAGE CONTENT START -->
+                     <div class="landing-page">
+                        <div class="content-block-title page-intro"><b>Career Assesment</b><br>Examination</div>
+                        
+                        <div class="content-block">
+                           <div class="landing-message">
+                              <div>Good day, applicant. Make sure you are ready and awake before you take the exam. Exam will take an avarage time of <b>1 hour</b> and re-take of the exam will not be allowed.<br><br>Every questions will have a corresponding time.</div>
+                           </div>
+                        </div>
+
+                        <div class="content-block">
+                           <p><a href="/exam/register" class="item-link button button-round active start-exam-button">START EXAM</a></p>  
+                        </div>
+                     </div>
+                     <!-- PAGE CONTENT END -->
                   </div>
                </div>
             </div>
@@ -58,3 +70,4 @@
       <script type="text/javascript" src="/assets/exam/exam.js"></script>
    </body>
 </html>
+

@@ -43,6 +43,7 @@ use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_payout_bank;
 use App\Models\Tbl_online_pymnt_api;
 use App\Models\Tbl_mlm_plan_setting;
+use App\Models\Tbl_vmoney_settings;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -336,6 +337,12 @@ class ShopMemberController extends Shop
 
                     die();
                 }
+                else
+                {
+                    $data["page"] = "Request Payout";
+                    $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                    return view("member2.request_payout", $data);
+                }
             }
             else
             {
@@ -344,7 +351,7 @@ class ShopMemberController extends Shop
                         <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
                     </div>';
 
-                echo "<h3 class='text-center' style='margin: 25px 0;'>You are not allowed to request payout right now.";
+                echo "<h3 class='text-center' style='margin: 25px 0;'>You are not allowed to request payout right now.</h3>";
                 
                 echo '<div class="modal-footer">
                         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
@@ -484,7 +491,7 @@ class ShopMemberController extends Shop
     public function getPayoutSetting()
     {
         $data["page"] = "Payout";
-        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->bank()->get();
+        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->bank()->vmoney()->get();
         $data["_method"] = unserialize($this->shop_info->shop_payout_method);
 
         $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
@@ -499,6 +506,30 @@ class ShopMemberController extends Shop
         $update_customer["customer_payout_method"] = request("customer_payout_method");
         $update_customer["tin_number"] = request("tin_number");
         Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
+
+
+        /* UPDATE VMONEY METHOD */
+        foreach(request("vmoney") as $key => $value)
+        {
+            $slot_info = Tbl_mlm_slot::where("slot_no", $value)->where("shop_id", $this->shop_info->shop_id)->first();
+
+            if ($slot_info) 
+            {
+                $update_vmoney["slot_id"] = $slot_info->slot_id;
+                $update_vmoney["vmoney_email"] = request("vmoney_email")[$key];
+                
+                $exist = Tbl_vmoney_settings::where("slot_id", $slot_info->slot_id)->first();
+
+                if ($exist) 
+                {
+                    Tbl_vmoney_settings::where("slot_id", $slot_info->slot_id)->update($update_vmoney);
+                }
+                else
+                {
+                    Tbl_vmoney_settings::insert($update_vmoney);
+                }            
+            }
+        }
 
 
         /* UPDATE EON METHOD */

@@ -124,7 +124,7 @@ class PayrollController extends Member
      //audit_trail_view_all
      public function modal_view_all_transaction($id,$uid)
      {
-          
+         
           $data['audit'] = Tbl_audit_trail::orderBy("tbl_audit_trail.created_at","DESC")->where('audit_trail_id',$id)->where("audit_shop_id",AuditTrail::getShopId())->first();
           $data['user_info'] = Tbl_user::where('user_id',$uid)->where("user_shop",AuditTrail::getShopId())->first();
            return view("member.payroll.modal.modal_view_all_transaction",$data);
@@ -151,6 +151,7 @@ class PayrollController extends Member
                                                   ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
                                                   ->orderBy('tbl_payroll_period.payroll_period_start','asc')
                                                   ->get();
+                                                  
           $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
          
           return view('member.payroll.payroll_timekeeping', $data);
@@ -720,15 +721,17 @@ class PayrollController extends Member
 
                foreach($_data as $data)
                {
+                   
                     $count_employee = Tbl_payroll_employee_basic::where('payroll_employee_company_id',Self::getid($data['company'], 'company'))
                                                                ->where('payroll_employee_first_name',Self::nullableToString($data['first_name']))
                                                                ->where('payroll_employee_middle_name', Self::nullableToString($data['middle_name']))
                                                                ->where('payroll_employee_last_name',Self::nullableToString($data['last_name']))
                                                                ->count();
+                    
                     if($count_employee == 0)
                     {
                          /* EMPLOYEE BASIC INSERT START */
-                         $insert['shop_id']                                = Self::shop_id();
+                         $insert['shop_id']                           = Self::shop_id();
                          $insert['payroll_employee_company_id']       = Self::getid($data['company'], 'company');
                          $insert['payroll_employee_title_name']       = Self::nullableToString($data['title_name']);
                          $insert['payroll_employee_first_name']       = Self::nullableToString($data['first_name']);
@@ -740,10 +743,10 @@ class PayrollController extends Member
                          $insert['payroll_employee_contact']          = Self::nullableToString($data['contact']);
                          $insert['payroll_employee_email']            = Self::nullableToString($data['email_address']);
                          $insert['payroll_employee_birthdate']        = Self::nullableToString($data['birthdate']);
-                         $insert['payroll_employee_gender']                = Self::nullableToString($data['gender_mf']);
-                         $insert['payroll_employee_number']                = Self::nullableToString($data['employee_number']);
+                         $insert['payroll_employee_gender']           = Self::nullableToString($data['gender_mf']);
+                         $insert['payroll_employee_number']           = Self::nullableToString($data['employee_number']);
                          $insert['payroll_employee_atm_number']       = Self::nullableToString($data['atmaccount_number']);
-                         $insert['payroll_employee_street']                = Self::nullableToString($data['street']);
+                         $insert['payroll_employee_street']           = Self::nullableToString($data['street']);
                          $insert['payroll_employee_city']             = Self::nullableToString($data['citytown']);
                          $insert['payroll_employee_state']            = Self::nullableToString($data['stateprovince']);
                          $insert['payroll_employee_zipcode']          = Self::nullableToString($data['zip_code']);

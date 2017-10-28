@@ -392,7 +392,9 @@ class Payroll2
 			
 			$_timesheet[$from]->default_remarks = Payroll2::timesheet_default_remarks($_timesheet[$from]);
 			$_timesheet[$from]->daily_info = Payroll2::timesheet_process_daily_info($employee_id, $from, $timesheet_db, $payroll_period_company_id);
+			
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
+
 		}
 		
 		//dd($_timesheet);
@@ -419,7 +421,7 @@ class Payroll2
 			}
 
 			$return = Payroll2::timesheet_process_daily_info_record($employee_id, $date, $approved, $_record, $timesheet_db->payroll_time_sheet_id, $payroll_period_company_id, $timesheet_db->time_keeping_approved,  $timesheet_db->custom_shift,  $timesheet_db->custom_shift_id);
-		
+			
 			$return->source = "";
 			$return->branch = "";
 			$return->payroll_time_sheet_id = 0;
@@ -1371,6 +1373,7 @@ class Payroll2
 		$regular_holiday_hours	= "00:00:00";
 		$special_holiday_hours	= "00:00:00";
 		$leave_hours_consumed	= "00:00:00";
+		$leave_minutes 			= Self::time_float($leave);
 		$leave_hours			= $leave; //$leave;
 		$excess_leave_hours 	= $leave;
 		$is_half_day			= false;
@@ -1389,28 +1392,27 @@ class Payroll2
 			$target_hours = Payroll2::float_time($target_hours);
 		}
 		
-		if ($_time==null) 
+		if ($_time == null) 
 		{
-			if (!(($day_type == "rest_day")||($day_type == "extra")||($is_holiday == "regular")||($leave_hours!="00:00:00")))
+			if (!(($day_type == "rest_day")||($day_type == "extra")||($is_holiday == "regular")))
 			{
 				$is_absent =true;
 			}
 
 			/*Start trigger if leave*/
-			if ($is_absent==true) 
+			if ($is_absent==true && $leave_minutes != 0) 
 			{
 				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
 				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
-				if ($target_minutes > $leave_minutes) 
+				if ($target_minutes > $leave_minutes ) 
 				{
-					// $under_time 			= Payroll::time_diff($leave_hours,$target_hours);
+					$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
 					$leave_hours_consumed   = $leave_hours;
 					$time_spent             = $leave_hours;
 					$is_absent 				= false;
 				}
 				else
 				{
-
 					$leave_hours_consumed   = $target_hours;
 					$is_absent 				= false;
 					$time_spent 			= $target_hours;
@@ -1420,10 +1422,9 @@ class Payroll2
 		}
 		else
 		{
-
 			if($_shift != null)
 			{
-				/*START check if there is multimple time in and time out in a single shift*/
+				/*START check if there is multimple time in and time out in a single day*/
 				foreach ($_shift as $shift) 
 				{
 					$shift_in_minutes  = explode(":", $shift->shift_in);
@@ -1469,18 +1470,18 @@ class Payroll2
 						}
 					}
 				}
-				/*END check if there is multimple time in and time out in a single shift*/
+				/*END check if there is multimple time in and time out in a single day*/
 			}
 
 
-			$count=0;
-			//compute night differential
-			$night_differential=Payroll2::night_differential_computation($_time,false);
-			
+			$count = 0;
+
+			/*Start compute night differential*/
+			$night_differential = Payroll2::night_differential_computation($_time,false);
+			/*End compute night differential*/
+
 			foreach ($_time as $time) 
 			{
-
-
 				echo $testing == true ? "<hr><br><br> TIME IN - ".$time->time_in." vs TIME OUT - ".$time->time_out."<br><br>":"";                                                                                                
 				//undertime computation
 	
@@ -1648,14 +1649,12 @@ class Payroll2
 			}
 			/*END sum time_spent late and undertime of all auto approved sched*/
 	
-			
 			/*Start leave trigger*/
 			if ($use_leave == true) 
 			{
 				//if absent
 				if ($is_absent==true) 
 				{
-					
 					$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
 					$leave_minutes = Payroll2::convert_time_in_minutes($leave);
 					if ($target_minutes > $leave_minutes) 
@@ -1667,7 +1666,6 @@ class Payroll2
 					}
 					else
 					{
-
 						$leave_hours_consumed   = $target_hours;
 						$is_absent 				= false;
 						$time_spent 			= $target_hours;
@@ -1680,8 +1678,10 @@ class Payroll2
 					//fill undertime with leave hours
 					if ($leave_fill_undertime == 1) 
 					{
+
 					 	$undertime_minutes = Payroll2::convert_time_in_minutes($under_time);
 						$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
+
 						//has undertime record and have leave hours
 						if (($undertime_minutes > 0) && ($excess_leave_minutes > 0)) 
 						{
@@ -1708,7 +1708,6 @@ class Payroll2
 					//fill late with leave hours
 					if ($leave_fill_late==1) 
 					{
-
 						$late_minutes = Payroll2::convert_time_in_minutes($late_hours);
 						$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
 						//has late record and have leave hours
@@ -1731,7 +1730,6 @@ class Payroll2
 								$excess_leave_hours="00:00";
 							}
 						}
-
 					}
 
 					//excess leave hour if not use
@@ -1863,6 +1861,7 @@ class Payroll2
 		$special_holiday_hours 	= "00:00:00";
 		$leave_hours_consumed 	= "00:00:00";
 		$leave_hours 			= $leave;
+		$leave_minutes 			= Self::time_float($leave);
 		$excess_leave_hours 	= $leave_hours;
 		$is_half_day 			= false;
 		$is_absent 				= false;
@@ -1873,21 +1872,21 @@ class Payroll2
 		// {
 		// 	$is_absent = true;
 		// }
-
-		if ($_time==null) 
+	
+		if ($_time == null) 
 		{
-			if (!(($day_type == "rest")||($day_type == "extra")||($is_holiday == "regular")||($leave_hours=="00:00:00")))
+			if (!(($day_type == "rest")||($day_type == "extra")||($is_holiday == "regular")))
 			{
 				$is_absent =true;
 			}
 			/*Start leave trigger*/
-			if ($is_absent==true) 
+			if ($is_absent==true && $leave_minutes !=0) 
 			{
 				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
 				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
 				if ($target_minutes > $leave_minutes) 
 				{
-					// $under_time 			= Payroll::time_diff($leave_hours,$target_hours);
+					$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
 					$leave_hours_consumed   = $leave_hours;
 					$time_spent             = $leave_hours;	
 					$is_absent 				= false;
@@ -3530,8 +3529,11 @@ class Payroll2
 		
 		
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
+		
 		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
+
 		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
+
 		$return = Payroll2::cutoff_breakdown_allowance_v2($return, $data);
 		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
 		$return = Payroll2::cutoff_breakdown_non_taxable_allowances($return, $data);
@@ -3634,7 +3636,7 @@ class Payroll2
 			$return->_time_breakdown['special_holiday']["float"] = 0;
 			$return->_time_breakdown['special_holiday']["time"] = $return->_time_breakdown['special_holiday']["float"] . " No Special Holiday";
 		}
-
+		
 		return $return;
 	}
 	public static function cutoff_breakdown_to_tr($breakdown)

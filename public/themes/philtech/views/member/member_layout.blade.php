@@ -55,7 +55,7 @@
 <!-- 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
 							<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
 						</li> -->
-						@if($mlm_member)
+						@if($mlm_member && $privilage_card_holder == false)
 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
 							<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
 						</li>

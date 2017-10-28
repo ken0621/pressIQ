@@ -110,7 +110,7 @@
                                     <li> <a href="/">HOME</a> </li>
                                     <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
                                     <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
-                                    <li class="nav-ext"> <a class="smoth-scroll" href="/#products">CONTACT US</a> </li>
+                                    <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
                                 </ul>
                             @endif
                         </nav>

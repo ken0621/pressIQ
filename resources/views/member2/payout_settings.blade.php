@@ -24,6 +24,35 @@
 	        </div>
 	    </div>
 
+	    {{-- VMONEY --}}
+		<div class="row payout-mode-container" content="vmoney">
+	        <div class="clearfix modal-body"> 
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead style="text-transform: uppercase">
+                                <tr>
+                                    <th class="text-center" style="width: 100px;">SLOT CODE</th>
+                                    <th class="text-center" width="120px">V-MONEY EMAIL ADDRESS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	@foreach($_slot as $slot)
+                                <tr>
+                                	<input type="hidden" name="vmoney[]" value="{{ $slot->slot_no }}">
+                                    <td class="text-center" style="vertical-align: middle;">{{ $slot->slot_no }}</td>
+                                    <td class="text-center">
+                                    	<input type="text" class="form-control text-center" name="vmoney_email[]" value="{{ $slot->vmoney_email }}">
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+	        </div>
+		</div>
+
 	    {{-- EON CARD --}}
 		<div class="row payout-mode-container" content="eon">
 	        <div class="clearfix modal-body"> 

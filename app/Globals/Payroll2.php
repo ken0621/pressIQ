@@ -392,7 +392,9 @@ class Payroll2
 			
 			$_timesheet[$from]->default_remarks = Payroll2::timesheet_default_remarks($_timesheet[$from]);
 			$_timesheet[$from]->daily_info = Payroll2::timesheet_process_daily_info($employee_id, $from, $timesheet_db, $payroll_period_company_id);
+			
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
+
 		}
 		
 		//dd($_timesheet);
@@ -419,7 +421,7 @@ class Payroll2
 			}
 
 			$return = Payroll2::timesheet_process_daily_info_record($employee_id, $date, $approved, $_record, $timesheet_db->payroll_time_sheet_id, $payroll_period_company_id, $timesheet_db->time_keeping_approved,  $timesheet_db->custom_shift,  $timesheet_db->custom_shift_id);
-		
+			
 			$return->source = "";
 			$return->branch = "";
 			$return->payroll_time_sheet_id = 0;
@@ -3530,8 +3532,11 @@ class Payroll2
 		
 		
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
+		
 		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
+
 		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
+
 		$return = Payroll2::cutoff_breakdown_allowance_v2($return, $data);
 		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
 		$return = Payroll2::cutoff_breakdown_non_taxable_allowances($return, $data);
@@ -3634,7 +3639,7 @@ class Payroll2
 			$return->_time_breakdown['special_holiday']["float"] = 0;
 			$return->_time_breakdown['special_holiday']["time"] = $return->_time_breakdown['special_holiday']["float"] . " No Special Holiday";
 		}
-
+		
 		return $return;
 	}
 	public static function cutoff_breakdown_to_tr($breakdown)

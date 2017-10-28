@@ -1394,7 +1394,7 @@ class Payroll2
 		
 		if ($_time == null) 
 		{
-			if (!(($day_type == "rest_day")||($day_type == "extra")||($is_holiday == "regular")||($leave_hours!="00:00:00")))
+			if (!(($day_type == "rest_day")||($day_type == "extra")||($is_holiday == "regular")))
 			{
 				$is_absent =true;
 			}
@@ -1474,7 +1474,7 @@ class Payroll2
 			}
 
 
-			$count=0;
+			$count = 0;
 
 			/*Start compute night differential*/
 			$night_differential = Payroll2::night_differential_computation($_time,false);
@@ -1872,10 +1872,10 @@ class Payroll2
 		// {
 		// 	$is_absent = true;
 		// }
-
-		if ($_time==null) 
+	
+		if ($_time == null) 
 		{
-			if (!(($day_type == "rest")||($day_type == "extra")||($is_holiday == "regular")||($leave_hours=="00:00:00")))
+			if (!(($day_type == "rest")||($day_type == "extra")||($is_holiday == "regular")))
 			{
 				$is_absent =true;
 			}

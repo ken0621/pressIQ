@@ -182,7 +182,7 @@ button:hover{
 
 	@media screen and (max-width: 991px)
 	{
-		width: 55%;
+		width: 30%;
 		margin: auto;
 		img 
 		{
@@ -194,6 +194,15 @@ button:hover{
 			display: inline-block;
 			float: left;
 		} */
+	}
+	@media screen and (max-width: 475px)
+	{
+		width: 55%;
+		margin: auto;
+		img 
+		{
+			width: 100%;
+		}
 	}
 	&:hover{
 		cursor: pointer;

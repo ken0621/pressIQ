@@ -1,0 +1,20 @@
+.top-header
+{
+	background-color: #252525;
+	font-family: "Open Sans";
+	.text
+	{
+		color: rgba(255,255,255,0.5);
+		display: inline-block;
+		vertical-align: top;
+		margin: 10px 0;
+		font-size: 12.5px;
+		margin-right: 10px;
+		a
+		{
+			color: #7c7c7c;	
+			font-size: 10.42px;
+			font-weight: 400;
+		}
+	}
+}

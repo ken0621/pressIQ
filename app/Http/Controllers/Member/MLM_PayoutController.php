@@ -115,6 +115,7 @@ class MLM_PayoutController extends Member
 		}
 
 		$data["_bank"] = $_bank;
+		$data["shop_id"] = $shop_id;
 		return view('member.mlm_payout.payout_config', $data);
 	}
 	public function postConfig()

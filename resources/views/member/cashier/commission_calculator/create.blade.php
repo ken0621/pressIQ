@@ -65,7 +65,7 @@
                             <strong>Discount</strong>
                         </div>
                         <div class="col-md-6">
-                            <input type="text" value="0.00" class="number-input form-control input-sm text-right discount compute-all" name="">
+                            <input type="text" value="0.00" class="number-input form-control input-sm text-right discount discount-auto-add-comma" name="">
                         </div>
                     </div>
                 </div>

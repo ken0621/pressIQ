@@ -176,7 +176,7 @@ class MlmDeveloperController extends Member
         $default[]          = ["MEMBERSHIP","membership_name", true];
         $default[]          = ["BINARY LEFT","display_slot_binary_left", false];
         $default[]          = ["BINARY RIGHT","display_slot_binary_right", false];
-
+        $default[]          = ["TYPE","slot_status", false];
         $default[]          = ["BROWN CURRENT RANK","brown_current_rank", false];
         $default[]          = ["BROWN NEXT RANK","brown_next_rank", false];
         $default[]          = ["BROWN NEXT RANK REQ","brown_next_rank_requirements", false];

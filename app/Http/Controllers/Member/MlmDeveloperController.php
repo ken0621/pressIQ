@@ -48,6 +48,8 @@ class MlmDeveloperController extends Member
     public function index()
     {
         $data["page"] = "MLM Developer";
+        $shop_id = $this->user_info->shop_id;
+        $data["_membership"] = Tbl_membership::where("shop_id", $shop_id)->active()->get();
         return view("member.mlm_developer.mlm_developer", $data);
     }
     public function index_table()
@@ -66,6 +68,16 @@ class MlmDeveloperController extends Member
                 $q->orWhere("last_name", "LIKE", "%$search%");
                 $q->orWhere("slot_no", "LIKE", "%$search%");
             });
+        }
+
+        if(request("membership") != 0)
+        {
+            $slot_query->where("slot_membership", request("membership"));
+        }
+
+        if(request("type") != "NA")
+        {
+            $slot_query->where("slot_status", request("type"));
         }
 
         $data["_slot_page"] = $_slot = $slot_query->paginate(5);

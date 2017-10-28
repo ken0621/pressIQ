@@ -879,8 +879,6 @@ class MlmDeveloperController extends Member
             $check_same = null;
         }
 
-
-
         $return["status"] = "success";
         $return["call_function"] = "modify_slot_success";
 
@@ -915,6 +913,25 @@ class MlmDeveloperController extends Member
             }
         }
 
+        /* PREVENT DELETE IF THERE IS SLOT WHICH SPONSORED OR PLACED */
+        if(request('membership_id') == 'delete_slot')
+        {
+            $check_slot_sponsor = Tbl_mlm_slot::where("slot_sponsor", $slot_id)->first();
+
+            if($check_slot_sponsor)
+            {
+                $error = "Cannot delete slot if someone used this slot as sponsor (" . $check_slot_sponsor->slot_no . ").";
+            }
+     
+            $check_slot_placement = Tbl_mlm_slot::where("slot_placement", $slot_id)->first();
+
+            if($check_slot_placement)
+            {
+                $error = "Cannot delete slot if someone used this slot as placement (" . $check_slot_placement->slot_no . ").";
+            }
+        }
+
+
 
         if($error == "")
         {
@@ -925,10 +942,25 @@ class MlmDeveloperController extends Member
                 $update["slot_placement"] = $placement_info->slot_id;
             }
             
-            $update["slot_position"] = request("position");
-            $update["slot_membership"] = request("membership_id");
+            if(request('membership_id') == 'delete_slot')
+            {
+                Tbl_tree_placement::where("placement_tree_parent_id", $slot_id)->delete();
+                Tbl_tree_placement::where("placement_tree_child_id", $slot_id)->delete();
+                Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot_id)->delete();
+                Tbl_tree_sponsor::where("sponsor_tree_child_id", $slot_id)->delete();
+                Tbl_mlm_slot_wallet_log::where("wallet_log_slot_sponsor", $slot_id)->delete();
+                Tbl_mlm_slot_points_log::where("points_log_Sponsor", $slot_id)->delete();
+                Tbl_mlm_slot::where("slot_id", $slot_id)->delete();
+            }
+            else
+            {
+                $update["slot_position"] = request("position");
+                $update["slot_membership"] = request("membership_id");
+                Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
+            }
 
-            Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
+
+
             $return["status"] = "success";
             $return["call_function"] = "modify_slot_success";
         }

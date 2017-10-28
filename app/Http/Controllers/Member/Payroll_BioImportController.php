@@ -191,26 +191,28 @@ class Payroll_BioImportController extends Member
 		$failed = 0;
 		$incomplete = 0;
 		$overwritten = 0;
-		// dd($_time_record);
-		
 
-		foreach ($_time_record as $date => $time_record) 
+		foreach($_time_record as $date => $time_record) 
 		{
-			foreach ($time_record as $employee_number => $value) 
+			foreach($time_record as $employee_number => $value) 
 			{
 				$check_employee = null;
 				$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("shop_id", Self::shop_id())->first();
 				
 				$value['employee_number'] = $employee_number;
 				$value['date']			  = $date;
-				
+					
 				if ($check_employee) 
 				{
 					/* Get Tbl payroll time sheet data  */
 					$timesheet_db 	= Payroll2::timesheet_info_db($check_employee->payroll_employee_id, $date);
 
+					
+
 					/*Get Shift Code id*/
 					$shift_code_id 	= Tbl_payroll_employee_basic::where("payroll_employee_id", $check_employee->payroll_employee_id)->value("shift_code_id");
+					
+						
 					
 					/* CREATE TIMESHEET DB IF EMPTY */
 					if(!$timesheet_db)
@@ -241,7 +243,6 @@ class Payroll_BioImportController extends Member
 
 						Tbl_payroll_time_sheet_record::insert($insert_time);
 
-						
 						$success++;
 						$_time_record[$date][$employee_number]['status'] = 'INSERTED';
 						$_time_record[$date][$employee_number]['biometric_name'] = $biometric_name;
@@ -249,10 +250,36 @@ class Payroll_BioImportController extends Member
 					}
 					else
 					{
-						$time_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->get();
+						// dd($_time_record["2017-10-09"]);
+						$status = "INSERTED";
+						$_time_sheet_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->get();
 						
-						Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->delete();
+						/*check if import time will be conflicted in database time sheet record*/
+						foreach ($_time_sheet_record as $key => $time_sheet_record) 
+						{
+							$time_in_record = $time_sheet_record->payroll_time_sheet_in;
+							$time_out_record = $time_sheet_record->payroll_time_sheet_out;
 
+							if(($time_in_record > $value["time_in"] && $value["time_outn"] < $time_out_record) 
+							|| ($time_in_record > $value["time_in"] && $value["time_out"] < $time_out_record)
+							|| ($time_in_record == $value["time_in"] && $value["time_out"] == $time_out_record)) 
+							{
+								
+								Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id',$time_sheet_record->payroll_time_sheet_record_id)->delete();
+								$overwritten++;
+								$status = 'OVERWRITTEN';
+							}
+
+							// dd($value["time_in"]." ".$value["time_out"]);
+							// dd($time_sheet_record->payroll_time_sheet_in.' '.$time_sheet_record->payroll_time_sheet_out);
+						}
+
+						if ($status != 'OVERWRITTEN') 
+						{
+							$success++;
+						}
+						
+						
 						$update = null;
 						$update['payroll_time_sheet_id'] 		= $timesheet_db->payroll_time_sheet_id;
 						$update['payroll_company_id'] 			= $check_employee->payroll_employee_company_id;
@@ -267,11 +294,9 @@ class Payroll_BioImportController extends Member
 						
 						Tbl_payroll_time_sheet_record::insert($update);
 
-
-						$overwritten++;
-						$_time_record[$date][$employee_number]['status'] = 'OVERWRITTEN';
-						$_time_record[$date][$employee_number]['biometric_name'] = $biometric_name;
-						$_time_record[$date][$employee_number]['company_name'] = Tbl_payroll_company::where('payroll_company_id',$update['payroll_company_id'])->value('payroll_company_name');
+						$_time_record[$date][$employee_number]['status'] 			= $status;
+						$_time_record[$date][$employee_number]['biometric_name'] 	= $biometric_name;
+						$_time_record[$date][$employee_number]['company_name'] 		= Tbl_payroll_company::where('payroll_company_id',$update['payroll_company_id'])->value('payroll_company_name');
 					}
 				}
 				else
@@ -283,7 +308,6 @@ class Payroll_BioImportController extends Member
 					$failed++;
 				}
 			}
-			
 		}
 		
 		$data["success"] = $success;
@@ -859,10 +883,7 @@ class Payroll_BioImportController extends Member
 			    			{
 			    				array_push($insert_time_record, $insert_record);
 			    			}
-
-			    			
-		    			}
-		    			
+		    			}		    			
 		    		}
 	    		}
 	    	}
@@ -1269,7 +1290,7 @@ class Payroll_BioImportController extends Member
     	 		$employee_number = $time["employee_no"];
     	 		$time_in  = "";
     	 		$time_out = "";
-    	 		
+    	 
 			 	if (is_object($time["date"])) 
     	 		{
     	 			$date = date('Y-m-d', strtotime($time['date']->toDateTimeString()));

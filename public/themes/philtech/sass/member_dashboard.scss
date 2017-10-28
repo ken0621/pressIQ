@@ -33,7 +33,7 @@ $text-dark: #272c2f;
 
 	.brown-icon-money
 	{
-		margin-top: -7px;
+		margin-top: -7px; 
 	}
 
 	.title
@@ -67,6 +67,33 @@ $text-dark: #272c2f;
 				opacity: 1;
 			}
 		}
+	}
+
+	.content-wrapper
+	{
+		margin-top: 50px;
+		padding: 50px 60px 40px 60px;
+		background-color: #eee;
+	}
+
+	.left-side
+	{
+		text-align: left;
+		font-size: 15px;
+		font-weight: 600;
+		color: #404040;
+	}
+
+	.middle-pos
+	{
+		margin-top: 9px;
+	}
+
+	.p-text
+	{
+		float: right;
+		font-weight: bold !important;
+		color: #3E95CD !important;
 	}
 
 	.sub-container
@@ -364,6 +391,15 @@ $text-dark: #272c2f;
 					}
 				}
 			}
+		}
+	}
+	h4 
+	{
+		position: relative;
+		img 
+		{
+			padding-bottom: 5px;
+			padding-right: 5px;
 		}
 	}
 }

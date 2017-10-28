@@ -56,7 +56,7 @@ class PayrollTimeSheet2Controller extends Member
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
 		$data["company"] = $this->db_get_company_period_information($period_id);
 		$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_company_id);
-	
+		
 		return view('member.payroll2.employee_summary', $data);
 	}
 	public function index_redirect_if_time_keeping_does_not_exist($period_id)
@@ -111,7 +111,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
 
 		$data["period_id"] = $period_id;
-
+		
 		if($data["compute_type"] == "Flat Rate")
 		{
 			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";

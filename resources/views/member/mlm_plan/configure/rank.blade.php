@@ -203,6 +203,7 @@ function load_stair()
     $('.stair_body').load('/member/mlm/plan/rank/get',function()
     {
         color_picker_function();
+        jscolor.installByClassName("jscolor");
     });
 }
 function save_stairstep()

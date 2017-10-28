@@ -41,26 +41,38 @@ class PayrollBiometricsController
 {
 	public function save_data()
 	{
-		$app_key 		= Request::input("appkey");
-		$app_secret 	= Request::input("appsecret");
-		$branch_id 		= Request::input("branchid");
-		$_time_in_out 	= json_decode(Request::input("data_input"));
-		$check_access 	= Tbl_shop::where('shop_api_key',$app_key)->first();
 		
-		$return = null;
-		$employee_record = null;
-		if ($check_access->shop_api_key) 
+		if (Request::input("data_input") == 'null')
 		{
-			$shop_id 	= $check_access->shop_id;
-			/*$employee_record =  */$this->import_data_from_biometric($_time_in_out, $shop_id, $branch_id);
-			$return 	= "success";
+			$return 	= "No Data Found!";
 		}
 		else
 		{
-			$return 	= "failed";
+			$app_key 		= Request::input("appkey");
+			$app_secret 	= Request::input("appsecret");
+			$branch_id 		= Request::input("branchid");
+			$_time_in_out 	= json_decode(Request::input("data_input"));
+			$check_access 	= Tbl_shop::where('shop_api_key',$app_key)->first();
+			
+			$return = null;
+			$employee_record = null;
+
+			if ($check_access->shop_api_key) 
+			{
+				$shop_id 	= $check_access->shop_id;
+				/*$employee_record =  */$this->import_data_from_biometric($_time_in_out, $shop_id, $branch_id);
+				$return 	= "Success!";
+			}
+			else
+			{
+				$return 	= "Failed!";
+			}
 		}
 		
+		
 		echo $return;
+
+		/*echo (json_encode($_time_in_out) == null ? "has value": "null");*/
 	}
 
 

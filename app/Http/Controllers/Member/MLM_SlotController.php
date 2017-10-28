@@ -476,10 +476,20 @@ class MLM_SlotController extends Member
                 {
                     $data["genealogy_color"] = "background-color:".$stairstep->stairstep_genealogy_color;
                 }
+
+                if($stairstep->stairstep_genealogy_border_color == "Default")
+                {
+                    $data["genealogy_border_color"] = null;
+                }
+                else
+                {
+                    $data["genealogy_border_color"] = "border-style: solid;border-color:".$stairstep->stairstep_genealogy_border_color;
+                }
              }
              else
              {
-                $data["genealogy_color"] = null;
+                $data["genealogy_color"]        = null;
+                $data["genealogy_border_color"] = null;
              }
         }
         else
@@ -580,13 +590,24 @@ class MLM_SlotController extends Member
                {
                    $genealogy_color = "background-color:".$stairstep->stairstep_genealogy_color;
                }
+
+
+                if($stairstep->stairstep_genealogy_border_color == "Default")
+                {
+                    $genealogy_border_color = null;
+                }
+                else
+                {
+                    $genealogy_border_color = "border-style: solid;border-color:".$stairstep->stairstep_genealogy_border_color;
+                }
             }
             else
             {
                $genealogy_color = null;
+               $genealogy_border_color = null;
             }
 
-            $str_slot = '<span class="downline parent parent-reference PS SILVER" x="' . $slot_info->slot_id . '" style="'.$genealogy_color.'">';    
+            $str_slot = '<span class="downline parent parent-reference PS SILVER" x="' . $slot_info->slot_id . '" style="'.$genealogy_color.';'.$genealogy_border_color.'">';    
 
 
 

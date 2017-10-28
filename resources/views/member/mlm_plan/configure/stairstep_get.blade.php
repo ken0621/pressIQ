@@ -59,9 +59,13 @@
                 <label for="stairstep_leg_count">Leg Count</label>
                 <input type="number" class="form-control" name="stairstep_leg_count" value="{{$value->stairstep_leg_count}}">
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="stairstep_genealogy_color">Genealogy Color</label>
-                <input type="text" class="form-control jscolor" id="stairstep_genealogy_color" name="stairstep_genealogy_color" value="{{$rk->stairstep_genealogy_color == 'Default' ? '519fcd' : ltrim($rk->stairstep_genealogy_color, '#')}}">
+                <input type="text" class="form-control jscolor" id="stairstep_genealogy_color" name="stairstep_genealogy_color" value="{{$value->stairstep_genealogy_color == 'Default' ? '519fcd' : ltrim($value->stairstep_genealogy_color, '#')}}">
+            </div> 
+            <div class="col-md-2">
+                <label for="stairstep_genealogy_border_color">Genealogy Border Color</label>
+                <input type="text" class="form-control jscolor" id="stairstep_genealogy_border_color" name="stairstep_genealogy_border_color" value="{{$value->stairstep_genealogy_border_color == 'Default' ? '519fcd' : ltrim($value->stairstep_genealogy_border_color, '#')}}">
             </div> 
             <div class="col-md-1 pull-right">
                 <br>
@@ -131,9 +135,13 @@
             <label for="stairstep_leg_count">Leg Count</label>
             <input type="number" class="form-control" name="stairstep_leg_count" value="0">
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <label for="stairstep_genealogy_color">Genealogy Color</label>
             <input type="text" class="form-control jscolor" id="stairstep_genealogy_color" name="stairstep_genealogy_color" value="519fcd">
+        </div>        
+         <div class="col-md-2">
+            <label for="stairstep_genealogy_border_color">Genealogy Border Color</label>
+            <input type="text" class="form-control jscolor" id="stairstep_genealogy_border_color" name="stairstep_genealogy_border_color" value="519fcd">
         </div> 
         <div class="col-md-1 pull-right">
             <br>

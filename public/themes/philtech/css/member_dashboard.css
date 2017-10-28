@@ -39,6 +39,21 @@
       opacity: 0; }
     .dashboard .title:hover .title-button {
       opacity: 1; }
+  .dashboard .content-wrapper {
+    margin-top: 50px;
+    padding: 50px 60px 40px 60px;
+    background-color: #eee; }
+  .dashboard .left-side {
+    text-align: left;
+    font-size: 15px;
+    font-weight: 600;
+    color: #404040; }
+  .dashboard .middle-pos {
+    margin-top: 9px; }
+  .dashboard .p-text {
+    float: right;
+    font-weight: bold !important;
+    color: #3E95CD !important; }
   .dashboard .sub-container {
     padding: 10px 20px;
     border: 1px solid #ddd;
@@ -209,6 +224,11 @@
           width: 4px; }
     .dashboard .activities .holder:last-child .circle-line .line {
       display: none; }
+  .dashboard h4 {
+    position: relative; }
+    .dashboard h4 img {
+      padding-bottom: 5px;
+      padding-right: 5px; }
 
 /* Success */
 .popup-success .modal-content .modal-header {

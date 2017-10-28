@@ -46,8 +46,9 @@
     <div id="home" class="subheader-container">
         <div class="container">
             @if($customer)
-            <div class="left-container"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span>
+            <div class="left-container">
                 @if(!$mlm_member)
+                    <span><i class="fa fa-heart-o" aria-hidden="true"></i></span>
                     <span>BECOME A MEMBER</span>
                 @endif
             </div>
@@ -133,7 +134,7 @@
                                 <div class="icon-holder">
                                     <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/telephone-logo.png">
                                 </div>
-                                <p class="footer-details">(02)631-6997 | 0917-5326968</p>
+                                <p class="footer-details">(02)631-6997&nbsp;/&nbsp;0926-649-4134&nbsp;/&nbsp;0946-561-9714</p>
                             </div>
                             <div class="jca-footer-details-container">
                                 <div class="icon-holder">
@@ -179,16 +180,12 @@
                                 <p class="footer-detail-list">Packages</p>
                             </a>
                             
+                            <a href="/themes/{{ $shop_theme }}/img/overview/service-packages.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Service Packages</p>
+                            </a>
+
                             <a href="/themes/{{ $shop_theme }}/img/overview/product-packages.jpg" class="lsb-preview"> 
                                 <p class="footer-detail-list">Product Packages</p>
-                            </a>
-
-                            <a href="/themes/{{ $shop_theme }}/img/overview/product-packages-2.jpg" class="lsb-preview"> 
-                                <p class="footer-detail-list">Product Packages (8,000 Standard Package)</p>
-                            </a>
-
-                            <a href="/themes/{{ $shop_theme }}/img/overview/direct-selling.jpg" class="lsb-preview"> 
-                                <p class="footer-detail-list">Direct Selling</p>
                             </a>
                             
                             <a href="/themes/{{ $shop_theme }}/img/overview/sales-commission.jpg" class="lsb-preview"> 

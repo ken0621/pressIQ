@@ -1,4 +1,4 @@
-@extends("layout")
+@extends("layout2")
 @section("content")
 <form method="post">
 {{ csrf_field() }}

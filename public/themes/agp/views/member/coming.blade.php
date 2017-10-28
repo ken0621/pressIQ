@@ -1,4 +1,4 @@
-@extends("layout")
+@extends("layout2")
 @section("content")
 <div class="container">
 	<input type="hidden" id="_token" value="{{csrf_token()}}">

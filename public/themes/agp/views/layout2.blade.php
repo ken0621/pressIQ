@@ -39,8 +39,8 @@
         <div class="container">
             <div class="clearfix">
                 <div class="pull-left">
-                    <div class="text">CALL US NOW: 09999999999</div> 
-                    <div class="text">EMAIL US: sample@email.com</div>
+                    <div class="text">{{ get_content($shop_theme_info, "header", "header_call_label") }}: {{ get_content($shop_theme_info, "header", "header_call_number") }}</div> 
+                    <div class="text">{{ get_content($shop_theme_info, "header", "header_email_label") }}: {{ get_content($shop_theme_info, "header", "header_email_address") }}</div>
                 </div>
                 <div class="pull-right">
                     <div class="text"><a href="/member/register">LOG IN</a></div>
@@ -48,11 +48,72 @@
             </div>
         </div>
     </div>
+
+    <nav class="navbar">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <img src="{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : '/themes/' . $shop_theme . '/assets/front/img/small-logo.png' }}">
+                </a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="{{ Request::segment(1) == '' ? 'active' : '' }}"><a href="#">HOME</a></li>
+                    <li class="{{ Request::segment(1) == 'product' ? 'active' : '' }}"><a href="#">PRODUCTS</a></li>
+                    <li class="{{ Request::segment(1) == 'about' ? 'active' : '' }}"><a href="#">COMPANY</a></li>
+                    <li class="{{ Request::segment(1) == 'testimony' ? 'active' : '' }}"><a href="#">TESTIMONIALS</a></li>
+                    <li class="{{ Request::segment(1) == 'policy' ? 'active' : '' }}"><a href="#">POLICIES</a></li>
+                    <li class="{{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="#">CONTACT US</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
     
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
         @yield("content")
     </div>
+
+    <footer>
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-md-4">
+                    <div class="title">INFORMATION</div>
+                    <ul>
+                        <li><a href="/">HOME</a></li>
+                        <li><a href="/product">PRODUCT</a></li>
+                        <li><a href="/about">ABOUT US</a></li>
+                        <li><a href="/contact">CONTACT</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <div class="title">CONTACT US</div>
+                    <ul>
+                        <li><a href="javascript:">{{ get_content($shop_theme_info, "footer", "footer_contact_number") }}</a></li>
+                        <li><a href="javascript:">{{ get_content($shop_theme_info, "footer", "footer_contact_email") }}</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <div class="title">FOLLOW US ON</div>
+                    <div class="social-holder">
+                        <div class="holder" onclick="location.href='{{ get_content($shop_theme_info, "footer", "footer_facebook_link") }}''"><img src="/themes/{{ $shop_theme }}/resources/assets/front/img/fb.png"></div>
+                        <div class="holder" onclick="location.href='{{ get_content($shop_theme_info, "footer", "footer_twitter_link") }}'"><img src="/themes/{{ $shop_theme }}/resources/assets/front/img/tt.png"></div>
+                        <div class="holder" onclick="location.href='{{ get_content($shop_theme_info, "footer", "footer_pinterest_link") }}'"><img src="/themes/{{ $shop_theme }}/resources/assets/front/img/pp.png"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
     
     @include("frontend.gfoot")
 

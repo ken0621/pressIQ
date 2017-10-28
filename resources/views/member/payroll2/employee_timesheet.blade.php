@@ -31,7 +31,7 @@
                                     <?php $random_integer[$x] = rand (10000000, 999999999); ?>
                                 @endforeach
                             @endif
-
+                            
                             <?php $random_integer_for_blank = rand (10000000, 999999999); ?>
 
                             <tr class="tr-parent" date="{{ $timesheet->date }}" timesheet_id="{{ $timesheet->payroll_time_sheet_id }}">

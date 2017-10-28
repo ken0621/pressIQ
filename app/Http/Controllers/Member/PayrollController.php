@@ -151,6 +151,7 @@ class PayrollController extends Member
                                                   ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
                                                   ->orderBy('tbl_payroll_period.payroll_period_start','asc')
                                                   ->get();
+                                                  
           $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
          
           return view('member.payroll.payroll_timekeeping', $data);
@@ -4160,12 +4161,13 @@ class PayrollController extends Member
           $data['_day']            = Payroll::restday_checked($id); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
           $data['_shift_code']     = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
-          // dd($data);
+          // dd($data['group']);
           return view('member.payroll.modal.modal_edit_payroll_group',$data);
      }
 
      public function modal_update_payroll_group()
      {
+
           $payroll_group_id = Request::input("payroll_group_id");
 
           $update['payroll_group_code']                     = Request::input('payroll_group_code');
@@ -4181,6 +4183,7 @@ class PayrollController extends Member
           // $update['shift_code_id']                          = Request::input('shift_code_id');
           
           $payroll_group_deduct_before_absences             = 0;
+
           if( Request::has('payroll_group_deduct_before_absences'))
           {
                $payroll_group_deduct_before_absences        = Request::input('payroll_group_deduct_before_absences');
@@ -4268,11 +4271,10 @@ class PayrollController extends Member
           $update['payroll_under_time_interval']  = Request::input("payroll_under_time_interval");
           $update['payroll_under_time_parameter'] = Request::input("payroll_under_time_parameter");
           $update['payroll_under_time_deduction'] = Request::input("payroll_under_time_deduction");
-          $update['payroll_break_category']       = Request::input("payroll_break_category");
-          
-          $update['overtime_grace_time']          = Request::has('overtime_grace_time') ? date('H:i:s', strtotime(Request::input('overtime_grace_time'))) : '00:00:00';
+          $update['payroll_break_category']       = Request::input("payroll_break_category");         
+          $update['overtime_grace_time']          = Request::input('overtime_grace_time') == "" ? '00:00:00' : date('H:i:s', strtotime(Request::input('overtime_grace_time')));
           $update['grace_time_rule_overtime']     = Request::has('grace_time_rule_overtime') ? Request::input('grace_time_rule_overtime') : 'accumulative';
-          $update['late_grace_time']              = Request::has('late_grace_time') ? date('H:i:s', strtotime(Request::input('late_grace_time'))) : '00:00:00';
+          $update['late_grace_time']              = Request::input('late_grace_time') == "" ? '00:00:00' : date('H:i:s', strtotime(Request::input('late_grace_time')));
           $update['grace_time_rule_late']         = Request::has('grace_time_rule_late') ? Request::input("grace_time_rule_late") : 'first';
 
           /* UPDATE PAYROLL GROUP*/ 

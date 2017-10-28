@@ -131,6 +131,10 @@ class Mlm_complan_manager
                     $array['points_log_points']         = $computed_points;
                     $array['original_from_complan']     = "STAIRSTEP_DIRECT";
 
+                    if($old_percentage == null)
+                    {
+                        $old_percentage = 0;
+                    }
                     
                     $slot_logs_id = Mlm_slot_log::slot_log_points_array($array);
 
@@ -625,10 +629,10 @@ class Mlm_complan_manager
             foreach($slot_tree as $key => $tree)
             {
                 /* COMPUTE FOR BONUS */
-                if(isset($indirect_level[$tree->membership_id][$tree->sponsor_tree_level]))
+                if(isset($indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level]))
                 {
-                    //$indirect_bonus = $indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level];
-                    $indirect_bonus = $indirect_level[$tree->membership_id][$tree->sponsor_tree_level];     
+                    $indirect_bonus = $indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level];
+                    // $indirect_bonus = $indirect_level[$tree->membership_id][$tree->sponsor_tree_level];     
                 }
                 else
                 {

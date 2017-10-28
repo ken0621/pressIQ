@@ -86,7 +86,7 @@
                                             </td>                                      
                                         <td>
                                             <span class="direct_referral_rpv_edit{{$mem->membership_id}}">
-                                                <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_referral_rpv({{$mem->membership_id}},{{$mem->direct_referral_rpv}},{{$mem->direct_referral_rgpv}},{{$mem->direct_referral_spv}},{{$mem->direct_referral_sgpv}})">Edit</a>
+                                                <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_referral_rpv({{$mem->membership_id != null ? $mem->membership_id : '0'}},{{$mem->direct_referral_rpv != null ? $mem->direct_referral_rpv : '0'}},{{$mem->direct_referral_rgpv != null ? $mem->direct_referral_rgpv : '0'}},{{$mem->direct_referral_spv != null ? $mem->direct_referral_spv : '0'}},{{$mem->direct_referral_sgpv != null ? $mem->direct_referral_sgpv : '0'}},{{$mem->direct_referral_self_rpv != null ? $mem->direct_referral_self_rpv : '0'}},{{$mem->direct_referral_self_spv != null ? $mem->direct_referral_self_spv : '0'}})">Edit</a>
                                             </span>
                                         </td>
                                     </tr>

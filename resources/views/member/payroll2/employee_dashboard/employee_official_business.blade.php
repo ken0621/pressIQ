@@ -1,5 +1,4 @@
-@extends('member.payroll2.employee_dashboard.layout')
-@section('content')
+
   <ol class="breadcrumb">
     <li class="breadcrumb-item">
       <a href="/employee">Dashboard</a>
@@ -7,7 +6,7 @@
     <li class="breadcrumb-item active">{{ $page }}</li>
   </ol>
 	<div class="modal-body form-horizontal">
-		<div class="form-group">
+		<div class="row">
 	    	<div class="col-md-6">
 				<small>Name of Employee</small>
 				<select class="form-control" required>
@@ -21,21 +20,21 @@
 				</select>
 			</div>
 	    </div>
-		<div class="form-group">
+		<div class="row">
 			<div class="col-md-6">
 				<small>Date</small>
-				<input class="form-control" type="text" class="form-control" required>
+				<input class="form-control" type="date" class="form-control" required>
 			</div>
 			<div class="col-md-3">
 				<small>Time in</small>
-				<input class="form-control" type="text" class="form-control">
+				<input class="form-control" type="time" class="form-control">
 			</div>
 			<div class="col-md-3">
 				<small>Time out</small>
-				<input class="form-control" type="text" class="form-control">
+				<input class="form-control" type="time" class="form-control">
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="row">
 			<div class="col-md-6">
 				<small>Client Name</small>
 				<select class="form-control" name="select_client" required>
@@ -49,7 +48,7 @@
 				</select>
 			</div>
 		</div>
-        <div class="form-group">
+        <div class="row">
             <div class="col-sm-6">
             <small>Contact Person</small>
             	<input type="text" class="form-control">
@@ -59,13 +58,13 @@
 				<input class="form-control" type="text" class="form-control">
 			</div>
         </div>
-		<div class="form-group">
+		<div class="row">
             <div class="col-sm-12">
             <small>Adress</small>
             	<input type="text" class="form-control">
             </div>
         </div>
-		<div class="form-group">
+		<div class="row">
             <div class="col-sm-12">
             <small>Remarks</small>
             	<textarea class="form-control" name="other_info" rows="4" required></textarea>
@@ -77,4 +76,3 @@
 		<button type="submit"  class="btn btn-primary btn-md">Submit</button>
 	</div>
 </form>
-@endsection

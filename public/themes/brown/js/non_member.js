@@ -1,5 +1,5 @@
 var non_member = new non_member();
-var mainView = myApp.addView('.view-main');
+
 function non_member()
 {
 	init();

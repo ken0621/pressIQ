@@ -10,7 +10,9 @@
         <title>{{ ucfirst($shop_info->shop_key) }} | {{ isset($page) ? $page : "" }}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/jca-icon.png"" type="image/png"/>
+
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">   
@@ -44,7 +46,11 @@
     <div id="home" class="subheader-container">
         <div class="container">
             @if($customer)
-            <div class="left-container"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span><span>BECOME A MEMBER</span></div>
+            <div class="left-container"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span>
+                @if(!$mlm_member)
+                    <span>BECOME A MEMBER</span>
+                @endif
+            </div>
             <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span><span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
             @else
             <div class="left-container">
@@ -80,6 +86,11 @@
                                 <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
                                 <li><a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a></li>
                                 <li><a class="smoth-scroll" href="/#products">PRODUCTS</a></li>
+                            @elseif(Request::segment(1)=="terms_and_conditions")
+                                <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                                <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
+                                <li><a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a></li>
+                                <li><a class="smoth-scroll" href="/#products">PRODUCTS</a></li>    
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
@@ -128,44 +139,82 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <!-- <div class="col-md-2">
                         <div class="jca-footer-title-container">
                             <p class="footer-title">Quick Links</p>
                         </div>
                         <div class="jca-footer-details-container">
-                            <p class="footer-detail-list">Company Policy</p>
-                            <p class="footer-detail-list">Dealer’s Policy</p>
-                            <p class="footer-detail-list">Disclaimer</p>
-                            <p class="footer-detail-list">Terms & Condition</p>
-                            <p class="footer-detail-list">Privacy Policy</p>
-                            <p class="footer-detail-list">Product Policy</p>
+                            <a href="javascript:">
+                                <p class="footer-detail-list">Dealer’s Policy</p>
+                            </a>
+                            <a href="javascript:">
+                                <p class="footer-detail-list">Disclaimer</p>
+                            </a>
+                            <a href="javascript:">
+                               <p class="footer-detail-list">Terms & Condition</p> 
+                            </a>
+                            <a href="javascript:">
+                                <p class="footer-detail-list">Privacy Policy</p>
+                            </a>
+                            <a href="javascript:">
+                                <p class="footer-detail-list">Product Policy</p>
+                            </a>
                         </div>
-                    </div>
-                    <div class="col-md-3">
+                    </div> -->
+                    <div class="col-md-4">
                         <div class="jca-footer-title-container">
                             <p class="footer-title">Overview</p>
                         </div>
                         <div class="jca-footer-details-container">
-                            <p class="footer-detail-list">Marketing Plan</p>
-                            <p class="footer-detail-list">Packages</p>
-                            <p class="footer-detail-list">Product Packages</p>
-                            <p class="footer-detail-list">Direct Selling</p>
-                            <p class="footer-detail-list">Unilevel</p>
-                            <p class="footer-detail-list">Sales Comission</p>
-                            <p class="footer-detail-list">Overide Sales Comission</p>
+
+                            <a href="/themes/{{ $shop_theme }}/img/overview/marketing-plan.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Marketing Plan</p>
+                            </a>
+                            
+                            <a href="/themes/{{ $shop_theme }}/img/overview/packages.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Packages</p>
+                            </a>
+                            
+                            <a href="/themes/{{ $shop_theme }}/img/overview/product-packages.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Product Packages</p>
+                            </a>
+
+                            <a href="/themes/{{ $shop_theme }}/img/overview/product-packages-2.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Product Packages (8,000 Standard Package)</p>
+                            </a>
+
+                            <a href="/themes/{{ $shop_theme }}/img/overview/direct-selling.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Direct Selling</p>
+                            </a>
+                            
+                            <a href="/themes/{{ $shop_theme }}/img/overview/sales-commission.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Sales Commission</p>
+                            </a>
+
+                            <a href="/themes/{{ $shop_theme }}/img/overview/overide-sales-comission.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Overide Sales Commission</p>
+                            </a>
+
+                            <a href="/terms_and_conditions"> 
+                                <p class="footer-detail-list">General Terms and Conditions</p>
+                            </a>
+
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="jca-footer-title-container">
                             <p class="footer-title">Product Portfolio</p>
                         </div>
                         <div class="jca-footer-details-container">
-                            <p class="footer-detail-list">JCA Wellness Body Cream</p>
-                            <p class="footer-detail-list">JCA Wellness Day Cream</p>
-                            <p class="footer-detail-list">JCA Wellness Night Cream</p>
-                            <p class="footer-detail-list">Swiss Apple Stemcell Cerum</p>
-                            <p class="footer-detail-list">Swiss Apple Stemcell Soap with</p>
-                            <p class="footer-detail-list">gulthathione and collagen</p>
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-serum.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Swiss Apple Stem Cell Serum</p>
+                            </a>
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-soap.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Swiss Apple Stem Cell Soap with Glutathione and Collagen</p>
+                            </a>
+                            <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-services.jpg" class="lsb-preview"> 
+                                <p class="footer-detail-list">Stem Cell Therapy- The Anti-Aging and Rejuvenation Therapy</p>
+                            </a>
                         </div>
                     </div> 
                 </div>
@@ -174,7 +223,7 @@
     </footer>
     <div class="container">
         <div class="bottom">                           
-            <div class="ftr-title">© JCA International Corporation. All Right Reserved</div>
+            <div class="ftr-title">© JCA Wellness International Corp. All Right Reserved</div>
             <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
         </div>
     </div>
@@ -184,5 +233,10 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
 
     @yield("script")
+    <script> 
+      $(window).load(function() { 
+        $.fn.lightspeedBox(); 
+      }); 
+    </script> 
     </body>
 </html>

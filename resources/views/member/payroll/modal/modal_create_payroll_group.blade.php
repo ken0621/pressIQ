@@ -100,6 +100,9 @@
 											<label><input type="radio" name="payroll_group_cola_basis" value="Pro Rated Monthly" checked>Pro Rated Monthly</label>
 										</div>
 										<div class="radio">
+											<label><input type="radio" name="payroll_group_cola_basis" value="Daily Fixed">Daily Fixed</label>
+										</div>
+										<div class="radio">
 											<label><input type="radio" name="payroll_group_cola_basis" value="Daily Computation">Daily Computation</label>
 										</div>
 									</div>
@@ -317,7 +320,6 @@
 													<input type="number" name="payroll_late_interval" class="form-control late-param-change late-param-number text-right" step="any">
 													<span class="input-group-btn" style="width: 100px">
 														<select class="form-control late-param-change late-param-select" name="payroll_late_parameter">
-															<option value="Second">Second</option>
 															<option value="Minute">Minute</option>
 															<option value="Hour">Hour</option>
 														</select>
@@ -326,7 +328,7 @@
 
 											</div>
 											<div class="col-md-6">
-												<small>Deduction for every (<span class="late-label-param">0</span>)</small>
+												<small>Deduction Late Percentage</small>
 												<input type="number" name="payroll_late_deduction" class="form-control text-right" step="any">
 											</div>
 										</div>
@@ -361,7 +363,6 @@
 													<input type="number" name="payroll_under_time_interval" class="form-control late-param-change late-param-number text-right" step="any">
 													<span class="input-group-btn" style="width: 100px">
 														<select class="form-control late-param-change late-param-select" name="payroll_under_time_parameter">
-															<option value="Second">Second</option>
 															<option value="Minute">Minute</option>
 															<option value="Hour">Hour</option>
 														</select>
@@ -370,7 +371,7 @@
 
 											</div>
 											<div class="col-md-6">
-												<small>Deduction for every (<span class="under-time-label-param">0</span>)</small>
+												<small>Deduction Undertime Percentage</small>
 												<input type="number" name="payroll_under_time_deduction" class="form-control text-right" step="any">
 											</div>
 										</div>

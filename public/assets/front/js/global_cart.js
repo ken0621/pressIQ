@@ -13,6 +13,7 @@ function global_cart()
     }
     function document_ready()
     {
+        action_quantity_cart();
         event_add_to_cart();
     }
     function event_add_to_cart()
@@ -70,7 +71,14 @@ function global_cart()
         })
         .done(function(quantity) 
         {
-            $(".quantity-item-holder").text(quantity);
+            if (quantity > 99) 
+            {
+                $(".quantity-item-holder").text("99+");
+            }
+            else
+            {
+                $(".quantity-item-holder").text(quantity);
+            }
         })
         .fail(function() 
         {

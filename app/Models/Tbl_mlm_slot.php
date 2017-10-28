@@ -43,6 +43,7 @@ class Tbl_mlm_slot extends Model
         );
 
     }
+
     public function scopeShop($query, $shop_id)
     {
         return $query->where("shop_id", $shop_id);

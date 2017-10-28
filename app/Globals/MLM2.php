@@ -16,6 +16,7 @@ use App\Models\Tbl_rank_repurchase_cashback_item;
 use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_mlm_stairstep_settings;
+use App\Models\Tbl_mlm_plan_setting;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
@@ -263,6 +264,7 @@ class MLM2
 		$return["_wallet"]->current_wallet = 0;
 		$return["_wallet"]->total_earnings = 0;
 		$return["_wallet"]->total_payout = 0;
+		$return["_wallet"]->total_points = 0;
 
 
 		$_plan = Tbl_mlm_slot_wallet_log::groupBy("wallet_log_plan")->where("shop_id", $shop_id)->get();
@@ -285,10 +287,13 @@ class MLM2
 			}
 		}
 
-		$return["_wallet"]->complan_triangle 		= 0;
-		$return["_wallet"]->complan_direct 			= 0;
-		$return["_wallet"]->complan_builder 		= 0;
-		$return["_wallet"]->complan_leader 			= 0;
+		$return["_wallet"]->complan_triangle 					= 0;
+		$return["_wallet"]->complan_direct 						= 0;
+		$return["_wallet"]->complan_builder 					= 0;
+		$return["_wallet"]->complan_leader 						= 0;
+		$return["_wallet"]->complan_repurchase_cashback 		= 0;
+		$return["_wallet"]->complan_rank_repurchase_cashback 	= 0;
+		$return["_wallet"]->complan_stairstep 					= 0;
 
 		$return["_wallet_plan"] = $_plan;
 		
@@ -309,6 +314,14 @@ class MLM2
 
 		$return["_points"]->brown_builder_points 	= 0;
 		$return["_points"]->brown_leader_points 	= 0;
+		$return["_points"]->rank_pv 				= 0;
+		$return["_points"]->rank_gpv 				= 0;
+		$return["_points"]->stairstep_pv 			= 0;
+		$return["_points"]->stairstep_gpv 			= 0;
+		$return["_points"]->binary 					= 0;
+		$return["_points"]->direct 					= 0;
+		$return["_points"]->advertisement_bonus 	= 0;
+		$return["_points"]->maintenance 			= 0;
 		$return["_point_plan"] = $_plan_points;
 
 		$return["slot_count"] = 0;
@@ -339,6 +352,7 @@ class MLM2
 
 			$_slot_points = Tbl_mlm_slot_points_log::where("points_log_slot", $slot->slot_id)->get();
 
+
 			foreach($_slot_points as $slot_points)
 			{
 				$wallet_plan = strtolower($slot_points->points_log_complan);
@@ -350,6 +364,8 @@ class MLM2
 				{
 					$return["_points"]->$wallet_plan += $slot_points->points_log_points;
 				}
+
+				$return["_wallet"]->total_points += $slot_points->points_log_points;
 			}
 		}
 
@@ -372,6 +388,7 @@ class MLM2
 
 		$return["_slot"] = $_slot;
 		$return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
+		$return["_wallet"]->display_total_points = number_format($return["_wallet"]->total_points, 2) . " POINT(S)";;
 
 		return $return;
 	}
@@ -435,7 +452,10 @@ class MLM2
 			}
 		});
 
-		$query->where("wallet_log_amount", ">", 0);
+		if($shop_id != 52)
+		{
+			$query->where("wallet_log_amount", ">", 0);
+		}
 
 		
 
@@ -570,7 +590,7 @@ class MLM2
 
 
 			default:
-				$message = $reward->wallet_log_plan;
+				$message = $reward->wallet_log_details;
 			break;
 		}
 
@@ -1167,21 +1187,29 @@ class MLM2
 	}
 	public static function check_sponsor_have_placement($shop_id,$slot_id)
 	{
-		$sponsor = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
-		if($sponsor)
-		{	
-	    	if(($sponsor->slot_placement == 0 || $sponsor->slot_placement == null) && ($sponsor->slot_sponsor != null || $sponsor->slot_sponsor != 0))
-	    	{
-	    		$proceed = 0;
-	    	}
-	    	else
-	    	{
-	    		$proceed = 1;
-	    	}
+		$setting = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
+		if($setting->plan_settings_placement_required == 1)
+		{
+			$sponsor = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
+			if($sponsor)
+			{	
+		    	if(($sponsor->slot_placement == 0 || $sponsor->slot_placement == null) && ($sponsor->slot_sponsor != null || $sponsor->slot_sponsor != 0))
+		    	{
+		    		$proceed = 0;
+		    	}
+		    	else
+		    	{
+		    		$proceed = 1;
+		    	}
+			}
+			else
+			{
+				$proceed = 0;
+			}
 		}
 		else
 		{
-			$proceed = 0;
+			$proceed = 1;
 		}
 
         // if($check_sponsor->slot_placement == 0 || $check_sponsor->slot_placement == null)

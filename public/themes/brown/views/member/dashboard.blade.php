@@ -196,16 +196,22 @@
 									@if(count($_event) > 0)
 										@foreach($_event as $event)
 										<div class="event clearfix">
-											<div class="date">
-												<div class="day">{{date('d', strtotime($event->event_date))}}</div>
-												<div class="month">{{date('F', strtotime($event->event_date))}}</div>
+											<div onclick="action_load_link_to_modal('/members/event-details?id={{$event->event_id}}', 'lg')" style="background-image: url('{{$event->event_thumbnail_image}}'); background-size: cover; background-repeat: no-repeat;" class="box overlay black">
+												<div class="date">
+													<div class="day">{{date('d', strtotime($event->event_date))}}</div>
+													<div class="month">{{date('F', strtotime($event->event_date))}}</div>
+												</div>
 											</div>
 											<div class="detail">
 												<div class="titles">{{$event->event_title}}</div>
 												<div class="description">{{$event->event_sub_title}}</div>
 												<div class="action">
-													<a class="popup" size="md" link="/members/event-details?id={{$event->event_id}}"><i class="fa fa-check-circle"></i> Details</a> 
-													<a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
+													<a style="cursor: pointer;" class="popup" size="lg" link="/members/event-details?id={{$event->event_id}}"><i class="fa fa-check-circle"></i> Details</a>
+													@if($event->is_reserved == 0) 
+													<a style="cursor: pointer;" class="popup" size="md" link="/members/event-reserve?id={{$event->event_id}}"><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
+													@else
+													<a href="javascript:"><i class="fa fa-calendar-check-o"></i> Reserved</a>
+													@endif
 												</div>
 											</div>
 										</div>
@@ -332,7 +338,7 @@
 			</div>
 			<div class="animated fadeInUp col-md-6">
 				<div class="match-height">
-					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
+					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)

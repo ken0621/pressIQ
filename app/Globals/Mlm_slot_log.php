@@ -28,7 +28,11 @@ class Mlm_slot_log
 {   
 	public static function slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on)
 	{
-
+		$check_slot = Tbl_mlm_slot::where("slot_id",$wallet_log_slot)->first();
+		if($check_slot)
+		{
+			$insert['shop_id'] = $check_slot->shop_id; 
+		}
 		$insert['wallet_log_slot'] = $wallet_log_slot; 
 		$insert['wallet_log_slot_sponsor'] = $wallet_log_slot_sponsor; 
 		$insert['wallet_log_date_created'] = Carbon::now(); 
@@ -144,6 +148,14 @@ class Mlm_slot_log
 		if(isset($array['points_log_leve_end']))
 		{
 			$insert['points_log_leve_end'] = $array['points_log_leve_end'];
+		}		
+		if(isset($array['points_log_leve_end']))
+		{
+			$insert['points_log_leve_end'] = $array['points_log_leve_end'];
+		}		
+		if(isset($array['original_from_complan']))
+		{
+			$insert['original_from_complan'] = $array['original_from_complan'];
 		}
 		if($insert['points_log_type'] == "SGPV" || $insert['points_log_type'] == "SPV" || $insert['points_log_type'] == "RPV" || $insert['points_log_type'] == "RGPV")
 		{

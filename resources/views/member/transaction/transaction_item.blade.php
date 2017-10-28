@@ -14,6 +14,9 @@
 	    <div class="col-md-6">
 	        <label for="">Customer Name : </label> {{ucwords($customer_name)}} <br>
 	        <label>Transaction Number :</label> {{$list->transaction_number}}<br>
+            @if($list->transaction_sales_person != 0)
+                <label for="">Sales Person : </label> {{ucwords($list->user_first_name .' '.$list->user_last_name)}}
+            @endif
 	    </div>
 	    <div class="col-md-3 text-right">
 	        <label>Date :</label> <br>
@@ -23,7 +26,7 @@
 	    {{date('M d, Y',strtotime($list->transaction_date))}} <br>
 	    {{date('M d, Y',strtotime($list->transaction_due_date))}}
 	    </div>
-	</div>
+    </div>
 	<div class="form-group">
 	    &nbsp;
 	</div>
@@ -53,6 +56,12 @@
                     @endforeach
                 </tbody>
                 <tfoot>
+                    @if($list->transaction_discount != 0)
+                    <tr>
+                        <td colspan='4' class="text-right">FIXED DISCOUNT</td>
+                        <td class="text-center" style="color: red">{{currency('PHP', $list->transaction_discount)}}</td>
+                    </tr>
+                    @endif
                     <tr>
                         <td colspan='4' class="text-right"><b>TOTAL</b></td>
                         <td class="text-center">{{currency('PHP', $list->transaction_total)}}</td>
@@ -63,7 +72,12 @@
     </div>
 </div>
 <div class="modal-footer text-right">
+    @if($list->shop_id == 5)
+    <!-- MYPHONE ONLY -->
     <a class="btn btn-primary" href='/member/cashier/transactions_list/view/{{ $list->transaction_list_id }}' target="_blank">View PDF</a>
+    @else
+    <a class="btn btn-primary" href='/member/cashier/transactions_list/view_receipt/{{ $list->transaction_list_id }}' target="_blank">View PDF</a>
+    @endif
 </div>
 @if($transaction_details)
     <div class="text-center" style="padding-bottom: 10px;"><a href="javascript:" onclick="$('.payment-details').removeClass('hidden')">SHOW PAYMENT DETAILS</a></div>

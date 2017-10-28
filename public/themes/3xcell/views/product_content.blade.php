@@ -31,9 +31,10 @@
 							<div class="info-title">
 								Quantity
 							</div>
-							<input class="input-quantity" variant-id="{{ $product['variant'][0]['evariant_id'] }}" type="number" name="quantity" min="1" step="1" value="1">
+							<input class="input-quantity" onChange="$(this).siblings('.product-add-cart').attr('quantity', $(this).val())" type="number" name="quantity" min="1" step="1" value="1">
+							<div class="add-to-cart-button product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}" quantity="1"><span><i class="fa fa-cart-plus" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>ADD TO CART</span></div>
 						</div>
-						<div class="add-to-cart-button" variant-id="{{ $product['variant'][0]['evariant_id'] }}"><span><i class="fa fa-cart-plus" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>ADD TO CART</span></div>
+						
 						<!-- <div class="share-product">
 							<div class="info-title">Share This Product</div>
 							<div class="share-button-container">
@@ -75,31 +76,36 @@
 				</div>
 			</div>
 			<!-- PACKAGE -->
+			@if(isset($_package))
 			<div class="related-products-container">
 				<div class="title-container">
 					<div class="title">You May Also Like This</div>
 					<div class="line-bot"></div>
 				</div>
+				
 				<div class="per-item-container row clearfix">
 					<!-- PER ITEM -->
-					@foreach(limit_foreach($_package, 4) as $package)
-					<div class="col-md-3">
-						<div class="per-item" style="cursor: pointer;" onClick="location.href='/product/view/{{ $related['eprod_id'] }}'">
-							<div class="image-container">
-								<img src="{{ get_product_first_image($package) }}">
-							</div>
-							<div class="detail-container">
-								<div class="item-name">
-									{{ get_product_first_name($package) }}
+					@if(count($_package) > 0)
+						@foreach(limit_foreach($_package, 4) as $package)
+						<div class="col-md-3">
+							<div class="per-item" style="cursor: pointer;" onClick="location.href='/product/view/{{ $related['eprod_id'] }}'">
+								<div class="image-container">
+									<img src="{{ get_product_first_image($package) }}">
 								</div>
-								<div class="price-container">PHP {{ get_product_first_price($package) }}</div>
-								<div class="button-container">SHOP NOW</div>
+								<div class="detail-container">
+									<div class="item-name">
+										{{ get_product_first_name($package) }}
+									</div>
+									<div class="price-container">PHP {{ get_product_first_price($package) }}</div>
+									<div class="button-container">SHOP NOW</div>
+								</div>
 							</div>
 						</div>
-					</div>
-					@endforeach
+						@endforeach
+					@endif
 				</div>
 			</div>
+			@endif
 		</div>
 	</div>
 </div>
@@ -133,7 +139,7 @@ $(document).ready(function()
 <script type="text/javascript" src="/assets/front/js/zoom.js"></script>
 <script type="text/javascript">
 var product_image = ".single-product-img";
-var button_cart = ".add-to-cart-button";
+var button_cart = ".add-to-cart-buttons";
 var product_container = ".content";
 var product_quantity = ".input-quantity";
 var cart_holder = '.cart-dropdown';

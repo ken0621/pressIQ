@@ -18,7 +18,8 @@ function paginate_ajax()
 	}
 	
 	function event_run_paginate()
-	{
+	{ 
+        $('body').off('click', '.pagination a');
         $('body').on('click', '.pagination a', function(e) 
         {
             e.preventDefault();

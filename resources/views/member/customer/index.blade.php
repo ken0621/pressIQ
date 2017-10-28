@@ -20,8 +20,8 @@
                 Manage your customer
                 </small>
             </h1>
-            
             <a href="javascript:" class="panel-buttons btn btn-custom-primary pull-right popup" link="/member/customer/modalcreatecustomer" size="lg" data-toggle="modal" data-target="#global_modal">Create Customer</a>
+            <a href="javascript:" class="panel-buttons btn btn-default pull-right popup" link="/member/customer/bulk_archive" size="lg">Customer Bulk Archive</a>
         </div>
     </div>
 </div>

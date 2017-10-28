@@ -27,7 +27,7 @@ Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec o
     </div>
 </div>
 @endsection
-@section("script")
+@section("js")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/member_register.js"></script>
 <script type="text/javascript" src="/assets/member/js/google_script/google_script_auth.js"></script>
 

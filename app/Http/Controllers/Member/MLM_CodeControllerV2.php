@@ -95,11 +95,11 @@ class MLM_CodeControllerV2 extends Member
         $item_id            = $request->item_id;
         $quantity           = ($request->quantity <= 0 ? 1 : $request->quantity);
         $warehouse_id       = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+        Item::get_inventory($warehouse_id);
         $item_info          = Item::info($item_id);
         $_item              = Item::get_item_from_bundle($item_id, $warehouse_id);
         $_new_item          = null;
         $data["allowed"]    = "true";
-
         foreach($_item as $key => $item)
         {
             $_new_item[$key]                = $item;
@@ -229,6 +229,8 @@ class MLM_CodeControllerV2 extends Member
 
         Item::get_filter_type(5);
         $data["_item_kit"] = Item::get($this->user_info->shop_id);
+        Item::get_filter_type(1);
+        $data["_items"] = Item::get($this->user_info->shop_id);
         $data["_membership"] = MLM2::membership($this->user_info->shop_id);
 
         return view("member.mlm_code_v2.print_code_columns",$data);
@@ -241,12 +243,12 @@ class MLM_CodeControllerV2 extends Member
         $r['membership_kit'] = $request->membership_kit ? '' : 'hidden';
         $rt = serialize($r); 
 
-        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&print_limit='.$request->print_limit.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit);
+        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&print_limit='.$request->print_limit.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit.'&item_id='.$request->item_id);
     }
     public function print(Request $request)
     {
         $data['on_show'] = unserialize($request->Y);
-        $data['_item_product_code'] = Item::get_all_item_record_log('', $request->status, $request->print_limit);
+        $data['_item_product_code'] = Item::get_all_item_record_log('', $request->status, $request->print_limit, $request->item_id);
         if($request->t == 'membership_code')
         {
             $data['_item_product_code'] = Item::get_assembled_kit(0,$request->membership_kit,$request->membership,'',$request->status, $request->print_limit);

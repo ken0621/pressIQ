@@ -37,6 +37,21 @@
                                 RESET MLM DATA
                             </a>
                         </li>
+
+                        <li>
+                            <a href="javascript:" onclick="action_load_link_to_modal('/member/mlm/developer/recompute')">
+                                <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-warning"></i> &nbsp;</div>
+                                RECOMPUTE REWARDS
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript:" onclick="action_load_link_to_modal('/member/mlm/developer/redistribute')">
+                                <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-warning"></i> &nbsp;</div>
+                                SLOT RE-DISTRIBUTE REWARD
+                            </a>
+                        </li>
+                        
                     </ul>
                 </div>
                 <button class="btn btn-def-white btn-custom-white" onclick="action_load_link_to_modal('/member/columns/slot_module', 'md')"><i class="fa fa-gear"></i> COLUMNS</button>

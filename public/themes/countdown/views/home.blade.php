@@ -36,7 +36,7 @@
 	<body>
 		<!-- Coming Soon -->
 		<div class="coming-soon">
-			<div class="inner-bg" style="height: 100%; position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-image: url('assets/img/philtech-countdown-img.jpg'); background-size: cover;">
+			<div class="inner-bg" style="height: 100%; position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-image: url('assets/img/front-img2.jpg'); background-size: cover;">
 				<div class="container">
 					<div class="row">
 						<div class="col-sm-12">

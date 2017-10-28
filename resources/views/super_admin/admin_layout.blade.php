@@ -258,13 +258,13 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src= "/uploads/Digima-17/{{ Session::get('user')->user_pic }}" alt="User Image">
+              <img src= "/uploads/Digima-17/{{ Session::get('image_src') }}" alt="User Image" class="profile_image">
               <span class="hidden-xs">{{ Session::get('user')->first_name }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src= "/uploads/Digima-17/{{ Session::get('user')->user_pic }}" class="img-circle" alt="User Image">
+                <img src= "/uploads/Digima-17/{{ Session::get('image_src') }}" class="img-circle profile_image" alt="User Image">
 
                 <p>
                   {{ Session::get('user')->first_name }} - Web Developer
@@ -312,7 +312,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
           <div class="pull-left image">
-           <a data-toggle="modal" href="#normalModal"> <img src= "/uploads/Digima-17/{{ Session::get('user')->user_pic }}" alt="User Image" class="img-rounded"></a>
+           <a data-toggle="modal" href="#normalModal"> <img src= "/uploads/Digima-17/{{ Session::get('image_src')}}" alt="User Image" class="img-rounded bigger"></a>
           </div>
           <div class="pull-left info">
             <p>{{ Session::get('user')->first_name }}</p>
@@ -485,7 +485,7 @@
             </ul>
           </li>
           <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
-          <li><a href="https://adminlte.io/docs"><i class="fa fa-sign-out"></i> <span>Logout</span></a></li>
+          <li><a href="/admin/logout"><i class="fa fa-sign-out"></i> <span>Logout</span></a></li>
           <li class="header">LABELS</li>
           <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
           <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
@@ -506,24 +506,26 @@
 
     <div id="normalModal" class="modal fade">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content pic_content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h4 class="modal-title">Change Profile Picture</h4>
       </div>
       <div class="modal-body">
-        <img src= "/uploads/Digima-17/{{ Session::get('user')->user_pic }}" class="pic" class="profile_image" id="results">
+        <img src= "/uploads/Digima-17/{{ Session::get('image_src') }}"  class="profile_image pic" id="results">
         <p class="name1">
           {{ Session::get('user')->first_name }}
         </p>
-        <button type="button" class="btn btn-primary camera-btn"><i class="fa fa-camera" onClick="take_snapshot()" aria-hidden="true"></i> Take a Snap</button>
-        <div id="my_camera"></div>
-        <input id="upload" type="file"/>
-        <p class="text_upload-profile">Or <a href="" id="upload_link"> Upload an Image</a></p> 
+        <p class="update_user_profile_image"> update profile image
+        </p>
+        <form method="post" action="/admin/profile_picture_update" enctype="multipart/form-data" class="upload_pic_form">
+      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="file" name="fileToUpload" id="fileToUpload">
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="submit" class="btn save_pic btn-primary">Save changes</button>
       </div>
+     </form>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -566,17 +568,8 @@
     <script src="/admin_assets/dist/js/pages/dashboard.js"></script>
     <script src="/admin_assets/dist/js/demo.js"></script>
     <script type="text/javascript" src="/admin_assets/slick/slick.min.js"></script>
-    <script type="text/javascript" src ="/admin_assets/js/camera.js"></script>
-    <script type="text/javascript" src ="/admin_assets/js/webcam.js"></script>
-   <script type="text/javascript">
-     $(function()
-     {
-     $("#upload_link").on('click', function(e){
-     e.preventDefault();
-     $("#upload:hidden").trigger('click');
-     });
-     });
-   </script>
+    <script type="text/javascript" src="/admin_assets/js/change_profile_pic.js"></script>
+    <script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
   @yield("js")
   </body>
 </html>

@@ -1,8 +1,10 @@
 var pos = new pos()
 var load_item = null;
+var load_customer = null;
 var item_search_delay_timer;
 var settings_delay_timer;
 var keysearch = {};
+var keysearch_customer = {};
 
 var success_audio = new Audio('/assets/sounds/success.mp3');
 var error_audio = new Audio('/assets/sounds/error.mp3');
@@ -22,11 +24,75 @@ function pos()
 	{
 		action_load_item_table();
 		event_search_item();
+		event_search_customer();
 		event_click_search_result();
 		event_remote_item_from_cart();
 		action_convert_price_level_to_global_drop_list();
 		event_change_global_discount();
+		action_load_detach_customer();
+		event_click_process_sale();
+		action_hide_popover();
+		event_change_quantity();
 
+        event_load_popover();
+        action_click_change_qty();
+	}
+	function action_click_change_qty()
+    {
+        $('body').on('click','.td-change-qty', function(e)
+        {
+            var item_id = $(e.currentTarget).attr('item-id');
+            $('.input-qty-'+item_id).removeClass('hidden');
+            $('.change-quantity.'+item_id).addClass('hidden');
+        });
+    }
+    function event_load_popover()
+    {
+        $('[data-toggle="popover"]').popover(
+        {
+            placement: 'top',
+            title: 'Change Quantity',
+            html: true,
+            content:  $('#changeQuantity').html()
+        }).on('click', getDetails());
+    }
+    function getDetails()
+    {
+
+    }
+	function action_hide_popover()
+	{
+	    $('body').on('click', function (e) 
+	    {
+	        //did not click a popover toggle or popover
+	        if ($(e.target).data('toggle') !== 'popover' && $(e.target).parents('.popover.in').length === 0) 
+	        { 
+	            $('[data-toggle="popover"]').popover('hide');
+	        }
+	    });
+    }
+	function event_click_process_sale()
+	{
+		$('body').on('click','.btn-process-sale', function()
+		{
+			$('.form-process-sale').submit();
+		});
+	}
+	function action_load_detach_customer()
+	{
+		$("body").on('click', '.detach-customer', function()
+		{
+			customer_loading();
+			$.ajax({
+				url : '/member/cashier/pos/remove_customer',
+				data : {},
+				type : 'get',
+				success : function (data)
+				{
+					action_load_customer_info();
+				}
+			});
+		});
 	}
 	function table_loading()
 	{
@@ -81,6 +147,15 @@ function pos()
 				action_set_cart_info("price_level_id", $(".price-level-select").val());
 			}
 		});
+		$('.payment-method-select').globalDropList({
+			hasPopup : "false",
+			width    : '100%'		
+		});
+
+		$('.select-warehouse').globalDropList({
+	        hasPopup : 'false',
+	        width    : '100%'
+    	});
 	}
 	function event_remote_item_from_cart()
 	{
@@ -103,6 +178,113 @@ function pos()
 					action_load_item_table();
 				}
 			});
+		});
+	}
+	function event_change_quantity()
+	{
+		$("body").on("keyup", ".input-change-qty", function(e)
+		{
+			var qty_item_id = $(e.currentTarget).attr('item-id');
+			var qty = $(e.currentTarget).val();
+			if(e.which == 13) //ENTER KEY
+			{
+				$.ajax({
+					url : '/member/cashier/pos/change_qty',
+					type : 'post',
+					data : {item_id : qty_item_id, qty : qty, _token : $('#_token').val()},
+					success : function()
+					{
+						action_load_item_table();
+					}
+				})
+			}
+		});
+	}
+	function event_search_customer()
+	{
+		$("body").on("keyup", ".event_search_customer", function(e)
+		{
+			if(e.which == 13) //ENTER KEY
+			{
+				action_scan_customer($(".event_search_customer").val());
+				action_hide_search();
+			}
+			else if(e.which == 38) //UP KEY
+			{
+				event_search_customer_cursor_next(true);
+			}
+			else if(e.which == 40) //DOWN KEY
+			{
+				event_search_customer_cursor_next();
+			}
+			else /* SEARCH MODE */
+			{
+				if($(".event_search_customer").val() == "")
+				{
+					action_hide_search();
+				}
+				else
+				{
+					keysearch_customer.customer_keyword = $(".event_search_customer").val();
+					keysearch_customer._token = $(".token").val();
+					if(load_customer)
+					{
+						load_customer.abort();
+					}
+
+					clearTimeout(item_search_delay_timer);
+
+				    item_search_delay_timer = setTimeout(function()
+				    {
+				       $(".pos-search-container-customer").html(get_loader_html(10)).show();
+				       action_ajax_search_customer();
+				    }, 500);
+				}
+			}
+		});
+	}
+	function action_scan_customer($customer_id)
+	{
+		$(".event_search_customer").val("");
+		$(".event_search_customer").attr("disabled", "disabled");
+		$(".customer-button-scan").find(".customer-scan-load").show();
+		$(".customer-button-scan").find(".customer-scan-icon").hide();
+
+		scandata_customer = {};
+		scandata_customer.customer_id = $customer_id;
+		scandata_customer._token = $(".token").val();
+
+ 		$.ajax(
+		{
+			url			: "/member/cashier/pos/scan_customer",
+			dataType	: "json",
+			type 		: "post",
+			data 		: scandata_customer,
+			success 	: function(data)
+			{
+				$(".event_search_customer").removeAttr("disabled");
+				$(".customer-button-scan").find(".customer-scan-load").hide();
+				$(".customer-button-scan").find(".customer-scan-icon").show();
+
+				if(data.status == "success")
+				{
+					success_audio.play();
+					action_load_customer_info(data.price_level_id);
+				}
+				else if(data.status == "error")
+				{
+					toastr.error("<b>ERROR!</b><br>" + data.message);
+					error_audio.play();
+				}
+			},
+			error : function(data)
+			{
+				$(".event_search_customer").removeAttr("disabled");
+				$(".customer-button-scan").find(".customer-scan-load").hide();
+				$(".customer-button-scan").find(".customer-scan-icon").show();
+				toastr.error("An error occured during scan - please contact system administrator");
+				$(".event_search_customer").focus();
+			}
 		});
 	}
 	function event_search_item()
@@ -157,6 +339,32 @@ function pos()
 		});
 
 	}
+
+	function event_search_customer_cursor_next(reverse = false)
+	{
+		var current_cursor = $(".pos-customer-search-result.cursor");
+
+		if(current_cursor.length < 1)
+		{
+			$(".pos-customer-search-result:first").addClass("cursor");
+		}
+		else
+		{
+			if(reverse == true)
+			{
+				$(".pos-customer-search-result.cursor").prev(".pos-customer-search-result").addClass("cursor");
+			}
+			else
+			{
+				$(".pos-customer-search-result.cursor").next(".pos-customer-search-result").addClass("cursor");
+			}
+			
+			current_cursor.removeClass("cursor");
+		}
+
+		$active_item_id = $(".pos-customer-search-result.cursor").attr("customer_id");
+		$(".event_search_customer").val($active_item_id);
+	}
 	function event_search_item_cursor_next(reverse = false)
 	{
 		var current_cursor = $(".pos-item-search-result.cursor");
@@ -188,6 +396,12 @@ function pos()
 		{
 			$item_id = $(e.currentTarget).attr("item_id");
 			action_scan_item($item_id);
+			action_hide_search();
+		});
+		$("body").on("click", ".pos-customer-search-result", function(e)
+		{
+			$customer_id = $(e.currentTarget).attr("customer_id");
+			action_scan_customer($customer_id);
 			action_hide_search();
 		});
 	}
@@ -238,6 +452,19 @@ function pos()
 			}
 		});
 	}
+	function action_ajax_search_customer()
+	{
+		load_customer = $.ajax(
+		{
+			url:"/member/cashier/pos/search_customer",
+			type:"post",
+			data: keysearch_customer,
+			success: function(data)
+			{
+				$(".pos-search-container-customer").html(data);
+			}
+		});
+	}
 	function action_ajax_search_item()
 	{
 		load_item = $.ajax(
@@ -254,7 +481,29 @@ function pos()
 	function action_hide_search()
 	{
 		$(".pos-search-container").hide();
+		$(".pos-search-container-customer").hide();
 		clearTimeout(item_search_delay_timer);
+	}
+	function action_load_customer_info(price_level_id = '')
+	{
+		if($(".customer-container").text() != "")
+		{
+			customer_loading();
+		}
+		else
+		{
+			$(".customer-container").html(get_loader_html());
+		}
+		
+		$(".customer-container").load("/member/cashier/pos/customer", function()
+		{
+			$(".customer-container").css("opacity", 1);
+			$('.price-level-select').val(price_level_id).change();
+		});
+	}
+	function customer_loading()
+	{
+		$(".customer-container").css("opacity", 0.3);
 	}
 	function action_load_item_table()
 	{
@@ -285,10 +534,33 @@ function pos()
 	}
 }
 
+function toggle_destination(className) 
+{
+    if($('.wis-click').prop('checked'))
+    {
+    	$(className).slideDown();
+    }
+    else 
+    {
+    	$(className).slideUp();
+    }
+}
+
 function new_price_level_save_done(data)
 {
 	$("#global_modal").modal("hide");
 	$(".price-level-select").append('<option value="' + data.price_level_id + '">' + data.price_level_name + '</option>');
 	$(".price-level-select").globalDropList("reload");
 	$(".price-level-select").val(data.price_level_id).change();
+}
+function success_process_sale(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success('Success Process Sales');
+		setInterval(function()
+		{
+			location.href = '/member/cashier/transactions_list?receipt_id='+data.receipt_id;
+		},2000);
+	}	
 }

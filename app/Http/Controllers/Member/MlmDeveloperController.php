@@ -1009,13 +1009,16 @@ class MlmDeveloperController extends Member
             {
                 $return["status"] = "success";
                 $return["call_function"] = "change_owner_success";
+
+                $update["slot_owner"] = $customer->customer_id;
+                Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
             }
             else
             {
                 $return["status"] = "error";
                 $return["message"] = "Customer E-Mail doesn't exist.";
-                $update["slot_owner"] = $customer->customer_id;
-                Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
+
+
             }
 
             echo json_encode($return);

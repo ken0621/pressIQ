@@ -27,6 +27,7 @@
     function change_owner_success(data)
     {
         toastr.success("Change Owner Successful");
+        mlm_developer.action_load_data();
         data.element.modal("hide");
     }
 </script>

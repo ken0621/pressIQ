@@ -134,7 +134,7 @@ button:hover{
 	margin-top: 25px;
 	font-size: 15px;
 
-	@media screen and (max-width: 900px)
+	@media screen and (max-width: 991px)
 	{
 		margin-top: 50px;
 		float: left;
@@ -184,16 +184,11 @@ button:hover{
 	{
 		width: 30%;
 		margin: auto;
+		margin-top: -50px;
 		img 
 		{
 			width: 100%;
 		}
-
-		/* > a
-		{
-			display: inline-block;
-			float: left;
-		} */
 	}
 	@media screen and (max-width: 475px)
 	{
@@ -208,7 +203,7 @@ button:hover{
 		cursor: pointer;
 	}
 }
-.menu-nav
+/* .menu-nav
 {
 	display: none;
 	@media screen and (max-width: 991px)
@@ -226,7 +221,7 @@ button:hover{
 			margin: 5px 0;
 		}
 	}
-}
+} */
 
 .row-no-padding
 {
@@ -1137,7 +1132,7 @@ button:hover{
 }
 .fa-bars {
 	color: white;
-	opacity: 0.7;
+	/* opacity: 0.7; */
 }
 .fa-cart-plus {
 	font-size: 20px;

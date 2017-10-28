@@ -200,7 +200,7 @@ class MLM_PayoutController extends Member
 			$service 	= Request::input("service_charge");
 			$other 		= Request::input("other_charge");
 			$date 		= Request::input("payout_date");
-			$payout 	= MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $amount, $tax, $service, $other, $date);
+			$payout 	= MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $amount, $tax, $service, $other, $date, 'DONE', true);
 
 			if(is_numeric($payout))
 			{

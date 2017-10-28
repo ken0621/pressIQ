@@ -32,9 +32,15 @@ class MLM2
 {
 	public static $shop_id;
 
-	public static function current_wallet($shop_id, $slot_id)
+	public static function current_wallet($shop_id, $slot_id, $ignore_pending = false)
 	{
-		return Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_slot", $slot_id)->sum("wallet_log_amount");
+		$data = Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_slot", $slot_id)->sum("wallet_log_amount");
+		if($ignore_pending == true)
+		{
+			$data = Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_slot", $slot_id)->where('wallet_log_payout_status','!=','PENDING')->sum("wallet_log_amount");
+		}
+
+		return $data;
 	}
 	public static function check_unused_code($shop_id, $customer_id)
 	{
@@ -123,11 +129,10 @@ class MLM2
 		
 		return $return;
 	}
-	public static function slot_payout($shop_id, $slot_id, $method, $remarks, $amount, $tax = 0, $service = 0, $other = 0, $date = null, $status = "DONE")
+	public static function slot_payout($shop_id, $slot_id, $method, $remarks, $amount, $tax = 0, $service = 0, $other = 0, $date = null, $status = "DONE", $ignore_pending = false)
 	{
 		$total = doubleval(str_replace(",","",$amount)) + doubleval(str_replace(",","",$tax)) + doubleval(str_replace(",","",$service)) + doubleval(str_replace(",","",$other));
-		$current_wallet = Self::current_wallet($shop_id, $slot_id);
-
+		$current_wallet = Self::current_wallet($shop_id, $slot_id, $ignore_pending);
 
 		if(doubleval(round($current_wallet, 0)) < doubleval(round($total, 0)))
 		{
@@ -147,6 +152,10 @@ class MLM2
 			$insert["wallet_log_payout_status"] 	= $status;
 			$insert["wallet_log_date_created"]		= ($date == null ? Carbon::now() : date("Y-m-d", strtotime($date)));
 
+			if($ignore_pending == true)
+			{
+				Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot_id)->where('shop_id',$shop_id)->where('wallet_log_payout_status','PENDING')->delete();
+			}
 			return Tbl_mlm_slot_wallet_log::insertGetId($insert);
 		}
 	}

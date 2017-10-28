@@ -247,7 +247,7 @@ class ShopMemberController extends Shop
         $data["password"] = Crypt::decrypt(request()->password);
         return view("member.autologin", $data);
     }
-    public function getRequestPayout()
+    public function request_payout_allow()
     {
         $settings = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
         $allow = false;
@@ -282,13 +282,7 @@ class ShopMemberController extends Shop
             }
         }
         
-        if ($allow) 
-        {
-            $data["page"] = "Request Payout";
-            $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
-            return view("member2.request_payout", $data);
-        }
-        else
+        if (!$allow) 
         {
             if (is_serialized($settings->encashment_settings_schedule)) 
             {
@@ -338,12 +332,6 @@ class ShopMemberController extends Shop
 
                     die();
                 }
-                else
-                {
-                    $data["page"] = "Request Payout";
-                    $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
-                    return view("member2.request_payout", $data);
-                }
             }
             else
             {
@@ -359,6 +347,14 @@ class ShopMemberController extends Shop
                     </div>';
             }
         }
+    }
+    public function getRequestPayout()
+    {
+        $this->request_payout_allow();
+
+        $data["page"] = "Request Payout";
+        $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+        return view("member2.request_payout", $data);
     }
     public function postRequestPayout()
     {
@@ -464,9 +460,86 @@ class ShopMemberController extends Shop
                         $remarks    = "Request by Customer";
                         $other      = 0;
                         $date       = date("m/d/Y");
-                        $status     = "PENDING";
+                        $status = "PENDING";
 
-                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
+                        /* V-MONEY */
+                        if ($method == "vmoney") 
+                        {
+                            /* API */
+                            $post = 'mxtransfer.svc';
+                            
+                            if (get_domain() == "philtechglobalinc.com") 
+                            {
+                                $environment = 1;
+                            }
+                            else
+                            {
+                                $environment = 0;
+                            }
+
+                            /* Sandbox */
+                            if ($environment == 0) 
+                            {
+                                $pass["apiKey"] = 'Vqzs90pKLb6iwsGQhnRS'; // Vendor API Key issued by VMoney
+                                $pass["merchantId"] = 'M239658948226'; // Merchant ID registered within VMoney
+                                /* Set URL Sandbox or Live */
+                                $url = "http://test.vmoney.com/gtcvbankmerchant/";
+                            }
+                            /* Production */
+                            else
+                            {
+                                $pass["apiKey"] = 'z9Gy1dBbnyj9cxMqXSKF'; // Vendor API Key issued by VMoney
+                                $pass["merchantId"] = 'M132582139240'; // Merchant ID registered within VMoney
+                                /* Set URL Sandbox or Live */
+                                $url = "https://philtechglobalinc.vmoney.com/gtcvbankmerchant/";
+                            }
+
+                            $get_email = Tbl_vmoney_settings::where("slot_id", $slot_id)->first();
+
+                            if ($get_email) 
+                            {
+                                $pass["recipient"] = $get_email->vmoney_email; // Recipient's email address
+                                $pass["merchantRef"] = Self::$customer_info->customer_id . time(); // Merchant reference number
+                                $pass["amount"] = $take_home; // Amount of the transaction
+                                $pass["currency"] = 'PHP'; // Currency being transferred (ie PHP)
+                                $pass["message"] = 'Philtech VMoney Wallet Transfer'; // Memo or notes for transaction
+
+                                $post_params = $url . $post . "?" . http_build_query($pass);
+
+                                try 
+                                {
+                                    $client = new Client();
+                                    $response = $client->post($post_params, $pass);
+                                    $stream = $response->getBody();
+                                    $contents = $stream->getContents(); // returns all the contents
+                                    $contents = $stream->getContents(); // empty string
+                                    $stream->rewind(); // Seek to the beginning
+                                    $contents = $stream->getContents(); // returns all the contents
+                                    $data_decoded = json_decode($contents);
+
+                                    /* Result */
+                                    if ($data_decoded->resultCode == "000") 
+                                    {   
+                                        $status = "DONE"; // ASK IF RELEASED OR DONE
+                                        $remarks = "Request Payout via V-Money";
+
+                                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
+                                    }
+                                    else
+                                    {
+                                        // TBD
+                                    }
+                                } 
+                                catch (\Exception $e) 
+                                {
+                                    dd($e->getMessage());
+                                }
+                            }
+                        }
+                        else
+                        {
+                            $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
+                        }
                     }
                 }
 

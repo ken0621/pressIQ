@@ -95,7 +95,7 @@
                             <div class="row-fluid social_row">
                                 <div class="span12 account-button">
                                     <ul class="text-center" style="margin-top: 0;">
-                                        <li><a href="/members/login">LOG IN</a></li>
+                                        <li><a href="/mlm/login">LOG IN</a></li>
                                         <!-- <li><div class="divider">|</div></li> -->
                                         <!-- <li><a href="/mlm/register">SIGN UP</a></li> -->
                                     </ul>

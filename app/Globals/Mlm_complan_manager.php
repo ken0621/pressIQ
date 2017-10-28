@@ -625,10 +625,10 @@ class Mlm_complan_manager
             foreach($slot_tree as $key => $tree)
             {
                 /* COMPUTE FOR BONUS */
-                if(isset($indirect_level[$tree->membership_id][$tree->sponsor_tree_level]))
+                if(isset($indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level]))
                 {
-                    //$indirect_bonus = $indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level];
-                    $indirect_bonus = $indirect_level[$tree->membership_id][$tree->sponsor_tree_level];     
+                    $indirect_bonus = $indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level];
+                    // $indirect_bonus = $indirect_level[$tree->membership_id][$tree->sponsor_tree_level];     
                 }
                 else
                 {

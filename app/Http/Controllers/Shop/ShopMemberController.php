@@ -36,6 +36,8 @@ use App\Models\Tbl_email_template;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_mlm_slot_bank;
+use App\Models\Tbl_mlm_slot_coinsph;
+use App\Models\Tbl_mlm_slot_money_remittance;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Models\Tbl_vmoney_wallet_logs;
@@ -249,7 +251,6 @@ class ShopMemberController extends Shop
     {
         $settings = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
         $allow = false;
-
         if ($settings->encashment_settings_schedule_type != "none") 
         {
             if (is_serialized($settings->encashment_settings_schedule)) 
@@ -491,7 +492,7 @@ class ShopMemberController extends Shop
     public function getPayoutSetting()
     {
         $data["page"] = "Payout";
-        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->bank()->vmoney()->get();
+        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->coinsph()->money_remittance()->bank()->vmoney()->get();
         $data["_method"] = unserialize($this->shop_info->shop_payout_method);
 
         $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
@@ -565,6 +566,59 @@ class ShopMemberController extends Shop
                 }
             }
         }
+
+        /*UPDATE MONER REMITTANCE DETAILS*/
+        foreach (request('remittance_slot_no') as $key => $remittance_slot_no) 
+        { 
+            $slotinfo = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $remittance_slot_no)->first();
+            if(request("first_name")[$key] != "" && request("middle_name")[$key] != "" && request("last_name")[$key] != "" && request("contact_number")[$key] != "")
+            {
+                $check_money_remittance = Tbl_mlm_slot_money_remittance::where('slot_id',$slotinfo->slot_id)->first();
+
+                if($check_money_remittance)
+                {
+                    $update_remittance["money_remittance_type"] = request("money_remittance_type")[$key];
+                    $update_remittance["first_name"] = request("first_name")[$key];
+                    $update_remittance["middle_name"] = request("middle_name")[$key];
+                    $update_remittance["last_name"] = request("last_name")[$key];
+                    $update_remittance["contact_number"] = request("contact_number")[$key];
+                    Tbl_mlm_slot_money_remittance::where("slot_id", $slotinfo->slot_id)->update($update_remittance);
+                }
+                else
+                {
+                    $insert_remittance["money_remittance_type"] = request("money_remittance_type")[$key];
+                    $insert_remittance["slot_id"] = $slotinfo->slot_id;
+                    $insert_remittance["first_name"] = request("first_name")[$key];
+                    $insert_remittance["middle_name"] = request("middle_name")[$key];
+                    $insert_remittance["last_name"] = request("last_name")[$key];
+                    $insert_remittance["contact_number"] = request("contact_number")[$key];
+                    Tbl_mlm_slot_money_remittance::insert($insert_remittance);
+                }
+
+            }
+        }
+
+        /* UPDATE EON METHOD */
+        foreach(request("coinsph_slot_no") as $key => $coinsph_slot_no)
+        {
+            $slotinfo = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $coinsph_slot_no)->first();
+            if(request('wallet_address')[$key] != '')
+            {
+                $check_coinsph = Tbl_mlm_slot_coinsph::where('slot_id',$slotinfo->slot_id)->first();
+                if($check_coinsph)
+                {
+                    $update_coinsph["wallet_address"] = request("wallet_address")[$key];
+                    Tbl_mlm_slot_coinsph::where("slot_id", $slotinfo->slot_id)->update($update_coinsph);
+                }
+                else
+                {
+                    $insert_coins["slot_id"] = $slotinfo->slot_id;
+                    $insert_coins["wallet_address"] = request("wallet_address")[$key];
+                    Tbl_mlm_slot_coinsph::insert($insert_coins);
+                }
+            }
+        }
+
 
         echo json_encode("success");
     }

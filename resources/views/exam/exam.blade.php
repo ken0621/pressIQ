@@ -48,16 +48,16 @@
                   <div class="page-content">
                      <!-- PAGE CONTENT START -->
                      <div class="landing-page">
-                        <div class="content-block-title page-intro"><b>Career Assesment</b><br>Examination</div>
+                        <div class="content-block-title page-intro"><b>Applicant</b><br> Evaluation Examination</div>
                         
                         <div class="content-block">
                            <div class="landing-message">
-                              <div>Good day, applicant. Make sure you are ready and awake before you take the exam. Exam will take an avarage time of <b>1 hour</b> and re-take of the exam will not be allowed.<br><br>Every questions will have a corresponding time.</div>
+                              <div>Good day, applicant. Make sure you are ready and available for the next few hours before you take the exam. Exam will take an avarage time of <b>1 hour</b> and re-take of the exam will not be allowed.<br><br>Every questions will have a corresponding time.</div>
                            </div>
                         </div>
 
                         <div class="content-block">
-                           <p><a href="/exam/register" class="item-link button button-round active start-exam-button">START EXAM</a></p>  
+                           <p><a href="/exam/register" class="item-link button button-round active start-exam-button">PROCEED</a></p>  
                         </div>
                      </div>
                      <!-- PAGE CONTENT END -->

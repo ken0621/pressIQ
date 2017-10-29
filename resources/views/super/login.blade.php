@@ -26,8 +26,10 @@
       </div>
       <div class="views">
          <div class="view view-main">
+            <!-- START CONTENT -->
             <div style="margin-top: 30px;" class="login-screen-title">Digima Admin</div>
-            <form>
+            <form action="/super/login" method="post" class="ajax-submit">
+               {{ csrf_field() }}
                <div class="list-block">
                   <ul>
                      <li class="item-content">
@@ -50,18 +52,19 @@
                </div>
                <div class="list-block">
                   <ul>
-                     <li><a href="#" class="item-link list-button">Sign In</a></li>
+                     <li><a href="javascript: $$('.button-for-login').click()" class="item-link list-button">Sign In</a></li>
                   </ul>
                   <div class="list-block-label" style="text-align: center;">
                      <p>This page is only for Administrator of<br><b>Digima Web Solutions, Inc.</b></p>
                   </div>
                </div>
+               <input style="display: none;" type="submit" value="submit-data" class="button-for-login">
             </form>
          </div>
       </div>
    </div>
    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
    <script type="text/javascript" src="/assets/mobile/framework7/dist/js/framework7.min.js"></script>
-   <script type="text/javascript" src="/assets/exam/exam.js"></script>
+   <script type="text/javascript" src="/assets/admin/login.js"></script>
 </body>
 </html>

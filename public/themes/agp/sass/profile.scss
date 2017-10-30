@@ -1,6 +1,6 @@
 @import "../../../assets/front/sass/mixin";
 
-$content-text: 'Rubik', sans-serif;
+$content-text: 'Lato', sans-serif;
 $light: 300;
 $regular: 400;
 $medium: 500;
@@ -40,7 +40,7 @@ $text-dark: #404040;
 		{
 			color: $text-dark;
 			font-size: 17px;
-			font-weight: $medium;
+			font-weight: $bold;
 			text-align: center;
 		}
 		.sub
@@ -83,7 +83,7 @@ $text-dark: #404040;
 		.status-number
 		{
 			color: $text-dark;
-			font-weight: $medium;
+			font-weight: $bold;
 			font-size: 17px;
 		}
 		.status-label
@@ -116,7 +116,7 @@ $text-dark: #404040;
 			color: $text-dark;
 			font-size: 18px;
 			margin-bottom: 25px;
-			font-weight: $medium;
+			font-weight: $bold;
 		}
 		table
 		{
@@ -127,7 +127,7 @@ $text-dark: #404040;
 			td:first-child
 			{
 				color: $text-dark;
-				font-weight: $medium;
+				font-weight: $bold;
 				font-size: 15px;
 				width: 130px;
 				img
@@ -177,7 +177,7 @@ $text-dark: #404040;
 			padding: 25px 0;
 			color: $text-dark;
 			font-size: 13px;
-			font-weight: $medium;
+			font-weight: $bold;
 			text-decoration: none;
 			outline: none;
 			img
@@ -232,7 +232,7 @@ $text-dark: #404040;
 				}
 				&.active
 				{
-					border-bottom: 2.5px solid #FF8500;
+					border-bottom: 2.5px solid #75A04B;
 					a
 					{
 						font-weight: $regular;
@@ -282,7 +282,7 @@ $text-dark: #404040;
 						border-radius: 2.5px;
 						padding: 10px 25px;
 						color: #fff;
-						font-weight: $medium;
+						font-weight: $bold;
 						font-size: 13px;
 
 						@media screen and (min-width: 150px)
@@ -312,7 +312,7 @@ $text-dark: #404040;
 					.name
 					{
 						color: $text-dark;
-						font-weight: $medium;
+						font-weight: $bold;
 						font-size: 13px;
 						margin: 25px 0;
 						margin-bottom: 15px;
@@ -324,7 +324,7 @@ $text-dark: #404040;
 						border-radius: 0;
 						padding: 5px 50px;
 						font-size: 13px;
-						font-weight: $medium;
+						font-weight: $bold;
 					}
 					.file
 					{

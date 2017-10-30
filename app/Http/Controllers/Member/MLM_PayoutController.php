@@ -233,7 +233,7 @@ class MLM_PayoutController extends Member
 		$method 				= Request::input("method");
 		$tax_amount 			= Request::input("tax");
 		$service_charge_type 	= Request::input("service-charge-type");
-		$service_charge 		= Request::input("service-charge");
+		$service_charge 		= str_replace('%', '', Request::input("service-charge"));
 		$minimum 				= Request::input("minimum");
 		$other_charge 			= Request::input("other-charge");
 		$data["cutoff_date"]	= $cutoff_date = Request::input("cutoff-date");
@@ -276,7 +276,12 @@ class MLM_PayoutController extends Member
 				$remaining 			= $slot->current_wallet - $encashment_amount;
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
-				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
+				$compute_service_charge = $service_charge;
+				if($service_charge_type == 1)
+				{
+					$compute_service_charge = (($encashment_amount * (doubleval($service_charge)/100)));
+				}
+				$compute_net 		= $compute_net - ($compute_service_charge + $other_charge + $tax);
 			}
 			else
 			{
@@ -301,7 +306,7 @@ class MLM_PayoutController extends Member
 			$_slot[$key]->real_payout 		= number_format($slot->total_payout, 2, '.', '');
 			$_slot[$key]->real_encash 		= number_format($encashment_amount, 2, '.', '');
 			$_slot[$key]->real_remaining 	= number_format($remaining, 2, '.', '');
-			$_slot[$key]->real_service 		= number_format($service_charge, 2, '.', '');
+			$_slot[$key]->real_service 		= number_format($compute_service_charge, 2, '.', '');
 			$_slot[$key]->real_other 		= number_format($other_charge, 2, '.', '');
 			$_slot[$key]->real_tax 			= number_format($tax, 2, '.', '');
 			$_slot[$key]->real_net 			= number_format($compute_net, 2, '.', '');
@@ -312,7 +317,7 @@ class MLM_PayoutController extends Member
 			$_slot[$key]->display_payout = Currency::format($slot->total_payout);
 			$_slot[$key]->display_encash = Currency::format($encashment_amount);
 			$_slot[$key]->display_remaining = Currency::format($remaining);
-			$_slot[$key]->display_service = Currency::format($service_charge);
+			$_slot[$key]->display_service = Currency::format($compute_service_charge);
 			$_slot[$key]->display_other = Currency::format($other_charge);
 			$_slot[$key]->display_tax = Currency::format($tax);
 			$_slot[$key]->display_net = Currency::format($compute_net);

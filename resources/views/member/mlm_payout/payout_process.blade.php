@@ -22,9 +22,9 @@
                             <input type="text" class="form-control" name="tax" value="{{ isset($settings->enchasment_settings_tax) ? $settings->enchasment_settings_tax : 0 }}">
                         </div>
                         <div class="col-md-6">
-                            <label for="basic-input">Service Charge (PHP)</label>
+                            <label for="basic-input">Service Charge (% for pct.)</label>
                             <input type="hidden" name="service-charge-type" value="{{ isset($settings->enchasment_settings_p_fee_type) ? $settings->enchasment_settings_p_fee_type : 0 }}">
-                            <input type="text" class="form-control" name="service-charge" value="{{ isset($settings->enchasment_settings_p_fee) ? $settings->enchasment_settings_p_fee : 0 }}">
+                            <input type="text" class="form-control" name="service-charge" value="{{ isset($settings->enchasment_settings_p_fee) ? $settings->enchasment_settings_p_fee : 0 }}{{isset($settings->enchasment_settings_p_fee_type) ? ($settings->enchasment_settings_p_fee_type == 1 ? '%' : '') : ''}}">
                         </div>
                     </div>
                     <div class="form-group">

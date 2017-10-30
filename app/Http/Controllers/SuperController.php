@@ -5,6 +5,8 @@ use App\Models\Tbl_admin;
 use App\Models\Tbl_user;
 use App\Models\Tbl_user_position;
 use Crypt;
+use Validator;
+use Illuminate\Validation\Rule;
 
 class SuperController extends Controller
 {
@@ -45,6 +47,15 @@ class SuperController extends Controller
                 {
                     $this->admin_info = $check_admin;
                 }
+            }
+            else
+            {
+                /* IF NO SESSION - ALLOWED PAGE IS ONLY LOGIN AND LOGIN SUBMIT */
+                if(request()->segment(2) != "" && request()->segment(2) != "login")
+                {
+                    abort(404);
+                }
+                
             }
             
             return $next($request);
@@ -106,7 +117,7 @@ class SuperController extends Controller
     }
     public function getCustomer()
     {
-        $_shop = Tbl_shop::orderBy("shop_key")->get();
+        $_shop = Tbl_shop::active()->orderBy("shop_key")->get();
 
         foreach($_shop as $key => $shop)
         {
@@ -136,6 +147,39 @@ class SuperController extends Controller
         }
 
         return view("super.customer_edit", $data);
+    }
+    public function postCustomerEdit()
+    {
+        $shop_old = Tbl_shop::where("shop_id", request("id"))->first();
+
+        $condition["shop_key"]          = array("required", Rule::unique('tbl_shop')->ignore($shop_old->shop_key, 'shop_key'));
+        $condition["shop_contact"]      = array("required");
+        $validator                      = Validator::make(request()->all(), $condition);
+
+        if ($validator->fails())
+        {
+            $errors                 = $validator->errors();
+            $return["status"]       = "error";
+            $return["title"]        = "Validation Error";
+            $return["message"]      = $errors->first();
+        }
+        else
+        {
+            $update = request()->input();
+            unset($update["_token"]);
+            unset($update["id"]);
+
+            if($update["shop_domain"] == "")
+            {
+                $update["shop_domain"] = "unset_yet";
+            }
+
+            Tbl_shop::where("shop_id", request("id"))->update($update);
+
+            $return["title"] = "Successfully Updated";
+            $return["message"] = "Information of Customer No. " . request("id") . " has been successfully updated.";     
+        }
+        echo json_encode($return);
     }
     public function getUser()
     {

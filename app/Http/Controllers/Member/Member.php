@@ -184,8 +184,8 @@ class Member extends Controller
 			Seed_manual::put_mlm_pin_prefix($this->user_info->shop_id, $this->user_info->shop_key);
 			/* INSERT DEFAULT NAME FOR SOCIAL NETWORKING SITE */
 			Seed_manual::put_name_social_networking_site($this->user_info->shop_id);
-
 			/* INSERT MAIN WAREHOUSE */
+			
 			Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);
 			// dd($this->user_info);
 

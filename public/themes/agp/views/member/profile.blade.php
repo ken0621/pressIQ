@@ -1,15 +1,15 @@
 @extends("member.member_layout")
 @section("member_content")
-<div class="profile-container" style="overflow: hidden;">
+<div class="profile-container">
 	<div class="row clearfix row-no-padding">
-		<div class="animated fadeInUp col-md-4 left match-height load-profile">
+		<div class="col-md-4 left match-height load-profile">
 			<div class="load-profile-holder">
 				<div class="profile-main">
-					<div class="animated zoomIn img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
-					<div class="animated slideInUp name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
-					<div class="animated slideInUp sub">{{ $profile->email }}</div>
+					<div class="img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
+					<div class="name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
+					<div class="sub">{{ $profile->email }}</div>
 				</div>
-				<div class="animated fadeInUp profile-status">
+				<div class="profile-status">
 					<table>
 						<tr>
 							<td class="blue">
@@ -25,9 +25,9 @@
 				</div>
 				@if($mlm == 1)
 				<div class="profile-lead">
-					{{-- <a data-toggle="modal" data-target="#leads_modal" href="javascript:">
+					<!-- <a data-toggle="modal" data-target="#leads_modal" href="javascript:">
 						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
-					</a> --}}
+					</a> -->
 					<!-- Modal -->
 					<div id="leads_modal" class="modal fade leads-modal" role="dialog">
 					   <div class="modal-dialog">
@@ -50,20 +50,14 @@
 					</div>
 				</div>
 				@endif
-				<div class="animated fadeInUp profile-about">
+				<div class="profile-about">
 					<div class="title">About Me</div>
 					<table>
 						<tr>
 							<td>
 								<img src="/themes/{{ $shop_theme }}/img/calendar.png"> Date Joined
 							</td>
-							@if($profile->created_date)
-	                            <td>{{ date("F, d, Y", strtotime($profile->created_date)) }}</td>
-	                        @elseif($profile->created_at)
-	                            <td>{{ date("F, d, Y", strtotime($profile->created_at)) }}</td>
-	                        @elseif($profile->updated_at)
-	                            <td>{{ date("F, d, Y", strtotime($profile->updated_at)) }}</td>
-	                        @endif
+							<td>{{ $profile->created_date }}</td>
 						</tr>
 						<tr>
 							<td>
@@ -79,11 +73,10 @@
 				</div>
 			</div>
 		</div>
-		<div class="animated fadeInRight col-md-8 right match-height">
+		<div class="col-md-8 right match-height">
 			<div class="profile-form">
 				<ul class="nav nav-tabs">
 				   <li class="active"><a data-toggle="tab" href="#basic_info">Basic Info</a></li>
-				   <li><a data-toggle="tab" href="#contact_info">Reward Configuration</a></li>
 				   <li><a data-toggle="tab" href="#profile_picture">Profile Picture</a></li>
 				   @if($allowed_change_pass)
 				   <li><a data-toggle="tab" href="#password">Password</a></li>
@@ -107,7 +100,7 @@
 					   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					   		<div class="row clearfix">
 					   			<div class="col-md-6">
-					   				<div class="form-group">
+					   				<!-- <div class="form-group">
 							   			<label>First Name</label>
 							   			<input type="text" class="form-control" name="first_name" value="{{ $profile->first_name }}">
 							   		</div>
@@ -118,7 +111,7 @@
 							   		<div class="form-group">
 							   			<label>Last Name</label>
 							   			<input type="text" class="form-control" name="last_name" value="{{ $profile->last_name }}">
-							   		</div>
+							   		</div> -->
 							   		<div class="form-group">
 							   			<label>Birth Date</label>
 							   			<div style="margin-top: 5px;">
@@ -174,7 +167,7 @@
 						   		</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-brown" type="submit">Update</button>
+							   			<button class="btn btn-default" type="submit"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -201,7 +194,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button type="submit" class="submit-button btn btn-brown"><i class="fa fa-save"></i> Update</button>
+							   			<button type="submit" class="submit-button btn btn-default"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -265,7 +258,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-brown" type="submit">Update</button>
+							   			<button class="btn btn-default" type="submit"><i class="fa fa-pencil"></i>  Update</button>
 							   		</div>
 						   		</div>
 					   		</div>

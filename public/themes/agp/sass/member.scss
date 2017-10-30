@@ -1,6 +1,7 @@
 .member
 {
-	background-image: url("/themes/brown/img/bg.jpg");
+	//background-image: url("/themes/brown/img/bg.jpg");
+	background-color: #EEE;
 	background-size: cover;
 	.members
 	{
@@ -66,7 +67,7 @@
 		}
 		.sidebar
 		{
-			background-color: #301e10;
+			background-color: #9b6d24;
 			width: 300px;
 			position: absolute;
 			left: 0;
@@ -76,10 +77,11 @@
 			z-index: 10;
 			transition: 0.3s all ease;
 			// overflow: hidden;
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 768px)
 			{
 				display: none;
 			}
+
 			.shadow
 			{
 				position: absolute;
@@ -88,12 +90,14 @@
 				width: 12px;
 				z-index: 11;
 			}
+
 			.profile-holder
 			{
 				width: 300px;
 				overflow: hidden;
 				transition: 0.3s all ease;
 			}
+
 			.profile
 			{
 				text-align: center;
@@ -102,6 +106,7 @@
 				width: 283px;
 				text-align: left;
 				margin-left: 12.5px;
+
 				.img
 				{
 					width: 50px;
@@ -116,6 +121,7 @@
 						height: 50px;
 					}
 				}
+
 				.text
 				{
 					display: inline-block;
@@ -123,12 +129,14 @@
 					text-align: left;
 					margin-left: 15px;
 					width: 200px;
+
 					.name
 					{
 						color: #fff;
 						font-size: 14px;
 						font-weight: 500;
 					}
+
 					.sub
 					{
 						font-size: 13px;
@@ -139,14 +147,19 @@
 			.side-nav
 			{
 				transition: 0.3s all ease;
+
 				ul
 				{
 					margin: 0;
 					padding: 0;
+
 					li
 					{
+
 						display: block;
 						position: relative;
+						background-color: #9b6d24;
+
 						a
 						{
 							display: block;
@@ -157,12 +170,13 @@
 
 							.nav-holder
 							{
+
 								padding: 15px 15px;
 								color: #dac5a6;
 								font-size: 13px;
 								font-weight: 400;
 								letter-spacing: 0.5px;
-								border-bottom: 1px solid #301e10;
+								//border-bottom: 1px solid rgba(255,255,255,0.2);
 								padding-left: 25px;
 								width: 300px;
 								transition: 0.3s all ease;
@@ -174,7 +188,6 @@
 									vertical-align: top;
 									width: 20px;
 									margin-right: 15px;
-
 									text-align: center;
 									font-size: 18px;
 									color: #dac5a6;
@@ -185,18 +198,21 @@
 									} */
 								}
 							}
+
 							&:hover
 							{
 								.nav-holder
 								{
-									background-color: #3c2716;
+									background-color: rgba(255,255,255,0.2);
 									color: #fff;
 									text-decoration: none;
-									border-color: #3c2716;
+									//border-color: rgba(255,255,255,0.2);
 									
-									.icon {
+									.icon 
+									{
 										color: #fff;
 									}
+
 									img
 									{
 										-webkit-filter: brightness(2);
@@ -207,16 +223,17 @@
 								}
 							}
 						}
+
 						&.active
 						{
 							> a
 							{
 								> .nav-holder
 								{
-									background-color: #3c2716;
+									background-color: rgba(255,255,255,0.2);
 									color: #fff;
 									text-decoration: none;
-									border-color: #3c2716;
+									//border-color: rgba(255,255,255,0.2);
 									.icon {
 										color: #fff;
 									}
@@ -247,7 +264,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #301e10;
+										background-color: #9b6d24;
 									}
 								}
 							}
@@ -265,7 +282,7 @@
 			&.small
 			{
 				width: 80px;
-				background-color: #502d19;
+				background-color: #9b6d24;
 				.shadow
 				{
 					display: none;
@@ -329,7 +346,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #613922;
+										background-color: rgba(255,255,255,0.2);
 										.icon
 										{
 											img
@@ -351,7 +368,7 @@
 		{
 			margin-left: 80px;
 			padding: 15px;
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 768px)
 			{
 				margin-left: 0;
 			}

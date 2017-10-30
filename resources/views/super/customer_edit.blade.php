@@ -69,7 +69,7 @@
                         <div class="item-inner">
                            <div class="item-title label">Created</div>
                            <div class="item-input">
-                              <input style="color: #a8a8a8" readonly type="text" value="{{ $created }}">
+                              <input readonly type="text" value="{{ $created }}">
                            </div>
                         </div>
                      </div>
@@ -81,7 +81,7 @@
                         <div class="item-inner">
                            <div class="item-title label">Last Update</div>
                            <div class="item-input">
-                              <input style="color: #a8a8a8" readonly type="text" value="{{ $edited }}">
+                              <input readonly type="text" value="{{ $edited }}">
                            </div>
                         </div>
                      </div>

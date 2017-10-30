@@ -18,7 +18,7 @@
     <div class="partner-result row-no-padding">
 
       @foreach($_company_information as $company_information)
-        <a href="/partners_views/{{$company_information->company_id}}" style="text-decoration: none;color:#333">
+        <a href="/partners_views?i={{$company_information->company_id}}" style="text-decoration: none;color:#333">
         <div class="col-md-3 col-sm-6" style="padding: 4px;">
            <div class="partners-div clearfix match-height" style="height: auto; padding-bottom: 15px;">
               <div class="partner-header">

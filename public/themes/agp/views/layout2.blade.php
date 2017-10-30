@@ -93,10 +93,12 @@
                     <div class="space1"></div>
                     <span>BROWSE</span>
                     <ul class="links">
-                        <li> <a href="/">HOME</a> </li>
-                        <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
-                        <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
-                        <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
+                        <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">HOME</a> </li>
+                        <li class="nav-ext"> <a class="smoth-scroll" href="/product">PRODUCTS</a> </li>
+                        <li class="nav-ext"> <a class="smoth-scroll" href="/about">COMPANY</a> </li>
+                        <li class="nav-ext"> <a class="smoth-scroll" href="/testimony">TESTIMONIALS</a> </li>
+                        <li class="nav-ext"> <a class="smoth-scroll" href="/policy">POLICIES</a> </li>
+                        <li class="nav-ext"> <a class="smoth-scroll" href="/contact">CONTACT US</a> </li>
                     </ul>
                 @endif
             </nav>

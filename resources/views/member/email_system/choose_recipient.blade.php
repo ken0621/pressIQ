@@ -74,7 +74,7 @@
 </div>
   <div class="form-group row">
     <div class="">
-      <button type="button" class="form-control inputsubmit btn btn-primary" id="inputsubmit" name="search">Search</button>
+      <button type="button" class="form-control inputsubmit btn btn-primary search" id="inputsubmit" name="search">Search</button>
     </div>
   </div>
 </form>
@@ -82,8 +82,14 @@
 <br>
 <br>
 <br>
-<div class="row recipient_container col-md-6">
-<div class="recipient_container2">
+</div>
+
+<!-- Modal -->
+  <div class="modal fade" id="RecipientModal" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="row recipient_container col-md-6">
+          <div class="recipient_container2">
             <h3 class="text-center recipient_text">Recipient Lists</h3>
             <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
             <div class="well box" style="max-height: ;: 300px;overflow: auto;">
@@ -100,6 +106,13 @@
             </div>
         </div>
     </div>
+       
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
   
 <script src="/email_assets/js/create_press_release.js"></script>
@@ -139,7 +152,34 @@
 
     window.location.href = recipient_link;
 
-    
+   var myArr = [];
+
+                         $('#vc li').each(function (i) {
+
+                           if($(this).children().is(":checked") == true){
+                              myArr.push($(this).attr('value'));
+                           
+                           }else{
+                            
+                           }
+
+                        })
+                         
+
+                      $.ajax({
+                     type: "GET",
+                     url: "/member/page/press_release_email/view_send_email_press_release/sent_email",
+                     data: {myArr:myArr},
+                     dataType:"json",
+                     success: function(data){
+                                               // var recipient_value = myArr;
+                         var recipient_link = "/member/page/press_release_email/view_send_email_press_release";
+                          window.location.href = recipient_link;
+                     }  
+                });
+
+
+
     });
 </script>
 

@@ -265,6 +265,7 @@ class MLM_PayoutController extends Member
 		}
 
 		$_slot = $slot_query->orderBy("customer_id", "asc")->get();
+		$test = [];
 		foreach($_slot as $key => $slot)
 		{
 			if($source == "wallet")
@@ -275,10 +276,6 @@ class MLM_PayoutController extends Member
 				$remaining 			= $slot->current_wallet - $encashment_amount;
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
-				if($service_charge_type == 1)
-				{
-					$service_charge = (($encashment_amount * ($service_charge/100)));
-				}
 				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
 			}
 			else
@@ -291,14 +288,14 @@ class MLM_PayoutController extends Member
 				$remaining 			= $slot->current_wallet;
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
-
+				// $test[$key] = $encashment_amount .' * '.doubleval($service_charge) . '/100';
+				$compute_service_charge = $service_charge;
 				if($service_charge_type == 1)
 				{
-					$service_charge = (($encashment_amount * ($service_charge/100)));
+					$compute_service_charge = (($encashment_amount * (doubleval($service_charge)/100)));
 				}
-				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
+				$compute_net 		= $compute_net - ($compute_service_charge + $other_charge + $tax);
 			}
-
 			$_slot[$key]->real_wallet 		= number_format($slot->current_wallet, 2, '.', '');
 			$_slot[$key]->real_earnings 	= number_format($slot->total_earnings, 2, '.', '');
 			$_slot[$key]->real_payout 		= number_format($slot->total_payout, 2, '.', '');
@@ -362,7 +359,7 @@ class MLM_PayoutController extends Member
 				$total_net += $compute_net;
 			}
 		}
-
+		// dd($test);
 		$data["total_payout"] = Currency::format($total_payout);
 		$data["total_net"] = Currency::format($total_net);
 		$data["_slot"] = $_slot;

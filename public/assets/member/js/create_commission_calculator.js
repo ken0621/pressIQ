@@ -84,14 +84,10 @@ function create_commission_calculator()
 			width : '100%',
 			onChangeValue : function()
 			{
-				if($(this).val() != '')
+				if($(this).val())
 				{
 					agent_commission_percent = parseFloat($(this).find("option:selected").attr('commission-percent')) / 100;
 					event_compute_commission();
-				}
-				else
-				{
-					agent_commission_percent = 0;
 				}
 			}
 		});
@@ -201,6 +197,7 @@ function create_commission_calculator()
 		$('.c-amount-disc').html(number_format(discount, false));
 		$('.c-amount-tax').html(number_format(tax));
 		$('.c-amount-commission').html((agent_commission_percent * 100) + '%');
+		$('.c-amount-dp').html((downpayment * 100) + '%');
 	}
 	function event_accept_number_only()
 	{

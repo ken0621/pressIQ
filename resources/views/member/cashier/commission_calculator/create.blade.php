@@ -76,7 +76,7 @@
                             <h4><b>Net Downpayment :</b></h4>
                         </div>
                         <div class="col-md-6">
-                            <h4><div class="amount-net-downpayment">Amount of NDP</div></h4>
+                            <a id="popover_downpayment" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-net-downpayment">Amount of NDP</div></h4></a>
                         </div>
                     </div>
                     <div class="form-group ">
@@ -128,7 +128,7 @@
                             <h4><b>Total Commission :</b></h4>
                         </div>
                         <div class="col-md-6 text-center">
-                            <a id="popover" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-tc">TC Amount</div></h4></a>
+                            <a id="popover_tc" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-tc">TC Amount</div></h4></a>
                         </div>
                     </div>
                     <div class="form-group">
@@ -187,12 +187,32 @@
         </div>
     </div>
 </div>
+<div class="hidden row clearfix" id="downpayment-content">
+    <div class="text-center">
+
+        <div class="col-md-12">
+            <div>(TSP - (DP * TSP)) - DISC</div>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12">
+            <div>(<label class="c-amount-tsp">1,000,000</label> - (<label class="c-amount-dp">15%</label> * <label class="c-amount-tsp">1,000,000</label>)) - <label class="c-amount-disc">10,000</label> </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
-    $('#popover').popover({ 
+    $('#popover_tc').popover({ 
         html : true,
-        title: '<h4 style="padding:5px">Commission Computation</h4>',
+        title: '<h4 style="padding:0px">Commission Computation</h4>',
         content: function() {
           return $("#computation-content").html();
+        }
+    });
+    $('#popover_downpayment').popover({ 
+        html : true,
+        title: '<h4 style="padding:5px">Net Downpayment Computation</h4>',
+        content: function() {
+          return $("#downpayment-content").html();
         }
     });
 </script>

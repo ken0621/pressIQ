@@ -124,7 +124,7 @@
             <div class="container">
                 <div class="row-fluid">
                     <div class="span12">
-
+<!-- 
                         <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
                         <nav class="pushmenu pushmenu-left">
 
@@ -167,7 +167,7 @@
                                      <li class="nav-ext"> <a href="/contact">CONTACT US</a> </li>
                                 </ul>
                             @endif
-                        </nav>
+                        </nav> -->
                         <!-- Logo -->
                         <div id="logo" class="">
                             <a href='/'><img style="max-height: 100%; max-width: 100%; object-fit: contain;" src='{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : 'assets/front/img/small-logo.png' }}' alt='' /></a>
@@ -203,7 +203,7 @@
                         </div>
                         <!-- #navigation -->
                         <!-- End custom menu here -->
-                        <!-- <a href="javascript:" class="mobile_small_menu open"></a> -->
+                        <a href="javascript:" class="mobile_small_menu open"></a>
                     </div>
                 </div>
             </div>

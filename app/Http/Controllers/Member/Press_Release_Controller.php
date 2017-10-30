@@ -66,7 +66,7 @@ class Press_Release_Controller extends Member
 
     }
 
-    public function pass_id(Request $req)
+    public function pass_id()
     {
          
         $data = Request::input('myArr');

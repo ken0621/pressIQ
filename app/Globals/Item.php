@@ -1536,7 +1536,7 @@ class Item
         
         if($search_keyword)
         {
-            $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%")->orWhere('mlm_activation', "LIKE", "%" . $search_keyword . "%");
+            $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
         }
         if($status == 'reserved' || $status == 'block')
         {
@@ -1598,7 +1598,7 @@ class Item
         }
         if($search_keyword)
         {
-            $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%")->orWhere('mlm_activation', "LIKE", "%" . $search_keyword . "%");
+            $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
         }
 
         if($status == 'reserved' || $status == 'block')

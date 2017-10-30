@@ -1,19 +1,13 @@
-$content-text: 'Rubik', sans-serif;
+@import "../../../assets/front/sass/mixin";
+
+$content-text: 'Lato', sans-serif;
 $light: 300;
 $regular: 400;
 $medium: 500;
+$semi-bold: 600;
 $bold: 700;
-$text-light: #777;
-$text-dark: #272c2f;
-
-
-@mixin transition($transition)
-{
-	  -webkit-transition: all $transition ease-in-out;
-	  -moz-transition: all $transition ease-in-out;
-	  -o-transition: all $transition ease-in-out;
-	  transition: all $transition ease-in-out;
-}
+$text-light: #585858;
+$text-dark: #404040;
 
 /* Dashboard Top */
 .dashboard-top
@@ -74,9 +68,9 @@ $text-dark: #272c2f;
 			.btn-buy-a-kit
 			{
 				color: #fff;
-				background-color: #693d28;
+				background-color: #75A04B;
 				padding: 12px 40px 12px 40px;
-				border: 2px solid #693d28;
+				border: 2px solid #75A04B;
 				border-radius: 2px;
 			}
 			
@@ -92,10 +86,10 @@ $text-dark: #272c2f;
 
 			.btn-enter-a-code
 			{
-				color: #693d28;
+				color: #75A04B;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
-				border: 2px solid #693d28;
+				border: 2px solid #75A04B;
 				border-radius: 2px;
 				//margin-bottom: 65px;
 			}
@@ -281,7 +275,7 @@ $text-dark: #272c2f;
 	background-color: #fff;
 	.modal-header
 	{
-		background-color: #422311;
+		background-color: #75A04B;
 		border-top-left-radius: 3px;
 		border-top-right-radius: 3px;
 
@@ -453,7 +447,7 @@ $text-dark: #272c2f;
 		background-color: #fff;
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #75A04B;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -622,7 +616,7 @@ $text-dark: #272c2f;
 		
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #75A04B;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -650,7 +644,7 @@ $text-dark: #272c2f;
 				margin-bottom: 27px;
 				font-size: 13px !important;
 				letter-spacing: 0.3px;
-				color: #613922 !important;
+				color: #75A04B !important;
 			}
 			.value-set
 			{
@@ -688,9 +682,9 @@ $text-dark: #272c2f;
 				.btn-proceed-1
 				{
 					color: #fff;
-					background-color: #693d28;
+					background-color: #75A04B;
 					padding: 12px 40px;
-					border: 2px solid #693d28;
+					border: 2px solid #75A04B;
 					border-radius: 2px;
 				}
 			}
@@ -713,9 +707,10 @@ $text-dark: #272c2f;
 	.modal-content
 	{
 		background-color: #fff;
+		
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #252525;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -785,7 +780,7 @@ $text-dark: #272c2f;
 				width: 100%;
 				font-size: 16px;
 				border: none;
-				border: 1px solid #693d28;
+				border: 1px solid #75A04B;
 				margin: 5px 0px;
 				margin-bottom: 15px;
 				padding: 5px;
@@ -805,7 +800,7 @@ $text-dark: #272c2f;
 				.btn-proceed-2
 				{
 					color: #fff;
-					background-color: #693d28;
+					background-color: #75A04B;
 					padding: 10px 40px;
 					border-radius: 2px;
 					border: 0px !important;

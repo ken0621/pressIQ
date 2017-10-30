@@ -43,7 +43,13 @@
                     <div class="text">{{ get_content($shop_theme_info, "header", "header_email_label") }}: {{ get_content($shop_theme_info, "header", "header_email_address") }}</div>
                 </div>
                 <div class="pull-right">
-                    <div class="text"><a href="/member/register">LOG IN</a></div>
+                    @if($customer)
+                        <div class="text"><a href="/members/logout">LOGOUT</a></div>
+                        <div class="text"><a href="/members">MY ACCOUNT</a></div>
+                    @else
+                        <div class="text"><a href="/members/login">LOGIN</a></div>
+                        <div class="text"><a href="/members/register">REGISTER</a></div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -66,12 +72,12 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="{{ Request::segment(1) == '' ? 'active' : '' }}"><a href="#">HOME</a></li>
-                    <li class="{{ Request::segment(1) == 'product' ? 'active' : '' }}"><a href="#">PRODUCTS</a></li>
-                    <li class="{{ Request::segment(1) == 'about' ? 'active' : '' }}"><a href="#">COMPANY</a></li>
-                    <li class="{{ Request::segment(1) == 'testimony' ? 'active' : '' }}"><a href="#">TESTIMONIALS</a></li>
-                    <li class="{{ Request::segment(1) == 'policy' ? 'active' : '' }}"><a href="#">POLICIES</a></li>
-                    <li class="{{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="#">CONTACT US</a></li>
+                    <li class="{{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
+                    <li class="{{ Request::segment(1) == 'product' ? 'active' : '' }}"><a href="/product">PRODUCTS</a></li>
+                    <li class="{{ Request::segment(1) == 'about' ? 'active' : '' }}"><a href="/about">COMPANY</a></li>
+                    <li class="{{ Request::segment(1) == 'testimony' ? 'active' : '' }}"><a href="/testimony">TESTIMONIALS</a></li>
+                    <li class="{{ Request::segment(1) == 'policy' ? 'active' : '' }}"><a href="/policy">POLICIES</a></li>
+                    <li class="{{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -116,7 +122,6 @@
     </footer>
     
     @include("frontend.gfoot")
-
     {{-- GLOBALS --}}
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     

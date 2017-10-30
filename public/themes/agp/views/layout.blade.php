@@ -95,7 +95,14 @@
                             <div class="row-fluid social_row">
                                 <div class="span12 account-button">
                                     <ul class="text-center" style="margin-top: 0;">
-                                        <li><a href="/mlm/login">LOG IN</a></li>
+                                        <!-- <li><a href="/mlm/login">LOG IN</a></li> -->
+                                        @if($customer)
+                                            <li><a href="/members/logout">LOGOUT</a></li>
+                                            <li><a href="/members">MY ACCOUNT</a></li>
+                                        @else
+                                            <li><a href="/members/login">LOGIN</a></li>
+                                            <li><a href="/members/register">REGISTER</a></li>
+                                        @endif
                                         <!-- <li><div class="divider">|</div></li> -->
                                         <!-- <li><a href="/mlm/register">SIGN UP</a></li> -->
                                     </ul>

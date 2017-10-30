@@ -1,6 +1,7 @@
 .member
 {
-	background-image: url("/themes/brown/img/bg.jpg");
+	//background-image: url("/themes/brown/img/bg.jpg");
+	background-color: #EEE;
 	background-size: cover;
 	.members
 	{
@@ -66,7 +67,7 @@
 		}
 		.sidebar
 		{
-			background-color: #301e10;
+			background-color: #DBB166;
 			width: 300px;
 			position: absolute;
 			left: 0;
@@ -162,7 +163,7 @@
 								font-size: 13px;
 								font-weight: 400;
 								letter-spacing: 0.5px;
-								border-bottom: 1px solid #301e10;
+								border-bottom: 1px solid rgba(255,255,255,0.2);
 								padding-left: 25px;
 								width: 300px;
 								transition: 0.3s all ease;
@@ -189,10 +190,10 @@
 							{
 								.nav-holder
 								{
-									background-color: #3c2716;
+									background-color: rgba(255,255,255,0.2);
 									color: #fff;
 									text-decoration: none;
-									border-color: #3c2716;
+									border-color: rgba(255,255,255,0.2);
 									
 									.icon {
 										color: #fff;
@@ -213,10 +214,10 @@
 							{
 								> .nav-holder
 								{
-									background-color: #3c2716;
+									background-color: rgba(255,255,255,0.2);
 									color: #fff;
 									text-decoration: none;
-									border-color: #3c2716;
+									border-color: rgba(255,255,255,0.2);
 									.icon {
 										color: #fff;
 									}
@@ -247,7 +248,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #301e10;
+										background-color: rgba(255,255,255,0.2);
 									}
 								}
 							}
@@ -265,7 +266,7 @@
 			&.small
 			{
 				width: 80px;
-				background-color: #502d19;
+				background-color: #DBB166;
 				.shadow
 				{
 					display: none;
@@ -329,7 +330,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #613922;
+										background-color: rgba(255,255,255,0.2);
 										.icon
 										{
 											img

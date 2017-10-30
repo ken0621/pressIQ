@@ -6,71 +6,69 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">Accept JCA Privacy Policy</div>
+            <div class="modal-header">Accept AGP Privacy Policy</div>
             <div class="modal-body">
                 <div class="contract">
                 	<div class="header">Privacy Policy</div>
                 	<div class="introduction">
 	            		<div class="title">Introduction</div>
 	                	<div class="para-container">
-	                		<p>This privacy policy sets out rules for the collection, use and disclosure of personal information and how JCA Wellness International Corp. uses and protects the information that you.</p>
-	                		<p>JCA Wellness International Corp. is committed to guaranteeing that your privacy is protected. Should we ask you to provide certain information by which you can be identified when using the website, then you can be assured that it will only be used in accordance with this privacy statement. </p>
-	                		<p>JCA Wellness International Corp. may change and update this policy from time to time and any information we collect is not used and shared with this privacy statement.</p>
+	                		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, fugiat? Ex incidunt consequuntur ad eveniet vero, quibusdam nobis neque voluptas tempora illum qui, officiis molestiae, quam officia facere dolorum magnam et nostrum nemo eum. Dolores officia nesciunt suscipit, ipsam quasi ut nostrum, aperiam. Repellat facilis, aut, qui incidunt culpa quis.</p>
 	                	</div>
                 	</div>
 					
 					<div class="personal-info">
 						<div class="title">Personal Information</div>
 						<div class="para-container">
-							<p>Personal Information means any information about an identifiable individual. It includes, without limitation, information relating to identify, nationality, age, gender, address, telephone number, e-mail address, date of birth, and other information relating to our transaction with you as well as certain personal opinions or views of an individual. Only information which is required to make a determination of an individual’s eligibility will be collected. You may choose to restrict the collection or use of your personal information by indicating that you do not want the information for direct marketing purposes. We require this information to understand your needs and provide you with a better service and in particular for the following reasons:</p>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam repellat ex placeat reprehenderit distinctio deserunt voluptatum totam molestiae, error aliquid? Eius iusto, repudiandae magnam porro iste. Sunt ullam ipsam beatae quibusdam, reiciendis ut harum, dignissimos quasi dolore cum cupiditate voluptatibus dolorem quae rem ratione accusamus aliquam ea provident numquam debitis voluptate. Doloribus obcaecati, accusamus officiis alias quae sit, distinctio illum porro accusantium maiores sunt consectetur commodi nihil perspiciatis possimus laudantium, nisi dolorem voluptas veritatis nostrum repellat! In ducimus, officia vel, voluptatum qui temporibus, incidunt itaque nam porro corporis ea optio dignissimos. Odio voluptatum, adipisci sequi obcaecati enim? Facilis, enim, repellat!</p>
 							<ol>
-								<li>Record-keeping;</li>
-								<li>Send instructive and promotional email about new products or other information which we think you may find interesting. </li>
-								<li>For market research purposes</li>
-								<li>Or we may use the information to customize the website according to your requirements</li>
+								<li>Lorem ipsum dolor.</li>
+								<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum quibusdam nesciunt, praesentium. Praesentium doloremque optio fugit voluptatem, impedit, corporis aliquid! </li>
+								<li>Lorem ipsum dolor sit.</li>
+								<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem similique, est veritatis, consequuntur itaque provident!</li>
 							</ol>
 						</div>
 					</div>
 
 					<div class="share-protect">
-						<div class="title">Sharing and Protecting your Information</div>
+						<div class="title">Lorem ipsum dolor sit.</div>
 						<div class="para-container">
-							<p>JCA Wellness International Corp. will not sell, distribute or lease your personal information to other parties unless we have your permission or are required by law to do so.</p>
-							<p>To prevent unauthorized access, maintain data accuracy, and ensure information usage, we have put into place appropriate physical, electronic and managerial procedures to safeguard and secure these information we collected online. We will also take reasonable steps to verify your identify before granting access or make corrections.</p>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti voluptas blanditiis asperiores tempore voluptatum odit quod fugiat repudiandae commodi mollitia.</p>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error fuga dolor possimus vitae nam doloremque deserunt, accusamus, sequi quae aliquid!</p>
 						</div>
 					</div>
                 	
 					<div class="contact-us">
 						<div class="title">Contact Us</div>
 						<div class="para-container">
-							<p>Should you have any questions or concerns about this Privacy Policy, on or use of your information or would like to correct factual errors in your personal information, or in the unlikely event any of the personal information you provided is misused, you may redress these issue by reaching us directly at telephone number (02) 631-6997 or at mobile number 0926-6494134 (globe) 0946-5619714 (smart).</p>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat error accusantium, voluptate recusandae autem, ullam dolor minus deserunt ut. Sapiente facilis rem, ipsa! Officia maiores, architecto dicta recusandae molestiae sit ex, incidunt nesciunt vel laudantium, cum voluptas atque distinctio sed tenetur possimus blanditiis explicabo totam officiis soluta harum saepe alias.</p>
 						</div>
 					</div>
 
 					<div class="disclaimer">
 						<div class="title">Disclaimer</div>
 						<div class="para-container">
-							<p>The contents of this website, jcawellnessintcorp.digimahouse.com are for informational purposes only and do not render medical or psychological advice, opinion, diagnosis or treatment. The products as shown in this website are not intended to diagnose, treat, cure or prevent any disease or medical condition.</p>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet autem qui perferendis rerum quis ipsam inventore sit nisi eius cumque porro omnis ratione dolore excepturi ex possimus animi laboriosam soluta officia impedit cupiditate pariatur, assumenda. Odit maiores saepe sapiente repudiandae.</p>
 						</div>
 					</div>
 
 					<div class="dealers-policy">
 						<div class="title">Dealers Policy:</div>
 						<div class="para-container">
-							<p>As a new member of JCA Wellness International Corp., I understand and agree to the following: THAT</p>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt, minus corporis, excepturi ratione nam accusamus!</p>
 							<ol>
-								<li>I attest that I personally participated at JCA International Corp.</li>
-								<li>As a JCA International Corp Member, I hereby understood that there is no required minimum inventory that I need to maintain in order to sustain my status as a Member.</li>
-								<li>I shall be eligible to bonuses and privileges that may be granted by the company relative to my performance. Relevant to my activity, I further understand that bonuses, rebates and/or commissions are in accordance with the compensation scheme established in the JCA International Corp Marketing Plan, provided, that I have achieved such sales performance in good faith, and that I have not violated any of the provisions of the Distributorship Policy, </li>
-								<li>This Membership Contract limits a no employee – employer relationship between me and JCA International Corp; neither that I may claim to be a legal representative of JCA International Corp, nor bind JCA International Corp in any agreements other than those agreed herein;</li>
-								<li>I understand that I should secure an express written approval from the Organization of JCA International Corp or any of its authorized representative prior to making any form of advertisement in mainstream media, social networking sites, internet, and online media, including, but not limited to audio, visual and printed materials, other than the Company’s existing advertisement and marketing materials and postings on its official website and social media pages;</li>
-								<li>I am aware that making any misrepresentations, revisions, modifications, or alterations of the Company’s trademark, brand, logos, marks, marketing plan, products, advertisement, marketing materials, and other company provided marketing tools, is strictly prohibited. Otherwise, it shall be deemed violation of the Company’s rules, regulations and policies;</li>
-								<li>I shall diligently settle to the designated government agency/local government unit all due taxes from the taxable bonuses I have earned from JCA International Corp.</li>
-								<li>I am fully aware that the JCA Wellness International Corp reserves the right to modify, revise, and update its existing policies and business plan for the best interest of the company and its Distributors with 30 days prior notice;</li>
+								<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, natus!</li>
+								<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam aperiam obcaecati id, perferendis ipsam, perspiciatis.</li>
+								<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo aliquam, excepturi unde fugiat voluptatem maiores magni facilis quod? Accusamus, dolorum, maxime! Quia nam, voluptatem placeat officia, consectetur doloribus magni laudantium culpa illo, cupiditate porro numquam!</li>
+								<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates doloremque quae ut perferendis nisi vero iusto harum consequuntur minus quod placeat, rem earum fugiat esse!</li>
+								<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas perferendis tempora, nemo incidunt ad atque sunt eum porro optio libero! Ex quas facilis placeat unde, illo ab neque harum, odit explicabo minus quia repudiandae, consectetur quod minima necessitatibus commodi alias corporis ducimus veniam asperiores dignissimos omnis. Earum quaerat autem ullam.</li>
+								<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad enim blanditiis distinctio ducimus autem id soluta cumque obcaecati, aspernatur, quisquam accusantium vero iusto deserunt ut voluptas rerum nam aliquid itaque modi, maxime at nihil reiciendis dolores!</li>
+								<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum, suscipit id odit, incidunt quos assumenda vel rerum est dicta nulla!</li>
+								<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, suscipit dolorum. Similique eius sit ad beatae, esse saepe consequatur officiis, debitis perspiciatis recusandae. Iusto, et.</li>
 								<li>
-									<p>I conform to conduct all my activities in accordance with the existing laws of the Republic of the Philippines and release JCA International Corp from any liability arising from my own personal actions;</p>
-									<p>I hereby certify that the above information are true and correct to the best of my knowledge. In case of violation of any of the terms and conditions herein agreed, I hereby agree and allow JCA Wellness International Corp to revoke, deactivate, and/or suspend my privileges as Member without prejudice to any charges, criminal and/or civil, that JCA Wellness International Corp. may charge against me, without limitation to any false information I have provided herein.</p>
-									<p>I hereby certify that the above information are true and correct to the best of my knowledge. In case of violation of any of the terms and conditions herein agreed, I hereby agree and allow JCA Wellness International Corp to revoke, deactivate, and/or suspend my privileges as Member without prejudice to any charges, criminal and/or civil, that JCA Wellness International Corp. may charge against me, without limitation to any false information I have provided herein.</p>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat quas laborum quaerat, nihil dolor, voluptates aperiam expedita laboriosam voluptatum iste unde. Quidem, accusamus placeat provident.</p>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam et cupiditate quos. Maxime minima corporis eius. Hic ut assumenda, unde nesciunt, deleniti cum voluptatibus ullam.</p>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia, alias dolore quam repellendus voluptatibus rerum atque? Culpa vitae numquam fuga quo deserunt sit reiciendis sed.</p>
 								</li>
 							</ol>
 						</div>

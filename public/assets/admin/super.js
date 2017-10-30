@@ -16,9 +16,15 @@ function admin()
 			page_ready();
 		});
 
+        myApp.onPageInit('customer-list', function(page)
+        {
+        	var mySearchbar = $$('.searchbar')[0].f7Searchbar;
+        });
+
 	}
 	function page_ready()
 	{
+
 	}
 	function framework7init()
 	{

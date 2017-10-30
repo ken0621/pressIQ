@@ -102,6 +102,20 @@ class SuperController extends Controller
         
         echo json_encode($return);
     }
+    public function getCustomer()
+    {
+        $_shop = Tbl_shop::orderBy("shop_key")->get();
+
+        foreach($_shop as $key => $shop)
+        {
+            $_shop[$key]->shop_name = strtoupper($shop->shop_key);
+            $_shop[$key]->domain = ($shop->shop_domain == "unset_yet" ? "<span style='color: gray;'>no url set yet</span>" : $shop->shop_domain);
+        }
+
+        $data["_shop"] = $_shop;
+
+        return view("super.customer", $data);
+    }
     public function getLogout()
     {
         session()->forget("admin_username");

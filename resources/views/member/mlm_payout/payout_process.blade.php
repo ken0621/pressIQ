@@ -49,6 +49,8 @@
                                 <option value="eon">Eon Card</option>
                                 <option value="bank">Bank</option>
                                 <option value="bank">Cheque</option>
+                                <option value="palawan_express">Palawan Express</option>
+                                <option value="coinsph">COINS.PH</option>
                             </select>
                         </div>
                     </div>

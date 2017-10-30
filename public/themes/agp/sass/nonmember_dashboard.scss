@@ -86,12 +86,20 @@ $text-dark: #404040;
 
 			.btn-enter-a-code
 			{
+				@include transition(0.2s);
 				color: #75A04B;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
 				border: 2px solid #75A04B;
 				border-radius: 2px;
 				//margin-bottom: 65px;
+
+				&:hover
+				{
+					color: #fff;
+					border: 2px solid #daa966;
+					background-color: #daa966;
+				}
 			}
 		}
 
@@ -707,7 +715,7 @@ $text-dark: #404040;
 	.modal-content
 	{
 		background-color: #fff;
-		
+
 		.modal-header
 		{
 			background-color: #252525;

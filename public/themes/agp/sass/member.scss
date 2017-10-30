@@ -67,7 +67,7 @@
 		}
 		.sidebar
 		{
-			background-color: #DBB166;
+			background-color: #daa966;
 			width: 300px;
 			position: absolute;
 			left: 0;
@@ -81,7 +81,7 @@
 			{
 				display: none;
 			}
-			
+
 			.shadow
 			{
 				position: absolute;
@@ -195,6 +195,7 @@
 									} */
 								}
 							}
+
 							&:hover
 							{
 								.nav-holder
@@ -219,6 +220,7 @@
 								}
 							}
 						}
+
 						&.active
 						{
 							> a
@@ -277,7 +279,7 @@
 			&.small
 			{
 				width: 80px;
-				background-color: #DBB166;
+				background-color: #daa966;
 				.shadow
 				{
 					display: none;

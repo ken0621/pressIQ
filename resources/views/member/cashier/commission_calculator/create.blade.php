@@ -11,30 +11,30 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <strong>Select Customer</strong>
-                            <select class="select-customer form-control input-sm">
+                            <select class="select-customer form-control input-sm" name="customer_id">
                                  @include('member.load_ajax_data.load_customer')
                             </select>
                         </div>
                         <div class="col-md-6">
                             <strong>Customer Email</strong>
-                            <input type="text" class="form-control input-sm customer-email" name="">
+                            <input type="text" class="form-control input-sm customer-email" name="customer_email">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
                             <strong>Select Agent</strong>
-                            <select class="select-agent form-control input-sm">
+                            <select class="select-agent form-control input-sm" name="agent_id">
                                 <option commission-percent="8" value="1">Juan Dela Cruz</option>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <div class="col-md-6">
                                 <strong>Start Date</strong>
-                                <input type="text" class="form-control input-sm datepicker" name="">
+                                <input type="text" class="form-control input-sm datepicker" name="date">
                             </div>
                             <div class="col-md-6">
                                 <strong>Due Date</strong>
-                                <input type="text" class="form-control input-sm datepicker" name="">
+                                <input type="text" class="form-control input-sm datepicker" name="due_date">
                             </div>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-md-6">
                             <strong>Total Selling Price</strong>
-                            <input type="text" class="number-input form-control input-sm sales-price text-right compute-all" name="">
+                            <input type="text" class="number-input form-control input-sm sales-price text-right compute-all" name="total_selling_price">
                         </div>
                     </div>                    
                     <div class="form-group">
@@ -128,6 +128,7 @@
                             <h4><b>Total Commission :</b></h4>
                         </div>
                         <div class="col-md-6 text-center">
+                            <input type="hidden" name="total_contract_price" class="amount-tc">
                             <a id="popover_tc" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-tc">TC Amount</div></h4></a>
                         </div>
                     </div>

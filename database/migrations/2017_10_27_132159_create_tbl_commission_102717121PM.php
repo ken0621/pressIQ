@@ -34,8 +34,8 @@ class CreateTblCommission102717121PM extends Migration
         });
         Schema::create('tbl_commission_item', function (Blueprint $table) {
             $table->increments('commission_item_id');
-            $table->integer('commission_id')->unsined();
-            $table->integer('item_id')->unsined();
+            $table->integer('commission_id')->unsigned();
+            $table->integer('item_id')->unsigned();
             $table->double('downpayment_percent');
             $table->double('discount');
             $table->integer('monthly_amort');
@@ -48,8 +48,8 @@ class CreateTblCommission102717121PM extends Migration
         });
         Schema::create('tbl_commission_invoice', function (Blueprint $table) {
             $table->increments('comm_inv_id');
-            $table->integer('invoice_id')->unsined();
-            $table->integer('commission_id')->unsined();
+            $table->integer('invoice_id')->unsigned();
+            $table->integer('commission_id')->unsigned();
             $table->string('payment_ref_name')->nullable();
             $table->integer('payment_ref_id')->default(0);
             $table->double('commission_amount');

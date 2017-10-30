@@ -15,8 +15,9 @@
 							<input id="basic-input" value="{{ $settings->enchasment_settings_tax }}" class="form-control text-right" name="enchasment_settings_tax" placeholder="">
 						</div>
 						<div class="col-md-3">
-							<label for="basic-input">Service Charge (PHP)</label>
-							<input id="basic-input" value="{{ $settings->enchasment_settings_p_fee }}" class="form-control text-right" name="enchasment_settings_p_fee" placeholder="">
+							<label for="basic-input">Service Charge (% for Pct.)</label>
+							<input type="hidden" class="service_fee_type" name="enchasment_settings_p_fee_type" value="{{ $settings->enchasment_settings_p_fee_type }}">
+							<input id="basic-input" value="{{ $settings->enchasment_settings_p_fee }}" class="form-control text-right change-service-type" name="enchasment_settings_p_fee" placeholder="">
 						</div>
 						<div class="col-md-3">
 							<label for="basic-input">Other Charge (PHP)</label>

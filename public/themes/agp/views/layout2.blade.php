@@ -11,12 +11,13 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> --}}
-    <link rel="icon" href="/themes/{{ $shop_theme }}/img/unity-wealth-icon.png" type="image/png" />
+    <link rel="icon"  type="image/png" href="http://alpha-globalprestige.com/assets/front/img/agp.png">
 
     <!-- GOOGLE FONT -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300i,400,700,900" rel="stylesheet">
 
     <!-- GLOBAL CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global2.css">
@@ -38,12 +39,18 @@
     <div class="top-header">
         <div class="container">
             <div class="clearfix">
-                <div class="pull-left">
+                <div class="pull-left remove-mobile">
                     <div class="text">{{ get_content($shop_theme_info, "header", "header_call_label") }}: {{ get_content($shop_theme_info, "header", "header_call_number") }}</div> 
                     <div class="text">{{ get_content($shop_theme_info, "header", "header_email_label") }}: {{ get_content($shop_theme_info, "header", "header_email_address") }}</div>
                 </div>
                 <div class="pull-right">
-                    <div class="text"><a href="/member/register">LOG IN</a></div>
+                    @if($customer)
+                        <div class="text"><a href="/members/logout">LOGOUT</a></div>
+                        <div class="text"><a href="/members">MY ACCOUNT</a></div>
+                    @else
+                        <div class="text"><a href="/members/login">LOGIN</a></div>
+                        <div class="text"><a href="/members/register">REGISTER</a></div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -51,8 +58,56 @@
 
     <nav class="navbar">
         <div class="container">
+            
+            <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
+            <nav class="pushmenu pushmenu-left">
+
+                @if($customer)
+                <div class="space1"></div>
+                <span>BROWSE</span>
+                <ul class="links">
+                    <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">HOME</a> </li>
+                    <li class="nav-ext"> <a href="/product">PRODUCTS</a> </li>
+                    <li class="nav-ext"> <a href="/about">COMPANY</a> </li>
+                    <li class="nav-ext"> <a href="/testimony">TESTIMONIALS</a> </li>
+                    <li class="nav-ext"> <a href="/policy">POLICIES</a> </li>
+                    <li class="nav-ext"> <a href="/contact">CONTACT US</a> </li>
+                </ul>
+                
+                <div class="space2"></div>
+                <span>MEMBERS AREA</span>
+                <ul class="links">
+                    <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">DASHBOARD</a> </li>
+                    <li> <a href="/members/profile">PROFILE</a> </li>
+                    @if($mlm_member)
+                    <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary">GENEALOGY</a> </li>
+                    <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">REPORTS</a> </li>
+                    <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
+                        @if($customer)
+                            <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                        @endif
+                    @else
+                    @endif
+                </ul>
+                @else
+                    <div class="space1"></div>
+                    <span>BROWSE</span>
+                    <ul class="links">
+                        <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">HOME</a> </li>
+                        <li class="nav-ext"> <a href="/product">PRODUCTS</a> </li>
+                        <li class="nav-ext"> <a href="/about">COMPANY</a> </li>
+                        <li class="nav-ext"> <a href="/testimony">TESTIMONIALS</a> </li>
+                        <li class="nav-ext"> <a href="/policy">POLICIES</a> </li>
+                        <li class="nav-ext"> <a href="/contact">CONTACT US</a> </li>
+                    </ul>
+                @endif
+            </nav>
+
+            <a class="navbar-brand" href="#">
+                <img src="{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : '/themes/' . $shop_theme . '/assets/front/img/small-logo.png' }}">
+            </a>
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
+            <!-- <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -62,16 +117,16 @@
                 <a class="navbar-brand" href="#">
                     <img src="{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : '/themes/' . $shop_theme . '/assets/front/img/small-logo.png' }}">
                 </a>
-            </div>
+            </div> -->
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="{{ Request::segment(1) == '' ? 'active' : '' }}"><a href="#">HOME</a></li>
-                    <li class="{{ Request::segment(1) == 'product' ? 'active' : '' }}"><a href="#">PRODUCTS</a></li>
-                    <li class="{{ Request::segment(1) == 'about' ? 'active' : '' }}"><a href="#">COMPANY</a></li>
-                    <li class="{{ Request::segment(1) == 'testimony' ? 'active' : '' }}"><a href="#">TESTIMONIALS</a></li>
-                    <li class="{{ Request::segment(1) == 'policy' ? 'active' : '' }}"><a href="#">POLICIES</a></li>
-                    <li class="{{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="#">CONTACT US</a></li>
+                    <li class="{{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
+                    <li class="{{ Request::segment(1) == 'product' ? 'active' : '' }}"><a href="/product">PRODUCTS</a></li>
+                    <li class="{{ Request::segment(1) == 'about' ? 'active' : '' }}"><a href="/about">COMPANY</a></li>
+                    <li class="{{ Request::segment(1) == 'testimony' ? 'active' : '' }}"><a href="/testimony">TESTIMONIALS</a></li>
+                    <li class="{{ Request::segment(1) == 'policy' ? 'active' : '' }}"><a href="/policy">POLICIES</a></li>
+                    <li class="{{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -116,7 +171,6 @@
     </footer>
     
     @include("frontend.gfoot")
-
     {{-- GLOBALS --}}
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     

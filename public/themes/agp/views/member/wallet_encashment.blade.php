@@ -1,28 +1,28 @@
 @extends("member.member_layout")
 @section("member_content")
-<div class="wallet-encashment" style="overflow: hidden;">
+<div class="wallet-encashment">
 	<div class="main-member-header clearfix">
-		<div class="animated fadeInLeft left">
+		<div class="left">
 			<div class="icon">
 				<img src="/themes/{{ $shop_theme }}/img/wallet-encashment.png">
 			</div>
 			<div class="text">
 				<div class="name">
-					<div>Wallet Encashment</div>
+					<div>Wallet Payout</div>
 				</div>
 				<div class="sub">In this tab you can request/view encashment history. </div>
 			</div>
 		</div>
-		<div class="animated fadeInRight right">
+		<div class="right">
 			<div class="text-right">
-				<button onclick="action_load_link_to_modal('/members/payout-setting', 'lg')" type="button" class="btn btn-gear"><i class="fa fa-bank"></i> PAYOUT SETTINGS</button>
+				<!-- <button type="button" class="btn btn-default"><i class="fa fa-bank"></i> PAYOUT METHOD</button> -->
+				<button onclick="action_load_link_to_modal('/members/request-payout','md')" type="button" class="btn btn-primary"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button>
 			</div>
 		</div>
 	</div>
-	<div class="animated fadeInUp wallet-encashment-content">
+	<div class="wallet-encashment-content">
 		<div class="title">
 			Encashment History
-
 		</div>
 		<div class="table-holder table-responsive">
 			<table class="table table-striped">
@@ -32,33 +32,27 @@
 						<th class="text-center">SLOT</th>
 						<th class="text-center" width="100px">Method</th>
 						<th class="text-center" width="200px">Status</th>
-						<th class="text-right" width="180px">Amount</th>
+						<th class="text-right" width="180px">Take Home</th>
 						<th class="text-right" width="150px">Tax</th>
 						<th class="text-right" width="150px">Fee</th>
 						<th class="text-right" width="180px">Sub Total</th>
 					</tr>
 				</thead>
 				<tbody>
-					@if(count($_encashment) > 0)
-						@foreach($_encashment as $encashment)
-						<tr>
-							<td class="text-left">{{ $encashment->display_date }}</td>
-			  				<td class="text-center">
-			  					<div>{{ $encashment->slot_no }}</div>
-			  				</td>
-							<td class="text-center">{!! $encashment->log !!}</td>
-							<td class="text-center"><b>{{ $encashment->wallet_log_payout_status }}</b></td>
-							<td class="text-right"><b>{!! $encashment->display_wallet_log_request !!}</b></td>
-							<td class="text-right">{!! $encashment->display_wallet_log_tax !!}</td>
-							<td class="text-right">{!! $encashment->display_wallet_log_service_charge !!}</td>
-							<td class="text-right"><a href='javascript:'><b>{!! $encashment->display_wallet_log_amount !!}</b></a></td>
-						</tr>
-						@endforeach
-					@else
-						<tr>
-							<td class="text-center" style="padding: 50px;" colspan="8">NO PAYOUT RELEASE YET</td>
-						</tr>
-					@endif
+					@foreach($_encashment as $encashment)
+					<tr>
+						<td class="text-left">{{ $encashment->display_date }}</td>
+		  				<td class="text-center">
+		  					<div>{{ $encashment->slot_no }}</div>
+		  				</td>
+						<td class="text-center">{!! $encashment->wallet_log_plan !!}</td>
+						<td class="text-center"><b>{{ $encashment->wallet_log_payout_status }}</b></td>
+						<td class="text-right"><b>{!! $encashment->display_wallet_log_request !!}</b></td>
+						<td class="text-right">{!! $encashment->display_wallet_log_tax !!}</td>
+						<td class="text-right">{!! $encashment->display_wallet_log_service_charge !!}</td>
+						<td class="text-right"><a href='javascript:'><b>{!! $encashment->display_wallet_log_amount !!}</b></a></td>
+					</tr>
+					@endforeach
 				</tbody>
 				<tfoot style="background-color: #f3f3f3; font-size: 15px;">
 					<tr>
@@ -73,11 +67,17 @@
 					</tr>
 				</tfoot>
 			</table>
+		  	<div class="clearfix">
+			  	<div class="pull-right">
+			  		{!! session('payout_paginate') !!}
+			  	</div>
+		  	</div>
 		</div>
+
 	</div>
 </div>
 
-<!-- MANUAL PLACING OF SLOT -->
+
 <div class="popup-wallet-encashment">
     <div id="wallet-encashmnet-modal" class="modal fade">
         <div class="modal-md modal-dialog">
@@ -130,7 +130,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-default btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
 					<button class="btn btn-primary btn-custom-primary" type="button"><i class="fa fa-check"></i> Request Payout</button>
 				</div>
               </div>

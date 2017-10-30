@@ -41,4 +41,10 @@ class ShopPartnersController extends Shop
         }
 
     }
+
+    public function partners_views()
+    {
+        $data["page"] = "Partners Views";
+        return view("partners_views", $data);
+    }
 }

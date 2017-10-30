@@ -107,8 +107,10 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 	/* Others */
 	Route::get('/partners', 'Shop\ShopPartnersController@index');
+	Route::get('/partners_views', 'Shop\ShopPartnersController@partners_views');
 	Route::get('/partner-filtering-location', 'Shop\ShopPartnersController@partnerFilterByLocation');
 	Route::get('/legalities', 'Shop\ShopLegalitiesController@index');
+
 
 	Route::get('/manual_checkout', 'Shop\ShopManualCheckout@index');
 	Route::post('/manual_checkout', 'Shop\ShopManualCheckout@submit_proof');

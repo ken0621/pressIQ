@@ -135,7 +135,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
-            <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR PARTNERS</a></li>
+            <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
             <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li>
             <li class="nav-border"><a href="http://tour.philtechglobalinc.com">AIRLINE TICKETING</a></li>
             <li class="nav-border"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">TRAVEL AND TOURS</a></li> 

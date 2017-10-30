@@ -207,15 +207,20 @@ class Payroll_BioImportController extends Member
 					/* Get Tbl payroll time sheet data  */
 					$timesheet_db 	= Payroll2::timesheet_info_db($check_employee->payroll_employee_id, $date);
 
-					
-
 					/*Get Shift Code id*/
 					$shift_code_id 	= Tbl_payroll_employee_basic::where("payroll_employee_id", $check_employee->payroll_employee_id)->value("shift_code_id");
 					
+					/* Fail Import if timesheet is already approve by time keeper */
+					if ($timesheet_db->time_keeping_approved == 1) 
+					{
+						$_time_record[$date][$employee_number]['status'] 		 = "<div class='text-danger'>FAILED, TIMESHEET WAS ALREADY APPROVED.</div>";
+						$_time_record[$date][$employee_number]['biometric_name'] = $biometric_name;
+						$_time_record[$date][$employee_number]['company_name']   = "";
 						
-					
+						$failed++;
+					}
 					/* CREATE TIMESHEET DB IF EMPTY */
-					if(!$timesheet_db)
+					else if(!$timesheet_db)
 					{
 						$_shift_real 	=  Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $date);
 						$_shift 		=  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $date));
@@ -251,7 +256,7 @@ class Payroll_BioImportController extends Member
 					else
 					{
 						// dd($_time_record["2017-10-09"]);
-						$status = "INSERTED";
+						$status = "<div class='text-success'>INSERTED</div>";
 						$_time_sheet_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->get();
 						
 						/*check if import time will be conflicted in database time sheet record*/
@@ -260,25 +265,20 @@ class Payroll_BioImportController extends Member
 							$time_in_record = $time_sheet_record->payroll_time_sheet_in;
 							$time_out_record = $time_sheet_record->payroll_time_sheet_out;
 
-							if(($time_in_record > $value["time_in"] && $value["time_outn"] < $time_out_record) 
-							|| ($time_in_record > $value["time_in"] && $value["time_out"] < $time_out_record)
-							|| ($time_in_record == $value["time_in"] && $value["time_out"] == $time_out_record)) 
+							if(($time_in_record > $value["time_in"] && $value["time_out"]  < $time_out_record)
+							|| ($time_in_record > $value["time_in"] && $value["time_out"]  < $time_out_record) 
+							|| ($time_in_record == $value["time_in"])
+							|| ($time_out_record == $value["time_out"]))
 							{
-								
 								Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id',$time_sheet_record->payroll_time_sheet_record_id)->delete();
 								$overwritten++;
-								$status = 'OVERWRITTEN';
+								$status = "<div class='text-primary'>OVERWRITTEN</div>";
 							}
-
-							// dd($value["time_in"]." ".$value["time_out"]);
-							// dd($time_sheet_record->payroll_time_sheet_in.' '.$time_sheet_record->payroll_time_sheet_out);
 						}
-
-						if ($status != 'OVERWRITTEN') 
+						if ($status != "<div class='text-primary'>OVERWRITTEN</div>") 
 						{
 							$success++;
 						}
-						
 						
 						$update = null;
 						$update['payroll_time_sheet_id'] 		= $timesheet_db->payroll_time_sheet_id;
@@ -301,7 +301,7 @@ class Payroll_BioImportController extends Member
 				}
 				else
 				{
-					$_time_record[$date][$employee_number]['status'] = 'FAILED WRONG EMPLOYEE NO.';
+					$_time_record[$date][$employee_number]['status'] = "<div class='text-danger'>FAILED WRONG EMPLOYEE NO.</div>";
 					$_time_record[$date][$employee_number]['biometric_name'] = $biometric_name;
 					$_time_record[$date][$employee_number]['company_name'] = "";
 					
@@ -1284,13 +1284,13 @@ class Payroll_BioImportController extends Member
     	{
     	 foreach ($_time as $key => $time) 
     	 {
-
+    	 	// dd($time);
     	 	if ($time['date'] != null && $time['in_1'] != null && $time['out_1'] != null && $time['employee_no'] != null) 
     	 	{
     	 		$employee_number = $time["employee_no"];
     	 		$time_in  = "";
     	 		$time_out = "";
-    	 
+    	 		$date = null;
 			 	if (is_object($time["date"])) 
     	 		{
     	 			$date = date('Y-m-d', strtotime($time['date']->toDateTimeString()));
@@ -1299,34 +1299,21 @@ class Payroll_BioImportController extends Member
     	 		{
     	 			$date = date('Y-m-d', strtotime($time['date']));
     	 		}
-    	 		if (is_object($time["in_1"]) || is_object($time["in_2"])) 
-    	 		{
-    	 			$_record[$date][$employee_number]['time_in']	= date('H:i:s', strtotime($time["in_1"]->toDateTimeString()));
-    	 			$_record[$date][$employee_number]['time_out']	= date('H:i:s', strtotime($time["out_1"]->toDateTimeString()));
-    	 		}
-    	 		else
-    	 		{
-    	 			$_record[$date][$employee_number]['time_in']	= date('H:i:s', strtotime($time["in_1"]));
-    	 			$_record[$date][$employee_number]['time_out']	= date('H:i:s', strtotime($time["out_1"]));
-    	 		}
 
-    	 		/*$column_in_out = array('in_1','in_2','in_3','in_4','in_5','in_6','out_1','out_2','out_3','out_4','out_5','out_6');
+    	 		$column_in_out = array('in_1','in_2','in_3','in_4','in_5','in_6','out_1','out_2','out_3','out_4','out_5','out_6');
+    			
     			foreach ($time as $key => $value) 
     			{
-					if (in_array($key, $column_in_out)) 
+					if (in_array($key, $column_in_out) && $value != null) 
 					{
 						$time_record = null;			
 						if (is_object($value)) 
 						{
 							$time_record = date('H:i:s', strtotime($value->toDateTimeString())); 
-							$time_records[] = $time_records;
-
 						}
 						else
 						{
 							$time_record = date('H:i:s', strtotime($value)); 
-
-							$time_records[] = $time_records;
 						}
 
 						if (!isset($_record[$date][$employee_number]['time_in'])) 
@@ -1334,7 +1321,7 @@ class Payroll_BioImportController extends Member
 							
 							$_record[$date][$employee_number]['time_in']   = $time_record;
 
- 							$_record[$date][$employee_number]['time_out']  = $time_record;
+								$_record[$date][$employee_number]['time_out']  = $time_record;
 						}
 						else
 						{
@@ -1348,16 +1335,12 @@ class Payroll_BioImportController extends Member
 							}
 						}
 					}
-
-    			}*/
-    			
-    		
+    			}
     	 	}
     	 	else
     	 	{
     	 		$incomplete++;
     	 	}
-
     	 }
     	
     	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "Mustard Seed");

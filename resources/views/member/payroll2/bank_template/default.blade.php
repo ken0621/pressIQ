@@ -55,8 +55,9 @@
 		<td style="border: 1px solid #000;">Amount</td>
 	</tr>
 	<?php $total = 0; ?>
+	
 	@foreach($_employee as $employee)
-	<?php $total += $employee->net_pay; ?>
+	<?php $total += number_format((float)$employee->net_pay, 2, '.', ''); ?>
 	<tr style="font-size: 12px;">	
 		<td style="border: 1px solid #000;">{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }} {{ $employee->payroll_employee_last_name }}</td>
 		<td style="border: 1px solid #000; text-align: right;">{{ $employee->payroll_employee_atm_number }}</td>

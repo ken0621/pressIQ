@@ -6462,8 +6462,6 @@ class Payroll2
 				$restday_total 		 			+=	$restday;
 			}
 
-
-
 			if (isset($employee["cutoff_breakdown"]->_breakdown )) 
 			{
 				# code...

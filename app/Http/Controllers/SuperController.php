@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_admin;
+use App\Models\Tbl_user;
 use Crypt;
 
 class SuperController extends Controller
@@ -108,13 +109,25 @@ class SuperController extends Controller
 
         foreach($_shop as $key => $shop)
         {
-            $_shop[$key]->shop_name = strtoupper($shop->shop_key);
-            $_shop[$key]->domain = ($shop->shop_domain == "unset_yet" ? "<span style='color: gray;'>no url set yet</span>" : $shop->shop_domain);
+            $_shop[$key]->shop_name     = strtoupper($shop->shop_key);
+            $_shop[$key]->domain        = ($shop->shop_domain == "unset_yet" ? "<span style='color: gray;'>no url set yet</span>" : $shop->shop_domain);
+            $user_count                 = Tbl_user::where("user_shop", $shop->shop_id)->count();
+            $_shop[$key]->user_count    = "<span style='color: gray;'>" . $user_count . " user(s)" . "</span>";
         }
 
         $data["_shop"] = $_shop;
 
         return view("super.customer", $data);
+    }
+    public function getCustomerEdit()
+    {
+        $data["page"]       = "Customer Edit";
+        $data["shop"]       = Tbl_shop::where('shop_id', request("id"))->first();
+        $data["created"]    = date("m/d/Y", strtotime($data["shop"]->shop_date_created));
+        $data["edited"]     = date("m/d/Y", strtotime($data["shop"]->updated_at));
+        $data["user_count"] = Tbl_user::where("user_shop", $data["shop"]->shop_id)->count();
+
+        return view("super.customer_edit", $data);
     }
     public function getLogout()
     {

@@ -344,3 +344,4 @@ Route::any('member/mlm/developer/popup_slot_created', 'Member\MlmDeveloperContro
 Route::any('member/mlm/developer/popup_earnings', 'Member\MlmDeveloperController@popup_earnings');
 Route::any('member/mlm/developer/distributed_income', 'Member\MlmDeveloperController@distributed_income');
 Route::any('member/mlm/developer/popup_points', 'Member\MlmDeveloperController@popup_points');
+Route::any('member/mlm/developer/change_owner', 'Member\MlmDeveloperController@change_owner');

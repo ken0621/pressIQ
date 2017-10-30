@@ -46,24 +46,24 @@
         <!-- HEADER -->
         <div id="home" class="subheader-container">
             <div class="container">
-                @if($customer)
+                <!-- @if($customer)
                 <div class="left-container">
                     @if(!$mlm_member)
                         <span><i class="fa fa-heart-o" aria-hidden="true"></i></span>
                         <span>BECOME A MEMBER</span>
                     @endif
-                </div>
+                </div> -->
                 <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span><span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
-                @else
+                <!-- @else
                 <div class="left-container">
                     <span><i class="fa fa-heart-o" aria-hidden="true"></i></span>
                     <span>BECOME A MEMBER</span>
-                </div>
+                </div> -->
                 <div class="right-container">
                     <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span>
                     <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span>
                 </div>
-                @endif
+                <!-- @endif -->
             </div>
         </div>
         <div class="header-container">
@@ -110,7 +110,7 @@
                                     <li> <a href="/">HOME</a> </li>
                                     <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
                                     <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
-                                    <li class="nav-ext"> <a class="smoth-scroll" href="/#products">CONTACT US</a> </li>
+                                    <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
                                 </ul>
                             @endif
                         </nav>

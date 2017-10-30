@@ -131,6 +131,10 @@ class Mlm_complan_manager
                     $array['points_log_points']         = $computed_points;
                     $array['original_from_complan']     = "STAIRSTEP_DIRECT";
 
+                    if($old_percentage == null)
+                    {
+                        $old_percentage = 0;
+                    }
                     
                     $slot_logs_id = Mlm_slot_log::slot_log_points_array($array);
 

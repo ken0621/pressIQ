@@ -50,6 +50,7 @@
                                 @foreach($_membership as $membership)
                                 <option {{ $slot_info->slot_membership == $membership->membership_id ? 'selected' : '' }} value="{{ $membership->membership_id }}">{{ $membership->membership_name }}</option>
                                 @endforeach
+                                <option value="delete_slot">DELETE SLOT</option>
                             </select>
                         </div>
                     </div>

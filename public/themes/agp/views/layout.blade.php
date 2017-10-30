@@ -42,6 +42,7 @@
     <link rel="stylesheet" type="text/css" href="resources/assets/slick/slick-theme.css">
     <!-- GLOBAL -->
     <link rel="stylesheet" type="text/css" href="resources/assets/front/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
     <!-- OTHER -->
     @yield('css')
 
@@ -76,7 +77,7 @@
 </head>
 <!-- End of Header -->
 
-<body class="home page page-template-default header_1_body fullwidth_slider_page with_slider_page wpb-js-composer vc_responsive">
+<body class="pushmenu-push home page page-template-default header_1_body fullwidth_slider_page with_slider_page wpb-js-composer vc_responsive">
     <!-- Used for boxed layout -->
     <!-- Start Top Navigation -->
     <div class="top_nav">
@@ -95,7 +96,14 @@
                             <div class="row-fluid social_row">
                                 <div class="span12 account-button">
                                     <ul class="text-center" style="margin-top: 0;">
-                                        <li><a href="/mlm/login">LOG IN</a></li>
+                                        <!-- <li><a href="/mlm/login">LOG IN</a></li> -->
+                                        @if($customer)
+                                            <li><a href="/members/logout">LOGOUT</a></li>
+                                            <li><a href="/members">MY ACCOUNT</a></li>
+                                        @else
+                                            <li><a href="/members/login">LOGIN</a></li>
+                                            <li><a href="/members/register">REGISTER</a></li>
+                                        @endif
                                         <!-- <li><div class="divider">|</div></li> -->
                                         <!-- <li><a href="/mlm/register">SIGN UP</a></li> -->
                                     </ul>
@@ -116,6 +124,50 @@
             <div class="container">
                 <div class="row-fluid">
                     <div class="span12">
+
+                        <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
+                        <nav class="pushmenu pushmenu-left">
+
+                            @if($customer)
+                            <div class="space1"></div>
+                            <span>BROWSE</span>
+                            <ul class="links">
+                                <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">HOME</a> </li>
+                                <li class="nav-ext"> <a href="/product">PRODUCTS</a> </li>
+                                <li class="nav-ext"> <a href="/about">COMPANY</a> </li>
+                                <li class="nav-ext"> <a href="/testimony">TESTIMONIALS</a> </li>
+                                <li class="nav-ext"> <a href="/policy">POLICIES</a> </li>
+                                <li class="nav-ext"> <a href="/contact">CONTACT US</a> </li>
+                            </ul>
+                            
+                            <div class="space2"></div>
+                            <span>MEMBERS AREA</span>
+                            <ul class="links">
+                                <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">DASHBOARD</a> </li>
+                                <li> <a href="/members/profile">PROFILE</a> </li>
+                                @if($mlm_member)
+                                <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary">GENEALOGY</a> </li>
+                                <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">REPORTS</a> </li>
+                                <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
+                                    @if($customer)
+                                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                                    @endif
+                                @else
+                                @endif
+                            </ul>
+                            @else
+                                <div class="space1"></div>
+                                <span>BROWSE</span>
+                                <ul class="links">
+                                     <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">HOME</a> </li>
+                                     <li class="nav-ext"> <a href="/product">PRODUCTS</a> </li>
+                                     <li class="nav-ext"> <a href="/about">COMPANY</a> </li>
+                                     <li class="nav-ext"> <a href="/testimony">TESTIMONIALS</a> </li>
+                                     <li class="nav-ext"> <a href="/policy">POLICIES</a> </li>
+                                     <li class="nav-ext"> <a href="/contact">CONTACT US</a> </li>
+                                </ul>
+                            @endif
+                        </nav>
                         <!-- Logo -->
                         <div id="logo" class="">
                             <a href='/'><img style="max-height: 100%; max-width: 100%; object-fit: contain;" src='{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : 'assets/front/img/small-logo.png' }}' alt='' /></a>
@@ -151,7 +203,7 @@
                         </div>
                         <!-- #navigation -->
                         <!-- End custom menu here -->
-                        <a href="javascript:" class="mobile_small_menu open"></a>
+                        <!-- <a href="javascript:" class="mobile_small_menu open"></a> -->
                     </div>
                 </div>
             </div>
@@ -207,7 +259,6 @@
         </div>
     </footer>
     
-    
     <script type='text/javascript' src='resources/assets/ausart/assets/js/jquery.hoverex.js'></script>
     <script type='text/javascript' src='resources/assets/ausart/assets/js/imagesloaded.pkgd.min.js'></script>
     <script type='text/javascript' src='resources/assets/ausart/assets/js/jquery.parallax.js'></script>
@@ -228,6 +279,9 @@
     <!-- EXTERNAL JS -->
     <script type="text/javascript" src="resources/assets/external/matchheight.js"></script>
     <script type="text/javascript" src="resources/assets/slick/slick.min.js"></script>
+
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     <!-- EXECUTE JS -->
     <script type="text/javascript">
     ;(function($){

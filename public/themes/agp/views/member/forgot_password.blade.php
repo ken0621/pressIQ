@@ -16,6 +16,7 @@
 							<div class="register-form">
 								<div class="form-group">
 										<div class="choice">
+
 											<h2 class ="h2-Forgot">Forgot Password</h2>
 											<h2 class="h2-Lost">Lost Password</h2>
 											<p class="p-Follow">Follow these simple steps to reset your password</p>
@@ -35,11 +36,12 @@
 												@endif
 											</div>
 											<div class="register-label">EMAIL</div>
+
 											<div class="form-input">
-												<input class="form-control input-sm" type="email" name="email" placeholder="Type Your Email Here" value="">
+												<input class="form-control input-sm" type="email" name="email" placeholder="Type Your Email Here">
 											</div>
 										<div class="holder">
-											<button class="btn btn-brown" type="submit">Get New Password</button>
+											<button type="submit" class="btn btn-brown">Get New Password</button>
 										</div>
 									</div>
 								</div>
@@ -53,6 +55,15 @@
 </div>
 @endsection
 @section("script")
+<!-- <script type="text/javascript">
+	function submit_done(data)
+	{
+		type = data.status;
+		html_data = '<div class="alert alert-'+type+'">'+
+			data.status_message
+			+'</div>';
+	}
+</script> -->
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/forgot_password.css">

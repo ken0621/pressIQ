@@ -1,4 +1,4 @@
-$content-text: 'Arimo', sans-serif;
+$content-text: 'Lato', sans-serif;
 $light: 300;
 $regular: 400;
 $medium: 500;
@@ -77,7 +77,7 @@ body
 		{
 			color: $text-dark;
 			font-size: 20px;
-			font-weight: $medium;
+			font-weight: $bold;
 			padding: 15px 0;
 			@media screen and (max-width: 581px)
 			{
@@ -202,13 +202,13 @@ body
 			{
 				color: $text-dark;
 				font-size: 13px;
-				font-weight: $medium;
+				font-weight: $bold;
 			}
 			.radio-inline
 			{
 				color: $text-dark;
 				font-size: 13px;
-				font-weight: $medium;
+				font-weight: $bold;
 				margin-right: 25px;
 				input
 				{
@@ -265,7 +265,7 @@ body
 				}
 				span
 				{
-					color: #693d28;
+					color: #75A04B;
 				}
 			}
 			.choice
@@ -286,7 +286,7 @@ body
 					a {
 						color: $text-dark !important;
 						font-weight: $regular;
-						color: #422311 !important;
+						color: #75A04B !important;
 						font-size: 15px !important;
 					}
 					.btn-brown 
@@ -297,7 +297,7 @@ body
 						}
 						&:hover 
 						{
-							background-color: #613922;
+							background-color: #75A04B;
 						}
 					}
 				}
@@ -314,9 +314,9 @@ body
 				}
 				.login-href
 				{
-					color: #693d28;
+					color: #75A04B;
 					font-size: 13px;
-					font-weight: $medium;
+					font-weight: $bold;
 					@media screen and (max-width: 991px)
 					{
 						display: block;
@@ -331,10 +331,10 @@ body
 {
 	.modal-header
 	{
-		background-color: #693d28;
+		background-color: #75A04B;
 		color: #fff;
 		font-size: 13px;
-		font-weight: $medium;
+		font-weight: $bold;
 	}
 	.modal-body
 	{
@@ -366,11 +366,11 @@ body
 		}
 		.btn-semi
 		{
-			background-color: #693d28;
+			background-color: #75A04B;
 		}
 		.btn-pure
 		{
-			background-color: #462211;
+			background-color: #75A04B;
 		}
 	}
 }

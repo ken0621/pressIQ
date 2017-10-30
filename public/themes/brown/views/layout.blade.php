@@ -408,7 +408,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container figues">
         <div class="copyright">
             <div class="clearfix">
                 <div class="copy">&copy; 2017 BROWN&PROUD. All Right Reserved.</div>

@@ -104,4 +104,10 @@
 @endsection
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/wallet_logs.css">
+<style type="text/css">
+body
+{
+	overflow-x: hidden;
+}
+</style>
 @endsection

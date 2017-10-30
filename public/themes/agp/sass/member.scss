@@ -81,6 +81,7 @@
 			{
 				display: none;
 			}
+			
 			.shadow
 			{
 				position: absolute;
@@ -89,12 +90,14 @@
 				width: 12px;
 				z-index: 11;
 			}
+
 			.profile-holder
 			{
 				width: 300px;
 				overflow: hidden;
 				transition: 0.3s all ease;
 			}
+
 			.profile
 			{
 				text-align: center;
@@ -103,6 +106,7 @@
 				width: 283px;
 				text-align: left;
 				margin-left: 12.5px;
+
 				.img
 				{
 					width: 50px;
@@ -117,6 +121,7 @@
 						height: 50px;
 					}
 				}
+
 				.text
 				{
 					display: inline-block;
@@ -124,12 +129,14 @@
 					text-align: left;
 					margin-left: 15px;
 					width: 200px;
+
 					.name
 					{
 						color: #fff;
 						font-size: 14px;
 						font-weight: 500;
 					}
+
 					.sub
 					{
 						font-size: 13px;
@@ -140,14 +147,17 @@
 			.side-nav
 			{
 				transition: 0.3s all ease;
+
 				ul
 				{
 					margin: 0;
 					padding: 0;
+
 					li
 					{
 						display: block;
 						position: relative;
+
 						a
 						{
 							display: block;
@@ -163,7 +173,7 @@
 								font-size: 13px;
 								font-weight: 400;
 								letter-spacing: 0.5px;
-								border-bottom: 1px solid rgba(255,255,255,0.2);
+								//border-bottom: 1px solid rgba(255,255,255,0.2);
 								padding-left: 25px;
 								width: 300px;
 								transition: 0.3s all ease;
@@ -175,7 +185,6 @@
 									vertical-align: top;
 									width: 20px;
 									margin-right: 15px;
-
 									text-align: center;
 									font-size: 18px;
 									color: #dac5a6;
@@ -195,9 +204,11 @@
 									text-decoration: none;
 									border-color: rgba(255,255,255,0.2);
 									
-									.icon {
+									.icon 
+									{
 										color: #fff;
 									}
+
 									img
 									{
 										-webkit-filter: brightness(2);

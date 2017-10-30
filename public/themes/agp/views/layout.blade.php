@@ -42,6 +42,7 @@
     <link rel="stylesheet" type="text/css" href="resources/assets/slick/slick-theme.css">
     <!-- GLOBAL -->
     <link rel="stylesheet" type="text/css" href="resources/assets/front/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
     <!-- OTHER -->
     @yield('css')
 
@@ -76,7 +77,7 @@
 </head>
 <!-- End of Header -->
 
-<body class="home page page-template-default header_1_body fullwidth_slider_page with_slider_page wpb-js-composer vc_responsive">
+<body class="pushmenu-push home page page-template-default header_1_body fullwidth_slider_page with_slider_page wpb-js-composer vc_responsive">
     <!-- Used for boxed layout -->
     <!-- Start Top Navigation -->
     <div class="top_nav">
@@ -123,6 +124,48 @@
             <div class="container">
                 <div class="row-fluid">
                     <div class="span12">
+
+                        <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
+                                    <nav class="pushmenu pushmenu-left">
+
+                                        @if($customer)
+                                        <div class="space1"></div>
+                                        <span>BROWSE</span>
+                                        <ul class="links">
+                                            <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">HOME</a> </li>
+                                            <li class="nav-ext"> <a class="smoth-scroll" href="/product">PRODUCTS</a> </li>
+                                            <li class="nav-ext"> <a class="smoth-scroll" href="/about">COMPANY</a> </li>
+                                            <li class="nav-ext"> <a class="smoth-scroll" href="/testimony">TESTIMONIALS</a> </li>
+                                            <li class="nav-ext"> <a class="smoth-scroll" href="/policy">POLICIES</a> </li>
+                                            <li class="nav-ext"> <a class="smoth-scroll" href="/contact">CONTACT US</a> </li>
+                                        </ul>
+                                        
+                                        <div class="space2"></div>
+                                        <span>MEMBERS AREA</span>
+                                        <ul class="links">
+                                            <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">DASHBOARD</a> </li>
+                                            <li> <a href="/members/profile">PROFILE</a> </li>
+                                            @if($mlm_member)
+                                            <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary">GENEALOGY</a> </li>
+                                            <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">REPORTS</a> </li>
+                                            <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
+                                                @if($customer)
+                                                    <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                                                @endif
+                                            @else
+                                            @endif
+                                        </ul>
+                                        @else
+                                            <div class="space1"></div>
+                                            <span>BROWSE</span>
+                                            <ul class="links">
+                                                <li> <a href="/">HOME</a> </li>
+                                                <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
+                                                <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
+                                                <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
+                                            </ul>
+                                        @endif
+                                    </nav>
                         <!-- Logo -->
                         <div id="logo" class="">
                             <a href='/'><img style="max-height: 100%; max-width: 100%; object-fit: contain;" src='{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : 'assets/front/img/small-logo.png' }}' alt='' /></a>
@@ -214,7 +257,6 @@
         </div>
     </footer>
     
-    
     <script type='text/javascript' src='resources/assets/ausart/assets/js/jquery.hoverex.js'></script>
     <script type='text/javascript' src='resources/assets/ausart/assets/js/imagesloaded.pkgd.min.js'></script>
     <script type='text/javascript' src='resources/assets/ausart/assets/js/jquery.parallax.js'></script>
@@ -235,6 +277,9 @@
     <!-- EXTERNAL JS -->
     <script type="text/javascript" src="resources/assets/external/matchheight.js"></script>
     <script type="text/javascript" src="resources/assets/slick/slick.min.js"></script>
+
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     <!-- EXECUTE JS -->
     <script type="text/javascript">
     ;(function($){

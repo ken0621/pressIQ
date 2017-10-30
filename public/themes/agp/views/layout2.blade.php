@@ -39,7 +39,7 @@
     <div class="top-header">
         <div class="container">
             <div class="clearfix">
-                <div class="pull-left">
+                <div class="pull-left remove-mobile">
                     <div class="text">{{ get_content($shop_theme_info, "header", "header_call_label") }}: {{ get_content($shop_theme_info, "header", "header_call_number") }}</div> 
                     <div class="text">{{ get_content($shop_theme_info, "header", "header_email_label") }}: {{ get_content($shop_theme_info, "header", "header_email_address") }}</div>
                 </div>
@@ -58,8 +58,54 @@
 
     <nav class="navbar">
         <div class="container">
+            
+            <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
+            <nav class="pushmenu pushmenu-left">
+
+                @if($customer)
+                <div class="space1"></div>
+                <span>BROWSE</span>
+                <ul class="links">
+                    <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">HOME</a> </li>
+                    <li class="nav-ext"> <a class="smoth-scroll" href="/product">PRODUCTS</a> </li>
+                    <li class="nav-ext"> <a class="smoth-scroll" href="/about">COMPANY</a> </li>
+                    <li class="nav-ext"> <a class="smoth-scroll" href="/testimony">TESTIMONIALS</a> </li>
+                    <li class="nav-ext"> <a class="smoth-scroll" href="/policy">POLICIES</a> </li>
+                    <li class="nav-ext"> <a class="smoth-scroll" href="/contact">CONTACT US</a> </li>
+                </ul>
+                
+                <div class="space2"></div>
+                <span>MEMBERS AREA</span>
+                <ul class="links">
+                    <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">DASHBOARD</a> </li>
+                    <li> <a href="/members/profile">PROFILE</a> </li>
+                    @if($mlm_member)
+                    <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary">GENEALOGY</a> </li>
+                    <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">REPORTS</a> </li>
+                    <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
+                        @if($customer)
+                            <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                        @endif
+                    @else
+                    @endif
+                </ul>
+                @else
+                    <div class="space1"></div>
+                    <span>BROWSE</span>
+                    <ul class="links">
+                        <li> <a href="/">HOME</a> </li>
+                        <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
+                        <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
+                        <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
+                    </ul>
+                @endif
+            </nav>
+
+            <a class="navbar-brand" href="#">
+                <img src="{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : '/themes/' . $shop_theme . '/assets/front/img/small-logo.png' }}">
+            </a>
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
+            <!-- <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -69,7 +115,7 @@
                 <a class="navbar-brand" href="#">
                     <img src="{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : '/themes/' . $shop_theme . '/assets/front/img/small-logo.png' }}">
                 </a>
-            </div>
+            </div> -->
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">

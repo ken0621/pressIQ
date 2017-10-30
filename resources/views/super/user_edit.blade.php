@@ -108,6 +108,7 @@
             <div class="list-block">
                <ul>
                   <li><a href="" class="item-link list-button">Archive</a></li>
+                  <li><a href="" class="item-link list-button">Force Login</a></li>
                </ul>
             </div>
             <p style="text-align: right; display: none"><button class="button-for-register-1" type="submit">Update</button></p>

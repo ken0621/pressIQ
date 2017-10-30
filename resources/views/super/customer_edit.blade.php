@@ -93,7 +93,7 @@
             <div class="list-block">
                <ul>
                   <li><a href="" class="item-link list-button">Archive</a></li>
-                  <li><a href="" class="item-link list-button">View Users ({{ $user_count }})</a></li>
+                  <li><a href="/super/user?shop_id={{ $shop_id }}" class="item-link list-button">View Users ({{ $user_count }})</a></li>
                </ul>
             </div>
 

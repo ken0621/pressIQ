@@ -8,13 +8,18 @@
          </a>
       </div>
       <div class="center sliding">{{ $page }}</div>
+      <div class="right">
+         <a href="#" class="back link">
+            <span>Add</span>
+         </a>
+      </div>
    </div>
 </div>
 <div class="pages">
    <div data-page="customer-list" class="page">
       <form data-search-list=".customer-list-search" data-search-in=".item-title" class="searchbar searchbar-init">
          <div class="searchbar-input">
-            <input type="search" placeholder="Search Customer of {{ $page }}">
+            <input type="search" placeholder="Search User of {{ $page }}">
             <a href="#" class="searchbar-clear"></a>
             </div><a href="#" class="searchbar-cancel">Cancel</a>
          </form>
@@ -34,6 +39,7 @@
                               <div class="item-title">{!! $user->user_first_name !!} {!! $user->user_last_name !!}</div>
                            </div>
                            <div class="item-subtitle">{{ $user->user_email }}</div>
+                           <div style="color: gray;" class="item-subtitle">{{ $user->position_name }}</div>
                         </div>
                      </a>
                   </li>

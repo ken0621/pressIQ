@@ -67,11 +67,11 @@
                 <span>BROWSE</span>
                 <ul class="links">
                     <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">HOME</a> </li>
-                    <li class="nav-ext"> <a class="smoth-scroll" href="/product">PRODUCTS</a> </li>
-                    <li class="nav-ext"> <a class="smoth-scroll" href="/about">COMPANY</a> </li>
-                    <li class="nav-ext"> <a class="smoth-scroll" href="/testimony">TESTIMONIALS</a> </li>
-                    <li class="nav-ext"> <a class="smoth-scroll" href="/policy">POLICIES</a> </li>
-                    <li class="nav-ext"> <a class="smoth-scroll" href="/contact">CONTACT US</a> </li>
+                    <li class="nav-ext"> <a href="/product">PRODUCTS</a> </li>
+                    <li class="nav-ext"> <a href="/about">COMPANY</a> </li>
+                    <li class="nav-ext"> <a href="/testimony">TESTIMONIALS</a> </li>
+                    <li class="nav-ext"> <a href="/policy">POLICIES</a> </li>
+                    <li class="nav-ext"> <a href="/contact">CONTACT US</a> </li>
                 </ul>
                 
                 <div class="space2"></div>
@@ -94,11 +94,11 @@
                     <span>BROWSE</span>
                     <ul class="links">
                         <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">HOME</a> </li>
-                        <li class="nav-ext"> <a class="smoth-scroll" href="/product">PRODUCTS</a> </li>
-                        <li class="nav-ext"> <a class="smoth-scroll" href="/about">COMPANY</a> </li>
-                        <li class="nav-ext"> <a class="smoth-scroll" href="/testimony">TESTIMONIALS</a> </li>
-                        <li class="nav-ext"> <a class="smoth-scroll" href="/policy">POLICIES</a> </li>
-                        <li class="nav-ext"> <a class="smoth-scroll" href="/contact">CONTACT US</a> </li>
+                        <li class="nav-ext"> <a href="/product">PRODUCTS</a> </li>
+                        <li class="nav-ext"> <a href="/about">COMPANY</a> </li>
+                        <li class="nav-ext"> <a href="/testimony">TESTIMONIALS</a> </li>
+                        <li class="nav-ext"> <a href="/policy">POLICIES</a> </li>
+                        <li class="nav-ext"> <a href="/contact">CONTACT US</a> </li>
                     </ul>
                 @endif
             </nav>

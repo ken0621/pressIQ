@@ -1,3 +1,9 @@
+.table_archive_email
+{
+    width:50%;
+    height:50%;
+}
+
 #input_title_create {
     margin-top: 0px;
     margin-right: 20px;
@@ -162,10 +168,10 @@
 
 .recipient_container
 {
-    position: absolute !important;
-    left: 745px !important;
-    top: 258px;
-    height:500px;
+    width: 617px!important;
+    padding-top: 25px;
+    margin-left: -10px!important;
+    height: 575px;
 }
 
 .label-choose-recipient

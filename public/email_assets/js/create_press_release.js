@@ -12,9 +12,7 @@ $(document).ready(function(){
 		     success: function(response){
 		         if(response == 'success')
 		         {
-		         	/*$('#myModal_email').modal('hide');*/
-		         	/*$('.from_email').val('');
-		         	$('.to_email').val('');*/
+		         	$('.title_email').val('');
               $('.title').val('');
 		         	$('.subject_email').val('');
 		         	tinymce.get('texteditor').setContent('');
@@ -28,7 +26,8 @@ $(document).ready(function(){
 });
 
   $('.inputsubmit').click(function(e)
-  {		
+  {
+    $('#RecipientModal').modal('show');		
 
 
 		var country = $('#country').val();
@@ -52,7 +51,7 @@ $(document).ready(function(){
 
 });
 
-  var global_recipient_id = null;
+var global_recipient_id = null;
 $(document).ready(function(){
   $('#get_data_tinymce1').submit(function(e){
     var ajaxdata = $("._token1").val();

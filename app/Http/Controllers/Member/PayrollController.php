@@ -1649,7 +1649,7 @@ class PayrollController extends Member
           $id                                               = Request::input('id');
           $new_data = AuditTrail::get_table_data("tbl_payroll_employee_salary","payroll_employee_salary_id",$id);
           Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$id)->update($update);
-          AuditTrail::record_logs("DELETED: Payroll Employee Salary","Updating Payroll Employee with ID #".$id,$id,"",serialize($new_data));
+          // AuditTrail::record_logs("DELETED: Payroll Employee Salary","Updating Payroll Employee with ID #".$id,$id,"",serialize($new_data));
 
           $return['status']             = 'success';
           $return['function_name']      = 'employeelist.reload_salary_list';

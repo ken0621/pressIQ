@@ -31,12 +31,12 @@
                <ul>
                   @foreach($_shop as $shop)
                   <li>
-                     <a href="#" class="item-link item-content">
+                     <a href="/super/customer-edit?id={{ $shop->shop_id }}" class="item-link item-content">
                         <div class="item-inner">
                            <div class="item-title-row">
                               <div class="item-title">{{ $shop->shop_name }}</div>
                            </div>
-                           <div class="item-subtitle">{!! $shop->domain !!}</div>
+                           <div class="item-subtitle">{!! $shop->user_count !!}</div>
                         </div>
                      </a>
                   </li>

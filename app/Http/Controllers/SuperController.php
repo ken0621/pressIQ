@@ -110,7 +110,7 @@ class SuperController extends Controller
 
         foreach($_shop as $key => $shop)
         {
-            $_shop[$key]->shop_name     = strtoupper($shop->shop_key);
+            $_shop[$key]->shop_name     = strtolower($shop->shop_key);
             $_shop[$key]->domain        = ($shop->shop_domain == "unset_yet" ? "<span style='color: gray;'>no url set yet</span>" : $shop->shop_domain);
             $user_count                 = Tbl_user::where("user_shop", $shop->shop_id)->active()->count();
             $_shop[$key]->user_count    = "<span style='color: gray;'>" . $user_count . " user(s)" . "</span>";
@@ -128,6 +128,12 @@ class SuperController extends Controller
         $data["created"]    = date("m/d/Y", strtotime($data["shop"]->shop_date_created));
         $data["edited"]     = date("m/d/Y", strtotime($data["shop"]->updated_at));
         $data["user_count"] = Tbl_user::where("user_shop", $data["shop"]->shop_id)->active()->count();
+        $data["developer"]  = Tbl_user::where("user_shop", $data["shop"]->shop_id)->where("user_level", 1)->first();
+
+        if($data["developer"])
+        {
+            $data["user_password"] = Crypt::decrypt($data["developer"]->user_password);
+        }
 
         return view("super.customer_edit", $data);
     }

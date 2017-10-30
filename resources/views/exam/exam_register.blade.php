@@ -29,7 +29,7 @@
                         <div class="item-inner">
                            <div class="item-title label">First Name</div>
                            <div class="item-input">
-                              <input type="text" placeholder="First name">
+                              <input name="first_name" type="text" placeholder="First name">
                            </div>
                         </div>
                      </div>
@@ -39,7 +39,7 @@
                         <div class="item-inner">
                            <div class="item-title label">Last Name</div>
                            <div class="item-input">
-                              <input type="text" placeholder="Last name">
+                              <input name="last_name" type="text" placeholder="Last name">
                            </div>
                         </div>
                      </div>
@@ -49,7 +49,7 @@
                         <div class="item-inner">
                            <div class="item-title label">E-mail</div>
                            <div class="item-input">
-                              <input type="email" placeholder="E-mail">
+                              <input name="email" type="email" placeholder="E-mail">
                            </div>
                         </div>
                      </div>
@@ -60,7 +60,7 @@
                         <div class="item-inner">
                            <div class="item-title label">Contact</div>
                            <div class="item-input">
-                              <input type="text" placeholder="Mobile Number">
+                              <input name="contact" type="text" placeholder="Mobile Number">
                            </div>
                         </div>
                      </div>
@@ -71,7 +71,7 @@
                         <div class="item-inner">
                            <div class="item-title label">Gender</div>
                            <div class="item-input">
-                              <select>
+                              <select name="gender">
                                  <option>Male</option>
                                  <option>Female</option>
                               </select>
@@ -85,7 +85,7 @@
                         <div class="item-inner">
                            <div class="item-title label">Civil Status</div>
                            <div class="item-input">
-                              <select>
+                              <select name="civil_status">
                                  <option>Single</option>
                                  <option>Married</option>
                                  <option>Divorced</option>
@@ -101,7 +101,7 @@
                         <div class="item-inner">
                            <div class="item-title label">Birthday</div>
                            <div class="item-input">
-                              <input type="date" placeholder="Birth day" value="2014-04-30">
+                              <input name="birthday" type="date" placeholder="Birth day" value="2014-04-30">
                            </div>
                         </div>
                      </div>
@@ -112,7 +112,7 @@
                         <div class="item-inner">
                            <div class="item-title label">Complete<br>Address</div>
                            <div class="item-input">
-                              <textarea placeholder="Enter Address Here"></textarea>
+                              <textarea name="complete_address" placeholder="Enter Address Here"></textarea>
                            </div>
                         </div>
                      </div>
@@ -123,7 +123,7 @@
                         <div class="item-inner">
                            <div class="item-title label">Work<br>Experience</div>
                            <div class="item-input">
-                              <textarea placeholder="Previous Work (Leave blank if no previous work experience)"></textarea>
+                              <textarea name="work_experience" placeholder="Previous Work (Leave blank if no previous work experience)"></textarea>
                            </div>
                         </div>
                      </div>
@@ -135,10 +135,3 @@
       </div>
    </div>
 </div>
-<script type="text/javascript">
-
-$$('form.ajax-submit').on('form:success', function (e)
-{
-alert(123)''
-});
-</script>

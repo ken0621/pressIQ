@@ -80,14 +80,16 @@ class PayrollBankingController extends Member
             }
         }
      }
+
+
      public static function download_xls($data)
      {
         $data = Self::clean($data);
 
-        $company_code = $data["payroll_period"]->payroll_company_code;
-        $upload_month = date("m");
-        $upload_day = date("d");
-        $upload_year = date("y");
+        $company_code   = $data["payroll_period"]->payroll_company_code;
+        $upload_month   = date("m");
+        $upload_day     = date("d");
+        $upload_year    = date("y");
         $batch = "01";
         $data["payroll_period"]->payroll_company_account_no = DB::table("tbl_payroll_company")->where("payroll_company_id", $data["payroll_period"]->payroll_company_id)->first()->payroll_company_account_no;
         
@@ -105,14 +107,16 @@ class PayrollBankingController extends Member
         $data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
         $data = Self::clean($data);
      }
+
+
      public static function download_bdo($data)
      {
         $data = Self::clean($data);
 
-        $company_code = $data["payroll_period"]->payroll_company_code;
-        $upload_month = date("m");
-        $upload_day = date("d");
-        $upload_year = date("y");
+        $company_code   = $data["payroll_period"]->payroll_company_code;
+        $upload_month   = date("m");
+        $upload_day     = date("d");
+        $upload_year    = date("y");
         $batch = "01";
 
         //S3N

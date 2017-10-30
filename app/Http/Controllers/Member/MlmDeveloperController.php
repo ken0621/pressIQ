@@ -819,6 +819,17 @@ class MlmDeveloperController extends Member
         $update["current_level"] = 0;
 
         Tbl_mlm_slot::where("shop_id",$shop_id)->update($update);
+
+        $get_mlm_cd_slots = Tbl_membership_code::where("tbl_membership_code.shop_id",$shop_id)->join("tbl_mlm_slot","tbl_mlm_slot.slot_id","=","tbl_membership_code.slot_id")->where("membership_type","CD")->get();
+        foreach($get_mlm_cd_slots as $cd_slot)
+        {
+            if($cd_slot->membership_type == "CD")
+            {
+                $update_cd["slot_status"] = "CD";
+                $update_cd["slot_wallet_current"] = $cd_slot->membership_code_price;
+                Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$cd_slot->slot_id)->update($update_cd);
+            }
+        }
     }
     public function redistribute()
     {

@@ -25,39 +25,30 @@
 		  		<table class="table">
 			  		<thead>
 			  			<tr>
-			  				<th class="text-center" width="200px">DATE</th>
-			  				<th class="text-center" width="100px">SLOT</th>
-			  				<th class="text-left">DETAILS</th>
-			  				<th class="text-right" width="200px">AMOUNT</th>
+			  				<th class="text-left" width="200px">DATE JOINED</th>
+			  				<th class="text-right" width="100px">NAME</th>
 			  			</tr>
 			  		</thead>
 			  		<tbody>
-			  			@if(count($_rewards) > 0)
-				  			@foreach($_rewards as $reward)
+			  			@if(count($_direct) > 0)
+				  			@foreach($_direct as $direct)
 				  			<tr>
-				  				<td class="text-center">
-				  					<div><b>{{ $reward->display_date }}</b></div>
-				  					<div>{{ $reward->time_ago }}</div>
+				  				<td class="text-left">
+				  					<div><b>{{ $direct->display_date }}</b></div>
+				  					<div>{{ $direct->time_ago }}</div>
 				  				</td>
-				  				<td class="text-center">
-				  					<div>{{ $reward->slot_no }}</div>
+				  				<td class="text-right">
+				  					<div>{{ $direct->first_name }} {{ $direct->last_name }}</div>
 				  				</td>
-				  				<td class="text-left">{!! $reward->log !!}</td>
-				  				<td class="text-right"><b>{!! $reward->display_wallet_log_amount !!}</b></td>
 				  			</tr>
 				  			@endforeach
 				  		@else
 				  			<tr class="text-center" >
-				  				<td colspan="4">NO REWARD YET</td>
+				  				<td colspan="4">NO DIRECT YET</td>
 				  			</tr>
 			  			@endif
 			  		</tbody>
 			  	</table>
-		  	</div>
-		  	<div class="clearfix">
-			  	<div class="pull-right">
-			  		{!! session('notification_paginate') !!}
-			  	</div>
 		  	</div>
 		</div>
 	</div>

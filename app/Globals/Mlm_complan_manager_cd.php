@@ -92,7 +92,9 @@ class Mlm_complan_manager_cd
         $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
         Mlm_slot_log::slot_array($arry_log);
 
-        $update['slot_status'] = "PS";
+        $update['slot_status']          = "PS";
+        $update['old_slot_status']      = $slot_info->slot_status;
+        $update['old_slot_status_date'] = Carbon::now();
         Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->update($update);
 	}
 }

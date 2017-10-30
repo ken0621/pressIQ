@@ -17,19 +17,20 @@
       <div class="panel panel-left panel-reveal">
          <div class="content-block">
             <p>Navigation</p>
-            <p><a href="#">Dashboard</a></p>
-            <p><a href="#">Customer List</a></p>
-            <p><a href="javascript:" onclick="window.location.href='/super/logout'">Logout</a></p>
+            <p><a class="close-panel" href="javascript:">Dashboard</a></p>
+            <p><a class="close-panel" href="/super/customer">Customer List</a></p>
+            <p><a class="close-panel" href="javascript:" onclick="window.location.href='/super/logout'">Logout</a></p>
          </div>
       </div>
       <div class="views">
          <div class="view view-main">
             <div class="navbar">
                <div data-page="index" class="navbar-inner">
+                  <div class="left">
+                     <a data-panel="right" href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
+                  </div>
                   <div class="center sliding">ADMIN PANEL</div>
-               </div>
-               <div class="left">
-                  <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
+
                </div>
             </div>
             <div class="pages navbar-through toolbar-through">

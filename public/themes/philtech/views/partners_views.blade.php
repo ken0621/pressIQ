@@ -1,127 +1,80 @@
 @extends("layout")
 @section("content")
-<div class="container">
-    <div id="products" class="row list-group">
-    @foreach($company as $company)
-        <div class="item  col-xs-3 col-lg-4">
-            <div class="thumbnail">
-                <img class="group list-group-image" img src ="{{ $company->company_logo }}" />
-                <div class="caption">
-                    <h4 class="group inner list-group-item-heading">
-                        <center>{{ $company->company_name }}</center></h4>
-                    <p class="group inner list-group-item-text">
-                        <center>{{ $company->company_address }}</center></p>
-                    <div class="row">
-                        <div class="col-xs-6 col-md-6">
-                            <p class="lead">
-                                <center>{{ $company->company_number }}</center></p>
-                        </div>
-                        <div class="col-xs-6 col-md-6">
-                            <a class="btn btn-success" href="http://www.jquery2dotnet.com">View Location</a>
-                        </div>
-                    </div>
+<div class="content">
+   <div class="container">
+        <div class="single-slide">
+        @foreach($_company as $cm)
+            <div class="merchant-wrapper">
+                <div class="controls-container">
+                    <p>{{strtoupper($cm->company_name)}}</p>
+                    <div class="prev"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></div>
+                    <div class="next"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></div>
+                </div>
+                <div class="merchant-img-container">
+                    <img src="{{$cm->company_brochure}}">
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="map-address text-center">
+                    <h4><strong>{{$cm->company_address}}</strong></h4>
+                </div>
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCRvE3JLUuCDLRdqAz4ngx61tQDImQjOxQ&q={{$cm->company_address}}" width="600" height="450" frameborder="0" style="border:0" frameborder="0"></iframe>
                 </div>
             </div>
-        </div>
         @endforeach
-    </div>
+        </div>
+        {{-- <div class="merchant-wrapper">
+            <div class="controls-container">
+                <p>{{strtoupper($company->company_name)}}</p>
+                <div class="prev"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></div>
+                <div class="next"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></div>
+            </div>
+            <div class="merchant-img-container">
+                <img src="{{$company->company_brochure}}">
+            </div>
+            <br>
+            <br>
+            <br>
+            <div class="map-address text-center">
+                <h4><strong>{{$company->company_address}}</strong></h4>
+            </div>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCRvE3JLUuCDLRdqAz4ngx61tQDImQjOxQ&q={{$company->company_address}}" width="600" height="450" frameborder="0" style="border:0" frameborder="0"></iframe>
+            </div>
+        </div> --}}
+    </div>    
 </div>
 @endsection
 @section("css")
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/partners_views.css">
+@endsection
+@section('js')
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+        $('.single-slide').slick({
+          infinite: true,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          arrows: false,
+          speed: 500,
+          fade: true,
+          cssEase: 'linear'
+        });
+
+        $(".prev").click(function()
+        {
+            $('.single-slide').slick('slickPrev');
+        });
+
+        $(".next").click(function()
+        {
+            $('.single-slide').slick('slickNext');
+        });
+        
+    });
+</script>
 @endsection
 
-<style>
-.glyphicon { margin-right:5px; }
-.thumbnail
-{
-    margin-bottom: 20px;
-    padding: 10px;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    border-radius: 0px;
-    width: 300px; 
-    height: 450px;
- 
-}
-
-.item.list-group-item
-{
-    float: none;
-    width: 100%;
-    background-color: #fff;
-    margin-bottom: 10px;
-    
-}
-.item.list-group-item:nth-of-type(odd):hover,.item.list-group-item:hover
-{
-    background: #428bca;
-    
-}
-
-.item.list-group-item .list-group-image
-{
-    margin-right: 10px;
-    width: 50% !important;
-    height: auto;
-
-}
-.item.list-group-item .thumbnail
-{
-    margin-bottom: 0px;
-    width: 20; 
-
-}
-.item.list-group-item .caption
-{
-    padding: 9px 9px 0px 9px;
-}
-.item.list-group-item:nth-of-type(odd)
-{
-    background: #eeeeee;
-
-}
-
-.item.list-group-item:before, .item.list-group-item:after
-{
-    display: table;
-    content: " ";
-
-
-}
-
-.item.list-group-item img
-{
-    float: left;
-    height:50px;
-    width: 20px; 
-
-
-}
-.item.list-group-item:after
-{
-    clear: both;
-
-}
-.list-group-item-text
-{
-    margin: 0 0 11px;
-    text-align: center;	
-    overflow: hidden;
-
-}
-.list-group-item {
-    width: 30px;
-    height: 30px;
-}
-#products{
-	margin-top: 50px
-	overflow: hidden;
-}
-</style>
-
-<script>
-$(document).ready(function() {
-    $('#list').click(function(event){event.preventDefault();$('#products .item').addClass('list-group-item');});
-    $('#grid').click(function(event){event.preventDefault();$('#products .item').removeClass('list-group-item');$('#products .item').addClass('grid-group-item');});
-});
-</script>

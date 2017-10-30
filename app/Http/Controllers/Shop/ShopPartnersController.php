@@ -20,7 +20,7 @@ class ShopPartnersController extends Shop
     public function index()
     {
         $data["page"] = "Partners";
-        $data["_company_information"]  = Tbl_partners::orderBy('company_address')->where("shop_id", $this->shop_info->shop_id)->where("archived","0")->get();
+        $data["_company_information"]  = Tbl_partners::orderBy('company_address')->where("shop_id", $this->shop_info->shop_id)->where("archived",0)->get();
         $data['locationList'] = Tbl_partners::select('company_location')->distinct()->where("archived","0")->get();
         return view("partners", $data);
     }
@@ -40,5 +40,13 @@ class ShopPartnersController extends Shop
             return Response::json($partnerResultView);   
         }
 
+    }
+
+    public function partners_views($id)
+    {
+        $data["page"] = "Partners Views";
+        $data['company'] = Tbl_partners::where('company_id', $id)->where('archived',0)->where('shop_id', $this->shop_info->shop_id)->first();
+        $data['_company'] = Tbl_partners::where('archived',0)->where('shop_id', $this->shop_info->shop_id)->get();
+        return view("partners_views", $data);
     }
 }

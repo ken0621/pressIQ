@@ -209,9 +209,9 @@ class MLM_StairstepController extends Member
                                     {
                                         $wallet_log_details = "Your slot ".$list->slot_no." earned ".$dynamic_compression[$key]." from Dynamic Compression";                     
                                         Mlm_slot_log::slot($list->slot_id, $dynamic_slot[$key], $wallet_log_details, $dynamic_compression[$key], "DYNAMIC_COMPRESSION", "released",Carbon::now()); 
+                                        $total_dynamic = $total_dynamic + $dynamic_compression[$key];
                                         unset($dynamic_compression[$key]);
                                         unset($dynamic_slot[$key]);
-                                        $total_dynamic = $total_dynamic + $dynamic_compression;
                                         $dynamic_ctr--;
                                     }
                                 }

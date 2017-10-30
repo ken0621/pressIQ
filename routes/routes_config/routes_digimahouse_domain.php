@@ -67,7 +67,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/payment', 'Shop\ShopPaymentController@index');
 	Route::get('/order_placed', 'Shop\ShopCheckoutController@order_placed');
 	Route::get('/addto_cart', 'Shop\ShopCheckoutController@addtocart');
-	Route::get('/admin', 'Shop\Shop@admin');
 	Route::get('/file/{theme}/{type}/{filename}', 'Shop\Shop@file');
 
 	/*Product search*/

@@ -135,6 +135,7 @@ class MLM_PayoutController extends Member
 		{
 			$update["enchasment_settings_tax"] = doubleval(request("enchasment_settings_tax"));
 			$update["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
+			$update["enchasment_settings_p_fee_type"] = request("enchasment_settings_p_fee_type");
 			$update["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$update["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
 			$update["encashment_settings_schedule_type"] = request("encashment_settings_schedule_type");
@@ -146,6 +147,7 @@ class MLM_PayoutController extends Member
 		{
 			$insert["enchasment_settings_tax"] = doubleval(request("enchasment_settings_tax"));
 			$insert["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
+			$update["enchasment_settings_p_fee_type"] = request("enchasment_settings_p_fee_type");
 			$insert["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$insert["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
 			$insert["encashment_settings_schedule_type"] = request("encashment_settings_schedule_type");
@@ -230,6 +232,7 @@ class MLM_PayoutController extends Member
 		$source 				= Request::input("source");
 		$method 				= Request::input("method");
 		$tax_amount 			= Request::input("tax");
+		$service_charge_type 	= Request::input("service-charge-type");
 		$service_charge 		= Request::input("service-charge");
 		$minimum 				= Request::input("minimum");
 		$other_charge 			= Request::input("other-charge");
@@ -238,8 +241,6 @@ class MLM_PayoutController extends Member
 		$total_net 				= 0;
 		$minimum_encashment		= $minimum;
 		$data["method"]			= $method;
-
-
 		$slot_query = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet();
 
 		if($method == "eon")
@@ -274,6 +275,10 @@ class MLM_PayoutController extends Member
 				$remaining 			= $slot->current_wallet - $encashment_amount;
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
+				if($service_charge_type == 1)
+				{
+					$service_charge = (($encashment_amount * ($service_charge/100)));
+				}
 				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
 			}
 			else
@@ -286,6 +291,11 @@ class MLM_PayoutController extends Member
 				$remaining 			= $slot->current_wallet;
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
+
+				if($service_charge_type == 1)
+				{
+					$service_charge = (($encashment_amount * ($service_charge/100)));
+				}
 				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
 			}
 

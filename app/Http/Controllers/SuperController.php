@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_admin;
+use App\Models\Tbl_user;
 use Crypt;
 
 class SuperController extends Controller
@@ -101,6 +102,48 @@ class SuperController extends Controller
 
         
         echo json_encode($return);
+    }
+    public function getCustomer()
+    {
+        $_shop = Tbl_shop::orderBy("shop_key")->get();
+
+        foreach($_shop as $key => $shop)
+        {
+            $_shop[$key]->shop_name     = strtoupper($shop->shop_key);
+            $_shop[$key]->domain        = ($shop->shop_domain == "unset_yet" ? "<span style='color: gray;'>no url set yet</span>" : $shop->shop_domain);
+            $user_count                 = Tbl_user::where("user_shop", $shop->shop_id)->active()->count();
+            $_shop[$key]->user_count    = "<span style='color: gray;'>" . $user_count . " user(s)" . "</span>";
+        }
+
+        $data["_shop"] = $_shop;
+
+        return view("super.customer", $data);
+    }
+    public function getCustomerEdit()
+    {
+        $data["page"]       = "Customer Edit";
+        $data["shop"]       = Tbl_shop::where('shop_id', request("id"))->first();
+        $data["shop_id"]    = $data["shop"]->shop_id;
+        $data["created"]    = date("m/d/Y", strtotime($data["shop"]->shop_date_created));
+        $data["edited"]     = date("m/d/Y", strtotime($data["shop"]->updated_at));
+        $data["user_count"] = Tbl_user::where("user_shop", $data["shop"]->shop_id)->active()->count();
+
+        return view("super.customer_edit", $data);
+    }
+    public function getUser()
+    {
+        $data["shop"]       = Tbl_shop::where('shop_id', request("shop_id"))->first();
+        $data["shop_id"]    = $data["shop"]->shop_id;
+        $data["page"]       =  $data["shop"]->shop_key;
+        $data["_user"]      = Tbl_user::where("user_shop", request("shop_id"))->active()->get();
+        return view("super.user", $data);
+    }
+    public function getUserEdit()
+    {
+        $data["page"]       = "Edit";
+        $data["user_id"]    = $user_id = request("id");
+        $data["user"]       = Tbl_user::where("user_id", $user_id)->first();
+        return view("super.user_edit", $data);
     }
     public function getLogout()
     {

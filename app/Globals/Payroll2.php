@@ -6462,8 +6462,6 @@ class Payroll2
 				$restday_total 		 			+=	$restday;
 			}
 
-
-
 			if (isset($employee["cutoff_breakdown"]->_breakdown )) 
 			{
 				# code...
@@ -6570,4 +6568,10 @@ class Payroll2
 		
 		return $data;
 	}
+
+	public static function payroll_number_format($number,$decimal_places)
+	{
+		return number_format((float)$number, $decimal_places, '.', '');
+	}
+
 }

@@ -1,4 +1,10 @@
-var myApp = new Framework7( { animateNavBackIcon:true });
+var myApp = new Framework7(
+{
+	animateNavBackIcon:true,
+    onAjaxStart: function (xhr) { myApp.showIndicator(); },
+    onAjaxComplete: function (xhr) { myApp.hideIndicator(); }
+});
+
 var $$ = Dom7;
 var mainView = null;
 var admin = new admin();
@@ -16,9 +22,15 @@ function admin()
 			page_ready();
 		});
 
+        myApp.onPageInit('customer-list', function(page)
+        {
+        	var mySearchbar = $$('.searchbar')[0].f7Searchbar;
+        });
+
 	}
 	function page_ready()
 	{
+
 	}
 	function framework7init()
 	{

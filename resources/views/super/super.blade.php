@@ -10,6 +10,7 @@
       <link rel="stylesheet" href="/assets/mobile/framework7/dist/css/framework7.ios.min.css">
       <!-- Path to your custom app styles-->
       <link rel="stylesheet" href="/assets/exam/css/exam.css">
+      <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
    </head>
    <body>
       <div class="statusbar-overlay"></div>
@@ -17,19 +18,19 @@
       <div class="panel panel-left panel-reveal">
          <div class="content-block">
             <p>Navigation</p>
-            <p><a href="#">Dashboard</a></p>
-            <p><a href="#">Customer List</a></p>
-            <p><a href="javascript:" onclick="window.location.href='/super/logout'">Logout</a></p>
+            <p><a class="close-panel" href="javascript: mainView.router.back({pageName:'index',force:true});  myApp.closePanel();">Dashboard</a></p>
+            <p><a class="close-panel" href="/super/customer">Customer List</a></p>
+            <p><a class="close-panel" href="javascript:" onclick="window.location.href='/super/logout'">Logout</a></p>
          </div>
       </div>
       <div class="views">
          <div class="view view-main">
             <div class="navbar">
                <div data-page="index" class="navbar-inner">
+                  <div class="left">
+                     <a data-panel="right" href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
+                  </div>
                   <div class="center sliding">ADMIN PANEL</div>
-               </div>
-               <div class="left">
-                  <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
                </div>
             </div>
             <div class="pages navbar-through toolbar-through">

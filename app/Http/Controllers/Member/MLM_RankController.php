@@ -65,8 +65,33 @@ class MLM_RankController extends Member
 
   		$data["_history"]   		   = Tbl_rank_update::where('shop_id',$shop_id)->get();
 		$data["include_rpv_on_rgpv"]   = Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first()->include_rpv_on_rgpv;
-
+		$data["points_log"]    		   = Tbl_mlm_slot_points_log::slot()->where("shop_id",$shop_id)    
+																->where(function($query){
+													      $query->where('points_log_type',"RPV");
+													      $query->orWhere('points_log_type',"RGPV");})->get();
     	
+    	if(Request::input("edit_date"))
+    	{
+    		// dd(Request::input("edit_date"));
+    		foreach(Request::input("edit_date") as $key => $edit_date)
+    		{
+    			if($edit_date != "")
+    			{
+    				$check_date = Tbl_mlm_slot_points_log::slot()->where("shop_id",$shop_id)->where("points_log_id",$key)->first();
+    				if($check_date)
+    				{
+    					if($check_date->points_log_type == "RPV" || $check_date->points_log_type == "RGPV") 
+    					{
+    						// dd(Carbon::parse($edit_date));
+    						$update_log["points_log_date_claimed"] = Carbon::parse($edit_date);
+    						Tbl_mlm_slot_points_log::slot()->where("shop_id",$shop_id)->where("points_log_id",$key)->update($update_log);
+    					}
+    				}
+    			}
+    		}
+
+    		return Redirect::to("/member/mlm/rank/update");
+    	}
 
     	return view("member.mlm_rank.rank_update_stairstep",$data);
     }

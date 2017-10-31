@@ -13,7 +13,8 @@
           </small>
         </h1>
         <button type="button" id="button1" class="btn btn-sm update_ranking"><span><i class="fa fa-refresh" aria-hidden="true"></i></span>  Update Ranking</button>
-        <button type="button" id="button2" class="btn btn-sm" data-toggle="modal" data-target="#classModal"><span><i class="fa fa-refresh" aria-hidden="true"></i></span>  Rank Update History</button>
+        <button type="button" id="button2" class="btn btn-sm" data-toggle="modal" data-target="#classModal">Rank Update History</button>
+        <button type="button" id="button3" class="btn btn-sm" data-toggle="modal" data-target="#classModal2">View rank logs</button>
       </div>
     </div>
   </div>
@@ -143,6 +144,56 @@
 </div>
 </div>
 
+<div id="classModal2" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+
+        </button>
+        <h4 class="modal-title" id="classModalLabel">
+          Points log
+        </h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-condensed">
+          <thead>
+            <tr>
+              <th><center>Slot No.</center></th>
+              <th><center>Points</center></th>
+              <th><center>Type</center></th>
+              <th><center>Date received</center></th>
+              <th><center>Edit date</center></th>
+            </tr>
+          </thead>
+          <tbody>
+            <form method="POST" class="date_edit_form">
+              <input type="hidden" name="_token" value="{{csrf_token()}}">
+              @foreach($points_log as $log)
+                <tr>
+                  <td><center>{{$log->slot_no}}</center></td>
+                  <td><center>{{$log->points_log_points}}</center></td>
+                  <td><center>{{$log->points_log_type}}</center></td>
+                  <td><center>{{Carbon\Carbon::parse($log->points_log_date_claimed)->format("M d, Y g:i:s A")}}</center></td>
+                  <td><center><input type="text" name="edit_date[{{$log->points_log_id}}]" class="datepicker form-control input-sm start_date" name="start_date" value=""/></center></td>
+                </tr>
+              @endforeach
+            </form>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary submit_edit_date_btn">
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 <style>
@@ -192,6 +243,12 @@
     color: skyblue !important; 
   }
 
+  #button3{
+    border-color:#36a6fd;
+    background: white !important; 
+    color: skyblue !important; 
+  }
+
 </style>
 <style> 
 
@@ -230,6 +287,11 @@ $(".view_rank_update").click(function()
     $(".modal-loader").addClass("hidden");
   });
 });
+
+$(".submit_edit_date_btn").click(function(){
+  $(".date_edit_form").submit();
+});
+
 
 
 $(".update_ranking").click(function()

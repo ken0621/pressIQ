@@ -2,13 +2,11 @@
 namespace App\Http\Controllers\Member\PayrollEmployee;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_payroll_employee_basic;
-use App\Models\Tbl_shop;
 use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
-use App\Models\Tbl_payroll_period_company;
-use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_employee_contract;
+use App\Models\Tbl_payroll_leave_temp;
 use Illuminate\Http\Request;
 use Redirect;
 use Validator;
@@ -16,33 +14,19 @@ use Carbon\Carbon;
 use Crypt;
 use Session;
 use DB;
-use App\Globals\AuditTrail;
 use App\Http\Controllers\Member\PayrollMember;
 
-use App\Globals\Settings;
 
-use App\Models\Tbl_payroll_time_sheet_record;
-use App\Models\Tbl_payroll_group_rest_day;
-use App\Models\Tbl_payroll_holiday_company;
-use App\Models\Tbl_payroll_shift;
-use App\Models\Tbl_payroll_employee_schedule;
-use App\Models\Tbl_payroll_leave_employee;
-use App\Models\Tbl_payroll_leave_temp;
-
-use App\Globals\Payroll;
 use PDF2;
 use App\Globals\Pdf_global;
 
-use Jenssegers\Agent\Agent;
 
-class EmployeeController extends PayrollMember{
-
-
+class EmployeeController extends PayrollMember
+{
 	public function employee_info()
 	{
 		return $this->employee_info;
 	}
-
 	public function employee()
 	{
 		$data['page']	= 'Dashboard';
@@ -162,8 +146,8 @@ class EmployeeController extends PayrollMember{
 	}
 	public function employee_leave_management()
 	{
-		$data['page']	= 'Leave Management';
-		$data["_leave_name"] = tbl_payroll_leave_temp::where("shop_id", $this->employee_info->shop_id)->get();
+		$data['page']			= 'Leave Management';
+		$data["_leave_name"] 	= tbl_payroll_leave_temp::where("shop_id", $this->employee_info->shop_id)->get();
 	  	return view('member.payroll2.employee_dashboard.employee_leave_management',$data);
 	}
 	
@@ -181,11 +165,9 @@ class EmployeeController extends PayrollMember{
 	public function employee_time_keeping()
 	{
 
-		$data['page']	= 'Time Keeping';
-
-
-		$data['_employee_period'] = Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->get();
-       
+		$data['page']					= 'Time Keeping';
+		$data['period_record'] 			= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->get();
+		
 		return view('member.payroll2.employee_dashboard.employee_time_keeping',$data);
 	}
 	public function employee_payslip($payroll_period_id)
@@ -193,8 +175,13 @@ class EmployeeController extends PayrollMember{
     	$data['page']				= 'Employee Payslip';
     	$data["employee_company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
     	$data['period_record'] 		= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
-    	
+
+    	$data["period_record_start"]		= date("F d, Y", strtotime($data["period_record"]->payroll_period_start));
+		$data["period_record_end"]			= date("F d, Y", strtotime($data["period_record"]->payroll_period_end));
+		$data["period_record_release_date"]	= date("F d, Y", strtotime($data["period_record"]->payroll_release_date));
+
 		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);
+
 		$other_deductions = 0;
 
 		foreach($data["period_record"]->cutoff_breakdown->_breakdown as $breakdown)
@@ -207,14 +194,53 @@ class EmployeeController extends PayrollMember{
 
 		$data["period_record"]->other_deduction = $other_deductions;
 		$data["period_record"]->total_deduction = $data["period_record"]->philhealth_ee + $data["period_record"]->sss_ee + $data["period_record"]->pagibig_ee  + $other_deductions; // + $employee->tax_ee;
+		
+    	$data['total_period_record'] = Tbl_payroll_time_keeping_approved::where('tbl_payroll_time_keeping_approved.employee_id',$data["period_record"]->employee_id)->get();
+    	
+    	dd($total);
+    	//dd($data['total_period_record']);
+/*
+    	foreach($data["total_period_record"] as $key => $total)
+		{
+			$data["total_period_record"][$key]->total_net_pay = $total;
+			dd($total);
+		}
+		$data["total_period_record"][$key]->total_net_pay = $total->net_pay;
+		dd($total->net_pay);*/
+			/*$total = $data["total_period_record"];*/
+			
+			/*$data["_employee"][$key]->cutoff_compute = unserialize($employee->cutoff_compute);
+			$data["_employee"][$key]->cutoff_input =  unserialize($employee->cutoff_input);
+			$data["_employee"][$key]->cutoff_breakdown =  unserialize($employee->cutoff_breakdown);
+
+			$other_deductions = 0;
+
+			foreach($data["_employee"][$key]->cutoff_breakdown->_breakdown as $breakdown)
+			{
+				if($breakdown["deduct.net_pay"] == true)
+				{
+					$other_deductions += $breakdown["amount"];
+				}
+			}
+
+			$data["_employee"][$key]->other_deduction = $other_deductions;
+			$data["_employee"][$key]->total_deduction = $employee->philhealth_ee + $employee->sss_ee + $employee->pagibig_ee  + $other_deductions; // + $employee->tax_ee;*/
+		
+		
+	
 
 		$pdf = view('member.payroll2.employee_dashboard.employee_payslip', $data);
         return Pdf_global::show_pdf($pdf);
+        
     }
-    public function employee_timesheet($period_company_id)
+    public function employee_timesheet($payroll_period_id)
 	{
-		$data["page"] = "Employee Timesheet";
-
+		$data["page"] 				= "Employee Timesheet";
+		$data['period_record'] 		= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
+		//dd($data["period_record"]->cutoff_breakdown);
+		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);
+		
+		
 	}   
 	public function sample()
 	{
@@ -223,8 +249,8 @@ class EmployeeController extends PayrollMember{
 	}
 	public function employee_leave_application()
 	{
-		$data['page']	= 'Employee Leave Application';
-        $data["company"] = Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
+		$data['page']		= 'Employee Leave Application';
+        $data["company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
     	return view('member.payroll2.employee_dashboard.employee_leave_application',$data);
     }
     public function create_employee_leave()
@@ -249,8 +275,8 @@ class EmployeeController extends PayrollMember{
     }
     public function updated_layout()
     {
-		$data['page']	= 'Create Employee Approver';
-		$data['employee'] = Self::employee_profile();
+		$data['page']		= 'Create Employee Approver';
+		$data['employee'] 	= Self::employee_profile();
     	return view('member.payroll2.employee_dashboard.updated_layout',$data);
     }
     

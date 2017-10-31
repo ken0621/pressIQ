@@ -1,10 +1,9 @@
-
-  <ol class="breadcrumb">
+<ol class="breadcrumb">
     <li class="breadcrumb-item">
       <a href="/employee">Dashboard</a>
     </li>
     <li class="breadcrumb-item active">{{ $page }}</li>
-  </ol>
+</ol>
 <div class="panel panel-default">
 	<div class="modal-body form-horizontal">
 		<div class="row">

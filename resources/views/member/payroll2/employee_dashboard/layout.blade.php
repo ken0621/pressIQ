@@ -24,7 +24,7 @@
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
 		<a class="navbar-brand" href="#">DIGIMAHOUSE</a>
 		<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-		<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+		<i class="navbar-toggler-icon" aria-hidden="true"></i>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<ul class="navbar-nav navbar-sidenav" id="exampleAccordion">

@@ -1,10 +1,8 @@
-
-  <ol class="breadcrumb">
+<ol class="breadcrumb">
     <li class="breadcrumb-item">
       <a href="/employee">Update Information</a>
     </li>
-  </ol>
-
+</ol>
 <form class="form-horizontal" method="post" action="/update_employee_profile?payroll_employee_id={{$employee->payroll_employee_id}}">
 {{csrf_field()}}
 @if(session()->has('error'))

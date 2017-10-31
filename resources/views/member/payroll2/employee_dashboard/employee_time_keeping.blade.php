@@ -23,12 +23,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($_employee_period as $period)
+                    @foreach($period_record as $period)
                     <tr>
                         <td>{{ date('M d, Y',strtotime($period->payroll_period_start))." - ".date('M d, Y',strtotime($period->payroll_period_end)) }}</td>
                         <td>{{ date('Y', strtotime($period->payroll_period_end)) }}</td>
-                        <td><a href=''>TIMESHEET</td>
-                        <td><a href='/employee_payslip/{{ $period->payroll_period_id}}'>PAYSLIP</a></td>
+                        <td align="center"><a href='/employee_payslip/{{ $period->payroll_period_id}}'>TIMESHEET</td>
+                        <td align="center"><a href='/employee_payslip/{{ $period->payroll_period_id}}' target="_blank">PAYSLIP</a></td>
                     </tr>
                     @endforeach
                 </tbody>

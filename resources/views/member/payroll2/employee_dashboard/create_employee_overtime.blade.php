@@ -1,11 +1,11 @@
 @extends('member.payroll2.employee_dashboard.layout')
 @section('content')
-  <ol class="breadcrumb">
+<ol class="breadcrumb">
     <li class="breadcrumb-item">
       <a href="/employee">Dashboard</a>
     </li>
     <li class="breadcrumb-item active">{{ $page }}</li>
-  </ol>
+</ol>
 	<div class="modal-body form-horizontal">
 		<div class="row">
 	    	<div class="col-md-6">

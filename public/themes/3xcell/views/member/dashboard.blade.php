@@ -19,6 +19,12 @@
 	                        <!-- <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br> -->
 	                        <!-- <span class="or">OR</span> -->
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
+	                        @if(isset($company_head_id))
+	                        	</br>
+	                        	<span style="color:white">or</span>
+	                        	</br>
+	                        	<a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code no_sponsor_code" company_head_id="{{$company_head_id->slot_no}}">NO SPONSOR?</button></a>
+	                    	@endif
 	                    </div>
 	                </div>
 	            </div>

@@ -1,4 +1,4 @@
-$content-text: 'Arimo', sans-serif;
+$content-text: 'Lato', sans-serif;
 $light: 300;
 $regular: 400;
 $medium: 500;
@@ -195,7 +195,7 @@ body
 			{
 				color: $text-dark;
 				font-size: 15px;
-				font-weight: $medium;
+				font-weight: $bold;
 				letter-spacing: 0.5px;
 			}
 			.radio-inline
@@ -303,7 +303,7 @@ body
 
 				a {
 					color: $text-dark !important;
-					font-weight: $medium !important;
+					font-weight: $bold !important;
 				} 
 			}
 		}

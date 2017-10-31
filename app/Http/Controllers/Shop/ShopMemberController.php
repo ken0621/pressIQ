@@ -108,6 +108,7 @@ class ShopMemberController extends Shop
             $data["not_placed_slot"] = new stdClass();
             $data["not_placed_slot"]->slot_id = 0;
             $data["not_placed_slot"]->slot_no = 0;
+            $data["company_head_id"]  = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->orderBy("slot_id","ASC")->first();
    
             $data["_unplaced"] = MLM2::unplaced_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             if(isset($data["_unplaced"][0]))
@@ -1405,9 +1406,14 @@ class ShopMemberController extends Shop
     }
     public function getReport()
     {
-        $data["page"]           = "Report";
-        $data["_rewards"]       = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
-        $data["_codes"]         = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
+        $data["page"]               = "Report";
+        $data["_rewards"]           = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+        $data["_codes"]             = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
+        if($this->shop_info->shop_id == 47)
+        {
+            $data["_rewards_points"]    = MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+        }
+        
         return (Self::load_view_for_members("member.report", $data));
     }
     public function getLeadList()

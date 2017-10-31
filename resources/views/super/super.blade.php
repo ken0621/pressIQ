@@ -19,7 +19,7 @@
          <div class="content-block">
             <p>Navigation</p>
             <p><a class="close-panel" href="javascript: mainView.router.back({pageName:'index',force:true});  myApp.closePanel();">Dashboard</a></p>
-            <p><a class="close-panel" href="/super/customer">Customer List</a></p>
+            <p><a class="close-panel" href="/super/customer">Client List</a></p>
             <p><a class="close-panel" href="javascript:" onclick="window.location.href='/super/logout'">Logout</a></p>
          </div>
       </div>
@@ -51,6 +51,6 @@
       </div>
       <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
       <script type="text/javascript" src="/assets/mobile/framework7/dist/js/framework7.min.js"></script>
-      <script type="text/javascript" src="/assets/admin/super.js"></script>
+      <script type="text/javascript" src="/assets/admin/super.js?v=1.01"></script>
    </body>
 </html>

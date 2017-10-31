@@ -6,9 +6,9 @@
 		<table>
 			<tbody>
 				<tr>
-					<td class="c1">
-						<div class="register-side">
-							<img src="/themes/{{ $shop_theme }}/img/login-bg.jpg">
+					<td class="c1" style="background-color: #fcfcfc;">
+						<div class="register-side" >
+							<div class="text-center" style="margin: 200px 0px;">IMAGE HERE</div>
 						</div>
 					</td>
 					<td class="c2">

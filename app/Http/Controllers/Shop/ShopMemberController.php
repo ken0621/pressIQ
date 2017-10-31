@@ -404,7 +404,6 @@ class ShopMemberController extends Shop
 
         $tax = $payout_setting->enchasment_settings_tax;
         $service_charge = $payout_setting->enchasment_settings_p_fee;
-        $service_charge_type = $payout_setting->enchasment_settings_p_fee_type;
         $other_charge = $payout_setting->encashment_settings_o_fee;
         $minimum = $payout_setting->enchasment_settings_minimum;
 
@@ -429,16 +428,8 @@ class ShopMemberController extends Shop
                 $_slot[$key]->request_amount = $amount;
                 $_slot[$key]->display_request_amount = Currency::format($amount);
 
-                $compute_service_charge = $service_charge;
-                if($service_charge_type == 1)
-                {
-                    $compute_service_charge = (($amount * (doubleval($service_charge)/100)));
-                }
-
                 $tax_amount = ($tax / 100) * $amount;
-                $take_home = $amount - ($tax_amount + $compute_service_charge + $other_charge);
-
-
+                $take_home = $amount - ($tax_amount + $service_charge + $other_charge);
 
                 if($take_home < 0)
                 {
@@ -446,12 +437,12 @@ class ShopMemberController extends Shop
                 }
 
                 $_slot[$key]->tax_amount = $tax_amount;
-                $_slot[$key]->service_charge = $compute_service_charge;
+                $_slot[$key]->service_charge = $service_charge;
                 $_slot[$key]->other_charge = $other_charge;
                 $_slot[$key]->take_home = $take_home;
 
                 $_slot[$key]->display_tax_amount = Currency::format($tax_amount);
-                $_slot[$key]->display_service_charge = Currency::format($compute_service_charge);
+                $_slot[$key]->display_service_charge = Currency::format($service_charge);
                 $_slot[$key]->display_other_charge = Currency::format($other_charge);
                 $_slot[$key]->display_take_home = Currency::format($take_home);
 
@@ -557,7 +548,7 @@ class ShopMemberController extends Shop
                         }
                         else
                         {
-                            $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $compute_service_charge, $other_charge, $date, $status);
+                            $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
                         }
                     }
                 }
@@ -1417,11 +1408,11 @@ class ShopMemberController extends Shop
         $data["page"]               = "Report";
         $data["_rewards"]           = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
         $data["_codes"]             = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
-        if($this->shop_info->shop_id == 5)
+        if($this->shop_info->shop_id == 47)
         {
             $data["_rewards_points"]    = MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
         }
-
+        
         return (Self::load_view_for_members("member.report", $data));
     }
     public function getLeadList()

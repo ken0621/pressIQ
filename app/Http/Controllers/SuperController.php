@@ -123,7 +123,7 @@ class SuperController extends Controller
         }
         else
         {
-            $data["page"] = "Customer List";
+            $data["page"] = "Client List";
         }
         
         $query = Tbl_shop::orderBy("shop_key");
@@ -151,6 +151,11 @@ class SuperController extends Controller
         $data["_shop"] = $_shop;
 
         return view("super.customer", $data);
+    }
+    public function getCustomerAdd()
+    {
+        $data["page"]       = "Client Add";
+        return view("super.customer_add", $data);
     }
     public function getCustomerEdit()
     {

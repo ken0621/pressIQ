@@ -26,123 +26,137 @@ function admin()
 		/* CUSTOMER LIST EVENTS */
         myApp.onPageInit('customer-list', function(page)
         {
-        	var mySearchbar = $$('.searchbar')[0].f7Searchbar;
-			$$('.action-sheet-customer').off('click')
-			$$('.action-sheet-customer').on('click', function ()
-			{
-			    var buttons = [
-			        {
-			            text: 'Create Customer',
-			            bold: true,
-			            onClick: function ()
-			            {
-			                mainView.router.loadPage('/super/customer-add');
-			            }
-			        },
-			        {
-			            text: 'Archive List',
-			            onClick: function ()
-			            {
-			                mainView.router.loadPage('/super/customer?filter=archive');
-			            }
-			        },
-			        {
-			            text: 'Cancel',
-			            color: 'red'
-			        },
-			    ];
-			    myApp.actions(buttons);
-			});    	
+       		event_customer_list_actions();  	
         });
 
         /*  CUSTOMER EDIT EVENTS */
         myApp.onPageInit('customer-edit', function(page)
         {
-			$$('.confirm-archive').on('click', function ()
-			{
-			    myApp.confirm('Are you sure you want to archive this customer?','Confirm Archive', function ()
-			    {
-			        $shop_id = $(".customer-edit-shop-id").val();
-
-			        $.ajax(
-			        {
-			        	url:"/super/customer-archive",
-			  			data: {'shop_id':$shop_id},
-			  			type:"get",
-			  			success: function(data)
-			  			{
-			  				mainView.router.back(
-			  				{
-			  					url: page.view.history[page.view.history.length - 2],
-			  					force: true,
-                    			ignoreCache: true
-                			});
-
-			  			}
-			        });
-
-  
-				});
-			});
-
-			$$('.confirm-restore').on('click', function ()
-			{
-			    myApp.confirm('Are you sure you want to restore this customer?','Confirm Restore', function ()
-			    {
-			        $shop_id = $(".customer-edit-shop-id").val();
-
-			        $.ajax(
-			        {
-			        	url:"/super/customer-restore",
-			  			data: {'shop_id':$shop_id},
-			  			type:"get",
-			  			success: function(data)
-			  			{
-			  				mainView.router.back(
-			  				{
-			  					url: page.view.history[page.view.history.length - 3],
-			  					force: true,
-                    			ignoreCache: true
-                			});
-			  			}
-			        });
-
-  
-				});
-			});
+        	event_customer_edit_archive();
+        	event_customer_edit_restore();
 		});
 
         myApp.onPageInit('*', function(page)
         {
-			$$('form.ajax-submit').on('form:success', function (e)
-			{
-				var isjson = true;
-
-				try
-				{
-					var data = $.parseJSON(e.detail.data);
-				}
-				catch(err)
-				{
-					isjson = false;
-				}
-
-				if(isjson)
-				{
-					myApp.alert(data.message, data.title);
-				}
-				else
-				{
-					myApp.alert("Kindly check your internet connection.", "Error Occurred");
-				}
-
-				myApp.hideIndicator();
-			});
+        	event_global_ajax_submit();
 
 			$$('form.ajax-submit').on('form:beforesend', function (e) { myApp.showIndicator(); });
 			$$('form.ajax-submit').on('form:error', function (e) { myApp.hideIndicator(); });
         });
+	}
+	function event_global_ajax_submit()
+	{
+		$$('form.ajax-submit').on('form:success', function (e)
+		{
+			var isjson = true;
 
+			try
+			{
+				var data = $.parseJSON(e.detail.data);
+			}
+			catch(err)
+			{
+				isjson = false;
+			}
+
+			if(isjson)
+			{
+				myApp.alert(data.message, data.title);
+			}
+			else
+			{
+				myApp.alert("Kindly check your internet connection.", "Error Occurred");
+			}
+
+			myApp.hideIndicator();
+		});
+	}
+	function event_customer_edit_archive()
+	{
+		$$('.confirm-archive').on('click', function ()
+		{
+		    myApp.confirm('Are you sure you want to archive this customer?','Confirm Archive', function ()
+		    {
+		        $shop_id = $(".customer-edit-shop-id").val();
+
+		        $.ajax(
+		        {
+		        	url:"/super/customer-archive",
+		  			data: {'shop_id':$shop_id},
+		  			type:"get",
+		  			success: function(data)
+		  			{
+		  				mainView.router.back(
+		  				{
+		  					url: page.view.history[page.view.history.length - 2],
+		  					force: true,
+                			ignoreCache: true
+            			});
+
+		  			}
+		        });
+
+
+			});
+		});
+	}
+	function event_customer_edit_restore()
+	{
+		$$('.confirm-restore').on('click', function ()
+		{
+		    myApp.confirm('Are you sure you want to restore this customer?','Confirm Restore', function ()
+		    {
+		        $shop_id = $(".customer-edit-shop-id").val();
+
+		        $.ajax(
+		        {
+		        	url:"/super/customer-restore",
+		  			data: {'shop_id':$shop_id},
+		  			type:"get",
+		  			success: function(data)
+		  			{
+		  				mainView.router.back(
+		  				{
+		  					url: page.view.history[page.view.history.length - 3],
+		  					force: true,
+                			ignoreCache: true
+            			});
+		  			}
+		        });
+
+
+			});
+		});
+	}
+	function event_customer_list_actions()
+	{
+    	var mySearchbar = $$('.searchbar')[0].f7Searchbar;
+		$$('.action-sheet-customer').off('click')
+		$$('.action-sheet-customer').on('click', function ()
+		{
+		    var buttons = [
+		        {
+		            text: 'Add New Client',
+		            bold: true,
+		            onClick: function ()
+		            {
+		                mainView.router.loadPage('/super/customer-add');
+		            }
+		        },
+		        {
+		            text: 'Archive List',
+		            onClick: function ()
+		            {
+		                mainView.router.loadPage('/super/customer?filter=archive');
+		            }
+		        },
+		        {
+		            text: 'Cancel',
+		            color: 'red'
+		        },
+		    ];
+		    myApp.actions(buttons);
+		});  
 	}
 	function page_ready()
 	{

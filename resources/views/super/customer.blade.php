@@ -9,7 +9,7 @@
       </div>
       <div class="center sliding">{{ $page }}</div>
 
-      @if($page == "Customer List")
+      @if($page == "Client List")
          <div class="right">
             <a href="#" class="action-sheet-customer"><i class="fa fa-bars"></i></a>
          </div>
@@ -48,35 +48,6 @@
                @endforeach
             </ul>
          </div>
-         <!-- Filter Popup -->
-{{--          <div class="popup popup-filter">
-            <div class="content-block-title">Action List</div>
-            <div class="list-block">
-               <ul>
-                  <li>
-                     <a href="/super/customer-add" class="close-popup item-content">
-                        <div class="item-inner">
-                           <div class="item-title"><i class="fa fa-plus"></i> Create Customer</div>
-                        </div>
-                     </a>
-                  </li>
-                  <li>
-                     <a href="/super/customer?filter=archive" class="close-popup item-content">
-                        <div class="item-inner">
-                           <div class="item-title"><i class="fa fa-trash"></i> Archive List</div>
-                        </div>
-                     </a>
-                  </li>
-                  <li>
-                     <a href="#" class="close-popup item-content">
-                        <div class="item-inner">
-                           <div class="item-title"><i class="fa fa-close"></i> Closes Popup</div>
-                        </div>
-                     </a>
-                  </li>
-               </ul>
-            </div>            
-         </div> --}}
       </div>
    </div>
 </div>

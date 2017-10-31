@@ -28,6 +28,62 @@ function admin()
         	var mySearchbar = $$('.searchbar')[0].f7Searchbar;
         });
 
+        myApp.onPageInit('customer-edit', function(page)
+        {
+			$$('.confirm-archive').on('click', function ()
+			{
+			    myApp.confirm('Are you sure you want to archive this customer?','Confirm Archive', function ()
+			    {
+			        $shop_id = $(".customer-edit-shop-id").val();
+
+			        $.ajax(
+			        {
+			        	url:"/super/customer-archive",
+			  			data: {'shop_id':$shop_id},
+			  			type:"get",
+			  			success: function(data)
+			  			{
+			  				mainView.router.back(
+			  				{
+			  					url: page.view.history[page.view.history.length - 2],
+			  					force: true,
+                    			ignoreCache: true
+                			});
+
+			  			}
+			        });
+
+  
+				});
+			});
+
+			$$('.confirm-restore').on('click', function ()
+			{
+			    myApp.confirm('Are you sure you want to restore this customer?','Confirm Restore', function ()
+			    {
+			        $shop_id = $(".customer-edit-shop-id").val();
+
+			        $.ajax(
+			        {
+			        	url:"/super/customer-restore",
+			  			data: {'shop_id':$shop_id},
+			  			type:"get",
+			  			success: function(data)
+			  			{
+			  				mainView.router.back(
+			  				{
+			  					url: page.view.history[page.view.history.length - 3],
+			  					force: true,
+                    			ignoreCache: true
+                			});
+			  			}
+			        });
+
+  
+				});
+			});
+		});
+
         myApp.onPageInit('*', function(page)
         {
 			$$('form.ajax-submit').on('form:success', function (e)

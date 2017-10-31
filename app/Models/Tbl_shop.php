@@ -14,6 +14,11 @@ class Tbl_shop extends Model
     	return $query->where("tbl_shop.archived", 0);
     }
 
+    public static function scopeArchived($query)
+    {
+        return $query->where("tbl_shop.archived", 1);
+    }
+
     public static function scopegetUser($query)
     {
     	return $query->leftjoin("tbl_user","tbl_user.user_shop","=","tbl_shop.shop_id");

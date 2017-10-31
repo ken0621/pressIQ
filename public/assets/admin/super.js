@@ -23,11 +23,39 @@ function admin()
 			page_ready();
 		});
 
+		/* CUSTOMER LIST EVENTS */
         myApp.onPageInit('customer-list', function(page)
         {
         	var mySearchbar = $$('.searchbar')[0].f7Searchbar;
+			$$('.action-sheet-customer').off('click')
+			$$('.action-sheet-customer').on('click', function ()
+			{
+			    var buttons = [
+			        {
+			            text: 'Create Customer',
+			            bold: true,
+			            onClick: function ()
+			            {
+			                mainView.router.loadPage('/super/customer-add');
+			            }
+			        },
+			        {
+			            text: 'Archive List',
+			            onClick: function ()
+			            {
+			                mainView.router.loadPage('/super/customer?filter=archive');
+			            }
+			        },
+			        {
+			            text: 'Cancel',
+			            color: 'red'
+			        },
+			    ];
+			    myApp.actions(buttons);
+			});    	
         });
 
+        /*  CUSTOMER EDIT EVENTS */
         myApp.onPageInit('customer-edit', function(page)
         {
 			$$('.confirm-archive').on('click', function ()

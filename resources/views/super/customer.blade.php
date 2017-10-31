@@ -8,9 +8,13 @@
          </a>
       </div>
       <div class="center sliding">{{ $page }}</div>
-      <div class="right">
-         <a href="#" data-popup=".popup-filter" class="open-popup"><i class="fa fa-gear"></i></a>
-      </div>
+
+      @if($page == "Customer List")
+         <div class="right">
+            <a href="#" class="action-sheet-customer"><i class="fa fa-bars"></i></a>
+         </div>
+      @endif
+
    </div>
 </div>
 <div class="pages">
@@ -45,13 +49,34 @@
             </ul>
          </div>
          <!-- Filter Popup -->
-         <div class="popup popup-filter">
-            <div class="content-block-title">FILTER CUSTOMER</div>
-            <div class="content-block">
-               <p><a href="/super/customer?filter=archive" class="close-popup">Archive List</a></p>
-               <p><a href="#" class="close-popup">Close popup</a></p>
-            </div>
-         </div>
+{{--          <div class="popup popup-filter">
+            <div class="content-block-title">Action List</div>
+            <div class="list-block">
+               <ul>
+                  <li>
+                     <a href="/super/customer-add" class="close-popup item-content">
+                        <div class="item-inner">
+                           <div class="item-title"><i class="fa fa-plus"></i> Create Customer</div>
+                        </div>
+                     </a>
+                  </li>
+                  <li>
+                     <a href="/super/customer?filter=archive" class="close-popup item-content">
+                        <div class="item-inner">
+                           <div class="item-title"><i class="fa fa-trash"></i> Archive List</div>
+                        </div>
+                     </a>
+                  </li>
+                  <li>
+                     <a href="#" class="close-popup item-content">
+                        <div class="item-inner">
+                           <div class="item-title"><i class="fa fa-close"></i> Closes Popup</div>
+                        </div>
+                     </a>
+                  </li>
+               </ul>
+            </div>            
+         </div> --}}
       </div>
    </div>
 </div>

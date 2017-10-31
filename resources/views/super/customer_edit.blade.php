@@ -91,8 +91,7 @@
                </ul>
             </div>
             @endif
-
-            <div class="content-block-title">Action List</div>
+            
             <div class="list-block">
                <ul>
                   @if($shop->archived == 1)

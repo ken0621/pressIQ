@@ -1397,7 +1397,7 @@ function page_list()
     $code = "page-analytics-press-release";
     $nav[$page]['submenu'][$code]['label'] = "Analytics";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path ."page/". $page . "/create_press_release";
+    $nav[$page]['submenu'][$code]['url'] = $path ."page/". $page . "/analytics_email_press_release";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page', 'activate_theme'];
     $nav[$page]['submenu'][$code]['status'] = "Layout Only";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Ephraim Dognidon   </span>";

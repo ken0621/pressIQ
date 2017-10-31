@@ -34,7 +34,7 @@
     {{csrf_field()}}
       <div class="subject">
       <div class="col-lg-6">
-        <input type="text" id="input_subject" placeholder="To" class="form-control email-to-container subject_email" name="to" value="{{$sent_email}}">
+        <input type="hidden" id="input_subject" placeholder="To" class="form-control email-to-container subject_email" name="to" value="{{$mails}}">
       </div>
     </div>
     <br>

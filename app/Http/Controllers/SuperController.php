@@ -3,7 +3,10 @@ namespace App\Http\Controllers;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_admin;
 use App\Models\Tbl_user;
+use App\Models\Tbl_user_position;
 use Crypt;
+use Validator;
+use Illuminate\Validation\Rule;
 
 class SuperController extends Controller
 {
@@ -44,6 +47,15 @@ class SuperController extends Controller
                 {
                     $this->admin_info = $check_admin;
                 }
+            }
+            else
+            {
+                /* IF NO SESSION - ALLOWED PAGE IS ONLY LOGIN AND LOGIN SUBMIT */
+                if(request()->segment(2) != "" && request()->segment(2) != "login")
+                {
+                    abort(404);
+                }
+                
             }
             
             return $next($request);
@@ -105,11 +117,32 @@ class SuperController extends Controller
     }
     public function getCustomer()
     {
-        $_shop = Tbl_shop::orderBy("shop_key")->get();
+        if(request("filter") == "archive")
+        {
+            $data["page"] = "Archive List";
+        }
+        else
+        {
+            $data["page"] = "Client List";
+        }
+        
+        $query = Tbl_shop::orderBy("shop_key");
+
+
+        if(request("filter") == "archive")
+        {
+            $query->archived();
+        }
+        else
+        {
+            $query->active();
+        }
+
+        $_shop = $query->get();
 
         foreach($_shop as $key => $shop)
         {
-            $_shop[$key]->shop_name     = strtoupper($shop->shop_key);
+            $_shop[$key]->shop_name     = strtolower($shop->shop_key);
             $_shop[$key]->domain        = ($shop->shop_domain == "unset_yet" ? "<span style='color: gray;'>no url set yet</span>" : $shop->shop_domain);
             $user_count                 = Tbl_user::where("user_shop", $shop->shop_id)->active()->count();
             $_shop[$key]->user_count    = "<span style='color: gray;'>" . $user_count . " user(s)" . "</span>";
@@ -119,6 +152,11 @@ class SuperController extends Controller
 
         return view("super.customer", $data);
     }
+    public function getCustomerAdd()
+    {
+        $data["page"]       = "Client Add";
+        return view("super.customer_add", $data);
+    }
     public function getCustomerEdit()
     {
         $data["page"]       = "Customer Edit";
@@ -127,22 +165,72 @@ class SuperController extends Controller
         $data["created"]    = date("m/d/Y", strtotime($data["shop"]->shop_date_created));
         $data["edited"]     = date("m/d/Y", strtotime($data["shop"]->updated_at));
         $data["user_count"] = Tbl_user::where("user_shop", $data["shop"]->shop_id)->active()->count();
+        $data["developer"]  = Tbl_user::where("user_shop", $data["shop"]->shop_id)->where("user_level", 1)->first();
+
+        if($data["developer"])
+        {
+            $data["user_password"] = Crypt::decrypt($data["developer"]->user_password);
+        }
 
         return view("super.customer_edit", $data);
     }
-    public function getUser()
+    public function postCustomerEdit()
+    {
+        $shop_old = Tbl_shop::where("shop_id", request("id"))->first();
+
+        $condition["shop_key"]          = array("required", Rule::unique('tbl_shop')->ignore($shop_old->shop_key, 'shop_key'));
+        $condition["shop_contact"]      = array("required");
+        $validator                      = Validator::make(request()->all(), $condition);
+
+        if ($validator->fails())
+        {
+            $errors                 = $validator->errors();
+            $return["status"]       = "error";
+            $return["title"]        = "Validation Error";
+            $return["message"]      = $errors->first();
+        }
+        else
+        {
+            $update = request()->input();
+            unset($update["_token"]);
+            unset($update["id"]);
+
+            if($update["shop_domain"] == "")
+            {
+                $update["shop_domain"] = "unset_yet";
+            }
+
+            Tbl_shop::where("shop_id", request("id"))->update($update);
+
+            $return["title"] = "Successfully Updated";
+            $return["message"] = "Information of Customer No. " . request("id") . " has been successfully updated.";     
+        }
+        echo json_encode($return);
+    }
+    public function getCustomerArchive()
+    {
+        $update["archived"] = 1;
+        Tbl_shop::where("shop_id", request("shop_id"))->update($update);
+    }
+    public function getCustomerRestore()
+    {
+        $update["archived"] = 0;
+        Tbl_shop::where("shop_id", request("shop_id"))->update($update);
+    }    public function getUser()
     {
         $data["shop"]       = Tbl_shop::where('shop_id', request("shop_id"))->first();
         $data["shop_id"]    = $data["shop"]->shop_id;
         $data["page"]       =  $data["shop"]->shop_key;
-        $data["_user"]      = Tbl_user::where("user_shop", request("shop_id"))->active()->get();
+        $data["_user"]      = Tbl_user::where("user_shop", request("shop_id"))->active()->position()->get();
         return view("super.user", $data);
     }
     public function getUserEdit()
     {
         $data["page"]       = "Edit";
         $data["user_id"]    = $user_id = request("id");
-        $data["user"]       = Tbl_user::where("user_id", $user_id)->first();
+        $data["user"]       = Tbl_user::where("user_id", $user_id)->position()->first();
+        $data["_position"]  = Tbl_user_position::where("position_shop_id", $data["user"]->user_shop)->get();
+        $data["password"]   = Crypt::decrypt($data["user"]->user_password);
         return view("super.user_edit", $data);
     }
     public function getLogout()

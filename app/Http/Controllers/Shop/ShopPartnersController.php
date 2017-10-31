@@ -42,8 +42,9 @@ class ShopPartnersController extends Shop
 
     }
 
-    public function partners_views($id)
+    public function partners_views()
     {
+        $id = Request::input('i');
         $data["page"] = "Partners Views";
         $data['company'] = Tbl_partners::where('company_id', $id)->where('archived',0)->where('shop_id', $this->shop_info->shop_id)->first();
         $data['_company'] = Tbl_partners::where('archived',0)->where('shop_id', $this->shop_info->shop_id)->get();

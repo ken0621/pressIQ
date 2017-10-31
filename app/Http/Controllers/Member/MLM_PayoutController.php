@@ -135,6 +135,7 @@ class MLM_PayoutController extends Member
 		{
 			$update["enchasment_settings_tax"] = doubleval(request("enchasment_settings_tax"));
 			$update["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
+			$update["enchasment_settings_p_fee_type"] = request("enchasment_settings_p_fee_type");
 			$update["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$update["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
 			$update["encashment_settings_schedule_type"] = request("encashment_settings_schedule_type");
@@ -146,6 +147,7 @@ class MLM_PayoutController extends Member
 		{
 			$insert["enchasment_settings_tax"] = doubleval(request("enchasment_settings_tax"));
 			$insert["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
+			$update["enchasment_settings_p_fee_type"] = request("enchasment_settings_p_fee_type");
 			$insert["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$insert["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
 			$insert["encashment_settings_schedule_type"] = request("encashment_settings_schedule_type");
@@ -230,7 +232,8 @@ class MLM_PayoutController extends Member
 		$source 				= Request::input("source");
 		$method 				= Request::input("method");
 		$tax_amount 			= Request::input("tax");
-		$service_charge 		= Request::input("service-charge");
+		$service_charge_type 	= Request::input("service-charge-type");
+		$service_charge 		= str_replace('%', '', Request::input("service-charge"));
 		$minimum 				= Request::input("minimum");
 		$other_charge 			= Request::input("other-charge");
 		$data["cutoff_date"]	= $cutoff_date = Request::input("cutoff-date");
@@ -238,8 +241,6 @@ class MLM_PayoutController extends Member
 		$total_net 				= 0;
 		$minimum_encashment		= $minimum;
 		$data["method"]			= $method;
-
-
 		$slot_query = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet();
 
 		if($method == "eon")
@@ -264,6 +265,7 @@ class MLM_PayoutController extends Member
 		}
 
 		$_slot = $slot_query->orderBy("customer_id", "asc")->get();
+		$test = [];
 		foreach($_slot as $key => $slot)
 		{
 			if($source == "wallet")
@@ -274,7 +276,12 @@ class MLM_PayoutController extends Member
 				$remaining 			= $slot->current_wallet - $encashment_amount;
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
-				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
+				$compute_service_charge = $service_charge;
+				if($service_charge_type == 1)
+				{
+					$compute_service_charge = (($encashment_amount * (doubleval($service_charge)/100)));
+				}
+				$compute_net 		= $compute_net - ($compute_service_charge + $other_charge + $tax);
 			}
 			else
 			{
@@ -286,15 +293,20 @@ class MLM_PayoutController extends Member
 				$remaining 			= $slot->current_wallet;
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
-				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
+				// $test[$key] = $encashment_amount .' * '.doubleval($service_charge) . '/100';
+				$compute_service_charge = $service_charge;
+				if($service_charge_type == 1)
+				{
+					$compute_service_charge = (($encashment_amount * (doubleval($service_charge)/100)));
+				}
+				$compute_net 		= $compute_net - ($compute_service_charge + $other_charge + $tax);
 			}
-
 			$_slot[$key]->real_wallet 		= number_format($slot->current_wallet, 2, '.', '');
 			$_slot[$key]->real_earnings 	= number_format($slot->total_earnings, 2, '.', '');
 			$_slot[$key]->real_payout 		= number_format($slot->total_payout, 2, '.', '');
 			$_slot[$key]->real_encash 		= number_format($encashment_amount, 2, '.', '');
 			$_slot[$key]->real_remaining 	= number_format($remaining, 2, '.', '');
-			$_slot[$key]->real_service 		= number_format($service_charge, 2, '.', '');
+			$_slot[$key]->real_service 		= number_format($compute_service_charge, 2, '.', '');
 			$_slot[$key]->real_other 		= number_format($other_charge, 2, '.', '');
 			$_slot[$key]->real_tax 			= number_format($tax, 2, '.', '');
 			$_slot[$key]->real_net 			= number_format($compute_net, 2, '.', '');
@@ -305,7 +317,7 @@ class MLM_PayoutController extends Member
 			$_slot[$key]->display_payout = Currency::format($slot->total_payout);
 			$_slot[$key]->display_encash = Currency::format($encashment_amount);
 			$_slot[$key]->display_remaining = Currency::format($remaining);
-			$_slot[$key]->display_service = Currency::format($service_charge);
+			$_slot[$key]->display_service = Currency::format($compute_service_charge);
 			$_slot[$key]->display_other = Currency::format($other_charge);
 			$_slot[$key]->display_tax = Currency::format($tax);
 			$_slot[$key]->display_net = Currency::format($compute_net);
@@ -352,7 +364,7 @@ class MLM_PayoutController extends Member
 				$total_net += $compute_net;
 			}
 		}
-
+		// dd($test);
 		$data["total_payout"] = Currency::format($total_payout);
 		$data["total_net"] = Currency::format($total_net);
 		$data["_slot"] = $_slot;

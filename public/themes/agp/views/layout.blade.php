@@ -42,6 +42,7 @@
     <link rel="stylesheet" type="text/css" href="resources/assets/slick/slick-theme.css">
     <!-- GLOBAL -->
     <link rel="stylesheet" type="text/css" href="resources/assets/front/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
     <!-- OTHER -->
     @yield('css')
 
@@ -76,7 +77,7 @@
 </head>
 <!-- End of Header -->
 
-<body class="home page page-template-default header_1_body fullwidth_slider_page with_slider_page wpb-js-composer vc_responsive">
+<body class="pushmenu-push home page page-template-default header_1_body fullwidth_slider_page with_slider_page wpb-js-composer vc_responsive">
     <!-- Used for boxed layout -->
     <!-- Start Top Navigation -->
     <div class="top_nav">
@@ -95,7 +96,14 @@
                             <div class="row-fluid social_row">
                                 <div class="span12 account-button">
                                     <ul class="text-center" style="margin-top: 0;">
-                                        <li><a href="/mlm/login">LOG IN</a></li>
+                                        <!-- <li><a href="/mlm/login">LOG IN</a></li> -->
+                                        @if($customer)
+                                            <li><a href="/members/logout">LOGOUT</a></li>
+                                            <li><a href="/members">MY ACCOUNT</a></li>
+                                        @else
+                                            <li><a href="/members/login">LOGIN</a></li>
+                                            <li><a href="/members/register">REGISTER</a></li>
+                                        @endif
                                         <!-- <li><div class="divider">|</div></li> -->
                                         <!-- <li><a href="/mlm/register">SIGN UP</a></li> -->
                                     </ul>
@@ -207,7 +215,6 @@
         </div>
     </footer>
     
-    
     <script type='text/javascript' src='resources/assets/ausart/assets/js/jquery.hoverex.js'></script>
     <script type='text/javascript' src='resources/assets/ausart/assets/js/imagesloaded.pkgd.min.js'></script>
     <script type='text/javascript' src='resources/assets/ausart/assets/js/jquery.parallax.js'></script>
@@ -228,6 +235,9 @@
     <!-- EXTERNAL JS -->
     <script type="text/javascript" src="resources/assets/external/matchheight.js"></script>
     <script type="text/javascript" src="resources/assets/slick/slick.min.js"></script>
+
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     <!-- EXECUTE JS -->
     <script type="text/javascript">
     ;(function($){

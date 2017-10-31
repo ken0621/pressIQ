@@ -39,6 +39,13 @@
 <script type="text/javascript">
 	function success_reject(data) 
 	{
-
+		if(data.status == 'success')
+		{
+			toastr.success("Success");
+			setInterval(function()
+			{
+				location.reload();
+			},2000)
+		}
 	}
 </script>

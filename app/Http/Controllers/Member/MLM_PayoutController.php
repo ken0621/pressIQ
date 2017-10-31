@@ -14,6 +14,7 @@ use App\Models\Tbl_payout_bank;
 use App\Models\Tbl_payout_bank_shop;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_shop;
+use App\Models\Tbl_slot_notification;
 use App\Globals\Currency;
 use Redirect;
 use App\Globals\MLM2;
@@ -26,6 +27,7 @@ class MLM_PayoutController extends Member
 	{
 		$data["page"] = "Payout Processing";
 		$data['shop_id'] = $this->user_info->shop_id;
+		$data['count_reject'] = Tbl_slot_notification::where('shop_id',$data['shop_id'])->count();
 
 		return view('member.mlm_payout.payout', $data);
 	}
@@ -416,25 +418,33 @@ class MLM_PayoutController extends Member
 								->get();
 		$all_slot = Tbl_mlm_slot_wallet_log::where('tbl_mlm_slot_wallet_log.shop_id',$shop_id)->where('wallet_log_payout_status','PENDING')->slot()->customer()->get();
 
-		// ->where('current_wallet','<',$amount)
-		// ->where('customer_payout_method','unset')
 		foreach ($all_slot as $key => $value) 
 		{
-			if($encashment_type != $value->wallet_log_plan)
+			if(abs($value->wallet_log_amount)+1 > $amount || $value->wallet_log_amount == 0)
 			{
-				if(abs($value->wallet_log_amount) > $amount)
+				if($encashment_type != $value->wallet_log_plan)
 				{
 					unset($all_slot[$key]);
 				}
 			}
-			if(abs($value->wallet_log_amount) > $amount)
+		}
+
+		if(count($all_slot) > 0)
+		{
+			$insert['created_date'] = Carbon::now();
+			foreach ($all_slot as $key1 => $value1) 
 			{
-				dd($all_slot[$key]);
-				unset($all_slot[$key]);
+				$insert['shop_id'] = $this->user_info->shop_id;
+				$insert['customer_id'] = $value1->customer_id;
+				$insert['remarks'] = $remarks;
+				Tbl_slot_notification::insert($insert);
+				Tbl_mlm_slot_wallet_log::where('wallet_log_id',$value1->wallet_log_id)->delete();
 			}
 		}
 
-		print_r(count($all_slot));
-		die();
+		$return['status'] = 'success';
+		$return['call_function'] = 'success_reject';
+
+		return json_encode($return);
 	}
 }

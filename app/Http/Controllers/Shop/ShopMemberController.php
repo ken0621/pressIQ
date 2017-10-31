@@ -46,6 +46,7 @@ use App\Models\Tbl_payout_bank;
 use App\Models\Tbl_online_pymnt_api;
 use App\Models\Tbl_mlm_plan_setting;
 use App\Models\Tbl_vmoney_settings;
+use App\Models\Tbl_slot_notification;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -119,6 +120,7 @@ class ShopMemberController extends Shop
                 }
             }
             $data['_event'] = ShopEvent::get($this->shop_info->shop_id ,0 ,3 ,Carbon::now(), Self::$customer_info->customer_id, ['all','members']);
+            $data['_notification'] = Tbl_slot_notification::where('shop_id',$this->shop_info->shop_id)->where('customer_id',Self::$customer_info->customer_id)->where('has_been_seen',0)->first();
 
             if($this->shop_info->shop_theme == 'philtech')
             {
@@ -2222,6 +2224,12 @@ class ShopMemberController extends Shop
         }
 
         return json_encode($return);
+    }
+    public function getReadNotification()
+    {
+        $notif_id = Request2::input('notif_id');
+        $update['has_been_seen'] = 1;
+        Tbl_slot_notification::where('notification_id', $notif_id)->update($update);
     }
     public function getWebhook()
     {

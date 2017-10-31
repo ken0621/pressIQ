@@ -3,6 +3,20 @@
 
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
+@if($mlm_member)
+	@if(isset($_notification))
+	<div class="alert alert-danger">
+		<div class="message-warning text-center">
+			<b>Warning!</b> You are receiving this notification because ...
+			<br>
+			{!! $_notification->remarks !!}
+		</div>
+		<div class="text-center">
+			<a class="mark-as-read-click" notif-id="{{$_notification->notification_id}}"><small>Mark as Read</small></a>
+		</div>
+	</div>
+	@endif
+@endif
 @if(!$mlm_member)
 	<div class="dashboard">
 		@if(isset($check_unused_code))
@@ -324,8 +338,26 @@ $(document).ready(function()
 	});
 
 	add_event_click_buy_kit();
+	mark_as_read_function();
 });
-
+function mark_as_read_function()
+{
+	$('.mark-as-read-click').unbind('click');
+	$('.mark-as-read-click').bind('click', function()
+	{
+		$(this).html("Please wait...");
+		var notif_id = $(this).attr('notif-id');
+		$.ajax({
+			url : '/members/read-notification',
+			type : 'get',
+			data : {notif_id : notif_id},
+			success : function(data)
+			{
+				$('.alert.alert-danger').remove();
+			}
+		});
+	});
+}
 function add_event_click_buy_kit()
 {
 	$(".btn-buy-a-kit").off("click");
@@ -338,6 +370,8 @@ function action_click_buy_kit()
 {
 	$("#unity_kit").modal();
 }
+
+
 
 </script>
 @endsection

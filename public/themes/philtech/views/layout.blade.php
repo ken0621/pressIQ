@@ -10,17 +10,16 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name='B-verify' content='8b63efb2920a681d6f877a59a414659d09831140' />
-        <!-- FOR GOOGLE LOGIN -->
-        <meta name="google-signin-client_id" content="{{$google_app_id or ''}}">
-        <input type="hidden" name="" class="google_app_id" value="{{$google_app_id or ''}}">
-        <!-- END GOOGLE LOGIN -->
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+      
+        <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+        {{-- PHILTECH ICON --}}
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/icon/philtech-icon.png" type="image/png"/>
+
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
-        
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1">
         <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
         
         <!-- OTHER CSS -->
@@ -31,16 +30,29 @@
     <div class="loader" style="display: none;">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
-        <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
     <!-- HEADER -->
     <div class="header-nav clearfix">
         <div class="header-nav-top">
             <div class="container">
-                <div class="holder"><a href="javascript:">COMPANY</a></div>
-                <div class="holder"><a href="javascript:">BUSINESS PRESENTATION</a></div>
-                <div class="holder"><a href="javascript:">NEWS</a></div>
+                <div class="holder"><a href="/about">COMPANY</a></div>
+                @if($mlm_member)
+                <div class="holder">
+                    <div class="dropdown">
+                      <a class="">BUSINESS PRESENTATION</a>
+                      <div class="dropdown-content">
+                        <a href="https://drive.google.com/open?id=0B_zVgtlTtv89dU1Ub2toMXBLc2M">MILLIONAIRE SYSTEM</a>
+                        <a href="https://drive.google.com/open?id=0B_zVgtlTtv89ZzlKSnI3ckpxd1k">PRIVILEGE CARD PRESENTATION</a>
+                        <a href="https://drive.google.com/open?id=0B_zVgtlTtv89RDVSZ2QteUwzaVE">TRADITIONAL BUSINESS PRESENTATION</a>
+                      </div>
+                    </div>
+                </div>
+                @else
+                <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
+                @endif
+                <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 
                 @if($customer)
                 <div class="holder"><a href="/members">MY ACCOUNT</a></div>
@@ -66,7 +78,7 @@
                         <div class="search-bar">
                             <form action="/product" method="get" id="form-search">
                                 <div class="input-group">
-                                     <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
+                                     <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" name="search" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
                                      <span class="input-group-addon search-button" id="sizing-addon1">
                                         <a href="" onclick="onSearch();" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>                          
                                      </span>
@@ -89,10 +101,7 @@
                         <div class="shopping-cart-container text-center popup" link="/cartv2" size="lg">
                             <div class="shopping-cart">
                                 <img src="/themes/{{ $shop_theme }}/img/header/cart-icon.png">
-{{--                                 <span class="badge mini-cart-quantity">{{ $global_cart['sale_information']['total_quantity'] }}</span>
-                                <span>P </span>
-                                <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }}
-                                </span> --}}
+                                <span class="badge mini-cart-quantity quantity-item-holder" style="width: 23px; height: 23px; padding-left: 0; padding-right: 0;">0</span>
                             </div>
                             <div class="container-cart mini-cart">
                                 <div class="text-center"><span class="cart-loader text-center"><img style="height: 50px; margin: auto;" src="/assets/front/img/loader.gif"></span></div>
@@ -133,13 +142,50 @@
       </div><!-- /.container-fluid -->
       <div class="sticky-show">
           <div class="container">
-              <div class="holder">
-                  <button type="button" class="navbar-toggle">
+              <div class="holder category-holder">
+                  <div class="icon-bar-holder">
                     <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar" style="margin-top: 0;"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
+                  </div>
+                  <div class="category-label">CATEGORIES</div>
+              </div>
+              <div class="holder">
+                <div class="search-bar-holder">
+                    {{-- Search Bar --}}
+                    <div class="search-bar">
+                        <form action="/product" method="get" id="form-search">
+                            <div class="input-group">
+                                <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" name="search" id="keyword" aria-describedby="sizing-addon1">
+                                <span class="input-group-addon search-button" id="sizing-addon1">
+                                    <a href="" onclick="onSearch();" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    {{-- End Search Bar --}}
+                </div>
+              </div>
+              <div class="holder ft">
+                  <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/invert/cashback.png">
+              </div>
+              <div class="holder ft">
+                  <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/invert/delivery.png">
+              </div>
+              <div class="holder ft">
+                  <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/invert/privilege.png">
+              </div>
+              <div class="holder">
+                <div class="shopping-cart-container text-center popup" link="/cartv2" size="lg">
+                    <div class="shopping-cart">
+                        <img src="/themes/{{ $shop_theme }}/img/header/cart-icon.png">
+                        <span class="badge mini-cart-quantity quantity-item-holder" style="width: 23px; height: 23px; padding-left: 0; padding-right: 0;">0</span>
+                    </div>
+                    <div class="container-cart mini-cart">
+                        <div class="text-center"><span class="cart-loader text-center"><img style="height: 50px; margin: auto;" src="/assets/front/img/loader.gif"></span></div>
+                    </div>
+                </div>
               </div>
           </div>
       </div>
@@ -170,7 +216,7 @@
                         <li><a href="javascript:" onClick="alert('Under Development');">Career</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">Events</a></li>
                         <li class="{{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">Legalities</a></li>
-                        <li><a href="https://drive.google.com/file/d/0B9C_Tfe9UZCmemJFeXA3dWRyYjVKOVY1MlVkUlNiWlVDang4/view">Business Presentation</a></li>
+                        <li><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">Business Presentation</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
                     </ul>
                 </div>
@@ -227,22 +273,9 @@
         </div>
       </div>
     </div>
-
-    <div id="global_modal" class="modal fade" role="dialog" >
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content modal-content-global clearfix">
-            </div>
-        </div>
-    </div>
-    <div class="multiple_global_modal_container"></div>
-
     @include("frontend.gfoot")
     <script src="/themes/{{ $shop_theme }}/js/custom_theme.js"></script>
-    <!-- FOR GOOGLE LOGIN -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="https://apis.google.com/js/api:client.js"></script>
-    <!-- END GOOGLE LOGIN -->
+   
     @yield("js")
     </body>
 </html>

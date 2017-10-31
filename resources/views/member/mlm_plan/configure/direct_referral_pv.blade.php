@@ -16,7 +16,7 @@
     </div>
 </div>
 {!! $basic_settings !!} 
-<div class="panel panel-default">
+<!-- <div class="panel panel-default">
   <div class="panel-body">
 
     <form class="global-submit" method="post" id="save_include" action="/member/mlm/plan/direct_referral_pv/edit/save_include_direct_referral">
@@ -31,7 +31,7 @@
     </form>       
 
   </div>
-</div>
+</div> -->
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">
@@ -40,8 +40,13 @@
                     <thead style="text-transform: uppercase">
                         <tr><th colspan="3"><center>DIRECT SPONSOR BONUS PER MEMBERSHIP</center></th></tr>
                         <tr>
-                            <th>MEMEBERSHIP NAME</th>
-                            <th>REFERRAL RANK PV</th>
+                            <th>MEMBERSHIP NAME</th>
+                            <th>REFERRAL RANK RPV</th>
+                            <th>REFERRAL RANK RGPV</th>
+                            <th>REFERRAL RANK SPV</th>
+                            <th>REFERRAL RANK SGPV</th>
+                            <th>REFERRAL RANK SELF RPV</th>
+                            <th>REFERRAL RANK SELF SPV</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -55,13 +60,33 @@
                                                 {!! csrf_field() !!}
                                                 <input type="hidden" name="membership_id" value="{{$mem->membership_id}}">
                                                 <input type='hidden' class='form-control direct_referral_rpv_container' name='direct_referral_rpv' value=''>
+                                                <input type='hidden' class='form-control direct_referral_rgpv_container' name='direct_referral_rgpv' value=''>
+                                                <input type='hidden' class='form-control direct_referral_spv_container' name='direct_referral_spv' value=''>
+                                                <input type='hidden' class='form-control direct_referral_sgpv_container' name='direct_referral_sgpv' value=''>
+                                                <input type='hidden' class='form-control direct_referral_self_rpv_container' name='direct_referral_self_rpv' value=''>
+                                                <input type='hidden' class='form-control direct_referral_self_spv_container' name='direct_referral_self_spv' value=''>
                                             </form>
                                             <td>
                                                 <span class="direct_referral_rpv{{$mem->membership_id}}">{{$mem->direct_referral_rpv == "" ? 0 : $mem->direct_referral_rpv }}</span>
+                                            </td>                                                
+                                            <td>
+                                                <span class="direct_referral_rgpv{{$mem->membership_id}}">{{$mem->direct_referral_rgpv == "" ? 0 : $mem->direct_referral_rgpv }}</span>
+                                            </td>                                                 
+                                            <td>
+                                                <span class="direct_referral_spv{{$mem->membership_id}}">{{$mem->direct_referral_spv == "" ? 0 : $mem->direct_referral_spv }}</span>
+                                            </td>                                                 
+                                            <td>
+                                                <span class="direct_referral_sgpv{{$mem->membership_id}}">{{$mem->direct_referral_sgpv == "" ? 0 : $mem->direct_referral_sgpv }}</span>
+                                            </td>                                                
+                                            <td>
+                                                <span class="direct_referral_self_rpv{{$mem->membership_id}}">{{$mem->direct_referral_self_rpv == "" ? 0 : $mem->direct_referral_self_rpv }}</span>
+                                            </td>                                               
+                                            <td>
+                                                <span class="direct_referral_self_spv{{$mem->membership_id}}">{{$mem->direct_referral_self_spv == "" ? 0 : $mem->direct_referral_self_spv }}</span>
                                             </td>                                      
                                         <td>
                                             <span class="direct_referral_rpv_edit{{$mem->membership_id}}">
-                                                <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_referral_rpv({{$mem->membership_id}},{{$mem->direct_referral_rpv}})">Edit</a>
+                                                <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_referral_rpv({{$mem->membership_id}},{{$mem->direct_referral_rpv}},{{$mem->direct_referral_rgpv}},{{$mem->direct_referral_spv}},{{$mem->direct_referral_sgpv}})">Edit</a>
                                             </span>
                                         </td>
                                     </tr>
@@ -89,7 +114,17 @@ function save_include()
 function save_direct_points_membership(membershipid)
 {
     var direct_referral_rpv      = $('.direct_referral_rpvinput' + membershipid).val();
+    var direct_referral_rgpv     = $('.direct_referral_rgpvinput' + membershipid).val();
+    var direct_referral_spv      = $('.direct_referral_spvinput' + membershipid).val();
+    var direct_referral_sgpv     = $('.direct_referral_sgpvinput' + membershipid).val();
+    var direct_referral_self_rpv = $('.direct_referral_self_rpvinput' + membershipid).val();
+    var direct_referral_self_spv = $('.direct_referral_self_spvinput' + membershipid).val();
     $(".direct_referral_rpv_container").val(direct_referral_rpv);
+    $(".direct_referral_rgpv_container").val(direct_referral_rgpv);
+    $(".direct_referral_spv_container").val(direct_referral_spv);
+    $(".direct_referral_sgpv_container").val(direct_referral_sgpv);
+    $(".direct_referral_self_rpv_container").val(direct_referral_self_rpv);
+    $(".direct_referral_self_spv_container").val(direct_referral_self_spv);
 
     console.log($('#form' + membershipid));
     $('#form' + membershipid).submit();
@@ -98,24 +133,45 @@ function save_direct_points_membership(membershipid)
 function cancel(membershipid)
 {
     var direct_referral_rpv = $('.direct_referral_rpvinput' + membershipid).val();
+    var direct_referral_rgpv = $('.direct_referral_rgpvinput' + membershipid).val();
+    var direct_referral_spv = $('.direct_referral_spvinput' + membershipid).val();
+    var direct_referral_sgpv = $('.direct_referral_sgpvinput' + membershipid).val();
+    var direct_referral_self_rpv = $('.direct_referral_self_rpvinput' + membershipid).val();
+    var direct_referral_self_spv = $('.direct_referral_self_spvinput' + membershipid).val();
     direct_referral_rpv = parseInt(direct_referral_rpv);
+    direct_referral_rgpv = parseInt(direct_referral_rgpv);
+    direct_referral_spv = parseInt(direct_referral_spv);
+    direct_referral_sgpv = parseInt(direct_referral_sgpv);
+    direct_referral_self_rpv = parseInt(direct_referral_self_rpv);
+    direct_referral_self_spv = parseInt(direct_referral_self_spv);
 
-    console.log(Number.isInteger(direct_referral_rpv));
+    // console.log(Number.isInteger(direct_referral_rpv));
 
-    if(Number.isInteger(direct_referral_rpv) == true)
+    if(Number.isInteger(direct_referral_rpv) == true && Number.isInteger(direct_referral_rgpv) == true && Number.isInteger(direct_referral_spv)  == true &&Number.isInteger(direct_referral_sgpv) == true)
     {
         console.log(direct_referral_rpv);
         $('.direct_referral_rpv' + membershipid).html(direct_referral_rpv);
+        $('.direct_referral_rgpv' + membershipid).html(direct_referral_rgpv);
+        $('.direct_referral_spv' + membershipid).html(direct_referral_spv);
+        $('.direct_referral_sgpv' + membershipid).html(direct_referral_sgpv);
+        $('.direct_referral_self_rpv' + membershipid).html(direct_referral_self_rpv);
+        $('.direct_referral_self_spv' + membershipid).html(direct_referral_self_spv);
         
-        var edit = '<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_referral_rpv('+membershipid+', '+direct_referral_rpv+')">Edit</a>';
+        var edit = '<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_referral_rpv('+membershipid+', '+direct_referral_rpv+','+direct_referral_rgpv+','+direct_referral_spv+','+direct_referral_sgpv+','+direct_referral_self_rpv+','+direct_referral_self_spv+')">Edit</a>';
         $('.direct_referral_rpv_edit' + membershipid).html(edit)
     }
 }
-function edit_direct_referral_rpv(membershipid,direct_referral_rpv)
+function edit_direct_referral_rpv(membershipid,direct_referral_rpv,direct_referral_rgpv,direct_referral_spv,direct_referral_sgpv,direct_referral_self_rpv,direct_referral_self_spv)
 {
     $('.direct_referral_rpv' + membershipid).html("<input type='number' class='form-control direct_referral_rpvinput"+ membershipid +"' name='direct_referral_rpv' value='"+direct_referral_rpv+"'>");
+    $('.direct_referral_rgpv' + membershipid).html("<input type='number' class='form-control direct_referral_rgpvinput"+ membershipid +"' name='direct_referral_rgpv' value='"+direct_referral_rgpv+"'>");
+    $('.direct_referral_spv' + membershipid).html("<input type='number' class='form-control direct_referral_spvinput"+ membershipid +"' name='direct_referral_spv' value='"+direct_referral_spv+"'>");
+    $('.direct_referral_sgpv' + membershipid).html("<input type='number' class='form-control direct_referral_sgpvinput"+ membershipid +"' name='direct_referral_sgpv' value='"+direct_referral_sgpv+"'>");
+    $('.direct_referral_self_rpv' + membershipid).html("<input type='number' class='form-control direct_referral_self_rpvinput"+ membershipid +"' name='direct_referral_self_rpv' value='"+direct_referral_self_rpv+"'>");
+    $('.direct_referral_self_spv' + membershipid).html("<input type='number' class='form-control direct_referral_self_spvinput"+ membershipid +"' name='direct_referral_self_spv' value='"+direct_referral_self_spv+"'>");
 
     $('.direct_referral_rpv_edit' + membershipid).html('<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="#" onClick="save_direct_points_membership(' + membershipid +')">Save</a>');
+    
 }
 </script>
 @endsection

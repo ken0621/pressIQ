@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <label for="">Limit</label>
-                            <input type="number" max="100" name="print_limit" class='form-control' value='100'/>
+                            <input type="number" max="1000" name="print_limit" class='form-control' value='100'/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -51,6 +51,17 @@
                                 <option value="">All Membership Kit</option>
                             @foreach($_item_kit as $kit)
                                 <option value="{{ $kit->item_id }}">{{ $kit->item_name }}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    @else
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <select name="item_id" class="form-control">
+                                <option value="">All Items</option>
+                            @foreach($_items as $item)
+                                <option value="{{ $item->item_id }}">{{ $item->item_name }}</option>
                             @endforeach
                             </select>
                         </div>

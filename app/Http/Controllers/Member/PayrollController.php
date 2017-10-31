@@ -4185,6 +4185,7 @@ class PayrollController extends Member
           }
 
           $payroll_group_before_tax                         = 0;
+          
           if(Request::has('payroll_group_before_tax'))
           {
                $payroll_group_before_tax = Request::has('payroll_group_before_tax');
@@ -4336,18 +4337,17 @@ class PayrollController extends Member
           // {
           //   Tbl_payroll_group_rest_day::insert($insert_extra_day);
           // }
-          $old_data = AuditTrail::get_table_data("tbl_payroll_shift","payroll_group_id",$payroll_group_id);
+
           Tbl_payroll_shift::where('payroll_group_id', $payroll_group_id)->delete();
-          AuditTrail::record_logs('Deleting payroll Shift', 'Deleting payroll Shift with ID #'.$payroll_group_id, $id, "" ,serialize($old_data));
 
           if(!empty($insert_shift))
           {
                Tbl_payroll_shift::insert($insert_shift);
           }
 
-
           $return['status'] = 'success';
           $return['function_name'] = 'payrollconfiguration.reload_payroll_group';
+
           return json_encode($return);
      }
 
@@ -5191,6 +5191,150 @@ class PayrollController extends Member
           }
      }
      public function import_modal_shift_global()
+     {
+          $file  = Request::file('file');
+          $data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
+          $_shift = null;
+
+          $current_teacher = "";
+          $teacher_key = -1;
+          $subject_key = 0;
+
+          foreach ($data as  $value)
+          {
+               /* CHANGE ARRAY PER TEACHER */
+               if($current_teacher != $value->teacher_id)
+               {
+                    /* INITIALIZE DATA FOR EVERY TEACHER */
+                    $subject_key = 0;
+                    $teacher_key++;
+                    $current_teacher = $value->teacher_id;  
+                    $_shift[$teacher_key]["teacher_id"] = $value->teacher_id;
+                    $_d["Sun"] = null;
+                    $_d["Mon"] = null;
+                    $_d["Tue"] = null;
+                    $_d["Wed"] = null;
+                    $_d["Thu"] = null;
+                    $_d["Fri"] = null;
+                    $_d["Sat"] = null;
+                    $_shift[$teacher_key]["schedule"] = $_d;
+               }
+
+               /* GET DAYS */
+               $_day = Self::get_days_based_on_string_day($value->days);
+
+               foreach($_day as $day)
+               {
+                    $time["in"] = date("h:i A", strtotime($value->time_from));
+                    $time["out"] = date("h:i A", strtotime($value->time_to));
+                    $_shift[$teacher_key]["schedule"][$day][] = $time;
+               }
+          }
+
+          /* SORT TIME PER DAY */
+          foreach($_shift as $key => $shift)
+          {
+               /* EACH DAY */
+               foreach($shift["schedule"] as $day => $_time)
+               {
+                    $temptime = null;
+
+                    if($_time) //STORE TO ARRAY INT FORMAT
+                    {
+                         foreach($_time as $time)
+                         {
+                             $temptime[strtotime($time["in"])] = $time; 
+                         }
+
+                         ksort($temptime);
+                    }
+
+                    $_shift[$key]["schedule"][$day] = $temptime; //SAVE SORTED SCHEDULE TO NEW ARRAY
+               }
+          }
+
+          /* IMPORT ARRAY TO DATABASE */
+          $shop_id = $this->user_info->shop_id;
+
+          foreach($_shift as $shift)
+          {
+               $payroll_employee_number = $shift["teacher_id"];
+               $shift_code_name = "import_" . $payroll_employee_number;
+
+               /* DELETE SHIFT OVERRIDE */
+               Tbl_payroll_shift_code::where("shift_code_name", $shift_code_name)->where("shop_id", $shop_id)->delete();
+       
+               /* INSERT SHIFT CODE */
+               $insert_code["shift_code_name"] = $shift_code_name;
+               $insert_code["shift_archived"] = 0;
+               $insert_code["shop_id"] = $shop_id;
+               $shift_code_id = Tbl_payroll_shift_code::insertGetId($insert_code);
+
+               /* INSERT SHIFT DAY */  
+               foreach($shift["schedule"] as $day => $_time)
+               {
+                    $insert_day["shift_day"] = $day;
+                    $insert_day["shift_target_hours"] = 0;
+                    $insert_day["shift_rest_day"] = $_time == null ? 1 : 0;
+                    $insert_day["shift_code_id"] = $shift_code_id;
+
+                    $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
+
+                    /* INSERT SHIFT TIME */
+                    if($_time)
+                    {
+                         foreach($_time as $time)
+                         {
+                              $insert_time["shift_day_id"] = $shift_day_id;
+                              $insert_time["shift_work_start"] = date("H:i:s", strtotime($time["in"]));
+                              $insert_time["shift_work_end"] = date("H:i:s", strtotime($time["out"]));
+
+                              Tbl_payroll_shift_time::insert($insert_time);
+                         }
+                    }
+               }
+
+               /* UPDATE EMPLOYEE SHIFT CODE */
+               $employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $payroll_employee_number)->where("shop_id", $shop_id)->first();
+          
+               if($employee)
+               {
+                    $update_employee["shift_code_id"] = $shift_code_id;
+                    Tbl_payroll_employee_basic::where("payroll_employee_id", $employee->payroll_employee_id)->update($update_employee);
+                   
+                    echo "<div style='color: green;'><b>" . $payroll_employee_number . "</b> shift has been updated.<div>";
+               }
+               else
+               {
+                    echo "<div style='color: red;'><b>" . $payroll_employee_number . "</b> can't be found.</div>";
+               }
+          }
+
+          dd($_shift);
+     }
+     public function get_days_based_on_string_day($daystring)
+     {
+          $return = null;
+
+          $_day["Thu"] = "TH";
+          $_day["Mon"] = "M";
+          $_day["Tue"] = "T";
+          $_day["Wed"] = "W";
+          $_day["Fri"] = "F";
+          $_day["Sat"] = "S";
+
+          foreach($_day as $key => $day)
+          {
+               if (strpos($daystring, $day) !== false)
+               {
+                    $return[] = $key;
+                    $daystring = str_replace($day, "", $daystring);
+               }
+          } 
+
+          return $return;
+     }
+     public function import_modal_shift_global_backup()
      {
           $file  = Request::file('file');
           $data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();

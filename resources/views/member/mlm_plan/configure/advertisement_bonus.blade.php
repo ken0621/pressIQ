@@ -37,6 +37,7 @@
                                                         <tr>
                                                             <th>From what level</th>
                                                             <th>Bonus</th>
+                                                            <th>Bonus GC</th>
                                                             <th class="opt-col"></th>
                                                         </tr>
                                                     </thead>
@@ -45,12 +46,14 @@
                                                             <tr>
                                                                 <td><input class="form-control" type="number" name="level_end" value="{{$adsetting->level_end}}"></td>
                                                                 <td><input class="form-control" type="text"   name="advertisement_income" value="{{$adsetting->advertisement_income}}"></td>
+                                                                <td><input class="form-control" type="text"   name="advertisement_income_gc" value="{{$adsetting->advertisement_income_gc}}"></td>
                                                                 <td><a href="javascript:" onClick="submit_advertisement()">Save</a></td>
                                                             </tr>
                                                             @else
                                                               <tr>
                                                                 <td><input class="form-control" type="number" name="level_end" value="2"></td>
                                                                 <td><input class="form-control" type="text"   name="advertisement_income" value="0"></td>
+                                                                <td><input class="form-control" type="text"   name="advertisement_income_gc" value="0"></td>
                                                                 <td><a href="javascript:" onClick="submit_advertisement()">Save</a></td>
                                                             </tr>                      
                                                         @endif

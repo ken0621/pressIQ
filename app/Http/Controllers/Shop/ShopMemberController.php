@@ -11,10 +11,12 @@ use File;
 use Image;
 use Mail;
 use DB;
+use URL;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\ShopEvent;
+use App\Globals\CustomerBeneficiary;
 use App\Globals\Customer;
 use App\Globals\MemberSlotGenealogy;
 use App\Rules\Uniqueonshop;
@@ -37,7 +39,10 @@ use App\Models\Tbl_mlm_slot_bank;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Models\Tbl_vmoney_wallet_logs;
+use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_payout_bank;
+use App\Models\Tbl_online_pymnt_api;
+use App\Models\Tbl_mlm_plan_setting;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -49,6 +54,17 @@ use Google_Client;
 use Google_Service_Drive;
 use Google_Service_Plus;
 use stdClass;
+
+// PAYMAYA
+use App\Globals\PayMaya\PayMayaSDK;
+use App\Globals\PayMaya\API\Checkout;
+use App\Globals\PayMaya\API\Customization;
+use App\Globals\PayMaya\API\Webhook;
+use App\Globals\PayMaya\Core\CheckoutAPIManager;
+use App\Globals\PayMaya\Checkout\User;
+use App\Globals\PayMaya\Model\Checkout\ItemAmountDetails;
+use App\Globals\PayMaya\Model\Checkout\ItemAmount;
+use App\Globals\PayMaya\Core\Constants;
 
 class ShopMemberController extends Shop
 {
@@ -96,19 +112,97 @@ class ShopMemberController extends Shop
                     $data["not_placed_slot"] = $data["_unplaced"][0];
                 }
             }
-
-            $data['_event'] = ShopEvent::get($this->shop_info->shop_id,0 , 3);
+            $data['_event'] = ShopEvent::get($this->shop_info->shop_id ,0 ,3 ,Carbon::now(), Self::$customer_info->customer_id, ['all','members']);
         }
         
         $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
+        $data["item_kit"]    = Item::get_all_assembled_kit($this->shop_info->shop_id);
 
         return Self::load_view_for_members('member.dashboard', $data);
+    }
+    public function getProducts()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.products', $data);
+    }
+    public function getCertificate()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.certificate', $data);
     }
     public function getEventDetails(Request $request)
     {
         $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);
 
         return Self::load_view_for_members('member.view_events', $data);
+    }
+    public function getEventReserve(Request $request)
+    {
+        $data['page'] = "Reserve a Seat";
+        $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);
+        $data['action'] = '/members/event-reserve-submit';
+
+        $data['customer_details'] = null;
+        $data['customer_address'] = null;
+        if(Self::$customer_info)
+        {
+            $customer = Customer::info(Self::$customer_info->customer_id, $this->shop_info->shop_id);
+            $data['customer_details'] = $customer['customer'];
+            $data['customer_address'] = $customer['shipping'];
+        }
+        return Self::load_view_for_members('member.event_popup_form', $data);
+    }
+    public function postEventReserveSubmit(Request $request)
+    {
+        $insert['reservee_fname']           = $request->reservee_fname;
+        $insert['reservee_mname']           = $request->reservee_mname;
+        $insert['reservee_lname']           = $request->reservee_lname;
+        $insert['reservee_address']         = $request->reservee_address;
+        $insert['reservee_contact']         = $request->reservee_contact;
+        $insert['reservee_enrollers_code']  = $request->reservee_enrollers_code;
+
+        $validate['reservee_fname']             = 'required';
+        $validate['reservee_mname']             = 'required';
+        $validate['reservee_lname']             = 'required';
+        $validate['reservee_address']           = 'required';
+        $validate['reservee_contact']           = 'required';
+        $validate['reservee_enrollers_code']    = 'required';
+
+        $validator = Validator::make($insert, $validate);
+
+        $insert['reserve_date']  = Carbon::now();
+        
+        $return['status'] = null;
+        $return['status_message'] = null;
+        if(!$validator->fails()) 
+        {
+            $return_id = ShopEvent::reserved_seat($request->event_id, Self::$customer_info->customer_id, $insert);
+
+            if(is_numeric($return_id))
+            {
+                $return['status'] = 'success';
+                $return['call_function'] = 'success_reserve';
+            }
+            else
+            {                
+                $return['status'] = 'error_status';
+                $return['call_function'] = 'success_reserve';
+                $return['status_message'] = $return_id;
+            }
+        }
+        else
+        {
+            $message = null;
+            foreach($validator->errors()->all() as $error)
+            {
+                $message .= "<div>" . $error . "</div>";
+            }
+            $return['status'] = 'error_status';
+            $return['call_function'] = 'success_reserve';
+            $return['status_message'] = $message;
+        }
+
+        return json_encode($return);
     }
     public function getLead()
     {
@@ -139,9 +233,111 @@ class ShopMemberController extends Shop
     }
     public function getRequestPayout()
     {
-        $data["page"] = "Request Payout";
-        $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
-        return view("member2.request_payout", $data);
+        $settings = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
+        $allow = false;
+
+        if ($settings->encashment_settings_schedule_type != "none") 
+        {
+            if (is_serialized($settings->encashment_settings_schedule)) 
+            {
+                foreach (unserialize($settings->encashment_settings_schedule) as $key => $value) 
+                {
+                    if ($value == "true") 
+                    {
+                        if ($settings->encashment_settings_schedule_type == "weekly") 
+                        {
+                            if ($key == date("w")) 
+                            {
+                                $allow = true;
+                            }
+                        }
+                        elseif($settings->encashment_settings_schedule_type == "monthly")
+                        {
+                            if ($key == date("j")) 
+                            {
+                                $allow = true;
+                            }
+                        }
+                        else
+                        {
+                            $allow = true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        if ($allow) 
+        {
+            $data["page"] = "Request Payout";
+            $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            return view("member2.request_payout", $data);
+        }
+        else
+        {
+            if (is_serialized($settings->encashment_settings_schedule)) 
+            {
+                if ($settings->encashment_settings_schedule_type == "weekly") 
+                {
+                    echo '<div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                            <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+                        </div>';
+
+                    echo "<h3 class='text-center' style='margin: 25px 0;'>You can only request payout every ";
+                    foreach (unserialize($settings->encashment_settings_schedule) as $key0 => $value0) 
+                    {
+                        if ($value0 == "true") 
+                        {
+                            echo date('l', strtotime("Sunday +{$key0} days")) . " ";
+                        }
+                    }
+                    echo ".</h3>";
+                    
+                    echo '<div class="modal-footer">
+                            <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        </div>';
+
+                    die();
+                }
+                elseif($settings->encashment_settings_schedule_type == "monthly")
+                {
+                    echo '<div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                            <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+                        </div>';
+
+                    echo "<h3 class='text-center' style='margin: 25px 0;'>You can only request payout every ";
+                    foreach (unserialize($settings->encashment_settings_schedule) as $key0 => $value0) 
+                    {
+                        if ($value0 == "true") 
+                        {
+                            echo ordinal($key0) . " ";
+                        }
+                    }
+                    echo "day of the month.</h3>";
+                    
+                    echo '<div class="modal-footer">
+                            <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        </div>';
+
+                    die();
+                }
+            }
+            else
+            {
+                echo '<div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+                    </div>';
+
+                echo "<h3 class='text-center' style='margin: 25px 0;'>You are not allowed to request payout right now.";
+                
+                echo '<div class="modal-footer">
+                        <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>';
+            }
+        }
     }
     public function postRequestPayout()
     {
@@ -176,8 +372,13 @@ class ShopMemberController extends Shop
         $data["page"] = "Verify Payout";
         $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
         
-        $tax = 10;
-        $charge = 100;
+        $payout_setting = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
+
+        $tax = $payout_setting->enchasment_settings_tax;
+        $service_charge = $payout_setting->enchasment_settings_p_fee;
+        $other_charge = $payout_setting->encashment_settings_o_fee;
+        $minimum = $payout_setting->enchasment_settings_minimum;
+
         $total_payout = 0;
 
         if(request()->isMethod("post"))
@@ -201,8 +402,7 @@ class ShopMemberController extends Shop
                 $_slot[$key]->display_request_amount = Currency::format($amount);
 
                 $tax_amount = ($tax / 100) * $amount;
-                $charge_amount = $charge;
-                $take_home = $amount - ($tax_amount + $charge_amount);
+                $take_home = $amount - ($tax_amount + $service_charge + $other_charge);
 
                 if($take_home < 0)
                 {
@@ -210,11 +410,13 @@ class ShopMemberController extends Shop
                 }
 
                 $_slot[$key]->tax_amount = $tax_amount;
-                $_slot[$key]->charge_amount = $charge_amount;
+                $_slot[$key]->service_charge = $service_charge;
+                $_slot[$key]->other_charge = $other_charge;
                 $_slot[$key]->take_home = $take_home;
 
                 $_slot[$key]->display_tax_amount = Currency::format($tax_amount);
-                $_slot[$key]->display_charge_amount = Currency::format($charge_amount);
+                $_slot[$key]->display_service_charge = Currency::format($service_charge);
+                $_slot[$key]->display_other_charge = Currency::format($other_charge);
                 $_slot[$key]->display_take_home = Currency::format($take_home);
 
                 if($take_home == 0)
@@ -243,7 +445,7 @@ class ShopMemberController extends Shop
                         $date       = date("m/d/Y");
                         $status     = "PENDING";
 
-                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $charge_amount, $other, $date, $status);
+                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
                     }
                 }
 
@@ -697,12 +899,16 @@ class ShopMemberController extends Shop
         $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
         $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["_country"]            = Tbl_country::get();
+        $data["_locale"]             = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
         $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
 
+        $data['beneficiary'] = null;
         if(Self::$customer_info)
         {
             $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["wallet"]             = $data["customer_summary"]["_wallet"];
+
+            $data['beneficiary'] = CustomerBeneficiary::first(Self::$customer_info->customer_id);
         }
 
 
@@ -713,16 +919,16 @@ class ShopMemberController extends Shop
     public function postProfileUpdateInfo(Request $request)
     {
         $form = $request->all();
-        $validate['first_name'] = 'required';
-        $validate['middle_name'] = 'required';
-        $validate['last_name'] = 'required';
-        $validate['b_month'] = 'required';
-        $validate['b_day'] = 'required';
-        $validate['b_year'] = 'required';
+        // $validate['first_name'] = 'required';
+        // $validate['middle_name'] = 'required';
+        // $validate['last_name'] = 'required';
+        // $validate['b_month'] = 'required';
+        // $validate['b_day'] = 'required';
+        // $validate['b_year'] = 'required';
         $validate['country_id'] = 'required';
-        $validate['customer_state'] = 'required';
-        $validate['customer_city'] = 'required';
-        $validate['customer_zipcode'] = 'required';
+        // $validate['customer_state'] = 'required';
+        // $validate['customer_city'] = 'required';
+        // $validate['customer_zipcode'] = 'required';
         $validate['customer_street'] = 'required';
 
         $validator = Validator::make($form, $validate);
@@ -730,11 +936,31 @@ class ShopMemberController extends Shop
         if (!$validator->fails()) 
         {           
             /* Birthday Fix */
-            $birthday = date("Y-m-d", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year));
+            if ($request->birthdate) 
+            {
+                $birthday = date("Y-m-d", strtotime($request->birthdate));
+            }
+            else
+            {
+                $birthday = date("Y-m-d", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year)); 
+            }
+            
             /* Customer Data */
-            $insert_customer["first_name"]  = $request->first_name;
-            $insert_customer["middle_name"] = $request->middle_name;
-            $insert_customer["last_name"]   = $request->last_name;
+            if($request->first_name)
+            {
+                $insert_customer["first_name"]  = $request->first_name;
+            }
+            
+            if ($request->middle_name) 
+            {
+                $insert_customer["middle_name"] = $request->middle_name;
+            }
+
+            if ($request->last_name) 
+            {
+                $insert_customer["last_name"]   = $request->last_name;
+            }
+            
             $insert_customer["b_day"]       = $birthday;
             $insert_customer["birthday"]    = $birthday;
             $insert_customer["country_id"]  = $request->country_id;
@@ -757,14 +983,14 @@ class ShopMemberController extends Shop
             $insert_customer_address["state_id"] = $request->customer_state;
             $insert_customer_address["city_id"] = $request->customer_city;
             $insert_customer_address["barangay_id"] = $request->customer_zipcode;
-
+            
             $exist = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
-
+            
             if ($exist) 
             {
                 /* Update */
                 $insert_customer_address["updated_at"] = Carbon::now();
-
+                
                 Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->update($insert_customer_address);
             }
             else
@@ -778,6 +1004,38 @@ class ShopMemberController extends Shop
             }
             
             echo json_encode("success");
+        }
+        else
+        {
+            $result = $validator->errors();
+            echo json_encode($result);
+        }
+    }
+    public function postProfileUpdateBeneficiary(Request $request)
+    {
+        $form = $request->all();
+        $validate['beneficiary_fname']       = 'required';
+        $validate['beneficiary_mname']       = 'required';
+        $validate['beneficiary_lname']       = 'required';
+        $validate['beneficiary_contact_no']  = 'required|numeric';
+        $validate['beneficiary_email']       = 'required|email';
+
+        $validator = Validator::make($form, $validate);
+        
+        if(!$validator->fails()) 
+        {
+            $update['beneficiary_fname']       = $request->beneficiary_fname;
+            $update['beneficiary_mname']       = $request->beneficiary_mname;
+            $update['beneficiary_lname']       = $request->beneficiary_lname;
+            $update['beneficiary_contact_no']  = $request->beneficiary_contact_no;
+            $update['beneficiary_email']       = $request->beneficiary_email;
+
+            $beneficiary_id = CustomerBeneficiary::create(Self::$customer_info->customer_id, $update);
+
+            if(is_numeric($beneficiary_id))
+            {
+                echo json_encode("success");
+            }
         }
         else
         {
@@ -829,7 +1087,7 @@ class ShopMemberController extends Shop
                 if( $upload_success ) 
                 {
                    $exist = Tbl_customer::where("customer_id", $customer_id)->first();
-                   if ($exist->profile) 
+                   if (isset($exist->profile) && $exist->profile) 
                    {
                        $delete_file = $exist->profile;
                        File::delete($delete_file);
@@ -1565,7 +1823,7 @@ class ShopMemberController extends Shop
             $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
             $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $new_slot_no);
             
-            $return = Item::check_product_code($shop_id, $data["pin"], $data["activation"]);
+            $return = Item::check_unused_product_code($shop_id, $data["pin"], $data["activation"]);
 
             if($return)
             {
@@ -1576,7 +1834,16 @@ class ShopMemberController extends Shop
                     $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
                     MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
 
+                    $setting = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
                     $slot_id = $create_slot;
+
+                    if($setting->plan_settings_placement_required == 0)
+                    {
+                        $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+                        Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1);
+                        MLM2::entry($shop_id, $slot_id);
+                    }
+                    
                     $store["get_success_mode"] = "success";
                     session($store);
                     echo json_encode("success");
@@ -1770,5 +2037,81 @@ class ShopMemberController extends Shop
         }
 
         return json_encode($return);
+    }
+    public function getWebhook()
+    {
+        /* API Details */
+        $shop_id = $this->shop_info->shop_id;
+        $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)
+                                   ->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")
+                                   ->where("gateway_code_name", "paymaya")
+                                   ->first();
+                                   
+        /* Init Paymaya */
+        if (get_domain() == "c9users.io" || get_domain() == "digimahouse.dev") 
+        {
+            $environment = "SANDBOX";
+            PayMayaSDK::getInstance()->initCheckout("pk-sEt9FzRUWI2PCBI2axjZ7xdBHoPiVDEEWSulD78CW9c", "sk-cJFYCGhH4stZZTS52Z3dpNbrpRyu6a9iJaBiVlcIqZ5", $environment);
+        }
+        else
+        {
+            $environment = "PRODUCTION";
+            PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, $environment);
+        }
+
+        /* Set Webhook */
+        $webhook = Webhook::retrieve();
+
+        $webhook_success = "/payment/paymaya/webhook/success";
+        $webhook_failure = "/payment/paymaya/webhook/failure";
+        $webhook_cancel = "/payment/paymaya/webhook/cancel";
+
+        if (isset($webhook) && $webhook && count($webhook) > 0) 
+        {
+            foreach ($webhook as $value) 
+            {
+                if ($value->name == "CHECKOUT_SUCCESS") 
+                {
+                    $updateWebhook = new Webhook();
+                    $updateWebhook->name = Webhook::CHECKOUT_SUCCESS;
+                    $updateWebhook->id = $value->id;
+                    $updateWebhook->callbackUrl = URL::to($webhook_success);
+                    $updateWebhook->delete();
+                }
+                elseif($value->name == "CHECKOUT_FAILURE")
+                {
+                    $updateWebhook = new Webhook();
+                    $updateWebhook->name = Webhook::CHECKOUT_FAILURE;
+                    $updateWebhook->id = $value->id;
+                    $updateWebhook->callbackUrl = URL::to($webhook_failure);
+                    $updateWebhook->delete();
+                }
+                elseif($value->name == "CHECKOUT_DROPOUT")
+                {
+                    $updateWebhook = new Webhook();
+                    $updateWebhook->name = Webhook::CHECKOUT_DROPOUT;
+                    $updateWebhook->id = $value->id;
+                    $updateWebhook->callbackUrl = URL::to($webhook_cancel);
+                    $updateWebhook->delete();
+                }
+            }
+        }
+        
+        $successWebhook = new Webhook();
+        $successWebhook->name = Webhook::CHECKOUT_SUCCESS;
+        $successWebhook->callbackUrl = URL::to($webhook_success);
+        $successWebhook->register();
+        
+        $failureWebhook = new Webhook();
+        $failureWebhook->name = Webhook::CHECKOUT_FAILURE;
+        $failureWebhook->callbackUrl = URL::to($webhook_failure);
+        $failureWebhook->register();
+        
+        $cancelWebhook = new Webhook();
+        $cancelWebhook->name = Webhook::CHECKOUT_DROPOUT;
+        $cancelWebhook->callbackUrl = URL::to($webhook_cancel);
+        $cancelWebhook->register();
+
+        dd(Webhook::retrieve());
     }
 }

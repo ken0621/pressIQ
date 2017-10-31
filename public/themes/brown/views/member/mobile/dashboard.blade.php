@@ -53,7 +53,7 @@
                      <div class="list-block">
                         <ul>
                            <li>
-                              <a href="/members" class="item-link close-panel">
+                              <a href="javascript:" class="item-link close-panel">
                                  <div class="item-content">
                                     <div class="item-media"><i class="icon brown-icon-dashboard"></i></div>
                                     <div class="item-inner">
@@ -73,8 +73,8 @@
                                  </div>
                               </a>
                            </li>
-                           {{-- <li>
-                              <a href="forms.html" class="item-link close-panel">
+                           <li>
+                              <a href="/members/genealogy" class="item-link close-panel">
                                  <div class="item-content">
                                     <div class="item-media"><i class="icon brown-icon-flow-tree"></i></div>
                                     <div class="item-inner">
@@ -82,7 +82,7 @@
                                     </div>
                                  </div>
                               </a>
-                           </li> --}}
+                           </li>
                            <li>
                               <a href="/members/report" class="item-link close-panel">
                                  <div class="item-content">
@@ -109,6 +109,16 @@
                                     <div class="item-media"><i class="icon brown-icon-wallet"></i></div>
                                     <div class="item-inner">
                                        <div class="item-title">Wallet</div>
+                                    </div>
+                                 </div>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="/members/order" class="item-link close-panel">
+                                 <div class="item-content">
+                                    <div class="item-media"><i class="icon brown-icon-bag"></i></div>
+                                    <div class="item-inner">
+                                       <div class="item-title">Orders</div>
                                     </div>
                                  </div>
                               </a>
@@ -179,11 +189,6 @@
                      <div class="navbar-inner">
                         <div class="left"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div>
                         <div class="left">Dashboard</div>
-                        
-                        {{-- <div class="right">
-                           <div class="text">3</div>
-                           <img src="/themes/{{ $shop_theme }}/assets/mobile/img/notification.png">
-                        </div> --}}
                      </div>
                   </div>
                   <div class="page-content">
@@ -343,12 +348,12 @@
                                     @foreach($_slot as $slot)
                                     <div class="holder">
                                        <div class="row">
-                                          <div class="col-40 text-center">
+                                          <div class="col-100 text-center">
                                              <div class="label2">{{ $slot->slot_no }}</div>
                                              <div class="label3">{{ $slot->display_total_earnings }}</div>
                                              <div class="label3">{{ $slot->current_direct }} / {{ $slot->brown_next_rank_current }}</div>
                                           </div>
-                                          <div class="col-60 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
+                                          <div class="col-100 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
                                           <div class="col-40">
                                              @if($slot->brown_next_rank != "NO NEXT RANK")
                                              @if($slot->current_direct >= $slot->required_direct)
@@ -380,55 +385,6 @@
                         @endif
                      </div>
                   </div>
-                  <!-- Code Popup -->
-                  <!--<div class="popup popup-code">-->
-                  <!--    <form method="post" class="submit-verify-sponsor">-->
-                  <!--       <div class="code-holder">-->
-                  <!--          <div class="modal-header">-->
-                  <!--              <div class="modal-title"><i class="fa fa-star"></i> SPONSOR</div>-->
-                  <!--          </div>-->
-                  <!--          <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>-->
-                  <!--          <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">-->
-                  <!--          <div class="output-container">-->
-                  <!--          </div>-->
-                  <!--          <div class="btn-container">-->
-                  <!--              <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>-->
-                  <!--          </div>-->
-                  <!--       </div>-->
-                  <!--   </form>-->
-                  <!--</div>-->
-                  <!-- Verification Popup -->
-                  <!--<div class="popup popup-verification">-->
-                  <!--    <div class="verification-holder">-->
-                  <!--       <div class="modal-header">-->
-                  <!--           <div class="modal-title"><i class="fa fa-shield"></i> CODE VERIFICATION</div>-->
-                  <!--       </div>-->
-                  <!--       <div class="modal-body">-->
-                  <!--           <div class="message message-return-code-verify"></div>-->
-                  <!--           <form method="post" class="code-verification-form">-->
-                  <!--               <div>-->
-                  <!--                   <div class="labeld">Pin Code</div>-->
-                  <!--                   <input class="input input-pin text-center" name="pin" type="text" value="{{$mlm_pin or ''}}">-->
-                  <!--               </div>-->
-                  <!--               <div>-->
-                  <!--                   <div class="labeld">Activation</div>-->
-                  <!--                   <input class="input input-activation text-center" name="activation" type="text" value="{{$mlm_activation or ''}}">-->
-                  <!--               </div>-->
-                  <!--               <div class="btn-container">-->
-                  <!--                   <button id="btn-proceed-2" class="btn-proceed-2" type='submit'><i class="fa fa-angle-double-right"></i> Proceed</button>-->
-                  <!--               </div>-->
-                  <!--           </form>-->
-                  <!--       </div>-->
-                  <!--    </div>-->
-                  <!--</div>-->
-                  <!-- Final Verification Popup -->
-                  <!--<div class="popup final-popup-verification">-->
-                  <!--    <form method="post" class="submit-verify-sponsor">-->
-                  <!--       <div class="verification-holder">-->
-                  <!--          <div class="load-final-verification"></div>-->
-                  <!--       </div>-->
-                  <!--   </form>-->
-                  <!--</div>-->
                </div>
             </div>
          </div>
@@ -588,34 +544,6 @@
             </div>
          </div>
       </div>
-      <div class="picker-modal picker-modal-demo">
-         <div class="toolbar">
-            <div class="toolbar-inner">
-               <div class="left"></div>
-               <div class="right"><a href="#" class="link close-picker">Done</a></div>
-            </div>
-         </div>
-         <div class="picker-modal-inner">
-            <div class="content-block">Integer mollis nulla id nibh elementum finibus. Maecenas eget fermentum ipsum. Sed sagittis condimentum nisl at tempus. Duis lacus libero, laoreet vitae ligula a, aliquet eleifend sapien. Nullam sodales viverra sodales.</div>
-         </div>
-      </div>
-      <!-- JQUERY -->
-      <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-      <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/framework7/dist/js/framework7.js"></script>
-      <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/js/kitchen-sink.js"></script>
-      {{-- EXTERNAL JS --}}
-      <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
-      <!-- GLOBAL JS -->
-      <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/js/global.js"></script>
-      <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.1"></script>
-      <script type="text/javascript">
-         var myApp = new Framework7();
-         var $$ = Dom7;
-      </script>
-      <!-- BEGIN JIVOSITE CODE -->
-      <script type='text/javascript'>
-      (function(){ var widget_id = 'OcvyPjoHBr';var d=document;var w=window;function l(){ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
-      </script>
-      <!-- END JIVOSITE CODE -->
+      @include("member.mobile.script")
    </body>
 </html>

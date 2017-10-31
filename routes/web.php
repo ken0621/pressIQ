@@ -196,6 +196,10 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::any('product_order/create_order/submit_payment_upload','Member\ProductOrderController@submit_payment_upload');
 	
 	Route::get('product_order2','Member\ProductOrderController2@index');
+	Route::post('product_order2/table','Member\ProductOrderController2@table');
+	Route::get('product_order2/proof','Member\ProductOrderController2@proof');
+	Route::get('product_order2/confirm_payment','Member\ProductOrderController2@confirm_payment');
+	Route::post('product_order2/confirm_payment_submit','Member\ProductOrderController2@confirm_payment_submit');
 	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
 	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
 	
@@ -451,6 +455,21 @@ AdvancedRoute::controller("/member/item/warehouse/v2/refill","Member\WarehouseRe
 /* INVENTORY LOG*/
 Route::any('/member/item/inventory_log','Member\InventoryLogController@index');
 /*END INVENTORY LOG*/
+
+
+/* WAREHOUSE V2*/
+AdvancedRoute::controller('/member/item/v2/warehouse', 'Member\WarehouseControllerV2');
+/* End */
+
+/* WIS */
+AdvancedRoute::controller('/member/item/warehouse/wis', 'Member\WarehouseIssuanceSlipController');
+/* End */
+
+/* RR */
+AdvancedRoute::controller('/member/item/warehouse/rr', 'Member\WarehouseReceivingReportController');
+/* End */
+
+
 /* START PIS ARCY*/
 Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
 
@@ -887,6 +906,8 @@ AdvancedRoute::controller('/member/report', 'Member\ReportControllerV2');
 
 /* Customer */
 Route::get('/member/customer','Customer\CustomerController@index');
+Route::get('/member/customer/bulk_archive','Member\CustomerController@bulk_archive');
+Route::post('/member/customer/bulk_archive','Member\CustomerController@bulk_archive_post');
 Route::get('/member/customer/list','Member\CustomerController@index');
 Route::any('/member/customer/modalcreatecustomer','Member\CustomerController@modalcreatecustomer');
 Route::post('/member/customer/insertcustomer','Member\CustomerController@insertcustomer');
@@ -1058,6 +1079,10 @@ AdvancedRoute::controller('/member/ecommerce/trackings', 'Member\TrackingsContro
 
 
 /* MEMBER SHIPPING*/
+AdvancedRoute::controller('/member/warehouse/migration', 'Member\WarehouseMigrateController');
+/* End */
+
+/* MEMBER SHIPPING*/
 AdvancedRoute::controller('/member/register/shipping', 'MemberController');
 /* End */
 
@@ -1149,5 +1174,11 @@ include_once('routes_config/routes_item.php');
 /* Members Area */
 include_once('routes_config/routes_members_area.php');
 
+
 /*PAYROLL EMPLOYEE*/
 include_once('routes_config/routes_payroll_employee.php');
+
+
+Route::get('/ref/{id}', 'Shop\LeadController@ref');
+Route::get('/{id}', 'Shop\LeadController@ref');
+

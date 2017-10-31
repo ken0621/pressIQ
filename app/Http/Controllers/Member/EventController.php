@@ -8,7 +8,7 @@ use App\Globals\ShopEvent;
 /**
  * 
  *
- * @author ARCYLEN
+ * @author ARCYLEN GARCIA GUTIERREZ
  */
 
 class EventController extends Member
@@ -58,11 +58,13 @@ class EventController extends Member
 		$insert['event_sub_title'] 	 = $request->event_sub_title;
 		$insert['event_date']        = datepicker_input($request->event_date);
 		$insert['event_description'] = $request->event_description;
+		$insert['event_number_attendee'] = $request->event_number_attendee;
 
 		$rules["event_title"]           = "required";
         $rules["event_sub_title"]   	= "required";
         $rules["event_date"]   		    = "required";
         $rules["event_description"]  	= "required";
+        $rules["event_number_attendee"]  	= "required|numeric";
 
         $validate = Validator::make($insert, $rules);
 
@@ -122,11 +124,13 @@ class EventController extends Member
 		$update['event_sub_title'] 	 = $request->event_sub_title;
 		$update['event_date']        = datepicker_input($request->event_date);
 		$update['event_description'] = $request->event_description;
+		$update['event_number_attendee'] = $request->event_number_attendee;
 
 		$rules["event_title"]           = "required";
         $rules["event_sub_title"]   	= "required";
         $rules["event_date"]   		    = "required";
         $rules["event_description"]  	= "required";
+        $rules["event_number_attendee"]  	= "required|numeric";
 
         $validate = Validator::make($update, $rules);
 
@@ -198,5 +202,11 @@ class EventController extends Member
     	}
 
     	return json_encode($return);
+	}
+	public function getReserveeList(Request $request)
+	{
+		$data['_reservee'] = ShopEvent::get_all_reservee($request->id);
+
+		return view('member.manage_page_event.event_reservee_list',$data);
 	}
 }

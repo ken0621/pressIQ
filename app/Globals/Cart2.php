@@ -64,7 +64,7 @@ class Cart2
 	public static function set_payment_method_information($payment_method_info)
 	{
 	}
-	public static function add_item_to_cart($shop_id, $item_id, $quantity)
+	public static function add_item_to_cart($shop_id, $item_id, $quantity, $change_qty = false)
 	{
 		$cart_key = Self::get_cart_key();
 
@@ -75,6 +75,10 @@ class Cart2
 			if($check_cart) //ITEM EXIST IN CART
 			{
 				$update["quantity"] = $check_cart->quantity + $quantity;
+				if($change_qty == true)
+				{
+					$update["quantity"] = $quantity;
+				}
 				Tbl_cart::where("cart_id", $check_cart->cart_id)->update($update);
 			}
 			else //ITEM DOES NOT EXIST IN CART
@@ -108,7 +112,8 @@ class Cart2
 		$cart_key = Self::get_cart_key();
 		$total = 0;
 		$grand_total = 0;
-
+		$_cart = null;
+		
 		if($cart_key)
 		{
 			$_cart 			= Tbl_cart::where("unique_id_per_pc", $cart_key)->where("status", "Not Processed")->get();

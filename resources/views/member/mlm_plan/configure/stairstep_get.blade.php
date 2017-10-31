@@ -36,9 +36,17 @@
             <div class="col-md-1">
                 <label for="stairstep_bonus">Bonus</label>
                 <input type="number" class="form-control" name="stairstep_bonus" value="{{$value->stairstep_bonus}}">
-            </div>   
+            </div>               
             <div class="col-md-12"></div>
-            <div class="col-md-5"></div>        
+            <div class="col-md-3"></div>        
+            <div class="col-md-2">
+                <label for="direct_rank_bonus">Direct Bonus</label>
+                <input type="number" class="form-control" name="direct_rank_bonus" value="{{$value->direct_rank_bonus}}">
+            </div>            
+            <div class="col-md-2">
+                <label for="stairstep_rebates_bonus">Rebates Bonus</label>
+                <input type="number" class="form-control" name="stairstep_rebates_bonus" value="{{$value->stairstep_rebates_bonus}}">
+            </div>   
             <div class="col-md-2">
                 <label for="stairstep_leg_id">Leg Rank</label>
                 <select name="stairstep_leg_id" class="form-control">
@@ -97,9 +105,17 @@
         <div class="col-md-1">
             <label for="stairstep_bonus">Bonus</label>
             <input type="number" class="form-control" name="stairstep_bonus" value="0">
-        </div>
+        </div>       
         <div class="col-md-12"></div>
-        <div class="col-md-5"></div>
+        <div class="col-md-3"></div>
+        <div class="col-md-2">
+            <label for="direct_rank_bonus">Direct Bonus</label>
+            <input type="number" class="form-control" name="direct_rank_bonus" value="0">
+        </div>        
+        <div class="col-md-2">
+            <label for="stairstep_rebates_bonus">Rebates Bonus</label>
+            <input type="number" class="form-control" name="stairstep_rebates_bonus" value="0">
+        </div>
         <div class="col-md-2">
             <label for="stairstep_leg_id">Leg Rank</label>
             <select name="stairstep_leg_id" class="form-control">

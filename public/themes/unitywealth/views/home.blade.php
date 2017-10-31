@@ -6,7 +6,7 @@
         <div class="container">
             <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption.png"></div>
             <div class="caption-container">
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                <!-- <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p> -->
             </div>
             <div class="btn-container animated fadeInDown">SHOW MORE</div>
             <span class="animated fadeInDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
@@ -28,7 +28,7 @@ $(document).ready(function($) {
     
         /*TEXT FADEOUT*/
         $(window).scroll(function(){
-                $(".caption-container, .caption-logo-container").css("opacity", 1 - $(window).scrollTop() / 250);
+            $(".caption-container, .caption-logo-container").css("opacity", 1 - $(window).scrollTop() / 250);
         });
 
         //START MISSION AND VISION
@@ -40,6 +40,7 @@ $(document).ready(function($) {
             $(".title-mission").removeClass("highlighted");
             
         });
+        
         $(".title-mission").click(function()
         {
             $("#vision").addClass("hide");

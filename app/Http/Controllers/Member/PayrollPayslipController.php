@@ -86,8 +86,6 @@ class PayrollPayslipController extends Member
 		// 	{
 		// 		$data['new_employee'][$key][$keys] = (object)$values;
 		// 	}
-		// }sss
-		//return view('member.payroll.payroll_payslipv1', $data);
 
 		if (Self::shop_id() == 38)
 		{
@@ -97,7 +95,7 @@ class PayrollPayslipController extends Member
 		else
 		{
 			$pdf = view('member.payroll.payroll_payslipv1', $data);
-        	return Pdf_global::show_pdf($pdf);
-		}
-	}
+	        return Pdf_global::show_pdf($pdf);
+    	}
+    }
 }

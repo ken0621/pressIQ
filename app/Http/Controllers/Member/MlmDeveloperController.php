@@ -39,11 +39,6 @@ class MlmDeveloperController extends Member
 
     public function myTest()
     {
-        // $data = Tbl_membership_code::join("tbl_mlm_slot","tbl_mlm_slot.slot_no","=","tbl_membership_code.membership_activation_code")->where("used",0)->get();
-        // foreach($data as $d)
-        // {
-        //     echo "</br>".$d->slot_no;
-        // }
         $data =  $plan_settings = Tbl_mlm_plan::where('shop_id', $this->user_info->shop_id)
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')
@@ -52,7 +47,7 @@ class MlmDeveloperController extends Member
     }    
     public function index()
     {
-        $data["page"]           = "MLM Developer";
+        $data["page"] = "MLM Developer";
         return view("member.mlm_developer.mlm_developer", $data);
     }
     public function index_table()
@@ -79,7 +74,7 @@ class MlmDeveloperController extends Member
         foreach($_slot as $key => $slot)
         {
             $total_gc = Tbl_mlm_gc::where("mlm_gc_slot", $slot->slot_id)->value("mlm_gc_amount");
-
+          
         	$data["_slot"][$key] = $slot;
             $data["_slot"][$key]->customer = "<a href='javascript:'  link='/member/customer/customeredit/" . $slot->customer_id . "' class='popup' size='lg'>" . strtoupper($slot->first_name) . " " . strtoupper($slot->last_name) . '</a>';
             $data["_slot"][$key]->display_slot_no = '<a target="_blank" href="/members/autologin?email=' . $slot->email . '&password=' . $slot->password . '">' . $slot->slot_no . '</a>';
@@ -89,7 +84,7 @@ class MlmDeveloperController extends Member
         	$data["_slot"][$key]->current_wallet_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->current_wallet) . "</a>";
         	$data["_slot"][$key]->total_earnings_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->total_earnings) . "</a>";
         	$data["_slot"][$key]->total_payout_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->total_payout * -1) . "</a>";
-            $data["_slot"][$key]->total_gc_format = Currency::format(0);
+            $data["_slot"][$key]->total_gc_format = Currency::format($total_gc);
             $data["_slot"][$key]->display_slot_binary_left = number_format($slot->slot_binary_left);
             $data["_slot"][$key]->display_slot_binary_right = number_format($slot->slot_binary_right);
             $data["_slot"][$key]->display_date = date("F d, Y", strtotime($slot->slot_created_date));
@@ -553,6 +548,7 @@ class MlmDeveloperController extends Member
             {
                 $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
                 Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+                $return_position = "success";
             }
         }
 
@@ -710,4 +706,77 @@ class MlmDeveloperController extends Member
 
         return $data;
     }
-} 
+    public function recompute()
+    {
+        $shop_id = $this->user_info->shop_id;
+
+        if(Request::isMethod("post"))
+        {
+            $slot_id = request("slot_id");
+            $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+            Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+            Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+            MLM2::entry($shop_id,$slot_id);
+        }
+        else
+        {
+            $data["page"] = "Recompute";
+            $shop_id = $this->user_info->shop_id;
+            $data["_slot"] = Tbl_mlm_slot::where("shop_id", $shop_id)->get();
+            $data["count"] = Tbl_mlm_slot::where("shop_id", $shop_id)->count();
+            return view("member.mlm_developer.modal_recompute", $data);
+        }
+    }
+    public function recompute_reset()
+    {
+        $shop_id = $this->user_info->shop_id;
+        Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_amount", ">=", 0)->delete();
+        Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_plan", "=", "CD")->delete();
+        Tbl_mlm_slot_points_log::where("tbl_mlm_slot.shop_id", $shop_id)->join("tbl_mlm_slot", "tbl_mlm_slot.slot_id", "=", "tbl_mlm_slot_points_log.points_log_slot")->delete();
+        Tbl_tree_sponsor::where("shop_id", $shop_id)->delete();
+        Tbl_tree_placement::where("shop_id", $shop_id)->delete();
+    }
+    public function redistribute()
+    {
+        $data["page"] = "MLM Developer - Redistribute";
+        return view("member.mlm_developer.redistribute", $data);
+    }
+    public function redistribute_submit()
+    {
+        $shop_id    = $this->user_info->shop_id;
+        $slot_no    = Request::input("slot_no");
+        $slot_info  = Tbl_mlm_slot::where("slot_no", $slot_no)->where("shop_id", $shop_id)->first();
+
+        if($slot_info)
+        {
+            $slot_id    = $slot_info->slot_id;
+            $setting    = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
+
+            Tbl_tree_placement::where("placement_tree_parent_id", $slot_id)->delete();
+            Tbl_tree_placement::where("placement_tree_child_id", $slot_id)->delete();
+            Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot_id)->delete();
+            Tbl_tree_sponsor::where("sponsor_tree_child_id", $slot_id)->delete();
+            Tbl_mlm_slot_wallet_log::where("wallet_log_slot_sponsor", $slot_id)->delete();
+            Tbl_mlm_slot_points_log::where("points_log_Sponsor", $slot_id)->delete();
+
+            $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+
+            if($setting->plan_settings_placement_required == 1)
+            {
+                Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+            }
+
+            Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1);
+            MLM2::entry($shop_id, $slot_id);
+            $response["status"] = "success";
+            $response["call_function"] = "redistribute_success";
+        }
+        else
+        {
+            $response["status"] = "error";
+            $response["message"] = "Slot Code you entered can't be found.";
+        }
+
+        echo json_encode($response);
+    }
+}

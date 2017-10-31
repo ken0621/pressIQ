@@ -493,6 +493,44 @@ class MLM2
 
 		return $_reward;
 	}
+	public static function customer_rewards_points($shop_id, $customer_id, $limit = 10)
+	{
+		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
+		$query = Tbl_mlm_slot_points_log::slot()->where("shop_id", $shop_id)->where("slot_owner",$customer_id);
+		
+
+		if($limit == 0)
+		{
+			$_reward = $query->orderBy("points_log_id", "desc")->paginate(10);
+			$store_pagine["notification_paginate"] = $_reward->render();
+			session($store_pagine);
+		}
+		else
+		{
+			$query->limit($limit);
+			$_reward = $query->orderBy("points_log_id", "desc")->get();
+		}
+		
+
+		foreach($_reward as $key => $reward)
+		{
+			$reward_slot = Tbl_mlm_slot::where("slot_id", $reward->points_log_slot)->first();
+			$_reward[$key]->log_amount = number_format($reward->points_log_points,2);
+			$_reward[$key]->time_ago = time_ago($reward->points_log_date_claimed);
+			$_reward[$key]->display_date = date("F d, Y", strtotime($reward->points_log_date_claimed));
+			$_reward[$key]->log = Self::customer_rewards_points_contructor($reward);
+			$_reward[$key]->slot_no = $reward_slot->slot_no;
+			$_reward[$key]->points_log_type = $reward->points_log_type;
+		}
+
+		return $_reward;
+	}
+	public static function customer_rewards_points_contructor($reward)
+	{
+		$from_slot = Tbl_mlm_slot::where("slot_id",$reward->points_log_Sponsor)->first();
+		$message   = "Your slot no ".$reward->slot_no." earned ".$reward->log_amount." ".$reward->points_log_type." from slot no ".$from_slot->slot_no;
+		return $message;
+	}
 	public static function customer_total_payout($customer_id)
 	{
 		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->currentWallet()->get();

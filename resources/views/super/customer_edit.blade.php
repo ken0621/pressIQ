@@ -7,7 +7,7 @@
             <span>Back</span>
          </a>
       </div>
-      <div class="center sliding">Edit Customer</div>
+      <div class="center sliding">Edit Client</div>
       <div class="right">
          <a type="submit" href="javascript: $$('.button-for-register-1').click()" class="link">
            Update
@@ -18,10 +18,10 @@
 <div class="pages">
    <div data-page="customer-edit" class="page">
       <div class="page-content">
-
+         <input type="hidden" class="customer-edit-shop-id" value="{{ $shop_id }}">
          <form action="/super/customer-edit?id={{ $shop_id }}" method="post" class="ajax-submit">
             {{ csrf_field() }}
-            <div class="content-block-title">Customer Information</div>
+            <div class="content-block-title">Client Information</div>
             <div class="list-block">
                <ul>
                   <!-- Text inputs -->
@@ -92,10 +92,13 @@
             </div>
             @endif
 
-            <div class="content-block-title">Action List</div>
             <div class="list-block">
                <ul>
-                  <li><a href="/super/archive?shop_id={{ $shop_id }}" class="item-link list-button">Archive</a></li>
+                  @if($shop->archived == 1)
+                     <li><a href="#" class="confirm-restore item-link list-button">Restore</a></li>
+                  @else
+                     <li><a href="#" class="confirm-archive item-link list-button">Archive</a></li>
+                  @endif
                   <li><a href="/super/user?shop_id={{ $shop_id }}" class="item-link list-button">View Users ({{ $user_count }})</a></li>
                   <li><a href="" class="item-link list-button">Force Login</a></li>
                </ul>

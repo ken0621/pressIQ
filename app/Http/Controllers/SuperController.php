@@ -117,7 +117,28 @@ class SuperController extends Controller
     }
     public function getCustomer()
     {
-        $_shop = Tbl_shop::active()->orderBy("shop_key")->get();
+        if(request("filter") == "archive")
+        {
+            $data["page"] = "Archive List";
+        }
+        else
+        {
+            $data["page"] = "Client List";
+        }
+        
+        $query = Tbl_shop::orderBy("shop_key");
+
+
+        if(request("filter") == "archive")
+        {
+            $query->archived();
+        }
+        else
+        {
+            $query->active();
+        }
+
+        $_shop = $query->get();
 
         foreach($_shop as $key => $shop)
         {
@@ -130,6 +151,11 @@ class SuperController extends Controller
         $data["_shop"] = $_shop;
 
         return view("super.customer", $data);
+    }
+    public function getCustomerAdd()
+    {
+        $data["page"]       = "Client Add";
+        return view("super.customer_add", $data);
     }
     public function getCustomerEdit()
     {
@@ -181,7 +207,16 @@ class SuperController extends Controller
         }
         echo json_encode($return);
     }
-    public function getUser()
+    public function getCustomerArchive()
+    {
+        $update["archived"] = 1;
+        Tbl_shop::where("shop_id", request("shop_id"))->update($update);
+    }
+    public function getCustomerRestore()
+    {
+        $update["archived"] = 0;
+        Tbl_shop::where("shop_id", request("shop_id"))->update($update);
+    }    public function getUser()
     {
         $data["shop"]       = Tbl_shop::where('shop_id', request("shop_id"))->first();
         $data["shop_id"]    = $data["shop"]->shop_id;

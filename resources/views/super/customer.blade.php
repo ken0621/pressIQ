@@ -11,7 +11,7 @@
 
       @if($page == "Client List")
          <div class="right">
-            <a href="#" class="action-sheet-customer"><i class="fa fa-bars"></i></a>
+            <a href="#" class="action-sheet-customer"> Actions</a>
          </div>
       @endif
 

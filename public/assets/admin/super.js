@@ -32,8 +32,8 @@ function admin()
         /*  CUSTOMER EDIT EVENTS */
         myApp.onPageInit('customer-edit', function(page)
         {
-        	event_customer_edit_archive();
-        	event_customer_edit_restore();
+        	event_customer_edit_archive(page);
+        	event_customer_edit_restore(page);
 		});
 
         myApp.onPageInit('*', function(page)
@@ -71,7 +71,7 @@ function admin()
 			myApp.hideIndicator();
 		});
 	}
-	function event_customer_edit_archive()
+	function event_customer_edit_archive(page)
 	{
 		$$('.confirm-archive').on('click', function ()
 		{
@@ -100,7 +100,7 @@ function admin()
 			});
 		});
 	}
-	function event_customer_edit_restore()
+	function event_customer_edit_restore(page)
 	{
 		$$('.confirm-restore').on('click', function ()
 		{

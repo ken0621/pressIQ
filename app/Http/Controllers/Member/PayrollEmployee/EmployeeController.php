@@ -197,7 +197,7 @@ class EmployeeController extends PayrollMember
 		
     	$data['total_period_record'] = Tbl_payroll_time_keeping_approved::where('tbl_payroll_time_keeping_approved.employee_id',$data["period_record"]->employee_id)->get();
     	
-    	dd($total);
+    	//dd($total);
     	//dd($data['total_period_record']);
 /*
     	foreach($data["total_period_record"] as $key => $total)

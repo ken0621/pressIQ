@@ -25,6 +25,8 @@ class MLM_PayoutController extends Member
 	public function getIndex()
 	{
 		$data["page"] = "Payout Processing";
+		$data['shop_id'] = $this->user_info->shop_id;
+
 		return view('member.mlm_payout.payout', $data);
 	}
 	public function postIndexTable()
@@ -32,6 +34,13 @@ class MLM_PayoutController extends Member
 		$shop_id 		= $this->user_info->shop_id;
 		$query 			= Tbl_mlm_slot_wallet_log::where("tbl_mlm_slot_wallet_log.shop_id", $shop_id)->slot()->customer();
 
+		$mode = 'PENDING';
+		if(Request::input('mode'))
+		{
+			$mode = Request::input('mode');
+		}
+
+		$query->where("wallet_log_payout_status",$mode);
 		/* PAYOUT IMPORTATION QUERIES */
 		$query->where("wallet_log_amount", "<", 0);
 		$query->orderBy("wallet_log_date_created", "desc");
@@ -241,6 +250,9 @@ class MLM_PayoutController extends Member
 		$total_net 				= 0;
 		$minimum_encashment		= $minimum;
 		$data["method"]			= $method;
+
+		$less_tax				= 0;
+
 		$slot_query = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet();
 
 		if($method == "eon")
@@ -276,10 +288,11 @@ class MLM_PayoutController extends Member
 				$remaining 			= $slot->current_wallet - $encashment_amount;
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
+				$less_tax			= $encashment_amount - $tax;
 				$compute_service_charge = $service_charge;
 				if($service_charge_type == 1)
 				{
-					$compute_service_charge = (($encashment_amount * (doubleval($service_charge)/100)));
+					$compute_service_charge = (($less_tax * (doubleval($service_charge)/100)));
 				}
 				$compute_net 		= $compute_net - ($compute_service_charge + $other_charge + $tax);
 			}
@@ -294,10 +307,11 @@ class MLM_PayoutController extends Member
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
 				// $test[$key] = $encashment_amount .' * '.doubleval($service_charge) . '/100';
+				$less_tax			= $encashment_amount - $tax;
 				$compute_service_charge = $service_charge;
 				if($service_charge_type == 1)
 				{
-					$compute_service_charge = (($encashment_amount * (doubleval($service_charge)/100)));
+					$compute_service_charge = (($less_tax * (doubleval($service_charge)/100)));
 				}
 				$compute_net 		= $compute_net - ($compute_service_charge + $other_charge + $tax);
 			}
@@ -384,5 +398,43 @@ class MLM_PayoutController extends Member
 		{
 			return view("member.mlm_payout.payout_process_report", $data);
 		}
+	}
+
+	public function getRejectEncashment()
+	{
+		return view("member.mlm_payout.payout_reject");
+	}
+	public function postRejectEncashmentSubmit()
+	{
+		$amount = Request::input('less_than_amount');
+		$encashment_type = Request::input('encashment_type');
+		$remarks = Request::input('remarks');
+
+		$shop_id = $this->user_info->shop_id;
+		$all_slot = Tbl_mlm_slot::currentWallet()->where("tbl_mlm_slot.shop_id", $shop_id)->customer()
+								->groupBy('tbl_mlm_slot.slot_id')
+								->get();
+		$all_slot = Tbl_mlm_slot_wallet_log::where('tbl_mlm_slot_wallet_log.shop_id',$shop_id)->where('wallet_log_payout_status','PENDING')->slot()->customer()->get();
+
+		// ->where('current_wallet','<',$amount)
+		// ->where('customer_payout_method','unset')
+		foreach ($all_slot as $key => $value) 
+		{
+			if($encashment_type != $value->wallet_log_plan)
+			{
+				if(abs($value->wallet_log_amount) > $amount)
+				{
+					unset($all_slot[$key]);
+				}
+			}
+			if(abs($value->wallet_log_amount) > $amount)
+			{
+				dd($all_slot[$key]);
+				unset($all_slot[$key]);
+			}
+		}
+
+		print_r(count($all_slot));
+		die();
 	}
 }

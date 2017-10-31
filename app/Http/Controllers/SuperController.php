@@ -157,6 +157,10 @@ class SuperController extends Controller
         $data["page"]       = "Client Add";
         return view("super.customer_add", $data);
     }
+    public function postCustomerAdd()
+    {
+        
+    }
     public function getCustomerEdit()
     {
         $data["page"]       = "Customer Edit";

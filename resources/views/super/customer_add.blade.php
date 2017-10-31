@@ -19,7 +19,7 @@
 
    <div data-page="register-step1" class="page">
       <div class="page-content">
-         <form action="/exam/register" method="post" class="ajax-submit">
+         <form action="/super/customer-add" method="post" class="ajax-submit">
             {{ csrf_field() }}
             <div class="content-block-title">Account Detail</div>
             <div class="list-block">
@@ -79,7 +79,7 @@
                </ul>
             </div>
 
-            <div class="content-block-title">Company Information</div>
+            <div class="content-block-title">Business Information</div>
             <div class="list-block">
                <ul>
                   <!-- Text inputs -->
@@ -88,7 +88,7 @@
                         <div class="item-inner">
                            <div class="item-title label">Name</div>
                            <div class="item-input">
-                              <input name="shop_key" type="text" placeholder="Company name">
+                              <input name="shop_key" type="text" placeholder="Business Name">
                            </div>
                         </div>
                      </div>

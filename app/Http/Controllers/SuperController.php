@@ -4,6 +4,7 @@ use App\Models\Tbl_shop;
 use App\Models\Tbl_admin;
 use App\Models\Tbl_user;
 use App\Models\Tbl_user_position;
+use App\Models\Tbl_country;
 use Crypt;
 use Validator;
 use Illuminate\Validation\Rule;
@@ -155,11 +156,52 @@ class SuperController extends Controller
     public function getCustomerAdd()
     {
         $data["page"]       = "Client Add";
+        $data["_country"]   = Tbl_country::get();
         return view("super.customer_add", $data);
     }
     public function postCustomerAdd()
     {
-        
+        $condition["first_name"]        = array("required");
+        $condition["last_name"]         = array("required");
+        $condition["user_email"]        = array("required", "email", Rule::unique('tbl_user')->ignore('', 'user_email'));
+        $condition["password"]          = array("required", "confirmed", "min:5");
+        $condition["shop_key"]          = array("required",'alpha_dash', Rule::unique('tbl_shop')->ignore('', 'shop_key'));
+        $condition["contact"]           = array("required");
+        $condition["country"]           = array("required");
+        $validator                      = Validator::make(request()->all(), $condition);
+
+        if ($validator->fails())
+        {
+            $errors                     = $validator->errors();
+            $return["status"]           = "error";
+            $return["title"]            = "Validation Error";
+            $return["message"]          = $errors->first();
+        }
+        else
+        {
+            $insert_shop["shop_key"]            = request("shop_key");
+            $insert_shop["shop_status"]         = "trial";
+            $insert_shop["shop_country"]        = request("country");
+            $insert_shop["shop_street_address"] = request("complete_address");
+            $insert_shop["shop_contact"]        = request("contact");
+            $shop_id                            = Tbl_shop::insertGetId($insert_shop);
+
+            $insert_user["user_email"]          = request("user_email");
+            $insert_user["user_shop"]           = $shop_id;
+            $insert_user["user_first_name"]     = request("first_name");
+            $insert_user["user_last_name"]      = request("last_name");
+            $insert_user["user_contact_number"] = request("contact");
+            $insert_user["user_password"]       = Crypt::encrypt(request("password"));
+            $insert_user["user_level"]          = 1;
+
+            Tbl_user::insert($insert_user);
+
+            $return["title"]        = "Successfully Created";
+            $return["message"]      = "New Customer (" . request("shop_key") . ") has been created and added to list.";  
+            $return["back"]         = true; 
+        }
+
+        echo json_encode($return);
     }
     public function getCustomerEdit()
     {

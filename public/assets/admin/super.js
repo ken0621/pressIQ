@@ -38,13 +38,13 @@ function admin()
 
         myApp.onPageInit('*', function(page)
         {
-        	event_global_ajax_submit();
+        	event_global_ajax_submit(page);
 
 			$$('form.ajax-submit').on('form:beforesend', function (e) { myApp.showIndicator(); });
 			$$('form.ajax-submit').on('form:error', function (e) { myApp.hideIndicator(); });
         });
 	}
-	function event_global_ajax_submit()
+	function event_global_ajax_submit(page)
 	{
 		$$('form.ajax-submit').on('form:success', function (e)
 		{
@@ -62,11 +62,22 @@ function admin()
 			if(isjson)
 			{
 				myApp.alert(data.message, data.title);
+
+				if(data.back)
+				{
+	  				mainView.router.back(
+	  				{
+	  					url: page.view.history[page.view.history.length - 2],
+	  					force: true,
+            			ignoreCache: true
+        			});
+				}
 			}
 			else
 			{
 				myApp.alert("Kindly check your internet connection.", "Error Occurred");
 			}
+
 
 			myApp.hideIndicator();
 		});

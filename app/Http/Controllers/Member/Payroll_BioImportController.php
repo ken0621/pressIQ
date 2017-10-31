@@ -219,6 +219,7 @@ class Payroll_BioImportController extends Member
 						
 						$failed++;
 					}
+
 					/* CREATE TIMESHEET DB IF EMPTY */
 					else if(!$timesheet_db)
 					{
@@ -657,6 +658,7 @@ class Payroll_BioImportController extends Member
 	    	$temp_date = '';
 	    	$insert_time_record = array();
 	    	$time_sheet = array();
+
 	    	foreach($_time as $key => $time)
 	    	{
 	    		$temp_record['employee_number'] = (string)$time['no'];
@@ -675,9 +677,9 @@ class Payroll_BioImportController extends Member
 	    		{
 	    			$start 	= $date[0];
 	    			$end 	= $date[count($date) - 1];
+
 	    			if(Self::check_employee_number($start['employee_number']))
 	    			{
-	    				
 		    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($start['employee_number']), $start['date']);
 
 		    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
@@ -687,27 +689,37 @@ class Payroll_BioImportController extends Member
 
 		    			$temp_array['payroll_company_id']			= Self::getemployeeId($start['employee_number'],'payroll_employee_company_id');
 
-
-
 		    			if($company != '' || $company != 0 || $company != null)
 		    			{
 		    				$temp_array['payroll_company_id'] = $company;
 		    			}
 		    			
-
 		    			$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
+
 		    			if($count_record == 0)
 		    			{
 		    				array_push($insert_time_record, $temp_array);
 		    			}
-
 		    			/* delete all 0000-00-00 date value */
 		    			Self::delete_blank($payroll_time_sheet_id);
 	    			}
-	    			
 	    		}
 	    	}
+
+	    	/*START remove importation if time_sheet is already approved*/
+	    	foreach ($insert_time_record as $key => $value) 
+	    	{
+	    		$time_keeping_approved = Tbl_payroll_time_sheet::where('payroll_time_sheet_id',$value["payroll_time_sheet_id"])->value("time_keeping_approved");
+	   
+	    		if ($time_keeping_approved == 1) 
+	    		{
+	    			unset($insert_time_record[$key]);
+	    		}
+	    	}
+	    	/*END remove importation if time_sheet is already approved*/
+
 	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
+
 	    	if(!empty($insert_time_record))
 	    	{
 	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
@@ -875,7 +887,6 @@ class Payroll_BioImportController extends Member
 			    				{
 			    					$insert_record['payroll_time_sheet_out'] = date('H:i:s', strtotime($final_date['time_out']));
 			    				}
-			    				
 			    			}
 
 			    			$count_record = Tbl_payroll_time_sheet_record::wherearray($insert_record)->count();
@@ -887,6 +898,19 @@ class Payroll_BioImportController extends Member
 		    		}
 	    		}
 	    	}
+
+	    	/*START remove importation if time_sheet is already approved*/
+	    	foreach ($insert_time_record as $key => $value) 
+	    	{
+	    		$time_keeping_approved = Tbl_payroll_time_sheet::where('payroll_time_sheet_id',$value["payroll_time_sheet_id"])->value("time_keeping_approved");
+	    	
+	    		if ($time_keeping_approved == 1) 
+	    		{
+	    			unset($insert_time_record[$key]);
+	    		}
+	    	}
+	    	/*END remove importation if time_sheet is already approved*/
+
 	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
 	    	if(!empty($insert_time_record))
 	    	{
@@ -1404,7 +1428,7 @@ class Payroll_BioImportController extends Member
 
     public function manual_template()
     {
-    	$excels['data'][0] = ['Employee No.','Employee Name', 'Date','Time In','Time Out'];
+    	$excels['data'][0] = ['Employee No','Employee Name', 'Date','Time In','Time Out'];
         $excels['data'][1] = ['','', '','',''];
         // dd($excels);
         return Excel::create('Timesheet Template (Manual)', function($excel) use ($excels) {

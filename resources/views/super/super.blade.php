@@ -61,12 +61,18 @@
                                                     <div class="client">3EXCEL</div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-content-inner">
+                                        <div class="activity-container">
                                             <div class="activity">
                                                 <div class="detail">
                                                     <b>Guillermo Tabligan</b> edited detail of a customer in Reward Slots V2.
                                                 </div>
                                                 <div class="subdetail">
-                                                    <div class="time-ago">45 minutes ago</div>
+                                                    <div class="time-ago">2 minutes ago</div>
                                                     <div class="client">3EXCEL</div>
                                                 </div>
                                             </div>

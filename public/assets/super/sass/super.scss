@@ -59,6 +59,11 @@
 
 }
 
+.card-content
+{
+	border-bottom: 1px solid #eee;
+}
+
 .dashboard-content
 {
 	margin: 0;
@@ -67,9 +72,6 @@
 	{
 		.activity
 		{
-			margin-bottom: 10px;
-			border-bottom: 1px solid #eee;
-			padding: 10px;
 			.detail
 			{
 

@@ -35,21 +35,20 @@
 .bg-red {
   background-color: red; }
 
+.card-content {
+  border-bottom: 1px solid #eee; }
+
 .dashboard-content {
   margin: 0; }
-  .dashboard-content .activity-container .activity {
-    margin-bottom: 10px;
-    border-bottom: 1px solid #eee;
-    padding: 10px; }
-    .dashboard-content .activity-container .activity .subdetail {
-      display: flex;
-      padding-top: 5px; }
-      .dashboard-content .activity-container .activity .subdetail .time-ago {
-        flex: 1;
-        color: #ccc; }
-      .dashboard-content .activity-container .activity .subdetail .client {
-        flex: 1;
-        text-align: right;
-        color: #ccc; }
+  .dashboard-content .activity-container .activity .subdetail {
+    display: flex;
+    padding-top: 5px; }
+    .dashboard-content .activity-container .activity .subdetail .time-ago {
+      flex: 1;
+      color: #ccc; }
+    .dashboard-content .activity-container .activity .subdetail .client {
+      flex: 1;
+      text-align: right;
+      color: #ccc; }
 
 /*# sourceMappingURL=super.css.map */

@@ -54,54 +54,43 @@
 	background-color: red;
 }
 
+.dashboard-first-content-block
+{
+
+}
 
 .dashboard-content
 {
-	.dashboard-card
+	margin: 0;
+
+	.activity-container
 	{
-		display: flex;
-		width: 100%;
-		color: #fff;
-		padding: 10px;
-		box-sizing: border-box;
-		margin-bottom: 10px;
-
-		&:nth-child(1) { background-color: #55C5EA };
-		&:nth-child(2) { background-color: #5eb77f  };
-		&:nth-child(3) { background-color: #EA5F42  };
-		&:nth-child(3) { background-color: #E9933C  };
-
-		.card-icon
+		.activity
 		{
-			font-size: 40px;
-			text-align: right;
-		    -webkit-flex: 2; /* Safari 6.1+ */
-		    -ms-flex: 2; /* IE 10 */ 
-		    flex: 2;
+			margin-bottom: 10px;
+			border-bottom: 1px solid #eee;
+			padding: 10px;
+			.detail
+			{
 
-		}
-		.card-details
-		{	
-			line-height: 130%;
-			padding-left: 20px;
-		    -webkit-flex: 10; /* Safari 6.1+ */
-		    -ms-flex: 10; /* IE 10 */ 
-		    flex: 10;
-
-			.card-title
-			{
-				color: rgba(0,0,0,0.3);
-				font-weight: bold;
 			}
-			.card-label
+			.subdetail
 			{
-				font-weight: bold;
-				font-size: 18px;
-			}
-			.card-sub-label
-			{
-				color: rgba(255,255,255,0.7);
+				display: flex;
+				padding-top: 5px;
+				.time-ago
+				{
+					flex: 1;
+					color: #ccc;
+				}
+				.client
+				{
+					flex: 1;
+					text-align: right;
+					color: #ccc;
+				}
 			}
 		}
+
 	}
 }

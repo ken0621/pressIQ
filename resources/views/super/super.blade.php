@@ -45,28 +45,35 @@
                 <div class="pages navbar-through toolbar-through">
                     <div data-page="index" class="page">
                         <div class="page-content dashboard-content">
-                            <div class="content-block">
-                                <div class="dashboard-card">
-                                    <div class="card-icon">
-                                        <i class="fa fa-handshake-o"></i>
-                                    </div>
-                                    <div class="card-details">
-                                        <div class="card-title">YOUR LAST INTERACTION</div>
-                                        <div class="card-label">GNC Store #234</div>
-                                        <div class="card-sub-label">Visited 7 hours ago</div>
+
+
+                            <div class="card">
+                                <div class="card-header">Recent Client Activities <a href=""><i class="fa fa-refresh"></i></a></div>
+                                <div class="card-content">
+                                    <div class="card-content-inner">
+                                        <div class="activity-container">
+                                            <div class="activity">
+                                                <div class="detail">
+                                                    <b>Guillermo Tabligan</b> edited detail of a customer in Reward Slots V2.
+                                                </div>
+                                                <div class="subdetail">
+                                                    <div class="time-ago">2 minutes ago</div>
+                                                    <div class="client">3EXCEL</div>
+                                                </div>
+                                            </div>
+                                            <div class="activity">
+                                                <div class="detail">
+                                                    <b>Guillermo Tabligan</b> edited detail of a customer in Reward Slots V2.
+                                                </div>
+                                                <div class="subdetail">
+                                                    <div class="time-ago">45 minutes ago</div>
+                                                    <div class="client">3EXCEL</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="dashboard-card">
-                                    <div class="card-icon">
-                                        <i class="fa fa-id-card"></i>
-                                    </div>
-                                    <div class="card-details">
-                                        <div class="card-title">YOUR LAST INTERACTION</div>
-                                        <div class="card-label">GNC Store #234</div>
-                                        <div class="card-sub-label">Visited 7 hours ago</div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> 
                         </div>
                     </div>
                 </div>

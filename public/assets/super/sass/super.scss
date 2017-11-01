@@ -1,0 +1,40 @@
+.sidebar
+{
+	background-color: #0097b2;
+	padding: 0;
+	.sidebar-title
+	{
+		color: #fff;
+		font-weight: bold;
+		padding: 12px;
+		background-color: #0097b2;
+	}
+	.sidebar-link-container
+	{
+		padding: 0;
+		margin: 0;
+		border-top: 1px solid #0097b2;
+
+		.sidebar-link
+		{
+			margin: 0;
+			
+			a
+			{
+				color: #fff;
+				padding: 10px;
+				margin: 0;
+				border-top: 1px solid #00a9c6;
+				border-bottom: 1px solid #0097b2;
+				padding-left: 15px;
+			    background: #00a1c1; /* For browsers that do not support gradients */
+			    background: -webkit-linear-gradient(#00a1c1, #009eba); /* For Safari 5.1 to 6.0 */
+			    background: -o-linear-gradient(#00a1c1, #009eba); /* For Opera 11.1 to 12.0 */
+			    background: -moz-linear-gradient(#00a1c1, #009eba); /* For Firefox 3.6 to 15 */
+			    background: linear-gradient(#00a1c1, #009eba); /* Standard syntax */
+			    display: block;
+			}
+		}
+	}
+
+}

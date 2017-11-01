@@ -9,18 +9,18 @@
       <!-- Path to Framework7 Library CSS-->
       <link rel="stylesheet" href="/assets/mobile/framework7/dist/css/framework7.ios.min.css">
       <!-- Path to your custom app styles-->
-      <link rel="stylesheet" href="/assets/exam/css/exam.css">
+      <link rel="stylesheet" href="/assets/super/css/super.css">
       <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
    </head>
    <body>
       <div class="statusbar-overlay"></div>
       <div class="panel-overlay"></div>
-      <div class="panel panel-left panel-reveal">
-         <div class="content-block">
-            <p>Navigation</p>
-            <p><a class="close-panel" href="javascript: mainView.router.back({pageName:'index',force:true});  myApp.closePanel();">Dashboard</a></p>
-            <p><a class="close-panel" href="/super/customer">Client List</a></p>
-            <p><a class="close-panel" href="javascript:" onclick="window.location.href='/super/logout'">Logout</a></p>
+      <div class="panel panel-left panel-reveal sidebar">
+         <div class="sidebar-title">NAVIGATION</div>
+         <div class="sidebar-link-container content-block">
+            <p class="sidebar-link"><a class="close-panel" href="javascript: mainView.router.back({pageName:'index',force:true});  myApp.closePanel();">Dashboard</a></p>
+            <p class="sidebar-link"><a class="close-panel" href="/super/customer">Client List</a></p>
+            <p class="sidebar-link"><a class="close-panel" href="javascript:" onclick="window.location.href='/super/logout'">Logout</a></p>
          </div>
       </div>
       <div class="views">

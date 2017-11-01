@@ -1,40 +1,78 @@
 .sidebar {
-  background-color: #0097b2;
-  padding: 0; }
+  background-color: #f2f2f2;
+  padding: 0;
+  border-right: 1px solid #ddd; }
   .sidebar .sidebar-title {
-    color: #fff;
     font-weight: bold;
     padding: 12px;
-    background-color: #0097b2; }
+    background-color: #F7F7F8;
+    border-bottom: 1px solid #ddd; }
   .sidebar .sidebar-link-container {
     padding: 0;
-    margin: 0;
-    border-top: 1px solid #0097b2; }
+    margin: 0; }
     .sidebar .sidebar-link-container .sidebar-link {
-      margin: 0; }
-      .sidebar .sidebar-link-container .sidebar-link a {
-        color: #fff;
+      display: flex;
+      margin: 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+      border-top: 1px solid rgba(255, 255, 255, 0.5); }
+      .sidebar .sidebar-link-container .sidebar-link .sidebar-icon {
         padding: 10px;
+        text-align: center;
+        width: 30px;
+        padding-right: 0px;
+        padding-left: 15px; }
+      .sidebar .sidebar-link-container .sidebar-link a {
+        color: #777;
+        padding: 10px;
+        padding-left: 5px;
         margin: 0;
-        border-top: 1px solid #00a9c6;
-        border-bottom: 1px solid #0097b2;
-        padding-left: 15px;
-        background: #00a1c1;
-        /* For browsers that do not support gradients */
-        background: -webkit-linear-gradient(#00a1c1, #009eba);
-        /* For Safari 5.1 to 6.0 */
-        background: -o-linear-gradient(#00a1c1, #009eba);
-        /* For Opera 11.1 to 12.0 */
-        background: -moz-linear-gradient(#00a1c1, #009eba);
-        /* For Firefox 3.6 to 15 */
-        background: linear-gradient(#00a1c1, #009eba);
-        /* Standard syntax */
-        display: block; }
+        display: block;
+        font-weight: bold; }
 
 .toolbar .nav-icon {
   font-size: 25px; }
 
 .bg-red {
   background-color: red; }
+
+.dashboard-content .dashboard-card {
+  display: flex;
+  width: 100%;
+  color: #fff;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 10px; }
+  .dashboard-content .dashboard-card:nth-child(1) {
+    background-color: #55C5EA; }
+  .dashboard-content .dashboard-card:nth-child(2) {
+    background-color: #5eb77f; }
+  .dashboard-content .dashboard-card:nth-child(3) {
+    background-color: #EA5F42; }
+  .dashboard-content .dashboard-card:nth-child(3) {
+    background-color: #E9933C; }
+  .dashboard-content .dashboard-card .card-icon {
+    font-size: 40px;
+    text-align: right;
+    -webkit-flex: 2;
+    /* Safari 6.1+ */
+    -ms-flex: 2;
+    /* IE 10 */
+    flex: 2; }
+  .dashboard-content .dashboard-card .card-details {
+    line-height: 130%;
+    padding-left: 20px;
+    -webkit-flex: 10;
+    /* Safari 6.1+ */
+    -ms-flex: 10;
+    /* IE 10 */
+    flex: 10; }
+    .dashboard-content .dashboard-card .card-details .card-title {
+      color: rgba(0, 0, 0, 0.3);
+      font-weight: bold; }
+    .dashboard-content .dashboard-card .card-details .card-label {
+      font-weight: bold;
+      font-size: 18px; }
+    .dashboard-content .dashboard-card .card-details .card-sub-label {
+      color: rgba(255, 255, 255, 0.7); }
 
 /*# sourceMappingURL=super.css.map */

@@ -92,7 +92,7 @@ class SuperClientController extends Super
             Tbl_user::insert($insert_user);
 
             $return["title"]        = "Successfully Created";
-            $return["message"]      = "New Customer (" . request("shop_key") . ") has been created and added to list.";  
+            $return["message"]      = "New Customer has been created and added to list.";  
             $return["back"]         = true; 
         }
 
@@ -107,7 +107,7 @@ class SuperClientController extends Super
         $data["edited"]     = date("m/d/Y", strtotime($data["shop"]->updated_at));
         $data["user_count"] = Tbl_user::where("user_shop", $data["shop"]->shop_id)->active()->count();
         $data["developer"]  = Tbl_user::where("user_shop", $data["shop"]->shop_id)->where("user_level", 1)->first();
-
+        
         if($data["developer"])
         {
             $data["user_password"] = Crypt::decrypt($data["developer"]->user_password);

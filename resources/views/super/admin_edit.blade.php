@@ -10,7 +10,7 @@
       <div class="center sliding">Basic Details</div>
       <div class="right">
          <a type="submit" href="javascript: $$('.button-for-register-1').click()" class="link">
-            <span>Save</span>
+            <span>Update</span>
          </a>
       </div>
    </div>

@@ -40,7 +40,7 @@
                            <div class="item-title">{!! $admin->first_name !!} {!! $admin->last_name !!}</div>
                         </div>
                         <div class="item-subtitle">{{ $admin->username }}</div>
-                        <div style="color: gray;" class="item-subtitle">{{ $admin->mobile_number }}</div>
+                        <div style="color: gray;" class="item-subtitle">{{ ($admin->admin_type == 'full' ? 'Full Access' : 'Limited User') }}</div>
                      </div>
                   </a>
                </li>

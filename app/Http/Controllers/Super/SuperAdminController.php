@@ -21,6 +21,47 @@ class SuperAdminController extends Super
     	$data["page"] 			= "Admin Add";
     	return view("super.admin_add", $data);
     }
+    public function postAdd()
+    {
+        $condition["first_name"]        = array("required");
+        $condition["last_name"]         = array("required");
+        $condition["username"]        	= array("required", Rule::unique('tbl_admin')->ignore('', 'username'));
+        $condition["password"]        	= array("min:5");
+        $validator                      = Validator::make(request()->all(), $condition);
+
+        if ($validator->fails())
+        {
+            $errors                     = $validator->errors();
+            $return["status"]           = "error";
+            $return["title"]            = "Validation Error";
+            $return["message"]          = $errors->first();
+        }
+        else
+        {
+        	$insert["first_name"] 		= request("first_name");
+        	$insert["last_name"] 		= request("last_name");
+        	$insert["username"]			= request("username");
+        	$insert["password"]			= Crypt::encrypt(request("password"));
+
+        	if(request("full_access"))
+        	{
+        		$insert["admin_type"]	= "full";
+        	}
+        	else
+        	{
+        		$insert["admin_type"]	= "limited";
+        	}
+
+        	Tbl_admin::insert($insert);
+
+
+            $return["title"]        = "Successfully Created";
+            $return["message"]      = "New Super Admin has been created and added to list.";  
+            $return["back"]         = true;
+        }
+
+        echo json_encode($return);
+    }
     public function getEdit()
     {
     	$data["admin_id"]		= $admin_id = request("admin_id");
@@ -31,10 +72,13 @@ class SuperAdminController extends Super
     }
     public function postEdit()
     {
+    	$admin = Tbl_admin::where("admin_id", request("admin_id"))->first();
+
         $condition["first_name"]        = array("required");
         $condition["last_name"]         = array("required");
-        $condition["username"]        	= array("required", Rule::unique('tbl_admin')->ignore('', 'username'));
+        $condition["username"]        	= array("required", Rule::unique('tbl_admin')->ignore($admin->username, 'username'));
         $condition["password"]        	= array("min:5");
+        $validator                      = Validator::make(request()->all(), $condition);
 
         if ($validator->fails())
         {
@@ -48,8 +92,24 @@ class SuperAdminController extends Super
         	$update["first_name"] 		= request("first_name");
         	$update["last_name"] 		= request("last_name");
         	$update["username"]			= request("username");
-        	Tbl_admin::insert($update);
+        	$update["password"]			= Crypt::encrypt(request("password"));
+
+        	if(request("full_access"))
+        	{
+        		$update["admin_type"]	= "full";
+        	}
+        	else
+        	{
+        		$update["admin_type"]	= "limited";
+        	}
+
+        	Tbl_admin::where("admin_id", request("admin_id"))->update($update);
+
+        	$return["title"] 	= "Successfully Updated";
+            $return["message"] 	= "Information of Super Admin No. " . request("admin_id") . " (" . $admin->first_name . " " . $admin->last_name  . ") has been successfully updated."; 
+        	$return["back"]		= true;
         }
 
+        echo json_encode($return);
     }
 }

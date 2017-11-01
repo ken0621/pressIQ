@@ -377,9 +377,10 @@ class ShopMemberController extends Shop
                 $return .= "<div>Please setup your payout settings first.</div>";
             }
         }
+        
 
         $request_wallet = session("request_wallet");
-        
+
         foreach($_slot as $key => $slot)
         {
             $request_amount = $request_wallet[$key];

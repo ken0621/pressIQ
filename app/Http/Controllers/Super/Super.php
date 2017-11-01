@@ -37,7 +37,7 @@ class Super extends Controller
 
                 if($error != "")
                 {
-                    dd($error);
+                    return redirect("/super/logout");
                 }
                 else
                 {

@@ -39,7 +39,7 @@ class Super extends Controller
                 {
                     session()->forget("admin_username");
                     session()->forget("admin_password");
-                    return redirect("/super/logout");
+                    return redirect("/super");
                 }
                 else
                 {

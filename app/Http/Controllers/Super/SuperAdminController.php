@@ -16,6 +16,11 @@ class SuperAdminController extends Super
     	$data["_admin"] = Tbl_admin::where("admin_id", "<>", 1)->get();
     	return view("super.admin", $data);
     }
+    public function getAdd()
+    {
+    	$data["page"] 			= "Admin Add";
+    	return view("super.admin_add", $data);
+    }
     public function getEdit()
     {
     	$data["admin_id"]		= $admin_id = request("admin_id");

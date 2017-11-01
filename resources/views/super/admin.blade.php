@@ -9,7 +9,7 @@
       </div>
       <div class="center sliding">{{ $page }}</div>
       <div class="right">
-         <a href="#" class="back link">
+         <a href="/super/admin/add" class="item-link">
             <span>Add</span>
          </a>
       </div>

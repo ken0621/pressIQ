@@ -370,14 +370,14 @@ class ShopMemberController extends Shop
         $payout_setting = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
         $minimum = doubleval($payout_setting->enchasment_settings_minimum);
 
-        if($this->shop_info->shop_id != 60)
+        if($this->shop_info->shop_id != 60) //no neet to setup for JCA - temporary only
         {
             if(Self::$customer_info->customer_payout_method == 'unset')
             {
                 $return .= "<div>Please setup your payout settings first.</div>";
             }
         }
-        
+
 
         $request_wallet = session("request_wallet");
 

@@ -38,11 +38,29 @@ function admin()
 
         myApp.onPageInit('*', function(page)
         {
+        	event_tab(page);
         	event_global_ajax_submit(page);
 
 			$$('form.ajax-submit').on('form:beforesend', function (e) { myApp.showIndicator(); });
 			$$('form.ajax-submit').on('form:error', function (e) { myApp.hideIndicator(); });
         });
+
+        myApp.onPageBack('*', function(page)
+        {
+        	event_tab(page, true);
+        });
+	}
+
+	function event_tab(page, back)
+	{
+		$(".tab-link").removeClass("active");
+
+		if(mainView.url == "#index")
+		{
+			$(".tab-link.dashboard").addClass("active");
+		}
+
+        
 	}
 	function event_global_ajax_submit(page)
 	{

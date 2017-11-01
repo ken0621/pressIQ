@@ -31,4 +31,10 @@
         /* Standard syntax */
         display: block; }
 
+.toolbar .nav-icon {
+  font-size: 27px; }
+
+.bg-red {
+  background-color: red; }
+
 /*# sourceMappingURL=super.css.map */

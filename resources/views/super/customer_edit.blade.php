@@ -19,7 +19,7 @@
    <div data-page="customer-edit" class="page">
       <div class="page-content">
          <input type="hidden" class="customer-edit-shop-id" value="{{ $shop_id }}">
-         <form action="/super/customer-edit?id={{ $shop_id }}" method="post" class="ajax-submit">
+         <form action="/super/client/edit?id={{ $shop_id }}" method="post" class="ajax-submit">
             {{ csrf_field() }}
             <div class="content-block-title">Client Information</div>
             <div class="list-block">

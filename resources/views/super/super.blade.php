@@ -19,7 +19,8 @@
          <div class="sidebar-title">NAVIGATION</div>
          <div class="sidebar-link-container content-block">
             <p class="sidebar-link"><a class="close-panel" href="javascript: mainView.router.back({pageName:'index',force:true});  myApp.closePanel();">Dashboard</a></p>
-            <p class="sidebar-link"><a class="close-panel" href="/super/customer">Client List</a></p>
+            <p class="sidebar-link"><a class="close-panel" href="/super/client">Manage Clients</a></p>
+            <p class="sidebar-link"><a class="close-panel" href="/super/admin">Manage Super Admin</a></p>
             <p class="sidebar-link"><a class="close-panel" href="javascript:" onclick="window.location.href='/super/logout'">Logout</a></p>
          </div>
       </div>
@@ -47,10 +48,33 @@
                   </div>
                </div>
             </div>
+
+            <div class="toolbar tabbar tabbar-labels">
+                <div class="toolbar-inner">
+                    <a href="#" class="tab-link">
+                        <i class="icon nav-icon fa fa-home"></i>
+                        <span class="tabbar-label">Dashboard</span>
+                    </a>
+                    <a href="#" class="tab-link">
+                        <i class="icon nav-icon fa fa-envelope">
+                           <span class="badge bg-red">5</span>
+                        </i>
+                        <span class="tabbar-label">Message</span>
+                    </a>
+                    <a href="#" class="tab-link">
+                        <i class="icon nav-icon fa fa-list"></i>
+                        <span class="tabbar-label">My Task</span>
+                    </a>
+                    <a href="#" class="tab-link">
+                        <i class="icon nav-icon fa fa-gear"></i>
+                        <span class="tabbar-label">My Account</span>
+                    </a>
+                </div>
+            </div>
          </div>
       </div>
       <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
       <script type="text/javascript" src="/assets/mobile/framework7/dist/js/framework7.min.js"></script>
-      <script type="text/javascript" src="/assets/admin/super.js?v=1.02"></script>
+      <script type="text/javascript" src="/assets/admin/super.js?v=2.0"></script>
    </body>
 </html>

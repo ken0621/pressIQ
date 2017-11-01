@@ -33,7 +33,7 @@
                <ul>
                   @foreach($_user as $user)
                   <li>
-                     <a href="/super/user-edit?id={{ $user->user_id }}" class="item-link item-content">
+                     <a href="/super/user/edit?id={{ $user->user_id }}" class="item-link item-content">
                         <div class="item-inner">
                            <div class="item-title-row">
                               <div class="item-title">{!! $user->user_first_name !!} {!! $user->user_last_name !!}</div>
@@ -45,14 +45,6 @@
                   </li>
                   @endforeach
                </ul>
-            </div>
-            <!-- Filter Popup -->
-            <div class="popup popup-filter">
-               <div class="content-block-title">FILTER CUSTOMER</div>
-               <div class="content-block">
-                  <p><a href="#" class="close-popup">Archive List</a></p>
-                  <p><a href="#" class="close-popup">Close popup</a></p>
-               </div>
             </div>
          </div>
       </div>

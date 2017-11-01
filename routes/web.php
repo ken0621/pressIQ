@@ -1,6 +1,9 @@
 <?php
 AdvancedRoute::controller('/exam', 'ExamController');
-AdvancedRoute::controller('/super', 'SuperController');
+AdvancedRoute::controller('/super/client', 'Super\SuperClientController');
+AdvancedRoute::controller('/super/admin', 'Super\SuperAdminController');
+AdvancedRoute::controller('/super/user', 'Super\SuperUserController');
+AdvancedRoute::controller('/super', 'Super\SuperDashboardController');
 
 Route::get('/ref/{id}', 'LeadController@ref');
 Route::any('/inspirers', 'SampleTesting@inspirer');

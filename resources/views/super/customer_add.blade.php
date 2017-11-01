@@ -19,7 +19,7 @@
 
    <div data-page="register-step1" class="page">
       <div class="page-content">
-         <form action="/super/customer-add" method="post" class="ajax-submit">
+         <form action="/super/client/add" method="post" class="ajax-submit">
             {{ csrf_field() }}
             <div class="content-block-title">Account Detail</div>
             <div class="list-block">

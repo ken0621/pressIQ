@@ -92,7 +92,7 @@ function admin()
 
 		        $.ajax(
 		        {
-		        	url:"/super/customer-archive",
+		        	url:"/super/client/archive",
 		  			data: {'shop_id':$shop_id},
 		  			type:"get",
 		  			success: function(data)
@@ -121,7 +121,7 @@ function admin()
 
 		        $.ajax(
 		        {
-		        	url:"/super/customer-restore",
+		        	url:"/super/client/restore",
 		  			data: {'shop_id':$shop_id},
 		  			type:"get",
 		  			success: function(data)
@@ -151,14 +151,14 @@ function admin()
 		            bold: true,
 		            onClick: function ()
 		            {
-		                mainView.router.loadPage('/super/customer-add');
+		                mainView.router.loadPage('/super/client/add');
 		            }
 		        },
 		        {
 		            text: 'Archive List',
 		            onClick: function ()
 		            {
-		                mainView.router.loadPage('/super/customer?filter=archive');
+		                mainView.router.loadPage('/super/client?filter=archive');
 		            }
 		        },
 		        {

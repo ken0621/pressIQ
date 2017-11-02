@@ -994,7 +994,7 @@ class ShopMemberController extends Shop
         {
             Self::store_login_session($insert["email"], $raw_password);
         }
-        
+
         if(session("checkout_after_register"))
         {
             session()->forget("checkout_after_register");
@@ -1452,9 +1452,10 @@ class ShopMemberController extends Shop
         foreach($_lead as $key => $lead)
         {
             $slot_owned = Tbl_mlm_slot::where("slot_owner", $lead->customer_id)->first();
+            
             if($slot_owned)
             {
-                $_lead[$key]->slot_owned = $slot_owned->slot_id;
+                $_lead[$key]->slot_owned = $slot_owned->slot_no;
             }
             else
             {

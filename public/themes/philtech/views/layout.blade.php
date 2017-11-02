@@ -215,8 +215,8 @@
                     <ul>
                         <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partners</a></li>
                         <li><a href="https://loadcentral.net">E-loading Business</a></li>
-                        <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
-                        <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li>
+{{--                         <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
+                        <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li> --}}
                         <li><a href="https://philtechglobalinc.vmoney.com/">E-money</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">Career</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">Events</a></li>

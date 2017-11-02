@@ -14,7 +14,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="action_load_link_to_modal('/member/mlm/payout/process')" class="btn btn-primary"><i class="fa fa-star"></i> PROCESS GC MAINTENANCE</button>
+                <button onclick="action_load_link_to_modal('/member/mlm/gcmaintenance/process')" class="btn btn-primary"><i class="fa fa-star"></i> PROCESS GC MAINTENANCE</button>
             </div>
         </div>
     </div>

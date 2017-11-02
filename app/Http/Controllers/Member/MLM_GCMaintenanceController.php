@@ -27,6 +27,10 @@ class MLM_GCMaintenanceController extends Member
 		$data["page"] = "GC Maintenance";
 		return view('member.mlm_gcmaintenance.gcmaintenance', $data);
 	}
+	public function getProcess()
+	{
+		
+	}
 	public function postIndexTable()
 	{
 		$shop_id 		= $this->user_info->shop_id;
@@ -84,6 +88,6 @@ class MLM_GCMaintenanceController extends Member
 		}
 
 
-		return view('member.mlm_payout.payout_table', $data);
+		return view('member.mlm_gcmaintenance.gcmaintenance_table', $data);
 	}
 }

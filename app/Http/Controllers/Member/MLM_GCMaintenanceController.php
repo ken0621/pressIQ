@@ -29,7 +29,14 @@ class MLM_GCMaintenanceController extends Member
 	}
 	public function getProcess()
 	{
+		$data["page"] = "GC Maintenance";
+		return view('member.mlm_gcmaintenance.gcmaintenance_process', $data);
+	}
+	public function getProcessOutput()
+	{
+		$data["page"] = "GC Maintenance";
 		
+		return view('member.mlm_gcmaintenance.gcmaintenance_process_output', $data);
 	}
 	public function postIndexTable()
 	{

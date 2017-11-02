@@ -11,13 +11,6 @@
 				<div class="sub">List of Leads under your account.</div>
 			</div>
 		</div>
-		<div class="animated fadeInRight right">
-			<div class="search">
-				<select class="form-control">
-					<option>All Slots</option>
-				</select>
-			</div>
-		</div>
 	</div>
 	
 	<div class="report-content">

@@ -994,7 +994,7 @@ class ShopMemberController extends Shop
         {
             Self::store_login_session($insert["email"], $raw_password);
         }
-
+        
         if(session("checkout_after_register"))
         {
             session()->forget("checkout_after_register");
@@ -1444,10 +1444,28 @@ class ShopMemberController extends Shop
         {
             $query->where("customer_lead", "-1");
         }
-        
 
-        $data["_lead"]      = $query->get();
-        
+
+
+        $_lead      = $query->get();
+
+        foreach($_lead as $key => $lead)
+        {
+            $slot_owned = Tbl_mlm_slot::where("slot_owner", $lead->customer_id)->first();
+            if($slot_owned)
+            {
+                $_lead[$key]->slot_owned = $slot_owned->slot_id;
+            }
+            else
+            {
+                $_lead[$key]->slot_owned = "NONE";
+            }
+
+            $_lead[$key]->date_created = date("F d, Y", strtotime($lead->created_at)) . "<br>" . date("h:i A", strtotime($lead->created_at));
+        }
+
+        $data["_lead"] = $_lead;
+
         return (Self::load_view_for_members("member.lead", $data)); 
     }
     public function getWalletLogs()

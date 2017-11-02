@@ -27,4 +27,63 @@ class MLM_GCMaintenanceController extends Member
 		$data["page"] = "GC Maintenance";
 		return view('member.mlm_gcmaintenance.gcmaintenance', $data);
 	}
+	public function postIndexTable()
+	{
+		$shop_id 		= $this->user_info->shop_id;
+		$query 			= Tbl_mlm_slot_wallet_log::where("tbl_mlm_slot_wallet_log.shop_id", $shop_id)->slot()->customer();
+
+		$query->where("wallet_log_plan", "GC MAINTENANCE");
+
+		/* PAYOUT IMPORTATION QUERIES */
+		$query->where("wallet_log_amount", "<", 0);
+		$query->orderBy("wallet_log_date_created", "desc");
+		
+		/* SEARCH QUERY */
+		$search_key = Request::input("search");
+
+		if($search_key != "")
+		{
+			$query->where(function($q) use ($search_key)
+			{
+				$q->orWhere("first_name", "LIKE", "%$search_key%");
+				$q->orWhere("last_name", "LIKE", "%$search_key%");
+				$q->orWhere("slot_no", "LIKE", "%$search_key%");
+			});
+		}
+
+		$data["_payout"]				= null;
+		$data["total_payout"]			= Currency::format($query->sum("wallet_log_amount") * -1);
+		$data["total_request"]			= Currency::format($query->sum("wallet_log_request"));
+		$data["total_tax"]				= Currency::format($query->sum("wallet_log_tax"));
+		$data["total_service"]			= Currency::format($query->sum("wallet_log_service_charge"));
+		$data["total_other"]			= Currency::format($query->sum("wallet_log_other_charge"));
+		$data["__payout"] 				= $query->paginate(5);
+
+        /* GET TOTALS */
+        $grand_total_slot_wallet  			= Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->sum("wallet_log_amount");
+    	$grand_total_payout       			= Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_amount", "<", 0)->sum("wallet_log_amount") * -1;
+    	$grand_total_earnings     			= Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_amount", ">", 0)->sum("wallet_log_amount");
+
+        /* FORMAT TOTALS */
+    	$data["grand_total_slot_wallet"]     	= Currency::format($grand_total_slot_wallet);
+    	$data["grand_total_slot_earnings"]   	= Currency::format($grand_total_earnings);
+    	$data["grand_total_payout"]          	= Currency::format($grand_total_payout);
+
+		foreach($data["__payout"] as $key => $payout)
+		{
+			$data["_payout"][$key] 										= $payout;
+			$reward_slot 												= Tbl_mlm_slot::where("slot_id", $payout->wallet_log_slot)->first();
+			$data["_payout"][$key]->display_wallet_log_amount 			= Currency::format($payout->wallet_log_amount * -1);
+			$data["_payout"][$key]->time_ago 							= time_ago($payout->wallet_log_date_created);
+			$data["_payout"][$key]->display_date 						= date("m/d/Y", strtotime($payout->wallet_log_date_created));
+			$data["_payout"][$key]->slot_no 							= $reward_slot->slot_no;
+			$data["_payout"][$key]->display_wallet_log_request 			= Currency::format($payout->wallet_log_request);
+			$data["_payout"][$key]->display_wallet_log_tax 				= Currency::format($payout->wallet_log_tax);
+			$data["_payout"][$key]->display_wallet_log_service_charge 	= Currency::format($payout->wallet_log_service_charge);
+			$data["_payout"][$key]->display_wallet_log_other_charge 	= Currency::format($payout->wallet_log_other_charge);
+		}
+
+
+		return view('member.mlm_payout.payout_table', $data);
+	}
 }

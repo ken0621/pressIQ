@@ -187,10 +187,10 @@ class Payroll_BioImportController extends Member
 
 	public function save_time_record($_time_record, $company ,$shop_id, $biometric_name)
 	{
-		$success = 0;
-		$failed = 0;
-		$incomplete = 0;
-		$overwritten = 0;
+		$success 		= 0;
+		$failed 		= 0;
+		$incomplete 	= 0;
+		$overwritten 	= 0;
 
 		foreach($_time_record as $date => $time_record) 
 		{
@@ -276,6 +276,7 @@ class Payroll_BioImportController extends Member
 								$status = "<div class='text-primary'>OVERWRITTEN</div>";
 							}
 						}
+
 						if ($status != "<div class='text-primary'>OVERWRITTEN</div>") 
 						{
 							$success++;
@@ -311,10 +312,10 @@ class Payroll_BioImportController extends Member
 			}
 		}
 		
-		$data["success"] = $success;
-		$data["failed"] = $failed;
+		$data["success"] 	 = $success;
+		$data["failed"] 	 = $failed;
 		$data["overwritten"] = $overwritten;
-		$data['_report'] = $_time_record;
+		$data['_report'] 	 = $_time_record;
 		// dd($data['_report']);
 		if ($success != 0 || $overwritten != 0) 
 		{
@@ -664,9 +665,13 @@ class Payroll_BioImportController extends Member
 	    		$temp_record['employee_number'] = (string)$time['no'];
 	    		$temp_record['time']			= date('H:i:s', strtotime($time['datetime']));
 	    		$temp_record['date']			= date('Y-m-d', strtotime($time['datetime']));
-	    		array_push($time_sheet, $temp_record);
+	    		if ($temp_record['employee_number'] != "" || $temp_record['employee_number'] != null) 
+	    		{
+	    			array_push($time_sheet, $temp_record);
+	    		}
+	    		
 	    	}
-
+	    	
 	    	$_date_collect = collect($time_sheet)->groupBy('employee_number','date');
 
 	    	foreach($_date_collect as $key => $date_collect)
@@ -694,46 +699,69 @@ class Payroll_BioImportController extends Member
 		    				$temp_array['payroll_company_id'] = $company;
 		    			}
 		    			
-		    			$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
+		    			/*$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
 
 		    			if($count_record == 0)
-		    			{
+		    			{*/
 		    				array_push($insert_time_record, $temp_array);
-		    			}
+		    			/*}*/
 		    			/* delete all 0000-00-00 date value */
 		    			Self::delete_blank($payroll_time_sheet_id);
 	    			}
 	    		}
 	    	}
-
-	    	/*START remove importation if time_sheet is already approved*/
-	    	foreach ($insert_time_record as $key => $value) 
-	    	{
-	    		$time_keeping_approved = Tbl_payroll_time_sheet::where('payroll_time_sheet_id',$value["payroll_time_sheet_id"])->value("time_keeping_approved");
-	   
-	    		if ($time_keeping_approved == 1) 
-	    		{
-	    			unset($insert_time_record[$key]);
-	    		}
-	    	}
-	    	/*END remove importation if time_sheet is already approved*/
-
-	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
-
-	    	if(!empty($insert_time_record))
-	    	{
-	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
-	    		$count_inserted = count($insert_time_record);
-	    		$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company)->first();
-	    		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using ZKTime_5_0   Template.', "", "" ,"");
-	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
-	    	}
-	    	
-	    	// return $message;
+	    	return Self::insert_record($insert_time_record, $company);
     	}
 
     	return $message;
     	
+    }
+
+    public function insert_record($insert_time_record, $company)
+    {
+    	/*START remove importation if time_sheet is already approved*/
+    	foreach ($insert_time_record as $key => $value) 
+    	{
+
+    		$_time_sheet = Tbl_payroll_time_sheet::where('payroll_time_sheet_id',$value["payroll_time_sheet_id"])->first();
+    		
+    		if ($_time_sheet->time_keeping_approved == 1) 
+    		{
+    			unset($insert_time_record[$key]);
+    		}
+    		else
+    		{
+    			$_time_sheet_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$value["payroll_time_sheet_id"])->get();
+    			foreach ($_time_sheet_record as $key2 => $time_sheet_record) 
+    			{
+    				$time_in_record = $time_sheet_record->payroll_time_sheet_in;
+    				$time_out_record = $time_sheet_record->payroll_time_sheet_out;
+    				if(($time_in_record > $value["payroll_time_sheet_in"] && $value["payroll_time_sheet_out"]  < $time_out_record)
+    				|| ($time_in_record > $value["payroll_time_sheet_in"] && $value["payroll_time_sheet_out"]  < $time_out_record) 
+    				|| ($time_in_record == $value["payroll_time_sheet_in"])
+    				|| ($time_out_record == $value["payroll_time_sheet_out"]))
+    				{
+    					Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id',$time_sheet_record->payroll_time_sheet_record_id)->delete();
+    				}
+    			}
+    		}
+    	}
+    	/*END remove importation if time_sheet is already approved*/
+
+    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
+
+    	if(!empty($insert_time_record))
+    	{
+    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
+    		$count_inserted = count($insert_time_record);
+    		if ($company != null || $company != 0) {
+    			$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company)->first();
+    			AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using ZKTime_5_0   Template.', "", "" ,"");
+    		}
+    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
+    	}
+
+    	return $message;
     }
 
     public function import_zkteco_yh803aups($file, $company)
@@ -816,7 +844,6 @@ class Payroll_BioImportController extends Member
 
     public function import_Digital_Persona($file, $company)
     {
-    	
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('id_no','date','time_in','time_out'))->toArray();
     	// dd($_time);
     	$space = '        ';
@@ -827,6 +854,7 @@ class Payroll_BioImportController extends Member
     	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
     	if(isset($_time[0]['id_no']) && isset($_time[0]['date']) && isset($_time[0]['time_in']) && isset($_time[0]['time_out']))
     	{
+
     		foreach($_time as $time)
 	    	{
 	    		$time['id_no'] 		= trim((string)$time['id_no'],' ');
@@ -890,38 +918,18 @@ class Payroll_BioImportController extends Member
 			    			}
 
 			    			$count_record = Tbl_payroll_time_sheet_record::wherearray($insert_record)->count();
-			    			if($count_record == 0)
-			    			{
+			    			/*if($count_record == 0)
+			    			{*/
 			    				array_push($insert_time_record, $insert_record);
-			    			}
+			    			/*}*/
 		    			}		    			
 		    		}
 	    		}
 	    	}
 
-	    	/*START remove importation if time_sheet is already approved*/
-	    	foreach ($insert_time_record as $key => $value) 
-	    	{
-	    		$time_keeping_approved = Tbl_payroll_time_sheet::where('payroll_time_sheet_id',$value["payroll_time_sheet_id"])->value("time_keeping_approved");
-	    	
-	    		if ($time_keeping_approved == 1) 
-	    		{
-	    			unset($insert_time_record[$key]);
-	    		}
-	    	}
-	    	/*END remove importation if time_sheet is already approved*/
-
-	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
-	    	if(!empty($insert_time_record))
-	    	{
-	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
-	    		$count_inserted = count($insert_time_record);
-	    		$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company)->first();
-	    		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using Digital_Persona   Template.', "", "" ,"");
-	    		
-	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
-	    	}
+	    	$message = Self::insert_record($insert_time_record, $company);
     	}
+    	
     	return $message;
     }	
 
@@ -998,11 +1006,6 @@ class Payroll_BioImportController extends Member
     	// }
 
     	// return $message;
-
-
-
-
-
 
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','employee_name','date','time_in','time_out'));
 
@@ -1105,17 +1108,14 @@ class Payroll_BioImportController extends Member
 
     public function import_manual_v2($file, $company)
     {
-
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','employee_name','date','time_in','time_out'));
 
     	$incomplete = 0;
 
     	if(isset($_time[0]['employee_no']) && isset($_time[0]['employee_name']) && isset($_time[0]['date']) && isset($_time[0]['time_in']) && isset($_time[0]['time_out']))
     	{
-
     	 foreach ($_time as $key => $value) 
     	 {
-
     	 	if ($value['date'] != null && $value['time_in'] != null && $value['time_out'] != null && $value['employee_no'] != null) 
     	 	{
     	 		$employee_number = $value["employee_no"];
@@ -1154,8 +1154,6 @@ class Payroll_BioImportController extends Member
     		echo "<div>INVALID FILE FORMAT</div>";
     	}
     }
-
-
 
     public function import_mustard_seed($file, $company)
     {

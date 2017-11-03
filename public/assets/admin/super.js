@@ -38,13 +38,31 @@ function admin()
 
         myApp.onPageInit('*', function(page)
         {
-        	event_global_ajax_submit();
+        	event_tab(page);
+        	event_global_ajax_submit(page);
 
 			$$('form.ajax-submit').on('form:beforesend', function (e) { myApp.showIndicator(); });
 			$$('form.ajax-submit').on('form:error', function (e) { myApp.hideIndicator(); });
         });
+
+        myApp.onPageBack('*', function(page)
+        {
+        	event_tab(page, true);
+        });
 	}
-	function event_global_ajax_submit()
+
+	function event_tab(page, back)
+	{
+		$(".tab-link").removeClass("active");
+
+		if(mainView.url == "#index")
+		{
+			$(".tab-link.dashboard").addClass("active");
+		}
+
+        
+	}
+	function event_global_ajax_submit(page)
 	{
 		$$('form.ajax-submit').on('form:success', function (e)
 		{
@@ -62,11 +80,22 @@ function admin()
 			if(isjson)
 			{
 				myApp.alert(data.message, data.title);
+
+				if(data.back)
+				{
+	  				mainView.router.back(
+	  				{
+	  					url: page.view.history[page.view.history.length - 2],
+	  					force: true,
+            			ignoreCache: true
+        			});
+				}
 			}
 			else
 			{
 				myApp.alert("Kindly check your internet connection.", "Error Occurred");
 			}
+
 
 			myApp.hideIndicator();
 		});
@@ -81,7 +110,7 @@ function admin()
 
 		        $.ajax(
 		        {
-		        	url:"/super/customer-archive",
+		        	url:"/super/client/archive",
 		  			data: {'shop_id':$shop_id},
 		  			type:"get",
 		  			success: function(data)
@@ -110,7 +139,7 @@ function admin()
 
 		        $.ajax(
 		        {
-		        	url:"/super/customer-restore",
+		        	url:"/super/client/restore",
 		  			data: {'shop_id':$shop_id},
 		  			type:"get",
 		  			success: function(data)
@@ -140,14 +169,14 @@ function admin()
 		            bold: true,
 		            onClick: function ()
 		            {
-		                mainView.router.loadPage('/super/customer-add');
+		                mainView.router.loadPage('/super/client/add');
 		            }
 		        },
 		        {
 		            text: 'Archive List',
 		            onClick: function ()
 		            {
-		                mainView.router.loadPage('/super/customer?filter=archive');
+		                mainView.router.loadPage('/super/client?filter=archive');
 		            }
 		        },
 		        {

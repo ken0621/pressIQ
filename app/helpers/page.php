@@ -12,8 +12,6 @@ function page_list()
     $nav[$page]['user_settings'] = [];
     $nav[$page]['status']       = "Working 100% - Not Tested Yet";
     $nav[$page]['developer']    = ">";
-    
-
 
     /* REPORTS  */
     $page = "report"; 
@@ -21,7 +19,6 @@ function page_list()
     $nav[$page]['segment']  = $page;
     $nav[$page]['icon']     = "area-chart";
     $nav[$page]['type']     = "menu";
-
 
     /* -- REPORT => ECOMMERCE SUBMENU */
     $segment = "submenu-ecommerce";
@@ -484,6 +481,15 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
+        $code = "mlm-wallet-gc-maintenance";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "GC Maintenance";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/gcmaintenance";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Guillermo Tabligan";
+
+   
 
         $code = "mlm-report";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Report";

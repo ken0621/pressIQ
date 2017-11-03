@@ -20,6 +20,7 @@ function payout()
 		event_change_import_excel();
 		event_click_start_importation();
 		event_reset_payout();
+		event_tab_change();
 	}
 	function event_reset_payout()
 	{
@@ -183,11 +184,24 @@ function payout()
 			return false;
 		});
 	}
+
+    function event_tab_change()
+    {
+        $(".change-tab").click(function(e)
+        {
+            $(".change-tab").removeClass("active");
+            $(e.currentTarget).addClass("active");
+            payout_table_data.page = 1;
+            action_load_table();
+        });
+    }
 	function action_load_table()
 	{
 		payout_table_data._token = $(".payout-token").val();
 		payout_table_data.search = $(".search-employee-name").val();
-
+		$active_tab = $(".change-tab.active").attr("mode");
+        $(".active-tab").val($active_tab);
+        payout_table_data.mode = $active_tab;
 		$(".table-container").html('<div class="text-center" style="padding: 50px 10px; font-size: 26px;"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>')
 
 		$.ajax(

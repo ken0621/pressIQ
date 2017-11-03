@@ -46,6 +46,7 @@ use App\Models\Tbl_payout_bank;
 use App\Models\Tbl_online_pymnt_api;
 use App\Models\Tbl_mlm_plan_setting;
 use App\Models\Tbl_vmoney_settings;
+use App\Models\Tbl_slot_notification;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -120,6 +121,7 @@ class ShopMemberController extends Shop
                 }
             }
             $data['_event'] = ShopEvent::get($this->shop_info->shop_id ,0 ,3 ,Carbon::now(), Self::$customer_info->customer_id, ['all','members']);
+            $data['_notification'] = Tbl_slot_notification::where('shop_id',$this->shop_info->shop_id)->where('customer_id',Self::$customer_info->customer_id)->where('has_been_seen',0)->first();
 
             if($this->shop_info->shop_theme == 'philtech')
             {
@@ -370,11 +372,17 @@ class ShopMemberController extends Shop
         $payout_setting = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
         $minimum = doubleval($payout_setting->enchasment_settings_minimum);
 
-        if(Self::$customer_info->customer_payout_method == 'unset')
+        if($this->shop_info->shop_id != 60) //no neet to setup for JCA - temporary only
         {
-            $return .= "<div>Please setup your payout settings first.</div>";
+            if(Self::$customer_info->customer_payout_method == 'unset')
+            {
+                $return .= "<div>Please setup your payout settings first.</div>";
+            }
         }
+
+
         $request_wallet = session("request_wallet");
+
         foreach($_slot as $key => $slot)
         {
             $request_amount = $request_wallet[$key];
@@ -1438,10 +1446,29 @@ class ShopMemberController extends Shop
         {
             $query->where("customer_lead", "-1");
         }
-        
 
-        $data["_lead"]      = $query->get();
-        
+
+
+        $_lead      = $query->get();
+
+        foreach($_lead as $key => $lead)
+        {
+            $slot_owned = Tbl_mlm_slot::where("slot_owner", $lead->customer_id)->first();
+            
+            if($slot_owned)
+            {
+                $_lead[$key]->slot_owned = $slot_owned->slot_no;
+            }
+            else
+            {
+                $_lead[$key]->slot_owned = "NONE";
+            }
+
+            $_lead[$key]->date_created = date("F d, Y", strtotime($lead->created_at)) . "<br>" . date("h:i A", strtotime($lead->created_at));
+        }
+
+        $data["_lead"] = $_lead;
+
         return (Self::load_view_for_members("member.lead", $data)); 
     }
     public function getWalletLogs()
@@ -2223,6 +2250,12 @@ class ShopMemberController extends Shop
         }
 
         return json_encode($return);
+    }
+    public function getReadNotification()
+    {
+        $notif_id = Request2::input('notif_id');
+        $update['has_been_seen'] = 1;
+        Tbl_slot_notification::where('notification_id', $notif_id)->update($update);
     }
     public function getWebhook()
     {

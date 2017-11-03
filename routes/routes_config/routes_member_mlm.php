@@ -230,6 +230,7 @@ Route::any('/member/mlm/encashment/request/all/selected', 'Member\Mlm_Encashment
 Route::any('/member/mlm/encashment/deny/all/selected', 'Member\Mlm_EncashmentController@deny_all_selected');//luke
 
 AdvancedRoute::controller("/member/mlm/payout","Member\MLM_PayoutController");
+AdvancedRoute::controller("/member/mlm/gcmaintenance","Member\MLM_GCMaintenanceController");
 /* end MLM Product */
 
 /* start MLM Product */

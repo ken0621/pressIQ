@@ -7,7 +7,24 @@ $bold: 700;
 $text-light: #585858;
 $text-dark: #404040;
 
-
+.footable-details
+{
+	th
+	{
+		border: 0 !important;
+		vertical-align: middle !important;
+	}
+	td
+	{
+		vertical-align: middle !important;
+		text-align: left !important;
+		.item-qty
+		{
+			margin-left: 0 !important;
+			margin-right: auto !important;
+		}
+	}
+}
 /* Buy a kit */
 .popup-buy-a-kit
 {

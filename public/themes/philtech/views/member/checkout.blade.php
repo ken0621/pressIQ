@@ -75,13 +75,13 @@
 							<!-- CART SUMMARY -->
 							<div class="cart-summary">
 								<div class="top-title row-no-padding clearfix">
-									<div class="col-md-4">
+									<div class="col-xs-4">
 										<div class="per-title" style="border-bottom: 2px solid #63b944;">Product</div>									
 									</div>
-									<div class="col-md-4">
+									<div class="col-xs-4">
 										<div class="per-title" style="border-bottom: 2px solid #ef5525;">Quantity</div>
 									</div>
-									<div class="col-md-4">
+									<div class="col-xs-4">
 										<div class="per-title" style="border-bottom: 2px solid #6075f7;">Price</div>
 									</div>
 								</div>
@@ -90,13 +90,13 @@
 									@foreach($cart["_item"] as $c)
 									<!-- PER ITEM SUMMARY -->
 									<div class="per-summary-content row-no-padding clearfix">
-										<div class="col-md-4">
+										<div class="col-xs-4">
 											<div class="per-summary-details">{{ $c->item_name }}</div>
 										</div>
-										<div class="col-md-4">
+										<div class="col-xs-4">
 											<div class="per-summary-details">{{ $c->quantity }}</div>
 										</div>
-										<div class="col-md-4">
+										<div class="col-xs-4">
 											<div class="per-summary-details">{{ $c->display_subtotal }}</div>
 										</div>
 									</div>

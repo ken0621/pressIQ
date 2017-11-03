@@ -14,6 +14,7 @@ use App\Models\Tbl_payout_bank;
 use App\Models\Tbl_payout_bank_shop;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_shop;
+use App\Models\Tbl_slot_notification;
 use App\Globals\Currency;
 use Redirect;
 use App\Globals\MLM2;
@@ -25,6 +26,9 @@ class MLM_PayoutController extends Member
 	public function getIndex()
 	{
 		$data["page"] = "Payout Processing";
+		$data['shop_id'] = $this->user_info->shop_id;
+		$data['count_reject'] = Tbl_slot_notification::where('shop_id',$data['shop_id'])->count();
+
 		return view('member.mlm_payout.payout', $data);
 	}
 	public function postIndexTable()
@@ -32,6 +36,13 @@ class MLM_PayoutController extends Member
 		$shop_id 		= $this->user_info->shop_id;
 		$query 			= Tbl_mlm_slot_wallet_log::where("tbl_mlm_slot_wallet_log.shop_id", $shop_id)->slot()->customer();
 
+		$mode = 'PENDING';
+		if(Request::input('mode'))
+		{
+			$mode = Request::input('mode');
+		}
+
+		$query->where("wallet_log_payout_status",$mode);
 		/* PAYOUT IMPORTATION QUERIES */
 		$query->where("wallet_log_amount", "<", 0);
 		$query->orderBy("wallet_log_date_created", "desc");
@@ -241,6 +252,9 @@ class MLM_PayoutController extends Member
 		$total_net 				= 0;
 		$minimum_encashment		= $minimum;
 		$data["method"]			= $method;
+
+		$less_tax				= 0;
+
 		$slot_query = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet();
 
 		if($method == "eon")
@@ -276,10 +290,11 @@ class MLM_PayoutController extends Member
 				$remaining 			= $slot->current_wallet - $encashment_amount;
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
+				$less_tax			= $encashment_amount - $tax;
 				$compute_service_charge = $service_charge;
 				if($service_charge_type == 1)
 				{
-					$compute_service_charge = (($encashment_amount * (doubleval($service_charge)/100)));
+					$compute_service_charge = (($less_tax * (doubleval($service_charge)/100)));
 				}
 				$compute_net 		= $compute_net - ($compute_service_charge + $other_charge + $tax);
 			}
@@ -294,10 +309,11 @@ class MLM_PayoutController extends Member
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
 				// $test[$key] = $encashment_amount .' * '.doubleval($service_charge) . '/100';
+				$less_tax			= $encashment_amount - $tax;
 				$compute_service_charge = $service_charge;
 				if($service_charge_type == 1)
 				{
-					$compute_service_charge = (($encashment_amount * (doubleval($service_charge)/100)));
+					$compute_service_charge = (($less_tax * (doubleval($service_charge)/100)));
 				}
 				$compute_net 		= $compute_net - ($compute_service_charge + $other_charge + $tax);
 			}
@@ -384,5 +400,51 @@ class MLM_PayoutController extends Member
 		{
 			return view("member.mlm_payout.payout_process_report", $data);
 		}
+	}
+
+	public function getRejectEncashment()
+	{
+		return view("member.mlm_payout.payout_reject");
+	}
+	public function postRejectEncashmentSubmit()
+	{
+		$amount = Request::input('less_than_amount');
+		$encashment_type = Request::input('encashment_type');
+		$remarks = Request::input('remarks');
+
+		$shop_id = $this->user_info->shop_id;
+		$all_slot = Tbl_mlm_slot::currentWallet()->where("tbl_mlm_slot.shop_id", $shop_id)->customer()
+								->groupBy('tbl_mlm_slot.slot_id')
+								->get();
+		$all_slot = Tbl_mlm_slot_wallet_log::where('tbl_mlm_slot_wallet_log.shop_id',$shop_id)->where('wallet_log_payout_status','PENDING')->slot()->customer()->get();
+
+		foreach ($all_slot as $key => $value) 
+		{
+			if(abs($value->wallet_log_amount)+1 > $amount || $value->wallet_log_amount == 0)
+			{
+				if($encashment_type != $value->wallet_log_plan)
+				{
+					unset($all_slot[$key]);
+				}
+			}
+		}
+
+		if(count($all_slot) > 0)
+		{
+			$insert['created_date'] = Carbon::now();
+			foreach ($all_slot as $key1 => $value1) 
+			{
+				$insert['shop_id'] = $this->user_info->shop_id;
+				$insert['customer_id'] = $value1->customer_id;
+				$insert['remarks'] = $remarks;
+				Tbl_slot_notification::insert($insert);
+				Tbl_mlm_slot_wallet_log::where('wallet_log_id',$value1->wallet_log_id)->delete();
+			}
+		}
+
+		$return['status'] = 'success';
+		$return['call_function'] = 'success_reject';
+
+		return json_encode($return);
 	}
 }

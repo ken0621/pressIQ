@@ -8,20 +8,18 @@
          </a>
       </div>
       <div class="center sliding">{{ $page }}</div>
-
-      @if($page == "Client List")
-         <div class="right">
-            <a href="#" class="action-sheet-customer"> Actions</a>
-         </div>
-      @endif
-
+      <div class="right">
+         <a href="/super/admin/add" class="item-link">
+            <span>Add</span>
+         </a>
+      </div>
    </div>
 </div>
 <div class="pages">
    <div data-page="customer-list" class="page">
       <form data-search-list=".customer-list-search" data-search-in=".item-title" class="searchbar searchbar-init">
          <div class="searchbar-input">
-            <input type="search" placeholder="Search">
+            <input type="search" placeholder="Search User of {{ $page }}">
             <a href="#" class="searchbar-clear"></a>
          </div>
          <a href="#" class="searchbar-cancel">Cancel</a>
@@ -34,14 +32,15 @@
          
          <div class="list-block media-list searchbar-found customer-list-search">
             <ul>
-               @foreach($_shop as $shop)
+               @foreach($_admin as $admin)
                <li>
-                  <a href="/super/client/edit?id={{ $shop->shop_id }}" class="item-link item-content">
+                  <a href="/super/admin/edit?admin_id={{ $admin->admin_id }}" class="item-link item-content">
                      <div class="item-inner">
                         <div class="item-title-row">
-                           <div class="item-title">{{ $shop->shop_name }}</div>
+                           <div class="item-title">{!! $admin->first_name !!} {!! $admin->last_name !!}</div>
                         </div>
-                        <div class="item-subtitle">{!! $shop->user_count !!}</div>
+                        <div class="item-subtitle">{{ $admin->username }}</div>
+                        <div style="color: gray;" class="item-subtitle">{{ ($admin->admin_type == 'full' ? 'Full Access' : 'Limited User') }}</div>
                      </div>
                   </a>
                </li>
@@ -51,4 +50,3 @@
       </div>
    </div>
 </div>
-

@@ -84,6 +84,9 @@
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
 							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports</span></div></a>
 						</li>
+						<li class="{{ Request::segment(2) == "lead-list" ? "active" : "" }}">
+							<a href="/members/lead-list"><div class="nav-holder"><div class="icon brown-icon-heart"></div> <span>Lead List</span></div></a>
+						</li>
 						<!-- <li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
 							<a href="/members/network"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Network List</span></div></a>
 						</li> -->

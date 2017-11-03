@@ -19,7 +19,7 @@
 
    <div data-page="register-step1" class="page">
       <div class="page-content">
-         <form action="/exam/register" method="post" class="ajax-submit">
+         <form action="/super/client/add" method="post" class="ajax-submit">
             {{ csrf_field() }}
             <div class="content-block-title">Account Detail</div>
             <div class="list-block">
@@ -30,7 +30,7 @@
                         <div class="item-inner">
                            <div class="item-title label">First Name</div>
                            <div class="item-input">
-                              <input name="shop_key" type="text" placeholder="First Name">
+                              <input name="first_name" type="text" placeholder="First Name">
                            </div>
                         </div>
                      </div>
@@ -41,7 +41,7 @@
                         <div class="item-inner">
                            <div class="item-title label">Last Name</div>
                            <div class="item-input">
-                              <input name="shop_key" type="text" placeholder="Last Name">
+                              <input name="last_name" type="text" placeholder="Last Name">
                            </div>
                         </div>
                      </div>
@@ -51,7 +51,7 @@
                         <div class="item-inner">
                            <div class="item-title label">E-Mail</div>
                            <div class="item-input">
-                              <input name="email" type="text" placeholder="Company E-Mail">
+                              <input name="user_email" type="text" placeholder="Company E-Mail">
                            </div>
                         </div>
                      </div>
@@ -71,7 +71,7 @@
                         <div class="item-inner">
                            <div class="item-title label">Confirm</div>
                            <div class="item-input">
-                              <input name="confirm_password" type="password" placeholder="Confirm Password">
+                              <input name="password_confirmation" type="password" placeholder="Confirm Password">
                            </div>
                         </div>
                      </div>
@@ -79,16 +79,16 @@
                </ul>
             </div>
 
-            <div class="content-block-title">Company Information</div>
+            <div class="content-block-title">Business Information</div>
             <div class="list-block">
                <ul>
                   <!-- Text inputs -->
                   <li>
                      <div class="item-content">
                         <div class="item-inner">
-                           <div class="item-title label">Name</div>
+                           <div class="item-title label">Key</div>
                            <div class="item-input">
-                              <input name="shop_key" type="text" placeholder="Company name">
+                              <input name="shop_key" type="text" placeholder="Business Key">
                            </div>
                         </div>
                      </div>
@@ -111,7 +111,9 @@
                            <div class="item-title label">Country</div>
                            <div class="item-input">
                               <select name="country">
-                                 <option>Philippines</option>
+                                 @foreach($_country as $country)
+                                    <option {{ $country->country_name == "Philippines" ? 'selected' : '' }} value="{{ $country->country_id }}">{{ $country->country_name }}</option>
+                                 @endforeach
                               </select>
                            </div>
                         </div>

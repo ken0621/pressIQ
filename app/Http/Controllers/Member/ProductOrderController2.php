@@ -58,6 +58,10 @@ class ProductOrderController2 extends Member
             $data["_raw_table"][$key]->action = "NO ACTION";
             $data["_raw_table"][$key]->name = $raw_table->first_name . " " . $raw_table->last_name;
 
+            if($active_tab == "paid") 
+            {
+                $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
+            }
             if($active_tab == "unconfirmed")
             {
                 $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a> | ';

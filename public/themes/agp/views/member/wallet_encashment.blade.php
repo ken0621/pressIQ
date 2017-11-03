@@ -15,8 +15,8 @@
 		</div>
 		<div class="right">
 			<div class="text-right">
-				<button type="button" class="btn btn-default"><i class="fa fa-bank"></i> PAYOUT METHOD</button>
-				<button onclick="action_load_link_to_modal('/members/request-payout','md')" type="button" class="btn btn-primary"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button>
+				<button type="button" class="btn btn-default popup" link="/members/payout-setting" size="md"><i class="fa fa-bank"></i> PAYOUT METHOD</button>
+				<button type="button" class="btn btn-primary popup" link="/members/request-payout" size="md"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button>
 			</div>
 		</div>
 	</div>

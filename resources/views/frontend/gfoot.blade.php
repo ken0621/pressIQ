@@ -21,6 +21,7 @@
 <script type="text/javascript" src="/assets/front/external_js/parallax.js"></script>
 <script type="text/javascript" src="/assets/front/external_js/scrollspy.js"></script>
 <script type="text/javascript" src="/assets/front/external_js/jquery.keep-ratio.min.js"></script>
+<script type="text/javascript" src="/assets/front/external_js/footable.js"></script>
 <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
 {{-- SLICK --}}
 <script type="text/javascript" src="/assets/slick/slick.min.js"></script>

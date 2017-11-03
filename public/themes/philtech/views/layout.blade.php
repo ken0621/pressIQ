@@ -215,7 +215,7 @@
                 <div class="col-md-2 col-sm-6 match-height">
                     <div class="btm-title">INFORMATION</div>
                     <ul>
-                        <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partners</a></li>
+                        <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partner Merchants</a></li>
                         <li><a href="https://loadcentral.net">E-loading Business</a></li>
                         <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
                         <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li>

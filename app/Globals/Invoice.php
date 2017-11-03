@@ -113,6 +113,7 @@ class Invoice
         {
             $shop_id = Tablet_global::getShopId();
         }
+        
         $insert['inv_shop_id']                  = $shop_id;  
 		$insert['inv_customer_id']              = $customer_info['customer_id'];        
         $insert['inv_customer_email']           = $customer_info['customer_email'];

@@ -27,6 +27,7 @@ class CommissionCalculatorController extends Member
         $data['page'] = "Commission Calculator";
         $data['_customer'] = Customer::getAllCustomer();
         $data['_item'] = Item::get_all_category_item([2]);
+        CommissionCalculator::get_computation(73, 3);   
 
         return view('member.cashier.commission_calculator.create',$data);        
     }
@@ -36,8 +37,8 @@ class CommissionCalculatorController extends Member
         $comm['customer_id'] = $request->customer_id;
         $comm['customer_email'] = $request->customer_email;
         $comm['agent_id'] = $request->agent_id;
-        $comm['date'] = $request->date;
-        $comm['due_date'] = $request->due_date;
+        $comm['date'] = datepicker_input($request->date);
+        $comm['due_date'] = datepicker_input($request->due_date);
         $comm['total_selling_price'] = str_replace(',', '', $request->total_selling_price);
         $comm['total_contract_price'] = $request->total_contract_price;
         $comm['total_commission'] = $request->total_commission;

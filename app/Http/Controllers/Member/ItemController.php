@@ -209,6 +209,10 @@ class ItemController extends Member
             return $this->show_no_access();
         }
 	}
+	public function view_item_receipt($item_id)
+	{
+		dd(123);
+	}
 	public function view_item_history($item_id)
 	{
 		$data["text"] = Item::get_item_price_history($item_id, true);

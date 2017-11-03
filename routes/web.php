@@ -250,6 +250,7 @@ Route::get("/member/ecommerce/wishlist/list","Member\WishlistController@list");
 
 Route::any('/member/item', 'Member\ItemController@index'); /* ERWIN */  
 Route::any('/member/item/add', 'Member\ItemController@add'); /* ERWIN */
+Route::any('/member/item/view_item_receipt/{id}', 'Member\ItemController@view_item_receipt'); /* ERWIN */
 Route::any('/member/item/load_all_um','Member\ItemController@load_all_um');
 Route::any('/member/item/add_submit', 'Member\ItemController@add_submit'); /* ERWIN */
 Route::any('/member/item/edit/{id}', 'Member\ItemController@edit'); /* ERWIN */

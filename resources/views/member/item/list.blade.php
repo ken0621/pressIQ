@@ -63,6 +63,7 @@
                                     </th>
                                     <th>Item Details</th>
                                     <th>Item Price History</th>
+                                    <!-- <th>Receipt</th> -->
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -98,6 +99,7 @@
                                         {!! $item->item_price_history !!}
                                         </small>
                                     </td>
+                                    <!-- <td class="text-center"><a href="#" class="popup" link="/member/item/view_item_receipt/{{$item->item_id}}" size="lg" data-toggle="modal" data-target="#global_modal">View</a></td> -->
                                     <td>
                                     @if($can_edit_other_item == 1)
                                     <div class="btn-group">

@@ -760,6 +760,7 @@ class Payroll_BioImportController extends Member
     		}
     		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
     	}
+
     	return $message;
     }
 
@@ -843,7 +844,6 @@ class Payroll_BioImportController extends Member
 
     public function import_Digital_Persona($file, $company)
     {
-    	
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('id_no','date','time_in','time_out'))->toArray();
     	// dd($_time);
     	$space = '        ';

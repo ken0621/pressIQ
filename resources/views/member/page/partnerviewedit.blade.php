@@ -69,21 +69,42 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6" style="margin-bottom: 5px;">
-							<label>Company Logo</label>
-							<div class="match-height">
-								<input type="hidden" name="company_logo" value="{{ $company_info->company_logo}}">
-								<input class="image-value" key="company_logo" type="hidden" name="company_logo" value="{{ $company_info->company_logo }}">
-								<div class="gallery-list image-gallery image-gallery-single" key="company_logo">
-									@if($company_info->company_logo)
-									<div>
-										<div class="img-holder">
-											<img class="img-responsive" src="{{ $company_info->company_logo}}">
+						<div class="col-md-6" style="margin-bottom: 5px;"></div>
+						<div class="col-md-12">
+							<div class="col-md-6" style="margin-bottom: 5px;">
+								<label>Company Logo</label>
+								<div class="match-height">
+									<input type="hidden" name="company_logo" value="{{ $company_info->company_logo}}">
+									<input class="image-value" key="company_logo" type="hidden" name="company_logo" value="{{ $company_info->company_logo }}">
+									<div class="gallery-list image-gallery image-gallery-single" key="company_logo">
+										@if($company_info->company_logo)
+										<div>
+											<div class="img-holder">
+												<img class="img-responsive" src="{{ $company_info->company_logo}}">
+											</div>
 										</div>
+										@else
+										<div class="empty-notify"><i class="fa fa-image"></i> No Image Yet</div>
+										@endif
 									</div>
-									@else
-									<div class="empty-notify"><i class="fa fa-image"></i> No Image Yet</div>
-									@endif
+								</div>
+							</div>
+							<div class="col-md-6" style="margin-bottom: 5px;">
+								<label>Company Brochure <small>(Minimum image width : 980px)</small></label>
+								<div class="match-height">
+									<input type="hidden" name="company_brochure" value="{{ $company_info->company_brochure}}">
+									<input class="image-value" key="company_brochure" type="hidden" name="company_brochure" value="{{ $company_info->company_brochure }}">
+									<div class="gallery-list image-gallery image-gallery-single" key="company_brochure">
+										@if($company_info->company_brochure)
+										<div>
+											<div class="img-holder">
+												<img class="img-responsive" src="{{ $company_info->company_brochure}}">
+											</div>
+										</div>
+										@else
+										<div class="empty-notify"><i class="fa fa-image"></i> No Image Yet</div>
+										@endif
+									</div>
 								</div>
 							</div>
 						</div>

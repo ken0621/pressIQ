@@ -25,7 +25,7 @@
 				<td>
 					<!-- Binary Placing Settings -->
 					<div class="col-md-12">
-						@if($lead == null)
+<!-- 						@if($lead == null)
 						<label for="">Sponsor</label>
 							@if($sponsor_a == null)
 	                            <select class="form-control chosen-slot_sponsor input-sm pull-left" name="slot_sponsor" data-placeholder="Select Slot Sponsor" >
@@ -54,7 +54,9 @@
 						<input type="hidden" name="lead_id" value="{{$lead->lead_id}}">
 						<input type="hidden" name="slot_sponsor" value="{{$lead->lead_slot_id_sponsor}}">
 						<input type="text" class="form-control" name="sponsor" value="{{$lead->mlm_username}} (Slot - {{$lead->slot_no}}) {{$lead->membership_activation_code}}" readonly>
-						@endif
+						@endif -->
+						<label for="">Sponsor</label>
+						<input type ="text" class="form-control" name="slot_sponsor">
 					</div>
 	                @if(isset($binary_settings->marketing_plan_enable))
 	                    @if($binary_settings->marketing_plan_enable == 1)
@@ -64,13 +66,14 @@
 	                                    <label for="">Slot Placement (Binary)</label>
 	                                    <!-- <input type="text" class="form-control" name="slot_placement"> -->
 	                                    @if($placement == null)
-	                                    <select class="form-control chosen-slot_sponsor input-sm pull-left" name="slot_placement" data-placeholder="Select Slot Placement" >
+<!-- 	                                    <select class="form-control chosen-slot_sponsor input-sm pull-left" name="slot_placement" data-placeholder="Select Slot Placement" >
 			                            	@if(count($_slots) != 0)
 			                            		@foreach($_slots as $slot)
 			                            			<option value="{{$slot->slot_id}}" @if($placement == $slot->slot_id) selected @endif >{{$slot->first_name}} {{$slot->middle_name}} {{$slot->last_name}} ({{$slot->slot_no}})</option>
 			                            		@endforeach
 			                            	@endif
-			                            </select>
+			                            </select> -->
+			                            <input type="text" class="form-control input-sm pull-left" name="slot_placement" data-placeholder="Slot Placement" >
 			                            @else
 											<input type="hidden" name="slot_placement" value="{{$placement}}">
 											@if(count($_slots) != 0)

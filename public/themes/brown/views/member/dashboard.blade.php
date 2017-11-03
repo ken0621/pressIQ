@@ -46,9 +46,12 @@
 		    <div class="dashboard-top">
 		        <div class="row clearfix">
 			        <div class="animated fadeInLeft col-md-8">
-			        	<video controls="">
-							<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
-						</video>
+			        	<!-- <video controls=""> -->
+							<div class="embed-responsive embed-responsive-16by9 animated zoomInDown" style="margin-top: 25px;">
+							  <div class="overlay"></div>
+					        	<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/BGYP2umEcSQ?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=DglLgQYkQX4&mute=0"></iframe>
+							</div>
+						<!-- </video> -->
 			        </div>
 		            <div class="animated fadeInRight col-md-4">
 		                <div class="join-container">

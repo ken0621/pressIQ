@@ -22,16 +22,17 @@ $text-dark: #272c2f;
 		background-repeat: no-repeat;
 		background-size: cover;
 
+		@media screen and (max-width: 475px)
+		{
+			background-size: contain;
+		}
+
 		.btn-text
 		{
 			width: 100%;
 			white-space: normal;
 			padding: 70px 0px 0px 80px;
-
-			@media screen and (min-width: 991px)
-			{
-				text-align: left;
-			}
+			
 
 			.text-header1
 			{
@@ -88,15 +89,14 @@ $text-dark: #272c2f;
 			{
 				display: inline-block;
 				vertical-align: middle;
-				margin-right: 40px;
-				margin-bottom: 15px;
+				margin: auto;
+				padding: 60px 0;
 			}
 
 	    	.btn-container
 	    	{
-	    		display: inline-block;
-				vertical-align: middle;
-				padding-top: 0;
+	    		margin-left: 0;
+	    		padding: 0 0 75px 0;
 			}
 		}
 
@@ -106,11 +106,16 @@ $text-dark: #272c2f;
 			{
 				margin-right: 0;
 				margin-bottom: 0;
+				padding: 25px 0 15px 0;
+				.text-header1
+				{
+					font-size: 27px;
+				}
 			}
 
 			.btn-container
 			{
-				padding-top: 25px;
+				padding-top: 5px;
 			}
 		}
 	}

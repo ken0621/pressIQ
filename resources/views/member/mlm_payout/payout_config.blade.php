@@ -15,8 +15,9 @@
 							<input id="basic-input" value="{{ $settings->enchasment_settings_tax }}" class="form-control text-right" name="enchasment_settings_tax" placeholder="">
 						</div>
 						<div class="col-md-3">
-							<label for="basic-input">Service Charge (PHP)</label>
-							<input id="basic-input" value="{{ $settings->enchasment_settings_p_fee }}" class="form-control text-right" name="enchasment_settings_p_fee" placeholder="">
+							<label for="basic-input">Service Charge (% for Pct.)</label>
+							<input type="hidden" class="service_fee_type" name="enchasment_settings_p_fee_type" value="{{ $settings->enchasment_settings_p_fee_type }}">
+							<input id="basic-input" value="{{ $settings->enchasment_settings_p_fee }}" class="form-control text-right change-service-type" name="enchasment_settings_p_fee" placeholder="">
 						</div>
 						<div class="col-md-3">
 							<label for="basic-input">Other Charge (PHP)</label>
@@ -32,9 +33,14 @@
 					<div class="form-group">
 						<div class="col-md-6">
 							<div style="font-weight: bold; padding-bottom: 10px; font-size: 16px;">METHOD LIST</div>
+							@if($shop_id == 1)
+								<div><label><input {{ hasWord('vmoney', $user_info->shop_payout_method) ? 'checked' : '' }} class="payout_method" value="vmoney" type="checkbox" name="payout_method[]"> V-MONEY</label></div>
+							@endif
 							<div><label><input {{ hasWord('bank', $user_info->shop_payout_method) ? 'checked' : '' }} class="payout_method" value="bank" type="checkbox" name="payout_method[]"> BANK DEPOSIT</label></div>
 							<div><label><input {{ hasWord('cheque', $user_info->shop_payout_method) ? 'checked' : '' }} class="payout_method" value="cheque" type="checkbox" name="payout_method[]"> CHEQUE</label></div>
 							<div><label><input {{ hasWord('eon', $user_info->shop_payout_method) ? 'checked' : '' }} class="payout_method" value="eon" type="checkbox" name="payout_method[]"> EON</label></div>
+							<div><label><input {{ hasWord('palawan_express', $user_info->shop_payout_method) ? 'checked' : '' }} class="payout_method" value="palawan_express" type="checkbox" name="payout_method[]"> Palawan Express</label></div>
+							<div><label><input {{ hasWord('coinsph', $user_info->shop_payout_method) ? 'checked' : '' }} class="payout_method" value="coinsph" type="checkbox" name="payout_method[]"> COINS.PH</label></div>
 						</div>
 						<div class="col-md-6">
 							<div style="font-weight: bold; padding-bottom: 10px; font-size: 16px;">BANK LIST</div>

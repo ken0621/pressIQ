@@ -36,6 +36,8 @@ use App\Models\Tbl_email_template;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_mlm_slot_bank;
+use App\Models\Tbl_mlm_slot_coinsph;
+use App\Models\Tbl_mlm_slot_money_remittance;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Models\Tbl_vmoney_wallet_logs;
@@ -43,6 +45,8 @@ use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_payout_bank;
 use App\Models\Tbl_online_pymnt_api;
 use App\Models\Tbl_mlm_plan_setting;
+use App\Models\Tbl_vmoney_settings;
+use App\Models\Tbl_slot_notification;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -105,6 +109,7 @@ class ShopMemberController extends Shop
             $data["not_placed_slot"] = new stdClass();
             $data["not_placed_slot"]->slot_id = 0;
             $data["not_placed_slot"]->slot_no = 0;
+            $data["company_head_id"]  = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->orderBy("slot_id","ASC")->first();
    
             $data["_unplaced"] = MLM2::unplaced_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             if(isset($data["_unplaced"][0]))
@@ -116,6 +121,7 @@ class ShopMemberController extends Shop
                 }
             }
             $data['_event'] = ShopEvent::get($this->shop_info->shop_id ,0 ,3 ,Carbon::now(), Self::$customer_info->customer_id, ['all','members']);
+            $data['_notification'] = Tbl_slot_notification::where('shop_id',$this->shop_info->shop_id)->where('customer_id',Self::$customer_info->customer_id)->where('has_been_seen',0)->first();
 
             if($this->shop_info->shop_theme == 'philtech')
             {
@@ -244,11 +250,10 @@ class ShopMemberController extends Shop
         $data["password"] = Crypt::decrypt(request()->password);
         return view("member.autologin", $data);
     }
-    public function getRequestPayout()
+    public function request_payout_allow()
     {
         $settings = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
         $allow = false;
-
         if ($settings->encashment_settings_schedule_type != "none") 
         {
             if (is_serialized($settings->encashment_settings_schedule)) 
@@ -280,13 +285,7 @@ class ShopMemberController extends Shop
             }
         }
         
-        if ($allow) 
-        {
-            $data["page"] = "Request Payout";
-            $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
-            return view("member2.request_payout", $data);
-        }
-        else
+        if (!$allow) 
         {
             if (is_serialized($settings->encashment_settings_schedule)) 
             {
@@ -344,13 +343,21 @@ class ShopMemberController extends Shop
                         <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
                     </div>';
 
-                echo "<h3 class='text-center' style='margin: 25px 0;'>You are not allowed to request payout right now.";
+                echo "<h3 class='text-center' style='margin: 25px 0;'>You are not allowed to request payout right now.</h3>";
                 
                 echo '<div class="modal-footer">
                         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>';
             }
         }
+    }
+    public function getRequestPayout()
+    {
+        $this->request_payout_allow();
+
+        $data["page"] = "Request Payout";
+        $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+        return view("member2.request_payout", $data);
     }
     public function postRequestPayout()
     {
@@ -362,10 +369,23 @@ class ShopMemberController extends Shop
     {
         $return = "";
         $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
-        
+        $payout_setting = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
+        $minimum = doubleval($payout_setting->enchasment_settings_minimum);
+
+        if($this->shop_info->shop_id != 60) //no neet to setup for JCA - temporary only
+        {
+            if(Self::$customer_info->customer_payout_method == 'unset')
+            {
+                $return .= "<div>Please setup your payout settings first.</div>";
+            }
+        }
+
+
+        $request_wallet = session("request_wallet");
+
         foreach($_slot as $key => $slot)
         {
-            $request_amount = request("request_wallet")[$key];
+            $request_amount = $request_wallet[$key];
 
             if(doubleval($slot->current_wallet) < doubleval($request_amount))
             {
@@ -375,6 +395,10 @@ class ShopMemberController extends Shop
             if($request_amount < 0)
             {
                 $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is less than zero.</div>";
+            }
+            if($minimum > doubleval($request_amount))
+            {
+                $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is less than the limit for encashment.</div>";                
             }
         }
 
@@ -402,7 +426,6 @@ class ShopMemberController extends Shop
         {
             $request_method = "get";
         }
-
         if(Self::payout_validation() == "")
         {
             $request_wallet = session("request_wallet");
@@ -456,15 +479,91 @@ class ShopMemberController extends Shop
                         $remarks    = "Request by Customer";
                         $other      = 0;
                         $date       = date("m/d/Y");
-                        $status     = "PENDING";
+                        $status = "PENDING";
 
-                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
+                        /* V-MONEY */
+                        if ($method == "vmoney") 
+                        {
+                            /* API */
+                            $post = 'mxtransfer.svc';
+                            
+                            if (get_domain() == "philtechglobalinc.com") 
+                            {
+                                $environment = 1;
+                            }
+                            else
+                            {
+                                $environment = 0;
+                            }
+
+                            /* Sandbox */
+                            if ($environment == 0) 
+                            {
+                                $pass["apiKey"] = 'Vqzs90pKLb6iwsGQhnRS'; // Vendor API Key issued by VMoney
+                                $pass["merchantId"] = 'M239658948226'; // Merchant ID registered within VMoney
+                                /* Set URL Sandbox or Live */
+                                $url = "http://test.vmoney.com/gtcvbankmerchant/";
+                            }
+                            /* Production */
+                            else
+                            {
+                                $pass["apiKey"] = 'z9Gy1dBbnyj9cxMqXSKF'; // Vendor API Key issued by VMoney
+                                $pass["merchantId"] = 'M132582139240'; // Merchant ID registered within VMoney
+                                /* Set URL Sandbox or Live */
+                                $url = "https://philtechglobalinc.vmoney.com/gtcvbankmerchant/";
+                            }
+
+                            $get_email = Tbl_vmoney_settings::where("slot_id", $slot_id)->first();
+
+                            if ($get_email) 
+                            {
+                                $pass["recipient"] = $get_email->vmoney_email; // Recipient's email address
+                                $pass["merchantRef"] = Self::$customer_info->customer_id . time(); // Merchant reference number
+                                $pass["amount"] = $take_home; // Amount of the transaction
+                                $pass["currency"] = 'PHP'; // Currency being transferred (ie PHP)
+                                $pass["message"] = 'Philtech VMoney Wallet Transfer'; // Memo or notes for transaction
+
+                                $post_params = $url . $post . "?" . http_build_query($pass);
+
+                                try 
+                                {
+                                    $client = new Client();
+                                    $response = $client->post($post_params, $pass);
+                                    $stream = $response->getBody();
+                                    $contents = $stream->getContents(); // returns all the contents
+                                    $contents = $stream->getContents(); // empty string
+                                    $stream->rewind(); // Seek to the beginning
+                                    $contents = $stream->getContents(); // returns all the contents
+                                    $data_decoded = json_decode($contents);
+
+                                    /* Result */
+                                    if ($data_decoded->resultCode == "000") 
+                                    {   
+                                        $status = "DONE"; // ASK IF RELEASED OR DONE
+                                        $remarks = "Request Payout via V-Money";
+
+                                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
+                                    }
+                                    else
+                                    {
+                                        // TBD
+                                    }
+                                } 
+                                catch (\Exception $e) 
+                                {
+                                    dd($e->getMessage());
+                                }
+                            }
+                        }
+                        else
+                        {
+                            $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
+                        }
                     }
                 }
 
                 $total_payout += $take_home;
             }
-
 
             if($request_method == "get")
             {
@@ -484,7 +583,7 @@ class ShopMemberController extends Shop
     public function getPayoutSetting()
     {
         $data["page"] = "Payout";
-        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->bank()->get();
+        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->coinsph()->money_remittance()->bank()->vmoney()->get();
         $data["_method"] = unserialize($this->shop_info->shop_payout_method);
 
         $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
@@ -499,6 +598,30 @@ class ShopMemberController extends Shop
         $update_customer["customer_payout_method"] = request("customer_payout_method");
         $update_customer["tin_number"] = request("tin_number");
         Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
+
+
+        /* UPDATE VMONEY METHOD */
+        foreach(request("vmoney") as $key => $value)
+        {
+            $slot_info = Tbl_mlm_slot::where("slot_no", $value)->where("shop_id", $this->shop_info->shop_id)->first();
+
+            if ($slot_info) 
+            {
+                $update_vmoney["slot_id"] = $slot_info->slot_id;
+                $update_vmoney["vmoney_email"] = request("vmoney_email")[$key];
+                
+                $exist = Tbl_vmoney_settings::where("slot_id", $slot_info->slot_id)->first();
+
+                if ($exist) 
+                {
+                    Tbl_vmoney_settings::where("slot_id", $slot_info->slot_id)->update($update_vmoney);
+                }
+                else
+                {
+                    Tbl_vmoney_settings::insert($update_vmoney);
+                }            
+            }
+        }
 
 
         /* UPDATE EON METHOD */
@@ -534,6 +657,59 @@ class ShopMemberController extends Shop
                 }
             }
         }
+
+        /*UPDATE MONER REMITTANCE DETAILS*/
+        foreach (request('remittance_slot_no') as $key => $remittance_slot_no) 
+        { 
+            $slotinfo = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $remittance_slot_no)->first();
+            if(request("first_name")[$key] != "" && request("middle_name")[$key] != "" && request("last_name")[$key] != "" && request("contact_number")[$key] != "")
+            {
+                $check_money_remittance = Tbl_mlm_slot_money_remittance::where('slot_id',$slotinfo->slot_id)->first();
+
+                if($check_money_remittance)
+                {
+                    $update_remittance["money_remittance_type"] = request("money_remittance_type")[$key];
+                    $update_remittance["first_name"] = request("first_name")[$key];
+                    $update_remittance["middle_name"] = request("middle_name")[$key];
+                    $update_remittance["last_name"] = request("last_name")[$key];
+                    $update_remittance["contact_number"] = request("contact_number")[$key];
+                    Tbl_mlm_slot_money_remittance::where("slot_id", $slotinfo->slot_id)->update($update_remittance);
+                }
+                else
+                {
+                    $insert_remittance["money_remittance_type"] = request("money_remittance_type")[$key];
+                    $insert_remittance["slot_id"] = $slotinfo->slot_id;
+                    $insert_remittance["first_name"] = request("first_name")[$key];
+                    $insert_remittance["middle_name"] = request("middle_name")[$key];
+                    $insert_remittance["last_name"] = request("last_name")[$key];
+                    $insert_remittance["contact_number"] = request("contact_number")[$key];
+                    Tbl_mlm_slot_money_remittance::insert($insert_remittance);
+                }
+
+            }
+        }
+
+        /* UPDATE EON METHOD */
+        foreach(request("coinsph_slot_no") as $key => $coinsph_slot_no)
+        {
+            $slotinfo = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $coinsph_slot_no)->first();
+            if(request('wallet_address')[$key] != '')
+            {
+                $check_coinsph = Tbl_mlm_slot_coinsph::where('slot_id',$slotinfo->slot_id)->first();
+                if($check_coinsph)
+                {
+                    $update_coinsph["wallet_address"] = request("wallet_address")[$key];
+                    Tbl_mlm_slot_coinsph::where("slot_id", $slotinfo->slot_id)->update($update_coinsph);
+                }
+                else
+                {
+                    $insert_coins["slot_id"] = $slotinfo->slot_id;
+                    $insert_coins["wallet_address"] = request("wallet_address")[$key];
+                    Tbl_mlm_slot_coinsph::insert($insert_coins);
+                }
+            }
+        }
+
 
         echo json_encode("success");
     }
@@ -1238,9 +1414,14 @@ class ShopMemberController extends Shop
     }
     public function getReport()
     {
-        $data["page"]           = "Report";
-        $data["_rewards"]       = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
-        $data["_codes"]         = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
+        $data["page"]               = "Report";
+        $data["_rewards"]           = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+        $data["_codes"]             = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
+        if($this->shop_info->shop_id == 47)
+        {
+            $data["_rewards_points"]    = MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+        }
+        
         return (Self::load_view_for_members("member.report", $data));
     }
     public function getLeadList()
@@ -1265,10 +1446,29 @@ class ShopMemberController extends Shop
         {
             $query->where("customer_lead", "-1");
         }
-        
 
-        $data["_lead"]      = $query->get();
-        
+
+
+        $_lead      = $query->get();
+
+        foreach($_lead as $key => $lead)
+        {
+            $slot_owned = Tbl_mlm_slot::where("slot_owner", $lead->customer_id)->first();
+            
+            if($slot_owned)
+            {
+                $_lead[$key]->slot_owned = $slot_owned->slot_no;
+            }
+            else
+            {
+                $_lead[$key]->slot_owned = "NONE";
+            }
+
+            $_lead[$key]->date_created = date("F d, Y", strtotime($lead->created_at)) . "<br>" . date("h:i A", strtotime($lead->created_at));
+        }
+
+        $data["_lead"] = $_lead;
+
         return (Self::load_view_for_members("member.lead", $data)); 
     }
     public function getWalletLogs()
@@ -2050,6 +2250,12 @@ class ShopMemberController extends Shop
         }
 
         return json_encode($return);
+    }
+    public function getReadNotification()
+    {
+        $notif_id = Request2::input('notif_id');
+        $update['has_been_seen'] = 1;
+        Tbl_slot_notification::where('notification_id', $notif_id)->update($update);
     }
     public function getWebhook()
     {

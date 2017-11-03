@@ -16,7 +16,7 @@
                                 <th>Product Name</th>
                                 <th data-breakpoints="xs">Unit Price</th>
                                 <th data-breakpoints="xs">Quantity</th>
-                                <th data-breakpoints="xs">Total</th>
+                                <th data-breakpoints="xs sm">Total</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -42,13 +42,13 @@
             </div>
         </div>
         <div class="modal-footer row clearfix">
-            <div class="col-md-8">
+            <div class="col-md-8 clearfix">
                 <div class="left-btn-container">
                     <div style="color: #1c1c1c;"><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
-                    <button class="btn-checkout" onclick="location.href='/members/checkout'">Checkout</button>
+                    <button class="btn-checkout" onClick="location.href='/members/checkout'">Checkout</button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 clearfix">
                 @if(isset($cart) && $cart)
                     <div class="total">Total: {{ $cart["_total"]->display_grand_total }}</div>
                 @else

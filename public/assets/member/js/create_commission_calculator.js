@@ -182,8 +182,8 @@ function create_commission_calculator()
 		{
 			tcp = (parseFloat(tcp_string.substring(0, tcp_string.indexOf('%'))) / 100);
 		}
-		var amount_tcp = amount_tc * tcp;
-		$('.amount-tcp1').html('P '+number_format(amount_tcp));
+		var amount_tcp1 = amount_tc * tcp;
+		$('.amount-tcp1').html('P '+number_format(amount_tcp1));
 
 		ndp = 0;
 		if(ndp_string.indexOf('%') > 0)
@@ -193,6 +193,9 @@ function create_commission_calculator()
 		var amount_ndp = amount_tc * ndp;
 		$('.amount-ndp').html('P '+number_format(amount_ndp));
 
+		$('.input-tcp').val(amount_tcp);
+		$('.input-tc').val(amount_tc);
+		$('.input-loanable-amount').val(amount_loanable);
 		$('.c-amount-tsp').html(number_format(tsp, false));
 		$('.c-amount-disc').html(number_format(discount, false));
 		$('.c-amount-tax').html(number_format(tax));

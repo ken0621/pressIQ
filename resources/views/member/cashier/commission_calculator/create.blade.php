@@ -1,4 +1,4 @@
-<form>
+<form class="global-submit" method="post" action="/member/cashier/commission_calculator/create-submit">
     <input type="hidden" name="_token" value="{{ csrf_token() }}" >
     <div class="modal-header">
     	<button type="button" class="close" data-dismiss="modal">×</button>
@@ -24,7 +24,7 @@
                         <div class="col-md-6">
                             <strong>Select Agent</strong>
                             <select class="select-agent form-control input-sm" name="agent_id">
-                                <option commission-percent="8" value="1">Juan Dela Cruz</option>
+                                <option commission-percent="8" value="2">Juan Dela Cruz</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <strong>Select Property</strong>
-                            <select class="select-property form-control input-sm">
+                            <select class="select-property form-control input-sm" name="item_id">
                                  @include("member.load_ajax_data.load_item_category",['add_search' => ''])
                             </select>
                         </div>
@@ -53,7 +53,7 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <strong>Downpayment</strong>
-                            <input type="text" class="form-control input-sm text-right downpayment compute-all" name="" value="15%">
+                            <input type="text" class="form-control input-sm text-right downpayment compute-all" name="downpayment_percent" value="15%">
                         </div>
                         <div class="col-md-6">
                             <strong>Amount of Downpayment</strong>
@@ -65,7 +65,7 @@
                             <strong>Discount</strong>
                         </div>
                         <div class="col-md-6">
-                            <input type="text" value="0.00" class="number-input form-control input-sm text-right discount discount-auto-add-comma" name="">
+                            <input type="text" value="0.00" class="number-input form-control input-sm text-right discount discount-auto-add-comma" name="discount">
                         </div>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                     </div>
                     <div class="form-group ">
                         <div class="col-md-6">
-                            <select class="select-term text-right form-control input-sm">
+                            <select class="select-term text-right form-control input-sm" name="monthly_amort">
                                 @for($i = 1; $i <= 30; $i++)
                                 <option value="{{$i}}" {{$i == 1 ? 'selected' : ''}}>{{$i}} Month{{$i == 1 ? '' : 's'}}</option>
                                 @endfor
@@ -97,7 +97,7 @@
                                 <strong>Miscellaneous Fee</strong>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control text-right input-sm misc compute-all" name="" value="5%">
+                                <input type="text" class="form-control text-right input-sm misc compute-all" name="misceleneous_fee_percent" value="5%">
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
@@ -110,6 +110,7 @@
                         </div>
                         <div class="col-md-6 text-center">
                             <h4><div class="amount-loanable">Loanable Amount</div></h4>
+                            <input type="hidden" class="input-loanable-amount" name="loanable_amount">
                         </div>
                     </div>
                     <div class="form-group">
@@ -118,6 +119,7 @@
                         </div>
                         <div class="col-md-6 text-center">
                             <h4><div class="amount-tcp">TCP Amount</div></h4>
+                            <input type="hidden" class="input-tcp" name="total_contract_price">
                         </div>
                     </div>
                 </div>
@@ -128,7 +130,7 @@
                             <h4><b>Total Commission :</b></h4>
                         </div>
                         <div class="col-md-6 text-center">
-                            <input type="hidden" name="total_contract_price" class="amount-tc">
+                            <input type="hidden" name="total_commission" class="input-tc">
                             <a id="popover_tc" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-tc">TC Amount</div></h4></a>
                         </div>
                     </div>
@@ -138,7 +140,7 @@
                                 <strong>NDP Commission</strong>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control input-sm text-right compute-all ndp-commission" value="60%" name="">
+                                <input type="text" class="form-control input-sm text-right compute-all ndp-commission" value="60%" name="ndp_commission">
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
@@ -151,7 +153,7 @@
                                 <strong>TCP Commission</strong>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="change-tcp form-control input-sm text-right compute-all tcp-commission" name="" value="40%">
+                                <input type="text" class="change-tcp form-control input-sm text-right compute-all tcp-commission" name="tcp_commission" value="40%">
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
@@ -164,7 +166,7 @@
     </div>
     <div class="modal-footer">
     	<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-    	<button class="btn btn-primary btn-custom-primary" type="button">Save</button>
+    	<button class="btn btn-primary btn-custom-primary" type="submit">Save</button>
     </div>
 </form>
 <div class="hidden row clearfix" id="computation-content">

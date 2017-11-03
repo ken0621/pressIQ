@@ -132,17 +132,17 @@
           </button>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
-            <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
-            <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li> 
-            <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
-            <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
-            <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
-            <li class="nav-border {{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">LEGALITIES</a></li>
-            <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li> 
-          </ul>
+        <div class="collapse navbar-collapse navbar-center" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
+                <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
+                <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li> 
+                <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
+                <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
+                <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
+                <li class="nav-border {{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">LEGALITIES</a></li>
+                <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li> 
+            </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
       <div class="sticky-show">

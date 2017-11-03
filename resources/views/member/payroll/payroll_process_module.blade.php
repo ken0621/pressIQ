@@ -17,11 +17,17 @@
 
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
-        @if($access==1)
-        <li class="active cursor-pointer change-tab approve-tab" mode="processed"><a class="cursor-pointer"><i class="text-bold"> Processed </i></a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="registered"><a class="cursor-pointer"><i class="text-bold"> Registered </i></a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="posted"><a class="cursor-pointer"><i class="text-bold"> Posted </i></a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold"> Approved </i></a></li>
+        @if($access_processed == 1)
+        <li class="{{$access_processed == 1 ? 'active' : ''}} cursor-pointer change-tab approve-tab" mode="processed"><a class="cursor-pointer"><i class="text-bold"> Processed </i></a></li>
+        @endif
+        @if($access_registered == 1)
+        <li class="{{$access_processed == 0 ? 'active' : ''}} cursor-pointer change-tab approve-tab" mode="registered"><a class="cursor-pointer"><i class="text-bold"> Registered </i></a></li>
+        @endif
+        @if($access_posted == 1)
+        <li class="{{($access_processed == 0 && $access_registered == 0) ? 'active' : ''}} cursor-pointer change-tab approve-tab" mode="posted"><a class="cursor-pointer"><i class="text-bold"> Posted </i></a></li>
+        @endif
+        @if($access_approved == 1)
+        <li class="{{($access_processed == 0 && $access_registered == 0 && $access_posted == 0) ? 'active' : ''}} cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold"> Approved </i></a></li>
         @endif
     </ul>
     

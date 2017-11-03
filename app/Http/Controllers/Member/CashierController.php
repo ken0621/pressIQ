@@ -195,7 +195,7 @@ class CashierController extends Member
 
                     if($consume_inventory == 'instant')
                     {
-                        Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks);
+                        Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks, $warehouse_id);
                         $validate = 1;
                     }
                     if($consume_inventory == 'wis')

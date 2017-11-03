@@ -36,7 +36,7 @@
             <ul>
                @foreach($_shop as $shop)
                <li>
-                  <a href="/super/customer-edit?id={{ $shop->shop_id }}" class="item-link item-content">
+                  <a href="/super/client/edit?id={{ $shop->shop_id }}" class="item-link item-content">
                      <div class="item-inner">
                         <div class="item-title-row">
                            <div class="item-title">{{ $shop->shop_name }}</div>
@@ -51,3 +51,4 @@
       </div>
    </div>
 </div>
+

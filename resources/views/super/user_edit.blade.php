@@ -45,6 +45,18 @@
                         </div>
                      </div>
                   </li>
+
+                  <!-- CONTACT -->
+                  <li>
+                     <div class="item-content">
+                        <div class="item-inner">
+                           <div class="item-title label">Contact</div>
+                           <div class="item-input">
+                              <input name="first_name" type="text" placeholder="Contact" value="{{ $user->user_contact_number }}">
+                           </div>
+                        </div>
+                     </div>
+                  </li>
                   <!-- SELECT POSITION -->
                   <li>
                      <a href="#" class="item-link smart-select">
@@ -62,17 +74,6 @@
                            </div>
                         </div>
                      </a>
-                  </li>
-                  <!-- CONTACT -->
-                  <li>
-                     <div class="item-content">
-                        <div class="item-inner">
-                           <div class="item-title label">Contact</div>
-                           <div class="item-input">
-                              <input name="first_name" type="text" placeholder="Contact" value="{{ $user->user_contact_number }}">
-                           </div>
-                        </div>
-                     </div>
                   </li>
                </ul>
             </div>

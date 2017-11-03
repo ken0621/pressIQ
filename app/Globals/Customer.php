@@ -35,6 +35,8 @@ class Customer
 			session()->forget("lead_sponsor");
 		}
 		
+
+		//dd($info);
 		Tbl_customer::insert($info);
 		return true;	
 	}

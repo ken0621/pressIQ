@@ -204,9 +204,13 @@ class Transaction
 
         return $return;
     }
-    public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit')
+    public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit', $get_to_warehouse = 0)
     {
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
+        if($get_to_warehouse != 0)
+        {
+            $warehouse_id = $get_to_warehouse;
+        }
         
         $get_item = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
         

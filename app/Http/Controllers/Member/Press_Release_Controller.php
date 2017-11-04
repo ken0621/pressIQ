@@ -87,7 +87,7 @@ class Press_Release_Controller extends Member
     public function send_email(Request $request)
     { 
         $insert['email_content'] = Request::input('content');
-        $insert['from']=Request::input('from') . "@press-iq.com";
+        $insert['from']=Request::input('from');
         $insert['to']=Request::input('to');
         /*$insert['to']=explode(",",Request::input('to'));*/
         $insert['email_title']=Request::input('title');
@@ -95,10 +95,10 @@ class Press_Release_Controller extends Member
         $insert['email_time'] = date('Y-m-d');
         Tbl_press_release_email_sent::insert($insert);
         $data['tinymce_content'] = str_replace("../../../uploads", URL::to('/uploads'), Request::input('content'));;
-        $data['from']=Request::input('from');
+        $data['from']=Request::input('from'). "@press-iq.com";
         $data['to']=explode(",",Request::input('to'));
         $data['subject']=Request::input('subject');
-        $data['email_title']=Request::input('title');
+        $data['email_title']=Request::input('title');   
         foreach($data['to'] as $to)
         {
             $data['to'] = $to;  
@@ -178,11 +178,7 @@ class Press_Release_Controller extends Member
 
             {
                 $datas['_array1']=($stats->stats->today);
-                // foreach ($stats as $keys => $today) 
-                // {
-                //     dd($keys['stats']);
-                // }
-                
+  
                   
             }
         

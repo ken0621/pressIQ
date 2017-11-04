@@ -21,6 +21,7 @@
         </div>     
     </div>
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"> Add Recipient</button>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1"> Add Recipient in excel</button>
     </header>
     <table  class="table table-hover">
   <thead>
@@ -83,6 +84,31 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary save">Save Message</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Recipient Info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action ="/member/page/press_release_email/add_recipient_press_release" id="recipient-form">
+          {{csrf_field()}}
+          <div class="form-group">
+            <label for="recipient-name" class="form-control-label">Recipient file</label>
+            <input type="file" class="form-control" id="recipient-name" name="recipient_list">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

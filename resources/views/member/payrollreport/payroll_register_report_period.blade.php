@@ -38,7 +38,7 @@
 								<thead style="text-transform: uppercase">
 									<tr>
 										<th valign="center" rowspan="2" class="text-center" style="width: 200px">NAME</th>
-										<th valign="center" rowspan="2" class="text-center" style="width: 120px">BASIC PAY</th>
+										
 										<th valign="center" rowspan="2" class="text-center" style="width: 120px">Over Time PAY</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 120px">Night Differential Pay</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 120px">Regular Holiday Pay</th>
@@ -57,6 +57,7 @@
 										<th colspan="2" class="text-center" style="width: 200px">PHILHEALTH Contribution</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 100px">Witholding Tax</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 100px">TOTAL DEDUCTION</th>
+										<th valign="center" rowspan="2" class="text-center" style="width: 120px">BASIC PAY</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 100px">GROSS PAY</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 100px">NET HOME PAY</th>
 									</tr>
@@ -93,7 +94,6 @@
 									@foreach($_employee as $lbl => $employee)
 									<tr>
 										<td class="text-center" >{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_last_name }}</td>
-										<td class="text-center" >{{ number_format($employee->net_basic_pay,2) }} <br> ({{$employee->time_spent}} hours)</td>
 										<td class="text-center" >{{ number_format($employee->overtime,2) }} <br> ({{$employee->time_overtime}} hours)</td>
 										<td class="text-center" >{{ number_format($employee->nightdiff,2) }} <br> ({{$employee->time_night_differential}} hours)</td>
 										<td class="text-center" >{{ number_format($employee->special_holiday,2) }} <br> ({{$employee->time_special_holiday}} times)</td>
@@ -131,15 +131,16 @@
 										<td class="text-center" >{{ number_format($employee->philhealth_er,2) }}</td>
 										<td class="text-center" >{{ number_format($employee->tax_ee,2) }}</td>
 										<td class="text-center" >{{ number_format($employee->total_deduction_employee,2) }}</td>
+										<td class="text-center" >{{ number_format($employee->net_basic_pay,2) }} <br> ({{$employee->time_spent}} hours)</td>
 										<td class="text-center" >{{ number_format($employee->gross_pay,2) }}</td>
 										<td class="text-center" >{{ number_format($employee->net_pay,2) }}</td>
+										
 									</tr>
 									@endforeach
 
 
 									<tr>
 										<td class="text-center" ><b>Total</b></td>
-										<td class="text-center" ><b>{{ number_format($total_basic,2) }}</b></td>
 										<td class="text-center" ><b>{{ number_format($overtime_total,2) }}</b></td>
 										<td class="text-center" ><b>{{ number_format($nightdiff_total,2) }}</b></td>
 										<td class="text-center" ><b>{{ number_format($regular_holiday_total,2) }}</b></td>
@@ -176,6 +177,7 @@
 										<td class="text-center" ><b>{{ number_format($philhealth_er_total,2) }}</b></td>
 										<td class="text-center" ><b>{{ number_format($witholding_tax_total,2) }}</b></td>
 										<td class="text-center" ><b>{{ number_format($deduction_total,2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_basic,2) }}</b></td>
 										<td class="text-center" ><b>{{ number_format($total_gross,2) }}</b></td>
 										<td class="text-center" ><b>{{ number_format($total_net,2) }}</b></td>
 									</tr>

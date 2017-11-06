@@ -90,7 +90,15 @@ class Tbl_customer extends Model
 
         return $query->selectRaw("*, $balance as balance");
     }
-
+    public function scopeCommission($query)
+    {
+        return $query->leftjoin('tbl_commission','tbl_commission.customer_id','=','tbl_customer.customer_id');
+    }    
+    public function scopeSalesrep($query)
+    {
+        return $query->selectRaw('*, tbl_employee.first_name as salesrep_fname, tbl_employee.middle_name as salesrep_mname,tbl_employee.last_name as salesrep_lname')
+                     ->leftjoin('tbl_employee','employee_id','=','agent_id');
+    }
     public function scopeUnionVendor($query, $shop_id)
     {
         $raw = DB::table("tbl_vendor")->selectRaw("vendor_id as id, vendor_first_name as first_name, vendor_middle_name as middle_name, vendor_last_name as last_name, 'vendor' as reference, vendor_email as email")->where("archived", 0)->where("vendor_shop_id", $shop_id);

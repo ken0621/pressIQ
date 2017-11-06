@@ -44,6 +44,8 @@ function receive_payment()
 		    onChangeValue: function()
 		    {
 		    	var customer_id = $(this).val();
+		    	$('.salesrep_id').val($(this).find('option:selected').attr('salesrep_id'));
+		    	$('.salesrep').val($(this).find('option:selected').attr('salesrep'));
 		    	var check = $(".for-tablet-only").html();
 		    	if(check == null || check == "")
 		    	{

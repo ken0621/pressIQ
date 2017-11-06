@@ -8,6 +8,7 @@ use App\Globals\Accounting;
 use App\Globals\Invoice;
 use App\Globals\CreditMemo;
 use App\Globals\ReceivePayment;
+use App\Globals\CommissionCalculator;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
@@ -45,6 +46,7 @@ class Customer_ReceivePaymentController extends Member
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
         $data['action']         = "/member/customer/receive_payment/add";
         $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"]);
+        $data['comm_calculator'] = CommissionCalculator::check_settings($this->user_info->shop_id);
 
         $id = Request::input('id');
         if($id)
@@ -54,7 +56,6 @@ class Customer_ReceivePaymentController extends Member
             $data["_invoice"]           = Invoice::getAllInvoiceByCustomerWithRcvPymnt($data["rcvpayment"]->rp_customer_id, $data["rcvpayment"]->rp_id);
             $data['action']             = "/member/customer/receive_payment/update/".$data["rcvpayment"]->rp_id;
         }
-
         return view("member.receive_payment.receive_payment", $data);
     }
 

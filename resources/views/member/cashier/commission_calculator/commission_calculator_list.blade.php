@@ -68,7 +68,7 @@
                                         <small>TSP : {{currency('P ',$list->total_selling_price)}}</small>
                                     </td>
                                     <td class="text-center">
-                                        {{ucwords($list->first_name.' '.$list->middle_name.' '.$list->last_name)}}
+                                        {{ucwords($list->salesrep_fname.' '.$list->salesrep_mname.' '.$list->salesrep_lname)}}
                                     </td>
                                     <td class="text-center">
                                         {{currency('P ',$list->total_commission)}}

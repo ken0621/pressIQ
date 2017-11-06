@@ -16,6 +16,7 @@ class Tbl_commission extends Model
     }
     public function scopeSalesrep($query)
     {
-    	return $query->leftjoin('tbl_employee','employee_id','=','agent_id');
+    	return $query->selectRaw('*, tbl_employee.first_name as salesrep_fname, tbl_employee.middle_name as salesrep_mname,tbl_employee.last_name as salesrep_lname')
+                     ->leftjoin('tbl_employee','employee_id','=','agent_id');
     }
 }

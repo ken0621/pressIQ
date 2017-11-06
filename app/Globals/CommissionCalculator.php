@@ -5,6 +5,7 @@ use App\Models\Tbl_commission;
 use App\Models\Tbl_commission_item;
 use App\Models\Tbl_commission_invoice;
 use App\Models\Tbl_customer_invoice;
+use App\Models\Tbl_settings;
 
 use App\Globals\Invoice;
 use App\Globals\Item;
@@ -138,5 +139,9 @@ class CommissionCalculator
 	public static function list($shop_id)
 	{
 		return Tbl_commission::item()->salesrep()->where('tbl_commission.shop_id',$shop_id)->get();
+	}
+	public static function check_settings($shop_id)
+	{
+		return Tbl_settings::where('settings_key','customer_unit_receive_payment')->where('shop_id',$shop_id)->value('settings_value');
 	}
 }

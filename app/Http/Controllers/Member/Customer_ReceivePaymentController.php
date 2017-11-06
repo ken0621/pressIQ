@@ -70,6 +70,9 @@ class Customer_ReceivePaymentController extends Member
         //for credit memo
         $cm_id = Request::input("cm_id");
 
+        //for commission
+        $salesrep_id = Request::input("salesrep_id");
+
         // dd(Request::input());
         $insert["rp_shop_id"]           = $this->getShopId();
         $insert["rp_customer_id"]       = Request::input('rp_customer_id');
@@ -106,7 +109,15 @@ class Customer_ReceivePaymentController extends Member
 
                 if($insert_line["rpline_reference_name"] == 'invoice')
                 {
-                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                    $ret = Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                    if($ret == 1)
+                    {
+                        $check = CommissionCalculator::check_settings($this->user_info->shop_id);
+                        if($check == 1)
+                        {
+                            CommissionCalculator::update_commission($salesrep_id, $insert_line["rpline_reference_id"]);
+                        }
+                    }
                 }
             }
         }

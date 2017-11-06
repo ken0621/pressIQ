@@ -144,4 +144,8 @@ class CommissionCalculator
 	{
 		return Tbl_settings::where('settings_key','customer_unit_receive_payment')->where('shop_id',$shop_id)->value('settings_value');
 	}
+	public static function update_commission($salesrep, $invoice_id)
+	{
+		/*UPDATE COMMISSION HERE*/
+	}
 }

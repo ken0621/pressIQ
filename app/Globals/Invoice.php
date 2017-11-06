@@ -409,7 +409,7 @@ class Invoice
 
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
 
-        Invoice::updateIsPaid($inv_id);
+        return Invoice::updateIsPaid($inv_id);
     }
 
     public static function updateIsPaid($inv_id)
@@ -421,6 +421,8 @@ class Invoice
         else                                    $data["inv_is_paid"] = 0;
 
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
+
+        return $data['inv_is_paid'];
     }
 
 

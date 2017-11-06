@@ -39,7 +39,7 @@ class CommissionCalculator
 
 	        $invoice_info['invoice_date']       = $comm['date'];
 	        $invoice_info['invoice_due']        = $comm['due_date'];
-	        $invoice_info['new_inv_id']			= $i + 1;
+	        $invoice_info['new_inv_id']			= $commission_id.'00'.($i + 1);
 	        $invoice_info['billing_address']	= Item::get_item_details($comm_item['item_id'])->item_name;
 			$invoice_info['invoice_terms_id']	= 0;
 

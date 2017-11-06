@@ -269,3 +269,11 @@ function create_commission_calculator()
 
 
 }
+function success_commission(data)
+{
+	toastr.success('Success');
+	setInterval(function()
+	{
+		location.reload();
+	},2000);
+}

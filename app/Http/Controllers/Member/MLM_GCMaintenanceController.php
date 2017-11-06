@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Session;
 use Validator;
 use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_mlm_slot_bank;
 use App\Models\Tbl_mlm_slot_money_remittance;
 use App\Models\Tbl_mlm_slot_coinsph;
@@ -94,7 +95,52 @@ class MLM_GCMaintenanceController extends Member
 			$data["_payout"][$key]->display_wallet_log_other_charge 	= Currency::format($payout->wallet_log_other_charge);
 		}
 
-
 		return view('member.mlm_gcmaintenance.gcmaintenance_table', $data);
+	}
+	public function getJca()
+	{
+		$shop_id 		= $this->user_info->shop_id;
+		$query 			= Tbl_mlm_slot_wallet_log::where("tbl_mlm_slot_wallet_log.shop_id", $shop_id)->slot()->customer();
+
+		$query->where("wallet_log_plan", "GC MAINTENANCE");
+
+		/* PAYOUT IMPORTATION QUERIES */
+		$query->where("wallet_log_amount", "<", 0);
+		$query->orderBy("wallet_log_date_created", "desc");
+		
+		/* SEARCH QUERY */
+		$search_key = Request::input("search");
+
+		if($search_key != "")
+		{
+			$query->where(function($q) use ($search_key)
+			{
+				$q->orWhere("first_name", "LIKE", "%$search_key%");
+				$q->orWhere("last_name", "LIKE", "%$search_key%");
+				$q->orWhere("slot_no", "LIKE", "%$search_key%");
+			});
+		}
+
+		$data["_payout"]				= null;
+		$data["total_payout"]			= Currency::format($query->sum("wallet_log_amount") * -1);
+		$data["total_request"]			= Currency::format($query->sum("wallet_log_request"));
+		$data["total_tax"]				= Currency::format($query->sum("wallet_log_tax"));
+		$data["total_service"]			= Currency::format($query->sum("wallet_log_service_charge"));
+		$data["total_other"]			= Currency::format($query->sum("wallet_log_other_charge"));
+		$_gc 							= $query->get();
+
+		foreach($_gc as $key => $gc)
+		{
+			$insert_points[$key]["points_log_complan"] = "MAINTENANCE";
+			$insert_points[$key]["points_log_slot"] = $gc->slot_id;
+			$insert_points[$key]["points_log_Sponsor"] = 0;
+			$insert_points[$key]["points_log_date_claimed"] = $gc->wallet_log_date_created;
+			$insert_points[$key]["points_log_type"] = "GC";
+			$insert_points[$key]["points_log_from"] = "GC Maintenance";
+			$insert_points[$key]["points_log_points"] = $gc->wallet_log_amount * -1;
+			echo "<div>" . $gc->wallet_log_amount . " GC was stored to SLOT (" . $gc->slot_no . ") - " . date("m/d/Y", strtotime($gc->wallet_log_date_created)) . "</div>";
+		}
+
+		Tbl_mlm_slot_points_log::insert($insert_points);
 	}
 }

@@ -143,13 +143,13 @@ function receive_payment()
 	function action_update_apply_amount($amount)
 	{
 		$(".amount-to-apply").val($amount);
-		$(".amount-apply").html("PHP "+formatMoney($amount))
+		$(".amount-apply").html("PHP "+formatMoney_2($amount))
 	}
 
 	function action_update_credit_amount($amount)
 	{
 		$(".amount-to-credit").val($amount);
-		$(".amount-credit").html("PHP "+formatMoney($amount))
+		$(".amount-credit").html("PHP "+formatMoney_2($amount))
 	}
 
 	function event_payment_amount_change()
@@ -200,10 +200,21 @@ function receive_payment()
 		return Number($this.toString().replace(/[^0-9\.]+/g,""));
 	}
 
-	function formatMoney($this)
+	function formatMoney_2($this)
 	{
 		var n = formatFloat($this), 
 	    c = isNaN(c = Math.abs(c)) ? 2 : c, 
+	    d = d == undefined ? "." : d, 
+	    t = t == undefined ? "," : t, 
+	    s = n < 0 ? "-" : "", 
+	    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+	    j = (j = i.length) > 3 ? j % 3 : 0;
+	   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+	}
+	function formatMoney($this)
+	{
+		var n = formatFloat($this), 
+	    c = isNaN(c = Math.abs(c)) ? 5 : c, 
 	    d = d == undefined ? "." : d, 
 	    t = t == undefined ? "," : t, 
 	    s = n < 0 ? "-" : "", 

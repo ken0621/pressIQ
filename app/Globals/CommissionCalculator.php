@@ -7,6 +7,7 @@ use App\Models\Tbl_commission_invoice;
 use App\Models\Tbl_customer_invoice;
 
 use App\Globals\Invoice;
+use App\Globals\Item;
 
 use Carbon\carbon;
 use DB;
@@ -38,15 +39,25 @@ class CommissionCalculator
 
 	        $invoice_info['invoice_date']       = $comm['date'];
 	        $invoice_info['invoice_due']        = $comm['due_date'];
+	        $invoice_info['new_inv_id']			= $i + 1;
+	        $invoice_info['billing_address']	= Item::get_item_details($comm_item['item_id'])->item_name;
+			$invoice_info['invoice_terms_id']	= 0;
 
 	        $invoice_other_info['invoice_msg']  = "";
 	        $invoice_other_info['invoice_memo'] = "";
 
-	        $item_info['item_id']            = $comm_item['item_id'];
-	        $item_info['item_description']   = 'test';
-	        $item_info['quantity']           = 1;
-	        $item_info['rate']               = Self::get_computation($shop_id, $commission_id)['amount_monthly_amort'];
-	        $item_info['amount']             = Self::get_computation($shop_id, $commission_id)['amount_monthly_amort'];
+	        $item_info[0]['item_service_date']  = "";
+	        $item_info[0]['item_id']            = $comm_item['item_id'];
+	        $item_info[0]['item_description']   = 'test';
+	        $item_info[0]['discount']   		= 0;
+	        $item_info[0]['discount_remark']	= "";
+	        $item_info[0]['um']			   		= "";
+	        $item_info[0]['taxable']	   		= 0;
+	        $item_info[0]['ref_name']	   		= "";
+	        $item_info[0]['ref_id']	   			= 0;
+	        $item_info[0]['quantity']           = 1;
+	        $item_info[0]['rate']               = Self::get_computation($shop_id, $commission_id)['amount_monthly_amort'];
+	        $item_info[0]['amount']             = Self::get_computation($shop_id, $commission_id)['amount_monthly_amort'];
 
 	        $total_info['ewt']                  = 0;
 	        $total_info['total_discount_type']  = 0;
@@ -64,10 +75,11 @@ class CommissionCalculator
 			$ins['is_released'] = 0;
 			$ins['invoice_is_paid'] = 0;
 
-			Tbl_customer_invoice::insert($ins);
+			Tbl_commission_invoice::insert($ins);
 		}
 
-		die(var_dump($comm_item_id));
+		// die(var_dump($comm_item_id));
+		return "success";
 		
 	}
 	public static function get_computation($shop_id, $commission_id)
@@ -105,7 +117,7 @@ class CommissionCalculator
 			$return['amount_discount'] = $comm_item_data->discount;
 			$return['amount_net_dp'] = $return['amount_dp'] - $return['amount_discount'];
 			$return['month_amort'] = $comm_item_data->monthly_amort;
-			$return['amount_monthly_amort'] = $return['amount_dp'] / $comm_item_data->monthly_amort;
+			$return['amount_monthly_amort'] = $return['amount_net_dp'] / $comm_item_data->monthly_amort;
 
 			$return['percent_misc'] = $comm_item_data->misceleneous_fee_percent;
 			$return['amount_misc'] = ($comm_item_data->misceleneous_fee_percent/100) * $return['amount_tsp'];
@@ -119,8 +131,12 @@ class CommissionCalculator
 			$return['amount_monthly_commission'] = $return['amount_ndp_comm'] / $return['month_amort'];
 
 		}
-		dd($return);
+		// dd($return);
 
 		return $return;
+	}
+	public static function list($shop_id)
+	{
+		return Tbl_commission::item()->salesrep()->where('tbl_commission.shop_id',$shop_id)->get();
 	}
 }

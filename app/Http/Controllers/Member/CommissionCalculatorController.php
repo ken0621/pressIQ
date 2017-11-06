@@ -20,6 +20,7 @@ class CommissionCalculatorController extends Member
     public function getIndex()
     {
         $data['page'] = "Commission Calculator";
+        $data['_list'] = CommissionCalculator::list($this->user_info->shop_id);
         return view('member.cashier.commission_calculator.commission_calculator_list',$data);
     }
     public function getCreate()
@@ -27,7 +28,6 @@ class CommissionCalculatorController extends Member
         $data['page'] = "Commission Calculator";
         $data['_customer'] = Customer::getAllCustomer();
         $data['_item'] = Item::get_all_category_item([2]);
-        CommissionCalculator::get_computation(73, 3);   
 
         return view('member.cashier.commission_calculator.create',$data);        
     }
@@ -55,6 +55,12 @@ class CommissionCalculatorController extends Member
 
         $return = CommissionCalculator::create($shop_id, $comm, $comm_item);
 
-        // die(var_dump(123));
+        // die(var_dump('success'));
+        if($return == 'success')
+        {
+            $data['status'] = $return;
+            $data['call_function'] = 'success_commission';
+            return json_encode($data);
+        }
     }
 }

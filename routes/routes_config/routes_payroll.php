@@ -620,6 +620,5 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	//software controllers
 	Route::post('/biometrics/save_data','Member\PayrollBiometricsController@save_data');
 	Route::any('/biometrics/sample','Member\PayrollBiometricsController@sample');
-
 	/*END payroll biometrics*/
 });

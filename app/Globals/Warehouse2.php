@@ -776,7 +776,7 @@ class Warehouse2
         return $return;
 
     }
-    public static function consume_product_codes($shop_id = 0, $mlm_pin = '', $mlm_activation = '', $consume = array())
+    public static function consume_product_codes($shop_id = 0, $mlm_pin = '', $mlm_activation = '', $consume = array(), $remarks = "Consume using product codes.")
     {
         $return = null;
         $val = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
@@ -786,7 +786,7 @@ class Warehouse2
                                                  ->first();
         if($val)
         {
-            Warehouse2::consume_record_log($shop_id, $val->record_warehouse_id, $val->record_item_id,$val->record_log_id, 1, "Consume using product codes.", $consume);
+            Warehouse2::consume_record_log($shop_id, $val->record_warehouse_id, $val->record_item_id,$val->record_log_id, 1, $remarks, $consume);
             $return = $val->record_item_id;
         }
         else

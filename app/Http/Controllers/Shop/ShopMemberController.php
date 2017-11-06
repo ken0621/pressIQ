@@ -348,6 +348,8 @@ class ShopMemberController extends Shop
                 echo '<div class="modal-footer">
                         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>';
+
+                die();
             }
         }
     }

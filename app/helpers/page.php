@@ -722,10 +722,9 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Payroll Process";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_process_module";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','processed','registered','posted','approved'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";
-    
 
 
     // /* PAYROLL SUMMARY */

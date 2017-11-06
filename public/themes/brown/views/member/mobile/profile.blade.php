@@ -156,15 +156,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-input">
-                                        <textarea type="text" name="customer_street" placeholder="Full Address">{{ $profile_address->customer_street }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+
                     </ul>
                 </div>
             </form>

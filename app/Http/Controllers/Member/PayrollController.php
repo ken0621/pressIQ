@@ -222,7 +222,11 @@ class PayrollController extends Member
                                                   ->orderBy('tbl_payroll_period.payroll_period_start','asc')
                                                   ->get();
           
-          $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+          $data['access']               = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+          $data['access_processed']     = Utilities::checkAccess('payroll-process','processed');
+          $data['access_registered']    = Utilities::checkAccess('payroll-process','registered');
+          $data['access_posted']        = Utilities::checkAccess('payroll-process','posted');
+          $data['access_approved']      = Utilities::checkAccess('payroll-process','approved');
 
           return view('member.payroll.payroll_process_module', $data);
      }

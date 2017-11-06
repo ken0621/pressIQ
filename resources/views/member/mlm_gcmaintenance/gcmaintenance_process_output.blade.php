@@ -11,10 +11,13 @@
             Are you sure you want to process the following?
             </small>
             </h1>
-            <div class="dropdown pull-right">
-                <button onclick="location.href='/member/mlm/gcmaintenance'" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Cancel</button>
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-star"></i> Proceed</button>
-            </div>
+            <form method="post">
+                {{ csrf_field() }}
+                <div class="dropdown pull-right">
+                    <button onclick="location.href='/member/mlm/gcmaintenance'" class="btn btn-def-white btn-custom-white"><i class="fa fa-close"></i> Cancel</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Proceed GC Maintenance Process</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -28,24 +31,23 @@
                         <table class="table table-bordered table-striped table-condensed">
                             <thead style="text-transform: uppercase">
                                 <tr>
-                                    <th class="text-center">ID.</th>
-                                    <th class="text-center">Employee Name</th>
-                                    <th class="text-center" width="120px">NET BASIC PAY</th>
-                                    <th class="text-center" width="120px">GROSS PAY</th>
-                                    <th class="text-center" width="100px"></th>
-                                    <th class="text-center" width="100px"></th>
+                                    <th class="text-center">Customer Name</th>
+                                    <th class="text-center" width="120px">Slot Owned</th>
+                                    <th class="text-center" width="120px">Current Wallet</th>
+                                    <th class="text-center" width="100px">Maintenance</th>
+                                    <th class="text-right" width="200px">Wallet After Maintenance</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($_customer as $customer)
                                 <tr>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">Sample Name</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
+                                    <td class="text-center">{{ $customer->first_name }} {{ $customer->last_name }}</td>
+                                    <td class="text-center">{{ $customer->slot_count }} SLOT(S)</td>
+                                    <td class="text-center">{{ $customer->customer_wallet }}</td>
+                                    <td class="text-center">{{ $customer->maintenance }}</td>
+                                    <td class="text-right">{{ $customer->display_wallet_after_maintenance }}</td>
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

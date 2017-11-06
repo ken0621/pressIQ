@@ -130,6 +130,19 @@ body
 	}
 }
 
+.navbar-center
+{
+	width: 100% !important;
+	text-align: center;
+
+	ul 
+	{
+		display: inline-block !important;
+		float: none !important;
+		margin-bottom: -5px !important;
+	}
+}
+
 .navbar-default .navbar-toggle .icon-bar
 {
 	background-color: #fff;

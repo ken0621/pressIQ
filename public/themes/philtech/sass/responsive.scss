@@ -125,6 +125,14 @@
         width: 50%;
         float: left;
     }
+    .mobile-splash
+    {
+        display: block !important;
+    }
+    .mobile-splash-bottom
+    {
+        display: none;
+    }
 }
 
 @media (max-width: 425px) 

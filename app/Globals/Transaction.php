@@ -542,7 +542,7 @@ class Transaction
         {
             $data[$key]->customer_name = Transaction::getCustomerNameTransaction($value->transaction_id);
             
-            if(session('get_transaction_customer_details'))
+            if(session('get_transaction_customer_details') || session('get_transaction_customer_details_v2'))
             {
                 $data[$key]->phone_number           = $value->customer_mobile or $value->contact;
             }

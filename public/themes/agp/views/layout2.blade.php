@@ -104,7 +104,7 @@
             </nav>
 
             <a class="navbar-brand" href="#">
-                <img src="{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : '/themes/' . $shop_theme . '/assets/front/img/small-logo.png' }}">
+                <img style="max-width: 150px;" src="{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : '/themes/' . $shop_theme . '/assets/front/img/small-logo.png' }}">
             </a>
             <!-- Brand and toggle get grouped for better mobile display -->
             <!-- <div class="navbar-header">

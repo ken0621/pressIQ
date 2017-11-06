@@ -62,9 +62,9 @@
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
 							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
+						<!-- <li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
 							<a href="/members/network"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Network List</span></div></a>
-						</li>
+						</li> -->
 						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>
@@ -78,9 +78,9 @@
 						</li>
 						@else
 						@endif
-						<li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
+						<!-- <li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
 							<a href="/members/order"><div class="nav-holder"><div class="icon brown-icon-bag"></div> <span>Orders</span></div></a>
-						</li>
+						</li> -->
 <!-- 						<li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
 							<a href="/members/slot"><div class="nav-holder"><div class="icon brown-icon-cubes"></div> <span>My Slots</span></div></a>
 						</li> -->

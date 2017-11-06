@@ -118,7 +118,7 @@ function receive_payment()
 	{
 		$(document).on("change", ".amount-received", function()
 		{
-			$(this).val(formatMoney($(this).val()));
+			$(this).val(formatMoney_2($(this).val()));
 
 			var amount_receive = formatFloat($(this).val());
 			var amount_applied = formatFloat(action_total_amount_apply());

@@ -197,11 +197,11 @@ class Payroll_BioImportController extends Member
 			foreach($time_record as $employee_number => $value) 
 			{
 				$check_employee = null;
-				$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("shop_id", Self::shop_id())->first();
+				$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number."")->where("shop_id", Self::shop_id())->first();
 				
 				$value['employee_number'] = $employee_number;
 				$value['date']			  = $date;
-					
+
 				if ($check_employee) 
 				{
 					/* Get Tbl payroll time sheet data  */
@@ -210,8 +210,6 @@ class Payroll_BioImportController extends Member
 					/*Get Shift Code id*/
 					$shift_code_id 	= Tbl_payroll_employee_basic::where("payroll_employee_id", $check_employee->payroll_employee_id)->value("shift_code_id");
 					
-				
-
 					/* CREATE TIMESHEET DB IF EMPTY */
 					if(!$timesheet_db)
 					{

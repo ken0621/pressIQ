@@ -12,13 +12,13 @@
 					<div class="sub">All reward logs are shown here. </div>
 				</div>
 			</div>
-<!-- 			<div class="animated fadeInRight right">
-	<div class="search">
-		<select class="form-control">
-			<option>All Slots</option>
-		</select>
-	</div>
-</div> -->
+			<!-- <div class="animated fadeInRight right">
+				<div class="search">
+					<select class="form-control">
+						<option>All Slots</option>
+					</select>
+				</div>
+			</div> -->
 		</div>
 		
 		@if(count($_codes) > 0)

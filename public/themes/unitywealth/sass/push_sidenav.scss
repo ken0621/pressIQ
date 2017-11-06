@@ -16,6 +16,11 @@ $bold: 700;
      z-index: 1000;
      position: fixed;
 
+     @media screen and (max-width: 320px)
+    {
+        width: 250px;
+    }
+
     .space1
     {
         padding: 10px 0px 10px 0px;
@@ -33,6 +38,52 @@ $bold: 700;
         font-weight: $medium;
         color: #fff;
         padding-left: 30px;
+    }
+
+    .profile-img-container
+    {
+        padding: 20px;
+
+        .profile-img 
+        {
+            border-radius: 100%;
+            overflow: hidden;
+
+            img 
+            {
+                width: 100%;
+            }
+        }
+        
+        .text-holder
+        {
+             padding-left: 10px;
+             margin-top: 9px;
+             @media screen and (max-width: 349px)
+             {
+                margin-top: 2px;
+             }
+
+            .text-overflow
+            {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .name-text
+            {
+                color: #fff;
+                font-weight: $regular;
+                font-size: 18px;
+            }
+            .subtext
+            {
+                color: rgba(255,255,255,0.5);
+                font-weight: $light;
+                font-size: 15px;
+            }
+        }
     }
 }
 
@@ -117,7 +168,16 @@ $bold: 700;
  left: 0;
 }
 
-.pushmenu-push-toright { left: 300px; }
+.pushmenu-push-toright 
+{
+    left: 300px; 
+
+    @media screen and (max-width: 320px)
+    {
+        left: 246px;
+    }
+}
+
 
 /*Transition*/
 

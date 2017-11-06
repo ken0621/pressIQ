@@ -26,6 +26,7 @@ class CreateTblCommission102717121PM extends Migration
             $table->double('total_commission');
             $table->double('loanable_amount');
             $table->datetime('date_created');
+            $table->tinyInteger('is_fulfilled')->default(0);
 
 
             $table->foreign('customer_id')->references('customer_id')->on('tbl_customer')->onDelete('cascade');

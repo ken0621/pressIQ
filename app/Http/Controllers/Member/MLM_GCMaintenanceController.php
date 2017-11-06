@@ -15,6 +15,7 @@ use App\Models\Tbl_payout_bank;
 use App\Models\Tbl_payout_bank_shop;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_shop;
+use App\Models\Tbl_customer;
 use App\Globals\Currency;
 use Redirect;
 use App\Globals\MLM2;
@@ -33,11 +34,49 @@ class MLM_GCMaintenanceController extends Member
 		$data["page"] = "GC Maintenance";
 		return view('member.mlm_gcmaintenance.gcmaintenance_process', $data);
 	}
-	public function getProcessOutput()
+	public function anyProcessOutput()
 	{
-		$data["page"] = "GC Maintenance";
-		
-		return view('member.mlm_gcmaintenance.gcmaintenance_process_output', $data);
+		$data["page"] 	= "GC Maintenance Output";
+		$shop_id 		= $this->user_info->shop_id;
+		$_customer		= Tbl_customer::where("shop_id", $shop_id)->get();
+
+		foreach($_customer as $key => $customer)
+		{
+			$_slot 				= Tbl_mlm_slot::where("slot_owner", $customer->customer_id)->currentWallet()->get();
+			$customer_wallet 	= 0;
+			$slot_count 		= 0;
+
+			foreach($_slot as  $slot)
+			{
+				$customer_wallet += $slot->current_wallet;
+				$slot_count++;
+			}
+
+			if($customer_wallet >= request("amount"))
+			{
+				$_customer[$key]->customer_wallet 					= $customer_wallet;
+				$_customer[$key]->slot_count 						= $slot_count;
+				$_customer[$key]->maintenance 						= request("maintenance");
+				$_customer[$key]->wallet_after_maintenance 			= $customer_wallet - request("maintenance");
+				$_customer[$key]->display_wallet_after_maintenance 	= Currency::format($customer_wallet - request("maintenance"));
+			}
+			else
+			{
+				unset($_customer[$key]);
+			}	
+		}
+
+		if(request()->isMethod("post"))
+		{
+			dd($data);
+		}
+		else
+		{
+			$data["_customer"] = $_customer;
+			return view('member.mlm_gcmaintenance.gcmaintenance_process_output', $data);
+		}
+
+
 	}
 	public function postIndexTable()
 	{

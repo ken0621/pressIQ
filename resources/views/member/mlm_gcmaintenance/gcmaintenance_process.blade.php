@@ -12,6 +12,10 @@
                             <label for="basic-input">Wallet Amount of affected by GC Maintenance</label>
                             <input type="text" class="form-control" name="amount" value="5000">
                         </div>
+                        <div class="col-md-12">
+                            <label for="basic-input">Maintenance Amount</label>
+                            <input type="text" class="form-control" name="maintenance" value="1500">
+                        </div>
                     </div>
                 </div>
             </div>

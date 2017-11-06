@@ -210,18 +210,10 @@ class Payroll_BioImportController extends Member
 					/*Get Shift Code id*/
 					$shift_code_id 	= Tbl_payroll_employee_basic::where("payroll_employee_id", $check_employee->payroll_employee_id)->value("shift_code_id");
 					
-					/* Fail Import if timesheet is already approve by time keeper */
-					if ($timesheet_db->time_keeping_approved == 1) 
-					{
-						$_time_record[$date][$employee_number]['status'] 		 = "<div class='text-danger'>FAILED, TIMESHEET WAS ALREADY APPROVED.</div>";
-						$_time_record[$date][$employee_number]['biometric_name'] = $biometric_name;
-						$_time_record[$date][$employee_number]['company_name']   = "";
-						
-						$failed++;
-					}
+				
 
 					/* CREATE TIMESHEET DB IF EMPTY */
-					else if(!$timesheet_db)
+					if(!$timesheet_db)
 					{
 						$_shift_real 	=  Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $date);
 						$_shift 		=  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $date));
@@ -256,49 +248,62 @@ class Payroll_BioImportController extends Member
 					}
 					else
 					{
-						// dd($_time_record["2017-10-09"]);
-						$status = "<div class='text-success'>INSERTED</div>";
-						$_time_sheet_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->get();
-						
-						/*check if import time will be conflicted in database time sheet record*/
-						foreach ($_time_sheet_record as $key => $time_sheet_record) 
+						/* Fail Import if timesheet is already approve by time keeper */
+						if ($timesheet_db->time_keeping_approved == 1) 
 						{
-							$time_in_record = $time_sheet_record->payroll_time_sheet_in;
-							$time_out_record = $time_sheet_record->payroll_time_sheet_out;
+							$_time_record[$date][$employee_number]['status'] 		 = "<div class='text-danger'>FAILED, TIMESHEET WAS ALREADY APPROVED.</div>";
+							$_time_record[$date][$employee_number]['biometric_name'] = $biometric_name;
+							$_time_record[$date][$employee_number]['company_name']   = "";
+							
+							$failed++;
+						}
+						else
+						{
+							// dd($_time_record["2017-10-09"]);
+							$status = "<div class='text-success'>INSERTED</div>";
 
-							if(($time_in_record > $value["time_in"] && $value["time_out"]  < $time_out_record)
-							|| ($time_in_record > $value["time_in"] && $value["time_out"]  < $time_out_record) 
-							|| ($time_in_record == $value["time_in"])
-							|| ($time_out_record == $value["time_out"]))
+							$_time_sheet_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->get();
+							
+							/*check if import time will be conflicted in database time sheet record*/
+							foreach ($_time_sheet_record as $key => $time_sheet_record) 
 							{
-								Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id',$time_sheet_record->payroll_time_sheet_record_id)->delete();
-								$overwritten++;
-								$status = "<div class='text-primary'>OVERWRITTEN</div>";
+								$time_in_record = $time_sheet_record->payroll_time_sheet_in;
+								$time_out_record = $time_sheet_record->payroll_time_sheet_out;
+
+								if(($time_in_record > $value["time_in"] && $value["time_out"]  < $time_out_record)
+								|| ($time_in_record > $value["time_in"] && $value["time_out"]  < $time_out_record) 
+								|| ($time_in_record == $value["time_in"])
+								|| ($time_out_record == $value["time_out"]))
+								{
+									Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id',$time_sheet_record->payroll_time_sheet_record_id)->delete();
+									$overwritten++;
+									$status = "<div class='text-primary'>OVERWRITTEN</div>";
+								}
 							}
+
+							if ($status != "<div class='text-primary'>OVERWRITTEN</div>") 
+							{
+								$success++;
+							}
+							
+							$update = null;
+							$update['payroll_time_sheet_id'] 		= $timesheet_db->payroll_time_sheet_id;
+							$update['payroll_company_id'] 			= $check_employee->payroll_employee_company_id;
+							$update['payroll_time_sheet_in'] 		= $value["time_in"];;
+							$update['payroll_time_sheet_out'] 		= $value["time_out"];;
+							$update['payroll_time_sheet_origin'] 	= $biometric_name;
+
+							if($company != '' || $company != 0 || $company != null)
+			    			{
+			    				$update['payroll_company_id'] = $company;
+			    			}
+							
+							Tbl_payroll_time_sheet_record::insert($update);
+
+							$_time_record[$date][$employee_number]['status'] 			= $status;
+							$_time_record[$date][$employee_number]['biometric_name'] 	= $biometric_name;
+							$_time_record[$date][$employee_number]['company_name'] 		= Tbl_payroll_company::where('payroll_company_id',$update['payroll_company_id'])->value('payroll_company_name');
 						}
-
-						if ($status != "<div class='text-primary'>OVERWRITTEN</div>") 
-						{
-							$success++;
-						}
-						
-						$update = null;
-						$update['payroll_time_sheet_id'] 		= $timesheet_db->payroll_time_sheet_id;
-						$update['payroll_company_id'] 			= $check_employee->payroll_employee_company_id;
-						$update['payroll_time_sheet_in'] 		= $value["time_in"];;
-						$update['payroll_time_sheet_out'] 		= $value["time_out"];;
-						$update['payroll_time_sheet_origin'] 	= $biometric_name;
-
-						if($company != '' || $company != 0 || $company != null)
-		    			{
-		    				$update['payroll_company_id'] = $company;
-		    			}
-						
-						Tbl_payroll_time_sheet_record::insert($update);
-
-						$_time_record[$date][$employee_number]['status'] 			= $status;
-						$_time_record[$date][$employee_number]['biometric_name'] 	= $biometric_name;
-						$_time_record[$date][$employee_number]['company_name'] 		= Tbl_payroll_company::where('payroll_company_id',$update['payroll_company_id'])->value('payroll_company_name');
 					}
 				}
 				else

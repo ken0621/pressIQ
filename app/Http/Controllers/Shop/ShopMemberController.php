@@ -1581,9 +1581,10 @@ class ShopMemberController extends Shop
 
         if(is_numeric($transaction_list_id))
         {
+            $method_id  = request('method_id');
             $success    = "/members?success=1"; //redirect if payment success
             $failed     = "/members?failed=1"; //redirect if payment failed
-            $error      = Payment::payment_redirect($shop_id, $method, $transaction_list_id, $success, $failed);
+            $error      = Payment::payment_redirect($shop_id, $method, $transaction_list_id, $success, $failed, false, $method_id);
         }
         else
         {

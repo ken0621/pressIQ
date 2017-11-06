@@ -64,7 +64,8 @@ class ProductOrderController2 extends Member
             }
             if($active_tab == "unconfirmed")
             {
-                $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a> | ';
+                $data["_raw_table"][$key]->action = '<a href="javascript:" class="popup" link="/member/ecommerce/product_order2/details?id=' . $raw_table->transaction_list_id . '" size="lg">VIEW DETAILS</a> | ';
+                $data["_raw_table"][$key]->action .= '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a> | ';
                 $data["_raw_table"][$key]->action .= '<a link="/member/ecommerce/product_order2/confirm_payment?id='. $raw_table->transaction_list_id .'" class="popup" size="md">CONFIRM</a> | ';
                 $data["_raw_table"][$key]->action .= '<a link="/member/ecommerce/product_order2/reject_payment?id='. $raw_table->transaction_list_id .'" class="popup" size="md">REJECT</a>';
             }
@@ -94,6 +95,23 @@ class ProductOrderController2 extends Member
 
         $url = $this->user_info->upload_server . $proof;
         return redirect($url);
+    }
+    public function details()
+    {
+        $transaction_list_id    = request("id");
+        $transaction_list       = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
+        $details                = $transaction_list->payment_details;
+    
+        if (is_serialized($details)) 
+        {
+            $data["details"]               = unserialize($details);
+        }
+        else
+        {
+            $data["details"]               = [];
+        }
+
+        return view("member.product_order2.details", $data);
     }
     public function payref()
     {

@@ -85,7 +85,7 @@ class Press_Release_Controller extends Member
     }
 
     public function send_email(Request $request)
-    
+
     {
         try 
         {
@@ -150,7 +150,7 @@ class Press_Release_Controller extends Member
         
     }
 
-<<<<<<< HEAD
+
    
     public function analytics()
     {
@@ -196,7 +196,7 @@ class Press_Release_Controller extends Member
         
         return view("member.email_system.analytics_press_release",$datas);
     }
-=======
+
     /*public function get_recipient_info()
     {
         $email_address=
@@ -204,5 +204,4 @@ class Press_Release_Controller extends Member
     }
 */
 
->>>>>>> 000465eff182b97d9850a9ed70a28c8ae6536ead
 }

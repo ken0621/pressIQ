@@ -78,6 +78,11 @@ class Transaction
         $store["create_update_proof"] = $details;
         session($store);
     }
+    public static function create_update_proof_details($details)
+    {
+        $store["create_update_proof_details"] = $details;
+        session($store);
+    }
     public static function create_set_method($method)
     {
         $store["create_set_method"] = $method;
@@ -283,6 +288,12 @@ class Transaction
         {
             $update["transaction_payment_proof"] = session('create_update_proof');
             session()->forget('create_update_proof');
+        }
+
+        if (session('create_update_proof_details')) 
+        {
+            $update["payment_details"] = serialize(session('create_update_proof_details'));
+            session()->forget('create_update_proof_details');
         }
 
         if($balance == 0)
@@ -542,7 +553,7 @@ class Transaction
         {
             $data[$key]->customer_name = Transaction::getCustomerNameTransaction($value->transaction_id);
             
-            if(session('get_transaction_customer_details'))
+            if(session('get_transaction_customer_details') || session('get_transaction_customer_details_v2'))
             {
                 $data[$key]->phone_number           = $value->customer_mobile or $value->contact;
             }

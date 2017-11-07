@@ -47,10 +47,10 @@
 								<div class="color" style="background-color: #8E5EA2"></div>
 								<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
 							</div>
-							<div class="holder">
+							<!-- <div class="holder">
 								<div class="color"></div>
 								<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
-							</div>
+							</div> -->
 							<div class="holder">
 								<div class="color"></div>
 								<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>

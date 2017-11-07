@@ -28,5 +28,6 @@ Route::group(array('prefix' => '/member/cashier'), function()
 
 	/* COMMISSION CALCULATOR */
 	AdvancedRoute::controller('/commission_calculator', 'Member\CommissionCalculatorController');
+	AdvancedRoute::controller('/sales_agent', 'Member\SalesAgentController');
 	/* End */
 });

@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Globals\Invoice;
 use App\Globals\Utilities;
 use App\Globals\AuditTrail;
+use App\Globals\CommissionCalculator;
 class AgentPositionController extends Member
 {
     /**
@@ -41,7 +42,8 @@ class AgentPositionController extends Member
         $access = Utilities::checkAccess("pis-agent-position","add");
         if($access != 0)
         {
-         return view('member.employee.employee_position.employee_position_add');
+           $data['commission'] = CommissionCalculator::check_settings($this->user_info->shop_id);
+           return view('member.employee.employee_position.employee_position_add',$data);
         }
         else
         {
@@ -55,6 +57,7 @@ class AgentPositionController extends Member
         if($access != 0)
         {
             $data["edit"] = Tbl_position::where("position_id",$id)->first();
+            $data['commission'] = CommissionCalculator::check_settings($this->user_info->shop_id);
 
             return view('member.employee.employee_position.employee_position_edit',$data);
         }
@@ -73,9 +76,12 @@ class AgentPositionController extends Member
         $data["status_message"] = null;
 
         $position_name = Request::input("position_name");
-        $update["position_name"] = $position_name;
+        $commission_percent = Request::input("commission_percent") != null ? Request::input("commission_percent") : 0;
 
-        $rule["position_name"] = "required|unique:tbl_position,position_name,".$id.",position_id";
+        $update["position_name"] = $position_name;
+        $update["commission_percent"] = $commission_percent;
+
+        $rule["position_name"] = "required";
 
          $validation = Validator::make($update, $rule);
 
@@ -142,9 +148,11 @@ class AgentPositionController extends Member
         $data["status_message"] = null;
         $position_name = Request::input("position_name");
         $position_code = Request::input("position_code");
+        $commission_percent = Request::input("commission_percent") != null ? Request::input("commission_percent") : 0;
 
         $insert["position_name"] = $position_name;
         $insert["position_code"] = $position_code;
+        $insert["commission_percent"] = $commission_percent;
         $insert["position_created"] = Carbon::now();
         $insert["position_shop_id"] = $this->user_info->shop_id;
 

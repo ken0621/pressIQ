@@ -120,5 +120,4 @@ class Tbl_payroll_employee_basic extends Model
     {
     	$query->join("tbl_payroll_shift_time", "tbl_payroll_shift_time.shift_day_id", "=", "tbl_payroll_shift_day.shift_day_id");
     }
-
 }

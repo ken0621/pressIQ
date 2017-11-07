@@ -84,14 +84,10 @@ function create_commission_calculator()
 			width : '100%',
 			onChangeValue : function()
 			{
-				if($(this).val() != '')
+				if($(this).val())
 				{
 					agent_commission_percent = parseFloat($(this).find("option:selected").attr('commission-percent')) / 100;
 					event_compute_commission();
-				}
-				else
-				{
-					agent_commission_percent = 0;
 				}
 			}
 		});
@@ -116,6 +112,12 @@ function create_commission_calculator()
 		$('.compute-all').bind('keyup', function()
 		{
 			event_compute_commission();
+		});
+		$('.discount-auto-add-comma').unbind('keyup');
+		$('.discount-auto-add-comma').bind('keyup', function()
+		{
+			$(this).val(auto_comma($(this).val()));	
+			event_compute_commission();		
 		});
 	}
 	function event_change_tcp()
@@ -180,8 +182,8 @@ function create_commission_calculator()
 		{
 			tcp = (parseFloat(tcp_string.substring(0, tcp_string.indexOf('%'))) / 100);
 		}
-		var amount_tcp = amount_tc * tcp;
-		$('.amount-tcp1').html('P '+number_format(amount_tcp));
+		var amount_tcp1 = amount_tc * tcp;
+		$('.amount-tcp1').html('P '+number_format(amount_tcp1));
 
 		ndp = 0;
 		if(ndp_string.indexOf('%') > 0)
@@ -191,10 +193,14 @@ function create_commission_calculator()
 		var amount_ndp = amount_tc * ndp;
 		$('.amount-ndp').html('P '+number_format(amount_ndp));
 
+		$('.input-tcp').val(amount_tcp);
+		$('.input-tc').val(amount_tc);
+		$('.input-loanable-amount').val(amount_loanable);
 		$('.c-amount-tsp').html(number_format(tsp, false));
 		$('.c-amount-disc').html(number_format(discount, false));
 		$('.c-amount-tax').html(number_format(tax));
 		$('.c-amount-commission').html((agent_commission_percent * 100) + '%');
+		$('.c-amount-dp').html((downpayment * 100) + '%');
 	}
 	function event_accept_number_only()
 	{
@@ -247,6 +253,27 @@ function create_commission_calculator()
 		
 		return parseFloat(number);
 	}
+	function auto_comma(Num)
+	{ //function to add commas to textboxes
+        Num += '';
+        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+        x = Num.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        return x1 + x2;
+    }
 
 
+}
+function success_commission(data)
+{
+	toastr.success('Success');
+	setInterval(function()
+	{
+		location.reload();
+	},2000);
 }

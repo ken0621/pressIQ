@@ -65,6 +65,7 @@ class PayrollReportController extends Member
 		$year = 2017;
 		$shop_id = $this->shop_id();
 		$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
+		// dd($contri_info);
 		$data["contri_info"] = $contri_info; 
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
@@ -320,9 +321,9 @@ class PayrollReportController extends Member
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
 
-			AuditTrail::record_logs("DOWNLOAD","SSS REPORT",$this->shop_id(),"","");
+			// AuditTrail::record_logs("DOWNLOAD","SSS REPORT",$this->shop_id(),"","");
 
-			// dd($data);
+			dd($data);
 
 			Excel::create("Government Forms SSS",function($excel) use ($data)
 			{
@@ -494,13 +495,13 @@ class PayrollReportController extends Member
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
+		
 		$data = $this->get_total_payroll_register($data);
 		
-		// dd($data["_employee"]);
 		$data['filtering_company']= $period_company_id;
 		$data['_filter_company'] = Tbl_payroll_company::where('payroll_parent_company_id',$data["company"]->payroll_company_id)->get();
 
-		// dd($data);
+		
 
 		return view('member.payrollreport.payroll_register_report_period',$data);
 	}
@@ -664,6 +665,7 @@ class PayrollReportController extends Member
 
 		foreach($data["_employee"] as $key => $employee)
 		{
+
 			$payroll_group_salary_computation = Tbl_payroll_employee_contract::Group()->where('tbl_payroll_employee_contract.payroll_employee_id',$employee->payroll_employee_id)->first();
 
 			$total_er = $employee->sss_er + $employee->philhealth_er +  $employee->pagibig_er;

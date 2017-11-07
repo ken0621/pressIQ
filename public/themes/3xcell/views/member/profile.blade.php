@@ -12,10 +12,10 @@
 				<div class="profile-status">
 					<table>
 						<tr>
-							<td class="blue">
+							<!-- <td class="blue">
 								<div class="status-number">{{ $customer_summary["display_slot_count"] }}</div>
 								<div class="status-label">Slot Owned</div>
-							</td>
+							</td> -->
 							<td class="orange">
 								<div class="status-number">{{ $wallet->display_current_wallet }}</div>
 								<div class="status-label">Current Wallet</div>
@@ -23,15 +23,15 @@
 						</tr>
 					</table>
 				</div>
-				@if($mlm == 1)
-				<div class="profile-lead">
+	
+				<!-- <div class="profile-lead">
 					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
 						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
 					</a>
-					<!-- Modal -->
+					Modal
 					<div id="leads_modal" class="modal fade leads-modal" role="dialog">
 					   <div class="modal-dialog">
-					      <!-- Modal content-->
+					      Modal content
 					      <div class="modal-content">
 					         <div class="modal-header">
 					            {{-- <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
@@ -48,8 +48,8 @@
 					      </div>
 					   </div>
 					</div>
-				</div>
-				@endif
+				</div> -->
+				
 				<div class="profile-about">
 					<div class="title">About Me</div>
 					<table>
@@ -101,7 +101,7 @@
 					   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					   		<div class="row clearfix">
 					   			<div class="col-md-6">
-					   				<div class="form-group">
+					   				<!-- <div class="form-group">
 							   			<label>First Name</label>
 							   			<input type="text" class="form-control" name="first_name" value="{{ $profile->first_name }}">
 							   		</div>
@@ -112,7 +112,7 @@
 							   		<div class="form-group">
 							   			<label>Last Name</label>
 							   			<input type="text" class="form-control" name="last_name" value="{{ $profile->last_name }}">
-							   		</div>
+							   		</div> -->
 							   		<div class="form-group">
 							   			<label>Birth Date</label>
 							   			<div style="margin-top: 5px;">
@@ -267,7 +267,7 @@
 				   </div>
 				   @endif
 				   <!-- ADD BENEFICIARY -->
-				   <div id="add_beneficiary" class="tab-pane fade in active">
+				   <div id="add_beneficiary" class="tab-pane fade in">
 				   	<div class="beneficiary_success_message hidden">
 				   		<div class="alert alert-success">
 				   			<strong>Success!</strong> Your beneficiary has been successfully added.

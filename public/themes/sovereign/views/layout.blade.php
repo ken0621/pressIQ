@@ -14,12 +14,13 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,600|Source+Sans+Pro:400,600,700" rel="stylesheet">
     <!-- GLOBAL CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push-sidenav.css">
     @include("frontend.ghead")
     <!-- OTHER CSS -->
     @yield("css")
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
-<body>
+<body class="pushmenu-push">
     <div class="loader hide">
         <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
@@ -76,11 +77,13 @@
         </div>
         <div class="header-nav-middle">
             <div class="container clearfix">
+                
                 <div class="pull-left">
                     <div class="logo">
                         <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/logo.jpg">
                     </div>
                 </div>
+
                 <div class="pull-right">
                     <div class="info">
                         <div class="holder">

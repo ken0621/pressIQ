@@ -79,6 +79,11 @@ class Transaction
         $store["create_update_proof"] = $details;
         session($store);
     }
+    public static function create_update_proof_details($details)
+    {
+        $store["create_update_proof_details"] = $details;
+        session($store);
+    }
     public static function create_set_method($method)
     {
         $store["create_set_method"] = $method;
@@ -299,6 +304,12 @@ class Transaction
         {
             $update["transaction_payment_proof"] = session('create_update_proof');
             session()->forget('create_update_proof');
+        }
+
+        if (session('create_update_proof_details')) 
+        {
+            $update["payment_details"] = serialize(session('create_update_proof_details'));
+            session()->forget('create_update_proof_details');
         }
 
         if($balance == 0)

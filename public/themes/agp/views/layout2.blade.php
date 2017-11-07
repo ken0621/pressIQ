@@ -82,6 +82,7 @@
                     @if($mlm_member)
                     <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary">GENEALOGY</a> </li>
                     <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">REPORTS</a> </li>
+                    <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/lead-list">LEAD LIST</a> </li>
                     <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
                         @if($customer)
                             <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>

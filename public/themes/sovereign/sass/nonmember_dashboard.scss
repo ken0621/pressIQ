@@ -612,7 +612,10 @@ $text-dark: #272c2f;
 	}
 }
 
-
+.modal-open 
+{
+    overflow: scroll;
+}
 
 /* Failed */
 .popup-failed

@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,600|Source+Sans+Pro:400,600,700" rel="stylesheet">
     <!-- GLOBAL CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push-sidenav.css">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
     @include("frontend.ghead")
     <!-- OTHER CSS -->
     @yield("css")
@@ -77,7 +77,47 @@
         </div>
         <div class="header-nav-middle">
             <div class="container clearfix">
-                
+
+                <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
+                <nav class="pushmenu pushmenu-left">
+
+                    @if($customer)
+                    <div class="space1"></div>
+                    <span>BROWSE</span>
+                    <ul class="links">
+                        <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">HOME</a> </li>
+                        <li class="nav-ext"> <a href="javascript:">PRODUCTS</a> </li>
+                        <li class="nav-ext"> <a href="/about">COMPANY</a> </li>
+                        <li class="nav-ext"> <a href="/contact">CONTACT US</a> </li>
+                    </ul>
+                    
+                    <div class="space2"></div>
+                    <span>MEMBERS AREA</span>
+                    <ul class="links">
+                        <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">DASHBOARD</a> </li>
+                        <li> <a href="/members/profile">PROFILE</a> </li>
+                        @if($mlm_member)
+                        <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary">GENEALOGY</a> </li>
+                        <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">REPORTS</a> </li>
+                        <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
+                            @if($customer)
+                                <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                            @endif
+                        @else
+                        @endif
+                    </ul>
+                    @else
+                        <div class="space1"></div>
+                        <span>BROWSE</span>
+                        <ul class="links">
+                            <li> <a href="/">HOME</a> </li>
+                            <li class="nav-ext"> <a href="javascript:">PRODUCTS</a> </li>
+                            <li class="nav-ext"> <a href="/about">COMPANY</a> </li>
+                            <li class="nav-ext"> <a href="/contact">CONTACT US</a> </li>
+                        </ul>
+                    @endif
+                </nav>
+
                 <div class="pull-left">
                     <div class="logo">
                         <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/logo.jpg">
@@ -176,12 +216,14 @@
     </div>
 
     @include("frontend.gfoot")
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     <script type="text/javascript" src="/assets/slick/slick.min.js"></script>
     <script type="text/javascript" src="/assets/front/js/global.js"></script>
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/assets/member/global.js"></script>
 
     <script type="text/javascript">
+
     function submit_done(data)
     {
         if (data.from == "login") 
@@ -213,20 +255,24 @@
             }
         }
     }
+
     function click_submit_button(ito)
     {
         $('.global-submit').submit();
         $('.butonn_register').attr("disabled", true);
     }
+
     function get_sponsor_info_via_membership_code(ito)
     {
         var membership_code = $(ito).val();
         get_customer_view(membership_code);
     }
+
     function get_customer_view(membership_code)
     {
         $('#sponsor_info_get').load('/mlm/register/get/membership_code/' + membership_code);
     }
+    
     </script>
     @yield("script")
     </body>

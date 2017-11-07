@@ -199,6 +199,7 @@ class CommissionCalculator
 				$update['is_released'] = Self::check_ndp_paid_all($check->commission_id);			
 			}
 			Tbl_commission_invoice::where('invoice_id',$invoice_id)->update($update);
+			Self::update_tcp($check->commission_id);
 		}
 	}
 	public static function check_ndp_paid_all($commission_id)
@@ -212,6 +213,17 @@ class CommissionCalculator
 			$return = 1;
 		}
 		return $return;
+	}
+	public static function update_tcp($commission_id)
+	{
+		$shop_id = Self::getShopId();
+		$total_month = Self::get_computation($shop_id, $commission_id)['month_amort']; 
+		$total_paid_month = Tbl_commission_invoice::where('commission_id',$commission_id)->where('commission_type','NDPC')->where('invoice_is_paid',1)->count();
+		if($total_month == $total_paid_month)
+		{
+			$update['is_released'] = 1;	
+			Tbl_commission_invoice::where('commission_id',$commission_id)->where('commission_type','TCPC')->update($update);
+		}
 	}
 	public static function getShopId()
     {

@@ -129,6 +129,7 @@ class MLM_PlanController extends Member
             $update['enable_privilege_system']              = Request::input('enable_privilege_system');
 
             $update_membership_privilege["membership_privilege"] = 0;
+            $update_membership_privilege["membership_restricted"] = 0;
             Tbl_membership::where("shop_id",$shop_id)->update($update_membership_privilege);
 
             if(Request::input("enable_privilege_system") == 1)
@@ -138,6 +139,12 @@ class MLM_PlanController extends Member
                     $update_membership_privilege["membership_privilege"] = 1;
                     Tbl_membership::where("shop_id",$shop_id)->where("membership_id",Request::input("membership_chosen_id"))->update($update_membership_privilege);
                 }
+            }
+
+            if(Request::input("membership_restricted_id") != 0)
+            {
+                $update_membership_privilege["membership_restricted"] = 1;
+                Tbl_membership::where("shop_id",$shop_id)->where("membership_id",Request::input("membership_restricted_id"))->update($update_membership_privilege);
             }
 
     		// end
@@ -2810,7 +2817,7 @@ class MLM_PlanController extends Member
         {
             $insert["level_end"]                            = Request::input("level_end");
             $insert["advertisement_income"]                 = Request::input("advertisement_income");
-            $insert["advertisement_income_gc"]               = Request::input("advertisement_income_gc");
+            $insert["advertisement_income_gc"]              = Request::input("advertisement_income_gc");
             $insert["shop_id"]                              = $shop_id;
             Tbl_advertisement_bonus_settings::insert($insert);
         }

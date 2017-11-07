@@ -26,6 +26,7 @@ use App\Globals\Columns;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_brown_rank;
 use App\Models\Tbl_membership_code;
+use App\Models\Tbl_leadership_advertisement_points;
 use DB;
 use Redirect;
 use Request;
@@ -388,52 +389,68 @@ class MlmDeveloperController extends Member
         $membership_code_id         = Self::create_slot_submit_create_code($customer_id, $membership_package_id);
         $slot_id                    = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id,null,Carbon::now());
         
-        /* RANDOM WHILE PLACEMENT IS STILL TAKEN */
-        if(Request::input("placement") == "")
+        /*3xcell Membership Restriction*/
+        $membership_data   = Tbl_membership_package::where("membership_package_id",$membership_package_id)->first();
+        if($membership_data)
         {
-            if(isset($slot_id["message"]))
-            {
-                if($slot_id["message"] == "Placement Alread Taken")
-                {
-                    while($slot_id["message"] == "Placement Alread Taken")
-                    {
-                        $slot_placement = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->value("slot_id"); 
-                        $slot_id = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id,null,Carbon::now());
-                    }
-                }
-            }
+            $membership_restriction_id = $membership_data->membership_id;
         }
-
-        if(isset($slot_id["status"]))
+        $check_restriction = MLM2::check_membership_restriction($membership_restriction_id,$slot_sponsor);
+        if($check_restriction == 1)
         {
             $return["status"]        = "error";
-            $return["message"]       = $slot_id["message"];
+            $return["message"]       = "Sponsor cannot recruit this type of membership.";
+            echo json_encode($return);
         }
         else
-        {
-            $self_direct_referral_pv = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
-            if($slot_sponsor != null)
+        {  
+            /* RANDOM WHILE PLACEMENT IS STILL TAKEN */
+            if(Request::input("placement") == "")
             {
-                Mlm_compute::entry($slot_id);
-            }
-            elseif($self_direct_referral_pv)
-            {
-                if($self_direct_referral_pv->direct_referral_pv_initial_rpv == 1)
+                if(isset($slot_id["message"]))
                 {
-                    $direct_referral_pv_plan = Tbl_mlm_plan::where('shop_id', $shop_id)->where('marketing_plan_enable', 1)->where('marketing_plan_code', 'DIRECT_REFERRAL_PV')->first();
-                    if($direct_referral_pv_plan)
-                    {                    
-                        $slot_new_direct = Tbl_mlm_slot::where('slot_id', $slot_id)->membership()->membership_points()->customer()->first();
-                        Mlm_complan_manager::direct_referral_pv($slot_new_direct);
+                    if($slot_id["message"] == "Placement Alread Taken")
+                    {
+                        while($slot_id["message"] == "Placement Alread Taken")
+                        {
+                            $slot_placement = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->value("slot_id"); 
+                            $slot_id = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id,null,Carbon::now());
+                        }
                     }
                 }
             }
-            
-            $return["status"]        = "success";
-            $return["call_function"] = "create_test_slot_done";
-        }
 
-        echo json_encode($return);
+            if(isset($slot_id["status"]))
+            {
+                $return["status"]        = "error";
+                $return["message"]       = $slot_id["message"];
+            }
+            else
+            {
+                $self_direct_referral_pv = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
+                if($slot_sponsor != null)
+                {
+                    Mlm_compute::entry($slot_id);
+                }
+                elseif($self_direct_referral_pv)
+                {
+                    if($self_direct_referral_pv->direct_referral_pv_initial_rpv == 1)
+                    {
+                        $direct_referral_pv_plan = Tbl_mlm_plan::where('shop_id', $shop_id)->where('marketing_plan_enable', 1)->where('marketing_plan_code', 'DIRECT_REFERRAL_PV')->first();
+                        if($direct_referral_pv_plan)
+                        {                    
+                            $slot_new_direct = Tbl_mlm_slot::where('slot_id', $slot_id)->membership()->membership_points()->customer()->first();
+                            Mlm_complan_manager::direct_referral_pv($slot_new_direct);
+                        }
+                    }
+                }
+                
+                $return["status"]        = "success";
+                $return["call_function"] = "create_test_slot_done";
+            }
+
+            echo json_encode($return);
+        }
     }
     public static function create_slot_submit_random_customer($shop_id)
     {
@@ -805,6 +822,7 @@ class MlmDeveloperController extends Member
         Tbl_mlm_slot_points_log::where("tbl_mlm_slot.shop_id", $shop_id)->join("tbl_mlm_slot", "tbl_mlm_slot.slot_id", "=", "tbl_mlm_slot_points_log.points_log_slot")->delete();
         Tbl_tree_sponsor::where("shop_id", $shop_id)->delete();
         Tbl_tree_placement::where("shop_id", $shop_id)->delete();
+        Tbl_leadership_advertisement_points::where("shop_id", $shop_id)->delete();
 
         $update["slot_binary_left"] = 0;
         $update["slot_binary_right"] = 0;
@@ -817,6 +835,7 @@ class MlmDeveloperController extends Member
         $update["slot_upgrade_points"] = 0;
         $update["stairstep_rank"] = 0;
         $update["current_level"] = 0;
+        $update["advertisement_bonus_distributed"] = 0;
 
         Tbl_mlm_slot::where("shop_id",$shop_id)->update($update);
 

@@ -179,6 +179,19 @@ class Mlm_slot_log
 
 		return $message;
 	}
+	public static function log_constructor_gc($earner, $sponsor,  $log_array)
+	{
+		$label = Mlm_slot_log::get_complan_label($log_array['complan'], $sponsor->shop_id);
+		$message = "Your slot " . $earner->slot_no;
+		$message .= ", earned " . $log_array['earning'];
+		$message .= " GC from " .  $label;
+		$message .= " in level " . $log_array['level'];
+		$message .= " of " . $log_array['level_tree'];
+		$message .= ". Sponsor : " . $sponsor->slot_no;
+		$message .= "(" .name_format_from_customer_info($sponsor). ")";
+
+		return $message;
+	}
 	public static function get_complan_label($complan, $shop_id)
 	{
 		$label = Tbl_mlm_plan::where('marketing_plan_code', $complan)

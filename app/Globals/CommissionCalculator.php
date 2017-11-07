@@ -57,8 +57,8 @@ class CommissionCalculator
 	        $item_info[0]['ref_name']	   		= "";
 	        $item_info[0]['ref_id']	   			= 0;
 	        $item_info[0]['quantity']           = 1;
-	        $item_info[0]['rate']               = Self::get_computation($shop_id, $commission_id)['amount_monthly_amort'];
-	        $item_info[0]['amount']             = Self::get_computation($shop_id, $commission_id)['amount_monthly_amort'];
+	        $item_info[0]['rate']               = round(Self::get_computation($shop_id, $commission_id)['amount_monthly_amort'],5);
+	        $item_info[0]['amount']             = round(Self::get_computation($shop_id, $commission_id)['amount_monthly_amort'],5);
 
 	        $total_info['ewt']                  = 0;
 	        $total_info['total_discount_type']  = 0;
@@ -72,7 +72,7 @@ class CommissionCalculator
 		{
 			$ins['invoice_id'] = $value;
 			$ins['commission_id'] = $commission_id;
-			$ins['commission_amount'] = Self::get_computation($shop_id, $commission_id)['amount_monthly_commission'];
+			$ins['commission_amount'] = round(Self::get_computation($shop_id, $commission_id)['amount_monthly_commission'],5);
 			$ins['is_released'] = 0;
 			$ins['invoice_is_paid'] = 0;
 
@@ -144,8 +144,13 @@ class CommissionCalculator
 	{
 		return Tbl_settings::where('settings_key','customer_unit_receive_payment')->where('shop_id',$shop_id)->value('settings_value');
 	}
-	public static function update_commission($salesrep, $invoice_id)
+	public static function update_commission($invoice_id, $rcvpyment_id)
 	{
 		/*UPDATE COMMISSION HERE*/
+		$update['payment_ref_name'] = 'receive_payment';
+		$update['payment_ref_id'] = $rcvpyment_id;
+		$update['invoice_is_paid'] = 0;
+		Tbl_commission_invoice::where('invoice_id',$invoice_id)->update($update);
+
 	}
 }

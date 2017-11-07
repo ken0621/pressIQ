@@ -51,11 +51,12 @@ class CreateTblCommission102717121PM extends Migration
             $table->increments('comm_inv_id');
             $table->integer('invoice_id')->unsigned();
             $table->integer('commission_id')->unsigned();
+            $table->string('commission_type')->comment('NDPC or TCPC');
             $table->string('payment_ref_name')->nullable();
             $table->integer('payment_ref_id')->default(0);
             $table->double('commission_amount');
-            $table->tinyInteger('is_released');
-            $table->tinyInteger('invoice_is_paid');
+            $table->tinyInteger('is_released')->default(0);
+            $table->tinyInteger('invoice_is_paid')->default(0);
 
 
             $table->foreign('commission_id')->references('commission_id')->on('tbl_commission')->onDelete('cascade');

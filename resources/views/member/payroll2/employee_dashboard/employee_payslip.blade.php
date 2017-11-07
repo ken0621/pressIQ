@@ -27,10 +27,10 @@
              </div>
             <div class="col-md-6" >
                 <div> </div>
-                <div style="font-weight: bold; font-size: 22px; text-transform:uppercase;">{{ $employee_company->payroll_company_name }}</div>
-                <div style="font-weight: bold; font-size: 20px;">{{ $period_record->payroll_employee_display_name }}</div>
-                <div style="font-weight: font-size: 16px;">{{ $period_record_start." - ".$period_record_end }}</div>
-                <div style="font-weight: font-size: 16px;">{{ "Release Date: ".$period_record_release_date }}</div>
+                <div style="font-weight: bold; font-size: 21px; text-transform:uppercase;">{{ $employee_company->payroll_company_name }}</div>
+                <div style="font-weight: bold; font-size: 19px;">{{ $period_record->payroll_employee_display_name }}</div>
+                <div style="font-weight: font-size: 15px;">{{ $period_record_start." - ".$period_record_end }}</div>
+                <div style="font-weight: font-size: 15px;">{{ "Release Date: ".$period_record_release_date }}</div>
             </div>
         </div>
         <br>
@@ -39,7 +39,7 @@
                 <div class="payslip-wrapper page">
                     <div class="main-content-holder">
                         <div class="row" >
-                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 18px;">
+                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 17px;">
                                 SALARY COMPUTATION
                             </div>
                         </div>
@@ -107,24 +107,40 @@
                             </table>
                         </div>
                         <div class="row" >
-                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 18px;">
-                                TOTAL DEDUCTION FOR THE YEAR
+                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 17px;">
+                                TOTAL PER YEAR
                             </div>
                         </div>
                         <div class="col-md-12">
                             <table style="width: 100%;" class="table table-bordered">
                                 <tbody>
-                                @foreach ($total_period_record as $total)
-                                  <tr>
-                                      <td style="text-transform:uppercase">{{ $total->net_pay }}</td>
-                                      <td class="text-right"></td>
-                                  </tr>
-                                @endforeach
+                                  
+                                    <tr>
+                                        <td style="text-transform:uppercase">NET PAY</td>
+                                        <td style="font-weight: bold;" class="text-right">{{ payroll_currency($total_net_pay) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-transform:uppercase">WITHHOLDING TAX</td>
+                                        <td style="font-weight: bold;" class="text-right">{{ payroll_currency($total_tax_ee) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-transform:uppercase">SSS PREMIUM</td>
+                                        <td style="font-weight: bold;" class="text-right">{{ payroll_currency($total_sss_ee) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-transform:uppercase">PHIC PREMIUM</td>
+                                        <td style="font-weight: bold;" class="text-right">{{ payroll_currency($total_philhealth_ee) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-transform:uppercase">HDMF PREMIUM</td>
+                                        <td style="font-weight: bold;" class="text-right">{{ payroll_currency($total_pagibig_ee) }}</td>
+                                    </tr>
+                                   
                                 </tbody>
                             </table>
                         </div>
                         <div class="row" >
-                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 18px;">
+                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 17px;">
                                 PERFORMANCE SUMMARY
                             </div>
                         </div>
@@ -149,7 +165,7 @@
                         </div>
                         <div class="col-md-12 row" >
                             <div class="text-right">
-                                ______________________________
+                                ________________________
                             </div>
                         </div>
                         <div class="col-md-12 row" >

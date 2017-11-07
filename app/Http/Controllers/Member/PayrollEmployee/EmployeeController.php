@@ -7,6 +7,7 @@ use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_leave_temp;
+use App\Models\Tbl_payroll_period_company;
 use Illuminate\Http\Request;
 use Redirect;
 use Validator;
@@ -176,15 +177,17 @@ class EmployeeController extends PayrollMember
     	$data["employee_company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
     	$data['period_record'] 		= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
 
+    	
     	$data["period_record_start"]		= date("F d, Y", strtotime($data["period_record"]->payroll_period_start));
 		$data["period_record_end"]			= date("F d, Y", strtotime($data["period_record"]->payroll_period_end));
 		$data["period_record_release_date"]	= date("F d, Y", strtotime($data["period_record"]->payroll_release_date));
 
 		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);
+		//dd($data["period_record"]);
 
 		$other_deductions = 0;
 
-		foreach($data["period_record"]->cutoff_breakdown->_breakdown as $breakdown)
+		foreach($data["period_record"]->cutoff_breakdown->_breakdown as $breakdown)	
 		{
 			if($breakdown["deduct.net_pay"] == true)
 			{
@@ -195,40 +198,85 @@ class EmployeeController extends PayrollMember
 		$data["period_record"]->other_deduction = $other_deductions;
 		$data["period_record"]->total_deduction = $data["period_record"]->philhealth_ee + $data["period_record"]->sss_ee + $data["period_record"]->pagibig_ee  + $other_deductions; // + $employee->tax_ee;
 		
-    	$data['total_period_record'] = Tbl_payroll_time_keeping_approved::where('tbl_payroll_time_keeping_approved.employee_id',$data["period_record"]->employee_id)->get();
-    	
-    	//dd($total);
-    	//dd($data['total_period_record']);
-/*
-    	foreach($data["total_period_record"] as $key => $total)
+		$period_year = date("Y", strtotime($data["period_record"]->payroll_period_end));
+
+		$period_start = $period_year.'-01-01';
+
+		$data['total_period_record'] = Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)
+		->whereBetween('tbl_payroll_period.payroll_period_end',[$period_start, $data['period_record']->payroll_period_end])->get();
+
+		//dd($data['total_period_record']);
+
+		$data['total_net_pay'] = 0 ;
+		$data['total_tax_ee'] = 0 ;
+		$data['total_sss_ee'] = 0 ;
+		$data['total_philhealth_ee'] = 0 ;
+		$data['total_pagibig_ee'] = 0 ;
+
+		foreach($data['total_period_record'] as $total)	
 		{
-			$data["total_period_record"][$key]->total_net_pay = $total;
-			dd($total);
+			//dd($total);
+			$data['total_net_pay'] += $total->net_pay;
+			$data['total_tax_ee'] += $total->tax_ee;
+			$data['total_sss_ee'] += $total->sss_ee;
+			$data['total_philhealth_ee'] += $total->philhealth_ee;
+			$data['total_pagibig_ee'] += $total->pagibig_ee;
 		}
-		$data["total_period_record"][$key]->total_net_pay = $total->net_pay;
-		dd($total->net_pay);*/
-			/*$total = $data["total_period_record"];*/
-			
-			/*$data["_employee"][$key]->cutoff_compute = unserialize($employee->cutoff_compute);
-			$data["_employee"][$key]->cutoff_input =  unserialize($employee->cutoff_input);
-			$data["_employee"][$key]->cutoff_breakdown =  unserialize($employee->cutoff_breakdown);
 
-			$other_deductions = 0;
 
-			foreach($data["_employee"][$key]->cutoff_breakdown->_breakdown as $breakdown)
-			{
-				if($breakdown["deduct.net_pay"] == true)
-				{
-					$other_deductions += $breakdown["amount"];
-				}
-			}
+		//dd($data['total_net_pay']);
 
-			$data["_employee"][$key]->other_deduction = $other_deductions;
-			$data["_employee"][$key]->total_deduction = $employee->philhealth_ee + $employee->sss_ee + $employee->pagibig_ee  + $other_deductions; // + $employee->tax_ee;*/
+		/*$data['total_net_pay'] = 0 ;
+		$data['total_net_pay'] += $data['total_period_record']->net_pay;*/
+
 		
-		
+		/*$data['total_period_record'] = Tbl_payroll_time_keeping_approved::where('employee_id',$this->employee_info->payroll_employee_id)->get();
+
+		dd($data['total_period_record']); */
+
+
+		/*$data['period_record'] = Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)
+		->whereBetween('tbl_payroll_period.payroll_period_id',[$data['period_record']->payroll_period_start, $data['period_record']->payroll_period_end])->first();
+		dd($data['period_record']);*/
+
+		/*
+		$data['total_period_record'] = Tbl_payroll_period::where('payroll_period_id',$this->employee_info->payroll_employee_id)->get();
+		$data['total_period_record'] =*/
+
+		//dd($data['total_period_record']);
+
+		/*$data['total_period_record'] = Tbl_payroll_period::where('tbl_payroll_period.payroll_period_id',$data['period_record']->payroll_period_id)->first();
+
+		dd($data['total_period_record']);*/
+
+		/*$data['total_period_record'] = Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)
+		->whereBetween('tbl_payroll_period.payroll_period_id',[$data['period_record']->payroll_period_start, $data['period_record']->payroll_period_end])->first();
+*/
+		//dd($data['total_period_record']);
+
+
+
+		/*$total_net_pay = Tbl_payroll_period::whereBetween("payroll_period_id", [$data['period_record']->payroll_period_start, $data['period_record']->payroll_period_end])->first();
+
+		dd($total_net_pay);
+
+
+		$data['total_period_record'] = Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)
+		->where('tbl_payroll_period_company.payroll_period_company_id',$data['period_record']->payroll_period_company_id)
+		->whereBetween('tbl_payroll_period.payroll_period_id',[$data['period_record']->payroll_period_start, $data['period_record']->payroll_period_end])->get();
+
+		dd($data['total_period_record']);*/
+		/*$data['total_period_record'] = Tbl_payroll_period_company::where("payroll_period_id", $data['period_record']->payroll_period_id)->get();*/
+		/*->whereBetween('payroll_period_id', [$data["period_record_start"], $data["period_record_end"]])->first();*/
+
+		// foreach($data["total_period_record"]->net_pay as $total)
+		// {
+		// 	$data["total_period_record"][$key]->total_net_pay = $total;
+		// 	dd($total);
 	
+		// }
 
+		//return view('member.payroll2.employee_dashboard.employee_payslip', $data);
 		$pdf = view('member.payroll2.employee_dashboard.employee_payslip', $data);
         return Pdf_global::show_pdf($pdf);
         
@@ -281,3 +329,4 @@ class EmployeeController extends PayrollMember
     }
     
 }
+

@@ -33,11 +33,8 @@ Route::any('/member/page/press_release_email/email_sent_press_release', 'Member\
 Route::any('/member/page/press_release_email/email_list_press_release', 'Member\Press_Release_Controller@email_list');
 Route::any('/member/page/press_release_email/recipient_list_press_release', 'Member\Press_Release_Controller@recipient_list');
 Route::any('/member/page/press_release_email/view_send_email_press_release', 'Member\Press_Release_Controller@view_send_email');
-<<<<<<< HEAD
 Route::any('/member/page/press_release_email/analytics_email_press_release', 'Member\Press_Release_Controller@analytics');
 Route::any('/member/page/press_release_email/view_send_email_press_release/sent_email','Member\Press_Release_Controller@pass_id');
 Route::any('/member/page/press_release_email/import_excel','Member\Press_Release_RecipientController@inport_recipient_list');
-=======
->>>>>>> 000465eff182b97d9850a9ed70a28c8ae6536ead
 
 

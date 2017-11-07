@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .table_archive_email
 {
     width:50%;
@@ -36,8 +35,6 @@
     margin-top: 0px;
 }
 
-=======
->>>>>>> 000465eff182b97d9850a9ed70a28c8ae6536ead
 .panel-background
 {
     height:700px !important;   
@@ -151,8 +148,9 @@
 
 .input_chose_email
 {
-    margin-left: 10px;
-    margin-top: 20px;
+    position: absolute;
+    top: 495px;
+    left: 18px;
     width: 120px;  
 }
 
@@ -194,6 +192,7 @@
 .textarea_container
 {
     width:98%;
+    margin-top: -28px;
     margin-left: 10px;
     margin-right: 20px !important;
 }
@@ -221,8 +220,8 @@
 
 .gallery
 {
-    margin-left: 10px;
-    margin-top: 17px;
+    margin-left: -740px;
+    margin-top: 60px;
 }
 
 .save
@@ -349,14 +348,14 @@
 
 .create_news
 {
-	margin-left: 60px;
+    margin-left: 60px;
     font-size: 18px;
     margin-top: 5px;
 }
 
 .header_email
 {
-	border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
 }
 
 .mail-box {

@@ -11,20 +11,20 @@
         <th>Soft bounces</th>
         <th>Clicks</th>
         <th>Opens</th>
-		<th>unique opens</th>
+    <th>unique opens</th>
       </tr>
     </thead>
     <tbody>
 
       <tr>
         <td>{{$_array1->sent}}</td>
-  		<td>{{$_array1->hard_bounces}}</td>
-  		<td>{{$_array1->soft_bounces}}</td>
-  		<td>{{$_array1->clicks}}</td>
-  		<td>{{$_array1->opens}}</td>
-  		<td>{{$_array1->unique_opens}}</td>
+      <td>{{$_array1->hard_bounces}}</td>
+      <td>{{$_array1->soft_bounces}}</td>
+      <td>{{$_array1->clicks}}</td>
+      <td>{{$_array1->opens}}</td>
+      <td>{{$_array1->unique_opens}}</td>
       </tr>  
-	
+  
     </tbody>
   </table>
 </div>

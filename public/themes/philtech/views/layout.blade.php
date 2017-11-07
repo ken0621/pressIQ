@@ -132,17 +132,17 @@
           </button>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
-            <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
-            <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li> 
-            <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
-            <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
-            <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
-            <li class="nav-border {{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">LEGALITIES</a></li>
-            <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li> 
-          </ul>
+        <div class="collapse navbar-collapse navbar-center" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
+                <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
+                <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li> 
+                <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
+                <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
+                <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
+                <li class="nav-border {{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">LEGALITIES</a></li>
+                <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li> 
+            </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
       <div class="sticky-show">
@@ -213,7 +213,7 @@
                 <div class="col-md-2 col-sm-6 match-height">
                     <div class="btm-title">INFORMATION</div>
                     <ul>
-                        <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partners</a></li>
+                        <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partner Merchants</a></li>
                         <li><a href="https://loadcentral.net">E-loading Business</a></li>
 {{--                         <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
                         <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li> --}}

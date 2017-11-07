@@ -254,101 +254,110 @@ class ShopMemberController extends Shop
     {
         $settings = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
         $allow = false;
-        if ($settings->encashment_settings_schedule_type != "none") 
+        if($settings)
         {
-            if (is_serialized($settings->encashment_settings_schedule)) 
+            if ($settings->encashment_settings_schedule_type != "none") 
             {
-                foreach (unserialize($settings->encashment_settings_schedule) as $key => $value) 
+                if (is_serialized($settings->encashment_settings_schedule)) 
                 {
-                    if ($value == "true") 
+                    foreach (unserialize($settings->encashment_settings_schedule) as $key => $value) 
                     {
-                        if ($settings->encashment_settings_schedule_type == "weekly") 
+                        if ($value == "true") 
                         {
-                            if ($key == date("w")) 
+                            if ($settings->encashment_settings_schedule_type == "weekly") 
+                            {
+                                if ($key == date("w")) 
+                                {
+                                    $allow = true;
+                                }
+                            }
+                            elseif($settings->encashment_settings_schedule_type == "monthly")
+                            {
+                                if ($key == date("j")) 
+                                {
+                                    $allow = true;
+                                }
+                            }
+                            else
                             {
                                 $allow = true;
                             }
-                        }
-                        elseif($settings->encashment_settings_schedule_type == "monthly")
-                        {
-                            if ($key == date("j")) 
-                            {
-                                $allow = true;
-                            }
-                        }
-                        else
-                        {
-                            $allow = true;
                         }
                     }
+                }
+            }  
+        
+            if (!$allow) 
+            {
+                if (is_serialized($settings->encashment_settings_schedule)) 
+                {
+                    if ($settings->encashment_settings_schedule_type == "weekly") 
+                    {
+                        echo '<div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                                <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+                            </div>';
+
+                        echo "<h3 class='text-center' style='margin: 25px 0;'>You can only request payout every ";
+                        foreach (unserialize($settings->encashment_settings_schedule) as $key0 => $value0) 
+                        {
+                            if ($value0 == "true") 
+                            {
+                                echo date('l', strtotime("Sunday +{$key0} days")) . " ";
+                            }
+                        }
+                        echo ".</h3>";
+                        
+                        echo '<div class="modal-footer">
+                                <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                            </div>';
+
+                        die();
+                    }
+                    elseif($settings->encashment_settings_schedule_type == "monthly")
+                    {
+                        echo '<div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                                <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+                            </div>';
+
+                        echo "<h3 class='text-center' style='margin: 25px 0;'>You can only request payout every ";
+                        foreach (unserialize($settings->encashment_settings_schedule) as $key0 => $value0) 
+                        {
+                            if ($value0 == "true") 
+                            {
+                                echo ordinal($key0) . " ";
+                            }
+                        }
+                        echo "day of the month.</h3>";
+                        
+                        echo '<div class="modal-footer">
+                                <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                            </div>';
+
+                        die();
+                    }
+                }
+                else
+                {
+                    echo '<div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                            <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+                        </div>';
+
+                    echo "<h3 class='text-center' style='margin: 25px 0;'>You are not allowed to request payout right now.</h3>";
+                    
+                    echo '<div class="modal-footer">
+                            <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        </div>';
+
+                    die();
                 }
             }
         }
-        
-        if (!$allow) 
+        else
         {
-            if (is_serialized($settings->encashment_settings_schedule)) 
-            {
-                if ($settings->encashment_settings_schedule_type == "weekly") 
-                {
-                    echo '<div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">×</button>
-                            <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
-                        </div>';
-
-                    echo "<h3 class='text-center' style='margin: 25px 0;'>You can only request payout every ";
-                    foreach (unserialize($settings->encashment_settings_schedule) as $key0 => $value0) 
-                    {
-                        if ($value0 == "true") 
-                        {
-                            echo date('l', strtotime("Sunday +{$key0} days")) . " ";
-                        }
-                    }
-                    echo ".</h3>";
-                    
-                    echo '<div class="modal-footer">
-                            <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                        </div>';
-
-                    die();
-                }
-                elseif($settings->encashment_settings_schedule_type == "monthly")
-                {
-                    echo '<div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">×</button>
-                            <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
-                        </div>';
-
-                    echo "<h3 class='text-center' style='margin: 25px 0;'>You can only request payout every ";
-                    foreach (unserialize($settings->encashment_settings_schedule) as $key0 => $value0) 
-                    {
-                        if ($value0 == "true") 
-                        {
-                            echo ordinal($key0) . " ";
-                        }
-                    }
-                    echo "day of the month.</h3>";
-                    
-                    echo '<div class="modal-footer">
-                            <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                        </div>';
-
-                    die();
-                }
-            }
-            else
-            {
-                echo '<div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">×</button>
-                        <h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
-                    </div>';
-
-                echo "<h3 class='text-center' style='margin: 25px 0;'>You are not allowed to request payout right now.</h3>";
-                
-                echo '<div class="modal-footer">
-                        <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>';
-            }
+            echo "<h3 class='text-center' style='margin: 25px 0;'> Contact Administrator to create Encashment Settings. </h3>";
         }
     }
     public function getRequestPayout()
@@ -1579,9 +1588,10 @@ class ShopMemberController extends Shop
 
         if(is_numeric($transaction_list_id))
         {
+            $method_id  = request('method_id');
             $success    = "/members?success=1"; //redirect if payment success
             $failed     = "/members?failed=1"; //redirect if payment failed
-            $error      = Payment::payment_redirect($shop_id, $method, $transaction_list_id, $success, $failed);
+            $error      = Payment::payment_redirect($shop_id, $method, $transaction_list_id, $success, $failed, false, $method_id);
         }
         else
         {

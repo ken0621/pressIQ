@@ -400,16 +400,16 @@ class UtilitiesController extends Member
 
             if($user_info->position_rank == 0)
             {
-                $active = Tbl_user_position::shop()->where("position_rank",">", $user_info->position_rank)->orderBy("shop_key")->where("archived", 0)->get();
-                $inactive = Tbl_user_position::shop()->where("position_rank",">", $user_info->position_rank)->orderBy("shop_key")->where("archived", 1)->get();
+                $active = Tbl_user_position::shop()->where("position_rank",">", $user_info->position_rank)->orderBy("shop_key")->where("tbl_user_position.archived", 0)->get();
+                $inactive = Tbl_user_position::shop()->where("position_rank",">", $user_info->position_rank)->orderBy("shop_key")->where("tbl_user_position.archived", 1)->get();
                 $data["is_developer"] = true;
             }
             elseif($user_info->position_rank)
             {
                 $active = Tbl_user_position::where("position_shop_id", $this->user_info->shop_id)
-                                    ->where("position_rank",">", $user_info->position_rank)->where("archived", 0)->get();
+                                    ->where("position_rank",">", $user_info->position_rank)->where("tbl_user_position.archived", 0)->get();
                 $inactive = Tbl_user_position::where("position_shop_id", $this->user_info->shop_id)
-                                    ->where("position_rank",">", $user_info->position_rank)->where("archived", 1)->get();
+                                    ->where("position_rank",">", $user_info->position_rank)->where("tbl_user_position.archived", 1)->get();
             }
 
             $data["_position"]          = $active;

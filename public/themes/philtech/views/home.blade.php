@@ -5,6 +5,32 @@
 	<!-- TOP CONTENT -->
 		<div class="row clearfix">
 			<div class="col-md-3">
+				<div class="grid-holder mobile-splash" style="display: none;">
+					<div class="row-no-padding clearfix">
+						<div class="col-xs-12">
+							<div class="grid-1">
+								<div class="single-slide">
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide1.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.jpg">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12">
+							<div class="row-no-padding clearfix" style="padding-right: 5px;">
+								<div class="col-xs-6 grid-2">
+									<img src="/themes/{{ $shop_theme }}/img/slide/banner2.png">
+								</div>
+								<div class="col-xs-6 grid-2">
+									<img src="/themes/{{ $shop_theme }}/img/slide/banner3.png">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="left-bar-categories">
 					<div class="left-bar-title">
 						<img src="/themes/{{ $shop_theme }}/img/menu.png">
@@ -165,7 +191,7 @@
 				</div>
 			</div>
 			<div class="col-md-9">
-				<div class="grid-holder">
+				<div class="grid-holder mobile-splash-bottom">
 					<div class="row-no-padding clearfix">
 						<div class="col-xs-8">
 							<div class="grid-1">

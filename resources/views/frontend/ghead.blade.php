@@ -28,5 +28,7 @@
 <link rel="stylesheet" type="text/css" href="/assets/wow/css/animate.css">
 {{-- TOASTER --}}
 <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
+{{-- FOOTABLE --}}
+<link rel="stylesheet" type="text/css" href="/assets/front/external_css/footable.bootstrap.css">
 <!-- THEME COLOR -->
 <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">

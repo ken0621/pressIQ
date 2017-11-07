@@ -61,9 +61,9 @@ class DashboardController extends Member
         $data["expense_value"]	= [];
         foreach($data["_expenses"] as $key=>$expense)
         {
-        	$data["_expenses"][$key]->percentage = currency('',(($expense->amount / collect($data["_expenses"])->sum('amount')) * 100))." %";
+        	$data["_expenses"][$key]->percentage = currency('',((@($expense->amount / collect($data["_expenses"])->sum('amount'))) * 100))." %";
         	array_push($data["expense_name"], $expense->account_name);
-        	array_push($data["expense_value"], currency('',(($expense->amount / collect($data["_expenses"])->sum('amount')) * 100)));
+        	array_push($data["expense_value"], currency('',((@($expense->amount / collect($data["_expenses"])->sum('amount'))) * 100)));
         	array_push($data["expense_color"], $this->random_color());
         }
         $data["expense_name"]	= json_encode($data["expense_name"]);

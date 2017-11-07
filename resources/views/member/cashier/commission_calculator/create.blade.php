@@ -24,7 +24,9 @@
                         <div class="col-md-6">
                             <strong>Select Agent</strong>
                             <select class="select-agent form-control input-sm" name="agent_id">
-                                <option commission-percent="8" value="2">Juan Dela Cruz</option>
+                                @foreach($_agent as $agent)
+                                <option commission-percent="{{$agent->commission_percent}}" value="{{$agent->employee_id}}">{{ucwords($agent->first_name.' '.$agent->middle_name.' '.$agent->last_name)}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-6">

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Globals\Customer;
 use App\Globals\Item;
+use App\Globals\SalesAgent;
 use App\Globals\CommissionCalculator;
 
 use Carbon\Carbon;
@@ -27,6 +28,7 @@ class CommissionCalculatorController extends Member
     {
         $data['page'] = "Commission Calculator";
         $data['_customer'] = Customer::getAllCustomer();
+        $data['_agent'] = SalesAgent::get_list($this->user_info->shop_id);
         $data['_item'] = Item::get_all_category_item([2]);
 
         return view('member.cashier.commission_calculator.create',$data);        

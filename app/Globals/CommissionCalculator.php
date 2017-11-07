@@ -105,7 +105,7 @@ class CommissionCalculator
 
         $ins['invoice_id'] = $tcp_invoice_id;
 		$ins['commission_id'] = $commission_id;
-		$ins['commission_amount'] = round(Self::get_computation($shop_id, $commission_id)['amount_loanable'],5);
+		$ins['commission_amount'] = round(Self::get_computation($shop_id, $commission_id)['amount_tcp_comm'],5);
 		$ins['commission_type'] = 'TCPC';
 
 		Tbl_commission_invoice::insert($ins);
@@ -122,6 +122,31 @@ class CommissionCalculator
 		// die(var_dump($comm_item_id));
 		return "success";
 		
+	}
+	public static function per_agent($agent_id)
+	{
+		$get_all = Tbl_commission::invoice()->where('agent_id',$agent_id)->groupBy('comm_inv_id')->get();
+		$return['orverall_comm'] = 0;
+		$return['released_comm'] = 0;
+		$return['for_releasing_comm'] = 0;
+		$return['pending_comm'] = 0;
+		foreach ($get_all as $key => $value) 
+		{
+			if($value->is_released == 1 && $value->invoice_is_paid == 1)
+			{
+				$return['released_comm'] += $value->commission_amount;
+			}
+			if($value->invoice_is_paid == 1 && $value->is_released == 0)
+			{
+				$return['for_releasing_comm'] += $value->commission_amount;
+			}
+			if($value->is_released == 0 && $value->invoice_is_paid == 0)
+			{
+				$return['pending_comm'] += $value->commission_amount;
+			}
+			$return['orverall_comm'] += $value->commission_amount;
+		}
+		return $return;
 	}
 	public static function get_computation($shop_id, $commission_id)
 	{

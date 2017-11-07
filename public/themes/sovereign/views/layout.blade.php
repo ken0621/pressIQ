@@ -223,6 +223,7 @@
     <script type="text/javascript" src="/assets/member/global.js"></script>
 
     <script type="text/javascript">
+
     function submit_done(data)
     {
         if (data.from == "login") 
@@ -254,20 +255,24 @@
             }
         }
     }
+
     function click_submit_button(ito)
     {
         $('.global-submit').submit();
         $('.butonn_register').attr("disabled", true);
     }
+
     function get_sponsor_info_via_membership_code(ito)
     {
         var membership_code = $(ito).val();
         get_customer_view(membership_code);
     }
+
     function get_customer_view(membership_code)
     {
         $('#sponsor_info_get').load('/mlm/register/get/membership_code/' + membership_code);
     }
+    
     </script>
     @yield("script")
     </body>

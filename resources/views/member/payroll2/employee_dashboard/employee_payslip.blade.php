@@ -16,6 +16,34 @@
     <link rel="stylesheet" href="/assets/initializr/css/bootstrap-theme.min.css">
     <!--<link rel="stylesheet" href="/assets/initializr/css/main.css">-->
     {{-- <link rel="stylesheet" href="/assets/front/css/global.css"> --}}
+
+    <style type="text/css">
+      td
+      {
+        padding: 5px !important;
+        font-size: 10px;
+        line-height: 11px;
+      }
+      .payslip-wrapper
+      {
+        page-break-inside: avoid; 
+        /*width: 48.5%; */
+        padding: 10px; 
+        border: 1px solid #bbb; 
+        /*display: inline-block; */
+        vertical-align: top; 
+        top: 0; 
+        background-color: #fff; 
+        margin: 5px;
+        /*float: left;*/
+      }
+      .col-md-6
+      {
+        padding: 0;
+      }
+
+      /*div.breakNow { page-break-inside:avoid; page-break-after:always; }*/
+    </style>
 </head>
 <body>
     <div style="vertical-align: top;">
@@ -27,19 +55,19 @@
              </div>
             <div class="col-md-6" >
                 <div> </div>
-                <div style="font-weight: bold; font-size: 21px; text-transform:uppercase;">{{ $employee_company->payroll_company_name }}</div>
-                <div style="font-weight: bold; font-size: 19px;">{{ $period_record->payroll_employee_display_name }}</div>
-                <div style="font-weight: font-size: 15px;">{{ $period_record_start." - ".$period_record_end }}</div>
-                <div style="font-weight: font-size: 15px;">{{ "Release Date: ".$period_record_release_date }}</div>
+                <div style="font-weight: bold; font-size: 18px; text-transform:uppercase;">{{ $employee_company->payroll_company_name }}</div>
+                <div style="font-weight: bold; font-size: 16px;">{{ $period_record->payroll_employee_display_name }}</div>
+                <div style="font-weight: font-size: 12px;">{{ $period_record_start." - ".$period_record_end }}</div>
+                <div style="font-weight: font-size: 12px;">{{ "Release Date: ".$period_record_release_date }}</div>
             </div>
         </div>
         <br>
         <div class="clearfix">   
             <div class="col-md-12">
-                <div class="payslip-wrapper page">
+            {{--<div class="payslip-wrapper page">--}}
                     <div class="main-content-holder">
                         <div class="row" >
-                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 17px;">
+                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 15px;">
                                 SALARY COMPUTATION
                             </div>
                         </div>
@@ -107,7 +135,7 @@
                             </table>
                         </div>
                         <div class="row" >
-                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 17px;">
+                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 15px;">
                                 TOTAL PER YEAR
                             </div>
                         </div>
@@ -140,10 +168,10 @@
                             </table>
                         </div>
                         <div class="row" >
-                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 17px;">
+                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 15px;">
                                 PERFORMANCE SUMMARY
                             </div>
-                        </div>
+                        </div>    
                         <div class="col-md-12">
                             <table style="width: 100%;" class="table table-bordered">
                                 <tbody>
@@ -157,7 +185,7 @@
                             </table>
                         </div>
                         <div class="col-md-12 row" >
-                            <div class="text-center">
+                            <div style="font-size: 12px;" class="text-center">
                                 I agree with the above salary computation and acknowledge receipt of the same.
                             </div>
                             <br>
@@ -165,11 +193,11 @@
                         </div>
                         <div class="col-md-12 row" >
                             <div class="text-right">
-                                ________________________
+                                ______________________
                             </div>
                         </div>
                         <div class="col-md-12 row" >
-                            <div class="text-right">
+                            <div style="font-size: 12px;" class="text-right">
                                 Signature Over Printed Name
                             </div>
                         </div>

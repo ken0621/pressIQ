@@ -107,6 +107,7 @@ class MLM_PayoutController extends Member
 			$data["settings"] = new \stdClass();
 			$data["settings"]->enchasment_settings_tax = 0;
 			$data["settings"]->enchasment_settings_p_fee = 0;
+			$data["settings"]->enchasment_settings_p_fee_type = 0;
 			$data["settings"]->encashment_settings_o_fee = 0;
 			$data["settings"]->enchasment_settings_minimum = 0;
 			$data["settings"]->encashment_settings_schedule_type = "none";
@@ -157,12 +158,13 @@ class MLM_PayoutController extends Member
 		else
 		{
 			$insert["enchasment_settings_tax"] = doubleval(request("enchasment_settings_tax"));
+			$insert["shop_id"] = $shop_id;
 			$insert["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
-			$update["enchasment_settings_p_fee_type"] = request("enchasment_settings_p_fee_type");
+			$insert["enchasment_settings_p_fee_type"] = request("enchasment_settings_p_fee_type");
 			$insert["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$insert["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
 			$insert["encashment_settings_schedule_type"] = request("encashment_settings_schedule_type");
-			$update["encashment_settings_schedule"] = serialize(request("encashment_settings_schedule"));
+			$insert["encashment_settings_schedule"] = serialize(request("encashment_settings_schedule"));
 
 			Tbl_mlm_encashment_settings::insert($insert);
 		}

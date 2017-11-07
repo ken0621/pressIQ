@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
@@ -271,6 +273,18 @@ $text-dark: #272c2f;
 				{
 					text-align: right;
 					margin-top: 15px;
+					
+					.btn-blue
+					{
+						@include transition(0.2s);
+						background-color: #052093;
+						color: #fff;
+
+						&:hover
+						{
+							opacity: 0.8;
+						}
+					}
 
 					.btn-brown
 					{

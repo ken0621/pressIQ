@@ -145,9 +145,6 @@ Route::any('/register', 'Login\MemberLoginController@register');
 Route::post('/createAccount', 'Frontend\HomeController@createAccount');
 
 
-Route::any('/employee_login', 'Login\EmployeeLoginController@employee_login');
-
-
 Route::group(array('prefix' => '/member/{page}/'), function()
 {
 	//order start
@@ -1189,5 +1186,10 @@ include_once('routes_config/routes_item.php');
 include_once('routes_config/routes_members_area.php');
 
 
+/*PAYROLL EMPLOYEE*/
+include_once('routes_config/routes_payroll_employee.php');
+
+
 Route::get('/ref/{id}', 'Shop\LeadController@ref');
 Route::get('/{id}', 'Shop\LeadController@ref');
+

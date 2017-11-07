@@ -75,6 +75,7 @@ function non_member()
 				data: form_data,
 				success: function(data)
 				{
+					alert(data);
 					if(data == "success")
 					{
 						$("#proceed-modal-1").modal('hide');

@@ -3,7 +3,10 @@
 
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
+
+
 @if(!$mlm_member)
+	<!-- NON-MLM MEMBER -->
 	<div class="dashboard">
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
@@ -26,10 +29,11 @@
 	    </div>
 	</div>
 @else
+	<!-- MLM MEMBER -->
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
+					<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary <a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('members/enter-code')">Create New Slot</a></div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">

@@ -169,7 +169,11 @@ class CashierController extends Member
         {   
             foreach ($cart["_item"] as $key => $value)
             {
-                $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity,'Consume');
+                $item_type = Item::get_item_type($value->item_id);
+                if($item_type == 1)
+                {
+                    $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity,'Consume');
+                }
             }
 
             if(!$destination_warehouse_id && $consume_inventory == 'wis')
@@ -187,9 +191,11 @@ class CashierController extends Member
                     $get_transaction_list = Transaction::get_data_transaction_list($transaction_list_id);
                     $get_item = Transaction::get_transaction_item($transaction_list_id);
                     $remarks = 'Consume in Transaction Number : '.$get_transaction_list->transaction_number;
+
+
                     if($consume_inventory == 'instant')
                     {
-                        Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks);
+                        Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks, $warehouse_id);
                         $validate = 1;
                     }
                     if($consume_inventory == 'wis')

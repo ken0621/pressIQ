@@ -60,8 +60,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 	Route::get('/terms_and_conditions', 'Shop\ShopAboutController@terms_and_conditions'); //MARK FIGS
 
-
-
 	Route::get('/signin', 'Shop\ShopLoginController@signin'); //ROMMEL C.
 
 	Route::get('/blog', 'Shop\ShopBlogController@index');
@@ -69,7 +67,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/payment', 'Shop\ShopPaymentController@index');
 	Route::get('/order_placed', 'Shop\ShopCheckoutController@order_placed');
 	Route::get('/addto_cart', 'Shop\ShopCheckoutController@addtocart');
-	Route::get('/admin', 'Shop\Shop@admin');
 	Route::get('/file/{theme}/{type}/{filename}', 'Shop\Shop@file');
 
 	/*Product search*/
@@ -110,8 +107,10 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 	/* Others */
 	Route::get('/partners', 'Shop\ShopPartnersController@index');
+	Route::get('/partners_views', 'Shop\ShopPartnersController@partners_views');
 	Route::get('/partner-filtering-location', 'Shop\ShopPartnersController@partnerFilterByLocation');
 	Route::get('/legalities', 'Shop\ShopLegalitiesController@index');
+
 
 	Route::get('/manual_checkout', 'Shop\ShopManualCheckout@index');
 	Route::post('/manual_checkout', 'Shop\ShopManualCheckout@submit_proof');

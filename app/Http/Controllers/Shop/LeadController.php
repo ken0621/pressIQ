@@ -2,12 +2,20 @@
 namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_mlm_slot;
+use View;
 
 class LeadController extends Shop
 {
     public function ref($slot_no)
     {
-        $slot = Tbl_mlm_slot::where("slot_no", $slot_no)->where("shop_id", $this->shop_info->shop_id)->first();
+        $this->middleware(function ($request, $next)
+        {  
+            View::share("replicated", "x");
+            return $next($request);
+        });
+
+      
+        $slot = Tbl_mlm_slot::where("slot_no", urldecode($slot_no))->where("shop_id", $this->shop_info->shop_id)->first();
 
         if(!$slot)
         {
@@ -21,7 +29,7 @@ class LeadController extends Shop
 
             if(view()->exists("replicated"))
             {
-                return view("replicated", $data);
+                return view('replicated', $data);
             }
             else
             {

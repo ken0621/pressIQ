@@ -7,7 +7,8 @@ function submit_done_customer(result){
 
 
 var customerlist = new customerlist();
-
+var load_ajax_customer = null;
+var item_search_delay_timer = {};
 function customerlist()
 {
 	init();
@@ -22,18 +23,33 @@ function customerlist()
 	function search()
 	{
 		$(".customer-search").unbind("keyup");
-		$(".customer-search").bind("keyup", function () {
-			 var str = $(this).val();
-			 var value = $(this).attr("data-value");
-			 console.log(value);
-			 var data = {
-			 	str:str,
-			 	archive:value,
-			 	_token:misc('_token')
-			 };
-			 var url = "/member/customer/loadcustomer";
-			 var target = ".panel-customer";
-			 search_ajax(url, data, target);
+		$(".customer-search").bind("keyup", function ()
+		{
+			if($(".customer-search").val() != "")
+			{
+				 var str = $(this).val();
+				 var value = $(this).attr("data-value");
+				 console.log(value);
+				 var data = {
+				 	str:str,
+				 	archive:value,
+				 	_token:misc('_token')
+				 };
+				 var url = "/member/customer/loadcustomer";
+				 var target = ".panel-customer";
+				 
+				if(load_ajax_customer)
+				{
+					load_ajax_customer.abort();
+				}
+
+				clearTimeout(item_search_delay_timer);
+				item_search_delay_timer = setTimeout(function()
+				{					
+					 search_ajax(url, data, target);
+				}, 500);
+
+			}
 		});
 	}
 	function tabsearch()
@@ -52,7 +68,8 @@ function customerlist()
 		});
 	}
 
-	function search_ajax(urls = "", datas = [], target = ""){
+	function search_ajax(urls = "", datas = [], target = "")
+	{
 		$(target).html(misc('loader-16-gray margin-top-20'));
 		$.ajax({
 			url 	: 	urls,
@@ -72,9 +89,10 @@ function customerlist()
 		loadcustomer();
 	}
 
-	function loadcustomer(str = ''){
+	function loadcustomer(str = '')
+	{
 		$(".panel-customer").html('<div class="loader-16-gray margin-top-20"></div>');
-		$.ajax({
+		load_ajax_customer = $.ajax({
 			url 	: 	"/member/customer/loadcustomer",
 			type 	: 	"POST",
 			data 	: 	{

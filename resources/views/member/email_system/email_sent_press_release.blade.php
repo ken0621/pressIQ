@@ -25,7 +25,6 @@
     <table class="table table-hover table_archive_email">
   <thead>
     <tr>
-      <th>Title</th>
       <th>To</th>
       <th>From</th>
       <th>Subject</th>
@@ -35,7 +34,6 @@
   <tbody>
     @foreach($_sent_email as $sent_email)
     <tr>
-      <td>{{$sent_email->email_title}}</td>
       <td>{{$sent_email->to}}</td>
       <td>{{$sent_email->from}}</td>
       <td>{{$sent_email->email_title}}</td>

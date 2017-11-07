@@ -19,6 +19,12 @@
 	                        <!-- <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br> -->
 	                        <!-- <span class="or">OR</span> -->
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
+	                        @if(isset($company_head_id))
+	                        	</br>
+	                        	<span style="color:white">or</span>
+	                        	</br>
+	                        	<a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code no_sponsor_code" company_head_id="{{$company_head_id->slot_no}}">NO SPONSOR?</button></a>
+	                    	@endif
 	                    </div>
 	                </div>
 	            </div>
@@ -41,10 +47,10 @@
 								<div class="color" style="background-color: #8E5EA2"></div>
 								<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
 							</div>
-							<div class="holder">
+							<!-- <div class="holder">
 								<div class="color"></div>
 								<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
-							</div>
+							</div> -->
 							<div class="holder">
 								<div class="color"></div>
 								<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>

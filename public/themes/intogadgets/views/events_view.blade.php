@@ -2,13 +2,17 @@
 @extends('layout')
 <div class="container-fluid">
    <div class="events">
-      <table style="width: 100%;">
+      <div style="font-size: 4.2rem;
+    line-height: 1.19;
+    border-bottom: 0.1rem solid rgba(0,0,0,0.15);
+    padding-bottom: 2rem;
+    padding-top: 1.2rem;
+    margin-bottom: 20px;
+    font-weight: 300;">{{ $post->post_title }}</div>
+      <table style="width: 100%; table-layout: fixed;">
          <tbody>
             <tr>
-               <td colspan="2"><div class="title">{{ $post->post_title }}</div></td>
-            </tr>
-            <tr>
-               <td class="main-event">
+               <td class="main-event" style="overflow: auto;">
                   <div class="img">
                      <img src="{{ $post->post_image }}">
                   </div>
@@ -22,7 +26,7 @@
                         @if($i == 0)
                         <div class="holder first" onClick="location.href='/events/view/{{ $related->main_id }}'" style="cursor: pointer;">
                            <div class="img">
-                              <img class="4-3-ratio" src="{{ $related->post_image }}">
+                              <img class="cova" src="{{ $related->post_image }}">
                            </div>
                            <div class="side-content">{{ $related->post_title }}</div>
                         </div>
@@ -31,7 +35,7 @@
                            <tbody>
                               <tr>
                                  <td class="img">
-                                    <img class="4-3-ratio" src="{{ $related->post_image }}">
+                                    <img style="height: 75px; width: 100%; object-fit: cover;" src="{{ $related->post_image }}">
                                  </td>
                                  <td class="side-content">{{ $related->post_title }}</td>
                               </tr>
@@ -58,6 +62,20 @@
 @endsection
 @section('css')
 <link rel="stylesheet" href="resources/assets/frontend/css/events-view.css?version=1">
+<style type="text/css">
+@media screen and (max-width: 991px)
+{
+   table tbody, table tr
+   {
+      display: block;
+   }
+}
+.cova
+{
+   object-fit: cover !important;
+   max-width: 100%;
+}
+</style>
 @endsection
 @section('script')
 <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>

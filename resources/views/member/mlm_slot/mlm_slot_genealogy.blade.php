@@ -27,7 +27,7 @@
                 <div class="tree">
                     <ul>
                         <li class="width-reference">
-                            <span class="downline parent parent-reference PS" x="{{ $slot->slot_id }}">   
+                            <span class="downline parent parent-reference PS" x="{{ $slot->slot_id }}" style="{{$genealogy_color}};{{$genealogy_border_color}}">   
                                 <div id="info">
                                     <div id="photo">
                                         <img src="/assets/slot_genealogy/member/img/default-image.jpg">

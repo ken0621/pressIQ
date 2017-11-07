@@ -12,8 +12,14 @@ $(document).ready(function(){
 		     success: function(response){
 		         if(response == 'success')
 		         {
+<<<<<<< HEAD
 		         	$('.title_email').val('');
               $('.title').val('');
+=======
+		         	/*$('#myModal_email').modal('hide');*/
+		         	/*$('.from_email').val('');
+		         	$('.to_email').val('');*/
+>>>>>>> 000465eff182b97d9850a9ed70a28c8ae6536ead
 		         	$('.subject_email').val('');
 		         	tinymce.get('texteditor').setContent('');
 		         	alert('message save');
@@ -33,6 +39,7 @@ $(document).ready(function(){
 		var country = $('#country').val();
 		var title_of_journalist = $('#title_of_journalist').val();
     var industry_type = $('#industry_type').val();
+    alert(industry_type);
   	var data = {title_of_journalist:title_of_journalist,country:country, industry_type:industry_type};
 		var url = addParams("/member/page/press_release_email/choose_recipient_press_release",data);
 		$(".recipient_container").load(url+" .recipient_container2",function(){

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .table_archive_email
 {
     width:50%;
@@ -35,6 +36,8 @@
     margin-top: 0px;
 }
 
+=======
+>>>>>>> 000465eff182b97d9850a9ed70a28c8ae6536ead
 .panel-background
 {
     height:700px !important;   
@@ -148,9 +151,8 @@
 
 .input_chose_email
 {
-    position: absolute;
-    top: 495px;
-    left: 18px;
+    margin-left: 10px;
+    margin-top: 20px;
     width: 120px;  
 }
 
@@ -192,7 +194,6 @@
 .textarea_container
 {
     width:98%;
-    margin-top: -28px;
     margin-left: 10px;
     margin-right: 20px !important;
 }
@@ -220,8 +221,8 @@
 
 .gallery
 {
-    margin-left: -740px;
-    margin-top: 60px;
+    margin-left: 10px;
+    margin-top: 17px;
 }
 
 .save

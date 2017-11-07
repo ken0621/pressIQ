@@ -39,6 +39,7 @@ class Page_ThemesController extends Member
     	$insert["company_logo"] = Request::input("company_logo");
         $insert["company_name"] = Request::input("company_name");
 		$insert["company_owner"] = Request::input("company_owner_name");
+		$insert["company_brochure"] = Request::input("company_brochure");
 		$insert["company_contactnumber"] = Request::input("company_contact_number");
 		$insert["company_address"] = Request::input("company_address");
 		$insert["company_location"] = Request::input("company_location");
@@ -56,6 +57,7 @@ class Page_ThemesController extends Member
         $insert["company_logo"] = Request::input("company_logo");
         $insert["company_name"] = Request::input("company_name");
 		$insert["company_owner"] = Request::input("company_owner_name");
+		$insert["company_brochure"] = Request::input("company_brochure");
 		$insert["company_contactnumber"] = Request::input("company_contact_number");
 		$insert["company_address"] = Request::input("company_address");
 		$insert["company_location"] = Request::input("company_location");

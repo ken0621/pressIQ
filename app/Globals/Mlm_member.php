@@ -610,11 +610,37 @@ class Mlm_member
 
     public static function manual_add_slot($shop_id, $customer_id)
     {
+        $check_sponsor        = Tbl_mlm_slot::where("slot_no",Request::input('slot_sponsor'))->where("shop_id",$shop_id)->first();
+        $check_placement      = Tbl_mlm_slot::where("slot_no",Request::input('slot_placement'))->where("shop_id",$shop_id)->first();
+        if($check_sponsor)
+        {
+            $slot_sponsor = $check_sponsor->slot_id;
+        }
+        else
+        {
+            $slot_sponsor = null;
+            $data['response_status'] = "warning_2";
+            $data['error'] = "Sponsor does not exists";
+            return $data;
+        }
+
+        if($check_placement)
+        {
+            $slot_placement = $check_placement->slot_id;
+        }
+        else
+        {
+            $slot_placement = null;
+            $data['response_status'] = "warning_2";
+            $data['error'] = "Placement does not exists";
+            return $data;
+        }
+
         $disabled_validation_code               = Request::input('disabled_validation_code');
         $validate['slot_owner']                 = $customer_id;
         $validate['membership_code_id']         = Request::input('membership_code_id');
         $validate['membership_activation_code'] = Request::input('membership_activation_code');
-        $validate['slot_sponsor']               = Request::input('slot_sponsor');
+        $validate['slot_sponsor']               = $slot_sponsor;
         
         
         $rules['slot_owner']                    = "required";
@@ -641,7 +667,7 @@ class Mlm_member
                 {
                     if($binary_advance->binary_settings_placement == 0)
                     {
-                        $validate['slot_placement'] = Request::input('slot_placement');
+                        $validate['slot_placement'] = $slot_placement;
                         $validate['slot_position']  = Request::input('slot_position');
                         $rules['slot_placement']    = "required";
                         $rules['slot_position']     = "required";

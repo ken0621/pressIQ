@@ -25,8 +25,14 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray" style="border-bottom: 0; margin-bottom: -10px;">
     <ul class="nav nav-tabs">
-        <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Processed</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-money"></i> Pending</a></li>
+        <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-money"></i> Pending</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="done"><a class="cursor-pointer"><i class="fa fa-check"></i> Processed</a></li>
+        {{-- @if($shop_id == 55 && $count_reject == 0) --}}
+        @if($shop_id == 55)
+        <li class="pull-right">
+            <button class="btn btn-primary popup" link="/member/mlm/payout/reject-encashment" size="md" style="margin: 5px;">REJECT ENCASHMENT</button>
+        </li>
+        @endif
     </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">

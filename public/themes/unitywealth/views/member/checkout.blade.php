@@ -19,7 +19,7 @@
 				<div class="bottom-container-content">
 					<div class="row clearfix">
 						<!-- DELIVERY INFORMATION -->
-						<div class="col-md-8">
+						<div class="col-md-8 hidden">
 							<div class="delivery-information">
 								<div class="title-container">
 									Fill Up Delivery Information
@@ -38,7 +38,7 @@
 								<div class="form-container">
 									<div class="form-label">Complete Shipping Address</div>
 									<div class="form-input">
-										<textarea required name="customer_street" placeholder="Type your complete address here"></textarea>
+										<textarea name="customer_street" placeholder="Type your complete address here"></textarea>
 									</div>
 								</div>
 							</div>
@@ -71,7 +71,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-4"></div>
+						<div class="col-md-4 text-center">
 							<!-- CART SUMMARY -->
 							<div class="cart-summary">
 								<div class="top-title row-no-padding clearfix">
@@ -131,12 +132,13 @@
 								<div class="top-title">How do you want to pay?</div>
 								<div class="option">
 									<div class="form-input">
-										<select name="method" required="required">
+										<select name="method" required="required" class="method-id-change">
 											<option value="" hidden>Select Payment Method</option>
 											@foreach($_payment as $payment)
-												<option value="{{ $payment->link_reference_name }}">{{ $payment->method_name }}</option>
+												<option value="{{ $payment->link_reference_name }}" method-id="{{ $payment->method_id }}">{{ $payment->method_name }}</option>
 											@endforeach
 										</select>	
+										<input type="hidden" name="method_id" class="method-id-input">
 									</div>
 								</div>
 								<div class="button-container">
@@ -178,11 +180,13 @@
 @section("script")
 
 <script type="text/javascript">
-	// $(document).ready(function(){
- //    $("#proceed").click(function(){
- //      $("#myModal2").modal('show');
- //    });
- //  });
+$(document).ready(function()
+{
+	$('.method-id-change').change(function(event) 
+	{
+		$('.method-id-input').val($(event.currentTarget).children('option:selected').attr("method-id"));
+	});
+})
 </script>
 
 @endsection

@@ -17,13 +17,18 @@
 
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
+
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
+
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1">
         <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
         
         <!-- OTHER CSS -->
         @yield("css")
+
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css">
+        
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
@@ -55,10 +60,12 @@
                 <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 
                 @if($customer)
+                <div class="wata"></div>
                 <div class="holder"><a href="/members">MY ACCOUNT</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="/members/logout">LOGOUT</a></div>
                 @else
+                <div class="wata"></div>
                 <div class="holder"><a href="/members/login">LOGIN</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="/members/register">REGISTER</a></div>
@@ -125,19 +132,17 @@
           </button>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
-            <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR PARTNERS</a></li>
-            <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li>
-            <li class="nav-border"><a href="http://tour.philtechglobalinc.com">AIRLINE TICKETING</a></li>
-            <li class="nav-border"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">TRAVEL AND TOURS</a></li> 
-            <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
-            <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
-            <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
-            <li class="nav-border {{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">LEGALITIES</a></li>
-            <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li> 
-          </ul>
+        <div class="collapse navbar-collapse navbar-center" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
+                <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
+                <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li> 
+                <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
+                <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
+                <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
+                <li class="nav-border {{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">LEGALITIES</a></li>
+                <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li> 
+            </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
       <div class="sticky-show">
@@ -199,19 +204,19 @@
     <footer>
         <div class="container ftr">
             <div class="row clearfix">
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-4 col-sm-6 match-height">
                     <div class="img-footer">
                         <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech.jpg">
                     </div>
                     <p>PHILTECH, INC. “We provide Business” Is a subsidiary company of ZENAR TELECOMS, INC. with highly experienced both in retail and distribution of technology industry for almost 20years. PHILTE... <a style="color: #fff" href="/about">See more</a></p>
                 </div> 
-                <div class="col-md-2 col-sm-6">
+                <div class="col-md-2 col-sm-6 match-height">
                     <div class="btm-title">INFORMATION</div>
                     <ul>
-                        <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partners</a></li>
+                        <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partner Merchants</a></li>
                         <li><a href="https://loadcentral.net">E-loading Business</a></li>
-                        <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
-                        <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li>
+{{--                         <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
+                        <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li> --}}
                         <li><a href="https://philtechglobalinc.vmoney.com/">E-money</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">Career</a></li>
                         <li><a href="javascript:" onClick="alert('Under Development');">Events</a></li>
@@ -220,7 +225,7 @@
                         <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
                     </ul>
                 </div>
-                <div class="col-md-2 col-sm-6">
+                <div class="col-md-2 col-sm-6 match-height">
                     <div class="btm-title">SHOP</div>
                     <ul>
                         <li><a href="javascript:">DTH Products</a></li>
@@ -234,7 +239,7 @@
                         <li><a href="javascript:">Health & Wellness</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-4 col-sm-6 match-height">
                     <div class="btm-title">CONTACT US</div>
                     <table>
                         <tr>

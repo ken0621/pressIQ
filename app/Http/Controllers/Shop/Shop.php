@@ -28,6 +28,7 @@ class Shop extends Controller
     public $shop_theme;
     public $shop_theme_color;
     public $mlm_member;
+    public $privilage_card_holder;
     public static $customer_info;
     public static $slot_now;
 
@@ -144,11 +145,14 @@ class Shop extends Controller
                 $check_account          = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
                 Self::$customer_info    = $check_account;
                 $mlm_member             = false;
+                $privilage_card_holder  = false;
                 
                 if(Self::$customer_info)
                 {
                     $mlm_member        = MLM2::is_mlm_member($this->shop_info->shop_id, Self::$customer_info->customer_id);
                     $this->mlm_member   = $mlm_member;
+                    $privilage_card_holder = MLM2::is_privilage_card_holder($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                    $this->privelege_card_holder   = $privilage_card_holder;
                 }
 
                 /* Set Profile Image */
@@ -172,6 +176,8 @@ class Shop extends Controller
                 View::share("customer", Self::$customer_info);
                 View::share("mlm_member", $mlm_member);
                 View::share("profile_image", $profile_image);
+                View::share("privilage_card_holder", $privilage_card_holder);
+
                 return $next($request);
             });
         }

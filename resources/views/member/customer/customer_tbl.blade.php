@@ -33,9 +33,10 @@
                     <li><a href="/member/customer/receive_payment">Receive Payment</a></li>
                     <li><a href="/member/customer/invoice">Create Invoice</a></li>
                     <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
+                    <li><a class="popup" link="/member/customer/viewlead/{{$customer->customer_id}}" size="md" data-toggle="modal">View Lead</li>   
                     <!-- <li><a href="/member/customer/estimate">Create Estimate</li> -->
                     <li><a href="javascript:" class="active-toggle" data-content="{{$customer->customer_id1}}" data-target="#tr-customer-{{$customer->customer_id1}}" data-value="{{$customer->archived}}" data-html="{{$customer->archived == 0? 'inactive':'active'}}">{{$customer->archived == 0? 'Make Inactive':'Make active'}}</a></li>
-                    <li><a href="javascript:" class="popup" link="/member/customer/customeredit/{{$customer->customer_id1}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
+                    <li><a href="javascript:" class="popup" link="/member/customer/customeredit/{{$customer->customer_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
                   </ul>
                 </div>
             </td>

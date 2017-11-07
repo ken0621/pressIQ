@@ -371,7 +371,6 @@ function submit_done(data)
 				$('.modal-content-global .close').trigger("click");
 				data.element.modal("hide");
 		});
-		
 	}
 }
 

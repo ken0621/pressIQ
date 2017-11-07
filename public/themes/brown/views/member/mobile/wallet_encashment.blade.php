@@ -17,25 +17,53 @@
             </div>
             <div class="title">Enchashment History</div>
             <div class="data-table card">
-                <table>
+                <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Release Date</th>
-                            <th class="label-cell">Method</th>
-                            <th class="numeric-cell">Amount</th>
-                            <th class="numeric-cell">Tax</th>
-                            <th class="numeric-cell">Sub Total</th>
+                            <th class="text-left" width="200px">Date</th>
+                            <th class="text-center">SLOT</th>
+                            <th class="text-center" width="100px">Method</th>
+                            <th class="text-center" width="200px">Status</th>
+                            <th class="text-right" width="180px">Amount</th>
+                            <th class="text-right" width="150px">Tax</th>
+                            <th class="text-right" width="150px">Fee</th>
+                            <th class="text-right" width="180px">Sub Total</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td></td>
-                            <td class="label-cell"> </td>
-                            <td class="numeric-cell"> </td>
-                            <td class="numeric-cell"> </td>
-                            <td class="numeric-cell"> </td>
-                        </tr>
+                        @if(count($_encashment) > 0)
+                            @foreach($_encashment as $encashment)
+                            <tr>
+                                <td class="text-left">{{ $encashment->display_date }}</td>
+                                <td class="text-center">
+                                    <div>{{ $encashment->slot_no }}</div>
+                                </td>
+                                <td class="text-center">{!! $encashment->log !!}</td>
+                                <td class="text-center"><b>{{ $encashment->wallet_log_payout_status }}</b></td>
+                                <td class="text-right"><b>{!! $encashment->display_wallet_log_request !!}</b></td>
+                                <td class="text-right">{!! $encashment->display_wallet_log_tax !!}</td>
+                                <td class="text-right">{!! $encashment->display_wallet_log_service_charge !!}</td>
+                                <td class="text-right"><a href='javascript:'><b>{!! $encashment->display_wallet_log_amount !!}</b></a></td>
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td class="text-center" style="padding: 50px;" colspan="8">NO PAYOUT RELEASE YET</td>
+                            </tr>
+                        @endif
                     </tbody>
+                    <tfoot style="background-color: #f3f3f3; font-size: 15px;">
+                        <tr>
+                            <td class="text-right"></td>
+                            <td class="text-right"></td>
+                            <td class="text-right"></td>
+                            <td class="text-right"></td>
+                            <td class="text-right"></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"><b></b></td>
+                            <td class="text-right"><b>{{ $total_payout }}</b></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>

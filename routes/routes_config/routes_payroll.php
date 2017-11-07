@@ -518,7 +518,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_process_module','Member\PayrollController@payroll_process_module');
 
 
-	//Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@view_');
+	// Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@view_');
 	// Route::any('/payroll_process','Member\PayrollController@payroll_process');
 	// Route::any('/payroll_process/modal_create_process','Member\PayrollController@modal_create_process');
 	// Route::any('/payroll_process/ajax_load_payroll_period','Member\PayrollController@ajax_load_payroll_period');
@@ -607,6 +607,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::get('/report_13th_month_pay/excel_export','Member\PayrollController@report_13th_month_pay_excel_export');
 
 	/*START payroll biometrics*/
+	
 	//system controllers
 	Route::any('/payroll_biometric','Member\PayrollBiometricSystemController@index');
 	Route::any('/payroll_biometric/biometric_record_table','Member\PayrollBiometricSystemController@biometric_record_table');
@@ -620,4 +621,4 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::post('/biometrics/save_data','Member\PayrollBiometricsController@save_data');
 	Route::any('/biometrics/sample','Member\PayrollBiometricsController@sample');
 	/*END payroll biometrics*/
-});	 
+});

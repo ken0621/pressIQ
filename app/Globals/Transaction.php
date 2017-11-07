@@ -67,7 +67,7 @@ class Transaction
         }
         
         return $_item;
-    }    
+    }
     public static function create_update_transaction_details($details)
     {
         $store["create_update_transaction_details"] = $details;
@@ -76,6 +76,11 @@ class Transaction
     public static function create_update_proof($details)
     {
         $store["create_update_proof"] = $details;
+        session($store);
+    }
+    public static function create_update_proof_details($details)
+    {
+        $store["create_update_proof_details"] = $details;
         session($store);
     }
     public static function create_set_method($method)
@@ -204,9 +209,13 @@ class Transaction
 
         return $return;
     }
-    public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit')
+    public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit', $get_to_warehouse = 0)
     {
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
+        if($get_to_warehouse != 0)
+        {
+            $warehouse_id = $get_to_warehouse;
+        }
         
         $get_item = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
         
@@ -214,16 +223,56 @@ class Transaction
         $consume['id'] = $transaction_list_id;
         foreach ($get_item as $key => $value) 
         {
-            Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
+            $item_type = Item::get_item_type($value->item_id);
+            /*INVENTORY TYPE*/
+            if($item_type == 1 || $item_type == 5)
+            {
+                Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
+            }
+            /*NONINVENTORY TYPE*/
+            if($item_type == 2)
+            {
+                $return = Warehouse2::refill($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
+                if(!$return)
+                {
+                    Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
+                }
+            }
         }
+    }
+    public static function consume_in_warehouse_validation($shop_id, $transaction_list_id, $remarks = 'Enroll kit')
+    {
+        $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
+        
+        $get_item = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
+        
+        $return = null;
+        foreach ($get_item as $key => $value) 
+        {
+            $return .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks);
+        }
+
+        return $return;
     }
     public static function get_transaction_item($transaction_list_id)
     {
         return Tbl_transaction_item::where('transaction_list_id', $transaction_list_id)->get();
     }
-    public static function get_data_transaction_list($transaction_list_id)
+    public static function get_data_transaction_list($transaction_list_id, $type = null)
     {
-        return Tbl_transaction_list::where('transaction_list_id', $transaction_list_id)->first();
+        $data = Tbl_transaction_list::transaction()->where('transaction_list_id', $transaction_list_id);
+
+        if(session('get_transaction_customer_details_v2'))
+        {
+            $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
+            $data->leftJoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id');
+            $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
+            $data->groupBy("tbl_transaction_list.transaction_list_id");
+        }
+
+        session()->forget('get_transaction_customer_details_v2');
+
+        return $data->first();
     }
     public static function update_transaction_balance($transaction_id)
     {
@@ -240,7 +289,13 @@ class Transaction
             $update["transaction_payment_proof"] = session('create_update_proof');
             session()->forget('create_update_proof');
         }
-        
+
+        if (session('create_update_proof_details')) 
+        {
+            $update["payment_details"] = serialize(session('create_update_proof_details'));
+            session()->forget('create_update_proof_details');
+        }
+
         if($balance == 0)
         {
             $update["payment_status"] = "paid";
@@ -387,6 +442,15 @@ class Transaction
         }
         return $customer_address;
     }
+    public static function getCustomerTransaction($transaction_id = 0)
+    {
+        $transaction = null;
+        if($transaction_id)
+        {
+            $transaction = Tbl_transaction::where('transaction_id',$transaction_id)->first();
+        }
+        return $transaction;
+    }
     public static function get_transaction_filter_customer($customer_id) //filter result of transaction list by customer
     {
         $store["get_transaction_filter_customer_id"] = $customer_id;
@@ -433,7 +497,18 @@ class Transaction
         {
             if($transaction_type != 'all')
             {
-                $data->where('transaction_type', $transaction_type);
+                if($transaction_type == 'proof')
+                {
+                    $data->where('transaction_type', $transaction_type)->where('payment_status','pending');
+                }
+                elseif($transaction_type == 'reject')
+                {
+                    $data->where('transaction_type','proof')->where('payment_status','reject')->where('order_status','reject');
+                }
+                else
+                {
+                    $data->where('transaction_type', $transaction_type)->where('order_status','!=','reject');
+                }
             }
         }
         
@@ -478,7 +553,7 @@ class Transaction
         {
             $data[$key]->customer_name = Transaction::getCustomerNameTransaction($value->transaction_id);
             
-            if(session('get_transaction_customer_details'))
+            if(session('get_transaction_customer_details') || session('get_transaction_customer_details_v2'))
             {
                 $data[$key]->phone_number           = $value->customer_mobile or $value->contact;
             }
@@ -548,8 +623,6 @@ class Transaction
         session()->forget('get_transaction_date');
         session()->forget('get_transaction_payment_method');
         session()->forget('get_transaction_slot_id');
-        session()->forget('get_transaction_customer_details_v2');
-
         return $data;
     }
     public static function get_all_transaction_type()

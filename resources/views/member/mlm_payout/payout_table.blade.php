@@ -24,7 +24,7 @@
                 <td class="text-right">{{ $payout->display_wallet_log_tax }}</td>
                 <td class="text-right">{{ $payout->display_wallet_log_service_charge }}</td>
                 <td class="text-right">{{ $payout->display_wallet_log_other_charge }}</td>
-                <td class="text-right"><b>{{ $payout->display_wallet_log_amount }}</b></td>
+                <td class="text-right"><b> <a href="javascript:action_load_link_to_modal('/member/mlm/payout/edit?id={{ $payout->wallet_log_id }}', 'md')" >{{ $payout->display_wallet_log_amount }}</a></b></td>
             </tr>
             @endforeach
         </tbody>

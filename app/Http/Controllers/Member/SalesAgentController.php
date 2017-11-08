@@ -52,4 +52,14 @@ class SalesAgentController extends Member
 
 		return json_encode($return);
 	}
+	public function getViewTransaction(Request $request, $agent_id = 0)
+	{
+		if($agent_id != 0)
+		{
+			$data['_transaction'] = CommissionCalculator::per_agent_commission($agent_id);
+			$data['agent'] = SalesAgent::info($this->user_info->shop_id, $agent_id);
+
+			return view('member.cashier.sales_agent.sales_agent_transaction',$data);
+		}
+	}
 }

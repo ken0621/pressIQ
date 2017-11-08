@@ -4,7 +4,7 @@
             <tr>
                 <th class="text-center">Payout Date</th>
                 <th class="text-center">Slot No</th>
-                <th class="text-center">Customer Name</th>
+                <th class="text-center">Customer</th>
                 <th class="text-center" width="120px">Method</th>
                 <th class="text-right" width="150px">Amount</th>
                 <th class="text-right" width="120px">Tax</th>

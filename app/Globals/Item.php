@@ -551,7 +551,7 @@ class Item
             $_price_level->where('price_level_name','LIKE','%'.$search_keyword.'%');
         }
 
-        return $_price_level->paginate(2);
+        return $_price_level->paginate(5);
     }
     public static function insert_price_level($shop_id, $price_level_name, $price_level_type, $fixed_percentage_mode, $fixed_percentage_source, $fixed_percentage_value)
     {  

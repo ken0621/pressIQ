@@ -1979,14 +1979,17 @@ class PayrollController extends Member
      {
           $company_id = 0;
           $employement_status = 0;
+          
           if(Request::has('company_id'))
           {
                $company_id = Request::input('company_id');
           }
+
           if(Request::has('employement_status'))
           {
                $employement_status = Request::input('employement_status');
           }
+
           $parameter['date']                      = date('Y-m-d');
           $parameter['company_id']                = $company_id;
           $parameter['employement_status']   = $employement_status;

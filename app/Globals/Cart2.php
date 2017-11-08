@@ -141,6 +141,60 @@ class Cart2
 
 		return $return;
 	}
+
+	public static function scan_ref_num($shop_id, $warehouse_id, $ref_num)
+	{
+		$return = null;
+		$refnum = explode('@',$ref_num);
+		if(isset($refnum[0]))
+		{
+			if($refnum[0] == 'REFNUM')
+			{
+				if(isset($refnum[1]))
+				{
+					$record_log_id = $refnum[1];
+
+					$get_item = Tbl_warehouse_inventory_record_log::where('record_shop_id',$shop_id)
+																  ->where('record_warehouse_id',$warehouse_id)
+																  ->where('record_log_id',$record_log_id)
+																  ->first();
+					if($get_item)
+					{
+						if($get_item->record_inventory_status == 0 && $get_item->item_in_use == 'unused')
+						{
+							$cart_key = Self::get_cart_key();
+							if($cart_key)
+							{
+								$pin_code = $get_item->mlm_pin.'@'.$get_item->mlm_activation;
+								$check_cart = Tbl_cart_item_pincode::where("unique_id_per_pc", $cart_key)->where('shop_id',$shop_id)->where('pincode',$pin_code)->where("product_id",$get_item->record_item_id)->count();
+								if($check_cart == 0) //ITEM DON'T EXIST IN CART
+								{
+									$ins['unique_id_per_pc'] = $cart_key;
+									$ins['shop_id'] 		 = $shop_id;
+									$ins['product_id'] 		 = $get_item->record_item_id;
+									$ins['pincode'] 		 = $get_item->mlm_pin.'@'.$get_item->mlm_activation;
+									Tbl_cart_item_pincode::insert($ins);
+
+									$return = $get_item->record_item_id;
+								}
+								else
+								{
+									$return = "Item Already in the cart.";
+								}
+							}
+						}
+						else
+						{
+							$return = "Item Already consumed or used.";
+						}
+					}			
+				}				
+			}
+		}
+
+
+		return $return;
+	}
 	public static function get_item_pincode($shop_id, $item_id)
 	{
 		$cart_key = Self::get_cart_key();

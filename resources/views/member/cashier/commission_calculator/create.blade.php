@@ -1,4 +1,4 @@
-<form>
+<form class="global-submit" method="post" action="/member/cashier/commission_calculator/create-submit">
     <input type="hidden" name="_token" value="{{ csrf_token() }}" >
     <div class="modal-header">
     	<button type="button" class="close" data-dismiss="modal">×</button>
@@ -10,62 +10,64 @@
                 <div class="form-horizontal">
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label>Select Customer</label>
-                            <select class="select-customer form-control input-sm">
+                            <strong>Select Customer</strong>
+                            <select class="select-customer form-control input-sm" name="customer_id">
                                  @include('member.load_ajax_data.load_customer')
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label>Customer Email</label>
-                            <input type="text" class="form-control input-sm customer-email" name="">
+                            <strong>Customer Email</strong>
+                            <input type="text" class="form-control input-sm customer-email" name="customer_email">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label>Select Agent</label>
-                            <select class="select-agent form-control input-sm">
-                                <option commission-percent="8" value="1">Juan Dela Cruz</option>
+                            <strong>Select Agent</strong>
+                            <select class="select-agent form-control input-sm" name="agent_id">
+                                @foreach($_agent as $agent)
+                                <option commission-percent="{{$agent->commission_percent}}" value="{{$agent->employee_id}}">{{ucwords($agent->first_name.' '.$agent->middle_name.' '.$agent->last_name)}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-6">
                             <div class="col-md-6">
-                                <label>Start Date</label>
-                                <input type="text" class="form-control input-sm datepicker" name="">
+                                <strong>Start Date</strong>
+                                <input type="text" class="form-control input-sm datepicker" name="date">
                             </div>
                             <div class="col-md-6">
-                                <label>Due Date</label>
-                                <input type="text" class="form-control input-sm datepicker" name="">
+                                <strong>Due Date</strong>
+                                <input type="text" class="form-control input-sm datepicker" name="due_date">
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label>Select Property</label>
-                            <select class="select-property form-control input-sm">
+                            <strong>Select Property</strong>
+                            <select class="select-property form-control input-sm" name="item_id">
                                  @include("member.load_ajax_data.load_item_category",['add_search' => ''])
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label>Total Selling Price</label>
-                            <input type="text" class="number-input form-control input-sm sales-price text-right compute-all" name="">
+                            <strong>Total Selling Price</strong>
+                            <input type="text" class="number-input form-control input-sm sales-price text-right compute-all" name="total_selling_price">
                         </div>
                     </div>                    
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label>Downpayment</label>
-                            <input type="text" class="form-control input-sm text-right downpayment compute-all" name="" value="15%">
+                            <strong>Downpayment</strong>
+                            <input type="text" class="form-control input-sm text-right downpayment compute-all" name="downpayment_percent" value="15%">
                         </div>
                         <div class="col-md-6">
-                            <label>Amount of Downpayment</label>
+                            <strong>Amount of Downpayment</strong>
                             <input type="text" class="form-control text-right input-sm amount-downpayment" name="">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6 text-right">
-                            <label>Discount</label>
+                            <strong>Discount</strong>
                         </div>
                         <div class="col-md-6">
-                            <input type="text" value="0.00" class="number-input form-control input-sm text-right discount compute-all" name="">
+                            <input type="text" value="0.00" class="number-input form-control input-sm text-right discount discount-auto-add-comma" name="discount">
                         </div>
                     </div>
                 </div>
@@ -76,12 +78,12 @@
                             <h4><b>Net Downpayment :</b></h4>
                         </div>
                         <div class="col-md-6">
-                            <h4><div class="amount-net-downpayment">Amount of NDP</div></h4>
+                            <a id="popover_downpayment" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-net-downpayment">Amount of NDP</div></h4></a>
                         </div>
                     </div>
                     <div class="form-group ">
                         <div class="col-md-6">
-                            <select class="select-term text-right form-control input-sm">
+                            <select class="select-term text-right form-control input-sm" name="monthly_amort">
                                 @for($i = 1; $i <= 30; $i++)
                                 <option value="{{$i}}" {{$i == 1 ? 'selected' : ''}}>{{$i}} Month{{$i == 1 ? '' : 's'}}</option>
                                 @endfor
@@ -94,10 +96,10 @@
                     <div class="form-group">
                         <div class="col-md-6 padding-top-here">
                             <div class="col-md-6">
-                                <label>Miscellaneous Fee</label>
+                                <strong>Miscellaneous Fee</strong>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control text-right input-sm misc compute-all" name="" value="5%">
+                                <input type="text" class="form-control text-right input-sm misc compute-all" name="misceleneous_fee_percent" value="5%">
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
@@ -110,6 +112,7 @@
                         </div>
                         <div class="col-md-6 text-center">
                             <h4><div class="amount-loanable">Loanable Amount</div></h4>
+                            <input type="hidden" class="input-loanable-amount" name="loanable_amount">
                         </div>
                     </div>
                     <div class="form-group">
@@ -118,6 +121,7 @@
                         </div>
                         <div class="col-md-6 text-center">
                             <h4><div class="amount-tcp">TCP Amount</div></h4>
+                            <input type="hidden" class="input-tcp" name="total_contract_price">
                         </div>
                     </div>
                 </div>
@@ -128,16 +132,17 @@
                             <h4><b>Total Commission :</b></h4>
                         </div>
                         <div class="col-md-6 text-center">
-                            <a id="popover" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-tc">TC Amount</div></h4></a>
+                            <input type="hidden" name="total_commission" class="input-tc">
+                            <a id="popover_tc" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-tc">TC Amount</div></h4></a>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6 padding-top-here">
                             <div class="col-md-6">
-                                <label>NDP Commission</label>
+                                <strong>NDP Commission</strong>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control input-sm text-right compute-all ndp-commission" value="60%" name="">
+                                <input type="text" class="form-control input-sm text-right compute-all ndp-commission" value="60%" name="ndp_commission">
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
@@ -147,10 +152,10 @@
                     <div class="form-group">
                         <div class="col-md-6 padding-top-here">
                             <div class="col-md-6">
-                                <label>TCP Commission</label>
+                                <strong>TCP Commission</strong>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="change-tcp form-control input-sm text-right compute-all tcp-commission" name="" value="40%">
+                                <input type="text" class="change-tcp form-control input-sm text-right compute-all tcp-commission" name="tcp_commission" value="40%">
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
@@ -163,7 +168,7 @@
     </div>
     <div class="modal-footer">
     	<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-    	<button class="btn btn-primary btn-custom-primary" type="button">Save</button>
+    	<button class="btn btn-primary btn-custom-primary" type="submit">Save</button>
     </div>
 </form>
 <div class="hidden row clearfix" id="computation-content">
@@ -187,12 +192,32 @@
         </div>
     </div>
 </div>
+<div class="hidden row clearfix" id="downpayment-content">
+    <div class="text-center">
+
+        <div class="col-md-12">
+            <div>(TSP - (DP * TSP)) - DISC</div>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12">
+            <div>(<label class="c-amount-tsp">1,000,000</label> - (<label class="c-amount-dp">15%</label> * <label class="c-amount-tsp">1,000,000</label>)) - <label class="c-amount-disc">10,000</label> </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
-    $('#popover').popover({ 
+    $('#popover_tc').popover({ 
         html : true,
-        title: '<h4 style="padding:5px">Commission Computation</h4>',
+        title: '<h4 style="padding:0px">Commission Computation</h4>',
         content: function() {
           return $("#computation-content").html();
+        }
+    });
+    $('#popover_downpayment').popover({ 
+        html : true,
+        title: '<h4 style="padding:5px">Net Downpayment Computation</h4>',
+        content: function() {
+          return $("#downpayment-content").html();
         }
     });
 </script>

@@ -83,7 +83,7 @@
 	    </style>
 		<!-- Modal -->
 		<div id="unity_kit" class="modal fade unity-kit" role="dialog">
-			<div class="modal-dialog modal-lg">
+			<div class="modal-dialog modal-sm">
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
@@ -93,7 +93,7 @@
 					<div class="modal-body">
 						<div class="row clearfix">
 							@foreach($item_kit as $key => $kit)
-							<div class="col-md-3">
+							<div class="col-md-12 text-center">
 								<div class="kit-holder">
 									<div class="name match-height">{{ $key }}</div>
 									<div class="btn-holder"><button type="button" class="btn btn-primary" onClick="location.href='/cartv2/buy_kit_mobile/{{ $kit }}'">BUY</button></div>

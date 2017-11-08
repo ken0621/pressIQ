@@ -114,7 +114,8 @@ function employeelist()
 	/* USE THIS FOR FILTERING THE EMPLOYEE LIST */
 	function reload_employee_list(employement_status = 0, company_id = 0)
 	{
-		var formdata = {
+		var formdata = 
+		{
 			_token:misc('_token'),
 			company_id:company_id,
 			employement_status:employement_status

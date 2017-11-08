@@ -88,6 +88,22 @@
 
                         @if($customer)
                         <div class="space1"></div>
+                        <a href="/members/profile">
+                           <div class="profile-img-container">
+                                <div class="row-no-padding clearfix">
+                                    <div class="col-xs-3">
+                                        <div class="profile-img"><img src="{{ $profile_image }}"></div>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <div class="text-holder">
+                                            <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+                                            <div class="subtext text-overflow">{{ $customer->email }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </a>
+                        <div class="space1"></div>
                         <span>BROWSE</span>
                         <ul class="links">
                             <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>

@@ -207,6 +207,7 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::get('product_order2','Member\ProductOrderController2@index');
 	Route::post('product_order2/table','Member\ProductOrderController2@table');
 	Route::get('product_order2/proof','Member\ProductOrderController2@proof');
+	Route::get('product_order2/details','Member\ProductOrderController2@details');
 	Route::get('product_order2/confirm_payment','Member\ProductOrderController2@confirm_payment');
 	Route::post('product_order2/confirm_payment_submit','Member\ProductOrderController2@confirm_payment_submit');
 	Route::get('product_order2/reject_payment','Member\ProductOrderController2@reject_payment');
@@ -253,6 +254,7 @@ Route::get("/member/ecommerce/wishlist/list","Member\WishlistController@list");
 
 Route::any('/member/item', 'Member\ItemController@index'); /* ERWIN */  
 Route::any('/member/item/add', 'Member\ItemController@add'); /* ERWIN */
+Route::any('/member/item/view_item_receipt/{id}', 'Member\ItemController@view_item_receipt'); /* ERWIN */
 Route::any('/member/item/load_all_um','Member\ItemController@load_all_um');
 Route::any('/member/item/add_submit', 'Member\ItemController@add_submit'); /* ERWIN */
 Route::any('/member/item/edit/{id}', 'Member\ItemController@edit'); /* ERWIN */

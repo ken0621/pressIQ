@@ -12,6 +12,12 @@ body
 	background-color: #ededed;
 }
 
+.modal-open
+{
+	overflow: inherit;
+}
+
+
 .register
 {
 	font-family: $content-text;

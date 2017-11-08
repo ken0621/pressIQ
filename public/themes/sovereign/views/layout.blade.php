@@ -100,6 +100,8 @@
                         <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary">GENEALOGY</a> </li>
                         <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">REPORTS</a> </li>
                         <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
+                        <li class="{{ Request::segment(2) == "code-vault" ? "active" : "" }}"> <a href="javascript:">CODE VAULT</a> </li>
+                        <li class="{{ Request::segment(2) == "product-code-vault" ? "active" : "" }}"> <a href="javascript:">PRODUCT CODE VAULT</a> </li>
                             @if($customer)
                                 <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
                             @endif

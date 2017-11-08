@@ -343,6 +343,17 @@ $text-dark: #272c2f;
   overflow: inherit;
 }
 
+.modal-header
+{
+	background-color: #052093;
+	color: #fff;
+
+	.close
+	{
+		color: #fff;
+	}
+}
+
 /* Success */
 .popup-success
 {

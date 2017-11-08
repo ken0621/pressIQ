@@ -70,6 +70,11 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="btn-container">
+					<button class="btn btn-primary">Enter a code</button>
+				</div>
+				
 			</div>
 
 			<div class="col-md-6">

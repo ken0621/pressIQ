@@ -243,11 +243,12 @@ class MLM_CodeControllerV2 extends Member
         $r['membership_kit'] = $request->membership_kit ? '' : 'hidden';
         $rt = serialize($r); 
 
-        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&print_limit='.$request->print_limit.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit.'&item_id='.$request->item_id);
+        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&print_limit='.$request->print_limit.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit.'&item_id='.$request->item_id.'&type='.$request->barcode_type);
     }
     public function print(Request $request)
     {
         $data['on_show'] = unserialize($request->Y);
+        $data['type'] = $request->type;
         $data['_item_product_code'] = Item::get_all_item_record_log('', $request->status, $request->print_limit, $request->item_id);
         if($request->t == 'membership_code')
         {

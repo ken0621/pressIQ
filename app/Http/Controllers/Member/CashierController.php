@@ -106,6 +106,12 @@ class CashierController extends Member
             $data['item'] = $val = Cart2::scan_pin_code($data["shop_id"], $warehouse_id, $data["item_id"]);
             $item_id = $val;
         }
+        if(!$data['item'])
+        {
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+            $data['item'] = $val = Cart2::scan_ref_num($data["shop_id"], $warehouse_id, $data["item_id"]);
+            $item_id = $val;
+        }
 
         if($data["item"] && is_numeric($val))
         {

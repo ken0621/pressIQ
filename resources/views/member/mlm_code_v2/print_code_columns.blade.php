@@ -20,6 +20,16 @@
                             @endforeach
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label for="">Type of Barcode</label>
+                            <select name="barcode_type" class="form-control">
+                                <option value="ref_number">Reference Number</option>
+                                <option value="pin_code">Activation Code & Pin</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="col-md-12">
                             <label for="">Limit</label>

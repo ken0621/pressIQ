@@ -198,7 +198,7 @@
         </nav>
 
         <!-- MOBILE HEADER -->
-        <div class="mob-nav-wrap sticky">
+        {{-- <div class="mob-nav-wrap sticky">
             <div class="subheader">
                 <div class="container">
                     @if($customer)
@@ -293,9 +293,9 @@
                     <div class="mob-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo.png"></div> 
                 </div>
             </div>
-        </div>
+        </div> --}}
 
-        <div id="scroll-to" class="clearfix mob-margin">
+        <div id="scroll-to" class="clearfix">
            @yield("content")
         </div>
 

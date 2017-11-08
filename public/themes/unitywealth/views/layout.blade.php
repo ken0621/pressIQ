@@ -122,9 +122,9 @@
                             <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">Dashboard</a> </li>
                             <li> <a href="/members/profile">Profile</a> </li>
                             @if($mlm_member)
-                            <li> <a href="javascript:">Videos</a> </li>
-                            <li> <a href="javascript:">Ebooks</a> </li>
-                            <li class="{{ Request::segment(2) == "products" ? "active" : "" }}"> <a href="/members/products">Products</a> </li>
+                            {{-- <li> <a href="javascript:">Videos</a> </li> --}}
+                            <li class="{{ Request::segment(2) == "products" ? "active" : "" }}"> <a href="/members/ebooks">Ebooks</a> </li>
+                            <li class="{{ Request::segment(2) == "products" ? "active" : "" }}"> <a href="/members/videos">Products</a> </li>
                             <li class="{{ Request::segment(2) == "certificate" ? "active" : "" }}"> <a href="/members/certificate">Certificate</a> </li>
                             <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li>
                             <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">Reports</a> </li>

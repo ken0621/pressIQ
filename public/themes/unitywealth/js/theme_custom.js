@@ -42,6 +42,14 @@ function theme_custom()
 	            }
 	         });
 
+	        // Open a URL in a lightbox
+			var lightbox = lity('//www.youtube.com/watch?v=XSGBVzeBUbk');
+
+			// Bind as an event handler
+			$(document).on('click', '[data-lightbox]', lity);
+
+			
+
 	        $('.slider3').diyslider({
 	            width: "580px", // width of the slider
 	            height: "120px", // height of the slider

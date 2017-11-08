@@ -201,7 +201,17 @@
         <div class="mob-nav-wrap sticky">
             <div class="subheader">
                 <div class="container">
-                    <div class="right-container"><span>LOGIN&nbsp;&nbsp;</span><span>&nbsp;&nbsp;REGISTER</span></div>
+                    @if($customer)
+                    <div class="right-container">                        
+                        <span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span>
+                    </div>
+                    @else
+                    <div class="right-container">
+                        <span style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN&nbsp;&nbsp;</span>
+                        <span style="cursor: pointer;" onClick="location.href='/members/register'">&nbsp;&nbsp;REGISTER</span>
+                    </div>
+                    @endif
                 </div>
             </div>
             <div class="main-header">
@@ -212,14 +222,30 @@
 
                         @if($customer)
                         <div class="space1"></div>
+                        <span>CATEGORIES</span>
+                        <ul class="links">
+                            <li>DTH PRODUCTS</li>
+                            <li>PREPAID CARDS</li>
+                            <li>GADGETS</li>
+                            <li>ELECTRONICS</li>
+                            <li>SERVICES</li>
+                            <li>ENTERTAINMENT</li>
+                            <li>APPAREL</li>
+                            <li>ACCESSORIES</li>
+                            <li>HEALTH & WELLNESS</li>
+                        </ul>
+                        <div class="space2"></div>
                         <span>BROWSE</span>
                         <ul class="links">
-                            <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>
-                            <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
-                            <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
-                            <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
-                        </ul>
-                        
+                                <li>HOME</li>
+                                <li>OUT MERCHANTS</li>
+                                <li>E-LOADING BUSINESS</li>
+                                <li>E-MONEY</li>
+                                <li>CAREER</li>
+                                <li>EVENTS</li>
+                                <li>LEGALITIES</li>
+                                <li>CONTACT US</li>
+                            </ul>
                         <div class="space2"></div>
                         <span>MEMBERS AREA</span>
                         <ul class="links">
@@ -237,12 +263,29 @@
                         </ul>
                         @else
                             <div class="space1"></div>
+                            <span>CATEGORIES</span>
+                            <ul class="links">
+                                <li>DTH PRODUCTS</li>
+                                <li>PREPAID CARDS</li>
+                                <li>GADGETS</li>
+                                <li>ELECTRONICS</li>
+                                <li>SERVICES</li>
+                                <li>ENTERTAINMENT</li>
+                                <li>APPAREL</li>
+                                <li>ACCESSORIES</li>
+                                <li>HEALTH & WELLNESS</li>
+                            </ul>
+                            <div class="space1"></div>
                             <span>BROWSE</span>
                             <ul class="links">
-                                <li> <a href="/">HOME</a> </li>
-                                <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
-                                <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
-                                <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
+                                <li>HOME</li>
+                                <li>OUT MERCHANTS</li>
+                                <li>E-LOADING BUSINESS</li>
+                                <li>E-MONEY</li>
+                                <li>CAREER</li>
+                                <li>EVENTS</li>
+                                <li>LEGALITIES</li>
+                                <li>CONTACT US</li>
                             </ul>
                         @endif
                     </nav>
@@ -252,7 +295,7 @@
             </div>
         </div>
 
-        <div id="scroll-to" class="clearfix">
+        <div id="scroll-to" class="clearfix mob-margin">
            @yield("content")
         </div>
 

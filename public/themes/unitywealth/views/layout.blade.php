@@ -18,6 +18,11 @@
     <!-- GLOBAL CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
+    <!-- VIDEO LIGHTBOX -->
+    <link rel="stylesheet" type="text/css" media="all" href="/themes/{{ $shop_theme }}/assets/lity/assets/style.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/themes/{{ $shop_theme }}/assets/lity/assets/prism.css">
+    <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/lity/dist/lity.css">
+    
     <!-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/new_sidenav.css"> -->
     <!-- COUNTDOWN TIMER -->
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/animate.css">
@@ -258,6 +263,11 @@
     <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.countdown.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/countdown/wow.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/countdown/scripts.js?version=1"></script>
+
+    <!-- LITY -->
+    <script src="/themes/{{ $shop_theme }}/assets/lity/vendor/jquery.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/lity/dist/lity.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/lity/assets/prism.js"></script>
     
     <!-- FB WIDGET -->
     <div id="fb-root"></div>

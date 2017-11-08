@@ -64,20 +64,15 @@ $bold: 700;
 
      li
      {
-        //margin-top: 30px;
-        border-bottom: 1px solid rgba(255,255,255, 0.2);
-        padding: 10px 0px;
+        /* border-bottom: 1px solid rgba(255,255,255, 0.2); */
+        padding: 6px 0px;
         padding-left: 10px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.7);
 
         a
         {
-            position: relative;
-            display: block; /* drops the nav vertically*/
-            color: #f1f1f1;
-            font-size: 16px;
             text-decoration: none;
-            //line-height: 80%;
-            //padding: 5px;
         }
     }
 

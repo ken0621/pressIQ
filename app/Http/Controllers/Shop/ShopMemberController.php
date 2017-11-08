@@ -149,6 +149,16 @@ class ShopMemberController extends Shop
         $data = [];
         return Self::load_view_for_members('member.certificate', $data);
     }
+    public function getVideos()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.videos', $data);
+    }
+    public function getEbooks()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.ebooks', $data);
+    }
     public function getEventDetails(Request $request)
     {
         $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);

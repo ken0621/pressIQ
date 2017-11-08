@@ -193,6 +193,86 @@ body
         display:block !important;
     }
 }
+
+/* MOBILE NAVIGATION */
+.mob-nav-wrap
+{
+	display: none;
+	@media screen and (max-width: 768px)
+	{
+		display: block;
+	}
+
+	.subheader
+	{
+		background-color: #ff8500;
+		padding: 2px 0;
+
+		.right-container
+		{
+			color: #fff;
+			float: right;
+
+			span 
+			{
+				font-size: 13px;
+			}
+		}
+	}
+	.main-header
+	{
+		background-color: #fff;
+		padding: 15px 0;
+		text-align: center;
+
+		@media screen and (max-width: 414px)
+		{
+			padding: 11px 0;
+		}
+
+		@media screen and (max-width: 375px)
+		{
+			padding: 11px 0;
+		}
+
+		.mob-cart-container
+		{
+			width: 29px;
+			float: right;
+			margin-right: 8px;
+			margin-top: 12px;
+			img 
+			{
+				width: 100%;
+			}
+
+			@media screen and (max-width: 325px)
+			{
+				margin-top: 4px;
+			}
+		}
+		.mob-logo-container
+		{
+			width: 23%;
+			margin: auto;
+			img
+			{
+				width: 100%;
+			}
+		}
+	}
+}
+/* HEADER FIXED */
+.mob-nav-wrap.sticky
+{
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 100;
+}
+
+
+
 .header-nav
 {
 	background-color: #fff;

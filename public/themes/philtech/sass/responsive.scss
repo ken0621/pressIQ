@@ -67,6 +67,22 @@
 
 @media (max-width: 768px) 
 {
+    .content 
+    {
+        margin-top: 118px;
+    }
+    .header-nav
+    {
+        display: none;
+    }
+    .navbar
+    {
+        display: none;
+    }
+    .left-bar-categories
+    {
+        display: none;
+    }
     .header-nav .header-nav-middle .search-bar-holder
     {
         width: calc(100% - 240px);
@@ -137,6 +153,15 @@
 
 @media (max-width: 425px) 
 {
+    #nav_list
+    {
+        margin-top: 18px;
+    }
+
+    .mob-logo-container
+    {
+        width: 40% !important;
+    }
     .header-nav .header-nav-middle .woaw .holder
     {
         margin-bottom: 15px;
@@ -226,7 +251,21 @@
 
 @media (max-width: 375px) 
 {
-    
+    #nav_list
+    {
+        margin-top: 20px;
+    }
+    .content 
+    {
+        margin-top: 111px;
+    }
+}
+@media (max-width: 320px)
+{
+    .content 
+    {
+        margin-top: 106px;
+    }
 }
 
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) 

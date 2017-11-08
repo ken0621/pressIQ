@@ -71,7 +71,7 @@
                                             <td class="text-center">{{currency('P ',$list->for_releasing_comm,2)}}</td>
                                             <td class="text-center">{{currency('P ',$list->pending_comm,2)}}</td>
                                             <td class="text-center">
-                                                <a href="javascript:">View Transaction</a>
+                                                <a href="javascript:" class="popup" link="/member/cashier/sales_agent/view-transaction/{{$list->employee_id}}" size="lg">View Transaction</a>
                                             </td>
                                         </tr>
                                     @endforeach

@@ -123,6 +123,10 @@ class CommissionCalculator
 		return "success";
 		
 	}
+	public static function info($shop_id, $commission_id)
+	{
+		return Tbl_commission::item()->where('tbl_commission.shop_id',$shop_id)->where('tbl_commission.commission_id',$commission_id)->first();
+	}
 	public static function per_agent($agent_id)
 	{
 		$get_all = Tbl_commission::invoice()->where('agent_id',$agent_id)->groupBy('comm_inv_id')->get();
@@ -147,6 +151,42 @@ class CommissionCalculator
 			$return['orverall_comm'] += $value->commission_amount;
 		}
 		return $return;
+	}
+	public static function per_agent_commission($agent_id)
+	{
+		$get_all = Tbl_commission::customer()->item()->where('tbl_commission.shop_id',Self::getShopId())->where('agent_id',$agent_id)->groupBy('tbl_commission.commission_id')->get();
+		foreach ($get_all as $key => $value) 
+		{
+			$get_all[$key]['orverall_comm'] = 0;
+			$get_all[$key]['released_comm'] = 0;
+			$get_all[$key]['for_releasing_comm'] = 0;
+			$get_all[$key]['pending_comm'] = 0;
+
+			$data = Tbl_commission_invoice::where('commission_id',$value->commission_id)->get();
+			foreach ($data as $key2 => $value2) 
+			{
+				if($value2->is_released == 1 && $value2->invoice_is_paid == 1)
+				{
+					$get_all[$key]['released_comm'] += $value2->commission_amount;
+				}
+				if($value2->invoice_is_paid == 1 && $value2->is_released == 0)
+				{
+					$get_all[$key]['for_releasing_comm'] += $value2->commission_amount;
+				}
+				if($value2->is_released == 0 && $value2->invoice_is_paid == 0)
+				{
+					$get_all[$key]['pending_comm'] += $value2->commission_amount;
+				}
+				$get_all[$key]['orverall_comm'] += $value2->commission_amount;
+			}
+		}
+		
+		return $get_all;
+	}
+
+	public static function per_commission_invoices($commission_id)
+	{
+		return Tbl_commission::invoice()->where('tbl_commission.commission_id',$commission_id)->groupBy('comm_inv_id')->orderBy('new_inv_id')->get();
 	}
 	public static function get_computation($shop_id, $commission_id)
 	{

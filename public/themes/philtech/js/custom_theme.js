@@ -18,6 +18,17 @@ function custom_theme()
 			ready_load_ecom_cart();
 			ready_load_mini_ecom_cart();
 			event_sticky_nav();
+
+			/*MOBILE SIDE NAV*/
+            $menuLeft = $('.pushmenu-left');
+            $nav_list = $('#nav_list');
+
+            $nav_list.click(function() {
+                $(this).toggleClass('active');
+                $('.pushmenu-push').toggleClass('pushmenu-push-toright');
+                $menuLeft.toggleClass('pushmenu-open');
+            });
+
 		});
 	}
 	function event_show_cart()

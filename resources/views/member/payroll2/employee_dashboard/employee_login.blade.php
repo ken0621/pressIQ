@@ -69,7 +69,7 @@
 				</div>
 				<ul class="list-group">
 					<li class="list-group-item">
-						@if($shop_id == null)
+					
 							<span class="welcome-text">
 								Welcome to Digima House!
 							</span>
@@ -78,16 +78,8 @@
 									 <strong>Error!</strong> {{ session('message') }}<br>
 								</span>
 							@endif
-						@else
-							<span class="welcome-text">
-								Welcome to {{$shop_info->shop_key}}!
-							</span>
-							@if(session()->has('message'))
-								<span class="member" style="color: red;">
-									 <strong>Error!</strong> {{ session('message') }}<br>
-								</span>
-							@endif
-						@endif	
+				
+			
 					</li>
 					<li class="list-group-item">
 						<span class="login-text">

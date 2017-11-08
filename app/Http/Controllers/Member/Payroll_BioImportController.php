@@ -702,7 +702,6 @@ class Payroll_BioImportController extends Member
 	    		{
 	    			array_push($time_sheet, $temp_record);
 	    		}
-	    		
 	    	}
 	    	
 	    	$_date_collect = collect($time_sheet)->groupBy('employee_number','date');

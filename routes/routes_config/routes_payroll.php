@@ -106,8 +106,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* EMPLOYEE END */
 	
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
-
-
+	
 	//company_register_report/
 	/* TIMESHEET START */
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');

@@ -1,6 +1,6 @@
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal">×</button>
-	<h4 class="modal-title"> Invoices</h4>
+	<h4 class="modal-title">{{$commission->item_name or ''}} - Invoices</h4>
 </div>
 <div class="modal-body clearfix">
    	<div class="clearfix">

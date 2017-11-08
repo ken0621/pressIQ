@@ -1,6 +1,7 @@
 .member
 {
 	background-color: #ededed;
+
 	.members
 	{
 		background-color: #fff;
@@ -9,11 +10,13 @@
 		position: relative;
 		min-height: 620px;
 		border: 1px solid #ccc;
+
 		.header
 		{
 			border-bottom: 1px solid #e9e9e9;
 			text-align: right;
 			margin-left: 80px;
+
 			.notification
 			{
 				display: inline-block;
@@ -25,11 +28,13 @@
 					background-color: #ed5639;
 				}
 			}
+
 			.profile-dropdown
 			{
 				padding: 7.5px 20px;
 				display: inline-block;
 				vertical-align: middle;
+
 				.img
 				{
 					width: 36px;
@@ -45,6 +50,7 @@
 						border-radius: 100%;
 					}
 				}
+				
 				.name
 				{
 					display: inline-block;
@@ -174,13 +180,12 @@
 								transition: 0.3s all ease;
 								height: 50px;
 
-								.icon 
+								.icon, .fa
 								{
 									display: inline-block;
 									vertical-align: top;
 									width: 20px;
 									margin-right: 15px;
-
 									text-align: center;
 									font-size: 18px;
 									color: #fff;
@@ -206,7 +211,7 @@
 									text-decoration: none;
 									border-color: #1F262C;
 
-									.icon 
+									.icon, .fa
 									{
 										color: #fff;
 										opacity: 1;
@@ -367,6 +372,7 @@
 									.nav-holder
 									{
 										background-color: rgba(0,0,0,0.1);
+
 										.icon
 										{
 											img
@@ -394,6 +400,7 @@
 			{
 				margin-left: 0;
 			}
+
 			.main-member-header
 			{
 				.left
@@ -402,6 +409,7 @@
 					{
 						float: left;
 					}
+
 					.icon
 					{
 						display: inline-block;
@@ -412,6 +420,7 @@
 
 						}
 					}
+
 					.text
 					{
 						display: inline-block;
@@ -429,16 +438,19 @@
 						}
 					}
 				}
+
 				.right
 				{
 					@media screen and (min-width: 991px)
 					{
 						float: right;
 					}
+
 					.search
 					{
 						position: relative;
 						margin: 6px 0;
+
 						.form-control
 						{
 							color: #85939e;
@@ -447,6 +459,7 @@
 							box-shadow: none;
 							width: 300px;
 						}
+
 						img
 						{
 							position: absolute;

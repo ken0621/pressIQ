@@ -123,6 +123,10 @@ class CommissionCalculator
 		return "success";
 		
 	}
+	public static function info($shop_id, $commission_id)
+	{
+		return Tbl_commission::item()->where('tbl_commission.shop_id',$shop_id)->where('tbl_commission.commission_id',$commission_id)->first();
+	}
 	public static function per_agent($agent_id)
 	{
 		$get_all = Tbl_commission::invoice()->where('agent_id',$agent_id)->groupBy('comm_inv_id')->get();
@@ -148,10 +152,9 @@ class CommissionCalculator
 		}
 		return $return;
 	}
-
 	public static function per_agent_commission($agent_id)
 	{
-		$get_all = Tbl_commission::customer()->item()->where('agent_id',$agent_id)->groupBy('tbl_customer.customer_id')->get();
+		$get_all = Tbl_commission::customer()->item()->where('tbl_commission.shop_id',Self::getShopId())->where('agent_id',$agent_id)->groupBy('tbl_commission.commission_id')->get();
 		foreach ($get_all as $key => $value) 
 		{
 			$get_all[$key]['orverall_comm'] = 0;
@@ -179,6 +182,11 @@ class CommissionCalculator
 		}
 		
 		return $get_all;
+	}
+
+	public static function per_commission_invoices($commission_id)
+	{
+		return Tbl_commission::invoice()->where('tbl_commission.commission_id',$commission_id)->groupBy('comm_inv_id')->orderBy('new_inv_id')->get();
 	}
 	public static function get_computation($shop_id, $commission_id)
 	{

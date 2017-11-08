@@ -62,4 +62,11 @@ class SalesAgentController extends Member
 			return view('member.cashier.sales_agent.sales_agent_transaction',$data);
 		}
 	}
+	public function getInvoices(Request $request, $commission_id)
+	{
+		$data['_invoices'] = CommissionCalculator::per_commission_invoices($commission_id);
+		$data['commission'] = CommissionCalculator::info($this->user_info->shop_id,$commission_id);
+		
+		return view('member.cashier.sales_agent.sales_agent_invoices',$data);
+	}
 }

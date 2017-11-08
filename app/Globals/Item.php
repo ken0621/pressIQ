@@ -538,10 +538,20 @@ class Item
         return $item;
     }
     /* READ DATA END */
-    public static function list_price_level($shop_id)
+    public static function list_price_level($shop_id, $type = null, $search_keyword = null)
     {
-        $_price_level = Tbl_price_level::where("shop_id", $shop_id)->get();
-        return $_price_level;
+        $_price_level = Tbl_price_level::where("shop_id", $shop_id);
+
+        if($type)
+        {
+            $_price_level->where('price_level_type',$type);
+        }
+        if($search_keyword)
+        {
+            $_price_level->where('price_level_name','LIKE','%'.$search_keyword.'%');
+        }
+
+        return $_price_level->paginate(2);
     }
     public static function insert_price_level($shop_id, $price_level_name, $price_level_type, $fixed_percentage_mode, $fixed_percentage_source, $fixed_percentage_value)
     {  
@@ -558,6 +568,25 @@ class Item
         }
 
         return Tbl_price_level::insertGetId($insert_price_level);
+    }
+    public static function update_price_level($shop_id, $price_level_id, $price_level_name, $price_level_type, $fixed_percentage_mode, $fixed_percentage_source, $fixed_percentage_value)
+    {  
+        $update_price_level["price_level_name"] = $price_level_name;
+        $update_price_level["price_level_type"] = $price_level_type;
+        
+        if($price_level_type == "fixed-percentage")
+        {
+
+            $update_price_level["fixed_percentage_mode"] = $fixed_percentage_mode;
+            $update_price_level["fixed_percentage_source"] = $fixed_percentage_source;
+            $update_price_level["fixed_percentage_value"] = $fixed_percentage_value;
+        }
+        Tbl_price_level::where('price_level_id',$price_level_id)->update($update_price_level);
+        return $price_level_id;
+    }
+    public static function delete_price_level_item($price_level_id)
+    {  
+        Tbl_price_level_item::where('price_level_id',$price_level_id)->delete();
     }
     public static function insert_price_level_item($shop_id, $price_level_id, $_item)
     {  
@@ -578,6 +607,20 @@ class Item
         {
             Tbl_price_level_item::insert($_insert);
         }
+    }
+    public static function price_level_info($shop_id, $price_level_id)
+    {
+        return Tbl_price_level::where('shop_id',$shop_id)->where('price_level_id',$price_level_id)->first();
+    }
+    public static function price_level_info_item($price_level_id)
+    {
+        $data = Tbl_price_level_item::where('price_level_id',$price_level_id)->get();
+        $return = null;
+        foreach ($data as $key => $value) 
+        {
+            $return[$value->item_id] = $value->custom_price;
+        }
+        return $return;
     }
     public static function getShopId()
     {

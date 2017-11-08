@@ -732,10 +732,15 @@ class MLM2
     											$query->where('shop_id', Self::$shop_id);
 											});
 
+		$check_restriction = MLM2::check_membership_restriction($membership_id,$sponsor);
         $validator = Validator::make($insert, $rules);
         if($slot_creation_limit != 0 && $slot_creation_count >= $slot_creation_limit)
         {
         	return "Your account cannot create more than ".$slot_creation_limit." slots";
+        }
+        else if($check_restriction == 1)
+        {
+        	return "Your sponsor cannot recruit this type of membership.";
         }
 		else if ($validator->fails())
 		{
@@ -1303,5 +1308,27 @@ class MLM2
 		}
 
 		return $data["RANK_REPURCHASE_CASHBACK"];
+	}
+	public static function check_membership_restriction($membership_id,$sponsor_id)
+	{
+		$return 	= 0;
+		$membership = Tbl_membership::where("membership_id",$membership_id)->first();
+		if($membership)
+		{
+			$sponsor_slot = Tbl_mlm_slot::where("slot_id",$sponsor_id)->first();
+			if($sponsor_slot)
+			{
+				$sponsor_membership = Tbl_membership::where("membership_id",$sponsor_slot->slot_membership)->first();
+				if($sponsor_membership)
+				{
+					if($membership->membership_restricted == 0 && $sponsor_membership->membership_restricted == 1)
+					{
+						$return = 1;
+					}
+				}
+			}
+		}
+
+		return $return;
 	}
 }

@@ -10,7 +10,7 @@
 			<div class="membership_name {{$on_show['membership']}}" style="text-align:center;">{{ucwords($item_code->membership_name)}}</div>
 			@else
 			<img src="{{URL::to('/')}}/barcode?text={{ 'REFNUM@'.$item_code->record_log_id }}&size=50">
-			<label>{{'REFNUM@'.$item_code->record_log_id}}</label>
+			<small>{{'REFNUM@'.$item_code->record_log_id}}</small>
 			<div class="mlm_pin {{$on_show['pin_num']}}">{{$item_code->mlm_pin}}</div>
 			<div class="mlm_activation {{$on_show['activation']}}">{{$item_code->mlm_activation}}</div>		
 			<div class="item_name {{$on_show['membership_kit']}}" style="text-align:center;">{{ucwords($item_code->item_name)}}</div>	

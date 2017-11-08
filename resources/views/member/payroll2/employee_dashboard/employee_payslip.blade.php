@@ -136,7 +136,7 @@
                         </div>
                         <div class="row" >
                             <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 15px;">
-                                TOTAL PER YEAR
+                                YEAR-END SUMMARY
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -193,7 +193,7 @@
                         </div>
                         <div class="col-md-12 row" >
                             <div class="text-right">
-                                ______________________
+                                _____________________
                             </div>
                         </div>
                         <div class="col-md-12 row" >

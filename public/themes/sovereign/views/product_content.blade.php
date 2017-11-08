@@ -34,7 +34,7 @@
     </div>
 </div>
 @endsection
-@section("js")
+@section("script")
 <script type="text/javascript" src="/resources/assets/frontend/js/zoom.js"></script>
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/product_content.js"></script>
 @endsection

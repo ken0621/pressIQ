@@ -191,6 +191,16 @@ function non_member()
 			$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeClass("use").removeAttr("disabled");
 			$(".submit-verify-sponsor").find("input").removeAttr("disabled").val("");
 	    });
+
+	    $(".no_sponsor_code").click(function()
+	    {
+			$("#enter-a-code-modal").modal('show');
+			$(".output-container").html("");
+
+			$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeClass("use").removeAttr("disabled");
+			$(".submit-verify-sponsor").find("input").removeAttr("disabled").val("");
+			$(".input-verify-sponsor").val($(this).attr("company_head_id"));
+	    });
 	}
 	function action_verify_placement()
 	{

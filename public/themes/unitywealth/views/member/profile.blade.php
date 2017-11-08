@@ -25,9 +25,9 @@
 				</div>
 				@if($mlm == 1)
 				<div class="profile-lead">
-					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
-						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
-					</a>
+<!-- 					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
+	<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
+</a> -->
 					<!-- Modal -->
 					<div id="leads_modal" class="modal fade leads-modal" role="dialog">
 					   <div class="modal-dialog">
@@ -73,7 +73,7 @@
 			<div class="profile-form">
 				<ul class="nav nav-tabs">
 				   <li class="active"><a data-toggle="tab" href="#basic_info">Basic Info</a></li>
-				   <li><a data-toggle="tab" href="#contact_info">Reward Configuration</a></li>
+				   <!-- <li><a data-toggle="tab" href="#contact_info">Reward Configuration</a></li> -->
 				   <li><a data-toggle="tab" href="#profile_picture">Profile Picture</a></li>
 				   @if($allowed_change_pass)
 				   <li><a data-toggle="tab" href="#password">Password</a></li>
@@ -97,18 +97,18 @@
 					   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					   		<div class="row clearfix">
 					   			<div class="col-md-6">
-					   				<div class="form-group">
-							   			<label>First Name</label>
-							   			<input type="text" class="form-control" name="first_name" value="{{ $profile->first_name }}">
-							   		</div>
-							   		<div class="form-group">
-							   			<label>Middle Name</label>
-							   			<input type="text" class="form-control" name="middle_name" value="{{ $profile->middle_name }}">
-							   		</div>
-							   		<div class="form-group">
-							   			<label>Last Name</label>
-							   			<input type="text" class="form-control" name="last_name" value="{{ $profile->last_name }}">
-							   		</div>
+					   				<!-- <div class="form-group">
+					   											   			<label>First Name</label>
+					   											   			<input type="text" class="form-control" name="first_name" value="{{ $profile->first_name }}">
+					   											   		</div>
+					   											   		<div class="form-group">
+					   											   			<label>Middle Name</label>
+					   											   			<input type="text" class="form-control" name="middle_name" value="{{ $profile->middle_name }}">
+					   											   		</div>
+					   											   		<div class="form-group">
+					   											   			<label>Last Name</label>
+					   											   			<input type="text" class="form-control" name="last_name" value="{{ $profile->last_name }}">
+					   											   		</div> -->
 							   		<div class="form-group">
 							   			<label>Birth Date</label>
 							   			<div style="margin-top: 5px;">
@@ -171,57 +171,57 @@
 					   </form>
 				   </div>
 				   <!-- CONTACT INFO -->
-				   <div id="contact_info" class="tab-pane fade">
+				   <!-- <div id="contact_info" class="tab-pane fade">
 				   		<div class="contact_info_success_message hidden">
-							<div class="alert alert-success">
-							  <strong>Success!</strong> Sponsor Rule has been successfully updated.
-							</div>
+				   							<div class="alert alert-success">
+				   							  <strong>Success!</strong> Sponsor Rule has been successfully updated.
+				   							</div>
 				   		</div>
 				   		<form method="post" class="reward-configuration-form">
 				   			{{ csrf_field() }}
-					   		<div class="row clearfix">
-					   			<div class="col-md-12">
-					   				<div class="form-group">
-							   			<label>New Sponsor Rule</label>
-							   			<select name="downline_rule" class="form-control">
-							   				<option value="auto" {{ $customer->downline_rule == "auto" ? "selected" : "" }}>AUTO PLACEMENT</option>
-							   				<option value="manual" {{ $customer->downline_rule == "manual" ? "selected" : "" }}>MANUAL PLACEMENT</option>
-							   			</select>
-							   		</div>
-					   			</div>
-						   		<div class="col-md-12">
-						   			<div class="form-group btn-holder">
-							   			<button type="submit" class="submit-button btn btn-default"><i class="fa fa-pencil"></i> Update</button>
-							   		</div>
-						   		</div>
-					   		</div>
+				   					   		<div class="row clearfix">
+				   					   			<div class="col-md-12">
+				   					   				<div class="form-group">
+				   							   			<label>New Sponsor Rule</label>
+				   							   			<select name="downline_rule" class="form-control">
+				   							   				<option value="auto" {{ $customer->downline_rule == "auto" ? "selected" : "" }}>AUTO PLACEMENT</option>
+				   							   				<option value="manual" {{ $customer->downline_rule == "manual" ? "selected" : "" }}>MANUAL PLACEMENT</option>
+				   							   			</select>
+				   							   		</div>
+				   					   			</div>
+				   						   		<div class="col-md-12">
+				   						   			<div class="form-group btn-holder">
+				   							   			<button type="submit" class="submit-button btn btn-default"><i class="fa fa-pencil"></i> Update</button>
+				   							   		</div>
+				   						   		</div>
+				   					   		</div>
 				   		</form>
-				   </div>
-				   <div id="profile_picture" class="tab-pane fade">
-				   	<div class="profile_picture_success_message hidden">
-						<div class="alert alert-success">
-						  <strong>Success!</strong> Your profile picture has been successfully updated.
-						</div>
-			   		</div>
-			   		<div class="profile_picture_failed_message hidden">
-						<div class="alert alert-danger">
-						  <strong>Failed!</strong> Please try again later.
-						</div>
-			   		</div>
-				   	<form class="profile-pic-form" enctype="multipart/form-data">
-				   	<input class="get-token" type="hidden" name="_token" value="{{ csrf_token() }}">
-				   	<input type="hidden" name="customer_id" value="{{ $profile->customer_id }}">
-						<div class="upload-profile-pic">
-							<div class="icon">
-								<img style="width: 161px; height: 121px; object-fit: cover; object-fit: cover;" class="img-upload" src="/themes/{{ $shop_theme }}/img/cloud.png">
+				   </div> -->
+					<div id="profile_picture" class="tab-pane fade">
+						<div class="profile_picture_success_message hidden">
+							<div class="alert alert-success">
+								<strong>Success!</strong> Your profile picture has been successfully updated.
 							</div>
-							<div class="name">Choose New Profile Image</div>
-							<button class="btn btn-cloud" type="button" onClick="$('.upload-profile').trigger('click');">Browse</button>
-							<input type="file" class="hide upload-profile" name="profile_image">
-							<div class="file file-name">No File Selected</div>
 						</div>
-					</form>
-				   </div>
+						<div class="profile_picture_failed_message hidden">
+							<div class="alert alert-danger">
+								<strong>Failed!</strong> Please try again later.
+							</div>
+						</div>
+						<form class="profile-pic-form" enctype="multipart/form-data">
+							<input class="get-token" type="hidden" name="_token" value="{{ csrf_token() }}">
+							<input type="hidden" name="customer_id" value="{{ $profile->customer_id }}">
+							<div class="upload-profile-pic">
+								<div class="icon">
+									<img style="width: 161px; height: 121px; object-fit: cover; object-fit: cover;" class="img-upload" src="/themes/{{ $shop_theme }}/img/cloud.png">
+								</div>
+								<div class="name">Choose New Profile Image</div>
+								<button class="btn btn-cloud" type="button" onClick="$('.upload-profile').trigger('click');">Browse</button>
+								<input type="file" class="hide upload-profile" name="profile_image">
+								<div class="file file-name">No File Selected</div>
+							</div>
+						</form>
+					</div>
 				   @if($allowed_change_pass)
 				   <div id="password" class="tab-pane fade">
 					   	<div class="profile_password_success_message hidden">

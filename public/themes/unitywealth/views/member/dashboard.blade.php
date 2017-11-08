@@ -3,6 +3,20 @@
 
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
+@if($mlm_member)
+	@if(isset($_notification))
+	<div class="alert alert-danger">
+		<div class="message-warning text-center">
+			<b>Warning!</b> You are receiving this notification because ...
+			<br>
+			{!! $_notification->remarks !!}
+		</div>
+		<div class="text-center">
+			<a class="mark-as-read-click" notif-id="{{$_notification->notification_id}}"><small>Mark as Read</small></a>
+		</div>
+	</div>
+	@endif
+@endif
 @if(!$mlm_member)
 	<div class="dashboard">
 		@if(isset($check_unused_code))
@@ -18,7 +32,6 @@
 		                	<div class="congrats-holder">
 			                	<div class="title">CONGRATULATIONS!</div>
 			                    <div class="img">
-			                    	<img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
 			                    </div>
 			                    <div class="desc">You are one step away from your membership!</div>
 			                    <div class="btn-container">
@@ -45,9 +58,10 @@
 	                        <!-- <div class="text-header2">Enroll now and become one of us!</div> -->
 	                    </div>
 	                    <div class="btn-container">
-	                        <button class="btn-buy-a-kit" type="button">Buy a Package</button><br>
-	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-	                        <a href="#" id="btn-enter-a-code"><button style="margin-top: 0;" onclick="action_load_link_to_modal('members/enter-code')" class="btn-enter-a-code">ENTER A CODE</button></a>
+	                        <button class="btn-buy-a-kit" type="button">Activate My Account</button>
+	                        <!-- <br> -->
+	                        <!-- <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
+	                        <a href="#" id="btn-enter-a-code"><button style="margin-top: 0;" onclick="action_load_link_to_modal('members/enter-code')" class="btn-enter-a-code">ENTER A CODE</button></a> -->
 	                    </div>
 	                </div>
 	            </div>
@@ -69,7 +83,7 @@
 	    </style>
 		<!-- Modal -->
 		<div id="unity_kit" class="modal fade unity-kit" role="dialog">
-			<div class="modal-dialog modal-lg">
+			<div class="modal-dialog modal-sm">
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
@@ -79,7 +93,7 @@
 					<div class="modal-body">
 						<div class="row clearfix">
 							@foreach($item_kit as $key => $kit)
-							<div class="col-md-3">
+							<div class="col-md-12 text-center">
 								<div class="kit-holder">
 									<div class="name match-height">{{ $key }}</div>
 									<div class="btn-holder"><button type="button" class="btn btn-primary" onClick="location.href='/cartv2/buy_kit_mobile/{{ $kit }}'">BUY</button></div>
@@ -150,7 +164,7 @@
 							<div class="row clearfix">
 								<div class="col-sm-12 text-center">
 									<div class="label2">{{ $slot->slot_no }}</div>
-									<div class="label3"> <a href="javascript:" onclick="action_load_link_to_modal('/members/lead?slot_no={{ $slot->slot_no }}')"> VIEW LEAD LINK</a></b></div>
+									<div> <a href="javascript:" onclick="action_load_link_to_modal('/members/lead?slot_no={{ urlencode($slot->slot_no) }}','md')"> VIEW LEAD LINK</a></b></div>
 								</div>
 							</div>
 						</div>
@@ -179,13 +193,13 @@
 									<div class="date">{{ $direct->time_ago }}</div>
 								</div>
 							</div>
-							<div class="action pull-right">
+<!-- 							<div class="action pull-right">
 								@if($direct->distributed == 1)
 									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
 								@else
 									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 								@endif
-							</div>
+							</div> -->
 						</div>
 						@endforeach
 					@else
@@ -233,7 +247,7 @@
 	            <div class="modal-md modal-dialog">
 	                <div class="modal-content">
 	                    <div class="modal-body">
-	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
+	                        {{-- <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div> --}}
 	                        <div class="text-header">Done!</div>
 	                        <div class="text-caption">You are now an official member of <br><b>Unity Wealth</b></div>
 	                    </div>
@@ -324,8 +338,26 @@ $(document).ready(function()
 	});
 
 	add_event_click_buy_kit();
+	mark_as_read_function();
 });
-
+function mark_as_read_function()
+{
+	$('.mark-as-read-click').unbind('click');
+	$('.mark-as-read-click').bind('click', function()
+	{
+		$(this).html("Please wait...");
+		var notif_id = $(this).attr('notif-id');
+		$.ajax({
+			url : '/members/read-notification',
+			type : 'get',
+			data : {notif_id : notif_id},
+			success : function(data)
+			{
+				$('.alert.alert-danger').remove();
+			}
+		});
+	});
+}
 function add_event_click_buy_kit()
 {
 	$(".btn-buy-a-kit").off("click");
@@ -338,6 +370,8 @@ function action_click_buy_kit()
 {
 	$("#unity_kit").modal();
 }
+
+
 
 </script>
 @endsection

@@ -1,7 +1,5 @@
 @extends("member.member_layout")
 @section("member_content")
-
-
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
@@ -88,7 +86,7 @@
 					</div>
 				</div>
 
-				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="title">Reward Points</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="max-height: auto;">
 						<div class="holder">
@@ -137,7 +135,7 @@
 		</div>
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Newest Direct Referrals</div>
+				<div class="title">Newest Direct Referrals  <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/direct'">View All Direct</a></div>
 				<div class="sub-container border-holder">
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>

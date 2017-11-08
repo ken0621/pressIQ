@@ -99,16 +99,28 @@ class CashierController extends Member
         $data["item_id"]    = $item_id = Request::input("item_id");
         $data["item"]       = $item = Cart2::scan_item($data["shop_id"], $data["item_id"]);
 
-        if($data["item"])
+        $val = 0;
+        if(!$data['item'])
+        {
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+            $data['item'] = $val = Cart2::scan_pin_code($data["shop_id"], $warehouse_id, $data["item_id"]);
+            $item_id = $val;
+        }
+
+        if($data["item"] && is_numeric($val))
         {
             $return["status"]   = "success";
-            $return["message"]  = "Item Number " .  $item->item_id . " has been added.";
+            $return["message"]  = "Item Number " .  $item_id . " has been added.";
             Cart2::add_item_to_cart($shop_id, $item_id, 1);
         }
         else
         {
             $return["status"]   = "error";
             $return["message"]  = "The ITEM you scanned didn't match any record.";
+            if(!is_numeric($val))
+            {
+                $return["message"]  = $val;
+            }
         }
 
         echo json_encode($return);
@@ -119,17 +131,26 @@ class CashierController extends Member
         $data["item_id"]    = $item_id = Request::input("item_id");
         $quantity           = Request::input("qty");
         $data["item"]       = $item = Cart2::scan_item($data["shop_id"], $data["item_id"]);
+        $count = Cart2::get_item_pincode($shop_id, $item_id);
 
-        if($data["item"])
+        if(count($count) > 0)
         {
-            $return["status"]   = "success";
-            $return["message"]  = "Item Number " .  $item->item_id . " has been added.";
-            Cart2::add_item_to_cart($shop_id, $item_id, $quantity, true);
+            $return["status"]   = "error";
+            $return["status_message"]  = "The ITEM cannot change quantity.";
         }
         else
         {
-            $return["status"]   = "error";
-            $return["message"]  = "The ITEM you scanned didn't match any record.";
+            if($data["item"])
+            {
+                $return["status"]   = "success";
+                $return["status_message"]  = "Item Number " .  $item->item_id . " has been added.";
+                Cart2::add_item_to_cart($shop_id, $item_id, $quantity, true);
+            }
+            else
+            {
+                $return["status"]   = "error";
+                $return["status_message"]  = "The ITEM you scanned didn't match any record.";
+            }   
         }
 
         echo json_encode($return);
@@ -143,7 +164,7 @@ class CashierController extends Member
     public function pos_remove_item()
     {
         $item_id = Request::input("item_id");
-        Cart2::delete_item_from_cart($item_id);
+        Cart2::delete_item_from_cart($item_id); 
         $return["status"] = "success";
         $return["item_id"] = $item_id;
         echo json_encode($return);
@@ -169,7 +190,11 @@ class CashierController extends Member
         {   
             foreach ($cart["_item"] as $key => $value)
             {
-                $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity,'Consume');
+                $item_type = Item::get_item_type($value->item_id);
+                if($item_type == 1)
+                {
+                    $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity,'Consume');
+                }
             }
 
             if(!$destination_warehouse_id && $consume_inventory == 'wis')
@@ -187,9 +212,11 @@ class CashierController extends Member
                     $get_transaction_list = Transaction::get_data_transaction_list($transaction_list_id);
                     $get_item = Transaction::get_transaction_item($transaction_list_id);
                     $remarks = 'Consume in Transaction Number : '.$get_transaction_list->transaction_number;
+
+
                     if($consume_inventory == 'instant')
                     {
-                        Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks);
+                        Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks, $warehouse_id);
                         $validate = 1;
                     }
                     if($consume_inventory == 'wis')

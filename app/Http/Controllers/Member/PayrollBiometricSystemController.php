@@ -67,7 +67,7 @@ class PayrollBiometricSystemController extends Member
 		->whereBetween('tbl_payroll_biometric_record.payroll_time_date',array($date["date_from"],$date["date_to"]))
 		->orderBy('tbl_payroll_employee_basic.payroll_employee_number','asc')
 		->get();
-
+		// dd(Tbl_payroll_biometric_record::get());
 		return view('member.payroll2.payroll_biometric_record_table', $data);
 	}
 
@@ -143,14 +143,31 @@ class PayrollBiometricSystemController extends Member
 			}
 			else
 			{
-				Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->delete();
-				
+
+				$_time_sheet_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->get();
+				foreach ($_time_sheet_record as $key => $time_sheet_record) 
+				{
+					$time_in_record = $time_sheet_record->payroll_time_sheet_in;
+					$time_out_record = $time_sheet_record->payroll_time_sheet_out;
+
+					if(($time_in_record > $biometric_record->payroll_time_in && $biometric_record->payroll_time_out < $time_out_record) 
+					|| ($time_in_record > $biometric_record->payroll_time_in && $biometric_record->payroll_time_out < $time_out_record)
+					|| ($time_in_record == $biometric_record->payroll_time_in && $biometric_record->payroll_time_out == $time_out_record)) 
+					{
+						
+						Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$timesheet_db->payroll_time_sheet_id)->delete();
+					}
+
+					// dd($value["time_in"]." ".$value["time_out"]);
+					// dd($time_sheet_record->payroll_time_sheet_in.' '.$time_sheet_record->payroll_time_sheet_out);
+				}
+
 				$update = null;
 				$update['payroll_time_sheet_id'] 	= $timesheet_db->payroll_time_sheet_id;
 				$update['payroll_company_id'] 		= $payroll_company_id;
 				$update['payroll_time_sheet_in'] 	= $biometric_record->payroll_time_in;
 				$update['payroll_time_sheet_out'] 	= $biometric_record->payroll_time_out;
-				$update['payroll_time_sheet_origin'] = "ZKTeco TX628";
+				$update['payroll_time_sheet_origin'] = "Digima ZKTeco TX628";
 
 				Tbl_payroll_time_sheet_record::insert($update);
 				$_insert[] = $update;

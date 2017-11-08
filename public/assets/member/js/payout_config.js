@@ -15,6 +15,7 @@ function payout_config()
 	function document_ready()
 	{
 		event_schedule_type_select();
+		event_change_service_type();
 	}
 
 	function event_schedule_type_select()
@@ -27,7 +28,19 @@ function payout_config()
 			action_schedule_type_select(e.currentTarget);
 		});
 	}
-
+	function event_change_service_type()
+	{
+		$('.change-service-type').unbind('keyup');
+		$('.change-service-type').bind('keyup',function()
+		{
+			$('.service_fee_type').val(0);
+			var service_charge_string = $(this).val();
+			if(service_charge_string.indexOf('%') > 0)
+			{
+				$('.service_fee_type').val(1);
+			}
+		});
+	}
 	function action_schedule_type_select(self)
 	{
 		var schedule_type = $(self).val();

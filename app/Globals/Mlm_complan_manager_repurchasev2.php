@@ -615,7 +615,7 @@ class Mlm_complan_manager_repurchasev2
 
     public static function repurchase_points($slot_info,$points)
     {
-        $membership_points_repurchase = 0;
+        $membership_points_repurchase = $points;
 
         if($membership_points_repurchase != 0)
         {
@@ -636,25 +636,81 @@ class Mlm_complan_manager_repurchasev2
     public static function repurchase_cashback($slot_info,$points,$rank_points = 0)
     {
         $membership_points_repurchase_cashback = $points;
-        
+        $check_privilege                       = Tbl_mlm_plan_setting::where('shop_id',$slot_info->shop_id)->first();
+        if($check_privilege)
+        {
+            $check_privilege = $check_privilege->enable_privilege_system;
+        }
+        else
+        {
+            $check_privilege = 0;
+        }
+
+        if($check_privilege == 1)
+        {
+            $privilege_membership = Tbl_membership::where("shop_id",$slot_info->shop_id)->where("membership_privilege",1)->first();
+            if($privilege_membership)
+            {
+                $privilege_membership = $privilege_membership->membership_id;
+            }
+            else
+            {
+                $privilege_membership = 0;
+            }
+        }
+        else
+        {
+            $privilege_membership = 0;
+        }
+
+
         if($membership_points_repurchase_cashback != 0)
         {
-            $log_array['earning'] = $membership_points_repurchase_cashback;
-            $log_array['level'] = 0;
-            $log_array['level_tree'] = 'Sponsor Tree';
-            $log_array['complan'] = 'REPURCHASE_CASHBACK';
+            if(($privilege_membership == $slot_info->slot_membership) && ($check_privilege == 1))
+            {
+                $direct_slot          = Tbl_mlm_slot::where("slot_id",$slot_info->slot_sponsor)->where("shop_id",$slot_info->shop_id)->first();
+                if($direct_slot)
+                { 
+                    if($direct_slot->slot_membership != $privilege_membership)
+                    {
+                        $log_array['earning'] = $membership_points_repurchase_cashback;
+                        $log_array['level'] = 1;
+                        $log_array['level_tree'] = 'Sponsor Tree';
+                        $log_array['complan'] = 'REPURCHASE_CASHBACK';
 
-            $log = Mlm_slot_log::log_constructor($slot_info, $slot_info,  $log_array);
+                        $log = Mlm_slot_log::log_constructor($direct_slot, $slot_info,  $log_array);
 
-            $arry_log['wallet_log_slot'] = $slot_info->slot_id;
-            $arry_log['shop_id'] = $slot_info->shop_id;
-            $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
-            $arry_log['wallet_log_details'] = $log;
-            $arry_log['wallet_log_amount'] = $membership_points_repurchase_cashback;
-            $arry_log['wallet_log_plan'] = "REPURCHASE_CASHBACK";
-            $arry_log['wallet_log_status'] = "released";   
-            $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK', $slot_info->shop_id); 
-            Mlm_slot_log::slot_array($arry_log);
+                        $arry_log['wallet_log_slot'] = $direct_slot->slot_id;
+                        $arry_log['shop_id'] = $slot_info->shop_id;
+                        $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                        $arry_log['wallet_log_details'] = $log;
+                        $arry_log['wallet_log_amount'] = $membership_points_repurchase_cashback;
+                        $arry_log['wallet_log_plan'] = "REPURCHASE_CASHBACK";
+                        $arry_log['wallet_log_status'] = "released";   
+                        $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK', $slot_info->shop_id); 
+                        Mlm_slot_log::slot_array($arry_log);
+                    }     
+                }
+            }
+            else
+            {
+                $log_array['earning'] = $membership_points_repurchase_cashback;
+                $log_array['level'] = 0;
+                $log_array['level_tree'] = 'Sponsor Tree';
+                $log_array['complan'] = 'REPURCHASE_CASHBACK';
+
+                $log = Mlm_slot_log::log_constructor($slot_info, $slot_info,  $log_array);
+
+                $arry_log['wallet_log_slot'] = $slot_info->slot_id;
+                $arry_log['shop_id'] = $slot_info->shop_id;
+                $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                $arry_log['wallet_log_details'] = $log;
+                $arry_log['wallet_log_amount'] = $membership_points_repurchase_cashback;
+                $arry_log['wallet_log_plan'] = "REPURCHASE_CASHBACK";
+                $arry_log['wallet_log_status'] = "released";   
+                $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK', $slot_info->shop_id); 
+                Mlm_slot_log::slot_array($arry_log);
+            }
         }        
 
         $membership_points_rank_repurchase_cashback = $rank_points;
@@ -877,6 +933,7 @@ class Mlm_complan_manager_repurchasev2
 
     public static function real_time_rank_upgrade($slot_info)
     {
+  
         $shop_id                    = $slot_info->shop_id;
         $slot_id                    = $slot_info->slot_id;
         $old_rank_id                = 0;
@@ -886,18 +943,35 @@ class Mlm_complan_manager_repurchasev2
         $include_rpv_on_rgpv        = Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first()->include_rpv_on_rgpv;
 
         // Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id","<",$slot->slot_id)->orderBy("slot_id","DESC")->first();                                          
-        $slot_info      = Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->first();
+        $slot_info          = Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->first();
 
         if($slot_info)
         {       
             $old_rank_id    = $slot_info->stairstep_rank;
-            $rpv                   = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
-                                                            ->where("points_log_type","RPV")
-                                                            ->sum("points_log_points");
+            $rpv            = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
+                                                     ->where("points_log_type","RPV");
+                                                     
 
-            $grpv                  = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
-                                                            ->where("points_log_type","RGPV")   
-                                                            ->sum("points_log_points");                                         
+            $grpv           = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
+                                                     ->where("points_log_type","RGPV");
+             
+            $days_sub       = Tbl_mlm_plan_setting::where('shop_id',$shop_id)->first()->rank_real_time_update_counter;
+                   
+            /* IF HAS RANGE FOR DATE FROM START TO END VARIABLE */                                                                     
+            if($days_sub != 0)
+            {
+                $days_sub = $days_sub - 1;
+                $start    = Carbon::parse(Carbon::now()->startOfMonth())->subMonths($days_sub)->format("Y-m-d 00:00:00");
+                $end      = Carbon::parse(Carbon::now()->endOfMonth())->format("Y-m-d 23:59:59");
+                $rpv      = $rpv->where('points_log_date_claimed',">=",$start)->where('points_log_date_claimed',"<=",$end)->sum("points_log_points");
+                $grpv     = $grpv->where('points_log_date_claimed',">=",$start)->where('points_log_date_claimed',"<=",$end)->sum("points_log_points");
+            }
+            else
+            {
+                $rpv  = $rpv->sum("points_log_points");
+                $grpv = $grpv->sum("points_log_points");
+            }
+
             if(!$rpv)
             {
                 $rpv = 0;

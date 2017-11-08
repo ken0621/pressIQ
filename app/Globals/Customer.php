@@ -35,6 +35,8 @@ class Customer
 			session()->forget("lead_sponsor");
 		}
 		
+
+		//dd($info);
 		Tbl_customer::insert($info);
 		return true;	
 	}
@@ -144,7 +146,7 @@ class Customer
     	// dd($shop_id);
     	return $data;
 	}
-	public static function search_get($shop_id, $keyword = '')
+	public static function search_get($shop_id, $keyword = '', $paginate = 0)
 	{
 		$return = Tbl_customer::where('shop_id', $shop_id);
 
@@ -171,8 +173,17 @@ class Customer
 			$return = Tbl_customer::where('shop_id', $shop_id);
 			$return->where('tbl_customer.middle_name','LIKE', "%" . $keyword . "%");
 		}
+		if($paginate != 0)
+		{
+			$return = $return->groupBy('tbl_customer.customer_id')->paginate($paginate);
 
-		return $return->groupBy('tbl_customer.customer_id')->get();
+		}
+		else
+		{
+			$return = $return->groupBy('tbl_customer.customer_id')->get();
+		}
+
+		return $return;
 	}
 	public static function getAllCustomer($for_tablet = false)
 	{

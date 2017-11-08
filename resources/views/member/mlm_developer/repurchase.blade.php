@@ -1,15 +1,15 @@
 
-<form class="global-submit form-horizontal" role="form" action="/member/mlm/developer/repurchase" method="post">
+<form class="global-submit form-horizontal test_repurchase_form" role="form" action="/member/mlm/developer/repurchase" method="post">
     {{ csrf_field() }}
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
-        <h4 class="modal-title">CREATE MLM SLOT FOR TESTING</h4>
+        <h4 class="modal-title">CREATE MLM SLOT FOR TESTING <button class="btn btn-primary pull-right all_zero_btn" type="button" style="margin-right:10px;">All Zero</button></h4>
     </div>
     <div class="modal-body clearfix">
          <div class="form-group">
             <div class="col-md-12">            
                 <label>PURCHASE BY (SLOT NO.)</label>
-                <input name="slot_no" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)">
+                <input name="slot_no" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)" >
             </div>
          </div>
 
@@ -144,4 +144,15 @@
             mlm_developer.action_load_data();
         }
     }
+
+    $(".all_zero_btn").click(function()
+    {
+        $("form.test_repurchase_form :input").each(function()
+        {
+            if($(this).attr("name") != "slot_no" && $(this).attr("name") != "_token")
+            {
+                $(this).val(0);
+            }
+        });
+    });
 </script>

@@ -48,6 +48,8 @@ class MlmDeveloperController extends Member
     public function index()
     {
         $data["page"] = "MLM Developer";
+        $shop_id = $this->user_info->shop_id;
+        $data["_membership"] = Tbl_membership::where("shop_id", $shop_id)->active()->get();
         return view("member.mlm_developer.mlm_developer", $data);
     }
     public function index_table()
@@ -66,6 +68,16 @@ class MlmDeveloperController extends Member
                 $q->orWhere("last_name", "LIKE", "%$search%");
                 $q->orWhere("slot_no", "LIKE", "%$search%");
             });
+        }
+
+        if(request("membership") != 0)
+        {
+            $slot_query->where("slot_membership", request("membership"));
+        }
+
+        if(request("type") != "NA")
+        {
+            $slot_query->where("slot_status", request("type"));
         }
 
         $data["_slot_page"] = $_slot = $slot_query->paginate(5);
@@ -90,6 +102,9 @@ class MlmDeveloperController extends Member
             $data["_slot"][$key]->display_date = date("F d, Y", strtotime($slot->slot_created_date));
             $data["_slot"][$key]->display_time = date("h:i A", strtotime($slot->slot_created_date));
             $data["_slot"][$key]->modify_slot = "<a href='javascript:' link='/member/mlm/developer/modify_slot?slot_id=" . $slot->slot_id . "' class='popup' size='md'>MODIFY SLOT</a>";
+            $data["_slot"][$key]->distributed_income = "<a href='javascript:' link='/member/mlm/developer/distributed_income?slot_id=" . $slot->slot_id . "' class='popup' size='md'>DISTRIBUTED INCOME</a>";
+            $data["_slot"][$key]->change_owner = "<a href='javascript:' link='/member/mlm/developer/change_owner?slot_id=" . $slot->slot_id . "' class='popup' size='md'>" . strtoupper($slot->first_name) . " " . strtoupper($slot->last_name) . "</a>";
+            $data["_slot"][$key]->allow_multiple_slot = "<input type='checkbox' ".($slot->allow_multiple_slot == 1 ? 'checked' : '')." customer-id='".$slot->customer_id."' class='allow-slot-change' name='allow_multiple_slot'/>";
 
             /* BROWN RANK DETAILS */
             $brown_current_rank = Tbl_brown_rank::where("rank_id", $slot->brown_rank_id)->first();
@@ -169,26 +184,29 @@ class MlmDeveloperController extends Member
 
         $default[]          = ["SLOT CODE","display_slot_no", true];
         $default[]          = ["SLOT OWNER","customer", false];
+      
         $default[]          = ["SPONSOR","sponsor_button", false];
+        $default[]          = ["E-MAIL","email", false];
         $default[]          = ["PLACEMENT","placement_button", false];
         $default[]          = ["MEMBERSHIP","membership_name", true];
         $default[]          = ["BINARY LEFT","display_slot_binary_left", false];
         $default[]          = ["BINARY RIGHT","display_slot_binary_right", false];
-
+        $default[]          = ["TYPE","slot_status", false];
         $default[]          = ["BROWN CURRENT RANK","brown_current_rank", false];
         $default[]          = ["BROWN NEXT RANK","brown_next_rank", false];
         $default[]          = ["BROWN NEXT RANK REQ","brown_next_rank_requirements", false];
         $default[]          = ["BROWN BUILDER POINTS","brown_builder_points", false];
         $default[]          = ["BROWN LEADER POINTS","brown_leader_points", false];
-
         $default[]          = ["DATE CREATED","display_date", true];
         $default[]          = ["TIME CREATED","display_time", false];
-
         $default[]          = ["EARNINGS","total_earnings_format", true];
         $default[]          = ["PAYOUT","total_payout_format", false];
         $default[]          = ["CURRENT GC","total_gc_format", false];
         $default[]          = ["CURRENT WALLET","current_wallet_format", true];
         $default[]          = ["MODIFY SLOT","modify_slot", false];
+        $default[]          = ["DISTRIBUTED INCOME","distributed_income", false]; 
+        $default[]          = ["ALLOW MULTIPLE SLOT","allow_multiple_slot", false];
+        $default[]          = ["CHANGE OWNER","change_owner", false];
 
 
         if(isset($data["_slot"]))
@@ -202,6 +220,22 @@ class MlmDeveloperController extends Member
 
 
     	return view("member.mlm_developer.mlm_developer_table", $data);
+    }
+    public function allow_multiple_slot()
+    {
+        $customer_id = Request::input('customer_id');
+        $data = Tbl_customer::where('customer_id',$customer_id)->where('shop_id',$this->user_info->shop_id)->first();
+        if($data)
+        {
+            $update['allow_multiple_slot'] = 1;
+            if($data->allow_multiple_slot == 1)
+            {
+                $update['allow_multiple_slot'] = 0;
+            }
+
+            Tbl_customer::where('customer_id',$customer_id)->where('shop_id',$this->user_info->shop_id)->update($update);
+        }
+        return json_encode('success');
     }
     public function create_slot()
     {
@@ -261,6 +295,37 @@ class MlmDeveloperController extends Member
             $data["log_total"] = Currency::format($data["log_total"]);
 
             return view("member.mlm_developer.popup_earnings", $data);
+        }
+        else
+        {
+            $data["title"] = "NO EARNINGS";
+            $data["message"] = "This slot doesn't have any earnings yet.";
+            return view("error_modal", $data);
+        } 
+    }
+    public function distributed_income()
+    {
+        $data["page"] = "distributed_income";
+        $data["slot_info"] = Tbl_mlm_slot::where("slot_id", Request::input("slot_id"))->first();
+        $_wallet = Tbl_mlm_slot_wallet_log::where("wallet_log_slot_sponsor", Request::input("slot_id"))->orderBy("wallet_log_id", "asc")->get();
+        
+        if(count($_wallet) > 0)
+        {
+            $data["log_total"] = 0;
+            foreach($_wallet as $key => $wallet)
+            {
+                $recipient = Tbl_mlm_slot::where("slot_id", $wallet->wallet_log_slot)->customer()->first();
+                $data["_wallet"][$key] = $wallet;
+                $data["_wallet"][$key]->display_amount = Currency::format($wallet->wallet_log_amount);
+                $data["_wallet"][$key]->display_date = date("F d, Y - h:i A ", strtotime($wallet->wallet_log_date_created)); //October 24, 1991 (10:30 AM)
+                $data["log_total"] += $wallet->wallet_log_amount;
+                $data["_wallet"][$key]->distributed_to = $recipient->slot_no . " - " . $recipient->first_name . " " . $recipient->last_name;
+                $data["_wallet"][$key]->running_balance = Currency::format($data["log_total"]);
+            }
+
+            $data["log_total"] = Currency::format($data["log_total"]);
+
+            return view("member.mlm_developer.distributed_income", $data);
         }
         else
         {
@@ -712,14 +777,16 @@ class MlmDeveloperController extends Member
     public function recompute()
     {
         $shop_id = $this->user_info->shop_id;
-
         if(Request::isMethod("post"))
         {
             $slot_id = request("slot_id");
             $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
-            Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
-            Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
-            MLM2::entry($shop_id,$slot_id);
+            if($slot_info_e)
+            {            
+                Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+                Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+                MLM2::entry($shop_id,$slot_id);
+            }
         }
         else
         {
@@ -738,6 +805,31 @@ class MlmDeveloperController extends Member
         Tbl_mlm_slot_points_log::where("tbl_mlm_slot.shop_id", $shop_id)->join("tbl_mlm_slot", "tbl_mlm_slot.slot_id", "=", "tbl_mlm_slot_points_log.points_log_slot")->delete();
         Tbl_tree_sponsor::where("shop_id", $shop_id)->delete();
         Tbl_tree_placement::where("shop_id", $shop_id)->delete();
+
+        $update["slot_binary_left"] = 0;
+        $update["slot_binary_right"] = 0;
+        $update["slot_wallet_all"] = 0;
+        $update["slot_wallet_current"] = 0;
+        $update["slot_pairs_current"] = 0;
+        $update["slot_pairs_gc"] = 0;
+        $update["slot_personal_points"] = 0;
+        $update["slot_group_points"] = 0;
+        $update["slot_upgrade_points"] = 0;
+        $update["stairstep_rank"] = 0;
+        $update["current_level"] = 0;
+
+        Tbl_mlm_slot::where("shop_id",$shop_id)->update($update);
+
+        // $get_mlm_cd_slots = Tbl_membership_code::where("tbl_membership_code.shop_id",$shop_id)->join("tbl_mlm_slot","tbl_mlm_slot.slot_id","=","tbl_membership_code.slot_id")->where("membership_type","CD")->get();
+        // foreach($get_mlm_cd_slots as $cd_slot)
+        // {
+        //     if($cd_slot->membership_type == "CD")
+        //     {
+        //         $update_cd["slot_status"] = "CD";
+        //         $update_cd["slot_wallet_current"] = $cd_slot->membership_code_price;
+        //         Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$cd_slot->slot_id)->update($update_cd);
+        //     }
+        // }
     }
     public function redistribute()
     {
@@ -784,26 +876,39 @@ class MlmDeveloperController extends Member
     }
     public function modify_slot()
     {
-        $data["page"] = "MLM Developer - Modify Slot";
-        $data["slot_info"] = Tbl_mlm_slot::where("slot_id", request("slot_id"))->first();
-        $data["sponsor_info"] = Tbl_mlm_slot::where("slot_id", $data["slot_info"]->slot_sponsor)->first();
+        $shop_id                = $this->user_info->shop_id;
+        $data["page"]           = "MLM Developer - Modify Slot";
+        $data["slot_info"]      = Tbl_mlm_slot::where("slot_id", request("slot_id"))->first();
+        $data["sponsor_info"]   = Tbl_mlm_slot::where("slot_id", $data["slot_info"]->slot_sponsor)->first();
         $data["placement_info"] = Tbl_mlm_slot::where("slot_id", $data["slot_info"]->slot_placement)->first();
-        return view("member.mlm_developer.modify_slot", $data);  
+        $data["_membership"]    = Tbl_membership::where("shop_id", $shop_id)->where("membership_archive", 0)->get();
+        
+        return view("member.mlm_developer.modify_slot", $data);
     }
     public function modify_slot_submit()
     {
         $error = "";
         $shop_id = $this->user_info->shop_id;
         $slot_id = request("slot_id");
+        $membership_id = request("membership_id");
+        $setting    = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
 
         $sponsor_info = Tbl_mlm_slot::where("slot_no", request("sponsor"))->where("shop_id", $shop_id)->first();
         $placement_info = Tbl_mlm_slot::where("slot_no", request("placement"))->where("shop_id", $shop_id)->first();
-        $check_same = Tbl_mlm_slot::where("slot_placement", $placement_info->slot_id)->where("slot_sponsor", $sponsor_info->slot_id)->where("slot_position", request("position"))->first();
+
+        if($placement_info)
+        {
+            $check_same = Tbl_mlm_slot::where("slot_placement", $placement_info->slot_id)->where("slot_position", request("position"))->first();
+        }
+        else
+        {
+            $check_same = null;
+        }
 
         $return["status"] = "success";
         $return["call_function"] = "modify_slot_success";
 
-        if(request("password") != "0SlO051O")
+        if(request("password") != "water456")
         {
             $error = "Developer Password is incorrect";
         }
@@ -826,20 +931,72 @@ class MlmDeveloperController extends Member
 
                 if($check_same)
                 {
-                    $error = "Position Occupied";
+                    if($check_same->slot_id != $slot_id)
+                    {
+                        $error = "Position Occupied";
+                    }
                 }
             }
         }
+
+        /* PREVENT DELETE IF THERE IS SLOT WHICH SPONSORED OR PLACED */
+        if(request('membership_id') == 'delete_slot')
+        {
+            $check_slot_sponsor = Tbl_mlm_slot::where("slot_sponsor", $slot_id)->first();
+
+            if($check_slot_sponsor)
+            {
+                $error = "Cannot delete slot if someone used this slot as sponsor (" . $check_slot_sponsor->slot_no . ").";
+            }
+     
+            $check_slot_placement = Tbl_mlm_slot::where("slot_placement", $slot_id)->first();
+
+            if($check_slot_placement)
+            {
+                $error = "Cannot delete slot if someone used this slot as placement (" . $check_slot_placement->slot_no . ").";
+            }
+        }
+
 
 
         if($error == "")
         {
             $update["slot_sponsor"] = $sponsor_info->slot_id;
-            $update["slot_placement"] = $placement_info->slot_id;
-            $update["slot_position"] = request("position");
+
+            if(request("placement") != "")
+            {
+                $update["slot_placement"] = $placement_info->slot_id;
+            }
+            
+            Tbl_tree_placement::where("placement_tree_parent_id", $slot_id)->delete();
+            Tbl_tree_placement::where("placement_tree_child_id", $slot_id)->delete();
+            Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot_id)->delete();
+            Tbl_tree_sponsor::where("sponsor_tree_child_id", $slot_id)->delete();
+            Tbl_mlm_slot_wallet_log::where("wallet_log_slot_sponsor", $slot_id)->delete();
+            Tbl_mlm_slot_points_log::where("points_log_Sponsor", $slot_id)->delete();
 
 
-            Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
+            if(request('membership_id') == 'delete_slot')
+            {
+                Tbl_mlm_slot::where("slot_id", $slot_id)->delete();
+            }
+            else
+            {
+                $update["slot_position"] = request("position");
+                $update["slot_membership"] = request("membership_id");
+                Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
+
+                $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+
+                if($setting->plan_settings_placement_required == 1)
+                {
+                    Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+                }
+
+                Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1);
+                MLM2::entry($shop_id, $slot_id);
+            }
+
             $return["status"] = "success";
             $return["call_function"] = "modify_slot_success";
         }
@@ -851,5 +1008,38 @@ class MlmDeveloperController extends Member
 
         echo json_encode($return);
     }
+    public function change_owner()
+    {
+        $slot_id = request("slot_id");
 
+        if(request()->isMethod("post"))
+        {
+            $customer = Tbl_customer::where("email", request("email"))->where("shop_id", $this->user_info->shop_id)->first();
+           
+            if($customer)
+            {
+                $return["status"] = "success";
+                $return["call_function"] = "change_owner_success";
+
+                $update["slot_owner"] = $customer->customer_id;
+                Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
+            }
+            else
+            {
+                $return["status"] = "error";
+                $return["message"] = "Customer E-Mail doesn't exist.";
+
+
+            }
+
+            echo json_encode($return);
+        }
+        else
+        {
+            $data["page"]   = "Change Owner";
+            $data["id"]     = request("slot_id");
+            $data["slot"]   = Tbl_mlm_slot::where("slot_id", $data["id"])->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->customer()->first();
+            return view("member.mlm_developer.change_owner", $data);
+        }
+    }
 }

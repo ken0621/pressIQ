@@ -37,8 +37,7 @@
                 <label for="stairstep_bonus">Bonus</label>
                 <input type="number" class="form-control" name="stairstep_bonus" value="{{$value->stairstep_bonus}}">
             </div>               
-            <div class="col-md-12"></div>
-            <div class="col-md-3"></div>        
+            <div class="col-md-12"></div>      
             <div class="col-md-2">
                 <label for="direct_rank_bonus">Direct Bonus</label>
                 <input type="number" class="form-control" name="direct_rank_bonus" value="{{$value->direct_rank_bonus}}">
@@ -60,6 +59,14 @@
                 <label for="stairstep_leg_count">Leg Count</label>
                 <input type="number" class="form-control" name="stairstep_leg_count" value="{{$value->stairstep_leg_count}}">
             </div>
+            <div class="col-md-2">
+                <label for="stairstep_genealogy_color">Genealogy Color</label>
+                <input type="text" class="form-control jscolor" id="stairstep_genealogy_color" name="stairstep_genealogy_color" value="{{$value->stairstep_genealogy_color == 'Default' ? '519fcd' : ltrim($value->stairstep_genealogy_color, '#')}}">
+            </div> 
+            <div class="col-md-2">
+                <label for="stairstep_genealogy_border_color">Genealogy Border Color</label>
+                <input type="text" class="form-control jscolor" id="stairstep_genealogy_border_color" name="stairstep_genealogy_border_color" value="{{$value->stairstep_genealogy_border_color == 'Default' ? '519fcd' : ltrim($value->stairstep_genealogy_border_color, '#')}}">
+            </div> 
             <div class="col-md-1 pull-right">
                 <br>
                 <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_stairstep({{$key}})">Save</a>
@@ -107,7 +114,6 @@
             <input type="number" class="form-control" name="stairstep_bonus" value="0">
         </div>       
         <div class="col-md-12"></div>
-        <div class="col-md-3"></div>
         <div class="col-md-2">
             <label for="direct_rank_bonus">Direct Bonus</label>
             <input type="number" class="form-control" name="direct_rank_bonus" value="0">
@@ -129,6 +135,14 @@
             <label for="stairstep_leg_count">Leg Count</label>
             <input type="number" class="form-control" name="stairstep_leg_count" value="0">
         </div>
+        <div class="col-md-2">
+            <label for="stairstep_genealogy_color">Genealogy Color</label>
+            <input type="text" class="form-control jscolor" id="stairstep_genealogy_color" name="stairstep_genealogy_color" value="519fcd">
+        </div>        
+         <div class="col-md-2">
+            <label for="stairstep_genealogy_border_color">Genealogy Border Color</label>
+            <input type="text" class="form-control jscolor" id="stairstep_genealogy_border_color" name="stairstep_genealogy_border_color" value="519fcd">
+        </div> 
         <div class="col-md-1 pull-right">
             <br>
             <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="save_stairstep()">Save</a>
@@ -136,3 +150,5 @@
     </form>
     </td>
 </tr>
+
+

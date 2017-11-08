@@ -280,11 +280,20 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "90% Working";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";  
 
-    /* -- E-COMMERCE => PRODUCT ORDERS */
+    /* -- TAYLORMADE => COMMISSION CALC */
     $code = "cashier-commission-calculator";
     $nav[$page]['submenu'][$code]['label'] = "Commission Calculator";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/commission_calculator";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Arcylen Gutierrez</span>";  
+
+    /* -- TAYLORMADE => SALES AGENT */
+    $code = "cashier-sales-agent";
+    $nav[$page]['submenu'][$code]['label'] = "Sales Agent";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sales_agent";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "90% Working";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Arcylen Gutierrez</span>";  

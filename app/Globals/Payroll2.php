@@ -1245,7 +1245,8 @@ class Payroll2
 							($time_out_minutes>=$next_shift_in_minutes)) 
 						{ 
 							//sometimes it records with the same time
-							if ($shift_out_minutes != $next_shift_in_minutes) {
+							if ($shift_out_minutes != $next_shift_in_minutes) 
+							{
 								$reason = "<b>answer: ".Payroll2::convert_to_12_hour($shift->shift_out)." to ".Payroll2::convert_to_12_hour($_shift[$count_shift]->shift_in)." (0)- <span style='color: green; text-transform: uppercase'>sandwich overtime, time in is between next shift in and out<span><br></b>";
 								echo $testing == true ? $reason : "";
 								$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_out, $_shift[$count_shift]->shift_in, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out, $_shift[$count_shift]->shift_in));
@@ -3474,10 +3475,8 @@ class Payroll2
 		/* GET PERIOD CATEGORY ARR */
 		$data["period_category_arr"] 	= $period_category_arr	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
 
-
 		/* BREAKDOWN MODE */
 		$return->_breakdown = array();
-
 
 		/* FLAT RATE DECLARED BASIC PAY */
 		if($group->payroll_group_salary_computation == "Flat Rate")
@@ -3544,20 +3543,22 @@ class Payroll2
 		}
 		
 		
-		
-		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
-		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
-		$return = Payroll2::cutoff_breakdown_allowance_v2($return, $data);
-		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
-		$return = Payroll2::cutoff_breakdown_non_taxable_allowances($return, $data);
-		$return = Payroll2::cutoff_breakdown_hidden_allowances($return, $data);
+		if ($return->_time_breakdown["time_spent"]["float"] != 0 )
+		{
+			$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
+			$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
+			$return = Payroll2::cutoff_breakdown_allowance_v2($return, $data);
+			$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
+			$return = Payroll2::cutoff_breakdown_non_taxable_allowances($return, $data);
+			$return = Payroll2::cutoff_breakdown_hidden_allowances($return, $data);
+		}
+		
 		$return = Payroll2::cutoff_breakdown_compute_gross_pay($return, $data);
 		$return = Payroll2::cutoff_breakdown_government_contributions($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_taxable_salary($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_tax($return, $data);	
 		$return = Payroll2::cutoff_breakdown_compute_net($return, $data);
-		
 		
 		return $return;
 	}
@@ -4269,99 +4270,126 @@ class Payroll2
 			}
 		}
 
-		$val["label"] = "SSS EE";
-		$val["description"] = $sss_description;
-		$val["type"] = "government_contributions";
-		$val["amount"] = $sss_contribution["ee"];
-		$val["add.gross_pay"] = false;
-		$val["deduct.gross_pay"] = false;
-		$val["add.taxable_salary"] = false;
-		$val["deduct.taxable_salary"] = true;
-		$val["add.net_pay"] = false;
-		$val["deduct.net_pay"] = false;
-		array_push($return->_breakdown, $val);
-		$val = null;
 
-		$val["label"] = "SSS ER";
-		$val["type"] = "government_contributions";
-		$val["amount"] = $sss_contribution["er"];			
-		$val["add.gross_pay"] = false;
-		$val["deduct.gross_pay"] = false;
-		$val["add.taxable_salary"] = false;
-		$val["deduct.taxable_salary"] = false;
-		$val["add.net_pay"] = false;
-		$val["deduct.net_pay"] = false;
-		array_push($return->_breakdown, $val);
-		$val = null;
+		if ($return->_time_breakdown["time_spent"]["float"] != 0 ) 
+		{
+			$val["label"] = "SSS EE";
+			$val["description"] = $sss_description;
+			$val["type"] = "government_contributions";
+			$val["amount"] = $sss_contribution["ee"];
+			$val["add.gross_pay"] = false;
+			$val["deduct.gross_pay"] = false;
+			$val["add.taxable_salary"] = false;
+			$val["deduct.taxable_salary"] = true;
+			$val["add.net_pay"] = false;
+			$val["deduct.net_pay"] = false;
+			array_push($return->_breakdown, $val);
+			$val = null;
 
-		$val["label"] = "SSS EC";
-		$val["type"] = "government_contributions";
-		$val["amount"] = $sss_contribution["ec"];			
-		$val["add.gross_pay"] = false;
-		$val["deduct.gross_pay"] = false;
-		$val["add.taxable_salary"] = false;
-		$val["deduct.taxable_salary"] = false;
-		$val["add.net_pay"] = false;
-		$val["deduct.net_pay"] = false;
-		array_push($return->_breakdown, $val);
-		$val = null;
+			$val["label"] = "SSS ER";
+			$val["type"] = "government_contributions";
+			$val["amount"] = $sss_contribution["er"];			
+			$val["add.gross_pay"] = false;
+			$val["deduct.gross_pay"] = false;
+			$val["add.taxable_salary"] = false;
+			$val["deduct.taxable_salary"] = false;
+			$val["add.net_pay"] = false;
+			$val["deduct.net_pay"] = false;
+			array_push($return->_breakdown, $val);
+			$val = null;
 
-		$val["label"] = "PHILHEALTH EE";
-		$val["type"] = "government_contributions";
-		$val["description"] = $philhealth_description;
-		$val["amount"] = $philhealth_contribution["ee"];
-		$val["add.gross_pay"] = false;
-		$val["deduct.gross_pay"] = false;
-		$val["add.taxable_salary"] = false;
-		$val["deduct.taxable_salary"] = true;
-		$val["add.net_pay"] = false;
-		$val["deduct.net_pay"] = false;
-		array_push($return->_breakdown, $val);
-		$val = null;
+			$val["label"] = "SSS EC";
+			$val["type"] = "government_contributions";
+			$val["amount"] = $sss_contribution["ec"];			
+			$val["add.gross_pay"] = false;
+			$val["deduct.gross_pay"] = false;
+			$val["add.taxable_salary"] = false;
+			$val["deduct.taxable_salary"] = false;
+			$val["add.net_pay"] = false;
+			$val["deduct.net_pay"] = false;
+			array_push($return->_breakdown, $val);
+			$val = null;
 
-		$val["label"] = "PHILHEALTH ER";
-		$val["type"] = "government_contributions";
-		$val["amount"] = $philhealth_contribution["er"];			
-		$val["add.gross_pay"] = false;
-		$val["deduct.gross_pay"] = false;
-		$val["add.taxable_salary"] = false;
-		$val["deduct.taxable_salary"] = false;
-		$val["add.net_pay"] = false;
-		$val["deduct.net_pay"] = false;
-		array_push($return->_breakdown, $val);
-		$val = null;
+			$val["label"] = "PHILHEALTH EE";
+			$val["type"] = "government_contributions";
+			$val["description"] = $philhealth_description;
+			$val["amount"] = $philhealth_contribution["ee"];
+			$val["add.gross_pay"] = false;
+			$val["deduct.gross_pay"] = false;
+			$val["add.taxable_salary"] = false;
+			$val["deduct.taxable_salary"] = true;
+			$val["add.net_pay"] = false;
+			$val["deduct.net_pay"] = false;
+			array_push($return->_breakdown, $val);
+			$val = null;
 
-		$val["label"] = "PAGIBIG EE";
-		$val["type"] = "government_contributions";
-		$val["description"] = $pagibig_description;
-		$val["amount"] = $pagibig_contribution["ee"];
-		$val["add.gross_pay"] = false;
-		$val["deduct.gross_pay"] = false;
-		$val["add.taxable_salary"] = false;
-		$val["deduct.taxable_salary"] = true;
-		$val["add.net_pay"] = false;
-		$val["deduct.net_pay"] = false;
-		array_push($return->_breakdown, $val);
-		$val = null;
+			$val["label"] = "PHILHEALTH ER";
+			$val["type"] = "government_contributions";
+			$val["amount"] = $philhealth_contribution["er"];			
+			$val["add.gross_pay"] = false;
+			$val["deduct.gross_pay"] = false;
+			$val["add.taxable_salary"] = false;
+			$val["deduct.taxable_salary"] = false;
+			$val["add.net_pay"] = false;
+			$val["deduct.net_pay"] = false;
+			array_push($return->_breakdown, $val);
+			$val = null;
 
-		$val["label"] = "PAGIBIG ER";
-		$val["type"] = "government_contributions";
-		$val["amount"] = $pagibig_contribution["er"];			
-		$val["add.gross_pay"] = false;
-		$val["deduct.gross_pay"] = false;
-		$val["add.taxable_salary"] = false;
-		$val["deduct.taxable_salary"] = false;
-		$val["add.net_pay"] = false;
-		$val["deduct.net_pay"] = false;
-		array_push($return->_breakdown, $val);
-		$val = null;
+			$val["label"] = "PAGIBIG EE";
+			$val["type"] = "government_contributions";
+			$val["description"] = $pagibig_description;
+			$val["amount"] = $pagibig_contribution["ee"];
+			$val["add.gross_pay"] = false;
+			$val["deduct.gross_pay"] = false;
+			$val["add.taxable_salary"] = false;
+			$val["deduct.taxable_salary"] = true;
+			$val["add.net_pay"] = false;
+			$val["deduct.net_pay"] = false;
+			array_push($return->_breakdown, $val);
+			$val = null;
 
-		$return->sss_contribution = $sss_contribution;
-		$return->pagibig_contribution = $pagibig_contribution;
-		$return->philhealth_contribution = $philhealth_contribution;
-		$return->sss_contribution["salary"] = $sss_reference_amount;
-		$return->philhealth_contribution["salary"] = $philhealth_reference_amount;
-		$return->pagibig_contribution["salary"] = $pagibig_reference_amount;
+			$val["label"] = "PAGIBIG ER";
+			$val["type"] = "government_contributions";
+			$val["amount"] = $pagibig_contribution["er"];			
+			$val["add.gross_pay"] = false;
+			$val["deduct.gross_pay"] = false;
+			$val["add.taxable_salary"] = false;
+			$val["deduct.taxable_salary"] = false;
+			$val["add.net_pay"] = false;
+			$val["deduct.net_pay"] = false;
+			array_push($return->_breakdown, $val);
+			$val = null;
+
+			$return->sss_contribution 					= $sss_contribution;
+			$return->pagibig_contribution 				= $pagibig_contribution;
+			$return->philhealth_contribution 			= $philhealth_contribution;
+			$return->sss_contribution["salary"] 		= $sss_reference_amount;
+			$return->philhealth_contribution["salary"] 	= $philhealth_reference_amount;
+			$return->pagibig_contribution["salary"] 	= $pagibig_reference_amount;
+		}
+		else
+		{
+			/*if no time spent, remove deduction of government deductions*/
+			foreach ($sss_contribution as $key => $value) 
+			{
+				$sss_contribution[$key] = 0;
+			}
+			foreach ($pagibig_contribution as $key => $value) 
+			{
+				$pagibig_contribution[$key] = 0;
+			}
+			foreach ($philhealth_contribution as $key => $value) 
+			{
+				$philhealth_contribution[$key] = 0;
+			}
+			$return->sss_contribution 					= $sss_contribution;
+			$return->pagibig_contribution 				= $pagibig_contribution;
+			$return->philhealth_contribution 			= $philhealth_contribution;
+			$return->sss_contribution["salary"] 		= 0;
+			$return->philhealth_contribution["salary"] 	= 0;
+			$return->pagibig_contribution["salary"] 	= 0;
+		}
+
 		return $return;
 	}
 	public static function cutoff_breakdown_non_taxable_allowances($return, $data)
@@ -4815,9 +4843,7 @@ class Payroll2
 				$val = null;
 			}
 		}
-
 		extract($data);
-
 		/* AGENCY DEDUCTION */
 		if($group->payroll_group_agency == Payroll::return_ave($period_category))
 		{

@@ -338,6 +338,11 @@ $text-dark: #272c2f;
 	}
 }
 
+.modal-open 
+{
+  overflow: inherit;
+}
+
 /* Success */
 .popup-success
 {

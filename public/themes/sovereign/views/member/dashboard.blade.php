@@ -223,6 +223,7 @@
 @section("member_script")
 <script type="text/javascript" src="/assets/member/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
+
 <script>
 
 $(document).ready(function()

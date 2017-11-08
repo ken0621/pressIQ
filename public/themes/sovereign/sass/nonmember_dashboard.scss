@@ -611,9 +611,9 @@ $text-dark: #272c2f;
 	}
 }
 
-.modal-open 
+.modal-open
 {
-  overflow-y: scroll;
+  overflow: inherit;
 }
 
 /* Failed */

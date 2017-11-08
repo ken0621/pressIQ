@@ -4270,8 +4270,7 @@ class Payroll2
 				$pagibig_contribution["er"] = 0;
 			}
 		}
-
-
+		
 		if ($return->_time_breakdown["time_spent"]["float"] != 0 || $data["group"]->payroll_group_salary_computation == "Flat Rate") 
 		{
 			$val["label"] = "SSS EE";

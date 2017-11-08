@@ -78,7 +78,7 @@ class TruckController extends Member
         $insert["truck_shop_id"] = $this->user_info->shop_id;
         $insert["created_at"] = Carbon::now();
 
-        $rule["truck_model"] = "required";
+/*        $rule["truck_model"] = "required";*/
         $rule["truck_kilogram"] = "numeric";
         $rule["plate_number"] = "required|unique:tbl_truck,plate_number";
 
@@ -141,7 +141,7 @@ class TruckController extends Member
         $update["warehouse_id"] = $truck_warehouse;
         $update["created_at"] = Carbon::now();
 
-        $rule["truck_model"] = "required";
+        /*$rule["truck_model"] = "required";*/
         $rule["truck_kilogram"] = "numeric";
         $rule["plate_number"] = "required|unique:tbl_truck,plate_number,".$id.",truck_id";
 

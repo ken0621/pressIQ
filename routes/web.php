@@ -282,6 +282,8 @@ Route::any('/member/pis_counter','Member\PurchasingInventorySystemController@pis
 Route::any('/member/item/view_item_history/{id}','Member\ItemController@view_item_history');
 Route::any('/member/item/add_submit_pis','Member\ItemController@add_submit_pis');
 Route::any('/member/item/edit_submit_pis','Member\ItemController@edit_submit_pis');
+Route::any('/member/item/delete_item_history','Member\ItemController@delete_item_history');
+
 
 Route::any('/member/enable_disable_pis/{pass}/{action}','Member\PurchasingInventorySystemController@enable_pis');
 /*END ITEM FOR PIS*/

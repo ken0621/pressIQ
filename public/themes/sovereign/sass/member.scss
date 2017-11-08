@@ -180,13 +180,12 @@
 								transition: 0.3s all ease;
 								height: 50px;
 
-								.icon 
+								.icon, .fa
 								{
 									display: inline-block;
 									vertical-align: top;
 									width: 20px;
 									margin-right: 15px;
-
 									text-align: center;
 									font-size: 18px;
 									color: #fff;
@@ -212,7 +211,7 @@
 									text-decoration: none;
 									border-color: #1F262C;
 
-									.icon 
+									.icon, .fa
 									{
 										color: #fff;
 										opacity: 1;
@@ -373,7 +372,7 @@
 									.nav-holder
 									{
 										background-color: rgba(0,0,0,0.1);
-										
+
 										.icon
 										{
 											img

@@ -12,7 +12,6 @@ $text-dark: #272c2f;
 /* Dashboard Top */
 .dashboard-top
 {
-	
 	.join-container
 	{
 		font-family: $content-text;
@@ -675,6 +674,124 @@ $text-dark: #272c2f;
 					padding: 12px 55px;
 					border: 2px solid #ed5639;
 					border-radius: 2px;
+				}
+			}
+		}
+	}
+}
+
+.popup-enter-a-code
+{
+	.modal-header
+	{
+		background-color: #052093;
+		color: #fff;
+
+		.close
+		{
+			color: #fff;
+		}
+	}
+
+	.modal-body
+	{
+		text-align: center;
+			
+		.labels
+		{
+			padding: 20px;
+		}
+
+		input
+		{
+			width: 100%;
+			font-size: 15px;
+			font-weight: 400 !important;
+			color: #777 !important;
+			letter-spacing: 0.5px;
+			border: none;
+			border: 1px solid #c9c9c9;
+			margin: 5px 0px;
+			margin-bottom: 15px;
+			padding: 5px;
+			border-radius: 2px;
+		}
+
+    	.btn-container
+    	{
+			text-align: center;
+			font-family: $content-text;
+			font-weight: $semi-bold;
+			font-size: 13px;
+			padding-bottom: 20px;
+
+			.btn-verify
+			{
+				@include transition(0.2s);
+				color: #fff;
+				background-color: #052093;
+				padding: 12px 25px;
+				border: none;
+				border-radius: 2px;
+				opacity: 0.9;
+			}
+
+			.btn-verify:hover
+			{
+				color: #fff;
+				opacity: 0.8;
+			}
+		}
+	}
+}
+
+.popup-verify-placement
+{
+	#slot-placement-modal
+	{
+		.modal-content
+		{
+			.modal-header
+			{
+				background-color: #052093;
+			}
+
+			.modal-body
+			{
+				.slot-placement-form
+				{
+					.labeld
+					{
+						color: #2D2D2D;
+					}
+
+					.input
+					{
+						border: 1px solid #052093;
+					}
+					
+					.btn-container
+					{
+						button
+						{
+							@include transition(0.2s);
+							color: #052093;
+							border: 2px solid #052093;
+							
+							&:hover
+							{
+								color: #fff;
+								background-color: #052093;
+
+							}
+
+						}
+
+						.iamowner
+						{
+							color: #2D2D2D !important;
+						}
+					}
 				}
 			}
 		}

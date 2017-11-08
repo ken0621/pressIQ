@@ -71,6 +71,12 @@
 								</li>
 							</ul>
 						</li>
+						<li class="{{ Request::segment(2) == "code-vault" ? "active" : "" }}">
+							<a href="javascript:"><div class="nav-holder"><div class="fa fa-shield"></div> <span>Code Vault</span></div></a>
+						</li>
+						<li class="{{ Request::segment(2) == "prod-code-vault" ? "active" : "" }}">
+							<a href="javascript:"><div class="nav-holder"><div class="fa fa-shield"></div> <span>Product Code Vault</span></div></a>
+						</li>
 						@else
 						@endif
 					</ul>

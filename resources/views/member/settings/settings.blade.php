@@ -95,3 +95,15 @@
 			<option value="1">Enable</option>
 		</select>
 	</div>
+
+	<hr>
+	<center>Accounting - Taylormade</center>
+	<!-- Customer with Unit -->
+	<div class="settings" id="customer_unit_receive_payment">
+		Customer with Unit in Receive Payment
+		<input type="hidden" name="settings_key" value="customer_unit_receive_payment">
+		<select name="settings_value" class="form-control">
+			<option value="0">Disable</option>
+			<option value="1">Enable</option>
+		</select>
+	</div>

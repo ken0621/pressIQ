@@ -264,6 +264,17 @@
                                         </select>
                                     </td>
                                 </tr>
+                                </tr>
+                                    <td>Restricted Membership</td>
+                                    <td>
+                                        <select class="form-control" name="membership_restricted_id">
+                                                <option value="0">None</option>
+                                                @foreach($membership_list as $list)
+                                                    <option value="{{$list->membership_id}}" {{$list->membership_restricted == 1 ? 'selected' : ''}}>{{$list->membership_name}}</option>
+                                                @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
                             </tbody>
                         
                         @else

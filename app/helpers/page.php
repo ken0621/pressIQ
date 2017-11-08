@@ -280,11 +280,20 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "90% Working";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";  
 
-    /* -- E-COMMERCE => PRODUCT ORDERS */
+    /* -- TAYLORMADE => COMMISSION CALC */
     $code = "cashier-commission-calculator";
     $nav[$page]['submenu'][$code]['label'] = "Commission Calculator";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/commission_calculator";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Arcylen Gutierrez</span>";  
+
+    /* -- TAYLORMADE => SALES AGENT */
+    $code = "cashier-sales-agent";
+    $nav[$page]['submenu'][$code]['label'] = "Sales Agent";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sales_agent";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "90% Working";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Arcylen Gutierrez</span>";  
@@ -979,6 +988,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/v2";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','refill-item','add_auto_approve', 'can_approve_item_request', 'can_edit_other_item'];
+    $nav[$page]['submenu'][$code]['status'] = "Still developing";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
+
+    $code = "item-price-level";
+    $nav[$page]['submenu'][$code]['label'] = "Item Price Level";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/price_level";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit'];
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
 

@@ -26,7 +26,6 @@ body
 	letter-spacing: 0.2px;
 	margin: 25px 0;
 	background-color: #fff;
-
 	table
 	{
 		table-layout: fixed;
@@ -50,7 +49,6 @@ body
 			display: block;
 		}
 	}
-
 	.register-side
 	{
 		img
@@ -58,7 +56,6 @@ body
 			width: 100%;
 		}
 	}
-	
 	.register-form
 	{
 		padding: 50px;
@@ -265,12 +262,12 @@ body
 					.btn
 					{
 						@include transition(0.2s);
-						background-color: #FD8A0E;
+						background-color: #042491;
 						color: #fff;
 
 						&:hover
 						{
-							opacity: 0.8;
+							background-color: #0B2064;
 						}
 					}
 
@@ -295,7 +292,7 @@ body
 				.login-href
 				{
 					@include transition(0.2s);
-					color: #FD8A0E;
+					color: #B17D2A;
 					font-size: 15px;
 					font-weight: $regular;
 
@@ -306,7 +303,17 @@ body
 
 					&:hover
 					{
-						opacity: 0.8;
+						color: #019771;
+					}
+				}
+				.btn-brown
+				{
+					@media screen and (min-width: 125px)
+					{
+						width: 125px;
+					}
+					&:hover {
+						background-color: #613922;
 					}
 				}
 			}

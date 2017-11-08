@@ -37,7 +37,7 @@ Route::any('create_employee_official_business', 'Member\PayrollEmployee\Employee
 Route::any('create_employee_approver', 'Member\PayrollEmployee\EmployeeController@create_employee_approver');
 
 Route::any('employee_payslip/{payroll_period_id}','Member\PayrollEmployee\EmployeeController@employee_payslip');
-Route::any('employee_timesheet/{payroll_period_id}','Member\PayrollEmployee\EmployeeController@employee_timesheet');
+Route::any('employee_timesheet','Member\PayrollEmployee\EmployeeController@employee_timesheet');
 
 
 Route::any('sample', 'Member\PayrollEmployee\EmployeeController@sample');

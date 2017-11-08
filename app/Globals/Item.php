@@ -392,7 +392,11 @@ class Item
 
         return $return;
     }
-    
+    public static function get_per_warehouse($shop_id, $warehouse_id, $archive = 0)
+    {
+        $query = Tbl_item::inventorylog()->where("tbl_item.shop_id", $shop_id)->where('record_warehouse_id',$warehouse_id)->where("tbl_item.archived", $archive)->type()->groupBy('tbl_item.item_id')->get();
+        return $query;
+    }
     public static function get_all_item()
     {
         return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();

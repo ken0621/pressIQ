@@ -245,7 +245,7 @@ class PayrollController extends Member
           $separated_status[0] = 8;
           $separated_status[1] = 9;
 
-		$data['_active']	 = Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $active_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
+		$data['_active']	 = Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $active_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_last_name')->paginate($this->paginate_count);
 
 		// $data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
 
@@ -259,7 +259,7 @@ class PayrollController extends Member
           or `tbl_payroll_employee_contract`.`payroll_employee_contract_date_end` = 0000-00-00) 
           and `payroll_employee_contract_status` in (8, 9) and `tbl_payroll_employee_basic`.`shop_id` = '.Self::shop_id().' 
           and `tbl_payroll_employee_contract`.`payroll_employee_contract_archived` = 0 
-          order by `tbl_payroll_employee_basic`.`payroll_employee_first_name` asc');
+          order by `tbl_payroll_employee_basic`.`payroll_employee_last_name` asc');
 
 
           /*ORIGINAL QUERY*/
@@ -1989,9 +1989,10 @@ class PayrollController extends Member
 
           $parameter['date']                      = date('Y-m-d');
           $parameter['company_id']                = $company_id;
-          $parameter['employement_status']   = $employement_status;
+          $parameter['employement_status']        = $employement_status;
           $parameter['shop_id']                   = Self::shop_id();
-          $data['_active'] = Tbl_payroll_employee_basic::selemployee($parameter)->get();
+
+          $data['_active'] = Tbl_payroll_employee_basic::selemployee($parameter)->orderBy('tbl_payroll_employee_basic.payroll_employee_last_name')->get();
 
           return view('member.payroll.reload.employee_list_reload', $data);
      }

@@ -168,7 +168,7 @@ class EmployeeController extends PayrollMember
 
 		$data['page']				= 'Time Keeping';
 		$data['period_record'] 		= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->get();
-		//dd($data['period_record'] );
+		// dd($data['period_record']);
 		return view('member.payroll2.employee_dashboard.employee_time_keeping',$data);
 	}
 	public function employee_payslip($payroll_period_id)

@@ -85,7 +85,8 @@ class Tbl_payroll_time_keeping_approved extends Model
 
 		$query->join("tbl_payroll_period_company", "tbl_payroll_period_company.payroll_period_company_id", "=", "tbl_payroll_time_keeping_approved.payroll_period_company_id")
 			  ->join("tbl_payroll_period", "tbl_payroll_period.payroll_period_id", "=", "tbl_payroll_period_company.payroll_period_id")
-			  ->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
+			  ->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id")
+			  ->orderBy('tbl_payroll_period.payroll_period_start','asc');
 
 		if($employee_id != 0)
 		{

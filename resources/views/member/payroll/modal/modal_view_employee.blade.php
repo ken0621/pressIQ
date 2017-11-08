@@ -33,18 +33,15 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="col-md-6 padding-lr-1">
+            <div class="col-md-4 padding-lr-1">
               <small>Employee number</small>
               <input type="text" name="payroll_employee_number" class="form-control" required value="{{$employee->payroll_employee_number}}">
             </div>
-<<<<<<< HEAD
-=======
-            <div class="col-md-3 padding-lr-1">
+            <div class="col-md-4 padding-lr-1">
               <small>Biometric number</small>
               <input type="text" name="payroll_employee_biometric_number" class="form-control" required value="{{$employee->payroll_employee_biometric_number}}">
             </div>
->>>>>>> a50c0e283a765e37f1b2dc8472f2c6ba8e87bdaf
-            <div class="col-md-6 padding-lr-1">
+            <div class="col-md-4 padding-lr-1">
               <small>ATM No.</small>
               <input type="text" name="payroll_employee_atm_number" class="form-control" value="{{$employee->payroll_employee_atm_number}}">
             </div>

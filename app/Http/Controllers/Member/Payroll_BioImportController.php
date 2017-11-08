@@ -783,7 +783,8 @@ class Payroll_BioImportController extends Member
     	{
     		Tbl_payroll_time_sheet_record::insert($insert_time_record);
     		$count_inserted = count($insert_time_record);
-    		if ($company != null || $company != 0) {
+    		if ($company != null || $company != 0) 
+    		{
     			$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company)->first();
     			AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using ZKTime_5_0   Template.', "", "" ,"");
     		}

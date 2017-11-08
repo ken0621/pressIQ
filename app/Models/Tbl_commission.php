@@ -23,4 +23,8 @@ class Tbl_commission extends Model
     {
         return $query->leftjoin('tbl_commission_invoice','tbl_commission_invoice.commission_id','=','tbl_commission.commission_id');
     }
+    public function scopeCustomer($query)
+    {
+        return $query->leftjoin('tbl_customer','tbl_customer.customer_id','=','tbl_commission.customer_id');
+    }
 }

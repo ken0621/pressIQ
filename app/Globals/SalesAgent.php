@@ -25,6 +25,12 @@ class SalesAgent
 		$ins['shop_id'] = $shop_id;
 		return Tbl_employee::insertGetId($ins);
 	}
+	public static function info($shop_id, $agent_id)
+	{
+		$return = Tbl_employee::where('shop_id',$shop_id)->where('employee_id',$agent_id)->first();
+
+		return $return;
+	}
 	public static function get_list($shop_id, $commission = false, $archived = 0)
 	{
 		$agent = Tbl_employee::position()->where('shop_id',$shop_id)->where('tbl_employee.archived',$archived)->get();

@@ -46,7 +46,8 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('members/enter-code')">Create New Slot</a></div>
+				<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('/members/enter-code')">Create New Slot</a>
+				</div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">

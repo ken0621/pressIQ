@@ -87,3 +87,19 @@ $text-dark: #272c2f;
 		}
 	}
 }
+
+.modal-open
+{
+	overflow: scroll;
+}
+
+.modal-header
+{
+	background-color: #052093;
+	color: #fff;
+
+	.close
+	{
+		color: #fff;
+	}
+}

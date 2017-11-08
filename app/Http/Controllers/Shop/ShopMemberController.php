@@ -2343,4 +2343,47 @@ class ShopMemberController extends Shop
 
         dd(Webhook::retrieve());
     }
+    public function postSlotUpgradeCode(Request $request)
+    {
+        $shop_id                                = $this->shop_info->shop_id;
+        $validate["pin"]                        = ["required", "string", "alpha_dash"];
+        $validate["activation"]                 = ["required", "string", "alpha_dash"];
+        $validator                              = Validator::make($request->all(), $validate);
+
+        $message = "";
+
+        if($validator->fails())
+        {
+            foreach($validator->errors()->all() as $error)
+            {
+                $message .= "<div>" . $error . "</div>";
+            }
+        }
+        else
+        {
+            $activation             = request("activation");
+            $pin                    = request("pin");
+            $check_membership_code  = MLM2::check_membership_code($shop_id, $pin, $activation);
+
+            if(!$check_membership_code)
+            {
+                $message = "Invalid PIN / ACTIVATION!";
+            }
+            else
+            {
+                if($check_membership_code->mlm_slot_id_created != "")
+                {
+                    $message = "PIN / ACTIVATION ALREADY USED";
+                }
+                else
+                {
+                    $store["temp_pin"] = $pin;
+                    $store["temp_activation"] = $activation;
+                    session($store);
+                }
+            }
+        }
+
+        echo $message;
+    }
 }

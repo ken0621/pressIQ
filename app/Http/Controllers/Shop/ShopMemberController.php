@@ -396,18 +396,22 @@ class ShopMemberController extends Shop
         {
             $request_amount = $request_wallet[$key];
 
-            if(doubleval($slot->current_wallet) < doubleval($request_amount))
+            if ($request_amount != 0) 
             {
-                $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is more than the amount you currently have.</div>";
-            }
+                if(doubleval($slot->current_wallet) < doubleval($request_amount))
+                {
+                    $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is more than the amount you currently have.</div>";
+                }
 
-            if($request_amount < 0)
-            {
-                $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is less than zero.</div>";
-            }
-            if($minimum > doubleval($request_amount))
-            {
-                $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is less than the limit for encashment.</div>";                
+                if($request_amount < 0)
+                {
+                    $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is less than zero.</div>";
+                }
+                
+                if($minimum > doubleval($request_amount))
+                {
+                    $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is less than the limit for encashment.</div>";                
+                }
             }
         }
 
@@ -2342,5 +2346,48 @@ class ShopMemberController extends Shop
         $cancelWebhook->register();
 
         dd(Webhook::retrieve());
+    }
+    public function postSlotUpgradeCode(Request $request)
+    {
+        $shop_id                                = $this->shop_info->shop_id;
+        $validate["pin"]                        = ["required", "string", "alpha_dash"];
+        $validate["activation"]                 = ["required", "string", "alpha_dash"];
+        $validator                              = Validator::make($request->all(), $validate);
+
+        $message = "";
+
+        if($validator->fails())
+        {
+            foreach($validator->errors()->all() as $error)
+            {
+                $message .= "<div>" . $error . "</div>";
+            }
+        }
+        else
+        {
+            $activation             = request("activation");
+            $pin                    = request("pin");
+            $check_membership_code  = MLM2::check_membership_code($shop_id, $pin, $activation);
+
+            if(!$check_membership_code)
+            {
+                $message = "Invalid PIN / ACTIVATION!";
+            }
+            else
+            {
+                if($check_membership_code->mlm_slot_id_created != "")
+                {
+                    $message = "PIN / ACTIVATION ALREADY USED";
+                }
+                else
+                {
+                    $store["temp_pin"] = $pin;
+                    $store["temp_activation"] = $activation;
+                    session($store);
+                }
+            }
+        }
+
+        echo $message;
     }
 }

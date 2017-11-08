@@ -154,15 +154,11 @@
 					<div class="chart-legend" style="max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
+							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_leadership_advertisement_bonus}}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
 							<div class="name"><span>Advertisement GC</span><span class="value">{{ $points->display_advertisement_bonus}}</span></div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span style="font-size: 12px;">Leadership Advertisement GC</span><span class="value">{{ $points->display_leadership_advertisement_bonus}}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>

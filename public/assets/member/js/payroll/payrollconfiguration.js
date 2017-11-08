@@ -187,7 +187,7 @@ function payrollconfiguration()
 		load_configuration(action, method, target, formdata);
 	}
 
-	this.relaod_tbl_department = function()
+	this.reload_tbl_department = function()
 	{
 		// department_archived();
 		// department_archived(1);
@@ -242,6 +242,11 @@ function payrollconfiguration()
 	this.reload_leave_temp = function()
 	{
 		reload_configuration("/member/payroll/leave");
+	}
+
+	this.reload_leavev2_temp = function()
+	{
+		reload_configuration("/member/payroll/leave/v2");
 	}
 	
 	this.reload_holiday = function()

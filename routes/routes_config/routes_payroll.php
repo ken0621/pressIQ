@@ -55,6 +55,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/employee_13_month_pay_report_table','Member\Payroll13thMonthPayController@employee_13_month_pay_report_table');
 	/*END 13th month pay*/
 
+
 	/* COMPANY START */
 	Route::any('/company_list','Member\PayrollController@company_list');
 	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');
@@ -375,6 +376,33 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/leave/update_leave_temp',"Member\PayrollController@update_leave_temp");
 	/* LEAVE END */
 
+	/* LEAVE V2 START */
+	Route::any('/leave/v2',"Member\PayrollController@leaveV2");
+	Route::any('/leave/v2/modal_create_leave_type',"Member\PayrollController@modal_create_leave_type");
+
+	Route::any('/leave/v2/modal_create_leave_tempv2',"Member\PayrollController@modal_create_leave_tempv2");
+
+	Route::any('/leave/v2/modal_leave_tag_employeev2/{leave_temp_id}',"Member\PayrollController@modal_leave_tag_employeev2");
+
+	Route::any('/leave/v2/set_leave_tag_employeev2',"Member\PayrollController@set_leave_employee_tagv2");
+
+	Route::any('/leave/v2/reload_leave_employeev2',"Member\PayrollController@remove_leave_tag_employeev2");
+
+	Route::any('/leave/v2/get_leave_tag_employeev2',"Member\PayrollController@get_leave_tag_employeev2");
+
+	Route::any('leave/v2/reload_leave_employeev2',"Member\PayrollController@reload_leave_employeev2");
+
+
+	Route::any('/leave/v2/modal_view_leave_employee',"Member\PayrollController@modal_view_leave_employee");
+	Route::any('/leave/v2/modal_reset_leave',
+		"Member\PayrollController@modal_reset_leave");
+	Route::any('/leave/v2/modal_leave_scheduling',"Member\PayrollController@modal_leave_scheduling");
+	Route::any('/leave/v2/modal_leave_history',
+		"Member\PayrollController@modal_leave_history");
+
+	Route::any('/leave/v2/modal_save_leave_type',
+		"Member\PayrollController@modal_save_leave_type");
+	/* LEAVE V2 END */
 
 	/* PAYROLL GROUP START */
 	Route::any('/payroll_group',"Member\PayrollController@payroll_group");

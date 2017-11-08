@@ -14,7 +14,7 @@
 					@foreach($_company as $company)
 					<option value="{{$company->payroll_company_id}}">{{$company->payroll_company_name}}</option>
 					@endforeach
-				</select>
+				</select>	
 			</div>
 		</div>
 		<div class="form-group">

@@ -72,10 +72,8 @@ class Tbl_payroll_period extends Model
 		if ($employee_id != 0) 
 		{
 			$query->where("tbl_payroll_employee_basic.payroll_employee_id",$employee_id);
-		
 		}
 
 		return $query;
-
-	}
+	}                                       
 }

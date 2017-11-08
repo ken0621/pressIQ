@@ -15,7 +15,7 @@
       {{$active->payroll_employee_number}}
     </td>
     <td>
-      {{$active->payroll_employee_display_name}}
+      {{$active->payroll_employee_last_name}}, {{$active->payroll_employee_first_name}} {{ substr($active->payroll_employee_middle_name, 0, -(strlen($active->payroll_employee_middle_name))+1) }}.
     </td>
     <td>
       {{$active->payroll_company_name}}

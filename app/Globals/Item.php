@@ -1726,4 +1726,21 @@ class Item
     {
         return Tbl_item::where("item_id",$item_id)->value('item_type_id');
     }
+    public static function view_item_receipt($item_id)
+    {
+        $audit = Tbl_audit_trail::where("source_id",$item_id)->where("source","item")->where("remarks","Added")->first();
+
+        if($audit)
+        {
+            $data = unserialize($audit->new_data);
+            
+            $data["category_name"] = Tbl_category::where("type_id",$data["item_category_id"])->first() ? Tbl_category::where("type_id",$data["item_category_id"])->first()->type_name : "";
+        }
+        else
+        {
+            $data = null;
+        }
+
+        return $data;
+    }
 }

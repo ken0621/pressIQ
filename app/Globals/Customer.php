@@ -11,6 +11,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_customer_other_info;
 use App\Globals\Tablet_global;
 use App\Globals\Mlm_plan;
+use App\Globals\CommissionCalculator;
 use DB;
 use Carbon\Carbon;
 use Request;
@@ -192,8 +193,12 @@ class Customer
 		{
 			$shop_id = Tablet_global::getShopId();
 		}
-		$customer = Tbl_customer::info()->where("tbl_customer.archived", 0)->where("shop_id", $shop_id)->groupBy("tbl_customer.customer_id")->orderBy("tbl_customer.customer_id","DESC")->get();
-		return $customer;
+		$customer = Tbl_customer::info()->where("tbl_customer.archived", 0)->where("tbl_customer.shop_id", $shop_id)->groupBy("tbl_customer.customer_id")->orderBy("tbl_customer.customer_id","DESC");
+		// if(CommissionCalculator::check_settings($shop_id) == 1)
+		// {
+		// 	$customer = $customer->selectRaw('*, tbl_employee.first_name as salesrep_fname, tbl_employee.middle_name as salesrep_mname,tbl_employee.last_name as salesrep_lname')->commission()->salesrep();
+		// }
+		return $customer->get();
 	}
 	public static function countAllCustomer($for_tablet = false)
 	{

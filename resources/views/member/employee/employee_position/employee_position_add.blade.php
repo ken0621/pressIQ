@@ -25,6 +25,16 @@
                 <input type="text" class="form-control" name="position_code" id="warehouse_name">
             </div>
         </div> 
+        @if(isset($commission))
+            @if($commission == 1)
+            <div class="form-group">
+                <div class="col-md-12">          
+                    <label>Commission Percent *</label>
+                    <input type="text" class="form-control" name="commission_percent" id="warehouse_name">
+                </div>
+            </div>
+            @endif 
+        @endif
     </div>
 </div>
 <div class="modal-footer" >

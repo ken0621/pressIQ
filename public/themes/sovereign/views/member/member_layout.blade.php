@@ -40,9 +40,9 @@
 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
 							<a href="javascript:">
 								<div class="nav-holder">
-								<div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span>
-								<!-- <div class="icon"><img style="margin-top: -8px; opacity: 1 !important;" src="/themes/{{ $shop_theme }}/img/binary-icon-nav.png"></div> -->
-							</div>
+									<div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span>
+									<!-- <div class="icon"><img style="margin-top: -8px; opacity: 1 !important;" src="/themes/{{ $shop_theme }}/img/binary-icon-nav.png"></div> -->
+								</div>
 							</a>
 
 							<ul>
@@ -52,12 +52,10 @@
 								<!-- <li>
 									<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"> &nbsp;&nbsp;<span>Unilevel Tree</span></div></a>
 								</li> -->
-
 							</ul>
 						</li>
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
 							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports</span></div></a>
-						</li>
 						</li>
 						<!-- <li class="{{ Request::segment(2) == "lead-list" ? "active" : "" }}">
 							<a href="/members/lead-list"><div class="nav-holder"><div class="icon brown-icon-heart"></div> <span>Lead List</span></div></a>

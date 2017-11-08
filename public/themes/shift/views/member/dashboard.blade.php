@@ -138,10 +138,12 @@
 				<div class="sub-container">
 					<div class="chart-legend">
 						@foreach($_wallet_plan as $plan)
+							@if($plan->label != "Advertisement Bonus Gc" && $plan->label != "Leadership Advertisement Bonus Gc" && $plan->label != "Binary Gc")
 							<div class="holder">
 								<div class="color"></div>
 								<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
 							</div>
+							@endif
 						@endforeach
 					</div>
 
@@ -152,7 +154,7 @@
 					<div class="chart-legend" style="max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
+							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_leadership_advertisement_bonus}}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>

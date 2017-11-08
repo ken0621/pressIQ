@@ -54,7 +54,7 @@
 		<section class="wrapper scrollable animated fadeInDown">
 			<section class="panel panel-default">
 				<div class="panel-heading">
-					@if($shop_id == null)
+		
 					<div>
 						<img src="/assets/member/images/proton-logo.png" alt="proton-logo">
 						<h1>
@@ -66,18 +66,6 @@
 						</span>
 						</h1>
 					</div>
-					@else
-						@if($shop_info)
-							<div>
-								<img src="{{$company_logo}}" style="width: 100% !important; object-fit: contain !important; ">
-								<h1>
-								<span class="title">
-									<!-- <center>{{$shop_info->shop_key}}</center> -->
-								</span>
-								</h1>
-							</div>
-						@endif
-					@endif
 				</div>
 				<ul class="list-group">
 					<li class="list-group-item">

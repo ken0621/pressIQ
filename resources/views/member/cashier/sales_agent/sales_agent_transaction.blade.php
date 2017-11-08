@@ -27,7 +27,7 @@
                                     <td class="text-center {{$total_released+= $transaction->released_comm}}">{{currency('P ',$transaction->released_comm,2)}}</td>
                                     <td class="text-center {{$total_pending+= $transaction->pending_comm}}">{{currency('P ',$transaction->pending_comm,2)}}</td>
                                     <td class="text-center">
-                                        <a href="javascript:" size="lg">View Invoices</a>
+                                        <a href="javascript:" class="popup" link="/member/cashier/sales_agent/invoices/{{$transaction->commission_id}}" size="lg">View Invoices</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -38,9 +38,9 @@
                     <tfoot>
                     	<tr>
                     		<td colspan="2" class="text-right"><b>TOTAL</b></td>
-                    		<td class="text-center">{{currency('P ',$total_overall)}}</td>
-                    		<td class="text-center">{{currency('P ',$total_released)}}</td>
-                    		<td class="text-center">{{currency('P ',$total_pending)}}</td>
+                    		<td class="text-center"><strong>{{currency('P ',$total_overall)}}</strong></td>
+                    		<td class="text-center"><strong>{{currency('P ',$total_released)}}</strong></td>
+                    		<td class="text-center"><strong>{{currency('P ',$total_pending)}}</strong></td>
                     		<td class="text-center"></td>
                     	</tr>
                     </tfoot>

@@ -148,6 +148,38 @@ class CommissionCalculator
 		}
 		return $return;
 	}
+
+	public static function per_agent_commission($agent_id)
+	{
+		$get_all = Tbl_commission::customer()->item()->where('agent_id',$agent_id)->groupBy('tbl_customer.customer_id')->get();
+		foreach ($get_all as $key => $value) 
+		{
+			$get_all[$key]['orverall_comm'] = 0;
+			$get_all[$key]['released_comm'] = 0;
+			$get_all[$key]['for_releasing_comm'] = 0;
+			$get_all[$key]['pending_comm'] = 0;
+
+			$data = Tbl_commission_invoice::where('commission_id',$value->commission_id)->get();
+			foreach ($data as $key2 => $value2) 
+			{
+				if($value2->is_released == 1 && $value2->invoice_is_paid == 1)
+				{
+					$get_all[$key]['released_comm'] += $value2->commission_amount;
+				}
+				if($value2->invoice_is_paid == 1 && $value2->is_released == 0)
+				{
+					$get_all[$key]['for_releasing_comm'] += $value2->commission_amount;
+				}
+				if($value2->is_released == 0 && $value2->invoice_is_paid == 0)
+				{
+					$get_all[$key]['pending_comm'] += $value2->commission_amount;
+				}
+				$get_all[$key]['orverall_comm'] += $value2->commission_amount;
+			}
+		}
+		
+		return $get_all;
+	}
 	public static function get_computation($shop_id, $commission_id)
 	{
 		$return['amount_tsp'] = 0;

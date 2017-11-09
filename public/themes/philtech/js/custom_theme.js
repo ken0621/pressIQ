@@ -188,14 +188,14 @@ function action_load_cart()
 
 function ready_load_mini_ecom_cart()
 {
-	$('.mini-cart').load('/mini_cart', function()
-	{
-		var quantity = $('.mini-cart .quantity-get').val();
-		var total_price = $('.mini-cart .total-get').val();
+	// $('.mini-cart').load('/mini_cart', function()
+	// {
+	// 	var quantity = $('.mini-cart .quantity-get').val();
+	// 	var total_price = $('.mini-cart .total-get').val();
 		
-		$('.mini-cart-quantity').html(quantity);
-		$('.mini-cart-total-price').html(total_price);
-	});
+	// 	$('.mini-cart-quantity').html(quantity);
+	// 	$('.mini-cart-total-price').html(total_price);
+	// });
 }
 function action_after_load()
 {

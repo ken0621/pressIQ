@@ -2,5 +2,55 @@
 	"home":
 	{
 		
+	},
+	"replicated-link":
+	{
+		"replicated_video_link" :
+		{
+			"label":"Replicated Video Link",
+			"type":"textbox",
+			"default":"https://www.youtube.com/embed/DqeREVV5WDE",
+			"size":"12"
+		}
+	},
+	"non-member-video":
+	{
+		"nonmember_video_link" :
+		{
+			"label":"Non-member Video Link",
+			"type":"textbox",
+			"default":"https://player.vimeo.com/video/241726583",
+			"size":"12"
+		}
+	},
+	"videos":
+	{
+		"product_video_maintenance" :
+		{
+			"label":"Product Video Maintenance",
+			"type":"maintenance",
+			"default":"",
+			"field":[
+				{"name":"video_thumbnail_780x531", "type":"image"},
+				{"name":"title", "type":"text"},
+				{"name":"video_link", "type":"text"}
+			],
+			"size":"12"
+		}
+	},
+	"ebooks":
+	{
+		"ebooks_maintenance" :
+		{
+			"label":"Ebooks Maintenance",
+			"type":"maintenance",
+			"default":"",
+			"field":[
+				{"name":"ebooks_thumbnail", "type":"image"},
+				{"name":"title", "type":"text"},
+				{"name":"ebooks_link", "type":"text"}
+			],
+			"size":"12"
+		}
 	}
 }

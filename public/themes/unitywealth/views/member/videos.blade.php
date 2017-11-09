@@ -80,6 +80,28 @@
 	</div> --}}
 
 	<!-- LIST TYPE -->
+	@if(count(get_content($shop_theme_info,"videos","product_video_maintenance")) > 0)
+		@foreach(unserialize(get_content($shop_theme_info,"videos", "product_video_maintenance")) as $video)
+			<div class="per-video-container">
+				<div class="row clearfix">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<a href="{{ $video["video_link"] }}" data-lity>
+								<div class="thumbnail">
+									<img src="{{ $video["video_thumbnail_780x531"] }}">
+								</div>
+							</a>
+						</div>
+						<div class="col-md-8">
+							<div class="video-title">
+								<a href="{{ $video["video_link"] }}" data-lity><p>{{ $video["title"] }}</p></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		@endforeach
+	@endif
 
 	<div class="per-video-container">
 		<div class="row clearfix">
@@ -207,9 +229,8 @@
 			</div>
 		</div>
 	</div>
-
-
 </div>
+
 @endsection
 @section("member_script")
 <script type="text/javascript" src="/assets/front/js/global_checkout.js"></script>

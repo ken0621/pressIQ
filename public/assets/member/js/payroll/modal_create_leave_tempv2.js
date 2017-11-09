@@ -48,23 +48,23 @@ function modal_create_leave_temp()
 	this.load_employee_tag = function()
 	{
 		reload_leave_employee();
-
+		var payroll_leave_type_id = document.getElementById('payroll_leave_type_id').value;
 		$(".tbl-tag").html('<tr><td colspan="3" class="text-center">'+misc('loader') + '</td></tr>');
 		$.ajax({
 			url 	: 	"/member/payroll/leave/v2/get_leave_tag_employeev2",
 			type 	: 	"POST",
 			data 	: 	{
 				_token:misc('_token'),
-			payroll_leave_type_id:$("#payroll_leave_type_id").val()
+			payroll_leave_type_id:payroll_leave_type_id
 			},
 			success : 	function(result)
 			{
 				result = JSON.parse(result);
-
 				var html = "";
-				$(result.new_record).each(function(index, data)
-				{
-					html += tbl_tag(data);
+
+				$(result.new_record).each(function(index, emp)
+				{			
+							html += tbl_tag(emp,result.leave_type);
 				});
 				$(".tbl-tag").html(html);
 				remove_tag();
@@ -111,13 +111,15 @@ function modal_create_leave_temp()
 		toastr.error("Error, something went wrong.");
 	}
 
-	function tbl_tag(data)
+	function tbl_tag(data,leavetype)
 	{
+
 		var html = '<tr>';
 		html += '<td>' + data.payroll_employee_title_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_employee_id+'"></td>';
-		html  += '<td>' + data.payroll_leave_hours_cap + '</td>';
+		html += '<td>'+ leavetype[0].payroll_leave_hours_cap + ' <input type="hidden" name="payroll_leave_temp_hours" value="'+leavetype[0].payroll_leave_hours_cap+'"></td>';
 		html += '<td><a href="#" class="btn-remove-tag" data-content="'+data.payroll_employee_id+'"><i class="fa fa-times"></i></a></td>';
 		html += '</tr>';
+
 		return html;
 	}
 

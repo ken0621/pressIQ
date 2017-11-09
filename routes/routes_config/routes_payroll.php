@@ -390,7 +390,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/leave/v2/get_leave_tag_employeev2',"Member\PayrollController@get_leave_tag_employeev2");
 
-	Route::any('leave/v2/reload_leave_employeev2',"Member\PayrollController@reload_leave_employeev2");
+	Route::any('/leave/v2/reload_leave_employeev2',"Member\PayrollController@reload_leave_employeev2");
+
+	
+	Route::any('/leave/v2/modal_save_leave_temp_v2',"Member\PayrollController@modal_save_leave_temp_v2");
 
 
 	Route::any('/leave/v2/modal_view_leave_employee',"Member\PayrollController@modal_view_leave_employee");

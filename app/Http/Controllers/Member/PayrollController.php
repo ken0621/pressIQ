@@ -81,6 +81,7 @@ use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_branch_location;
 use App\Models\Tbl_payroll_leave_type;
 use App\Models\Tbl_payroll_leave_employeev2;
+use App\Models\Tbl_payroll_leave_tempv2;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -4011,14 +4012,11 @@ class PayrollController extends Member
           {
                $employee = Session::get('leave_tag_employee');
           }
-          // $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
-          $emp = Tbl_payroll_employee_basic::select('payroll_employee_title_name','payroll_employee_first_name','payroll_employee_middle_name','payroll_employee_last_name','payroll_employee_suffix_name','payroll_employee_id','tbl_payroll_leave_typev2.payroll_leave_hours_cap')
-               ->join('tbl_payroll_leave_typev2','tbl_payroll_leave_typev2.shop_id', '=', 'tbl_payroll_employee_basic.shop_id')
-               ->whereIn('payroll_employee_id',$employee)
-               ->where('tbl_payroll_leave_typev2.payroll_leave_hours_cap',$payroll_leave_type_id)
-               ->get();
+          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+          $data['leave_type'] = Tbl_payroll_leave_type::select('payroll_leave_hours_cap')->where('payroll_leave_type_id',$payroll_leave_type_id)->get();
 
           $data['new_record'] = $emp;
+
           return json_encode($data);
      }
 
@@ -4038,6 +4036,37 @@ class PayrollController extends Member
           $data['_active'] = Tbl_payroll_leave_employeev2::getperleave($payroll_leave_temp_id)->get();
           $data['_archived'] = Tbl_payroll_leave_employeev2::getperleave($payroll_leave_temp_id , 1)->get();
           return view('member.payroll.reload.leave_employee_reload', $data);
+     }
+
+     public function modal_save_leave_temp_v2()
+     {
+          
+          $insert['payroll_leave_type_id']                  = Request::input('payroll_leave_type_id');
+          $insert['payroll_leave_temp_is_cummulative']      = Request::input('payroll_leave_temp_is_cummulative');
+
+          $insert['shop_id']                                = Self::shop_id();
+          $insert['payroll_leave_temp_is_cummulative']      = Request::input('payroll_leave_temp_is_cummulative');
+          $leave_temp_id = Tbl_payroll_leave_tempv2::insertGetId($insert);
+
+          $insert_employee = array();
+          if(Session::has('leave_tag_employee'))
+          {
+               foreach(Session::get('leave_tag_employee') as $tag)
+               {    
+                    $temp['payroll_leave_temp_id']           = $leave_temp_id;
+                    $temp['payroll_employee_id']             = $tag;
+                    $temp['payroll_leave_temp_hours']        = Request::input('payroll_leave_temp_hours');
+                    array_push($insert_employee, $temp);
+               }
+               if(!empty($insert_employee))
+               {
+                    Tbl_payroll_leave_employeev2::insert($insert_employee);
+               }
+          }
+
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
+          return json_encode($return);
      }
 
      public function modal_view_leave_employee()

@@ -9,7 +9,7 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Type of Leave</small>
-				<select class="form-control user-error" id="payroll_leave_type_id" required name="payroll_leave_temp_name" aria-invalid="true">
+				<select class="form-control user-error" id="payroll_leave_type_id" required name="payroll_leave_type_id" aria-invalid="true">
 					<option value="">Select Leave Type</option>
 					@foreach($_leave_type as $leavetype)
 					<option value="{{$leavetype->payroll_leave_type_id}}" {{$selected == $leavetype->payroll_leave_type_id ? 'selected="selected"' : ''}}>{{$leavetype->payroll_leave_type_name}}</option>
@@ -17,7 +17,7 @@
 	
 				</select>
 			</div>
-
+		
 			<div class="col-md-6">
 				<small>Commulative?</small>
 				<div class="form-control padding-b-37">

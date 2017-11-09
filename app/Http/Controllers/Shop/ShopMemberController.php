@@ -152,6 +152,16 @@ class ShopMemberController extends Shop
         $data = [];
         return Self::load_view_for_members('member.certificate', $data);
     }
+    public function getVideos()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.videos', $data);
+    }
+    public function getEbooks()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.ebooks', $data);
+    }
     public function getEventDetails(Request $request)
     {
         $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);
@@ -392,11 +402,33 @@ class ShopMemberController extends Shop
             }
         }
 
+        // Validate Email V-Money
+        $customer_info = Self::$customer_info;
+
+        if($customer_info->customer_payout_method == "unset")
+        {
+            $method     = "cheque";
+        }
+        else
+        {
+            $method     = $customer_info->customer_payout_method;
+        }
 
         $request_wallet = session("request_wallet");
 
         foreach($_slot as $key => $slot)
         {
+            // Method V-Money
+            if ($method == "vmoney") 
+            {
+                $get_email = Tbl_vmoney_settings::where("slot_id", $slot->slot_id)->value("vmoney_email");
+
+                if (!$get_email || $get_email == "" ) 
+                {
+                    $return .= "<div>Please set your vmoney e-mail for <b>" . $slot->slot_no . "</b> in payout settings.</div>";
+                }
+            }
+
             $request_amount = $request_wallet[$key];
 
             if ($request_amount != 0) 

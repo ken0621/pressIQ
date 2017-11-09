@@ -93,5 +93,4 @@ class Tbl_payroll_period_company extends Model
 
 		return $query;
 	}
-
 }

@@ -386,7 +386,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/leave/v2/set_leave_tag_employeev2',"Member\PayrollController@set_leave_employee_tagv2");
 
-	Route::any('/leave/v2/reload_leave_employeev2',"Member\PayrollController@remove_leave_tag_employeev2");
+	Route::any('/leave/v2/remove_leave_tag_employeev2',"Member\PayrollController@remove_leave_tag_employeev2");
 
 	Route::any('/leave/v2/get_leave_tag_employeev2',"Member\PayrollController@get_leave_tag_employeev2");
 

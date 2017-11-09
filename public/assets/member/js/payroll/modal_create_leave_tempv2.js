@@ -116,7 +116,7 @@ function modal_create_leave_temp()
 
 		var html = '<tr>';
 		html += '<td>' + data.payroll_employee_title_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_employee_id+'"></td>';
-		html += '<td>'+ leavetype[0].payroll_leave_hours_cap + ' <input type="hidden" name="payroll_leave_temp_hours" value="'+leavetype[0].payroll_leave_hours_cap+'"></td>';
+	    html += '<td>'+ leavetype[0].payroll_leave_hours_cap + ' <input type="hidden" name="payroll_leave_temp_hours" value="'+leavetype[0].payroll_leave_hours_cap+'"></td>';
 		html += '<td><a href="#" class="btn-remove-tag" data-content="'+data.payroll_employee_id+'"><i class="fa fa-times"></i></a></td>';
 		html += '</tr>';
 

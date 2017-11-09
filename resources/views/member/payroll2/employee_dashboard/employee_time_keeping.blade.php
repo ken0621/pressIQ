@@ -27,8 +27,8 @@
                     <tr>
                         <td>{{ date('M d, Y',strtotime($period->payroll_period_start)).' - '.date('M d, Y',strtotime($period->payroll_period_end)) }}</td>
                         <td>{{ date('Y', strtotime($period->payroll_period_end)) }}</td>
-                        <td align="center"><a href='/employee_payslip/{{ $period->payroll_period_id}}'>TIMESHEET</td>
-                        <td align="center"><a href='/employee_payslip/{{ $period->payroll_period_id}}' target="_blank">PAYSLIP</a></td>
+                        <td align="center"><a href="javascript:" onClick="action_load_link_to_modal('/employee_timesheet', 'lg')">TIMESHEET</td>
+                        <td align="center"><a href='/employee_payslip_pdf/{{ $period->payroll_period_id}}' target="_blank">PAYSLIP</a></td>
                     </tr>
                     @endforeach
                 </tbody>

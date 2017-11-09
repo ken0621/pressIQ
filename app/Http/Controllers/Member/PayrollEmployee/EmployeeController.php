@@ -8,6 +8,7 @@ use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_leave_temp;
 use App\Models\Tbl_payroll_period_company;
+use App\Models\Tbl_payroll_time_sheet;
 use Illuminate\Http\Request;
 use Redirect;
 use Validator;
@@ -171,7 +172,7 @@ class EmployeeController extends PayrollMember
 		// dd($data['period_record']);
 		return view('member.payroll2.employee_dashboard.employee_time_keeping',$data);
 	}
-	public function employee_payslip($payroll_period_id)
+	public function employee_payslip_pdf($payroll_period_id)
     { 
     	$data['page']				= 'Employee Payslip';
     	$data["employee_company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
@@ -224,18 +225,34 @@ class EmployeeController extends PayrollMember
 		}
 
 		//return view('member.payroll2.employee_dashboard.employee_payslip', $data);
-		$pdf = view('member.payroll2.employee_dashboard.employee_payslip', $data);
+		$pdf = view('member.payroll2.employee_dashboard.employee_payslip_pdf', $data);
         return Pdf_global::show_pdf($pdf);
         
     }
-    public function employee_timesheet($payroll_period_id)
+    public function employee_timesheet()
 	{
-		$data["page"] 				= "Employee Timesheet";
-		$data['period_record'] 		= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
-		//dd($data["period_record"]->cutoff_breakdown);
-		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);
+		$data["page"] 	= "Employee Timesheet";
+
+		$period = Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->first();
+
+
+		$date_start = $period->payroll_period_start;
+		$date_end = $period->payroll_period_end;
+
+		$get_timesheet = Tbl_payroll_time_sheet::whereBetween('payroll_time_date', array($date_start, $date_end))->where('payroll_employee_id',$this->employee_info->payroll_employee_id)->groupBy('payroll_time_date')->get();
+
+		foreach ($get_timesheet as $key => $value) 
+		{
+			$data['_timesheet'][$key] = [];
+			$data['_timesheet'][$key]["covered_date"] = date('M d, Y', strtotime($value->payroll_time_date));
+			
+		}
+
+		dd($data['_timesheet']);
+
 		
-		
+
+		return view('member.payroll2.employee_dashboard.employee_timesheet',$data);
 	}   
 	public function sample()
 	{

@@ -1574,7 +1574,7 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
-    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0, $item_id = 0)
+    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0, $item_id = 0, $get_to = 0, $take = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1614,6 +1614,15 @@ class Item
         {
             $data = $query->get();            
         }
+
+        if($take != 0)
+        {
+            if($get_to > 1)
+            {
+                $query->skip($get_to);
+            }
+            $data = $query->take($take + 1)->get();
+        }
         return $data;
     }
     public static function get_first_assembled_kit($shop_id)
@@ -1624,7 +1633,7 @@ class Item
     {
         return Tbl_item::where('shop_id',$shop_id)->where('item_type_id',5)->where("archived", 0)->pluck('item_id', 'item_name');
     }
-    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0)
+    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0, $get_to = 0, $take = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1665,7 +1674,6 @@ class Item
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused');
         }  
 
-
         if($paginate != 0)
         {
             $data = $query->paginate($paginate);
@@ -1673,6 +1681,14 @@ class Item
         else
         {
             $data = $query->get();            
+        }
+       if($take != 0)
+        {
+            if($get_to > 1)
+            {
+                $query->skip($get_to);
+            }
+            $data = $query->take($take + 1)->get();
         }
         return $data; 
     } 

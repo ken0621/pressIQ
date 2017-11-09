@@ -422,7 +422,7 @@ class ShopMemberController extends Shop
 
                 if (!$get_email || $get_email == "" ) 
                 {
-                    $return .= "<div>Please set your vmoney e-mail in payout settings.</div>";
+                    $return .= "<div>Please set your vmoney e-mail for <b>" . $slot->slot_no . "</b> in payout settings.</div>";
                 }
             }
 

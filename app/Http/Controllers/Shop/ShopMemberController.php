@@ -399,11 +399,33 @@ class ShopMemberController extends Shop
             }
         }
 
+        // Validate Email V-Money
+        $customer_info = Self::$customer_info;
+
+        if($customer_info->customer_payout_method == "unset")
+        {
+            $method     = "cheque";
+        }
+        else
+        {
+            $method     = $customer_info->customer_payout_method;
+        }
 
         $request_wallet = session("request_wallet");
 
         foreach($_slot as $key => $slot)
         {
+            // Method V-Money
+            if ($method == "vmoney") 
+            {
+                $get_email = Tbl_vmoney_settings::where("slot_id", $slot->slot_id)->value("vmoney_email");
+
+                if (!$get_email || $get_email == "" ) 
+                {
+                    $return .= "<div>Please set your vmoney e-mail in payout settings.</div>";
+                }
+            }
+
             $request_amount = $request_wallet[$key];
 
             if ($request_amount != 0) 

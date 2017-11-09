@@ -338,8 +338,10 @@ Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController
 
 /* PRICE LEVEL */
 Route::any('/member/item/price_level','Member\ItemPriceLevelController@index');
+Route::any('/member/item/price_level/table','Member\ItemPriceLevelController@index_table');
 Route::get('/member/item/price_level/add','Member\ItemPriceLevelController@add');
 Route::post('/member/item/price_level/add','Member\ItemPriceLevelController@add_submit');
+Route::post('/member/item/price_level/edit_submit','Member\ItemPriceLevelController@edit_submit');
 
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');

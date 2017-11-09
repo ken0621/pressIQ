@@ -20,7 +20,7 @@
 							</div>
 						</div>
 						<div class="col-xs-12">
-							<div class="row-no-padding clearfix" style="padding-right: 5px;">
+							<div class="row-no-padding clearfix">
 								<div class="col-xs-6 grid-2">
 									<img src="/themes/{{ $shop_theme }}/img/slide/banner2.png">
 								</div>

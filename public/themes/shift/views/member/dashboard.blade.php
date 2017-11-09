@@ -137,14 +137,22 @@
 				<div class="title">Reward Summary</div>
 				<div class="sub-container">
 					<div class="chart-legend">
-						@foreach($_wallet_plan as $plan)
-							@if($plan->label != "Advertisement Bonus Gc" && $plan->label != "Leadership Advertisement Bonus Gc" && $plan->label != "Binary Gc")
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
-							</div>
-							@endif
-						@endforeach
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Advertisement Bonus</span> {{ $wallet->display_complan_advertisement_bonus }}</div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Direct</span> {{ $wallet->display_complan_direct }}</div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Leadership Advertisement Bonus</span> {{ $wallet->display_complan_leadership_advertisement_bonus }}</div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Rebates Bonus</span> {{ $wallet->display_complan_stairstep }}</div>
+						</div>
 					</div>
 
 				</div>
@@ -154,7 +162,7 @@
 					<div class="chart-legend" style="max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
+							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_leadership_advertisement_bonus}}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
@@ -162,24 +170,18 @@
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span style="font-size: 12px;">Leadership Advertisement GC</span><span class="value">{{ $points->display_leadership_advertisement_bonus}}</span></div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
 							<div class="name"><span>Rank PV</span><span class="value">{{ $points->display_rank_pv }}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Rank Group PV</span><span class="value">{{ $points->display_rank_gpv }}</span></div>
+							<div class="name"><span>Rebates Points</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
 						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Stair Step PV</span><span class="value">{{ $points->display_stairstep_pv }}</span></div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Stair Step Group PV</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
-						</div>
+					</div>
+				</div>
+				<div class="title">Enter Product Code</div>
+				<div class="sub-container">
+					<div class="chart-legend text-center">
+						<button class="btn btn-shift-use-pcode" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 					</div>
 				</div>
 			</div>

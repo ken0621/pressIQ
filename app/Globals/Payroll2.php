@@ -3544,7 +3544,8 @@ class Payroll2
 		
 		
 		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
-		if ($return->_time_breakdown["time_spent"]["float"] != 0 )
+
+		if ($return->_time_breakdown["time_spent"]["float"] != 0 || $group->payroll_group_salary_computation == "Flat Rate")
 		{
 			$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
 			$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
@@ -4269,9 +4270,8 @@ class Payroll2
 				$pagibig_contribution["er"] = 0;
 			}
 		}
-
-
-		if ($return->_time_breakdown["time_spent"]["float"] != 0 ) 
+		
+		if ($return->_time_breakdown["time_spent"]["float"] != 0 || $data["group"]->payroll_group_salary_computation == "Flat Rate") 
 		{
 			$val["label"] = "SSS EE";
 			$val["description"] = $sss_description;

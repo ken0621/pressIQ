@@ -149,6 +149,16 @@ class ShopMemberController extends Shop
         $data = [];
         return Self::load_view_for_members('member.certificate', $data);
     }
+    public function getVideos()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.videos', $data);
+    }
+    public function getEbooks()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.ebooks', $data);
+    }
     public function getEventDetails(Request $request)
     {
         $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);
@@ -389,25 +399,51 @@ class ShopMemberController extends Shop
             }
         }
 
+        // Validate Email V-Money
+        $customer_info = Self::$customer_info;
+
+        if($customer_info->customer_payout_method == "unset")
+        {
+            $method     = "cheque";
+        }
+        else
+        {
+            $method     = $customer_info->customer_payout_method;
+        }
 
         $request_wallet = session("request_wallet");
 
         foreach($_slot as $key => $slot)
         {
+            // Method V-Money
+            if ($method == "vmoney") 
+            {
+                $get_email = Tbl_vmoney_settings::where("slot_id", $slot->slot_id)->value("vmoney_email");
+
+                if (!$get_email || $get_email == "" ) 
+                {
+                    $return .= "<div>Please set your vmoney e-mail for <b>" . $slot->slot_no . "</b> in payout settings.</div>";
+                }
+            }
+
             $request_amount = $request_wallet[$key];
 
-            if(doubleval($slot->current_wallet) < doubleval($request_amount))
+            if ($request_amount != 0) 
             {
-                $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is more than the amount you currently have.</div>";
-            }
+                if(doubleval($slot->current_wallet) < doubleval($request_amount))
+                {
+                    $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is more than the amount you currently have.</div>";
+                }
 
-            if($request_amount < 0)
-            {
-                $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is less than zero.</div>";
-            }
-            if($minimum > doubleval($request_amount))
-            {
-                $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is less than the limit for encashment.</div>";                
+                if($request_amount < 0)
+                {
+                    $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is less than zero.</div>";
+                }
+                
+                if($minimum > doubleval($request_amount))
+                {
+                    $return .= "<div>The amount you are trying to request for <b>" . $slot->slot_no . "</b> is less than the limit for encashment.</div>";                
+                }
             }
         }
 
@@ -2030,6 +2066,26 @@ class ShopMemberController extends Shop
         {
             return Self::load_view_for_members('member2.final_verify', $data);
         }
+    }
+    public function generate_slot_no_based_on_name($first_name, $last_name)
+    {
+        $name = $first_name . substr($last_name, 0, 1);
+        $name = preg_replace("/[^A-Za-z0-9]/", "", $name);
+        $name = strtolower($name);
+
+        $count_exist = 1;
+        $loop = 1;
+        $return = "";
+
+        while($count_exist != 0)
+        {
+            $suffix_number  = str_pad($loop, 2, '0', STR_PAD_LEFT);
+            $return         = $name . $suffix_number;
+            $count_exist    = Tbl_mlm_slot::where("slot_no", $return)->count();
+            $loop++;
+        }
+        
+        return $return;
     }    
     public function postFinalVerify()
     {
@@ -2041,10 +2097,12 @@ class ShopMemberController extends Shop
             $customer_id    = Self::$customer_info->customer_id;
             $membership_id  = $data["membership_code"]->membership_id;
             $sponsor        = $data["sponsor"]->slot_id;
+
+            $slot_no_based_on_name = Self::generate_slot_no_based_on_name(Self::$customer_info->first_name, Self::$customer_info->last_name);
             
             $new_slot_no    = $data["pin"];
             $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
-            $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $new_slot_no);
+            $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $slot_no_based_on_name);
             
             $return = Item::check_unused_product_code($shop_id, $data["pin"], $data["activation"]);
 
@@ -2342,5 +2400,48 @@ class ShopMemberController extends Shop
         $cancelWebhook->register();
 
         dd(Webhook::retrieve());
+    }
+    public function postSlotUpgradeCode(Request $request)
+    {
+        $shop_id                                = $this->shop_info->shop_id;
+        $validate["pin"]                        = ["required", "string", "alpha_dash"];
+        $validate["activation"]                 = ["required", "string", "alpha_dash"];
+        $validator                              = Validator::make($request->all(), $validate);
+
+        $message = "";
+
+        if($validator->fails())
+        {
+            foreach($validator->errors()->all() as $error)
+            {
+                $message .= "<div>" . $error . "</div>";
+            }
+        }
+        else
+        {
+            $activation             = request("activation");
+            $pin                    = request("pin");
+            $check_membership_code  = MLM2::check_membership_code($shop_id, $pin, $activation);
+
+            if(!$check_membership_code)
+            {
+                $message = "Invalid PIN / ACTIVATION!";
+            }
+            else
+            {
+                if($check_membership_code->mlm_slot_id_created != "")
+                {
+                    $message = "PIN / ACTIVATION ALREADY USED";
+                }
+                else
+                {
+                    $store["temp_pin"] = $pin;
+                    $store["temp_activation"] = $activation;
+                    session($store);
+                }
+            }
+        }
+
+        echo $message;
     }
 }

@@ -2,11 +2,9 @@ body
 {
 	font-family: 'Poppins', sans-serif;
 }
-
 .header-nav
 {
 	font-family: 'Source Sans Pro', sans-serif;
-
 	.header-nav-top
 	{
 		border-bottom: 1px solid #d2d4d5;
@@ -14,10 +12,10 @@ body
 		@media screen and (max-width: 720px)
 		{
 			text-align: center;
-			/* .pull-left, .pull-right
+			.pull-left, .pull-right
 			{
 				float: none !important;
-			} */
+			}
 		}
 		.slick-prev
 		{
@@ -208,9 +206,6 @@ body
 	}
 	.header-nav-middle
 	{
-
-		background-color: #fff;
-
 		.logo
 		{
 			margin: 11px 0;
@@ -375,19 +370,5 @@ footer
 		{
 			float: none !important;
 		}
-	}
-}
-
-/* MEDIA SCREEN */
-@media screen and (max-width: 768px)
-{
-	.header-nav .header-nav-middle .info .holder
-	{
-	    display: none;
-	}
-
-	.header-nav .header-nav-middle .info .divider
-	{
-	    display: none;
 	}
 }

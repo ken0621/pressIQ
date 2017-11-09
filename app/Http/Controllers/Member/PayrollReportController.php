@@ -444,7 +444,8 @@ class PayrollReportController extends Member
 
 	public function export_loan_summary_report_to_excel($employee_id = 0,$payroll_deduction_id = 0 )
 	{
-		if (Request::input('employee_id')!='') {
+		if (Request::input('employee_id')!='') 
+		{
 			$employee_id = Request::input('employee_id');
 			$payroll_deduction_id = Request::input('payroll_deduction_id');
 		}
@@ -487,21 +488,18 @@ class PayrollReportController extends Member
 
 	}
 
-
 	public function payroll_register_report_period($period_company_id)
 	{
-		$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
-		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
-		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
+		$data["company"] 			= Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
+		$data["_employee"] 			= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+
+		$data["period_info"] 		= $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
-		
 		$data = $this->get_total_payroll_register($data);
 		
 		$data['filtering_company']= $period_company_id;
 		$data['_filter_company'] = Tbl_payroll_company::where('payroll_parent_company_id',$data["company"]->payroll_company_id)->get();
-
-		
 
 		return view('member.payrollreport.payroll_register_report_period',$data);
 	}
@@ -509,7 +507,8 @@ class PayrollReportController extends Member
 	{
 		$period_company_id = request::input('payroll_parent_company_id');
 		$payroll_employee_company_id = request::input('parent_company_id');
-		if($payroll_employee_company_id==0)
+		
+		if($payroll_employee_company_id == 0)
 		{
 			$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
 			$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
@@ -525,7 +524,7 @@ class PayrollReportController extends Member
 		{
 			$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
 			$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->get();
-			
+			// dd(Tbl_payroll_time_keeping_approved::PeriodCompany($period_company_id)->Basic()->get());
 			$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 			$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 			$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));

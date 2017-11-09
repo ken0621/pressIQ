@@ -4,20 +4,6 @@
 	<div class="title"><span class="fa fa-book">&nbsp;&nbsp;</span><span>Ebooks</span></div>
 	<div class="row clearfix">
 
-		{{-- @if(count(get_content($shop_theme_info,"ebooks","ebooks_maintenance")) > 0)
-			@foreach(unserialize(get_content($shop_theme_info,"ebooks", "ebooks_maintenance")) as $ebooks)
-				<div class="col-md-3">
-					<div class="per-item">
-						<a href="{{ $ebooks["ebooks_link"] }}"><div class="thumbnail"><img src="{{ $ebooks["ebooks_thumbnail"] }}"></div></a>
-						<!-- <div class="title">27 Essential Rules Of Internet Marketing.pdf</div> -->
-						<object data="1.pdf" type="application/pdf">
-						  <a href="{{ $ebooks["ebooks_link"] }}"><p>{{ $ebooks["title"] }}</p></a>
-						</object>
-					</div>
-				</div>
-			@endforeach
-		@endif --}}
-
 		<div class="col-md-3">
 			<div class="per-item">
 				<a href="/themes/{{ $shop_theme }}/assets/pdf/1.pdf"><div class="thumbnail"><img src="/themes/{{ $shop_theme }}/img/ebook-1.jpg"></div></a>

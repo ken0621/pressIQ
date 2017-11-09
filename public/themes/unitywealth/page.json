@@ -37,20 +37,5 @@
 			],
 			"size":"12"
 		}
-	},
-	"ebooks":
-	{
-		"ebooks_maintenance" :
-		{
-			"label":"Ebooks Maintenance",
-			"type":"maintenance",
-			"default":"",
-			"field":[
-				{"name":"ebooks_thumbnail", "type":"image"},
-				{"name":"title", "type":"text"},
-				{"name":"ebooks_link", "type":"text"}
-			],
-			"size":"12"
-		}
 	}
 }

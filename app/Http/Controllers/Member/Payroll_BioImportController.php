@@ -320,12 +320,12 @@ class Payroll_BioImportController extends Member
 		$data["overwritten"] = $overwritten;
 		$data['_report'] 	 = $_time_record;
 		// dd($data['_report']);
-		if ($success != 0 || $overwritten != 0) 
-		{
-			$count_inserted = $success + $overwritten;
-			$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company)->first();
-	   		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using import_mustard_seed   Template.', "", "" ,"");	
-		}
+		// if ($success != 0 || $overwritten != 0) 
+		// {
+		// 	$count_inserted = $success + $overwritten;
+		// 	$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company)->first();
+	 //   		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using import_mustard_seed   Template.', "", "" ,"");	
+		// }
 		
 		return $data;
 	}
@@ -488,7 +488,7 @@ class Payroll_BioImportController extends Member
 	public function check_employee_number($payroll_employee_number = '')
 	{
 		$bool = true;
-		$count = Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->count();
+		$count = Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number."")->where('shop_id', Self::shop_id())->count();
 		if($count == 0)
 		{
 			$bool = false;
@@ -501,7 +501,7 @@ class Payroll_BioImportController extends Member
 	/* GET EMPLOYEE ID START */
 	public function getemployeeId($payroll_employee_number = '', $value = 'payroll_employee_id')
 	{
-		return Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->value($value);
+		return Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number."")->where('shop_id', Self::shop_id())->value($value);
 	}
 
 	public function getTimeSheetId($payroll_employee_id = 0, $date = '0000-00-00')

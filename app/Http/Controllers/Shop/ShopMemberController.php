@@ -2066,6 +2066,26 @@ class ShopMemberController extends Shop
         {
             return Self::load_view_for_members('member2.final_verify', $data);
         }
+    }
+    public function generate_slot_no_based_on_name($first_name, $last_name)
+    {
+        $name = $first_name . substr($last_name, 0, 1);
+        $name = preg_replace("/[^A-Za-z0-9]/", "", $name);
+        $name = strtolower($name);
+
+        $count_exist = 1;
+        $loop = 1;
+        $return = "";
+
+        while($count_exist != 0)
+        {
+            $suffix_number  = str_pad($loop, 2, '0', STR_PAD_LEFT);
+            $return         = $name . $suffix_number;
+            $count_exist    = Tbl_mlm_slot::where("slot_no", $return)->count();
+            $loop++;
+        }
+        
+        return $return;
     }    
     public function postFinalVerify()
     {
@@ -2077,10 +2097,12 @@ class ShopMemberController extends Shop
             $customer_id    = Self::$customer_info->customer_id;
             $membership_id  = $data["membership_code"]->membership_id;
             $sponsor        = $data["sponsor"]->slot_id;
+
+            $slot_no_based_on_name = Self::generate_slot_no_based_on_name(Self::$customer_info->first_name, Self::$customer_info->last_name);
             
             $new_slot_no    = $data["pin"];
             $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
-            $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $new_slot_no);
+            $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $slot_no_based_on_name);
             
             $return = Item::check_unused_product_code($shop_id, $data["pin"], $data["activation"]);
 

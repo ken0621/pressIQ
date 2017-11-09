@@ -59,4 +59,4 @@
     </div>
 </div>
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/cart_modal.css?version=1">
-<script type="text/javascript" src="/assets/front/js/global_cart_modal.js?version=1"></script>
+<script type="text/javascript" src="/assets/front/js/global_cart_modal.js?version=2"></script>

@@ -24,7 +24,7 @@
 	                        <a href="javascript:" onclick="action_load_link_to_modal('/members/enter-code')" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
 	                    </div>
 	                </div>
-	            </div>
+	            </div>	
 	        </div>
 	    </div>
 	</div>
@@ -61,6 +61,11 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="btn-container">
+					<a class="btn btn-lblue" style="width: 100%; margin-bottom: 5px" role="button" href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a>
+				</div>
+
 			</div>
 
 			<div class="col-md-6">

@@ -161,7 +161,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/branch_name/archive_branch','Member\PayrollController@archive_branch');
 	/* BRANCH NAME END */
 
-
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');
 	Route::any('/departmentlist/department_modal_create','Member\PayrollController@department_modal_create');

@@ -4270,8 +4270,7 @@ class Payroll2
 				$pagibig_contribution["er"] = 0;
 			}
 		}
-
-
+		
 		if ($return->_time_breakdown["time_spent"]["float"] != 0 || $data["group"]->payroll_group_salary_computation == "Flat Rate") 
 		{
 			$val["label"] = "SSS EE";
@@ -5596,9 +5595,9 @@ class Payroll2
 		$data['total_gross_pay']	= $cutoff_compute->cutoff_basic;
 		$data['obj']				= array();
 		
-		
 		if(isset($cutoff_compute->_breakdown_addition_summary))
 		{
+
 			foreach($cutoff_compute->_breakdown_addition_summary as $key => $amount)
 			{
 				$temp['name']	= $key;

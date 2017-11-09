@@ -22,13 +22,12 @@
     </div>
     </header>
 
-    <table class="table table-hover">
+    <table class="table table-hover table_archive_email">
   <thead>
     <tr>
       <th>To</th>
       <th>From</th>
       <th>Subject</th>
-      <th>Email Content</th>
       <th>Date</th>
     </tr>
   </thead>
@@ -38,13 +37,11 @@
       <td>{{$sent_email->to}}</td>
       <td>{{$sent_email->from}}</td>
       <td>{{$sent_email->email_title}}</td>
-      <td>{!!$sent_email->email_content!!}</td>
       <td>{{$sent_email->email_time}}</td>
     </tr>
     @endforeach
   </tbody>
 </table>
 </div>
-</script>
 @endsection   
 

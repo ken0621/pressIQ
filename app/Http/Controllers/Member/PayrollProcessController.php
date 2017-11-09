@@ -466,6 +466,7 @@ class PayrollProcessController extends Member
 			$date_end = $period->payroll_period_end;
 
 			$get_timesheet = Tbl_payroll_time_sheet::whereBetween('payroll_time_date', array($date_start, $date_end))->where('payroll_employee_id',$employee_id)->groupBy('payroll_time_date')->get();
+			
 
 			foreach ($get_timesheet as $key => $value) 
 			{

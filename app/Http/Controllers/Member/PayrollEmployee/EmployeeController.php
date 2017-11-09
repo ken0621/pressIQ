@@ -184,7 +184,7 @@ class EmployeeController extends PayrollMember
 		$data["period_record_release_date"]	= date("F d, Y", strtotime($data["period_record"]->payroll_release_date));
 
 		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);
-		//dd($data["period_record"]);
+		
 
 		$other_deductions = 0;
 
@@ -199,14 +199,11 @@ class EmployeeController extends PayrollMember
 		$data["period_record"]->other_deduction = $other_deductions;
 		$data["period_record"]->total_deduction = $data["period_record"]->philhealth_ee + $data["period_record"]->sss_ee + $data["period_record"]->pagibig_ee  + $other_deductions; // + $employee->tax_ee;
 		
+		//YEAR-END SUMMARY - PAYROLL PERIOD
 		$period_year = date("Y", strtotime($data["period_record"]->payroll_period_end));
-
 		$period_start = $period_year.'-01-01';
-
 		$data['total_period_record'] = Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)
 		->whereBetween('tbl_payroll_period.payroll_period_end',[$period_start, $data['period_record']->payroll_period_end])->get();
-
-		//dd($data['total_period_record']);
 
 		$data['total_net_pay'] = 0 ;
 		$data['total_tax_ee'] = 0 ;
@@ -214,9 +211,9 @@ class EmployeeController extends PayrollMember
 		$data['total_philhealth_ee'] = 0 ;
 		$data['total_pagibig_ee'] = 0 ;
 
+
 		foreach($data['total_period_record'] as $total)	
 		{
-			//dd($total);
 			$data['total_net_pay'] += $total->net_pay;
 			$data['total_tax_ee'] += $total->tax_ee;
 			$data['total_sss_ee'] += $total->sss_ee;
@@ -229,27 +226,33 @@ class EmployeeController extends PayrollMember
         return Pdf_global::show_pdf($pdf);
         
     }
-    public function employee_timesheet()
+    public function employee_timesheet($payroll_period_id)
 	{
 		$data["page"] 	= "Employee Timesheet";
 
-		$period = Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->first();
+		$period = Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
 
-
-		$date_start = $period->payroll_period_start;
-		$date_end = $period->payroll_period_end;
-
-		$get_timesheet = Tbl_payroll_time_sheet::whereBetween('payroll_time_date', array($date_start, $date_end))->where('payroll_employee_id',$this->employee_info->payroll_employee_id)->groupBy('payroll_time_date')->get();
-
-		foreach ($get_timesheet as $key => $value) 
+		if($period)
 		{
-			$data['_timesheet'][$key] = [];
-			$data['_timesheet'][$key]["covered_date"] = date('M d, Y', strtotime($value->payroll_time_date));
+			$date_start = $period->payroll_period_start;
+			$date_end = $period->payroll_period_end;
+
+			$get_timesheet = Tbl_payroll_time_sheet::whereBetween('payroll_time_date', array($date_start, $date_end))->where('payroll_employee_id',$this->employee_info->payroll_employee_id)->groupBy('payroll_time_date')->get();
+
+			//RENAMING payroll_time_date to covered_date;
+			foreach ($get_timesheet as $key => $value) 
+			{
+				$data['_timesheet'][$key] = [];
+				$data['_timesheet'][$key]["covered_date"] = date('M d, Y', strtotime($value->payroll_time_date));
+				
+				$_record = Tbl_payroll_time_sheet_record::record()->where("payroll_time_sheet_id", $value->payroll_time_sheet_id)->get();
+				$_record_approved = Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", $value->payroll_time_sheet_id)->get();
+
+				
 			
+			}
+
 		}
-
-		dd($data['_timesheet']);
-
 		
 
 		return view('member.payroll2.employee_dashboard.employee_timesheet',$data);

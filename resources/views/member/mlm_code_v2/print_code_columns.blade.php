@@ -121,7 +121,7 @@
     $('.print-submit').unbind('click');
     $('.print-submit').bind('click',function()
     {
-        if($('.range-from').val() <= $('.range-to').val())
+        if(parseInt($('.range-from').val()) <= parseInt($('.range-to').val()))
         {
             alert('Invalid Range');
         }

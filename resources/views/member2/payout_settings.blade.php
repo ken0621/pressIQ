@@ -12,7 +12,7 @@
 	                <label for="basic-input">How would you like to receive your payout?</label>
 	                <select name="customer_payout_method" class="form-control choose-method">
 	                	@foreach($_method as $method)
-	                		<option {{ $customer->customer_payout_method == $method ? "selected" : "" }} value="{{ $method }}">{{ strtoupper($method) }}</option>
+	                		<option {{ $customer->customer_payout_method == $method ? "selected" : "" }} value="{{ $method }}">{{ $method == "vmoney" ? "E-MONEY" : strtoupper($method) }}</option>
 	                	@endforeach
 	                </select>
 	            </div>
@@ -33,7 +33,7 @@
                             <thead style="text-transform: uppercase">
                                 <tr>
                                     <th class="text-center" style="width: 100px;">SLOT CODE</th>
-                                    <th class="text-center" width="120px">V-MONEY EMAIL ADDRESS</th>
+                                    <th class="text-center" width="120px">E-MONEY EMAIL ADDRESS</th>
                                 </tr>
                             </thead>
                             <tbody>

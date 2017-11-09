@@ -727,9 +727,12 @@ class Payroll_BioImportController extends Member
     	{
 
     		$_time_sheet = Tbl_payroll_time_sheet::where('payroll_time_sheet_id',$value["payroll_time_sheet_id"])->first();
-    		
+    		$failed[] = null;
+    		// dd($insert_time_record);
     		if ($_time_sheet->time_keeping_approved == 1) 
     		{
+    			
+    			$failed[] = $insert_time_record[$key];
     			unset($insert_time_record[$key]);
     		}
     		else
@@ -752,7 +755,7 @@ class Payroll_BioImportController extends Member
     	/*END remove importation if time_sheet is already approved*/
 
     	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
-
+    	// dd($insert_time_record);
     	if(!empty($insert_time_record))
     	{
     		Tbl_payroll_time_sheet_record::insert($insert_time_record);

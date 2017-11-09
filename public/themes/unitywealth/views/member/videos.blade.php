@@ -80,7 +80,7 @@
 	</div> --}}
 
 	<!-- LIST TYPE -->
-	@if(count(get_content($shop_theme_info,"videos","product_video_maintenance")) > 0)
+	@if(loop_content_condition($shop_theme_info,"videos","product_video_maintenance"))
 		@foreach(unserialize(get_content($shop_theme_info,"videos", "product_video_maintenance")) as $video)
 			<div class="per-video-container">
 				<div class="row clearfix">

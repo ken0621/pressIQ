@@ -78,7 +78,7 @@
 					<div class="chart-legend">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Performace Commission</span><span class="value">{{ $wallet->display_complan_stairstep }}</span></div>
+							<div class="name"><span>Performance Commission</span><span class="value">{{ $wallet->display_complan_stairstep }}</span></div>
 						</div>
 					</div>
 				</div>
@@ -104,6 +104,12 @@
 						</div>
 					</div>
 				</div>
+<!-- 				<div class="title">Upgrade slot</div>
+				<div class="sub-container">
+					<div class="chart-legend text-center">
+						<button class="btn btn-default" data-toggle="modal" data-target="#proceed-modal-2">Use Upgrade Code</button>
+					</div>
+				</div> -->
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
@@ -197,6 +203,36 @@
 	</div>
 @endif
 
+<!--  Upgrade Slot -->
+<div class="popup-upgrade-slot">
+    <div id="upgrade-slot-modal" class="modal fade">
+        <div class="modal-sm modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><i class="fa fa-shield"></i> CODE UPGRADE</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="message message-return-code-verify"></div>
+                    <form class="upgrade-slot-verification-form">
+                        <div>
+                            <div class="labeld">Pin Code</div>
+                            <input class="input input-pin text-center" name="pin" type="text">
+                        </div>
+                        <div>
+                            <div class="labeld">Activation</div>
+                            <input class="input input-activation text-center" name="activation" type="text">
+                        </div>
+                        <div class="btn-container">
+                            <button id="btn-upgrade" class="btn-upgrade"><i class="fa fa-angle-double-right"></i> Proceed</button>
+                        </div>
+                    </form>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
+
 <!--  Enter a code -->
 <div class="popup-enter-a-code">
     <div id="enter-a-code-modal" class="modal fade">
@@ -233,7 +269,7 @@
 </div>
 
 <!-- Proceed 2 -->
-<div class="popup-proceed2">
+<div class="popup-proceed">
     <div id="proceed-modal-2" class="modal fade">
         <div class="modal-sm modal-dialog">
             <div class="modal-content">

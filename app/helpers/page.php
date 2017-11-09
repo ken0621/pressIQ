@@ -991,6 +991,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
 
+    $code = "item-price-level";
+    $nav[$page]['submenu'][$code]['label'] = "Item Price Level";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/price_level";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit'];
+    $nav[$page]['submenu'][$code]['status'] = "Still developing";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
+
 
     /* -- ITEM => ITEM CATEGORIES  */
     $code = "item-categories";

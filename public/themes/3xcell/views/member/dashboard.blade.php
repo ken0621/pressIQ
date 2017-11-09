@@ -88,28 +88,30 @@
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Rank PV</span><span class="value">{{ $points->display_rank_pv }}</span></div>
+							<div class="name"><span>Rank PV</span><span class="value">{{ $points->display_rank_pv + $points->display_rank_gpv }}</span></div>
 						</div>
-						<div class="holder">
+<!-- 						<div class="holder">
 							<div class="color"></div>
 							<div class="name"><span>Rank Group PV</span><span class="value">{{ $points->display_rank_gpv }}</span></div>
+						</div> -->
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Personal Volume</span><span class="value">{{ $points->display_stairstep_pv }}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Stair Step PV</span><span class="value">{{ $points->display_stairstep_pv }}</span></div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Stair Step Group PV</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
+							<div class="name"><span>Group Sales PV</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
 						</div>
 					</div>
 				</div>
-<!-- 				<div class="title">Upgrade slot</div>
+				@if($first_slot->membership_restricted == 1)
+				<div class="title">Upgrade slot</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
-						<button class="btn btn-default" data-toggle="modal" data-target="#proceed-modal-2">Use Upgrade Code</button>
+						<button class="btn btn-default" data-toggle="modal" data-target="#upgrade-slot-modal">Use Upgrade Code</button>
 					</div>
-				</div> -->
+				</div>
+				@endif
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
@@ -204,7 +206,7 @@
 @endif
 
 <!--  Upgrade Slot -->
-<div class="popup-upgrade-slot">
+<div class="popup-proceed2">
     <div id="upgrade-slot-modal" class="modal fade">
         <div class="modal-sm modal-dialog">
             <div class="modal-content">
@@ -217,14 +219,14 @@
                     <form class="upgrade-slot-verification-form">
                         <div>
                             <div class="labeld">Pin Code</div>
-                            <input class="input input-pin text-center" name="pin" type="text">
+                            <input class="input upgrade-pin text-center" name="pin" type="text">
                         </div>
                         <div>
                             <div class="labeld">Activation</div>
-                            <input class="input input-activation text-center" name="activation" type="text">
+                            <input class="input upgrade-activation text-center" name="activation" type="text">
                         </div>
                         <div class="btn-container">
-                            <button id="btn-upgrade" class="btn-upgrade"><i class="fa fa-angle-double-right"></i> Proceed</button>
+                            <button id="btn-upgrade" type="button" class="btn-upgrade" onClick="check_upgrade_code()"><i class="fa fa-angle-double-right"></i> Proceed</button>
                         </div>
                     </form>
                 </div>
@@ -269,7 +271,7 @@
 </div>
 
 <!-- Proceed 2 -->
-<div class="popup-proceed">
+<div class="popup-proceed2">
     <div id="proceed-modal-2" class="modal fade">
         <div class="modal-sm modal-dialog">
             <div class="modal-content">
@@ -341,3 +343,58 @@
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css">
 @endsection
+
+<style type="text/css">
+#btn-upgrade
+{
+    color: #fff;
+    background-color: #2161C8;
+    padding: 10px 40px;
+    border-radius: 2px;
+    border: 0px !important;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+    margin-top: 20px;
+    text-transform: uppercase;
+}	
+
+</style>
+
+<script type="text/javascript">
+	function check_upgrade_code()
+	{
+		var form_data = {};
+		form_data._token = $("._token").val();
+		form_data.pin = $(".upgrade-pin").val();
+		form_data.activation = $(".upgrade-activation").val();
+
+		/* START LOADING AND DISABLE FORM */
+		$(".code-verification-form").find(".btn-proceed-2").html('<i class="fa fa-spinner fa-pulse fa-fw"></i> VERIFYING').attr("disabled", "disabled");
+		$(".code-verification-form").find("select").attr("disabled", "disabled");
+
+		$.ajax(
+		{
+			url:"/members/slot-upgrade-code",
+			data:form_data,
+			type:"post",
+			success: function(data)
+			{
+				$(".message-return-code-verify").html(data);
+				if(data == "")
+				{
+					toastr.success("Upgrade success");
+					window.location.replace("/members");
+				}
+			},
+			error: function(data)
+			{
+				alert("An ERROR occurred. Please contact administrator.");
+				$(".code-verification-form").find(".btn-proceed-2").html('<i class="fa fa-angle-double-right"></i> PROCEED').removeAttr("disabled");
+			}
+		});
+
+	}
+</script>

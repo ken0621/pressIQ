@@ -12,6 +12,12 @@ function payout()
 			document_ready();
 		});
 	}
+
+	this.action_load_table = function()
+	{
+		action_load_table();
+	};
+
 	function document_ready()
 	{
 		action_load_table();

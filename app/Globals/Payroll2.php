@@ -2910,6 +2910,11 @@ class Payroll2
 			$cola = $cola - ($undertime_float * $cola_rate_per_hour);
 		}
 
+		if ($cola < 0) 
+		{
+			$cola = 0;
+		}
+
 		$return->cola_daily 		  = $daily_cola;
 		$return->cola_day_pay 		  = $cola;
 		$return->cola_plus_daily_rate = $daily_rate+$cola;

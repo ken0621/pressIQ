@@ -45,8 +45,10 @@ use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_payout_bank;
 use App\Models\Tbl_online_pymnt_api;
 use App\Models\Tbl_mlm_plan_setting;
+use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
+use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -94,7 +96,8 @@ class ShopMemberController extends Shop
             $data['allow_multiple_slot'] = Self::$customer_info->allow_multiple_slot;
             $data['mlm_pin'] = '';
             $data['mlm_activation'] = '';            
-            
+            $data["first_slot"]         = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+           
             if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
             {
                 $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
@@ -1460,14 +1463,38 @@ class ShopMemberController extends Shop
     public function getReport()
     {
         $data["page"]               = "Report";
-        $data["_rewards"]           = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
-        $data["_codes"]             = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
-        if($this->shop_info->shop_id == 47)
+
+        if(request("sort_by"))
         {
-            $data["_rewards_points"]    = MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+            $sort_by = request("sort_by");
         }
+        else
+        {
+            $sort_by = 0;
+        }
+
+        $data["_rewards"]           = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,$sort_by);
+        $data["_codes"]             = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
         
         return (Self::load_view_for_members("member.report", $data));
+    }
+    public function getReportPoints()
+    {
+        $data["page"]               = "Report";
+        if(request("sort_by"))
+        {
+            $sort_by = request("sort_by");
+        }
+        else
+        {
+            $sort_by = 0;
+        }
+
+        $data["_rewards_points"]    = MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by);
+
+        
+        
+        return (Self::load_view_for_members("member.report_points", $data));
     }
     public function getLeadList()
     {
@@ -2407,39 +2434,69 @@ class ShopMemberController extends Shop
         $validate["pin"]                        = ["required", "string", "alpha_dash"];
         $validate["activation"]                 = ["required", "string", "alpha_dash"];
         $validator                              = Validator::make($request->all(), $validate);
-
+        $slot                                   = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
         $message = "";
 
-        if($validator->fails())
+        if($slot)
         {
-            foreach($validator->errors()->all() as $error)
+            $check_membership = Tbl_membership::where("membership_id",$slot->slot_membership)->first();
+            if($check_membership->membership_restricted == 1)
             {
-                $message .= "<div>" . $error . "</div>";
+                if($validator->fails())
+                {
+                    foreach($validator->errors()->all() as $error)
+                    {
+                        $message .= "<div>" . $error . "</div>";
+                    }
+                }
+                else
+                {
+                    $activation             = request("activation");
+                    $pin                    = request("pin");
+                    $check_membership_code  = MLM2::check_membership_code($shop_id, $pin, $activation);
+
+                    if(!$check_membership_code)
+                    {
+                        $message = "Invalid PIN / ACTIVATION!";
+                    }
+                    else
+                    {
+                        if($check_membership_code->mlm_slot_id_created != "")
+                        {
+                            $message = "PIN / ACTIVATION ALREADY USED";
+                        }
+                        else
+                        {
+                            if($check_membership_code->membership_restricted == 0)
+                            {
+                                $remarks = "Code used for upgrading by " . Self::$customer_info->first_name . " " . Self::$customer_info->last_name;
+                                MLM2::use_membership_code($slot->shop_id, $pin, $activation, $slot->slot_id, $remarks);
+
+                                $update_warelog["used_for_upgrade"] = 1;
+                                Tbl_warehouse_inventory_record_log::where("record_log_id",$check_membership_code->record_log_id)->where("record_shop_id",$shop_id)->update($update_warelog);
+                                
+                                $update_slot_mem["slot_membership"]         = $check_membership_code->membership_id;
+                                $update_slot_mem["upgraded"]                = 1;
+                                $update_slot_mem["upgrade_from_membership"] = $slot->slot_membership;
+                                Tbl_mlm_slot::where("slot_id",$slot->slot_id)->where("shop_id",$shop_id)->update($update_slot_mem);
+
+                            }
+                            else
+                            {      
+                                $message = "<div>Membership Code is not available for upgrade</div>";                     
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                $message = "<div>Your slot membership is not available for upgrade</div>";
             }
         }
         else
         {
-            $activation             = request("activation");
-            $pin                    = request("pin");
-            $check_membership_code  = MLM2::check_membership_code($shop_id, $pin, $activation);
-
-            if(!$check_membership_code)
-            {
-                $message = "Invalid PIN / ACTIVATION!";
-            }
-            else
-            {
-                if($check_membership_code->mlm_slot_id_created != "")
-                {
-                    $message = "PIN / ACTIVATION ALREADY USED";
-                }
-                else
-                {
-                    $store["temp_pin"] = $pin;
-                    $store["temp_activation"] = $activation;
-                    session($store);
-                }
-            }
+            $message = "<div>You have no slot to upgrade</div>";
         }
 
         echo $message;

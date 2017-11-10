@@ -1425,6 +1425,7 @@ class MLM_PlanController extends Member
         $data['stair_get']                      = MLM_PlanController::get_rank($shop_id);
         $data['include_rpv_on_rgpv']            = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->include_rpv_on_rgpv; 
         $data['rank_real_time_update']          = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->rank_real_time_update; 
+        $data['rank_update_email']              = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->rank_update_email; 
         $data['rank_real_time_update_counter']  = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->rank_real_time_update_counter; 
         $data['stair_count']                    = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->count();
         $data['points_settings']                = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->orderBy("stairstep_points_level","ASC ")->get();
@@ -1592,6 +1593,7 @@ class MLM_PlanController extends Member
         $shop_id = $this->user_info->shop_id;
         $update["include_rpv_on_rgpv"]           = Request::input("include_rpv_on_rgpv") ? Request::input("include_rpv_on_rgpv") : 0 ;
         $update["rank_real_time_update"]         = Request::input("rank_real_time_update") ? Request::input("rank_real_time_update") : 0;
+        $update["rank_update_email"]             = Request::input("rank_update_email") ? Request::input("rank_update_email") : 0;
         $update["rank_real_time_update_counter"] = Request::input("rank_real_time_update_counter");
         Tbl_mlm_plan_setting::where("shop_id",$shop_id)->update($update); 
         $data['response_status'] = "success";

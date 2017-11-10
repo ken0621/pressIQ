@@ -3290,9 +3290,9 @@ class PayrollController extends Member
           $update['expense_account_id']           = Request::input('expense_account_id');
           $old_data = AuditTrail::get_table_data("tbl_payroll_deduction","payroll_deduction_id",$payroll_deduction_id);
           Tbl_payroll_deduction::where('payroll_deduction_id',$payroll_deduction_id)->update($update);
-           AuditTrail::record_logs('Updating Payroll deduction', 'payroll Deduction with deduction ID #'.$id. " to archived value: ".Request::input('archived'), $payroll_deduction_id ,"", serialize($old_data));
-          $return['status']             = 'success';
-          $return['function_name']      = 'payrollconfiguration.reload_deduction';
+          AuditTrail::record_logs('Updating Payroll deduction', 'payroll Deduction with deduction ID #'.$id. " to archived value: ".Request::input('archived'), $payroll_deduction_id ,"", serialize($old_data));
+          $return['status']                       = 'success';
+          $return['function_name']                = 'payrollconfiguration.reload_deduction';
           return json_encode($return);
      }
 

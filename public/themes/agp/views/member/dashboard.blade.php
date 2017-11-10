@@ -71,6 +71,20 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="title">Wallet Per Slot</div>
+				<div class="sub-container">
+					<div class="table-holder">
+						<div class="chart-legend">
+							@foreach($_slot as $slot)
+							<div class="holder">
+								<div class="color" style="background-color: #019771"></div>
+								<div class="name"><span>{{ $slot->slot_no }}</span> {{ $slot->display_current_wallet }}</div>
+							</div>
+							@endforeach
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="col-md-6">

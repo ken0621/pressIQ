@@ -324,7 +324,7 @@ class Payroll_BioImportController extends Member
 		// {
 		// 	$count_inserted = $success + $overwritten;
 		// 	$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company)->first();
-	 //   		AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using import_mustard_seed   Template.', "", "" ,"");	
+	 	// 	AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using import_mustard_seed   Template.', "", "" ,"");	
 		// }
 		
 		return $data;
@@ -647,7 +647,6 @@ class Payroll_BioImportController extends Member
 	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
 	    	}
     	}
-
     	return $message;
     }
 
@@ -728,12 +727,12 @@ class Payroll_BioImportController extends Member
     	{
 
     		$_time_sheet = Tbl_payroll_time_sheet::where('payroll_time_sheet_id',$value["payroll_time_sheet_id"])->first();
-    		$failed[] = null;
+    		// $failed[] = null;
     		// dd($insert_time_record);
     		if ($_time_sheet->time_keeping_approved == 1) 
     		{
     			
-    			$failed[] = $insert_time_record[$key];
+    			// $failed[] = $insert_time_record[$key];
     			unset($insert_time_record[$key]);
     		}
     		else
@@ -1372,7 +1371,7 @@ class Payroll_BioImportController extends Member
     	 	}
     	 }
     	
-    	 $data = Self::save_time_record($_record, $company, $this->user_info->shop_id, "Mustard Seed");
+    	 $data =  Self::save_time_record($_record, $company, $this->user_info->shop_id, "Mustard Seed");
    		 $html =  Self::import_report_table($data);
    		 echo $html;
     	 // echo "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";

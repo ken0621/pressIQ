@@ -2875,16 +2875,20 @@ class Payroll2
 		}
 		if($time_spent==0 && $_time["day_type"] != "rest_day" && $_time["day_type"] != "extra_day" && $leave_float == 0)
 		{
-
 			$cola_daily_deduction = $cola;		
 		}
-		
+
+		if ($leave_float != 0) 
+		{
+			$cola_daily_deduction = $cola;
+			$cola = $cola - $cola;
+			$daily_cola = $daily_cola - $daily_cola;
+		}
 		
 		//for daily fixed cola
 		if ($time_spent==0) 
 		{
 			$daily_cola = $daily_cola - $daily_cola;
-
 			//debugging report: from else if in top to here
 			$cola = $cola - $cola;
 			//debugging report: from else if in top to here
@@ -2906,7 +2910,6 @@ class Payroll2
 			$cola = $cola - ($undertime_float * $cola_rate_per_hour);
 		}
 
-
 		$return->cola_daily 		  = $daily_cola;
 		$return->cola_day_pay 		  = $cola;
 		$return->cola_plus_daily_rate = $daily_rate+$cola;
@@ -2915,7 +2918,6 @@ class Payroll2
 		$return->cola_percentile 	  = @($cola / ($daily_rate+$cola));
 		
 		return $return;
-		
 	}
 
 
@@ -3455,7 +3457,6 @@ class Payroll2
 	public static function cutoff_breakdown($payroll_period_company_id, $employee_id, $cutoff_compute, $data)
 	{
 		$return = new stdClass();
-
 
 		$data["employee_id"] 		= $employee_id;
 		$data["employee"]			= Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->first();
@@ -4570,11 +4571,16 @@ class Payroll2
 				$total_cola = $data["salary"]->monthly_cola;
 			}
 		}
-		
+		$deducted = 0;
+		$added    = 0;
 		foreach ($data["cutoff_input"] as $key => $cutoff_input) 
 		{
 			$total_cola = $total_cola - $cutoff_input->compute->total_day_cola_deduction;
 			$total_cola = $total_cola + $cutoff_input->compute->total_day_cola_addition;
+
+			/*checking*/
+			$deducted 	+= $cutoff_input->compute->total_day_cola_deduction;
+			$added 		+= $cutoff_input->compute->total_day_cola_addition;
 		}
 
 		$val["label"] = "COLA";

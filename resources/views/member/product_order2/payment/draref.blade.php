@@ -66,7 +66,7 @@
 			<td>{{ $transaction->slot_upline_no }}</td>
 			<td>{{ $transaction->transaction_number }}</td>
 			<td>{{ date("m/d/y", strtotime($transaction->transaction_date_created)) }}</td>
-			<td>"{{ $transaction->customer_mobile or $transaction->phone_number}}"</td>
+			<td>"{{ $transaction->phone_number}}"</td>
 			<td>{{ date("m/d/y", strtotime(($transaction->b_day ? $transaction->b_day : $transaction->birthday))) }}</td>
 			<td>{{ $transaction->customer_street }}</td>
 			<td>{{ $transaction->customer_zipcode }}</td>

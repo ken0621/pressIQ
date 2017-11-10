@@ -1,11 +1,5 @@
 @extends('member.payroll2.employee_dashboard.layout')
 @section('content')
-<ol class="breadcrumb">
-    <li class="breadcrumb-item">
-        <a href="/employee">Dashboard</a>
-    </li>
-    <li class="breadcrumb-item active">{{ $page }}</li>
-</ol>
 <!-- Example DataTables Card-->
 <div class="card mb-3">
     <div class="card-header">
@@ -27,8 +21,8 @@
                     <tr>
                         <td>{{ date('M d, Y',strtotime($period->payroll_period_start)).' - '.date('M d, Y',strtotime($period->payroll_period_end)) }}</td>
                         <td>{{ date('Y', strtotime($period->payroll_period_end)) }}</td>
-                        <td align="center"><a href="javascript:" onClick="action_load_link_to_modal('/employee_timesheet/{{ $period->payroll_period_id}}', 'lg')">TIMESHEET</td>
-                        <td align="center"><a href='/employee_payslip_pdf/{{ $period->payroll_period_id}}' target="_blank">PAYSLIP</a></td>
+                        <td align="center"><a  style="color:#1E90FF;" href="javascript:" onClick="action_load_link_to_modal('/employee_timesheet/{{ $period->payroll_period_id}}', 'lg')">TIMESHEET</td>
+                        <td align="center"><a  style="color:#1E90FF;" href='/employee_payslip_pdf/{{ $period->payroll_period_id}}' target="_blank">PAYSLIP</a></td>
                     </tr>
                     @endforeach
                 </tbody>

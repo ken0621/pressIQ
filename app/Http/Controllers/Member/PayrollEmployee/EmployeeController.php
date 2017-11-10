@@ -9,6 +9,10 @@ use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_leave_temp;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_time_sheet;
+use App\Models\Tbl_payroll_time_sheet_record;
+use App\Models\Tbl_payroll_time_sheet_record_approved;
+use App\Globals\Payroll2;
+use App\Globals\Utilities;
 use Illuminate\Http\Request;
 use Redirect;
 use Validator;
@@ -178,11 +182,11 @@ class EmployeeController extends PayrollMember
     	$data["employee_company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
     	$data['period_record'] 		= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
 
-    	
     	$data["period_record_start"]		= date("F d, Y", strtotime($data["period_record"]->payroll_period_start));
 		$data["period_record_end"]			= date("F d, Y", strtotime($data["period_record"]->payroll_period_end));
 		$data["period_record_release_date"]	= date("F d, Y", strtotime($data["period_record"]->payroll_release_date));
 
+		//dd(unserialize($data["period_record"]->cutoff_input));
 		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);
 		
 
@@ -226,36 +230,42 @@ class EmployeeController extends PayrollMember
         return Pdf_global::show_pdf($pdf);
         
     }
-    public function employee_timesheet($payroll_period_id)
+public function employee_timesheet($payroll_period_id)
 	{
 		$data["page"] 	= "Employee Timesheet";
 
-		$period = Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
+		$data['period_record'] 			= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
 
-		if($period)
-		{
-			$date_start = $period->payroll_period_start;
-			$date_end = $period->payroll_period_end;
+		$data["period_record_start"]		= date('M d, Y',strtotime($data["period_record"]->payroll_period_start));
+		$data["period_record_end"]			= date('M d, Y',strtotime($data["period_record"]->payroll_period_end));
 
-			$get_timesheet = Tbl_payroll_time_sheet::whereBetween('payroll_time_date', array($date_start, $date_end))->where('payroll_employee_id',$this->employee_info->payroll_employee_id)->groupBy('payroll_time_date')->get();
+		$data["_timesheet"] 			= Payroll2::timesheet_info($data["period_record"], $this->employee_info->payroll_employee_id);
 
-			//RENAMING payroll_time_date to covered_date;
-			foreach ($get_timesheet as $key => $value) 
-			{
-				$data['_timesheet'][$key] = [];
-				$data['_timesheet'][$key]["covered_date"] = date('M d, Y', strtotime($value->payroll_time_date));
-				
-				$_record = Tbl_payroll_time_sheet_record::record()->where("payroll_time_sheet_id", $value->payroll_time_sheet_id)->get();
-				$_record_approved = Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", $value->payroll_time_sheet_id)->get();
+		//dd($data["_timesheet"]);
+		$data["access_salary_rates"]	= $access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
 
-				
-			
-			}
+		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);
 
-		}
+		$data["time_keeping_approved"] 	= $data['period_record'] ? true : false;
+		
 		
 
-		return view('member.payroll2.employee_dashboard.employee_timesheet',$data);
+		/*employee_contract = $this->db_get_current_employee_contract($employee_id, $data["period_record"]->payroll_period_start);
+
+		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
+
+		$data["period_id"] = $period_id;
+		
+		if($data["compute_type"] == "Flat Rate")
+		{
+			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
+		}
+		else
+		{
+			return view('member.payroll2.employee_dashboard.employee_timesheet', $data);
+
+		}*/
+		return view('member.payroll2.employee_dashboard.employee_timesheet', $data);
 	}   
 	public function sample()
 	{

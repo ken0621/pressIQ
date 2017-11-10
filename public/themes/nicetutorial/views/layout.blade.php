@@ -14,8 +14,7 @@
         <link rel="icon" href="/themes/{{ $shop_theme }}/img/nice-icon.png" type="image/png" />
     
         <!-- GOOGLE FONT -->
-        <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> 
-        <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">    
+        <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">
 
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
@@ -46,72 +45,61 @@
     </div>
 
     <!-- HEADER -->
-    <div id="home" class="subheader-container">
+    <div class="top-header">
         <div class="container">
-            @if($customer)
+            <!-- TOP HEADER INFO -->
             <div class="left-container">
-                <span><i class="fa fa-mobile" aria-hidden="true"></i></span>
-                <span>012-345-6789</span>
-                <span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
-                <span>company-email.here</span>
-                <span><i class="fa fa-facebook" aria-hidden="true"></i></span>
-                <span>Facebook</span>
+                <div class="top-info-container">
+                    <div class="icon-container">
+                        <i class="fa fa-mobile"></i>
+                    </div>
+                    <div class="detail-container">
+                        0123-456-789
+                    </div>
+                </div>
+                <div class="top-info-container">
+                    <div class="icon-container">
+                        <i class="fa fa-envelope-o"></i>
+                    </div>
+                    <div class="detail-container">
+                        username@gmail.com
+                    </div>
+                </div>
+                <div class="top-info-container">
+                    <div class="icon-container">
+                        <i class="fa fa-facebook"></i>
+                    </div>
+                    <div class="detail-container">
+                        username/facebook.com
+                    </div>
+                </div>
             </div>
-            <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span><span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
-            @else
-            <div class="left-container">
-                <span><i class="fa fa-mobile" aria-hidden="true"></i></span>
-                <span>012-345-6789</span>
-                <span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
-                <span>company-email.here</span>
-                <span><i class="fa fa-facebook" aria-hidden="true"></i></span>
-                <span>Facebook</span>
-            </div>
+            <!-- LOGIN REGISTER -->
             <div class="right-container">
-                <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span>
-                <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/login'">
-                    <div class="subhead-btn">SIGN IN</div>
-                </span>
+                <div class="reg-btn">
+                    Register
+                </div>
+                <button>
+                    Sign In
+                </button>
             </div>
-            @endif
         </div>
     </div>
-    <div class="header-container">
+    <div class="main-header">
         <div class="container">
-            <div class="row clearfix">
-                <div class="col-md-2">
-                    <div class="image-logo-holder">
-                        <a class="clearfix" href="/">
-                            <img src="/themes/{{ $shop_theme }}/img/header-logo.png">
-                        </a>                       
-                    </div>
-                    <div class="menu-nav">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-                <div class="col-md-10">
-                <!-- NAVIGATION -->
-                    <nav class="navirino">
-                        <ul>
-                            @if(Request::segment(1)=="members")
-                                <li><a class="smoth-scroll" href="/#home">Home</a></li>
-                                <li><a class="smoth-scroll" href="/#aboutus">About Us</a></li>
-                                <li><a class="smoth-scroll" href="/#mission-vision">Packages</a></li>
-                                <li><a class="smoth-scroll" href="/#products">Contact Us</a></li>
-                            @else
-                                <li><a class="smoth-scroll" href="#home">Home</a></li>
-                                <li><a class="smoth-scroll" href="#aboutus">About Us</a></li>
-                                <li><a class="smoth-scroll" href="#mission-vision">Packages</a></li>
-                                <li><a class="smoth-scroll" href="#products">Contact Us</a></li>
-                            @endif
-                        </ul>
-                    </nav>
-                </div>
+            <div class="logo-container">
+                <img src="/themes/{{ $shop_theme }}/img/header-logo.png">
             </div>
+            <nav>
+                <ul>
+
+                    <li>Home</li>
+                    <li>About Us</li>
+                    <li>Contact Us</li>
+                </ul>
+            </nav>
         </div>
-    </div> 
+    </div>
     
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
@@ -119,49 +107,67 @@
     </div>
 
     <!-- FOOTER -->
-    <footer id="bottom-footer">
+    
+    <footer>
         <div class="container">
-            <div class="footer-container">
-                <div class="upper row clearfix">
-                    <div class="col-md-4">
-                        <div class="footer-title-container">
-                            <p class="footer-title">INFORMATION</p>
-                        </div>
-                        <a href=""><p>HOME</p></a>
-                        <a href=""><p>ABOUT US</p></a>
-                        <a href=""><p>PACKAGES</p></a>
-                        <a href=""><p>CONTACT US</p></a>
+            <div class="top-footer row clearfix"> 
+                <div class="col-md-4">
+                    <div class="ftr-info-title">
+                        INFORMATION
                     </div>
-                    <div class="col-md-4">
-                        <div class="footer-title-container">
-                            <p class="footer-title">NEWS LETTER</p>
-                        </div>
-                        <p style="text-transform: uppercase; letter-spacing: 0.5px;">
-                            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
+                    <div class="ftr-info">
+                        <ul>
+                            <li>HOME</li>
+                            <li>ABOUT</li>
+                            <li>CONTACT</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="ftr-info-title">
+                        NEWS LETTER
+                    </div>
+                    <div class="ftr-info">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur<br> adipisicing elit. 
+                            Quae explicabo iure nulla, 
                         </p>
-                        <input type="text" placeholder="Enter Your Email Here">
-                        <span style="padding-left: 10px;">
-                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <div class="col-md-4" style="padding-left: 150px !important;">
-                        <div class="footer-title-container">
-                            <p class="footer-title">FOLLOW US ON</p>
+                        <div class="newsletter-txtbox">
+                            <input type="text" placeholder="Enter your Email here">
+                            <i class="fa fa-send"></i>
                         </div>
-                        <span><i class="fa fa-facebook-square" aria-hidden="true"></i></span>
-                        <span><i class="fa fa-twitter-square" aria-hidden="true"></i></span>
-                        <span><i class="fa fa-pinterest-square" aria-hidden="true"></i></span>
                     </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="ftr-info-title">
+                        FOLLOW US ON
+                    </div>
+                    <div class="ftr-info">
+                        <div class="media-icon">
+                            <i class="fa fa-facebook"></i>
+                        </div>
+                        <div class="media-icon">
+                            <i class="fa fa-twitter"></i>
+                        </div>
+                        <div class="media-icon">
+                            <i class="fa fa-pinterest-p"></i>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="bottom-footer">
+                <div class="left-container">
+                    <span>Terms & Conditions</span>
+                    <span>API Use Policy</span>
+                    <span>Privacy Policy</span>
+                    <span>Cookies</span>
+                </div>
+                <div class="right-container">
+                    <span>© 2015 - 2016 DIGIMA HOUSE. All Rights Reserved</span>
                 </div>
             </div>
         </div>
     </footer>
-    <div class="container">
-        <div class="bottom">                           
-            <div class="ftr-title">© Nicenterprises All Right Reserved</div>
-            <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
-        </div>
-    </div>
     
     @include("frontend.gfoot")
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>

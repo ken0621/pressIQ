@@ -1,17 +1,39 @@
 @extends("layout")
 @section("content")
 <div class="content">
-    <!-- Media Slider -->
-    <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/front-img2.jpg')">
+    <!-- BANNER -->
+    <div class="wrapper1">
+       <div class="container">
+           <div class="logo-holder">
+               <img src="/themes/{{ $shop_theme }}/img/logo-caption.png">
+           </div>
+            <div class="btn-scroll">Show More</div>
+       </div>
+    </div>
+    <!-- WHO WE ARE -->
+    <div class="wrapper2">
         <div class="container">
-            <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption.png"></div>
-            <div class="scroll-down-container">
-                <span class="animated fadeInDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>                
+            <div class="title">
+                Who we are
+            </div>
+            <div class="row clearfix ">
+                <div class="col-md-6">
+                    <div class="info">
+                        <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, vel, totam. Eaque itaque molestiae, eos hic ullam libero ducimus? Incidunt optio impedit repellendus doloribus veniam quas dicta, a pariatur sunt.
+                        </p>
+                        div.
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    
+                </div>
             </div>
         </div>
     </div>
-    <!-- SCROLL TO TOP -->
-    <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
+    <div class="wrapper3"></div>
+    <div class="wrapper4"></div>
+    <div class="wrapper5"></div>
 </div>
 @endsection
 

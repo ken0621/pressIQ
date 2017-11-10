@@ -1,66 +1,75 @@
-$display-text: 'Raleway', sans-serif;
-$content-text: 'Ubuntu', sans-serif;
-$light: 300;
-$regular: 400;
-$medium: 500;
+$display-text: 'PT Sans', sans-serif;
+$light: 400;
 $bold: 700;
-$text-light: #555;
-$text-dark: #1c1c1c;
+$text-white: white;
+$text-blue: #02295e;
+$text-content: #1c1c1c;
 
-body{
+body 
+{
 	background-color: transparent;
-	color: $text-light;
-}
-/* SLIDER */
-.slider-wrapper {
-	position: relative;
-	width: 100%;
-	background-position: center;
-	background-attachment: fixed;
-	background-repeat: no-repeat;
-	background-size: cover;
+	font-family: $display-text;
+	color: $text-content;
+} 
 
-	
+.content 
+{
+	/* BANNER */
+	.wrapper1
+	{
+		background-image: url('../img/front-img2.jpg');
+		background-attachment: fixed;
+		background-position: center;
+		background-repeat: no-repeat;
+		height: 600px;
 
-	.container {
-		position: relative;
-		text-align: center;
-		
-		.caption-logo-container {
-			width: 40%;
+		.logo-holder
+		{	
+			max-width: 450px;
 			margin: auto;
-			padding: 210px 0 175px 0;
-			
+			margin-top: 165px;
 			img 
 			{
 				width: 100%;
 			}
-
-			@media screen and (max-width: 991px)
-			{
-				width: 50%;
-			}
-			@media screen and (max-width: 475px)
-			{
-				width: 75%;
-				padding: 150px 0;
-			}
 		}
-		.scroll-down-container
+
+		.btn-scroll
 		{
-			padding-bottom: 45px;
-			span 
+			margin: auto;
+			max-width: 120px;
+			background-color: #edac0e;
+			padding: 10px 0;
+			text-align: center;
+			color: $text-white;
+			border-radius: 20px;
+			margin-top: 100px;
+
+			&:hover
 			{
-				color: #fff;
-				border: 1px solid #fff;
-				border-radius: 100%;
-				padding: 20px;
-				i 
-				{
-					font-size: 18px;
-				}
+				background-color: #da9f0f;
 			}
 		}
 	}
-}
+	/* WHO WE ARE */
+	.wrapper2
+	{
+		background-color: #02295e;
+		color: $text-white;
 
+		.title
+		{
+			font-size: 21px;
+			text-align: center;
+			padding-top: 35px;
+			font-weight: $bold;
+			letter-spacing: 0.5px;
+		}
+
+		.info
+		{
+			padding-top: 20px;
+			letter-spacing: 0.5px;
+		}
+	}
+}

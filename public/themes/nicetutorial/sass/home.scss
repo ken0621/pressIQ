@@ -1,0 +1,66 @@
+$display-text: 'Raleway', sans-serif;
+$content-text: 'Ubuntu', sans-serif;
+$light: 300;
+$regular: 400;
+$medium: 500;
+$bold: 700;
+$text-light: #555;
+$text-dark: #1c1c1c;
+
+body{
+	background-color: transparent;
+	color: $text-light;
+}
+/* SLIDER */
+.slider-wrapper {
+	position: relative;
+	width: 100%;
+	background-position: center;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: cover;
+
+	
+
+	.container {
+		position: relative;
+		text-align: center;
+		
+		.caption-logo-container {
+			width: 40%;
+			margin: auto;
+			padding: 210px 0 175px 0;
+			
+			img 
+			{
+				width: 100%;
+			}
+
+			@media screen and (max-width: 991px)
+			{
+				width: 50%;
+			}
+			@media screen and (max-width: 475px)
+			{
+				width: 75%;
+				padding: 150px 0;
+			}
+		}
+		.scroll-down-container
+		{
+			padding-bottom: 45px;
+			span 
+			{
+				color: #fff;
+				border: 1px solid #fff;
+				border-radius: 100%;
+				padding: 20px;
+				i 
+				{
+					font-size: 18px;
+				}
+			}
+		}
+	}
+}
+

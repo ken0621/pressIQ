@@ -47,6 +47,7 @@
 			<td>Invoice #</td>
 			<td>Invoice Date</td>
 			<td>Contact No</td>
+			<td>TIN</td>
 			<td>Birthday</td>
 			<td>Street</td>
 			<td>Zip</td>
@@ -54,7 +55,7 @@
 			<td>State</td>
 			<td>Checkout ID</td>
 			<td>Paymaya Response</td>
-			<td>Slot</td>
+			<td>Slot No.</td>
 			<td>Investigation</td>
 		</tr>
 		@foreach($_transaction as $transaction)
@@ -68,6 +69,7 @@
 			<td>{{ $transaction->transaction_number }}</td>
 			<td>{{ date("m/d/y", strtotime($transaction->transaction_date_created)) }}</td>
 			<td>"{{ $transaction->customer_mobile or $transaction->phone_number or $transaction->contact }}"</td>
+			<td>{{$transaction->tin_number or ''}}</td>
 			<td>{{ date("m/d/y", strtotime(($transaction->b_day ? $transaction->b_day : $transaction->birthday))) }}</td>
 			<td>{{ $transaction->customer_street }}</td>
 			<td>{{ $transaction->customer_zipcode }}</td>

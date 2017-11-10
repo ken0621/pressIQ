@@ -127,7 +127,7 @@ class ProductOrderController2 extends Member
         Transaction::get_transaction_payment_method();
         Transaction::get_transaction_slot_id();
 
-        $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'receipt', '', 0);
+        $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'receipt', '', 10);
         foreach ($data["_transaction"] as $key => $value) 
         {
             if ($value->payment_method != "paymaya") 

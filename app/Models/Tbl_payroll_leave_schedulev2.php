@@ -1,0 +1,128 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Tbl_payroll_leave_schedulev2 extends Model
+{
+    //
+    protected $table = 'tbl_payroll_leave_schedulev2';
+	protected $primaryKey = "payroll_leave_schedule_id";
+    public $timestamps = false;
+
+    public function scopegetlist($query, $shop_id = 0, $date = '0000-00-00' ,$param = '>=')
+	{
+		//table is okay
+		$query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_leave_employee_id','=','tbl_payroll_leave_schedulev2.payroll_leave_employee_id')
+			  ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_tempv2.payroll_leave_temp_id','=','tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
+			  ->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_leave_employee_v2.payroll_employee_id')
+			  ->where('tbl_payroll_leave_schedulev2.shop_id', $shop_id)
+			  ->where('tbl_payroll_leave_schedulev2.payroll_schedule_leave', $param, $date);
+		return $query;
+	}
+	public function scopespecific($query, $payroll_leave_schedule_id = 0)
+	{
+			//table is okay
+		$query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_leave_employee_id','=','tbl_payroll_leave_schedulev2.payroll_leave_employee_id')
+			  ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_tempv2.payroll_leave_temp_id','=','tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
+			  ->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_leave_employee_v2.payroll_employee_id')
+			  ->where('tbl_payroll_leave_schedulev2.payroll_leave_schedule_id', $payroll_leave_schedule_id);
+		return $query;
+	}
+
+
+	public function scopecheckemployee($query, $payroll_employee_id = 0, $payroll_schedule_leave = '0000-00-00')
+	{
+				//table is okay
+		$query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_leave_employee_id','=','tbl_payroll_leave_schedulev2.payroll_leave_employee_id')
+			  ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_tempv2.payroll_leave_temp_id','=','tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
+			  ->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_leave_employee_v2.payroll_employee_id')
+			  ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id)
+			  ->where('tbl_payroll_leave_schedulev2.payroll_schedule_leave', $payroll_schedule_leave);
+		return $query;
+	}
+
+	public function scopegetremaining($query, $payroll_employee_id = 0, $date = '0000-00-00')
+	{
+				//table is okay
+		$query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_leave_employee_id','=','tbl_payroll_leave_schedulev2.payroll_leave_employee_id')
+			  ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_tempv2.payroll_leave_temp_id','=','tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
+			  ->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_leave_employee_v2.payroll_employee_id')
+			  ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id)
+			  ->where('tbl_payroll_leave_schedulev2.payroll_schedule_leave', '<' ,$date);
+		return $query;
+	}
+
+	public function scopegetyearly($query, $payroll_leave_employee_id = 0, $date = array())
+	{
+		if(empty($date))
+		{
+			$date[0] = date('Y-01-01');
+			$date[1] = date('Y-12-31');
+		}
+
+		$query->where('payroll_leave_employee_id', $payroll_leave_employee_id)->whereBetween('payroll_schedule_leave', $date);
+
+		return $query;
+	}
+
+
+	public function scopegetemployeeleavedata($query, $payroll_employee_id = 0)
+	{
+				//table is okay
+		$query->join('tbl_payroll_leave_employee_v2', 'tbl_payroll_leave_schedulev2.payroll_leave_employee_id', '=', 'tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
+                              ->join('tbl_payroll_leave_tempv2', 'tbl_payroll_leave_employee_v2.payroll_leave_temp_id', '=', 'tbl_payroll_leave_tempv2.payroll_leave_temp_id')
+                              ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', '=', $payroll_employee_id)
+                              ->orderBy('tbl_payroll_leave_schedulev2.payroll_leave_schedule_id', 'desc');
+        return $query;
+	}
+
+	public function scopegetemployeeleavedatedata($query, $payroll_employee_id = 0, $date = "0000-00-00")
+	{
+			//table is okay
+		$query->join('tbl_payroll_leave_employee_v2', 'tbl_payroll_leave_schedulev2.payroll_leave_employee_id', '=', 'tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
+                              ->join('tbl_payroll_leave_tempv2', 'tbl_payroll_leave_employee_v2.payroll_leave_temp_id', '=', 'tbl_payroll_leave_tempv2.payroll_leave_temp_id')
+                              ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', '=', $payroll_employee_id)
+                              ->where('tbl_payroll_leave_schedulev2.payroll_schedule_leave', $date)
+                              ->orderBy('tbl_payroll_leave_schedulev2.payroll_leave_schedule_id', 'desc');
+        return $query;
+	}
+
+
+	public function scopegetemployeeleaveconsumesumdata($query, $payroll_leave_employee_id = 0)
+	{
+
+		/*select tbl_payroll_leave_employee.payroll_leave_employee_id, sum(tbl_payroll_leave_schedule.consume)from 
+		tbl_payroll_leave_schedule left join tbl_payroll_leave_employee 
+		on tbl_payroll_leave_employee.payroll_leave_employee_id = tbl_payroll_leave_schedule.payroll_leave_employee_id
+		where tbl_payroll_leave_employee.payroll_leave_employee_id = 104
+		group by tbl_payroll_leave_employee.payroll_leave_employee_id*/
+		
+		$query->select(DB::raw('tbl_payroll_leave_employee_v2.payroll_leave_employee_id, sum(tbl_payroll_leave_schedulev2.consume) as total_leave_consume'))
+             ->leftJoin("tbl_payroll_leave_employee_v2","tbl_payroll_leave_employee_v2.payroll_leave_employee_id","=","tbl_payroll_leave_schedulev2.payroll_leave_employee_id")
+             ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id', '=', $payroll_leave_employee_id)
+             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_employee_id');
+
+        return $query;
+	}
+
+
+	public function scopegetallemployeeleavedata($query, $payroll_employee_id=0)
+	{
+			//may leave temp days cap sa tempv2 
+			$query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_V2.payroll_leave_employee_id')
+        				//join("tbl_payroll_leave_employee","tbl_payroll_leave_schedule.payroll_leave_employee_id","=","tbl_payroll_leave_employee.payroll_leave_employee_id");
+             ->join("tbl_payroll_employee_basic","tbl_payroll_leave_employee.payroll_employee_id","=","tbl_payroll_employee_basic.payroll_employee_id")
+             ->join("tbl_payroll_leave_tempv2","tbl_payroll_leave_employee_v2.payroll_leave_temp_id","=","tbl_payroll_leave_tempv2.payroll_leave_temp_id")
+             ->select(DB::raw('tbl_payroll_employee_basic.payroll_employee_id , tbl_payroll_employee_basic.payroll_employee_display_name, tbl_payroll_leave_tempv2.payroll_leave_temp_name, tbl_payroll_leave_tempv2.payroll_leave_temp_days_cap, sum(tbl_payroll_leave_schedulev2.consume) as total_leave_consume, (tbl_payroll_leave_tempv2.payroll_leave_temp_days_cap - sum(tbl_payroll_leave_schedulev2.consume)) as remaining_leave'))
+             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id');
+
+             if ($payroll_employee_id != 0) 
+             {
+             	$query->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id);
+             }
+        return $query;
+	}
+
+}

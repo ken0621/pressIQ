@@ -395,6 +395,24 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 	Route::any('/leave/v2/modal_save_leave_temp_v2',"Member\PayrollController@modal_save_leave_temp_v2");
 
+	//scheduling
+	Route::any('/leave_schedule/v2/save_schedule_leave_tagv2','Member\PayrollController@save_schedule_leave_tagv2')
+	;
+
+	Route::any('/leave_schedule/v2/leave_schedule_tag_employeev2/{id}','Member\PayrollController@leave_schedule_tag_employeev2');
+	
+
+	Route::any('/leave_schedule/v2/session_tag_leavev2','Member\PayrollController@session_tag_leavev2');
+
+	Route::any('/leave_schedule/v2/ajax_schedule_leave_tag_employeev2','Member\PayrollController@ajax_schedule_leave_tag_employeev2');	
+
+	Route::any('/leave_schedule/v2/unset_session_leave_tagv2','Member\PayrollController@unset_session_leave_tagv2')
+	;
+
+	Route::any('/leave_schedule/v2/get_session_leave_tagv2','Member\PayrollController@get_session_leave_tagv2');
+
+	//end schedule
+
 
 	Route::any('/leave/v2/modal_view_leave_employee',"Member\PayrollController@modal_view_leave_employee");
 	Route::any('/leave/v2/modal_reset_leave',
@@ -511,8 +529,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/leave_schedule/get_session_leave_tag','Member\PayrollController@get_session_leave_tag');
 	Route::any('/leave_schedule/unset_session_leave_tag','Member\PayrollController@unset_session_leave_tag')
 	;
-	Route::any('/leave_schedule/save_schedule_leave_tag','Member\PayrollController@save_schedule_leave_tag')
-	;
+	Route::any('/leave_schedule/save_schedule_leave_tag','Member\PayrollController@save_schedule_leave_tag');
+
 	Route::any('/leave_schedule/delete_confirm_schedule_leave/{id}','Member\PayrollController@delete_confirm_schedule_leave')
 	;
 	Route::any('/leave_schedule/delete_schedule_leave','Member\PayrollController@delete_schedule_leave')

@@ -1,7 +1,7 @@
 <!-- Change action, name and function-->
 <link rel="stylesheet" type="text/css" href="/assets/member/payroll/css/timesheet.css">
 <link rel="stylesheet" type="text/css" href="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.css">
-<form class="global-submit " role="form" action="/member/payroll/leave_schedule/save_schedule_leave_tag" method="post">
+<form class="global-submit " role="form" action="/member/payroll/leave_schedule/v2/save_schedule_leave_tagv2" method="post">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
 		<h4 class="modal-title">Leave Schedule</h4>
@@ -27,15 +27,18 @@
 		</div>
 		<div class="form-group">
 			<div class="col-md-6">
-				<small>Leave Name</small>
-				<select class="form-control select-leave" name="leave_reason" required>
-
-
+				<small>Type of Leave</small>
+				<select class="form-control user-error select-leave" id="payroll_leave_type_id" required name="leave_reason" aria-invalid="true">
+					<option value="">Select Leave Type</option>
+					@foreach($_leave_type as $leavetype)
+					<option value="{{$leavetype->payroll_leave_type_id}}" {{$selected == $leavetype->payroll_leave_type_id ? 'selected="selected"' : ''}}>{{$leavetype->payroll_leave_type_name}}</option>
+					@endforeach
+	
 				</select>
 			</div>
 			<div class="col-md-6">
 				<small>&nbsp;</small>
-				<button class="btn btn-custom-primary btn-block popup employee-tag" type="button" link="/member/payroll/leave_schedule/leave_schedule_tag_employee/0">Tag Employee</button>
+				<button class="btn btn-custom-primary btn-block popup employee-tag" type="button" link="/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/0">Tag Employee</button>
 			</div>
 		</div>
 		<div class="form-group">
@@ -45,7 +48,9 @@
 						<tr>
 							<th class="text-center">Employee name</th>
 							<!-- <th class="text-center">Whole day</th> -->
-							<th class="text-center">Hours</th>
+							<th class="text-center">Used Leave</th>
+							<th class="text-center">Remaining Leave</th>
+							<th class="text-center">Apply Leave</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -68,7 +73,7 @@
 	$(".select-leave").unbind("change");
 	$(".select-leave").bind("change", function()
 	{
-		var link = "/member/payroll/leave_schedule/leave_schedule_tag_employee/" + $(this).val();
+		var link = "/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/" + $(this).val();
 		 $(".employee-tag").attr('link',link);
 	});
 

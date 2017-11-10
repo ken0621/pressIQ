@@ -4251,6 +4251,8 @@ class PayrollController extends Member
           $emp = Tbl_payroll_employee_basic::join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->whereIn('tbl_payroll_leave_employee_v2.payroll_leave_employee_id',$employee)->get();
           $data['new_record'] = $emp;
 
+          $data['used_leave'] = Tbl_payroll_leave_schedulev2::getemployeeleaveconsumesumdata($employee)->get();
+
           return json_encode($data);
      }
 

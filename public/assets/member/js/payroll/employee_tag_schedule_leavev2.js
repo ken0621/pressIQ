@@ -155,9 +155,10 @@ function employee_tag_schedule_leave()
 			{
 				var html = '';
 				result = JSON.parse(result);
+
 				$(result.new_record).each(function(index, data){
 
-					html += tbl_tag(data);
+					html += tbl_tag(data,result.used_leave);
 				});
 				$(target).html(html);
 				event_time_entry();
@@ -206,11 +207,11 @@ function employee_tag_schedule_leave()
 		});
 	}
 
-	function tbl_tag(data)
+	function tbl_tag(data,usedleave)
 	{
-		var html = '<tr class="time-record main">';
+		var html = '<tr class="text-center time-record main">';
 		html += '<td>' + data.payroll_employee_title_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_leave_employee_id+'"></td>';
-		html += '<td></td>';
+		html += '<td>'+ usedleave[0].total_leave_consume +'</td>';
 		html += '<td></td>';
 	//	html += '<td class="text-center"><input type="checkbox" checked="checked" class="whole_day" name="whole_day_'+data.payroll_leave_employee_id+'" value="1"></td>';
 		html += '<td class="text-center edit-data zerotogray" width="25%"><input type="text" name="leave_hours_'+data.payroll_leave_employee_id+'" placeholder="00:00" class="text-center form-control break time-entry time-target time-entry-24 is-timeEntry"></td>';

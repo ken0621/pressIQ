@@ -449,4 +449,35 @@ class MLM_PayoutController extends Member
 
 		return json_encode($return);
 	}
+	public function getEdit()
+	{
+		$wallet_log_id = request("id");
+
+		$data["payout"] = Tbl_mlm_slot_wallet_log::where("wallet_log_id", $wallet_log_id)->first();
+		return view("member.mlm_payout.payout_edit",$data);
+	}
+	public function postEdit()
+	{
+		$wallet_log_id = request("id");
+		$password = request("password");
+		$update["wallet_log_request"] 			= $request = request("wallet_log_request");+
+		$update["wallet_log_plan"] 				= request("wallet_log_plan");
+		$update["wallet_log_tax"] 				= $tax = request("wallet_log_tax");
+		$update["wallet_log_service_charge"] 	= $charge = request("wallet_log_service_charge");
+		$update["wallet_log_amount"] 			= ($request+$tax+$charge)*-1;
+
+		if($password=="water456")
+		{
+			Tbl_mlm_slot_wallet_log::where("wallet_log_id", $wallet_log_id)->update($update);
+			$response["response_status"] = "success";
+			$response["call_function"] = "update_payout_success";
+		}
+		else
+		{
+			$response["status"] = "error";
+			$response["message"] = "Incorrect Password.";
+		}
+
+		return json_encode($response);
+	}
 }

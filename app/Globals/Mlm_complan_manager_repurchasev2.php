@@ -30,6 +30,7 @@ use App\Models\Tbl_rank_points_log;
 use App\Models\Tbl_rank_update;
 use App\Models\Tbl_rank_update_slot;
 use App\Models\Tbl_brown_rank;
+use App\Models\Tbl_customer;
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
 
@@ -44,6 +45,7 @@ use App\Globals\Mlm_slot_log;
 use App\Globals\Mlm_complan_manager_repurchasev2;
 use App\Globals\Mlm_tree;
 use App\Globals\Membership_code;
+use App\Globals\Mail_global;
 
 
 
@@ -1064,7 +1066,24 @@ class Mlm_complan_manager_repurchasev2
                               
 
                 $update_rank_update["complete"] = 1;
-                Tbl_rank_update::where("rank_update_id",$rank_update_id)->update($update_rank_update);                     
+                Tbl_rank_update::where("rank_update_id",$rank_update_id)->update($update_rank_update);  
+
+                $rank_update_email = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->rank_update_email;
+
+                if($rank_update_email == 1)
+                {
+                    $new_rank_data  = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$new_rank_id)->first();
+                    $old_rank_data  = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$old_rank_id)->first();
+
+                    $customer_email = Tbl_customer::where("customer_id",$slot_info->slot_owner)->first();
+                    $email_content["subject"] = "Rank Upgrade";
+                    $email_content["content"] = "Your rank has been upgraded to ".$new_rank_data->stairstep_name;
+                    $email_address            = $customer_email->email;
+                    // $email_address            = "";
+
+                    $return_mail = Mail_global::send_email(null, $email_content, $shop_id, $email_address);
+                }
+
             }
         }
     }

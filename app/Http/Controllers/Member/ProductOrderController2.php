@@ -135,7 +135,6 @@ class ProductOrderController2 extends Member
                 unset($data["_transaction"][$key]);
             }
         }
-
         Excel::create('Paymaya Report', function($excel) use ($data)
         {
             $excel->sheet('Paymaya', function($sheet) use ($data)

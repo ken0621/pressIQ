@@ -5,6 +5,7 @@
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
     <div class="panel-heading">
         <div>
+
             <i class="fa fa-calendar"></i>
             <h1>
             <span class="page-title">Timesheet / {{ $company->payroll_company_name }} ({{ $company->payroll_period_category }})</span>

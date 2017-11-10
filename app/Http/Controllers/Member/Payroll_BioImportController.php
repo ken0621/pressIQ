@@ -53,7 +53,6 @@ class Payroll_BioImportController extends Member
 		
 		if($biometric == 'ZKTime 5.0')
 		{
-
 			return Self::import_ZKTime_5_0($file , $company);
 		}
 
@@ -79,11 +78,13 @@ class Payroll_BioImportController extends Member
 		}
 		if($biometric == 'Manual Template')
 		{
+			/*kim*/
 			return Self::import_manual_v2($file, $company);
 		}
 
 		if($biometric == 'Mustard Seed')
 		{
+			/*kim*/
 			return Self::import_mustard_seed_v2($file, $company);
 		}
 
@@ -94,6 +95,7 @@ class Payroll_BioImportController extends Member
 		
 		if($biometric == 'ANVIZ Biometrics EP Series')
 		{
+			/*kim*/
 			return Self::import_anviz_biometrics_ep_series($file , $company);
 		}
 	}
@@ -197,10 +199,17 @@ class Payroll_BioImportController extends Member
 			foreach($time_record as $employee_number => $value) 
 			{
 				$check_employee = null;
+
 				$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number."")->where("shop_id", Self::shop_id())->first();
 				
 				$value['employee_number'] = $employee_number;
 				$value['date']			  = $date;
+
+				if (!$check_employee) 
+				{
+					$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("shop_id", Self::shop_id())->first();
+				}
+
 
 				if ($check_employee) 
 				{
@@ -386,7 +395,13 @@ class Payroll_BioImportController extends Member
     	foreach($_record as $key_employee => $employee)
     	{
     		/* CHECK IF EMPLOYEE EXIST */
-    		$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee->employee_no)->where("shop_id", $shop_id)->first();
+    		$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_biometric_number", $employee->employee_no)->where("shop_id", $shop_id)->first();
+    		
+    		if (!$check_employee) 
+    		{
+    			$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee->employee_no)->where("shop_id", $shop_id)->first();
+    		}
+
     		
     		if($check_employee)
     		{
@@ -488,10 +503,17 @@ class Payroll_BioImportController extends Member
 	public function check_employee_number($payroll_employee_number = '')
 	{
 		$bool = true;
-		$count = Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number."")->where('shop_id', Self::shop_id())->count();
-		if($count == 0)
+
+		/*$count = Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->count();*/
+		$count = Tbl_payroll_employee_basic::where("payroll_employee_biometric_number", $payroll_employee_number)->where("shop_id", Self::shop_id())->first();
+
+		if(!$count)
 		{
-			$bool = false;
+			$count = Tbl_payroll_employee_basic::where("payroll_employee_number", $payroll_employee_number)->where("shop_id", Self::shop_id())->first();
+			if (!$count) 
+			{
+				$bool = false;
+			}
 		}
 		return $bool;
 	}
@@ -501,7 +523,14 @@ class Payroll_BioImportController extends Member
 	/* GET EMPLOYEE ID START */
 	public function getemployeeId($payroll_employee_number = '', $value = 'payroll_employee_id')
 	{
-		return Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number."")->where('shop_id', Self::shop_id())->value($value);
+		$employee_info = Tbl_payroll_employee_basic::where('payroll_employee_biometric_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->value($value);
+		
+		if (!$employee_info) 
+		{
+			$employee_info = Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->value($value);
+		}
+
+		return $employee_info;
 	}
 
 	public function getTimeSheetId($payroll_employee_id = 0, $date = '0000-00-00')
@@ -927,6 +956,7 @@ class Payroll_BioImportController extends Member
 			    			/*if($count_record == 0)
 			    			{*/
 			    				array_push($insert_time_record, $insert_record);
+
 			    			/*}*/
 		    			}		    			
 		    		}
@@ -1117,7 +1147,7 @@ class Payroll_BioImportController extends Member
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','employee_name','date','time_in','time_out'));
 
     	$incomplete = 0;
-
+    	$_record = null;
     	if(isset($_time[0]['employee_no']) && isset($_time[0]['employee_name']) && isset($_time[0]['date']) && isset($_time[0]['time_in']) && isset($_time[0]['time_out']))
     	{
     	 foreach ($_time as $key => $value) 

@@ -653,6 +653,7 @@ class Payroll_BioImportController extends Member
 
     public function import_ZKTime_5_0($file, $company)
     {
+    	
     	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
 
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('no','datetime'));

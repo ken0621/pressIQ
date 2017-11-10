@@ -20,19 +20,127 @@
                 <div class="col-md-6">
                     <div class="info">
                         <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, vel, totam. Eaque itaque molestiae, eos hic ullam libero ducimus? Incidunt optio impedit repellendus doloribus veniam quas dicta, a pariatur sunt.
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, vel, totam. Eaque itaque molestiae, eos hic ullam libero ducimus? Incidunt optio impedit repellendus doloribus veniam quas dicta, a pariatur sunt.Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, vel, totam. Eaque itaque molestiae, eos hic ullam libero ducimus? Incidunt optio impedit repellendus doloribus veniam quas dicta, a pariatur sunt.Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, vel, totam. Eaque itaque molestiae, eos hic ullam libero ducimus? Incidunt optio impedit repellendus doloribus veniam quas dicta, a pariatur sunt.
                         </p>
-                        div.
+                        <div class="btn-more">More</div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    
+                    <div class="img-holder">
+                        <img src="/themes/{{ $shop_theme }}/img/whoWeAre.png">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="wrapper3"></div>
-    <div class="wrapper4"></div>
+    <div class="wrapper3">
+        <div class="container">
+            <div class="title">
+                Why Join in NICE Enterprises
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-4">
+                   <div class="per-col col-1">
+                       <div class="img-holder">
+                           <img src="/themes/{{ $shop_theme }}/img/join-1.png">
+                       </div>
+                       <div class="info-title">
+                           Lorem Ipsum
+                       </div>
+                       <div class="info">
+                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias nobis, quaerat qui illo vel maxime accusamus beatae sit iste ipsa obcaecati aliquid cum aut unde quidem eligendi assumenda minima quasi.</p>
+                       </div>
+                   </div> 
+                </div>
+                <div class="col-md-4">
+                    <div class="per-col col-2">
+                        <div class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/join-2.png">
+                        </div>
+                        <div class="info-title">
+                            Lorem Ipsum
+                        </div>
+                        <div class="info">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias nobis, quaerat qui illo vel maxime accusamus beatae sit iste ipsa obcaecati aliquid cum aut unde quidem eligendi assumenda minima quasi.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                   <div class="per-col col-3">
+                       <div class="img-holder">
+                           <img src="/themes/{{ $shop_theme }}/img/join-3.png">
+                       </div>
+                       <div class="info-title">
+                           Lorem Ipsum
+                       </div>
+                       <div class="info">
+                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias nobis, quaerat qui illo vel maxime accusamus beatae sit iste ipsa obcaecati aliquid cum aut unde quidem eligendi assumenda minima quasi.</p>
+                       </div>
+                   </div> 
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="wrapper4">
+        <div class="container">
+            <div class="title">Membership Packages</div>
+            <div class="row clearfix">
+                <div class="col-md-4">
+                    <div class="col-1">
+                        <div class="rectangle-1">
+                            <div class="rectangle-2">
+                                <div class="title-package">
+                                    Package 1
+                                </div>
+                                <div class="title-package">
+                                    $20
+                                </div>
+                            </div>
+                            <div class="info">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi quasi aliquid inventore, dolore reiciendis unde sequi nemo mollitia debitis totam illo nisi eveniet commodi. Sit iusto, mollitia impedit repudiandae exdolore reiciendis unde sequi nemo mollitia debitis totam illo nisi eveniet commodi. Sit iusto, mollitia impedit repudiandae.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-2">
+                        <div class="rectangle-1">
+                            <div class="rectangle-2">
+                                <div class="title-package">
+                                    Package 2
+                                </div>
+                                <div class="title-package">
+                                    $20
+                                </div>
+                            </div>
+                            <div class="info">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi quasi aliquid inventore, dolore reiciendis unde sequi nemo mollitia debitis totam illo nisi eveniet commodi. Sit iusto, mollitia impedit repudiandae exdolore reiciendis unde sequi nemo mollitia debitis totam illo nisi eveniet commodi. Sit iusto, mollitia impedit repudiandae.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-3">
+                        <div class="rectangle-1">
+                            <div class="rectangle-2">
+                                <div class="title-package">
+                                    Package 3
+                                </div>
+                                <div class="title-package">
+                                    $20
+                                </div>
+                            </div>
+                            <div class="info">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi quasi aliquid inventore, dolore reiciendis unde sequi nemo mollitia debitis totam illo nisi eveniet commodi. Sit iusto, mollitia impedit repudiandae exdolore reiciendis unde sequi nemo mollitia debitis totam illo nisi eveniet commodi. Sit iusto, mollitia impedit repudiandae.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
     <div class="wrapper5"></div>
 </div>
 @endsection

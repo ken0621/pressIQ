@@ -145,9 +145,6 @@ Route::any('/register', 'Login\MemberLoginController@register');
 Route::post('/createAccount', 'Frontend\HomeController@createAccount');
 
 
-Route::any('/employee_login', 'Login\EmployeeLoginController@employee_login');
-
-
 Route::group(array('prefix' => '/member/{page}/'), function()
 {
 	//order start
@@ -284,6 +281,8 @@ Route::any('/member/pis_counter','Member\PurchasingInventorySystemController@pis
 Route::any('/member/item/view_item_history/{id}','Member\ItemController@view_item_history');
 Route::any('/member/item/add_submit_pis','Member\ItemController@add_submit_pis');
 Route::any('/member/item/edit_submit_pis','Member\ItemController@edit_submit_pis');
+Route::any('/member/item/delete_item_history','Member\ItemController@delete_item_history');
+
 
 Route::any('/member/enable_disable_pis/{pass}/{action}','Member\PurchasingInventorySystemController@enable_pis');
 /*END ITEM FOR PIS*/
@@ -1193,5 +1192,10 @@ include_once('routes_config/routes_item.php');
 include_once('routes_config/routes_members_area.php');
 
 
+/*PAYROLL EMPLOYEE*/
+include_once('routes_config/routes_payroll_employee.php');
+
+
 Route::get('/ref/{id}', 'Shop\LeadController@ref');
 Route::get('/{id}', 'Shop\LeadController@ref');
+

@@ -102,11 +102,11 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Sales price/rate *</label> 
-                            <input type="text" class="form-control number-input input-sm" id="item_price" value="{{isset($data['item_price']) ? number_format($data['item_price'],2) : ''}}" name="item_price" required>
+                            <input type="text" class="form-control number-input input-sm" id="item_price" value="{{isset($data['item_price']) ? number_format($data['item_price'],4) : ''}}" name="item_price" required>
                         </div> 
                         <div class="col-md-6">  
                             <label>Cost *</label>  
-                            <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? number_format($data['item_cost'],2) : ''}}" name="item_cost" required>
+                            <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? number_format($data['item_cost'],4) : ''}}" name="item_cost" required>
                         </div>
                     </div>
                     <!-- <div class="col-md-12" style="border-bottom: solid 1px #A CACAC; padding-top:20px;margin-bottom: 5px"></div> -->
@@ -600,7 +600,7 @@
 <script type="text/javascript">
 function setTwoNumberDecimal(x) 
 {
-    var value = parseFloat($(x).val()).toFixed(2);
+    var value = parseFloat($(x).val()).toFixed(4);
     $(x).val(value);
 }
 

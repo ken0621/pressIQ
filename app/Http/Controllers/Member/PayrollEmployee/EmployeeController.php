@@ -246,13 +246,13 @@ public function employee_timesheet($payroll_period_id)
 
 		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);
 
-		//$data["time_keeping_approved"] 	= $data['period_record'] ? true : false;
+		$data["time_keeping_approved"] 	= $data['period_record'] ? true : false;
 		
 		
-		/*$employee_contract 		= Tbl_payroll_employee_contract::EmployeePayrollGroup($this->employee_info->payroll_employee_id)->get();
+		/*$employee_contract 		= Tbl_payroll_employee_contract::employeePayrollGroup($this->employee_info->payroll_employee_id)->get();
 
-		//dd($employee_contract);
-		$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["period_record"]->payroll_period_start);
+		dd($employee_contract);*/
+		/*$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["period_record"]->payroll_period_start);
 		$employee_contract = Tbl_payroll_employee_contract::Employeecontract($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
 
 

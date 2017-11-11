@@ -279,13 +279,10 @@ class EmployeeController extends PayrollMember
 		}
 		else
 		{
-			return view('member.payroll2.employee_dashboard.employee_timesheet_pdf', $data);
-		}
-
-		
-		/*$pdf = view('member.payroll2.employee_dashboard.employee_timesheet_pdf', $data);
-        return Pdf_global::show_pdf($pdf);*/
-	}
+			$pdf = view('member.payroll2.employee_dashboard.employee_timesheet_pdf', $data);
+	        return Pdf_global::show_pdf($pdf);
+	    }
+	}   
 	public function sample()
 	{
 		$data['page']	= 'Official Business Management';

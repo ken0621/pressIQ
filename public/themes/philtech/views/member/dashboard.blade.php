@@ -61,10 +61,11 @@
 						</div>
 					</div>
 				</div>
-
+				@if($travel_and_tours)
 				<div class="btn-container">
 					<a class="btn btn-lblue" style="width: 100%; margin-bottom: 5px" role="button" href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a>
 				</div>
+				@endif
 
 			</div>
 

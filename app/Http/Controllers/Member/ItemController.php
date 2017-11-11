@@ -19,6 +19,7 @@ use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_um;
 use App\Models\Tbl_item_merchant_request;
 use App\Models\Tbl_user;
+use App\Models\Tbl_audit_trail;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -209,12 +210,25 @@ class ItemController extends Member
             return $this->show_no_access();
         }
 	}
+	public function view_item_receipt($item_id)
+	{
+		$data["invoice"] = Item::view_item_receipt($item_id);
+		// dd($data);
+		return view("member.item.pis.item_view_receipt",$data);
+	}
 	public function view_item_history($item_id)
 	{
+
 		$data["text"] = Item::get_item_price_history($item_id, true);
 
-
 		return view("member.item.pis.item_price_history",$data);
+	}
+	public function delete_item_history()
+	{
+		$audit_trail_id = Request::input("history_id");
+		Tbl_audit_trail::where("audit_trail_id",$audit_trail_id)->delete();
+		echo json_encode('success');
+
 	}
 	public function load_item()
     {

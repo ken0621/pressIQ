@@ -113,6 +113,7 @@ class Invoice
         {
             $shop_id = Tablet_global::getShopId();
         }
+        
         $insert['inv_shop_id']                  = $shop_id;  
 		$insert['inv_customer_id']              = $customer_info['customer_id'];        
         $insert['inv_customer_email']           = $customer_info['customer_email'];
@@ -408,7 +409,7 @@ class Invoice
 
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
 
-        Invoice::updateIsPaid($inv_id);
+        return Invoice::updateIsPaid($inv_id);
     }
 
     public static function updateIsPaid($inv_id)
@@ -420,6 +421,8 @@ class Invoice
         else                                    $data["inv_is_paid"] = 0;
 
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
+
+        return $data['inv_is_paid'];
     }
 
 

@@ -62,6 +62,9 @@
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
 							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports</span></div></a>
 						</li>
+						<li class="{{ Request::segment(2) == "report_points" ? "active" : "" }}">
+							<a href="/members/report-points"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports (Points)</span></div></a>
+						</li>
 						<!-- <li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
 							<a href="/members/network"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Network List</span></div></a>
 						</li> -->
@@ -100,7 +103,7 @@
 				<div class="clearfix">
 					@yield("member_content")
 				</div>
-			</div>	
+			</div>
 		</div>
 	</div>
 </div>

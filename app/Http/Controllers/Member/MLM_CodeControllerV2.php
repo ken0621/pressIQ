@@ -208,6 +208,7 @@ class MLM_CodeControllerV2 extends Member
     }
     public function print_codes(Request $request)
     {
+        $data['shop_id'] = $this->user_info->shop_id;
         $column[0]['name'] = 'PIN No';
         $column[0]['code'] = 'pin_num';
         $column[0]['status'] = 'true';
@@ -231,6 +232,10 @@ class MLM_CodeControllerV2 extends Member
         $data["_item_kit"] = Item::get($this->user_info->shop_id);
         Item::get_filter_type(1);
         $data["_items"] = Item::get($this->user_info->shop_id);
+        if($this->user_info->shop_id == 1)
+        {
+            $data["_items"] = Item::get_per_warehouse($this->user_info->shop_id, Warehouse2::get_current_warehouse($this->user_info->shop_id));
+        }
         $data["_membership"] = MLM2::membership($this->user_info->shop_id);
 
         return view("member.mlm_code_v2.print_code_columns",$data);
@@ -243,15 +248,17 @@ class MLM_CodeControllerV2 extends Member
         $r['membership_kit'] = $request->membership_kit ? '' : 'hidden';
         $rt = serialize($r); 
 
-        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&print_limit='.$request->print_limit.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit.'&item_id='.$request->item_id);
+        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&print_range_to='.$request->print_range_to.'&print_range_from='.$request->print_range_from.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit.'&item_id='.$request->item_id.'&type='.$request->barcode_type);
     }
     public function print(Request $request)
     {
         $data['on_show'] = unserialize($request->Y);
-        $data['_item_product_code'] = Item::get_all_item_record_log('', $request->status, $request->print_limit, $request->item_id);
+        $data['type'] = $request->type;
+        $take = $request->print_range_from - $request->print_range_to;
+        $data['_item_product_code'] = Item::get_all_item_record_log('', $request->status, 0, $request->item_id, $request->print_range_to, $take);
         if($request->t == 'membership_code')
         {
-            $data['_item_product_code'] = Item::get_assembled_kit(0,$request->membership_kit,$request->membership,'',$request->status, $request->print_limit);
+            $data['_item_product_code'] = Item::get_assembled_kit(0,$request->membership_kit,$request->membership,'',$request->status, 0, $request->print_range_to, $take);
         }
         $pdf = view('member.mlm_code_v2.print_code_pdf', $data);
         return Pdf_global::show_pdf($pdf);

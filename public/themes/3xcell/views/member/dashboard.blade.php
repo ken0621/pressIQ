@@ -12,7 +12,7 @@
 	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-bg.png');">
 	                    <div class="btn btn-text">
 	                        <div class="text-header1">Become A Member Now!</div>
-	                        <div class="text-header2">Opportunity awaits you. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aenean commodo ligula eget dolor.</div>
+	                        <div class="text-header2">Opportunity awaits you.</div>
 	                    </div>
 	                    <div class="btn-container">
 	                        <!-- <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">BUY A KIT</button></a> -->
@@ -78,7 +78,7 @@
 					<div class="chart-legend">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Performace Commission</span><span class="value">{{ $wallet->display_complan_stairstep }}</span></div>
+							<div class="name"><span>Performance Commission</span><span class="value">{{ $wallet->display_complan_stairstep }}</span></div>
 						</div>
 					</div>
 				</div>
@@ -88,22 +88,30 @@
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Rank PV</span><span class="value">{{ $points->display_rank_pv }}</span></div>
+							<div class="name"><span>Rank PV</span><span class="value">{{ $points->display_rank_pv + $points->display_rank_gpv }}</span></div>
 						</div>
-						<div class="holder">
+<!-- 						<div class="holder">
 							<div class="color"></div>
 							<div class="name"><span>Rank Group PV</span><span class="value">{{ $points->display_rank_gpv }}</span></div>
+						</div> -->
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Personal Volume</span><span class="value">{{ $points->display_stairstep_pv }}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Stair Step PV</span><span class="value">{{ $points->display_stairstep_pv }}</span></div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Stair Step Group PV</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
+							<div class="name"><span>Group Sales PV</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
 						</div>
 					</div>
 				</div>
+				@if($first_slot->membership_restricted == 1)
+				<div class="title">Upgrade slot</div>
+				<div class="sub-container">
+					<div class="chart-legend text-center">
+						<button class="btn btn-default" data-toggle="modal" data-target="#upgrade-slot-modal">Use Upgrade Code</button>
+					</div>
+				</div>
+				@endif
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
@@ -196,6 +204,36 @@
 	    </div>
 	</div>
 @endif
+
+<!--  Upgrade Slot -->
+<div class="popup-proceed2">
+    <div id="upgrade-slot-modal" class="modal fade">
+        <div class="modal-sm modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><i class="fa fa-shield"></i> CODE UPGRADE</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="message message-return-code-verify"></div>
+                    <form class="upgrade-slot-verification-form">
+                        <div>
+                            <div class="labeld">Pin Code</div>
+                            <input class="input upgrade-pin text-center" name="pin" type="text">
+                        </div>
+                        <div>
+                            <div class="labeld">Activation</div>
+                            <input class="input upgrade-activation text-center" name="activation" type="text">
+                        </div>
+                        <div class="btn-container">
+                            <button id="btn-upgrade" type="button" class="btn-upgrade" onClick="check_upgrade_code()"><i class="fa fa-angle-double-right"></i> Proceed</button>
+                        </div>
+                    </form>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
 
 <!--  Enter a code -->
 <div class="popup-enter-a-code">
@@ -305,3 +343,58 @@
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css">
 @endsection
+
+<style type="text/css">
+#btn-upgrade
+{
+    color: #fff;
+    background-color: #2161C8;
+    padding: 10px 40px;
+    border-radius: 2px;
+    border: 0px !important;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+    margin-top: 20px;
+    text-transform: uppercase;
+}	
+
+</style>
+
+<script type="text/javascript">
+	function check_upgrade_code()
+	{
+		var form_data = {};
+		form_data._token = $("._token").val();
+		form_data.pin = $(".upgrade-pin").val();
+		form_data.activation = $(".upgrade-activation").val();
+
+		/* START LOADING AND DISABLE FORM */
+		$(".code-verification-form").find(".btn-proceed-2").html('<i class="fa fa-spinner fa-pulse fa-fw"></i> VERIFYING').attr("disabled", "disabled");
+		$(".code-verification-form").find("select").attr("disabled", "disabled");
+
+		$.ajax(
+		{
+			url:"/members/slot-upgrade-code",
+			data:form_data,
+			type:"post",
+			success: function(data)
+			{
+				$(".message-return-code-verify").html(data);
+				if(data == "")
+				{
+					toastr.success("Upgrade success");
+					window.location.replace("/members");
+				}
+			},
+			error: function(data)
+			{
+				alert("An ERROR occurred. Please contact administrator.");
+				$(".code-verification-form").find(".btn-proceed-2").html('<i class="fa fa-angle-double-right"></i> PROCEED').removeAttr("disabled");
+			}
+		});
+
+	}
+</script>

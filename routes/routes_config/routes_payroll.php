@@ -106,8 +106,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* EMPLOYEE END */
 	
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
-
-
+	
 	//company_register_report/
 	/* TIMESHEET START */
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');
@@ -161,7 +160,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/branch_name/modal_archive_branch/{archived}/{id}','Member\PayrollController@modal_archive_branch');
 	Route::any('/branch_name/archive_branch','Member\PayrollController@archive_branch');
 	/* BRANCH NAME END */
-
 
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');

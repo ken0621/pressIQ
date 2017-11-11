@@ -59,17 +59,19 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @if(count($_list) > 0)
+                                @foreach($_list as $key => $list)
                                 <tr>
-                                    <td class="text-center">1</td>
+                                    <td class="text-center">{{$key+1}}</td>
                                     <td>
-                                        <div><b>Duplex with Garage</b> </div>
-                                        <small>TSP : P 3,500,000.00</small>
+                                        <div><b>{{$list->item_name}}</b> </div>
+                                        <small>TSP : {{currency('P ',$list->total_selling_price)}}</small>
                                     </td>
                                     <td class="text-center">
-                                        Juan Dela Cruz
+                                        {{ucwords($list->salesrep_fname.' '.$list->salesrep_mname.' '.$list->salesrep_lname)}}
                                     </td>
                                     <td class="text-center">
-                                        P 280,000.00
+                                        {{currency('P ',$list->total_commission)}}
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">
@@ -82,6 +84,10 @@
                                         </div>
                                     </td>
                                 </tr>
+                                @endforeach
+                                @else
+                                <tr><td colspan="5" class="text-center">NO PROCESS YET</td></tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>

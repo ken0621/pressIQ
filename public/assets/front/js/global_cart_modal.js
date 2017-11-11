@@ -122,6 +122,6 @@ function cart_modal()
 
 	function event_footable_cart()
 	{
-		$('.footable-cart').footable();
+		// $('.footable-cart').footable();
 	}
 }

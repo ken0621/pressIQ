@@ -261,5 +261,5 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product.css?updated1">
 @endsection

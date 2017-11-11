@@ -15,21 +15,6 @@
     <div class="panel-body form-horizontal">
         <div class="form-group">
             <div class="col-md-12">            
-                <label>Truck Model *</label>
-                <input type="text" class="form-control" name="truck_model" id="warehouse_name">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-12">            
-                <label>Kilogram </label>
-                <div class="input-group">
-                <input type="text" class="form-control number-input" name="truck_kilogram">
-                  <span class="input-group-addon" style="background-color: #e6e6e6" id="basic-addon2">kg</span>
-                </div>
-            </div>
-        </div> 
-        <div class="form-group">
-            <div class="col-md-12">            
                 <label>Truck Plate Number *</label>
                 <input type="text" class="form-control" name="truck_plate_number">
             </div>
@@ -47,6 +32,21 @@
                 </select>
             </div>
         </div>
+        <div class="form-group">
+            <div class="col-md-12">            
+                <label>Truck Model</label>
+                <input type="text" class="form-control" name="truck_model" id="warehouse_name">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">            
+                <label>Kilogram </label>
+                <div class="input-group">
+                <input type="text" class="form-control number-input" name="truck_kilogram">
+                  <span class="input-group-addon" style="background-color: #e6e6e6" id="basic-addon2">kg</span>
+                </div>
+            </div>
+        </div> 
     </div>
 </div>
 <div class="modal-footer" >

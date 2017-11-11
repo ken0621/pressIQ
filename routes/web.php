@@ -266,6 +266,7 @@ Route::any('/member/item/data', 'Member\ItemController@data'); /* ERWIN */
 Route::get('/member/item/mulitple_price_modal/{id}', 'Member\ItemController@get_multiple_price_modal'); /* B */
 Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_multiple_price_modal'); /* B */
 Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_item_new_price'); /* B */
+Route::get('/member/item/print_new_item','Member\ItemController@print_new_item');
 
 Route::get('/member/item/approve_request/{id}', 'Member\ItemController@merchant_approve_request'); /* ERWIN */
 Route::post('/member/item/approve_request_post/approve', 'Member\ItemController@merchant_approve_request_post'); /* ERWIN */

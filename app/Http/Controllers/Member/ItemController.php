@@ -33,6 +33,7 @@ use App\Globals\Vendor;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Utilities;
+use App\Globals\Pdf_global;
 
 use Crypt;
 use Redirect;
@@ -2090,5 +2091,41 @@ class ItemController extends Member
 	public function merchant_decline_request_post($id)
 	{
 
+	}
+	public function print_new_item()
+	{
+		$data['owner'] = $this->user_info;
+		$data['_new_item'] = Tbl_audit_trail::user()->where('audit_shop_id',Item::getShopId())->where('remarks','Added')->where('source','item')
+									 ->whereBetween('tbl_audit_trail.created_at',[date('Y-m-d h:i:s',strtotime(Carbon::now())),date('Y-m-d h:i:s',strtotime(Carbon::now()->addDays(1)))])
+									 ->leftjoin('tbl_item','item_id','=','source_id')
+									 ->leftjoin('tbl_category','type_id','=','item_category_id')
+									 ->leftjoin('tbl_item_type','tbl_item_type.item_type_id','=','tbl_item.item_type_id')
+									 ->get();
+		foreach ($data['_new_item'] as $key => $value) 
+		{
+			$data["_new_item"][$key]->conversion = UnitMeasurement::um_convertion($value->item_id);
+			$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
+			$data["_new_item"][$key]->inventory_count_um_view = 0;
+			$data["_new_item"][$key]->item_whole_price = 0;
+			$data["_new_item"][$key]->um_whole = "";
+			if($um)
+			{
+				$data["_new_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+				
+				$data["_new_item"][$key]->item_whole_price = $um->unit_qty * $value->item_price;
+				$data["_new_item"][$key]->um_whole = $um->multi_abbrev;
+			}
+			if($value->item_type_id == 4)
+			{
+				$data["_new_item"][$key]->item_price = Item::get_item_bundle_price($value->item_id);
+			}
+			if($value->bundle_group == 1)
+			{
+				$data["_new_item"][$key]->item_type_name = "Group";
+			}
+		}
+
+        $pdf = view('member.item.pis.print_new_item', $data);
+        return Pdf_global::show_pdf($pdf);
 	}
 }

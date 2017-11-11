@@ -11,6 +11,7 @@ use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
+use App\Models\Tbl_payroll_rdo;
 use App\Globals\Payroll2;
 use App\Globals\Utilities;
 use Illuminate\Http\Request;
@@ -39,13 +40,41 @@ class EmployeeController extends PayrollMember
 		
 		return view('member.payroll2.employee_dashboard.employee',$data);
 	}
-	public function company_details()
+	public function company_details($action = 'view')
 	{
 		$data['page']	= 'Company Details';
 		$data["company"] = Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
 		
+
+		$data['rdo'] = Tbl_payroll_rdo::orderBy('rdo_code')->first();
+
+		$data["company"] = Tbl_payroll_rdo::CompanyRdo()->get();
+		//dd($data["company"]);
 		return view('member.payroll2.employee_dashboard.company_details',$data);
 	}
+
+	/*public function company_list()
+     {
+          // $data['_page'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_company::selcompany(Self::shop_id(),1)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
+
+          $_active = array();
+          $data['_parent'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('payroll_company_name')->paginate($this->paginate_count);
+
+          foreach($data['_parent'] as $parent)
+          {
+               $temp['company'] = $parent;
+               $temp['branch'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id', $parent->payroll_company_id)->orderBy('payroll_company_name')->get();
+               array_push($_active, $temp);
+          }
+
+          // $data['_active'] = Payroll::company_heirarchy(Self::shop_id(), $this->paginate_count);
+          $data['_active'] = $_active;
+          // dd($data['_active']);
+          return view('member.payroll.companylist', $data);
+     }*/
+
+
 	public function employee_profile()
 	{
 		$data['page']	= 'Profile';
@@ -224,30 +253,6 @@ class EmployeeController extends PayrollMember
 			$data['total_philhealth_ee'] += $total->philhealth_ee;
 			$data['total_pagibig_ee'] += $total->pagibig_ee;
 		}
-<<<<<<< HEAD
-		
-		//return view('member.payroll2.employee_dashboard.employee_payslip', $data);
-		$pdf = view('member.payroll2.employee_dashboard.employee_payslip', $data);
-        return Pdf_global::show_pdf($pdf);
-        
-    }
-    public function employee_timesheet()
-	{
-		$data["page"] 	= "Employee Timesheet";
-		$data["period"] = Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->first();
-		
-		$data["period_start"]	= date("F d, Y", strtotime($data["period"]->payroll_period_start));
-		$data["period_end"]		= date("F d, Y", strtotime($data["period"]->payroll_period_end));
-
-
-		if($data["period"])
-		{
-			$date_start = $data["period"]->payroll_period_start;
-			$date_end 	= $data["period"]->payroll_period_end;
-
-		}
-		return view('member.payroll2.employee_dashboard.employee_timesheet',$data);
-=======
 
 		//return view('member.payroll2.employee_dashboard.employee_payslip', $data);
 		$pdf = view('member.payroll2.employee_dashboard.employee_payslip_pdf', $data);
@@ -306,7 +311,6 @@ class EmployeeController extends PayrollMember
 			$pdf = view('member.payroll2.employee_dashboard.employee_timesheet_pdf', $data);
 	        return Pdf_global::show_pdf($pdf);
 	    }
->>>>>>> 1d8fd1c12d30adbbce6f11045b5b03711641cbef
 	}   
 	public function sample()
 	{

@@ -524,18 +524,27 @@ class PayrollReportController extends Member
 		}
 		else
 		{
-			$data["company"] 			= Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
-			// $data["_employee"] 			= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_employee_company_id)->Basic()->get();
-			// $data["_employee"] 			= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_employee_company_id)->Basic()->get();
+			$data["company"] 		= Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
+			$data["_employee"] 		= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_employee_company_id)->Basic()->get();
+			
+			/*START Removed it on 2018*/
+			// $check_if_updated = true;
+
 			// foreach ($data["_employee"] as $key => $employee) 
 			// {
-			// 	if ($employee->employee_company_id == "NULL") 
+
+			// 	if ($employee->employee_company_id != "NULL") 
 			// 	{
-			// 		$data["_employee"][$key] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->where('tbl_payroll_employee_basic.payroll_employee_id', $employee->payroll_employee_id)->first();
+			// 		$check_if_updated = false;
+			// 		break;
 			// 	}
 			// }
+			/*END Removed it on 2018*/
 
-			$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->first();
+			if (count($data["_employee"]) == 0 ) /*&& $check_if_updated*/
+			{
+				$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->get();
+			}
 
 			$data["period_info"] 		= $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 			$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
@@ -579,7 +588,13 @@ class PayrollReportController extends Member
 		// dd($id.$uid);
 		$period_company_id = $id;
 		$payroll_employee_company_id = $uid;
-		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->get();
+		$data["_employee"] 		= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_employee_company_id)->Basic()->get();
+
+		if (count($data["_employee"]) == 0 ) 
+		{
+			$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->get();
+		}
+
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));

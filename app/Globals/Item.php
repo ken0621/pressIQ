@@ -666,6 +666,11 @@ class Item
                     {
                         $return .= date('m/d/Y',strtotime($value->created_at))." - ".currency("PHP ",$amount)."<br>";
 
+                        if($show_all == true)
+                        {
+                            $return .= " - <a class='click_delete' href='javascript:' history-id='".$value->audit_trail_id."'>&nbsp;&nbsp;Delete</a><br>";
+                        }
+
                         $text = $return;
                         if($show_all == false)
                         {
@@ -676,11 +681,9 @@ class Item
                         }
                     }
                 }
-
                 $last = $amount;
             }
         }  
-
         return $text;
     }
     public static function get_item_details($item_id = 0)
@@ -1579,7 +1582,7 @@ class Item
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
-        $query = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
+        $query = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('item_type_id','!=',5)->groupBy('record_log_id')->orderBy('record_log_id');
         
         if($search_keyword)
         {

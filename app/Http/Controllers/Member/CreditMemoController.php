@@ -9,6 +9,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_user;
+use App\Models\Tbl_customer_invoice;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Customer;
@@ -447,9 +448,10 @@ class CreditMemoController extends Member
     {
         $data["pis"] = Purchasing_inventory_system::check();
 
-        $data["_cm"] = Tbl_credit_memo::manual_cm()->customer()->orderBy("tbl_credit_memo.cm_id","DESC")->where("tbl_customer.shop_id", $this->getShopId())->get();
-
+        $data["_cm"] = Tbl_credit_memo::inv()->manual_cm()->customer()->orderBy("tbl_credit_memo.cm_id","DESC")->where("tbl_customer.shop_id", $this->getShopId())->get();
+        
         return view("member.customer.credit_memo.cm_list",$data);
+
     }
     /**
      * Show the form for creating a new resource.

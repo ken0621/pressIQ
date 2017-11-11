@@ -27,7 +27,112 @@ class Warehouse
 {   
     public static function select_item_warehouse_per_bundle($warehouse_id, $manufacturer_id = 0, $keyword_search = '')
     {
-        $bundle = Tbl_item::where("item_type_id",4)->where("shop_id",Warehouse::getShopId())->get();
+        $bundle = Tbl_item::category()->where("item_type_id",4)->where('is_mts',0)->where("shop_id",Warehouse::getShopId())->get();
+
+        $item = [];
+        $bundle_data = [];
+
+        foreach($bundle as $key => $value) 
+        {
+            //onhand = current
+            $bundle_data[$key]["bundle_id"] = $value->item_id;
+            $bundle_data[$key]["bundle_item_name"] = $value->item_name;
+            $bundle_data[$key]["bundle_item_bardcode"] = $value->item_barcode;
+            $bundle_data[$key]["bundle_item_description"] = $value->item_sales_information;
+            $bundle_data[$key]["bundle_item_um"] = $value->item_measurement_id;
+            $bundle_data[$key]["bundle_actual_stocks"] = null;
+            $bundle_data[$key]["bundle_actual_stocks_um"] = null;
+            $bundle_data[$key]["bundle_current_stocks"] = null;
+            $bundle_data[$key]["bundle_current_stocks_um"] = null;
+
+            $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$value->item_id)->get();
+
+            $warehouse_bundle_qty = [];
+            $bundle_qty_ = [];
+            $bundle_qty_warehouse = [];
+            $boo = false;
+            foreach ($bundle_item as $key_bundle => $value_bundle) 
+            {
+               $warehouse_qty = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_bundle->bundle_item_id)->value('inventory_count');   
+
+               
+               $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
+               $bundle_qty_warehouse[$value_bundle->bundle_item_id] = $warehouse_qty / $bundle_qty; 
+               $bundle_qty_[$value_bundle->bundle_item_id] = $bundle_qty;
+               if(isset(Item::info($value_bundle->bundle_item_id)->item_manufacturer_id))
+               {
+                    if($manufacturer_id != 0 && $manufacturer_id != null)
+                    {
+                        if(Item::info($value_bundle->bundle_item_id)->item_manufacturer_id != $manufacturer_id)
+                        {
+                            $boo = true;
+                        }
+                    }
+               }
+            }
+
+            
+            $bundle_data[$key]["item"] = $bundle_qty_warehouse;
+            $bundle_data[$key]["bundle_qty"] = $bundle_qty_;
+
+            if($boo == true)
+            {
+                unset($bundle_data[$key]);
+            }
+        }
+
+        $um = null;
+        $rem_item = [];
+        foreach($bundle_data as $key_bundle_data => $value_bundle_data) 
+        {
+            $bundle_stocks = 0;
+            if(count($value_bundle_data["item"]) > 0)
+            {
+                $bundle_stocks = floor(min($value_bundle_data["item"]));
+            }
+
+            foreach($value_bundle_data["item"] as $item_id_key => $value_item) 
+            {
+                $rem_item[$value_bundle_data["bundle_id"].".".$item_id_key]["item_id"] = $item_id_key;
+                $rem_item[$value_bundle_data["bundle_id"].".".$item_id_key]["item_quantity"] = ($value_item - $bundle_stocks) * $value_bundle_data["bundle_qty"][$item_id_key];
+            }
+
+            $bundle_data[$key_bundle_data]["bundle_current_stocks_um"] = UnitMeasurement::um_view($bundle_stocks,$value_bundle_data["bundle_item_um"]);
+            $bundle_data[$key_bundle_data]["bundle_current_stocks"] = $bundle_stocks;
+
+            $qty = Purchasing_inventory_system::get_sir_stocks($warehouse_id, $value_bundle_data["bundle_id"]);
+            $bundle_data[$key_bundle_data]['total_stock_sir'] = UnitMeasurement::um_view($qty,$value_bundle_data["bundle_item_um"]);
+
+            $bundle_data[$key_bundle_data]["bundle_actual_stocks"] = $bundle_stocks + $qty;
+            $bundle_data[$key_bundle_data]["bundle_actual_stocks_um"] = UnitMeasurement::um_view($bundle_data[$key_bundle_data]["bundle_actual_stocks"],$value_bundle_data["bundle_item_um"]);
+        }
+
+        // dd($rem_item);
+
+        // foreach($rem_item as $key_rem => $value_rem)
+        // {
+        //     $item_details = Item::get_item_details($value_rem["item_id"]);
+
+        //     $bundle_data["b".$key_rem]["bundle_id"] = $value_rem["item_id"];
+        //     $bundle_data["b".$key_rem]["bundle_item_name"] = $item_details->item_name;
+        //     $bundle_data["b".$key_rem]["bundle_item_bardcode"] = $item_details->item_barcode;
+        //     $bundle_data["b".$key_rem]["bundle_item_um"] = $item_details->item_measurement_id;
+        //     $um_info = UnitMeasurement::um_other($item_details->item_measurement_id);
+        //     $um = "";
+        //     if($um_info)
+        //     {   
+        //         $um = $um_info->multi_id;
+        //     }
+        //     $bundle_data["b".$key_rem]["bundle_current_stocks"] = UnitMeasurement::um_view($value_rem["item_quantity"],$item_details->item_measurement_id,$um);
+        // }
+
+        return $bundle_data;
+
+    }
+
+    public static function select_item_warehouse_per_bundle_empties($warehouse_id, $manufacturer_id = 0, $keyword_search = '')
+    {
+        $bundle = Tbl_item::category()->where("item_type_id",4)->where('is_mts',1)->where("shop_id",Warehouse::getShopId())->get();
 
         $item = [];
         $bundle_data = [];
@@ -133,6 +238,7 @@ class Warehouse
     public static function get_inventory_item($warehouse_id, $type = '', $manufacturer_id = 0)
     {
         $data['warehouse_item_bundle'] = Warehouse::select_item_warehouse_per_bundle($warehouse_id, $manufacturer_id);
+        $data['warehouse_item_bundle_empties'] = Warehouse::select_item_warehouse_per_bundle_empties($warehouse_id, $manufacturer_id);
         $data['_inventory'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], $manufacturer_id);
         $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], $manufacturer_id, 1);
 

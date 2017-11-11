@@ -4609,199 +4609,202 @@ class Payroll2
 	{
 
 		$_allowance = Tbl_payroll_employee_allowance_v2::where("payroll_employee_id", $data["employee_id"])->where('tbl_payroll_allowance_v2.payroll_allowance_archived',0)->joinAllowance()->get();
-		
+	
 		foreach($_allowance as $allowance)
 		{
-			$allowance_amount = $allowance->payroll_employee_allowance_amount;
-			$allowance_name = $allowance->payroll_allowance_name;
+			$allowance_period = strtolower(str_replace(' ', '_', $allowance->payroll_allowance_add_period));
 
-			if($allowance->payroll_allowance_type == "fixed")
+			if ($allowance_period == $data['period_info']['period_count'] || $allowance->payroll_allowance_add_period == "Every Period") 
 			{
-				$val["label"] = $allowance_name;
-				$val["type"] = "additions";
-				$val["record_type"] = "allowance";
-				$val["amount"] = $allowance_amount;
+				$allowance_amount 	= $allowance->payroll_employee_allowance_amount;
+				$allowance_name 	= $allowance->payroll_allowance_name;
 
-				if($allowance->payroll_allowance_category == "Taxable")
+				if($allowance->payroll_allowance_type == "fixed")
 				{
-					$val["add.gross_pay"] = true;
-					$val["deduct.gross_pay"] = false;
-					$val["add.taxable_salary"] = false;
-					$val["deduct.taxable_salary"] = false;
-					$val["add.net_pay"] = false;
-					$val["deduct.net_pay"] = false;
-				}
-				elseif ($allowance->payroll_allowance_category == "Hidden") {
-					$val["add.gross_pay"] = false;
-					$val["deduct.gross_pay"] = false;
-					$val["add.taxable_salary"] = false;
-					$val["deduct.taxable_salary"] = false;
-					$val["add.net_pay"] = true;
-					$val["deduct.net_pay"] = false;
-				}
-				else
-				{
-					$val["add.gross_pay"] = true;
-					$val["deduct.gross_pay"] = false;
-					$val["add.taxable_salary"] = false;
-					$val["deduct.taxable_salary"] = true;
-					$val["add.net_pay"] = true;
-					$val["deduct.net_pay"] = false;
-				}
+					$val["label"] 	= $allowance_name;
+					$val["type"] 	= "additions";
+					$val["record_type"] = "allowance";
+					$val["amount"] 	= $allowance_amount;
 
-				array_push($return->_breakdown, $val);
-				$val = null;
-			}
+					if($allowance->payroll_allowance_category == "Taxable")
+					{
+						$val["add.gross_pay"] = true;
+						$val["deduct.gross_pay"] = false;
+						$val["add.taxable_salary"] = false;
+						$val["deduct.taxable_salary"] = false;
+						$val["add.net_pay"] = false;
+						$val["deduct.net_pay"] = false;
+					}
+					elseif ($allowance->payroll_allowance_category == "Hidden") {
+						$val["add.gross_pay"] = false;
+						$val["deduct.gross_pay"] = false;
+						$val["add.taxable_salary"] = false;
+						$val["deduct.taxable_salary"] = false;
+						$val["add.net_pay"] = true;
+						$val["deduct.net_pay"] = false;
+					}
+					else
+					{
+						$val["add.gross_pay"] = true;
+						$val["deduct.gross_pay"] = false;
+						$val["add.taxable_salary"] = false;
+						$val["deduct.taxable_salary"] = true;
+						$val["add.net_pay"] = true;
+						$val["deduct.net_pay"] = false;
+					}
 
-			else if($allowance->payroll_allowance_type == 'pro_rated')
-			{
-				$actual_gross_pay = 0;
-				$standard_gross_pay = 0;
-				$val["label"] = $allowance_name;
-				$val["type"] = "additions";
-				$val["record_type"] = "allowance";
-				$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
-				
-				if ($allowance->basic_pay==1) 
-				{
-					$actual_gross_pay += $data['cutoff_compute']->cutoff_basic;
-					$d['basic'] = $data['cutoff_compute']->cutoff_basic;
+					array_push($return->_breakdown, $val);
+					$val = null;
 				}
 
-				if ($allowance->cola==1) 
+				else if($allowance->payroll_allowance_type == 'pro_rated')
 				{
-					$actual_gross_pay += $data['cutoff_compute']->cutoff_cola;
-					$d['cola'] = $data['cutoff_compute']->cutoff_cola;
-				}
-
-				$overtime = 0;
-				$special_holiday = 0;
-				$leave_pay = 0;
-				$regular_holiday = 0;
-				$deduction = 0;
-				$count = 0;
-
-
-				foreach ($data['cutoff_input'] as $value) 
-				{
+					$actual_gross_pay = 0;
+					$standard_gross_pay = 0;
+					$val["label"] = $allowance_name;
+					$val["type"] = "additions";
+					$val["record_type"] = "allowance";
+					$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
 					
-					if (isset($value->compute->_breakdown_addition)) 
+					if ($allowance->basic_pay==1) 
 					{
-						foreach ($value->compute->_breakdown_addition as $lbl => $values) 
+						$actual_gross_pay += $data['cutoff_compute']->cutoff_basic;
+						$d['basic'] = $data['cutoff_compute']->cutoff_basic;
+					}
+
+					if ($allowance->cola==1) 
+					{
+						$actual_gross_pay += $data['cutoff_compute']->cutoff_cola;
+						$d['cola'] = $data['cutoff_compute']->cutoff_cola;
+					}
+
+					$overtime = 0;
+					$special_holiday = 0;
+					$leave_pay = 0;
+					$regular_holiday = 0;
+					$deduction = 0;
+					$count = 0;
+
+					foreach ($data['cutoff_input'] as $value) 
+					{
+						if (isset($value->compute->_breakdown_addition)) 
 						{
-
-							if ($allowance->over_time_pay==1) 
+							foreach ($value->compute->_breakdown_addition as $lbl => $values) 
 							{
-								if (in_array($lbl, $ot_category)) 
+
+								if ($allowance->over_time_pay==1) 
 								{
-									$actual_gross_pay += $values['rate'];
-									$overtime += $values['rate'];
+									if (in_array($lbl, $ot_category)) 
+									{
+										$actual_gross_pay += $values['rate'];
+										$overtime += $values['rate'];
+									}
 								}
-							}
 
-							if($allowance->regular_holiday_pay==1)
-							{
-								if ($lbl == 'Legal Holiday' || $lbl == 'Legal Holiday Rest Day') 
+								if($allowance->regular_holiday_pay==1)
 								{
-									$actual_gross_pay += $values['rate'];
-									$regular_holiday += $values['rate'];
+									if ($lbl == 'Legal Holiday' || $lbl == 'Legal Holiday Rest Day') 
+									{
+										$actual_gross_pay += $values['rate'];
+										$regular_holiday += $values['rate'];
+									}
 								}
-							}
 
-							if ($allowance->special_holiday_pay==1) 
-							{
-								if ($lbl == 'Special Holiday' || $lbl == 'Special Holiday Rest Day') 
+								if ($allowance->special_holiday_pay==1) 
 								{
-									$actual_gross_pay += $values['rate'];
-									$special_holiday += $values['rate'];
+									if ($lbl == 'Special Holiday' || $lbl == 'Special Holiday Rest Day') 
+									{
+										$actual_gross_pay += $values['rate'];
+										$special_holiday += $values['rate'];
+									}
 								}
-							}
 
-							if ($allowance->leave_pay==1) 
-							{
-								if ($lbl == 'Leave Pay') 
+								if ($allowance->leave_pay==1) 
 								{
-									$actual_gross_pay += $values['rate'];
-									$leave_pay += $values['rate'];
+									if ($lbl == 'Leave Pay') 
+									{
+										$actual_gross_pay += $values['rate'];
+										$leave_pay += $values['rate'];
+									}
 								}
 							}
 						}
-					}
 
 
-					if (isset($value->compute->_breakdown_deduction)) 
-					{
-						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
+						if (isset($value->compute->_breakdown_deduction)) 
 						{
-							if ($value->time_output["leave_hours"] || $lbl == 'late' || $lbl == 'undertime' ) 
+							foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
 							{
-								$standard_gross_pay += $values['rate'];
-								$deduction += $values['rate'];
+								if ($value->time_output["leave_hours"] || $lbl == 'late' || $lbl == 'undertime' ) 
+								{
+									$standard_gross_pay += $values['rate'];
+									$deduction += $values['rate'];
+								}
+								// if ($data["group"]->payroll_group_salary_computation != "Daily Rate") 
+								// {
+								// 	if ($value->time_output["leave_hours"] == '00:00:00') 
+								// 	{
+								// 		$standard_gross_pay += $values['rate'];
+								// 		$deduction += $values['rate'];
+								// 	}
+								// }
 							}
-							// if ($data["group"]->payroll_group_salary_computation != "Daily Rate") 
-							// {
-							// 	if ($value->time_output["leave_hours"] == '00:00:00') 
-							// 	{
-							// 		$standard_gross_pay += $values['rate'];
-							// 		$deduction += $values['rate'];
-							// 	}
-							// }
 						}
+
+						$d['overtime'] = $overtime;
+						$d['regular_holiday'] = $regular_holiday;
+						$d['special_holiday'] = $special_holiday;
+						$d['leave_pay'] = $leave_pay;
+						$d['deductions'] = $deduction;
+						$a[$count] = $d;
+						$count++;
 					}
 
-					$d['overtime'] = $overtime;
-					$d['regular_holiday'] = $regular_holiday;
-					$d['special_holiday'] = $special_holiday;
-					$d['leave_pay'] = $leave_pay;
-					$d['deductions'] = $deduction;
-					$a[$count] = $d;
-					$count++;
-				}
+					// dd($data);
+					// dd($a);
 
-				// dd($data);
-				// dd($a);
+					$standard_gross_pay+=$actual_gross_pay;
+					$val["amount"] = @($actual_gross_pay/$standard_gross_pay) * $allowance_amount;
 
-				$standard_gross_pay+=$actual_gross_pay;
-				$val["amount"] = @($actual_gross_pay/$standard_gross_pay) * $allowance_amount;
+					// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
 
-				// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
+					if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
+					{
+						$val["amount"] = $val["amount"] * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
+					}
 
-				if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
-				{
-					$val["amount"] = $val["amount"] * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
+					if($allowance->payroll_allowance_category == "Taxable")
+					{
+						$val["add.gross_pay"] = true;
+						$val["deduct.gross_pay"] = false;
+						$val["add.taxable_salary"] = false;
+						$val["deduct.taxable_salary"] = false;
+						$val["add.net_pay"] = false;
+						$val["deduct.net_pay"] = false;
+					}
+					elseif ($allowance->payroll_allowance_category == "Hidden") {
+						$val["add.gross_pay"] = false;
+						$val["deduct.gross_pay"] = false;
+						$val["add.taxable_salary"] = false;
+						$val["deduct.taxable_salary"] = false;
+						$val["add.net_pay"] = true;
+						$val["deduct.net_pay"] = false;
+					}
+					else
+					{
+						$val["add.gross_pay"] = true;
+						$val["deduct.gross_pay"] = false;
+						$val["add.taxable_salary"] = false;
+						$val["deduct.taxable_salary"] = true;
+						$val["add.net_pay"] = true;
+						$val["deduct.net_pay"] = false;
+					}
+					
+					array_push($return->_breakdown, $val);
+					$val = null;
 				}
-
-				if($allowance->payroll_allowance_category == "Taxable")
-				{
-					$val["add.gross_pay"] = true;
-					$val["deduct.gross_pay"] = false;
-					$val["add.taxable_salary"] = false;
-					$val["deduct.taxable_salary"] = false;
-					$val["add.net_pay"] = false;
-					$val["deduct.net_pay"] = false;
-				}
-				elseif ($allowance->payroll_allowance_category == "Hidden") {
-					$val["add.gross_pay"] = false;
-					$val["deduct.gross_pay"] = false;
-					$val["add.taxable_salary"] = false;
-					$val["deduct.taxable_salary"] = false;
-					$val["add.net_pay"] = true;
-					$val["deduct.net_pay"] = false;
-				}
-				else
-				{
-					$val["add.gross_pay"] = true;
-					$val["deduct.gross_pay"] = false;
-					$val["add.taxable_salary"] = false;
-					$val["deduct.taxable_salary"] = true;
-					$val["add.net_pay"] = true;
-					$val["deduct.net_pay"] = false;
-				}
-				
-				array_push($return->_breakdown, $val);
-				$val = null;
 			}
-
+			
 		}
 		
 		return $return;

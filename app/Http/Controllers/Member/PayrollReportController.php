@@ -323,7 +323,7 @@ class PayrollReportController extends Member
 
 			// AuditTrail::record_logs("DOWNLOAD","SSS REPORT",$this->shop_id(),"","");
 
-			dd($data);
+			/d/d($data);
 
 			Excel::create("Government Forms SSS",function($excel) use ($data)
 			{
@@ -517,7 +517,7 @@ class PayrollReportController extends Member
 			$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 			$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
 			$data 						= $this->get_total_payroll_register($data);
-			
+
 			$data['period_company_id_filter'] = 0 ;
 			$data['payroll_employee_company_id_filter'] = 0;
 

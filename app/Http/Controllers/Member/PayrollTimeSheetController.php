@@ -49,7 +49,6 @@ class PayrollTimeSheetController extends Member
 
 	public function company_timesheet($id)
 	{
-
 		$count = Tbl_payroll_period_company::check($id, $this->user_info->shop_id)->count();
 
 		if($count == 0)

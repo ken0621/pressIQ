@@ -38,7 +38,6 @@ class Payroll_BioImportController extends Member
 		$biometric 	= Request::input('biometric');
 		$company_id = Request::input('company');
 		
-
 		if ($company_id != '') 
 		{
 			$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
@@ -746,6 +745,8 @@ class Payroll_BioImportController extends Member
     public function insert_record($insert_time_record, $company)
     {
     	/*START remove importation if time_sheet is already approved*/
+    	$data['_report'] = array();
+    	
     	foreach ($insert_time_record as $key => $value) 
     	{
 
@@ -756,6 +757,7 @@ class Payroll_BioImportController extends Member
     		{
     			
     			// $failed[] = $insert_time_record[$key];
+
     			unset($insert_time_record[$key]);
     		}
     		else

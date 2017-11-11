@@ -3,9 +3,10 @@
     <h4 class="modal-title timesheet-title">{{ $period_record->payroll_employee_first_name }} {{ $period_record->payroll_employee_last_name }}</h4>
     <button type="button" class="close" data-dismiss="modal">×</button></div>
 
-<div class="modal-body clearfix timesheet-body">
-    <div class="col-md-12 " style="text-align: left; font-weight: bold; font-size: 16px;">TIME RECORD {{ "(".$period_record_start." - ".$period_record_end.")"}}</div>
-   
+<div class="col-md-12 timesheet-time-record">TIME RECORD</div>
+<div class="col-md-12 timesheet-period"> {{ $period_record_start." - ".$period_record_end }} </div>
+<div class="modal-body clearfix">
+       
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-condensed">
@@ -32,7 +33,7 @@
                                 <label>{{ $record->time_sheet_in }}</label>
                                 @endforeach
                             @else
-                                <label>NO TIME</label>
+                                <label>No Time</label>
                             @endif
                             </td>
 
@@ -42,7 +43,7 @@
                                 <label>{{ $record->time_sheet_out }}</label>
                                 @endforeach
                             @else
-                                <label>NO TIME</label>
+                                <label>No Time</label>
                             @endif
                             </td>
 
@@ -57,9 +58,9 @@
                             </td>
                            
                             @if($timesheet->custom_shift == 1)
-                                <td class="shift-custom text-center">CUSTOM</td>
+                                <td class="shift-custom text-center">Custom</td>
                             @else
-                                <td class="shift-custom text-center">DEFAULT</td>
+                                <td class="shift-custom text-center">Default</td>
                             @endif
                             
                             <td>
@@ -89,12 +90,12 @@
                 </table>
             </div>
         </div>
-        <div class="col-md-6 pull-right" >
+        <div class="col-md-7 pull-right" >
             <table style="width: 100%;" class="table table-bordered">
                 <tbody>
                 @foreach($period_record->cutoff_breakdown->_time_breakdown as $key => $time_breakdown)
                   <tr>
-                      <td style="text-transform:uppercase">{{ str_replace("_"," ",$key) }}</td>
+                      <td class="timesheet-record">{{ str_replace("_"," ",$key) }}</td>
                       <td class="text-right">{{ $time_breakdown["time"] }}</td>
                   </tr>
                 @endforeach
@@ -125,5 +126,21 @@
         font-size: 14px;
         text-align: center;
 
+    }
+    .timesheet-time-record
+    {
+        font-weight: bold;
+        font-size: 16px;
+        padding-top: 10px;
+    }
+    .timesheet-period
+    {
+        font-size: 12px;
+    }
+    .timesheet-record
+    {
+        text-transform: uppercase;
+        text-align: left;
+        font-weight: bold;
     }
 </style>

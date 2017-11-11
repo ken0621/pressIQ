@@ -152,7 +152,7 @@
                     @foreach($period_record->cutoff_breakdown->_time_breakdown as $key => $time_breakdown)
                       <tr>
                           <td class="timesheet-record">{{ str_replace("_"," ",$key) }}</td>
-                          <td class="text-right timesheet-record">{{ $time_breakdown["time"] }}</td>
+                          <td class="text-right" style="font-weight: bold;">{{ $time_breakdown["time"] }}</td>
                       </tr>
                     @endforeach
                     </tbody>

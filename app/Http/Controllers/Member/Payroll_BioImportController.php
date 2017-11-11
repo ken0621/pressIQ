@@ -22,8 +22,6 @@ use DateTime;
 use App\Globals\Payroll;
 use App\Globals\Payroll2;
 
-
-
 class Payroll_BioImportController extends Member
 {
 
@@ -68,7 +66,6 @@ class Payroll_BioImportController extends Member
 
 		if($biometric == 'Digital Persona')
 		{
-
 			return Self::import_Digital_Persona($file, $company);
 		}
 
@@ -78,13 +75,11 @@ class Payroll_BioImportController extends Member
 		}
 		if($biometric == 'Manual Template')
 		{
-			/*kim*/
 			return Self::import_manual_v2($file, $company);
 		}
 
 		if($biometric == 'Mustard Seed')
 		{
-			/*kim*/
 			return Self::import_mustard_seed_v2($file, $company);
 		}
 
@@ -95,7 +90,6 @@ class Payroll_BioImportController extends Member
 		
 		if($biometric == 'ANVIZ Biometrics EP Series')
 		{
-			/*kim*/
 			return Self::import_anviz_biometrics_ep_series($file , $company);
 		}
 	}

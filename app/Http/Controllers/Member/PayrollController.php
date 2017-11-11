@@ -4248,10 +4248,31 @@ class PayrollController extends Member
                $employee = Session::get('employee_leave_tag');
           }
 
-          $emp = Tbl_payroll_employee_basic::join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->whereIn('tbl_payroll_leave_employee_v2.payroll_leave_employee_id',$employee)->get();
-          $data['new_record'] = $emp;
+          $leavedat = array();
+          foreach($employee as $emp)
+          {
+               $employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id')
+                                                       ->join('tbl_payroll_leave_schedulev2','tbl_payroll_leave_employee_v2.payroll_leave_employee_id','=','tbl_payroll_leave_schedulev2.payroll_leave_employee_id')
+                                                       ->where('tbl_payroll_leave_schedulev2.payroll_leave_employee_id',$emp)
+                                                       ->distinct()
+                                                       ->get();
+                                   
+               if(count($employee_id) == 0)
+               {
+                    $empdat = Tbl_payroll_employee_basic::join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id',$emp)->get();
 
-          $data['used_leave'] = Tbl_payroll_leave_schedulev2::getemployeeleaveconsumesumdata($employee)->get();
+                    array_push($leavedat,$empdat);
+               }    
+               else
+               {
+                    $empdat = Tbl_payroll_leave_schedulev2::getallemployeeleavedata($employee_id)->get();
+
+                    array_push($leavedat,$empdat);
+               }         
+
+          }
+
+          $data['new_record']  = $leavedat;
 
           return json_encode($data);
      }

@@ -158,7 +158,11 @@ function employee_tag_schedule_leave()
 
 				$(result.new_record).each(function(index, data){
 
-					html += tbl_tag(data,result.used_leave);
+					$(data).each(function(index,data2){
+						console.log(data2);
+						html += tbl_tag(data2);
+					});
+					
 				});
 				$(target).html(html);
 				event_time_entry();
@@ -207,12 +211,26 @@ function employee_tag_schedule_leave()
 		});
 	}
 
-	function tbl_tag(data,usedleave)
+	function tbl_tag(data)
 	{
 		var html = '<tr class="text-center time-record main">';
-		html += '<td>' + data.payroll_employee_title_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_leave_employee_id+'"></td>';
-		html += '<td>'+ usedleave[0].total_leave_consume +'</td>';
-		html += '<td></td>';
+		html += '<td>' + data.payroll_employee_display_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_leave_employee_id+'"></td>';
+		if(data.total_leave_consume == null)
+		{
+			html += '<td>00:00</td>';
+		}
+		else
+		{
+			html += '<td>'+ data.total_leave_consume +'</td>';
+		}
+		if(data.remaining_leave == null)
+		{
+			html += '<td>'+ data.payroll_leave_temp_hours + '</td>';
+		}
+		else
+		{
+			html += '<td>'+ data.remaining_leave +'</td>';
+		}
 	//	html += '<td class="text-center"><input type="checkbox" checked="checked" class="whole_day" name="whole_day_'+data.payroll_leave_employee_id+'" value="1"></td>';
 		html += '<td class="text-center edit-data zerotogray" width="25%"><input type="text" name="leave_hours_'+data.payroll_leave_employee_id+'" placeholder="00:00" class="text-center form-control break time-entry time-target time-entry-24 is-timeEntry"></td>';
 		html += '<td class="text-center"><a href="#" class="btn-remove-tag" data-content="'+data.payroll_employee_id+'"><i class="fa fa-times"></i></a></td>';

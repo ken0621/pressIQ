@@ -111,18 +111,27 @@ class Tbl_payroll_leave_schedulev2 extends Model
 
 	public function scopegetallemployeeleavedata($query, $payroll_employee_id=0)
 	{
-			//may leave temp days cap sa tempv2 
-			$query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
-        				//join("tbl_payroll_leave_employee","tbl_payroll_leave_schedule.payroll_leave_employee_id","=","tbl_payroll_leave_employee.payroll_leave_employee_id");
+
+			// $query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
+   
+   //           ->join("tbl_payroll_employee_basic","tbl_payroll_leave_employee_v2.payroll_employee_id","=","tbl_payroll_employee_basic.payroll_employee_id")
+   //           ->join("tbl_payroll_leave_tempv2","tbl_payroll_leave_employee_v2.payroll_leave_temp_id","=","tbl_payroll_leave_tempv2.payroll_leave_temp_id")
+   //           ->select(DB::raw('tbl_payroll_employee_basic.payroll_employee_id , tbl_payroll_employee_basic.payroll_employee_display_name, tbl_payroll_leave_tempv2.payroll_leave_type_id, tbl_payroll_leave_employee_v2.payroll_leave_temp_hours, sum(tbl_payroll_leave_schedulev2.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_leave_schedulev2.consume)) as remaining_leave'))
+   //           ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id');
+
+             // if ($payroll_employee_id != 0) 
+             // {
+             // 	$query->whereIn('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id);
+             // }
+
+			 $query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
              ->join("tbl_payroll_employee_basic","tbl_payroll_leave_employee_v2.payroll_employee_id","=","tbl_payroll_employee_basic.payroll_employee_id")
              ->join("tbl_payroll_leave_tempv2","tbl_payroll_leave_employee_v2.payroll_leave_temp_id","=","tbl_payroll_leave_tempv2.payroll_leave_temp_id")
-             ->select(DB::raw('tbl_payroll_employee_basic.payroll_employee_id , tbl_payroll_employee_basic.payroll_employee_display_name, tbl_payroll_leave_tempv2.payroll_leave_temp_name, tbl_payroll_leave_employee_v2.payroll_leave_hours_cap, sum(tbl_payroll_leave_schedulev2.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_hours_cap - sum(tbl_payroll_leave_schedulev2.consume)) as remaining_leave'))
-             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id');
+             ->select(DB::raw('tbl_payroll_employee_basic.payroll_employee_id , tbl_payroll_employee_basic.payroll_employee_display_name, tbl_payroll_leave_tempv2.payroll_leave_type_id, tbl_payroll_leave_employee_v2.payroll_leave_employee_id, tbl_payroll_leave_employee_v2.payroll_leave_temp_hours, sum(tbl_payroll_leave_schedulev2.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_leave_schedulev2.consume)) as remaining_leave'))
+             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
+			 ->whereIn('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id);
+             
 
-             if ($payroll_employee_id != 0) 
-             {
-             	$query->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id);
-             }
         return $query;
 	}
 

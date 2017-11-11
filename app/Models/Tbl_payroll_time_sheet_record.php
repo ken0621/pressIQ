@@ -53,4 +53,8 @@ class Tbl_payroll_time_sheet_record extends Model
 
 		return $query;
 	}
+	public function scopeTimesheetRecord($query)
+	{
+		return $query->join('tbl_payroll_company',"tbl_payroll_company.payroll_company_id","=","tbl_payroll_time_sheet_record.payroll_company_id");
+	}
 }

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use DB;
 class Tbl_credit_memo extends Model
 {
    protected $table = 'tbl_credit_memo';
@@ -23,5 +23,10 @@ class Tbl_credit_memo extends Model
     {
     	return $query->join("tbl_credit_memo_line","tbl_credit_memo_line.cmline_cm_id","=","tbl_credit_memo.cm_id")
     				->join("tbl_item","tbl_item.item_id","=","cmline_item_id");
+    }
+    public static function scopeInv($query)
+    {
+        return $query->leftJoin("tbl_customer_invoice","credit_memo_id","=","tbl_credit_memo.cm_id");
+
     }
 }

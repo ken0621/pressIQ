@@ -63,6 +63,7 @@ class UnitMeasurement
         return Tbl_unit_measurement::multi()->where("um_shop", UnitMeasurement::getShopId())
                                     ->where("um_id", $um_id)
                                     ->where("um_archived",0)
+                                    ->orderBy('is_base','ASC')
                                     ->get();
     }
     public static function create_um($um_n_based_id, $um_base_id, $qty)

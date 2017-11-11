@@ -392,7 +392,11 @@ class Item
 
         return $return;
     }
-    
+    public static function get_per_warehouse($shop_id, $warehouse_id, $archive = 0)
+    {
+        $query = Tbl_item::inventorylog()->where("tbl_item.shop_id", $shop_id)->where('record_warehouse_id',$warehouse_id)->where("tbl_item.archived", $archive)->type()->groupBy('tbl_item.item_id')->get();
+        return $query;
+    }
     public static function get_all_item()
     {
         return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();
@@ -534,10 +538,20 @@ class Item
         return $item;
     }
     /* READ DATA END */
-    public static function list_price_level($shop_id)
+    public static function list_price_level($shop_id, $type = null, $search_keyword = null)
     {
-        $_price_level = Tbl_price_level::where("shop_id", $shop_id)->get();
-        return $_price_level;
+        $_price_level = Tbl_price_level::where("shop_id", $shop_id);
+
+        if($type)
+        {
+            $_price_level->where('price_level_type',$type);
+        }
+        if($search_keyword)
+        {
+            $_price_level->where('price_level_name','LIKE','%'.$search_keyword.'%');
+        }
+
+        return $_price_level->paginate(5);
     }
     public static function insert_price_level($shop_id, $price_level_name, $price_level_type, $fixed_percentage_mode, $fixed_percentage_source, $fixed_percentage_value)
     {  
@@ -554,6 +568,25 @@ class Item
         }
 
         return Tbl_price_level::insertGetId($insert_price_level);
+    }
+    public static function update_price_level($shop_id, $price_level_id, $price_level_name, $price_level_type, $fixed_percentage_mode, $fixed_percentage_source, $fixed_percentage_value)
+    {  
+        $update_price_level["price_level_name"] = $price_level_name;
+        $update_price_level["price_level_type"] = $price_level_type;
+        
+        if($price_level_type == "fixed-percentage")
+        {
+
+            $update_price_level["fixed_percentage_mode"] = $fixed_percentage_mode;
+            $update_price_level["fixed_percentage_source"] = $fixed_percentage_source;
+            $update_price_level["fixed_percentage_value"] = $fixed_percentage_value;
+        }
+        Tbl_price_level::where('price_level_id',$price_level_id)->update($update_price_level);
+        return $price_level_id;
+    }
+    public static function delete_price_level_item($price_level_id)
+    {  
+        Tbl_price_level_item::where('price_level_id',$price_level_id)->delete();
     }
     public static function insert_price_level_item($shop_id, $price_level_id, $_item)
     {  
@@ -574,6 +607,20 @@ class Item
         {
             Tbl_price_level_item::insert($_insert);
         }
+    }
+    public static function price_level_info($shop_id, $price_level_id)
+    {
+        return Tbl_price_level::where('shop_id',$shop_id)->where('price_level_id',$price_level_id)->first();
+    }
+    public static function price_level_info_item($price_level_id)
+    {
+        $data = Tbl_price_level_item::where('price_level_id',$price_level_id)->get();
+        $return = null;
+        foreach ($data as $key => $value) 
+        {
+            $return[$value->item_id] = $value->custom_price;
+        }
+        return $return;
     }
     public static function getShopId()
     {
@@ -1530,7 +1577,7 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
-    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0, $item_id = 0)
+    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0, $item_id = 0, $get_to = 0, $take = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1570,6 +1617,15 @@ class Item
         {
             $data = $query->get();            
         }
+
+        if($take != 0)
+        {
+            if($get_to > 1)
+            {
+                $query->skip($get_to);
+            }
+            $data = $query->take($take + 1)->get();
+        }
         return $data;
     }
     public static function get_first_assembled_kit($shop_id)
@@ -1580,7 +1636,7 @@ class Item
     {
         return Tbl_item::where('shop_id',$shop_id)->where('item_type_id',5)->where("archived", 0)->pluck('item_id', 'item_name');
     }
-    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0)
+    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0, $get_to = 0, $take = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1621,7 +1677,6 @@ class Item
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused');
         }  
 
-
         if($paginate != 0)
         {
             $data = $query->paginate($paginate);
@@ -1629,6 +1684,14 @@ class Item
         else
         {
             $data = $query->get();            
+        }
+       if($take != 0)
+        {
+            if($get_to > 1)
+            {
+                $query->skip($get_to);
+            }
+            $data = $query->take($take + 1)->get();
         }
         return $data; 
     } 
@@ -1728,5 +1791,22 @@ class Item
     public static function type($item_id = 0)
     {
         return Tbl_item::where("item_id",$item_id)->value('item_type_id');
+    }
+    public static function view_item_receipt($item_id)
+    {
+        $audit = Tbl_audit_trail::where("source_id",$item_id)->where("source","item")->where("remarks","Added")->first();
+
+        if($audit)
+        {
+            $data = unserialize($audit->new_data);
+            
+            $data["category_name"] = Tbl_category::where("type_id",$data["item_category_id"])->first() ? Tbl_category::where("type_id",$data["item_category_id"])->first()->type_name : "";
+        }
+        else
+        {
+            $data = null;
+        }
+
+        return $data;
     }
 }

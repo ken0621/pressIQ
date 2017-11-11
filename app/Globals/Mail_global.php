@@ -375,7 +375,7 @@ class Mail_global
             } 
             catch (\Exception $e) 
             {
-                // Mail_global::fail_email($e->getMessage);
+                // Mail_global::fail_email($e->getMessage());
                 $result = 0; 
             }
         }       

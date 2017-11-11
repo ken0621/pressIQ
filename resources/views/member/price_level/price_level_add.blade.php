@@ -1,5 +1,6 @@
-<form class="global-submit form-horizontal" role="form" action="/member/item/price_level/add" method="post">
+<form class="global-submit form-horizontal" role="form" action="{{$action}}" method="post">
 	{{ csrf_field() }}
+	<input type="hidden" name="price_level_id" value="{{$price_level->price_level_id}}">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
 		<h4 class="modal-title"><i class="fa fa-table"></i> CREATE NEW PRICE LEVEL</h4>
@@ -11,7 +12,7 @@
 		        <div class="form-group">
 		            <label class="control-label col-sm-4 text-right" for="email">Price Level</label>
 		            <div class="col-sm-8">
-		                <input name="price_level_name" required="required" type="text" class="form-control input-sm price-level-select">
+		                <input name="price_level_name" required="required" value="{{$price_level->price_level_name or ''}}" type="text" class="form-control input-sm price-level-select">
 		            </div>
 		        </div>
 	        </div>
@@ -20,8 +21,8 @@
 		            <label class="control-label col-sm-4 text-right" for="email">Price Level Type</label>
 		            <div class="col-sm-8">
 		                <select name="price_level_type" class="form-control select-type-of-price-level">
-		                	<option value="per-item">Per Item</option>
-		                	<option value="fixed-percentage">Fixed Percentage</option>
+		                	<option value="per-item" {{isset($price_level) ? ($price_level->price_level_type == 'per-item' ? 'selected' : '')  : ''}}>Per Item</option>
+		                	<option value="fixed-percentage" {{isset($price_level) ? ($price_level->price_level_type == 'fixed-percentage' ? 'selected' : '') : '' }}>Fixed Percentage</option>
 		                </select>
 		            </div>
 		        </div>
@@ -47,12 +48,12 @@
 					        	@foreach($_item as $item)
 					            <tr>
 					            	<td width="50px" class="text-center price-level-check-event">
-					            		<input class="checkboxs" type="checkbox" name="">
+					            		<input class="checkboxs" type="checkbox" name="" {{isset($price_level_item[$item->item_id]) ? ($price_level_item[$item->item_id] != 0 ? 'checked' : '') : ''}} >
 					            	</td>
 					                <td width="250px" class="text-left price-level-check-event">{{ $item->item_name }}</td>
 					                <td width="180px" class="text-center item-cost" item-value="{{$item->item_cost}}">{{ $item->item_cost }}</td>
 					                <td width="180px" class="text-center item-price" item-value="{{$item->item_price}}">{{ $item->item_price }}</td>
-					                <td class="text-center"><input name="_item[{{ $item->item_id }}]" type="text" class="custom-price-textbox text-right" name=""></td>
+					                <td class="text-center"><input name="_item[{{ $item->item_id }}]" type="text" class="custom-price-textbox text-right" value="{{isset($price_level_item[$item->item_id]) ? ($price_level_item[$item->item_id] != 0 ? $price_level_item[$item->item_id] : '') : ''}}"></td>
 					            </tr>
 					            @endforeach
 					        </tbody>
@@ -105,7 +106,7 @@
 							</span>
 							<span> by </span>
 							<span>
-								<input class="text-right" width="20px" type="text" name="fixed-percentage-value" value="0.00%">
+								<input class="text-right" width="20px" type="text" name="fixed-percentage-value" value="{{$price_level->fixed_percentage_value or '0.00'}}%">
 							</span>
 						</div>
 						<div style="margin-top: 5px;">

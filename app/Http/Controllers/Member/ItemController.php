@@ -210,6 +210,12 @@ class ItemController extends Member
             return $this->show_no_access();
         }
 	}
+	public function view_item_receipt($item_id)
+	{
+		$data["invoice"] = Item::view_item_receipt($item_id);
+		// dd($data);
+		return view("member.item.pis.item_view_receipt",$data);
+	}
 	public function view_item_history($item_id)
 	{
 

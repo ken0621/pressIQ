@@ -44,7 +44,7 @@
         <div class="modal-footer row clearfix">
             <div class="col-md-8 clearfix">
                 <div class="left-btn-container">
-                    <div style="color: #1c1c1c;"><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
+                    <div style="color: #1c1c1c; cursor: pointer;" data-dismiss="modal" aria-label="Close"><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
                     <button class="btn-checkout" onClick="location.href='/members/checkout'">Checkout</button>
                 </div>
             </div>
@@ -59,4 +59,4 @@
     </div>
 </div>
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/cart_modal.css?version=1">
-<script type="text/javascript" src="/assets/front/js/global_cart_modal.js?version=1"></script>
+<script type="text/javascript" src="/assets/front/js/global_cart_modal.js?version=2"></script>

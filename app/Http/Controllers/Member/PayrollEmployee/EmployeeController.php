@@ -8,6 +8,11 @@ use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_leave_temp;
 use App\Models\Tbl_payroll_period_company;
+use App\Models\Tbl_payroll_time_sheet;
+use App\Models\Tbl_payroll_time_sheet_record;
+use App\Models\Tbl_payroll_time_sheet_record_approved;
+use App\Globals\Payroll2;
+use App\Globals\Utilities;
 use Illuminate\Http\Request;
 use Redirect;
 use Validator;
@@ -171,19 +176,19 @@ class EmployeeController extends PayrollMember
 		// dd($data['period_record']);
 		return view('member.payroll2.employee_dashboard.employee_time_keeping',$data);
 	}
-	public function employee_payslip($payroll_period_id)
+	public function employee_payslip_pdf($payroll_period_id)
     { 
     	$data['page']				= 'Employee Payslip';
     	$data["employee_company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
     	$data['period_record'] 		= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
 
-    	
     	$data["period_record_start"]		= date("F d, Y", strtotime($data["period_record"]->payroll_period_start));
 		$data["period_record_end"]			= date("F d, Y", strtotime($data["period_record"]->payroll_period_end));
 		$data["period_record_release_date"]	= date("F d, Y", strtotime($data["period_record"]->payroll_release_date));
 
+		//dd(unserialize($data["period_record"]->cutoff_input));
 		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);
-		//dd($data["period_record"]);
+		
 
 		$other_deductions = 0;
 
@@ -198,14 +203,11 @@ class EmployeeController extends PayrollMember
 		$data["period_record"]->other_deduction = $other_deductions;
 		$data["period_record"]->total_deduction = $data["period_record"]->philhealth_ee + $data["period_record"]->sss_ee + $data["period_record"]->pagibig_ee  + $other_deductions; // + $employee->tax_ee;
 		
+		//YEAR-END SUMMARY - PAYROLL PERIOD
 		$period_year = date("Y", strtotime($data["period_record"]->payroll_period_end));
-
 		$period_start = $period_year.'-01-01';
-
 		$data['total_period_record'] = Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)
 		->whereBetween('tbl_payroll_period.payroll_period_end',[$period_start, $data['period_record']->payroll_period_end])->get();
-
-		//dd($data['total_period_record']);
 
 		$data['total_net_pay'] = 0 ;
 		$data['total_tax_ee'] = 0 ;
@@ -213,9 +215,9 @@ class EmployeeController extends PayrollMember
 		$data['total_philhealth_ee'] = 0 ;
 		$data['total_pagibig_ee'] = 0 ;
 
+
 		foreach($data['total_period_record'] as $total)	
 		{
-			//dd($total);
 			$data['total_net_pay'] += $total->net_pay;
 			$data['total_tax_ee'] += $total->tax_ee;
 			$data['total_sss_ee'] += $total->sss_ee;
@@ -224,18 +226,51 @@ class EmployeeController extends PayrollMember
 		}
 
 		//return view('member.payroll2.employee_dashboard.employee_payslip', $data);
-		$pdf = view('member.payroll2.employee_dashboard.employee_payslip', $data);
+		$pdf = view('member.payroll2.employee_dashboard.employee_payslip_pdf', $data);
         return Pdf_global::show_pdf($pdf);
         
     }
-    public function employee_timesheet($payroll_period_id)
+public function employee_timesheet($payroll_period_id)
 	{
-		$data["page"] 				= "Employee Timesheet";
-		$data['period_record'] 		= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
-		//dd($data["period_record"]->cutoff_breakdown);
+		$data["page"] 	= "Employee Timesheet";
+
+		$data['period_record'] 			= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
+
+		$data["period_record_start"]		= date('M d, Y',strtotime($data["period_record"]->payroll_period_start));
+		$data["period_record_end"]			= date('M d, Y',strtotime($data["period_record"]->payroll_period_end));
+
+		$data["_timesheet"] 			= Payroll2::timesheet_info($data["period_record"], $this->employee_info->payroll_employee_id);
+
+		//dd($data["_timesheet"]);
+		$data["access_salary_rates"]	= $access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+
 		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);
+
+		//$data["time_keeping_approved"] 	= $data['period_record'] ? true : false;
 		
 		
+		$employee_contract 		= Tbl_payroll_employee_contract::EmployeePayrollGroup($this->employee_info->payroll_employee_id)->get();
+
+		dd($employee_contract);
+		$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["period_record"]->payroll_period_start);
+		$employee_contract = Tbl_payroll_employee_contract::Employeecontract($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
+
+
+
+		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
+
+		$data["period_id"] = $period_id;
+		
+		if($data["compute_type"] == "Flat Rate")
+		{
+			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
+		}
+		else
+		{
+			return view('member.payroll2.employee_dashboard.employee_timesheet', $data);
+
+		}
+		return view('member.payroll2.employee_dashboard.employee_timesheet', $data);
 	}   
 	public function sample()
 	{

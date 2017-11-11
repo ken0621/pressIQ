@@ -4,6 +4,11 @@
 	{
 		background-color: #fff;
 		margin-right: 7.5px;
+		
+		@media screen and (max-width: 768px)
+		{
+			margin-right: 0;
+		}
 		img
 		{
 			width: 100%;

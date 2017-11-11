@@ -510,13 +510,13 @@ class PayrollReportController extends Member
 		
 		if($payroll_employee_company_id == 0)
 		{
-			$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
-			$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+			$data["company"] 			= Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
+			$data["_employee"] 			= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
 			
-			$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
+			$data["period_info"] 		= $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 			$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 			$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
-			$data = $this->get_total_payroll_register($data);
+			$data 						= $this->get_total_payroll_register($data);
 
 			return view('member.payrollreport.payroll_register_report_period_filter',$data);
 		}

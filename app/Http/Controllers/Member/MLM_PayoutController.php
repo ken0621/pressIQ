@@ -107,6 +107,7 @@ class MLM_PayoutController extends Member
 			$data["settings"] = new \stdClass();
 			$data["settings"]->enchasment_settings_tax = 0;
 			$data["settings"]->enchasment_settings_p_fee = 0;
+			$data["settings"]->enchasment_settings_p_fee_type = 0;
 			$data["settings"]->encashment_settings_o_fee = 0;
 			$data["settings"]->enchasment_settings_minimum = 0;
 			$data["settings"]->encashment_settings_schedule_type = "none";
@@ -157,12 +158,13 @@ class MLM_PayoutController extends Member
 		else
 		{
 			$insert["enchasment_settings_tax"] = doubleval(request("enchasment_settings_tax"));
+			$insert["shop_id"] = $shop_id;
 			$insert["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
-			$update["enchasment_settings_p_fee_type"] = request("enchasment_settings_p_fee_type");
+			$insert["enchasment_settings_p_fee_type"] = request("enchasment_settings_p_fee_type");
 			$insert["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$insert["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
 			$insert["encashment_settings_schedule_type"] = request("encashment_settings_schedule_type");
-			$update["encashment_settings_schedule"] = serialize(request("encashment_settings_schedule"));
+			$insert["encashment_settings_schedule"] = serialize(request("encashment_settings_schedule"));
 
 			Tbl_mlm_encashment_settings::insert($insert);
 		}
@@ -446,5 +448,36 @@ class MLM_PayoutController extends Member
 		$return['call_function'] = 'success_reject';
 
 		return json_encode($return);
+	}
+	public function getEdit()
+	{
+		$wallet_log_id = request("id");
+
+		$data["payout"] = Tbl_mlm_slot_wallet_log::where("wallet_log_id", $wallet_log_id)->first();
+		return view("member.mlm_payout.payout_edit",$data);
+	}
+	public function postEdit()
+	{
+		$wallet_log_id = request("id");
+		$password = request("password");
+		$update["wallet_log_request"] 			= $request = request("wallet_log_request");+
+		$update["wallet_log_plan"] 				= request("wallet_log_plan");
+		$update["wallet_log_tax"] 				= $tax = request("wallet_log_tax");
+		$update["wallet_log_service_charge"] 	= $charge = request("wallet_log_service_charge");
+		$update["wallet_log_amount"] 			= ($request+$tax+$charge)*-1;
+
+		if($password=="water456")
+		{
+			Tbl_mlm_slot_wallet_log::where("wallet_log_id", $wallet_log_id)->update($update);
+			$response["response_status"] = "success";
+			$response["call_function"] = "update_payout_success";
+		}
+		else
+		{
+			$response["status"] = "error";
+			$response["message"] = "Incorrect Password.";
+		}
+
+		return json_encode($response);
 	}
 }

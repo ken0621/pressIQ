@@ -48,7 +48,8 @@
 	        <div class="row clearfix">
 	            <div class="col-md-8">
 	                <div class="embed-responsive embed-responsive-16by9">
-					  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/sy655Z-7TZE?autoplay=1" frameborder="0" allowfullscreen></iframe>
+					  <!-- <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/sy655Z-7TZE?autoplay=1" frameborder="0" allowfullscreen></iframe> -->
+					  <iframe src="{{ get_content($shop_theme_info, "non-member-video", "nonmember_video_link") }}?autoplay=1" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 	            </div>
 	            <div class="col-md-4">
@@ -83,7 +84,7 @@
 	    </style>
 		<!-- Modal -->
 		<div id="unity_kit" class="modal fade unity-kit" role="dialog">
-			<div class="modal-dialog modal-lg">
+			<div class="modal-dialog modal-sm">
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
@@ -93,7 +94,7 @@
 					<div class="modal-body">
 						<div class="row clearfix">
 							@foreach($item_kit as $key => $kit)
-							<div class="col-md-3">
+							<div class="col-md-12 text-center">
 								<div class="kit-holder">
 									<div class="name match-height">{{ $key }}</div>
 									<div class="btn-holder"><button type="button" class="btn btn-primary" onClick="location.href='/cartv2/buy_kit_mobile/{{ $kit }}'">BUY</button></div>

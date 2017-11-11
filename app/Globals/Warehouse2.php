@@ -776,7 +776,7 @@ class Warehouse2
         return $return;
 
     }
-    public static function consume_product_codes($shop_id = 0, $mlm_pin = '', $mlm_activation = '', $consume = array())
+    public static function consume_product_codes($shop_id = 0, $mlm_pin = '', $mlm_activation = '', $consume = array(), $remarks = "Consume using product codes.", $code_used = 'used')
     {
         $return = null;
         $val = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
@@ -786,7 +786,7 @@ class Warehouse2
                                                  ->first();
         if($val)
         {
-            Warehouse2::consume_record_log($shop_id, $val->record_warehouse_id, $val->record_item_id,$val->record_log_id, 1, "Consume using product codes.", $consume);
+            Warehouse2::consume_record_log($shop_id, $val->record_warehouse_id, $val->record_item_id,$val->record_log_id, 1, $remarks, $consume,null, $code_used);
             $return = $val->record_item_id;
         }
         else
@@ -797,7 +797,7 @@ class Warehouse2
         return $return;
 
     }
-    public static function consume_record_log($shop_id, $warehouse_id, $item_id = 0, $recor_log_id = 0, $quantity = 1, $remarks = '', $consume = array(), $inventory_history = '')
+    public static function consume_record_log($shop_id, $warehouse_id, $item_id = 0, $recor_log_id = 0, $quantity = 1, $remarks = '', $consume = array(), $inventory_history = '', $code_used = 'used')
     {
         $return = null;
 
@@ -820,7 +820,7 @@ class Warehouse2
         $insert['record_consume_ref_id']     = isset($consume['id']) ? $consume['id'] : 0;
         $insert['record_inventory_status']   = 1;
         $insert['record_log_date_updated']   = Carbon::now();
-        $insert['item_in_use']               = 'used';
+        $insert['item_in_use']               = $code_used;
        
         Warehouse2::insert_item_history($recor_log_id);
         Tbl_warehouse_inventory_record_log::where('record_log_id',$recor_log_id)->update($insert);

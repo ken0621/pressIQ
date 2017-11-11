@@ -17,6 +17,7 @@ use App\Models\Tbl_warehouse_receiving_report_item;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_sponsor;
 
+use App\Models\Tbl_cart_item_pincode;
 use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_transaction_item;
@@ -76,6 +77,11 @@ class Transaction
     public static function create_update_proof($details)
     {
         $store["create_update_proof"] = $details;
+        session($store);
+    }
+    public static function create_update_proof_details($details)
+    {
+        $store["create_update_proof_details"] = $details;
         session($store);
     }
     public static function create_set_method($method)
@@ -221,8 +227,23 @@ class Transaction
             $item_type = Item::get_item_type($value->item_id);
             /*INVENTORY TYPE*/
             if($item_type == 1 || $item_type == 5)
-            {
-                Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
+            {   
+                $check = Cart2::get_item_pincode($shop_id, $value->item_id);
+                if(count($check) > 0)
+                {
+                    foreach ($check as $key_cart => $value_cart) 
+                    {
+                        $pincode = explode('@', $value_cart->pincode);
+                        $mlm_pin = $pincode[0];
+                        $mlm_activation = $pincode[1];
+                        Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, $consume,'Consume using Transaction list '.$transaction_list_id,'unused');
+                    }
+                }
+                else
+                {                    
+                    Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
+                }
+
             }
             /*NONINVENTORY TYPE*/
             if($item_type == 2)
@@ -283,6 +304,12 @@ class Transaction
         {
             $update["transaction_payment_proof"] = session('create_update_proof');
             session()->forget('create_update_proof');
+        }
+
+        if (session('create_update_proof_details')) 
+        {
+            $update["payment_details"] = serialize(session('create_update_proof_details'));
+            session()->forget('create_update_proof_details');
         }
 
         if($balance == 0)

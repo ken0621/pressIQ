@@ -12,10 +12,12 @@ use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_rank_update;
 use App\Models\Tbl_mlm_plan_setting;
+use App\Models\Tbl_customer;
 use App\Models\Tbl_rank_update_slot;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_member;
+use App\Globals\Mail_global;
 use Crypt;
 use Redirect;
 use Request;
@@ -274,6 +276,27 @@ class MLM_RankController extends Member
 
 		    		$data["status"]   = "Complete";
 		    		$data["message"]  = "Complete";
+
+
+
+		            if($new_rank_id != $old_rank_id)
+		            {
+		                $rank_update_email = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->rank_update_email;
+
+		                if($rank_update_email == 1)
+		                {
+		                    $new_rank_data = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$new_rank_id)->first();
+		                    $old_rank_data = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$old_rank_id)->first();
+							$customer_email = Tbl_customer::where("customer_id",$slot_info->slot_owner)->first();
+
+		                    $email_content["subject"] = "Rank Upgrade";
+		                    $email_content["content"] = "Your rank has been upgraded to ".$new_rank_data->stairstep_name;
+		                    $email_address            = $customer_email->email;
+
+		                    $return_mail = Mail_global::send_email(null, $email_content, $shop_id, $email_address);
+		                }
+
+		            }
 		        }							
 	    	}
 	    	else

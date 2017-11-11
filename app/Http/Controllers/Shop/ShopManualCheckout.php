@@ -11,7 +11,7 @@ use App\Globals\Transaction;
 use stdClass;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-
+use App\Models\Tbl_online_pymnt_method;
 
 
 class ShopManualCheckout extends Shop
@@ -24,7 +24,8 @@ class ShopManualCheckout extends Shop
        	$shop_id 				= $transaction_list->shop_id;
        	$gateway_id 			= Tbl_online_pymnt_gateway::where("gateway_code_name", $method)->value("gateway_id");
        	$api					= Tbl_online_pymnt_api::where("api_gateway_id", $gateway_id)->where("api_shop_id", $shop_id)->first();
-
+        $data["method_name"]    = Tbl_online_pymnt_method::where("method_id", request('method_id'))->value('method_name');
+        
        	if(!$api)
        	{
        		$api = new stdClass();
@@ -56,6 +57,7 @@ class ShopManualCheckout extends Shop
       $path = Storage::putFile('payment-proof', $request->file('proofupload'));
 
       Transaction::create_update_proof($path);
+      Transaction::create_update_proof_details(request()->except(['proofupload', '_token', "tid", "method_id"]));
       $transaction_list_id  = Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, null, $source);
     
       return redirect("/manual_checkout/success");

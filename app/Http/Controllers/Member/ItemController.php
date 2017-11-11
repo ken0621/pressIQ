@@ -10,6 +10,7 @@ use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_unit_measurement;
+use App\Models\Tbl_item_price_history;
 use App\Models\Tbl_product_vendor;
 use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_unit_measurement_multi;
@@ -225,8 +226,8 @@ class ItemController extends Member
 	}
 	public function delete_item_history()
 	{
-		$audit_trail_id = Request::input("history_id");
-		Tbl_audit_trail::where("audit_trail_id",$audit_trail_id)->delete();
+		$history_id = Request::input("history_id");
+		Tbl_item_price_history::where("item_price_history_id",$history_id)->delete();
 		echo json_encode('success');
 
 	}
@@ -1188,6 +1189,9 @@ class ItemController extends Member
 		$item_cost 						= str_replace(',','',Request::input("item_cost"));
 		$item_reorder_point 			= Request::input("item_reorder_point");
 		$item_quantity 					= Request::input("item_quantity");
+
+		$sales_price_change				= Request::input('sales_price_change');
+		$cost_price_change				= Request::input('cost_price_change');
 		
 		if ($old["item_measurement_id"]) 
 		{
@@ -1204,6 +1208,15 @@ class ItemController extends Member
 		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->value("account_id");
 		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->value("account_id");
 		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->value("account_id");
+
+		if($sales_price_change)
+		{
+			Item::change_price($item_id,$sales_price_change,$item_price);
+		}
+		if($cost_price_change)
+		{
+			Item::change_price($item_id,$cost_price_change,$item_cost);
+		}
 
 		if($item_type == "inventory")
 		{			

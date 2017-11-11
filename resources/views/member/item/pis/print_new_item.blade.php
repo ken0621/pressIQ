@@ -37,14 +37,37 @@
         		<td class="text-center">
         			{{currency('PHP ',$item->item_cost)}}
         		</td>
-        		<td>
+        		<td class="text-center">
         			{{$item->user_first_name}} <br>
-        			{{$item->user_last_name}} <br>
+        			{{$item->user_last_name}}
         		</td>
         	</tr>
         	@endforeach
         </tbody>
      </table>
+     <br>
+     <br>
+     <br>
+     <br>
+    <div class="form-group">
+        <table class="text-center" style="width: 100%;font-size: 13px;">
+            <tr style="border: 0px">
+                <td style="width: 33%"></td>
+                <td style="width: 33%"></td>
+                <td style="width: 33%">{{strtoupper($owner->user_first_name." ".$owner->user_last_name)}}</td>
+            </tr>
+            <tr style="border: 0px">
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+            </tr>
+            <tr style="border: 0px">
+                <td style="width: 33%">Approved By:</td>
+                <td style="width: 33%">Checked By:</td>
+                <td style="width: 33%">Printed By:</td>
+            </tr>
+        </table>
+    </div>
 </div>
 </body>
 <style type="text/css">

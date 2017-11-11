@@ -12,21 +12,21 @@
                 <table class="table table-bordered table-condensed">
                     <thead class="timesheet-thead">
                         <tr>
-                            <th class="text-center" colspan="2">Day</th>
-                            <th class="text-center">Time In</th>
-                            <th class="text-center">Time Out</th>
-                            <th class="text-center">Remark / Activity</th>
-                            <th class="text-center">Shift</i></th>
-                            <th class="text-center">Source</th>
-                            <th class="text-center">Branch</th>
-                            <th class="text-center">{{ $access_salary_rates == 1 ? 'Rates':'Time Spent'}}</th>
+                            <th colspan="2">Day</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Remark / Activity</th>
+                            <th>Shift</th>
+                            <th>Source</th>
+                            <th>Branch</th>
+                            <th>{{ $access_salary_rates == 1 ? 'Rates':'Time Spent'}}</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($_timesheet as $timesheet)
                         <tr>
-                            <td class="text-center">{{ $timesheet->day_number}}</td>
-                            <td class="text-center">{{ $timesheet->day_word}}</td>
+                            <td>{{ $timesheet->day_number}}</td>
+                            <td>{{ $timesheet->day_word}}</td>
                             <td>
                             @if($timesheet->record)
                                 @foreach($timesheet->record as $key => $record)
@@ -58,9 +58,9 @@
                             </td>
                            
                             @if($timesheet->custom_shift == 1)
-                                <td class="shift-custom text-center">Custom</td>
+                                <td>Custom</td>
                             @else
-                                <td class="shift-custom text-center">Default</td>
+                                <td>Default</td>
                             @endif
                             
                             <td>
@@ -105,7 +105,7 @@
     </div>
 </div>
 <div class="modal-footer text-right">
-    <button type="button" class="btn btn-primary">VIEW PDF</button>
+    <a href='/employee_timesheet_pdf/{{ $period_record->payroll_period_id}}' target="_blank"><button type="button" class="btn btn-primary">VIEW PDF</button></a>
     <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
 </div>
 <style type="text/css">
@@ -121,11 +121,14 @@
         text-transform: uppercase;
         font-size: 14px;
     }
+    th
+    {
+        text-align: center;
+    }
     td
     {
         font-size: 14px;
         text-align: center;
-
     }
     .timesheet-time-record
     {

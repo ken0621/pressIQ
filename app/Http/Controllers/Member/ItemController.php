@@ -205,6 +205,8 @@ class ItemController extends Member
 			$data["_item_archived"]	   = $item_archived->paginate(30);
 			$data["_item_pending"]	   = $item_pending->get();
 
+			$data['pis'] = Purchasing_inventory_system::check();
+
 		    return view('member.item.list',$data);
         }
         else

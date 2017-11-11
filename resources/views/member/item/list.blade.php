@@ -13,7 +13,9 @@
                 </small>
             </h1>
             <a class="panel-buttons btn btn-custom-primary pull-right popup" link="/member/item/add" size="lg" data-toggle="modal" data-target="#global_modal">Add Item</a>
+            @if($pis)
             <a href="/member/item/print_new_item" target="_blank" class="pull-right btn btn-custom-white"><i class="fa fa-print"></i> Print New Added Item</a>
+            @endif
         </div>
     </div>
 </div>

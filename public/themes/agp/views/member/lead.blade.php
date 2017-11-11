@@ -7,20 +7,11 @@
 				<img src="/themes/{{ $shop_theme }}/img/report-icon.png">
 			</div>
 			<div class="text">
-				<div class="name">Reports</div>
-				<div class="sub">All rewards logs are shown here. </div>
-			</div>
-		</div>
-		<div class="animated fadeInRight right">
-			<div class="search">
-				<select class="form-control">
-					<option>All Slots</option>
-				</select>
+				<div class="name">Lead List</div>
+				<div class="sub">List of Leads under your account.</div>
 			</div>
 		</div>
 	</div>
-	
-	<h3 class="animated slideInDown text-center">My Notifications</h3>
 	
 	<div class="report-content">
 		<div class="animated fadeInUp holder">
@@ -28,15 +19,25 @@
 		  		<table class="table">
 			  		<thead>
 			  			<tr>
-			  				<th class="text-left" width="200px">SLOT</th>
-			  				<th class="text-left">DETAILS</th>
-			  				<th class="text-right">AMOUNT</th>
+			  				<th class="text-left" width="200px">CUSTOMER NAME</th>
+			  				<th class="text-left" width="200px">EMAIL</th>
+			  				<th class="text-left" width="200px">CONTACT</th>
+			  				<th class="text-left">DATE JOINED</th>
+			  				<th class="text-right">SLOT OWNED</th>
 			  			</tr>
 			  		</thead>
 			  		<tbody>
-			  			@foreach($_lead as $lead)
-
-			  			@endforeach
+			  			@if(count($_lead) > 0)
+				  			@foreach($_lead as $lead)
+				  			<tr>
+				  				<td>{{ $lead->first_name }} {{ $lead->last_name }}</td>
+				  				<td>{{ $lead->email }}</td>
+				  				<td>{{ $lead->contact }}</td>
+				  				<td>{!! $lead->date_created !!}</td>
+				  				<td class="text-right">{{ $lead->slot_owned }}</td>
+				  			</tr>
+				  			@endforeach
+			  			@endif
 			  		</tbody>
 			  	</table>
 		  	</div>

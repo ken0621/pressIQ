@@ -3506,8 +3506,6 @@ class Payroll2
 		}
 
 		$return = Payroll2::cutoff_breakdown_additions($return, $data);
-
-		
 		
 		if ($group->payroll_group_cola_basis == "") 
 		{
@@ -5105,6 +5103,7 @@ class Payroll2
 		/* GET PHILHEALTH CONTRIBUTION */
 		$philhealth_salary			= $salary->payroll_employee_salary_philhealth;
 		$philhealth_reference		= '(REF. DECLARED)';
+
 		if($group->philhealth_reference == 'net_basic')
 		{
 			$philhealth_salary		= $employee_compute['get_net_basic_pay']['total_net_basic'];
@@ -5118,16 +5117,19 @@ class Payroll2
 		}
 	
 		$phil_record = $previous_record;
+
 		if($group->payroll_group_philhealth == '1st Period')
 		{
 			$phil_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id, true);
 		}
+
 		if($group->payroll_group_philhealth == 'Last Period')
 		{
 			$phil_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id, false, true);
 		}
 		
 		$phil_every = false;
+
 		if($group->payroll_group_sss == 'Every Period')
 		{
 			$phil_every = true;

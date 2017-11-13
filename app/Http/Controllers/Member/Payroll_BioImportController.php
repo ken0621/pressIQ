@@ -799,7 +799,7 @@ class Payroll_BioImportController extends Member
     	$data["failed"]			= $failed;
     	if(!empty($insert_time_record))
     	{
-    		// Tbl_payroll_time_sheet_record::insert($insert_time_record);
+    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
     		$count_inserted = count($insert_time_record);
     		if ($company != null || $company != 0) {
     			$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company)->first();

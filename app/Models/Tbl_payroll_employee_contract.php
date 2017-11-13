@@ -113,6 +113,20 @@ class Tbl_payroll_employee_contract extends Model
 			  	$query->where('tbl_payroll_employee_contract.payroll_jobtitle_id', $job_title_id);
 			  }
 
+	return $query;
+	}
+	
+	public function scopeEmployeePayrollGroup($query, $employee_id)
+	{
+
+		$query->join(" tbl_payroll_employee_basic", " tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_employee_contract.payroll_employee_id")
+			  ->join("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=", "tbl_payroll_employee_contract.payroll_group_id")
+			  ->where('tbl_payroll_employee_basic.payroll_employee_id',$employee_id);
+
+		/*if($employee_id != 0)
+		{
+			$query->where('tbl_payroll_employee_basic.payroll_employee_id',$employee_id);
+		}*/
 		return $query;
 	}
 }

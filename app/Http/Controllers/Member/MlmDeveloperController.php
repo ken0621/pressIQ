@@ -807,10 +807,31 @@ class MlmDeveloperController extends Member
         }
         else
         {
+
+
+
+            $empty_date_slot = Tbl_mlm_slot::where("shop_id",$shop_id)
+                                           ->where("slot_date_computed","0000-00-00 00:00:00")
+                                           ->update(["slot_date_computed" => DB::raw("`slot_created_date`")]);
+                                           // dd($empty_date_slot);
+
             $data["page"] = "Recompute";
             $shop_id = $this->user_info->shop_id;
-            $data["_slot"] = Tbl_mlm_slot::where("shop_id", $shop_id)->get();
+            if($shop_id == 52)
+            {
+                $data["_slot"] = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy("slot_date_computed","ASC")->orderBy("slot_id","ASC")->get();
+            }
+            else
+            {
+                $data["_slot"] = Tbl_mlm_slot::where("shop_id", $shop_id)->get();
+            }
             $data["count"] = Tbl_mlm_slot::where("shop_id", $shop_id)->count();
+
+
+
+
+
+
             return view("member.mlm_developer.modal_recompute", $data);
         }
     }

@@ -1182,6 +1182,8 @@ Route::any("/kim/compute_flexi_time","Core\Times2@compute_flexi_time");
 include_once('routes_config/routes_payroll.php');
 /* PAYROLL END */
 
+include_once('routes_config/routes_project.php');
+
 /* PAYMENT FACILITIES */
 include_once('routes_config/routes_payment.php');
 include_once('routes_config/routes_reward.php');
@@ -1194,8 +1196,6 @@ include_once('routes_config/routes_members_area.php');
 
 /*PAYROLL EMPLOYEE*/
 include_once('routes_config/routes_payroll_employee.php');
-
-
 Route::get('/ref/{id}', 'Shop\LeadController@ref');
 Route::get('/{id}', 'Shop\LeadController@ref');
 

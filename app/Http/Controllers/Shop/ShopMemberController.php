@@ -2493,6 +2493,8 @@ class ShopMemberController extends Shop
                                 $update_slot_mem["upgrade_from_membership"] = $slot->slot_membership;
                                 Tbl_mlm_slot::where("slot_id",$slot->slot_id)->where("shop_id",$shop_id)->update($update_slot_mem);
 
+                                MLM2::entry($shop_id,$slot->slot_id);
+
                             }
                             else
                             {      

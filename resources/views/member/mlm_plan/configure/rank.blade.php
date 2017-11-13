@@ -32,6 +32,10 @@
         <div class="col-md-12 pull">
             <label for="rank_real_time_update">Real-time update</label>
             <input type="checkbox" id="rank_real_time_update" name="rank_real_time_update" value="1" {{$rank_real_time_update == 1 ? 'checked' : ''}}>
+        </div>        
+        <div class="col-md-12 pull">
+            <label for="rank_update_email">Enable Email Send Rank Up</label>
+            <input type="checkbox" id="rank_update_email" name="rank_update_email" value="1" {{$rank_update_email == 1 ? 'checked' : ''}}>
         </div>         
         <div class="col-md-12 pull">
             <label for="rank_real_time_update_counter">Update month range (0 = All range)</label>

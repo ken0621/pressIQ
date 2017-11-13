@@ -3,6 +3,7 @@
 <div class="ebooks-wrapper">
 	<div class="title"><span class="fa fa-book">&nbsp;&nbsp;</span><span>Ebooks</span></div>
 	<div class="row clearfix">
+
 		<div class="col-md-3">
 			<div class="per-item">
 				<a href="/themes/{{ $shop_theme }}/assets/pdf/1.pdf"><div class="thumbnail"><img src="/themes/{{ $shop_theme }}/img/ebook-1.jpg"></div></a>

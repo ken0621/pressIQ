@@ -44,7 +44,7 @@
                             <select name="barcode_type" class="form-control">
                                 <option value="ref_number">Reference Number</option>
                                 @if($shop_id == 5)
-                                <option value="register_form">How to Register Form</option>
+                                <option value="register_form">Register Form</option>
                                 @else
                                 <option value="pin_code">Activation Code & Pin</option>
                                 @endif

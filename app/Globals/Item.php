@@ -666,6 +666,11 @@ class Item
                     {
                         $return .= date('m/d/Y',strtotime($value->created_at))." - ".currency("PHP ",$amount)."<br>";
 
+                        if($show_all == true)
+                        {
+                            $return .= " - <a class='click_delete' href='javascript:' history-id='".$value->audit_trail_id."'>&nbsp;&nbsp;Delete</a><br>";
+                        }
+
                         $text = $return;
                         if($show_all == false)
                         {
@@ -676,11 +681,9 @@ class Item
                         }
                     }
                 }
-
                 $last = $amount;
             }
         }  
-
         return $text;
     }
     public static function get_item_details($item_id = 0)

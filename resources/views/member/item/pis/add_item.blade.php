@@ -613,7 +613,7 @@
 <script type="text/javascript">
 function setTwoNumberDecimal(x) 
 {
-    var value = parseFloat($(x).val()).toFixed(2);
+    var value = parseFloat($(x).val()).toFixed(4);
     $(x).val(value);
 }
 

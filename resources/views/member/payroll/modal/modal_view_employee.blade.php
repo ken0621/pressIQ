@@ -39,7 +39,7 @@
             </div>
             <div class="col-md-4 padding-lr-1">
               <small>Biometric number</small>
-              <input type="text" name="payroll_employee_biometric_number" class="form-control" required value="{{$employee->payroll_employee_biometric_number}}">
+              <input type="text" name="payroll_employee_biometric_number" class="form-control" value="{{$employee->payroll_employee_biometric_number}}">
             </div>
             <div class="col-md-4 padding-lr-1">
               <small>ATM No.</small>

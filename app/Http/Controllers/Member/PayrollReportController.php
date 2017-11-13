@@ -322,9 +322,7 @@ class PayrollReportController extends Member
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
 
 			// AuditTrail::record_logs("DOWNLOAD","SSS REPORT",$this->shop_id(),"","");
-
-			/d/d($data);
-
+			
 			Excel::create("Government Forms SSS",function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)

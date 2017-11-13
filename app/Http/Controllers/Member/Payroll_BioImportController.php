@@ -817,7 +817,7 @@ class Payroll_BioImportController extends Member
 
     public function importation_table_report($data)
     {
-    	$html = "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
+    	$html  = "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
     	$html .= "<table class='table'>
     				<thead>
     				      <tr>
@@ -843,7 +843,7 @@ class Payroll_BioImportController extends Member
 						<td class='text-center'>".$report['report']['status']."</td>
 					  </tr>";
     	}
-    	$html .= "   </tbody>
+    	$html 	  .= "   </tbody>
     			  </table>";
     	return $html;
     }

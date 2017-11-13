@@ -823,7 +823,8 @@ class MlmDeveloperController extends Member
             }
             else
             {
-                $data["_slot"] = Tbl_mlm_slot::where("shop_id", $shop_id)->get();
+                // $data["_slot"] = Tbl_mlm_slot::where("shop_id", $shop_id)->get();
+                $data["_slot"] = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy("slot_date_computed","ASC")->orderBy("slot_id","ASC")->get();
             }
             $data["count"] = Tbl_mlm_slot::where("shop_id", $shop_id)->count();
 

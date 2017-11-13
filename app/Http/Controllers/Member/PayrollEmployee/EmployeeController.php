@@ -40,16 +40,15 @@ class EmployeeController extends PayrollMember
 		
 		return view('member.payroll2.employee_dashboard.employee',$data);
 	}
-	public function company_details($action = 'view')
+	public function company_details()
 	{
 		$data['page']	= 'Company Details';
-		$data["company"] = Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
-		
 
-		$data['rdo'] = Tbl_payroll_rdo::orderBy('rdo_code')->first();
+		$shop_id = $this->employee_info->shop_id;
 
-		$data["company"] = Tbl_payroll_rdo::CompanyRdo()->get();
-		//dd($data["company"]);
+		$data['company'] = Tbl_payroll_company::companydetails($shop_id)->where('payroll_parent_company_id',0)->first();
+		//dd($data['company']);
+
 		return view('member.payroll2.employee_dashboard.company_details',$data);
 	}
 

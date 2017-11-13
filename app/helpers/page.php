@@ -1411,6 +1411,7 @@ function page_list()
         $nav[$page]['submenu'][$segment]['segment']= $segment;
         $nav[$page]['submenu'][$segment]['type']   = "submenu";
 
+
             $code = "create-press-release";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Create";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;

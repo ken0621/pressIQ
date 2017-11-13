@@ -121,6 +121,36 @@ class PayrollTimeSheet2Controller extends Member
 			return view('member.payroll2.employee_timesheet', $data);
 		}
 	}
+	public function timesheet_pdf($period_id, $employee_id)
+	{
+		$data["page"]					= "Employee Timesheet";
+		$data["employee_id"]			= $this->$employee_id = $employee_id;
+		$data["employee_info"]			= $this->db_get_employee_information($employee_id); 
+		$data["company_period"] 		= $this->db_get_company_period_information($period_id);
+
+		$data["show_period_start"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_start));
+		$data["show_period_end"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
+		$data["_timesheet"] 			= Payroll2::timesheet_info($data["company_period"], $employee_id);
+		
+		$data["access_salary_rates"]	= $access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+		$check_approved 				= Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_id)->first();
+		$data["time_keeping_approved"] 	= $check_approved ? true : false;
+
+		$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["company_period"]->payroll_period_start);
+
+		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
+
+		$data["period_id"] = $period_id;
+		
+		if($data["compute_type"] == "Flat Rate")
+		{
+			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
+		}
+		else
+		{
+			return view('member.payroll2.employee_timesheet_pdf', $data);
+		}
+	}
 	public function approve_timesheets($period_id = 0, $employee_id = 0)
 	{
 

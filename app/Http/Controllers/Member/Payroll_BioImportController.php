@@ -783,8 +783,11 @@ class Payroll_BioImportController extends Member
     			/*unset the report of inserted timesheet*/
     			if (isset($insert_time_record[$key]["report"])) 
     			{
-    				array_push($data['_report'], $insert_time_record[$key]);
-    				$success++;
+    				if ($insert_time_record[$key]["report"]["status"] == "Inserted")
+    				{
+    					array_push($data['_report'], $insert_time_record[$key]);
+    					$success++;
+    				}
     				unset($insert_time_record[$key]["report"]);
     			}
     		}
@@ -961,6 +964,7 @@ class Payroll_BioImportController extends Member
 	    		}
 	    		array_push($record_array, $time);
 	    	}
+
 	    	$_collect = collect($record_array)->groupBy('id_no');
 	    	// dd($collect);
 

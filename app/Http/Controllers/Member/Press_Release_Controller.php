@@ -14,6 +14,7 @@ use App\Models\Tbl_press_release_recipient;
 use App\Models\Tbl_press_release_email_sent;
 use Mail;
 use Illuminate\Pagination\LengthAwarePaginator;
+use URL;
 
 class Press_Release_Controller extends Member
 {
@@ -63,47 +64,51 @@ class Press_Release_Controller extends Member
 
     }
 
+    public function pass_id()
+    {
+         
+        $data = Request::input('myArr');
+        Session::put('email', $data); 
+        return json_encode($data);
+        
+    }
+
     public function view_send_email()
     {
          $data["_email_list"]=Tbl_press_release_email::get();
     	 $data["sent_email"] = Request::input('sent_email');
+         $data["mail"] = Session::get('email');
+         $data["mails"] = implode(",", $data["mail"]);
     	return view("member.email_system.send_email_press_release",$data);
     }
 
     public function send_email(Request $request)
-    {
-        try 
+    { 
+        $insert['email_content'] = Request::input('content');
+        $insert['from']=Request::input('from') . "@press-iq.com";
+        $insert['to']=Request::input('to');
+        /*$insert['to']=explode(",",Request::input('to'));*/
+        $insert['email_title']=Request::input('title');
+        $insert['email_subject']=Request::input('subject');
+        $insert['email_time'] = date('Y-m-d');
+        Tbl_press_release_email_sent::insert($insert);
+        $data['tinymce_content'] = str_replace("../../../uploads", URL::to('/uploads'), Request::input('content'));;
+        $data['from']=Request::input('from');
+        $data['to']=explode(",",Request::input('to'));
+        $data['subject']=Request::input('subject');
+        $data['email_title']=Request::input('title');
+        foreach($data['to'] as $to)
         {
-            $insert['email_content'] = Request::input('content');
-            $insert['from']=Request::input('from');
-            $insert['to']=Request::input('to');
-            /*$insert['to']=explode(",",Request::input('to'));*/
-            $insert['email_title']=Request::input('subject');
-            $insert['email_time'] = date('Y-m-d');
-            Tbl_press_release_email_sent::insert($insert);
-
-            $data['tinymce_content'] = Request::input('content');
-            $data['from']=Request::input('from');
-            $data['to']=explode(",",Request::input('to'));
-            $data['subject']=Request::input('subject');
-            foreach($data['to'] as $to)
+            $data['to'] = $to;  
+            Mail::send('member.email_system.email',$data, function($message) use ($data)
             {
-                $data['to'] = $to;
-                Mail::send('member.email_system.email',$data, function($message) use ($data)
-                {
-                    $message->from($data['from']);
-                    $message->to("edwardguevarra2003@gmail");
-                    $message->subject($data['subject']);
-                });  
-            }
-       
-            return json_encode("success"); 
-        } 
-        catch (\Exception $e) 
-        {
-            dd($e->getMessages());
+                $message->from($data['from']);
+                $message->to($data['to']);
+                $message->subject($data['subject']);
+            });  
         }
-        
+   
+        return json_encode("success"); 
 	}
     public function email_sent()
     {
@@ -133,12 +138,53 @@ class Press_Release_Controller extends Member
         return 'success';
         
     }
-
-    /*public function get_recipient_info()
+   
+    public function analytics()
     {
-        $email_address=
+        // DB::table("tbl_settings")->where("shop_id", $this->user_info->shop_id)->where("settings_key", "password")->first();
 
+        $curl = curl_init();
+
+          curl_setopt_array($curl, array(
+          CURLOPT_URL => "https://mandrillapp.com/api/1.0/users/info.json?key=cKQiemfNNB-5xm98HhcNzw",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "GET",
+          CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+          ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) 
+        {
+          echo "cURL Error #:" . $err;
+        } 
+        else 
+        {
+         $data['_array'] = json_decode($response);
+         foreach ($data as $key => $stats)
+
+            {
+                $datas['_array1']=($stats->stats->today);
+                // foreach ($stats as $keys => $today) 
+                // {
+                //     dd($keys['stats']);
+                // }
+                
+                  
+            }
+        
+        }
+        
+        return view("member.email_system.analytics_press_release",$datas);
     }
-*/
-
 }

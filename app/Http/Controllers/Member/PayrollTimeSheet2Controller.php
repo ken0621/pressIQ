@@ -122,7 +122,6 @@ class PayrollTimeSheet2Controller extends Member
 	
 	public function timesheet_pdf($period_id, $employee_id)
 	{
-
 		$data["page"]					= "Employee Timesheet";
 		$data["employee_id"]			= $this->$employee_id = $employee_id;
 		$data["employee_info"]			= $this->db_get_employee_information($employee_id); 
@@ -131,6 +130,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["show_period_start"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_start));
 		$data["show_period_end"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
 		$data["_timesheet"] 			= Payroll2::timesheet_info($data["company_period"], $employee_id);
+
 		$data["access_salary_rates"]	= $access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
 		$check_approved 				= Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_id)->first();
 		$data["time_keeping_approved"] 	= $check_approved ? true : false;

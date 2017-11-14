@@ -93,41 +93,47 @@
 				        <h4 class="modal-title">BROWN&PROUD KITS</h4>
 				      </div>
 				      <div class="modal-body">
-				        <table class="table" style="margin: 0">
-				        	<thead>
-				        		<tr>
-				        			<th></th>
-				        			<th>Image</th>
-				        			<th>Product Name</th>
-				        			<th>Unit Price</th>
-				        			<th>Quantity</th>
-				        			<th>Total</th>
-				        		</tr>
-				        	</thead>
-				        	<tbody>
-				        		<tr>
-				        			<td><input type="checkbox" name="" value=""></td>
-				        			<td><img src="" alt=""></td>
-				        			<td>Membership</td>
-				        			<td>P 5,000.00</td>
-				        			<td><input class="item-qty form-control text-center" style="width: 75px; margin: auto;" type="number" name="quantity" min="1" step="1"></td>
-				        			<td>P 10,000.00</td>
-				        		</tr>
-				        		<tr>
-				        			<td><input type="checkbox" name="" value=""></td>
-				        			<td><img src="" alt=""></td>
-				        			<td>Membership</td>
-				        			<td>P 5,000.00</td>
-				        			<td><input class="item-qty form-control text-center" style="width: 75px; margin: auto;" type="number" name="quantity" min="1" step="1"></td>
-				        			<td>P 10,000.00</td>
-				        		</tr>
-				        	</tbody>
-				        </table>
+				        <div class="row-no-padding clearfix">
+				        	<div class="col-md-4">
+								<div class="kit-parent-holder">
+									<div class="kit-holder match-height">
+										<div class="product-title">Kit-A Lorem ipsum dolor sit amet.</div>
+										<div class="product-img-container">
+											<img src="/themes/{{ $shop_theme }}/img/kit-sample-a.jpg">
+											<div class="product-price">P 9,900.00</div>
+										</div>
+										<button class="btn btn-custom">ENROLL NOW</button>
+									</div>
+								</div>
+				        	</div>
+				        	<div class="col-md-4">
+				        		<div class="kit-parent-holder">
+				        			<div class="kit-holder match-height">
+				        				<div class="product-title">Kit-B Lorem ipsum dolor sit amet, consectetur adipisicing.</div>
+				        				<div class="product-img-container">
+				        					<img src="/themes/{{ $shop_theme }}/img/kit-sample-b.jpg">
+				        					<div class="product-price">P 5,900.00</div>
+				        				</div>
+				        				<button class="btn btn-custom">ENROLL NOW</button>
+				        			</div>
+				        		</div>
+				        	</div>
+				        	<div class="col-md-4">
+				        		<div class="kit-parent-holder">
+				        			<div class="kit-holder match-height">
+				        				<div class="product-title">Kit-C Lorem ipsum dolor.</div>
+				        				<div class="product-img-container">
+				        					<img src="/themes/{{ $shop_theme }}/img/kit-sample-c.jpg">
+				        					<div class="product-price">P 2,900.00</div>
+				        				</div>
+				        				<button class="btn btn-custom">ENROLL NOW</button>
+				        			</div>
+				        		</div>
+				        	</div>
+				        </div>
 				      </div>
 				      <div class="modal-footer">
-				        <button type="button" class="btn btn-success">ADD TO CART</button>
-				        &nbsp;
-				        <span>Total: P 20,000.00</span>
+				        <!-- <button type="button" class="btn btn-success pull-left">ADD TO CART</button> -->
 				      </div>
 				    </div>
 				  </div>

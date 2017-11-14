@@ -33,9 +33,31 @@ function pos()
 		event_click_process_sale();
 		action_hide_popover();
 		event_change_quantity();
+		event_click_add_payment();
 
         event_load_popover();
         action_click_change_qty();
+	}
+	function event_click_add_payment()
+	{
+		$('body').on('click','.btn-add-payment', function(e)
+		{
+			var payment_method = $('.input-payment-method').val();
+			var payment_amount = $('.input-payment-amount').val();
+			var _token = $('#_token').val();
+			table_loading();
+			$.ajax(
+			{
+				url:"/member/cashier/pos/add_payment",
+				dataType:"json",
+				data: {payment_method:payment_method,payment_amount:payment_amount,_token:_token},
+				type:"post",
+				success: function(data)
+				{
+					action_load_item_table();
+				}
+			});
+		});
 	}
 	function action_click_change_qty()
     {
@@ -535,7 +557,7 @@ function pos()
 	{
 		$(".big-total").find(".grand-total").text($(".table-grand-total").val());
 		$(".big-total").find(".amount-due").text($(".table-amount-due").val());
-		$(".amount-due-input").val($(".table-amount-due").val().replace('PHP',''));
+		$(".input-payment-amount").val($(".table-amount-due").val().replace('PHP',''));
 	}
 	function get_loader_html($padding = 50)
 	{
@@ -557,6 +579,7 @@ function toggle_destination(className)
 function select_payment(type = '')
 {
 	$('.btn-payment').addClass('btn-custom-white');
+	$('.input-payment-method').val(type);
 	$('.'+type).removeClass('btn-custom-white');
 	$('.'+type).addClass('btn-primary');
 }

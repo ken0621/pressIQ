@@ -150,16 +150,19 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-4 text-right" for="email">Payment Method</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" name="payment_method">
+                                    <select class="form-control" name="payment_method1">
                                         <option value="cash">Cash</option>
                                         <option value="cheque">Cheque</option>
                                     </select>
                                 </div>
                             </div>
-                            @include('member.cashier.pos_payment_method')
+                            <div class="form-group">
+                                @include('member.cashier.pos_payment_method')
+                            </div>
                             <div class="form-group">
                                 <label class="control-label col-sm-4 text-right" for="email">Add Pyament</label>
                                 <div class="col-sm-8">
+                                    <input type="hidden" name="payment_method" class="input-payment-method">
                                     <a href="javascript:" class="btn btn-primary cash btn-payment" onClick="select_payment('cash')">Cash</a>
                                     <a href="javascript:" class="btn btn-custom-white check btn-payment" onClick="select_payment('check')">Check</a>
                                     <a href="javascript:" class="btn btn-custom-white gc btn-payment" onClick="select_payment('gc')">GC</a>
@@ -168,9 +171,9 @@
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <div class="input-group">
-                                      <input type="text" class="form-control amount-due-input" placeholder="Amount...">
+                                      <input type="text" class="form-control input-payment-amount" name="payment_amount" placeholder="Amount...">
                                       <span class="input-group-btn">
-                                        <button class="btn btn-custom-white" type="button">Add Payment</button>
+                                        <button class="btn btn-custom-white btn-add-payment" type="button">Add Payment</button>
                                       </span>
                                     </div>
                                 </div>

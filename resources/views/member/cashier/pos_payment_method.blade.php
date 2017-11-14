@@ -1,4 +1,4 @@
- <div class="form-group payment-list">
+ <div class="payment-list">
     <div class="col-sm-12">
         <li>
             <div class="col-sm-1">

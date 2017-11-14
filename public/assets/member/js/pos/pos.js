@@ -535,6 +535,7 @@ function pos()
 	{
 		$(".big-total").find(".grand-total").text($(".table-grand-total").val());
 		$(".big-total").find(".amount-due").text($(".table-amount-due").val());
+		$(".amount-due-input").val($(".table-amount-due").val().replace('PHP',''));
 	}
 	function get_loader_html($padding = 50)
 	{
@@ -552,6 +553,12 @@ function toggle_destination(className)
     {
     	$(className).slideUp();
     }
+}
+function select_payment(type = '')
+{
+	$('.btn-payment').addClass('btn-custom-white');
+	$('.'+type).removeClass('btn-custom-white');
+	$('.'+type).addClass('btn-primary');
 }
 
 function new_price_level_save_done(data)

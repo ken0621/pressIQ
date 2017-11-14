@@ -156,6 +156,25 @@
                                     </select>
                                 </div>
                             </div>
+                            @include('member.cashier.pos_payment_method')
+                            <div class="form-group">
+                                <label class="control-label col-sm-4 text-right" for="email">Add Pyament</label>
+                                <div class="col-sm-8">
+                                    <a href="javascript:" class="btn btn-primary cash btn-payment" onClick="select_payment('cash')">Cash</a>
+                                    <a href="javascript:" class="btn btn-custom-white check btn-payment" onClick="select_payment('check')">Check</a>
+                                    <a href="javascript:" class="btn btn-custom-white gc btn-payment" onClick="select_payment('gc')">GC</a>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="input-group">
+                                      <input type="text" class="form-control amount-due-input" placeholder="Amount...">
+                                      <span class="input-group-btn">
+                                        <button class="btn btn-custom-white" type="button">Add Payment</button>
+                                      </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -172,4 +191,17 @@
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="/assets/member/css/pos.css">
+<style type="text/css">
+    .payment-list li
+    {
+        list-style: none;
+        padding : 10px;
+    }
+    .payment-list
+    {
+        border-top: 1px dotted #bfbfbf;
+        border-bottom: 1px dotted #bfbfbf;
+        padding :10px;
+    }
+</style>
 @endsection

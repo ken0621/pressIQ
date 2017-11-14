@@ -9,8 +9,6 @@
 	@endif
 @endif
 
-
-
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
@@ -60,7 +58,8 @@
 		                        <div class="text-header2">Enroll now and become one of us!</div>
 		                    </div>
 		                    <div class="btn-container">
-		                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br>
+		                        <!-- <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br> -->
+		                        <button class="btn-buy-a-kit" data-toggle="modal" data-target="#popup-brown-kit">Enroll Now</button><br>
 		                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
 		                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 		                    </div>
@@ -81,6 +80,63 @@
 					<p class="wow fadeInRight"><i class="fa fa-circle" aria-hidden="true"></i>Agila Rewards Ready</p>
 				</div>
 			</div>
+
+			<!-- Modal -->
+			
+			<div class="brown-popup-kit">
+				<div class="modal fade" id="popup-brown-kit" role="dialog">
+				  <div class="modal-dialog modal-lg">
+				    <!-- Modal content-->
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        <h4 class="modal-title">BROWN&PROUD KITS</h4>
+				      </div>
+				      <div class="modal-body">
+				        <table class="table" style="margin: 0">
+				        	<thead>
+				        		<tr>
+				        			<th></th>
+				        			<th>Image</th>
+				        			<th>Product Name</th>
+				        			<th>Unit Price</th>
+				        			<th>Quantity</th>
+				        			<th>Total</th>
+				        		</tr>
+				        	</thead>
+				        	<tbody>
+				        		<tr>
+				        			<td><input type="checkbox" name="" value=""></td>
+				        			<td><img src="" alt=""></td>
+				        			<td>Membership</td>
+				        			<td>P 5,000.00</td>
+				        			<td><input class="item-qty form-control text-center" style="width: 75px; margin: auto;" type="number" name="quantity" min="1" step="1"></td>
+				        			<td>P 10,000.00</td>
+				        		</tr>
+				        		<tr>
+				        			<td><input type="checkbox" name="" value=""></td>
+				        			<td><img src="" alt=""></td>
+				        			<td>Membership</td>
+				        			<td>P 5,000.00</td>
+				        			<td><input class="item-qty form-control text-center" style="width: 75px; margin: auto;" type="number" name="quantity" min="1" step="1"></td>
+				        			<td>P 10,000.00</td>
+				        		</tr>
+				        	</tbody>
+				        </table>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-success">ADD TO CART</button>
+				        &nbsp;
+				        <span>Total: P 20,000.00</span>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+			</div>
+
+
+			<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/cart_modal.js"></script>
+
 		@endif
 	</div>
 @else

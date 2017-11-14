@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Rubik', sans-serif;
 $light: 300;
 $regular: 400;
@@ -5,15 +7,6 @@ $medium: 500;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
-
-
-@mixin transition($transition)
-{
-	  -webkit-transition: all $transition ease-in-out;
-	  -moz-transition: all $transition ease-in-out;
-	  -o-transition: all $transition ease-in-out;
-	  transition: all $transition ease-in-out;
-}
 
 /* Dashboard Top */
 .dashboard-top
@@ -827,8 +820,6 @@ $text-dark: #272c2f;
 	}
 }
 
-
-
 /* Failed */
 .popup-failed
 {
@@ -887,6 +878,62 @@ $text-dark: #272c2f;
 					padding: 12px 55px;
 					border: 2px solid #ed5639;
 					border-radius: 2px;
+				}
+			}
+		}
+	}
+}
+
+/* brown-popup-kit */
+.brown-popup-kit
+{
+	.modal-content
+	{
+		.modal-header
+		{
+			background-color: #422311;
+			color: #fff;
+
+			.close
+			{
+				color: #fff;
+			}
+		}
+
+		.modal-body
+		{
+			padding: 0;
+
+			.table
+			{
+				
+				thead
+				{
+					background-color: #ECE8E8;
+
+					tr
+					{
+						th
+						{
+							text-align: center;
+							font-weight: $light;
+							border-bottom: none;
+						}
+					}
+				}
+
+				tbody
+				{
+
+					tr
+					{
+						text-align: center;
+						border-top: none;
+						td
+						{
+							vertical-align: middle;
+						}
+					}
 				}
 			}
 		}

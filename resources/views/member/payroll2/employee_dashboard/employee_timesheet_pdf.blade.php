@@ -60,7 +60,7 @@
     </style>
 </head>
 <body>
-    <div style="vertical-align: top;">
+    <div style="vertical-align: top; text-align: center;">
         <div class="row">
             <div class="timesheet-title">{{ $period_record->payroll_employee_first_name }} {{ $period_record->payroll_employee_last_name }} - TIME RECORD</div>
         </div>

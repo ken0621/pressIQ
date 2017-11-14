@@ -81,8 +81,7 @@
 				</div>
 			</div>
 
-			<!-- Modal -->
-			
+			<!-- BROWN POPUP KIT -->
 			<div class="brown-popup-kit">
 				<div class="modal fade" id="popup-brown-kit" role="dialog">
 				  <div class="modal-dialog modal-lg">

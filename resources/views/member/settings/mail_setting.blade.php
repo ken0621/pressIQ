@@ -62,6 +62,12 @@
                         <input value="{{ isset($setting['mail_encryption']) ? $setting['mail_encryption']->settings_value : '' }}" class="form-control" type="text" name="mail_encryption">
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Mail Name</label>
+                        <input value="{{ isset($setting['mail_name']) ? $setting['mail_name']->settings_value : '' }}" class="form-control" type="text" name="mail_name">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -71,4 +71,12 @@ class Tbl_payroll_company extends Model
         return $query;
     }
 
+    public function scopecompanydetails($query,$shop_id = 0)
+    {
+        $query->join('tbl_payroll_rdo','tbl_payroll_rdo.payroll_rdo_id','=','tbl_payroll_company.payroll_company_rdo')
+              ->join('tbl_payroll_bank_convertion','tbl_payroll_bank_convertion.payroll_bank_convertion_id','=','tbl_payroll_company.payroll_company_bank')
+              ->where('shop_id', $shop_id);
+
+        return $query;
+    }
 }

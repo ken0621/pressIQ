@@ -881,7 +881,6 @@ class Payroll_BioImportController extends Member
 	    			$end 	= $date[count($date) - 1];
 	    			if(Self::check_employee_number($start['employee_number']))
 	    			{
-	    				
 		    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($start['employee_number']), $start['date']);
 
 		    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;

@@ -115,11 +115,12 @@ class WarehouseController extends Member
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
         { 
-            $data["_warehouse"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get();
+            $data["_warehouse"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id");
             if(Request::input("search_txt"))
             {
-               $data["_warehouse"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 0)->where("warehouse_name","LIKE","%".Request::input("search_txt")."%")->groupBy("tbl_warehouse.warehouse_id")->get();            
+               $data["_warehouse"]->where("warehouse_name","LIKE","%".Request::input("search_txt")."%");
             }
+            $data["_warehouse"] = $data["_warehouse"]->paginate(10);
 
             // $data["_warehouse_archived"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 1)->groupBy("tbl_warehouse.warehouse_id")->get();
             

@@ -98,9 +98,19 @@
 									<div class="kit-holder match-height">
 										<div class="product-title">Kit-A Lorem ipsum dolor sit amet.</div>
 										<div class="product-img-container">
+											<div class="product-hover">
+												<div class="kit-small">
+													<img src="/themes/{{ $shop_theme }}/img/kit-sample-a.jpg">
+												</div>
+												<div class="detail-container">
+													<p>
+														Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore tempora dolore incidunt culpa magni distinctio nisi iusto dolorem ea, provident eligendi aspernatur ut numquam minus praesentium recusandae rerum non nulla.
+													</p>
+												</div>
+											</div>
 											<img src="/themes/{{ $shop_theme }}/img/kit-sample-a.jpg">
-											<div class="product-price">P 9,900.00</div>
 										</div>
+										<div class="product-price">P 9,900.00</div>
 										<button class="btn btn-custom">ENROLL NOW</button>
 									</div>
 								</div>
@@ -110,9 +120,19 @@
 				        			<div class="kit-holder match-height">
 				        				<div class="product-title">Kit-B Lorem ipsum dolor sit amet, consectetur adipisicing.</div>
 				        				<div class="product-img-container">
+				        					<div class="product-hover">
+				        						<div class="kit-small">
+				        							<img src="/themes/{{ $shop_theme }}/img/kit-sample-b.jpg">
+				        						</div>
+				        						<div class="detail-container">
+				        							<p>
+				        								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore tempora dolore incidunt culpa magni distinctio nisi iusto dolorem ea, provident eligendi aspernatur ut numquam minus praesentium recusandae rerum non nulla.
+				        							</p>
+				        						</div>
+				        					</div>
 				        					<img src="/themes/{{ $shop_theme }}/img/kit-sample-b.jpg">
-				        					<div class="product-price">P 5,900.00</div>
 				        				</div>
+				        				<div class="product-price">P 5,900.00</div>
 				        				<button class="btn btn-custom">ENROLL NOW</button>
 				        			</div>
 				        		</div>
@@ -122,9 +142,19 @@
 				        			<div class="kit-holder match-height">
 				        				<div class="product-title">Kit-C Lorem ipsum dolor.</div>
 				        				<div class="product-img-container">
+				        					<div class="product-hover">
+				        						<div class="kit-small">
+				        							<img src="/themes/{{ $shop_theme }}/img/kit-sample-c.jpg">
+				        						</div>
+				        						<div class="detail-container">
+				        							<p>
+				        								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore tempora dolore incidunt culpa magni distinctio nisi iusto dolorem ea, provident eligendi aspernatur ut numquam minus praesentium recusandae rerum non nulla.
+				        							</p>
+				        						</div>
+				        					</div>
 				        					<img src="/themes/{{ $shop_theme }}/img/kit-sample-c.jpg">
-				        					<div class="product-price">P 2,900.00</div>
 				        				</div>
+				        				<div class="product-price">P 2,900.00</div>
 				        				<button class="btn btn-custom">ENROLL NOW</button>
 				        			</div>
 				        		</div>

@@ -5143,6 +5143,7 @@ class PayrollController extends Member
           $insert_code['shop_id']            = Self::shop_id();
 
           $shift_code_id = Tbl_payroll_shift_code::insertGetId($insert_code);
+
           AuditTrail::record_logs("CREATED: Shift Template","Shift Template Code Name : ".Request::input('shift_code_name'),"","","");
           $insert_shift = array();
 

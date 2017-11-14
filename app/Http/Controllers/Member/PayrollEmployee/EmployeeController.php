@@ -12,6 +12,8 @@ use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_rdo;
+use App\Models\Tbl_payroll_overtime_rate;
+use App\Models\Tbl_payroll_shift_code;
 use App\Globals\Payroll2;
 use App\Globals\Utilities;
 use Illuminate\Http\Request;
@@ -51,28 +53,6 @@ class EmployeeController extends PayrollMember
 
 		return view('member.payroll2.employee_dashboard.company_details',$data);
 	}
-
-	/*public function company_list()
-     {
-          // $data['_page'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
-          $data['_archived'] = Tbl_payroll_company::selcompany(Self::shop_id(),1)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
-
-          $_active = array();
-          $data['_parent'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('payroll_company_name')->paginate($this->paginate_count);
-
-          foreach($data['_parent'] as $parent)
-          {
-               $temp['company'] = $parent;
-               $temp['branch'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id', $parent->payroll_company_id)->orderBy('payroll_company_name')->get();
-               array_push($_active, $temp);
-          }
-
-          // $data['_active'] = Payroll::company_heirarchy(Self::shop_id(), $this->paginate_count);
-          $data['_active'] = $_active;
-          // dd($data['_active']);
-          return view('member.payroll.companylist', $data);
-     }*/
-
 
 	public function employee_profile()
 	{
@@ -155,7 +135,24 @@ class EmployeeController extends PayrollMember
 	public function employee_overtime_application()
 	{
 		$data['page']	= 'Over Time Application';
+
+		//$data['ot'] = Tbl_payroll_employee_basic::EmployeeOvertime()->first();
+		//dd($data['ot']);
 		return view('member.payroll2.employee_dashboard.employee_overtime_application',$data);
+	}
+	public function employee_overtime_view_shift()
+	{
+		$data['page']	= 'Over Time Application';
+
+		//$data['shift'] = Tbl_payroll_employee_basic::EmployeeShift('payroll_employee_id',$this->employee_info->payroll_employee_id)->first();
+
+		//dd($data['shift']);
+		/*$shift_code = Tbl_payroll_employee_basic::where("shift_code_id", $this->employee_info->shift_code_id)->first();
+		$shift_name = Tbl_payroll_shift_code::where("shift_code_id", $shift_code->shift_code_id)->first();
+		dd($shift_code->shift_code_name);
+		$shift_code_id = Tbl_payroll_shift_code::insertGetId($insert_code);*/
+		//dd($shift_code_id);
+		return view('member.payroll2.employee_dashboard.employee_overtime_view_shift',$data);
 	}
 	public function authorized_access_leave()
 	{
@@ -268,7 +265,6 @@ class EmployeeController extends PayrollMember
 		$data["period_record_end"]			= date('M d, Y',strtotime($data["period_record"]->payroll_period_end));
 
 		$data["_timesheet"] 			= Payroll2::timesheet_info($data["period_record"], $this->employee_info->payroll_employee_id);
-
 		$data["access_salary_rates"]	= $access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
 
 		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);

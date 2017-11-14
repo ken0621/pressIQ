@@ -22,22 +22,6 @@
     </div>
 </div>
 
-<!--mai-->
-<div class="form-group">
-    <div class="col-md-12">
-        <div class="col-md-6">
-            <ul class="nav nav-tabs">
-              <li id="all-list" class="active"><a data-toggle="tab" href="#open"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;Open</a></li>
-
-              <li id="archived-list"><a data-toggle="tab" href="#close"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;Close</a></li>
-
-              <li id="archived-list"><a data-toggle="tab" href="#all"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;All</a></li>
-            </ul>
-        </div>
-    </div>
-
-</div>
-<!--end-->
 
 <!--mai-->
 <div class="form-group">

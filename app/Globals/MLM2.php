@@ -1220,6 +1220,10 @@ class MLM2
             // $c = Mlm_gc::slot_gc($slot_id);
 
             Mlm_compute::set_slot_nick_name_2($slot_info);
+            if($slot_info->slot_date_computed == "0000-00-00 00:00:00")
+            {
+            	$update_slot["slot_date_computed"] = Carbon::now();
+            }
 
             $update_slot["distributed"] = 1;
             Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->update($update_slot);

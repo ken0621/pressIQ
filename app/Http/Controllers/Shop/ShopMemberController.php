@@ -90,7 +90,7 @@ class ShopMemberController extends Shop
             $data["points"]             = $data["customer_summary"]["_points"];
             $data["_wallet_plan"]       = $data["customer_summary"]["_wallet_plan"];
             $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
-            $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["_slot"]              = $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
             $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
             $data['allow_multiple_slot'] = Self::$customer_info->allow_multiple_slot;
@@ -98,6 +98,20 @@ class ShopMemberController extends Shop
             $data['mlm_activation'] = '';            
             $data["first_slot"]         = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
            
+            if($this->shop_info->shop_theme == 'philtech')
+            {
+                $data["travel_and_tours"] = false;
+
+                foreach($_slot as $slot)
+                {
+                    if($slot->slot_membership == 4)
+                    {
+                        $data["travel_and_tours"] = true;
+                    }
+                }
+            }
+
+
             if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
             {
                 $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
@@ -131,7 +145,7 @@ class ShopMemberController extends Shop
                 if(MLM2::is_privilage_card_holder($this->shop_info->shop_id, Self::$customer_info->customer_id))
                 {
                     return Self::load_view_for_members('member.privilage_card_holder_dashboard',$data);
-                }                
+                }                   
             }
         }
 
@@ -2314,7 +2328,6 @@ class ShopMemberController extends Shop
         $data['slot_no'] = Request2::input('slot_no');
         
         $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) in your Slot No <b>".$data['slot_no']."</b> ?";
-
         $data['action'] = '/members/slot-use-product-code';
 
         return view('mlm.slots.confirm_product_code',$data);
@@ -2479,6 +2492,8 @@ class ShopMemberController extends Shop
                                 $update_slot_mem["upgraded"]                = 1;
                                 $update_slot_mem["upgrade_from_membership"] = $slot->slot_membership;
                                 Tbl_mlm_slot::where("slot_id",$slot->slot_id)->where("shop_id",$shop_id)->update($update_slot_mem);
+
+                                MLM2::entry($shop_id,$slot->slot_id);
 
                             }
                             else

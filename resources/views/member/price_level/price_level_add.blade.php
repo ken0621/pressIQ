@@ -1,6 +1,6 @@
 <form class="global-submit form-horizontal" role="form" action="{{$action}}" method="post">
 	{{ csrf_field() }}
-	<input type="hidden" name="price_level_id" value="{{$price_level->price_level_id}}">
+	<input type="hidden" name="price_level_id" value="{{isset($price_level) ? $price_level->price_level_id : ''}}">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
 		<h4 class="modal-title"><i class="fa fa-table"></i> CREATE NEW PRICE LEVEL</h4>

@@ -211,6 +211,11 @@
                         <div class="col-md-8">
                             <input type="text" class="form-control number-input" id="item_price" value="{{isset($data['item_price']) ? $data['item_price'] : ''}}" name="item_price" required>
                         </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="sales_price_change" value="sales_price" > Change Sales Price
+                            </label>
+                        </div>
                     </div>
                 </div>         
                 <div class="col-md-12">

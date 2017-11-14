@@ -65,6 +65,9 @@
 						<li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
 							<a href="/members/network"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Network List</span></div></a>
 						</li>
+						<li class="{{ Request::segment(2) == "lead-list" ? "active" : "" }}">
+							<a href="/members/lead-list"><div class="nav-holder"><div class="icon brown-icon-heart"></div> <span>Lead List</span></div></a>
+						</li>
 						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>
@@ -75,9 +78,6 @@
 						</li>
 						@else
 						@endif
-{{-- 						<li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
-							<a href="/members/order"><div class="nav-holder"><div class="icon brown-icon-bag"></div> <span>Orders</span></div></a>
-						</li> --}}
 					</ul>
 				</div>
 			</div>

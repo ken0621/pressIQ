@@ -736,6 +736,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";
 
 
+
     // /* PAYROLL SUMMARY */
     // $code = "payroll-summary";
     // $nav[$page]['submenu'][$code]['label'] = "Payroll Summary";
@@ -746,7 +747,6 @@ function page_list()
     // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
     
-
 
 
 
@@ -851,6 +851,10 @@ function page_list()
     // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     // $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
+
+
+
+
     /* PAYROLL REPORTS */
     $segment = "submenu-payroll-reports";
     $nav[$page]['submenu'][$segment]['name']   = "Payroll Reports";
@@ -924,6 +928,22 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings']  = ['access_page'];
     $nav[$page]['submenu'][$code]['status']         = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer']      = "Gullermo Tabligan";
+
+    /* PROJECT */
+    $page = "project";  
+    $nav[$page]['name'] = "Project Management";
+    $nav[$page]['segment'] = $page;
+    $nav[$page]['icon'] = "heart";
+    $nav[$page]['type']     = "menu";
+
+    /* -- PROJECT => LIST  */
+    $code = "project-list";
+    $nav[$page]['submenu'][$code]['label'] = "Project List";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/project_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Guillermo Tabligan";
 
     /* PRODUCT */
     // $page = "product";  
@@ -1106,7 +1126,6 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
     
-
     /* VENDORS */
     $page = "vendor";  
     $nav[$page]['name'] = "Vendors";

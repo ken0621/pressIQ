@@ -163,14 +163,15 @@ class PayrollTimeSheet2Controller extends Member
 		
 		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
-		
+		$company_id 	= Tbl_payroll_employee_basic::where('payroll_employee_id',$employee_id)->value('payroll_employee_company_id');
+
 		if($check_approved)
 		{
 			Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->delete();
 		}
 		else
 		{
-			$time_keeping_approve_id = Tbl_payroll_time_keeping_approved::insertRecord($employee_id, $period_id, $compute_cutoff["cutoff_breakdown"], $compute_cutoff);
+			$time_keeping_approve_id = Tbl_payroll_time_keeping_approved::insertRecord($employee_id, $period_id, $company_id, $compute_cutoff["cutoff_breakdown"], $compute_cutoff);
 			Tbl_payroll_time_sheet::updateCompute($compute_cutoff["cutoff_input"]);
 			Tbl_payroll_time_keeping_approved_breakdown::insertBreakdown($time_keeping_approve_id, $compute_cutoff["cutoff_breakdown"]->_breakdown);
 			Tbl_payroll_time_keeping_approved_daily_breakdown::insertBreakdown($time_keeping_approve_id, $compute_cutoff["cutoff_input"]);
@@ -178,9 +179,8 @@ class PayrollTimeSheet2Controller extends Member
 		}
 		
 		//add payment in deduction
-		PayrollDeductionController::approve_deduction_payment($period_id,$employee_id,$payroll_period_id);
-		return json_encode(Request::input());	
-
+		PayrollDeductionController::approve_deduction_payment($period_id, $employee_id, $payroll_period_id);
+		return json_encode(Request::input());
 	}
 	
 	
@@ -1405,7 +1405,7 @@ class PayrollTimeSheet2Controller extends Member
 
 		$query->orderBy("payroll_employee_last_name");
 		$query->groupBy("tbl_payroll_employee_basic.payroll_employee_id");
-
+		
 		if($search != "")
 		{
 			$query->where("tbl_payroll_employee_basic.payroll_employee_display_name", "LIKE", "%" . $search . "%");

@@ -500,7 +500,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/* NO RECORDS FOUND */
 	Route::any('/no_records','Member\PayrollController@no_records');
-
+	
 
 
 	/* PAYROLL PROCESS START */

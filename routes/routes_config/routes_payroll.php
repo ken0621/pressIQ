@@ -117,10 +117,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_timesheet2/make_adjustment/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@make_adjustment');
 	Route::any('/company_timesheet2/delete_adjustment/{period_id}/{employee_id}/{adjustment_id}','Member\PayrollTimeSheet2Controller@delete_adjustment');	
 	Route::any('/company_timesheet_approve/approve_timesheet','Member\PayrollTimeSheet2Controller@approve_timesheets');
-	
 	Route::any('/company_timesheet2/{company_id}','Member\PayrollTimeSheet2Controller@index');
 	Route::any('/company_timesheet2/table/{company_id}','Member\PayrollTimeSheet2Controller@index_table');
 	Route::any('/company_timesheet2/{company_id}/{employee_id}','Member\PayrollTimeSheet2Controller@timesheet');
+	Route::any('/company_timesheet2_pdf/{company_id}/{employee_id}','Member\PayrollTimeSheet2Controller@timesheet_pdf');
 	Route::any('/company_timesheet_day_summary/info/{time_sheet_id}','Member\PayrollTimeSheet2Controller@day_summary_info');
 	Route::post('/company_timesheet_day_summary/change','Member\PayrollTimeSheet2Controller@day_summary_change');
 	Route::any('/company_timesheet_day_summary/{time_sheet_id}','Member\PayrollTimeSheet2Controller@day_summary');
@@ -131,6 +131,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 
 	Route::any('/employee_timesheet/timesheet/{id}/{period_id}','Member\PayrollTimeSheetController@timesheet');
+	Route::any('/employee_timesheet/timesheet_pdf/{id}/{period_id}','Member\PayrollTimeSheetController@timesheet_pdf');
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimeSheetController@json_process_time');
 	Route::any('/employee_timesheet/save_time_record','Member\PayrollTimeSheetController@save_time_record');
 	Route::any('/employee_timesheet/new_time_tr','Member\PayrollTimeSheetController@new_time_tr');

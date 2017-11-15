@@ -124,7 +124,8 @@ class Tbl_payroll_employee_basic extends Model
     public function scopeEmployeeShift($query, $employee_id)
     {
     	$query->join("tbl_payroll_shift_code", "tbl_payroll_shift_code.shift_code_id", "=", "tbl_payroll_employee_basic.shift_code_id")
-    	->where('payroll_employee_id',$employee_id);
+    		  ->where('payroll_employee_id',$employee_id);
+
     	return $query;
     }
 }

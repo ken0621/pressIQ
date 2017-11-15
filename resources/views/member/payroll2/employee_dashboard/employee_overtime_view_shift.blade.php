@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h5 class="modal-title">{{ $employee }} - {{ $page }}</h5>
+    <h5 class="modal-title">{{ $page }}</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
     <span aria-hidden="true">&times;</span>
     </button>
@@ -26,10 +26,28 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>
-						</td>
-					</tr>
+					@foreach($shift as $day)
+						<tr>
+							<td>
+								{{ $day->shift_day }}
+							</td>
+							<td>
+								{{ $day->shift_target_hours }}
+							</td>
+						</tr>
+					@endforeach
+
+					@foreach($shift_time as $time)
+						<tr>
+							<td>
+								{{ $time->shift_work_start }}
+							</td>
+							<td>
+								{{ $time->shift_work_end }}
+							</td>
+						</tr>
+					@endforeach
+
 				</tbody>
 			</table>
 		</div>

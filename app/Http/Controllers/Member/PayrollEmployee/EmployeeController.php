@@ -14,7 +14,10 @@ use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_rdo;
 use App\Models\Tbl_payroll_overtime_rate;
 use App\Models\Tbl_payroll_shift_code;
+use App\Models\Tbl_payroll_shift_time;
+use App\Models\Tbl_payroll_shift_day;
 use App\Globals\Payroll2;
+use App\Globals\Payroll;
 use App\Globals\Utilities;
 use Illuminate\Http\Request;
 use Redirect;
@@ -134,24 +137,74 @@ class EmployeeController extends PayrollMember
 	}
 	public function employee_overtime_application()
 	{
-		$data['page']	= 'Over Time Application';
+		$data['page']	= 'Overtime Application';
 
-		//$data['ot'] = Tbl_payroll_employee_basic::EmployeeOvertime()->first();
 		//dd($data['ot']);
 		return view('member.payroll2.employee_dashboard.employee_overtime_application',$data);
 	}
 	public function employee_overtime_view_shift()
 	{
-		$data['page']	= 'Over Time Application';
+		$data['page']	= 'Shift Schedule';
 
-		//$data['shift'] = Tbl_payroll_employee_basic::EmployeeShift('payroll_employee_id',$this->employee_info->payroll_employee_id)->first();
 
-		//dd($data['shift']);
-		/*$shift_code = Tbl_payroll_employee_basic::where("shift_code_id", $this->employee_info->shift_code_id)->first();
-		$shift_name = Tbl_payroll_shift_code::where("shift_code_id", $shift_code->shift_code_id)->first();
-		dd($shift_code->shift_code_name);
-		$shift_code_id = Tbl_payroll_shift_code::insertGetId($insert_code);*/
-		//dd($shift_code_id);
+		$data['employee'] = Tbl_payroll_employee_basic::EmployeeShift($this->employee_info->payroll_employee_id)->first();
+
+		$data['shift'] = tbl_payroll_shift_day::where("shift_code_id", $data['employee']->shift_code_id)->get();
+
+		//dd($data['shift_day'][0]->shift_day_id);
+
+		foreach ($data['shift'] as $value) 
+		{	
+			$data['shift_day_id'] = $value->shift_day_id;
+			dd($data['shift_day_id'])
+
+			$data['shift_time'] = tbl_payroll_shift_time::where('shift_day_id', $data['shift_day_id'])->get();
+
+
+			//dd($data['shift']);
+
+		}	
+
+
+
+
+
+
+
+		//$data['shift_time'] = tbl_payroll_shift_time::get();
+		//dd($data['shift_time']);
+
+		//$data['shift_time'] = tbl_payroll_shift_time::ShiftTime("tbl_payroll_shift_day.shift_day_id", $data['shift_day']->shift_day_id)->first();
+
+		
+		//dd($data['shift_time']);
+
+		/*foreach($day->time_shift as $x => $timeshift)
+		{
+
+		}*/
+
+		/*$data['shift_day'] = tbl_payroll_shift_day::where("shift_code_id", $data['employee']->shift_code_id)->get();
+		dd($data['shift_day'][1]->shift_day_id);
+
+		$data['shift_time'] = Tbl_payroll_shift_time::where("shift_day_id", $data['employee']->shift_code_id)->get();
+		dd($data['shift_time'][0]->shift_work_start);
+
+		/*$data['shift_time'] = Tbl_payroll_shift_time::where("shift_day_id",$data['shift_day']->shift_day_id)->first();
+
+		dd($data['shift_time']);
+
+		foreach ($data['shift_time'] as $key => $value) 
+		{
+			dd($value);
+		}
+*/
+
+		//dd($data['shift_time'][0]);
+
+
+
+		//$data['shift'] = Tbl_payroll_shift_time::ShiftTime()->where("tbl_payroll_shift_day.shift_code_id", $data['shift']->shift_code_id)->get();
 		return view('member.payroll2.employee_dashboard.employee_overtime_view_shift',$data);
 	}
 	public function authorized_access_leave()

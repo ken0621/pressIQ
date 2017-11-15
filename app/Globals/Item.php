@@ -10,6 +10,7 @@ use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_sir_item;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_item_discount;
+use App\Models\Tbl_item_price_history;
 use App\Models\Tbl_audit_trail;
 use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Globals\Item;
@@ -392,7 +393,11 @@ class Item
 
         return $return;
     }
-    
+    public static function get_per_warehouse($shop_id, $warehouse_id, $archive = 0)
+    {
+        $query = Tbl_item::inventorylog()->where("tbl_item.shop_id", $shop_id)->where('record_warehouse_id',$warehouse_id)->where("tbl_item.archived", $archive)->type()->groupBy('tbl_item.item_id')->get();
+        return $query;
+    }
     public static function get_all_item()
     {
         return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();
@@ -534,10 +539,20 @@ class Item
         return $item;
     }
     /* READ DATA END */
-    public static function list_price_level($shop_id)
+    public static function list_price_level($shop_id, $type = null, $search_keyword = null)
     {
-        $_price_level = Tbl_price_level::where("shop_id", $shop_id)->get();
-        return $_price_level;
+        $_price_level = Tbl_price_level::where("shop_id", $shop_id);
+
+        if($type)
+        {
+            $_price_level->where('price_level_type',$type);
+        }
+        if($search_keyword)
+        {
+            $_price_level->where('price_level_name','LIKE','%'.$search_keyword.'%');
+        }
+
+        return $_price_level->paginate(5);
     }
     public static function insert_price_level($shop_id, $price_level_name, $price_level_type, $fixed_percentage_mode, $fixed_percentage_source, $fixed_percentage_value)
     {  
@@ -554,6 +569,25 @@ class Item
         }
 
         return Tbl_price_level::insertGetId($insert_price_level);
+    }
+    public static function update_price_level($shop_id, $price_level_id, $price_level_name, $price_level_type, $fixed_percentage_mode, $fixed_percentage_source, $fixed_percentage_value)
+    {  
+        $update_price_level["price_level_name"] = $price_level_name;
+        $update_price_level["price_level_type"] = $price_level_type;
+        
+        if($price_level_type == "fixed-percentage")
+        {
+
+            $update_price_level["fixed_percentage_mode"] = $fixed_percentage_mode;
+            $update_price_level["fixed_percentage_source"] = $fixed_percentage_source;
+            $update_price_level["fixed_percentage_value"] = $fixed_percentage_value;
+        }
+        Tbl_price_level::where('price_level_id',$price_level_id)->update($update_price_level);
+        return $price_level_id;
+    }
+    public static function delete_price_level_item($price_level_id)
+    {  
+        Tbl_price_level_item::where('price_level_id',$price_level_id)->delete();
     }
     public static function insert_price_level_item($shop_id, $price_level_id, $_item)
     {  
@@ -575,6 +609,20 @@ class Item
             Tbl_price_level_item::insert($_insert);
         }
     }
+    public static function price_level_info($shop_id, $price_level_id)
+    {
+        return Tbl_price_level::where('shop_id',$shop_id)->where('price_level_id',$price_level_id)->first();
+    }
+    public static function price_level_info_item($price_level_id)
+    {
+        $data = Tbl_price_level_item::where('price_level_id',$price_level_id)->get();
+        $return = null;
+        foreach ($data as $key => $value) 
+        {
+            $return[$value->item_id] = $value->custom_price;
+        }
+        return $return;
+    }
     public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
@@ -594,46 +642,97 @@ class Item
     public static function get_item_price_history($item_id, $show_all = false)
     {
         $item_data = Item::get_item_details($item_id);
-        $return = "";
-        $text = "";
-        $trail = Tbl_audit_trail::where("source","item")->where("source_id",$item_id)->orderBy("created_at","DESC")->get();
-       
-        $last = null;
-        foreach ($trail as $key => $value)
+
+        $item_history = Tbl_item_price_history::where('item_id',$item_id)->orderBy('updated_at','DESC')->get();
+
+        $text = null;
+        $return = null; 
+        if($show_all == true)
         {
-            $item_qty = 1;
-            if(Purchasing_inventory_system::check())
+            $return .= "<table class='table table-bordered'>";
+            $return .= "<thead>";
+            $return .= "<tr>";
+            $return .= "<th>Date</th>";
+            $return .= "<th>Type</th>";
+            $return .= "<th>Amount</th>";
+            $return .= "<th></th>";
+            $return .= "</tr>";
+            $return .= "</thead><tbody>";
+        }
+        foreach ($item_history as $key => $value) 
+        {
+            if($show_all == true)
             {
-                $item_qty = UnitMeasurement::um_qty($item_data->item_measurement_id, 1);
+                $return .= "<tr><td>".date('m/d/Y',strtotime($value->updated_at))."</td>";
+                $return .= "<td>".strtoupper(str_replace('_', ' ', $value->price_type))."</td>";
+                $return .= "<td>".currency("PHP ",$value->price)."</td>";
+                $return .= "<td><a class='click_delete' href='javascript:' history-id='".$value->item_price_history_id."'>Delete</td></tr>";
             }
-            $old[$key] = unserialize($value->old_data);
-            $amount = 0;
-            if($old)
+            if($show_all == false)
             {
-                if($item_data->item_price != $old[$key]["item_price"] && $old[$key]["item_price"] != 0)
-                {
-                    $len = strlen($return);
+                $return .= date('m/d/Y',strtotime($value->updated_at))." - ".currency("PHP ",$value->price)."<br>";
+            }
+        }
+
+        if($show_all == false)
+        {
+            $len = strlen($return);
+            if($len > 25)
+            {
+                $text = (substr($return, 0, 30)."...<a class='popup' size='md' link='/member/item/view_item_history/".$item_id."'>View</a>");
+            }
+        }
+        if($show_all == true)
+        {   
+            $return .= "</tbody></table>";
+            $text = $return;
+        }
+
+        // $return = "";
+        // $text = "";
+        // $trail = Tbl_audit_trail::where("source","item")->where("source_id",$item_id)->orderBy("created_at","DESC")->get();
+       
+
+
+        // $last = null;
+        // foreach ($trail as $key => $value)
+        // {
+        //     $item_qty = 1;
+        //     if(Purchasing_inventory_system::check())
+        //     {
+        //         $item_qty = UnitMeasurement::um_qty($item_data->item_measurement_id, 1);
+        //     }
+        //     $old[$key] = unserialize($value->old_data);
+        //     $amount = 0;
+        //     if($old)
+        //     {
+        //         if($item_data->item_price != $old[$key]["item_price"] && $old[$key]["item_price"] != 0)
+        //         {
+        //             $len = strlen($return);
                     
-                    $amount = $old[$key]["item_price"] * $item_qty;
-                    if ($last != $amount) 
-                    {
-                        $return .= date('m/d/Y',strtotime($value->created_at))." - ".currency("PHP ",$amount)."<br>";
+        //             $amount = $old[$key]["item_price"] * $item_qty;
+        //             if ($last != $amount) 
+        //             {
+        //                 $return .= date('m/d/Y',strtotime($value->created_at))." - ".currency("PHP ",$amount)."<br>";
 
-                        $text = $return;
-                        if($show_all == false)
-                        {
-                            if($len > 25)
-                            {
-                                $text = (substr($text, 0, 30)."...<a class='popup' size='sm' link='/member/item/view_item_history/".$item_id."'>View</a>");
-                            }
-                        }
-                    }
-                }
+        //                 if($show_all == true)
+        //                 {
+        //                     $return .= " - <a class='click_delete' href='javascript:' history-id='".$value->audit_trail_id."'>&nbsp;&nbsp;Delete</a><br>";
+        //                 }
 
-                $last = $amount;
-            }
-        }  
-
+        //                 $text = $return;
+        //                 if($show_all == false)
+        //                 {
+        //                     if($len > 25)
+        //                     {
+        //                         $text = (substr($text, 0, 30)."...<a class='popup' size='sm' link='/member/item/view_item_history/".$item_id."'>View</a>");
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //         $last = $amount;
+        //     }
+        // }  
         return $text;
     }
     public static function get_item_details($item_id = 0)
@@ -1527,12 +1626,12 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
-    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0, $item_id = 0)
+    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0, $item_id = 0, $get_to = 0, $take = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
-        $query = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
+        $query = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('item_type_id','!=',5)->groupBy('record_log_id')->orderBy('record_log_id');
         
         if($search_keyword)
         {
@@ -1567,6 +1666,15 @@ class Item
         {
             $data = $query->get();            
         }
+
+        if($take != 0)
+        {
+            if($get_to > 1)
+            {
+                $query->skip($get_to);
+            }
+            $data = $query->take($take + 1)->get();
+        }
         return $data;
     }
     public static function get_first_assembled_kit($shop_id)
@@ -1577,7 +1685,7 @@ class Item
     {
         return Tbl_item::where('shop_id',$shop_id)->where('item_type_id',5)->where("archived", 0)->pluck('item_id', 'item_name');
     }
-    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0)
+    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0, $get_to = 0, $take = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1618,7 +1726,6 @@ class Item
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused');
         }  
 
-
         if($paginate != 0)
         {
             $data = $query->paginate($paginate);
@@ -1626,6 +1733,14 @@ class Item
         else
         {
             $data = $query->get();            
+        }
+       if($take != 0)
+        {
+            if($get_to > 1)
+            {
+                $query->skip($get_to);
+            }
+            $data = $query->take($take + 1)->get();
         }
         return $data; 
     } 
@@ -1742,5 +1857,39 @@ class Item
         }
 
         return $data;
+    }
+    public static function change_price($item_id, $type, $price)
+    {
+        $data = Tbl_item::where('item_id',$item_id)->first();
+        if($data)
+        {
+            $con = true;
+            if($type == 'sales_price')
+            {
+                if($data->item_price == $price)
+                {
+                    $con = false;
+                }
+                $price = $data->item_price;
+            }
+            if($type == 'cost_price')
+            {
+                if($data->item_cost == $price)
+                {
+                    $con = false;
+                }
+                $price = $data->item_cost;
+            }
+            if($con == true)
+            {
+                $insert['item_id'] = $item_id;
+                $insert['shop_id'] = Item::getShopId();
+                $insert['price_type'] = $type;
+                $insert['price'] = $price;
+                $insert['updated_at'] = Carbon::now();
+
+                Tbl_item_price_history::insert($insert);                
+            }
+        }
     }
 }

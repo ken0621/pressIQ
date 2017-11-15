@@ -10,6 +10,7 @@ use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_unit_measurement;
+use App\Models\Tbl_item_price_history;
 use App\Models\Tbl_product_vendor;
 use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_unit_measurement_multi;
@@ -19,6 +20,7 @@ use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_um;
 use App\Models\Tbl_item_merchant_request;
 use App\Models\Tbl_user;
+use App\Models\Tbl_audit_trail;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -31,6 +33,7 @@ use App\Globals\Vendor;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Utilities;
+use App\Globals\Pdf_global;
 
 use Crypt;
 use Redirect;
@@ -202,6 +205,8 @@ class ItemController extends Member
 			$data["_item_archived"]	   = $item_archived->paginate(30);
 			$data["_item_pending"]	   = $item_pending->get();
 
+			$data['pis'] = Purchasing_inventory_system::check();
+
 		    return view('member.item.list',$data);
         }
         else
@@ -217,10 +222,17 @@ class ItemController extends Member
 	}
 	public function view_item_history($item_id)
 	{
+
 		$data["text"] = Item::get_item_price_history($item_id, true);
 
-
 		return view("member.item.pis.item_price_history",$data);
+	}
+	public function delete_item_history()
+	{
+		$history_id = Request::input("history_id");
+		Tbl_item_price_history::where("item_price_history_id",$history_id)->delete();
+		echo json_encode('success');
+
 	}
 	public function load_item()
     {
@@ -1180,6 +1192,9 @@ class ItemController extends Member
 		$item_cost 						= str_replace(',','',Request::input("item_cost"));
 		$item_reorder_point 			= Request::input("item_reorder_point");
 		$item_quantity 					= Request::input("item_quantity");
+
+		$sales_price_change				= Request::input('sales_price_change');
+		$cost_price_change				= Request::input('cost_price_change');
 		
 		if ($old["item_measurement_id"]) 
 		{
@@ -1196,6 +1211,15 @@ class ItemController extends Member
 		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->value("account_id");
 		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->value("account_id");
 		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->value("account_id");
+
+		if($sales_price_change)
+		{
+			Item::change_price($item_id,$sales_price_change,$item_price);
+		}
+		if($cost_price_change)
+		{
+			Item::change_price($item_id,$cost_price_change,$item_cost);
+		}
 
 		if($item_type == "inventory")
 		{			
@@ -2069,5 +2093,41 @@ class ItemController extends Member
 	public function merchant_decline_request_post($id)
 	{
 
+	}
+	public function print_new_item()
+	{
+		$data['owner'] = $this->user_info;
+		$data['_new_item'] = Tbl_audit_trail::user()->where('audit_shop_id',Item::getShopId())->where('remarks','Added')->where('source','item')
+									 ->whereBetween('tbl_audit_trail.created_at',[date('Y-m-d h:i:s',strtotime(Carbon::now())),date('Y-m-d h:i:s',strtotime(Carbon::now()->addDays(1)))])
+									 ->leftjoin('tbl_item','item_id','=','source_id')
+									 ->leftjoin('tbl_category','type_id','=','item_category_id')
+									 ->leftjoin('tbl_item_type','tbl_item_type.item_type_id','=','tbl_item.item_type_id')
+									 ->get();
+		foreach ($data['_new_item'] as $key => $value) 
+		{
+			$data["_new_item"][$key]->conversion = UnitMeasurement::um_convertion($value->item_id);
+			$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
+			$data["_new_item"][$key]->inventory_count_um_view = 0;
+			$data["_new_item"][$key]->item_whole_price = 0;
+			$data["_new_item"][$key]->um_whole = "";
+			if($um)
+			{
+				$data["_new_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+				
+				$data["_new_item"][$key]->item_whole_price = $um->unit_qty * $value->item_price;
+				$data["_new_item"][$key]->um_whole = $um->multi_abbrev;
+			}
+			if($value->item_type_id == 4)
+			{
+				$data["_new_item"][$key]->item_price = Item::get_item_bundle_price($value->item_id);
+			}
+			if($value->bundle_group == 1)
+			{
+				$data["_new_item"][$key]->item_type_name = "Group";
+			}
+		}
+
+        $pdf = view('member.item.pis.print_new_item', $data);
+        return Pdf_global::show_pdf($pdf);
 	}
 }

@@ -15,7 +15,7 @@
 	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-bg.png');">
 	                    <div class="btn btn-text">
 	                        <div class="text-header1">Become A Member Now!</div>
-	                        <div class="text-header2">Opportunity awaits you. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aenean commodo ligula eget dolor.</div>
+	                        <div class="text-header2">Opportunity awaits you. Purchase now and enjoy the perks of being a Philtech VIP.</div>
 	                    </div>
 	                    <div class="btn-container">
 	                        <!-- <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">BUY A KIT</button></a> -->
@@ -24,7 +24,7 @@
 	                        <a href="javascript:" onclick="action_load_link_to_modal('/members/enter-code')" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
 	                    </div>
 	                </div>
-	            </div>
+	            </div>	
 	        </div>
 	    </div>
 	</div>
@@ -61,6 +61,12 @@
 						</div>
 					</div>
 				</div>
+				@if($travel_and_tours)
+				<div class="btn-container">
+					<a class="btn btn-lblue" style="width: 100%; margin-bottom: 5px" role="button" href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a>
+				</div>
+				@endif
+
 			</div>
 
 			<div class="col-md-6">

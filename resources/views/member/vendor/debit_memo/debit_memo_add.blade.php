@@ -113,10 +113,11 @@
                                                         <input type="hidden" class="dbline_taxable" name="dbline_taxable[]" value="" >
                                                         <input type="checkbox" name="" class="taxable-check" >
                                                     </td> -->
-
+                                                    @if(isset($serial)) 
                                                     <td>
                                                         <textarea class="txt-serial-number" name="serial_number[]">{{$dbline->serial_number}}</textarea>
                                                     </td>
+                                                    @endif
                                                     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                 </tr>
                                             @endforeach

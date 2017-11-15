@@ -1,0 +1,96 @@
+var project_list = new project_list();
+var table_data = {};
+var x = null;
+
+function project_list()
+{
+	init();
+
+	this.action_load_table = function() 
+	{
+		action_load_table();
+	}
+
+	function init()
+	{
+		$(document).ready(function()
+		{
+			document_ready();
+		});
+	}
+	function document_ready()
+	{
+		action_load_table();
+		event_change_tab();
+		event_archive();
+		event_search();
+	}
+	function event_search()
+	{
+		$(".search-project").keyup(function(e)
+		{
+			action_table_loader();
+			clearTimeout(x);
+
+			x = setTimeout(function()
+			{
+				action_load_table();
+			}, 1000)
+		});
+	}
+	function event_archive()
+	{
+		$("body").on("click", ".action-archive",function(e)
+		{
+			var project_id = $(e.currentTarget).closest("tr").attr("project_id");
+
+			if(confirm("Are you sure you want to archive"))
+			{
+				action_table_loader();
+
+				$.ajax(
+				{
+					url:"/member/project/project_list/archive",
+					data:{ 'project_id':project_id },
+					type:"get",
+					success: function(data)
+					{
+						action_load_table();
+					}
+				});
+			}
+		});
+	}
+	function event_change_tab()
+	{
+		$(".change-tab").click(function(e)
+		{
+			$(".change-tab").removeClass("active");
+			$(e.currentTarget).addClass("active");
+			action_load_table();
+		});
+	}
+	function action_table_loader()
+	{
+		$(".load-table-here").html('<div style="padding: 100px; text-align: center; font-size: 20px;"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>');
+	}
+	function action_load_table()
+	{
+		table_data.activetab = $(".change-tab.active").attr("mode");
+		table_data.search = $(".search-project").val();
+
+		action_table_loader();
+
+		$.ajax(
+		{
+			url:"/member/project/project_list/table",
+			data: table_data,
+			type:"get",
+			success: function(data)
+			{
+				$(".load-table-here").html(data);
+			}
+
+		});
+	}
+}

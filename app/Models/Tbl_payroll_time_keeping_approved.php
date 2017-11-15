@@ -13,9 +13,10 @@ class Tbl_payroll_time_keeping_approved extends Model
     /* REFERECE COLUMN NAME */
 	// [PRIMARY KEY] 	payroll_tax_status_id
 	// [VARCHAR] 		payroll_tax_status_name
-	public function scopeInsertRecord($query, $employee_id, $payroll_period_company_id, $cutoff_breakdown, $compute_cutoff)
+	public function scopeInsertRecord($query, $employee_id, $payroll_period_company_id ,$company_id , $cutoff_breakdown, $compute_cutoff)
 	{
 		$insert["employee_id"] = $employee_id;
+		$insert["employee_company_id"] = $company_id;
 		$insert["payroll_period_company_id"] = $payroll_period_company_id;
 		$insert["net_basic_pay"] = $cutoff_breakdown->basic_pay_total;
 		$insert["gross_pay"] =  $cutoff_breakdown->gross_pay_total;
@@ -32,8 +33,8 @@ class Tbl_payroll_time_keeping_approved extends Model
 		$insert["pagibig_ee"] = $cutoff_breakdown->pagibig_contribution["ee"];
 		$insert["pagibig_er"] = $cutoff_breakdown->pagibig_contribution["er"];
 		$insert["tax_ee"] = $cutoff_breakdown->tax_total;
-		$insert["cutoff_input"] = serialize($compute_cutoff["cutoff_input"]);
-		$insert["cutoff_compute"] =	serialize($compute_cutoff["cutoff_compute"]);
+		$insert["cutoff_input"] 	= serialize($compute_cutoff["cutoff_input"]);
+		$insert["cutoff_compute"] 	= serialize($compute_cutoff["cutoff_compute"]);
 		$insert["cutoff_breakdown"] = serialize($compute_cutoff["cutoff_breakdown"]);
 		
 		$time_keeping_approve_id = Tbl_payroll_time_keeping_approved::insertGetId($insert);
@@ -75,7 +76,13 @@ class Tbl_payroll_time_keeping_approved extends Model
 	//james
 	public function scopeBasicfilter($query,$payroll_employee_company_id)
 	{
+		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
+		$query->where('tbl_payroll_employee_basic.payroll_employee_company_id',$payroll_employee_company_id);
+		return $query;
+	}
 
+	public function scopeBasicIdfilter($query,$payroll_employee_company_id)
+	{
 		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
 		$query->where('tbl_payroll_employee_basic.payroll_employee_company_id',$payroll_employee_company_id);
 		return $query;

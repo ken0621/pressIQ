@@ -448,10 +448,16 @@ class MLM2
 
 		return $_direct;
 	}
-	public static function customer_rewards($shop_id, $customer_id, $limit = 10)
+	public static function customer_rewards($shop_id, $customer_id, $limit = 10,$sort_by = "0")
 	{
 		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
 		$query = Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id);
+
+		if($sort_by != "0")
+		{
+			$sort_by = strtoupper($sort_by);
+			$query = $query->where("wallet_log_plan",$sort_by);
+		}
 
 		$query->where(function($q) use ($_slot)
 		{
@@ -471,7 +477,7 @@ class MLM2
 		if($limit == 0)
 		{
 			$_reward = $query->orderBy("wallet_log_id", "desc")->paginate(10);
-			$store_pagine["notification_paginate"] = $_reward->render();
+			$store_pagine["notification_paginate"] = $_reward->appends(request()->except('page'))->render();
 			session($store_pagine);
 		}
 		else
@@ -493,16 +499,20 @@ class MLM2
 
 		return $_reward;
 	}
-	public static function customer_rewards_points($shop_id, $customer_id, $limit = 10)
+	public static function customer_rewards_points($shop_id, $customer_id, $limit = 10,$sort_by = "0")
 	{
 		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
 		$query = Tbl_mlm_slot_points_log::slot()->where("shop_id", $shop_id)->where("slot_owner",$customer_id);
 		
+		if($sort_by != "0")
+		{
+			$query = $query->where("points_log_type",$sort_by);
+		}
 
 		if($limit == 0)
 		{
 			$_reward = $query->orderBy("points_log_id", "desc")->paginate(10);
-			$store_pagine["notification_paginate"] = $_reward->render();
+			$store_pagine["notification_paginate_points"] = $_reward->appends(request()->except('page'))->render();
 			session($store_pagine);
 		}
 		else
@@ -528,8 +538,15 @@ class MLM2
 	public static function customer_rewards_points_contructor($reward)
 	{
 		$from_slot = Tbl_mlm_slot::where("slot_id",$reward->points_log_Sponsor)->first();
-		$message   = "Your slot no ".$reward->slot_no." earned ".$reward->log_amount." ".$reward->points_log_type." from slot no ".$from_slot->slot_no;
-		return $message;
+		if($from_slot)
+		{
+			$message   = "Your slot no ".$reward->slot_no." earned ".$reward->log_amount." ".$reward->points_log_type." from slot no ".$from_slot->slot_no;
+			return $message;
+		}
+		else
+		{
+			return "---";
+		}
 	}
 	public static function customer_total_payout($customer_id)
 	{
@@ -1203,6 +1220,10 @@ class MLM2
             // $c = Mlm_gc::slot_gc($slot_id);
 
             Mlm_compute::set_slot_nick_name_2($slot_info);
+            if($slot_info->slot_date_computed == "0000-00-00 00:00:00")
+            {
+            	$update_slot["slot_date_computed"] = Carbon::now();
+            }
 
             $update_slot["distributed"] = 1;
             Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->update($update_slot);

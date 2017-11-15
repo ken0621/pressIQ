@@ -266,6 +266,7 @@ Route::any('/member/item/data', 'Member\ItemController@data'); /* ERWIN */
 Route::get('/member/item/mulitple_price_modal/{id}', 'Member\ItemController@get_multiple_price_modal'); /* B */
 Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_multiple_price_modal'); /* B */
 Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_item_new_price'); /* B */
+Route::get('/member/item/print_new_item','Member\ItemController@print_new_item');
 
 Route::get('/member/item/approve_request/{id}', 'Member\ItemController@merchant_approve_request'); /* ERWIN */
 Route::post('/member/item/approve_request_post/approve', 'Member\ItemController@merchant_approve_request_post'); /* ERWIN */
@@ -281,6 +282,8 @@ Route::any('/member/pis_counter','Member\PurchasingInventorySystemController@pis
 Route::any('/member/item/view_item_history/{id}','Member\ItemController@view_item_history');
 Route::any('/member/item/add_submit_pis','Member\ItemController@add_submit_pis');
 Route::any('/member/item/edit_submit_pis','Member\ItemController@edit_submit_pis');
+Route::any('/member/item/delete_item_history','Member\ItemController@delete_item_history');
+
 
 Route::any('/member/enable_disable_pis/{pass}/{action}','Member\PurchasingInventorySystemController@enable_pis');
 /*END ITEM FOR PIS*/
@@ -338,8 +341,10 @@ Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController
 
 /* PRICE LEVEL */
 Route::any('/member/item/price_level','Member\ItemPriceLevelController@index');
+Route::any('/member/item/price_level/table','Member\ItemPriceLevelController@index_table');
 Route::get('/member/item/price_level/add','Member\ItemPriceLevelController@add');
 Route::post('/member/item/price_level/add','Member\ItemPriceLevelController@add_submit');
+Route::post('/member/item/price_level/edit_submit','Member\ItemPriceLevelController@edit_submit');
 
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
@@ -1178,6 +1183,8 @@ Route::any("/kim/compute_flexi_time","Core\Times2@compute_flexi_time");
 include_once('routes_config/routes_payroll.php');
 /* PAYROLL END */
 
+include_once('routes_config/routes_project.php');
+
 /* PAYMENT FACILITIES */
 include_once('routes_config/routes_payment.php');
 include_once('routes_config/routes_reward.php');
@@ -1190,8 +1197,6 @@ include_once('routes_config/routes_members_area.php');
 
 /*PAYROLL EMPLOYEE*/
 include_once('routes_config/routes_payroll_employee.php');
-
-
 Route::get('/ref/{id}', 'Shop\LeadController@ref');
 Route::get('/{id}', 'Shop\LeadController@ref');
 

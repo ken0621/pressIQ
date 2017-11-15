@@ -236,7 +236,7 @@ class Transaction
                         $pincode = explode('@', $value_cart->pincode);
                         $mlm_pin = $pincode[0];
                         $mlm_activation = $pincode[1];
-                        Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, $consume);
+                        Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, $consume,'Consume using Transaction list '.$transaction_list_id,'unused');
                     }
                 }
                 else

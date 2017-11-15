@@ -191,9 +191,8 @@ class Payroll_BioImportController extends Member
 			{
 				$check_employee = null;
 
-
 				$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_biometric_number", $employee_number)->where("shop_id", Self::shop_id())->first();
-				
+
 				$value['employee_number'] = $employee_number;
 				$value['date']			  = $date;
 
@@ -517,7 +516,9 @@ class Payroll_BioImportController extends Member
 	/* GET EMPLOYEE ID START */
 	public function getemployeeId($payroll_employee_number = '', $value = 'payroll_employee_id')
 	{
+
 		$employee_info = Tbl_payroll_employee_basic::where('payroll_employee_biometric_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->value($value);
+
 
 		
 		if (!$employee_info) 
@@ -1015,9 +1016,9 @@ class Payroll_BioImportController extends Member
 			    			/*if($count_record == 0)
 			    			{*/
 			    			array_push($insert_time_record, $insert_record);
-
 			    			/*}*/
 		    			}		    			
+
 		    		}
 	    		}
 	    	}

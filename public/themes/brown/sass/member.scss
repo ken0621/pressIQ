@@ -66,12 +66,12 @@
 		}
 		.sidebar
 		{
-			background-color: #301e10;
+			background-color: #301F19;
 			width: 300px;
 			position: absolute;
 			left: 0;
 			top: 0;
-			/* border-right: 5px solid #301e10; */
+			/* border-right: 5px solid #301F19; */
 			height: 100%;
 			z-index: 10;
 			transition: 0.3s all ease;
@@ -162,7 +162,7 @@
 								font-size: 13px;
 								font-weight: 400;
 								letter-spacing: 0.5px;
-								border-bottom: 1px solid #301e10;
+								border-bottom: 1px solid #301F19;
 								padding-left: 25px;
 								width: 300px;
 								transition: 0.3s all ease;
@@ -189,10 +189,10 @@
 							{
 								.nav-holder
 								{
-									background-color: #3c2716;
+									background-color: #402A21;
 									color: #fff;
 									text-decoration: none;
-									border-color: #3c2716;
+									border-color: #402A21;
 									
 									.icon {
 										color: #fff;
@@ -213,10 +213,10 @@
 							{
 								> .nav-holder
 								{
-									background-color: #3c2716;
+									background-color: #402A21;
 									color: #fff;
 									text-decoration: none;
-									border-color: #3c2716;
+									border-color: #402A21;
 									.icon {
 										color: #fff;
 									}
@@ -247,7 +247,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #301e10;
+										background-color: #301F19;
 									}
 								}
 							}
@@ -265,7 +265,7 @@
 			&.small
 			{
 				width: 80px;
-				background-color: #502d19;
+				background-color: #402A21;
 				.shadow
 				{
 					display: none;

@@ -151,6 +151,12 @@ class ShopMemberController extends Shop
 
         return Self::load_view_for_members('member.dashboard', $data);
     }
+    public function getKit()
+    {
+        $data["item_kit"] = Item::get_all_assembled_kit_v2($this->shop_info->shop_id);
+
+        return view("member.kit_modal", $data);
+    }
     public function getDirect()
     {
         $data["_direct"] = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id);

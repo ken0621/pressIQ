@@ -258,7 +258,7 @@ class MLM_CodeControllerV2 extends Member
         $data['_item_product_code'] = Item::get_all_item_record_log('', $request->status, 0, $request->item_id, $request->print_range_to, $take);
         if($request->t == 'membership_code')
         {
-            $data['_item_product_code'] = Item::get_assembled_kit(0,$request->membership_kit,$request->membership,'',$request->status, 0, $request->print_range_to, $take);
+            $data['_item_product_code'] = Item::get_assembled_kit(0,$request->membership_kit,$request->membership,'',$request->status, 0, $request->print_range_to, $take, $request->print_range_from);
         }
         $pdf = view('member.mlm_code_v2.print_code_pdf', $data);
         return Pdf_global::show_pdf($pdf);

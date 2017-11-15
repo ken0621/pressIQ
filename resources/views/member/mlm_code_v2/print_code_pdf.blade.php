@@ -53,11 +53,11 @@
 		
 		<!-- {!! $ctr == 3 ? "</tr><tr>" : '' !!}	 -->
 		<tr>
-			<td  width="100%" height=400px" class="text-center" style="border:1px #000 solid;">
+			<td  width="100%" height=400px" class="text-center" >
 
 				<div style="float:left;width: 50%;padding-left:5px">
 				</div>
-				<div style="float:right;width: 50%;padding-right:5px"><div class="text-center">CTRL NUM -{{ $item_code->record_log_id }}</div></div></div>
+				<div style="float:right;width: 50%;padding-right:5px"><div class="text-center">{{str_pad($item_code->ctrl_number, 9, '0', STR_PAD_LEFT)}}</div></div></div>
 				<br>
 				<br>
 				<br>

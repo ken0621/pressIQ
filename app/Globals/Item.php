@@ -1685,7 +1685,7 @@ class Item
     {
         return Tbl_item::where('shop_id',$shop_id)->where('item_type_id',5)->where("archived", 0)->pluck('item_id', 'item_name');
     }
-    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0, $get_to = 0, $take = 0)
+    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0, $get_to = 0, $take = 0, $get_from = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1732,16 +1732,27 @@ class Item
         }
         else
         {
-            $data = $query->get();            
-        }
-       if($take != 0)
-        {
-            if($get_to > 1)
+            if($shop_id == 5)
             {
-                $query->skip($get_to);
+                $data = $query->whereBetween('ctrl_number',[$get_to, $get_from])->get();
             }
-            $data = $query->take($take + 1)->get();
+            else
+            {
+                if($take != 0)
+                {
+                    if($get_to > 1)
+                    {
+                        $query->skip($get_to);
+                    }
+                    $data = $query->take($take + 1)->get();
+                }
+                else
+                {
+                    $data = $query->get(); 
+                }        
+            }           
         }
+
         return $data; 
     } 
 

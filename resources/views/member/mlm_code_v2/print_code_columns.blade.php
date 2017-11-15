@@ -42,7 +42,7 @@
                         <div class="col-md-12">
                             <label for="">Type of Forms</label>
                             <select name="barcode_type" class="form-control">
-                                @if($shop_id == 1)
+                                @if($shop_id == 5)
                                 <option value="register_form">Register Form</option>
                                 @else
                                 <option value="pin_code">Activation Code & Pin</option>

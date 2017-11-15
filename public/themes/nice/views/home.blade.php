@@ -6,7 +6,7 @@
         <div class="container">
             <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption.png"></div>
             <div class="scroll-down-container">
-                <span class="animated fadeInDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>                
+                <span class="animated fadeInDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>           
             </div>
         </div>
     </div>

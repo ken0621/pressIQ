@@ -451,6 +451,7 @@ class Warehouse2
                 $insert[$ctr_qty]['record_log_date_updated']   = Carbon::now();
                 $insert[$ctr_qty]['mlm_pin']                   = Warehouse2::get_mlm_pin($shop_id);
                 $insert[$ctr_qty]['mlm_activation']            = Item::get_mlm_activation($shop_id);
+                $insert[$ctr_qty]['ctrl_number']               = Warehouse2::get_control_number($warehouse_id, $shop_id, Item::get_item_type($item_id));
 
                 if($serial_qty > 0)
                 {
@@ -482,6 +483,24 @@ class Warehouse2
         }       
 
         return $return;
+    }
+    public static function get_control_number($warehouse_id, $shop_id, $item_type = null)
+    {
+        $return = 0;
+        if($shop_id == 5) // SPECIAL FOR BROWN 
+        {
+            if($item_type == 5) // MEMBERSHIP KIT TYPE ITEM
+            {
+                $check = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->value('main_warehouse');
+                if($check == 3)
+                {
+                    $count = Tbl_warehouse_inventory_record_log::item()->where('record_warehouse_id',$warehouse_id)->where('item_type_id',$item_type)->count();
+                    $return = $count + 1;
+                }
+            }
+        }
+        return $return;
+
     }
     public static function update_inventory_count($warehouse_id, $slip_id, $item_id, $quantity)
     {
@@ -983,5 +1002,23 @@ class Warehouse2
         }
 
         return $_item;       
+    }
+    public static function get_codes($warehouse_id, $start_date, $end_date, $transaction_type = '')
+    {
+        $data = Tbl_warehouse_inventory_record_log::item()->slotinfo()->customerinfo()->where("item_in_use",'used')->where("record_inventory_status",1)->where('record_warehouse_id',$warehouse_id)->whereBetween('record_log_date_updated',[$start_date, $end_date]);
+
+        if($transaction_type != '')
+        {
+            if($transaction_type == 'online')
+            {
+                $data = $data->where('record_consume_ref_name', 'transaction_list');
+            }
+            if($transaction_type == 'offline')
+            {
+                $data = $data->where('record_consume_ref_name','!=', 'transaction_list');
+            }
+        }
+
+        return $data->get();
     }
 }

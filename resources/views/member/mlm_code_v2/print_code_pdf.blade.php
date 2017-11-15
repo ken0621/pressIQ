@@ -1,4 +1,4 @@
-<table width="100%" style="margin-right: 5px;" class="{{$ctr = 0}}">
+<table width="100%" style="margin-right: 15px;" class="{{$ctr = 0}}">
 	@if(count($_item_product_code) > 0)
 	<tr >
 	@foreach($_item_product_code as $item_code)
@@ -23,7 +23,7 @@
 		</td>
 		{!! $ctr == 4 ? "</tr><tr>" : '' !!}
 		@else
-		<td {!! $ctr == 3 ? $ctr = 0 : '' !!} width="25%" style="border:1px #000 solid;padding:10px ;padding-top: 20px;" class="{{$ctr++}} text-small">
+		<!-- <td {!! $ctr == 3 ? $ctr = 0 : '' !!} width="25%" style="border:1px #000 solid;padding:10px ;padding-top: 20px;" class="{{$ctr++}} text-small">
 			<div class="text-center"><strong>How to Register</strong></div><br>
 			<div>
 				1. Visit our website <a href="javascript:">{{$_SERVER['SERVER_NAME']}}</a>
@@ -49,15 +49,37 @@
 			</div>
 			<br>
 			<div class="text-center"><small>{{'REFNUM-'.$item_code->record_log_id}}</small></div>
-		</td>	
+		</td> -->
 		
-		{!! $ctr == 3 ? "</tr><tr>" : '' !!}	
+		<!-- {!! $ctr == 3 ? "</tr><tr>" : '' !!}	 -->
+		<tr>
+			<td  width="100%" height=400px" class="text-center" >
+
+				<div style="float:left;width: 50%;padding-left:5px">
+				</div>
+				<div style="float:right;width: 50%;padding-right:5px"><div class="text-center">{{str_pad($item_code->ctrl_number, 9, '0', STR_PAD_LEFT)}}</div></div></div>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<div class="text-center">
+					<div> CODE </div>
+					<div><strong>{{$item_code->mlm_pin}}</strong><div>
+					<div>ACTIVATION<div>
+					<div><strong>{{$item_code->mlm_activation}}</strong> <div>
+				</div>
+				<br>
+				<br>
+			</td>
+		</tr>
 		@endif
 	@endforeach
 	</tr>
 	@else
 	<tr><td style="text-align: center">NO CODES</td></tr>
 	@endif
+	
 </table>
 <style type="text/css">
 	tr { page-break-inside: avoid; }

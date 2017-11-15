@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblProjectType extends Migration
+class UpdateTblMembershipPointsRepurchaseCashbackPointsVip extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateTblProjectType extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_project_type', function (Blueprint $table)
+        Schema::table('tbl_membership_points', function (Blueprint $table) 
         {
-            $table->increments("project_type_id");
-            $table->string("project_type_name");
+           $table->double('membership_points_repurchase_cashback_points')->default(0);
         });
     }
 

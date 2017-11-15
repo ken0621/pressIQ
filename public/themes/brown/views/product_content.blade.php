@@ -35,7 +35,7 @@
 										</div>
 										<div class="col-md-5">
 											<div class="product-info">
-												<div class="desc">{{ $product_variant["evariant_description"] }}</div>
+												<div class="desc">{!! $product_variant["evariant_description"] !!}</div>
 												<div class="spec">
 													{{-- <div class="spec-title">Specification</div>
 													<div class="spec-list">

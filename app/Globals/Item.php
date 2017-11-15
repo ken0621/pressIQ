@@ -1689,6 +1689,10 @@ class Item
     {
         return Tbl_item::where('shop_id',$shop_id)->where('item_type_id',5)->where("archived", 0)->pluck('item_id', 'item_name');
     }
+    public static function get_all_assembled_kit_v2($shop_id)
+    {
+        return Tbl_item::where('shop_id',$shop_id)->where('item_type_id',5)->where("archived", 0)->get();
+    } 
     public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0, $get_to = 0, $take = 0, $get_from = 0)
     {
         $shop_id = Item::getShopId();

@@ -26,15 +26,15 @@
             <button class="btn btn-custom-green-white margin-right-10 btn-pdf pull-right" onclick="report_file('excel')"><i class="fa fa-file-excel-o"></i>&nbsp;Export to Excel</button>
         </div>
         <div  style="margin-top: 15px" class="form-group">
-            <div class="col-md-2" style="padding: 5px">
-                <select class="form-control" name="warehouse_id">
+            <div class="col-md-2 " style="padding: 5px">
+                <select class="form-control input-sm" name="warehouse_id">
                     @foreach($_warehouse as $warehouse)
                     <option value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
                     @endforeach
                 </select>
             </div>
             <div class="col-md-4" style="padding: 5px">
-                <select class="form-control" name="transaction_type">
+                <select class="form-control input-sm" name="transaction_type">
                     <option value="">All Type of Transaction</option>
                     <option value="online">Online Transaction</option>
                     <option value="offline">Offline Transaction</option>

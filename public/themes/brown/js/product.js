@@ -22,15 +22,17 @@ function product()
         $("#slider-range").slider(
         {
             range: true,
-            min: 0,
-            max: 500,
-            values: [75, 300],
+            min: min_price,
+            max: max_price,
+            values: [current_min, current_max],
             slide: function(event, ui)
             {
-                $("#amount").text("$" + ui.values[0] + " - $" + ui.values[1]);
+                $("#amount").text("₱ " + ui.values[0] + " - ₱ " + ui.values[1]);
+                $("#min-holder").val(ui.values[0]);
+                $("#max-holder").val(ui.values[1]);
             }
         });
-        $("#amount").text("$" + $("#slider-range").slider("values", 0) +
-            " - $" + $("#slider-range").slider("values", 1));
+
+        $("#amount").text("₱ " + $("#slider-range").slider("values", 0) + " - ₱ " + $("#slider-range").slider("values", 1));
     }
 }

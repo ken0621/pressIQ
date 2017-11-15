@@ -3926,7 +3926,8 @@ class Payroll2
 		$payroll_company_id = $date_query->payroll_company_id;
 
 		/* SSS COMPUTATION */
-		$sss_description = "";	
+		$sss_description = "";
+
 		if($sss_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
 		{
 			$sss_contribution = Payroll::sss_contribution($shop_id, $sss_declared);
@@ -3954,6 +3955,7 @@ class Payroll2
 				/* CHECK EXCEED MONTH */
 				$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
 				$total_cutoff = 0;
+
 				foreach($_cutoff as $cutoff)
 				{
 					$total_cutoff += $cutoff->sss_ee;
@@ -4013,19 +4015,50 @@ class Payroll2
 				}
 				else
 				{
-					$last_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					// $last_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					
+					// if($last_cutoff)
+					// {
+					// 	$sss_description .= "<br> Using previous cutoff as reference, previous SSS Salary used is " . payroll_currency($last_cutoff->sss_salary) . " (" . payroll_currency($last_cutoff->sss_ee) . ")";
+					// 	$sss_reference_amount = $sss_reference_amount + $last_cutoff->sss_salary;
+					// 	$sss_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($sss_reference_amount);
+					// 	$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+					// 	$sss_description .= "<br> New SSS Bracket falls to " . payroll_currency($sss_contribution["ee"]);
+					// 	$sss_description .= "<br> NEW BRACKET (" . payroll_currency($sss_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->sss_ee) . ")";
+					// 	$sss_contribution["ee"] = $sss_contribution["ee"] - $last_cutoff->sss_ee;
+					// 	$sss_contribution["er"] = $sss_contribution["er"] - $last_cutoff->sss_er;
+					// 	$sss_contribution["ec"] = $sss_contribution["ec"] - $last_cutoff->sss_ec;
+					// 	$last_cutoff->sss_salary;
+					// }
+
+					$last_cutoff 			= Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					$_period_approved 		= Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+					
+					$total_previous_cutoff_sss_ee  	= 0;
+					$total_previous_cutoff_sss_er	= 0;
+					$total_previous_cutoff_sss_ec	= 0;
+
+					foreach ($_period_approved as $key => $period_approved) 
+					{
+						$total_previous_cutoff_sss_ee += $period_approved->sss_ee;
+						$total_previous_cutoff_sss_er += $period_approved->sss_er;
+						$total_previous_cutoff_sss_ec += $period_approved->sss_ec;
+					}
 					
 					if($last_cutoff)
 					{
-						$sss_description .= "<br> Using previous cutoff as reference, previous SSS Salary used is " . payroll_currency($last_cutoff->sss_salary) . " (" . payroll_currency($last_cutoff->sss_ee) . ")";
 						$sss_reference_amount = $sss_reference_amount + $last_cutoff->sss_salary;
-						$sss_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($sss_reference_amount);
 						$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+						
+						$sss_description .= "<br> Using previous cutoff as reference, all previous SSS Salary used is " . payroll_currency($last_cutoff->sss_salary) . " (" . payroll_currency($total_previous_cutoff_sss_ee) . ")";
+						$sss_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($sss_reference_amount);
 						$sss_description .= "<br> New SSS Bracket falls to " . payroll_currency($sss_contribution["ee"]);
-						$sss_description .= "<br> NEW BRACKET (" . payroll_currency($sss_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->sss_ee) . ")";
-						$sss_contribution["ee"] = $sss_contribution["ee"] - $last_cutoff->sss_ee;
-						$sss_contribution["er"] = $sss_contribution["er"] - $last_cutoff->sss_er;
-						$sss_contribution["ec"] = $sss_contribution["ec"] - $last_cutoff->sss_ec;
+						$sss_description .= "<br> NEW BRACKET (" . payroll_currency($sss_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($total_previous_cutoff_sss_ee) . ")";
+						
+						$sss_contribution["ee"] = $sss_contribution["ee"] - $total_previous_cutoff_sss_ee;
+						$sss_contribution["er"] = $sss_contribution["er"] - $total_previous_cutoff_sss_er;
+						$sss_contribution["ec"] = $sss_contribution["ec"] - $total_previous_cutoff_sss_ec;
+
 						$last_cutoff->sss_salary;
 					}
 					else
@@ -4033,7 +4066,6 @@ class Payroll2
 						dd("Warning! This is not the 1st period of the month and the system can't find reference period for the month of $period_month($period_year)");
 					}
 				}
-				
 			}
 			else
 			{
@@ -4076,7 +4108,6 @@ class Payroll2
 		/* PHILHEALTH COMPUTATION */	
 		if($philhealth_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
 		{
-			
 			$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_declared);
 			$philhealth_description = payroll_currency($philhealth_declared) . " declared PHILHEALTH Salary";
 
@@ -5609,9 +5640,9 @@ class Payroll2
 		$data['total_gross_pay']	= $cutoff_compute->cutoff_basic;
 		$data['obj']				= array();
 		
-		
 		if(isset($cutoff_compute->_breakdown_addition_summary))
 		{
+
 			foreach($cutoff_compute->_breakdown_addition_summary as $key => $amount)
 			{
 				$temp['name']	= $key;

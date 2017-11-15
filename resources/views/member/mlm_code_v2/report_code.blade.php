@@ -12,8 +12,8 @@
     </div>
 </div>
 
-@include('member.reports.filter.filter1');
-@include('member.reports.output.output_report_code');
+@include('member.reports.filter.filter1')
+@include('member.reports.output.output_report_code')
 
 @endsection
 @section('script')

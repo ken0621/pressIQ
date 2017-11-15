@@ -5804,9 +5804,9 @@ class Payroll2
 		$data['total_gross_pay']	= $cutoff_compute->cutoff_basic;
 		$data['obj']				= array();
 		
-		
 		if(isset($cutoff_compute->_breakdown_addition_summary))
 		{
+
 			foreach($cutoff_compute->_breakdown_addition_summary as $key => $amount)
 			{
 				$temp['name']	= $key;

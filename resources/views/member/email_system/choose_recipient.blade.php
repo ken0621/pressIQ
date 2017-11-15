@@ -74,7 +74,7 @@
 </div>
   <div class="form-group row">
     <div class="">
-      <button type="button" class="form-control inputsubmit btn btn-primary" id="inputsubmit" name="search">Search</button>
+      <button type="button" class="form-control inputsubmit btn btn-primary search" id="inputsubmit" name="search">Search</button>
     </div>
   </div>
 </form>
@@ -82,24 +82,36 @@
 <br>
 <br>
 <br>
-<div class="row recipient_container col-md-6">
-<div class="recipient_container2">
+</div>
+
+<!-- Modal -->
+  <div class="modal fade" id="RecipientModal" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="row recipient_container col-md-6">
+          <div class="recipient_container2">
             <h3 class="text-center recipient_text">Recipient Lists</h3>
             <input type="hidden"  class="_token1" id="_token1" value="{{csrf_token()}}"/>
             <div class="well box" style="max-height: ;: 300px;overflow: auto;">
               <button type="button" class="check-all btn btn-primary" onClick="selectall(this)">Check All</button>
-                <ul class="list-group check_list">
+                <ul class="list-group check_list" id="vc">
                   @foreach($_recipient_list as $recipient_list)
-                  <li  class="list-group-item tocheck" name="foo"> 
+                  <li  class="list-group-item tocheck" name="foo" value="{{$recipient_list->research_email_address}}"> 
                     <input type = "checkbox" class="to_check" id="check">
                     {{$recipient_list->company_name}}{{$recipient_list->name}}{{$recipient_list->position}}{{$recipient_list->industry_type}}
-                    <input type="hidden" class = "email_add" value="{{$recipient_list->research_email_address}}">
                 </li>
                   @endforeach
                 </ul>
             </div>
         </div>
     </div>
+       
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
   
 <script src="/email_assets/js/create_press_release.js"></script>
@@ -134,12 +146,39 @@
 </script>
 <script>
     $('.con').click(function(event) {
-    var recipient_value = $('.input_chose_recipient').val();
-    var recipient_link = "/member/page/press_release_email/view_send_email_press_release?sent_email="+recipient_value;
+    // var recipient_value = $('.input_chose_recipient').val();
+    // var recipient_link = "/member/page/press_release_email/view_send_email_press_release?sent_email="+recipient_value;
 
-    window.location.href = recipient_link;
+    // window.location.href = recipient_link;
 
-    
+   var myArr = [];
+
+                         $('#vc li').each(function (i) {
+
+                           if($(this).children().is(":checked") == true){
+                              myArr.push($(this).attr('value'));
+                           
+                           }else{
+                            
+                           }
+
+                        })
+                         
+
+                      $.ajax({
+                     type: "GET",
+                     url: "/member/page/press_release_email/view_send_email_press_release/sent_email",
+                     data: {myArr:myArr},
+                     dataType:"json",
+                     success: function(data){
+                                               // var recipient_value = myArr;
+                         var recipient_link = "/member/page/press_release_email/view_send_email_press_release";
+                          window.location.href = recipient_link;
+                     }  
+                });
+
+
+
     });
 </script>
 

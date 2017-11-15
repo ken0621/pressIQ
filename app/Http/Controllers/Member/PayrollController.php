@@ -1371,7 +1371,6 @@ class PayrollController extends Member
 
           $data['access_salary_detail'] = $access = Utilities::checkAccess('payroll-timekeeping','salary_detail');
 
-          
           foreach($_journal_tag as $tag)
           {
                $count_tag = Tbl_payroll_journal_tag_employee::checkdata($id, $tag['payroll_journal_tag_id'])->count(); 

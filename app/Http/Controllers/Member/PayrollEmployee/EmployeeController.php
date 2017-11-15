@@ -11,6 +11,7 @@ use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
+use App\Models\Tbl_payroll_rdo;
 use App\Globals\Payroll2;
 use App\Globals\Utilities;
 use Illuminate\Http\Request;
@@ -42,10 +43,37 @@ class EmployeeController extends PayrollMember
 	public function company_details()
 	{
 		$data['page']	= 'Company Details';
-		$data["company"] = Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
-		
+
+		$shop_id = $this->employee_info->shop_id;
+
+		$data['company'] = Tbl_payroll_company::companydetails($shop_id)->where('payroll_parent_company_id',0)->first();
+		//dd($data['company']);
+
 		return view('member.payroll2.employee_dashboard.company_details',$data);
 	}
+
+	/*public function company_list()
+     {
+          // $data['_page'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_company::selcompany(Self::shop_id(),1)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
+
+          $_active = array();
+          $data['_parent'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('payroll_company_name')->paginate($this->paginate_count);
+
+          foreach($data['_parent'] as $parent)
+          {
+               $temp['company'] = $parent;
+               $temp['branch'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id', $parent->payroll_company_id)->orderBy('payroll_company_name')->get();
+               array_push($_active, $temp);
+          }
+
+          // $data['_active'] = Payroll::company_heirarchy(Self::shop_id(), $this->paginate_count);
+          $data['_active'] = $_active;
+          // dd($data['_active']);
+          return view('member.payroll.companylist', $data);
+     }*/
+
+
 	public function employee_profile()
 	{
 		$data['page']	= 'Profile';
@@ -230,7 +258,7 @@ class EmployeeController extends PayrollMember
         return Pdf_global::show_pdf($pdf);
         
     }
-public function employee_timesheet($payroll_period_id)
+	public function employee_timesheet($payroll_period_id)
 	{
 		$data["page"] 	= "Employee Timesheet";
 
@@ -241,36 +269,47 @@ public function employee_timesheet($payroll_period_id)
 
 		$data["_timesheet"] 			= Payroll2::timesheet_info($data["period_record"], $this->employee_info->payroll_employee_id);
 
-		//dd($data["_timesheet"]);
 		$data["access_salary_rates"]	= $access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
 
 		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);
 
-		//$data["time_keeping_approved"] 	= $data['period_record'] ? true : false;
-		
-		
-		$employee_contract 		= Tbl_payroll_employee_contract::EmployeePayrollGroup($this->employee_info->payroll_employee_id)->get();
+		$employee_contract = Tbl_payroll_employee_contract::EmployeePayrollGroup($this->employee_info->payroll_employee_id)->first();
 
-		dd($employee_contract);
-		$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["period_record"]->payroll_period_start);
-		$employee_contract = Tbl_payroll_employee_contract::Employeecontract($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
-
-
-
-		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
-
-		$data["period_id"] = $period_id;
-		
-		if($data["compute_type"] == "Flat Rate")
+		if ($employee_contract->payroll_group_code == 'Flate Rate')
 		{
 			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
 		}
 		else
 		{
 			return view('member.payroll2.employee_dashboard.employee_timesheet', $data);
-
 		}
-		return view('member.payroll2.employee_dashboard.employee_timesheet', $data);
+	}   
+	public function employee_timesheet_pdf($payroll_period_id)
+	{
+		$data["page"] 	= "Employee Timesheet";
+
+		$data['period_record'] 			= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
+
+		$data["period_record_start"]		= date('M d, Y',strtotime($data["period_record"]->payroll_period_start));
+		$data["period_record_end"]			= date('M d, Y',strtotime($data["period_record"]->payroll_period_end));
+
+		$data["_timesheet"] 			= Payroll2::timesheet_info($data["period_record"], $this->employee_info->payroll_employee_id);
+
+		$data["access_salary_rates"]	= $access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+
+		$data["period_record"]->cutoff_breakdown =  unserialize($data["period_record"]->cutoff_breakdown);
+
+		$employee_contract = Tbl_payroll_employee_contract::EmployeePayrollGroup($this->employee_info->payroll_employee_id)->first();
+
+		if ($employee_contract->payroll_group_code == 'Flate Rate')
+		{
+			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
+		}
+		else
+		{
+			$pdf = view('member.payroll2.employee_dashboard.employee_timesheet_pdf', $data);
+	        return Pdf_global::show_pdf($pdf);
+	    }
 	}   
 	public function sample()
 	{

@@ -90,20 +90,35 @@
 					@if(count($_point_plan) > 0)
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						@foreach($_point_plan as $plan)
-						<div class="holder">
-							<div class="color"></div>
 							@if($plan->label == "Repurchase Cashback")
-								<div class="name"><span>VIP Cashback</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+<!-- 								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>VIP Cashback</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+								</div> -->
 							@else
-								<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+								</div>
 							@endif
-						</div>
 						@endforeach
 					</div>
 					@else
 						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
 					@endif
 				</div>
+
+				@if(isset($points->{ "display_repurchase_cashback"}))
+				<div class="title"><i class="align-icon"></i> VIP Cashback</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+								<div class="name">{{ $points->{ "display_repurchase_cashback"} }}</div>
+						</div>
+					</div>
+				</div>
+				@endif
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">

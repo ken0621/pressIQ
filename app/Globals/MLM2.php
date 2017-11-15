@@ -379,9 +379,13 @@ class MLM2
 
 				$return["_wallet"]->total_points += $slot_points->points_log_points;
 
-				if($wallet_plan == "repurchase_cashback" && $slot_points->points_log_converted == 1)
+				if($wallet_plan == "repurchase_cashback")
 				{
-					$return["_points"]->$wallet_plan -= $slot_points->points_log_points;
+					if($slot_points->points_log_converted == 1)
+					{
+						$return["_points"]->$wallet_plan -= $slot_points->points_log_points;
+					}
+					
 					$return["_wallet"]->total_points -= $slot_points->points_log_points;
 				}
 			}
@@ -407,7 +411,7 @@ class MLM2
 		$return["_slot"] = $_slot;
 		$return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
 		$return["_wallet"]->display_total_points = number_format($return["_wallet"]->total_points, 2) . " POINT(S)";;
-
+		
 		return $return;
 	}
 	public static function complan_to_label($shop_id, $string)

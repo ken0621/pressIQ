@@ -61,6 +61,29 @@ $bold: 700;
      text-transform: uppercase;
      padding-left: 20px;
 
+     .shop-container
+     {
+        padding: 6px 0px;
+        padding-left: 10px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+     }
+
+     .subshop-container
+     {
+        display: none;
+        
+        ul
+        {
+            li
+            {
+                padding-top: 3px;
+                padding-bottom: 3px;
+            }
+        }
+     }
+
 
      li
      {

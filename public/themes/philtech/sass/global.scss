@@ -1598,15 +1598,19 @@ footer
 {
 	@media screen and (max-width: 768px)
 	{
-		margin-top: 55px;
+		margin-top: 139px;
+	}
+	@media screen and (max-width: 425px)
+	{
+		margin-top: 122px;
 	}
 	@media screen and (max-width: 375px)
 	{
-		margin-top: 45px;
+		margin-top: 113px;
 	}
 	@media screen and (max-width: 320px)
 	{
-		margin-top: 41px;
+		margin-top: 106px;
 	}		
 }
 .member-mob-margin
@@ -1623,4 +1627,20 @@ footer
 	{
 		margin-top: 20px;
 	}
+}
+.mobile-search
+{
+	display: none;
+	padding: 15px;
+	background-color: #006cc5;
+
+	@media screen and (max-width: 768px)
+	{
+		display: block !important;
+	}
+}
+.mob-search 
+{
+	border: none;
+	background-color: #ff8500;
 }

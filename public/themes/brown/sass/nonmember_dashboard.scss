@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Rubik', sans-serif;
 $light: 300;
 $regular: 400;
@@ -5,15 +7,6 @@ $medium: 500;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
-
-
-@mixin transition($transition)
-{
-	  -webkit-transition: all $transition ease-in-out;
-	  -moz-transition: all $transition ease-in-out;
-	  -o-transition: all $transition ease-in-out;
-	  transition: all $transition ease-in-out;
-}
 
 /* Dashboard Top */
 .dashboard-top
@@ -74,9 +67,9 @@ $text-dark: #272c2f;
 			.btn-buy-a-kit
 			{
 				color: #fff;
-				background-color: #693d28;
+				background-color: #402A21;
 				padding: 12px 40px 12px 40px;
-				border: 2px solid #693d28;
+				border: 2px solid #402A21;
 				border-radius: 2px;
 			}
 			
@@ -92,10 +85,10 @@ $text-dark: #272c2f;
 
 			.btn-enter-a-code
 			{
-				color: #693d28;
+				color: #402A21;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
-				border: 2px solid #693d28;
+				border: 2px solid #402A21;
 				border-radius: 2px;
 				//margin-bottom: 65px;
 			}
@@ -281,7 +274,7 @@ $text-dark: #272c2f;
 	background-color: #fff;
 	.modal-header
 	{
-		background-color: #422311;
+		background-color: #402A21;
 		border-top-left-radius: 3px;
 		border-top-right-radius: 3px;
 
@@ -453,7 +446,7 @@ $text-dark: #272c2f;
 		background-color: #fff;
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #402A21;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -622,7 +615,7 @@ $text-dark: #272c2f;
 		
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #402A21;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -688,9 +681,9 @@ $text-dark: #272c2f;
 				.btn-proceed-1
 				{
 					color: #fff;
-					background-color: #693d28;
+					background-color: #402A21;
 					padding: 12px 40px;
-					border: 2px solid #693d28;
+					border: 2px solid #402A21;
 					border-radius: 2px;
 				}
 			}
@@ -715,7 +708,7 @@ $text-dark: #272c2f;
 		background-color: #fff;
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #402A21;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -785,7 +778,7 @@ $text-dark: #272c2f;
 				width: 100%;
 				font-size: 16px;
 				border: none;
-				border: 1px solid #693d28;
+				border: 1px solid #402A21;
 				margin: 5px 0px;
 				margin-bottom: 15px;
 				padding: 5px;
@@ -805,7 +798,7 @@ $text-dark: #272c2f;
 				.btn-proceed-2
 				{
 					color: #fff;
-					background-color: #693d28;
+					background-color: #402A21;
 					padding: 10px 40px;
 					border-radius: 2px;
 					border: 0px !important;
@@ -826,8 +819,6 @@ $text-dark: #272c2f;
 		}
 	}
 }
-
-
 
 /* Failed */
 .popup-failed
@@ -887,6 +878,131 @@ $text-dark: #272c2f;
 					padding: 12px 55px;
 					border: 2px solid #ed5639;
 					border-radius: 2px;
+				}
+			}
+		}
+	}
+}
+
+/* brown-popup-kit */
+.brown-popup-kit
+{
+	.modal-content
+	{
+		.modal-header
+		{
+			background-color: #402A21;
+			color: #fff;
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+
+			.close
+			{
+				color: #fff;
+			}
+		}
+
+		.modal-body
+		{
+			padding: 0 0 0 5px;
+			background-color: #EDEDED;
+
+			.kit-parent-holder
+			{
+				&:hover{
+					cursor: pointer;
+
+					.product-hover
+					{
+						opacity: 1 !important;
+						@include transition(0.3s);
+					}
+				}
+				.kit-holder
+				{
+					padding: 10px;
+					background-color: #FFF;
+
+					.product-title
+					{
+						text-align: center;
+						height: 50px;
+					}
+
+					.product-img-container
+					{
+						position: relative;
+						text-align: center;
+						padding-bottom: 25px;
+
+						img
+						{
+							width: 100%;
+						}
+
+						.product-hover
+						{
+							opacity: 0;
+							position: absolute;
+							top: 0;
+							background-color: #fff;
+							width: 100%;
+							height: 100%;
+							z-index: 99;
+							padding: 0 20px 20px 20px;
+							text-align: center;
+
+							.kit-small
+							{
+								width: 60%;
+								margin: auto;
+								img 
+								{
+									width: 100%;
+								}
+							}
+
+							.detail-container
+							{
+								
+							}
+
+						}
+					}
+
+					.btn-custom
+					{
+						width: 100%;
+						background-color: #ed573a;
+						color: #fff;
+						text-align: center;
+						padding: 10px 0;
+						font-weight: $medium;
+					}
+
+					.product-price
+					{
+						text-align: center;
+						font-size: 18px;
+						font-weight: $medium;
+						color: #ed573a;
+						padding-bottom: 10px;
+					}
+				}
+
+				&:first-child
+				{
+					padding: 5px 2.5px 5px 0px;
+				}
+
+				&:nth-child(2)
+				{
+					padding: 5px 2.5px 5px 2.5px;
+				}
+
+				&:last-child
+				{
+					padding: 5px 5px 5px 2.5px;
 				}
 			}
 		}

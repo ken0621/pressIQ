@@ -19,6 +19,7 @@
 			    		<tr>
 			    			<th>Monthly</th>
 			    			<th>Daily</th>
+			    			<th>Hourly</th>
 			    			<th>COLA (Daily)</th>
 			    			<th>COLA (Monthly)</th>
 			    			<th>Mimimum Wage</th>
@@ -37,6 +38,9 @@
 			    		</td>
 			    		<td class="text-right">
 			    			{{number_format($active->payroll_employee_salary_daily, 2)}}
+			    		</td>
+			    		<td class="text-right">
+			    			{{number_format($active->payroll_employee_salary_hourly, 2)}}
 			    		</td>
 			    		<td class="text-right">
 			    			{{number_format($active->payroll_employee_salary_cola, 2)}}

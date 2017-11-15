@@ -1,7 +1,7 @@
 <div class="report-container">
 	<div class="panel panel-default panel-block panel-title-block panel-report load-data">
 		<div class="panel-heading load-content">
-			@include('member.reports.report_header');
+			@include('member.reports.report_header')
 			<div class="table-reponsive">
 				@if(count($codes) > 0)
 				<table class="table table-condensed collaptable">

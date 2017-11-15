@@ -284,8 +284,9 @@ class MLM_CodeControllerV2 extends Member
         $period         = $request->report_period ? $request->report_period : 'all';
         $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
         $data["from"] = Report::checkDatePeriod($period,$date)['start_date'];
-        $data["to"] = Report::checkDatePeriod($period,$date)['end_date'];   
-        $data['codes'] = Warehouse2::get_codes(Warehouse2::get_current_warehouse($this->user_info->shop_id), $data["from"], $data["to"]);
+        $data["to"] = Report::checkDatePeriod($period,$date)['end_date'];
+        $data["_warehouse"] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
+        $data['codes'] = Warehouse2::get_codes($request->warehouse_id, $data["from"], $data["to"], $request->transaction_type);
         $report_type    = $request->report_type;
         $load_view      = $request->load_view;
         if($report_type && !$load_view)

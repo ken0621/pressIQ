@@ -1003,8 +1003,22 @@ class Warehouse2
 
         return $_item;       
     }
-    public static function get_codes($warehouse_id, $start_date, $end_date)
+    public static function get_codes($warehouse_id, $start_date, $end_date, $transaction_type = '')
     {
-        return Tbl_warehouse_inventory_record_log::item()->slotinfo()->customerinfo()->where("item_in_use",'used')->where("record_inventory_status",1)->where('record_warehouse_id',$warehouse_id)->whereBetween('record_log_date_updated',[$start_date, $end_date])->get();
+        $data = Tbl_warehouse_inventory_record_log::item()->slotinfo()->customerinfo()->where("item_in_use",'used')->where("record_inventory_status",1)->where('record_warehouse_id',$warehouse_id)->whereBetween('record_log_date_updated',[$start_date, $end_date]);
+
+        if($transaction_type != '')
+        {
+            if($transaction_type == 'online')
+            {
+                $data = $data->where('record_consume_ref_name', 'transaction_list');
+            }
+            if($transaction_type == 'offline')
+            {
+                $data = $data->where('record_consume_ref_name','!=', 'transaction_list');
+            }
+        }
+
+        return $data->get();
     }
 }

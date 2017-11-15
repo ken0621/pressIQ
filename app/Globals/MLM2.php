@@ -21,12 +21,14 @@ use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
 use App\Globals\Mlm_compute;
+use App\Globals\Warehouse2;
 
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 use Validator;
 use stdClass;
 use DB;
+use session;
 
 class MLM2
 {
@@ -689,19 +691,32 @@ class MLM2
 	public static function use_membership_code($shop_id, $pin, $activation, $slot_id_created, $remarks = null, $consume = array())
 	{
 		$update["mlm_slot_id_created"] 		= $slot_id_created;
+		$update["record_log_date_updated"]	= Carbon::now();
 		$update["item_in_use"] 				= "used";
 		$update["record_inventory_status"]	= 1;
-		
-		if(count($consume) > 0)
-		{
-			$update["record_consume_ref_name"] 	= $consume['name'];
-			$update["record_consume_ref_id"]	= $consume['id'];
-		}
 
 		if($remarks)
 		{
 			$initial_record 					= Tbl_warehouse_inventory_record_log::codes($shop_id, $pin, $activation)->first();
 			$update["record_item_remarks"]	 	= $initial_record->record_item_remarks . "\r\n" . $remarks;
+
+			if($initial_record->record_warehouse_id != Warehouse2::get_main_warehouse($shop_id))
+			{
+				$consume['name'] = 'offline_transaction';
+				$consume['id'] = $slot_id_created;
+			}
+			if(!session('online_transaction'))
+			{
+				$consume['name'] = 'offline_transaction';
+				$consume['id'] = $slot_id_created;
+			}
+            Warehouse2::insert_item_history($initial_record->record_log_id);
+		}
+		
+		if(count($consume) > 0)
+		{
+			$update["record_consume_ref_name"] 	= $consume['name'];
+			$update["record_consume_ref_id"]	= $consume['id'];
 		}
 
 		Tbl_warehouse_inventory_record_log::codes($shop_id, $pin, $activation)->update($update);

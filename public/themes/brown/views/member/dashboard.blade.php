@@ -59,7 +59,7 @@
 		                    </div>
 		                    <div class="btn-container">
 		                        <!-- <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br> -->
-		                        <button class="btn-buy-a-kit" data-toggle="modal" data-target="#popup-brown-kit">Enroll Now</button><br>
+		                        <button class="btn-buy-a-kit popup" link="/members/kit" size="lg">Enroll Now</button><br>
 		                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
 		                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 		                    </div>
@@ -80,98 +80,6 @@
 					<p class="wow fadeInRight"><i class="fa fa-circle" aria-hidden="true"></i>Agila Rewards Ready</p>
 				</div>
 			</div>
-
-			<!-- BROWN POPUP KIT -->
-			<div class="brown-popup-kit">
-				<div class="modal fade" id="popup-brown-kit" role="dialog">
-				  <div class="modal-dialog modal-lg">
-				    <!-- Modal content-->
-				    <div class="modal-content">
-				      <div class="modal-header">
-				        <button type="button" class="close" data-dismiss="modal">&times;</button>
-				        <h4 class="modal-title">BROWN&PROUD KITS</h4>
-				      </div>
-				      <div class="modal-body">
-				        <div class="row-no-padding clearfix">
-				        	<div class="col-md-4">
-								<div class="kit-parent-holder">
-									<div class="kit-holder match-height">
-										<div class="product-title">Kit-A Lorem ipsum dolor sit amet.</div>
-										<div class="product-img-container">
-											<div class="product-hover">
-												<div class="kit-small">
-													<img src="/themes/{{ $shop_theme }}/img/kit-sample-a.jpg">
-												</div>
-												<div class="detail-container">
-													<p>
-														Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore tempora dolore incidunt culpa magni distinctio nisi iusto dolorem ea, provident eligendi aspernatur ut numquam minus praesentium recusandae rerum non nulla.
-													</p>
-												</div>
-											</div>
-											<img src="/themes/{{ $shop_theme }}/img/kit-sample-a.jpg">
-										</div>
-										<div class="product-price">P 9,900.00</div>
-										<button class="btn btn-custom">ENROLL NOW</button>
-									</div>
-								</div>
-				        	</div>
-				        	<div class="col-md-4">
-				        		<div class="kit-parent-holder">
-				        			<div class="kit-holder match-height">
-				        				<div class="product-title">Kit-B Lorem ipsum dolor sit amet, consectetur adipisicing.</div>
-				        				<div class="product-img-container">
-				        					<div class="product-hover">
-				        						<div class="kit-small">
-				        							<img src="/themes/{{ $shop_theme }}/img/kit-sample-b.jpg">
-				        						</div>
-				        						<div class="detail-container">
-				        							<p>
-				        								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore tempora dolore incidunt culpa magni distinctio nisi iusto dolorem ea, provident eligendi aspernatur ut numquam minus praesentium recusandae rerum non nulla.
-				        							</p>
-				        						</div>
-				        					</div>
-				        					<img src="/themes/{{ $shop_theme }}/img/kit-sample-b.jpg">
-				        				</div>
-				        				<div class="product-price">P 5,900.00</div>
-				        				<button class="btn btn-custom">ENROLL NOW</button>
-				        			</div>
-				        		</div>
-				        	</div>
-				        	<div class="col-md-4">
-				        		<div class="kit-parent-holder">
-				        			<div class="kit-holder match-height">
-				        				<div class="product-title">Kit-C Lorem ipsum dolor.</div>
-				        				<div class="product-img-container">
-				        					<div class="product-hover">
-				        						<div class="kit-small">
-				        							<img src="/themes/{{ $shop_theme }}/img/kit-sample-c.jpg">
-				        						</div>
-				        						<div class="detail-container">
-				        							<p>
-				        								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore tempora dolore incidunt culpa magni distinctio nisi iusto dolorem ea, provident eligendi aspernatur ut numquam minus praesentium recusandae rerum non nulla.
-				        							</p>
-				        						</div>
-				        					</div>
-				        					<img src="/themes/{{ $shop_theme }}/img/kit-sample-c.jpg">
-				        				</div>
-				        				<div class="product-price">P 2,900.00</div>
-				        				<button class="btn btn-custom">ENROLL NOW</button>
-				        			</div>
-				        		</div>
-				        	</div>
-				        </div>
-				      </div>
-				      <div class="modal-footer">
-				        <!-- <button type="button" class="btn btn-success pull-left">ADD TO CART</button> -->
-				      </div>
-				    </div>
-				  </div>
-				</div>
-			</div>
-
-
-			<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/cart_modal.js"></script>
-
 		@endif
 	</div>
 @else
@@ -517,7 +425,6 @@
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.1"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 <script>
-
 $(document).ready(function()
 {
 	$wallet = $(".chart-income").attr("wallet");
@@ -573,10 +480,17 @@ $(document).ready(function()
 		    }
 		});
 	} 
-	
-
 });
-
+</script>
+<script type="text/javascript">
+$(document).on('show.bs.modal', '.modal', function () 
+{
+    var zIndex = 1040 + (10 * $('.modal:visible').length);
+    $(this).css('z-index', zIndex);
+    setTimeout(function() {
+        $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+    }, 0);
+});
 </script>
 @endsection
 @section("member_css")

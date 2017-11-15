@@ -1003,4 +1003,8 @@ class Warehouse2
 
         return $_item;       
     }
+    public static function get_codes($warehouse_id, $start_date, $end_date)
+    {
+        return Tbl_warehouse_inventory_record_log::item()->slotinfo()->customerinfo()->where("item_in_use",'used')->where("record_inventory_status",1)->where('record_warehouse_id',$warehouse_id)->whereBetween('record_log_date_updated',[$start_date, $end_date])->get();
+    }
 }

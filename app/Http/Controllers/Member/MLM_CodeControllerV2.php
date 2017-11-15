@@ -5,10 +5,12 @@ use App\Globals\MLM2;
 use App\Globals\Warehouse2;
 use App\Globals\Pdf_global;
 use App\Globals\Customer;
+use App\Globals\Report;
 
 use App\Globals\BarcodeGenerator;
 use Redirect;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class MLM_CodeControllerV2 extends Member
 {
@@ -271,5 +273,29 @@ class MLM_CodeControllerV2 extends Member
         }
         $pdf = view('member.mlm_code_v2.print_code_pdf', $data);
         return Pdf_global::show_pdf($pdf);
+    }
+    public function report_code(Request $request)
+    {
+        $data['action'] = '';
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title']  = 'Membership Code Report'; 
+        $date['start']  = $request->from;
+        $date['end']    = $request->to;
+        $period         = $request->report_period ? $request->report_period : 'all';
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
+        $data["from"] = Report::checkDatePeriod($period,$date)['start_date'];
+        $data["to"] = Report::checkDatePeriod($period,$date)['end_date'];   
+        $data['codes'] = Warehouse2::get_codes(Warehouse2::get_current_warehouse($this->user_info->shop_id), $data["from"], $data["to"]);
+        $report_type    = $request->report_type;
+        $load_view      = $request->load_view;
+        if($report_type && !$load_view)
+        {
+            $view =  'member.reports.output.output_report_code'; 
+            return Report::check_report_type($report_type, $view, $data, 'Membership_Code_Report-'.Carbon::now());
+        }
+        else
+        {
+            return view('member.mlm_code_v2.report_code',$data);
+        }
     }
 }

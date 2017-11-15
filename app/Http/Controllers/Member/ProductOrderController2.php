@@ -271,4 +271,11 @@ class ProductOrderController2 extends Member
 
         return json_encode($return);
     }
+
+    public function settings()
+    {
+        $data = [];
+
+        return view("member.product_order2.settings", $data);
+    }
 }

@@ -198,7 +198,7 @@
         </nav>
 
         <!-- MOBILE HEADER -->
-        {{-- <div class="mob-nav-wrap sticky">
+        <div class="mob-nav-wrap sticky">
             <div class="subheader">
                 <div class="container">
                     @if($customer)
@@ -289,11 +289,11 @@
                             </ul>
                         @endif
                     </nav>
-                    <div class="mob-cart-container"><img src="/themes/{{ $shop_theme }}/img/cart-mob.png"></div>
-                    <div class="mob-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo.png"></div> 
+                    <div class="mob-cart-container popup" size="lg" link="/cartv2"><img src="/themes/{{ $shop_theme }}/img/cart-mob.png"></div>
+                    <a href="/"><div class="mob-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo.png"></div></a>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
         <div id="scroll-to" class="clearfix">
            @yield("content")

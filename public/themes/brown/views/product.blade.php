@@ -40,7 +40,7 @@
 						@endforeach
 					</div>
 				</div>
-				@if(Request::input("type"))
+				{{-- @if(Request::input("type"))
 					<div class="bottom-item-container" style="overflow: hidden;">
 						<div class="row clearfix">
 							<div class="wow fadeInLeft text-header">You May Also Like This</div>
@@ -78,7 +78,7 @@
 							</div>
 						</div>
 					</div>
-				@endif
+				@endif --}}
 			</div>
 		</div>
 	</div>

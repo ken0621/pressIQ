@@ -92,7 +92,11 @@
 						@foreach($_point_plan as $plan)
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+							@if($plan->label == "Repurchase Cashback")
+								<div class="name"><span>VIP Cashback</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+							@else
+								<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+							@endif
 						</div>
 						@endforeach
 					</div>

@@ -627,6 +627,10 @@ class Item
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
+    public static function getUserid()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_id');
+    }
     public static function generate_barcode($barcode = 0)
     {
         $return = $barcode;
@@ -1735,6 +1739,7 @@ class Item
             if($shop_id == 5)
             {
                 $data = $query->whereBetween('ctrl_number',[$get_to, $get_from])->get();
+
             }
             else
             {
@@ -1903,4 +1908,16 @@ class Item
             }
         }
     }
+    public static function tag_as_printed($warehouse_id, $from, $to)
+    {
+        $update['printed_by'] = Self::getUserid();
+        $get = Tbl_warehouse_inventory_record_log::item()->where('item_type_id',5)->where('record_warehouse_id',$warehouse_id)->whereBetween('ctrl_number',[$from,$to])->update($update);
+    }
+    public static function get_last_print()
+    {
+        $return = Tbl_warehouse_inventory_record_log::item()->where('item_type_id',5)->where('record_shop_id',Self::getShopId())->where('printed_by',0)->where('ctrl_number','!=',0)->value('ctrl_number');
+
+        return $return;
+    }
+
 }

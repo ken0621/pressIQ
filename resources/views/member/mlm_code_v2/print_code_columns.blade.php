@@ -54,10 +54,10 @@
                      <div class="form-group">
                         <div class="col-md-12"><label for="">Range</label></div>
                         <div class="col-md-6">
-                            <input type="number" name="print_range_to" class='form-control range-to' value='1'/>
+                            <input type="number" name="print_range_to" class='form-control range-to' value="{{$from or '1'}}"/>
                         </div>
                         <div class="col-md-6">
-                            <input type="number" name="print_range_from" class='form-control range-from' value='100'/>
+                            <input type="number" name="print_range_from" class='form-control range-from'/>
                         </div>
                     </div>
 
@@ -121,7 +121,7 @@
     $('.print-submit').unbind('click');
     $('.print-submit').bind('click',function()
     {
-        if(parseInt($('.range-from').val()) <= parseInt($('.range-to').val()))
+        if(parseInt($('.range-from').val()) < parseInt($('.range-to').val()))
         {
             alert('Invalid Range');
         }

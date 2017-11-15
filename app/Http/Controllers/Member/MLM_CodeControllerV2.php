@@ -236,6 +236,10 @@ class MLM_CodeControllerV2 extends Member
         {
             $data["_items"] = Item::get_per_warehouse($this->user_info->shop_id, Warehouse2::get_current_warehouse($this->user_info->shop_id));
         }
+        if($this->user_info->shop_id == 5)
+        {
+            $data['from'] = Item::get_last_print();
+        }
         $data["_membership"] = MLM2::membership($this->user_info->shop_id);
 
         return view("member.mlm_code_v2.print_code_columns",$data);
@@ -259,6 +263,11 @@ class MLM_CodeControllerV2 extends Member
         if($request->t == 'membership_code')
         {
             $data['_item_product_code'] = Item::get_assembled_kit(0,$request->membership_kit,$request->membership,'',$request->status, 0, $request->print_range_to, $take, $request->print_range_from);
+            if($data['type'] == 'register_form' && Item::getShopId() == 5)
+            {
+                $warehouse_id = Warehouse2::get_current_warehouse(Item::getShopId());
+                Item::tag_as_printed($warehouse_id, $request->print_range_to, $request->print_range_from);
+            }
         }
         $pdf = view('member.mlm_code_v2.print_code_pdf', $data);
         return Pdf_global::show_pdf($pdf);

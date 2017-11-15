@@ -93,12 +93,7 @@
 								</div>
 								<div class="product-feature">
 									<div class="feature-title">General Features</div>
-									<div class="feature-content">
-										<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
-										<p><img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-vid.jpg"></p>
-										<p><img class="img-responsive" src="/themes/{{ $shop_theme }}/img/ad-wow.jpg"></p>
-										<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.</p>
-									</div>
+									<div class="feature-content">{!! $product["eprod_details"] !!}</div>
 								</div>
 							</div>
 						</td>
@@ -106,38 +101,16 @@
 							<div class="side-holder">
 								<div class="side-title">You May Also Like This</div>
 								<div class="side-content">
-									<div class="holder">
-										<div class="img">
-											<img src="/themes/{{ $shop_theme }}/img/side-1.jpg">
+									@foreach($_related as $related)
+										<div class="holder">
+											<div class="img">
+												<img src="{{ get_product_first_image($related) }}">
+											</div>
+											<div class="name">{{ get_product_first_name($related) }}</div>
+											<div class="sub"></div>
+											<div class="price">{{ get_product_first_price($related) }}</div>
 										</div>
-										<div class="name">Brown 1</div>
-										<div class="sub">4.7 HD IPS Display</div>
-										<div class="price">P 9,500.00</div>
-									</div>
-									<div class="holder">
-										<div class="img">
-											<img src="/themes/{{ $shop_theme }}/img/side-2.jpg">
-										</div>
-										<div class="name">XB-400</div>
-										<div class="sub">4.7 HD IPS Display</div>
-										<div class="price">P 9,500.00</div>
-									</div>
-									<div class="holder">
-										<div class="img">
-											<img src="/themes/{{ $shop_theme }}/img/side-3.jpg">
-										</div>
-										<div class="name">Sense 4</div>
-										<div class="sub">4.7 HD IPS Display</div>
-										<div class="price">P 9,500.00</div>
-									</div>
-									<div class="holder">
-										<div class="img">
-											<img src="/themes/{{ $shop_theme }}/img/side-4.jpg">
-										</div>
-										<div class="name">Sense 4</div>
-										<div class="sub">4.7 HD IPS Display</div>
-										<div class="price">P 9,500.00</div>
-									</div>	
+									@endforeach
 								</div>
 							</div>
 						</td>

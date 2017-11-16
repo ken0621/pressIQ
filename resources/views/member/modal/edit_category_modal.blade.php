@@ -36,7 +36,7 @@
             </div>
 
         </div>
-        <input type="hidden" name="hidden_parent_category" {{$category->type_parent_id != 0 ? $parent->type_id:''}} class="hidden_parent_category">
+        <input type="hidden" name="hidden_parent_category" value="{{$category->type_parent_id != 0 ? $parent->type_id:''}}" class="hidden_parent_category">
 
       </div>
       

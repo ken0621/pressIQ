@@ -20,7 +20,7 @@
 				</div>
 			</div> -->
 		</div>
-		<h3 class="text-center">Points Log</h3>
+		<div class="text-center text-title"">Points Log</div>
 		<div class="col-md-3" style="bottom: 20px;">
 			<select class="form-control sort_by_log">
 				<option value="0">All</option>

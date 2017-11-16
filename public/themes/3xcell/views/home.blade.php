@@ -369,8 +369,6 @@
 			</div>
 		</div>
 	</div>
-	
-
 	<!-- SCROLL TO TOP -->
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
@@ -383,41 +381,23 @@
 
 @section("js")
 
-
 <script type="text/javascript">
 
-$(document).ready(function()
-{
+	$(document).ready(function()
+	{
+		$('.single-item').slick({
+			prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/arrow-left.png'>",
+	      	nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right.png'>",
+	      	dots: false,
+	      	autoplay: true,
+	  		autoplaySpeed: 3000,
+		});
 
-	$('.single-item').slick({
-		prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/arrow-left.png'>",
-      	nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right.png'>",
-      	dots: false,
-      	autoplay: true,
-  		autoplaySpeed: 3000,
+	    lightbox.option({
+	      'disableScrolling': true,
+	      'wrapAround': true
+	    });
+
 	});
-
-    lightbox.option({
-      'disableScrolling': true,
-      'wrapAround': true
-    });
-
-	/*scroll up*/
-	$(window).scroll(function () {
-        if ($(this).scrollTop() > 700) {
-            $('.scroll-up').fadeIn();
-        } else {
-            $('.scroll-up').fadeOut();
-        }
-    });
-
-    $('.scroll-up').click(function () {
-        $("html, body").animate({
-            scrollTop: 0
-        }, 700);
-        return false;
-    });
-
-});
 </script>
 @endsection

@@ -131,6 +131,7 @@ function custom_theme()
 	            $('.header-nav').css("margin-bottom", get_height+"px");
 		        $('.navbar').addClass("sticky");
 	        }
+	        
 	        else
 	        {
 	            $('.header-nav').css("margin-bottom", "0px");

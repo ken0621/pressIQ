@@ -1,10 +1,9 @@
 @import "../../../assets/front/sass/mixin";
 
-$display-text: 'Raleway', sans-serif;
-$content-text: 'Ubuntu', sans-serif;
+$display-text: 'Open Sans', sans-serif;
 $light: 300;
 $regular: 400;
-$medium: 500;
+$semi-bold: 600;
 $bold: 700;
 
 .pushmenu 
@@ -35,9 +34,9 @@ $bold: 700;
 
     span
     {
-        font-family: $content-text;
-        font-size: 16px;
-        font-weight: $medium;
+        font-family: $display-text;
+        font-size: 18px;
+        font-weight: $semi-bold;
         color: #fff;
         padding-left: 30px;
     }
@@ -105,7 +104,7 @@ $bold: 700;
      list-style-type: none;
      /* margin: 0 0 0 10%; */
      width: 93%;
-     font-family: $content-text;
+     font-family: $display-text;
      text-transform: uppercase;
      padding-left: 20px;
 

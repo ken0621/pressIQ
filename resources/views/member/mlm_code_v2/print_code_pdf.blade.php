@@ -53,12 +53,15 @@
 		
 		<!-- {!! $ctr == 3 ? "</tr><tr>" : '' !!}	 -->
 		<tr>
-			<td  width="100%" height=400px" class="text-center" >
+			<td  width="100%" class="text-center" >
 
+				<br>
+				<br>
+				<br>
+				<br>
 				<div style="float:left;width: 50%;padding-left:5px">
 				</div>
 				<div style="float:right;width: 50%;padding-right:5px"><div class="text-center">{{str_pad($item_code->ctrl_number, 9, '0', STR_PAD_LEFT)}}</div></div></div>
-				<br>
 				<br>
 				<br>
 				<br>
@@ -69,7 +72,6 @@
 					<div>ACTIVATION<div>
 					<div><strong>{{$item_code->mlm_activation}}</strong> <div>
 				</div>
-				<br>
 				<br>
 			</td>
 		</tr>

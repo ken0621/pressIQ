@@ -120,6 +120,7 @@ class ShopMemberController extends Shop
                 
                 $store["temp_pin"] = $data['mlm_pin'];
                 $store["temp_activation"] = $data['mlm_activation'];
+                $store["online_transaction"] = true;
                 session($store);
             }
    
@@ -150,6 +151,12 @@ class ShopMemberController extends Shop
         }
 
         return Self::load_view_for_members('member.dashboard', $data);
+    }
+    public function getKit()
+    {
+        $data["item_kit"] = Item::get_all_assembled_kit_v2($this->shop_info->shop_id);
+
+        return view("member.kit_modal", $data);
     }
     public function getDirect()
     {

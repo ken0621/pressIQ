@@ -106,8 +106,9 @@
     </div>
 </div>
 <div class="modal-footer text-right">
-    <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
+    <a href='/member/payroll/company_timesheet2_pdf/{{$company_period->payroll_period_company_id}}/{{$employee_info->payroll_employee_id}}' target="_blank"><button type="button" class="btn btn-success">VIEW PDF</button></a>
     <button type="button" class="btn btn-primary load-summary">VIEW SUMMARY</button>
+    <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
     <!--<button class="btn btn-primary btn-custom-primary approve-timesheet-btn" type="button">{{ $time_keeping_approved == true ? "RETURN TO PENDING" : "MARK AS READY" }}</button>-->
 </div>
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2.js"></script>

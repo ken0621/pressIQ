@@ -86,9 +86,9 @@
                             <div class="search-bar">
                                 <form action="/product" method="get" id="form-search">
                                     <div class="input-group">
-                                         <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" name="search" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
+                                         <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" name="search" id="keyword1" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
                                          <span class="input-group-addon search-button" id="sizing-addon1">
-                                            <a href="" onclick="onSearch();" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>                          
+                                            <a href="" onclick="onSearch(1);" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>                          
                                          </span>
                                     </div>
                                 </form>
@@ -163,9 +163,9 @@
                         <div class="search-bar">
                             <form action="/product" method="get" id="form-search">
                                 <div class="input-group">
-                                    <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" name="search" id="keyword" aria-describedby="sizing-addon1">
+                                    <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" name="search" id="keyword1" aria-describedby="sizing-addon1">
                                     <span class="input-group-addon search-button" id="sizing-addon1">
-                                        <a href="" onclick="onSearch();" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>
+                                        <a href="javascript:" onclick="onSearch(1);" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>
                                     </span>
                                 </div>
                             </form>
@@ -312,7 +312,6 @@
                                 <a href="/contact"><li>CONTACT US</li></a>
                             </ul>
                         @endif
-                        
                     </nav>
                     <div class="mob-cart-container popup" size="lg" link="/cartv2"><img src="/themes/{{ $shop_theme }}/img/cart-mob.png"></div>
                     <div class="mob-logo-container"><a href="/"><img src="/themes/{{ $shop_theme }}/img/logo.png"></a></div>
@@ -324,9 +323,9 @@
                     <div class="search-bar">
                         <form action="/product" method="get" id="form-search">
                             <div class="input-group">
-                                 <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" style="border: none;" name="search" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
+                                 <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" style="border: none;" name="search" id="keyword2" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
                                  <span class="input-group-addon search-button mob-search" id="sizing-addon1">
-                                    <a href="" onclick="onSearch();" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>                          
+                                    <a href="javascript:" onclick="onSearch(2);" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>                          
                                  </span>
                             </div>
                         </form>

@@ -210,8 +210,16 @@ function action_after_load()
 {
 	
 }
-function onSearch()
+function onSearch(x)
 {
-    var keyword = $('#keyword').val();
-    $("#submit_link").attr("href", "/product?search="+$('#keyword').val());
+	if (x == 1) 
+	{
+		var keyword = $('#keyword1').val();
+	}
+	else
+	{
+		var keyword = $('#keyword2').val();
+	}
+    
+    location.href="/product?search="+keyword;
 }

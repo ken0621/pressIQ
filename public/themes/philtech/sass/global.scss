@@ -1249,6 +1249,7 @@ footer
 {
 	position: relative;
 	overflow: hidden;
+	min-height: 210px;
     .new-add-to-cart-button
 	{
 		position: absolute;
@@ -1267,12 +1268,10 @@ footer
     	opacity: 1;
     	transition: all 0.2s;
     	width: 100%;
-    	min-height: 210px;
     	max-height: 210px;
 
     	@media screen and (max-width: 414px)
     	{
-			min-height: 180px;
     		max-height: 180px;
     	}
     }

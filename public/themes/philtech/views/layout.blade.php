@@ -248,7 +248,7 @@
                             <span>BROWSE</span>
                             <ul class="links">
                                     <a href="/"><li>HOME</li></a>
-                                    <a href="/partners"><li>OUT MERCHANTS</li></a>
+                                    <a href="/partners"><li>OUR MERCHANTS</li></a>
                                     <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
                                     <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
                                     <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
@@ -303,7 +303,7 @@
                             <span>BROWSE</span>
                             <ul class="links">
                                 <a href="/"><li>HOME</li></a>
-                                <a href="/partners"><li>OUT MERCHANTS</li></a>
+                                <a href="/partners"><li>OUR MERCHANTS</li></a>
                                 <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
                                 <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
                                 <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>

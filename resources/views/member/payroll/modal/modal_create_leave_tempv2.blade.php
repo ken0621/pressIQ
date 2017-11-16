@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css" href="/assets/member/payroll/css/timesheet.css">
+<link rel="stylesheet" type="text/css" href="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.css">
+
 <!-- Change action, name, some links and functions-->
 <form class="global-submit" role="form" action="/member/payroll/leave/v2/modal_save_leave_temp_v2" method="POST">
 	<div class="modal-header">
@@ -17,7 +20,7 @@
 	
 				</select>
 			</div>
-		
+
 			<div class="col-md-6">
 				<small>Commulative?</small>
 				<div class="form-control padding-b-37">
@@ -32,6 +35,11 @@
 						</div>
 					</div>					
 				</div>		
+			</div>
+
+			<div class="col-md-6">
+				<small>Leave Name</small>
+				<input type="text" name="payroll_leave_temp_name" class="form-control" required>
 			</div>
 
 
@@ -50,7 +58,7 @@
 					<thead>
 						<tr>
 							<th>Employee Name</th>
-							<th>Leave Credits</th>
+							<th class="text-center">Leave Hours</th>
 							<th width="5%"></th>
 						</tr>
 					</thead>
@@ -68,4 +76,6 @@
 		<button class="btn btn-custom-primary btn-submit" type="submit">Save</button>
 	</div>
 </form>
+<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
+<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 <script type="text/javascript" src="/assets/member/js/payroll/modal_create_leave_tempv2.js"></script>

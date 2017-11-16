@@ -12,13 +12,6 @@
 				<input type="text" name="payroll_leave_type_name" class="form-control" required>
 			</div>
 		</div>
-
-		<div class="form-group">
-			<div class="col-md-6">
-				<small>No. of Hours</small>
-				<input type="number" name="payroll_leave_hours_cap" class="form-control text-right"  step="0.01" required>
-			</div>
-		</div>
 	</div>	
 
 	<div class="modal-footer">

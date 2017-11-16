@@ -24,8 +24,7 @@
 				  	<table class="table table-condensed table-bordered">
 				  		<thead>
 				  			<tr>
-				  				<th style="text-align: center;">Type of Leave</th>
-				  				<th style="text-align: center;">No. of Hours</th>
+				  				<th style="text-align: center;">Leave Name</th>
 				  				<th style="text-align: center;">Used Leave</th> 
 				  			</tr>
 				  		</thead>
@@ -33,9 +32,10 @@
 				  			@foreach($_active as $active)
 				  			<tr style="text-align: center;">
 
-				  				<td>{{$active->payroll_leave_type_name}}</td>
-				  				<td>{{$active->payroll_leave_hours_cap}}</td>
-				  				<td ><a href="javascript: action_load_link_to_modal('/member/payroll/leave/v2/modal_view_leave_employee','lg')" >View Employee</a></td>
+				  				<td>{{$active->payroll_leave_temp_name}}</td>
+				  	{{-- 			<td ><a href="javascript: action_load_link_to_modal('/member/payroll/leave/v2/modal_view_leave_employee/','lg')" >View Employee</a></td> --}}
+
+				  				<td><a href="#" class="popup" link="/member/payroll/leave/v2/modal_view_leave_employee/{{$active->payroll_leave_temp_id}}" size="lg">View Employee</a></td>
 
 
 				  			</tr>

@@ -64,9 +64,10 @@ function modal_create_leave_temp()
 
 				$(result.new_record).each(function(index, emp)
 				{			
-							html += tbl_tag(emp,result.leave_type);
+							html += tbl_tag(emp);
 				});
 				$(".tbl-tag").html(html);
+				event_time_entry();
 				remove_tag();
 			},
 			error 	: 	function(err)
@@ -111,16 +112,25 @@ function modal_create_leave_temp()
 		toastr.error("Error, something went wrong.");
 	}
 
-	function tbl_tag(data,leavetype)
+	function tbl_tag(data)
 	{
 
 		var html = '<tr>';
 		html += '<td>' + data.payroll_employee_title_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_employee_id+'"></td>';
-	    html += '<td>'+ leavetype[0].payroll_leave_hours_cap + ' <input type="hidden" name="payroll_leave_temp_hours" value="'+leavetype[0].payroll_leave_hours_cap+'"></td>';
+		html += '<td class="text-center edit-data zerotogray" width="25%"><input type="text" name="leave_hours_'+data.payroll_employee_id+'" placeholder="00:00" class="text-center form-control break time-entry time-target time-entry-24 is-timeEntry"></td>';
 		html += '<td><a href="#" class="btn-remove-tag" data-content="'+data.payroll_employee_id+'"><i class="fa fa-times"></i></a></td>';
 		html += '</tr>';
 
 		return html;
+	}
+
+	function event_time_entry()
+	{
+		$(".time-entry").timeEntry('destroy');
+		$(".time-entry-24").timeEntry('destroy');
+		$(".time-entry.time-in").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+		$(".time-entry.time-out").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 12, 0, 0)});
+		$(".time-entry-24").timeEntry({show24Hours: true, defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 	}
 
 	function misc(str){

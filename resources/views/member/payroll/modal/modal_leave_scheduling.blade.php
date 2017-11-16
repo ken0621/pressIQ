@@ -9,13 +9,46 @@
 	</div>
 	<div class="modal-body form-horizontal">
 		<div class="form-group">
-			<div class="col-md-12">
+
+			<div class="col-md-6">
+				<small>Leave Name</small>
+				<select class="form-control select-leave" name="leave_reason" required>
+					<option value="">Select Leave</option>
+					@foreach($_leave_name as $leave)
+					<option value="{{$leave->payroll_leave_temp_id}}">{{$leave->payroll_leave_temp_name}}</option>
+					@endforeach
+				</select>
+			</div>
+
+			<div class="col-md-6">
+				<small>Date Created</small>
+				<input type="text" name="payroll_leave_date_created" class="date_picker form-control" required>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-6">
 				<div class="checkbox">
 					<label><input type="checkbox" class="single_date_only" name="single_date_only" value="1" checked>Single date only</label>
 				</div>
 			</div>
-		</div>
-		<div class="form-group">
+
+			<div class="col-md-6">
+				<small>With Pay?</small>
+				<div class="form-control padding-b-37">
+					<div class="col-md-6">
+						<div class="radio">
+							<label><input type="radio" class="payroll_leave_temp_with_pay" name="payroll_leave_temp_with_pay" value="1" checked >Yes</label>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="radio">
+							<label><input type="radio" class="payroll_leave_temp_with_pay" name="payroll_leave_temp_with_pay" value="0" >No</label>
+						</div>
+					</div>					
+				</div>		
+			</div>
+
 			<div class="col-md-6">
 				<small>Schedule date Start</small>
 				<input type="text" name="payroll_schedule_leave" class="date_picker form-control" required>
@@ -26,16 +59,6 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<div class="col-md-6">
-				<small>Type of Leave</small>
-				<select class="form-control user-error select-leave" id="payroll_leave_type_id" required name="leave_reason" aria-invalid="true">
-					<option value="">Select Leave Type</option>
-					@foreach($_leave_type as $leavetype)
-					<option value="{{$leavetype->payroll_leave_type_id}}" {{$selected == $leavetype->payroll_leave_type_id ? 'selected="selected"' : ''}}>{{$leavetype->payroll_leave_type_name}}</option>
-					@endforeach
-	
-				</select>
-			</div>
 			<div class="col-md-6">
 				<small>&nbsp;</small>
 				<button class="btn btn-custom-primary btn-block popup employee-tag" type="button" link="/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/0">Tag Employee</button>

@@ -399,7 +399,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/leave_schedule/v2/save_schedule_leave_tagv2','Member\PayrollController@save_schedule_leave_tagv2')
 	;
 
-	Route::any('/leave_schedule/v2/leave_schedule_tag_employeev2/{id}','Member\PayrollController@leave_schedule_tag_employeev2');
+	Route::any('/leave_schedule/v2/leave_schedule_tag_employeev2/{leave_temp_id}','Member\PayrollController@leave_schedule_tag_employeev2');
 	
 
 	Route::any('/leave_schedule/v2/session_tag_leavev2','Member\PayrollController@session_tag_leavev2');
@@ -414,7 +414,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	//end schedule
 
 
-	Route::any('/leave/v2/modal_view_leave_employee',"Member\PayrollController@modal_view_leave_employee");
+	Route::any('/leave/v2/modal_view_leave_employee/{payroll_leave_temp_id}',"Member\PayrollController@modal_view_leave_employee");
 	Route::any('/leave/v2/modal_reset_leave',
 		"Member\PayrollController@modal_reset_leave");
 	Route::any('/leave/v2/modal_leave_scheduling',"Member\PayrollController@modal_leave_scheduling");

@@ -26,12 +26,14 @@
 				  			</tr>
 				  		</thead>
 				  		<tbody>
+				  			@foreach($emp as $data)
+				  				@foreach($data as $dat)
 				  			<tr style="text-align: center;">
-				  				<td>Sample Name</td>
-				  				<td>Sample Date</td>
-				  				<td>Sample Total</td>
-				  				<td>Sample Leave</td>
-				  				<td>Sample Remaining</td>
+				  				<td>{{$dat->payroll_employee_display_name}}</td>
+				  				<td>{{$dat->payroll_leave_date_created}}</td>
+				  				<td>{{$dat->payroll_leave_temp_hours}}</td>
+				  				<td>{{$dat->total_leave_consume}}</td>
+				  				<td>{{$dat->remaining_leave}}</td>
 				  				<td class="text-center"> 
 				  					<div class="dropdown">
 										<button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
@@ -50,6 +52,8 @@
 									</div>
 				  				</td>
 				  			</tr>
+				  				@endforeach
+				  			@endforeach
 				  		</tbody>
 				  	</table>
 

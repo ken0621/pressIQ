@@ -3,7 +3,7 @@
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Tag Employee</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
-		<input type="hidden" name="leave_id" class="leave_id" value="{{$leave_id}}">
+		<input type="hidden" name="leave_id" class="leave_id" value="{{$leave_temp_id}}">
 	</div>
 	<div class="modal-body form-horizontal">
 		<div class="form-group">

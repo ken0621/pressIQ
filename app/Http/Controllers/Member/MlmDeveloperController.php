@@ -47,7 +47,7 @@ class MlmDeveloperController extends Member
         dd($data);
     }    
     public function index()
-    {
+    {   
         $data["page"] = "MLM Developer";
         $shop_id = $this->user_info->shop_id;
         $data["_membership"] = Tbl_membership::where("shop_id", $shop_id)->active()->get();

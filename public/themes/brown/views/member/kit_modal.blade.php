@@ -20,14 +20,14 @@
 									</div>
 									<div class="detail-container">
 										<p>
-											{{ $kit->item_sales_information ? $kit->item_sales_information : $kit->item_purchasing_information }}
+											{!! $kit->item_sales_information ? $kit->item_sales_information : $kit->item_purchasing_information !!}
 										</p>
 									</div>
 								</div>
 								<img src="{{ $kit->item_img }}">
 							</div>
 							<div class="product-price">P {{ number_format($kit->item_price, 2) }}</div>
-							<button class="btn btn-custom product-add-cart" item-id="{{ $kit->item_id }}" quantity="1">ENROLL NOW</button>
+							<button class="btn btn-custom product-add-cart" {{$kit->inventory_count == 0 ? 'disabled' : ''}} item-id="{{ $kit->item_id }}" quantity="1">ENROLL NOW</button>
 						</div>
 					</div>
 				</div>

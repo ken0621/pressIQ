@@ -282,24 +282,22 @@
 			</div>
 		</div>
 
-		@if($allow_multiple_slot == 1)		
-			<div class="row clearfix">
-				<div class="animated fadeInUp col-md-12">
-					<div class="unilevel-holder">
-						<div class="title"><i class="fa fa-credit-card" aria-hidden="true"></i> Repurchase</div>
-						<div class="sub-container">
-							<div class="dashboard-top">
-					            <div class="join-container" style="border: 0; max-height: none; min-height: auto;">
-					                <div class="btn-container" style="padding-top: 0;">
-					                    <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Buy a Kit</button><br>
-					                </div>
-					            </div>	    
-						    </div>
-						</div>
+		<div class="row clearfix">
+			<div class="animated fadeInUp col-md-12">
+				<div class="unilevel-holder">
+					<div class="title"><i class="fa fa-credit-card" aria-hidden="true"></i> Repurchase</div>
+					<div class="sub-container">
+						<div class="dashboard-top">
+				            <div class="join-container" style="border: 0; max-height: none; min-height: auto;">
+				                <div class="btn-container" style="padding-top: 0;">
+				                    <button class=" btn-buy-a-kit popup" link="/members/kit" size="lg" item-id="{{$item_kit_id or '54'}}" quantity="1">Buy a Kit</button><br>
+				                </div>
+				            </div>	    
+					    </div>
 					</div>
 				</div>
 			</div>
-	    @endif
+		</div>
 
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-6">

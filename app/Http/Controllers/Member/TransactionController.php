@@ -88,7 +88,6 @@ class TransactionController extends Member
         {
             $data["list"]->transaction_date_created = $old->created_date;
         }
-        
         $html = view("member.transaction.view_pdf", $data);
         $pdf = Pdf_global::show_pdfv2($html);
         return $pdf;

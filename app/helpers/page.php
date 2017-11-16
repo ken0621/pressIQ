@@ -736,6 +736,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";
 
 
+
     // /* PAYROLL SUMMARY */
     // $code = "payroll-summary";
     // $nav[$page]['submenu'][$code]['label'] = "Payroll Summary";
@@ -746,7 +747,6 @@ function page_list()
     // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
     
-
 
 
 
@@ -800,7 +800,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Payroll Configuration";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_configuration";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','Branch_Location','Department','Job_Title','Holiday','Holiday v2','Holiday_Default','Holiday Employee','Allowances','Allowances V2','Deductions','Deductions V2','Leave','Payroll_Group', 'Shift_Template','Journal_Tags','Payslip','Tax_Period','Tax_Table','SSS_Table','Philhealth_Table','Pagibig/HDMF'];
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','Branch_Location','Department','Job_Title','Holiday','Holiday_v2','Holiday_Default','Holiday Employee','Allowances','Allowances V2','Deductions','Deductions V2','Leave','Payroll_Group', 'Shift_Template','Journal_Tags','Payslip','Tax_Period','Tax_Table','SSS_Table','Philhealth_Table','Pagibig/HDMF'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
     
@@ -850,6 +850,10 @@ function page_list()
     // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     // $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+
+
+
 
     /* PAYROLL REPORTS */
     $segment = "submenu-payroll-reports";
@@ -924,6 +928,22 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings']  = ['access_page'];
     $nav[$page]['submenu'][$code]['status']         = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer']      = "Gullermo Tabligan";
+
+    /* PROJECT */
+    $page = "project";  
+    $nav[$page]['name'] = "Project Management";
+    $nav[$page]['segment'] = $page;
+    $nav[$page]['icon'] = "heart";
+    $nav[$page]['type']     = "menu";
+
+    /* -- PROJECT => LIST  */
+    $code = "project-list";
+    $nav[$page]['submenu'][$code]['label'] = "Project List";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/project_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Guillermo Tabligan";
 
     /* PRODUCT */
     // $page = "product";  
@@ -1106,7 +1126,6 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
     
-
     /* VENDORS */
     $page = "vendor";  
     $nav[$page]['name'] = "Vendors";
@@ -1410,6 +1429,7 @@ function page_list()
         $nav[$page]['submenu'][$segment]['name']   = "Create Press Release";
         $nav[$page]['submenu'][$segment]['segment']= $segment;
         $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
 
             $code = "create-press-release";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Create";

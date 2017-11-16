@@ -30,6 +30,7 @@ use App\Models\Tbl_rank_points_log;
 use App\Models\Tbl_rank_update;
 use App\Models\Tbl_rank_update_slot;
 use App\Models\Tbl_brown_rank;
+use App\Models\Tbl_customer;
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
 
@@ -44,6 +45,7 @@ use App\Globals\Mlm_slot_log;
 use App\Globals\Mlm_complan_manager_repurchasev2;
 use App\Globals\Mlm_tree;
 use App\Globals\Membership_code;
+use App\Globals\Mail_global;
 
 
 
@@ -633,9 +635,10 @@ class Mlm_complan_manager_repurchasev2
             Mlm_slot_log::slot_log_points_array($array);
         }
     }
-    public static function repurchase_cashback($slot_info,$points,$rank_points = 0)
+    public static function repurchase_cashback($slot_info,$points,$rank_points = 0,$cashback_points = 0)
     {
-        $membership_points_repurchase_cashback = $points;
+        $membership_points_repurchase_cashback        = $points;
+        $membership_points_repurchase_cashback_points = $cashback_points;
         $check_privilege                       = Tbl_mlm_plan_setting::where('shop_id',$slot_info->shop_id)->first();
         if($check_privilege)
         {
@@ -710,6 +713,46 @@ class Mlm_complan_manager_repurchasev2
                 $arry_log['wallet_log_status'] = "released";   
                 $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK', $slot_info->shop_id); 
                 Mlm_slot_log::slot_array($arry_log);
+            }
+        }  
+
+        /* PHILTECH VIP REPURCHASE CASHBACK-DESU */
+        if($membership_points_repurchase_cashback_points != 0)
+        {
+            if(($privilege_membership == $slot_info->slot_membership) && ($check_privilege == 1))
+            {
+                $direct_slot          = Tbl_mlm_slot::where("slot_id",$slot_info->slot_sponsor)->where("shop_id",$slot_info->shop_id)->first();
+                if($direct_slot)
+                { 
+                    if($direct_slot->slot_membership != $privilege_membership)
+                    {
+                        $array['points_log_complan'] = "REPURCHASE_CASHBACK";
+                        $array['points_log_level'] = 0;
+                        $array['points_log_slot'] = $slot_info->slot_id;
+                        $array['points_log_Sponsor'] = $slot_info->slot_id;
+                        $array['points_log_date_claimed'] = Carbon::now();
+                        $array['points_log_converted'] = 0;
+                        $array['points_log_converted_date'] = Carbon::now();
+                        $array['points_log_type'] = 'RCP';
+                        $array['points_log_from'] = 'Repurchase Cashback Points';
+                        $array['points_log_points'] = $membership_points_repurchase_cashback_points;
+                        Mlm_slot_log::slot_log_points_array($array);
+                    }     
+                }
+            }
+            else
+            {
+                $array['points_log_complan'] = "REPURCHASE_CASHBACK";
+                $array['points_log_level'] = 0;
+                $array['points_log_slot'] = $slot_info->slot_id;
+                $array['points_log_Sponsor'] = $slot_info->slot_id;
+                $array['points_log_date_claimed'] = Carbon::now();
+                $array['points_log_converted'] = 0;
+                $array['points_log_converted_date'] = Carbon::now();
+                $array['points_log_type'] = 'RCP';
+                $array['points_log_from'] = 'Repurchase Cashback Points';
+                $array['points_log_points'] = $membership_points_repurchase_cashback_points;
+                Mlm_slot_log::slot_log_points_array($array);
             }
         }        
 
@@ -1064,7 +1107,24 @@ class Mlm_complan_manager_repurchasev2
                               
 
                 $update_rank_update["complete"] = 1;
-                Tbl_rank_update::where("rank_update_id",$rank_update_id)->update($update_rank_update);                     
+                Tbl_rank_update::where("rank_update_id",$rank_update_id)->update($update_rank_update);  
+
+                $rank_update_email = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->rank_update_email;
+
+                if($rank_update_email == 1)
+                {
+                    $new_rank_data  = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$new_rank_id)->first();
+                    $old_rank_data  = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$old_rank_id)->first();
+
+                    $customer_email = Tbl_customer::where("customer_id",$slot_info->slot_owner)->first();
+                    $email_content["subject"] = "Rank Upgrade";
+                    $email_content["content"] = "Your rank has been upgraded to ".$new_rank_data->stairstep_name;
+                    $email_address            = $customer_email->email;
+                    // $email_address            = "";
+
+                    $return_mail = Mail_global::send_email(null, $email_content, $shop_id, $email_address);
+                }
+
             }
         }
     }

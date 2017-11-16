@@ -123,8 +123,11 @@ class Mlm_compute
                 // no income for fs.
             }
 
-
-
+            if($slot_info->slot_date_computed == "0000-00-00 00:00:00")
+            {
+                $update_slot["slot_date_computed"] = Carbon::now();
+                Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$slot_info->shop_id)->update($update_slot);
+            }
             // check if there are cd graduate
             $b = Mlm_complan_manager_cd::graduate_check($slot_info);
             // $c = Mlm_gc::slot_gc($slot_id);
@@ -190,10 +193,11 @@ class Mlm_compute
             }           
             else if($points_title == "REPURCHASE_CASHBACK")
             {      
-                $cashback       = $data["REPURCHASE_CASHBACK"];
-                $rank_cashback  = $data["RANK_REPURCHASE_CASHBACK"];
-                $plan           = strtolower($points_title);
-                Mlm_complan_manager_repurchasev2::$plan($slot_info, $cashback,$rank_cashback);
+                $cashback              = $data["REPURCHASE_CASHBACK"];
+                $rank_cashback         = $data["RANK_REPURCHASE_CASHBACK"];
+                $rank_cashback_points  = $data["REPURCHASE_CASHBACK_POINTS"];
+                $plan                  = strtolower($points_title);
+                Mlm_complan_manager_repurchasev2::$plan($slot_info, $cashback,$rank_cashback,$rank_cashback_points);
             }
             else
             {

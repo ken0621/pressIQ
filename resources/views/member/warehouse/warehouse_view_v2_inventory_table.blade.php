@@ -11,6 +11,12 @@
             @include("member.load_ajax_data.load_bundle_item_inventory")
         </div>
     </div>
+    <div id="bundle_empties" class="bundle tab-pane fade">
+        <div class="form-group order-tags"></div>
+        <div class="table-responsive">
+            @include("member.load_ajax_data.load_bundle_item",['warehouse_item_bundle' => $warehouse_item_bundle_empties])
+        </div>
+    </div>
     <div id="empties" class="empties tab-pane fade">
         <div class="form-group order-tags"></div>
         <div class="table-responsive">

@@ -13,9 +13,10 @@ class Tbl_payroll_time_keeping_approved extends Model
     /* REFERECE COLUMN NAME */
 	// [PRIMARY KEY] 	payroll_tax_status_id
 	// [VARCHAR] 		payroll_tax_status_name
-	public function scopeInsertRecord($query, $employee_id, $payroll_period_company_id, $cutoff_breakdown, $compute_cutoff)
+	public function scopeInsertRecord($query, $employee_id, $payroll_period_company_id ,$company_id , $cutoff_breakdown, $compute_cutoff)
 	{
 		$insert["employee_id"] = $employee_id;
+		$insert["employee_company_id"] = $company_id;
 		$insert["payroll_period_company_id"] = $payroll_period_company_id;
 		$insert["net_basic_pay"] = $cutoff_breakdown->basic_pay_total;
 		$insert["gross_pay"] =  $cutoff_breakdown->gross_pay_total;
@@ -75,9 +76,29 @@ class Tbl_payroll_time_keeping_approved extends Model
 	//james
 	public function scopeBasicfilter($query,$payroll_employee_company_id)
 	{
-
 		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
 		$query->where('tbl_payroll_employee_basic.payroll_employee_company_id',$payroll_employee_company_id);
+		return $query;
+	}
+
+	public function scopeBasicIdfilter($query,$payroll_employee_company_id)
+	{
+		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
+		$query->where('tbl_payroll_employee_basic.payroll_employee_company_id',$payroll_employee_company_id);
+		return $query;
+	}
+	public function scopeEmployeePeriod($query, $employee_id)
+	{
+
+		$query->join("tbl_payroll_period_company", "tbl_payroll_period_company.payroll_period_company_id", "=", "tbl_payroll_time_keeping_approved.payroll_period_company_id")
+			  ->join("tbl_payroll_period", "tbl_payroll_period.payroll_period_id", "=", "tbl_payroll_period_company.payroll_period_id")
+			  ->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id")
+			  ->orderBy('tbl_payroll_period.payroll_period_start','asc');
+
+		if($employee_id != 0)
+		{
+			$query->where('tbl_payroll_employee_basic.payroll_employee_id',$employee_id);
+		}
 		return $query;
 	}
 }

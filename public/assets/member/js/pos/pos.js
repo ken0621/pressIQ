@@ -192,9 +192,17 @@ function pos()
 					url : '/member/cashier/pos/change_qty',
 					type : 'post',
 					data : {item_id : qty_item_id, qty : qty, _token : $('#_token').val()},
-					success : function()
+					success : function(data)
 					{
-						action_load_item_table();
+						if(data.status == 'success')
+						{
+							action_load_item_table();
+						}
+						else
+						{
+							toastr.warning('The ITEM cannot change quantity');
+							action_load_item_table();
+						}
 					}
 				})
 			}

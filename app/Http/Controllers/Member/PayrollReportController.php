@@ -322,9 +322,7 @@ class PayrollReportController extends Member
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
 
 			// AuditTrail::record_logs("DOWNLOAD","SSS REPORT",$this->shop_id(),"","");
-
-			dd($data);
-
+			
 			Excel::create("Government Forms SSS",function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
@@ -496,10 +494,10 @@ class PayrollReportController extends Member
 		$data["period_info"] 		= $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
-		$data = $this->get_total_payroll_register($data);
+		$data 						= $this->get_total_payroll_register($data);
 		
-		$data['filtering_company']= $period_company_id;
-		$data['_filter_company'] = Tbl_payroll_company::where('payroll_parent_company_id',$data["company"]->payroll_company_id)->get();
+		$data['filtering_company']	= $period_company_id;
+		$data['_filter_company'] 	= Tbl_payroll_company::where('payroll_parent_company_id',$data["company"]->payroll_company_id)->get();
 
 		return view('member.payrollreport.payroll_register_report_period',$data);
 	}
@@ -510,28 +508,51 @@ class PayrollReportController extends Member
 		
 		if($payroll_employee_company_id == 0)
 		{
-			$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
-			$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+			$data["company"] 			= Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
+			$data["_employee"] 			= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
 			
-			$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
+			$data["period_info"] 		= $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 			$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 			$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
-			$data = $this->get_total_payroll_register($data);
+			$data 						= $this->get_total_payroll_register($data);
+
+			$data['period_company_id_filter'] = 0 ;
+			$data['payroll_employee_company_id_filter'] = 0;
+
 
 			return view('member.payrollreport.payroll_register_report_period_filter',$data);
 		}
 		else
 		{
-			$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
-			$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->get();
-			// dd(Tbl_payroll_time_keeping_approved::PeriodCompany($period_company_id)->Basic()->get());
-			$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
+			$data["company"] 		= Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
+			$data["_employee"] 		= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_employee_company_id)->Basic()->get();
+			
+			/*START Removed it on 2018*/
+			// $check_if_updated = true;
+
+			// foreach ($data["_employee"] as $key => $employee) 
+			// {
+
+			// 	if ($employee->employee_company_id != "NULL") 
+			// 	{
+			// 		$check_if_updated = false;
+			// 		break;
+			// 	}
+			// }
+			/*END Removed it on 2018*/
+
+			if (count($data["_employee"]) == 0 ) /*&& $check_if_updated*/
+			{
+				$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->get();
+			}
+
+			$data["period_info"] 		= $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 			$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 			$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
 			$data = $this->get_total_payroll_register($data);
-			// dd($data);
 			$data['period_company_id_filter'] = $period_company_id ;
-			$data['payroll_employee_company_id_filter'] = $payroll_employee_company_id ;
+			$data['payroll_employee_company_id_filter'] = $payroll_employee_company_id;
+			
 			return view('member.payrollreport.payroll_register_report_period_filter',$data);
 	    }
 	}
@@ -567,7 +588,13 @@ class PayrollReportController extends Member
 		// dd($id.$uid);
 		$period_company_id = $id;
 		$payroll_employee_company_id = $uid;
-		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->get();
+		$data["_employee"] 		= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_employee_company_id)->Basic()->get();
+
+		if (count($data["_employee"]) == 0 ) 
+		{
+			$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->get();
+		}
+
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
@@ -937,15 +964,14 @@ class PayrollReportController extends Member
 				$deduction_total				+= Payroll2::payroll_number_format($deduction, 2);
 				$cola_total						+= Payroll2::payroll_number_format($cola, 2);
 
-				$sss_ee_total					+= Payroll2::payroll_number_format($sss_ee, 2);
-				$sss_er_total					+= Payroll2::payroll_number_format($sss_er, 2);
-				$sss_ec_total					+= Payroll2::payroll_number_format($sss_ec, 2);
-				$hdmf_ee_total					+= Payroll2::payroll_number_format($hdmf_ee, 2);
-				$hdmf_er_total					+= Payroll2::payroll_number_format($hdmf_er, 2);
-				$philhealth_ee_total			+= Payroll2::payroll_number_format($philhealth_ee, 2);
-				$philhealth_er_total			+= Payroll2::payroll_number_format($philhealth_er, 2);
-				$witholding_tax_total			+= Payroll2::payroll_number_format($witholding_tax, 2);
-
+				$sss_ee_total						+= Payroll2::payroll_number_format($sss_ee, 2);
+				$sss_er_total						+= Payroll2::payroll_number_format($sss_er, 2);
+				$sss_ec_total						+= Payroll2::payroll_number_format($sss_ec, 2);
+				$hdmf_ee_total						+= Payroll2::payroll_number_format($hdmf_ee, 2);
+				$hdmf_er_total						+= Payroll2::payroll_number_format($hdmf_er, 2);
+				$philhealth_ee_total				+= Payroll2::payroll_number_format($philhealth_ee, 2);
+				$philhealth_er_total				+= Payroll2::payroll_number_format($philhealth_er, 2);
+				$witholding_tax_total				+= Payroll2::payroll_number_format($witholding_tax, 2);
 
 				$adjustment_deduction_total		+= Payroll2::payroll_number_format($adjustment_deduction,2);
 				$adjustment_allowance_total		+= Payroll2::payroll_number_format($adjustment_allowance,2);
@@ -1117,7 +1143,8 @@ class PayrollReportController extends Member
 				}
 			}
 			
-			$employee->net_basic_pay = $employee->net_basic_pay - $leave_pay; 
+			$employee->net_basic_pay = $employee->net_basic_pay - $leave_pay;
+
 			$total_basic 	+= Payroll2::payroll_number_format($employee->net_basic_pay,2);
 			$total_gross 	+= Payroll2::payroll_number_format($employee->gross_pay,2);
 			$total_net 		+= Payroll2::payroll_number_format($employee->net_pay,2);
@@ -1146,24 +1173,24 @@ class PayrollReportController extends Member
 		$data["total_deduction_of_all_employee"] 	= $total_deduction_employee;
 
 
-		$data["deduction_total"] 					= $deduction_total;
-		$data["cola_total"] 						= $cola_total;
-		$data["sss_ee_total"] 						= $sss_ee_total;
-		$data["sss_er_total"] 						= $sss_er_total;
-		$data["sss_ec_total"] 						= $sss_ec_total;
-		$data["hdmf_ee_total"] 						= $hdmf_ee_total;
-		$data["hdmf_er_total"] 						= $hdmf_er_total;
-		$data["philhealth_ee_total"] 				= $philhealth_ee_total;
-		$data["philhealth_er_total"] 				= $philhealth_er_total;
-		$data["witholding_tax_total"] 				= $witholding_tax_total;
-		$data["adjustment_deduction_total"] 		= $adjustment_deduction_total;
-		$data["adjustment_allowance_total"] 		= $adjustment_allowance_total;
-		$data["allowance_total"] 					= $allowance_total;
-		$data["cash_bond_total"] 					= $cash_bond_total;
-		$data["cash_advance_total"]					= $cash_advance_total;
-		$data["hdmf_loan_total"]					= $hdmf_loan_total;
-		$data["sss_loan_total"]						= $sss_loan_total;
-		$data["other_loans_total"]					= $other_loans_total;
+		$data["deduction_total"] 						= $deduction_total;
+		$data["cola_total"] 							= $cola_total;
+		$data["sss_ee_total"] 							= $sss_ee_total;
+		$data["sss_er_total"] 							= $sss_er_total;
+		$data["sss_ec_total"] 							= $sss_ec_total;
+		$data["hdmf_ee_total"] 							= $hdmf_ee_total;
+		$data["hdmf_er_total"] 							= $hdmf_er_total;
+		$data["philhealth_ee_total"] 					= $philhealth_ee_total;
+		$data["philhealth_er_total"] 					= $philhealth_er_total;
+		$data["witholding_tax_total"] 					= $witholding_tax_total;
+		$data["adjustment_deduction_total"] 			= $adjustment_deduction_total;
+		$data["adjustment_allowance_total"] 			= $adjustment_allowance_total;
+		$data["allowance_total"] 						= $allowance_total;
+		$data["cash_bond_total"] 						= $cash_bond_total;
+		$data["cash_advance_total"]						= $cash_advance_total;
+		$data["hdmf_loan_total"]						= $hdmf_loan_total;
+		$data["sss_loan_total"]							= $sss_loan_total;
+		$data["other_loans_total"]						= $other_loans_total;
 
 		$data["overtime_total"] 		 			= $overtime_total;
 		$data["special_holiday_total"] 				= $special_holiday_total;
@@ -1176,15 +1203,15 @@ class PayrollReportController extends Member
 		$data["restday_total"] 		 				= $restday_total;
 
 
-		$data["total_adjsutment_allowance"]			= $total_adjsutment_allowance;	
-		$data["total_adjsutment_bonus"]				= $total_adjsutment_bonus;		
-		$data["total_adjsutment_commission"]		= $total_adjsutment_commission;
-		$data["total_adjsutment_incentives"]		= $total_adjsutment_incentives;
-		$data["total_adjsutment_cash_advance"]		= $total_adjsutment_cash_advance;
-		$data["total_adjsutment_cash_bond"]			= $total_adjsutment_cash_bond;	
-		$data["total_adjsutment_additions"]			= $total_adjsutment_additions;	
-		$data["total_adjsutment_deductions"]		= $total_adjsutment_deductions;
-		$data["total_adjsutment_others"]			= $total_adjsutment_others;	
+		$data["total_adjsutment_allowance"]				= $total_adjsutment_allowance;	
+		$data["total_adjsutment_bonus"]					= $total_adjsutment_bonus;		
+		$data["total_adjsutment_commission"]			= $total_adjsutment_commission;
+		$data["total_adjsutment_incentives"]			= $total_adjsutment_incentives;
+		$data["total_adjsutment_cash_advance"]			= $total_adjsutment_cash_advance;
+		$data["total_adjsutment_cash_bond"]				= $total_adjsutment_cash_bond;	
+		$data["total_adjsutment_additions"]				= $total_adjsutment_additions;	
+		$data["total_adjsutment_deductions"]			= $total_adjsutment_deductions;
+		$data["total_adjsutment_others"]				= $total_adjsutment_others;	
 
 
 		$data["time_total_time_spent"]				=	$time_total_time_spent;				

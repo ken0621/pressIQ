@@ -24,7 +24,15 @@
 		@if(count($_codes) > 0)
 		<h3 class="animated slideInDown text-center">My Notifications</h3>
 	    @endif
-		
+	    <div class="text-center" style="padding:25px;"></div>
+		<div class="col-md-3" style="bottom: 20px;">
+			<select class="form-control sort_by_log">
+				<option value="0">All</option>
+				<option {{Request::input("sort_by") == "direct" ? "selected" : ""}} value="direct">Wholesale Commission</option>
+				<option {{Request::input("sort_by") == "rank_repurchase_cashback" ? "selected" : ""}} value="rank_repurchase_cashback">Personal Rebates</option>
+				<option {{Request::input("sort_by") == "stairstep" ? "selected" : ""}} value="stairstep">Performance Commission</option>
+			</select>
+		</div>
 		<div class="report-content">
 	        <div class="animated fadeInUp holder">
 	          	<div class="table-responsive">
@@ -32,7 +40,7 @@
 	        	  		<thead>
 	        	  			<tr>
 	        	  				<th class="text-center" width="200px">DATE</th>
-	        	  				<th class="text-center" width="100px">SLOT</th>
+	        	  				<!-- <th class="text-center" width="100px">SLOT</th> -->
 	        	  				<th class="text-left">DETAILS</th>
 	        	  				<th class="text-right" width="200px">AMOUNT</th>
 	        	  			</tr>
@@ -45,9 +53,9 @@
 	        		  					<div><b>{{ $reward->display_date }}</b></div>
 	        		  					<div>{{ $reward->time_ago }}</div>
 	        		  				</td>
-	        		  				<td class="text-center">
+	     <!--    		  				<td class="text-center">
 	        		  					<div>{{ $reward->slot_no }}</div>
-	        		  				</td>
+	        		  				</td> -->
 	        		  				<td class="text-left">{!! $reward->log !!}</td>
 	        		  				<td class="text-right"><b>{!! $reward->display_wallet_log_amount !!}</b></td>
 	        		  			</tr>
@@ -100,55 +108,49 @@
 			</div>
 		</div>
 		@endif
-
-		@if($shop_id == 47)
-		<h3 class="text-center">Points Log</h3>
-		<div class="report-content">
-			<div class="animated fadeInUp holder">
-			  	<div class="table-responsive">
-			  		<table class="table">
-	        	  		<thead>
-	        	  			<tr>
-	        	  				<th class="text-center" width="200px">DATE</th>
-	        	  				<th class="text-center" width="100px">SLOT</th>
-	        	  				<th class="text-left">DETAILS</th>
-	        	  				<th class="text-right" width="200px">TYPE</th>
-	        	  				<th class="text-right" width="200px">AMOUNT</th>
-	        	  			</tr>
-	        	  		</thead>
-	        	  		<tbody>
-	        	  			@if(count($_rewards_points) > 0)
-	        		  			@foreach($_rewards_points as $reward)
-	        		  			<tr>
-	        		  				<td class="text-center">
-	        		  					<div><b>{{ $reward->display_date }}</b></div>
-	        		  					<div>{{ $reward->time_ago }}</div>
-	        		  				</td>
-	        		  				<td class="text-center">
-	        		  					<div>{{ $reward->slot_no }}</div>
-	        		  				</td>
-	        		  				<td class="text-left">{!! $reward->log !!}</td>
-	        		  				<td class="text-right">{{$reward->points_log_type}}</td>
-	        		  				<td class="text-right"><b>{!! $reward->log_amount !!}</b></td>
-	        		  			</tr>
-	        		  			@endforeach
-	        		  		@else
-	        		  			<tr class="text-center" >
-	        		  				<td colspan="4">NO REWARD YET</td>
-	        		  			</tr>
-	        	  			@endif
-	        	  		</tbody>
-				  	</table>
-			  	</div>
-			</div>
-		</div>
-		@endif
-
 	</div>
 
 @endsection
 
 @section("member_script")
+<script type="text/javascript">
+	var getUrlParameter = function getUrlParameter(sParam) 
+	{
+	    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+	        sURLVariables = sPageURL.split('&'),
+	        sParameterName,
+	        i;
+
+	    for (i = 0; i < sURLVariables.length; i++) {
+	        sParameterName = sURLVariables[i].split('=');
+
+	        if (sParameterName[0] === sParam) {
+	            return sParameterName[1] === undefined ? true : sParameterName[1];
+	        }
+	    }
+	};
+
+
+	$(".sort_by_log").change(function()
+	{
+		var pagination = getUrlParameter('page');
+		var sort_by    = $(this).val();
+		// var sort_by    = getUrlParameter('sort_by');
+		var string     = "";
+		// if(pagination)
+		// {
+		// 	string  = "?page="+pagination;
+		// 	string  = string + "&sort_by="+sort_by;
+		// }
+		// else
+		// {
+			string  = "?sort_by="+sort_by;
+		// }
+
+	    var url = 'http://' + window.location.hostname + window.location.pathname+string;
+	    window.location.href = url;
+	});
+</script>
 @endsection
 
 @section("member_css")

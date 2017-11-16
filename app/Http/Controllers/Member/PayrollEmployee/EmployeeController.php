@@ -156,7 +156,7 @@ class EmployeeController extends PayrollMember
 		foreach ($data['shift'] as $value) 
 		{	
 			$data['shift_day_id'] = $value->shift_day_id;
-			dd($data['shift_day_id'])
+			//dd($data['shift_day_id'])
 
 			$data['shift_time'] = tbl_payroll_shift_time::where('shift_day_id', $data['shift_day_id'])->get();
 

@@ -5,11 +5,13 @@ use App\Globals\Transaction;
 use App\Globals\Columns;
 use App\Models\Tbl_online_pymnt_method;
 use App\Globals\Payment;
+use App\Globals\Settings;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_online_pymnt_link;
 use Excel;
 use DB;
 use Request;
+use Redirect;
 
 class ProductOrderController2 extends Member
 {
@@ -274,8 +276,34 @@ class ProductOrderController2 extends Member
 
     public function settings()
     {
-        $data = [];
+        $data["shipping_fee"] = isset(Settings::get_settings_php_shop_id("shipping_fee", $this->user_info->shop_id)["settings_value"]) ? Settings::get_settings_php_shop_id("shipping_fee", $this->user_info->shop_id)["settings_value"] : 0;
 
         return view("member.product_order2.settings", $data);
+    }
+
+    public function settings_submit()
+    {
+        $shipping_fee = Request::input("shipping_fee");
+
+        if ($shipping_fee) 
+        {
+            $shipping_exist = Settings::get_settings_php_shop_id("shipping_fee", $this->user_info->shop_id);
+
+            if ($shipping_exist["response_status"] == "success") 
+            {
+                $result = Settings::update_settings_shop_id("shipping_fee", $shipping_fee, $this->user_info->shop_id);
+            }
+            else
+            {
+                $result = Settings::insert_settings_shop_id("shipping_fee", $shipping_fee, $this->user_info->shop_id);
+            }
+
+            if ($result["response_status"] == "error") 
+            {
+                dd($data["message"]);
+            }
+        }
+
+        return Redirect::back();
     }
 }

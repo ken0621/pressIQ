@@ -916,7 +916,7 @@ class Payroll2
 	public static function timesheet_process_in_out($timesheet_db)
 	{
 		$_timesheet_record = null;
-		// dd($_timesheet_record);
+
 		if($timesheet_db)
 		{
 			$_timesheet_record_db = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->get();
@@ -983,6 +983,7 @@ class Payroll2
 			$_timesheet_record[$key]->branch = Payroll2::timesheet_get_branch($record->payroll_company_id)->name;
 			$_timesheet_record[$key]->source = $record->payroll_time_sheet_origin;
 			$_timesheet_record[$key]->payroll_time_sheet_id = $record->payroll_time_sheet_id;
+			$_timesheet_record[$key]->payroll_time_sheet_record_id = $record->payroll_time_sheet_record_id;
 		}
 
 		return $_timesheet_record;

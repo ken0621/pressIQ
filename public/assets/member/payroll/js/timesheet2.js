@@ -46,7 +46,6 @@ function timesheet()
 
 				action_load_link_to_modal("/member/payroll/company_timesheet2/income_summary/" + period_id + "/" + employee_id, "lg");
 			}, 500);
-
 		});
 	}
 	function event_click_custom_shift_checkbox()
@@ -111,6 +110,7 @@ function timesheet()
 
 		//alert(123);
 	}
+
 	function event_time_focus_out_recompute()
 	{
 		/* STORE INITITAL VALUE */
@@ -124,7 +124,17 @@ function timesheet()
 		$(".table-timesheet").on("keyup", ".time-entry", function(e)
 		{
 			var tr_date = $(e.currentTarget).closest(".tr-parent").attr("date");
-			action_reload_rate_for_date(tr_date);
+			var td_class = $(e.currentTarget).closest("td").attr("class");
+			if (td_class == "time-comment-td") 
+			{
+				var remark 				= $(e.currentTarget).val();
+				var timesheet_record_id = $(e.currentTarget).attr("id");
+				action_time_sheet_save_remark(timesheet_record_id, remark);
+			}
+			else
+			{
+				action_reload_rate_for_date(tr_date);
+			}
 		});
 
 		/* CHECK IF INITIAL VALUE CHANGED AFTER FOCUS OUT */
@@ -185,11 +195,34 @@ function timesheet()
 			type:"post",
 			success: function(data)
 			{
-				console.log("TIME CHANGED SUCESS");
+				console.log("TIME CHANGED SUCCESS");
 				$target = $(".tr-parent[date='" + tr_date + "']");
 				$target.find(".rate-output").html(data.string_income).css("opacity", "1");
 			}
 		})
+	}
+
+	function action_time_sheet_save_remark(timesheet_record_id, remark)
+	{
+		$.ajax({
+			url: '/member/payroll/company_timesheet2/remarks_change',
+			type: 'get',
+			data: {timesheet_record_id : timesheet_record_id, remark : remark},
+			success : function (data)
+			{
+
+			}
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
 	}
 
 

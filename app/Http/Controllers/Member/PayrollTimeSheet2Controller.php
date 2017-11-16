@@ -109,7 +109,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
 
 		$data["period_id"] = $period_id;
-		
+		// dd($data);
 		if($data["compute_type"] == "Flat Rate")
 		{
 			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
@@ -283,6 +283,15 @@ class PayrollTimeSheet2Controller extends Member
 		$return["string_income"] = $data["daily_info"]->value_html;
 		
 		echo json_encode($return);
+	}
+
+	public function remarks_change()
+	{
+		$timesheet_record_id  	= Request::input("timesheet_record_id");
+		$update['payroll_time_shee_activity']  	= Request::input("remark");
+		Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id',$timesheet_record_id)->update($update);
+
+		return "success updating";
 	}
 
 	public function timesheet_daily_income_to_string($compute_type, $timesheet_id, $compute, $approved, $period_company_id, $time_keeping_approved = 0)
@@ -958,9 +967,10 @@ class PayrollTimeSheet2Controller extends Member
 		$data["employee_info"] 			= $this->db_get_employee_information($employee_id); 
 		$check_approved 				= Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
 		$data["time_keeping_approved"]  = $check_approved ? true : false;
+		
 		$data["employee_salary"]   		= $this->get_salary($employee_id,$data["start_date"]);
+		
 		$data['access_salary_rate'] 	= Utilities::checkAccess('payroll-timekeeping','salary_rates');
-	
 		switch ($computation_type)
 		{
 			case "Daily Rate":

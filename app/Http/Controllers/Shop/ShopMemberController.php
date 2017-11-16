@@ -120,6 +120,7 @@ class ShopMemberController extends Shop
                 
                 $store["temp_pin"] = $data['mlm_pin'];
                 $store["temp_activation"] = $data['mlm_activation'];
+                $store["online_transaction"] = true;
                 session($store);
             }
    

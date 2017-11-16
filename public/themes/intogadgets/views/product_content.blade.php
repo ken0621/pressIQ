@@ -361,6 +361,13 @@
   max-width: 100% !important;
   width: auto !important;
 }
+@media screen and (max-width: 500px)
+{
+  .single-detail-description 
+  {
+    padding: 5px !important;
+  }
+}
 </style>
 
 @endsection

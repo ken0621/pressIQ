@@ -2,7 +2,7 @@
 @section("content")
 <div class="content">
     <!-- Media Slider -->
-    <!-- <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/front-img2.jpg')">
+    <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/front-img2.jpg')">
         <div class="container">
             <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption.png"></div>
             <div class="caption-container">
@@ -11,8 +11,8 @@
             <div class="btn-container animated fadeInDown">SHOW MORE</div>
             <span class="animated fadeInDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
         </div>
-    </div> -->
-    <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/countdown-img.jpg')">
+    </div>
+    {{-- <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/countdown-img.jpg')">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12 col-xs-12">
@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>

@@ -312,6 +312,7 @@
                                 <a href="/contact"><li>CONTACT US</li></a>
                             </ul>
                         @endif
+                        
                     </nav>
                     <div class="mob-cart-container popup" size="lg" link="/cartv2"><img src="/themes/{{ $shop_theme }}/img/cart-mob.png"></div>
                     <div class="mob-logo-container"><a href="/"><img src="/themes/{{ $shop_theme }}/img/logo.png"></a></div>

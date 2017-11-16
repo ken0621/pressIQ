@@ -1,4 +1,5 @@
-body{
+body
+{
 	font-family: 'Open Sans', sans-serif;
 	background-color: transparent;
 	color: #747474;
@@ -7,6 +8,11 @@ body{
 .slider-wrapper {
 	position: relative;
 	width: 100%;
+}
+
+.slick-next
+{
+	right: 0;
 }
 /* .media-container {
 	position: relative;

@@ -116,29 +116,42 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div> 
+                                </div>
                             </a>
                             <div class="space1"></div>
                             <span>BROWSE</span>
                             <ul class="links">
-                                <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>
-                                <li> <a href="javascript:">PRODUCTS</a> </li>
-                                <li class="{{ Request::segment(2) == "promos" ? "active" : "" }}"> <a href="/promos">PROMOS</a> </li>
-                                <li> <a href="javascript:">COMPANY</a> </li>
-                                <li class="{{ Request::segment(2) == "gallery" ? "active" : "" }}"> <a href="/gallery">GALLERY</a> </li>
-                                <li class="{{ Request::segment(2) == "contact" ? "active" : "" }}"> <a href="/contact">CONTACT US</a> </li>
+                                <li> <a href="/">Home</a> </li>
+                                <li class="product-mobile-dropdown">
+                                    <a href="javascript:">PRODUCTS</a>
+                                </li>
+                                    <ul class="product-mobile-dropdown-list">
+                                        <li>Beauty Skin Care</li>
+                                        <li>Food Supplement</li>
+                                    </ul>
+                                <li> <a href="/promos">PROMOS</a> </li>
+                                <li class="company-mobile-dropdown"> 
+                                    <a href="javascript:">COMPANY</a> 
+                                </li>
+                                    <ul class="company-mobile-dropdown-list">
+                                        <li><a href="/history">Our History</a></li>
+                                        <li><a href="/how_to_join">How to Join</a></li>
+                                        <li><a href="/events">Company Events</a></li>
+                                    </ul>
+                                <li> <a href="/gallery">GALLERY</a> </li>
+                                <li> <a href="/contact">CONTACT US</a> </li>
                             </ul>
                             
                             <div class="space2"></div>
                             <span>MEMBERS AREA</span>
                             <ul class="links">
-                                <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">Dashboard</a> </li>
+                                <li> <a href="/members">Dashboard</a> </li>
                                 <li> <a href="/members/profile">Profile</a> </li>
                                 @if($mlm_member)
-                                <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li>
-                                <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">Reports</a> </li>
-                                <li class="{{ Request::segment(2) == "report_points" ? "active" : "" }}"> <a href="/members/report-points">Reports (Points)</a> </li>
-                                <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">Wallet Encashment</a> </li>
+                                <li> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li>
+                                <li> <a href="/members/report">Reports</a> </li>
+                                <li> <a href="/members/report-points">Reports (Points)</a> </li>
+                                <li> <a href="/members/wallet-encashment">Wallet Encashment</a> </li>
                                     @if($customer)
                                         <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
                                     @endif
@@ -149,12 +162,12 @@
                                 <div class="space1"></div>
                                 <span>BROWSE</span>
                                 <ul class="links">
-                                    <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>
+                                    <li> <a href="/">Home</a> </li>
                                     <li> <a href="javascript:">PRODUCTS</a> </li>
-                                    <li class="{{ Request::segment(2) == "promos" ? "active" : "" }}"> <a href="/promos">PROMOS</a> </li>
+                                    <li> <a href="/promos">PROMOS</a> </li>
                                     <li> <a href="javascript:">COMPANY</a> </li>
-                                    <li class="{{ Request::segment(2) == "gallery" ? "active" : "" }}"> <a href="/gallery">GALLERY</a> </li>
-                                    <li class="{{ Request::segment(2) == "contact" ? "active" : "" }}"> <a href="/contact">CONTACT US</a> </li>
+                                    <li> <a href="/gallery">GALLERY</a> </li>
+                                    <li> <a href="/contact">CONTACT US</a> </li>
                                 </ul>
                             @endif
                     </nav>
@@ -378,7 +391,7 @@
     <div id="fb-root"></div>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
-
+        
     @yield("js")
     </body>
 </html>

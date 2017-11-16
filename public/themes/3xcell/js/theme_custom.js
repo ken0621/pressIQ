@@ -14,10 +14,12 @@ function theme_custom()
 
 	function document_ready()
 	{
+        product_mobile_dropdown();
+        company_mobile_dropdown();
 		action_facebook_widget();
 		event_header_fix();
 		event_action_click();
-        event_mobile_sidenav()
+        event_mobile_sidenav();
 	}
 
 	function action_facebook_widget()
@@ -142,6 +144,22 @@ function theme_custom()
             $(this).toggleClass('active');
             $('.pushmenu-push').toggleClass('pushmenu-push-toright');
             $menuLeft.toggleClass('pushmenu-open');
+        });
+    }
+
+    function product_mobile_dropdown()
+    {
+        $(".product-mobile-dropdown").on("click", function (e) 
+        {
+            $(e.currentTarget).siblings(".product-mobile-dropdown-list").slideToggle();
+        });
+    }
+
+    function company_mobile_dropdown()
+    {
+        $(".company-mobile-dropdown").on("click", function (e) 
+        {
+            $(e.currentTarget).siblings(".company-mobile-dropdown-list").slideToggle();
         });
     }
 }

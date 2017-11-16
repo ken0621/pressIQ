@@ -20,7 +20,7 @@
 									</div>
 									<div class="detail-container">
 										<p>
-											{{ $kit->item_sales_information ? $kit->item_sales_information : $kit->item_purchasing_information }}
+											{!! $kit->item_sales_information ? $kit->item_sales_information : $kit->item_purchasing_information !!}
 										</p>
 									</div>
 								</div>

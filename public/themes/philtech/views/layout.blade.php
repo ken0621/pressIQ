@@ -220,60 +220,60 @@
                     <!-- PUSH MENU NAVIGATION -->
                     <nav class="pushmenu pushmenu-left">
                         @if($customer)
-                        <div class="space1"></div>
-                        <span>CATEGORIES</span>
-                        @if(isset($_categories))
-                            @foreach($_categories as $category)
-                                <div class="links">
-                                    <div class="shop-container">
-                                        {{ $category['type_name'] }}
-                                    </div>
-                                    @if($category['subcategory'])
-                                        <div class="subshop-container">
-                                            @foreach($category['subcategory'] as $subcategory)
-                                                <ul>
-                                                    <a href="/product?type={{ $subcategory['type_id'] }}">
-                                                        <li>
-                                                            {{ $subcategory['type_name'] }}
-                                                        </li>
-                                                    </a>
-                                                </ul>
-                                            @endforeach
+                            <div class="space1"></div>
+                            <span>CATEGORIES</span>
+                            @if(isset($_categories))
+                                @foreach($_categories as $category)
+                                    <div class="links">
+                                        <div class="shop-container">
+                                            {{ $category['type_name'] }}
                                         </div>
-                                    @endif
-                                </div>
-                            @endforeach
-                        @endif
-                        <div class="space2"></div>
-                        <span>BROWSE</span>
-                        <ul class="links">
-                                <a href="/"><li>HOME</li></a>
-                                <a href="/partners"><li>OUT MERCHANTS</li></a>
-                                <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
-                                <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
-                                <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
-                                <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
-                                <a href="/legalities"><li>LEGALITIES</li></a>
-                                <a href="/contact"><li>CONTACT US</li></a>
-                            </ul>
-                        <div class="space2"></div>
-                        <span>MEMBERS AREA</span>
-                        <ul class="links">
-                        <a href="/members"><li class="{{ Request::segment(1) == "members" ? "active" : "" }}" >DASHBOARD</li></a> 
-                            <a href="/members/profile"><li>PROFILE</li></a>
-                            @if($mlm_member)
-                            <a href="/members/genealogy?mode=binary"><li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">GENEALOGY</li></a>
-                            <a href="/members/report"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">REPORTS</li></a>
-                            <a href="/members/network"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">NETWORK LIST</li></a>
-                            <a href="/members/lead-list"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">LEAD LIST</li></a> 
-                            <a href="/members/wallet-encashment"><li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}">WALLET</li></a> 
-                                @if($customer)
-                                    <a href="/members/logout"><li class="user-logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></li>
-                                    </a>
-                                @endif
-                            @else
+                                        @if($category['subcategory'])
+                                            <div class="subshop-container">
+                                                @foreach($category['subcategory'] as $subcategory)
+                                                    <ul>
+                                                        <a href="/product?type={{ $subcategory['type_id'] }}">
+                                                            <li>
+                                                                {{ $subcategory['type_name'] }}
+                                                            </li>
+                                                        </a>
+                                                    </ul>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
                             @endif
-                        </ul>
+                            <div class="space2"></div>
+                            <span>BROWSE</span>
+                            <ul class="links">
+                                    <a href="/"><li>HOME</li></a>
+                                    <a href="/partners"><li>OUT MERCHANTS</li></a>
+                                    <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
+                                    <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
+                                    <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
+                                    <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
+                                    <a href="/legalities"><li>LEGALITIES</li></a>
+                                    <a href="/contact"><li>CONTACT US</li></a>
+                                </ul>
+                            <div class="space2"></div>
+                            <span>MEMBERS AREA</span>
+                            <ul class="links">
+                                <a href="/members"><li class="{{ Request::segment(1) == "members" ? "active" : "" }}" >DASHBOARD</li></a> 
+                                <a href="/members/profile"><li>PROFILE</li></a>
+                                @if($mlm_member)
+                                <a href="/members/genealogy?mode=binary"><li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">GENEALOGY</li></a>
+                                <a href="/members/report"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">REPORTS</li></a>
+                                <a href="/members/network"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">NETWORK LIST</li></a>
+                                <a href="/members/lead-list"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">LEAD LIST</li></a> 
+                                <a href="/members/wallet-encashment"><li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}">WALLET</li></a> 
+                                    @if($customer)
+                                        <a href="/members/logout"><li class="user-logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></li>
+                                        </a>
+                                    @endif
+                                @else
+                                @endif
+                            </ul>
                         @else
                             <div class="space1"></div>
                             <span>CATEGORIES</span>
@@ -317,20 +317,20 @@
                     <div class="mob-logo-container"><a href="/"><img src="/themes/{{ $shop_theme }}/img/logo.png"></a></div>
                 </div>
             </div>
-
+            <!-- SEARCH BAR -->
             @if(Request::segment(1)!="members")
-            <div class="mobile-search">
-                <div class="search-bar">
-                    <form action="/product" method="get" id="form-search">
-                        <div class="input-group">
-                             <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" style="border: none;" name="search" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
-                             <span class="input-group-addon search-button mob-search" id="sizing-addon1">
-                                <a href="" onclick="onSearch();" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>                          
-                             </span>
-                        </div>
-                    </form>
+                <div class="mobile-search">
+                    <div class="search-bar">
+                        <form action="/product" method="get" id="form-search">
+                            <div class="input-group">
+                                 <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" style="border: none;" name="search" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
+                                 <span class="input-group-addon search-button mob-search" id="sizing-addon1">
+                                    <a href="" onclick="onSearch();" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>                          
+                                 </span>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
             @endif
         </div>
 

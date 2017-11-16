@@ -18,6 +18,7 @@
         <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
         @include("frontend.ghead")
        
         <!-- OTHER CSS -->
@@ -38,7 +39,7 @@
         </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
-    <body>
+    <body class="pushmenu-push">
     <div class="loader hide">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
@@ -95,13 +96,76 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-2">
+
+                    <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
+                        
+                        <nav class="pushmenu pushmenu-left">
+                        
+                            @if($customer)
+                            <div class="space1"></div>
+                            <a href="/members/profile">
+                               <div class="profile-img-container">
+                                    <div class="row-no-padding clearfix">
+                                        <div class="col-xs-3">
+                                            <div class="profile-img"><img src="{{ $profile_image }}"></div>
+                                        </div>
+                                        <div class="col-xs-9">
+                                            <div class="text-holder">
+                                                <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+                                                <div class="subtext text-overflow">{{ $customer->email }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </a>
+                            <div class="space1"></div>
+                            <span>BROWSE</span>
+                            <ul class="links">
+                                <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>
+                                <li> <a href="javascript:">PRODUCTS</a> </li>
+                                <li class="{{ Request::segment(2) == "promos" ? "active" : "" }}"> <a href="/promos">PROMOS</a> </li>
+                                <li> <a href="javascript:">COMPANY</a> </li>
+                                <li class="{{ Request::segment(2) == "gallery" ? "active" : "" }}"> <a href="/gallery">GALLERY</a> </li>
+                                <li class="{{ Request::segment(2) == "contact" ? "active" : "" }}"> <a href="/contact">CONTACT US</a> </li>
+                            </ul>
+                            
+                            <div class="space2"></div>
+                            <span>MEMBERS AREA</span>
+                            <ul class="links">
+                                <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">Dashboard</a> </li>
+                                <li> <a href="/members/profile">Profile</a> </li>
+                                @if($mlm_member)
+                                <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li>
+                                <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">Reports</a> </li>
+                                <li class="{{ Request::segment(2) == "report_points" ? "active" : "" }}"> <a href="/members/report-points">Reports (Points)</a> </li>
+                                <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">Wallet Encashment</a> </li>
+                                    @if($customer)
+                                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                                    @endif
+                                @else
+                                @endif
+                            </ul>
+                            @else
+                                <div class="space1"></div>
+                                <span>BROWSE</span>
+                                <ul class="links">
+                                    <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>
+                                    <li> <a href="javascript:">PRODUCTS</a> </li>
+                                    <li class="{{ Request::segment(2) == "promos" ? "active" : "" }}"> <a href="/promos">PROMOS</a> </li>
+                                    <li> <a href="javascript:">COMPANY</a> </li>
+                                    <li class="{{ Request::segment(2) == "gallery" ? "active" : "" }}"> <a href="/gallery">GALLERY</a> </li>
+                                    <li class="{{ Request::segment(2) == "contact" ? "active" : "" }}"> <a href="/contact">CONTACT US</a> </li>
+                                </ul>
+                            @endif
+                    </nav>
+
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></a>    
-                        <div class="menu-nav">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>                   
+                        <!-- <div class="menu-nav">
+                               <span></span>
+                               <span></span>
+                               <span></span>
+                           </div> -->                   
                     </div>
                 </div>
                 <div class="col-md-10">

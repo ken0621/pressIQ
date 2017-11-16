@@ -17,6 +17,7 @@ function theme_custom()
 		action_facebook_widget();
 		event_header_fix();
 		event_action_click();
+        event_mobile_sidenav()
 	}
 
 	function action_facebook_widget()
@@ -131,4 +132,16 @@ function theme_custom()
             $(".minimize-product-holder").toggle("slow");
         });
 	}
+
+    function event_mobile_sidenav()
+    {
+        $menuLeft = $('.pushmenu-left');
+        $nav_list = $('#nav_list');
+        
+        $nav_list.click(function() {
+            $(this).toggleClass('active');
+            $('.pushmenu-push').toggleClass('pushmenu-push-toright');
+            $menuLeft.toggleClass('pushmenu-open');
+        });
+    }
 }

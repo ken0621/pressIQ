@@ -20,7 +20,27 @@ function theme_custom()
 		event_header_fix();
 		event_action_click();
         event_mobile_sidenav();
+        scroll_up();
 	}
+
+    function scroll_up()
+    {
+        /*scroll up*/
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 700) {
+                $('.scroll-up').fadeIn();
+            } else {
+                $('.scroll-up').fadeOut();
+            }
+        });
+
+        $('.scroll-up').click(function () {
+            $("html, body").animate({
+                scrollTop: 0
+            }, 700);
+            return false;
+        });
+    }
 
 	function action_facebook_widget()
 	{

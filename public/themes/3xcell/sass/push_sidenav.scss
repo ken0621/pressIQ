@@ -39,6 +39,11 @@ $bold: 700;
         font-weight: $semi-bold;
         color: #fff;
         padding-left: 30px;
+
+        @media screen and (max-width: 320px)
+        {
+            font-size: 16px;
+        }
     }
 
     .profile-img-container
@@ -78,6 +83,7 @@ $bold: 700;
                 font-weight: $regular;
                 font-size: 18px;
             }
+
             .subtext
             {
                 color: rgba(255,255,255,0.5);
@@ -125,6 +131,14 @@ $bold: 700;
             //line-height: 80%;
             //padding: 5px;
         }
+
+        @media screen and (max-width: 320px)
+        {
+            a
+            {
+                font-size: 14px;
+            }
+        }
     }
 
     ul
@@ -135,8 +149,16 @@ $bold: 700;
         a
         {
             text-decoration: none;
-            color: #fff;
+            color: #f1f1f1;
             font-size: 14px;
+        }
+
+        @media screen and (max-width: 320px)
+        {
+            a
+            {
+                font-size: 13px;
+            }
         }
     }
 
@@ -247,6 +269,11 @@ $bold: 700;
 
  @media screen and (max-width: 768px)
  {
+    .header-container 
+    {
+        padding-bottom: 0px;
+    }
+
     .image-logo-holder
     {
         margin-top: -65px;

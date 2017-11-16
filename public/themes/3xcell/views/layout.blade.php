@@ -129,13 +129,17 @@
                                 <li class="product-mobile-dropdown">
                                     <a href="javascript:">PRODUCTS</a>
                                 </li>
-                                    <ul class="product-mobile-dropdown-list">
-                                        <li>Beauty Skin Care</li>
-                                        <li>Food Supplement</li>
-                                        <li>Food Supplement</li>
-                                        <li>Business Packages</li>
-                                        <li>Retail Packages</li>
-                                    </ul>
+                                    @if(count($_categories) > 0)
+                                        <ul class="product-mobile-dropdown-list">
+                                            @foreach($_categories as $categories)
+                                                <li>
+                                                    <a href="/product?type={{ $categories["type_id"] }}">
+                                                        {{ $categories["type_name"] }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
                                 <li> <a href="/promos">PROMOS</a> </li>
                                 <li class="company-mobile-dropdown"> 
                                     <a href="javascript:">COMPANY</a> 
@@ -177,13 +181,17 @@
                                     <li class="product-mobile-dropdown">
                                         <a href="javascript:">PRODUCTS</a>
                                     </li>
-                                        <ul class="product-mobile-dropdown-list">
-                                            <li>Beauty Skin Care</li>
-                                            <li>Food Supplement</li>
-                                            <li>Food Supplement</li>
-                                            <li>Business Packages</li>
-                                            <li>Retail Packages</li>
-                                        </ul>
+                                        @if(count($_categories) > 0)
+                                            <ul class="product-mobile-dropdown-list">
+                                                @foreach($_categories as $categories)
+                                                    <li>
+                                                        <a href="/product?type={{ $categories["type_id"] }}">
+                                                            {{ $categories["type_name"] }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
                                     <li> <a href="/promos">PROMOS</a> </li>
                                     <li class="company-mobile-dropdown"> 
                                         <a href="javascript:">COMPANY</a> 

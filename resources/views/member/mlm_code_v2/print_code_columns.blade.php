@@ -57,7 +57,7 @@
                             <input type="number" name="print_range_to" class='form-control range-to' value="{{$from or '1'}}"/>
                         </div>
                         <div class="col-md-6">
-                            <input type="number" name="print_range_from" class='form-control range-from'/>
+                            <input type="number" name="print_range_from" class='form-control range-from' value="{{$from or '1'}}"/>
                         </div>
                     </div>
 

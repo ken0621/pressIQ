@@ -271,8 +271,18 @@ class MLM_CodeControllerV2 extends Member
                 Item::tag_as_printed($warehouse_id, $request->print_range_to, $request->print_range_from);
             }
         }
+        $paper_size = null;
+        $orientation = 'portrait';
+        if($this->user_info->shop_id == 5)
+        {
+            if($request->type == 'register_form')
+            {
+                $paper_size = "a6";
+                $orientation = 'landscape';
+            }
+        }
         $pdf = view('member.mlm_code_v2.print_code_pdf', $data);
-        return Pdf_global::show_pdf($pdf);
+        return Pdf_global::show_pdf($pdf, $orientation, null, $paper_size);
     }
     public function report_code(Request $request)
     {

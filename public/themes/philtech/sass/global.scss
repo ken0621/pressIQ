@@ -276,6 +276,10 @@ body
 .header-nav
 {
 	background-color: #fff;
+	@media screen and (max-width: 768px)
+	{
+		display: none;
+	}
 	.header-nav-top
 	{
 		text-align: right;
@@ -662,6 +666,10 @@ body
 .left-bar-categories
 {
 	background-color: #fff;
+	@media screen and (max-width: 768px)
+	{
+		display: none;
+	}
 	.left-bar-title
 	{
 		padding: 12px 12px 12px 20px;
@@ -745,6 +753,8 @@ body
 		}
 	}
 }
+
+
 
 .row-no-padding
 {
@@ -1590,6 +1600,49 @@ footer
 {
 	@media screen and (max-width: 768px)
 	{
-		margin-top: 100px;
+		margin-top: 139px;
+	}
+	@media screen and (max-width: 425px)
+	{
+		margin-top: 122px;
+	}
+	@media screen and (max-width: 375px)
+	{
+		margin-top: 113px;
+	}
+	@media screen and (max-width: 320px)
+	{
+		margin-top: 106px;
 	}		
+}
+.member-mob-margin
+{
+	@media screen and (max-width: 768px)
+	{
+		margin-top: 40px;
+	}
+	@media screen and (max-width: 375px)
+	{
+		margin-top: 26px;
+	}
+	@media screen and (max-width: 320px)
+	{
+		margin-top: 20px;
+	}
+}
+.mobile-search
+{
+	display: none;
+	padding: 15px;
+	background-color: #006cc5;
+
+	@media screen and (max-width: 768px)
+	{
+		display: block !important;
+	}
+}
+.mob-search 
+{
+	border: none;
+	background-color: #ff8500;
 }

@@ -967,9 +967,10 @@ class PayrollTimeSheet2Controller extends Member
 		$data["employee_info"] 			= $this->db_get_employee_information($employee_id); 
 		$check_approved 				= Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
 		$data["time_keeping_approved"]  = $check_approved ? true : false;
+		
 		$data["employee_salary"]   		= $this->get_salary($employee_id,$data["start_date"]);
+		
 		$data['access_salary_rate'] 	= Utilities::checkAccess('payroll-timekeeping','salary_rates');
-	
 		switch ($computation_type)
 		{
 			case "Daily Rate":

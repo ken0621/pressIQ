@@ -275,6 +275,12 @@
                                         </select>
                                     </td>
                                 </tr>
+                                </tr>
+                                    <td>Repurchase Cashback Points Convert Day</td>
+                                    <td>
+                                        <input type="number" class="form-control" name="repurchase_cashback_date_convert" value="{{$plan_settings->repurchase_cashback_date_convert}}">
+                                    </td>
+                                </tr>
                             </tbody>
                         
                         @else

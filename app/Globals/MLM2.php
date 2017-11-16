@@ -17,16 +17,21 @@ use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_plan_setting;
+use App\Models\Tbl_mlm_cashback_convert_history;
+use App\Models\Rel_cashback_convert_history;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
 use App\Globals\Mlm_compute;
+use App\Globals\Warehouse2;
+use App\Globals\Mlm_slot_log;
 
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 use Validator;
 use stdClass;
 use DB;
+use session;
 
 class MLM2
 {
@@ -375,6 +380,16 @@ class MLM2
 				}
 
 				$return["_wallet"]->total_points += $slot_points->points_log_points;
+
+				if($wallet_plan == "repurchase_cashback")
+				{
+					if($slot_points->points_log_converted == 1)
+					{
+						$return["_points"]->$wallet_plan -= $slot_points->points_log_points;
+					}
+					
+					$return["_wallet"]->total_points -= $slot_points->points_log_points;
+				}
 			}
 		}
 
@@ -398,7 +413,7 @@ class MLM2
 		$return["_slot"] = $_slot;
 		$return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
 		$return["_wallet"]->display_total_points = number_format($return["_wallet"]->total_points, 2) . " POINT(S)";;
-
+		
 		return $return;
 	}
 	public static function complan_to_label($shop_id, $string)
@@ -689,19 +704,32 @@ class MLM2
 	public static function use_membership_code($shop_id, $pin, $activation, $slot_id_created, $remarks = null, $consume = array())
 	{
 		$update["mlm_slot_id_created"] 		= $slot_id_created;
+		$update["record_log_date_updated"]	= Carbon::now();
 		$update["item_in_use"] 				= "used";
 		$update["record_inventory_status"]	= 1;
-		
-		if(count($consume) > 0)
-		{
-			$update["record_consume_ref_name"] 	= $consume['name'];
-			$update["record_consume_ref_id"]	= $consume['id'];
-		}
 
 		if($remarks)
 		{
 			$initial_record 					= Tbl_warehouse_inventory_record_log::codes($shop_id, $pin, $activation)->first();
 			$update["record_item_remarks"]	 	= $initial_record->record_item_remarks . "\r\n" . $remarks;
+
+			if($initial_record->record_warehouse_id != Warehouse2::get_main_warehouse($shop_id))
+			{
+				$consume['name'] = 'offline_transaction';
+				$consume['id'] = $slot_id_created;
+			}
+			if(!session('online_transaction'))
+			{
+				$consume['name'] = 'offline_transaction';
+				$consume['id'] = $slot_id_created;
+			}
+            Warehouse2::insert_item_history($initial_record->record_log_id);
+		}
+		
+		if(count($consume) > 0)
+		{
+			$update["record_consume_ref_name"] 	= $consume['name'];
+			$update["record_consume_ref_id"]	= $consume['id'];
 		}
 
 		Tbl_warehouse_inventory_record_log::codes($shop_id, $pin, $activation)->update($update);
@@ -1256,6 +1284,7 @@ class MLM2
 			$data["REPURCHASE_POINTS"]			= isset($item_points->REPURCHASE_POINTS) ? $item_points->REPURCHASE_POINTS : 0;
 			$data["UNILEVEL_REPURCHASE_POINTS"]	= isset($item_points->UNILEVEL_REPURCHASE_POINTS) ? $item_points->UNILEVEL_REPURCHASE_POINTS : 0;
 			$data["REPURCHASE_CASHBACK"]		= isset($item_points->REPURCHASE_CASHBACK) ? $item_points->REPURCHASE_CASHBACK : 0;
+			$data["REPURCHASE_CASHBACK_POINTS"]	= isset($item_points->REPURCHASE_CASHBACK_POINTS) ? $item_points->REPURCHASE_CASHBACK_POINTS : 0;
 			$data["DISCOUNT_CARD_REPURCHASE"]	= isset($item_points->DISCOUNT_CARD_REPURCHASE) ? $item_points->DISCOUNT_CARD_REPURCHASE : 0;
 			$data["STAIRSTEP"]					= isset($item_points->STAIRSTEP) ? $item_points->STAIRSTEP : 0;
 			$data["BINARY_REPURCHASE"]			= isset($item_points->BINARY_REPURCHASE) ? $item_points->BINARY_REPURCHASE : 0;
@@ -1351,5 +1380,58 @@ class MLM2
 		}
 
 		return $return;
+	}
+	public static function convert_repurchase_cashback_points($shop_id)
+	{
+		$get_cashback 	  						 = Tbl_mlm_slot_points_log::slot()->where("shop_id",$shop_id)->where("points_log_type","RCP")->where("points_log_converted",0)->get();
+		$converted_points 						 = null;
+		// dd($get_cashback);
+		$insert["cashback_convert_history_date"] = Carbon::now();
+		$insert["shop_id"] 						 = $shop_id;
+		$history_id 							 = Tbl_mlm_cashback_convert_history::insertGetId($insert);
+		foreach($get_cashback as $cashback)
+		{
+			if(!isset($converted_points[$cashback->points_log_slot]))
+			{
+				$converted_points[$cashback->points_log_slot]  = $cashback->points_log_points;
+			}
+			else
+			{
+				$converted_points[$cashback->points_log_slot] += $cashback->points_log_points;
+			}
+
+			$rel_insert["rel_points_log_id"] 			   = $cashback->points_log_id;
+			$rel_insert["rel_cashback_convert_history_id"] = $history_id;
+			$rel_insert["shop_id"] 						   = $history_id;
+			Rel_cashback_convert_history::insert($rel_insert);
+		}	
+
+		if($converted_points != null)
+		{
+			foreach($converted_points as $key => $convert)
+			{
+				$slot_info               = Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$key)->first();
+                $log_array['earning']    = $convert;
+                $log_array['level']      = 0;
+                $log_array['level_tree'] = 'Binary Tree';
+                $log_array['complan']    = 'REPURCHASE_CASHBACK_POINTS';
+
+                $log = Mlm_slot_log::log_constructor($slot_info, $slot_info,  $log_array);
+
+                $arry_log['wallet_log_slot']         = $slot_info->slot_id;
+                $arry_log['shop_id']                 = $slot_info->shop_id;
+                $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                $arry_log['wallet_log_details']      = $log;
+                $arry_log['wallet_log_amount']       = $convert;
+                $arry_log['wallet_log_plan']         = "REPURCHASE_CASHBACK_POINTS";
+                $arry_log['wallet_log_status']       = "n_ready";   
+                $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK_POINTS', $slot_info->shop_id); 
+                Mlm_slot_log::slot_array($arry_log);
+			}
+
+
+			Tbl_mlm_slot_points_log::slot()->where("shop_id",$shop_id)->where("points_log_type","RCP")->where("points_log_converted",0)->update(['points_log_converted' => 1]);
+		}
+
 	}
 }

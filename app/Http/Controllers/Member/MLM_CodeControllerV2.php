@@ -275,7 +275,7 @@ class MLM_CodeControllerV2 extends Member
         $orientation = 'portrait';
         if($this->user_info->shop_id == 5)
         {
-            if($request->type)
+            if($request->type == 'register_form')
             {
                 $paper_size = "a6";
                 $orientation = 'landscape';

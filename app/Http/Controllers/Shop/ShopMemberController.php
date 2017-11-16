@@ -120,6 +120,7 @@ class ShopMemberController extends Shop
                 
                 $store["temp_pin"] = $data['mlm_pin'];
                 $store["temp_activation"] = $data['mlm_activation'];
+                $store["online_transaction"] = true;
                 session($store);
             }
    
@@ -714,6 +715,7 @@ class ShopMemberController extends Shop
                 {
                     $update_bank["payout_bank_id"] = request("bank_id")[$key];
                     $update_bank["bank_account_number"] = request("bank_account_no")[$key];
+                    $update_bank["bank_account_type"] = request("bank_account_type")[$key];
                     Tbl_mlm_slot_bank::where("slot_id", $slotinfo->slot_id)->update($update_bank);
                 }
                 else
@@ -721,6 +723,7 @@ class ShopMemberController extends Shop
                     $insert_bank["slot_id"] = $slotinfo->slot_id;
                     $insert_bank["payout_bank_id"] = request("bank_id")[$key];
                     $insert_bank["bank_account_number"] = request("bank_account_no")[$key];
+                    $insert_bank["bank_account_type"] = request("bank_account_type")[$key];
                     Tbl_mlm_slot_bank::insert($insert_bank);
                 }
             }

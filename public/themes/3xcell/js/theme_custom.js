@@ -160,7 +160,7 @@ function theme_custom()
         $menuLeft = $('.pushmenu-left');
         $nav_list = $('#nav_list');
         
-        $nav_list.click(function() {
+        $nav_list.on("click", function() {
             $(this).toggleClass('active');
             $('.pushmenu-push').toggleClass('pushmenu-push-toright');
             $menuLeft.toggleClass('pushmenu-open');

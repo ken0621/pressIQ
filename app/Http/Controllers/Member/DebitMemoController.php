@@ -556,6 +556,7 @@ class DebitMemoController extends Member
     }
     public function replace($debit_memo_id)
     {
+
         $data["serial"] = ItemSerial::check_setting();
         $data["debit_memo_id"] = $debit_memo_id;
         $data["_db_item"] = Tbl_debit_memo_line::replace_dbitem()->db_item()->where("dbline_db_id",$debit_memo_id)->get();

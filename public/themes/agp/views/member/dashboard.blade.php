@@ -71,6 +71,34 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="title">Wallet Per Slot</div>
+				<div class="sub-container">
+					<div class="table-holder">
+						<div class="chart-legend">
+							@foreach($_slot as $slot)
+							<div class="holder">
+								<div class="color" style="background-color: #019771"></div>
+								<div class="name"><span>{{ $slot->slot_no }}</span> {{ $slot->display_current_wallet }}</div>
+							</div>
+							@endforeach
+						</div>
+					</div>
+				</div>
+
+				<div class="title">Replicated Link</div>
+				<div class="sub-container">
+						@foreach($_slot as $slot)
+						<div class="holder">
+							<div class="row clearfix">
+								<div class="col-sm-12 text-center">
+									<div class="label2">{{ $slot->slot_no }}</div>
+									<div> <a href="javascript:" onclick="action_load_link_to_modal('/members/lead?slot_no={{ urlencode($slot->slot_no) }}','md')"> VIEW LEAD LINK</a></b></div>
+								</div>
+							</div>
+						</div>
+						@endforeach
+				</div>
 			</div>
 
 			<div class="col-md-6">
@@ -87,6 +115,7 @@
 						</div>
 					</div>
 				</div>
+
 
 				<div class="title">Reward Points</div>
 				<div class="sub-container">

@@ -41,9 +41,9 @@
                     <table class="table table-bordered table-condensed">
                         <thead>
                             <tr>
-                                <th>Truck Info</th>
                                 <th>Truck Plate Number</th>
-                                <th class="text-center">Warehouse</th>
+                                <th>Warehouse</th>
+                                <th>Truck Info</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -51,9 +51,9 @@
                         @if($_truck != null)
                             @foreach($_truck as $truck)
                             <tr>
-                                <td>{{$truck->truck_model}} ({{$truck->truck_kilogram}} kg.)</td>
                                 <td >{{strtoupper($truck->plate_number)}}</td>
                                 <td>{{$truck->warehouse_name}}</td>
+                                <td>{{$truck->truck_model}} ({{$truck->truck_kilogram}} kg.)</td>
                                 <td class="text-center">
                                     <a link="/member/pis/truck_list/edit/{{$truck->truck_id}}" size="md" class="popup">Edit</a> |
                                     <a link="/member/pis/truck_list/archived/{{$truck->truck_id}}/archived" size="md" class="popup">Archived</a> 

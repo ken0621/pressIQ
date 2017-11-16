@@ -18,8 +18,7 @@ function global_cart()
     }
     function event_add_to_cart()
     {
-        $(".product-add-cart").unbind("click");
-        $(".product-add-cart").bind("click", function(e)
+        $("body").on("click", ".product-add-cart", function(e)
         {
             action_add_to_cart(e.currentTarget);
         });

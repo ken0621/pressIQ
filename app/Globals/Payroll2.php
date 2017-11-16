@@ -2875,16 +2875,20 @@ class Payroll2
 		}
 		if($time_spent==0 && $_time["day_type"] != "rest_day" && $_time["day_type"] != "extra_day" && $leave_float == 0)
 		{
-
 			$cola_daily_deduction = $cola;		
 		}
-		
+
+		if ($leave_float != 0) 
+		{
+			$cola_daily_deduction = $cola;
+			$cola = $cola - $cola;
+			$daily_cola = $daily_cola - $daily_cola;
+		}
 		
 		//for daily fixed cola
 		if ($time_spent==0) 
 		{
 			$daily_cola = $daily_cola - $daily_cola;
-
 			//debugging report: from else if in top to here
 			$cola = $cola - $cola;
 			//debugging report: from else if in top to here
@@ -2906,6 +2910,10 @@ class Payroll2
 			$cola = $cola - ($undertime_float * $cola_rate_per_hour);
 		}
 
+		if ($cola < 0) 
+		{
+			$cola = 0;
+		}
 
 		$return->cola_daily 		  = $daily_cola;
 		$return->cola_day_pay 		  = $cola;
@@ -2915,7 +2923,6 @@ class Payroll2
 		$return->cola_percentile 	  = @($cola / ($daily_rate+$cola));
 		
 		return $return;
-		
 	}
 
 
@@ -3456,7 +3463,6 @@ class Payroll2
 	{
 		$return = new stdClass();
 
-
 		$data["employee_id"] 		= $employee_id;
 		$data["employee"]			= Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->first();
 
@@ -3500,8 +3506,6 @@ class Payroll2
 		}
 
 		$return = Payroll2::cutoff_breakdown_additions($return, $data);
-
-		
 		
 		if ($group->payroll_group_cola_basis == "") 
 		{
@@ -3922,7 +3926,8 @@ class Payroll2
 		$payroll_company_id = $date_query->payroll_company_id;
 
 		/* SSS COMPUTATION */
-		$sss_description = "";	
+		$sss_description = "";
+
 		if($sss_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
 		{
 			$sss_contribution = Payroll::sss_contribution($shop_id, $sss_declared);
@@ -3950,6 +3955,7 @@ class Payroll2
 				/* CHECK EXCEED MONTH */
 				$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
 				$total_cutoff = 0;
+
 				foreach($_cutoff as $cutoff)
 				{
 					$total_cutoff += $cutoff->sss_ee;
@@ -4009,19 +4015,50 @@ class Payroll2
 				}
 				else
 				{
-					$last_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					// $last_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					
+					// if($last_cutoff)
+					// {
+					// 	$sss_description .= "<br> Using previous cutoff as reference, previous SSS Salary used is " . payroll_currency($last_cutoff->sss_salary) . " (" . payroll_currency($last_cutoff->sss_ee) . ")";
+					// 	$sss_reference_amount = $sss_reference_amount + $last_cutoff->sss_salary;
+					// 	$sss_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($sss_reference_amount);
+					// 	$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+					// 	$sss_description .= "<br> New SSS Bracket falls to " . payroll_currency($sss_contribution["ee"]);
+					// 	$sss_description .= "<br> NEW BRACKET (" . payroll_currency($sss_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->sss_ee) . ")";
+					// 	$sss_contribution["ee"] = $sss_contribution["ee"] - $last_cutoff->sss_ee;
+					// 	$sss_contribution["er"] = $sss_contribution["er"] - $last_cutoff->sss_er;
+					// 	$sss_contribution["ec"] = $sss_contribution["ec"] - $last_cutoff->sss_ec;
+					// 	$last_cutoff->sss_salary;
+					// }
+
+					$last_cutoff 			= Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					$_period_approved 		= Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+					
+					$total_previous_cutoff_sss_ee  	= 0;
+					$total_previous_cutoff_sss_er	= 0;
+					$total_previous_cutoff_sss_ec	= 0;
+
+					foreach ($_period_approved as $key => $period_approved) 
+					{
+						$total_previous_cutoff_sss_ee += $period_approved->sss_ee;
+						$total_previous_cutoff_sss_er += $period_approved->sss_er;
+						$total_previous_cutoff_sss_ec += $period_approved->sss_ec;
+					}
 					
 					if($last_cutoff)
 					{
-						$sss_description .= "<br> Using previous cutoff as reference, previous SSS Salary used is " . payroll_currency($last_cutoff->sss_salary) . " (" . payroll_currency($last_cutoff->sss_ee) . ")";
 						$sss_reference_amount = $sss_reference_amount + $last_cutoff->sss_salary;
-						$sss_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($sss_reference_amount);
 						$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+						
+						$sss_description .= "<br> Using previous cutoff as reference, all previous SSS Salary used is " . payroll_currency($last_cutoff->sss_salary) . " (" . payroll_currency($total_previous_cutoff_sss_ee) . ")";
+						$sss_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($sss_reference_amount);
 						$sss_description .= "<br> New SSS Bracket falls to " . payroll_currency($sss_contribution["ee"]);
-						$sss_description .= "<br> NEW BRACKET (" . payroll_currency($sss_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->sss_ee) . ")";
-						$sss_contribution["ee"] = $sss_contribution["ee"] - $last_cutoff->sss_ee;
-						$sss_contribution["er"] = $sss_contribution["er"] - $last_cutoff->sss_er;
-						$sss_contribution["ec"] = $sss_contribution["ec"] - $last_cutoff->sss_ec;
+						$sss_description .= "<br> NEW BRACKET (" . payroll_currency($sss_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($total_previous_cutoff_sss_ee) . ")";
+						
+						$sss_contribution["ee"] = $sss_contribution["ee"] - $total_previous_cutoff_sss_ee;
+						$sss_contribution["er"] = $sss_contribution["er"] - $total_previous_cutoff_sss_er;
+						$sss_contribution["ec"] = $sss_contribution["ec"] - $total_previous_cutoff_sss_ec;
+
 						$last_cutoff->sss_salary;
 					}
 					else
@@ -4029,7 +4066,6 @@ class Payroll2
 						dd("Warning! This is not the 1st period of the month and the system can't find reference period for the month of $period_month($period_year)");
 					}
 				}
-				
 			}
 			else
 			{
@@ -4072,7 +4108,6 @@ class Payroll2
 		/* PHILHEALTH COMPUTATION */	
 		if($philhealth_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
 		{
-			
 			$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_declared);
 			$philhealth_description = payroll_currency($philhealth_declared) . " declared PHILHEALTH Salary";
 
@@ -4570,11 +4605,16 @@ class Payroll2
 				$total_cola = $data["salary"]->monthly_cola;
 			}
 		}
-		
+		$deducted = 0;
+		$added    = 0;
 		foreach ($data["cutoff_input"] as $key => $cutoff_input) 
 		{
 			$total_cola = $total_cola - $cutoff_input->compute->total_day_cola_deduction;
 			$total_cola = $total_cola + $cutoff_input->compute->total_day_cola_addition;
+
+			/*checking*/
+			$deducted 	+= $cutoff_input->compute->total_day_cola_deduction;
+			$added 		+= $cutoff_input->compute->total_day_cola_addition;
 		}
 
 		$val["label"] = "COLA";
@@ -4598,199 +4638,202 @@ class Payroll2
 	{
 
 		$_allowance = Tbl_payroll_employee_allowance_v2::where("payroll_employee_id", $data["employee_id"])->where('tbl_payroll_allowance_v2.payroll_allowance_archived',0)->joinAllowance()->get();
-		
+	
 		foreach($_allowance as $allowance)
 		{
-			$allowance_amount = $allowance->payroll_employee_allowance_amount;
-			$allowance_name = $allowance->payroll_allowance_name;
+			$allowance_period = strtolower(str_replace(' ', '_', $allowance->payroll_allowance_add_period));
 
-			if($allowance->payroll_allowance_type == "fixed")
+			if ($allowance_period == $data['period_info']['period_count'] || $allowance->payroll_allowance_add_period == "Every Period") 
 			{
-				$val["label"] = $allowance_name;
-				$val["type"] = "additions";
-				$val["record_type"] = "allowance";
-				$val["amount"] = $allowance_amount;
+				$allowance_amount 	= $allowance->payroll_employee_allowance_amount;
+				$allowance_name 	= $allowance->payroll_allowance_name;
 
-				if($allowance->payroll_allowance_category == "Taxable")
+				if($allowance->payroll_allowance_type == "fixed")
 				{
-					$val["add.gross_pay"] = true;
-					$val["deduct.gross_pay"] = false;
-					$val["add.taxable_salary"] = false;
-					$val["deduct.taxable_salary"] = false;
-					$val["add.net_pay"] = false;
-					$val["deduct.net_pay"] = false;
-				}
-				elseif ($allowance->payroll_allowance_category == "Hidden") {
-					$val["add.gross_pay"] = false;
-					$val["deduct.gross_pay"] = false;
-					$val["add.taxable_salary"] = false;
-					$val["deduct.taxable_salary"] = false;
-					$val["add.net_pay"] = true;
-					$val["deduct.net_pay"] = false;
-				}
-				else
-				{
-					$val["add.gross_pay"] = true;
-					$val["deduct.gross_pay"] = false;
-					$val["add.taxable_salary"] = false;
-					$val["deduct.taxable_salary"] = true;
-					$val["add.net_pay"] = true;
-					$val["deduct.net_pay"] = false;
-				}
+					$val["label"] 	= $allowance_name;
+					$val["type"] 	= "additions";
+					$val["record_type"] = "allowance";
+					$val["amount"] 	= $allowance_amount;
 
-				array_push($return->_breakdown, $val);
-				$val = null;
-			}
+					if($allowance->payroll_allowance_category == "Taxable")
+					{
+						$val["add.gross_pay"] = true;
+						$val["deduct.gross_pay"] = false;
+						$val["add.taxable_salary"] = false;
+						$val["deduct.taxable_salary"] = false;
+						$val["add.net_pay"] = false;
+						$val["deduct.net_pay"] = false;
+					}
+					elseif ($allowance->payroll_allowance_category == "Hidden") {
+						$val["add.gross_pay"] = false;
+						$val["deduct.gross_pay"] = false;
+						$val["add.taxable_salary"] = false;
+						$val["deduct.taxable_salary"] = false;
+						$val["add.net_pay"] = true;
+						$val["deduct.net_pay"] = false;
+					}
+					else
+					{
+						$val["add.gross_pay"] = true;
+						$val["deduct.gross_pay"] = false;
+						$val["add.taxable_salary"] = false;
+						$val["deduct.taxable_salary"] = true;
+						$val["add.net_pay"] = true;
+						$val["deduct.net_pay"] = false;
+					}
 
-			else if($allowance->payroll_allowance_type == 'pro_rated')
-			{
-				$actual_gross_pay = 0;
-				$standard_gross_pay = 0;
-				$val["label"] = $allowance_name;
-				$val["type"] = "additions";
-				$val["record_type"] = "allowance";
-				$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
-				
-				if ($allowance->basic_pay==1) 
-				{
-					$actual_gross_pay += $data['cutoff_compute']->cutoff_basic;
-					$d['basic'] = $data['cutoff_compute']->cutoff_basic;
+					array_push($return->_breakdown, $val);
+					$val = null;
 				}
 
-				if ($allowance->cola==1) 
+				else if($allowance->payroll_allowance_type == 'pro_rated')
 				{
-					$actual_gross_pay += $data['cutoff_compute']->cutoff_cola;
-					$d['cola'] = $data['cutoff_compute']->cutoff_cola;
-				}
-
-				$overtime = 0;
-				$special_holiday = 0;
-				$leave_pay = 0;
-				$regular_holiday = 0;
-				$deduction = 0;
-				$count = 0;
-
-
-				foreach ($data['cutoff_input'] as $value) 
-				{
+					$actual_gross_pay = 0;
+					$standard_gross_pay = 0;
+					$val["label"] = $allowance_name;
+					$val["type"] = "additions";
+					$val["record_type"] = "allowance";
+					$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
 					
-					if (isset($value->compute->_breakdown_addition)) 
+					if ($allowance->basic_pay==1) 
 					{
-						foreach ($value->compute->_breakdown_addition as $lbl => $values) 
+						$actual_gross_pay += $data['cutoff_compute']->cutoff_basic;
+						$d['basic'] = $data['cutoff_compute']->cutoff_basic;
+					}
+
+					if ($allowance->cola==1) 
+					{
+						$actual_gross_pay += $data['cutoff_compute']->cutoff_cola;
+						$d['cola'] = $data['cutoff_compute']->cutoff_cola;
+					}
+
+					$overtime = 0;
+					$special_holiday = 0;
+					$leave_pay = 0;
+					$regular_holiday = 0;
+					$deduction = 0;
+					$count = 0;
+
+					foreach ($data['cutoff_input'] as $value) 
+					{
+						if (isset($value->compute->_breakdown_addition)) 
 						{
-
-							if ($allowance->over_time_pay==1) 
+							foreach ($value->compute->_breakdown_addition as $lbl => $values) 
 							{
-								if (in_array($lbl, $ot_category)) 
+
+								if ($allowance->over_time_pay==1) 
 								{
-									$actual_gross_pay += $values['rate'];
-									$overtime += $values['rate'];
+									if (in_array($lbl, $ot_category)) 
+									{
+										$actual_gross_pay += $values['rate'];
+										$overtime += $values['rate'];
+									}
 								}
-							}
 
-							if($allowance->regular_holiday_pay==1)
-							{
-								if ($lbl == 'Legal Holiday' || $lbl == 'Legal Holiday Rest Day') 
+								if($allowance->regular_holiday_pay==1)
 								{
-									$actual_gross_pay += $values['rate'];
-									$regular_holiday += $values['rate'];
+									if ($lbl == 'Legal Holiday' || $lbl == 'Legal Holiday Rest Day') 
+									{
+										$actual_gross_pay += $values['rate'];
+										$regular_holiday += $values['rate'];
+									}
 								}
-							}
 
-							if ($allowance->special_holiday_pay==1) 
-							{
-								if ($lbl == 'Special Holiday' || $lbl == 'Special Holiday Rest Day') 
+								if ($allowance->special_holiday_pay==1) 
 								{
-									$actual_gross_pay += $values['rate'];
-									$special_holiday += $values['rate'];
+									if ($lbl == 'Special Holiday' || $lbl == 'Special Holiday Rest Day') 
+									{
+										$actual_gross_pay += $values['rate'];
+										$special_holiday += $values['rate'];
+									}
 								}
-							}
 
-							if ($allowance->leave_pay==1) 
-							{
-								if ($lbl == 'Leave Pay') 
+								if ($allowance->leave_pay==1) 
 								{
-									$actual_gross_pay += $values['rate'];
-									$leave_pay += $values['rate'];
+									if ($lbl == 'Leave Pay') 
+									{
+										$actual_gross_pay += $values['rate'];
+										$leave_pay += $values['rate'];
+									}
 								}
 							}
 						}
-					}
 
 
-					if (isset($value->compute->_breakdown_deduction)) 
-					{
-						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
+						if (isset($value->compute->_breakdown_deduction)) 
 						{
-							if ($value->time_output["leave_hours"] || $lbl == 'late' || $lbl == 'undertime' ) 
+							foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
 							{
-								$standard_gross_pay += $values['rate'];
-								$deduction += $values['rate'];
+								if ($value->time_output["leave_hours"] || $lbl == 'late' || $lbl == 'undertime' ) 
+								{
+									$standard_gross_pay += $values['rate'];
+									$deduction += $values['rate'];
+								}
+								// if ($data["group"]->payroll_group_salary_computation != "Daily Rate") 
+								// {
+								// 	if ($value->time_output["leave_hours"] == '00:00:00') 
+								// 	{
+								// 		$standard_gross_pay += $values['rate'];
+								// 		$deduction += $values['rate'];
+								// 	}
+								// }
 							}
-							// if ($data["group"]->payroll_group_salary_computation != "Daily Rate") 
-							// {
-							// 	if ($value->time_output["leave_hours"] == '00:00:00') 
-							// 	{
-							// 		$standard_gross_pay += $values['rate'];
-							// 		$deduction += $values['rate'];
-							// 	}
-							// }
 						}
+
+						$d['overtime'] = $overtime;
+						$d['regular_holiday'] = $regular_holiday;
+						$d['special_holiday'] = $special_holiday;
+						$d['leave_pay'] = $leave_pay;
+						$d['deductions'] = $deduction;
+						$a[$count] = $d;
+						$count++;
 					}
 
-					$d['overtime'] = $overtime;
-					$d['regular_holiday'] = $regular_holiday;
-					$d['special_holiday'] = $special_holiday;
-					$d['leave_pay'] = $leave_pay;
-					$d['deductions'] = $deduction;
-					$a[$count] = $d;
-					$count++;
-				}
+					// dd($data);
+					// dd($a);
 
-				// dd($data);
-				// dd($a);
+					$standard_gross_pay+=$actual_gross_pay;
+					$val["amount"] = @($actual_gross_pay/$standard_gross_pay) * $allowance_amount;
 
-				$standard_gross_pay+=$actual_gross_pay;
-				$val["amount"] = @($actual_gross_pay/$standard_gross_pay) * $allowance_amount;
+					// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
 
-				// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
+					if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
+					{
+						$val["amount"] = $val["amount"] * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
+					}
 
-				if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
-				{
-					$val["amount"] = $val["amount"] * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
+					if($allowance->payroll_allowance_category == "Taxable")
+					{
+						$val["add.gross_pay"] = true;
+						$val["deduct.gross_pay"] = false;
+						$val["add.taxable_salary"] = false;
+						$val["deduct.taxable_salary"] = false;
+						$val["add.net_pay"] = false;
+						$val["deduct.net_pay"] = false;
+					}
+					elseif ($allowance->payroll_allowance_category == "Hidden") {
+						$val["add.gross_pay"] = false;
+						$val["deduct.gross_pay"] = false;
+						$val["add.taxable_salary"] = false;
+						$val["deduct.taxable_salary"] = false;
+						$val["add.net_pay"] = true;
+						$val["deduct.net_pay"] = false;
+					}
+					else
+					{
+						$val["add.gross_pay"] = true;
+						$val["deduct.gross_pay"] = false;
+						$val["add.taxable_salary"] = false;
+						$val["deduct.taxable_salary"] = true;
+						$val["add.net_pay"] = true;
+						$val["deduct.net_pay"] = false;
+					}
+					
+					array_push($return->_breakdown, $val);
+					$val = null;
 				}
-
-				if($allowance->payroll_allowance_category == "Taxable")
-				{
-					$val["add.gross_pay"] = true;
-					$val["deduct.gross_pay"] = false;
-					$val["add.taxable_salary"] = false;
-					$val["deduct.taxable_salary"] = false;
-					$val["add.net_pay"] = false;
-					$val["deduct.net_pay"] = false;
-				}
-				elseif ($allowance->payroll_allowance_category == "Hidden") {
-					$val["add.gross_pay"] = false;
-					$val["deduct.gross_pay"] = false;
-					$val["add.taxable_salary"] = false;
-					$val["deduct.taxable_salary"] = false;
-					$val["add.net_pay"] = true;
-					$val["deduct.net_pay"] = false;
-				}
-				else
-				{
-					$val["add.gross_pay"] = true;
-					$val["deduct.gross_pay"] = false;
-					$val["add.taxable_salary"] = false;
-					$val["deduct.taxable_salary"] = true;
-					$val["add.net_pay"] = true;
-					$val["deduct.net_pay"] = false;
-				}
-				
-				array_push($return->_breakdown, $val);
-				$val = null;
 			}
-
+			
 		}
 		
 		return $return;
@@ -4885,10 +4928,8 @@ class Payroll2
 				}
 			}
 		}
-
-
-
-		$deduction = Payroll::getdeductionv2($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
+		
+		$deduction = Payroll::getdeductionv2($employee_id, $end_date, $period_category_arr['period_category'], $period_category, $shop_id);
 
 		if(isset($deduction["deduction"]))
 		{
@@ -5091,6 +5132,7 @@ class Payroll2
 		/* GET PHILHEALTH CONTRIBUTION */
 		$philhealth_salary			= $salary->payroll_employee_salary_philhealth;
 		$philhealth_reference		= '(REF. DECLARED)';
+
 		if($group->philhealth_reference == 'net_basic')
 		{
 			$philhealth_salary		= $employee_compute['get_net_basic_pay']['total_net_basic'];
@@ -5104,16 +5146,19 @@ class Payroll2
 		}
 	
 		$phil_record = $previous_record;
+
 		if($group->payroll_group_philhealth == '1st Period')
 		{
 			$phil_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id, true);
 		}
+
 		if($group->payroll_group_philhealth == 'Last Period')
 		{
 			$phil_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id, false, true);
 		}
 		
 		$phil_every = false;
+
 		if($group->payroll_group_sss == 'Every Period')
 		{
 			$phil_every = true;
@@ -5595,9 +5640,9 @@ class Payroll2
 		$data['total_gross_pay']	= $cutoff_compute->cutoff_basic;
 		$data['obj']				= array();
 		
-		
 		if(isset($cutoff_compute->_breakdown_addition_summary))
 		{
+
 			foreach($cutoff_compute->_breakdown_addition_summary as $key => $amount)
 			{
 				$temp['name']	= $key;

@@ -15,7 +15,7 @@
 	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-bg.png');">
 	                    <div class="btn btn-text">
 	                        <div class="text-header1">Become A Member Now!</div>
-	                        <div class="text-header2">Opportunity awaits you. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aenean commodo ligula eget dolor.</div>
+	                        <div class="text-header2">Opportunity awaits you. Purchase now and enjoy the perks of being a Philtech VIP.</div>
 	                    </div>
 	                    <div class="btn-container">
 	                        <!-- <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">BUY A KIT</button></a> -->
@@ -61,10 +61,11 @@
 						</div>
 					</div>
 				</div>
-
+				@if($travel_and_tours)
 				<div class="btn-container">
 					<a class="btn btn-lblue" style="width: 100%; margin-bottom: 5px" role="button" href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a>
 				</div>
+				@endif
 
 			</div>
 
@@ -89,16 +90,35 @@
 					@if(count($_point_plan) > 0)
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						@foreach($_point_plan as $plan)
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
-						</div>
+							@if($plan->label == "Repurchase Cashback")
+<!-- 								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>VIP Cashback</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+								</div> -->
+							@else
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+								</div>
+							@endif
 						@endforeach
 					</div>
 					@else
 						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
 					@endif
 				</div>
+
+				@if(isset($points->{ "display_repurchase_cashback"}))
+				<div class="title"><i class="align-icon"></i> VIP Cashback</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+								<div class="name">{{ $points->{ "display_repurchase_cashback"} }}</div>
+						</div>
+					</div>
+				</div>
+				@endif
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">

@@ -19,6 +19,7 @@
 					<option value="SSS Loan" {{ ($deduction->payroll_deduction_type == 'SSS Loan') ? 'selected' : '' }} >SSS Loan</option>
 					<option value="HDMF Loan" {{ ($deduction->payroll_deduction_type == 'HDMF Loan') ? 'selected' : '' }} >HDMF Loan</option>
 					<option value="Cash Bond" {{ ($deduction->payroll_deduction_type == 'Cash Bond') ? 'selected' : '' }} >Cash Bond</option>
+					<option value="Cash Advance" {{ ($deduction->payroll_deduction_type == 'Cash Advance') ? 'selected' : '' }} >Cash Advance</option>
 					<option value="Others" {{ ($deduction->payroll_deduction_type == 'Others') ? 'selected' : '' }} >Others...</option>
 				</select>
 			</div>

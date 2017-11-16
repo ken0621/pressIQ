@@ -51,9 +51,9 @@
             @if($customer)
             <div class="left-container">
                 <span><i class="fa fa-mobile" aria-hidden="true"></i></span>
-                <span>012-345-6789</span>
+                <span>{!! get_content($shop_theme_info, "home", "home_contact_number") !!}</span>
                 <span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
-                <span>company-email.here</span>
+                <span>{!! get_content($shop_theme_info, "home", "home_email_address") !!}</span>
                 <span><i class="fa fa-facebook" aria-hidden="true"></i></span>
                 <span>Facebook</span>
             </div>
@@ -61,9 +61,9 @@
             @else
             <div class="left-container">
                 <span><i class="fa fa-mobile" aria-hidden="true"></i></span>
-                <span>012-345-6789</span>
+                <span>{!! get_content($shop_theme_info, "home", "home_contact_number") !!}</span>
                 <span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
-                <span>company-email.here</span>
+                <span>{!! get_content($shop_theme_info, "home", "home_email_address") !!}</span>
                 <span><i class="fa fa-facebook" aria-hidden="true"></i></span>
                 <span>Facebook</span>
             </div>

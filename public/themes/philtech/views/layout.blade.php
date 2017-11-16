@@ -21,14 +21,14 @@
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
 
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=2">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=3">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
         <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
         
         <!-- OTHER CSS -->
         @yield("css")
 
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css?version=2">
         
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>

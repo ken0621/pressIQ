@@ -14,6 +14,9 @@
 							<th class="text-center">Code</th>
 							<!-- <th class="text-right">Discrepancy</th> -->
 							<th class="text-center">Activation</th>
+							@if($warehouse_data->main_warehouse == 3)
+							<th>Control Number</th>
+							@endif
 						</tr>
 					</thead>
 					<tbody>	
@@ -25,6 +28,9 @@
 							<td>{{$code->item_name}}</td>
 							<td class="text-center">{{$code->mlm_pin}}</td>
 							<td class="text-center">{{$code->mlm_activation}}</td>
+							@if($warehouse_data->main_warehouse == 3)
+							<td>{{str_pad($code->ctrl_number, 9, '0', STR_PAD_LEFT)}}</td>
+							@endif
 						</tr>
 					@endforeach			
 					</tbody>

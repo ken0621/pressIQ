@@ -287,6 +287,7 @@ class MLM_CodeControllerV2 extends Member
         $data["to"] = Report::checkDatePeriod($period,$date)['end_date'];
         $data["_warehouse"] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
         $data['codes'] = Warehouse2::get_codes($request->warehouse_id, $data["from"], $data["to"], $request->transaction_type);
+        $data['warehouse_data'] = Warehouse2::get_info($request->warehouse_id);
         $report_type    = $request->report_type;
         $load_view      = $request->load_view;
         if($report_type && !$load_view)

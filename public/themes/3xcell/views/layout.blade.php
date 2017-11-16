@@ -121,13 +121,20 @@
                             <div class="space1"></div>
                             <span>BROWSE</span>
                             <ul class="links">
+                                @if($customer_info)
                                 <li> <a href="/">Home</a> </li>
+                                @else
+                                <li><a href="/members" id="home">MY ACCOUNT</a></li>
+                                @endif
                                 <li class="product-mobile-dropdown">
                                     <a href="javascript:">PRODUCTS</a>
                                 </li>
                                     <ul class="product-mobile-dropdown-list">
                                         <li>Beauty Skin Care</li>
                                         <li>Food Supplement</li>
+                                        <li>Food Supplement</li>
+                                        <li>Business Packages</li>
+                                        <li>Retail Packages</li>
                                     </ul>
                                 <li> <a href="/promos">PROMOS</a> </li>
                                 <li class="company-mobile-dropdown"> 
@@ -162,10 +169,30 @@
                                 <div class="space1"></div>
                                 <span>BROWSE</span>
                                 <ul class="links">
+                                    @if($customer_info)
                                     <li> <a href="/">Home</a> </li>
-                                    <li> <a href="javascript:">PRODUCTS</a> </li>
+                                    @else
+                                    <li><a href="/members" id="home">MY ACCOUNT</a></li>
+                                    @endif
+                                    <li class="product-mobile-dropdown">
+                                        <a href="javascript:">PRODUCTS</a>
+                                    </li>
+                                        <ul class="product-mobile-dropdown-list">
+                                            <li>Beauty Skin Care</li>
+                                            <li>Food Supplement</li>
+                                            <li>Food Supplement</li>
+                                            <li>Business Packages</li>
+                                            <li>Retail Packages</li>
+                                        </ul>
                                     <li> <a href="/promos">PROMOS</a> </li>
-                                    <li> <a href="javascript:">COMPANY</a> </li>
+                                    <li class="company-mobile-dropdown"> 
+                                        <a href="javascript:">COMPANY</a> 
+                                    </li>
+                                        <ul class="company-mobile-dropdown-list">
+                                            <li><a href="/history">Our History</a></li>
+                                            <li><a href="/how_to_join">How to Join</a></li>
+                                            <li><a href="/events">Company Events</a></li>
+                                        </ul>
                                     <li> <a href="/gallery">GALLERY</a> </li>
                                     <li> <a href="/contact">CONTACT US</a> </li>
                                 </ul>
@@ -194,12 +221,12 @@
                                 <a class="head-button link-nav">PRODUCTS</a>
 
                                 <!--MINIMIZE VERSION STARTS HERE -->
-                                <div class="minimize-product-holder">                                    
+                                <div class="minimize-product-holder">                                
                                     @if(count($_categories) > 0)
                                         @foreach($_categories as $categories)
                                         <a href="/product?type={{ $categories["type_id"] }}">
                                             <div class="minimize-tabs">{{ $categories["type_name"] }}</div>
-                                        </a>   
+                                        </a>
                                         @endforeach
                                     @else
                                         <a href="">

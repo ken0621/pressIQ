@@ -115,7 +115,7 @@
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
-						<button class="btn btn-default" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+						<button class="btn btn-blue" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 					</div>
 				</div>
 			</div>
@@ -142,7 +142,7 @@
 							</div>
 							<div class="action pull-right">
 								@if($direct->distributed == 1)
-									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
+									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-blue"><i class="fa fa-star"></i> VIEW INFO</button>
 								@else
 									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 								@endif

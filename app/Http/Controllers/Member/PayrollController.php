@@ -1625,7 +1625,7 @@ class PayrollController extends Member
           $update['is_deduct_pagibig_default']    = $is_deduct_pagibig_default;
           $update['deduct_pagibig_custom']        = $deduct_pagibig_custom;
           Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$payroll_employee_salary_id)->update($update);
-          AuditTrail::record_logs("EDITED: Payroll Employee Salary","Updating Employee Salary with Salary ID #".$payroll_employee_salary_id,$payroll_employee_salary_id,"","");
+          // AuditTrail::record_logs("EDITED: Payroll Employee Salary","Updating Employee Salary with Salary ID #".$payroll_employee_salary_id,$payroll_employee_salary_id,"","");
 
           $return['function_name'] = 'employeelist.reload_salary_list';
           $return['status'] = 'success';

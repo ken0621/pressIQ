@@ -127,7 +127,7 @@
 	function submit_done(data)
 	{
 		data.element.modal("toggle");
-		executeFunctionByName(data.function_name, window);
+		// executeFunctionByName(data.function_name, window);
 	}
 
 	$(".deduction-check-period-new").unbind("change");
@@ -172,4 +172,10 @@
 			}
 		});
 	}
+
+	// function salary_update_success(data)
+	// {
+	// 	employeelist.reload_salary_list();
+	// 	data.element.modal("hide");
+	// }
 </script>

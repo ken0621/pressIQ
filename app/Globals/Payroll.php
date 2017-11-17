@@ -3217,7 +3217,6 @@ class Payroll
 		
 		foreach($_deduction as $deduction)
 		{
-
 			$temp['deduction_name'] 			= $deduction->payroll_deduction_name;
 			$temp['deduction_category'] 		= $deduction->payroll_deduction_category;
 			$temp['payroll_deduction_id'] 		= $deduction->payroll_deduction_id;
@@ -3247,7 +3246,6 @@ class Payroll
 				{
 					array_push($data['deduction'], $temp);
 				}
-
 			}
 		}
 		// dd($data);

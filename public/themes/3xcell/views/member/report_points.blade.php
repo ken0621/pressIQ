@@ -3,7 +3,7 @@
 @section("member_content")
 	<div class="report-container" style="overflow: hidden;">
 		<div class="report-header clearfix">
-			<div class="animated fadeInLeft left">
+			<div class="left">
 				<div class="icon">
 					<img src="/themes/{{ $shop_theme }}/img/report-icon.png">
 				</div>
@@ -31,7 +31,7 @@
 			</select>
 		</div>
 		<div class="report-content">
-			<div class="animated fadeInUp holder">
+			<div class="holder">
 			  	<div class="table-responsive">
 			  		<table class="table">
 	        	  		<thead>
@@ -74,7 +74,6 @@
 	          	</div>
 			</div>
 		</div>
-
 	</div>
 
 @endsection

@@ -253,7 +253,7 @@ body
 		}
 		.mob-logo-container
 		{
-			width: 23%;
+			max-width: 150px;
 			margin: auto;
 			img
 			{
@@ -1249,6 +1249,8 @@ footer
 {
 	position: relative;
 	overflow: hidden;
+	max-height: 210px;
+	min-height: 210px;
     .new-add-to-cart-button
 	{
 		position: absolute;
@@ -1267,14 +1269,6 @@ footer
     	opacity: 1;
     	transition: all 0.2s;
     	width: 100%;
-    	min-height: 210px;
-    	max-height: 210px;
-
-    	@media screen and (max-width: 414px)
-    	{
-			min-height: 180px;
-    		max-height: 180px;
-    	}
     }
     .new-add-to-cart-overlay
     {
@@ -1306,6 +1300,12 @@ footer
     		}
     	}
     }
+	@media screen and (max-width: 768px)
+	{
+		max-height: 160px;
+		min-height: 160px;
+	}
+
 }
 
 
@@ -1645,4 +1645,9 @@ footer
 {
 	border: none;
 	background-color: #ff8500;
+}
+
+.disable-scroll
+{
+	overflow: hidden;
 }

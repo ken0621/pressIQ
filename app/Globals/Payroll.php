@@ -3217,35 +3217,36 @@ class Payroll
 		
 		foreach($_deduction as $deduction)
 		{
-
 			$temp['deduction_name'] 			= $deduction->payroll_deduction_name;
 			$temp['deduction_category'] 		= $deduction->payroll_deduction_category;
 			$temp['payroll_deduction_id'] 		= $deduction->payroll_deduction_id;
 			$temp['payroll_periodal_deduction'] = $deduction->payroll_periodal_deduction;
 			$temp['payroll_deduction_type']		= $deduction->payroll_deduction_type;
 
-
-			$payroll_total_payment_amount = Tbl_payroll_deduction_payment_v2::where('payroll_employee_id',$employee_id)
-			->where('deduction_name',$temp['deduction_name'])
-			->where('payroll_deduction_id', $temp['payroll_deduction_id'])
-			->select(DB::raw('IFNULL(sum(payroll_payment_amount),0) as total_payment'))
-			->orderBy('payroll_deduction_payment_id','desc')
-			->first();
+			$payroll_total_payment_amount = Tbl_payroll_deduction_payment_v2::gettotaldeductionpayment($employee_id, $temp['payroll_deduction_id'], $temp['deduction_name'])->first();
 			
-			// $total_payment = Tbl_payroll_deduction_payment_v2::getpayment($employee_id, $payroll_record_id, $deduction->payroll_deduction_id)->select(DB::raw('IFNULL(sum(payroll_payment_amount), 0) as total_payment'))->value('total_payment');
+			$payroll_month_payment_amount = Tbl_payroll_deduction_payment_v2::getmonthdeductionpayment($employee_id, $temp['payroll_deduction_id'], $temp['deduction_name'], $month)->first();
+						
+			/*Check Total payment of the month and if total payment and deduction is greater than monthly amortization*/
+			if (($payroll_month_payment_amount["total_payment"] + $deduction->payroll_periodal_deduction) > $deduction->payroll_monthly_amortization) 
+			{
+				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_month_payment_amount["total_payment"];
+			}
 
 			if($temp == 'Last Period')
 			{
 				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_total_payment_amount["total_payment"];
 			}
 
-
 			if ($payroll_total_payment_amount["total_payment"] < $deduction->payroll_deduction_amount) 
 			{
 				$data['total_deduction'] += $temp['payroll_periodal_deduction'];
-				array_push($data['deduction'], $temp);
+
+				if ($temp['payroll_periodal_deduction'] > 0) 
+				{
+					array_push($data['deduction'], $temp);
+				}
 			}
-			
 		}
 		// dd($data);
 		return $data;

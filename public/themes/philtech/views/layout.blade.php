@@ -21,14 +21,14 @@
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
 
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=7">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
         <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
         
         <!-- OTHER CSS -->
         @yield("css")
 
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css?version=2">
         
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
@@ -248,7 +248,7 @@
                             <span>BROWSE</span>
                             <ul class="links">
                                     <a href="/"><li>HOME</li></a>
-                                    <a href="/partners"><li>OUT MERCHANTS</li></a>
+                                    <a href="/partners"><li>OUR MERCHANTS</li></a>
                                     <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
                                     <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
                                     <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
@@ -303,7 +303,7 @@
                             <span>BROWSE</span>
                             <ul class="links">
                                 <a href="/"><li>HOME</li></a>
-                                <a href="/partners"><li>OUT MERCHANTS</li></a>
+                                <a href="/partners"><li>OUR MERCHANTS</li></a>
                                 <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
                                 <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
                                 <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
@@ -419,7 +419,7 @@
           </div>
         </div>
         @include("frontend.gfoot")
-        <script src="/themes/{{ $shop_theme }}/js/custom_theme.js?version=1"></script>
+        <script src="/themes/{{ $shop_theme }}/js/custom_theme.js?version=3"></script>
 
         @yield("js")
     </body>

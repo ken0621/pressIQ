@@ -73,6 +73,10 @@ use App\Globals\PayMaya\Model\Checkout\ItemAmountDetails;
 use App\Globals\PayMaya\Model\Checkout\ItemAmount;
 use App\Globals\PayMaya\Core\Constants;
 
+
+use App\Models\Tbl_item;
+use App\Tbl_item_redeemable;
+
 class ShopMemberController extends Shop
 {
     public function getIndex()
@@ -1483,6 +1487,13 @@ class ShopMemberController extends Shop
             $data["_tree"] = MLM2::get_sponsor_network($this->shop_info->shop_id, request()->input("slot_no"), request('level'));
             return (Self::load_view_for_members("member.network_slot", $data));
         }
+    }
+    public function getRedeemable()
+    {
+        $sort_by = 0;
+        $data['page'] = "Redeemable";
+        $data['_redeemable'] = Tbl_item_redeemable::where("archived",0)->get();
+        return (Self::load_view_for_members("member.redeemable",$data));
     }
     public function getReport()
     {

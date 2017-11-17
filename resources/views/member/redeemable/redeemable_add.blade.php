@@ -56,10 +56,10 @@
                         <div class="col-md-8">
                             @if(isset($row))
                             @foreach($row as $r)
-                            <img src="{{$r->image_path}}" width="100%" height="auto" class="img-holder">
+                            <img src="{{$r->image_path}}" width="100%" height="auto" style="max-height:200px" class="img-holder">
                             @endforeach
                             @else
-                            <img src="" width="100%" height="auto" class="img-holder">
+                            <img src="" width="100%" height="auto" style="max-height:200px" class="img-holder">
                             @endif
                         </div>
                         <div class="col-md-0">

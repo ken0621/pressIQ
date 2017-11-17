@@ -98,13 +98,17 @@
                             @if(Request::segment(1)=="members")
                                 <li><a class="smoth-scroll" href="/#home">Home</a></li>
                                 <li><a class="smoth-scroll" href="/#aboutus">About Us</a></li>
-                                <li><a class="smoth-scroll" href="/#mission-vision">Packages</a></li>
-                                <li><a class="smoth-scroll" href="/#products">Contact Us</a></li>
+                                <li><a class="smoth-scroll" href="/#whytojoin">Why to Join</a></li>
+                                <li><a class="smoth-scroll" href="/#packages">Packages</a></li>
+                                <li><a class="smoth-scroll" href="/#partners">Our Partners</a></li>
+                                <li><a class="smoth-scroll" href="/#contactus">Contact Us</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="#home">Home</a></li>
                                 <li><a class="smoth-scroll" href="#aboutus">About Us</a></li>
-                                <li><a class="smoth-scroll" href="#mission-vision">Packages</a></li>
-                                <li><a class="smoth-scroll" href="#products">Contact Us</a></li>
+                                <li><a class="smoth-scroll" href="#whytojoin">Why to Join</a></li>
+                                <li><a class="smoth-scroll" href="#packages">Packages</a></li>
+                                <li><a class="smoth-scroll" href="#partners">Our Partners</a></li>
+                                <li><a class="smoth-scroll" href="#contactus">Contact Us</a></li>
                             @endif
                         </ul>
                     </nav>
@@ -127,10 +131,12 @@
                         <div class="footer-title-container">
                             <p class="footer-title">INFORMATION</p>
                         </div>
-                        <a href=""><p>HOME</p></a>
-                        <a href=""><p>ABOUT US</p></a>
-                        <a href=""><p>PACKAGES</p></a>
-                        <a href=""><p>CONTACT US</p></a>
+                        <a href="/"><p>HOME</p></a>
+                        <a href="/#aboutus"><p>ABOUT US</p></a>
+                        <a href="/#whytojoin"><p>WHY TO JOIN</p></a>
+                        <a href="/#packages"><p>PACKAGES</p></a>
+                        <a href="/#partners"><p>OUR PARTNERS</p></a>
+                        <a href="/#contactus"><p>CONTACT US</p></a>
                     </div>
                     <div class="col-md-4">
                         <div class="footer-title-container">

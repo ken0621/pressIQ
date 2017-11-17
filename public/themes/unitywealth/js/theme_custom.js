@@ -89,6 +89,12 @@ function theme_custom()
     			$menuLeft.toggleClass('pushmenu-open');
     		});
 
+    		/*EXIT SIDE NAV TOGGLE*/
+            $('.nav-ext').click(function()
+            {
+                $('#nav_list').click();
+            });
+
 	        // NAVIRINO CLICK TOGGLE
 	        $(".menu-nav").click(function()
 	        {

@@ -1,10 +1,11 @@
+<link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
 <div class="popup-buy-a-kit">
     <div class="modal-content cart">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title"><img src="/themes/{{ $shop_theme }}/img/cart.png"> My Shopping Cart</h4>
         </div>
-        <div class="cart-loader-holder">
+        <div class="cart-loader-holder clearfix">
             <div style="margin: 50px auto;" class="cart-loader loader-16-gray hide"></div>
             <div class="not-loader">
                 @if(isset($cart) && $cart)
@@ -24,7 +25,7 @@
                         <tr>
                             <td><img src=""></td>
                             <td>{{ $item->item_name }}</td>
-                            <td>P {{ number_format($item->item_price) }}</td>
+                            <td>P {{ number_format($item->item_price, 2) }}</td>
                             <td><input class="item-qty form-control text-center" style="width: 75px; margin: auto;" type="number" name="quantity" min="1" step="1" value="{{ $item->quantity }}" item-id="{{ $item->item_id }}"></td>
                             <td>P {{ number_format($item->subtotal, 2) }}</td>
                             <td><div class="remove-container remove-item-cart" item-id="{{ $item->item_id }}" style="cursor: pointer;"><i class="fa fa-times" aria-hidden="true"></i></div></td>

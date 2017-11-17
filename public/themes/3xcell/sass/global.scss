@@ -28,19 +28,22 @@ button:hover{
 	transition: 0.3s all ease;
 }
 
-.slick-next{
-	right: 1px;
+/* .slick-next
+{
+	right: 0px;
 	z-index: 50;
 }
-.slick-prev{
+.slick-prev
+{
 	left: 0px;
 	z-index: 50;
 }
 
-.slick-prev, .slick-next{
+.slick-prev, .slick-next
+{
 	width: 40px;
 	height: 40px;
-}
+} */
 
 .content{
 	background-color: transparent;
@@ -445,7 +448,8 @@ button:hover{
 					text-align: justify;
 				}
 			}
-			p {
+			p 
+			{
 				padding-top: 20px;
 				font-size: 11px;
 				color: white;

@@ -51,6 +51,17 @@
                             </select>
                         </div>
                     </div>
+                    @if($shop_id == 5)
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label for="">Print Code as :</label>
+                                <select name="print_code_as" class="form-control">
+                                    <value value="pdf">PDF</value>
+                                    <value value="excel">Excel</value>
+                                </select>
+                            </div>
+                        </div>
+                    @endif
                      <div class="form-group">
                         <div class="col-md-12"><label for="">Range</label></div>
                         <div class="col-md-6">

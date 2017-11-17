@@ -363,6 +363,22 @@ $text-dark: #272c2f;
 	}
 }
 
+.modal-header
+{
+	background-color: #2161C8;
+	color: #fff;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	.close
+	{
+		@extend .fa;
+	}
+}
+
 /* Success */
 .popup-success
 {

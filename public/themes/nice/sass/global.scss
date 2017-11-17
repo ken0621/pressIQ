@@ -145,6 +145,7 @@ button:hover{
 			.navirino
 			{
 				margin-top: 15px;
+
 				a 
 				{
 					@include transition(0.2s);
@@ -164,6 +165,7 @@ button:hover{
 				
 			}
 		}
+
 		&.subheader-container
 		{
 			margin-bottom: 87px;
@@ -171,7 +173,8 @@ button:hover{
 	}
 }
 
-.navirino{
+.navirino
+{
 	float: right;
 	margin-top: 20px;
 	font-size: 15px;
@@ -196,7 +199,8 @@ button:hover{
 		}
 	}
 	
-	li {
+	li 
+	{
 		display: inline-block;
 		padding: 0px 10px;
 
@@ -206,9 +210,11 @@ button:hover{
 		}
 	}
 
-	a {
+	a 
+	{
 		color: #404040;
-		&:hover {
+		&:hover 
+		{
 			color: #02295e;
 			text-decoration: none;
 			cursor: pointer;
@@ -217,8 +223,10 @@ button:hover{
 }
 
 
-.image-logo-holder{
+.image-logo-holder
+{
 	text-align: center;
+
 	img
 	{
 		width: 100%;
@@ -248,13 +256,16 @@ button:hover{
 		}
 	}
 
-	&:hover{
+	&:hover
+	{
 		cursor: pointer;
 	}
 }
+
 .menu-nav
 {
 	display: none;
+
 	@media screen and (max-width: 991px)
 	{
 		display: block;
@@ -271,6 +282,7 @@ button:hover{
 			margin: 5px 0;
 		}
 	}
+
 	@media screen and (max-width: 475px)
 	{
 			margin-top: 10px;
@@ -386,7 +398,8 @@ button:hover{
 }
 
 /* DROPDOWN 3 SLIDER */
-.product-dropdown {
+.product-dropdown 
+{
 	border-radius: 1px;
 	background-color: white;
 	position: absolute;

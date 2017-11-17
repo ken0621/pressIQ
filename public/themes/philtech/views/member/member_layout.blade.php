@@ -1,6 +1,6 @@
 @extends("layout")
 @section("content")
-<div class="member">
+<div class="member member-mob-margin">
 	<div class="container">
 		<div class="members">
 			<div class="header hidden">

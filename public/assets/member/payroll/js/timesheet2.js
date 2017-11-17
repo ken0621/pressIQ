@@ -127,9 +127,7 @@ function timesheet()
 			var td_class = $(e.currentTarget).closest("td").attr("class");
 			if (td_class == "time-comment-td") 
 			{
-				var remark 				= $(e.currentTarget).val();
-				var timesheet_record_id = $(e.currentTarget).attr("id");
-				action_time_sheet_save_remark(timesheet_record_id, remark);
+				action_time_sheet_save_remark(tr_date);
 			}
 			else
 			{
@@ -202,12 +200,17 @@ function timesheet()
 		})
 	}
 
-	function action_time_sheet_save_remark(timesheet_record_id, remark)
+	function action_time_sheet_save_remark(tr_date)
 	{
+		$input = $(".timesheet-of-employee").find(".tr-parent[date='" + tr_date + "'] :input").serialize();
+
+		$period_id = $(".employee-timesheet-modal .period-id").val();
+		$employee_id = $(".employee-timesheet-modal .x-employee-id").val();
+
 		$.ajax({
-			url: '/member/payroll/company_timesheet2/remarks_change',
+			url: '/member/payroll/company_timesheet2/remarks_change/'+ $period_id + "/" + $employee_id,
 			type: 'get',
-			data: {timesheet_record_id : timesheet_record_id, remark : remark},
+			data: $input,
 			success : function (data)
 			{
 

@@ -423,3 +423,11 @@
         margin-top: 5px;
     }
 }
+
+.hot-deals-container
+{
+    @media screen and (max-width: 768px)
+    {
+        display: none;
+    }
+}

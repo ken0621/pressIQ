@@ -294,6 +294,7 @@ function customer_invoice()
 			/* CHECK THE DISCOUNT */
 			if(discount.indexOf('%') >= 0)
 			{
+				alert("123");
 				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
 				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
 			}

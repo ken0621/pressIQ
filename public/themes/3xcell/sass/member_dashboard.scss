@@ -22,6 +22,23 @@ $text-dark: #272c2f;
 		margin-top: -7px;
 	}
 
+	.btn-blue
+	{
+		background-color: #2161C8;
+		color: #fff;
+		@include transition(0.2s);
+
+		.fa
+		{
+			color: #fff;
+		}
+
+		&:hover
+		{
+			opacity: 0.8;
+		}
+	}
+
 	.title
 	{
 		color: #000;

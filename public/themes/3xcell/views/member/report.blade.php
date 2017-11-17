@@ -3,7 +3,7 @@
 @section("member_content")
 	<div class="report-container" style="overflow: hidden;">
 		<div class="report-header clearfix">
-			<div class="animated fadeInLeft left">
+			<div class="left">
 				<div class="icon">
 					<img src="/themes/{{ $shop_theme }}/img/report-icon.png">
 				</div>
@@ -22,7 +22,7 @@
 		</div>
 		
 		@if(count($_codes) > 0)
-		<h3 class="animated slideInDown text-center">My Notifications</h3>
+		<h3 class="text-center">My Notifications</h3>
 	    @endif
 	    <div class="text-center" style="padding:25px;"></div>
 		<div class="col-md-3" style="bottom: 20px;">
@@ -34,7 +34,7 @@
 			</select>
 		</div>
 		<div class="report-content">
-	        <div class="animated fadeInUp holder">
+	        <div class="holder">
 	          	<div class="table-responsive">
 	          		<table class="table">
 	        	  		<thead>
@@ -81,7 +81,7 @@
 		@if(count($_codes) > 0)
 		<h3 class="text-center">Purchased Kits and Codes</h3>
 		<div class="report-content">
-			<div class="animated fadeInUp holder">
+			<div class="holder">
 			  	<div class="table-responsive">
 			  		<table class="table">
 				  		<thead>

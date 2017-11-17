@@ -219,8 +219,9 @@ class MemberSlotGenealogy
             $l = Tbl_tree_placement::where('placement_tree_parent_id',$slot_info->slot_id)->where('placement_tree_position','left')->count();
             $r = Tbl_tree_placement::where('placement_tree_parent_id',$slot_info->slot_id)->where('placement_tree_position','right')->count();
 
+             $first_name = iconv("UTF-8", "ASCII//TRANSLIT", $slot_info->first_name);
+            $abb             = strtoupper(substr($first_name, 0, 3));
 
-            $abb             = strtoupper(substr($slot_info->first_name, 0, 3));
             $additional_info = "";
 
 

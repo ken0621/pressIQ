@@ -293,8 +293,8 @@ class PayrollTimeSheet2Controller extends Member
 			$update["payroll_time_shee_activity"] = Request::input("remarks")[$key];
 			Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $time_sheet_record->payroll_time_sheet_record_id)->update($update);
 		}
-		echo count($_time_sheet_record);
 		
+		//absent and no time_sheet_record
 		if (count($_time_sheet_record) == 0) 
 		{
 			$insert["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
@@ -303,6 +303,7 @@ class PayrollTimeSheet2Controller extends Member
 			$insert["payroll_time_sheet_origin"] = "Manually Encoded";
 			Tbl_payroll_time_sheet_record::insert($insert);
 		}
+		
 		return "success updating";
 	}
 

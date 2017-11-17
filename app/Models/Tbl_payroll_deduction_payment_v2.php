@@ -73,6 +73,27 @@ class Tbl_payroll_deduction_payment_v2 extends Model
 	}
 
 
+     public function scopegettotaldeductionpayment($query, $employee_id, $payroll_deduction_id, $deduction_name)
+     {
+          $query->where('payroll_employee_id',$employee_id)
+               ->where('deduction_name',$deduction_name)
+               ->where('payroll_deduction_id', $payroll_deduction_id)
+               ->select(DB::raw('IFNULL(sum(payroll_payment_amount),0) as total_payment'))
+               ->orderBy('payroll_deduction_payment_id','desc');
+     }
+
+
+     public function scopegetmonthdeductionpayment($query, $employee_id, $payroll_deduction_id, $deduction_name, $month)
+     {
+          $query->where('payroll_employee_id',$employee_id)
+               ->where('deduction_name',$deduction_name)
+               ->where('payroll_deduction_id', $payroll_deduction_id)
+               ->select(DB::raw('IFNULL(sum(payroll_payment_amount),0) as total_payment'))
+               ->whereBetween('payroll_payment_period',$month)
+               ->orderBy('payroll_deduction_payment_id','desc');
+     }
+
+
 
 	public function scopegetdeductionpertype($query,$shop_id = 0 , $deduction_category )
 	{

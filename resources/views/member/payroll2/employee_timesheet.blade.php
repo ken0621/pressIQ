@@ -62,7 +62,7 @@
                                 <td class="time-comment-td">
                                     @if($timesheet->record)
                                         @foreach($timesheet->record as $x => $record)
-                                        <input name="remarks[]" unq="{{ $random_integer[$x] }}" value="{{ ($record->time_sheet_activity == '' ? $timesheet->default_remarks : $record->time_sheet_activity) }}" type="text" class="comment new-time-event text-table time-entry">
+                                        <input name="remarks[]" unq="{{ $random_integer[$x] }}" value="{{ ($record->time_sheet_activity == '' ? $timesheet->default_remarks : $record->time_sheet_activity) }}" type="text" id="{{$record->payroll_time_sheet_record_id}}" class="comment new-time-event text-table time-entry">
                                         @endforeach
                                     @else
                                         <input name="remarks[]" unq="{{ $random_integer_for_blank }}" value="{{ $timesheet->default_remarks }}" type="text" class="comment new-time-event text-table time-entry">

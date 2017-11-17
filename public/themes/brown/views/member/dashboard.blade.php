@@ -9,8 +9,6 @@
 	@endif
 @endif
 
-
-
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
@@ -60,7 +58,8 @@
 		                        <div class="text-header2">Enroll now and become one of us!</div>
 		                    </div>
 		                    <div class="btn-container">
-		                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br>
+		                        <!-- <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br> -->
+		                        <button class="btn-buy-a-kit popup" link="/members/kit" size="lg">Enroll Now</button><br>
 		                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
 		                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 		                    </div>
@@ -283,24 +282,22 @@
 			</div>
 		</div>
 
-		@if($allow_multiple_slot == 1)		
-			<div class="row clearfix">
-				<div class="animated fadeInUp col-md-12">
-					<div class="unilevel-holder">
-						<div class="title"><i class="fa fa-credit-card" aria-hidden="true"></i> Repurchase</div>
-						<div class="sub-container">
-							<div class="dashboard-top">
-					            <div class="join-container" style="border: 0; max-height: none; min-height: auto;">
-					                <div class="btn-container" style="padding-top: 0;">
-					                    <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Buy a Kit</button><br>
-					                </div>
-					            </div>	    
-						    </div>
-						</div>
+		<div class="row clearfix">
+			<div class="animated fadeInUp col-md-12">
+				<div class="unilevel-holder">
+					<div class="title"><i class="fa fa-credit-card" aria-hidden="true"></i> Repurchase</div>
+					<div class="sub-container">
+						<div class="dashboard-top">
+				            <div class="join-container" style="border: 0; max-height: none; min-height: auto;">
+				                <div class="btn-container" style="padding-top: 0;">
+				                    <button class=" btn-buy-a-kit popup" link="/members/kit" size="lg" item-id="{{$item_kit_id or '54'}}" quantity="1">Buy a Kit</button><br>
+				                </div>
+				            </div>	    
+					    </div>
 					</div>
 				</div>
 			</div>
-	    @endif
+		</div>
 
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-6">
@@ -423,10 +420,9 @@
 @endsection
 
 @section("member_script")
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.1"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.2"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 <script>
-
 $(document).ready(function()
 {
 	$wallet = $(".chart-income").attr("wallet");
@@ -482,15 +478,22 @@ $(document).ready(function()
 		    }
 		});
 	} 
-	
-
 });
-
+</script>
+<script type="text/javascript">
+$(document).on('show.bs.modal', '.modal', function () 
+{
+    var zIndex = 1040 + (10 * $('.modal:visible').length);
+    $(this).css('z-index', zIndex);
+    setTimeout(function() {
+        $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+    }, 0);
+});
 </script>
 @endsection
 @section("member_css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css">
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css?v=2.2">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css?v=2.2">
 
 
 <style type="text/css">

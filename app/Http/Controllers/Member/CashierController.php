@@ -76,6 +76,10 @@ class CashierController extends Member
 
         echo json_encode($return);
     }
+    public function add_payment()
+    {
+        
+    }
     public function remove_customer()
     {
         Session::forget('customer_id');

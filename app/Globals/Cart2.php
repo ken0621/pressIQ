@@ -236,9 +236,10 @@ class Cart2
 
 			if(!$cart_info)
 			{
-				$cart_info = new stdClass();
-				$cart_info->price_level_id = 0;
+				$cart_info 					= new stdClass();
+				$cart_info->price_level_id 	= 0;
 				$cart_info->global_discount = 0;
+				$cart_info->shipping_fee 	= 0;
 			}
  		}
 
@@ -302,6 +303,8 @@ class Cart2
 
 				$grand_total 				= $grand_total - $global_discount;
 			}
+
+			$grand_total 								= $grand_total + $cart_info->shipping_fee; // Shipping Fee
 
 			$data["_item"] 								= $_cart;
 			$data["_total"] 							= new stdClass();

@@ -18,6 +18,7 @@ function custom_theme()
 			ready_load_ecom_cart();
 			ready_load_mini_ecom_cart();
 			event_sticky_nav();
+			event_toggle_subshop_container();
 
 			/*MOBILE SIDE NAV*/
             $menuLeft = $('.pushmenu-left');
@@ -29,8 +30,25 @@ function custom_theme()
                 $menuLeft.toggleClass('pushmenu-open');
             });
 
+            /*DISABLE BODY SCROLLING*/
+            var $body = $(document.body);
+
+            $('#nav_list').click(function()
+            {
+            	$body.toggleClass('disable-scroll');
+            });
+
 		});
 	}
+
+	function event_toggle_subshop_container()
+	{
+		$(".shop-container").on("click", function (e) 
+		{
+		    $(e.currentTarget).siblings(".subshop-container").slideToggle();
+		});
+	}
+
 	function event_show_cart()
 	{
 		$('html').click(function() 
@@ -131,6 +149,7 @@ function custom_theme()
 	            $('.header-nav').css("margin-bottom", get_height+"px");
 		        $('.navbar').addClass("sticky");
 	        }
+	        
 	        else
 	        {
 	            $('.header-nav').css("margin-bottom", "0px");
@@ -201,8 +220,16 @@ function action_after_load()
 {
 	
 }
-function onSearch()
+function onSearch(x)
 {
-    var keyword = $('#keyword').val();
-    $("#submit_link").attr("href", "/product?search="+$('#keyword').val());
+	if (x == 1) 
+	{
+		var keyword = $('#keyword1').val();
+	}
+	else
+	{
+		var keyword = $('#keyword2').val();
+	}
+    
+    location.href="/product?search="+keyword;
 }

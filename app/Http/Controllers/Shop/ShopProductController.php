@@ -259,8 +259,8 @@ class ShopProductController extends Shop
         $data["_product"] = self::paginate($product, $perPage);
         $data["current_count"] = count($data["_product"]);
 
-        /* Philtech Exclusive */
-        if ($this->shop_info->shop_theme == "philtech") 
+        /* Category Show */
+        if ($this->shop_info->shop_theme == "brown")
         {
             $data["_categories"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         }

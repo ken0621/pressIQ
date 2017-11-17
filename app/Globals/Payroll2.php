@@ -347,8 +347,8 @@ class Payroll2
 	public static function timesheet_info($company_period, $employee_id) 
 	{
 		$_timesheet = null;
-		$from = $data["start_date"] = $company_period->payroll_period_start;
-		$to = $data["end_date"] = $company_period->payroll_period_end;
+		$from 		= $data["start_date"] 	= $company_period->payroll_period_start;
+		$to 		= $data["end_date"] 	= $company_period->payroll_period_end;
 		$payroll_period_company_id = $company_period->payroll_period_company_id;
 		$shift_code_id = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->value("shift_code_id");
 	
@@ -916,7 +916,7 @@ class Payroll2
 	public static function timesheet_process_in_out($timesheet_db)
 	{
 		$_timesheet_record = null;
-		// dd($_timesheet_record);
+
 		if($timesheet_db)
 		{
 			$_timesheet_record_db = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->get();
@@ -983,6 +983,7 @@ class Payroll2
 			$_timesheet_record[$key]->branch = Payroll2::timesheet_get_branch($record->payroll_company_id)->name;
 			$_timesheet_record[$key]->source = $record->payroll_time_sheet_origin;
 			$_timesheet_record[$key]->payroll_time_sheet_id = $record->payroll_time_sheet_id;
+			$_timesheet_record[$key]->payroll_time_sheet_record_id = $record->payroll_time_sheet_record_id;
 		}
 
 		return $_timesheet_record;
@@ -4187,18 +4188,45 @@ class Payroll2
 				}
 				else
 				{
-					$last_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					// $last_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
 					
+					// if($last_cutoff)
+					// {
+					// 	$philhealth_description .= "<br> Using previous cutoff as reference, previous PHILHEALTH Salary used is " . payroll_currency($last_cutoff->phihealth_salary) . " (" . payroll_currency($last_cutoff->philhealth_ee) . ")";
+					// 	$philhealth_reference_amount = $philhealth_reference_amount + $last_cutoff->phihealth_salary;
+					// 	$philhealth_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($philhealth_reference_amount);
+					// 	$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+					// 	$philhealth_description .= "<br> New PHILHEALTH Bracket falls to " . payroll_currency($philhealth_contribution["ee"]);
+					// 	$philhealth_description .= "<br> NEW BRACKET (" . payroll_currency($philhealth_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->philhealth_ee) . ")";
+					// 	$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $last_cutoff->philhealth_ee;
+					// 	$philhealth_contribution["er"] = $philhealth_contribution["er"] - $last_cutoff->philhealth_er;
+					// 	$last_cutoff->phihealth_salary;
+					// }
+
+
+
+					$last_cutoff 		= Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					$_period_approved 	= Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+
+					$total_previous_cutoff_philhealth_ee  	= 0;
+					$total_previous_cutoff_philhealth_er	= 0;
+
+					foreach ($_period_approved as $key => $period_approved) 
+					{
+						$total_previous_cutoff_philhealth_ee += $period_approved->philhealth_ee;
+						$total_previous_cutoff_philhealth_er += $period_approved->philhealth_er;
+					}
+
 					if($last_cutoff)
 					{
-						$philhealth_description .= "<br> Using previous cutoff as reference, previous PHILHEALTH Salary used is " . payroll_currency($last_cutoff->phihealth_salary) . " (" . payroll_currency($last_cutoff->philhealth_ee) . ")";
+						$philhealth_description .= "<br> Using previous cutoff as reference, previous PHILHEALTH Salary used is " . payroll_currency($last_cutoff->phihealth_salary) . " (" . payroll_currency($total_previous_cutoff_philhealth_ee) . ")";
 						$philhealth_reference_amount = $philhealth_reference_amount + $last_cutoff->phihealth_salary;
 						$philhealth_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($philhealth_reference_amount);
 						$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
 						$philhealth_description .= "<br> New PHILHEALTH Bracket falls to " . payroll_currency($philhealth_contribution["ee"]);
-						$philhealth_description .= "<br> NEW BRACKET (" . payroll_currency($philhealth_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->philhealth_ee) . ")";
-						$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $last_cutoff->philhealth_ee;
-						$philhealth_contribution["er"] = $philhealth_contribution["er"] - $last_cutoff->philhealth_er;
+						$philhealth_description .= "<br> NEW BRACKET (" . payroll_currency($philhealth_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($total_previous_cutoff_philhealth_ee) . ")";
+						$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $total_previous_cutoff_philhealth_ee;
+						$philhealth_contribution["er"] = $philhealth_contribution["er"] - $total_previous_cutoff_philhealth_er;
 						$last_cutoff->phihealth_salary;
 					}
 					else
@@ -4947,8 +4975,9 @@ class Payroll2
 					$val["deduct.taxable_salary"] = false;
 					$val["add.net_pay"] = false;
 					$val["deduct.net_pay"] = true;
-			
+
 					array_push($return->_breakdown, $val);
+					
 					$val = null;
 				}
 			}
@@ -4977,20 +5006,18 @@ class Payroll2
 		$end_date 			= $date_query->payroll_period_end;
 		$period_category 	= $date_query->payroll_period_category;
 		
-		
 		/* GET PREVIOUS RECORD */
 		$previous_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id);
 
 		/* get employee contract */
-		$group 	= Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)
+		$group 	 =  Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)
 												->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 		                                        ->first();
-		                                        
-		// dd($date_query);
-		$shop_id = $group->shop_id;      
+		$shop_id =  $group->shop_id;      
 		
 		/* GET EMPLOYEE SALARY */
-		$salary 			= Tbl_payroll_employee_salary::selemployee($employee_id, $start_date)->first();
+		$salary  =  Tbl_payroll_employee_salary::selemployee($employee_id, $start_date)->first();
+
 		if($salary == null)
 		{
 			$salary = new stdClass();

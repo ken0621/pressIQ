@@ -9,6 +9,7 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::any('/pos/remove_item','Member\CashierController@pos_remove_item');
 	Route::any('/pos/set_cart_info/{key}/{value}','Member\CashierController@set_cart_info');
 	Route::any('/pos/process_sale','Member\CashierController@process_sale');
+	Route::any('/pos/add_payment','Member\CashierController@add_payment');
 
 	/* CUSTOMER */
 	Route::any('/pos/search_customer','Member\CashierController@pos_search_customer');

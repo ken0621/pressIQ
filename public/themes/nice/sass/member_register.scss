@@ -272,11 +272,11 @@ body
 				span
 				{
 					@include transition(0.2s);
-					color: #00A4E6;
+					color: #02295e;
 
 					&:hover
 					{
-						color: #76B83F;
+						color: #eead0e;
 					}
 				}
 			}
@@ -301,18 +301,18 @@ body
 						@include transition(0.2s);
 						/* color: $text-dark !important; */
 						font-weight: $regular;
-						color: #00A4E6 !important;
+						color: #02295e !important;
 						font-size: 15px !important;
 
 						&:hover
 						{
-							color: #76B83F !important;
+							color: #eead0e !important;
 						}
 					}
 					.btn-signup
 					{
 						@include transition(0.2s);
-						background-color: #00A4E6;
+						background-color: #02295e;
 						color: #fff;
 
 						@media screen and (max-width: 991px)
@@ -321,7 +321,7 @@ body
 						}
 						&:hover 
 						{
-							background-color: #76B83F;
+							background-color: #eead0e;
 							color: #fff;
 						}
 					}
@@ -340,7 +340,7 @@ body
 				.login-href
 				{
 					@include transition(0.2s);
-					color: #76B83F !important;
+					color: #eead0e !important;
 					font-size: 13px;
 					font-weight: 600;
 
@@ -358,7 +358,7 @@ body
 {
 	.modal-header
 	{
-		background-color: #00A4E6;
+		background-color: #02295e;
 		color: #fff;
 		font-size: 13px;
 		font-weight: 600;
@@ -393,22 +393,13 @@ body
 		.btn-semi
 		{
 			@include transition(0.2s);
-			background-color: #00A4E6;
-
-			&:hover
-			{
-				background-color: #f34e4e;
-			}
+			background-color: rgba(2,41,94,0.9);
 		}
 		.btn-pure
 		{
 			@include transition(0.2s);
-			background-color: #00A4E6;
+			background-color: #02295e;
 
-			&:hover
-			{
-				background-color: #76B83F;
-			}
 		}
 	}
 }

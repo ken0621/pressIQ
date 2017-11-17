@@ -272,7 +272,7 @@ class MLM_CodeControllerV2 extends Member
             }
         }
         $paper_size = null;
-        $orientation = 'portrait';
+        $orientation = null;
         if($this->user_info->shop_id == 5)
         {
             if($request->type == 'register_form')

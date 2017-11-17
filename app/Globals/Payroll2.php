@@ -347,8 +347,8 @@ class Payroll2
 	public static function timesheet_info($company_period, $employee_id) 
 	{
 		$_timesheet = null;
-		$from = $data["start_date"] = $company_period->payroll_period_start;
-		$to = $data["end_date"] = $company_period->payroll_period_end;
+		$from 		= $data["start_date"] 	= $company_period->payroll_period_start;
+		$to 		= $data["end_date"] 	= $company_period->payroll_period_end;
 		$payroll_period_company_id = $company_period->payroll_period_company_id;
 		$shift_code_id = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->value("shift_code_id");
 	

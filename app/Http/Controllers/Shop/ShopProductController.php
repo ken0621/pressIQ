@@ -260,7 +260,7 @@ class ShopProductController extends Shop
         $data["current_count"] = count($data["_product"]);
 
         /* Category Show */
-        if ($this->shop_info->shop_theme == "philtech" || $this->shop_info->shop_theme == "brown") 
+        if ($this->shop_info->shop_theme == "brown")
         {
             $data["_categories"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         }

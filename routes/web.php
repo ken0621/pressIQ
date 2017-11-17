@@ -213,6 +213,9 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
 	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
 	Route::get('product_order2/export','Member\ProductOrderController2@export');
+
+	Route::get('product_order2/settings','Member\ProductOrderController2@settings');
+	Route::post('product_order2/settings','Member\ProductOrderController2@settings_submit');
 	//product order end
 });
 
@@ -1183,6 +1186,8 @@ Route::any("/kim/compute_flexi_time","Core\Times2@compute_flexi_time");
 include_once('routes_config/routes_payroll.php');
 /* PAYROLL END */
 
+include_once('routes_config/routes_project.php');
+
 /* PAYMENT FACILITIES */
 include_once('routes_config/routes_payment.php');
 include_once('routes_config/routes_reward.php');
@@ -1195,8 +1200,6 @@ include_once('routes_config/routes_members_area.php');
 
 /*PAYROLL EMPLOYEE*/
 include_once('routes_config/routes_payroll_employee.php');
-
-
 Route::get('/ref/{id}', 'Shop\LeadController@ref');
 Route::get('/{id}', 'Shop\LeadController@ref');
 

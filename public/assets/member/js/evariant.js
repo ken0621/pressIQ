@@ -213,6 +213,15 @@ function submit_done(data)
 			});
 		}
 	}
+	else if(data.status == "success-category")
+	{
+		$(".select-category").load("/member/item/load_category/inventory", function()
+		{
+			$(this).globalDropList("reload");
+			$(this).val(data.id).change();
+		})
+		data.element.modal("hide");
+	}
 	else
 	{
 		toastr.error(data.message);

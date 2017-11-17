@@ -24,7 +24,7 @@
                         <tr>
                             <td><img src=""></td>
                             <td>{{ $item->item_name }}</td>
-                            <td>P {{ number_format($item->item_price) }}</td>
+                            <td>P {{ number_format($item->item_price, 2) }}</td>
                             <td><input class="item-qty form-control text-center" style="width: 75px; margin: auto;" type="number" name="quantity" min="1" step="1" value="{{ $item->quantity }}" item-id="{{ $item->item_id }}"></td>
                             <td>P {{ number_format($item->subtotal, 2) }}</td>
                             <td><div class="remove-container remove-item-cart" item-id="{{ $item->item_id }}" style="cursor: pointer;"><i class="fa fa-times" aria-hidden="true"></i></div></td>
@@ -47,10 +47,11 @@
                 </div>
             </div>
             <div class="col-md-4">
+                <div class="total" style="display: inline-block; vertical-align: top; margin-right: 15px;">Shipping Fee: {{ number_format($cart["info"]->shipping_fee, 2) }}</div>
                 @if(isset($cart) && $cart)
-                    <div class="total">Total: {{ $cart["_total"]->display_grand_total }}</div>
+                    <div class="total" style="display: inline-block; vertical-align: top;">Total: {{ $cart["_total"]->display_grand_total }}</div>
                 @else
-                    <div class="total">Total: 0.00</div>
+                    <div class="total" style="display: inline-block; vertical-align: top;">Total: 0.00</div>
                 @endif
             </div>
         </div>

@@ -627,6 +627,10 @@ class Item
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
+    public static function getUserid()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_id');
+    }
     public static function generate_barcode($barcode = 0)
     {
         $return = $barcode;
@@ -1685,7 +1689,11 @@ class Item
     {
         return Tbl_item::where('shop_id',$shop_id)->where('item_type_id',5)->where("archived", 0)->pluck('item_id', 'item_name');
     }
-    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0, $get_to = 0, $take = 0)
+    public static function get_all_assembled_kit_v2($shop_id)
+    {
+        return Tbl_item::inventory(Warehouse2::get_main_warehouse($shop_id))->where('shop_id',$shop_id)->where('item_type_id',5)->where("archived", 0)->get();
+    } 
+    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0, $get_to = 0, $take = 0, $get_from = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1732,16 +1740,28 @@ class Item
         }
         else
         {
-            $data = $query->get();            
-        }
-       if($take != 0)
-        {
-            if($get_to > 1)
+            if($shop_id == 5)
             {
-                $query->skip($get_to);
+                $data = $query->whereBetween('ctrl_number',[$get_to, $get_from])->get();
+
             }
-            $data = $query->take($take + 1)->get();
+            else
+            {
+                if($take != 0)
+                {
+                    if($get_to > 1)
+                    {
+                        $query->skip($get_to);
+                    }
+                    $data = $query->take($take + 1)->get();
+                }
+                else
+                {
+                    $data = $query->get(); 
+                }        
+            }           
         }
+
         return $data; 
     } 
 
@@ -1892,4 +1912,16 @@ class Item
             }
         }
     }
+    public static function tag_as_printed($warehouse_id, $from, $to)
+    {
+        $update['printed_by'] = Self::getUserid();
+        $get = Tbl_warehouse_inventory_record_log::item()->where('item_type_id',5)->where('record_warehouse_id',$warehouse_id)->whereBetween('ctrl_number',[$from,$to])->update($update);
+    }
+    public static function get_last_print()
+    {
+        $return = Tbl_warehouse_inventory_record_log::item()->where('item_type_id',5)->where('record_shop_id',Self::getShopId())->where('printed_by',0)->where('ctrl_number','!=',0)->value('ctrl_number');
+
+        return $return;
+    }
+
 }

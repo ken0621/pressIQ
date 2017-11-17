@@ -191,7 +191,8 @@ class Payroll_BioImportController extends Member
 			{
 				$check_employee = null;
 
-				$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number."")->where("shop_id", Self::shop_id())->first();
+
+				$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_biometric_number", $employee_number)->where("shop_id", Self::shop_id())->first();
 				
 				$value['employee_number'] = $employee_number;
 				$value['date']			  = $date;
@@ -201,6 +202,8 @@ class Payroll_BioImportController extends Member
 					$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee_number)->where("shop_id", Self::shop_id())->first();
 				}
 
+				$value['employee_number'] = $employee_number;
+				$value['date']			  = $date;
 
 				if ($check_employee) 
 				{
@@ -515,10 +518,11 @@ class Payroll_BioImportController extends Member
 	public function getemployeeId($payroll_employee_number = '', $value = 'payroll_employee_id')
 	{
 		$employee_info = Tbl_payroll_employee_basic::where('payroll_employee_biometric_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->value($value);
+
 		
 		if (!$employee_info) 
 		{
-			$employee_info = Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->value($value);
+			$employee_info 	= Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->value($value);
 		}
 
 		return $employee_info;
@@ -532,6 +536,7 @@ class Payroll_BioImportController extends Member
 		{
 			$insert_time['payroll_employee_id'] = $payroll_employee_id;
 			$insert_time['payroll_time_date'] 	= $date;
+			dd($insert_time);
 			$payroll_time_sheet_id = Tbl_payroll_time_sheet::insertGetId($insert_time);
 		}
 		else
@@ -712,7 +717,7 @@ class Payroll_BioImportController extends Member
 	    			if(Self::check_employee_number($start['employee_number']))
 	    			{
 		    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($start['employee_number']), $start['date']);
-
+		    			
 		    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
 		    			$temp_array['payroll_time_sheet_in'] 		= $start['time'];
 		    			$temp_array['payroll_time_sheet_out'] 		= $end['time'];
@@ -783,8 +788,11 @@ class Payroll_BioImportController extends Member
     			/*unset the report of inserted timesheet*/
     			if (isset($insert_time_record[$key]["report"])) 
     			{
-    				array_push($data['_report'], $insert_time_record[$key]);
-    				$success++;
+    				if ($insert_time_record[$key]["report"]["status"] == "Inserted")
+    				{
+    					array_push($data['_report'], $insert_time_record[$key]);
+    					$success++;
+    				}
     				unset($insert_time_record[$key]["report"]);
     			}
     		}
@@ -801,7 +809,8 @@ class Payroll_BioImportController extends Member
     	{
     		Tbl_payroll_time_sheet_record::insert($insert_time_record);
     		$count_inserted = count($insert_time_record);
-    		if ($company != null || $company != 0) {
+    		if ($company != null || $company != 0) 
+    		{
     			$data['company_info'] = Tbl_payroll_company::where('payroll_company_id',$company)->first();
     			AuditTrail::record_logs('INSERTED: '.$data['company_info']->payroll_company_name.' Timesheet',$count_inserted.' Files had been inserted using ZKTime_5_0   Template.', "", "" ,"");
     		}
@@ -814,7 +823,7 @@ class Payroll_BioImportController extends Member
 
     public function importation_table_report($data)
     {
-    	$html = "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
+    	$html  = "<div><h4 class='text-success'>SUCCESS: ".$data["success"]."</h4><h4 class='text-primary'>OVERWRITTEN: ".$data["overwritten"]."</h4><h4 class='text-danger'>FAILED: ".$data["failed"]."</h4></div>";
     	$html .= "<table class='table'>
     				<thead>
     				      <tr>
@@ -840,7 +849,7 @@ class Payroll_BioImportController extends Member
 						<td class='text-center'>".$report['report']['status']."</td>
 					  </tr>";
     	}
-    	$html .= "   </tbody>
+    	$html 	  .= "   </tbody>
     			  </table>";
     	return $html;
     }
@@ -878,7 +887,6 @@ class Payroll_BioImportController extends Member
 	    			$end 	= $date[count($date) - 1];
 	    			if(Self::check_employee_number($start['employee_number']))
 	    			{
-	    				
 		    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($start['employee_number']), $start['date']);
 
 		    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
@@ -961,6 +969,7 @@ class Payroll_BioImportController extends Member
 	    		}
 	    		array_push($record_array, $time);
 	    	}
+
 	    	$_collect = collect($record_array)->groupBy('id_no');
 	    	// dd($collect);
 
@@ -999,7 +1008,6 @@ class Payroll_BioImportController extends Member
 			    					$insert_record['payroll_time_sheet_out'] = date('H:i:s', strtotime($final_date['time_out']));
 			    				}
 			    			}
-
 			    			$count_record = Tbl_payroll_time_sheet_record::wherearray($insert_record)->count();
 			    			$insert_record['report']['date']			= $date;
 		    				$insert_record['report']['employee_number']	= $date_key[0]['id_no'];

@@ -24,6 +24,7 @@ function cart_modal()
 		$(".item-qty").unbind("change");
 		$(".item-qty").bind("change", function(e)
 		{
+			cart_loader_show();
 			action_quantity_price(e.currentTarget);
 		});
 	}

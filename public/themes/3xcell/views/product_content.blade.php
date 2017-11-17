@@ -9,24 +9,49 @@
 					<div class="prod-image-container">
 						<img class="single-product-img" src="{{ get_product_first_image($product) }}">
 					</div>
-					<!-- PRODUCT DESCRIPTION -->
-					<div class="prod-description-container">
-						<div class="prod-description-title-container">
-							<div class="description-title">
-								Description
-							</div>
-						</div>
-						<div class="prod-description">
-							<p>
-								{!! get_product_first_description($product) !!}
-							</p>
-						</div>
-					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="purchase-details-container">
-						<div class="product-name-container">{{ get_product_first_name($product) }}<div class="line-bot"></div></div>
-						<div class="product-price">{{ get_product_first_price($product) }}</div>
+						<div class="product-name-container">{{ get_product_first_name($product) }}{{-- <div class="line-bot"></div> --}}</div>
+						<!-- PRODUCT DESCRIPTION -->
+						<div class="prod-description-container">
+							<div class="prod-description-title-container">
+								<div class="description-title">
+									Description
+								</div>
+							</div>
+							<div class="prod-description">
+								<p>
+									{!! get_product_first_description($product) !!}
+								</p>
+							</div>
+						</div>
+						<div class="product-price">
+							{{ get_product_first_price($product) }}
+							<div style="margin-top: 15px; font-size: 18px;">
+								@if($mlm_member)
+									@foreach($product["variant"][0]["pv"] as $key => $value)
+										@if($key == "STAIRSTEP" || $key == "STAIRSTEP_GROUP" || $key == "RANK")
+											<div>
+												<span class="pv-label" style="padding-left: 0;">
+													<i class="fa fa-star" aria-hidden="true"></i>
+												</span>
+												@if($key == "RANK")
+													<span class="pv-label">RANK PV:</span>
+												@elseif($key == "STAIRSTEP_GROUP")
+													<span class="pv-label">GROUP VOLUME:</span>
+												@elseif($key == "STAIRSTEP")
+													<span class="pv-label">PERSONAL PV</span>
+												@else
+													<span class="pv-label">{{ str_replace("_", " ", $key) }}:</span>
+												@endif
+												<span class="pv-details">P {{ number_format($value, 2) }}</span>
+											</div>
+										@endif
+									@endforeach
+								@endif
+							</div>
+						</div>
 						<div class="product-quantity">
 							<div class="info-title">
 								Quantity

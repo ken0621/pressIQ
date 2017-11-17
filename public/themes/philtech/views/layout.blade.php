@@ -21,7 +21,7 @@
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
 
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=6">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=7">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
         <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
         
@@ -419,7 +419,7 @@
           </div>
         </div>
         @include("frontend.gfoot")
-        <script src="/themes/{{ $shop_theme }}/js/custom_theme.js?version=2"></script>
+        <script src="/themes/{{ $shop_theme }}/js/custom_theme.js?version=3"></script>
 
         @yield("js")
     </body>

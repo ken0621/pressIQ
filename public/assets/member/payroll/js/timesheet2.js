@@ -125,6 +125,8 @@ function timesheet()
 		{
 			var tr_date = $(e.currentTarget).closest(".tr-parent").attr("date");
 			var td_class = $(e.currentTarget).closest("td").attr("class");
+			var time_in_val = $(e.currentTarget).closest(".tr-parent").find('.time-out-td').find('.time-in').first().val();
+			
 			if (td_class == "time-comment-td") 
 			{
 				action_time_sheet_save_remark(tr_date);

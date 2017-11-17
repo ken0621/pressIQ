@@ -15,6 +15,7 @@ $bold: 700;
      top: 0;
      z-index: 1000;
      position: fixed;
+     overflow-y: auto;
     @media screen and (max-width: 320px)
     {
         width: 250px;
@@ -68,17 +69,11 @@ $bold: 700;
         border-bottom: 1px solid rgba(255,255,255, 0.2);
         padding: 10px 0px;
         padding-left: 10px;
+    }
 
-        a
-        {
-            position: relative;
-            display: block; /* drops the nav vertically*/
-            color: #f1f1f1;
-            font-size: 16px;
-            text-decoration: none;
-            //line-height: 80%;
-            //padding: 5px;
-        }
+    a 
+    {
+        color: rgba(255,255,255, 0.7) !important;
     }
 
     .user-logout

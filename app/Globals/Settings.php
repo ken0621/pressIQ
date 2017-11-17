@@ -156,6 +156,60 @@ class Settings
 		}
 		return $data;
 	}
+	public static function update_settings_shop_id($key, $value, $shop_id)
+	{
+		if($key != null)
+		{
+			$setting = Tbl_settings::where('settings_key', $key)->where('shop_id', $shop_id)->first();
+			if($setting != null)
+			{
+				if(isset($setting->settings_value))
+				{
+					$update['settings_value'] = $value;
+					$updata['settings_setup_done'] = 1;
+					$setting = Tbl_settings::where('settings_key', $key)->where('shop_id', $shop_id)->update($update);
+					$data['response_status'] = 'success';
+					$data['settings_key'] = $key;
+					$data['settings_value'] = $value;
+				}
+				else
+				{
+					$data['response_status'] = 'error';
+					$data['message'] = 'Invalid Settings Key';
+				}
+				
+			}
+			else
+			{
+				$data['response_status'] = 'error';
+				$data['message'] = 'Invalid Settings Key';
+			}
+		}
+		else
+		{
+			$data['response_status'] = 'error';
+			$data['message'] = 'Settings key must not be null';
+		}
+		return $data;
+	}
+	public static function insert_settings_shop_id($key, $value, $shop_id)
+	{
+		if($key != null)
+		{
+			$insert['settings_value'] 	   = $value;
+			$insert['settings_key']	  	   = $key;
+			$insert['shop_id'] 			   = $shop_id;
+			$insert['settings_setup_done'] = 1;
+			$setting = Tbl_settings::insert($insert);
+			$data['response_status']       = 'success';
+		}
+		else
+		{
+			$data['response_status'] = 'error';
+			$data['message'] 		 = 'Settings key must not be null';
+		}
+		return $data;
+	}
 	public static function set_mail_setting($shop_id)
 	{
 		$setting = collect(DB::table("tbl_settings")->where("shop_id", $shop_id)->get())->keyBy('settings_key');

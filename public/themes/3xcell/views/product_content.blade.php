@@ -9,24 +9,32 @@
 					<div class="prod-image-container">
 						<img class="single-product-img" src="{{ get_product_first_image($product) }}">
 					</div>
-					<!-- PRODUCT DESCRIPTION -->
-					<div class="prod-description-container">
-						<div class="prod-description-title-container">
-							<div class="description-title">
-								Description
-							</div>
-						</div>
-						<div class="prod-description">
-							<p>
-								{!! get_product_first_description($product) !!}
-							</p>
-						</div>
-					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="purchase-details-container">
-						<div class="product-name-container">{{ get_product_first_name($product) }}<div class="line-bot"></div></div>
-						<div class="product-price">{{ get_product_first_price($product) }}</div>
+						<div class="product-name-container">{{ get_product_first_name($product) }}{{-- <div class="line-bot"></div> --}}</div>
+						<!-- PRODUCT DESCRIPTION -->
+						<div class="prod-description-container">
+							<div class="prod-description-title-container">
+								<div class="description-title">
+									Description
+								</div>
+							</div>
+							<div class="prod-description">
+								<p>
+									{!! get_product_first_description($product) !!}
+								</p>
+							</div>
+						</div>
+						<div class="product-price">
+							{{ get_product_first_price($product) }}
+							@if($mlm_member)
+								<span class="pv-label">
+									<i class="fa fa-star" aria-hidden="true"></i>
+								</span>
+								<span class="pv-label">PV:</span><span class="pv-details"></span>
+							@endif
+						</div>
 						<div class="product-quantity">
 							<div class="info-title">
 								Quantity

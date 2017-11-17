@@ -42,7 +42,7 @@
     </head>
     <body>
         <div class="pushmenu-push">
-            
+            <div id="overlay" onclick="off()"></div>
             <div class="loader hide">
               <span><img src="/resources/assets/frontend/img/loader.gif"></span>
             </div>
@@ -100,7 +100,7 @@
                     <div class="row clearfix">
                         <div class="col-md-2">
 
-                            <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
+                            <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
                                 
                                 <nav class="pushmenu pushmenu-left">
                                 
@@ -429,7 +429,19 @@
             <div id="fb-root"></div>
             <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
             <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
-                
+            
+        <!--     <script>
+            function on() 
+            {
+                document.getElementById("overlay").style.display = "block";
+            }
+        
+            function off() 
+            {
+                document.getElementById("overlay").style.display = "none";
+            }
+        </script> -->
+
             @yield("js")
         </div>
     </body>

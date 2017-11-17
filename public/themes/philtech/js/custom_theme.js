@@ -29,6 +29,15 @@ function custom_theme()
                 $('.pushmenu-push').toggleClass('pushmenu-push-toright');
                 $menuLeft.toggleClass('pushmenu-open');
             });
+
+            /*DISABLE BODY SCROLLING*/
+            var $body = $(document.body);
+
+            $('#nav_list').click(function()
+            {
+            	$body.toggleClass('disable-scroll');
+            });
+
 		});
 	}
 

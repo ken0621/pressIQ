@@ -907,7 +907,14 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Kimbriel Oraya";
 
-
+        /* -- REPORT => PRODUCTS  */
+        $code = "Employee-Summary-Report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Employee Summary Report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/employee_summary_report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "E";
 
 
     /* PAYROLL Biometric */

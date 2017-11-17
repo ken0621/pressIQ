@@ -180,7 +180,7 @@ class Purchasing_inventory_system
             
         }
         return $data;
-    }
+    } 
     public static function get_report_data($sir_id)
     {
         $user_id = Purchasing_inventory_system::getUserId();

@@ -56,8 +56,8 @@
                             <div class="col-md-12">
                                 <label for="">Print Code as :</label>
                                 <select name="print_code_as" class="form-control">
-                                    <value value="pdf">PDF</value>
-                                    <value value="excel">Excel</value>
+                                    <option value="pdf">PDF</option>
+                                    <option value="excel">Excel</option>
                                 </select>
                             </div>
                         </div>

@@ -367,7 +367,13 @@ $text-dark: #272c2f;
 {
 	background-color: #2161C8;
 	color: #fff;
-
+	
+	.modal-title
+	{
+		font-weight: $regular;
+		color: #fff !important;
+	}
+	
 	.fa
 	{
 		color: #fff;
@@ -376,6 +382,15 @@ $text-dark: #272c2f;
 	.close
 	{
 		@extend .fa;
+	}
+}
+
+.modal-body
+{
+	h3
+	{
+		font-size: 21px !important;
+		color: #FF3300 !important;
 	}
 }
 

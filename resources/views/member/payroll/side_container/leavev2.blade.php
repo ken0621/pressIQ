@@ -5,7 +5,8 @@
 
 			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_create_leave_type" style="margin-right:20px;">Create Leave Type</a>
 
-			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_leave_scheduling" style="margin-right:20px;">Leave Scheduling</a>
+			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave_schedule/v2/modal_leave_scheduling" style="margin-right:20px;">Leave Scheduling</a>
+
 
 			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_leave_history" style="margin-right:20px;">Leave Schedule History</a>
 			</h4>

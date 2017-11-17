@@ -130,7 +130,7 @@ function modal_create_leave_temp()
 		$(".time-entry-24").timeEntry('destroy');
 		$(".time-entry.time-in").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 		$(".time-entry.time-out").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 12, 0, 0)});
-		$(".time-entry-24").timeEntry({show24Hours: true, defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+		$(".time-entry-24").timeEntry({unlimitedHours: true, defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 	}
 
 	function misc(str){

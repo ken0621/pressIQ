@@ -157,7 +157,7 @@ function employee_tag_schedule_leave()
 				result = JSON.parse(result);
 
 				$(result.new_record).each(function(index, data){
-
+					console.log(data);
 					$(data).each(function(index,data2){
 						console.log(data2);
 						html += tbl_tag(data2);

@@ -1,5 +1,6 @@
 <!-- Change action, name and function-->
-<form class="global-submit" role="form" action="/member/payroll/leave/modal_save_leave_temp" method="POST">
+<form class="global-submit" role="form" action="/member/payroll/leave/v2/modal_leave_schedule_action" method="POST">
+	
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Reset</h4>
@@ -10,17 +11,17 @@
 
 					<div class="col-md-12">
 						<div class="radio">
-							<label><input type="radio" name="payroll_leave_temp_is_cummulative" value="1" checked>Convert to Cash</label>
+							<label><input type="radio" name="payroll_leave_schedule_convert" value="convert_to_cash" checked>Convert to Cash</label>
 						</div>
 					</div>
 					<div class="col-md-12">
 						<div class="radio">
-							<label><input type="radio" name="payroll_leave_temp_is_cummulative" value="0">Accumulate</label>
+							<label><input type="radio" name="payroll_leave_schedule_accumulate" value="accumulate">Accumulate</label>
 						</div>
 					</div>
 					<div class="col-md-12">
 						<div class="radio">
-							<label><input type="radio" name="payroll_leave_temp_is_cummulative" value="0">No Action, Just Reset</label>
+							<label><input type="radio" name="payroll_leave_schedule_reset" value="reset">No Action, Just Reset</label>
 						</div>
 					</div>						
 

@@ -40,13 +40,16 @@
 										<span class="caret"></span></button>
 										<ul class="dropdown-menu dropdown-menu-custom">
 											<li>
-												<a href="#" class="popup" link=""><i class="fa fa-pencil"></i>&nbsp;View</a>
+												<a href="#" class="popup" link="" size="sm"><i class="fa fa-money"></i>&nbsp;Convert to Cash</a>
 											</li>
 											<li>
-												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_reset_leave" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Reset</a>
+												<a href="#" class="popup" link="" size="sm"><i class="fa fa-plus"></i>&nbsp;Accumulate</a>
 											</li>
 											<li>
-												<a href="#" class="popup" link="" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Reset history</a>
+												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_leave_action_reset/{{$dat->payroll_leave_employee_id}}" size="sm"><i class="fa  fa-recycle"></i>&nbsp;Reset</a>
+											</li>
+											<li>
+												<a href="#" class="popup" link="" size="sm"><i class="fa fa-history"></i>&nbsp;Reset history</a>
 											</li>
 										</ul>
 									</div>

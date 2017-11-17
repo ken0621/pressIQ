@@ -4081,8 +4081,6 @@ class PayrollController extends Member
                                                             ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_employee_v2.payroll_leave_temp_id','=','tbl_payroll_leave_tempv2.payroll_leave_temp_id')
                                                             ->where('tbl_payroll_leave_tempv2.payroll_leave_temp_id',$payroll_leave_temp_id)
                                                             ->get();
-
-          // dd($payroll_employee_id);       
           $datas = array();                                               
           foreach($payroll_employee_id as $key => $emp_id)
           {
@@ -4093,13 +4091,17 @@ class PayrollController extends Member
           }
    
           $data['emp'] = $datas;
-
           return view('member.payroll.modal.modal_view_leave_employee',$data);
      }
 
      public function modal_reset_leave()
      {
           return view('member.payroll.modal.modal_reset_leave');
+     }
+
+     public function modal_leave_schedule_action()
+     {
+
      }
 
      public function modal_leave_scheduling()
@@ -4129,6 +4131,41 @@ class PayrollController extends Member
           return json_encode($return);
      }
 
+     public function modal_leave_action_reset($payroll_leave_employee_id)
+     {
+          // dd($payroll_leave_employee_id);
+
+          $statement = 'reset';
+          // if($archived == 0)
+          // {
+          //      $statement = 'restore';
+          // }
+
+          $file_name          = Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id', $payroll_leave_employee_id)->value('payroll_leave_temp_name');
+
+          $data['title']      = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/leave/v2/reset_leave_schedulev2';
+          $data['id']         = $payroll_leave_employee_id;
+
+          return view('member.payroll.modal.modal_leave_reset_confirm',$data);
+
+     }
+
+     // public function reset_leave_schedulev2()
+     // {
+     //       $id = Request::input('id');
+     //      $update['payroll_leave_schedule_archived'] = 1;
+
+     //      Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$id)->update($update);
+
+     //      $return['status']             = 'success';
+     //      $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
+
+     //      return json_encode($return);
+     // }
+
+
 // scheduling leave
      public function save_schedule_leave_tagv2()
      {
@@ -4146,29 +4183,13 @@ class PayrollController extends Member
                {
                     $leave_hours = Request::input("leave_hours_".$tag);
 
-                    if(Request::has('single_date_only'))
+                    if($leave_hours != 0)
                     {
-                         $temp['payroll_leave_employee_id']    = $tag;
-                         $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
-
-                         $temp['payroll_leave_date_created']   = $payroll_leave_date_created;
-                         $temp['payroll_leave_temp_with_pay']  = Request::input('payroll_leave_temp_with_pay');
-                         $temp['payroll_leave_temp_name']      = $leave_reason["payroll_leave_temp_name"];
-
-                         $temp['shop_id']                      = Self::shop_id();
-                         $temp['leave_hours']                  = $leave_hours;
-                         $temp['consume']                      = Payroll::time_float($leave_hours);
-                         $temp['notes']                        = "Used ".$leave_hours." hours in ".$leave_reason["payroll_leave_temp_name"];
-                         array_push($insert, $temp);
-                    }
-
-                    else
-                    {
-                         $end = datepicker_input(Request::input('payroll_schedule_leave_end'));
-                         while($payroll_schedule_leave <= $end)
+                         if(Request::has('single_date_only'))
                          {
                               $temp['payroll_leave_employee_id']    = $tag;
                               $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
+
                               $temp['payroll_leave_date_created']   = $payroll_leave_date_created;
                               $temp['payroll_leave_temp_with_pay']  = Request::input('payroll_leave_temp_with_pay');
                               $temp['payroll_leave_temp_name']      = $leave_reason["payroll_leave_temp_name"];
@@ -4178,7 +4199,26 @@ class PayrollController extends Member
                               $temp['consume']                      = Payroll::time_float($leave_hours);
                               $temp['notes']                        = "Used ".$leave_hours." hours in ".$leave_reason["payroll_leave_temp_name"];
                               array_push($insert, $temp);
-                              $payroll_schedule_leave = Carbon::parse($payroll_schedule_leave)->addDay()->format("Y-m-d");
+                         }
+
+                         else
+                         {
+                              $end = datepicker_input(Request::input('payroll_schedule_leave_end'));
+                              while($payroll_schedule_leave <= $end)
+                              {
+                                   $temp['payroll_leave_employee_id']    = $tag;
+                                   $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
+                                   $temp['payroll_leave_date_created']   = $payroll_leave_date_created;
+                                   $temp['payroll_leave_temp_with_pay']  = Request::input('payroll_leave_temp_with_pay');
+                                   $temp['payroll_leave_temp_name']      = $leave_reason["payroll_leave_temp_name"];
+
+                                   $temp['shop_id']                      = Self::shop_id();
+                                   $temp['leave_hours']                  = $leave_hours;
+                                   $temp['consume']                      = Payroll::time_float($leave_hours);
+                                   $temp['notes']                        = "Used ".$leave_hours." hours in ".$leave_reason["payroll_leave_temp_name"];
+                                   array_push($insert, $temp);
+                                   $payroll_schedule_leave = Carbon::parse($payroll_schedule_leave)->addDay()->format("Y-m-d");
+                              }
                          }
                     }
                }
@@ -4292,7 +4332,7 @@ class PayrollController extends Member
                else
                {
                     $empdat = Tbl_payroll_leave_schedulev2::getallemployeeleavedata($employee_id)->get();
-
+                    
                     array_push($leavedat,$empdat);
                }         
 

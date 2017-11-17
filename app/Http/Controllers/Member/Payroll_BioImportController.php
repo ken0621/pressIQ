@@ -536,7 +536,6 @@ class Payroll_BioImportController extends Member
 		{
 			$insert_time['payroll_employee_id'] = $payroll_employee_id;
 			$insert_time['payroll_time_date'] 	= $date;
-			dd($insert_time);
 			$payroll_time_sheet_id = Tbl_payroll_time_sheet::insertGetId($insert_time);
 		}
 		else
@@ -971,7 +970,6 @@ class Payroll_BioImportController extends Member
 	    	}
 
 	    	$_collect = collect($record_array)->groupBy('id_no');
-	    	// dd($collect);
 
 	    	$insert_time_record = array();
 
@@ -980,15 +978,18 @@ class Payroll_BioImportController extends Member
 	    		if(Self::check_employee_number($key))
 	    		{
 	    			$_date_key = collect($collect)->groupBy('date');
-	    			// dd($_date_key);
+	  				
 		    		foreach($_date_key as $dk => $date_key)
 		    		{
+
 		    			$insert_record = null;
 		    			$date = date('Y-m-d', strtotime($dk));
+
 		    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($key), $date);
 
 		    			/* delete all 0000-00-00 date value */
 		    			Self::delete_blank($payroll_time_sheet_id);
+
 		    			if($date_key[0]['time_in'] != '')
 		    			{
 		    				$insert_record['payroll_time_sheet_in'] 	= date('H:i:s', strtotime($date_key[0]['time_in']));

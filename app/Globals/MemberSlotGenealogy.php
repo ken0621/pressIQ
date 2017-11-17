@@ -178,7 +178,6 @@ class MemberSlotGenealogy
     {
         $left_info  = Tbl_mlm_slot::where("slot_placement", $slot_id)->where("slot_position", "left")->membership()->customer()->first();
         $right_info = Tbl_mlm_slot::where("slot_placement", $slot_id)->where("slot_position", "right")->membership()->customer()->first(); 
-
         $tree_string = "";
         $tree_string .= Self::downline_format($left_info,'Left',$slot_id);
         $tree_string .= Self::downline_format($right_info,'Right',$slot_id);
@@ -213,7 +212,8 @@ class MemberSlotGenealogy
     }
     public static function downline_format_unilevel($slot_info,$position = null,$placement = null)
     {
-
+             
+            
         if($slot_info)
         {
             $l = Tbl_tree_placement::where('placement_tree_parent_id',$slot_info->slot_id)->where('placement_tree_position','left')->count();
@@ -222,6 +222,8 @@ class MemberSlotGenealogy
 
             $abb             = strtoupper(substr($slot_info->first_name, 0, 3));
             $additional_info = "";
+
+
 
             if($slot_info->shop_id == 47)
             {
@@ -232,7 +234,8 @@ class MemberSlotGenealogy
                                     <div>Rank PV:'.$rank_points["rpersonal_pv"].'</div>
                                     <div>Rank Group PV:'.$rank_points["rgroup_pv"].'</div>';
             }
-            
+
+
 
             if(isset($gen_color["genealogy_color"]))
             {
@@ -311,7 +314,9 @@ class MemberSlotGenealogy
             $r = Tbl_tree_placement::where('placement_tree_parent_id',$slot_info->slot_id)->where('placement_tree_position','right')->count();
             
 
-            $abb = strtoupper(substr($slot_info->first_name, 0, 3));
+            $first_name = iconv("UTF-8", "ASCII//TRANSLIT", $slot_info->first_name);
+            $abb = strtoupper(substr($first_name, 0, 3));
+
             $additional_info = "";
             if($slot_info->shop_id == 47)
             {
@@ -335,8 +340,10 @@ class MemberSlotGenealogy
 
 
 
+
             if($slot_info->image == "")
             {
+
                 return  '<li class="width-reference">'.$str_slot.
                                     '<div id="info">
                                         <div id="photo">
@@ -376,6 +383,8 @@ class MemberSlotGenealogy
                             </li>';             
             }
 
+
+
         }
         else if($position) 
         {
@@ -395,5 +404,6 @@ class MemberSlotGenealogy
                             </span>
                         </li>';
         }
+
     }
 }

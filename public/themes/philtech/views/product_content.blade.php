@@ -1,6 +1,6 @@
 @extends('layout')
 @section('content')
-<div class="content">
+<div class="content mob-margin">
     <div class="container">
         <div class="row clearfix">
             <div class="col-md-12">

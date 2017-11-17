@@ -20,6 +20,7 @@ function paginate_ajax()
     {
         $('body').on('click', '.pagination a', function(e) 
         {
+
             e.preventDefault();
             
             var load_data = $(this).closest('.load-data');
@@ -35,12 +36,19 @@ function paginate_ajax()
                 var url = $(this).attr('href');
             }
 
+            $url = $(e.currentTarget).attr("href");
+            var url = new URL($url);
+            $page = url.searchParams.get("page");
+
+            $url = "/member/customer/list?page=" + $page;
+            
             load_data.each(function() 
             {
                 $.each(this.attributes, function() 
                 {
                     if(this.specified && this.name != "class" && this.name != "style") 
                     {
+
                         url = url+"&&"+this.name+"="+this.value;
                         console.log(this.name, this.value);
                     }

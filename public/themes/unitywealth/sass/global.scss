@@ -279,98 +279,46 @@ button:hover{
 	.footer-container
 	{
 		padding: 35px 0px 55px 0px;
-		.reach-us-holder
+		color: rgba(255,255,255,0.5);
+
+		.footer-img-container
 		{
-			width: 84%;
-			.jca-footer-title-container
+			width: 75%;
+
+			img 
 			{
-				.footer-title
-				{
-					font-family: "Raleway Bold", sans-serif;
-					font-size: 15px;
-					font-weight: bold;
-					color: #ffffff;
-					margin-bottom: 25px;
-				}
-			}
-			.jca-footer-details-container
-			{
-				.icon-holder
-				{
-					display: inline-block;
-					vertical-align: top;
-					width: 21px;
-					text-align: right;
-					.jca-footer-icon
-					{
-						
-					}
-				}
-				.footer-details
-				{
-					font-family: "Raleway Regular", sans-serif;
-					font-size: 12px;
-					margin: 0px;
-					color: #ffffff;
-					display: inline-block;
-					width: 85%;
-					text-align: justify;
-					margin-left: 14px;
-					margin-bottom: 10px;
-				}
-				.footer-detail-list
-				{
-					font-family: "Raleway Regular", sans-serif;
-					font-size: 12px;
-					margin: 0px;
-					color: #ffffff;
-					margin-bottom: 5px;
-				}
+				width: 100%;
 			}
 		}
-		.jca-footer-title-container
+		.footer-profile-content
 		{
-			.footer-title
-			{
-				font-family: "Raleway Bold", sans-serif;
-				font-size: 15px;
-				font-weight: bold;
-				color: #ffffff;
-				margin-bottom: 25px;
-			}
+			padding-top: 15px;
 		}
-		.jca-footer-details-container
+
+		.footer-title
 		{
-			.icon-holder
+			color: #fff;
+			border-bottom: 1px solid #fff;
+			padding-bottom: 10px;
+			font-size: 15px;
+			font-weight: bold;
+		}
+		.footer-details
+		{
+			padding-top: 15px;
+			ul
 			{
-				display: inline-block;
-				vertical-align: top;
-				width: 21px;
-				text-align: right;
-				.jca-footer-icon
+				padding-left: 0;
+				li
 				{
-						
+					list-style: none;
+					padding: 3px 0;	
 				}
-			}
-			.footer-details
-			{
-				font-family: "Raleway Regular", sans-serif;
-				font-size: 12px;
-				margin: 0px;
-				color: #ffffff;
-				display: inline-block;
-				width: 85%;
-				text-align: justify;
-				margin-left: 14px;
-				margin-bottom: 10px;
-			}
-			.footer-detail-list
-			{
-				font-family: "Raleway Regular", sans-serif;
-				font-size: 12px;
-				margin: 0px;
-				color: #ffffff;
-				margin-bottom: 5px;
+				a 
+				{
+					color: rgba(255,255,255,0.5);
+					text-decoration: none;
+				}
 			}
 		}
 	}

@@ -19,25 +19,89 @@
             </ul>
         </div>
         <div class="col-md-9 m-t-lg">
+            @if($company->payroll_parent_company_id != 0)
+                <div class="row">
+                    <div class="col-md-12">
+                        <small>Is Sub-Company of:</small>
+                        <input type="text" placeholder="Parent Company" class="form-control" value="{{$company->payroll_company_name}}" disabled>
+                    </div>
+                </div>
+            @endif
             <div class="row">
-                <h4>Business Information</h4>
-                <div class="panel panel-default">
-                	<div class="form-group row">
-                		<div class="col-md-12">
-                            <br><p style="text-indent: 40px" align="justify">Our goal is to provide and build professional websites, mobile applications with a specific design that best suit to your company specifications, a uniform graphic set with eye catchy details. We are good at building brands and improving your global presence so that we develop meaningful and long term relationships with you. Our core services focuses in Web Design and Development, E-commerce Web Development, Sleek-Modern & Mobile Responsive Web Design, SEO and Apps for Android & iOS, maintain and update website content to both existing and new clients. We also accept any Graphic Design services, Produce 2D animated Videos, and Social Media Marketing. Our services are not limited to what a techinal I.T Professional can do but also professional business advice on how are you going to innovate your business process.</p>
-                		</div>
-                        <div class="col-md-12">
-                            <br><p style="text-indent: 40px" align="justify">Our goal is to provide and build professional websites, mobile applications with a specific design that best suit to your company specifications, a uniform graphic set with eye catchy details. We are good at building brands and improving your global presence so that we develop meaningful and long term relationships with you. Our core services focuses in Web Design and Development, E-commerce Web Development, Sleek-Modern & Mobile Responsive Web Design, SEO and Apps for Android & iOS, maintain and update website content to both existing and new clients. We also accept any Graphic Design services, Produce 2D animated Videos, and Social Media Marketing. Our services are not limited to what a techinal I.T Professional can do but also professional business advice on how are you going to innovate your business process.</p>
-                        </div>
-                	</div>
+                <div class="col-md-12">
+                    <small>Company Name</small>
+                    <input type="text" placeholder="Company Name" class="form-control" value="{{$company->payroll_company_name}}" disabled>
+                </div>
+            </div>  
+            <div class="row">
+                <div class="col-md-6">
+                    <small>Company Code</small>
+                    <input type="text" placeholder="Company Code" class="form-control" value="{{$company->payroll_company_code}}" disabled>
+                </div>
+                <div class="col-md-6">
+                    <small>Company RDO</small>
+                    <input type="text" placeholder="Company RDO" class="form-control" value="{{$company->payroll_rdo_id.' - '.$company->rdo_location}}" disabled>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <small>Company Address</small>
+                    <input type="text" placeholder="Company Address" class="form-control" value="{{$company->payroll_company_address}}" disabled>
+                </div>
+            </div>  
+            <div class="row">
+                <div class="col-md-6">
+                    <small>Company Contact</small>
+                    <input type="text" placeholder="Company Contact" class="form-control" value="{{$company->payroll_company_contact}}" disabled>
+                </div>
+                <div class="col-md-6">
+                    <small>Company Email</small>
+                    <input type="text" placeholder="Company Email" class="form-control" value="{{$company->payroll_company_email}}" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <small>Nature of Business</small>
+                    <input type="text" placeholder="Nature of Business" class="form-control" value="{{$company->payroll_company_nature_of_business}}" disabled>
+                </div>
+                <div class="col-md-6">
+                    <small>Company Date Started</small>
+                    <input type="text" placeholder="Company Date Started" class="form-control" value="{{$company->payroll_company_date_started}}" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <small>Bank</small>
+                    <input type="text" placeholder="Bank" class="form-control" value="{{$company->bank_name}}" disabled>
+                </div>
+                <div class="col-md-6">
+                    <small>Bank Account Number</small>
+                    <input type="text" placeholder="Bank Account Number" class="form-control" value="{{$company->payroll_company_account_no}}" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <small>Company TIN</small>
+                    <input type="text" placeholder="Company TIN" class="form-control" value="{{$company->payroll_company_tin}}" disabled>
+                </div>
+                <div class="col-md-6">
+                    <small>Company SSS</small>
+                    <input type="text" placeholder="Company SSS" class="form-control" value="{{$company->payroll_company_sss}}" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <small>Company Philhealth</small>
+                    <input type="text" placeholder="Company Philhealth" class="form-control" value="{{$company->payroll_company_philhealth}}" disabled>
+                </div>
+                <div class="col-md-6">
+                    <small>Company PAGIBIG</small>
+                    <input type="text" placeholder="Company PAGIBIG" class="form-control" value="{{$company->payroll_company_pagibig}}" disabled>
+                </div>
+            </div>
+            <br>
         </div>
     </div>
 </div>
-<div class="modal-footer">
-    <button type="submit"  class="btn btn-primary btn-md">Edit</button>
-</div>
-
 
 @endsection

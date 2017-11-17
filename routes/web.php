@@ -213,6 +213,9 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
 	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
 	Route::get('product_order2/export','Member\ProductOrderController2@export');
+
+	Route::get('product_order2/settings','Member\ProductOrderController2@settings');
+	Route::post('product_order2/settings','Member\ProductOrderController2@settings_submit');
 	//product order end
 });
 

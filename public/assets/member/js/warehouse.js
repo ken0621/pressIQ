@@ -238,10 +238,17 @@ function warehouse()
 
     function on_search_warehouse()
     {
-        $(".srch-warehouse-txt").keyup(function()
+        $(".srch-warehouse-txt").keyup(function(e)
         {
             var srch_txt = $(this).val();
-            $(".warehouse-container").load("/member/item/warehouse?search_txt="+srch_txt+" .warehouse-container"); 
+            if(e.which == 13)
+            {
+                if(srch_txt != '')
+                {
+                    $(".warehouse-container").load("/member/item/warehouse?search_txt="+srch_txt+" .warehouse-container"); 
+                    $(".load-data").attr("search_txt",$(this).val());
+                }                
+            }
         });
     }
     function action_reassign_number()

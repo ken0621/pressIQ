@@ -46,6 +46,8 @@ class MLM_PlanController extends Member
 {
     public function index()
     {
+        // dd(Carbon::now());
+        // dd(Carbon::now()->format("d"));
         $access = Utilities::checkAccess('mlm-plan', 'access_page');
         if($access == 0)
         {
@@ -127,6 +129,7 @@ class MLM_PlanController extends Member
             $update['plan_settings_placement_required']     = Request::input('plan_settings_placement_required');
             $update['max_slot_per_account']                 = Request::input('max_slot_per_account');
             $update['enable_privilege_system']              = Request::input('enable_privilege_system');
+            $update['repurchase_cashback_date_convert']     = Request::input('repurchase_cashback_date_convert');
 
             $update_membership_privilege["membership_privilege"] = 0;
             $update_membership_privilege["membership_restricted"] = 0;
@@ -2314,11 +2317,13 @@ class MLM_PlanController extends Member
     }
     public static function repurchase_cashback_add()
     {
-        $validate['membership_id'] = Request::input("membership_id");
-        $validate['membership_points_repurchase_cashback'] = Request::input("membership_points_repurchase_cashback");
+        $validate['membership_id']                                = Request::input("membership_id");
+        $validate['membership_points_repurchase_cashback']        = Request::input("membership_points_repurchase_cashback");
+        $validate['membership_points_repurchase_cashback_points'] = Request::input("membership_points_repurchase_cashback_points");
 
-        $rules['membership_id']   = "required";
-        $rules['membership_points_repurchase_cashback']    = "required";
+        $rules['membership_id']                                   = "required";
+        $rules['membership_points_repurchase_cashback']           = "required";
+        $rules['membership_points_repurchase_cashback_points']    = "required";
         
         
         $validator = Validator::make($validate,$rules);
@@ -2327,13 +2332,15 @@ class MLM_PlanController extends Member
             $count = Tbl_membership_points::where('membership_id', $validate['membership_id'])->count();
             if($count == 0)
             {
-                $insert['membership_id'] = $validate['membership_id'];
-                $insert['membership_points_repurchase_cashback'] = $validate['membership_points_repurchase_cashback'];
+                $insert['membership_id']                                = $validate['membership_id'];
+                $insert['membership_points_repurchase_cashback']        = $validate['membership_points_repurchase_cashback'];
+                $insert['membership_points_repurchase_cashback_points'] = $validate['membership_points_repurchase_cashback_points'];
                 Tbl_membership_points::insert($insert);
             }
             else
             {
-                $update['membership_points_repurchase_cashback'] = $validate['membership_points_repurchase_cashback'];
+                $update['membership_points_repurchase_cashback']        = $validate['membership_points_repurchase_cashback'];
+                $update['membership_points_repurchase_cashback_points'] = $validate['membership_points_repurchase_cashback_points'];
                 Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
             }
             $data['response_status'] = "success";

@@ -62,7 +62,7 @@
                                 <td class="time-comment-td">
                                     @if($timesheet->record)
                                         @foreach($timesheet->record as $x => $record)
-                                        <input name="remarks[]" unq="{{ $random_integer[$x] }}" value="{{ ($record->time_sheet_activity == '' ? $timesheet->default_remarks : $record->time_sheet_activity) }}" type="text" class="comment new-time-event text-table time-entry">
+                                        <input name="remarks[]" unq="{{ $random_integer[$x] }}" value="{{ ($record->time_sheet_activity == '' ? $timesheet->default_remarks : $record->time_sheet_activity) }}" type="text" id="{{$record->payroll_time_sheet_record_id}}" class="comment new-time-event text-table time-entry">
                                         @endforeach
                                     @else
                                         <input name="remarks[]" unq="{{ $random_integer_for_blank }}" value="{{ $timesheet->default_remarks }}" type="text" class="comment new-time-event text-table time-entry">
@@ -106,8 +106,9 @@
     </div>
 </div>
 <div class="modal-footer text-right">
-    <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
+    <a href='/member/payroll/company_timesheet2_pdf/{{$company_period->payroll_period_company_id}}/{{$employee_info->payroll_employee_id}}' target="_blank"><button type="button" class="btn btn-success">VIEW PDF</button></a>
     <button type="button" class="btn btn-primary load-summary">VIEW SUMMARY</button>
+    <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
     <!--<button class="btn btn-primary btn-custom-primary approve-timesheet-btn" type="button">{{ $time_keeping_approved == true ? "RETURN TO PENDING" : "MARK AS READY" }}</button>-->
 </div>
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2.js"></script>

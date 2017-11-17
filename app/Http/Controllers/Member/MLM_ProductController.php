@@ -152,6 +152,10 @@ class MLM_ProductController extends Member
                 $data['active'][$add_count]        = "RANK_REPURCHASE_CASHBACK";
                 $data['active_label'][$add_count]  = "Rank Repurchase Cashback"; 
                 $add_count++;
+
+                $data['active'][$add_count]        = "REPURCHASE_CASHBACK_POINTS";
+                $data['active_label'][$add_count]  = "Repurchase Cashback Points"; 
+                $add_count++;
             }
 	    }
 
@@ -275,6 +279,8 @@ class MLM_ProductController extends Member
                     }                    
                     else if($value->marketing_plan_code == "REPURCHASE_CASHBACK")
                     {
+                        $update["REPURCHASE_CASHBACK_POINTS"] = $points["REPURCHASE_CASHBACK_POINTS"][$value2->membership_id];
+
                         foreach($_rank as $rank)
                         {
                             $update_rank_cashback['amount']  = $rank_cashback_points[$rank->stairstep_id];

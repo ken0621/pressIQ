@@ -34,7 +34,7 @@
             <div class="col-md-4 pull-right">
                 <div class="input-group">
                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                    <input type="search" name="" class="form-control srch-warehouse-txt" placeholder="Start typing warehouse">
+                    <input type="search" name="" class="form-control srch-warehouse-txt" placeholder="Enter warehouse">
                 </div>
             </div>
         </div>
@@ -43,60 +43,79 @@
             <div id="all" class="tab-pane fade in active">
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-condensed">
-                        <thead>
-                            <tr>
-                                <th class="text-center">Warehouse Name</th>
-                                @if($pis == null)
-                                <th class="text-center">Total Holding Items</th>
-                                <th>Total Selling Price</th>
-                                <th>Total Cost Price</th>
-                                @endif
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-warehouse">
-                        @if($_warehouse != null)
-                            @foreach($_warehouse as $warehouse)
-                            <tr>
-                                <td class="text-center">{{$warehouse->warehouse_name}}</td>
-
-                                @if($pis == null)
-                                <td class="text-center">{{number_format($warehouse->total_qty)}} item(s)</td>
-                                <td>{{currency("PHP",$warehouse->total_selling_price)}}</td>
-                                <td>{{currency("PHP",$warehouse->total_cost_price)}}</td>
-                                @endif
-                                <td class="text-center">
-                                    <div class="btn-group">
-                                      <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Action <span class="caret"></span>
-                                      </button>
-                                      <ul class="dropdown-menu dropdown-menu-custom">
-                                        @if($pis == null)
-                                        <li><a size="lg" link="/member/item/warehouse/view/{{$warehouse->warehouse_id}}" href="javascript:" class="popup">View Warehouse</a></li>
-                                        @else
-                                        <li><a href="/member/item/warehouse/view_v2/{{$warehouse->warehouse_id}}" >View Warehouse</a></li>
-                                        @endif
-                                        <li><a target="_blank" href="/member/item/warehouse/xls/{{$warehouse->warehouse_id}}">Export to Excel</a></li>
-                                        @if($enable_serial != null)
-                                            @if($enable_serial == "enable")
-                                                <li><a href="/member/item/view_serials/{{$warehouse->warehouse_id}}">View Item Serials Number</a></li>
-                                                <li><a href="/member/item/inventory_log/{{$warehouse->warehouse_id}}">{{$warehouse->count_no_serial}} Item has No Serials Number</a></li>
+                    <div class="load-data" target="warehouse-table-list">
+                        <div id="warehouse-table-list">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Warehouse Name</th>
+                                            @if($pis == null)
+                                            <th class="text-center">Total Holding Items</th>
+                                            <th>Total Selling Price</th>
+                                            <th>Total Cost Price</th>
                                             @endif
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody class="table-warehouse">
+                                    @if(count($_warehouse) > 0)
+                                        @foreach($_warehouse as $warehouse)
+                                        <tr>
+                                            <td class="text-center">{{$warehouse->warehouse_name}}</td>
+
+                                            @if($pis == null)
+                                            <td class="text-center">{{number_format($warehouse->total_qty)}} item(s)</td>
+                                            <td>{{currency("PHP",$warehouse->total_selling_price)}}</td>
+                                            <td>{{currency("PHP",$warehouse->total_cost_price)}}</td>
+                                            @endif
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                  <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Action <span class="caret"></span>
+                                                  </button>
+                                                  <ul class="dropdown-menu dropdown-menu-custom">
+                                                    @if($pis == null)
+                                                    <li><a size="lg" link="/member/item/warehouse/view/{{$warehouse->warehouse_id}}" href="javascript:" class="popup">View Warehouse</a></li>
+                                                    @else
+                                                    <li><a href="/member/item/warehouse/view_v2/{{$warehouse->warehouse_id}}" >View Warehouse</a></li>
+                                                    @endif
+                                                    <li><a target="_blank" href="/member/item/warehouse/xls/{{$warehouse->warehouse_id}}">Export to Excel</a></li>
+                                                    @if($enable_serial != null)
+                                                        @if($enable_serial == "enable")
+                                                            <li><a href="/member/item/view_serials/{{$warehouse->warehouse_id}}">View Item Serials Number</a></li>
+                                                            <li><a href="/member/item/inventory_log/{{$warehouse->warehouse_id}}">{{$warehouse->count_no_serial}} Item has No Serials Number</a></li>
+                                                        @endif
+                                                    @endif
+                                                    <li><a size="lg" link="/member/item/warehouse/refill?warehouse_id={{$warehouse->warehouse_id}}" href="javascript:" class="popup">Refill  Warehouse</a></li>
+                                                    <li><a href="/member/item/warehouse/refill_log/{{$warehouse->warehouse_id}}">Refill Logs</a></li>
+                                                    <li><a class="popup" size="lg" link="/member/item/warehouse/adjust/{{$warehouse->warehouse_id}}">Adjust Inventory</a></li>
+                                                    <li><a href="javascript:" class="popup" link="/member/item/warehouse/edit/{{$warehouse->warehouse_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit</a></li>
+                                                    <li><a link="/member/item/warehouse/archived/{{$warehouse->warehouse_id}}" href="javascript:" class="popup">Archived</a></li>
+                                                  </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    @else
+                                    <tr>
+                                        @if($pis == null)
+                                        <td colspan="5" class="text-center">No Warehouse Found</td>
+                                        @else
+                                        <td colspan="2" class="text-center">No Warehouse Found</td>
                                         @endif
-                                        <li><a size="lg" link="/member/item/warehouse/refill?warehouse_id={{$warehouse->warehouse_id}}" href="javascript:" class="popup">Refill  Warehouse</a></li>
-                                        <li><a href="/member/item/warehouse/refill_log/{{$warehouse->warehouse_id}}">Refill Logs</a></li>
-                                        <li><a class="popup" size="lg" link="/member/item/warehouse/adjust/{{$warehouse->warehouse_id}}">Adjust Inventory</a></li>
-                                        <li><a href="javascript:" class="popup" link="/member/item/warehouse/edit/{{$warehouse->warehouse_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit</a></li>
-                                        <li><a link="/member/item/warehouse/archived/{{$warehouse->warehouse_id}}" href="javascript:" class="popup">Archived</a></li>
-                                      </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        @endif
-                        </tbody>
-                    </table>
+                                    </tr>
+                                    @endif
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="text-center pull-right">
+                                {!!$_warehouse->render()!!}
+                            </div>   
+                        </div> 
+                    </div>
                 </div>
             </div>
             <div id="archived" class="tab-pane fade in">
@@ -140,6 +159,6 @@
 </div>
 @endsection
 @section("script")
-<!-- <script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script> -->
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 <script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
 @endsection

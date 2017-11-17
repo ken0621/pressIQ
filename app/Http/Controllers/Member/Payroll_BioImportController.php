@@ -563,7 +563,6 @@ class Payroll_BioImportController extends Member
 		{
 			$day = 'SH';
 		}
-
 		return $day;
 	}
 	/* CHECK IF HOLIDAY OR REGULAR DAY END */

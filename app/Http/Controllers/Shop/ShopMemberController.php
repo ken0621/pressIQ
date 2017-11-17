@@ -2252,12 +2252,6 @@ class ShopMemberController extends Shop
 
     public function load_view_for_members($view, $data, $memberonly = true)
     {
-        /* Philtech Exclusive */
-        if ($this->shop_info->shop_theme == "philtech") 
-        {
-            $data["_categories"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
-        }
-
         $agent = new Agent();
 
         if($agent->isMobile())

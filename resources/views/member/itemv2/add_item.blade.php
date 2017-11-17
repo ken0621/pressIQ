@@ -219,7 +219,7 @@
             <div class="form-horizontal">
                 <div class="form-group">
                     <div class="col-md-6">
-                        <label for="basic-input">Item Description</label>
+                        <label for="basic-input">Item Name</label>
                         <input id="basic-input" value="{{ get_request_old($item_info, 'item_description', 'item_name') }}" class="form-control item-description" name="item_description" placeholder="">
                     </div>
                     <div class="col-md-3">
@@ -277,6 +277,13 @@
                     <div class="col-md-3">
                         <label for="basic-input">GC Earnings</label>
                         <input type="text" class="form-control" name="gc_earning" value="{{ get_request_old($item_info, 'gc_earning') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label for="basic-input">Item Description</label>
+                        <textarea class="form-control" placeholder="Description on item" name="item_sales_information">{{ get_request_old($item_info, 'item_sales_information') }}</textarea>
                     </div>
                 </div>
 

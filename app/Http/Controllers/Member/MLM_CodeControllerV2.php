@@ -254,35 +254,50 @@ class MLM_CodeControllerV2 extends Member
         $r['membership_kit'] = $request->membership_kit ? '' : 'hidden';
         $rt = serialize($r); 
 
-        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&print_range_to='.$request->print_range_to.'&print_range_from='.$request->print_range_from.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit.'&item_id='.$request->item_id.'&type='.$request->barcode_type);
+        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&print_range_to='.$request->print_range_to.'&print_range_from='.$request->print_range_from.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit.'&item_id='.$request->item_id.'&type='.$request->barcode_type.'&print_type='.$request->print_code_as);
     }
     public function print(Request $request)
     {
         $data['on_show'] = unserialize($request->Y);
         $data['type'] = $request->type;
         $take = $request->print_range_from - $request->print_range_to;
+
+        $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title']  = 'Membership Code'; 
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
         $data['_item_product_code'] = Item::get_all_item_record_log('', $request->status, 0, $request->item_id, $request->print_range_to, $take);
         if($request->t == 'membership_code')
         {
             $data['_item_product_code'] = Item::get_assembled_kit(0,$request->membership_kit,$request->membership,'',$request->status, 0, $request->print_range_to, $take, $request->print_range_from);
             if($data['type'] == 'register_form' && Item::getShopId() == 5)
             {
-                $warehouse_id = Warehouse2::get_current_warehouse(Item::getShopId());
                 Item::tag_as_printed($warehouse_id, $request->print_range_to, $request->print_range_from);
             }
         }
-        $paper_size = null;
-        $orientation = 'portrait';
-        if($this->user_info->shop_id == 5)
+
+        $data['warehouse_data'] = Warehouse2::get_info($warehouse_id);
+        if($request->print_type == 'excel')
         {
-            if($request->type == 'register_form')
-            {
-                $paper_size = "a6";
-                $orientation = 'landscape';
-            }
+            $view = 'member.mlm_code_v2.print_code_excel';
+            return Report::check_report_type($request->print_type, $view, $data, 'Membership_Code-'.Carbon::now());
         }
-        $pdf = view('member.mlm_code_v2.print_code_pdf', $data);
-        return Pdf_global::show_pdf($pdf, $orientation, null, $paper_size);
+        else
+        {
+            $paper_size = null;
+            $orientation = null;
+            if($this->user_info->shop_id == 5)
+            {
+                if($request->type == "register_form")
+                {
+                    $paper_size = "a6";
+                    $orientation = 'landscape';
+                }
+            }
+            $pdf = view('member.mlm_code_v2.print_code_pdf', $data);
+            return Pdf_global::show_pdf($pdf, $orientation, null, $paper_size);
+        }
+
     }
     public function report_code(Request $request)
     {

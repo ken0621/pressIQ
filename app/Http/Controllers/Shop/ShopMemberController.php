@@ -28,6 +28,7 @@ use App\Globals\EmailContent;
 use App\Globals\Mail_global;
 use App\Globals\Transaction;
 use App\Globals\Warehouse2;
+use App\Globals\Ecom_Product;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;

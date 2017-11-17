@@ -347,8 +347,8 @@ class Payroll2
 	public static function timesheet_info($company_period, $employee_id) 
 	{
 		$_timesheet = null;
-		$from = $data["start_date"] = $company_period->payroll_period_start;
-		$to = $data["end_date"] = $company_period->payroll_period_end;
+		$from 		= $data["start_date"] 	= $company_period->payroll_period_start;
+		$to 		= $data["end_date"] 	= $company_period->payroll_period_end;
 		$payroll_period_company_id = $company_period->payroll_period_company_id;
 		$shift_code_id = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->value("shift_code_id");
 	
@@ -4975,8 +4975,9 @@ class Payroll2
 					$val["deduct.taxable_salary"] = false;
 					$val["add.net_pay"] = false;
 					$val["deduct.net_pay"] = true;
-			
+
 					array_push($return->_breakdown, $val);
+					
 					$val = null;
 				}
 			}
@@ -5005,20 +5006,18 @@ class Payroll2
 		$end_date 			= $date_query->payroll_period_end;
 		$period_category 	= $date_query->payroll_period_category;
 		
-		
 		/* GET PREVIOUS RECORD */
 		$previous_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id);
 
 		/* get employee contract */
-		$group 	= Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)
+		$group 	 =  Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)
 												->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 		                                        ->first();
-		                                        
-		// dd($date_query);
-		$shop_id = $group->shop_id;      
+		$shop_id =  $group->shop_id;      
 		
 		/* GET EMPLOYEE SALARY */
-		$salary 			= Tbl_payroll_employee_salary::selemployee($employee_id, $start_date)->first();
+		$salary  =  Tbl_payroll_employee_salary::selemployee($employee_id, $start_date)->first();
+
 		if($salary == null)
 		{
 			$salary = new stdClass();

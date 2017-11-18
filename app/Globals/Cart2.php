@@ -8,6 +8,7 @@ use App\Models\Tbl_cart_info;
 use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Models\Tbl_cart_item_pincode;	
+use App\Models\Tbl_cart_payment;
 use Session;
 use Carbon\Carbon;
 use App\Globals\Currency;
@@ -27,6 +28,27 @@ class Cart2
 	public static function get_cart_key()
 	{
 		return session("cart_key");
+	}
+	public static function scan_payment($shop_id, $payment_type = '', $payment_amount = 0)
+	{
+		$return = null;
+		if($payment_type != '' && $payment_amount != 0)
+		{
+			$cart_key = Self::get_cart_key();
+			$ins_payment['shop_id'] = $shop_id;
+			$ins_payment['unique_id_per_pc'] = $cart_key;
+			$ins_payment['payment_type'] = $payment_type;
+			$ins_payment['payment_amount'] = $payment_amount;
+
+			$return = Tbl_cart_payment::insertGetId($ins_payment);
+		}
+		return $return;
+	}
+
+	public static function load_payment($shop_id)
+	{
+		$cart_key = Self::get_cart_key();
+		return Tbl_cart_payment::where('shop_id',$shop_id)->where('unique_id_per_pc',$cart_key)->get();
 	}
 	public static function set($key, $value)
 	{

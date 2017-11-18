@@ -162,7 +162,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-4 text-right" for="email">Add Pyament</label>
                                 <div class="col-sm-8">
-                                    <input type="hidden" name="payment_method" class="input-payment-method">
+                                    <input type="hidden" name="payment_method" class="input-payment-method" value="cash">
                                     <a href="javascript:" class="btn btn-primary cash btn-payment" onClick="select_payment('cash')">Cash</a>
                                     <a href="javascript:" class="btn btn-custom-white check btn-payment" onClick="select_payment('check')">Check</a>
                                     <a href="javascript:" class="btn btn-custom-white gc btn-payment" onClick="select_payment('gc')">GC</a>

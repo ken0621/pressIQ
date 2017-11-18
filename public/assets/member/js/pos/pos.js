@@ -54,7 +54,10 @@ function pos()
 				type:"post",
 				success: function(data)
 				{
-					action_load_item_table();
+					if(data)
+					{
+						action_load_payment_table();
+					}
 				}
 			});
 		});
@@ -539,7 +542,7 @@ function pos()
 	{
 		$(".customer-container").css("opacity", 0.3);
 	}
-	function action_payment_table()
+	function action_load_payment_table()
 	{
 		if($(".pos-payment").text() != "")
 		{

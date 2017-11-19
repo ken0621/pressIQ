@@ -50,6 +50,10 @@ class Cart2
 		$cart_key = Self::get_cart_key();
 		return Tbl_cart_payment::where('shop_id',$shop_id)->where('unique_id_per_pc',$cart_key)->get();
 	}
+	public static function remove_payment($cart_payment_id = 0)
+	{
+		return Tbl_cart_payment::where('cart_payment_id',$cart_payment_id)->delete();
+	}
 	public static function set($key, $value)
 	{
 		$cart_key = Self::get_cart_key();
@@ -226,7 +230,6 @@ class Cart2
 		{
 			$return = Tbl_cart_item_pincode::where("unique_id_per_pc", $cart_key)->where('shop_id',$shop_id)->where("product_id",$item_id)->get();
 		}
-
 		return $return;
 	}
 	public static function edit_item_from_cart($item_id, $quantity)

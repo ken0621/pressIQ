@@ -34,6 +34,7 @@ function pos()
 		action_hide_popover();
 		event_change_quantity();
 		event_click_add_payment();
+		event_click_remove_payment();
 
         event_load_popover();
         action_click_change_qty();
@@ -54,10 +55,33 @@ function pos()
 				type:"post",
 				success: function(data)
 				{
-					if(data)
+					if(data.status == 'success')
 					{
 						action_load_payment_table();
 					}
+					else
+					{
+						toastr.warning(data.status_message);
+						action_load_payment_table();
+					}
+				}
+			});
+		});
+	}
+	function event_click_remove_payment()
+	{
+		$('body').on('click','.remove-payment', function(e)
+		{
+			payment_loading();
+			$.ajax(
+			{
+				url:"/member/cashier/pos/remove_payment",
+				dataType:"json",
+				data: {cart_payment_id : $(e.currentTarget).attr('payment-id')},
+				type:"get",
+				success: function(data)
+				{
+						action_load_payment_table();
 				}
 			});
 		});
@@ -227,9 +251,9 @@ function pos()
 						{
 							action_load_item_table();
 						}
-						else
+						if(data.status == 'error')
 						{
-							toastr.warning('The ITEM cannot change quantity');
+							toastr.warning(data.status_message);
 							action_load_item_table();
 						}
 					}
@@ -576,9 +600,15 @@ function pos()
 	function action_update_big_totals()
 	{
 		$(".big-total").find(".grand-total").text($(".table-grand-total").val());
-		var amount_due = $(".table-amount-due").val();
-		$(".big-total").find(".amount-due").text(amount_due);
-		$(".input-payment-amount").val(amount_due.replace('PHP',''));
+		var payment_amount = 0;
+		var amount_due_php = $(".table-amount-due").val();
+		var amount_due = parseFloat($(".table-amount-due").val().replace('PHP',''));
+		$('.payment-li').each(function()
+		{
+			payment_amount += parseFloat($(this).find(".compute-payment-amount").val());
+		});
+		$(".big-total").find(".amount-due").text('PHP ' +(amount_due - payment_amount).toFixed(2));
+		$(".input-payment-amount").val(amount_due - payment_amount);
 	}
 	function get_loader_html($padding = 50)
 	{

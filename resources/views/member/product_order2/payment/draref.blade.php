@@ -55,6 +55,7 @@
 			<td>State</td>
 			<td>TXN ID</td>
 			<td>Slot No</td>
+			<td>Slot ID</td>
 			<td>Investigation</td>
 		</tr>
 		@foreach($_transaction as $transaction)
@@ -76,6 +77,7 @@
 			<td>{{ $transaction->customer_state }}</td>
 			<td>{{ $transaction->checkout_id }}</td>
 			<td>{{ $transaction->slot_no }}</td>
+			<td>{{ $transaction->slot_id }}</td>
 			<td>{{ $transaction->dragonpay_response }}</td>
 		</tr>
 		@endforeach

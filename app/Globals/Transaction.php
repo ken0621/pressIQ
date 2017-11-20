@@ -625,10 +625,12 @@ class Transaction
                         $data[$key]->slot_upline_no = "HEAD";
                     }
                     $data[$key]->slot_no = $slot->slot_no;
+                    $data[$key]->slot_id = $slot->slot_id;
                 }
                 else
                 {
                     $data[$key]->slot_no = "Unused";
+                    $data[$key]->slot_id = "none";
                     $data[$key]->slot_upline_no = "Unused";
                 }
             }

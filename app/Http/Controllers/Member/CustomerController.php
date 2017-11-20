@@ -112,7 +112,7 @@ class CustomerController extends Member
                                     ->where('tbl_customer.shop_id',$shop_id)
                                     ->where('tbl_customer.archived',$archived)
                                     ->where('tbl_customer.IsWalkin',$IsWalkin)
-    								->orderBy('tbl_customer.first_name');
+    								->orderBy('tbl_customer.customer_id', 'desc');
 
     		if($filter_by_slot == 'w_slot')
             {

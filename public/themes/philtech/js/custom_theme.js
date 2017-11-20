@@ -26,9 +26,18 @@ function custom_theme()
 
             $nav_list.click(function() {
                 $(this).toggleClass('active');
-                $('.pushmenu-push').toggleClass('pushmenu-push-toright');
+                // $('.pushmenu-push').toggleClass('pushmenu-push-toright');
                 $menuLeft.toggleClass('pushmenu-open');
             });
+
+            // /*DISABLE BODY SCROLLING*/
+            // var $body = $(document.body);
+
+            // $('#nav_list').click(function()
+            // {
+            // 	$body.toggleClass('disable-scroll');
+            // });
+
 		});
 	}
 
@@ -223,4 +232,19 @@ function onSearch(x)
 	}
     
     location.href="/product?search="+keyword;
+}
+
+/*JAVASCRIPT*/
+
+function on() 
+{
+    document.getElementById("overlay").style.display = "block";
+    $("body").css("overflow", "hidden");
+}
+
+function off()
+{
+    document.getElementById("overlay").style.display = "none";
+    $('.pushmenu').removeClass("pushmenu-open");
+    $("body").css("overflow", "auto");
 }

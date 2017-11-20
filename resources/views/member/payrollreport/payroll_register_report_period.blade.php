@@ -38,17 +38,17 @@
 								<thead style="text-transform: uppercase">
 									<tr>
 										<th valign="center" rowspan="2" class="text-center" style="width: 200px">NAME</th>
-										
+										<th valign="center" rowspan="2" class="text-center" style="width: 120px">ABSENT</th>
+										<th valign="center" rowspan="2" class="text-center" style="width: 120px">LATE</th>
+										<th valign="center" rowspan="2" class="text-center" style="width: 120px">UNDERTIME</th>
+										<th valign="center" rowspan="2" class="text-center" style="width: 120px">BASIC PAY</th>
+										<th valign="center" rowspan="2" class="text-center" style="width: 120px">COLA</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 120px">Over Time PAY</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 120px">Night Differential Pay</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 120px">Regular Holiday Pay</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 120px">Special Holiday Pay</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 120px">Restday Pay</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 120px">Leave Pay</th>
-										<th valign="center" rowspan="2" class="text-center" style="width: 120px">COLA</th>
-										<th valign="center" rowspan="2" class="text-center" style="width: 120px">LATE</th>
-										<th valign="center" rowspan="2" class="text-center" style="width: 120px">UNDERTIME</th>
-										<th valign="center" rowspan="2" class="text-center" style="width: 120px">ABSENT</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 120px">ALLOWANCES</th>
 										<th colspan="5" class="text-center" style="width: 600px">DEDUCTIONS</th>
 										<th colspan="9" class="text-center" style="width: 900px">ADJUSTMENT</th>
@@ -57,7 +57,6 @@
 										<th colspan="2" class="text-center" style="width: 200px">PHILHEALTH Contribution</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 100px">Witholding Tax</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 100px">TOTAL DEDUCTION</th>
-										<th valign="center" rowspan="2" class="text-center" style="width: 120px">BASIC PAY</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 100px">GROSS PAY</th>
 										<th valign="center" rowspan="2" class="text-center" style="width: 100px">NET HOME PAY</th>
 									</tr>
@@ -94,16 +93,17 @@
 									@foreach($_employee as $lbl => $employee)
 									<tr>
 										<td class="text-center" >{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_last_name }}</td>
+										<td class="text-center" >{{ number_format($employee->absent,2) }} <br> ({{$employee->time_absent}} times)</td>
+										<td class="text-center" >{{ number_format($employee->late,2) }} <br> ({{$employee->time_late}} hours)</td>
+										<td class="text-center" >{{ number_format($employee->undertime,2) }} <br> ({{$employee->time_undertime}} hours)</td>
+										<td class="text-center" >{{ number_format($employee->net_basic_pay,2) }} <br> ({{$employee->time_spent}} hours)</td>
+										<td class="text-center" >{{ number_format($employee->cola,2) }}</td>
 										<td class="text-center" >{{ number_format($employee->overtime,2) }} <br> ({{$employee->time_overtime}} hours)</td>
 										<td class="text-center" >{{ number_format($employee->nightdiff,2) }} <br> ({{$employee->time_night_differential}} hours)</td>
 										<td class="text-center" >{{ number_format($employee->special_holiday,2) }} <br> ({{$employee->time_special_holiday}} times)</td>
 										<td class="text-center" >{{ number_format($employee->regular_holiday,2) }} <br> ({{$employee->time_regular_holiday}} times)</td>
 										<td class="text-center" >{{ number_format($employee->restday,2 )}}</td>
 										<td class="text-center" >{{ number_format($employee->leave_pay,2) }} <br> ({{$employee->time_leave_hours}} hours)</td>
-										<td class="text-center" >{{ number_format($employee->cola,2) }}</td>
-										<td class="text-center" >{{ number_format($employee->late,2) }} <br> ({{$employee->time_late}} hours)</td>
-										<td class="text-center" >{{ number_format($employee->undertime,2) }} <br> ({{$employee->time_undertime}} hours)</td>
-										<td class="text-center" >{{ number_format($employee->absent,2) }} <br> ({{$employee->time_absent}} times)</td>
 										<td class="text-center" >{{ number_format($employee->allowance,2) }}</td>
 										<!-- <td class="text-center" >{{ number_format($employee->adjustment_allowance,2) }}</td> -->
 										<td class="text-center" >{{ number_format($employee->sss_loan,2) }}</td>
@@ -119,7 +119,7 @@
 										<td class="text-center" >{{ number_format($employee->adjsutment_cash_advance,2) }}</td>
 										<td class="text-center" >{{ number_format($employee->adjsutment_cash_bond,2) }}</td>
 										<td class="text-center" >{{ number_format($employee->adjsutment_additions,2) }}</td>
-										<td sclass="text-center" >{{ number_format($employee->adjsutment_deductions,2) }}</td>
+										<td class="text-center" >{{ number_format($employee->adjsutment_deductions,2) }}</td>
 										<td class="text-center" >{{ number_format($employee->adjsutment_others,2) }}</td>
 										
 										<td class="text-center" >{{ number_format($employee->sss_ee,2) }}</td>
@@ -131,7 +131,6 @@
 										<td class="text-center" >{{ number_format($employee->philhealth_er,2) }}</td>
 										<td class="text-center" >{{ number_format($employee->tax_ee,2) }}</td>
 										<td class="text-center" >{{ number_format($employee->total_deduction_employee,2) }}</td>
-										<td class="text-center" >{{ number_format($employee->net_basic_pay,2) }} <br> ({{$employee->time_spent}} hours)</td>
 										<td class="text-center" >{{ number_format($employee->gross_pay,2) }}</td>
 										<td class="text-center" >{{ number_format($employee->net_pay,2) }}</td>
 										
@@ -141,48 +140,46 @@
 
 									<tr>
 										<td class="text-center" ><b>Total</b></td>
-										<td class="text-center" ><b>{{ number_format($overtime_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($nightdiff_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($regular_holiday_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($special_holiday_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($restday_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($leave_pay_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($cola_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($late_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($undertime_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($absent_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($allowance_total,2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($absent_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($late_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($undertime_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_basic, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($cola_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($overtime_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($nightdiff_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($regular_holiday_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($special_holiday_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($restday_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($leave_pay_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($allowance_total, 2) }}</b></td>
 										<!-- <td class="text-center" ><b>{{ number_format($adjustment_allowance_total,2) }}</b></td> -->
-										<td class="text-center" ><b>{{ number_format($sss_loan_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($hdmf_loan_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($cash_bond_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($cash_advance_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($other_loans_total,2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($sss_loan_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($hdmf_loan_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($cash_bond_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($cash_advance_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($other_loans_total, 2) }}</b></td>
 										<!-- <td class="text-center" ><b>{{ number_format($adjustment_deduction_total,2) }}</b></td> -->
-										<td class="text-center" ><b>{{ number_format($total_adjsutment_allowance,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($total_adjsutment_bonus,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($total_adjsutment_commission,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($total_adjsutment_incentives,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($total_adjsutment_cash_advance,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($total_adjsutment_cash_bond,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($total_adjsutment_additions,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($total_adjsutment_deductions,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($total_adjsutment_others,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($sss_ee_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($sss_er_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($sss_ec_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($hdmf_ee_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($hdmf_er_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($philhealth_ee_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($philhealth_er_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($witholding_tax_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($deduction_total,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($total_basic,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($total_gross,2) }}</b></td>
-										<td class="text-center" ><b>{{ number_format($total_net,2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_adjsutment_allowance, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_adjsutment_bonus, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_adjsutment_commission, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_adjsutment_incentives, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_adjsutment_cash_advance, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_adjsutment_cash_bond, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_adjsutment_additions, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_adjsutment_deductions, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_adjsutment_others, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($sss_ee_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($sss_er_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($sss_ec_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($hdmf_ee_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($hdmf_er_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($philhealth_ee_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($philhealth_er_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($witholding_tax_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($deduction_total, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_gross, 2) }}</b></td>
+										<td class="text-center" ><b>{{ number_format($total_net, 2) }}</b></td>
 									</tr>
-									
-									
 								</tbody>
 							</table>
 						</div>

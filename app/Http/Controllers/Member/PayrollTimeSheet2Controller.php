@@ -49,7 +49,6 @@ class PayrollTimeSheet2Controller extends Member
 {
 	public function index($period_id)
 	{
-
 		$data["payroll_period_id"] = $period_id;
 		$data["page"] = "Employee List Summary";
 

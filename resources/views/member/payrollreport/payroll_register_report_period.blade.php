@@ -105,7 +105,7 @@
 										<td class="text-center" >{{ number_format($employee->restday,2 )}}</td>
 										<td class="text-center" >{{ number_format($employee->leave_pay,2) }} <br> ({{$employee->time_leave_hours}} hours)</td>
 										<td class="text-center" >{{ number_format($employee->allowance,2) }}</td>
-										<!-- <td class="text-center" >{{ number_format($employee->adjustment_allowance,2) }}</td> -->
+										<!--<td class="text-center" >{{ number_format($employee->adjustment_allowance,2) }}</td>-->
 										<td class="text-center" >{{ number_format($employee->sss_loan,2) }}</td>
 										<td class="text-center" >{{ number_format($employee->hdmf_loan,2) }}</td>
 										<td class="text-center" >{{ number_format($employee->cash_bond,2) }}</td>

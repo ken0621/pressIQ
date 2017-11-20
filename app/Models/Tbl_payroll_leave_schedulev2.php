@@ -127,17 +127,6 @@ class Tbl_payroll_leave_schedulev2 extends Model
 	public function scopegetallemployeeleavedata($query, $payroll_employee_id=0)
 	{
 
-			// $query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
-   
-   //           ->join("tbl_payroll_employee_basic","tbl_payroll_leave_employee_v2.payroll_employee_id","=","tbl_payroll_employee_basic.payroll_employee_id")
-   //           ->join("tbl_payroll_leave_tempv2","tbl_payroll_leave_employee_v2.payroll_leave_temp_id","=","tbl_payroll_leave_tempv2.payroll_leave_temp_id")
-   //           ->select(DB::raw('tbl_payroll_employee_basic.payroll_employee_id , tbl_payroll_employee_basic.payroll_employee_display_name, tbl_payroll_leave_tempv2.payroll_leave_type_id, tbl_payroll_leave_employee_v2.payroll_leave_temp_hours, sum(tbl_payroll_leave_schedulev2.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_leave_schedulev2.consume)) as remaining_leave'))
-   //           ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id');
-
-             // if ($payroll_employee_id != 0) 
-             // {
-             // 	$query->whereIn('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id);
-             // }
 			$date[0] = date('Y-01-01');
 			$date[1] = date('Y-12-31');
 		
@@ -153,6 +142,18 @@ class Tbl_payroll_leave_schedulev2 extends Model
              
 
         return $query;
+	}
+
+	public function scopecomputenewtotalleave($query, $payroll_leave_employee_id=0)
+	{
+			$date[0] = date('Y-01-01');
+			$date[1] = date('Y-12-31');
+		
+
+			 $query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
+             ->select(DB::raw('(tbl_payroll_leave_employee_v2.payroll_leave_temp_hours + (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_leave_schedulev2.consume))) as total_new_leave'))
+			 ->where('tbl_payroll_leave_schedulev2.payroll_leave_employee_id',$payroll_leave_employee_id)
+			 ->whereBetween('tbl_payroll_leave_schedulev2.payroll_schedule_leave', $date);  
 	}
 
 }

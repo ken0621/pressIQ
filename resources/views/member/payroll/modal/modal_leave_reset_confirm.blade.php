@@ -5,12 +5,12 @@
 		<h4 class="modal-title">{!!$title!!}</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
 		<input type="hidden" name="id" value="{{$id}}">
+		<input type="hidden" name="remaining_leave" value="{{$remaining_leave}}">
 		@if(isset($payroll_leave_employee_id))
 		<input type="hidden" class="payroll_deduction_type" value="{{ $payroll_leave_employee_id }} ">
 		@else
 		<input type="hidden" class="payroll_deduction_type" value="">
 		@endif
-
 	</div>
 	<div class="modal-body form-horizontal">
 		{!!isset($html) ? $html : ''!!}

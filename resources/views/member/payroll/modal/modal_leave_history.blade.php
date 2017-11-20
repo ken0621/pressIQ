@@ -17,17 +17,20 @@
 				  	<table class="table table-condensed table-bordered">
 				  		<thead>
 				  			<tr>
-				  				<th style="text-align: center;">Date Created</th>
-				  				<th style="text-align: center;">Date Applied</th> 
-				  				<th style="text-align: center;">Used Leave</th>  
+				  				<th style="text-align: center" width="35%">Name</th>
+				  				<th style="text-align: center;" width="20%">Date Created</th>
+				  				<th style="text-align: center;" width="20%">Date Applied</th> 
+				  				<th style="text-align: center;" width="15%">Used Leave</th>  
 				  				<th width="10%"></th>
 				  			</tr>
 				  		</thead>
 				  		<tbody>
+				  			@foreach($_active as $active)
 				  			<tr style="text-align: center;">
-				  				<td>Sample Date</td>
-				  				<td>Sample Date</td>
-				  				<td>Sample Leave</td>
+				  				<td>{{$active->payroll_employee_display_name}}</td>
+				  				<td>{{$active->payroll_leave_date_created}}</td>
+				  				<td>{{$active->payroll_leave_date_applied}}</td>
+				  				<td>{{$active->consume}}</td>
 				  				<td class="text-center"> 
 				  					<div class="dropdown">
 										<button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
@@ -43,6 +46,7 @@
 									</div>
 				  				</td>
 				  			</tr>
+				  			@endforeach
 				  		</tbody>
 				  	</table>
 

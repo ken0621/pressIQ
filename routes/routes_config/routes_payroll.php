@@ -413,21 +413,17 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/leave_schedule/v2/modal_leave_scheduling',"Member\PayrollController@modal_leave_scheduling");
 
-	// Route::any('/leave/v2/modal_reset_leave',
-	// 	"Member\PayrollController@modal_reset_leave");
+	Route::any('/leave/v2/modal_leave_action/{payroll_leave_employee_id}/{action}/{remaining_leave}',"Member\PayrollController@modal_leave_action");
 
-	// Route::any('/leave/v2/modal_leave_schedule_action',
-	// 	"Member\PayrollController@modal_leave_schedule_action");
+	Route::any('/leave/v2/reset_leave_schedulev2',"Member\PayrollController@reset_leave_schedulev2");
+	
+	Route::any('/leave/v2/reset_and_accumulate_leave_schedulev2',"Member\PayrollController@reset_and_accumulate_leave_schedulev2");
 
-		// Route::any('/deduction/v2/archive_deduction_type',"Member\PayrollDeductionController@archive_deduction_type");
-
-	Route::any('/leave/v2/modal_leave_action_reset/{payroll_leave_employee_id}',"Member\PayrollController@modal_leave_action_reset");
-
-	// Route::any('/leave/v2/reset_leave_schedulev2',"Member\PayrollController@reset_leave_schedulev2");
+	Route::any('/leave/v2/reset_leave_schedule_history',"Member\PayrollController@reset_leave_schedule_history");
 	
 	//end schedule
 
-	Route::any('/leave/v2/modal_view_leave_employee/{payroll_leave_temp_id}',"Member\PayrollController@modal_view_leave_employee");
+	Route::any('/leave/v2/modal_view_leave_employee/{payroll_leave_temp_id}/',"Member\PayrollController@modal_view_leave_employee");
 
 	Route::any('/leave/v2/modal_leave_history',
 		"Member\PayrollController@modal_leave_history");

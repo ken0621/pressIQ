@@ -217,13 +217,16 @@ function theme_custom()
 
 function on() 
 {
+    var $body = $(document.body);
+
     document.getElementById("overlay").style.display = "block";
-    $("body").css("overflow", "hidden");
+    $body.css("overflow", "hidden");
 }
 
 function off()
 {
+    var $body = $(document.body);
     document.getElementById("overlay").style.display = "none";
     $('.pushmenu').removeClass("pushmenu-open");
-    $("body").css("overflow", "auto");
+    $body.css("overflow", "auto");
 }

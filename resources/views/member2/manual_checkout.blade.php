@@ -25,7 +25,7 @@
 		                </div>
 					</div>
 					<div class="form-group">
-						<input name="reference_number" class="form-control" type="number" step="any" placeholder="Reference Number">
+						<input name="reference_number" class="form-control" type="text" step="any" placeholder="Reference Number">
 					</div>				
 					<div class="form-group">
 						<input name="amount" class="form-control" type="number" step="any" placeholder="Amount">
@@ -55,7 +55,7 @@
 		                </div>
 					</div>
 					<div class="form-group">
-						<input name="reference_number" class="form-control" type="number" step="any" placeholder="Reference Number">
+						<input name="reference_number" class="form-control" type="text" step="any" placeholder="Reference Number">
 					</div>
 					
 					<div class="form-group">

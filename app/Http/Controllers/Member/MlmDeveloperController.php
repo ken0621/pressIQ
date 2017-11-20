@@ -521,6 +521,7 @@ class MlmDeveloperController extends Member
         Tbl_tree_placement::where("shop_id", $shop_id)->delete();
         Tbl_tree_sponsor::where("shop_id", $shop_id)->delete();
         Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->delete();
+        Tbl_leadership_advertisement_points::where("shop_id", $shop_id)->delete();
 
         foreach($_slot as $slot)
         {
@@ -1008,7 +1009,14 @@ class MlmDeveloperController extends Member
             {
                 $update["slot_placement"] = $placement_info->slot_id;
             }
-            
+            $modify_slot_info = Tbl_mlm_slot::where("slot_id",$slot_id)->first();
+            if($modify_slot_info)
+            {
+                if($modify_slot_info->slot_sponsor != 0)
+                {
+                    Tbl_mlm_slot_wallet_log::where("shop_id",$shop_id)->where("wallet_log_matrix_triangle", $modify_slot_info->slot_sponsor)->delete();
+                }
+            }         
             Tbl_tree_placement::where("placement_tree_parent_id", $slot_id)->delete();
             Tbl_tree_placement::where("placement_tree_child_id", $slot_id)->delete();
             Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot_id)->delete();

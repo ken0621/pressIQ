@@ -28,12 +28,29 @@
 						</div>
 						<div class="product-price">
 							{{ get_product_first_price($product) }}
-							@if($mlm_member)
-								<span class="pv-label">
-									<i class="fa fa-star" aria-hidden="true"></i>
-								</span>
-								<span class="pv-label">PV:</span><span class="pv-details"></span>
-							@endif
+							<div style="margin-top: 15px; font-size: 18px;">
+								@if($mlm_member)
+									@foreach($product["variant"][0]["pv"] as $key => $value)
+										@if($key == "STAIRSTEP" || $key == "STAIRSTEP_GROUP" || $key == "RANK")
+											<div>
+												<span class="pv-label" style="padding-left: 0;">
+													<i class="fa fa-star" aria-hidden="true"></i>
+												</span>
+												@if($key == "RANK")
+													<span class="pv-label">RANK PV:</span>
+												@elseif($key == "STAIRSTEP_GROUP")
+													<span class="pv-label">GROUP VOLUME:</span>
+												@elseif($key == "STAIRSTEP")
+													<span class="pv-label">PERSONAL PV</span>
+												@else
+													<span class="pv-label">{{ str_replace("_", " ", $key) }}:</span>
+												@endif
+												<span class="pv-details">P {{ number_format($value, 2) }}</span>
+											</div>
+										@endif
+									@endforeach
+								@endif
+							</div>
 						</div>
 						<div class="product-quantity">
 							<div class="info-title">

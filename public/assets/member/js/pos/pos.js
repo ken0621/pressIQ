@@ -602,7 +602,7 @@ function pos()
 		$(".big-total").find(".grand-total").text($(".table-grand-total").val());
 		var payment_amount = 0;
 		var amount_due_php = $(".table-amount-due").val();
-		var amount_due = parseFloat($(".table-amount-due").val().replace('PHP',''));
+		var amount_due = parseFloat($(".table-amount-due").val().replace('PHP','').replace(',',''));
 		$('.payment-li').each(function()
 		{
 			payment_amount += parseFloat($(this).find(".compute-payment-amount").val());

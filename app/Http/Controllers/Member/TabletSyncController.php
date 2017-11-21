@@ -248,7 +248,7 @@ class TabletSyncController extends Controller
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_customer (customer_id, shop_id, country_id, title_name, first_name, middle_name, last_name,suffix_name, email, password, company, b_day,profile,IsWalkin, created_date, archived, ismlm,mlm_username,tin_number,is_corporate,approved,created_at,updated_at,customer_phone,customer_mobile,customer_fax, get_status) VALUES " . "(".$value->customer_id.",'".$value->shop_id."','".$value->country_id."','".$value->title_name."','".$value->first_name."','".$value->middle_name."','".$value->last_name."','".$value->suffix_name."','".$value->email."','".$value->password."','".$value->company."','".$value->b_day."','".$value->profile."','".$value->IsWalkin."','".$value->created_date."','".$value->archived."','".$value->ismlm."','".$value->mlm_username."','".$value->tin_number."','".$value->is_corporate."','".$value->approved."','".$value->created_at."','".$value->updated_at."','"+$value->customer_phone+"','"+$value->customer_mobile+"','"+$value->customer_fax+"','old')";
+                $return[$key] = "INSERT INTO tbl_customer (customer_id, shop_id, country_id, title_name, first_name, middle_name, last_name,suffix_name, email, password, company, b_day,profile,IsWalkin, created_date, archived, ismlm, mlm_username, tin_number, is_corporate, approved, created_at, updated_at, customer_phone, customer_mobile, customer_fax, get_status) VALUES " . "(".$value->customer_id.",'".$value->shop_id."','".$value->country_id."','".$value->title_name."','".$value->first_name."','".$value->middle_name."','".$value->last_name."','".$value->suffix_name."','".$value->email."','".$value->password."','".$value->company."','".$value->b_day."','".$value->profile."','".$value->IsWalkin."','".$value->created_date."','".$value->archived."','".$value->ismlm."','".$value->mlm_username."','".$value->tin_number."','".$value->is_corporate."','".$value->approved."','".$value->created_at."','".$value->updated_at."','".$value->customer_phone."','".$value->customer_mobile."','".$value->customer_fax."','old')";
                 if($this->add_limiter($limit, $limit_ctr++))
                 {
                     break 1;
@@ -540,7 +540,7 @@ class TabletSyncController extends Controller
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_position (position_id, position_name, daily_rate, position_created,archived, position_code,position_shop_id,created_at,updated_at) VALUES " . "(".$value->position_id.",'".$value->position_name."','".$value->daily_rate."','".$value->position_created."','".$value->archived."','".$value->position_code."','".$value->position_shop_id."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_position (position_id, position_name, daily_rate, position_created,archived, position_code,position_shop_id,created_at,updated_at) VALUES " . "(".$value->position_id.",'".$value->position_name."','0','".$value->position_created."','".$value->archived."','".$value->position_code."','".$value->position_shop_id."','".$value->created_at."','".$value->updated_at."')";
                 if($this->add_limiter($limit, $limit_ctr++))
                 {
                     break 1;
@@ -760,7 +760,7 @@ class TabletSyncController extends Controller
                                     ->get();
             foreach ($data as $key => $value) 
             {
-                $return[$key] = 'INSERT INTO tbl_invoice_log (shop_id, transaction_customer_id ,transaction_name, transaction_id, transaction_amount, date_created) VALUES (' . $value->shop_id . ','.$value->customer_id.', "customer_beginning_balance", 0,' . $value->balance . ', "'. Carbon::now() . '")';
+                $return[$key] = 'INSERT INTO tbl_invoice_log (shop_id, transaction_customer_id ,transaction_name, transaction_id, transaction_amount, date_created) VALUES (' . $value->shop_id . ','.$value->customer_id.', "customer_beginning_balance", 0,' . $value->balance ? $value->balance : 0 . ', "'. Carbon::now() . '")';
 
             }   
         }

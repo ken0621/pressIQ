@@ -156,7 +156,7 @@
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
-						<button class="btn btn-default" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+						<button class="btn btn-nice-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 					</div>
 				</div>
 

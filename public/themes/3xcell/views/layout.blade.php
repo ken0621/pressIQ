@@ -102,7 +102,6 @@
                         <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
                             
                             <nav class="pushmenu pushmenu-left">
-                            
                                 @if($customer)
                                 <div class="space1"></div>
                                 <a href="/members/profile">
@@ -207,7 +206,7 @@
                                         <li> <a href="/contact">CONTACT US</a> </li>
                                     </ul>
                                 @endif
-                        </nav>
+                            </nav>
 
                         <div class="image-logo-holder">
                             <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></a>    

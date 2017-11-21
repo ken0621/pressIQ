@@ -70,7 +70,7 @@
 					{{ get_content($shop_theme_info, "home", "home_division_3_title") }}
 				</div>
 				<div class="prod-container row clearfix">
-					<div class="col-md-6 col-sm-6 col-xs-6 prod-holder">
+					<div class="col-md-6 col-sm-6 col-xs-12 prod-holder">
 						<div class="prod-cat">
 							<div class="hover-detail-container">
 								<h3>TAKE IT EVERYDAY</h3>
@@ -104,7 +104,7 @@
 							<!-- <div class="medium-button">Shop Now</div> -->
 						</div>
 					</div>
-					<div class="col-md-6 col-sm-6 col-xs-6 prod-holder">
+					<div class="col-md-6 col-sm-6 col-xs-12 prod-holder">
 						<div class="prod-cat">
 							<div class="hover-detail-container">
 								<h5>YOUR EVERYDAY</h5>
@@ -170,7 +170,7 @@
 			<div class="trusted-brand">
 				<div class="title-container"></div>
 				<div class="brand-container row clearfix">
-					<div class="col-md-4 col-sm-4 col-xs-4 per-brand-holder">
+					<div class="col-md-4 col-sm-4 col-xs-12 per-brand-holder">
 						<div class="per-brand">
 							<img src="/themes/{{ $shop_theme }}/img/shield-icon.png">
 							<h1>{{ get_content($shop_theme_info, "home", "home_division_5_left_title") }}</h1>
@@ -179,7 +179,7 @@
 							</h2>
 						</div>
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-4 per-brand-holder">
+					<div class="col-md-4 col-sm-4 col-xs-12 per-brand-holder">
 						<div class="per-brand">
 							<img src="/themes/{{ $shop_theme }}/img/quality-icon.png">
 							<h1>{{ get_content($shop_theme_info, "home", "home_division_5_middle_title") }} </h1>
@@ -188,7 +188,7 @@
 							</h2>
 						</div>
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-4 per-brand-holder">
+					<div class="col-md-4 col-sm-4 col-xs-12 per-brand-holder">
 						<div class="per-brand">
 							<img src="/themes/{{ $shop_theme }}/img/cart-icon.png">
 							<h1>{{ get_content($shop_theme_info, "home", "home_division_5_right_title") }}</h1>

@@ -69,12 +69,18 @@ body
 			position: relative;
 			padding: 20px;
 			background-color: #2161c8;
-			max-height: 215px;
-			min-height: 215px;
+			height: 215px;
+			
+			@media screen and (max-width: 900px)
+			{
+				height: 250px;
+				text-align: center;
+			}
 
 			@media screen and (max-width: 425px)
 			{
-				max-height: 255px;
+				max-height: 260px;
+				text-align: center;
 			}
 
 			.title-container{
@@ -111,12 +117,18 @@ body
 			position: relative;
 			padding: 20px;
 			background-color: #48b920;
-			max-height: 215px;
-			min-height: 215px;
+			height: 215px;
+
+			@media screen and (max-width: 900px)
+			{
+				height: 250px;
+				text-align: center;
+			}
 			
 			@media screen and (max-width: 425px)
 			{
-				max-height: 255px;
+				max-height: 260px;
+				text-align: center;
 			}
 			
 			.title-container{
@@ -173,12 +185,18 @@ body
 			position: relative;
 			padding: 20px;
 			background-color: #e10616;
-			max-height: 215px;
-			min-height: 215px;
+			height: 215px;
+
+			@media screen and (max-width: 900px)
+			{
+				height: 250px;
+				text-align: center;
+			}
 
 			@media screen and (max-width: 425px)
 			{
-				max-height: 255px;
+				max-height: 260px;
+				text-align: center;
 			}
 
 			.title-container{
@@ -819,17 +837,7 @@ body
 	width: 25%;
 	@media screen and (max-width: 900px)
 	{
-		position: unset;
-		width: 45%;
-	}
-	@media screen and (max-width: 600px)
-	{
-		width: 55%;
-	}
-	@media screen and (max-width: 414px)
-	{
-		position: absolute;
-		width: 25%;
+		width: 90%;
 	}
 
 	&:hover {

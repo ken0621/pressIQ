@@ -3975,7 +3975,8 @@ class PayrollController extends Member
 
           $insert_tag = array();
 
-          if(isset($employee_tag)){
+          if(isset($employee_tag))
+          {
                foreach($employee_tag as $tag)
                {
 
@@ -4003,13 +4004,12 @@ class PayrollController extends Member
 
          
           $return['status']             = 'success';
-          $return['function_name']      = 'modal_create_leave_temp.load_employee_tag';
+          $return['function_name']      = 'modal_create_leave_tempv2.load_employee_tagv2';
           return json_encode($return);
      }
 
      public function get_leave_tag_employeev2()
      {
-          $payroll_leave_type_id = Request::input('payroll_leave_type_id');
           $employee = [0 => 0];
           if(Session::has('leave_tag_employee'))
           {
@@ -4037,7 +4037,7 @@ class PayrollController extends Member
           $payroll_leave_temp_id = Request::input('payroll_leave_temp_id');
           $data['_active'] = Tbl_payroll_leave_employeev2::getperleave($payroll_leave_temp_id)->get();
           $data['_archived'] = Tbl_payroll_leave_employeev2::getperleave($payroll_leave_temp_id , 1)->get();
-          return view('member.payroll.reload.leave_employee_reload', $data);
+          return view('member.payroll.reload.leave_employee_reloadv2', $data);
      }
 
      public function modal_save_leave_temp_v2()
@@ -4075,6 +4075,62 @@ class PayrollController extends Member
           $return['status']             = 'success';
           $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
           return json_encode($return);
+     }
+
+     public function modal_edit_leave_tempv2($payroll_leave_temp_id)
+     {
+          $data['leave_temp'] = Tbl_payroll_leave_tempv2::where('payroll_leave_temp_id', $payroll_leave_temp_id)->first();
+          $data['_active'] = Tbl_payroll_leave_employeev2::getperleave($payroll_leave_temp_id)->get();
+          $data['_archived'] = Tbl_payroll_leave_employeev2::getperleave($payroll_leave_temp_id , 1)->get();
+          // dd($data);
+          return view('member.payroll.modal.modal_edit_leave_tempv2', $data);
+     }
+
+     public function update_leave_tempv2()
+     {
+          $payroll_leave_temp_id                       = Request::input('payroll_leave_temp_id');
+          $update['payroll_leave_temp_name']           = Request::input('payroll_leave_temp_name');
+          $update['payroll_leave_temp_is_cummulative'] = Request::input('payroll_leave_temp_is_cummulative');
+
+          Tbl_payroll_leave_tempv2::where('payroll_leave_temp_id', $payroll_leave_temp_id)->update($update);
+
+          foreach(Request::input('employee_tag') as $tag)
+          {
+                    $leave_hours = Request::input("leave_hours_".$tag);
+
+                    $updates['payroll_leave_temp_hours']   = $leave_hours;
+
+                    Tbl_payroll_leave_employeev2::where('payroll_employee_id', $tag)
+                                                  ->where('payroll_leave_temp_id', $payroll_leave_temp_id)
+                                                  ->update($updates);
+
+          }
+
+
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
+          return json_encode($return);
+     }
+
+     public function modal_archived_leave_employeev2($archived, $id)
+     {
+
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $_query             = Tbl_payroll_leave_employeev2::employee($id)->first();
+          // dd($_query);
+          $file_name               = $_query->payroll_employee_title_name.' '.$_query->payroll_employee_first_name.' '.$_query->payroll_employee_middle_name.' '.$_query->payroll_employee_last_name.' '.$_query->payroll_employee_suffix_name;
+          $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/leave/archived_leave_employee';
+          $data['id']         = $id;
+          $data['archived']   = $archived;
+
+          return view('member.modal.modal_confirm_archived', $data);
+
      }
 
      public function modal_view_leave_employee($payroll_leave_temp_id)
@@ -4154,7 +4210,7 @@ class PayrollController extends Member
                $action = 'Convert to Cash';
                $data['title']      = 'Do you really want to '.$action.'?';
                $data['html']       = '';
-               $data['action']     = '/member/payroll/leave/v2/reset_leave_schedulev2';
+               $data['action']     = '/member/payroll/leave/v2/convert_to_cash_leave_schedulev2';
                $data['id']         = $payroll_leave_employee_id;
                $data['remaining_leave'] = $remaining_leave;
           }
@@ -4175,6 +4231,7 @@ class PayrollController extends Member
      {
           $id                                             = Request::input('id');
           $update['payroll_leave_schedule_archived']      = 1;
+
           $name = Tbl_payroll_leave_employeev2::employee($id)->first();
 
           $insert['payroll_employee_display_name']        = $name->payroll_employee_display_name;
@@ -4199,13 +4256,51 @@ class PayrollController extends Member
           $update['payroll_leave_schedule_archived'] = 1;
           $updates['payroll_leave_temp_hours'] = Tbl_payroll_leave_schedulev2::computenewtotalleave($id)->value('total_new_leave');
 
+           $name = Tbl_payroll_leave_employeev2::employee($id)->first();
 
+          $insert['payroll_employee_display_name']        = $name->payroll_employee_display_name;
+          $insert['payroll_leave_action']                 = "accumulate";
+          $insert['shop_id']                              = Self::shop_id();
+          $insert['payroll_report_date_created']          = date("Y-m-d");
+          $insert['payroll_leave_employee_id']            = $id;
+          $insert['payroll_leave_hours_remaining']        = Request::input('remaining_leave');
+          $insert['payroll_leave_hours_accumulated']      = Request::input('remaining_leave');
+
+
+          Tbl_payroll_leave_report::insert($insert);
           Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$id)->update($update);
           Tbl_payroll_leave_employeev2::where('payroll_leave_employee_id',$id)->update($updates);
 
           $return['status']             = 'success';
           $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
 
+          return json_encode($return);
+     }
+
+     public function convert_to_cash_leave_schedulev2()
+     {
+          $id                                             = Request::input('id');
+          $update['payroll_leave_schedule_archived']      = 1;
+          $name = Tbl_payroll_leave_employeev2::employee($id)->first();  
+          $payroll_employee_id = $name['payroll_employee_id'];
+          $cash_converted = Tbl_payroll_employee_salary::where('payroll_employee_id',$payroll_employee_id)
+                                                       ->value('payroll_employee_salary_daily');
+
+          $divide = ($cash_converted / 8) * Request::input('remaining_leave');                                             
+          $insert['payroll_employee_display_name']        = $name->payroll_employee_display_name;
+          $insert['payroll_leave_action']                 = "convert_to_cash";
+          $insert['shop_id']                              = Self::shop_id();
+          $insert['payroll_report_date_created']          = date("Y-m-d");
+          $insert['payroll_leave_employee_id']            = $id;
+          $insert['payroll_leave_hours_remaining']        = Request::input('remaining_leave');
+          $insert['payroll_leave_cash_converted']         = $divide;
+
+          Tbl_payroll_leave_report::insert($insert);
+          Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$id)->update($update);
+
+          $return['status']                               = 'success';
+          $return['function_name']                        = 'payrollconfiguration.reload_leavev2_temp';
+ 
           return json_encode($return);
      }
 

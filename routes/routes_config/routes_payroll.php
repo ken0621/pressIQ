@@ -419,11 +419,22 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 	Route::any('/leave/v2/reset_and_accumulate_leave_schedulev2',"Member\PayrollController@reset_and_accumulate_leave_schedulev2");
 
+	Route::any('/leave/v2/convert_to_cash_leave_schedulev2',
+		"Member\PayrollController@convert_to_cash_leave_schedulev2");
+
 	Route::any('/leave/v2/reset_leave_schedule_history',"Member\PayrollController@reset_leave_schedule_history");
 	
 	//end schedule
 
 	Route::any('/leave/v2/modal_view_leave_employee/{payroll_leave_temp_id}/',"Member\PayrollController@modal_view_leave_employee");
+
+	Route::any('/leave/v2/modal_edit_leave_tempv2/{payroll_leave_temp_id}',
+		"Member\PayrollController@modal_edit_leave_tempv2");
+
+
+	Route::any('/leave/v2/update_leave_tempv2',"Member\PayrollController@update_leave_tempv2");
+
+	Route::any('/leave/V2/modal_archived_leave_employeev2{archived}/{id}',"Member\PayrollController@modal_archived_leave_employeev2");
 
 	Route::any('/leave/v2/modal_leave_history',
 		"Member\PayrollController@modal_leave_history");

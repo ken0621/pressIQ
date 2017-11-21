@@ -40,10 +40,10 @@
 										<span class="caret"></span></button>
 										<ul class="dropdown-menu dropdown-menu-custom">
 											<li>
-												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_leave_action/{{$dat->payroll_leave_employee_id}}/convert" size="sm"><i class="fa fa-money"></i>&nbsp;Convert to Cash</a>
+												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_leave_action/{{$dat->payroll_leave_employee_id}}/convert/{{$dat->remaining_leave}}" size="sm"><i class="fa fa-money"></i>&nbsp;Convert to Cash</a>
 											</li>
 											<li>
-												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_leave_action/{{$dat->payroll_leave_employee_id}}/resetandaccum" size="sm"><i class="fa fa-plus"></i>&nbsp;Reset and Accumulate</a>
+												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_leave_action/{{$dat->payroll_leave_employee_id}}/resetandaccum/{{$dat->remaining_leave}}" size="sm"><i class="fa fa-plus"></i>&nbsp;Reset and Accumulate</a>
 											</li>
 											<li>
 												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_leave_action/{{$dat->payroll_leave_employee_id}}/reset/{{$dat->remaining_leave}}" size="sm"><i class="fa  fa-recycle"></i>&nbsp;Reset</a>

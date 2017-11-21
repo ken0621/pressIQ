@@ -1,6 +1,6 @@
-var modal_create_leave_temp = new modal_create_leave_temp();
+var modal_create_leave_tempv2 = new modal_create_leave_tempv2();
 
-function modal_create_leave_temp()
+function modal_create_leave_tempv2()
 {
 	init();
 
@@ -45,17 +45,15 @@ function modal_create_leave_temp()
 		});
 	}
 
-	this.load_employee_tag = function()
+	this.load_employee_tagv2 = function()
 	{
 		reload_leave_employee();
-		var payroll_leave_type_id = document.getElementById('payroll_leave_type_id').value;
 		$(".tbl-tag").html('<tr><td colspan="3" class="text-center">'+misc('loader') + '</td></tr>');
 		$.ajax({
 			url 	: 	"/member/payroll/leave/v2/get_leave_tag_employeev2",
 			type 	: 	"POST",
 			data 	: 	{
-				_token:misc('_token'),
-			payroll_leave_type_id:payroll_leave_type_id
+				_token:misc('_token')
 			},
 			success : 	function(result)
 			{

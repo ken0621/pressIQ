@@ -702,6 +702,7 @@ class Customer_InvoiceController extends Member
             $data["transaction_type"] = "Sales Receipt";            
         }
         $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
+        //dd($data["invoice_item"]);
         foreach($data["invoice_item"] as $key => $value) 
         {
             $qty = UnitMeasurement::um_qty($value->invline_um);
@@ -724,6 +725,8 @@ class Customer_InvoiceController extends Member
                 $data["_cmline"][$keys]->cm_qty = UnitMeasurement::um_view($total_qtys,$values->item_measurement_id,$values->cmline_um);
             }
         }
+        //dd($data);
+        //return view('member.customer_invoice.invoice_pdf', $data);
         $pdf = view('member.customer_invoice.invoice_pdf', $data);
         return Pdf_global::show_pdf($pdf);
     }

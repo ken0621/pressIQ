@@ -30,6 +30,7 @@ use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
 use App\Globals\Item;
+use App\Globals\Purchasing_inventory_system;
 
 class CustomerController extends Member
 {
@@ -44,8 +45,14 @@ class CustomerController extends Member
 	{
         if($this->hasAccess("customer-list","access_page"))
         {
-            
             $data['_customer'] = $this->customerlist();
+
+            //dd($data['_customer']);
+
+            if(Purchasing_inventory_system::check())
+            {
+                //dd(Purchasing_inventory_system::check());
+            }
             
             if (Request::ajax()) 
             {

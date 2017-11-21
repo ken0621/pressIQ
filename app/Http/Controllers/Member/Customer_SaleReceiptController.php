@@ -88,7 +88,6 @@ class Customer_SaleReceiptController extends Member
                 $data['_item'] = Item::get_all_item_sir($sir->sir_id);
             }
         }
-
         return view('member.customer.sales_receipt.create_sale_receipt', $data);
     }
 

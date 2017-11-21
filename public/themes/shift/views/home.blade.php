@@ -1,11 +1,11 @@
 @extends("layout")
 @section("content")
 <!-- Media Slider -->
-<div class="fullscreen background parallax top-container" style="background-image: url('/themes/{{ $shop_theme }}/img/front-banner.jpg');" data-img-width="1600" data-img-height="1139" data-diff="100">
+<div class="fullscreen background parallax top-container" style="background-image: url('{{ get_content($shop_theme_info, "home", "home_banner") }}');" data-img-width="1600" data-img-height="1139" data-diff="100">
     <div class="container">
-        <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/top-logo.png"></div>
+        <div class="caption-logo-container"><img src="{{ get_content($shop_theme_info, "home", "home_banner_caption1") }}"></div>
         <div class="caption-container animated fadeInDown">
-            <h1>SCENTS.HEALTH.INFORMATION.FASHION.TECHNOLOGY</h1>
+            <h1>{{ get_content($shop_theme_info, "home", "home_banner_caption2") }}</h1>
         </div>
     </div>
     <div class="scroll-down"><img src="/themes/{{ $shop_theme }}/img/scroll-down.png"></div>
@@ -15,27 +15,27 @@
 <section class="brand-container">
     <div class="container">
         <div class="title">Our <span>Brand</span></div>
-        <div class="sub">Our brand is a call to action for everyone that an alternative, more superior option is available for you. And it is just a click away. Try everything that we offer and you will see that SHIFTing to our brand is the best decision for you.</div>
+        <div class="sub">{!!get_content($shop_theme_info, "home", "home_our_brand_context") !!}</div>
         <div class="brand-row">
             <div class="brand-holder">
-                <div class="img"><img src="/themes/{{ $shop_theme }}/img/icon/scent.png"></div>
-                <div class="name a">SCENT</div>
+                <div class="img"><img src="{{ get_content($shop_theme_info, "home", "home_our_brand_icon1") }}"></div>
+                <div class="name a">{{ get_content($shop_theme_info, "home", "home_our_brand_icon1_title") }}</div>
             </div>
             <div class="brand-holder">
-                <div class="img"><img src="/themes/{{ $shop_theme }}/img/icon/health.png"></div>
-                <div class="name b">HEALTH</div>
+                <div class="img"><img src="{{ get_content($shop_theme_info, "home", "home_our_brand_icon2") }}"></div>
+                <div class="name b">{{ get_content($shop_theme_info, "home", "home_our_brand_icon2_title") }}</div>
             </div>
             <div class="brand-holder">
-                <div class="img"><img src="/themes/{{ $shop_theme }}/img/icon/info.png"></div>
-                <div class="name c">INFORMATION</div>
+                <div class="img"><img src="{{ get_content($shop_theme_info, "home", "home_our_brand_icon3") }}"></div>
+                <div class="name c">{{ get_content($shop_theme_info, "home", "home_our_brand_icon3_title") }}</div>
             </div>
             <div class="brand-holder">
-                <div class="img"><img src="/themes/{{ $shop_theme }}/img/icon/fashion.png"></div>
-                <div class="name d">FASHION</div>
+                <div class="img"><img src="{{ get_content($shop_theme_info, "home", "home_our_brand_icon4") }}"></div>
+                <div class="name d">{{ get_content($shop_theme_info, "home", "home_our_brand_icon4_title") }}</div>
             </div>
             <div class="brand-holder">
-                <div class="img"><img src="/themes/{{ $shop_theme }}/img/icon/technology.png"></div>
-                <div class="name e">TECHNOLOGY</div>
+                <div class="img"><img src="{{ get_content($shop_theme_info, "home", "home_our_brand_icon5") }}"></div>
+                <div class="name e">{{ get_content($shop_theme_info, "home", "home_our_brand_icon5_title") }}</div>
             </div>
         </div>
     </div>
@@ -43,7 +43,7 @@
 <section class="opportunity-container" style="background-image: url('/themes/{{ $shop_theme }}/img/center-bg.jpg');">
     <div class="container">
         <div class="title">Your Opportunity</div>
-        <div class="sub">If you like the brands we have, we would like to ask you to join our ever increasing team of distributors and become our partner in promoting S.H.I.F.T.! A very good and competitive compensation package comes with it. A perfect way to add an extra flow of cash in your basket. To find out more, contact any of our TEAM LEADERS or DIRECTORS.</div>
+        <div class="sub">{!! get_content($shop_theme_info, "home", "home_your_opportunity_context") !!}</div>
         <div class="row clearfix">
             <div class="col-md-4 col-sm-6">
                 <div class="opportunity-holder">
@@ -92,14 +92,14 @@
     <div class="container">
         <div class="row clearfix">
             <div class="col-md-6">
-                <div class="title">Our Belief</div>
-                <div class="desc">We believe that we will make a difference in every consumers chopice. We will make it very convenient for our patrons to shop for what they need at a very affordable price. We also believe that every SHIFT partner will have a huge change in lifestyle as more and more people will SHIFT! So what are you waiting for, SHIFT to our products and become a SHIFT partner now! It's EASY... It's SIMPLE!</div>
+                <div class="title">{{ get_content($shop_theme_info, "home", "home_division3_title") }}</div>
+                <div class="desc">{!! get_content($shop_theme_info, "home", "home_division3_context") !!}</div>
                 <div class="btn-container">
                     <button class="btn btn-primary">Join Us Today</button>
                 </div>
             </div>
             <div class="col-md-6">
-                <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/belief-bg.jpg">
+                <img class="img-responsive" src="{{ get_content($shop_theme_info, "home", "home_division3_image") }}">
             </div>
         </div>
     </div>

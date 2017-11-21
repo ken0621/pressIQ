@@ -27,6 +27,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_user;
 use App\Models\Tbl_terms;
+use App\Models\Tbl_customer_address;
 
 use Request;
 use Carbon\Carbon;
@@ -85,6 +86,12 @@ class Customer_InvoiceController extends Member
                 $data["action"] = "/member/customer/invoice/manual_invoice_update";
                 $data['_item'] = Item::get_all_item_sir($sir->sir_id);
             }
+        }
+
+        foreach ($data["_customer"] as $key => $value) 
+        {
+            $address = Tbl_customer_address::where("customer_id", $value->customer_id)->where("purpose", "billing")->first();
+            $data["_customer"][$key]->billing_address = isset($address->customer_street) ? $address->customer_street : "None";
         }
 
         return view('member.customer_invoice.customer_invoice', $data);
@@ -373,7 +380,7 @@ class Customer_InvoiceController extends Member
                 if (isset($data["status"]) && isset($data["status_message"]) && $data["status_message"] > 0) 
                 {
                     $json["status"]         = "error-invoice";
-                    $json["status_message"] = str_replace("</br>", "", $data["status_message"]);
+                    $json["status_message"] = $data["status_message"];
 
                     $json["redirect"]       = "/member/customer/invoice?id=" . $inv_id;
                     
@@ -451,7 +458,7 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
                 $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
                 $item_info[$key]['um']                 = Request::input('invline_um')[$key];
-                $item_info[$key]['quantity']           = Request::input('invline_qty')[$key];
+                $item_info[$key]['quantity']           = str_replace(",", "", Request::input('invline_qty')[$key]);
                 $item_info[$key]['rate']               = convertToNumber(Request::input('invline_rate')[$key]);
                 $item_info[$key]['discount']           = isset(Request::input('invline_discount')[$key]) ? Request::input('invline_discount')[$key] : 0;
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
@@ -663,9 +670,18 @@ class Customer_InvoiceController extends Member
                 }
                 if(count($product_consume) > 0)
                 {
+                    if (Purchasing_inventory_system::check()) 
+                    {
+                        $allow_out_of_stock = false;
+                    }
+                    else
+                    {
+                        $allow_out_of_stock = true;
+                    }
+
                     $transaction_id = $inv_id;
                     $transaction_type = "invoice";
-                    $json = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array',true, $item_serial);
+                    $json = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array', $allow_out_of_stock, $item_serial);
                 }
 
                 if($json["status"] == "success")
@@ -679,6 +695,14 @@ class Customer_InvoiceController extends Member
                         $json["redirect"]   = '/member/customer/invoice';
                     }
                     Request::session()->flash('success', 'Invoice Successfully Updated');
+                }
+                elseif($json["status"] == "error" && count($json["status_message"]) > 0)
+                {
+                    $json["status"]         = "error-invoice";
+                    $json["invoice_id"]     = $inv_id;
+                    $json["redirect"]       = "/member/customer/invoice?id=" . $inv_id;
+
+                    Request::session()->flash('error', $json["status_message"]);
                 }
             }
             else

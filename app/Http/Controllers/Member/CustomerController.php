@@ -129,6 +129,7 @@ class CustomerController extends Member
     public function load_customer()
     {
         $data["_customer"]  = Customer::getAllCustomer();
+
         return view('member.load_ajax_data.load_customer', $data);
     }
 	

@@ -562,6 +562,7 @@ function customer_invoice()
 			onChangeValue: function()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
+				$(".customer-billing-address").val($(this).find("option:selected").attr("billing-address"));
 				load_all_estimate($(this).val());
 			}
 		});

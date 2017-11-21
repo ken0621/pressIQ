@@ -42,6 +42,6 @@
     {
         list-style: none;
         padding: 5px;
-        margin: 5px;
+        margin: 5px; 
     }
 </style>

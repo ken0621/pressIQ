@@ -151,7 +151,7 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
                 $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
                 $item_info[$key]['um']                 = Request::input('invline_um')[$key];
-                $item_info[$key]['quantity']           = Request::input('invline_qty')[$key];
+                $item_info[$key]['quantity']           = str_replace(",", "", Request::input('invline_qty')[$key]);
                 $item_info[$key]['rate']               = convertToNumber(Request::input('invline_rate')[$key]);
                 $item_info[$key]['discount']           = isset(Request::input('invline_discount')[$key]) ? Request::input('invline_discount')[$key] : 0;
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
@@ -354,23 +354,46 @@ class Customer_InvoiceController extends Member
                 
                 if(count($product_consume) > 0)
                 {
+                    if (Purchasing_inventory_system::check()) 
+                    {
+                        $allow_out_of_stock = false;
+                    }
+                    else
+                    {
+                        $allow_out_of_stock = true;
+                    }
+
                     $remarks            = "Consume by Invoice #".Request::input('new_invoice_id');
                     $warehouse_id       = $this->current_warehouse->warehouse_id;
                     $transaction_type   = "invoice";
                     $transaction_id     = $inv_id;
-                    $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id,true,$item_serial);
+                    $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id, $allow_out_of_stock, $item_serial);
                 }
 
-                $json["status"]         = "success-invoice";
-                if($button_action == "save-and-edit")
+                if (isset($data["status"]) && isset($data["status_message"]) && $data["status_message"] > 0) 
                 {
-                    $json["redirect"]    = "/member/customer/invoice_list";
+                    $json["status"]         = "error-invoice";
+                    $json["status_message"] = str_replace("</br>", "", $data["status_message"]);
+
+                    $json["redirect"]       = "/member/customer/invoice?id=" . $inv_id;
+                    
+                    Request::session()->flash('error', $data["status_message"]);
                 }
-                elseif($button_action == "save-and-new")
+                else
                 {
-                    $json["redirect"]   = '/member/customer/invoice';
+                    $json["status"]         = "success-invoice";
+
+                    if($button_action == "save-and-edit")
+                    {
+                        $json["redirect"]    = "/member/customer/invoice_list";
+                    }
+                    elseif($button_action == "save-and-new")
+                    {
+                        $json["redirect"]   = '/member/customer/invoice';
+                    }
+
+                    Request::session()->flash('success', 'Invoice Successfully Created');
                 }
-                Request::session()->flash('success', 'Invoice Successfully Created');
             }
             else
             {

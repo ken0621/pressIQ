@@ -353,7 +353,7 @@
 
                                                             <td class="cm-number-td text-right">1</td>
                                                             <td>
-                                                                <select class="form-control select-item droplist-item-cm input-sm pull-left {{$cmline->cmline_item_id}}" name="cmline_item_id[]" required>
+                                                                <select class="required form-control select-item droplist-item-cm input-sm pull-left {{$cmline->cmline_item_id}}" name="cmline_item_id[]">
                                                                     @include("member.load_ajax_data.load_item", ['_item' => $_cm_item, 'add_search' => "", 'item_id' => $cmline->cmline_item_id])
                                                                 </select>
                                                             </td>
@@ -528,7 +528,11 @@
 @section('script')
 <script type="text/javascript">
     @if(Session::has('success'))
-        toastr.success('{{Session::get('success')}}');
+        toastr.success('{{ Session::get('success') }}');
+    @elseif(Session::has('error'))
+        @foreach(Session::get('error') as $error)
+            toastr.error('{{ $error }}');
+        @endforeach
     @endif
 </script>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>

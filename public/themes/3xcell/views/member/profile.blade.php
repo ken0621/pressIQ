@@ -91,7 +91,7 @@
 							</div>
 				   		</div>
 				   		<div class="profile_info_failed_message hidden">
-							<div class="alert alert-danger">
+							<div class="alert">
 							  <ul>
 							  	
 							  </ul>
@@ -208,7 +208,7 @@
 						</div>
 			   		</div>
 			   		<div class="profile_picture_failed_message hidden">
-						<div class="alert alert-danger">
+						<div class="alert">
 						  <strong>Failed!</strong> Please try again later.
 						</div>
 			   		</div>
@@ -234,7 +234,7 @@
 							</div>
 				   		</div>
 				   		<div class="profile_password_failed_message hidden">
-							<div class="alert alert-danger">
+							<div class="alert">
 							  <ul>
 							  	
 							  </ul>
@@ -274,7 +274,7 @@
 				   		</div>
 				   	</div>
 				   	<div class="beneficiary_info_failed_message hidden">
-				   		<div class="alert alert-danger">
+				   		<div class="alert">
 				   			<ul>
 
 				   			</ul>

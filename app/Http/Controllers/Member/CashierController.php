@@ -31,6 +31,39 @@ class CashierController extends Member
         
        	return view("member.cashier.pos", $data);
     }
+    public function add_payment()
+    {
+        $payment_type = Request::input('payment_method');
+        $payment_amount = Request::input('payment_amount');
+
+        if($payment_amount > 0)
+        {
+            $return = Cart2::scan_payment($this->user_info->shop_id, $payment_type, $payment_amount);
+            if(is_numeric($return))
+            {
+                $return['status'] = 'success';
+            }            
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = "You can't add zero amount of payment";
+
+        }
+        return json_encode($return);
+    }
+    public function load_payment()
+    {
+        $data['_payment'] = Cart2::load_payment($this->user_info->shop_id);
+
+        return view('member.cashier.pos_payment_method',$data);
+    }
+    public function remove_payment()
+    {
+        $return = Cart2::remove_payment(Request::input('cart_payment_id'));
+
+        return json_encode('success');
+    }
     public function pos_table_item()
     {
     	$data["cart_key"]   = $cart_key = Cart2::get_cart_key();

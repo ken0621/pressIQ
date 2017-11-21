@@ -33,9 +33,58 @@ function pos()
 		event_click_process_sale();
 		action_hide_popover();
 		event_change_quantity();
+		event_click_add_payment();
+		event_click_remove_payment();
 
         event_load_popover();
         action_click_change_qty();
+	}
+	function event_click_add_payment()
+	{
+		$('body').on('click','.btn-add-payment', function(e)
+		{
+			var payment_method = $('.input-payment-method').val();
+			var payment_amount = $('.input-payment-amount').val();
+			var _token = $('#_token').val();
+			payment_loading();
+			$.ajax(
+			{
+				url:"/member/cashier/pos/add_payment",
+				dataType:"json",
+				data: {payment_method:payment_method,payment_amount:payment_amount,_token:_token},
+				type:"post",
+				success: function(data)
+				{
+					if(data.status == 'success')
+					{
+						action_load_payment_table();
+					}
+					else
+					{
+						toastr.warning(data.status_message);
+						action_load_payment_table();
+					}
+				}
+			});
+		});
+	}
+	function event_click_remove_payment()
+	{
+		$('body').on('click','.remove-payment', function(e)
+		{
+			payment_loading();
+			$.ajax(
+			{
+				url:"/member/cashier/pos/remove_payment",
+				dataType:"json",
+				data: {cart_payment_id : $(e.currentTarget).attr('payment-id')},
+				type:"get",
+				success: function(data)
+				{
+						action_load_payment_table();
+				}
+			});
+		});
 	}
 	function action_click_change_qty()
     {
@@ -93,6 +142,10 @@ function pos()
 				}
 			});
 		});
+	}
+	function payment_loading()
+	{
+		$(".pos-payment").css("opacity", 0.3);
 	}
 	function table_loading()
 	{
@@ -198,9 +251,9 @@ function pos()
 						{
 							action_load_item_table();
 						}
-						else
+						if(data.status == 'error')
 						{
-							toastr.warning('The ITEM cannot change quantity');
+							toastr.warning(data.status_message);
 							action_load_item_table();
 						}
 					}
@@ -513,6 +566,19 @@ function pos()
 	{
 		$(".customer-container").css("opacity", 0.3);
 	}
+	function action_load_payment_table()
+	{
+		if($(".pos-payment").text() != "")
+		{
+			payment_loading();
+		}
+		
+		$(".pos-payment").load("/member/cashier/pos/load_payment", function()
+		{
+			action_update_big_totals();
+			$(".pos-payment").css("opacity", 1);
+		});
+	}
 	function action_load_item_table()
 	{
 		if($(".load-item-table-pos").text() != "")
@@ -534,7 +600,15 @@ function pos()
 	function action_update_big_totals()
 	{
 		$(".big-total").find(".grand-total").text($(".table-grand-total").val());
-		$(".big-total").find(".amount-due").text($(".table-amount-due").val());
+		var payment_amount = 0;
+		var amount_due_php = $(".table-amount-due").val();
+		var amount_due = parseFloat($(".table-amount-due").val().replace('PHP','').replace(',',''));
+		$('.payment-li').each(function()
+		{
+			payment_amount += parseFloat($(this).find(".compute-payment-amount").val());
+		});
+		$(".big-total").find(".amount-due").text('PHP ' +(amount_due - payment_amount).toFixed(2));
+		$(".input-payment-amount").val(amount_due - payment_amount);
 	}
 	function get_loader_html($padding = 50)
 	{
@@ -552,6 +626,13 @@ function toggle_destination(className)
     {
     	$(className).slideUp();
     }
+}
+function select_payment(type = '')
+{
+	$('.btn-payment').addClass('btn-custom-white');
+	$('.input-payment-method').val(type);
+	$('.'+type).removeClass('btn-custom-white');
+	$('.'+type).addClass('btn-primary');
 }
 
 function new_price_level_save_done(data)

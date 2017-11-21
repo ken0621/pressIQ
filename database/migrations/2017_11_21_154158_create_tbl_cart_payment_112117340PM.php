@@ -13,7 +13,7 @@ class CreateTblCartPayment112117340PM extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_cart_payment', function (Blueprint $table) {
+        Schema::create('tbl_cart_payment', function (Blueprint $table) {
             $table->increments('cart_payment_id');
             $table->integer('shop_id');
             $table->string('unique_id_per_pc');

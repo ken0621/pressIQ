@@ -156,7 +156,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group pos-payment">
+                            <div class="form-group pos-payment row clearfix">
                                 @include('member.cashier.pos_payment_method')
                             </div>
                             <div class="form-group">

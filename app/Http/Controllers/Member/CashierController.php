@@ -22,6 +22,7 @@ class CashierController extends Member
         $data["current_level"]  = ($data["cart"]["info"] ? $data["cart"]["info"]->price_level_id : 0);
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
         $data['_salesperson'] = Utilities::get_all_users($this->user_info->shop_id, $this->user_info->user_id);
+        $data['_payment'] = Cart2::load_payment($this->user_info->shop_id);
         
         if(Session::has('customer_id'))
         {
@@ -41,6 +42,7 @@ class CashierController extends Member
             $return = Cart2::scan_payment($this->user_info->shop_id, $payment_type, $payment_amount);
             if(is_numeric($return))
             {
+                $return = null;
                 $return['status'] = 'success';
             }            
         }

@@ -334,78 +334,95 @@ class Customer_InvoiceController extends Member
             }
 
         }
-        // END CM/RETURNS
-        $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
 
-        if(!$json["status"])
+        $retun_error = null;
+        if(Purchasing_inventory_system::check())
         {
-            if($inv == 0 || Request::input("keep_val") == "keep")
+            $remarks            = "Consume by Invoice #".Request::input('new_invoice_id');
+            $warehouse_id       = $this->current_warehouse->warehouse_id;
+            $retun_error = Warehouse::inventory_consume_validation($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', null, null, true, null);
+            $json["status"]         = "error";
+            $json["status_message"] =  $retun_error;
+            
+            Request::session()->flash('error', $json["status_message"]);
+
+        }
+        if(!$retun_error)
+        {
+            // END CM/RETURNS
+            $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
+
+            if(!$json["status"])
             {
+                if($inv == 0 || Request::input("keep_val") == "keep")
+                {
 
-                $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
-                
-                if(count(Session::get('est_item')) > 0)
-                {
-                    Estimate::update_all_estimate(Session::get('est_item'), $inv_id);
-                }
-                if($cm_customer_info != null && $cm_item_info != null)
-                {
-                    $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $inv_id);
-
-                    $cm_remarks            = "Returns Items with Invoice # ". Request::input('new_invoice_id');
-                    $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
-                    $cm_transaction_type   = "credit_memo";
-                    $cm_transaction_id     = $cm_id;
-                    $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
-                }
-                
-                if(count($product_consume) > 0)
-                {
-                    if (Purchasing_inventory_system::check()) 
+                    $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+                    
+                    if(count(Session::get('est_item')) > 0)
                     {
-                        $allow_out_of_stock = false;
+                        Estimate::update_all_estimate(Session::get('est_item'), $inv_id);
+                    }
+                    if($cm_customer_info != null && $cm_item_info != null)
+                    {
+                        $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $inv_id);
+
+                        $cm_remarks            = "Returns Items with Invoice # ". Request::input('new_invoice_id');
+                        $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
+                        $cm_transaction_type   = "credit_memo";
+                        $cm_transaction_id     = $cm_id;
+                        $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
+                    }
+                    
+                    if(count($product_consume) > 0)
+                    {
+                        if (Purchasing_inventory_system::check()) 
+                        {
+                            $allow_out_of_stock = false;
+                        }
+                        else
+                        {
+                            $allow_out_of_stock = true;
+                        }
+
+                        $remarks            = "Consume by Invoice #".Request::input('new_invoice_id');
+                        $warehouse_id       = $this->current_warehouse->warehouse_id;
+                        $transaction_type   = "invoice";
+                        $transaction_id     = $inv_id;
+                        $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id, $allow_out_of_stock, $item_serial);
+                    }
+
+                    if (isset($data["status"]) && isset($data["status_message"]) && $data["status_message"] > 0) 
+                    {
+                        $json["status"]         = "error-invoice";
+                        $json["status_message"] = $data["status_message"];
+
+                        $json["redirect"]       = "/member/customer/invoice?id=" . $inv_id;
+                        
+                        Request::session()->flash('error', $data["status_message"]);
                     }
                     else
                     {
-                        $allow_out_of_stock = true;
+                        $json["status"]         = "success-invoice";
+
+                        if($button_action == "save-and-edit")
+                        {
+                            $json["redirect"]    = "/member/customer/invoice_list";
+                        }
+                        elseif($button_action == "save-and-new")
+                        {
+                            $json["redirect"]   = '/member/customer/invoice';
+                        }
+
+                        Request::session()->flash('success', 'Invoice Successfully Created');
                     }
-
-                    $remarks            = "Consume by Invoice #".Request::input('new_invoice_id');
-                    $warehouse_id       = $this->current_warehouse->warehouse_id;
-                    $transaction_type   = "invoice";
-                    $transaction_id     = $inv_id;
-                    $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id, $allow_out_of_stock, $item_serial);
-                }
-
-                if (isset($data["status"]) && isset($data["status_message"]) && $data["status_message"] > 0) 
-                {
-                    $json["status"]         = "error-invoice";
-                    $json["status_message"] = $data["status_message"];
-
-                    $json["redirect"]       = "/member/customer/invoice?id=" . $inv_id;
-                    
-                    Request::session()->flash('error', $data["status_message"]);
                 }
                 else
                 {
-                    $json["status"]         = "success-invoice";
-
-                    if($button_action == "save-and-edit")
-                    {
-                        $json["redirect"]    = "/member/customer/invoice_list";
-                    }
-                    elseif($button_action == "save-and-new")
-                    {
-                        $json["redirect"]   = '/member/customer/invoice';
-                    }
-
-                    Request::session()->flash('success', 'Invoice Successfully Created');
+                    $json["inv_id"] = Request::input("new_invoice_id");            
+                    $json["status"] = "error-inv-no";
                 }
-            }
-            else
-            {
-                $json["inv_id"] = Request::input("new_invoice_id");            
-                $json["status"] = "error-inv-no";
+
             }
 
         }

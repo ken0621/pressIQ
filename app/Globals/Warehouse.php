@@ -1038,6 +1038,29 @@ class Warehouse
         }
         return $data;
     }
+    public static function inventory_consume_validation($warehouse_id = 0, $remarks = '', $consume_product ,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type = '', $transaction_id = 0, $allow_out_of_stock = false, $item_serial = array())
+    {
+        $err_msg = null;
+        foreach($consume_product as $key => $product)
+        {
+            $item_type = Tbl_item::where("item_id",$product['product_id'])->value("item_type_id");
+            if($item_type == 1) //inventory
+            {
+                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $product['product_id'])->value('inventory_count');
+                if($count_on_hand == null)
+                {
+                    $count_on_hand = 0;   
+                }
+
+                if(!($product['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $product['quantity']))
+                {
+                    $item_name = Item::get_item_details($product['product_id']);
+                    $err_msg .= "The quantity of ".$item_name->item_name." is not enough for you to consume.<br>";
+                }
+            }
+        }
+        return $err_msg;
+    }
     public static function inventory_consume($warehouse_id = 0, $remarks = '', $consume_product ,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type = '', $transaction_id = 0,$allow_out_of_stock = false, $item_serial = array())
     {
         $shop_id = Warehouse::get_shop_id($warehouse_id);
@@ -1108,7 +1131,6 @@ class Warehouse
                         $inventory_err[$err] = Warehouse::array_tansfer('error', $product['product_id']);
                         $err++;
                     }
-
                 }                
             }
         }

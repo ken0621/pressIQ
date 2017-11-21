@@ -86,7 +86,7 @@
 				<div class="tab-content">
 				   <div id="basic_info" class="tab-pane fade in active">
 				   		<div class="profile_info_success_message hidden">
-							<div class="alert alert-success">
+							<div class="alert alert-custom-success">
 							  <strong>Success!</strong> Your info has been successfully updated.
 							</div>
 				   		</div>
@@ -177,7 +177,7 @@
 				   <!-- CONTACT INFO -->
 				   <div id="contact_info" class="tab-pane fade">
 				   		<div class="contact_info_success_message hidden">
-							<div class="alert alert-success">
+							<div class="alert alert-custom-success">
 							  <strong>Success!</strong> Sponsor Rule has been successfully updated.
 							</div>
 				   		</div>
@@ -203,7 +203,7 @@
 				   </div>
 				   <div id="profile_picture" class="tab-pane fade">
 				   	<div class="profile_picture_success_message hidden">
-						<div class="alert alert-success">
+						<div class="alert alert-custom-success">
 						  <strong>Success!</strong> Your profile picture has been successfully updated.
 						</div>
 			   		</div>
@@ -229,7 +229,7 @@
 				   @if($allowed_change_pass)
 				   <div id="password" class="tab-pane fade">
 					   	<div class="profile_password_success_message hidden">
-							<div class="alert alert-success">
+							<div class="alert alert-custom-success">
 							  <strong>Success!</strong> Your password has been successfully updated.
 							</div>
 				   		</div>
@@ -269,7 +269,7 @@
 				   <!-- ADD BENEFICIARY -->
 				   <div id="add_beneficiary" class="tab-pane fade in">
 				   	<div class="beneficiary_success_message hidden">
-				   		<div class="alert alert-success">
+				   		<div class="alert alert-custom-success">
 				   			<strong>Success!</strong> Your beneficiary has been successfully added.
 				   		</div>
 				   	</div>

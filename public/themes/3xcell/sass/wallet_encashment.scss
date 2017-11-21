@@ -127,10 +127,18 @@ $text-dark: #272c2f;
 	}
 }
 
-.btn-primary, .btn-custom-primary
+.btn-primary, .btn-custom-primary, .btn-custom-payout
 {
 	background-color: #2161C8 !important;
 	color: #fff !important;
 	background-image: none !important;
 	border-color: #2161C8 !important;
+}
+
+.btn-custom-color
+{
+	background-color: #48B920 !important;
+	color: #fff !important;
+	background-image: none !important;
+	border-color: #48B920 !important;
 }

@@ -26,6 +26,7 @@ use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_period;
+use App\Models\Tbl_payroll_leave_schedule;
 
 use DateTime;
 
@@ -416,7 +417,8 @@ class Payroll2
 			$_timesheet[$from]->day_word 				= Carbon::parse($from)->format("D");
 			$_timesheet[$from]->record 					= Payroll2::timesheet_process_in_out($timesheet_db);
 			$_timesheet[$from]->is_holiday 				= Payroll2::timesheet_get_is_holiday($employee_id, $from); //$holiday["holiday_day_type"];
-			
+			$_timesheet[$from]->is_leave				= Payroll2::timesheet_get_is_leave($employee_id, $from);
+
 			// $_timesheet[$from]->holiday_name = $holiday["holiday_name"];
 			if(isset($_shift_real[0]))
 			{
@@ -896,9 +898,22 @@ class Payroll2
 		}
 		return $day_type;
 	}
+
+	public static function timesheet_get_is_leave($employee_id, $date)
+	{
+		$leave_schedule = Tbl_payroll_leave_schedule::checkemployee($employee_id, $date)->get();
+
+		if (count($leave_schedule) > 0) 
+		{
+			return true;
+		}
+
+		return false;
+	}
 	public static function timesheet_default_remarks($data)
 	{
 		$remarks = null;
+
 		if($data->day_type == "rest_day")
 		{
 			$remarks[] = "REST DAY";
@@ -911,6 +926,14 @@ class Payroll2
 		{
 			$remarks[] = "HOLIDAY";
 		}
+		if (isset($data->is_leave)) 
+		{
+			if($data->is_leave)
+			{
+				$remarks[] = "LEAVE";
+			}
+		}
+
 		// if (isset($data->holiday_name)) 
 		// {
 		// 	$remarks[] = $data->holiday_name;
@@ -3239,6 +3262,7 @@ class Payroll2
 				}
 			}
 		}
+
 		return Payroll2::convert_to_24_hour($night_differential);
 	}
 

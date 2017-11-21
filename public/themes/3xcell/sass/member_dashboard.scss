@@ -7,13 +7,6 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
-.btn-primary
-{
-	background-color: #2161C8 !important;
-	color: #fff !important;
-	background-image: none !important;
-}
-
 .dashboard
 {
 	font-family: $content-text;
@@ -461,4 +454,12 @@ $text-dark: #272c2f;
 			}
 		}
 	}
+}
+
+.btn-primary
+{
+	background-color: #2161C8 !important;
+	color: #fff !important;
+	background-image: none !important;
+	border-color: #2161C8 !important;
 }

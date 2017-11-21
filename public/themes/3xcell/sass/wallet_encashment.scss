@@ -87,3 +87,45 @@ $text-dark: #272c2f;
 		}
 	}
 }
+
+.modal-header
+{
+	background-color: #2161C8;
+	color: #fff;
+	
+	.modal-title
+	{
+		font-weight: $regular;
+		color: #fff !important;
+	}
+	
+	.fa
+	{
+		color: #fff;
+	}
+
+	.close
+	{
+		@extend .fa;
+	}
+}
+
+.btn-custom-close
+{
+	background-color: #ff5454 !important;
+	color: #fff;
+
+	&:hover
+	{
+		opacity: 0.8;
+		color: #fff;
+	}
+}
+
+.btn-3xblue, .btn-custom-primary
+{
+	background-color: #2161C8 !important;
+	color: #fff !important;
+	background-image: none !important;
+	border-color: #2161C8 !important;
+}

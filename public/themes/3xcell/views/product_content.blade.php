@@ -36,11 +36,11 @@
 												<span class="pv-label" style="padding-left: 0;">
 													<i class="fa fa-star" aria-hidden="true"></i>
 												</span>
-												@if($key == "RANK")
+												{{-- @if($key == "RANK")
 													<span class="pv-label">RANK PV:</span>
 												@elseif($key == "STAIRSTEP_GROUP")
-													<span class="pv-label">GROUP VOLUME:</span>
-												@elseif($key == "STAIRSTEP")
+													<span class="pv-label">GROUP VOLUME:</span> --}}
+												@if($key == "STAIRSTEP")
 													<span class="pv-label">PERSONAL PV</span>
 												@else
 													<span class="pv-label">{{ str_replace("_", " ", $key) }}:</span>

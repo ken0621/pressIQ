@@ -31,7 +31,8 @@
 							<div style="margin-top: 15px; font-size: 18px;">
 								@if($mlm_member)
 									@foreach($product["variant"][0]["pv"] as $key => $value)
-										@if($key == "STAIRSTEP" || $key == "STAIRSTEP_GROUP" || $key == "RANK")
+										@if($key == "STAIRSTEP" )
+										{{-- || $key == "STAIRSTEP_GROUP" || $key == "RANK" --}}
 											<div>
 												<span class="pv-label" style="padding-left: 0;">
 													<i class="fa fa-star" aria-hidden="true"></i>

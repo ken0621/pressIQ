@@ -9,7 +9,7 @@
 				<tr>
 					<th>Employee Name</th>
 					<th>Leave Hours</th>
-					<th></th>
+					<th width="5%"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -19,7 +19,7 @@
 						{{$active->payroll_employee_title_name.' '.$active->payroll_employee_first_name.' '.$active->payroll_employee_middle_name.' '.$active->payroll_employee_last_name.' '.$active->payroll_employee_suffix_name}}
 					</td>
 					<input type="hidden" name="employee_tag[]" value="'{{$active->payroll_employee_id}}'">
-					<td class="text-center edit-data zerotogray">
+					<td class="text-center edit-data zerotogray" width="25%">
 						<input type="text" name="leave_hours_{{$active->payroll_employee_id}}" placeholder="00:00" class="text-center form-control break time-entry time-target time-entry-24 is-timeEntry" value="{{$active->payroll_leave_temp_hours}}">
 					</td>
 

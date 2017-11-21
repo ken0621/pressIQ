@@ -6,6 +6,7 @@
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
 		<input type="hidden" name="id" value="{{$id}}">
 		<input type="hidden" name="remaining_leave" value="{{$remaining_leave}}">
+		<input type="hidden" name="archived" value="{{isset($archived) ? $archived : 0}}">
 		@if(isset($payroll_leave_employee_id))
 		<input type="hidden" class="payroll_deduction_type" value="{{ $payroll_leave_employee_id }} ">
 		@else

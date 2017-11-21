@@ -4112,27 +4112,6 @@ class PayrollController extends Member
           return json_encode($return);
      }
 
-     public function modal_archived_leave_employeev2($archived, $id)
-     {
-
-          $statement = 'archive';
-          if($archived == 0)
-          {
-               $statement = 'restore';
-          }
-          $_query             = Tbl_payroll_leave_employeev2::employee($id)->first();
-          // dd($_query);
-          $file_name               = $_query->payroll_employee_title_name.' '.$_query->payroll_employee_first_name.' '.$_query->payroll_employee_middle_name.' '.$_query->payroll_employee_last_name.' '.$_query->payroll_employee_suffix_name;
-          $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
-          $data['html']       = '';
-          $data['action']     = '/member/payroll/leave/archived_leave_employee';
-          $data['id']         = $id;
-          $data['archived']   = $archived;
-
-          return view('member.modal.modal_confirm_archived', $data);
-
-     }
-
      public function modal_view_leave_employee($payroll_leave_temp_id)
      {
          $payroll_employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id')
@@ -4221,6 +4200,16 @@ class PayrollController extends Member
                $data['html']       = '';
                $data['action']     = '/member/payroll/leave/v2/reset_leave_schedule_history';
                $data['id']         = $payroll_leave_employee_id;
+               $data['remaining_leave'] = $remaining_leave;
+          }
+          else if($action == 'archived_temp')
+          {
+               $action = 'Archived temp';
+               $data['title']      = 'Do you really want to '.$action.'?';
+               $data['html']       = '';
+               $data['action']     = '/member/payroll/leave/v2/archived_leave_tempv2';
+               $data['id']         = $payroll_leave_employee_id;
+               $data['remaining_leave'] = $remaining_leave;
           }
 
           return view('member.payroll.modal.modal_leave_reset_confirm',$data);
@@ -4312,6 +4301,18 @@ class PayrollController extends Member
           $return['status']             = 'success';
           $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
 
+          return json_encode($return);
+     }
+
+     public function archived_leave_tempv2()
+     {
+          $id = Request::input('id');
+          $update['payroll_leave_employee_is_archived'] = 1;
+  
+          Tbl_payroll_leave_employeev2::where('payroll_leave_employee_id', $id)->update($update);
+
+          $return['status']             = 'success';
+          $return['function_name']      = 'modal_create_leave_tempv2.load_employee_tagv2';
           return json_encode($return);
      }
 

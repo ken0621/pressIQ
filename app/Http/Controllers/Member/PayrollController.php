@@ -3983,13 +3983,14 @@ class PayrollController extends Member
                     array_push($array, $tag);
                     if($leave_temp_id != 0)
                     {
-                         $count = Tbl_payroll_leave_employeev2::where('payroll_leave_temp_id', $leave_temp_id)->where('payroll_employee_id',$tag)->count();
+                         $count = Tbl_payroll_leave_employeev2::where('payroll_leave_temp_id', $leave_temp_id)->where('payroll_employee_id',$tag)->where('payroll_leave_employee_is_archived',0)->count();
                          if($count == 0)
                          {
                               $insert['payroll_leave_temp_id'] = $leave_temp_id;
                               $insert['payroll_employee_id']     = $tag;
                               array_push($insert_tag, $insert);
                          }
+
                     }
                }    
           }
@@ -4089,6 +4090,7 @@ class PayrollController extends Member
      public function update_leave_tempv2()
      {
           $payroll_leave_temp_id                       = Request::input('payroll_leave_temp_id');
+          $payroll_leave_employee_id                   = Request::input('payroll_leave_employee_id');
           $update['payroll_leave_temp_name']           = Request::input('payroll_leave_temp_name');
           $update['payroll_leave_temp_is_cummulative'] = Request::input('payroll_leave_temp_is_cummulative');
 
@@ -4102,6 +4104,7 @@ class PayrollController extends Member
 
                     Tbl_payroll_leave_employeev2::where('payroll_employee_id', $tag)
                                                   ->where('payroll_leave_temp_id', $payroll_leave_temp_id)
+                                                  ->where('payroll_leave_employee_id', $payroll_leave_employee_id)
                                                   ->update($updates);
 
           }
@@ -4114,7 +4117,7 @@ class PayrollController extends Member
 
      public function modal_view_leave_employee($payroll_leave_temp_id)
      {
-         $payroll_employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id')
+         $payroll_employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id','payroll_leave_employee_id')
                                                             ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_employee_v2.payroll_leave_temp_id','=','tbl_payroll_leave_tempv2.payroll_leave_temp_id')
                                                             ->where('tbl_payroll_leave_tempv2.payroll_leave_temp_id',$payroll_leave_temp_id)
                                                             ->get();
@@ -4122,7 +4125,7 @@ class PayrollController extends Member
           foreach($payroll_employee_id as $key => $emp_id)
           {
                // dd($emp_id['payroll_employee_id']);     
-               $empdata = Tbl_payroll_leave_schedulev2::getviewleavedata($emp_id['payroll_employee_id'])->get();
+               $empdata = Tbl_payroll_leave_schedulev2::getviewleavedata($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
     
                array_push($datas, $empdata); 
           }
@@ -4308,8 +4311,10 @@ class PayrollController extends Member
      {
           $id = Request::input('id');
           $update['payroll_leave_employee_is_archived'] = 1;
-  
+          $updates['payroll_leave_schedule_archived']    = 1;
+
           Tbl_payroll_leave_employeev2::where('payroll_leave_employee_id', $id)->update($update);
+          Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id', $id)->update($updates);
 
           $return['status']             = 'success';
           $return['function_name']      = 'modal_create_leave_tempv2.load_employee_tagv2';

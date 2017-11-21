@@ -49,6 +49,20 @@
         <!-- HEADER -->
         <div class="subheader-container">
             <div class="container" style="position: relative;">
+                <div class="social-mob">
+                    <span>
+                        <i class="fa fa-facebook-square" aria-hidden="true"></i>
+                    </span>
+                    <span>
+                        <i class="fa fa-twitter-square" aria-hidden="true"></i>
+                    </span>
+                    <span>
+                        <i class="fa fa-instagram" aria-hidden="true"></i>
+                    </span>
+                    <span>
+                        <i class="fa fa-google-plus-square" aria-hidden="true"></i>
+                    </span>
+                </div>
                <div class="button-container">
                     <div class="social-media-container">
                         <span>
@@ -97,29 +111,81 @@
         <div class="header-container">
             <div class="container">
                 <div class="row clearfix">
-                    <div class="col-md-2">
+                    <div class="col-md-3 cox-sm-12 col-xs-12">
 
                         <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
                             
-                            <nav class="pushmenu pushmenu-left">
-                            
-                                @if($customer)
-                                <div class="space1"></div>
-                                <a href="/members/profile">
-                                   <div class="profile-img-container">
-                                        <div class="row-no-padding clearfix">
-                                            <div class="col-xs-3">
-                                                <div class="profile-img"><img src="{{ $profile_image }}"></div>
-                                            </div>
-                                            <div class="col-xs-9">
-                                                <div class="text-holder">
-                                                    <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
-                                                    <div class="subtext text-overflow">{{ $customer->email }}</div>
-                                                </div>
+                        <nav class="pushmenu pushmenu-left">
+                        
+                            @if($customer)
+                            <div class="space1"></div>
+                            <a href="/members/profile">
+                               <div class="profile-img-container">
+                                    <div class="row-no-padding clearfix">
+                                        <div class="col-xs-3">
+                                            <div class="profile-img"><img src="{{ $profile_image }}"></div>
+                                        </div>
+                                        <div class="col-xs-9">
+                                            <div class="text-holder">
+                                                <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+                                                <div class="subtext text-overflow">{{ $customer->email }}</div>
                                             </div>
                                         </div>
                                     </div>
-                                </a>
+                                </div>
+                            </a>
+                            <div class="space1"></div>
+                            <span>BROWSE</span>
+                            <ul class="links">
+                                @if($customer_info)
+                                <li> <a href="/">Home</a> </li>
+                                @else
+                                <li><a href="/members" id="home">MY ACCOUNT</a></li>
+                                @endif
+                                <li class="product-mobile-dropdown">
+                                    <a href="javascript:">PRODUCTS</a>
+                                </li>
+                                    @if(count($_categories) > 0)
+                                        <ul class="product-mobile-dropdown-list">
+                                            @foreach($_categories as $categories)
+                                                <li>
+                                                    <a href="/product?type={{ $categories["type_id"] }}">
+                                                        {{ $categories["type_name"] }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                <li> <a href="/promos">PROMOS</a> </li>
+                                <li class="company-mobile-dropdown"> 
+                                    <a href="javascript:">COMPANY</a> 
+                                </li>
+                                    <ul class="company-mobile-dropdown-list">
+                                        <li><a href="/history">Our History</a></li>
+                                        <li><a href="/how_to_join">How to Join</a></li>
+                                        <li><a href="/events">Company Events</a></li>
+                                    </ul>
+                                <li> <a href="/gallery">GALLERY</a> </li>
+                                <li> <a href="/contact">CONTACT US</a> </li>
+                            </ul>
+                            
+                            <div class="space2"></div>
+                            <span>MEMBERS AREA</span>
+                            <ul class="links">
+                                <li> <a href="/members">Dashboard</a> </li>
+                                <li> <a href="/members/profile">Profile</a> </li>
+                                @if($mlm_member)
+                                <li> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li>
+                                <li> <a href="/members/report">Reports</a> </li>
+                                <li> <a href="/members/report-points">Reports (Points)</a> </li>
+                                <li> <a href="/members/wallet-encashment">Wallet Encashment</a> </li>
+                                    @if($customer)
+                                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                                    @endif
+                                @else
+                                @endif
+                            </ul>
+                            @else
                                 <div class="space1"></div>
                                 <span>BROWSE</span>
                                 <ul class="links">
@@ -154,59 +220,7 @@
                                     <li> <a href="/gallery">GALLERY</a> </li>
                                     <li> <a href="/contact">CONTACT US</a> </li>
                                 </ul>
-                                
-                                <div class="space2"></div>
-                                <span>MEMBERS AREA</span>
-                                <ul class="links">
-                                    <li> <a href="/members">Dashboard</a> </li>
-                                    <li> <a href="/members/profile">Profile</a> </li>
-                                    @if($mlm_member)
-                                    <li> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li>
-                                    <li> <a href="/members/report">Reports</a> </li>
-                                    <li> <a href="/members/report-points">Reports (Points)</a> </li>
-                                    <li> <a href="/members/wallet-encashment">Wallet Encashment</a> </li>
-                                        @if($customer)
-                                            <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
-                                        @endif
-                                    @else
-                                    @endif
-                                </ul>
-                                @else
-                                    <div class="space1"></div>
-                                    <span>BROWSE</span>
-                                    <ul class="links">
-                                        @if($customer_info)
-                                        <li> <a href="/">Home</a> </li>
-                                        @else
-                                        <li><a href="/members" id="home">MY ACCOUNT</a></li>
-                                        @endif
-                                        <li class="product-mobile-dropdown">
-                                            <a href="javascript:">PRODUCTS</a>
-                                        </li>
-                                            @if(count($_categories) > 0)
-                                                <ul class="product-mobile-dropdown-list">
-                                                    @foreach($_categories as $categories)
-                                                        <li>
-                                                            <a href="/product?type={{ $categories["type_id"] }}">
-                                                                {{ $categories["type_name"] }}
-                                                            </a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            @endif
-                                        <li> <a href="/promos">PROMOS</a> </li>
-                                        <li class="company-mobile-dropdown"> 
-                                            <a href="javascript:">COMPANY</a> 
-                                        </li>
-                                            <ul class="company-mobile-dropdown-list">
-                                                <li><a href="/history">Our History</a></li>
-                                                <li><a href="/how_to_join">How to Join</a></li>
-                                                <li><a href="/events">Company Events</a></li>
-                                            </ul>
-                                        <li> <a href="/gallery">GALLERY</a> </li>
-                                        <li> <a href="/contact">CONTACT US</a> </li>
-                                    </ul>
-                                @endif
+                            @endif
                         </nav>
 
                         <div class="image-logo-holder">
@@ -217,8 +231,12 @@
                                    <span></span>
                                </div> -->                   
                         </div>
+
+                        <div class="image-logo-mob">
+                            <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></a>                      
+                        </div>
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-9">
                     <!-- NAVIGATION -->
                         <nav class="navirino clearfix">
                             <ul>
@@ -373,7 +391,7 @@
         <footer id="bottom-footer">
             <div class="container">
                 <div class="upper row clearfix">
-                    <div class="col-md-4 col-sm-4 col-xs-4 footer-holder">
+                    <div class="col-md-4 col-sm-4 col-xs-12 footer-holder">
                         <div class="footer-img-container">
                             <img class="footer-img" src="/themes/{{ $shop_theme }}/img/footer-img.png">
                             <p class="description">
@@ -381,7 +399,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-4 col-xs-4 footer-holder">
+                    <div class="col-md-4 col-sm-4 col-xs-12 footer-holder">
                         <div class="upper-mid">
                             <div class="upper-mid-title">INFORMATION</div>
                             <div class="upper-mid-link-container">
@@ -393,7 +411,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-4 col-xs-4 footer-holder">
+                    <div class="col-md-4 col-sm-4 col-xs-12 footer-holder">
                         <div class="upper-right">
                             <div class="upper-mid-title">CONTACT US TODAY</div>
                             <div class="upper-mid-title-2">PRINCIPAL OFFICE 2</div>

@@ -56,15 +56,37 @@ button:hover{
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 600;
 
+	.social-mob
+	{
+		float: left;
+		display: none;
+		span 
+		{
+			color: white;
+			font-size: 20px;
+			margin-right: 2px;
+
+			&:hover 
+			{
+				cursor: pointer;
+			}
+		}
+	
+
+		@media screen and (max-width: 768px)
+		{
+			display: inline-block;
+		}
+	}
+
 	.button-container{
 		float: right;
 
 		.social-media-container {
 			float: left;
-			@media screen and (max-width: 320px)
+			@media screen and (max-width: 768px)
 			{
-				float: unset;
-				display: inline-block;
+				display: none;
 			}
 			span {
 				color: white;
@@ -76,7 +98,6 @@ button:hover{
 				}
 			}
 		}
-
 		.login-container{
 			float: left;
 			@media screen and (max-width: 320px)

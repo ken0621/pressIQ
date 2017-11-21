@@ -18,7 +18,7 @@
 		<div class="container">
 		<!-- INFO -->
 			<div class="info-container row-no-padding clearfix">
-				<div class="col-md-4 col-sm-4 col-xs-4 col-padding">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="box1-container">
 						<div class="title-container">
 							<span class="info-icon"><img src="/themes/{{ $shop_theme }}/img/people-icon.png"></span>
@@ -32,22 +32,19 @@
 						<a href="/history"><div class="small-button">Read More</div></a>
 					</div>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4 col-padding">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="box2-container">
 						<div class="title-container">
 							<span class="info-icon"><img src="/themes/{{ $shop_theme }}/img/handshake-icon.png"></span>
 							<span class="info-title">Opportunity</span>	
 						</div>
-						<!-- <div class="context-container">							
-								<div>{!! get_content($shop_theme_info, "home", "home_top_middle_description") !!}</div>
-						</div> -->
 						<div class="context-container">							
 								{!! get_content($shop_theme_info, "home", "home_top_middle_description") !!}
 						</div>
 						<a href="/how_to_join"><div class="small-button">Know More</div></a>
 					</div>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4 col-padding">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="box3-container">
 						<div class="title-container">
 							<span class="info-icon"><img src="/themes/{{ $shop_theme }}/img/buah-merah-icon.png"></span>
@@ -283,19 +280,19 @@
 		<div class="container">
 			<div class="title-container">Events</div>
 			<div class="events-container row-no-padding clearfix">
-				<div class="col-md-8 col-sm-8 col-xs-6 events-holder">
+				<div class="col-md-8 col-sm-8 col-xs-12 events-holder">
 					<div class="per-event-container">
 						@if(count(get_front_news($shop_id)) > 0)
 							@foreach(limit_foreach(get_front_news($shop_id), 3) as $news)
 									<div class="per-event row clearfix">
-										<div class="col-md-4 col-sm-4">
+										<div class="col-md-4 col-sm-4 col-xs-4">
 											<div class="event-image-container">
 												<a href="/news?id={{ $news->post_id }}">
 													<img src="{{ $news->post_image }}">
 												</a>
 											</div>
 										</div>
-										<div class="col-md-8 col-sm-8">
+										<div class="col-md-8 col-sm-8 col-xs-8">
 											<div class="event-details-container">
 												<h1>
 													<a href="/news?id={{ $news->post_id }}">
@@ -318,7 +315,7 @@
 					</div>
 				</div>
 				<!-- FACEBOOK FANPAGE -->
-				<div class="col-md-4 col-sm-4 col-xs-6 fb-fanpage-holder">
+				<div class="col-md-4 col-sm-4 col-xs-12 fb-fanpage-holder">
 					<div class="fb-container">
 						<div class="container-title-header">Facebook Fanpage</div>
 						<div class="body-container">

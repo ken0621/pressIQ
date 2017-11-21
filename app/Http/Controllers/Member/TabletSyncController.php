@@ -540,7 +540,7 @@ class TabletSyncController extends Controller
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_position (position_id, position_name, daily_rate, position_created,archived, position_code,position_shop_id,created_at,updated_at) VALUES " . "(".$value->position_id.",'".$value->position_name."','".$value->daily_rate."','".$value->position_created."','".$value->archived."','".$value->position_code."','".$value->position_shop_id."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_position (position_id, position_name, daily_rate, position_created,archived, position_code,position_shop_id,created_at,updated_at) VALUES " . "(".$value->position_id.",'".$value->position_name."','0','".$value->position_created."','".$value->archived."','".$value->position_code."','".$value->position_shop_id."','".$value->created_at."','".$value->updated_at."')";
                 if($this->add_limiter($limit, $limit_ctr++))
                 {
                     break 1;

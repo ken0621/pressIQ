@@ -30,7 +30,14 @@ class ShopProductContent2Controller extends Shop
 
         if ($this->shop_theme == "3xcell") 
         {
-            $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
+            if(isset(Self::$customer_info->customer_id))
+            {
+                $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
+            }
+            else
+            {
+                $slot = null;
+            }
 
             foreach ($data["product"]["variant"] as $key => $value) 
             {

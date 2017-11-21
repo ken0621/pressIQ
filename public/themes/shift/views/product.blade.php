@@ -1,9 +1,9 @@
 @extends("layout")
 @section("content")
-<section class="header" style="background-image: url('/themes/{{ $shop_theme }}/img/product-bg.jpg')">
+<section class="header" style="background-image: url('{{ get_content($shop_theme_info, "products", "products_banner") }}')">
     <div class="container">
         <div class="title">Our <span>Products</span></div>
-        <div class="sub">Our brand is a call to action for everyone that an alternative, more superior option is available for you. And it is just a click away. Try everything that we offer and you will see that SHIFTing to our brand is the best decision for you.</div>
+        <div class="sub">{!!get_content($shop_theme_info, "products", "products_banner_context") !!}</div>
     </div>
 </section>
 <section class="main">

@@ -760,7 +760,7 @@ class TabletSyncController extends Controller
                                     ->get();
             foreach ($data as $key => $value) 
             {
-                $return[$key] = 'INSERT INTO tbl_invoice_log (shop_id, transaction_customer_id ,transaction_name, transaction_id, transaction_amount, date_created) VALUES (' . $value->shop_id . ','.$value->customer_id.', "customer_beginning_balance", 0,' . $value->balance . ', "'. Carbon::now() . '")';
+                $return[$key] = 'INSERT INTO tbl_invoice_log (shop_id, transaction_customer_id ,transaction_name, transaction_id, transaction_amount, date_created) VALUES (' . $value->shop_id . ','.$value->customer_id.', "customer_beginning_balance", 0,' . ($value->balance ? $value->balance : 0) . ', "'. Carbon::now() . '")';
 
             }   
         }

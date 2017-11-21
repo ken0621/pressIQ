@@ -1,10 +1,10 @@
 @extends("layout")
 @section("content")
 <div class="contact">
-    <header class="header" style="background-image: url('/themes/{{ $shop_theme }}/img/about-bg.jpg');">
+    <header class="header" style="background-image: url('{{ get_content($shop_theme_info, "contact", "contact_banner") }}');">
         <div class="container">
-        	<div class="first">We Are</div>
-        	<div class="second">Passionate</div>
+        	<div class="first">{{ get_content($shop_theme_info, "contact", "contact_banner_caption1") }}</div>
+        	<div class="second">{{ get_content($shop_theme_info, "contact", "contact_banner_caption2") }}</div>
         </div>
     </header>
     <section>
@@ -63,15 +63,15 @@
     				<div id="map"></div>
     				<div class="info-holder">
     					<div class="title"><img src="/themes/{{ $shop_theme }}/img/icon/location.png"> Find Us</div>
-    					<div class="desc">7825 Allison Way, Arvada, CO 80005, USA</div>
+    					<div class="desc">{{ get_content($shop_theme_info, "contact", "contact_address") }}</div>
     				</div>
     				<div class="info-holder">
     					<div class="title"><img src="/themes/{{ $shop_theme }}/img/icon/phone.png"> Call us today</div>
-    					<div class="desc">Support: +01 2345 6789</div>
+    					<div class="desc">{{ get_content($shop_theme_info, "contact", "contact_number") }}</div>
     				</div>
     				<div class="info-holder">
     					<div class="title"><img src="/themes/{{ $shop_theme }}/img/icon/mail.png"> Email us now</div>
-    					<div class="desc">contact@yourwebsite.com</div>
+    					<div class="desc">{{ get_content($shop_theme_info, "contact", "contact_email") }}</div>
     				</div>
     			</div>
     		</div>

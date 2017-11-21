@@ -1,6 +1,245 @@
 {
 	"home":
 	{
-		
+		"home_banner" :
+		{
+			"label":"Home Top Banner Image (998x750) Image Dimensions",
+			"type":"image",
+			"default":"/themes/shift/img/front-banner.jpg",
+			"size":"4"
+		},
+		"home_banner_caption1" :
+		{
+			"label":"Home Top Banner Caption Image",
+			"type":"image",
+			"default":"/themes/shift/img/top-logo.png",
+			"size":"4"
+		},
+		"home_banner_caption2" :
+		{
+			"label":"Home Slogan Text",
+			"type":"textbox",
+			"default":"SCENTS.HEALTH.INFORMATION.FASHION.TECHNOLOGY",
+			"size":"4"
+		},
+		"home_our_brand_context" :
+		{
+			"label":"Our Brand Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
+		},
+		"home_our_brand_icon1" :
+		{
+			"label":"Our Brand Icon 1",
+			"type":"image",
+			"default":"/themes/shift/img/icon/scent.png",
+			"size":"3"
+		},
+		"home_our_brand_icon2" :
+		{
+			"label":"Our Brand Icon 2",
+			"type":"image",
+			"default":"/themes/shift/img/icon/health.png",
+			"size":"2"
+		},
+		"home_our_brand_icon3" :
+		{
+			"label":"Our Brand Icon 3",
+			"type":"image",
+			"default":"/themes/shift/img/icon/info.png",
+			"size":"2"
+		},
+		"home_our_brand_icon4" :
+		{
+			"label":"Our Brand Icon 4",
+			"type":"image",
+			"default":"/themes/shift/img/icon/fashion.png",
+			"size":"2"
+		},
+		"home_our_brand_icon5" :
+		{
+			"label":"Our Brand Icon 5",
+			"type":"image",
+			"default":"/themes/shift/img/icon/technology.png",
+			"size":"3"
+		},
+		"home_our_brand_icon1_title" :
+		{
+			"label":"Icon 1 Title",
+			"type":"textbox",
+			"default":"SCENT",
+			"size":"3"
+		},
+		"home_our_brand_icon2_title" :
+		{
+			"label":"Icon 2 Title",
+			"type":"textbox",
+			"default":"HEALTH",
+			"size":"2"
+		},
+		"home_our_brand_icon3_title" :
+		{
+			"label":"Icon 3 Title",
+			"type":"textbox",
+			"default":"INFORMATION",
+			"size":"2"
+		},
+		"home_our_brand_icon4_title" :
+		{
+			"label":"Icon 4 Title",
+			"type":"textbox",
+			"default":"FASHION",
+			"size":"2"
+		},
+		"home_our_brand_icon5_title" :
+		{
+			"label":"Icon 5 Title",
+			"type":"textbox",
+			"default":"TECHNOLOGY",
+			"size":"3"
+		},
+		"home_your_opportunity_context" :
+		{
+			"label":"Your Opportunity Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
+		},
+		"home_division3_title" :
+		{
+			"label":"Division 3 Title",
+			"type":"textbox",
+			"default":"Our Belief",
+			"size":"4"
+		},
+		"home_division3_context" :
+		{
+			"label":"Division 3 Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"home_division3_image" :
+		{
+			"label":"Division 3 Image (455x455) Image Dimensions",
+			"type":"image",
+			"default":"/themes/shift/img/belief-bg.jpg",
+			"size":"4"
+		}
+	},
+	"company":
+	{
+		"company_banner" :
+		{
+			"label":"Company Top Banner Image (998x285) Image Dimensions",
+			"type":"image",
+			"default":"/themes/shift/img/about-bg.jpg",
+			"size":"4"
+		},
+		"company_banner_caption1" :
+		{
+			"label":"Company Banner Caption 1",
+			"type":"textbox",
+			"default":"We Are",
+			"size":"4"
+		},
+		"company_banner_caption2" :
+		{
+			"label":"Company Banner Caption 2",
+			"type":"textbox",
+			"default":"Passionate",
+			"size":"4"
+		},
+		"company_who_are_we_context" :
+		{
+			"label":"Company Who are we Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"company_vision_context" :
+		{
+			"label":"Company Vision Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"company_mission_context" :
+		{
+			"label":"Company Mission Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"company_division2_vp_context" :
+		{
+			"label":"Division 2 Vice President Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
+		}
+	},
+	"products":
+	{
+		"products_banner" :
+		{
+			"label":"Product Top Banner Image (998x305) Image Dimensions",
+			"type":"image",
+			"default":"/themes/shift/img/product-bg.jpg",
+			"size":"6"
+		},
+		"products_banner_context" :
+		{
+			"label":"Product Banner Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		}
+	},
+	"contact":
+	{
+		"contact_banner" :
+		{
+			"label":"Contact Top Banner Image (998x447) Image Dimensions",
+			"type":"image",
+			"default":"/themes/shift/img/about-bg.jpg",
+			"size":"4"
+		},
+		"contact_banner_caption1" :
+		{
+			"label":"Contact Banner Caption 1",
+			"type":"textbox",
+			"default":"We Are",
+			"size":"4"
+		},
+		"contact_banner_caption2" :
+		{
+			"label":"Contact Banner Caption 2",
+			"type":"textbox",
+			"default":"Passionate",
+			"size":"4"
+		},
+		"contact_address":
+		{
+			"label":"Contact Address",
+			"type":"textbox",
+			"default":"7825 Allison Way, Arvada, CO 80005, USA",
+			"size":"4"
+		},
+		"contact_number":
+		{
+			"label":"Contact Number",
+			"type":"textbox",
+			"default":"Support: +01 2345 6789",
+			"size":"4"
+		},
+		"contact_email":
+		{
+			"label":"Contact Email Address",
+			"type":"textbox",
+			"default":"contact@yourwebsite.com",
+			"size":"4"
+		}
 	}
 }

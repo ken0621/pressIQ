@@ -115,7 +115,9 @@
           <li><a data-toggle="tab" href="#tax-info">Tax info</a></li>
           <li><a data-toggle="tab" href="#payment-and-billing">Payment and billing</a></li>
           <li><a data-toggle="tab" href="#attachment">Attachment</a></li>
+          @if(!$pis)
           <li><a data-toggle="tab" href="#mlm">MLM</a></li>
+          @endif
           @if ($customer->ismlm == 2)
           <li><a data-toggle="tab" href="#ecomm">E-commerce</a></li>
           @endif

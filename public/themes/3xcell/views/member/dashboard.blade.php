@@ -260,6 +260,7 @@
         </div>
     </div>
 </div>
+
 <!-- Proceed 1 -->
 <div class="popup-proceed1">
     <div id="proceed-modal-1" class="modal fade">
@@ -299,6 +300,7 @@
           </div>
       </div>
   </div>
+
 <!-- MANUAL PLACING OF SLOT -->
 <div class="popup-verify-placement">
     <div id="slot-placement-modal" class="modal fade">
@@ -332,6 +334,7 @@
           </div>
       </div>
   </div>
+  
 @endsection
 
 @section("member_script")

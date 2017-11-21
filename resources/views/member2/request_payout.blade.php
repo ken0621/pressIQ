@@ -30,7 +30,7 @@
 	    </table>
 	</div>
 	<div class="modal-footer">
-		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+		<button type="button" class="btn btn-def-white btn-custom-white btn-custom-close" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
 		<button type="submit" class="btn btn-primary btn-custom-primary" type="button"><i class="fa fa-angle-double-right"></i> Request Payout</button>
 	</div>
 </form>

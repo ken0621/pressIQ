@@ -776,7 +776,8 @@ class Warehouse
         foreach($transaction_item_inventory as $key2 => $value2)
         {            
             $count = Tbl_warehouse_inventory::check_inventory_single($inventory_slip->warehouse_id, $value2['product_id'])->value('inventory_count');
-            $count_on_hand = $count + $value2["quantity"];
+            // $count_on_hand = $count + $value2["quantity"];
+            $count_on_hand = $count;
 
             if($allow_out_of_stock == true)
             {

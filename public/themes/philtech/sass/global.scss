@@ -268,7 +268,7 @@ body
 	position: fixed;
 	top: 0;
 	width: 100%;
-	z-index: 100;
+	z-index: 90;
 }
 
 
@@ -1646,9 +1646,4 @@ footer
 {
 	border: none;
 	background-color: #ff8500;
-}
-
-.disable-scroll
-{
-	overflow: hidden;
 }

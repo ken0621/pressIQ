@@ -32,7 +32,7 @@
         
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
-    <body class="pushmenu-push">
+    <body>
         <div class="loader" style="display: none;">
           <span><img src="/resources/assets/frontend/img/loader.gif"></span>
         </div>
@@ -199,6 +199,103 @@
 
         <!-- MOBILE HEADER -->
         <div class="mob-nav-wrap sticky">
+            <!-- PUSH MENU NAVIGATION -->
+            <nav class="pushmenu pushmenu-left">
+                @if($customer)
+                    <div class="space1"></div>
+                    <span>CATEGORIES</span>
+                    @if(isset($_categories))
+                        @foreach($_categories as $category)
+                            <div class="links">
+                                <div class="shop-container">
+                                    {{ $category['type_name'] }}
+                                </div>
+                                @if($category['subcategory'])
+                                    <div class="subshop-container">
+                                        @foreach($category['subcategory'] as $subcategory)
+                                            <ul>
+                                                <a href="/product?type={{ $subcategory['type_id'] }}">
+                                                    <li>
+                                                        {{ $subcategory['type_name'] }}
+                                                    </li>
+                                                </a>
+                                            </ul>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    @endif
+                    <div class="space2"></div>
+                    <span>BROWSE</span>
+                    <ul class="links">
+                            <a href="/"><li>HOME</li></a>
+                            <a href="/partners"><li>OUR MERCHANTS</li></a>
+                            <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
+                            <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
+                            <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
+                            <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
+                            <a href="/legalities"><li>LEGALITIES</li></a>
+                            <a href="/contact"><li>CONTACT US</li></a>
+                        </ul>
+                    <div class="space2"></div>
+                    <span>MEMBERS AREA</span>
+                    <ul class="links">
+                        <a href="/members"><li class="{{ Request::segment(1) == "members" ? "active" : "" }}" >DASHBOARD</li></a> 
+                        <a href="/members/profile"><li>PROFILE</li></a>
+                        @if($mlm_member)
+                        <a href="/members/genealogy?mode=binary"><li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">GENEALOGY</li></a>
+                        <a href="/members/report"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">REPORTS</li></a>
+                        <a href="/members/network"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">NETWORK LIST</li></a>
+                        <a href="/members/lead-list"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">LEAD LIST</li></a> 
+                        <a href="/members/wallet-encashment"><li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}">WALLET</li></a> 
+                            @if($customer)
+                                <a href="/members/logout"><li class="user-logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></li>
+                                </a>
+                            @endif
+                        @else
+                        @endif
+                    </ul>
+                @else
+                    <div class="space1"></div>
+                    <span>CATEGORIES</span>
+                    @if(isset($_categories))
+                        @foreach($_categories as $category)
+                            <div class="links">
+                                <div class="shop-container">
+                                    {{ $category['type_name'] }}
+                                </div>
+                                @if($category['subcategory'])
+                                    <div class="subshop-container">
+                                        @foreach($category['subcategory'] as $subcategory)
+                                            <ul>
+                                                <a href="/product?type={{ $subcategory['type_id'] }}">
+                                                    <li>
+                                                        {{ $subcategory['type_name'] }}
+                                                    </li>
+                                                </a>
+                                            </ul>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    @endif
+                    <div class="space2"></div>
+                    <span>BROWSE</span>
+                    <ul class="links">
+                        <a href="/"><li>HOME</li></a>
+                        <a href="/partners"><li>OUR MERCHANTS</li></a>
+                        <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
+                        <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
+                        <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
+                        <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
+                        <a href="/legalities"><li>LEGALITIES</li></a>
+                        <a href="/contact"><li>CONTACT US</li></a>
+                    </ul>
+                @endif
+            </nav>
+            <div id="overlay" onclick="off()"></div>
             <div class="subheader">
                 <div class="container">
                     @if($customer)
@@ -216,103 +313,7 @@
             </div>  
             <div class="main-header">
                 <div class="container">
-                    <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
-                    <!-- PUSH MENU NAVIGATION -->
-                    <nav class="pushmenu pushmenu-left">
-                        @if($customer)
-                            <div class="space1"></div>
-                            <span>CATEGORIES</span>
-                            @if(isset($_categories))
-                                @foreach($_categories as $category)
-                                    <div class="links">
-                                        <div class="shop-container">
-                                            {{ $category['type_name'] }}
-                                        </div>
-                                        @if($category['subcategory'])
-                                            <div class="subshop-container">
-                                                @foreach($category['subcategory'] as $subcategory)
-                                                    <ul>
-                                                        <a href="/product?type={{ $subcategory['type_id'] }}">
-                                                            <li>
-                                                                {{ $subcategory['type_name'] }}
-                                                            </li>
-                                                        </a>
-                                                    </ul>
-                                                @endforeach
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            @endif
-                            <div class="space2"></div>
-                            <span>BROWSE</span>
-                            <ul class="links">
-                                    <a href="/"><li>HOME</li></a>
-                                    <a href="/partners"><li>OUR MERCHANTS</li></a>
-                                    <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
-                                    <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
-                                    <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
-                                    <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
-                                    <a href="/legalities"><li>LEGALITIES</li></a>
-                                    <a href="/contact"><li>CONTACT US</li></a>
-                                </ul>
-                            <div class="space2"></div>
-                            <span>MEMBERS AREA</span>
-                            <ul class="links">
-                                <a href="/members"><li class="{{ Request::segment(1) == "members" ? "active" : "" }}" >DASHBOARD</li></a> 
-                                <a href="/members/profile"><li>PROFILE</li></a>
-                                @if($mlm_member)
-                                <a href="/members/genealogy?mode=binary"><li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">GENEALOGY</li></a>
-                                <a href="/members/report"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">REPORTS</li></a>
-                                <a href="/members/network"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">NETWORK LIST</li></a>
-                                <a href="/members/lead-list"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">LEAD LIST</li></a> 
-                                <a href="/members/wallet-encashment"><li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}">WALLET</li></a> 
-                                    @if($customer)
-                                        <a href="/members/logout"><li class="user-logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></li>
-                                        </a>
-                                    @endif
-                                @else
-                                @endif
-                            </ul>
-                        @else
-                            <div class="space1"></div>
-                            <span>CATEGORIES</span>
-                            @if(isset($_categories))
-                                @foreach($_categories as $category)
-                                    <div class="links">
-                                        <div class="shop-container">
-                                            {{ $category['type_name'] }}
-                                        </div>
-                                        @if($category['subcategory'])
-                                            <div class="subshop-container">
-                                                @foreach($category['subcategory'] as $subcategory)
-                                                    <ul>
-                                                        <a href="/product?type={{ $subcategory['type_id'] }}">
-                                                            <li>
-                                                                {{ $subcategory['type_name'] }}
-                                                            </li>
-                                                        </a>
-                                                    </ul>
-                                                @endforeach
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            @endif
-                            <div class="space2"></div>
-                            <span>BROWSE</span>
-                            <ul class="links">
-                                <a href="/"><li>HOME</li></a>
-                                <a href="/partners"><li>OUR MERCHANTS</li></a>
-                                <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
-                                <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
-                                <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
-                                <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
-                                <a href="/legalities"><li>LEGALITIES</li></a>
-                                <a href="/contact"><li>CONTACT US</li></a>
-                            </ul>
-                        @endif
-                    </nav>
+                    <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
                     <div class="mob-cart-container popup" size="lg" link="/cartv2"><img src="/themes/{{ $shop_theme }}/img/cart-mob.png"></div>
                     <div class="mob-logo-container"><a href="/"><img src="/themes/{{ $shop_theme }}/img/logo.png"></a></div>
                 </div>

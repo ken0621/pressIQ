@@ -227,9 +227,10 @@
         </li>
         <li class="breadcrumb-item active">My Dashboard</li>
       </ol>
-  
+
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
+    
     <footer class="sticky-footer">
       <div class="container">
         <div class="text-center">

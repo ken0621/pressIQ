@@ -417,6 +417,7 @@ class PayrollTimeSheet2Controller extends Member
 			
 			$_timesheet[$from]->default_remarks = $this->timesheet_default_remarks($_timesheet[$from]);
 			$_timesheet[$from]->daily_info = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db, $payroll_period_company_id);
+			
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
 		
@@ -426,6 +427,7 @@ class PayrollTimeSheet2Controller extends Member
 	public function timesheet_process_in_out($timesheet_db)
 	{
 		$_timesheet_record = null;
+
 		if($timesheet_db)
 		{
 			$_timesheet_record_db = $this->db_get_time_sheet_record_of_in_and_out($timesheet_db->payroll_time_sheet_id);
@@ -936,7 +938,7 @@ class PayrollTimeSheet2Controller extends Member
 	public function income_summary($period_company_id, $employee_id)
 	{
 
-		$data["date"] = $date = Tbl_payroll_period_company::sel($period_company_id)->value('payroll_period_start');
+		$data["date"]  = $date  = Tbl_payroll_period_company::sel($period_company_id)->value('payroll_period_start');
 		$data["group"] = $group = $this->db_get_current_employee_contract($employee_id, $date);
 
 		if(!$group)
@@ -963,7 +965,6 @@ class PayrollTimeSheet2Controller extends Member
 					$computation_type = "Daily Rate";
 				}
 			}
-
 		}		
 		else
 		{

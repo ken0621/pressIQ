@@ -11,10 +11,10 @@
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
 	            <div class="col-md-12">
-	            	<div class="title">NON-MEMBER | <span>DASHBOARD</span> </div>
+	            	<div class="title">Not Yet Activated | <span>DASHBOARD</span> </div>
 	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-bg.png');">
 	                    <div class="btn btn-text">
-	                        <div class="text-header1">Become A Member Now!</div>
+	                        <div class="text-header1">BE A FRANCHISEE NOW!</div>
 	                        <div class="text-header2">Opportunity awaits you. Purchase now and enjoy the perks of being a Philtech VIP.</div>
 	                    </div>
 	                    <div class="btn-container">

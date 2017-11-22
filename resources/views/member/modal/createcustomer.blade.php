@@ -7,6 +7,57 @@
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
     <input type="hidden" name="customer_status" value="{{$customer_status or 'approved'}}">
     <div class="form-horizontal">
+
+    @if($check_user == true)
+    <div class="form-group">
+      <div class="col-md-6">
+        <label for="">Company</label>
+        <input type="text" name="company" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label for="">Email</label>
+        <input type="email" name="email" class="form-control"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-6">
+        <div class="col-md-2 padding-lr-1">
+          <label>Title</label>
+          <input type="text" name="title" class="form-control auto-name title margin-l-0"/>
+        </div>
+        <div class="col-md-3 padding-lr-1">
+          <label>First name</label>
+          <input type="text" name="first_name" class="form-control auto-name first_name" value="{{$value or ''}}" required/>
+        </div>
+        <div class="col-md-3 padding-lr-1">
+          <label>Middle name</label>
+          <input type="text" name="middle_name" class="form-control auto-name middle_name"/>
+        </div>
+        <div class="col-md-3 padding-lr-1">
+          <label>Last name</label>
+          <input type="text" name="last_name" class="form-control auto-name last_name"/>
+        </div>
+        <div class="col-md-1 padding-lr-1">
+          <label>Suffix</label>
+          <input type="text" name="suffix" class="form-control auto-name suffix"/>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="col-md-4 padding-lr-1">
+          <label for="">Phone</label>
+          <input type="text" name="phone" class="form-control"/>
+        </div>
+        <div class="col-md-4 padding-lr-1">
+          <label for="">Mobile</label>
+          <input type="text" name="mobile" class="form-control"/>
+        </div>
+        <div class="col-md-4 padding-lr-1">
+          <label for="">Fax</label>
+          <input type="text" name="fax" class="form-control"/>
+        </div>
+      </div>
+    </div>
+    @else
     <div class="form-group">
       <div class="col-md-6">
         <div class="col-md-2 padding-lr-1">
@@ -55,6 +106,7 @@
         </div>
       </div>
     </div>
+    @endif
     <div class="form-group">
       <div class="col-md-6">
         <label for="">Display name as</label>

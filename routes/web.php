@@ -600,6 +600,7 @@ Route::any('/tablet/sales_receipt/create_submit','Member\TabletPISController@cre
 Route::any('/tablet/sales_receipt/update_submit','Member\TabletPISController@update_sales_receipt_submit');
 
 Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_submission');
+
 Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
 
 Route::any('/tablet/sync_data/{table}/{date}','Member\TabletSyncController@sync');

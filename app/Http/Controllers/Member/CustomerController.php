@@ -47,13 +47,6 @@ class CustomerController extends Member
         {
             $data['_customer'] = $this->customerlist();
 
-            //dd($data['_customer']);
-
-            if(Purchasing_inventory_system::check())
-            {
-                //dd(Purchasing_inventory_system::check());
-            }
-            
             if (Request::ajax()) 
             {
                 return view('member.customer.customer_tbl', $data)->render();  
@@ -200,6 +193,9 @@ class CustomerController extends Member
     	    $data['_customer'] = Tbl_customer::where('shop_id',$shop_id)->where('IsWalkin',0)->where('archived',0)->get();
     	    $data['_delivery_method'] = Tbl_delivery_method::where('archived',0)->get();
             $value = Request::input('value');
+
+            $data['check_user'] = Purchasing_inventory_system::check();
+            
             if($value || $value != '')
             {
                 $data["value"] = $value;

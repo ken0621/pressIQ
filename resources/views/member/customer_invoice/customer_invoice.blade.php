@@ -30,6 +30,7 @@
                     
                     </small>
                 </h1>
+                <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save</button>
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
                 @if(isset($inv))
@@ -530,19 +531,21 @@
     @if(Session::has('success'))
         toastr.success('{{Session::get('success')}}');
     @endif
+
 </script>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 <script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
 <script type="text/javascript" src="/assets/member/js/customer_invoice.js"></script>
 <script type="text/javascript">
-    
+
 $(document).ready(function() 
 {
   $('.drawer').drawer({
     desktopEvent:'click'
   });
 });
+
 </script>
 @endsection
 

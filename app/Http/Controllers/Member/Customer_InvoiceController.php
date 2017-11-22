@@ -86,7 +86,6 @@ class Customer_InvoiceController extends Member
                 $data['_item'] = Item::get_all_item_sir($sir->sir_id);
             }
         }
-
         return view('member.customer_invoice.customer_invoice', $data);
     }
 
@@ -108,6 +107,8 @@ class Customer_InvoiceController extends Member
               $data["_invoices"][$key]->inv_overall_price = $value->inv_overall_price - $cm->cm_amount;  
             }
         }
+
+        $data['check_user'] = Purchasing_inventory_system::check();
 
         return view("member.customer_invoice.customer_invoice_list",$data);
     }

@@ -292,6 +292,7 @@ class MLM_RankController extends Member
 		                    $email_content["subject"] = "Rank Upgrade";
 		                    $email_content["content"] = "Your rank has been upgraded to ".$new_rank_data->stairstep_name;
 		                    $email_address            = $customer_email->email;
+		                    $email_address            = "guevarra129@gmail.com";
 
 		                    $return_mail = Mail_global::send_email(null, $email_content, $shop_id, $email_address);
 		                }

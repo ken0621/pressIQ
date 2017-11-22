@@ -23,7 +23,7 @@ class TransactionController extends Member
         
         foreach($_transaction as $key => $transaction)
         {
-            $_list = Tbl_transaction_list::transaction()->where("tbl_transaction.payment_status",'paid')->where("transaction_id", $transaction->transaction_id)->orderBy("transaction_list_id", "asc")->get();
+            $_list = Tbl_transaction_list::where("transaction_id", $transaction->transaction_id)->orderBy("transaction_list_id", "asc")->get();
             $_transaction[$key]->display_balance = "<b>" .Currency::format($transaction->transaction_balance) . "</b>";
             $_transaction[$key]->transaction_origin_date = date("F d, Y - h:i A", strtotime($_list[0]->transaction_date_created));
             $_transaction[$key]->transaction_origin_status = $transaction->transaction_balance == 0 ? "COMPLETED" : "PENDING";

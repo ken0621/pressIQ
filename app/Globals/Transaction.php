@@ -506,7 +506,7 @@ class Transaction
     }
     public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0)
     {
-        $data = Tbl_transaction_list::where("tbl_transaction.payment_status",'paid')->where('tbl_transaction_list.shop_id',$shop_id);
+        $data = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id);
         
         if($transaction_id != 0)
         {

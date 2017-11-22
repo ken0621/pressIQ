@@ -36,12 +36,14 @@
 				<div style="font-weight: 700; font-size: 20px; line-height: 20px; margin-top: 5px;">ISSUED: 31/01/2017</div>
 			</div>
 			<div style="width: 100%; text-align: right; margin-top: 160px;">
+				@if($membership_code)
 				<div class="barcode" style="text-align: center;">
 					<div class="barcodeimg" style="background-color: #fff; padding: 7.5px 0;"><img src="{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/barcode?text={{ $membership_code }}&size=35"></div>
 					<div class="barcodetxt" style="font-size: 12px; margin-top: -7.5px; padding-bottom: 2px;">
 						<span>{{ $membership_code }}</span>
 					</div>
 				</div>
+				@endif
 			</div>
 		</div>
 	</div>
@@ -93,9 +95,9 @@
 			<div class="text-right" style="font-weight: 600; color: white; font-size: 12px;">Tampering invalidates the card.</div>
 		</div> --}}
 		<div style="color: #000; margin-top: 70px;">
-			<div style="margin-left: 115px;">{{$info->slot_created_date}}</div>
-			<div style="margin-top: 4px; margin-left: 83px;">{{$number}}</div>
-			<div style="width: 291px; margin-top: 5px; margin-left: 135px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $address }}</div>
+			<div style="margin-left: 115px;">{{$info->slot_created_date ? $info->slot_created_date : '&nbsp;'}}</div>
+			<div style="margin-top: 4px; margin-left: 83px;">{{$number ? $number : '&nbsp;'}}</div>
+			<div style="width: 291px; margin-top: 5px; margin-left: 135px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $address ? $address : '&nbsp;' }}</div>
 			<div style="margin-left: 320px; margin-top: 3px;"><small>(+63)9175422614</small></div>
 		</div>
 	</div>

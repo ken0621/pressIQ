@@ -24,6 +24,7 @@
                     <select class="form-control" name="card_status">
                         <option value="0">Pending Cards</option>
                         <option value="1">Printed Cards</option>
+                        <option value="2">Pre-printing Cards</option>
                     </select>
                 </div>
                 <div class="col-md-12">

@@ -48,7 +48,7 @@
     </style>
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
-<body class="pushmenu-push">
+<body>
 
     <div class="loader hide">
         <span><img src="/resources/assets/frontend/img/loader.gif"></span>
@@ -81,73 +81,75 @@
             @endif
         </div>
     </div>
+    <!-- MOBILE PUSH MENU -->
+    <nav class="pushmenu pushmenu-left">
+
+        @if($customer)
+        <div class="space1"></div>
+        <a href="/members/profile">
+           <div class="profile-img-container">
+                <div class="row-no-padding clearfix">
+                    <div class="col-xs-3">
+                        <div class="profile-img"><img src="{{ $profile_image }}"></div>
+                    </div>
+                    <div class="col-xs-9">
+                        <div class="text-holder">
+                            <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+                            <div class="subtext text-overflow">{{ $customer->email }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </a>
+        <div class="space1"></div>
+        <span>BROWSE</span>
+        <ul class="links">
+            <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>
+            <li class="nav-ext"> <a class="smoth-scroll" href="/#company-profile">Company Profile</a> </li>
+            {{-- <li> <a href="javascript:">Mission & Vision</a> </li> --}}
+            <li> <a href="javascript:">Contact Us</a> </li>
+        </ul>
+        
+        <div class="space2"></div>
+        <span>MEMBERS AREA</span>
+        <ul class="links">
+            <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">Dashboard</a> </li>
+            <li> <a href="/members/profile">Profile</a> </li>
+            @if($mlm_member)
+            {{-- <li> <a href="javascript:">Videos</a> </li> --}}
+            <li class="{{ Request::segment(2) == "products" ? "active" : "" }}"> <a href="/members/ebooks">Ebooks</a> </li>
+            <li class="{{ Request::segment(2) == "products" ? "active" : "" }}"> <a href="/members/videos">Products</a> </li>
+            <li class="{{ Request::segment(2) == "certificate" ? "active" : "" }}"> <a href="/members/certificate">Certificate</a> </li>
+            <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li>
+            <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">Reports</a> </li>
+            <li class="{{ Request::segment(2) == "lead-list" ? "active" : "" }}"> <a href="/members/lead-list">Lead List</a> </li>
+            <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">Wallet</a> </li>
+                @if($customer)
+                    <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                @endif
+            @else
+            @endif
+        </ul>
+        @else
+            <div class="space1"></div>
+            <span>BROWSE</span>
+            <ul class="links">
+                <li> <a href="/">Home</a> </li>
+                <li class="nav-ext"> <a class="smoth-scroll" href="/#company-profile">Company Profile</a> </li>
+                {{-- <li> <a href="javascript:">Mission & Vision</a> </li> --}}
+                <li> <a href="javascript:">Contact Us</a> </li>
+            </ul>
+        @endif
+    </nav>
+    <div id="overlay" onclick="off()"></div>
     <div class="header-container">
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-3">
                     @if(request()->segment(1) != "replicated")
-                    <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
+                    <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
                     @endif
-                    <nav class="pushmenu pushmenu-left">
 
-                        @if($customer)
-                        <div class="space1"></div>
-                        <a href="/members/profile">
-                           <div class="profile-img-container">
-                                <div class="row-no-padding clearfix">
-                                    <div class="col-xs-3">
-                                        <div class="profile-img"><img src="{{ $profile_image }}"></div>
-                                    </div>
-                                    <div class="col-xs-9">
-                                        <div class="text-holder">
-                                            <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
-                                            <div class="subtext text-overflow">{{ $customer->email }}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> 
-                        </a>
-                        <div class="space1"></div>
-                        <span>BROWSE</span>
-                        <ul class="links">
-                            <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>
-                            <li class="nav-ext"> <a class="smoth-scroll" href="/#company-profile">Company Profile</a> </li>
-                            {{-- <li> <a href="javascript:">Mission & Vision</a> </li> --}}
-                            <li> <a href="javascript:">Contact Us</a> </li>
-                        </ul>
-                        
-                        <div class="space2"></div>
-                        <span>MEMBERS AREA</span>
-                        <ul class="links">
-                            <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">Dashboard</a> </li>
-                            <li> <a href="/members/profile">Profile</a> </li>
-                            @if($mlm_member)
-                            {{-- <li> <a href="javascript:">Videos</a> </li> --}}
-                            <li class="{{ Request::segment(2) == "products" ? "active" : "" }}"> <a href="/members/ebooks">Ebooks</a> </li>
-                            <li class="{{ Request::segment(2) == "products" ? "active" : "" }}"> <a href="/members/videos">Products</a> </li>
-                            <li class="{{ Request::segment(2) == "certificate" ? "active" : "" }}"> <a href="/members/certificate">Certificate</a> </li>
-                            <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li>
-                            <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">Reports</a> </li>
-                            <li class="{{ Request::segment(2) == "lead-list" ? "active" : "" }}"> <a href="/members/lead-list">Lead List</a> </li>
-                            <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">Wallet</a> </li>
-                                @if($customer)
-                                    <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
-                                @endif
-                            @else
-                            @endif
-                        </ul>
-                        @else
-                            <div class="space1"></div>
-                            <span>BROWSE</span>
-                            <ul class="links">
-                                <li> <a href="/">Home</a> </li>
-                                <li class="nav-ext"> <a class="smoth-scroll" href="/#company-profile">Company Profile</a> </li>
-                                {{-- <li> <a href="javascript:">Mission & Vision</a> </li> --}}
-                                <li> <a href="javascript:">Contact Us</a> </li>
-                            </ul>
-                        @endif
-
-                    </nav>
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/">
                             <img src="/themes/{{ $shop_theme }}/img/header-logo.png">

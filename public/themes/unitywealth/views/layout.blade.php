@@ -17,7 +17,7 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500" rel="stylesheet">
     <!-- GLOBAL CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css?version=2">
     <!-- VIDEO LIGHTBOX -->
     <link rel="stylesheet" type="text/css" media="all" href="/themes/{{ $shop_theme }}/assets/lity/assets/prism.css">
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/lity/dist/lity.css">
@@ -243,7 +243,7 @@
     
     @include("frontend.gfoot")
     {{-- GLOBALS --}}
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js?version=2"></script>
     <!-- COUNTDOWN TIMER -->
     {{-- <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.backstretch.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.countdown.min.js"></script>

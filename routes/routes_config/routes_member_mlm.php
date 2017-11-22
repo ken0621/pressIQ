@@ -340,6 +340,8 @@ Route::post('member/mlm/developer/modify_slot', 'Member\MlmDeveloperController@m
 
 Route::any('member/mlm/developer/allow_multiple_slot', 'Member\MlmDeveloperController@allow_multiple_slot');
 
+Route::any('member/mlm/developer/tag_as_ambassador', 'Member\MlmDeveloperController@tag_as_ambassador');
+
 
 
 Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');

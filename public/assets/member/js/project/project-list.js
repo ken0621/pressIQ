@@ -44,13 +44,33 @@ function project_list()
 		{
 			var project_id = $(e.currentTarget).closest("tr").attr("project_id");
 
-			if(confirm("Are you sure you want to archive"))
+			var action = "";
+			if($('.action-archive').text()[0]=='A')
+			{
+				action="archive";
+			}
+			else
+			{
+				action="restore";
+			}
+
+			if(confirm("Are you sure you want to "+action))
 			{
 				action_table_loader();
 
+				var url = "";
+				if(action=='archive')
+				{
+					url = "/member/project/project_list/archive";
+				}
+				else
+				{
+					url = "/member/project/project_list/restore";
+				}
+
 				$.ajax(
 				{
-					url:"/member/project/project_list/archive",
+					url: url,
 					data:{ 'project_id':project_id },
 					type:"get",
 					success: function(data)

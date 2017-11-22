@@ -274,7 +274,7 @@
 <!--  Enter a code -->
 <div class="popup-enter-a-code">
     <div id="enter-a-code-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
+        <div class="modal-md modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

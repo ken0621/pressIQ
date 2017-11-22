@@ -154,13 +154,14 @@ $text-dark: #272c2f;
 		.btn-shift-use-pcode
 		{
 			@include transition(0.2s);
+			border-radius: 25px;
 			background-color: #D4B044;
 			color: #fff;
 
-			&:hover
+			/* &:hover
 			{
 				opacity: 0.8;
-			}
+			} */
 		}
 	}
 
@@ -360,21 +361,10 @@ $text-dark: #272c2f;
 	}
 }
 
-.modal-open
+/* .modal-open
 {
 	overflow-x: auto;
-}
-
-.modal-header
-{
-	background-color: #191919;
-	color: #fff;
-
-	.close
-	{
-		color: #fff;
-	}
-}
+} */
 
 /* Success */
 .popup-success

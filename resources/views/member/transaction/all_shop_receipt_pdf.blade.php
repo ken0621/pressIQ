@@ -63,7 +63,9 @@
                 @if($customer_address)
                 <div class="detail-row"><strong>Shipping Address :</strong> {{ $customer_address->customer_street }} {{ $customer_address->customer_state }} {{ $customer_address->customer_city }} {{ $customer_address->customer_zipcode }}</div>
                 @endif
+                @if($customer_info)
                 <div class="detail-row"><strong>TIN :</strong> {{ $customer_info->tin_number }}</div>
+                @endif
             </div>
             <div class="sub-title">INVOICE DETAILS:</div>
             <div class="holder invoice-details">

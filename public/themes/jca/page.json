@@ -302,7 +302,6 @@
 			"default":"/themes/jca/img/product&services-003.png",
 			"size":"3"
 		}
-
 	},
 	"terms_and_conditions":
 	{
@@ -319,6 +318,30 @@
 			"type":"tinymce",
 			"default":"",
 			"size":"12"
+		}
+	},
+	"footer_details":
+	{
+		"footer_details_address" :
+		{
+			"label":"Company Address Details",
+			"type":"textbox",
+			"default":"Unit 810 8/F Raffles Corporate Center, F. Ortigas Ave., Ortigas Center, San Antonio, Pasig City",
+			"size":"4"
+		},
+		"footer_details_number" :
+		{
+			"label":"Company Phone Number",
+			"type":"textbox",
+			"default":"(02)631-6997 / 0926-649-4134 / 0946-561-9714",
+			"size":"4"
+		},
+		"footer_email_address" :
+		{
+			"label":"Company Email Address",
+			"type":"textbox",
+			"default":"jcawellnessinternationalcorp@gmail.com",
+			"size":"4"
 		}
 	}
 }

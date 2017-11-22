@@ -197,7 +197,7 @@
                         <div class="footer-img-container"><img src="/themes/{{ $shop_theme }}/img/logo-inverted.png"></div>
                         <div class="footer-profile-content">
                             <p>
-                                Unity wealth is an affiliate marketing that provides digital training to help people on how  to earn money online and how to be an effective online entrepreneur such as eBooks and video tutorials. 
+                                {{ get_content($shop_theme_info, "footer-details", "footer_company_profile") }} 
                             </p>
                         </div>
                     </div>
@@ -223,10 +223,10 @@
                                <span></span> 
                             </p>
                             <p>
-                               <span>Phone:&nbsp;&nbsp;</span><span>0990 - 000 - 0000</span> 
+                               <span>Phone:&nbsp;&nbsp;</span><span>{{ get_content($shop_theme_info, "footer-details", "footer_phone_number") }}</span> 
                             </p>
                             <p>
-                                <span>Email Address:&nbsp;&nbsp;</span><span>youremailaddresshere@gmail.com</span>
+                                <span>Email Address:&nbsp;&nbsp;</span><span>{{ get_content($shop_theme_info, "footer-details", "footer_email_address") }}</span>
                             </p>
                         </div>
                     </div>

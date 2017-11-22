@@ -23,7 +23,7 @@ class TransactionController extends Member
         
         foreach($_transaction as $key => $transaction)
         {
-            $_list = Tbl_transaction_list::where("transaction_id", $transaction->transaction_id)->orderBy("transaction_list_id", "asc")->get();
+            $_list = Tbl_transaction_list::transaction()->where("tbl_transaction.payment_status",'paid')->where("transaction_id", $transaction->transaction_id)->orderBy("transaction_list_id", "asc")->get();
             $_transaction[$key]->display_balance = "<b>" .Currency::format($transaction->transaction_balance) . "</b>";
             $_transaction[$key]->transaction_origin_date = date("F d, Y - h:i A", strtotime($_list[0]->transaction_date_created));
             $_transaction[$key]->transaction_origin_status = $transaction->transaction_balance == 0 ? "COMPLETED" : "PENDING";
@@ -104,8 +104,7 @@ class TransactionController extends Member
         $data['customer_info']       = Transaction::getCustomerInfoTransaction($data['list']->transaction_id);
         $data['customer_address']    = Transaction::getCustomerAddressTransaction($data['list']->transaction_id);
 
-        $data['_codes']    = Transaction::get_transaction_item_code($transaction_list_id);
-
+        $data['_codes']    = Transaction::get_transaction_item_code($transaction_list_id, $this->user_info->shop_id);
 
         $html = view("member.transaction.all_shop_receipt_pdf", $data);
         $pdf = Pdf_global::show_pdfv2($html);

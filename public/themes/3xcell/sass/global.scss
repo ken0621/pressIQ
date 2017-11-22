@@ -56,15 +56,37 @@ button:hover{
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 600;
 
+	.social-mob
+	{
+		float: left;
+		display: none;
+		span 
+		{
+			color: white;
+			font-size: 20px;
+			margin-right: 2px;
+
+			&:hover 
+			{
+				cursor: pointer;
+			}
+		}
+	
+
+		@media screen and (max-width: 768px)
+		{
+			display: inline-block;
+		}
+	}
+
 	.button-container{
 		float: right;
 
 		.social-media-container {
 			float: left;
-			@media screen and (max-width: 320px)
+			@media screen and (max-width: 768px)
 			{
-				float: unset;
-				display: inline-block;
+				display: none;
 			}
 			span {
 				color: white;
@@ -76,7 +98,6 @@ button:hover{
 				}
 			}
 		}
-
 		.login-container{
 			float: left;
 			@media screen and (max-width: 320px)
@@ -139,30 +160,40 @@ button:hover{
 .header-container{
 	position: relative;
 	background-color: #fff;
-	@media screen and (max-width: 900px)
+
+	.image-logo-holder
 	{
-		padding-bottom: 12px;
+		max-width: 182px;
+
+		img 
+		{
+			width: 100%;
+		}
 	}
-	@media screen and (max-width: 768px)
-	{
-		padding-bottom: 12px;
-	}
-	@media screen and (max-width: 600px)
-	{
-		padding-bottom: 12px;
-	}
-	@media screen and (max-width: 375px)
-	{
-		padding-bottom: 12px;
-	}
-	@media screen and (max-width: 360px)
-	{
-		padding-bottom: 12px;
-	}
-	@media screen and (max-width: 320px)
-	{
-		padding-bottom: 12px;
-	}
+	// @media screen and (max-width: 900px)
+	// {
+	// 	padding-bottom: 12px;
+	// }
+	// @media screen and (max-width: 768px)
+	// {
+	// 	padding-bottom: 12px;
+	// }
+	// @media screen and (max-width: 600px)
+	// {
+	// 	padding-bottom: 12px;
+	// }
+	// @media screen and (max-width: 375px)
+	// {
+	// 	padding-bottom: 12px;
+	// }
+	// @media screen and (max-width: 360px)
+	// {
+	// 	padding-bottom: 12px;
+	// }
+	// @media screen and (max-width: 320px)
+	// {
+	// 	padding-bottom: 12px;
+	// }
 
 	nav{
 		a.active{
@@ -328,11 +359,7 @@ button:hover{
 	text-align: center;
 	@media screen and (max-width: 991px)
 	{
-		> a
-		{
-			display: inline-block;
-			float: left;
-		}
+		display: none;
 	}
 	&:hover{
 		cursor: pointer;
@@ -357,6 +384,22 @@ button:hover{
 				margin: 5px 0;
 			}
 		}
+	}
+}
+
+.image-logo-mob
+{
+	display: none;
+	max-width: 180px;
+	margin: auto;
+	img 
+	{
+		width: 100%;
+	}
+
+	@media screen and (max-width: 991px)
+	{
+		display: block;
 	}
 }
 
@@ -458,6 +501,11 @@ button:hover{
 			.upper-mid {
 				padding: 0px 20px 0px 20px;
 
+				@media screen and (max-width: 425px)
+				{
+					padding-left: 0;
+				}
+
 				.upper-mid-title {
 					padding: 10px 0px 10px 0px;
 					border-bottom: 1px solid rgba(255,255,255, 0.3);
@@ -478,6 +526,11 @@ button:hover{
 			}
 			.upper-right {
 				padding-left: 20px;
+
+				@media screen and (max-width: 425px)
+				{
+					padding-left: 0;
+				}
 
 				.upper-mid-title {
 					padding: 10px 0px 10px 0px;

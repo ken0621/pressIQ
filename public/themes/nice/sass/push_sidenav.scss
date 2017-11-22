@@ -9,7 +9,7 @@ $bold: 700;
 .pushmenu 
 { 
     /*this is the nav*/
-     background: #48b920;
+     background: #02295E;
      text-align: left;
      width: 300px;
      height: 100%;
@@ -41,9 +41,9 @@ $bold: 700;
         color: #fff;
         padding-left: 30px;
 
-        @media screen and (max-width: 414px)
+        @media screen and (max-width: 768px)
         {
-            font-size: 16px;
+            font-size: 15px;
         }
     }
 
@@ -133,7 +133,7 @@ $bold: 700;
             //padding: 5px;
         }
 
-        @media screen and (max-width: 414px)
+        @media screen and (max-width: 768px)
         {
             a
             {
@@ -188,7 +188,7 @@ $bold: 700;
 
 /* .links li a:hover:after { width: 100%; } */
 
-.links li:active { background-color: #1D5BC6; }
+.links li:active { background-color: #EDAC0E; }
 
 .pushmenu-left
 { 
@@ -255,12 +255,11 @@ $bold: 700;
             padding: 7.5px 12px 7.5px 12px;
             margin-right: auto;
             margin-top: 20px;
-            float: left;
 
             .fa
             {
                 display: block;
-                color: #1D5BC6;
+                color: #02295E;
                 font-size: 30px;
             }
 
@@ -287,24 +286,30 @@ $bold: 700;
 
  @media screen and (max-width: 768px)
  {
-    .header-container 
+    /* .header-container 
     {
         padding-bottom: 0px;
+    } */
+
+    #nav_list
+    {
+        padding-bottom: 25px;
+        margin-top: 5px;
     }
 
     .image-logo-holder
     {
-        margin-top: -65px;
-        margin-left: 250px;
+        margin-left: 265px;
+        margin-top: -60px;
     }
 }
 
 @media screen and (max-width: 414px)
 {
-
     .image-logo-holder
     {
-        margin-left: 110px;
+        margin-left: 125px;
+        margin-top: -65px;
     }
 }
 
@@ -312,22 +317,36 @@ $bold: 700;
 {
     .image-logo-holder
     {
-        margin-left: 110px;
+        margin-left: 125px;
+        margin-top: -65px;
     }
 }
 
 @media screen and (max-width: 375px)
 {
+    #nav_list .fa 
+    {
+        font-size: 25px;
+    }
+
     .image-logo-holder
     {
-        margin-left: 95px;
+        margin-left: 105px;
+        margin-top: -65px;
     }
 }
 
 @media screen and (max-width: 320px)
 {
-    .image-logo-holder
+    #nav_list
     {
-        margin-left: 65px;
+        padding-bottom: 25px;
+        margin-top: 0px;
     }
+
+   .image-logo-holder 
+   {
+       margin-left: 85px;
+       margin-top: -60px;
+   }
 }

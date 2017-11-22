@@ -35,6 +35,7 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_email_template;
 use App\Models\Tbl_transaction_list;
+use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_mlm_slot_bank;
 use App\Models\Tbl_mlm_slot_coinsph;
@@ -1494,6 +1495,21 @@ class ShopMemberController extends Shop
         $data['page'] = "Redeemable";
         $data['_redeemable'] = Tbl_item_redeemable::where("archived",0)->get();
         return (Self::load_view_for_members("member.redeemable",$data));
+    }
+    public function getCodevault()
+    {
+        $data['page'] = "Code Vault";
+        $query = Tbl_transaction_list::CodeVaultTransaction();
+        $q = $query->where("tbl_transaction_list.shop_id",$this->shop_info->shop_id);
+        $data['_codes'] = $q->where("item_in_use","unused")->get();
+        return (Self::load_view_for_members("member.code-vault",$data));
+    }
+    public function getUsecode()
+    {
+        $data['page'] = "Use Code";
+        $data['pin'] = request("pin");
+        $data['activation'] = request("activation");
+        return view("member.use_code",$data);
     }
     public function getReport()
     {

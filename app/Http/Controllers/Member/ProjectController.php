@@ -57,5 +57,10 @@ class ProjectController extends Member
         $update["archived"] = 1;
         Tbl_project::where("project_id", request("project_id"))->update($update);
     }
+    public function restore()
+    {
+        $update["archived"] = 0;
+        Tbl_project::where("project_id", request("project_id"))->update($update);
+    }
 
 }

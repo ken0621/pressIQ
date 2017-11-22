@@ -1203,3 +1203,12 @@ include_once('routes_config/routes_payroll_employee.php');
 Route::get('/ref/{id}', 'Shop\LeadController@ref');
 Route::get('/{id}', 'Shop\LeadController@ref');
 
+
+// Item Redeemable
+Route::get('member/item/redeemable','Member\RedeemableItemController@index');
+Route::get('member/item/redeemable/add','Member\RedeemableItemController@add');
+Route::post('member/item/redeemable/add','Member\RedeemableItemController@submit_add');
+Route::get('member/item/redeemable/redeemable_table', 'Member\RedeemableItemController@table');
+Route::get('member/item/redeemable/archive', 'Member\RedeemableItemController@archive');
+Route::get('member/item/redeemable/modify','Member\RedeemableItemController@modify');
+Route::post('member/item/redeemable/modify','Member\RedeemableItemController@submit_modify');

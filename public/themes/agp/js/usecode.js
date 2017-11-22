@@ -22,15 +22,7 @@ function usecode()
 			var pin = $(e.currentTarget).closest("tr").attr("pin");
 			var activation = $(e.currentTarget).closest("tr").attr("activation");
 
-			$.ajax(
-			{
-				url: "/members/usecode",
-				type: "get",
-				success: function(data)
-				{
-					action_load_link_to_modal('/members/usecode?pin='+pin+"&activation="+activation, 'md');
-				}
-			});
+			action_load_link_to_modal('/members/usecode?pin='+pin+"&activation="+activation, 'md');
 
 		});
 	}

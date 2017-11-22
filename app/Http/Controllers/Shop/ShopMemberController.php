@@ -1500,8 +1500,12 @@ class ShopMemberController extends Shop
     {
         $data['page'] = "Code Vault";
         $query = Tbl_transaction_list::CodeVaultTransaction();
-        $q = $query->where("tbl_transaction_list.shop_id",$this->shop_info->shop_id);
+
+        $data['customer_id'] = Self::$customer_info->customer_id;
+
+        $q = $query->where("tbl_transaction.transaction_reference_id",Self::$customer_info->customer_id);
         $data['_codes'] = $q->where("item_in_use","unused")->get();
+
         return (Self::load_view_for_members("member.code-vault",$data));
     }
     public function getUsecode()

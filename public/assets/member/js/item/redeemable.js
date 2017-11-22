@@ -94,15 +94,9 @@ function redeemable()
 		$("body").on('click','.action-modify',function(e)
 		{
 			var id = $(e.currentTarget).closest("tr").attr("id");
-			$.ajax(
-			{
-				url: "/member/item/redeemable/modify",
-				type: "get",
-				success: function(data)
-				{
-					action_load_link_to_modal('/member/item/redeemable/modify?item_redeemable_id='+id, 'lg');
-				}
-			});
+
+			action_load_link_to_modal('/member/item/redeemable/modify?item_redeemable_id='+id, 'lg');
+
 		});
 	}
 	function event_search()

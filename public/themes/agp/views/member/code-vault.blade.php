@@ -8,7 +8,7 @@
 			</div>
 			<div class="text">
 				<div class="name">{{$page}}</div>
-				<div class="sub">All rewards logs are shown here. </div>
+				<div class="sub">{{$customer_id}}</div>
 			</div>
 		</div>
 		<div class="right">

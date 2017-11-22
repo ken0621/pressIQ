@@ -342,6 +342,69 @@
 			"type":"textbox",
 			"default":"jcawellnessinternationalcorp@gmail.com",
 			"size":"4"
+		},
+		"footer_marketing_plan" :
+		{
+			"label":"Marketing Plan Image",
+			"type":"image",
+			"default":"/themes/jca/img/overview/marketing-plan.jpg",
+			"size":"3"
+		},
+		"footer_packages" :
+		{
+			"label":"Packages",
+			"type":"image",
+			"default":"/themes/jca/img/overview/packages.jpg",
+			"size":"3"
+		},
+		"footer_service_packages" :
+		{
+			"label":"Service Packages",
+			"type":"image",
+			"default":"/themes/jca/img/overview/service-packages.jpg",
+			"size":"3"
+		},
+		"footer_product_packages" :
+		{
+			"label":"Product Packages",
+			"type":"image",
+			"default":"/themes/jca/img/overview/product-packages.jpg",
+			"size":"3"
+		},
+		"footer_sales_commission" :
+		{
+			"label":"Sales Commission",
+			"type":"image",
+			"default":"/themes/jca/img/overview/sales-commission.jpg",
+			"size":"3"
+		},
+		"footer_override_sales_commission" :
+		{
+			"label":"Override Sales Commission",
+			"type":"image",
+			"default":"/themes/jca/img/overview/overide-sales-comission.jpg",
+			"size":"3"
+		},
+		"footer_product_portfolio1" :
+		{
+			"label":"Swiss Apple Stem Cell Serum",
+			"type":"image",
+			"default":"/themes/jca/img/product-portfolio/p-serum.jpg",
+			"size":"3"
+		},
+		"footer_product_portfolio2" :
+		{
+			"label":"Swiss Apple Stem Cell Soap with Glutathione and Collagen",
+			"type":"image",
+			"default":"/themes/jca/img/product-portfolio/p-soap.jpg",
+			"size":"3"
+		},
+		"footer_product_portfolio3" :
+		{
+			"label":"Stem Cell Therapy- The Anti-Aging and Rejuvenation Therapy",
+			"type":"image",
+			"default":"/themes/jca/img/product-portfolio/p-services.jpg",
+			"size":"3"
 		}
 	}
 }

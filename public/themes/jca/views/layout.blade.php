@@ -168,19 +168,19 @@
                                     <div class="icon-holder">
                                         <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/location-logo.png">
                                     </div>
-                                    <p class="footer-details">Unit 810 8/F Raffles Corporate Center, F. Ortigas Ave., Ortigas Center, San Antonio, Pasig City</p>
+                                    <p class="footer-details">{{ get_content($shop_theme_info, "footer_details", "footer_details_address") }}</p>
                                 </div>
                                 <div class="jca-footer-details-container">
                                     <div class="icon-holder">
                                         <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/telephone-logo.png">
                                     </div>
-                                    <p class="footer-details">(02)631-6997&nbsp;/&nbsp;0926-649-4134&nbsp;/&nbsp;0946-561-9714</p>
+                                    <p class="footer-details">{{ get_content($shop_theme_info, "footer_details", "footer_details_number") }}</p>
                                 </div>
                                 <div class="jca-footer-details-container">
                                     <div class="icon-holder">
                                         <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/mail-logo.png">
                                     </div>
-                                    <p class="footer-details">jcawellnessinternationalcorp@gmail.com</p>
+                                    <p class="footer-details">{{ get_content($shop_theme_info, "footer_details", "footer_email_address") }}</p>
                                 </div>
                             </div>
                         </div>
@@ -212,27 +212,27 @@
                             </div>
                             <div class="jca-footer-details-container">
 
-                                <a href="/themes/{{ $shop_theme }}/img/overview/marketing-plan.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_marketing_plan") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Marketing Plan</p>
                                 </a>
                                 
-                                <a href="/themes/{{ $shop_theme }}/img/overview/packages.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_packages") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Packages</p>
                                 </a>
                                 
-                                <a href="/themes/{{ $shop_theme }}/img/overview/service-packages.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_service_packages") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Service Packages</p>
                                 </a>
 
-                                <a href="/themes/{{ $shop_theme }}/img/overview/product-packages.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_packages") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Product Packages</p>
                                 </a>
                                 
-                                <a href="/themes/{{ $shop_theme }}/img/overview/sales-commission.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_sales_commission") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Sales Commission</p>
                                 </a>
 
-                                <a href="/themes/{{ $shop_theme }}/img/overview/overide-sales-comission.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_override_sales_commission") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Overide Sales Commission</p>
                                 </a>
 
@@ -247,13 +247,13 @@
                                 <p class="footer-title">Product Portfolio</p>
                             </div>
                             <div class="jca-footer-details-container">
-                                <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-serum.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_portfolio1") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Swiss Apple Stem Cell Serum</p>
                                 </a>
-                                <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-soap.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_portfolio2") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Swiss Apple Stem Cell Soap with Glutathione and Collagen</p>
                                 </a>
-                                <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-services.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_portfolio3") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Stem Cell Therapy- The Anti-Aging and Rejuvenation Therapy</p>
                                 </a>
                             </div>

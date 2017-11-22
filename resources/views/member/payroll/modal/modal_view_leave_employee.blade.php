@@ -1,4 +1,5 @@
 <!-- Change action, name and function-->
+<div class="leave_whole">
 <form class="global-submit" role="form" action="/member/payroll/leave/modal_save_leave_temp" method="POST">
 
 		<button type="button" class="close" data-dismiss="modal" style="margin-right: 15px;">&times;
@@ -49,7 +50,7 @@
 												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_leave_action/{{$dat->payroll_leave_employee_id}}/reset/{{$dat->remaining_leave}}" size="sm"><i class="fa  fa-recycle"></i>&nbsp;Reset</a>
 											</li>
 											<li>
-												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_leave_action/{{$dat->payroll_leave_employee_id}}/resethistory" size="sm"><i class="fa fa-history"></i>&nbsp;Reset history</a>
+												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_leave_action/{{$dat->payroll_leave_employee_id}}/resethistory/{{$dat->remaining_leave}}" size="sm"><i class="fa fa-history"></i>&nbsp;Reset history</a>
 											</li>
 										</ul>
 									</div>
@@ -69,4 +70,5 @@
   </div>
 
 </form>
-<script type="text/javascript" src="/assets/member/js/payroll/modal_create_leave_temp.js"></script>
+</div>
+<script type="text/javascript" src="/assets/member/js/payroll/modal_create_leave_tempv2.js"></script>

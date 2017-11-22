@@ -154,6 +154,7 @@ class Tbl_payroll_leave_schedulev2 extends Model
 			 $query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
              ->select(DB::raw('(tbl_payroll_leave_employee_v2.payroll_leave_temp_hours + (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_leave_schedulev2.consume))) as total_new_leave'))
 			 ->where('tbl_payroll_leave_schedulev2.payroll_leave_employee_id',$payroll_leave_employee_id)
+			 ->where('tbl_payroll_leave_schedulev2.payroll_leave_schedule_archived',0)
 			 ->whereBetween('tbl_payroll_leave_schedulev2.payroll_schedule_leave', $date);  
 	}
 

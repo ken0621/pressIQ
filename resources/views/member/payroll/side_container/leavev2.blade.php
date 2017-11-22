@@ -63,6 +63,48 @@
 
 		  </div> 
 
+		  	<div id="archived-leave_temp" class="tab-pane fade">
+	  		  <div class="load-data" target="value-id-2">
+				<div id="value-id-2">
+				 	<table class="table table-condensed table-bordered">
+				  		<thead>
+				  			<tr>
+				  				<th style="text-align: center;">Leave Name</th>
+				  				<th style="text-align: center;">Used Leave</th> 
+				  				<th style="text-align: center">Action</th>
+				  			</tr>
+				  		</thead>
+				  		<tbody>
+				  			@foreach($_archived as $archive)
+				  			<tr style="text-align: center;">
+
+				  				<td>{{$archive->payroll_leave_temp_name}}</td>
+				  				<td><a href="#" class="popup" link="/member/payroll/leave/v2/modal_view_leave_employee/{{$archive->payroll_leave_temp_id}}" size="lg">View Employee</a></td>
+
+				  				<td class="text-center"> 
+				  					<div class="dropdown">
+										<button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu dropdown-menu-custom">
+											<li>
+												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_edit_leave_tempv2/{{$archive->payroll_leave_temp_id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+											</li>
+											<li>
+												<a href="#" class="popup" link="#" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Restore</a>
+											</li>
+										</ul>
+									</div>
+				  				</td>
+
+				  			</tr>
+				  			@endforeach
+				  		</tbody>
+				  	</table>
+				  	<div class="pagination"> {!! $_archived->render() !!} </div>
+			  	</div>
+		  	</div>
+		  </div>
+
   </div>
 </div>
 

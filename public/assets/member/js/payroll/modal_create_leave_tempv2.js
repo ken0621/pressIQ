@@ -47,6 +47,35 @@ function modal_create_leave_tempv2()
 
 	this.load_employee_tagv2 = function()
 	{
+		$(".tbl-tag").html('<tr><td colspan="3" class="text-center">'+misc('loader') + '</td></tr>');
+		$.ajax({
+			url 	: 	"/member/payroll/leave/v2/get_leave_tag_employeev2",
+			type 	: 	"POST",
+			data 	: 	{
+				_token:misc('_token')
+			},
+			success : 	function(result)
+			{
+				result = JSON.parse(result);
+				var html = "";
+
+				$(result.new_record).each(function(index, emp)
+				{			
+							html += tbl_tag(emp);
+				});
+				$(".tbl-tag").html(html);
+				event_time_entry();
+				remove_tag();
+			},
+			error 	: 	function(err)
+			{
+				error_function();
+			}
+		});
+	}
+
+	this.load_for_edit_leave_temp = function()
+	{
 		reload_leave_employee();
 		$(".tbl-tag").html('<tr><td colspan="3" class="text-center">'+misc('loader') + '</td></tr>');
 		$.ajax({
@@ -75,6 +104,8 @@ function modal_create_leave_tempv2()
 		});
 	}
 
+
+
 /*	this.reload_leave_employee = function()
 	{
 		reload_leave_employee();
@@ -88,7 +119,7 @@ function modal_create_leave_tempv2()
 			_token:misc('_token'),
 			payroll_leave_temp_id:$("#payroll_leave_temp_id").val()
 		};
-		var target = ".leave-employee";
+		var target = ".leave_whole";
 		$(target).html(misc('loader'));
 		$.ajax({
 			url	 	: 	action,

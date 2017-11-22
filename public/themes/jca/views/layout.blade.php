@@ -38,7 +38,7 @@
         </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
-    <body class="pushmenu-push">
+    <body>
         <div class="loader hide">
           <span><img src="/resources/assets/frontend/img/loader.gif"></span>
         </div>
@@ -66,6 +66,45 @@
                 <!-- @endif -->
             </div>
         </div>
+        <div id="overlay" onclick="off()"></div>
+        <nav class="pushmenu pushmenu-left">
+
+            @if($customer)
+            <div class="space1"></div>
+            <span>BROWSE</span>
+            <ul class="links">
+                <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>
+                <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
+                <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
+                <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
+            </ul>
+            
+            <div class="space2"></div>
+            <span>MEMBERS AREA</span>
+            <ul class="links">
+                <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">DASHBOARD</a> </li>
+                <li> <a href="/members/profile">PROFILE</a> </li>
+                @if($mlm_member)
+                <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary">GENEALOGY</a> </li>
+                <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">REPORTS</a> </li>
+                <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
+                    @if($customer)
+                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                    @endif
+                @else
+                @endif
+            </ul>
+            @else
+                <div class="space1"></div>
+                <span>BROWSE</span>
+                <ul class="links">
+                    <li> <a href="/">HOME</a> </li>
+                    <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
+                    <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
+                    <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
+                </ul>
+            @endif
+        </nav>
         <div class="header-container">
             <div class="container">
                 <div class="row clearfix">
@@ -75,45 +114,7 @@
                             <span></span>
                             <span></span>
                         </div> -->
-                        <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
-                        <nav class="pushmenu pushmenu-left">
-
-                            @if($customer)
-                            <div class="space1"></div>
-                            <span>BROWSE</span>
-                            <ul class="links">
-                                <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>
-                                <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
-                                <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
-                                <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
-                            </ul>
-                            
-                            <div class="space2"></div>
-                            <span>MEMBERS AREA</span>
-                            <ul class="links">
-                                <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">DASHBOARD</a> </li>
-                                <li> <a href="/members/profile">PROFILE</a> </li>
-                                @if($mlm_member)
-                                <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary">GENEALOGY</a> </li>
-                                <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">REPORTS</a> </li>
-                                <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
-                                    @if($customer)
-                                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
-                                    @endif
-                                @else
-                                @endif
-                            </ul>
-                            @else
-                                <div class="space1"></div>
-                                <span>BROWSE</span>
-                                <ul class="links">
-                                    <li> <a href="/">HOME</a> </li>
-                                    <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
-                                    <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
-                                    <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
-                                </ul>
-                            @endif
-                        </nav>
+                        <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
                         <div class="image-logo-holder">
                             <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/header-logo.png"></a>                       
                         </div>

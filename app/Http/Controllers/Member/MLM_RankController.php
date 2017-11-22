@@ -18,6 +18,7 @@ use App\Globals\Mlm_slot_log;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_member;
 use App\Globals\Mail_global;
+use App\Globals\Mlm_complan_manager_repurchasev2;
 use Crypt;
 use Redirect;
 use Request;
@@ -285,16 +286,33 @@ class MLM_RankController extends Member
 
 		                if($rank_update_email == 1)
 		                {
-		                    $new_rank_data = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$new_rank_id)->first();
-		                    $old_rank_data = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$old_rank_id)->first();
-							$customer_email = Tbl_customer::where("customer_id",$slot_info->slot_owner)->first();
+		                    $content        = Mlm_complan_manager_repurchasev2::get_email_content_rank($shop_id,$new_rank_id);
+		                    if($content != null)
+		                    {
+		                        $new_rank_data  = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$new_rank_id)->first();
+		                        $old_rank_data  = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$old_rank_id)->first();
 
-		                    $email_content["subject"] = "Rank Upgrade";
-		                    $email_content["content"] = "Your rank has been upgraded to ".$new_rank_data->stairstep_name;
-		                    $email_address            = $customer_email->email;
-		                    $email_address            = "guevarra129@gmail.com";
+		                        $customer_email = Tbl_customer::where("customer_id",$slot_info->slot_owner)->first();
+		                        $email_content["subject"] = $content->email_content_subject;
+		                        $email_content["content"] = $content->email_content;
+		                        $email_address            = $customer_email->email;
+		                        // $email_address            = "";
 
-		                    $return_mail = Mail_global::send_email(null, $email_content, $shop_id, $email_address);
+		                        $return_mail = Mail_global::send_email(null, $email_content, $shop_id, $email_address);
+		                    }
+		                    else
+		                    {
+		                        $new_rank_data  = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$new_rank_id)->first();
+		                        $old_rank_data  = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$old_rank_id)->first();
+
+		                        $customer_email = Tbl_customer::where("customer_id",$slot_info->slot_owner)->first();
+		                        $email_content["subject"] = "Rank Upgrade";
+		                        $email_content["content"] = "Your rank has been upgraded to ".$new_rank_data->stairstep_name;
+		                        $email_address            = $customer_email->email;
+		                        // $email_address            = "";
+
+		                        $return_mail = Mail_global::send_email(null, $email_content, $shop_id, $email_address);
+		                    }
 		                }
 
 		            }

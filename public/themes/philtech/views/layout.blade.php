@@ -206,11 +206,11 @@
                     <span>CATEGORIES</span>
                     @if(isset($_categories))
                         @foreach($_categories as $category)
-                            <div class="links">
-                                <div class="shop-container">
-                                    {{ $category['type_name'] }}
-                                </div>
+                            <div class="links">                   
                                 @if($category['subcategory'])
+                                    <div class="shop-container">
+                                        {{ $category['type_name'] }}
+                                    </div>
                                     <div class="subshop-container">
                                         @foreach($category['subcategory'] as $subcategory)
                                             <ul>
@@ -222,6 +222,12 @@
                                             </ul>
                                         @endforeach
                                     </div>
+                                @else
+                                    <a href="/product?type={{ $category['type_id'] }}">
+                                        <div class="shop-container">
+                                            {{ $category['type_name'] }}
+                                        </div>
+                                    </a>
                                 @endif
                             </div>
                         @endforeach

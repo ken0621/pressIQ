@@ -25,44 +25,46 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<small>Monthly Rate</small>
 				<input type="number" name="payroll_employee_salary_monthly" step="any" class="form-control text-right" required placeholder="0.00" value="{{$salary->payroll_employee_salary_monthly}}">
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<small>Daily Rate</small>
 				<input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right" placeholder="0.00" value="{{$salary->payroll_employee_salary_daily}}">
 			</div>
-
+			<div class="col-md-4">
+				<small>Hourly Rate</small>
+				<input type="number" step="any" name="payroll_employee_salary_hourly" class="form-control text-right" placeholder="0.00" value="{{$salary->payroll_employee_salary_hourly}}">
+			</div>
 		</div>
 		<div class="form-group">
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<small>COLA (Daily)</small>
 				<input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" placeholder="0.00" value="{{$salary->payroll_employee_salary_cola}}">
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<small>COLA (Monthly)</small>
 				<input type="number" step="any" name="payroll_employee_salary_monthly_cola" class="form-control text-right" placeholder="0.00" value="{{$salary->monthly_cola}}">
 			</div>
-			
 		</div>
 		<div class="custom-compute-pop-obj">
 			<div class="form-group">
-				<div class="col-md-6">
+				<div class="col-md-4">
 					<small>Taxable Salary</small>
 					<input type="number" name="payroll_employee_salary_taxable" class="form-control text-right" step="any" placeholder="0.00" value="{{$salary->payroll_employee_salary_taxable}}">
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-4">
 					<small>Pagibig Contribution</small>
 					<input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right" step="any" placeholder="0.00" value="{{$salary->payroll_employee_salary_pagibig}}">
 				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-md-6">
+				<div class="col-md-4">
 					<small>Philhealth Salary</small>
 					<input type="number" name="payroll_employee_salary_philhealth" class="form-control text-right" step="any" placeholder="0.00" value="{{$salary->payroll_employee_salary_philhealth}}">
 				</div>
-				<div class="col-md-6">
+			</div>
+			<div class="form-group">
+				<div class="col-md-4">
 					<small>SSS Salary</small>
 					<input type="number" name="payroll_employee_salary_sss" class="form-control text-right" step="any" placeholder="0.00" value="{{$salary->payroll_employee_salary_sss}}">
 				</div>

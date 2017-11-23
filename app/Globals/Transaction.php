@@ -283,7 +283,7 @@ class Transaction
     }
     public static function get_all_transaction_item($shop_id, $date_from = '',$date_to = '', $transaction_type = '')
     {
-        $data = Tbl_transaction_item::transaction_list()->where('shop_id', $shop_id);
+        $data = Tbl_transaction_item::transaction_list()->transaction()->where('tbl_transaction_list.shop_id', $shop_id);
         if($date_from && $date_to)
         {
             $data = $data->whereBetween('transaction_date_created',[$date_from,$date_to]);
@@ -292,6 +292,7 @@ class Transaction
         {
             $data = $data->where('transaction_type',$transaction_type);
         }
+        $data = $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
         return $data->get();
     }
     public static function get_data_transaction_list($transaction_list_id, $type = null)

@@ -8,6 +8,8 @@
 					<thead style="text-transform: uppercase">
 						<tr>
 							<th class="text-center">#</th>
+							<th class="text-center">Date</th>
+							<th class="text-center">Customer Name</th>
 							<th class="text-center">Invoice No.</th>
 							<th class="text-center">Product</th>
 							<th class="text-center">Quantity</th>
@@ -18,6 +20,8 @@
 							@foreach($_report as $key => $report)
 							<tr>
 								<td class="text-center">{{$key+1}}</td>
+								<td class="text-center">{{date('F d, Y',strtotime($report->transaction_date))}}</td>
+								<td class="text-center">{{ucwords($report->first_name.' '.$report->middle_name.' '.$report->last_name)}}</td>
 								<td class="text-center">{{$report->transaction_number}}</td>
 								<td class="text-center">{{$report->item_name}}</td>
 								<td class="text-center">{{$report->quantity}}</td>

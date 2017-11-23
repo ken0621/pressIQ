@@ -1026,6 +1026,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
 
+    $code = "item-redeemable";
+    $nav[$page]['submenu'][$code]['label'] = "Redeemable Item";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/redeemable";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Still developing";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Patrick Manarang</span>";
+
 
     /* -- ITEM => ITEM CATEGORIES  */
     $code = "item-categories";

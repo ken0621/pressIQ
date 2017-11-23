@@ -107,6 +107,8 @@ class MlmDeveloperController extends Member
             $data["_slot"][$key]->change_owner = "<a href='javascript:' link='/member/mlm/developer/change_owner?slot_id=" . $slot->slot_id . "' class='popup' size='md'>" . strtoupper($slot->first_name) . " " . strtoupper($slot->last_name) . "</a>";
             $data["_slot"][$key]->allow_multiple_slot = "<input type='checkbox' ".($slot->allow_multiple_slot == 1 ? 'checked' : '')." customer-id='".$slot->customer_id."' class='allow-slot-change' name='allow_multiple_slot'/>";
 
+            $data["_slot"][$key]->ambassador = "<input type='checkbox' ".($slot->ambassador == 1 ? 'checked' : '')." customer_id='".$slot->customer_id."' class='tag_as_ambassador' name='tag_as_ambassador'/>";
+
             /* BROWN RANK DETAILS */
             $brown_current_rank = Tbl_brown_rank::where("rank_id", $slot->brown_rank_id)->first();
 
@@ -208,6 +210,7 @@ class MlmDeveloperController extends Member
         $default[]          = ["DISTRIBUTED INCOME","distributed_income", false]; 
         $default[]          = ["ALLOW MULTIPLE SLOT","allow_multiple_slot", false];
         $default[]          = ["CHANGE OWNER","change_owner", false];
+        $default[]          = ["Ambassador","ambassador", false];
 
 
         if(isset($data["_slot"]))
@@ -237,6 +240,20 @@ class MlmDeveloperController extends Member
             Tbl_customer::where('customer_id',$customer_id)->where('shop_id',$this->user_info->shop_id)->update($update);
         }
         return json_encode('success');
+    }
+    public function tag_as_ambassador()
+    {
+        $customer_id = Request::input("customer_id");
+        $update['ambassador'] = 0;
+
+        $data = Tbl_mlm_slot::customer()->where("customer_id",$customer_id)->first();
+        if($data->ambassador==0)
+        {
+            $update['ambassador'] = 1;
+        }
+        
+        Tbl_mlm_slot::customer()->where("customer_id",$customer_id)->update($update);
+        return json_encode($customer_id+" ambassador="+$update['ambassador']);
     }
     public function create_slot()
     {

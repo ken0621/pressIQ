@@ -82,49 +82,43 @@ class ShopMemberController extends Shop
 {
     public function getIndex()
     {
-        if(Self::$customer_info->customer_id == 12) //SIR ARNOLD
+        $data["page"] = "Dashboard";
+        $data["mode"] = session("get_success_mode");
+        $data["zero_currency"] = Currency::format(0);
+        session()->forget("get_success_mode");
+        
+        $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
+        $data["item_kit"]    = Item::get_all_assembled_kit($this->shop_info->shop_id);
+        if(Self::$customer_info)
         {
-            $data["page"] = "Dashboard";
-            return Self::load_view_for_members('member.dashboard2', $data);
-        }
-        else
-        {
-            $data["page"] = "Dashboard";
-            $data["mode"] = session("get_success_mode");
-            $data["zero_currency"] = Currency::format(0);
-            session()->forget("get_success_mode");
-            
-            $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
-            $data["item_kit"]    = Item::get_all_assembled_kit($this->shop_info->shop_id);
-            if(Self::$customer_info)
+            $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["wallet"]             = $data["customer_summary"]["_wallet"];
+            $data["points"]             = $data["customer_summary"]["_points"];
+            $data["_wallet_plan"]       = $data["customer_summary"]["_wallet_plan"];
+            $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
+            $data["_slot"]              = $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data['allow_multiple_slot'] = Self::$customer_info->allow_multiple_slot;
+            $data['mlm_pin'] = '';
+            $data['mlm_activation'] = '';            
+            $data["first_slot"]         = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+           
+            if($this->shop_info->shop_theme == 'philtech')
             {
-                $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
-                $data["wallet"]             = $data["customer_summary"]["_wallet"];
-                $data["points"]             = $data["customer_summary"]["_points"];
-                $data["_wallet_plan"]       = $data["customer_summary"]["_wallet_plan"];
-                $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
-                $data["_slot"]              = $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
-                $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-                $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-                $data['allow_multiple_slot'] = Self::$customer_info->allow_multiple_slot;
-                $data['mlm_pin'] = '';
-                $data['mlm_activation'] = '';            
-                $data["first_slot"]         = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
-               
-                if($this->shop_info->shop_theme == 'philtech')
-                {
-                    $data["travel_and_tours"] = false;
+                $data["travel_and_tours"] = false;
 
-                    foreach($_slot as $slot)
+                foreach($_slot as $slot)
+                {
+                    if($slot->slot_membership == 4)
                     {
-                        if($slot->slot_membership == 4)
-                        {
-                            $data["travel_and_tours"] = true;
-                        }
+                        $data["travel_and_tours"] = true;
                     }
                 }
+            }
 
-
+            if(Self::$customer_info->customer_id != 12) //SIR ARNOLD
+            {
                 if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
                 {
                     $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
@@ -136,38 +130,35 @@ class ShopMemberController extends Shop
                     $store["online_transaction"] = true;
                     session($store);
                 }
-       
-                $data["not_placed_slot"] = new stdClass();
-                $data["not_placed_slot"]->slot_id = 0;
-                $data["not_placed_slot"]->slot_no = 0;
-                $data["company_head_id"]  = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->orderBy("slot_id","ASC")->first();
-       
-                $data["_unplaced"] = MLM2::unplaced_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
-                if(isset($data["_unplaced"][0]))
+            }
+   
+            $data["not_placed_slot"] = new stdClass();
+            $data["not_placed_slot"]->slot_id = 0;
+            $data["not_placed_slot"]->slot_no = 0;
+            $data["company_head_id"]  = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->orderBy("slot_id","ASC")->first();
+   
+            $data["_unplaced"] = MLM2::unplaced_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            if(isset($data["_unplaced"][0]))
+            {
+                if($data["_unplaced"][0]->slot_placement == 0)
                 {
-                    if($data["_unplaced"][0]->slot_placement == 0)
-                    {
-                        $data["not_placed_yet"] = true;
-                        $data["not_placed_slot"] = $data["_unplaced"][0];
-                    }
-                }
-                $data['_event'] = ShopEvent::get($this->shop_info->shop_id ,0 ,3 ,Carbon::now(), Self::$customer_info->customer_id, ['all','members']);
-                $data['_notification'] = Tbl_slot_notification::where('shop_id',$this->shop_info->shop_id)->where('customer_id',Self::$customer_info->customer_id)->where('has_been_seen',0)->first();
-
-                if($this->shop_info->shop_theme == 'philtech')
-                {
-                    if(MLM2::is_privilage_card_holder($this->shop_info->shop_id, Self::$customer_info->customer_id))
-                    {
-                        return Self::load_view_for_members('member.privilage_card_holder_dashboard',$data);
-                    }                   
+                    $data["not_placed_yet"] = true;
+                    $data["not_placed_slot"] = $data["_unplaced"][0];
                 }
             }
+            $data['_event'] = ShopEvent::get($this->shop_info->shop_id ,0 ,3 ,Carbon::now(), Self::$customer_info->customer_id, ['all','members']);
+            $data['_notification'] = Tbl_slot_notification::where('shop_id',$this->shop_info->shop_id)->where('customer_id',Self::$customer_info->customer_id)->where('has_been_seen',0)->first();
 
-            return Self::load_view_for_members('member.dashboard', $data);
+            if($this->shop_info->shop_theme == 'philtech')
+            {
+                if(MLM2::is_privilage_card_holder($this->shop_info->shop_id, Self::$customer_info->customer_id))
+                {
+                    return Self::load_view_for_members('member.privilage_card_holder_dashboard',$data);
+                }                   
+            }
         }
 
-
-
+        return view("member.dashboard", $data);
     }
     public function getKit()
     {

@@ -1,8 +1,6 @@
 @extends("member.member_layout")
 @section("member_content")
-
 	<div class="text-center">DASHBOARD OF SIR ARNOLD IS BEING RE-DEVELOPED</div>
-
 @endsection
 
 @section("member_script")

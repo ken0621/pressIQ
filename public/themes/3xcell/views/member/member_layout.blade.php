@@ -62,7 +62,7 @@
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
 							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "report_points" ? "active" : "" }}">
+						<li class="{{ Request::segment(2) == "report-points" ? "active" : "" }}">
 							<a href="/members/report-points"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports (Points)</span></div></a>
 						</li>
 						<!-- <li class="{{ Request::segment(2) == "network" ? "active" : "" }}">

@@ -5,6 +5,31 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
+
+.btn-cust-paysett
+{
+	background-color: #02295E;
+	color: #fff;
+
+	&:hover
+	{
+		color: #fff;
+		opacity: 0.8;
+	}
+}
+
+.btn-cust-reqpay
+{
+	background-color: #EDAC0E;
+	color: #fff;
+
+	&:hover
+	{
+		color: #fff;
+		opacity: 0.8;
+	}
+}
+
 .wallet-encashment
 {
 	font-family: $content-text;

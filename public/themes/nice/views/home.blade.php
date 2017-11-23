@@ -20,8 +20,8 @@
                         <div class="paragraph-container">
                             {!! get_content($shop_theme_info, "home", "home_about_us_info") !!}
                         </div>
-                        <div  class="button-container">
-                            <a href="#">More</a>
+                        <div class="button-container">
+                            <button>More</button>
                         </div>
                     </div>
                 </div>

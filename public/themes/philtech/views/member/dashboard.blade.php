@@ -75,12 +75,13 @@
 					<div class="chart-legend">
 						@foreach($_wallet_plan as $plan)
 							<div class="holder">
+
 								<div class="color"></div>
 
 								@if($plan->label == "Membership Matching")
 									<div class="name"><span>Franchise Matching</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
 								@elseif($plan->label == "Vmoney")
-									<div class="name"><span>Emoney</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+									<div class="name"><span>E-Money</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
 								@else
 									<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
 								@endif

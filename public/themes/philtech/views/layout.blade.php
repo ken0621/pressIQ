@@ -420,7 +420,7 @@
           </div>
         </div>
         @include("frontend.gfoot")
-        <script src="/themes/{{ $shop_theme }}/js/custom_theme.js?version=3"></script>
+        <script src="/themes/{{ $shop_theme }}/js/custom_theme.js?version=4"></script>
 
         @yield("js")
     </body>

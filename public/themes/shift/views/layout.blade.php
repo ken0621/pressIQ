@@ -37,8 +37,13 @@
     <div id="home" class="subheader-container">
         <div class="container">
             @if($customer)
-            <div class="left-container"><span><i class="fa fa-envelope-o" aria-hidden="true"></i></span><span>yourcompany.email</span></div>
-            <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span><span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
+            <div class="left-container">
+                <span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
+                <span>yourcompany.email</span>
+            </div>
+            <div class="right-container">
+                <span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span>
+                <span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
             @else
             <div class="left-container">
                 <span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>

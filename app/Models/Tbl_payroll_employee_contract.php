@@ -129,4 +129,5 @@ class Tbl_payroll_employee_contract extends Model
 			return $query;
 		}
 	}
+
 }

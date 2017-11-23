@@ -282,17 +282,9 @@ function customer_invoice()
 			var qty 	= $(this).find(".txt-qty").val();
 			var rate 	= $(this).find(".txt-rate").val();
 			var discount= $(this).find(".txt-discount").val().toString();
-			//var multiple_discount = discount.split("/");
+			var multiple_discount = discount.split("/");
 			var amount 	= $(this).find(".txt-amount");
 			var taxable = $(this).find(".taxable-check");
-
-			//console.log(discount);
-			/*
-			for(i = 0; i < multiple_discount.length; i++)
-			{
-			    document.write(multiple_discount[i]);
-			    document.write('<br>');
-			}*/
 
 			/* CHECK IF QUANTITY IS EMPTY */
 			if(qty == "" || qty == null)
@@ -301,13 +293,28 @@ function customer_invoice()
 			}
 
 			/* CHECK THE DISCOUNT */
-			
+		
 			if(discount.indexOf('%') >= 0)
+			{	
+				//alert(discount.indexOf("%") + 1);
+
+				for(i = 0; i < multiple_discount.length; i++)
+				{		
+					alert(multiple_discount.length); // index of %
+					//alert(multiple_discount[i]); //split
+					//$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
+					discount = (parseFloat(multiple_discount[i].substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
+					//alert(discount);
+				}
+			}
+			/*if(discount.indexOf('%') >= 0)
 			{
 				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
 				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
-			}
+				alert(discount);
+			}*/
 			else if(discount == "" || discount == null)
+				
 			{
 				discount = 0;
 			}

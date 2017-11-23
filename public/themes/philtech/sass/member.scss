@@ -507,6 +507,7 @@
 	color: #fff !important;
 	border: 1px solid #006CC5 !important;
 	font-weight: 400;
+	@include transition(0.3s);
 
 	&:hover
 	{
@@ -520,7 +521,7 @@
 {
 	background-color: #fd6060 !important;
 	color: #fff;
-    transition: 0.3s all ease;
+    @include transition(0.3s);
 
 	&:hover
 	{

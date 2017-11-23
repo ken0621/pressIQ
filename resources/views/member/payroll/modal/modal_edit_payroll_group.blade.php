@@ -42,6 +42,9 @@
 										<div class="radio">
 											<label><input type="radio" name="payroll_group_salary_computation" value="Monthly Rate" {{$group->payroll_group_salary_computation == 'Monthly Rate' ? 'checked':''}}>Monthly Rate</label>
 										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_salary_computation" value="Hourly Rate" {{$group->payroll_group_salary_computation == 'Hourly Rate' ? 'checked':''}}>Hourly Rate</label>
+										</div>
 									</div>
 								</div>
 							</div>

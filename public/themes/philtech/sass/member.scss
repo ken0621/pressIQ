@@ -453,3 +453,27 @@
 		}
 	}
 }
+
+.modal-header
+{
+	background-color: #006CC5;
+	color: #fff;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	.close
+	{
+		color: #fff;
+	}
+}
+
+.btn-primary
+{
+	background-color: #006CC5 !important;
+	color: #fff !important;
+	border: 1px solid #006CC5 !important;
+	font-weight: 400;
+}

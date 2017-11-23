@@ -2917,11 +2917,11 @@ class Payroll2
 				$render_days			 += $date_compute->compute->rendered_days;
 			}
 
-			$return->cutoff_rate     		  = $cutoff_rate;
+			// $return->cutoff_rate     		  = $cutoff_rate;
 			$return->cutoff_income_plus_cola  = $cutoff_income_plus_cola;
 			$return->cutoff_income 			  = $cutoff_income;
 			$return->cutoff_cola			  = $cutoff_cola;
-			// $return->cutoff_basic			  = $cutoff_basic;
+			$return->cutoff_basic			  = $cutoff_basic;
 			$return->render_days			  = $render_days;
 		}
 		else if($compute_type == "hourly")
@@ -2946,11 +2946,11 @@ class Payroll2
 				$render_days			 += $date_compute->compute->rendered_days;
 			}
 
-			$return->cutoff_rate     		  = $cutoff_rate;
+			// $return->cutoff_rate     		  = $cutoff_rate;
 			$return->cutoff_income_plus_cola  = $cutoff_income_plus_cola;
 			$return->cutoff_income 			  = $cutoff_income;
 			$return->cutoff_cola			  = $cutoff_cola;
-			// $return->cutoff_basic			  = $cutoff_basic;
+			$return->cutoff_basic			  = $cutoff_basic;
 			$return->render_days			  = $render_days;
 		}
 		else if ($compute_type=="monthly") 
@@ -3771,6 +3771,7 @@ class Payroll2
 			$return = Payroll2::cutoff_breakdown_hidden_allowances($return, $data);
 		}
 		
+		$return = Payroll2::cutoff_breakdown_compute_gross_basic_pay($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_gross_pay($return, $data);
 		$return = Payroll2::cutoff_breakdown_government_contributions($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_taxable_salary($return, $data);
@@ -4053,6 +4054,7 @@ class Payroll2
 
 		return $return;
 	}
+
 	public static function cutoff_breakdown_compute_gross_pay($return, $data)
 	{
 		extract($data);
@@ -4086,6 +4088,29 @@ class Payroll2
 
 		return $return;
 	}
+
+	public static function cutoff_breakdown_compute_gross_basic_pay($return, $data)
+	{
+		extract($data);
+		
+		$return->gross_basic_pay = 0;
+
+		if ($group->payroll_group_salary_computation == "Daily Rate") 
+		{
+			$return->gross_basic_pay = Payroll2::identify_period_salary_daily_rate($cutoff_input);
+		}
+		elseif ($group->payroll_group_salary_computation == "Hourly Rate") {
+			# code...
+		}
+		else
+		{
+			$return->gross_basic_pay = Payroll2::identify_period_salary($salary->payroll_employee_salary_monthly, $period_category);
+		}
+		
+		
+		return $return;
+	}
+
 	public static function cutoff_breakdown_compute_taxable_salary($return, $data)
 	{
 		extract($data);
@@ -4935,8 +4960,11 @@ class Payroll2
 					
 					if ($allowance->basic_pay==1) 
 					{
-						$actual_gross_pay += $data['cutoff_compute']->cutoff_basic;
-						$d['basic'] = $data['cutoff_compute']->cutoff_basic;
+						if (isset($data['cutoff_compute']->cutoff_basic)) 
+						{
+							$actual_gross_pay += $data['cutoff_compute']->cutoff_basic;
+							$d['basic'] = $data['cutoff_compute']->cutoff_basic;
+						}
 					}
 
 					if ($allowance->cola==1) 
@@ -6897,6 +6925,42 @@ class Payroll2
 	public static function payroll_number_format($number,$decimal_places)
 	{
 		return number_format((float)$number, $decimal_places, '.', '');
+	}
+
+	public static function identify_period_salary_daily_rate($_timesheet)
+	{
+		$salary_period = 0;
+		
+		foreach ($_timesheet as $key => $timesheet) 
+		{
+			$salary_period += $timesheet->compute->daily_rate;
+		}
+
+		return $salary_period;
+	}
+
+	public static function identify_period_salary($salary = 0, $period = '')
+	{
+		$salary_period = 0;
+
+		if($period == 'Monthly')
+		{
+			$salary_period = $salary;
+		}
+		else if($period == 'Semi-monthly')
+		{
+			$salary_period = $salary / 2;
+		}
+		else if($period == 'Weekly')
+		{
+			$salary_period = $salary / 4;
+		}
+		else if($period == 'Daily')
+		{
+			$salary_period = ($salary * 12) / 365;
+		}
+		
+		return $salary_period;
 	}
 
 }

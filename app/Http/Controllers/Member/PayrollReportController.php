@@ -614,8 +614,10 @@ class PayrollReportController extends Member
 
 	public function get_total_payroll_register($data)
 	{
+		$total_gross_basic 			= 0;
 		$total_basic 				= 0;
 		$total_gross	 			= 0;
+		$total_cutoff_basic 		= 0;
 		$total_net 					= 0;
 		$total_tax 					= 0;
 
@@ -689,6 +691,8 @@ class PayrollReportController extends Member
 
 
 
+
+			
 		foreach($data["_employee"] as $key => $employee)
 		{
 
@@ -708,7 +712,7 @@ class PayrollReportController extends Member
 
 			// $total_deduction_employee += $employee["total_deduction"];
 
-			$data["_employee"][$key] = $employee;
+			$data["_employee"][$key] 		   = $employee;
 			$data["_employee"][$key]->total_er = $total_er;
 			$data["_employee"][$key]->total_ee = $total_ee;
 			$data["_employee"][$key]->total_ec = $total_ec;
@@ -758,8 +762,7 @@ class PayrollReportController extends Member
 					$time_total_undertime				+= $time_performance["undertime"]["time"];
 					$time_total_late					+= $time_performance["late"]["time"];
 					$time_total_absent					+= $time_performance["absent"]["float"];
-				}
-				
+				}	
 			}
 
 
@@ -1089,8 +1092,6 @@ class PayrollReportController extends Member
 				$restday_total 		 			+=	Payroll2::payroll_number_format($restday,2);
 			}
 
-
-
 			if (isset($employee["cutoff_breakdown"]->_breakdown )) 
 			{
 				# code...
@@ -1145,12 +1146,16 @@ class PayrollReportController extends Member
 			
 			$employee->net_basic_pay = $employee->net_basic_pay - $leave_pay;
 
-			$total_basic 	+= Payroll2::payroll_number_format($employee->net_basic_pay,2);
-			$total_gross 	+= Payroll2::payroll_number_format($employee->gross_pay,2);
-			$total_net 		+= Payroll2::payroll_number_format($employee->net_pay,2);
-			$total_tax 		+= Payroll2::payroll_number_format($employee->tax_ee,2);
+			// $total_cutoff_basic 	+= Payroll2::payroll_number_format(unserialize($employee->cutoff_compute)->cutoff_basic,2);
+			$total_gross_basic		+= Payroll2::payroll_number_format($employee->gross_basic_pay,2);
+			$total_basic 			+= Payroll2::payroll_number_format($employee->net_basic_pay,2);
+			$total_gross 			+= Payroll2::payroll_number_format($employee->gross_pay,2);
+			$total_net 				+= Payroll2::payroll_number_format($employee->net_pay,2);
+			$total_tax 				+= Payroll2::payroll_number_format($employee->tax_ee,2);
 		}
 
+		// $data["total_cutoff_basic"]					= $total_cutoff_basic;
+		$data["total_gross_basic"]					= $total_gross_basic;
 		$data["total_basic"] 						= $total_basic;
 		$data["total_gross"] 						= $total_gross;
 		$data["total_net"] 							= $total_net;
@@ -1171,7 +1176,6 @@ class PayrollReportController extends Member
 		$data["_deduction"] 						= $_deduction;
 		$data["total_deduction"] 					= $total_deduction;
 		$data["total_deduction_of_all_employee"] 	= $total_deduction_employee;
-
 
 		$data["deduction_total"] 						= $deduction_total;
 		$data["cola_total"] 							= $cola_total;
@@ -1212,7 +1216,6 @@ class PayrollReportController extends Member
 		$data["total_adjsutment_additions"]				= $total_adjsutment_additions;	
 		$data["total_adjsutment_deductions"]			= $total_adjsutment_deductions;
 		$data["total_adjsutment_others"]				= $total_adjsutment_others;	
-
 
 		$data["time_total_time_spent"]				=	$time_total_time_spent;				
 		$data["time_total_overtime"]				=	$time_total_overtime;				

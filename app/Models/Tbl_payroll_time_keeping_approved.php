@@ -18,6 +18,7 @@ class Tbl_payroll_time_keeping_approved extends Model
 		$insert["employee_id"] = $employee_id;
 		$insert["employee_company_id"] = $company_id;
 		$insert["payroll_period_company_id"] = $payroll_period_company_id;
+		$insert["gross_basic_pay"] = $cutoff_breakdown->gross_basic_pay;
 		$insert["net_basic_pay"] = $cutoff_breakdown->basic_pay_total;
 		$insert["gross_pay"] =  $cutoff_breakdown->gross_pay_total;
 		$insert["net_pay"] =  $cutoff_breakdown->net_pay_total;

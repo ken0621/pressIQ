@@ -490,7 +490,7 @@ class PayrollTimeSheet2Controller extends Member
 		$return->daily_salary	= 0;
 		$employee_contract		= $this->db_get_current_employee_contract($employee_id, $date);
 		$shift_code_id 			= Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->value("shift_code_id");
-		
+
 		if($custom_shift == 1)
 		{
 			$_shift =  $this->db_get_shift_of_employee_by_code($custom_shift_id, $date);
@@ -848,15 +848,8 @@ class PayrollTimeSheet2Controller extends Member
 			dd("This employee doesn't have salary as of this date (" .  payroll_date_format($company_period->payroll_period_start) . "). Please check effectivity date of salary.");
 		}
 
-		$cutoff_rate = $this->identify_period_salary($salary->payroll_employee_salary_monthly, $company_period->payroll_period_category);
-
-		$cutoff_cola = $this->identify_period_salary($salary->monthly_cola, $company_period->payroll_period_category);
-		
-		$cutoff_target_days = $this->identify_period_salary($salary->payroll_group_working_day_month, $group->payroll_period_category);
-		
-		$from = $data["start_date"] = $company_period->payroll_period_start;
-		$to = $data["end_date"] = $company_period->payroll_period_end;
-		
+		$from  = $data["start_date"]  = $company_period->payroll_period_start;
+		$to    = $data["end_date"]    = $company_period->payroll_period_end;
 		
 		while($from <= $to)
 		{
@@ -873,7 +866,24 @@ class PayrollTimeSheet2Controller extends Member
 			$_timesheet[$from]->payroll_time_sheet_id = $timesheet_db->payroll_time_sheet_id;
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
-
+		/*START Identify Cutoff rate*/
+		//base on daily rate of time sheet
+		// if ($compute_type == "daily") 
+		// {
+		// 	$cutoff_rate = $this->identify_period_salary_daily_rate($_timesheet);
+		// }
+		// //base on monthly salary
+		// else
+		// {
+			$cutoff_rate = $this->identify_period_salary($salary->payroll_employee_salary_monthly, $company_period->payroll_period_category);
+		// }
+		/*END Identify Cutoff rate*/
+		$cutoff_rate = $this->identify_period_salary($salary->payroll_employee_salary_monthly, $company_period->payroll_period_category);
+		
+		$cutoff_cola = $this->identify_period_salary($salary->monthly_cola, $company_period->payroll_period_category);
+		
+		$cutoff_target_days = $this->identify_period_salary($salary->payroll_group_working_day_month, $group->payroll_period_category);
+		
 		$data["cutoff_input"] 		= $_timesheet;
 		$data["cutoff_compute"] 	= $cutoff_compute = Payroll2::cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days, $_timesheet);
 		$data["cutoff_breakdown"] 	= $cutoff_breakdown = Payroll2::cutoff_breakdown($period_company_id, $employee_id, $cutoff_compute, $data);
@@ -955,7 +965,7 @@ class PayrollTimeSheet2Controller extends Member
 			// dd($this->compute_process_cutoff($check_approved));
 			$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
 			
-			/*if($computation_type != "Flat Rate" && $computation_type != "Hourly Rate")
+			if($computation_type != "Flat Rate" && $computation_type != "Hourly Rate")
 			{
 				if(isset($data["cutoff_compute"]->cutoff_rate))
 				{
@@ -966,7 +976,7 @@ class PayrollTimeSheet2Controller extends Member
 					$computation_type = "Daily Rate";
 				}
 
-			}*/
+			}
 		}
 
 		else
@@ -1082,6 +1092,7 @@ class PayrollTimeSheet2Controller extends Member
 			$return["call_function"] = "apply_adjustment_submit_done";
 			$return["period_id"] 		= $period_company_id;
 			$return["employee_id"] 		= $employee_id;
+			
 			echo json_encode($return);
 		}
 		else
@@ -1549,6 +1560,16 @@ class PayrollTimeSheet2Controller extends Member
 		return $salary_period;
 	}
 
+	public function identify_period_salary_daily_rate($_timesheet)
+	{
+		$salary_period = 0;
+		
+		foreach ($_timesheet as $key => $timesheet) 
+		{
+			$salary_period += $timesheet->compute->daily_rate;
+		}
+		return $salary_period;
+	}
 
 	public function identify_monthly_cola_salary($monthly_cola = 0, $period = '')
 	{

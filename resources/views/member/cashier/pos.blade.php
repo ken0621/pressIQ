@@ -147,7 +147,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group">
+                           <!--  <div class="form-group">
                                 <label class="control-label col-sm-4 text-right" for="email">Payment Method</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" name="payment_method">
@@ -155,7 +155,7 @@
                                         <option value="cheque">Cheque</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="form-group pos-payment row clearfix">
                                 @include('member.cashier.pos_payment_method')
                             </div>

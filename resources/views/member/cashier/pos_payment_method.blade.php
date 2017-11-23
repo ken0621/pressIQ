@@ -12,7 +12,8 @@
                 <div class="col-sm-7 text-right">
                     {{currency('PHP',$payment->payment_amount)}}
                 </div>
-                <input type="hidden" value="{{$payment->payment_amount}}" class="compute-payment-amount" name="">
+                <input type="hidden" name="payment_method[]" value="{{$payment->payment_type}}">
+                <input type="hidden" value="{{$payment->payment_amount}}" class="compute-payment-amount" name="payment_amount[]">
             </div>
         </li>
         @endforeach

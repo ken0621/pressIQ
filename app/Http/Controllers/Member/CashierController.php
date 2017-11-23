@@ -125,7 +125,8 @@ class CashierController extends Member
         if(Session::has('customer_id'))
         {
             $data = Customer::info(Session::get('customer_id'), $this->user_info->shop_id);
-            $data['exist'] = $data;   
+            $data['exist'] = $data;
+            $data['customer_points'] = Customer::get_points_wallet(Session::get('customer_id'));
         }
         return view('member.cashier.pos_customer_info',$data);
     }
@@ -215,7 +216,10 @@ class CashierController extends Member
     {
         $cart = Cart2::get_cart_info();
         $consume_inventory                                  = Request::input('consume_inventory');
+            
         $method                                             = Request::input('payment_method');
+        $amount                                             = Request::input('payment_amount');
+
         $shop_id                                            = $this->user_info->shop_id;
         $transaction_new["transaction_reference_table"]     = "tbl_customer";
         $transaction_new["transaction_reference_id"]        = Session::get('customer_id');
@@ -230,74 +234,82 @@ class CashierController extends Member
 
         if($cart)
         {   
-            foreach ($cart["_item"] as $key => $value)
+            if($transaction_new["transaction_reference_id"])
             {
-                $item_type = Item::get_item_type($value->item_id);
-                if($item_type == 1)
+                foreach ($cart["_item"] as $key => $value)
                 {
-                    $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity,'Consume');
+                    $item_type = Item::get_item_type($value->item_id);
+                    if($item_type == 1)
+                    {
+                        $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity,'Consume');
+                    }
                 }
-            }
 
-            if(!$destination_warehouse_id && $consume_inventory == 'wis')
-            {
-                $validate .= 'Please choose a warehouse destination <br>';
-            }
-
-            if(!$validate)
-            {                
-                Transaction::create_set_method($method);
-                $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
-
-                if(is_numeric($transaction_list_id))
+                if(!$destination_warehouse_id && $consume_inventory == 'wis')
                 {
-                    $get_transaction_list = Transaction::get_data_transaction_list($transaction_list_id);
-                    $get_item = Transaction::get_transaction_item($transaction_list_id);
-                    $remarks = 'Consume in Transaction Number : '.$get_transaction_list->transaction_number;
+                    $validate .= 'Please choose a warehouse destination <br>';
+                }
 
+                if(!$validate)
+                {
+                    Transaction::create_set_method('pos');
+                    $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, false);
 
-                    if($consume_inventory == 'instant')
+                    if(is_numeric($transaction_list_id))
                     {
-                        Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks, $warehouse_id);
-                        $validate = 1;
-                    }
-                    if($consume_inventory == 'wis')
-                    {
-                        $ins_wis['wis_shop_id'] = $shop_id;
-                        $ins_wis['wis_number'] = $get_transaction_list->transaction_number;
-                        $ins_wis['wis_from_warehouse'] = $warehouse_id;
-                        $ins_wis['destination_warehouse_id'] = Request::input('destination_warehouse_id');
-                        $ins_wis['wis_remarks'] = $remarks;
-                        $ins_wis['created_at'] = Carbon::now();
+                        $get_transaction_list = Transaction::get_data_transaction_list($transaction_list_id);
+                        $get_item = Transaction::get_transaction_item($transaction_list_id);
+                        $remarks = 'Consume in Transaction Number : '.$get_transaction_list->transaction_number;
 
-                        $_item = null;
-                        foreach ($get_item as $key_item => $value_item) 
+
+                        if($consume_inventory == 'instant')
                         {
-                            $_item[$key_item]['item_id'] = $value_item->item_id;
-                            $_item[$key_item]['quantity'] = $value_item->quantity;
-                            $_item[$key_item]['remarks'] = 'wis';
+                            Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks, $warehouse_id);
+                            $validate = 1;
                         }
-                        $validate = WarehouseTransfer::create_wis($shop_id, $remarks, $ins_wis, $_item);
-                    }
-                    if(is_numeric($validate))
-                    {
-                        Session::forget('customer_id');
-                        Cart2::clear_cart();
-                        $return['status'] = 'success';
-                        $return['receipt_id'] = $transaction_list_id;
-                        $return['call_function'] = 'success_process_sale';
-                    }
-                    else
-                    {
-                        $return['status'] = 'error';
-                        $return['status_message'] = $validate;
-                    }
-                } 
+                        if($consume_inventory == 'wis')
+                        {
+                            $ins_wis['wis_shop_id'] = $shop_id;
+                            $ins_wis['wis_number'] = $get_transaction_list->transaction_number;
+                            $ins_wis['wis_from_warehouse'] = $warehouse_id;
+                            $ins_wis['destination_warehouse_id'] = Request::input('destination_warehouse_id');
+                            $ins_wis['wis_remarks'] = $remarks;
+                            $ins_wis['created_at'] = Carbon::now();
+
+                            $_item = null;
+                            foreach ($get_item as $key_item => $value_item) 
+                            {
+                                $_item[$key_item]['item_id'] = $value_item->item_id;
+                                $_item[$key_item]['quantity'] = $value_item->quantity;
+                                $_item[$key_item]['remarks'] = 'wis';
+                            }
+                            $validate = WarehouseTransfer::create_wis($shop_id, $remarks, $ins_wis, $_item);
+                        }
+                        if(is_numeric($validate))
+                        {
+                            Session::forget('customer_id');
+                            Cart2::clear_cart();
+                            $return['status'] = 'success';
+                            $return['receipt_id'] = $transaction_list_id;
+                            $return['call_function'] = 'success_process_sale';
+                        }
+                        else
+                        {
+                            $return['status'] = 'error';
+                            $return['status_message'] = $validate;
+                        }
+                    } 
+                }
+                else
+                {
+                    $return['status'] = 'error';
+                    $return['status_message'] = $validate;
+                }
             }
             else
             {
                 $return['status'] = 'error';
-                $return['status_message'] = $validate;
+                $return['status_message'] = 'Please Select Customer';
             }
         }
         else

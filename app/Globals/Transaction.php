@@ -217,6 +217,9 @@ class Transaction
 
         return $return;
     }
+    public static function insert_payment($shop_id, $transaction_id, $method = array(), $amount = array())
+    {
+    }
     public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit', $get_to_warehouse = 0)
     {
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);

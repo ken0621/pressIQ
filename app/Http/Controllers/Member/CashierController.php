@@ -27,6 +27,7 @@ class CashierController extends Member
         if(Session::has('customer_id'))
         {
             $data['customer'] = Customer::info(Session::get('customer_id'), $this->user_info->shop_id);
+            $data['customer_points'] = Customer::get_points_wallet(Session::get('customer_id'));
             $data['exist'] = $data['customer'];
         }
         

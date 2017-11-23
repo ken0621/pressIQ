@@ -166,6 +166,7 @@
                                     <a href="javascript:" class="btn btn-primary cash btn-payment" onClick="select_payment('cash')">Cash</a>
                                     <a href="javascript:" class="btn btn-custom-white check btn-payment" onClick="select_payment('check')">Check</a>
                                     <a href="javascript:" class="btn btn-custom-white gc btn-payment" onClick="select_payment('gc')">GC</a>
+                                    <a href="javascript:" class="btn btn-custom-white gc btn-payment" onClick="select_payment('wallet')">Wallet</a>
                                 </div>
                             </div>
                             <div class="form-group">

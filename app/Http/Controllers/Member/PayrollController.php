@@ -4185,6 +4185,101 @@ class PayrollController extends Member
           return json_encode($return);
      }
 
+     //leave v2 reporting
+
+     public function modal_monthly_leave_report()
+     {
+           $tempmonth = date("Y-m-d");
+           $month = explode("-", $tempmonth);
+
+           $employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id')
+                                                       ->join('tbl_payroll_leave_schedulev2','tbl_payroll_leave_employee_v2.payroll_leave_employee_id','=','tbl_payroll_leave_schedulev2.payroll_leave_employee_id')
+                                                       ->where('tbl_payroll_leave_schedulev2.shop_id',Self::shop_id())
+                                                       ->whereMonth('tbl_payroll_leave_schedulev2.payroll_schedule_leave',$month[1])
+                                                       ->distinct()
+                                                       ->get();
+     
+          $leavedata = array();                                               
+          foreach($employee_id as $key => $emp_id)
+          {
+ 
+               $empdata = Tbl_payroll_leave_schedulev2::getmonthleavereportfilter($emp_id['payroll_employee_id'],$month[1])->get();
+    
+               array_push($leavedata, $empdata); 
+          }
+          $data['month_today']        = $month[1];
+          $data['month_today_string'] = date("F", mktime(0, 0, 0, $month[1],10));
+          $data['leave_report']       = $leavedata;
+          $data['months']             = array('01' => "January",'02' => "February",'03' => "March",'04' => "April",'05' => "May",'06' => "June",'07' => "July",'08' => "August",'09' => "September",'10' => "October",'11' => "November",'12' => "December");
+
+          return view("member.payroll.modal.modal_monthly_leave_report", $data);
+
+     }
+
+     public function monthly_leave_report_excel($month)
+     {
+           $employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id')
+                                                       ->join('tbl_payroll_leave_schedulev2','tbl_payroll_leave_employee_v2.payroll_leave_employee_id','=','tbl_payroll_leave_schedulev2.payroll_leave_employee_id')
+                                                       ->where('tbl_payroll_leave_schedulev2.shop_id',Self::shop_id())
+                                                       ->whereMonth('tbl_payroll_leave_schedulev2.payroll_schedule_leave',$month)
+                                                       ->distinct()
+                                                       ->get();
+
+          $datas = array();                                               
+          foreach($employee_id as $key => $emp_id)
+          {
+ 
+               $empdata = Tbl_payroll_leave_schedulev2::getmonthleavereportfilter($emp_id['payroll_employee_id'],$month)->get();
+    
+               array_push($datas, $empdata); 
+          }
+          $data['month_today']        = $month;
+          $data['leave_report']       = $datas;
+          $data['month_today_string'] = date("F", mktime(0, 0, 0, $month,10));
+          $data['months']             = array('01' => "January",'02' => "February",'03' => "March",'04' => "April",'05' => "May",'06' => "June",'07' => "July",'08' => "August",'09' => "September",'10' => "October",'11' => "November",'12' => "December");
+          Excel::create($data['month_today_string']." Leave Report",function($excel) use ($data)
+          {
+               $excel->sheet('clients',function($sheet) use ($data)
+               {
+                    $sheet->loadView('member.payroll.modal.modal_monthly_leave_report_export_excel',$data);
+               });
+          })->download('xls');
+     }
+
+     public function monthly_leave_report_filter()
+     {
+          $month      =  Request::input('month');
+          $employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id')
+                                                       ->join('tbl_payroll_leave_schedulev2','tbl_payroll_leave_employee_v2.payroll_leave_employee_id','=','tbl_payroll_leave_schedulev2.payroll_leave_employee_id')
+                                                       ->where('tbl_payroll_leave_schedulev2.shop_id',Self::shop_id())
+                                                       ->whereMonth('tbl_payroll_leave_schedulev2.payroll_schedule_leave',$month)
+                                                       ->distinct()
+                                                       ->get();
+
+          $datas = array();                                               
+          foreach($employee_id as $key => $emp_id)
+          {
+ 
+               $empdata = Tbl_payroll_leave_schedulev2::getmonthleavereportfilter($emp_id['payroll_employee_id'],$month)->get();
+    
+               array_push($datas, $empdata); 
+          }
+          $data['month_today']  = $month;
+          $data['leave_report'] = $datas;
+
+          $data['months']       = array('1' => "January",'2' => "February",'3' => "March",'4' => "April",'5' => "May",'6' => "June",'7' => "July",'8' => "August",'9' => "September",'10' => "October",'11' => "November",'12' => "December");
+
+          return view("member.payroll.modal.modal_monthly_leave_report_filter", $data);
+          
+     }
+
+     public function modal_remaining_leave_report()
+     {
+          return view("member.payroll.modal.modal_remaining_leave_report");
+     }
+
+     //end reporting v2
+
      public function modal_leave_action($payroll_leave_employee_id,$action,$remaining_leave)
      {
 
@@ -4255,7 +4350,7 @@ class PayrollController extends Member
           Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$id)->update($update);
 
           $return['status']                               = 'success';
-          $return['function_name']                        = 'payrollconfiguration.reload_leave_employee';
+           $return['function_name']                       = 'payrollconfiguration.reload_leavev2_temp';
  
           return json_encode($return);
      }

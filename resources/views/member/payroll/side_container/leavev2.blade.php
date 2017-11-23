@@ -12,6 +12,19 @@
 			</h4>
 		</div>
 	</div>
+	<div class="form-group">
+		<div class="col-md-12">
+			<h4><a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_monthly_leave_report" size="lg">Monthly Leave Report</a>
+
+			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_remaining_leave_report" style="margin-right:20px;">Remaining Leave Report</a>
+
+			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_paid_leave_report" style="margin-right:20px;">Paid Leave Report</a>
+
+
+			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_without_paid_leave_report" style="margin-right:20px;">Without Pay Leave</a>
+			</h4>
+		</div>
+	</div>
 	<ul class="nav nav-tabs">
 	  <li class="active"><a data-toggle="tab" href="#active-leave_temp"><i class="fa fa-star"></i>&nbsp;Active</a></li>
 	  <li><a data-toggle="tab" href="#archived-leave_temp"><i class="fa fa-trash-o"></i>&nbsp;Archived</a></li>

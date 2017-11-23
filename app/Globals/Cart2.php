@@ -376,6 +376,12 @@ class Cart2
 		$cart_key = Self::get_cart_key();
 		Tbl_cart::where("unique_id_per_pc", $cart_key)->delete();
 		Tbl_cart_item_pincode::where("unique_id_per_pc", $cart_key)->delete();
+		Tbl_cart_payment::where("unique_id_per_pc", $cart_key)->delete();
+	}
+	public static function cart_payment_amount($shop_id ,$type = '')
+	{
+        $cart_key = Self::get_cart_key();
+		return Tbl_cart_payment::where('payment_type',$type)->where('unique_id_per_pc',$cart_key)->where('shop_id',$shop_id)->sum('payment_amount');
 	}
 	public static function validate_cart()
 	{

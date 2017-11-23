@@ -35,9 +35,17 @@ function pos()
 		event_change_quantity();
 		event_click_add_payment();
 		event_click_remove_payment();
+		event_change_slot_id();
 
         event_load_popover();
         action_click_change_qty();
+	}
+	function event_change_slot_id()
+	{
+		$('body').on('change','.change-slot-id', function(e)
+		{
+			$('.input-slot-id').val($(e.currentTarget).val());
+		});
 	}
 	function event_click_add_payment()
 	{

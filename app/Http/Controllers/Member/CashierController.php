@@ -219,6 +219,7 @@ class CashierController extends Member
             
         $method                                             = Request::input('payment_method');
         $amount                                             = Request::input('payment_amount');
+        $slot_id                                            = Request::input('slot_id');
 
         $shop_id                                            = $this->user_info->shop_id;
         $transaction_new["transaction_reference_table"]     = "tbl_customer";
@@ -249,6 +250,8 @@ class CashierController extends Member
                 {
                     $validate .= 'Please choose a warehouse destination <br>';
                 }
+
+                $validate .= Transaction::validate_payment($shop_id, $slot_id);
 
                 if(!$validate)
                 {
@@ -298,7 +301,7 @@ class CashierController extends Member
                             $return['status'] = 'error';
                             $return['status_message'] = $validate;
                         }
-                    } 
+                    }
                 }
                 else
                 {

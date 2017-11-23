@@ -135,6 +135,17 @@ class Customer
 		$data['total_gc'] = Tbl_mlm_slot::mlm_points()->where("slot_owner",$customer_id)->where("points_log_type","GC")->sum("points_log_points");
 		return $data;
 	}	
+
+	public static function get_points_wallet_per_slot($slot_id = 0)
+	{
+		$data['total_wallet'] = Tbl_mlm_slot::where("slot_id", $slot_id)->currentWallet()->value('current_wallet');
+		$data['total_gc'] = Tbl_mlm_slot::mlm_points()->where("slot_id",$slot_id)->where("points_log_type","GC")->sum("points_log_points");
+		return $data;
+	}
+	public static function slot_info($slot_id)
+	{
+		return Tbl_mlm_slot::where('slot_id',$slot_id)->first();
+	}
 	public static function search($str = '', $shop_id = 0, $archived = 0)
 	{
 		if($str != '' && $str != null){

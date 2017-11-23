@@ -16,6 +16,7 @@ use App\Models\Tbl_warehouse_receiving_report;
 use App\Models\Tbl_warehouse_receiving_report_item;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_sponsor;
+use App\Models\Tbl_cart_payment;
 
 use App\Models\Tbl_cart_item_pincode;
 use App\Models\Tbl_transaction;
@@ -900,5 +901,25 @@ class Transaction
         }
 
         return $slot;
+    }
+    public static function validate_payment($shop_id, $slot_id)
+    {
+        $return = null;
+        $cart_key = Cart2::get_cart_key();
+        $amount = Customer::get_points_wallet_per_slot($slot_id);
+        $cart_wallet_amount = Cart2::cart_payment_amount($shop_id,'wallet');
+        $cart_gc_amount = Cart2::cart_payment_amount($shop_id,'gc');
+
+        if($cart_wallet_amount > $amount['total_wallet'])
+        {
+            $return .= 'Not enough wallet in <b>slot no'.Customer::slot_info($slot_id)->slot_no.'</b>, wallet remaining '.currency('PHP ',$amount['total_wallet']).'. <br>'; 
+        }
+
+        if($cart_gc_amount > $amount['total_gc'])
+        {
+            $return .= 'Not enough GC in <b>slot no'.Customer::slot_info($slot_id)->slot_no.'</b>, GC remaining '.currency('',$amount['total_gc']).' point(s). <br>'; 
+        }
+
+        return $return;
     }
 }

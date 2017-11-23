@@ -117,17 +117,19 @@ class ShopMemberController extends Shop
                 }
             }
 
-
-            if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
+            if(Self::$customer_info->customer_id != 12) //SIR ARNOLD
             {
-                $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
-                $data['mlm_pin'] = MLM2::get_code($data['check_unused_code'])['mlm_pin'];
-                $data['mlm_activation'] = MLM2::get_code($data['check_unused_code'])['mlm_activation'];
-                
-                $store["temp_pin"] = $data['mlm_pin'];
-                $store["temp_activation"] = $data['mlm_activation'];
-                $store["online_transaction"] = true;
-                session($store);
+                if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
+                {
+                    $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                    $data['mlm_pin'] = MLM2::get_code($data['check_unused_code'])['mlm_pin'];
+                    $data['mlm_activation'] = MLM2::get_code($data['check_unused_code'])['mlm_activation'];
+                    
+                    $store["temp_pin"] = $data['mlm_pin'];
+                    $store["temp_activation"] = $data['mlm_activation'];
+                    $store["online_transaction"] = true;
+                    session($store);
+                }
             }
    
             $data["not_placed_slot"] = new stdClass();
@@ -156,7 +158,7 @@ class ShopMemberController extends Shop
             }
         }
 
-        return Self::load_view_for_members('member.dashboard', $data);
+        return view("member.dashboard", $data);
     }
     public function getKit()
     {

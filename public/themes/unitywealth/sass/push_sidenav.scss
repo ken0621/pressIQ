@@ -13,7 +13,7 @@ $bold: 700;
      width: 300px;
      height: 100%;
      top: 0;
-     z-index: 1000;
+     z-index: 150;
      position: fixed;
      overflow-y: auto;
 
@@ -169,15 +169,15 @@ $bold: 700;
  left: 0;
 }
 
-.pushmenu-push-toright 
-{
-    left: 300px; 
+// .pushmenu-push-toright 
+// {
+//     left: 300px; 
 
-    @media screen and (max-width: 320px)
-    {
-        left: 246px;
-    }
-}
+//     @media screen and (max-width: 320px)
+//     {
+//         left: 246px;
+//     }
+// }
 
 
 /*Transition*/
@@ -195,28 +195,28 @@ $bold: 700;
 
     @media screen and (max-width: 991px)
     {
-            //background: url(icon_nav.png) no-repeat left top;
-            cursor: pointer;
-            //height: 27px;
-            //width: 33px;
-            //text-indent: -99999em;
+        //background: url(icon_nav.png) no-repeat left top;
+        cursor: pointer;
+        //height: 27px;
+        //width: 33px;
+        //text-indent: -99999em;
 
+        display: block;
+        width: 50px;
+        padding: 7.5px 12px 7.5px 12px;
+        margin-right: auto;
+        margin-top: 20px;
+        //background-color: #77b93f;
+
+        .fa
+        {
             display: block;
-            width: 50px;
-            padding: 7.5px 12px 7.5px 12px;
-            margin-right: auto;
-            margin-top: 20px;
-            //background-color: #77b93f;
-
-            .fa
-            {
-                display: block;
-                color: #77b93f;
-                font-size: 30px;
-            }
-
+            color: #77b93f;
+            font-size: 30px;
         }
+
     }
+}
 
 
     nav-list.active { background-position: -331px top; }
@@ -304,4 +304,21 @@ $bold: 700;
     {
         margin-top: -35px;
     }
+}
+
+
+#overlay
+{
+    transition: 0.2s;
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 145;
+    cursor: pointer;
 }

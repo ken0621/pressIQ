@@ -25,9 +25,9 @@
 				</div>
 				@if($mlm == 1)
 				<div class="profile-lead">
-					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
+					<!-- <a data-toggle="modal" data-target="#leads_modal" href="javascript:">
 						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
-					</a>
+					</a> -->
 					<!-- Modal -->
 					<div id="leads_modal" class="modal fade leads-modal" role="dialog">
 					   <div class="modal-dialog">
@@ -168,7 +168,7 @@
 						   		</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-default" type="submit"><i class="fa fa-pencil"></i> Update</button>
+							   			<button class="btn btn-profile-custom" type="submit"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -195,7 +195,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button type="submit" class="submit-button btn btn-default"><i class="fa fa-pencil"></i> Update</button>
+							   			<button type="submit" class="submit-button btn btn-profile-custom"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -259,7 +259,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-default" type="submit"><i class="fa fa-pencil"></i>  Update</button>
+							   			<button class="btn btn-profile-custom" type="submit"><i class="fa fa-pencil"></i>  Update</button>
 							   		</div>
 						   		</div>
 					   		</div>

@@ -85,7 +85,7 @@ function theme_custom()
     		
     		$nav_list.click(function() {
     			$(this).toggleClass('active');
-    			$('.pushmenu-push').toggleClass('pushmenu-push-toright');
+    			// $('.pushmenu-push').toggleClass('pushmenu-push-toright');
     			$menuLeft.toggleClass('pushmenu-open');
     		});
 
@@ -253,4 +253,17 @@ function ready_load_mini_ecom_cart()
 		$('.mini-cart-quantity').html(quantity);
 		$('.mini-cart-total-price').html(total_price);
 	});
+}
+
+function on() 
+{
+    document.getElementById("overlay").style.display = "block";
+    $("body").css("overflow", "hidden");
+}
+
+function off()
+{
+    document.getElementById("overlay").style.display = "none";
+    $('.pushmenu').removeClass("pushmenu-open");
+    $("body").css("overflow", "auto");
 }

@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 .member
 {
 	background-color: #ededed;
@@ -454,6 +456,21 @@
 	}
 }
 
+/* ALERT CUSTOM */
+.alert
+{
+	background-color: #ff5252;
+	color: #fff;
+}
+
+.alert-custom-success
+{
+	background-color: #57c029;
+	color: #fff;
+}
+/* END ALERT CUSTOM */
+
+/* PER THEMES POPUPS AND BUTTONS COLOR*/
 .modal-header
 {
 	background-color: #006CC5;
@@ -467,6 +484,20 @@
 	.close
 	{
 		color: #fff;
+	}
+}
+
+.btn-lblue
+{
+	background-color: #006CC5;
+	border: 1px solid #006CC5;
+	color: #fff;
+	@include transition(0.3s);
+
+	&:hover
+	{
+		background-color: inherit;
+		color: #006CC5;
 	}
 }
 
@@ -493,8 +524,10 @@
 
 	&:hover
 	{
-		background-color: rgba(253, 96, 96, 0.1) !important;
+		background-color: inherit !important;
 		border: 1px solid #fd6060;
-		color: #fff;
+		color: #fd6060;
 	}
 }
+
+/* END PER THEMES POPUPS AND BUTTONS COLOR*/

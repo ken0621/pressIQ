@@ -29,6 +29,7 @@ use App\Globals\Mail_global;
 use App\Globals\Transaction;
 use App\Globals\Warehouse2;
 use App\Globals\Ecom_Product;
+use App\Globals\Abs\AbsMain;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;
@@ -663,12 +664,26 @@ class ShopMemberController extends Shop
     public function postPayoutSetting()
     {
         $shop_id = $this->shop_info->shop_id;
+        $customer = Self::$customer_info;
 
         /* UPDATE CUSTOMER PAYOUT METHOD */
         $update_customer["customer_payout_method"] = request("customer_payout_method");
         $update_customer["tin_number"] = request("tin_number");
-        Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
+        // Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
 
+        /* UPDATE  METHOD */
+        foreach(request("airline") as $key => $value)
+        {
+            $slot_info = Tbl_mlm_slot::where("slot_no", $value)->where("shop_id", $this->shop_info->shop_id)->first();
+
+            if ($slot_info) 
+            {
+                if ($customer) 
+                {
+                    AbsMain::update_info($customer->customer_id, $slot_info->slot_id, request("tour_wallet_account_id")[$key], $this->shop_info->shop_id); 
+                }
+            }
+        }
 
         /* UPDATE VMONEY METHOD */
         foreach(request("vmoney") as $key => $value)
@@ -693,7 +708,6 @@ class ShopMemberController extends Shop
             }
         }
 
-
         /* UPDATE EON METHOD */
         foreach(request("eon_slot_code") as $key => $eon_slot_no)
         {
@@ -701,7 +715,6 @@ class ShopMemberController extends Shop
             $update_mlm_slot["slot_eon_card_no"] = request("eon_card_no")[$key];
             Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $eon_slot_no)->update($update_mlm_slot);
         }
-
 
         /* UPDATE BANK DETAILS */
         foreach(request("bank_slot_no") as $key => $bank_slot_no)

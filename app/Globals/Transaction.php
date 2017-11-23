@@ -281,6 +281,19 @@ class Transaction
     {
         return Tbl_transaction_item::where('transaction_list_id', $transaction_list_id)->get();
     }
+    public static function get_all_transaction_item($shop_id, $date_from = '',$date_to = '', $transaction_type = '')
+    {
+        $data = Tbl_transaction_item::transaction_list()->where('shop_id', $shop_id);
+        if($date_from && $date_to)
+        {
+            $data = $data->whereBetween('transaction_date_created',[$date_from,$date_to]);
+        }
+        if($transaction_type)
+        {
+            $data = $data->where('transaction_type',$transaction_type);
+        }
+        return $data->get();
+    }
     public static function get_data_transaction_list($transaction_list_id, $type = null)
     {
         $data = Tbl_transaction_list::transaction()->where('transaction_list_id', $transaction_list_id);

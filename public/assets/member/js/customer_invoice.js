@@ -579,6 +579,7 @@ function customer_invoice()
 			onChangeValue: function()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
+				$(".customer-billing-address").val($(this).find("option:selected").attr("billing-address"));
 				load_all_estimate($(this).val());
 			}
 		});
@@ -838,7 +839,6 @@ function submit_done(data)
 {
 	if(data.status == "success-invoice")
 	{
-		console.log("succes-invoice");
         if(data.redirect)
         {
         	toastr.success("Success inv");
@@ -850,6 +850,22 @@ function submit_done(data)
     		{
     			customer_invoice.action_initialized();
     			toastr.success("Success");
+    		})
+    	}
+	}
+	else if(data.status == "error-invoice")
+	{
+        if(data.redirect)
+        {
+        	toastr.error("Error inv");
+        	location.href = data.redirect;
+    	}
+    	else
+    	{
+    		$(".load-data:last").load(data.link+" .load-data .data-container", function()
+    		{
+    			customer_invoice.action_initialized();
+    			toastr.error("Error");
     		})
     	}
 	}

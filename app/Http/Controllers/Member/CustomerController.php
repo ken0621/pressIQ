@@ -52,6 +52,15 @@ class CustomerController extends Member
                 return view('member.customer.customer_tbl', $data)->render();  
             }
 
+            if(Purchasing_inventory_system::check())
+            {
+                $data["pis"] = true;                
+            }
+            else
+            {
+                $data["pis"] = false;
+            }
+            
     		return view('member.customer.index',$data);
         }
         else
@@ -129,6 +138,7 @@ class CustomerController extends Member
     public function load_customer()
     {
         $data["_customer"]  = Customer::getAllCustomer();
+
         return view('member.load_ajax_data.load_customer', $data);
     }
 	
@@ -199,6 +209,15 @@ class CustomerController extends Member
             if($value || $value != '')
             {
                 $data["value"] = $value;
+            }
+
+            if(Purchasing_inventory_system::check())
+            {
+                $data["pis"] = true;                
+            }
+            else
+            {
+                $data["pis"] = false;
             }
 
     	    return view('member.modal.createcustomer',$data);
@@ -664,6 +683,15 @@ class CustomerController extends Member
             else
             {
                 $data['termname'] = [];
+            }
+
+            if(Purchasing_inventory_system::check())
+            {
+                $data["pis"] = true;                
+            }
+            else
+            {
+                $data["pis"] = false;
             }
             
     	    return view('member.modal.editcustomermodal',$data);

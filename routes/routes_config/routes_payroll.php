@@ -43,6 +43,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/payroll_register_report_period/export_excel_filter/{id}/{uid}','Member\PayrollReportController@payroll_register_report_export_excel_filter');
 	/*END PAYROLL REGISTER REPORT*/
 
+	/*EMPLOYEE SUMMARY REPORT*/
+	Route::any('/reports/employee_summary_report','Member\PayrollReportController@employee_summary_report');
+
 	/*START 13th month pay*/
 	Route::any('/reports/13th_month_pay','Member\Payroll13thMonthPayController@index');
 	Route::any('/reports/employees_13th_month_pay_table','Member\Payroll13thMonthPayController@employees_13th_month_pay_table');

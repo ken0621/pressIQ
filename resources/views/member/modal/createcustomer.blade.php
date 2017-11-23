@@ -164,7 +164,9 @@
           <li><a data-toggle="tab" href="#tax-info">Tax info</a></li>
           <li><a data-toggle="tab" href="#payment-and-billing">Payment and billing</a></li>
           <li><a data-toggle="tab" href="#attachment">Attachment</a></li>
-          <li><a data-toggle="tab" href="#mlm">MLM</a></li>
+          @if(!$pis)
+            <li><a data-toggle="tab" href="#mlm">MLM</a></li>
+          @endif
         </ul>
         
         <div class="tab-content tab-content-custom">

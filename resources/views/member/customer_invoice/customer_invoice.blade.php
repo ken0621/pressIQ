@@ -83,7 +83,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Billing Address</label>
-                                <textarea class="form-control input-sm textarea-expand" name="inv_customer_billing_address" placeholder="">{{$inv->inv_customer_billing_address or ''}}</textarea>
+                                <textarea class="form-control input-sm textarea-expand customer-billing-address" name="inv_customer_billing_address" placeholder="">{{$inv->inv_customer_billing_address or ''}}</textarea>
                             </div>
                             <div class="col-sm-2">  
                                 <label>Terms</label>
@@ -354,7 +354,7 @@
 
                                                             <td class="cm-number-td text-right">1</td>
                                                             <td>
-                                                                <select class="form-control select-item droplist-item-cm input-sm pull-left {{$cmline->cmline_item_id}}" name="cmline_item_id[]" required>
+                                                                <select class="required form-control select-item droplist-item-cm input-sm pull-left {{$cmline->cmline_item_id}}" name="cmline_item_id[]">
                                                                     @include("member.load_ajax_data.load_item", ['_item' => $_cm_item, 'add_search' => "", 'item_id' => $cmline->cmline_item_id])
                                                                 </select>
                                                             </td>
@@ -529,7 +529,15 @@
 @section('script')
 <script type="text/javascript">
     @if(Session::has('success'))
-        toastr.success('{{Session::get('success')}}');
+        toastr.success('{{ Session::get('success') }}');
+    @elseif(Session::has('error'))
+        @if(is_array(Session::get('error')) && count(Session::get('error')) > 0)
+            @foreach(Session::get('error') as $error)
+                toastr.error('{{ $error }}');
+            @endforeach
+        @else
+            toastr.error('{{ Session::get('error') }}');
+        @endif
     @endif
 
 </script>

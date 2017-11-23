@@ -14,23 +14,19 @@
 					<div class="fill-up-container">
 						<!-- TEXTFIELD CONTAINER -->
 						<div class="textfield-container row clearfix">
-							<div class="col-md-6 col-sm-6 col-xs-6 form-holder">
+							<div class="col-md-6 col-sm-6 col-xs-12 form-holder">
 								<input type="text" class="form-control" placeholder="First Name*">
 							</div>
-							<div class="col-md-6 col-sm-6 col-xs-6 form-holder">
+							<div class="col-md-6 col-sm-6 col-xs-12 form-holder">
 								<input type="text" class="form-control" placeholder="Last Name*">
 							</div>
-						</div>
-						<div class="textfield-container row clearfix">
-							<div class="col-md-6 col-sm-6 col-xs-6 form-holder">
+							<div class="col-md-6 col-sm-6 col-xs-12 form-holder">
 								<input type="text" class="form-control" placeholder="Phone Number*">
 							</div>
-							<div class="col-md-6 col-sm-6 col-xs-6 form-holder">
+							<div class="col-md-6 col-sm-6 col-xs-12 form-holder">
 								<input type="text" class="form-control" placeholder="Email Address*">
 							</div>
-						</div>
-						<div class="textfield-container row clearfix">
-							<div class="col-md-6 col-sm-6 col-xs-6 form-holder">
+							<div class="col-md-6 col-sm-6 col-xs-12 form-holder">
 								<input type="text" class="form-control" placeholder="Subject">
 							</div>
 						</div>

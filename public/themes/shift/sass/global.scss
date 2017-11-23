@@ -132,7 +132,7 @@ button:hover
     padding: 10px 0px;
     position: relative;
     background-color: rgba(0, 0, 0, 0.9);
-    z-index: 150;
+    z-index: 99;
 
     @media screen and (max-width: 900px) 
     {
@@ -182,7 +182,7 @@ button:hover
         {
             position: fixed;
             width: 100%;
-            z-index: 999;
+            z-index: 99;
             top: 0;
             background-color: #000;
             padding: 2px 0px;

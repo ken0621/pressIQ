@@ -103,16 +103,25 @@
 						<div class="chart-legend">
 							@foreach($_wallet_plan as $plan)
 								<div class="holder">
+
 									<div class="color"></div>
-									<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+
+									@if($plan->label == "Membership Matching")
+										<div class="name"><span>Franchise Matching</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+									@elseif($plan->label == "Vmoney")
+										<div class="name"><span>E-Money</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+									@else
+										<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+									@endif
+
 								</div>
 							@endforeach
 						</div>
 					</div>
 				</div>
 				
+				@if(isset($points->{ "display_repurchase_cashback"}))
 				<div class="square-container vip-cashback-cont">
-					@if(isset($points->{ "display_repurchase_cashback"}))
 					<div class="title"><i class="align-icon"></i> VIP Cashback</div>
 					<div class="sub-container">
 						<div class="chart-legend" style="min-height: 117px; max-height: auto;">
@@ -122,8 +131,9 @@
 							</div>
 						</div>
 					</div>
-					@endif
 				</div>
+				@endif
+
 			</div>
 		</div>
 		
@@ -177,13 +187,13 @@
 										<div class="email">{{ $direct->slot_no }}</div>
 										<div class="date">{{ $direct->time_ago }}</div>
 									</div>
-								</div>
-								<div class="action pull-right">
-									@if($direct->distributed == 1)
-										<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-lblue"><i class="fa fa-star"></i> VIEW INFO</button>
-									@else
-										<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
-									@endif
+									<div class="action pull-right">
+										@if($direct->distributed == 1)
+											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-lblue"><i class="fa fa-star"></i> VIEW INFO</button>
+										@else
+											<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+										@endif
+									</div>
 								</div>
 							</div>
 							@endforeach

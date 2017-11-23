@@ -36,10 +36,17 @@ use Carbon\Carbon;
 class Transaction
 {
 
-    public static function get_transaction_item_code($transaction_list_id)
+    public static function get_transaction_item_code($transaction_list_id, $shop_id = null)
     {
         $list = Tbl_transaction_list::salesperson()->transaction()->where('transaction_list_id',$transaction_list_id)->first();
-        $check = Tbl_warehouse_issuance_report::where('wis_number',$list->transaction_number)->first();
+        if ($shop_id) 
+        {
+            $check = Tbl_warehouse_issuance_report::where("wis_shop_id", $shop_id)->where('wis_number',$list->transaction_number)->first();
+        }
+        else
+        {
+            $check = Tbl_warehouse_issuance_report::where('wis_number',$list->transaction_number)->first();
+        }
         $ref_name = 'transaction_list';
         $ref_id = $transaction_list_id;
         $_item = null;
@@ -273,6 +280,20 @@ class Transaction
     public static function get_transaction_item($transaction_list_id)
     {
         return Tbl_transaction_item::where('transaction_list_id', $transaction_list_id)->get();
+    }
+    public static function get_all_transaction_item($shop_id, $date_from = '',$date_to = '', $transaction_type = '')
+    {
+        $data = Tbl_transaction_item::transaction_list()->transaction()->where('tbl_transaction_list.shop_id', $shop_id);
+        if($date_from && $date_to)
+        {
+            $data = $data->whereBetween('transaction_date_created',[$date_from,$date_to]);
+        }
+        if($transaction_type)
+        {
+            $data = $data->where('transaction_type',$transaction_type);
+        }
+        $data = $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
+        return $data->get();
     }
     public static function get_data_transaction_list($transaction_list_id, $type = null)
     {

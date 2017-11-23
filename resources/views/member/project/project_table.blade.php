@@ -6,8 +6,9 @@
             <th class="text-center">Project Owner</th>
             <th class="text-center">Project Company E-Mail</th>
             <th class="text-center">Project Contact</th>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
+            @if(count($_project)!=0)
+            <th class="text-center" colspan="2">Action</th>
+            @endif
         </tr>
     </thead>
     <tbody>
@@ -23,7 +24,11 @@
                 <td class="text-center">{{ $project->project_email }}</td>
                 <td class="text-center">{{ $project->project_email }}</td>
                 <td class="text-center">{{ $project->project_contact }}</td>
+                @if($project->archived==0)
                 <td class="text-center"><a class="action-archive" href="javascript:">Archive</a></td>
+                @else
+                <td class="text-center"><a class="action-archive" href="javascript:">Restore</a></td>
+                @endif
                 <td class="text-center"><a class="action-modify" href="javascript:">Modify</a></td>
             </tr>
             @endforeach

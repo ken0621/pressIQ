@@ -1,3 +1,71 @@
+.modal-header
+{
+	background-color: #00A4E6;
+	color: #fff;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	.close
+	{
+		color: #fff;
+	}
+}
+
+.btn-custom-white
+{
+	background-color: #fd6060;
+	color: #fff;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	&:hover
+	{
+		color: #fff;
+		opacity: 0.8;
+	}
+	
+}
+
+.btn-def-custom, .btn-custom-primary
+{
+	background-color: #00A4E6;
+	color: #fff;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	&:hover
+	{
+		color: #fff;
+		opacity: 0.8;
+	}
+}
+
+.btn-payout-custom
+{
+	background-color: #77B941;
+	color: #fff;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	&:hover
+	{
+		color: #fff;
+		opacity: 0.8;
+	}
+}
+
 .member
 {
 	background-color: #ededed;

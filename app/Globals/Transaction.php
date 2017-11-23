@@ -906,9 +906,11 @@ class Transaction
     {
         $return = null;
         $cart_key = Cart2::get_cart_key();
+        $cart = Cart2::get_cart_info();
         $amount = Customer::get_points_wallet_per_slot($slot_id);
         $cart_wallet_amount = Cart2::cart_payment_amount($shop_id,'wallet');
         $cart_gc_amount = Cart2::cart_payment_amount($shop_id,'gc');
+        $cart_total_amount = Cart2::cart_payment_amount($shop_id);
 
         if($cart_wallet_amount > $amount['total_wallet'])
         {
@@ -919,7 +921,45 @@ class Transaction
         {
             $return .= 'Not enough GC in <b>slot no'.Customer::slot_info($slot_id)->slot_no.'</b>, GC remaining '.currency('',$amount['total_gc']).' point(s). <br>'; 
         }
+        if($cart)
+        {
+            if($cart_total_amount < $cart["_total"]->grand_total)
+            {
+                $return .= 'Not enough payment';
+            }
+        }
 
         return $return;
+    }
+    public static function consume_payment($shop_id, $transaction_list_id, $slot_id)
+    {        
+        $amount = Customer::get_points_wallet_per_slot($slot_id);
+        $cart_wallet_amount = Cart2::cart_payment_amount($shop_id,'wallet');
+        $cart_gc_amount = Cart2::cart_payment_amount($shop_id,'gc');
+        $transaction_info = Tbl_transaction_list::transaction()->where('transaction_type','receipt')->where('transaction_list_id', $transaction_list_id)->first();
+
+        $ins_wallet['shop_id'] = $shop_id;
+        $ins_wallet['wallet_log_slot'] = $slot_id;
+        $ins_wallet['wallet_log_slot_sponsor'] = $slot_id;
+        $ins_wallet['wallet_log_date_created'] = Carbon::now();
+        $ins_wallet['wallet_log_details'] = 'Thank you for purchasing. '.$cart_wallet_amount.' is deducted to your wallet';
+        $ins_wallet['wallet_log_amount'] = $cart_wallet_amount;
+        $ins_wallet['wallet_log_plan'] = 'REPURCHASE';
+        $ins_wallet['wallet_log_status'] = 'released';
+        $ins_wallet['wallet_log_claimbale_on'] = $ins_wallet['wallet_log_date_created'];
+        $ins_wallet['wallet_log_remarks'] = 'Purchase on POS - '.$transaction_info->transaction_number;
+        Tbl_mlm_slot_wallet_log::insert($ins_wallet);
+
+        $ins_gc['shop_id'] = $shop_id;
+        $ins_gc['wallet_log_slot'] = $slot_id;
+        $ins_gc['wallet_log_slot_sponsor'] = $slot_id;
+        $ins_gc['wallet_log_date_created'] = Carbon::now();
+        $ins_gc['wallet_log_details'] = 'Thank you for purchasing. '.$cart_wallet_amount.' is deducted to your wallet';
+        $ins_gc['wallet_log_amount'] = $cart_wallet_amount;
+        $ins_gc['wallet_log_plan'] = 'REPURCHASE';
+        $ins_gc['wallet_log_status'] = 'released';
+        $ins_gc['wallet_log_claimbale_on'] = $ins_gc['wallet_log_date_created'];
+        $ins_gc['wallet_log_remarks'] = 'Purchase on POS - '.$transaction_info->transaction_number;
+        Tbl_mlm_slot_wallet_log::insert($ins_gc);
     }
 }

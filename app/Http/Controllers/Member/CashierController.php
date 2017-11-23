@@ -288,13 +288,26 @@ class CashierController extends Member
                             }
                             $validate = WarehouseTransfer::create_wis($shop_id, $remarks, $ins_wis, $_item);
                         }
+
+
                         if(is_numeric($validate))
                         {
-                            Session::forget('customer_id');
-                            Cart2::clear_cart();
-                            $return['status'] = 'success';
-                            $return['receipt_id'] = $transaction_list_id;
-                            $return['call_function'] = 'success_process_sale';
+                            /** CONSUME - PAYMENT FOR GC AND WALLET **/ 
+                            $validate = Transaction::consume_payment($shop_id, $transaction_list_id, $slot_id);
+                            
+                            if(is_numeric($validate))
+                            {
+                                Session::forget('customer_id');
+                                Cart2::clear_cart();
+                                $return['status'] = 'success';
+                                $return['receipt_id'] = $transaction_list_id;
+                                $return['call_function'] = 'success_process_sale';
+                            }
+                            else
+                            {
+                                $return['status'] = 'error';
+                                $return['status_message'] = $validate;                                
+                            }
                         }
                         else
                         {

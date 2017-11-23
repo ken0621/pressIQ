@@ -381,7 +381,12 @@ class Cart2
 	public static function cart_payment_amount($shop_id ,$type = '')
 	{
         $cart_key = Self::get_cart_key();
-		return Tbl_cart_payment::where('payment_type',$type)->where('unique_id_per_pc',$cart_key)->where('shop_id',$shop_id)->sum('payment_amount');
+		$amount = Tbl_cart_payment::where('unique_id_per_pc',$cart_key)->where('shop_id',$shop_id);
+		if($type != '')
+		{
+			$amount = $amount->where('payment_type',$type);
+		}
+		return $amount->sum('payment_amount');
 	}
 	public static function validate_cart()
 	{

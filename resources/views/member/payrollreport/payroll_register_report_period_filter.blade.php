@@ -21,7 +21,7 @@
                         <th valign="center" rowspan="2" class="text-center" style="width: 120px">Leave Pay</th>
                         <!-- <th valign="center" rowspan="2" class="text-center" style="width: 120px">ALLOWANCES</th> -->
                         
-                        <th colspan="9" class="text-center" style="width: 900px">ALLOWANCES</th>
+                        <th colspan="11" class="text-center" style="width: 900px">ALLOWANCES</th>
 
                         <th valign="center" rowspan="2" class="text-center" style="width: 100px">GROSS PAY</th>
 
@@ -45,7 +45,8 @@
                         <th class="text-center" style="width: 100px">CASH BOND</th>
                         <th class="text-center" style="width: 100px">ADDITIONS</th>
                         <th class="text-center" style="width: 100px">DEDUCTIONS</th>
-                        <th class="text-center" style="width: 100px">OTHERS</th>
+                        <th class="text-center" style="width: 100px">13TH MONTH AND OTHER NON TAXABLE BENEFITS</th>
+                        <th class="text-center" style="width: 100px">DE MINIMIS BENEFIT</th>
                         <!-- <th class="text-center" style="width: 100px">Allowances</th>
                         <th class="text-center" style="width: 100px">Adjustment Allowances</th> -->
                         <th class="text-center" style="width: 100px">SSS LOAN</th>
@@ -92,6 +93,8 @@
                         <td class="text-center" >{{ number_format($employee->adjustment_additions,2) }}</td>
                         <td class="text-center" >{{ number_format($employee->adjustment_deductions,2) }}</td>
                         <td class="text-center" >{{ number_format($employee->adjustment_others,2) }}</td>
+                        <td class="text-center" >{{ number_format($employee->adjustment_13th_month_and_other,2) }}</td>
+                        <td class="text-center" >{{ number_format($employee->adjustment_de_minimis_benefit,2) }}</td>
 
                         <td class="text-center" >{{ number_format($employee->gross_pay,2) }}</td>
 
@@ -142,7 +145,9 @@
                         <td class="text-center" ><b>{{ number_format($total_adjustment_additions, 2) }}</b></td>
                         <td class="text-center" ><b>{{ number_format($total_adjustment_deductions, 2) }}</b></td>
                         <td class="text-center" ><b>{{ number_format($total_adjustment_others, 2) }}</b></td>
-
+                        <td class="text-center" >{{ number_format($employee->total_adjustment_13th_month_and_other,2) }}</td>
+                        <td class="text-center" >{{ number_format($employee->total_adjustment_de_minimis_benefit,2) }}</td>
+                        
                         <td class="text-center" ><b>{{ number_format($total_gross, 2) }}</b></td>
 
                         <!-- <td class="text-center" ><b>{{ number_format($adjustment_allowance_total,2) }}</b></td> -->
@@ -162,6 +167,7 @@
                         <td class="text-center" ><b>{{ number_format($philhealth_er_total, 2) }}</b></td>
                         <td class="text-center" ><b>{{ number_format($witholding_tax_total, 2) }}</b></td>
                         <td class="text-center" ><b>{{ number_format($deduction_total, 2) }}</b></td>
+
                         
                         <td class="text-center" ><b>{{ number_format($total_net, 2) }}</b></td>
                   </tr>

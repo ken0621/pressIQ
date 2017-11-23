@@ -663,17 +663,17 @@ class PayrollReportController extends Member
 		$nightdiff_total 		 			= 0;
 		$restday_total 		 				= 0;
 
-		$total_adjustment_allowance		= 0;
-		$total_adjustment_bonus			= 0;
-		$total_adjustment_commission	= 0;
-		$total_adjustment_incentives	= 0;
-		$total_adjustment_cash_advance	= 0;
-		$total_adjustment_cash_bond		= 0;
-		$total_adjustment_additions		= 0;
-		$total_adjustment_deductions	= 0;
-		$total_adjustment_others		= 0;
-		$total_13th_month_and_other 	= 0;
-		$total_de_minimis_benefit 		= 0;
+		$total_adjustment_allowance					= 0;
+		$total_adjustment_bonus						= 0;
+		$total_adjustment_commission				= 0;
+		$total_adjustment_incentives				= 0;
+		$total_adjustment_cash_advance				= 0;
+		$total_adjustment_cash_bond					= 0;
+		$total_adjustment_additions					= 0;
+		$total_adjustment_deductions				= 0;
+		$total_adjustment_others					= 0;
+		$total_adjustment_13th_month_and_other 		= 0;
+		$total_adjustment_de_minimis_benefit 		= 0;
 
 		$time_total_time_spent				= 0;
 		$time_total_overtime				= 0;
@@ -902,6 +902,14 @@ class PayrollReportController extends Member
 							{
 								$adjustment_others 		+= $breakdown["amount"];
 							}
+							if (strcasecmp($breakdown["category"], "13th Month and Other Non Taxable Benefits") == 0) 
+							{
+								$adjustment_13th_month_and_other 	+= $breakdown["amount"];
+							}
+							if (strcasecmp($breakdown["category"], "De Minimis Benefit") == 0) 
+							{
+								$adjustment_de_minimis_benefit 		+= $breakdown["amount"];
+							}
 						}
 					}
 					if (isset($breakdown["record_type"])) 
@@ -952,15 +960,18 @@ class PayrollReportController extends Member
 				$data["_employee"][$key]->hdmf_loan					= $hdmf_loan;
 				$data["_employee"][$key]->other_loans				= $other_loans;
 
-				$data["_employee"][$key]->adjustment_allowance 		= $adjustment_allowance;
-				$data["_employee"][$key]->adjustment_bonus 			= $adjustment_bonus;
-				$data["_employee"][$key]->adjustment_commission 	= $adjustment_commission;
-				$data["_employee"][$key]->adjustment_incentives 	= $adjustment_incentives;
-				$data["_employee"][$key]->adjustment_cash_advance 	= $adjustment_cash_advance;
-				$data["_employee"][$key]->adjustment_cash_bond 		= $adjustment_cash_bond;
-				$data["_employee"][$key]->adjustment_additions 		= $adjustment_additions;
-				$data["_employee"][$key]->adjustment_deductions 	= $adjustment_deductions;
-				$data["_employee"][$key]->adjustment_others 		= $adjustment_others;
+				$data["_employee"][$key]->adjustment_allowance 					= $adjustment_allowance;
+				$data["_employee"][$key]->adjustment_bonus 						= $adjustment_bonus;
+				$data["_employee"][$key]->adjustment_commission 				= $adjustment_commission;
+				$data["_employee"][$key]->adjustment_incentives 				= $adjustment_incentives;
+				$data["_employee"][$key]->adjustment_cash_advance 				= $adjustment_cash_advance;
+				$data["_employee"][$key]->adjustment_cash_bond 					= $adjustment_cash_bond;
+				$data["_employee"][$key]->adjustment_additions 					= $adjustment_additions;
+				$data["_employee"][$key]->adjustment_deductions 				= $adjustment_deductions;
+				$data["_employee"][$key]->adjustment_others 					= $adjustment_others;
+				$data["_employee"][$key]->adjustment_13th_month_and_other 		= $adjustment_13th_month_and_other;
+				$data["_employee"][$key]->adjustment_de_minimis_benefit 		= $adjustment_de_minimis_benefit;
+
 
 				$deduction_total				+= Payroll2::payroll_number_format($deduction, 2);
 				$cola_total						+= Payroll2::payroll_number_format($cola, 2);
@@ -983,15 +994,18 @@ class PayrollReportController extends Member
 				$sss_loan_total					+= Payroll2::payroll_number_format($sss_loan,2);
 				$other_loans_total				+= Payroll2::payroll_number_format($other_loans,2);
 
-				$total_adjustment_allowance			+= Payroll2::payroll_number_format($adjustment_allowance,2);
-				$total_adjustment_bonus				+= Payroll2::payroll_number_format($adjustment_bonus,2);
-				$total_adjustment_commission		+= Payroll2::payroll_number_format($adjustment_commission,2);
-				$total_adjustment_incentives		+= Payroll2::payroll_number_format($adjustment_incentives,2);
-				$total_adjustment_cash_advance		+= Payroll2::payroll_number_format($adjustment_cash_advance,2);
-				$total_adjustment_cash_bond			+= Payroll2::payroll_number_format($adjustment_cash_bond,2);
-				$total_adjustment_additions			+= Payroll2::payroll_number_format($adjustment_additions,2);
-				$total_adjustment_deductions		+= Payroll2::payroll_number_format($adjustment_deductions,2);
-				$total_adjustment_others			+= Payroll2::payroll_number_format($adjustment_others,2);
+				$total_adjustment_allowance					+= Payroll2::payroll_number_format($adjustment_allowance,2);
+				$total_adjustment_bonus						+= Payroll2::payroll_number_format($adjustment_bonus,2);
+				$total_adjustment_commission				+= Payroll2::payroll_number_format($adjustment_commission,2);
+				$total_adjustment_incentives				+= Payroll2::payroll_number_format($adjustment_incentives,2);
+				$total_adjustment_cash_advance				+= Payroll2::payroll_number_format($adjustment_cash_advance,2);
+				$total_adjustment_cash_bond					+= Payroll2::payroll_number_format($adjustment_cash_bond,2);
+				$total_adjustment_additions					+= Payroll2::payroll_number_format($adjustment_additions,2);
+				$total_adjustment_deductions				+= Payroll2::payroll_number_format($adjustment_deductions,2);
+				$total_adjustment_others					+= Payroll2::payroll_number_format($adjustment_others,2);
+				
+				$total_adjustment_13th_month_and_other		+= Payroll2::payroll_number_format($adjustment_13th_month_and_other,2);
+				$total_adjustment_de_minimis_benefit		+= Payroll2::payroll_number_format($adjustment_de_minimis_benefit,2);
 			}
 
 
@@ -1214,6 +1228,8 @@ class PayrollReportController extends Member
 		$data["total_adjustment_additions"]				= $total_adjustment_additions;	
 		$data["total_adjustment_deductions"]			= $total_adjustment_deductions;
 		$data["total_adjustment_others"]				= $total_adjustment_others;	
+		$data["total_adjustment_13th_month_and_other"] 	= $total_adjustment_13th_month_and_other;
+		$data["total_adjustment_de_minimis_benefit"] 	= $total_adjustment_de_minimis_benefit;
 
 		$data["time_total_time_spent"]				=	$time_total_time_spent;				
 		$data["time_total_overtime"]				=	$time_total_overtime;				

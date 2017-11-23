@@ -4107,7 +4107,6 @@ class Payroll2
 			$return->gross_basic_pay = Payroll2::identify_period_salary($salary->payroll_employee_salary_monthly, $period_category);
 		}
 		
-		
 		return $return;
 	}
 

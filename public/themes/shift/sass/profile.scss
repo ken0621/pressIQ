@@ -6,12 +6,12 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
-
 .profile-container
 {
 	font-family: $content-text;
 	margin: -15px;
 	color: #344049;
+
 	.left
 	{
 		border-right: 1px solid #e2e2e2;
@@ -207,7 +207,7 @@ $text-dark: #272c2f;
 					font-size: 17px;
 					text-align: center;
 					color: $text-light;
-					font-weight: $regular;
+					font-weight: $light;
 					min-width: 150px;
 					@media screen and (max-width: 1199px)
 					{
@@ -233,7 +233,7 @@ $text-dark: #272c2f;
 					border-bottom: 2.5px solid #D4B044;
 					a
 					{
-						font-weight: $regular;
+						font-weight: $light;
 						color: $text-dark;
 					}
 				}
@@ -250,7 +250,7 @@ $text-dark: #272c2f;
 					{
 						color: $text-dark;
 						font-size: 15px;
-						font-weight: $regular;
+						font-weight: $light;
 					}
 					.form-control
 					{
@@ -375,5 +375,24 @@ $text-dark: #272c2f;
 				font-weight: 600;
 			}
 		}
+	}
+}
+
+.btn-profile-custom
+{
+	font-size: 14px;
+	background-color: #09939C;
+	color: #fff;
+	border-radius: 25px;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	&:hover
+	{
+		background-color: #245580;
+		color: #fff;
 	}
 }

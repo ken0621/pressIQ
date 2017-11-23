@@ -455,3 +455,23 @@ $text-dark: #272c2f;
 		}
 	}
 }
+
+.btn-primary
+{
+	background-color: #2161C8 !important;
+	color: #fff !important;
+	background-image: none !important;
+	border-color: #2161C8 !important;
+}
+
+.btn-custom-white
+{
+	background-color: #ff5454 !important;
+	color: #fff;
+
+	&:hover
+	{
+		opacity: 0.8;
+		color: #fff;
+	}
+}

@@ -20,9 +20,9 @@
 	                        <!-- <span class="or">OR</span> -->
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
 	                        @if(isset($company_head_id))
-	                        	</br>
+	                        	</br></br>
 	                        	<span style="color:white">or</span>
-	                        	</br>
+	                        	</br></br>
 	                        	<a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code no_sponsor_code" company_head_id="{{$company_head_id->slot_no}}">NO SPONSOR?</button></a>
 	                    	@endif
 	                    </div>
@@ -187,7 +187,6 @@
 			</div>
 		</div>
 
-
 	    <!-- Success -->
 	    <div class="popup-success">
 	        <div id="success-modal" class="modal success-modal fade">
@@ -238,7 +237,7 @@
 <!--  Enter a code -->
 <div class="popup-enter-a-code">
     <div id="enter-a-code-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
+        <div class="modal-md modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -260,6 +259,7 @@
         </div>
     </div>
 </div>
+
 <!-- Proceed 1 -->
 <div class="popup-proceed1">
     <div id="proceed-modal-1" class="modal fade">
@@ -299,6 +299,7 @@
           </div>
       </div>
   </div>
+
 <!-- MANUAL PLACING OF SLOT -->
 <div class="popup-verify-placement">
     <div id="slot-placement-modal" class="modal fade">
@@ -332,6 +333,7 @@
           </div>
       </div>
   </div>
+  
 @endsection
 
 @section("member_script")

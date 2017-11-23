@@ -4,10 +4,10 @@
 			<div class="icon">
 				<img src="/themes/{{ $shop_theme }}/img/report-icon.png">
 			</div>
-		<div class="text">
-				<div class="name">Reports</div>
-				<div class="sub">All reward logs are shown here. </div>
-			</div>
+    		<div class="text">
+    				<div class="name">Reports</div>
+    				<div class="sub">All reward logs are shown here. </div>
+    		</div>
 		</div>
 		<div class="animated fadeInRight right">
 			<div class="search">

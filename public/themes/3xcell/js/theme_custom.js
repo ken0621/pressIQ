@@ -16,6 +16,7 @@ function theme_custom()
 	{
         product_mobile_dropdown();
         company_mobile_dropdown();
+        close_side_nav();
 		action_facebook_widget();
 		event_header_fix();
 		event_action_click();
@@ -160,11 +161,39 @@ function theme_custom()
         $menuLeft = $('.pushmenu-left');
         $nav_list = $('#nav_list');
         
-        $nav_list.on("click", function() {
+        $nav_list.on("click", function() 
+        {
             $(this).toggleClass('active');
-            $('.pushmenu-push').toggleClass('pushmenu-push-toright');
+           /* $('.pushmenu-push').toggleClass('pushmenu-push-toright');*/
             $menuLeft.toggleClass('pushmenu-open');
         });
+    }
+
+    function close_side_nav()
+    {
+        /*$("body").click(function(e)
+        {
+            if(e.target.className == "pushmenu-open")
+            { 
+                alert("do't hide");  
+            }
+
+            else 
+            {
+                $(".pushmenu-open").hide();
+            }
+        });*/
+
+/*        $(document).mouseup(function(e) 
+        {
+            var container = $("pushmenu-push");
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (!container.is(e.target) && container.has(e.target).length === 0) 
+            {
+                container.hide();
+            }
+        });*/
     }
 
     function product_mobile_dropdown()
@@ -182,4 +211,23 @@ function theme_custom()
             $(e.currentTarget).siblings(".company-mobile-dropdown-list").slideToggle();
         });
     }
+}
+
+/*JAVASCRIPT*/
+
+function on() 
+{
+    var $body = $(document.body);
+
+    document.getElementById("overlay").style.display = "block";
+    $body.css("overflow", "hidden");
+}
+
+function off()
+{
+    var $body = $(document.body);
+    document.getElementById("overlay").style.display = "none";
+    $('.pushmenu').removeClass("pushmenu-open");
+    $body.css("overflow", "auto");
+    /*$("body").css("overflow", "auto");*/
 }

@@ -21,9 +21,14 @@
         @yield("css")
         {{-- RESPONSIVE CSS --}}
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
+
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
+    
+    
+
     <div class="loader hide">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
@@ -32,8 +37,13 @@
     <div id="home" class="subheader-container">
         <div class="container">
             @if($customer)
-            <div class="left-container"><span><i class="fa fa-envelope-o" aria-hidden="true"></i></span><span>yourcompany.email</span></div>
-            <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span><span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
+            <div class="left-container">
+                <span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
+                <span>yourcompany.email</span>
+            </div>
+            <div class="right-container">
+                <span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span>
+                <span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
             @else
             <div class="left-container">
                 <span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
@@ -50,23 +60,92 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-2 col-sm-12">
+                    
+                    <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
+
+                        <nav class="pushmenu pushmenu-left">
+                            @if($customer)
+                            <div class="space1"></div>
+                            <a href="/members/profile">
+                               <div class="profile-img-container">
+                                    <div class="row-no-padding clearfix">
+                                        <div class="col-xs-3">
+                                            <div class="profile-img"><img src="{{ $profile_image }}"></div>
+                                        </div>
+                                        <div class="col-xs-9">
+                                            <div class="text-holder">
+                                                <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+                                                <div class="subtext text-overflow">{{ $customer->email }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="space1"></div>
+                            <span>BROWSE</span>
+                            <ul class="links">
+                                <li> <a onclick="off()" href="/">Home</a> </li>
+                                <li> <a onclick="off()" href="/about">Company</a> </li>
+                                <li> <a onclick="off()" href="/product">Products</a> </li>
+                                <li> <a onclick="off()" href="/contact">Get in touch</a> </li>
+                            </ul>
+                            
+                            <div class="space2"></div>
+                            <span>MEMBERS AREA</span>
+                            <ul class="links">
+                                <li> <a href="/members">Dashboard</a> </li>
+                                <li> <a href="/members/profile">Profile</a> </li>
+                                @if($mlm_member)
+                                <!-- <li> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li> -->
+                                <li class="genealogy-mobile-dropdown"> 
+                                    <a href="javascript:">Genealogy</a> 
+                                </li>
+                                    <ul class="genealogy-mobile-dropdown-list">
+                                        <li><a href="/members/genealogy?mode=binary">Binary Tree</a></li>
+                                        <li><a href="/members/genealogy?mode=sponsor">Unilevel Tree</a></li>
+                                    </ul>
+                                <li> <a href="/members/report">Reports</a> </li>
+                                <li> <a href="/members/report-points">Network List</a> </li>
+                                <li> <a href="/members/wallet-encashment">Wallet Encashment</a> </li>
+
+                                @else
+                                @endif
+                                <li> <a href="/members/order">Orders</a> </li>
+                                @if($customer)
+                                    <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                                @endif
+                            </ul>
+                            @else
+                                <div class="space1"></div>
+                                <span>BROWSE</span>
+                                <ul class="links">
+                                    <li> <a onclick="off()" href="/">Home</a> </li>
+                                    <li> <a onclick="off()" href="/about">Company</a> </li>
+                                    <li> <a onclick="off()" href="/product">Products</a> </li>
+                                    <li> <a onclick="off()" href="/contact">Get in touch</a> </li>
+                                </ul>
+                            @endif
+                        </nav>
+                        
+                        <div id="overlay" onclick="off()"></div>
+
                     <div class="image-logo-holder clearfix">
-                        <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/shift-logo.png"></a>                       
+                        <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/shift-logo.png"></a>
                     </div>
-                    <div class="menu-nav">
+                    <!-- <div class="menu-nav">
                         <span></span>
                         <span></span>
                         <span></span>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
                     <nav class="navirino">
                         <ul>
-                            <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a class="smoth-scroll" href="/">HOME</a></li>
-                            <li class="{{ Request::segment(1) == "about" ? "active" : "" }}"><a class="smoth-scroll" href="/about">COMPANY</a></li>
-                            <li class="{{ Request::segment(1) == "product" ? "active" : "" }}"><a class="smoth-scroll" href="/product">PRODUCTS</a></li>
-                            <li class="{{ Request::segment(1) == "contact" ? "active" : "" }}"><a class="smoth-scroll" href="/contact">GET INTOUCH</a></li>
+                            <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">HOME</a></li>
+                            <li class="{{ Request::segment(1) == "about" ? "active" : "" }}"><a href="/about">COMPANY</a></li>
+                            <li class="{{ Request::segment(1) == "product" ? "active" : "" }}"><a href="/product">PRODUCTS</a></li>
+                            <li class="{{ Request::segment(1) == "contact" ? "active" : "" }}"><a href="/contact">GET INTOUCH</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -124,9 +203,7 @@
 
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
 
-    <!-- FB WIDGET -->
-    <div id="fb-root"></div>
-
     @yield("script")
+
     </body>
 </html>

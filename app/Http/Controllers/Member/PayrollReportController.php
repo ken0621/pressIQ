@@ -27,6 +27,8 @@ use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_employee_contract;
+use App\Models\Tbl_payroll_employment_status;
+use App\Models\Tbl_payroll_employee_salary;
 
 use App\Globals\AuditTrail;
 
@@ -1229,5 +1231,28 @@ class PayrollReportController extends Member
 	}
 	/*END PAYROLL REGISTER REPORT*/
 
+	public function employee_summary_report()
+	{
+		$active_status[0]    = 1;
+	    $active_status[1]    = 2;
+	    $active_status[2]    = 3;
+	    $active_status[3]    = 4;
+	    $active_status[4]    = 5;
+	    $active_status[5]    = 6;
+	    $active_status[7]    = 7;
+
+		$data['_active']	 = Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $active_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_last_name')->get();
+
+		//dd($data['salary'][0]->payroll_employee_salary_monthly);
+		foreach ($data['_active'] as $key => $active)
+		{
+			$data['_active'][$key]->monthly_salary    = Tbl_payroll_employee_salary::selemployee($active->payroll_employee_id)->value('payroll_employee_salary_monthly');
+			$data['_active'][$key]->daily_salary    = Tbl_payroll_employee_salary::selemployee($active->payroll_employee_id)->value('payroll_employee_salary_daily');
+			//dd($data['_active'][$key]->payroll_employee_salary_monthly);
+		}
+		$data['_company']    = Payroll::company_heirarchy(Self::shop_id());
+
+		return view('member.payrollreport.payroll_employee_summary_report', $data);
+	}
 
 }

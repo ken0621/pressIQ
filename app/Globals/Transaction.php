@@ -36,10 +36,17 @@ use Carbon\Carbon;
 class Transaction
 {
 
-    public static function get_transaction_item_code($transaction_list_id)
+    public static function get_transaction_item_code($transaction_list_id, $shop_id = null)
     {
         $list = Tbl_transaction_list::salesperson()->transaction()->where('transaction_list_id',$transaction_list_id)->first();
-        $check = Tbl_warehouse_issuance_report::where('wis_number',$list->transaction_number)->first();
+        if ($shop_id) 
+        {
+            $check = Tbl_warehouse_issuance_report::where("wis_shop_id", $shop_id)->where('wis_number',$list->transaction_number)->first();
+        }
+        else
+        {
+            $check = Tbl_warehouse_issuance_report::where('wis_number',$list->transaction_number)->first();
+        }
         $ref_name = 'transaction_list';
         $ref_id = $transaction_list_id;
         $_item = null;

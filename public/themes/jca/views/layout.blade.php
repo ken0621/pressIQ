@@ -38,7 +38,7 @@
         </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
-    <body class="pushmenu-push">
+    <body>
         <div class="loader hide">
           <span><img src="/resources/assets/frontend/img/loader.gif"></span>
         </div>
@@ -66,6 +66,45 @@
                 <!-- @endif -->
             </div>
         </div>
+        <div id="overlay" onclick="off()"></div>
+        <nav class="pushmenu pushmenu-left">
+
+            @if($customer)
+            <div class="space1"></div>
+            <span>BROWSE</span>
+            <ul class="links">
+                <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>
+                <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
+                <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
+                <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
+            </ul>
+            
+            <div class="space2"></div>
+            <span>MEMBERS AREA</span>
+            <ul class="links">
+                <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">DASHBOARD</a> </li>
+                <li> <a href="/members/profile">PROFILE</a> </li>
+                @if($mlm_member)
+                <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary">GENEALOGY</a> </li>
+                <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">REPORTS</a> </li>
+                <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
+                    @if($customer)
+                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                    @endif
+                @else
+                @endif
+            </ul>
+            @else
+                <div class="space1"></div>
+                <span>BROWSE</span>
+                <ul class="links">
+                    <li> <a href="/">HOME</a> </li>
+                    <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
+                    <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
+                    <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
+                </ul>
+            @endif
+        </nav>
         <div class="header-container">
             <div class="container">
                 <div class="row clearfix">
@@ -75,45 +114,7 @@
                             <span></span>
                             <span></span>
                         </div> -->
-                        <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
-                        <nav class="pushmenu pushmenu-left">
-
-                            @if($customer)
-                            <div class="space1"></div>
-                            <span>BROWSE</span>
-                            <ul class="links">
-                                <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>
-                                <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
-                                <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
-                                <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
-                            </ul>
-                            
-                            <div class="space2"></div>
-                            <span>MEMBERS AREA</span>
-                            <ul class="links">
-                                <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">DASHBOARD</a> </li>
-                                <li> <a href="/members/profile">PROFILE</a> </li>
-                                @if($mlm_member)
-                                <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary">GENEALOGY</a> </li>
-                                <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">REPORTS</a> </li>
-                                <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
-                                    @if($customer)
-                                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
-                                    @endif
-                                @else
-                                @endif
-                            </ul>
-                            @else
-                                <div class="space1"></div>
-                                <span>BROWSE</span>
-                                <ul class="links">
-                                    <li> <a href="/">HOME</a> </li>
-                                    <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
-                                    <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
-                                    <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
-                                </ul>
-                            @endif
-                        </nav>
+                        <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
                         <div class="image-logo-holder">
                             <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/header-logo.png"></a>                       
                         </div>
@@ -168,19 +169,19 @@
                                     <div class="icon-holder">
                                         <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/location-logo.png">
                                     </div>
-                                    <p class="footer-details">Unit 810 8/F Raffles Corporate Center, F. Ortigas Ave., Ortigas Center, San Antonio, Pasig City</p>
+                                    <p class="footer-details">{{ get_content($shop_theme_info, "footer_details", "footer_details_address") }}</p>
                                 </div>
                                 <div class="jca-footer-details-container">
                                     <div class="icon-holder">
                                         <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/telephone-logo.png">
                                     </div>
-                                    <p class="footer-details">(02)631-6997&nbsp;/&nbsp;0926-649-4134&nbsp;/&nbsp;0946-561-9714</p>
+                                    <p class="footer-details">{{ get_content($shop_theme_info, "footer_details", "footer_details_number") }}</p>
                                 </div>
                                 <div class="jca-footer-details-container">
                                     <div class="icon-holder">
                                         <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/mail-logo.png">
                                     </div>
-                                    <p class="footer-details">jcawellnessinternationalcorp@gmail.com</p>
+                                    <p class="footer-details">{{ get_content($shop_theme_info, "footer_details", "footer_email_address") }}</p>
                                 </div>
                             </div>
                         </div>
@@ -212,27 +213,27 @@
                             </div>
                             <div class="jca-footer-details-container">
 
-                                <a href="/themes/{{ $shop_theme }}/img/overview/marketing-plan.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_marketing_plan") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Marketing Plan</p>
                                 </a>
                                 
-                                <a href="/themes/{{ $shop_theme }}/img/overview/packages.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_packages") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Packages</p>
                                 </a>
                                 
-                                <a href="/themes/{{ $shop_theme }}/img/overview/service-packages.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_service_packages") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Service Packages</p>
                                 </a>
 
-                                <a href="/themes/{{ $shop_theme }}/img/overview/product-packages.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_packages") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Product Packages</p>
                                 </a>
                                 
-                                <a href="/themes/{{ $shop_theme }}/img/overview/sales-commission.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_sales_commission") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Sales Commission</p>
                                 </a>
 
-                                <a href="/themes/{{ $shop_theme }}/img/overview/overide-sales-comission.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_override_sales_commission") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Overide Sales Commission</p>
                                 </a>
 
@@ -247,13 +248,13 @@
                                 <p class="footer-title">Product Portfolio</p>
                             </div>
                             <div class="jca-footer-details-container">
-                                <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-serum.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_portfolio1") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Swiss Apple Stem Cell Serum</p>
                                 </a>
-                                <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-soap.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_portfolio2") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Swiss Apple Stem Cell Soap with Glutathione and Collagen</p>
                                 </a>
-                                <a href="/themes/{{ $shop_theme }}/img/product-portfolio/p-services.jpg" class="lsb-preview"> 
+                                <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_portfolio3") }}" class="lsb-preview"> 
                                     <p class="footer-detail-list">Stem Cell Therapy- The Anti-Aging and Rejuvenation Therapy</p>
                                 </a>
                             </div>

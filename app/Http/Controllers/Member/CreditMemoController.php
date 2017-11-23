@@ -143,6 +143,15 @@ class CreditMemoController extends Member
             $data["action"]         = "/member/customer/credit_memo/update";
         }
 
+        if(Purchasing_inventory_system::check())
+        {
+            $data["pis"] = true;                
+        }
+        else
+        {
+            $data["pis"] = false;
+        }
+
         return view("member.customer.credit_memo.credit_memo_add",$data);
     }
     public function create_submit()

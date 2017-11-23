@@ -2,9 +2,9 @@
 @section("content")
 <div class="content">
     <!-- Media Slider -->
-    <div id="home" class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/front-img2.jpg')">
+    <div id="home" class="slider-wrapper" style="background-image: url('{{ get_content($shop_theme_info, "home", "home_banner") }}')">
         <div class="container">
-            <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption.png"></div>
+            <div class="caption-logo-container"><img src="{{ get_content($shop_theme_info, "home", "home_banner_image_logo") }}"></div>
             <div class="caption-container">
                 {{-- <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p> --}}
             </div>
@@ -18,21 +18,21 @@
                             <div class="content-details">
                                 <p class="title wow fadeInLeft" data-wow-delay=".1s">COMPANY PROFILE</p>
                                 <p class="desc wow fadeInLeft" data-wow-delay=".2s">
-                                    Unity wealth is an affiliate marketing that provides digital training to help people on how  to earn money online and how to be an effective online entrepreneur such as eBooks and video tutorials. 
+                                    {{ get_content($shop_theme_info, "home", "home_company_profile") }} 
                                 </p>
                                 <p class="title-2 wow fadeInLeft" data-wow-delay=".3s">MISSION</p>
                                 <p class="desc wow fadeInLeft" data-wow-delay=".4s">
-                                    Unity wealth is an affiliate marketing that provides digital training to help people on how  to earn money online and how to be an effective online entrepreneur such as eBooks and video tutorials. 
+                                    {{ get_content($shop_theme_info, "home", "home_company_mission") }} 
                                 </p>
                                 <p class="title-2 wow fadeInLeft" data-wow-delay=".5s">VISION</p>
                                 <p class="des wow fadeInLeft" data-wow-delay=".6s">
-                                    Unity wealth is an affiliate marketing that provides digital training to help people on how  to earn money online and how to be an effective online entrepreneur such as eBooks and video tutorials. 
+                                    {{ get_content($shop_theme_info, "home", "home_company_vision") }} 
                                 </p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="img-container wow fadeInRight">
-                                <img src="/themes/{{ $shop_theme }}/img/company-profile-img.jpg">
+                                <img src="{{ get_content($shop_theme_info, "home", "home_company_profile_image") }}">
                             </div>
                         </div>
                     </div>

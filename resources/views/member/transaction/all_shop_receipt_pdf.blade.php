@@ -63,7 +63,9 @@
                 @if($customer_address)
                 <div class="detail-row"><strong>Shipping Address :</strong> {{ $customer_address->customer_street }} {{ $customer_address->customer_state }} {{ $customer_address->customer_city }} {{ $customer_address->customer_zipcode }}</div>
                 @endif
+                @if($customer_info)
                 <div class="detail-row"><strong>TIN :</strong> {{ $customer_info->tin_number }}</div>
+                @endif
             </div>
             <div class="sub-title">INVOICE DETAILS:</div>
             <div class="holder invoice-details">
@@ -91,9 +93,11 @@
                         @if(count($_codes) > 0)
                         <tr>
                             <td colspan="5">
-                                @foreach($_codes[$item->item_id] as $c)
-                                <div>PIN <b>{{$c['item_pin']}}</b> - ACTIVATION CODE <b>{{$c['item_activation']}}</b></div>
-                                @endforeach
+                                @if(isset($_codes[$item->item_id]) && count($_codes[$item->item_id]) > 0)
+                                    @foreach($_codes[$item->item_id] as $c)
+                                    <div>PIN <b>{{$c['item_pin']}}</b> - ACTIVATION CODE <b>{{$c['item_activation']}}</b></div>
+                                    @endforeach
+                                @endif
                             </td>
                         </tr>
                         @endif

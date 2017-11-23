@@ -62,6 +62,10 @@ class Tbl_customer extends Model
         
         return $query = $sales_order->union($estimate)->union($invoice)->union($credit_memo)->union($sales_receipt)->union($receive_payment)->union($journal_entry)->orderBy("date_created","desc");
     }
+    public function scopeSearch($query)
+    {
+        return $query->join("tbl_mlm_slot","tbl_customer.customer_id","=","tbl_mlm_slot.slot_owner");
+    }
 
     public function scopeInfo($query)
     {

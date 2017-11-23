@@ -33,7 +33,7 @@
 				<div class="form-group order-tags"></div>
 				<div class="labas_mo_dito table-responsive " id="show_me_something">
 					<div>
-						<a href="/member/payroll/reports/payroll_register_report_period/export_excel/{{$period_info->payroll_period_company_id}}"><button style="margin-bottom: 20px;" type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a>
+						<button style="margin-bottom: 20px;" type="button" class="btn btn-success pull-right btn-export-excel"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button>
 					</div>
 					<div class="payroll_register_report_table">
 					</div>

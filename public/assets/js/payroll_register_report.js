@@ -17,6 +17,7 @@ function payroll_register_report()
 		$(document).ready(function(){
 			event_register_report_filter();
 			action_register_report_table(0);
+			export_excel_register_report();
 		});
 	}
 	
@@ -43,6 +44,15 @@ function payroll_register_report()
 					$(".payroll_register_report_table").html(data);
 				}
 			});
+	}
+
+	function export_excel_register_report()
+	{
+		$(".btn-export-excel").on('click',function()
+		{
+			var period_company_id = $(".period_company_id").val();
+			window.location = "/member/payroll/reports/payroll_register_report_period/export_excel/"+period_company_id+"/"+payroll_company_id;
+		});
 	}
 }
 

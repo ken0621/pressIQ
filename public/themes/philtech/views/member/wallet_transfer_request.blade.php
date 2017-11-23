@@ -29,7 +29,7 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <label for="basic-input">Amount</label>
-                            <input type="number" id="basic-input" class="form-control amount" min="0" name="amount">
+                            <input type="number" id="basic-input" class="form-control amount" min="1" name="amount">
                         </div>
                     </div>
 

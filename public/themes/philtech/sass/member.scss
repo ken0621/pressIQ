@@ -78,7 +78,7 @@
 			z-index: 10;
 			transition: 0.3s all ease;
 			// overflow: hidden;
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 768px)
 			{
 				display: none;
 			}
@@ -386,7 +386,7 @@
 			padding: 15px;
 
 			overflow: hidden;
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 768px)
 			{
 				margin-left: 0;
 			}
@@ -489,45 +489,46 @@
 
 .btn-lblue
 {
-	background-color: #006CC5;
+	background-color: inherit;
 	border: 1px solid #006CC5;
-	color: #fff;
+	color: #006CC5;
 	@include transition(0.3s);
 
 	&:hover
 	{
-		background-color: inherit;
-		color: #006CC5;
+		background-color: #006CC5;
+		color: #fff;
 	}
 }
 
 .btn-primary
 {
-	background-color: #006CC5 !important;
-	color: #fff !important;
+	background-color: inherit !important;
+	color: #006CC5 !important;
 	border: 1px solid #006CC5 !important;
 	font-weight: 400;
 	@include transition(0.3s);
 
 	&:hover
 	{
-		background-color: inherit !important;
-		color: #006CC5 !important;
+		background-color: #006CC5 !important;
+		color: #fff !important;
 		border: 1px solid #006CC5 !important;
 	}
 }
 
 .btn-custom-white
 {
-	background-color: #fd6060 !important;
-	color: #fff;
+	background-color: inherit !important;
+	color: #fd6060;
+	border: 1px solid #fd6060;
     @include transition(0.3s);
 
 	&:hover
 	{
-		background-color: inherit !important;
+		background-color: #fd6060 !important;
 		border: 1px solid #fd6060;
-		color: #fd6060;
+		color: #fff;
 	}
 }
 

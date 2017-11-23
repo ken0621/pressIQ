@@ -213,6 +213,9 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
 	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
 	Route::get('product_order2/export','Member\ProductOrderController2@export');
+
+	Route::get('product_order2/settings','Member\ProductOrderController2@settings');
+	Route::post('product_order2/settings','Member\ProductOrderController2@settings_submit');
 	//product order end
 });
 
@@ -390,6 +393,9 @@ Route::any('/member/pis/agent/archived/{id}/{action}','Member\AgentController@ar
 Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_submit');
 /* END AGENT*/
 Route::any('/member/report/agent/profit_loss','Member\ReportAgentProfitLossController@index');
+
+/*LOGISTIC REPORT*/
+Route::any('/member/report/logistic','Member\ReportLogisticController@index');
 
 /*SALES LIQUIDATION*/
 Route::any('member/cashier/sales_liquidation','Member\PisSalesLiquidationController@index');
@@ -1200,3 +1206,12 @@ include_once('routes_config/routes_payroll_employee.php');
 Route::get('/ref/{id}', 'Shop\LeadController@ref');
 Route::get('/{id}', 'Shop\LeadController@ref');
 
+
+// Item Redeemable
+Route::get('member/item/redeemable','Member\RedeemableItemController@index');
+Route::get('member/item/redeemable/add','Member\RedeemableItemController@add');
+Route::post('member/item/redeemable/add','Member\RedeemableItemController@submit_add');
+Route::get('member/item/redeemable/redeemable_table', 'Member\RedeemableItemController@table');
+Route::get('member/item/redeemable/archive', 'Member\RedeemableItemController@archive');
+Route::get('member/item/redeemable/modify','Member\RedeemableItemController@modify');
+Route::post('member/item/redeemable/modify','Member\RedeemableItemController@submit_modify');

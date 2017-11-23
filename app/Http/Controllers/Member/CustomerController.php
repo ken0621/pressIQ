@@ -30,6 +30,7 @@ use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
 use App\Globals\Item;
+use App\Globals\Purchasing_inventory_system;
 
 class CustomerController extends Member
 {
@@ -52,6 +53,15 @@ class CustomerController extends Member
                 return view('member.customer.customer_tbl', $data)->render();  
             }
 
+            if(Purchasing_inventory_system::check())
+            {
+                $data["pis"] = true;                
+            }
+            else
+            {
+                $data["pis"] = false;
+            }
+            
     		return view('member.customer.index',$data);
         }
         else
@@ -112,7 +122,7 @@ class CustomerController extends Member
                                     ->where('tbl_customer.shop_id',$shop_id)
                                     ->where('tbl_customer.archived',$archived)
                                     ->where('tbl_customer.IsWalkin',$IsWalkin)
-    								->orderBy('tbl_customer.first_name');
+    								->orderBy('tbl_customer.customer_id', 'desc');
 
     		if($filter_by_slot == 'w_slot')
             {
@@ -129,6 +139,7 @@ class CustomerController extends Member
     public function load_customer()
     {
         $data["_customer"]  = Customer::getAllCustomer();
+
         return view('member.load_ajax_data.load_customer', $data);
     }
 	
@@ -196,6 +207,15 @@ class CustomerController extends Member
             if($value || $value != '')
             {
                 $data["value"] = $value;
+            }
+
+            if(Purchasing_inventory_system::check())
+            {
+                $data["pis"] = true;                
+            }
+            else
+            {
+                $data["pis"] = false;
             }
 
     	    return view('member.modal.createcustomer',$data);
@@ -661,6 +681,15 @@ class CustomerController extends Member
             else
             {
                 $data['termname'] = [];
+            }
+
+            if(Purchasing_inventory_system::check())
+            {
+                $data["pis"] = true;                
+            }
+            else
+            {
+                $data["pis"] = false;
             }
             
     	    return view('member.modal.editcustomermodal',$data);

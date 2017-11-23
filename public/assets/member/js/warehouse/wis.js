@@ -34,5 +34,4 @@ function success_confirm(data)
 			location.reload();
 		},2000);
 	}
-
 }

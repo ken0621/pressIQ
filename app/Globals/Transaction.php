@@ -36,10 +36,17 @@ use Carbon\Carbon;
 class Transaction
 {
 
-    public static function get_transaction_item_code($transaction_list_id)
+    public static function get_transaction_item_code($transaction_list_id, $shop_id = null)
     {
         $list = Tbl_transaction_list::salesperson()->transaction()->where('transaction_list_id',$transaction_list_id)->first();
-        $check = Tbl_warehouse_issuance_report::where('wis_number',$list->transaction_number)->first();
+        if ($shop_id) 
+        {
+            $check = Tbl_warehouse_issuance_report::where("wis_shop_id", $shop_id)->where('wis_number',$list->transaction_number)->first();
+        }
+        else
+        {
+            $check = Tbl_warehouse_issuance_report::where('wis_number',$list->transaction_number)->first();
+        }
         $ref_name = 'transaction_list';
         $ref_id = $transaction_list_id;
         $_item = null;
@@ -273,6 +280,80 @@ class Transaction
     public static function get_transaction_item($transaction_list_id)
     {
         return Tbl_transaction_item::where('transaction_list_id', $transaction_list_id)->get();
+    }
+    public static function get_all_transaction_item($shop_id, $date_from = '',$date_to = '', $transaction_type = '', $payment_type = '')
+    {
+        $data = Tbl_transaction_item::transaction_list()->transaction()->where('tbl_transaction_list.shop_id', $shop_id);
+        if($date_from && $date_to)
+        {
+            $data = $data->whereBetween('transaction_date_created',[$date_from,$date_to]);
+        }
+        if($transaction_type)
+        {
+            $data = $data->where('transaction_type',$transaction_type);
+        }
+        $data = $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id')->get();
+        // die(var_dump($data));
+        foreach ($data as $key => $value) 
+        {
+            $payment_method = Transaction::getPaymentMethod($value->transaction_number, $value->transaction_list_id, is_serialized($value->transaction_details) ? unserialize($value->transaction_details) : null);
+            
+            $data[$key]->payment_method         = isset($payment_method->payment_method) ? $payment_method->payment_method : "None";
+
+            $data[$key]->checkout_id            = isset($payment_method->checkout_id) ? $payment_method->checkout_id : "None";
+            $data[$key]->paymaya_response       = isset($payment_method->paymaya_response) ? $payment_method->paymaya_response : "None";
+            $data[$key]->paymaya_status         = isset($payment_method->paymaya_status) ? $payment_method->paymaya_status : "None";
+            $data[$key]->dragonpay_response     = isset($payment_method->dragonpay_response) ? $payment_method->dragonpay_response : "None";
+            /* Old Date */
+            $old = DB::table("tbl_ec_order")->where("invoice_number", $value->transaction_number)->first();
+            if ($old) 
+            {
+                $data[$key]->transaction_date_created = $old->created_date;
+            }
+
+            $slot = Transaction::getSlotId($value->transaction_number, $value->transaction_list_id);
+            if ($slot) 
+            {
+                $tree = Tbl_tree_sponsor::where("sponsor_tree_child_id", $slot->slot_id)->first();
+                if ($tree) 
+                {
+                    $upline_slot = Tbl_mlm_slot::where("slot_id", $tree->sponsor_tree_parent_id)->first();
+                    if ($upline_slot) 
+                    {
+                        $data[$key]->slot_upline_no = $upline_slot->slot_no;
+                    }
+                    else
+                    {
+                        $data[$key]->slot_upline_no = "None";
+                    }
+                }
+                else
+                {
+                    $data[$key]->slot_upline_no = "HEAD";
+                }
+                $data[$key]->slot_no = $slot->slot_no;
+                $data[$key]->slot_id = $slot->slot_id;
+            }
+            else
+            {
+                $data[$key]->slot_no = "Unused";
+                $data[$key]->slot_id = "none";
+                $data[$key]->slot_upline_no = "Unused";
+            }
+        }
+        if($payment_type != '')
+        {
+            foreach ($data as $key => $value) 
+            {
+                if($value->payment_method != $payment_type)
+                {
+                    unset($data[$key]);
+                }
+            }
+        }
+        // die(var_dump($data));
+
+        return $data;
     }
     public static function get_data_transaction_list($transaction_list_id, $type = null)
     {
@@ -625,10 +706,12 @@ class Transaction
                         $data[$key]->slot_upline_no = "HEAD";
                     }
                     $data[$key]->slot_no = $slot->slot_no;
+                    $data[$key]->slot_id = $slot->slot_id;
                 }
                 else
                 {
                     $data[$key]->slot_no = "Unused";
+                    $data[$key]->slot_id = "none";
                     $data[$key]->slot_upline_no = "Unused";
                 }
             }
@@ -770,7 +853,6 @@ class Transaction
                 }
             }
         }
-
         return $data;
     }
 

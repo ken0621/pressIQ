@@ -142,6 +142,7 @@ class Purchase_Order
                 $insert_line['poline_description']     = $item_line['item_description'];
                 $insert_line['poline_um']              = $item_line['um'];
                 $insert_line['poline_qty']             = $item_line['quantity'];
+                $insert_line['poline_orig_qty']        = $item_line['quantity'];
                 $insert_line['poline_rate']            = $item_line['rate'];
                 $insert_line['poline_discount']        = $discount;
                 $insert_line['poline_discount_remark'] = $item_line['discount_remark'];

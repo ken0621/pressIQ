@@ -26,6 +26,7 @@ use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_period;
+use App\Models\Tbl_payroll_leave_schedule;
 
 use DateTime;
 
@@ -161,18 +162,18 @@ class Payroll2
 			}
 		}
 
-		$return["_employee_contribution"] = $_contribution;
-		$return["grand_total_pagibig_ee"] = $grand_total_pagibig_ee;
-		$return["grand_total_pagibig_er"] = $grand_total_pagibig_er;
+		$return["_employee_contribution"] 	 = $_contribution;
+		$return["grand_total_pagibig_ee"] 	 = $grand_total_pagibig_ee;
+		$return["grand_total_pagibig_er"] 	 = $grand_total_pagibig_er;
 		$return["grand_total_pagibig_ee_er"] = $grand_total_pagibig_ee_er;
 
-		$return["grand_total_sss_ee"] = $grand_total_sss_ee;
-		$return["grand_total_sss_er"] = $grand_total_sss_er;
-		$return["grand_total_sss_ec"] = $grand_total_sss_ec;
-		$return["grand_total_sss_ee_er"] = $grand_total_sss_ee_er;
+		$return["grand_total_sss_ee"]		= $grand_total_sss_ee;
+		$return["grand_total_sss_er"] 		= $grand_total_sss_er;
+		$return["grand_total_sss_ec"] 		= $grand_total_sss_ec;
+		$return["grand_total_sss_ee_er"] 	= $grand_total_sss_ee_er;
 
-		$return["grand_total_philhealth_ee"] = $grand_total_philhealth_ee;
-		$return["grand_total_philhealth_er"] = $grand_total_philhealth_er;
+		$return["grand_total_philhealth_ee"] 	= $grand_total_philhealth_ee;
+		$return["grand_total_philhealth_er"] 	= $grand_total_philhealth_er;
 		$return["grand_total_philhealth_ee_er"] = $grand_total_philhealth_ee_er;
 
 		return $return;
@@ -348,8 +349,8 @@ class Payroll2
 	public static function timesheet_info($company_period, $employee_id) 
 	{
 		$_timesheet = null;
-		$from = $data["start_date"] = $company_period->payroll_period_start;
-		$to = $data["end_date"] = $company_period->payroll_period_end;
+		$from 		= $data["start_date"] 	= $company_period->payroll_period_start;
+		$to 		= $data["end_date"] 	= $company_period->payroll_period_end;
 		$payroll_period_company_id = $company_period->payroll_period_company_id;
 		$shift_code_id = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->value("shift_code_id");
 	
@@ -416,7 +417,8 @@ class Payroll2
 			$_timesheet[$from]->day_word 				= Carbon::parse($from)->format("D");
 			$_timesheet[$from]->record 					= Payroll2::timesheet_process_in_out($timesheet_db);
 			$_timesheet[$from]->is_holiday 				= Payroll2::timesheet_get_is_holiday($employee_id, $from); //$holiday["holiday_day_type"];
-			
+			$_timesheet[$from]->is_leave				= Payroll2::timesheet_get_is_leave($employee_id, $from);
+
 			// $_timesheet[$from]->holiday_name = $holiday["holiday_name"];
 			if(isset($_shift_real[0]))
 			{
@@ -637,13 +639,15 @@ class Payroll2
 		$return->default_remarks 		= Payroll2::timesheet_default_remarks($return);
 		/*End leave function*/
 		
+		$compute_type = Payroll2::convert_period_cat($employee_contract->payroll_group_salary_computation);
+
 		if($return->time_compute_mode == "flexi")
 		{
-			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, $return->shift_break_hours, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $use_leave, $testing = false);
+			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, $return->shift_break_hours, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $use_leave, $compute_type, $testing = false);
 		}
 		else
 		{
-			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours, $use_leave, false);
+			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours, $use_leave, $compute_type, false);
 		}
 		
 		$return->compute_type = $compute_type = Payroll2::convert_period_cat($employee_contract->payroll_group_salary_computation);
@@ -894,9 +898,22 @@ class Payroll2
 		}
 		return $day_type;
 	}
+
+	public static function timesheet_get_is_leave($employee_id, $date)
+	{
+		$leave_schedule = Tbl_payroll_leave_schedule::checkemployee($employee_id, $date)->get();
+
+		if (count($leave_schedule) > 0) 
+		{
+			return true;
+		}
+
+		return false;
+	}
 	public static function timesheet_default_remarks($data)
 	{
 		$remarks = null;
+
 		if($data->day_type == "rest_day")
 		{
 			$remarks[] = "REST DAY";
@@ -909,6 +926,14 @@ class Payroll2
 		{
 			$remarks[] = "HOLIDAY";
 		}
+		if (isset($data->is_leave)) 
+		{
+			if($data->is_leave)
+			{
+				$remarks[] = "LEAVE";
+			}
+		}
+
 		// if (isset($data->holiday_name)) 
 		// {
 		// 	$remarks[] = $data->holiday_name;
@@ -925,7 +950,7 @@ class Payroll2
 	public static function timesheet_process_in_out($timesheet_db)
 	{
 		$_timesheet_record = null;
-		// dd($_timesheet_record);
+
 		if($timesheet_db)
 		{
 			$_timesheet_record_db = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->get();
@@ -993,6 +1018,7 @@ class Payroll2
 			$_timesheet_record[$key]->branch = Payroll2::timesheet_get_branch($record->payroll_company_id)->name;
 			$_timesheet_record[$key]->source = $record->payroll_time_sheet_origin;
 			$_timesheet_record[$key]->payroll_time_sheet_id = $record->payroll_time_sheet_id;
+			$_timesheet_record[$key]->payroll_time_sheet_record_id = $record->payroll_time_sheet_record_id;
 		}
 
 		return $_timesheet_record;
@@ -1399,8 +1425,9 @@ class Payroll2
      * @author (Kim Briel Oraya)
      *
      */
-	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0, $use_leave = false ,$testing = false)
+	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0, $use_leave = false , $compute_type = "daily" ,$testing = false)
 	{
+
 		$leave_fill_undertime	= 1;
 		$leave_fill_late		= 1;
 		$time_spent				= "00:00:00";
@@ -1789,32 +1816,36 @@ class Payroll2
 			}
 		}
 
-			/*START day type and holiday type*/
-			if (Payroll2::convert_to_24_hour($time_spent)=="00:00:00") 
+		/*START day type and holiday type*/
+		if (Payroll2::convert_to_24_hour($time_spent)=="00:00:00") 
+		{
+			$is_absent=true;
+		}
+		if ($day_type=="rest_day") 
+		{
+			$rest_day_hours = $time_spent;
+			$is_absent = false;
+		}
+		if ($day_type=="extra_day") 
+		{
+			$extra_day_hours = $regular_hours;	
+			$is_absent = false;
+		
+		}
+		if ($is_holiday=="regular") 
+		{
+			$regular_holiday_hours = $regular_hours;
+			$is_absent = false;
+		}
+		if ($is_holiday=="special") 
+		{
+			$special_holiday_hours = $regular_hours;
+			if ($compute_type == "monthly") 
 			{
-				$is_absent=true;
-			}
-			if ($day_type=="rest_day") 
-			{
-				$rest_day_hours = $time_spent;
 				$is_absent = false;
 			}
-			if ($day_type=="extra_day") 
-			{
-				$extra_day_hours = $regular_hours;	
-				$is_absent = false;
-			
-			}
-			if ($is_holiday=="regular") 
-			{
-				$regular_holiday_hours = $regular_hours;
-				$is_absent = false;
-			}
-			if ($is_holiday=="special") 
-			{
-				$special_holiday_hours = $regular_hours;
-			}
-			/*END day type and holiday type*/ 
+		}
+		/*END day type and holiday type*/ 
 
 		$return["target_hours"] 		 = Payroll2::convert_to_24_hour($target_hours);
 		$return["time_spent"] 			 = Payroll2::convert_to_24_hour($time_spent);
@@ -1883,10 +1914,10 @@ class Payroll2
      *
      */
 
-	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours=0, $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $use_leave = false, $testing = false)
+	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours=0, $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $use_leave = false, $compute_type ,$testing = false)
 	{
 
-		$leave_fill_undertime=1;
+		$leave_fill_undertime	= 1;
 		$time_spent 			= "00:00:00";
 		$late_hours 			= "00:00:00";
 		$under_time 			= "00:00:00";
@@ -2093,6 +2124,10 @@ class Payroll2
 		if ($is_holiday=="special") 
 		{
 			$special_holiday_hours = $regular_hours;
+			if ($compute_type == "monthly") 
+			{
+				$is_absent = false;
+			}
 		}
 		/*END day type and holiday type*/
 
@@ -2255,11 +2290,15 @@ class Payroll2
 		{
 			$daily_rate = $daily_true_rate;
 		}
-		/*END determine the daily rate by compute type*/
 
-		$total_day_income 		= $daily_rate;
+		
+		$total_day_income 		= $daily_rate ;
 		$target_float 			= Self::time_float($_time['target_hours']);
 		$daily_rate_plus_cola	= $daily_rate + $cola;
+		$hourly_rate 			= $return->hourly_rate = divide($daily_rate, $target_float);
+
+		/*END determine the daily rate by compute type*/
+
 
 		/*START get hourly rate*/
 		if ($compute_type != "hourly") 
@@ -2281,19 +2320,27 @@ class Payroll2
 		$group 				= Tbl_payroll_group::where('payroll_group_id', $group_id)->first();
 
 		/* BREAKDOWN ADDITIONS */
-		$_time['time_spent'] = Payroll2::minus_time(Payroll2::convert_time_in_minutes($_time['break_hours']),$_time['time_spent']);
+		$_time['time_spent']   = Payroll2::minus_time(Payroll2::convert_time_in_minutes($_time['break_hours']),$_time['time_spent']);
 
-		$time_spent 		= Self::time_float($_time['time_spent']);
-		$regular_float 		= Self::time_float($_time['regular_hours']);
-		$rest_float 		= Self::time_float($_time['rest_day_hours']);
-		$extra_float 		= Self::time_float($_time['extra_day_hours']);
-		$legal_float 		= Self::time_float($_time['regular_holiday_hours']);
-		$special_float 		= Self::time_float($_time['special_holiday_hours']);
-		$leave_float 		= Self::time_float($_time['leave_hours']);
-		$overtime_float 	= Self::time_float($_time['overtime']);
-		$night_diff_float 	= Self::time_float($_time['night_differential']);
-		$extra_float 		= Self::time_float($_time['extra_day_hours']);
-		$leave_float		= Self::time_float($_time["leave_hours"]);
+		$time_spent 		   = Self::time_float($_time['time_spent']);
+		$regular_float 		   = Self::time_float($_time['regular_hours']);
+		$rest_float 		   = Self::time_float($_time['rest_day_hours']);
+		$extra_float 		   = Self::time_float($_time['extra_day_hours']);
+		$legal_float 		   = Self::time_float($_time['regular_holiday_hours']);
+		$special_float 		   = Self::time_float($_time['special_holiday_hours']);
+		$leave_float 		   = Self::time_float($_time['leave_hours']);
+		$overtime_float 	   = Self::time_float($_time['overtime']);
+		$night_diff_float 	   = Self::time_float($_time['night_differential']);
+		$extra_float 		   = Self::time_float($_time['extra_day_hours']);
+		$leave_float		   = Self::time_float($_time["leave_hours"]);
+		$overtime 			   = 0;
+		$nightdiff 			   = 0;
+		$breakdown_deduction   = 0;
+		$breakdown_addition    = 0;
+		$additional_rate 	   = 1;
+		$cola_true_rate 	   = $cola;
+		$payroll_late_category = $group->payroll_late_category;
+		$payroll_late_category = $group->payroll_under_time_category;
 		
 		$overtime 				= 0;
 		$nightdiff 				= 0;
@@ -2672,21 +2719,25 @@ class Payroll2
 					$breakdown_addition += $nightdiff; 
 				}
 			}
-		}
-		
+
+		} 
+
 		$subtotal_after_addition = $total_day_income;
 		//compute cola
 		$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type, $leave_float);
 
+
 		/*START BREAKDOWN DEDUCTIONS */
+
 		$late_float			= Self::time_float($_time['late']);
 		$undertime_float	= Self::time_float($_time['undertime']);
 		$absent_float		= 0;
 
 	
 		//no time in monthly
-		if($time_spent==0 && $compute_type=="monthly")
+		if($time_spent == 0 && $compute_type=="monthly")
 		{
+
 			if($_time['is_holiday'] == 'special')
 			{
 				$_time["is_absent"] = false;
@@ -2721,7 +2772,7 @@ class Payroll2
 			/*Start Undertime Deduction Computation*/
 			if ($undertime_float != 0) 
 			{
-				$undertime_rate = Self::compute_undertime_deduction($_time['undertime'], $group->payroll_under_time_category, $undertime_float, $daily_rate, $hourly_rate, $additional_percentage);
+				$undertime_rate = Self::compute_undertime_deduction($_time['undertime'], $group->payroll_under_time_category, $undertime_float, $daily_rate, $hourly_rate, $additional_percentage, $group);
 				
 				if ($compute_type == "hourly") 
 				{
@@ -2732,15 +2783,15 @@ class Payroll2
 				$return->_breakdown_deduction["undertime"]["time"] = $_time['undertime'];
 				$return->_breakdown_deduction["undertime"]["hour"] = $_time['undertime'];
 
-				$total_day_income    	 = $total_day_income - $undertime_rate;
-				$breakdown_deduction 	 += $undertime_rate;
+				$total_day_income 	 = $total_day_income - $undertime_rate;
+				$breakdown_deduction += $undertime_rate;
 			}
 			/*End Undertime Deduction Computation*/
 			
 			/*Start late Deduction Computation*/
 			if ($late_float != 0)
 			{
-				$late_rate = Self::compute_late_deduction($_time['late'], $group->payroll_late_category, $late_float, $daily_rate, $hourly_rate, $additional_percentage);
+				$late_rate = Self::compute_late_deduction($_time['late'], $group->payroll_late_category, $late_float, $daily_rate, $hourly_rate, $additional_percentage, $group);
 				
 				if ($compute_type == "hourly") 
 				{
@@ -2777,7 +2828,7 @@ class Payroll2
 	}
 
 
-	public static function compute_undertime_deduction($undertime_hours = "00:00:00", $undertime_category = "Base on Salary", $undertime_float = 0, $daily_rate = 0, $hourly_rate = 0, $additional_percentage = 0)
+	public static function compute_undertime_deduction($undertime_hours = "00:00:00", $undertime_category = "Base on Salary", $undertime_float = 0, $daily_rate = 0, $hourly_rate = 0, $additional_percentage = 0, $group)
 	{
 		$undertime_rate = 0;
 
@@ -2806,7 +2857,7 @@ class Payroll2
 	}
 
 
-	public static function compute_late_deduction($late_hours = "00:00:00", $late_category = "Base on Salary", $late_float = 0, $daily_rate = 0, $hourly_rate = 0, $additional_percentage = 0)
+	public static function compute_late_deduction($late_hours = "00:00:00", $late_category = "Base on Salary", $late_float = 0, $daily_rate = 0, $hourly_rate = 0, $additional_percentage = 0, $group)
 	{
 		$late_rate = 0;
 
@@ -2865,15 +2916,15 @@ class Payroll2
 				$cutoff_basic			 += $date_compute->compute->total_day_basic;
 				$render_days			 += $date_compute->compute->rendered_days;
 			}
-			
-			$return->cutoff_rate     		  = $cutoff_rate;
+
+			// $return->cutoff_rate     		  = $cutoff_rate;
 			$return->cutoff_income_plus_cola  = $cutoff_income_plus_cola;
 			$return->cutoff_income 			  = $cutoff_income;
 			$return->cutoff_cola			  = $cutoff_cola;
 			$return->cutoff_basic			  = $cutoff_basic;
 			$return->render_days			  = $render_days;
 		}
-		else if($compute_type=="hourly")
+		else if($compute_type == "hourly")
 		{
 			$cutoff_income_plus_cola = 0;
 			$cutoff_income			 = 0;
@@ -2895,7 +2946,7 @@ class Payroll2
 				$render_days			 += $date_compute->compute->rendered_days;
 			}
 
-			$return->cutoff_rate     		  = $cutoff_rate;
+			// $return->cutoff_rate     		  = $cutoff_rate;
 			$return->cutoff_income_plus_cola  = $cutoff_income_plus_cola;
 			$return->cutoff_income 			  = $cutoff_income;
 			$return->cutoff_cola			  = $cutoff_cola;
@@ -2956,8 +3007,6 @@ class Payroll2
 		{
 			
 		}
-		
-		
 		//get breakdown addition summary and break down deduction summary
 		foreach($_date_compute as $date => $date_compute)
 		{
@@ -3213,6 +3262,7 @@ class Payroll2
 				}
 			}
 		}
+
 		return Payroll2::convert_to_24_hour($night_differential);
 	}
 
@@ -3721,6 +3771,7 @@ class Payroll2
 			$return = Payroll2::cutoff_breakdown_hidden_allowances($return, $data);
 		}
 		
+		$return = Payroll2::cutoff_breakdown_compute_gross_basic_pay($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_gross_pay($return, $data);
 		$return = Payroll2::cutoff_breakdown_government_contributions($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_taxable_salary($return, $data);
@@ -4003,6 +4054,7 @@ class Payroll2
 
 		return $return;
 	}
+
 	public static function cutoff_breakdown_compute_gross_pay($return, $data)
 	{
 		extract($data);
@@ -4036,6 +4088,28 @@ class Payroll2
 
 		return $return;
 	}
+
+	public static function cutoff_breakdown_compute_gross_basic_pay($return, $data)
+	{
+		extract($data);
+		
+		$return->gross_basic_pay = 0;
+
+		if ($group->payroll_group_salary_computation == "Daily Rate") 
+		{
+			$return->gross_basic_pay = Payroll2::identify_period_salary_daily_rate($cutoff_input);
+		}
+		elseif ($group->payroll_group_salary_computation == "Hourly Rate") {
+			# code...
+		}
+		else
+		{
+			$return->gross_basic_pay = Payroll2::identify_period_salary($salary->payroll_employee_salary_monthly, $period_category);
+		}
+		
+		return $return;
+	}
+
 	public static function cutoff_breakdown_compute_taxable_salary($return, $data)
 	{
 		extract($data);
@@ -4348,18 +4422,45 @@ class Payroll2
 				}
 				else
 				{
-					$last_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					// $last_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
 					
+					// if($last_cutoff)
+					// {
+					// 	$philhealth_description .= "<br> Using previous cutoff as reference, previous PHILHEALTH Salary used is " . payroll_currency($last_cutoff->phihealth_salary) . " (" . payroll_currency($last_cutoff->philhealth_ee) . ")";
+					// 	$philhealth_reference_amount = $philhealth_reference_amount + $last_cutoff->phihealth_salary;
+					// 	$philhealth_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($philhealth_reference_amount);
+					// 	$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+					// 	$philhealth_description .= "<br> New PHILHEALTH Bracket falls to " . payroll_currency($philhealth_contribution["ee"]);
+					// 	$philhealth_description .= "<br> NEW BRACKET (" . payroll_currency($philhealth_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->philhealth_ee) . ")";
+					// 	$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $last_cutoff->philhealth_ee;
+					// 	$philhealth_contribution["er"] = $philhealth_contribution["er"] - $last_cutoff->philhealth_er;
+					// 	$last_cutoff->phihealth_salary;
+					// }
+
+
+
+					$last_cutoff 		= Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					$_period_approved 	= Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+
+					$total_previous_cutoff_philhealth_ee  	= 0;
+					$total_previous_cutoff_philhealth_er	= 0;
+
+					foreach ($_period_approved as $key => $period_approved) 
+					{
+						$total_previous_cutoff_philhealth_ee += $period_approved->philhealth_ee;
+						$total_previous_cutoff_philhealth_er += $period_approved->philhealth_er;
+					}
+
 					if($last_cutoff)
 					{
-						$philhealth_description .= "<br> Using previous cutoff as reference, previous PHILHEALTH Salary used is " . payroll_currency($last_cutoff->phihealth_salary) . " (" . payroll_currency($last_cutoff->philhealth_ee) . ")";
+						$philhealth_description .= "<br> Using previous cutoff as reference, previous PHILHEALTH Salary used is " . payroll_currency($last_cutoff->phihealth_salary) . " (" . payroll_currency($total_previous_cutoff_philhealth_ee) . ")";
 						$philhealth_reference_amount = $philhealth_reference_amount + $last_cutoff->phihealth_salary;
 						$philhealth_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($philhealth_reference_amount);
 						$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
 						$philhealth_description .= "<br> New PHILHEALTH Bracket falls to " . payroll_currency($philhealth_contribution["ee"]);
-						$philhealth_description .= "<br> NEW BRACKET (" . payroll_currency($philhealth_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->philhealth_ee) . ")";
-						$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $last_cutoff->philhealth_ee;
-						$philhealth_contribution["er"] = $philhealth_contribution["er"] - $last_cutoff->philhealth_er;
+						$philhealth_description .= "<br> NEW BRACKET (" . payroll_currency($philhealth_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($total_previous_cutoff_philhealth_ee) . ")";
+						$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $total_previous_cutoff_philhealth_ee;
+						$philhealth_contribution["er"] = $philhealth_contribution["er"] - $total_previous_cutoff_philhealth_er;
 						$last_cutoff->phihealth_salary;
 					}
 					else
@@ -4858,8 +4959,11 @@ class Payroll2
 					
 					if ($allowance->basic_pay==1) 
 					{
-						$actual_gross_pay += $data['cutoff_compute']->cutoff_basic;
-						$d['basic'] = $data['cutoff_compute']->cutoff_basic;
+						if (isset($data['cutoff_compute']->cutoff_basic)) 
+						{
+							$actual_gross_pay += $data['cutoff_compute']->cutoff_basic;
+							$d['basic'] = $data['cutoff_compute']->cutoff_basic;
+						}
 					}
 
 					if ($allowance->cola==1) 
@@ -5108,8 +5212,9 @@ class Payroll2
 					$val["deduct.taxable_salary"] = false;
 					$val["add.net_pay"] = false;
 					$val["deduct.net_pay"] = true;
-			
+
 					array_push($return->_breakdown, $val);
+					
 					$val = null;
 				}
 			}
@@ -5138,20 +5243,18 @@ class Payroll2
 		$end_date 			= $date_query->payroll_period_end;
 		$period_category 	= $date_query->payroll_period_category;
 		
-		
 		/* GET PREVIOUS RECORD */
 		$previous_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id);
 
 		/* get employee contract */
-		$group 	= Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)
+		$group 	 =  Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)
 												->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 		                                        ->first();
-		                                        
-		// dd($date_query);
-		$shop_id = $group->shop_id;      
+		$shop_id =  $group->shop_id;      
 		
 		/* GET EMPLOYEE SALARY */
-		$salary 			= Tbl_payroll_employee_salary::selemployee($employee_id, $start_date)->first();
+		$salary  =  Tbl_payroll_employee_salary::selemployee($employee_id, $start_date)->first();
+
 		if($salary == null)
 		{
 			$salary = new stdClass();
@@ -6821,6 +6924,42 @@ class Payroll2
 	public static function payroll_number_format($number,$decimal_places)
 	{
 		return number_format((float)$number, $decimal_places, '.', '');
+	}
+
+	public static function identify_period_salary_daily_rate($_timesheet)
+	{
+		$salary_period = 0;
+		
+		foreach ($_timesheet as $key => $timesheet) 
+		{
+			$salary_period += $timesheet->compute->daily_rate;
+		}
+
+		return $salary_period;
+	}
+
+	public static function identify_period_salary($salary = 0, $period = '')
+	{
+		$salary_period = 0;
+
+		if($period == 'Monthly')
+		{
+			$salary_period = $salary;
+		}
+		else if($period == 'Semi-monthly')
+		{
+			$salary_period = $salary / 2;
+		}
+		else if($period == 'Weekly')
+		{
+			$salary_period = $salary / 4;
+		}
+		else if($period == 'Daily')
+		{
+			$salary_period = ($salary * 12) / 365;
+		}
+		
+		return $salary_period;
 	}
 
 }

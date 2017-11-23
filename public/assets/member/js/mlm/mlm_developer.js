@@ -24,6 +24,7 @@ function mlm_developer()
 		add_event_search();
 		add_event_filter();
 		add_event_allow_slot();
+		event_tag_as_ambassador();
 	}
 	function add_event_filter()
 	{
@@ -94,6 +95,26 @@ function mlm_developer()
 			{
 				$(".load-test-slots").html(data);
 			}
+		});
+	}
+	function event_tag_as_ambassador()
+	{
+		$("body").on("click",".tag_as_ambassador", function(e)
+		{
+			var customer_id = $(e.currentTarget).attr("customer_id");
+
+			$.ajax(
+			{
+				url: "/member/mlm/developer/tag_as_ambassador",
+				type: "get",
+				data: {customer_id:customer_id},
+				success: function(data)
+				{
+					console.log(data);
+				}
+			});
+
+
 		});
 	}
 }

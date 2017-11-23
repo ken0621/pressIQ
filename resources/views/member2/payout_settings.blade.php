@@ -96,6 +96,7 @@
 	                            <tr>
 	                                <th class="text-center" style="width: 100px;">SLOT CODE</th>
 	                                <th class="text-center" width="120px">BANK</th>
+	                                <th class="text-center" width="25px">TYPE</th>
 	                                <th class="text-center" width="120px">BANK ACCOUNT NUMBER</th>
 	                            </tr>
 	                        </thead>
@@ -109,6 +110,12 @@
 	                                		@foreach($_bank as $bank)
 	                                			<option {{ $slot->payout_bank_id == $bank->payout_bank_id ? 'selected' : '' }} value="{{ $bank->payout_bank_id  }}">{{ $bank->payout_bank_name }}</option>
 	                                		@endforeach
+	                                	</select>
+	                                </td>
+	                                <td class="text-center">
+	                                	<select name="bank_account_type[]" class="form-control text-center">
+	                                		<option>SA</option>
+	                                		<option>CA</option>
 	                                	</select>
 	                                </td>
 	                              	<td class="text-center">
@@ -197,7 +204,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+		<button type="button" class="btn btn-def-white btn-custom-white btn-custom-close" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
 		<button type="submit" class="btn btn-custom-primary" type="button"><i class="fa fa-pencil"></i> Update Payout Details</button>
 	</div>
 </form>

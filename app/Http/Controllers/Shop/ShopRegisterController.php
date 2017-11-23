@@ -13,4 +13,9 @@ class ShopRegisterController extends Shop
         $data["page"] = "register";
         return view("register", $data);
     }
+    public function press_signup()
+    {
+        $data["page"] = "sign_up";
+        return view("sign_up", $data);
+    }
 }

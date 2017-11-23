@@ -246,8 +246,8 @@ class PayrollController extends Member
           $separated_status[1] = 9;
 
 		$data['_active']	 = Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $active_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_last_name')->paginate($this->paginate_count);
-
-		// $data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
+		
+          // $data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
 
 
           $data['_separated'] = DB::select('select * from `tbl_payroll_employee_contract` inner join `tbl_payroll_employee_basic` 
@@ -1336,7 +1336,6 @@ class PayrollController extends Member
      public function modal_employee_view($id)
      {
 
-
           $data["source"]               = Request::input("source_page");
           // $data['_company']               = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
 
@@ -1354,6 +1353,7 @@ class PayrollController extends Member
           $data['contract']             = Tbl_payroll_employee_contract::selemployee($id)->first();
 
           $data['salary']               = Tbl_payroll_employee_salary::selemployee($id)->first();
+
           $data['requirement']          = Tbl_payroll_employee_requirements::selrequirements($id)->first();
           $data['_group']               = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
           $data['dependent']            = Tbl_payroll_employee_dependent::where('payroll_employee_id', $id)->get();
@@ -5145,6 +5145,7 @@ class PayrollController extends Member
           $insert_code['shop_id']            = Self::shop_id();
 
           $shift_code_id = Tbl_payroll_shift_code::insertGetId($insert_code);
+
           AuditTrail::record_logs("CREATED: Shift Template","Shift Template Code Name : ".Request::input('shift_code_name'),"","","");
           $insert_shift = array();
 

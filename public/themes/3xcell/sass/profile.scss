@@ -229,7 +229,7 @@ $text-dark: #272c2f;
 				}
 				&.active
 				{
-					border-bottom: 2.5px solid #2161C8;
+					border-bottom: 2.5px solid #48B920;
 					a
 					{
 						font-weight: $regular;
@@ -374,4 +374,16 @@ $text-dark: #272c2f;
 			}
 		}
 	}
+}
+
+.alert
+{
+	background-color: #ff5454 !important;
+	color: #fff;
+}
+
+.alert-custom-success
+{
+	background-color: #48B920 !important;
+	color: #fff;
 }

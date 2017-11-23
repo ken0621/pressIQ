@@ -76,7 +76,7 @@
 			z-index: 10;
 			transition: 0.3s all ease;
 			// overflow: hidden;
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 768px)
 			{
 				display: none;
 			}
@@ -385,7 +385,7 @@
 			padding: 15px;
 
 			overflow: hidden;
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 768px)
 			{
 				margin-left: 0;
 			}

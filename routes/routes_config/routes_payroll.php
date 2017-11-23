@@ -37,11 +37,14 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/payroll_register_report','Member\PayrollReportController@payroll_register_report');
 	Route::any('/reports/modal_create_register_report/{id}','Member\PayrollReportController@modal_create_register_report');
 	Route::any('/reports/payroll_register_report_period/{id}','Member\PayrollReportController@payroll_register_report_period');
-	Route::any('/reports/payroll_register_report_period_filtering','Member\PayrollReportController@payroll_register_report_period_filtering');
+	Route::any('/reports/payroll_register_report_table','Member\PayrollReportController@payroll_register_report_table');
 	
-	Route::any('/reports/payroll_register_report_period/export_excel/{id}','Member\PayrollReportController@payroll_register_report_export_excel');
+	Route::any('/reports/payroll_register_report_period/export_excel/{period_company_id}/{payroll_company_id}','Member\PayrollReportController@payroll_register_report_export_excel');
 	Route::any('/reports/payroll_register_report_period/export_excel_filter/{id}/{uid}','Member\PayrollReportController@payroll_register_report_export_excel_filter');
 	/*END PAYROLL REGISTER REPORT*/
+
+	/*EMPLOYEE SUMMARY REPORT*/
+	Route::any('/reports/employee_summary_report','Member\PayrollReportController@employee_summary_report');
 
 	/*START 13th month pay*/
 	Route::any('/reports/13th_month_pay','Member\Payroll13thMonthPayController@index');
@@ -114,6 +117,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_timesheet2/income_summary/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@income_summary');
 	Route::any('/company_timesheet2/unapprove/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@unapprove');
 	Route::any('/company_timesheet2/change/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@time_change');
+	Route::any('/company_timesheet2/remarks_change/{period_id}/{employee_id}', 'Member\PayrollTimeSheet2Controller@remarks_change');
 	Route::any('/company_timesheet2/make_adjustment/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@make_adjustment');
 	Route::any('/company_timesheet2/delete_adjustment/{period_id}/{employee_id}/{adjustment_id}','Member\PayrollTimeSheet2Controller@delete_adjustment');	
 	Route::any('/company_timesheet_approve/approve_timesheet','Member\PayrollTimeSheet2Controller@approve_timesheets');

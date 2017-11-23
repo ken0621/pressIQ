@@ -20,9 +20,9 @@
 	                        <!-- <span class="or">OR</span> -->
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
 	                        @if(isset($company_head_id))
-	                        	</br>
+	                        	</br></br>
 	                        	<span style="color:white">or</span>
-	                        	</br>
+	                        	</br></br>
 	                        	<a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code no_sponsor_code" company_head_id="{{$company_head_id->slot_no}}">NO SPONSOR?</button></a>
 	                    	@endif
 	                    </div>
@@ -115,7 +115,7 @@
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
-						<button class="btn btn-default" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+						<button class="btn btn-blue" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 					</div>
 				</div>
 			</div>
@@ -142,7 +142,7 @@
 							</div>
 							<div class="action pull-right">
 								@if($direct->distributed == 1)
-									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
+									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-blue"><i class="fa fa-star"></i> VIEW INFO</button>
 								@else
 									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 								@endif
@@ -186,7 +186,6 @@
 				</div>
 			</div>
 		</div>
-
 
 	    <!-- Success -->
 	    <div class="popup-success">
@@ -238,7 +237,7 @@
 <!--  Enter a code -->
 <div class="popup-enter-a-code">
     <div id="enter-a-code-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
+        <div class="modal-md modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -260,6 +259,7 @@
         </div>
     </div>
 </div>
+
 <!-- Proceed 1 -->
 <div class="popup-proceed1">
     <div id="proceed-modal-1" class="modal fade">
@@ -299,6 +299,7 @@
           </div>
       </div>
   </div>
+
 <!-- MANUAL PLACING OF SLOT -->
 <div class="popup-verify-placement">
     <div id="slot-placement-modal" class="modal fade">
@@ -332,6 +333,7 @@
           </div>
       </div>
   </div>
+  
 @endsection
 
 @section("member_script")

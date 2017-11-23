@@ -11,10 +11,10 @@
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
 	            <div class="col-md-12">
-	            	<div class="title">NON-MEMBER | <span>DASHBOARD</span> </div>
+	            	<div class="title">Not Yet Activated | <span>DASHBOARD</span> </div>
 	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-bg.png');">
 	                    <div class="btn btn-text">
-	                        <div class="text-header1">Become A Member Now!</div>
+	                        <div class="text-header1">BE A FRANCHISEE NOW!</div>
 	                        <div class="text-header2">Opportunity awaits you. Purchase now and enjoy the perks of being a Philtech VIP.</div>
 	                    </div>
 	                    <div class="btn-container">
@@ -75,8 +75,17 @@
 					<div class="chart-legend">
 						@foreach($_wallet_plan as $plan)
 							<div class="holder">
+
 								<div class="color"></div>
-								<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+
+								@if($plan->label == "Membership Matching")
+									<div class="name"><span>Franchise Matching</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+								@elseif($plan->label == "Vmoney")
+									<div class="name"><span>E-Money</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+								@else
+									<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+								@endif
+
 							</div>
 						@endforeach
 					</div>
@@ -90,16 +99,35 @@
 					@if(count($_point_plan) > 0)
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						@foreach($_point_plan as $plan)
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
-						</div>
+							@if($plan->label == "Repurchase Cashback")
+<!-- 								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>VIP Cashback</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+								</div> -->
+							@else
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+								</div>
+							@endif
 						@endforeach
 					</div>
 					@else
 						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
 					@endif
 				</div>
+
+				@if(isset($points->{ "display_repurchase_cashback"}))
+				<div class="title"><i class="align-icon"></i> VIP Cashback</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+								<div class="name">{{ $points->{ "display_repurchase_cashback"} }}</div>
+						</div>
+					</div>
+				</div>
+				@endif
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">

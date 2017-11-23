@@ -157,7 +157,7 @@
 
 				</div>
 
-				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="title">Reward Points</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="max-height: auto;">
 						<div class="holder">
@@ -208,7 +208,7 @@
 							</div>
 							<div class="action pull-right">
 								@if($direct->distributed == 1)
-									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
+									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-shift-view-info"><i class="fa fa-star"></i> VIEW INFO</button>
 								@else
 									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 								@endif
@@ -274,7 +274,7 @@
 <!--  Enter a code -->
 <div class="popup-enter-a-code">
     <div id="enter-a-code-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
+        <div class="modal-md modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

@@ -13,21 +13,11 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700" rel="stylesheet">
-        <!-- BOOTSTRAP -->
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
-        <!-- FONT AWESOME -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
-        <!-- SLICK CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick.css">
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick-theme.css">
+        @include("frontend.ghead")
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-        <link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
         {{-- Parallax --}}
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
-        <!-- THEME COLOR -->
-        <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
@@ -162,68 +152,8 @@
         </div>
     </div>
 
-
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
-    <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/match-height.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global.js"></script>
-    <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/figuesslider.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
-
-    <script type="text/javascript">
-
-        var dropdown = new dropdown();
-
-        function dropdown()
-        {
-            init();
-
-            function init()
-            {
-                event_toggle_nav();
-            }
-
-            function event_toggle_nav()
-            {
-                $(".menu-nav").bind("click", function()
-                {
-                    action_toggle_nav();
-                });
-            }
-
-            function action_toggle_nav()
-            {
-                $(".menu-nav").unbind("click");
-                $(".navirino").slideToggle(400, function()
-                {
-                    event_toggle_nav();
-                });
-            }
-        }
-    </script>
-
-    <script type="text/javascript">
-        $window = $(window);
-        $window.scroll(function() {
-          $scroll_position = $window.scrollTop();
-            if ($scroll_position > 100) { 
-                $('.header-container').addClass('header-fixed');
-
-                header_height = $('.your-header').innerHeight();
-                $('body').css('padding-top' , header_height);
-            } else {
-                $('.header-container').removeClass('header-fixed');
-                $('body').css('padding-top' , '0');
-            }
-         });
-
-    </script>
+    @include("frontend.gfoot")
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/custom_js.js"></script>
 
     @yield("js")
     </body>

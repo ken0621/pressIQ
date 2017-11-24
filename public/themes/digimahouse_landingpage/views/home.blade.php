@@ -356,9 +356,6 @@
 					</div>
 					
 				</section>
-
-
-
 			</div>
 		</div>
 	</div>
@@ -371,69 +368,7 @@
 @endsection
 
 @section("js")
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
 <script type="text/javascript">
-$(document).ready(function()
-{
-	$('.autoplay').slick({
-		slidesToShow: 4,
-		slidesToScroll: 1,
-		dots: false,
-		autoplay: true,
-		autoplaySpeed: 2000,
-	});
-
-	/*scroll up*/
-	$(window).scroll(function () {
-        if ($(this).scrollTop() > 700) {
-            $('.scroll-up').fadeIn();
-        } else {
-            $('.scroll-up').fadeOut();
-        }
-    });
-
-    $('.scroll-up').click(function () {
-        $("html, body").animate({
-            scrollTop: 0
-        }, 700);
-        return false;
-    });
-
-    $(".show-more-1").on("click", function () {
-
-	    if($(this).text()=="Show less.")
-	    {
-	        $(this).text("Show more.");
-	    } else {
-	        $(this).text("Show less.");
-	    }
-    	$(".show-1").slideToggle();
-    	return false;
-	});
-
-	$(".show-more-2").on("click", function () {
-
-	    if($(this).text()=="Show less.")
-	    {
-	        $(this).text("Show more.");
-	    } else {
-	        $(this).text("Show less.");
-	    }
-    	$(".show-2").slideToggle();
-    	return false;
-	});
-
-    $(".show-more-3").on("click", function () {
-
-	    if($(this).text()=="Show less.")
-	    {
-	        $(this).text("Show more.");
-	    } else {
-	        $(this).text("Show less.");
-	    }
-    	$(".show-3").slideToggle();
-    	return false;
-	});
-	
-});
 </script>
 @endsection

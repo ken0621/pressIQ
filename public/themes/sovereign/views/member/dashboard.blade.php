@@ -7,7 +7,6 @@
 
 @if(!$mlm_member)
 	<div class="dashboard">
-
 	    <!-- TOP DASHBOARD-->
 	    <!-- <div class="dashboard-top" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-dash.png')">
 	        <div class="row clearfix">
@@ -71,6 +70,11 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="btn-container">
+					<button class="btn btn-primary">Enter a code</button>
+				</div>
+				
 			</div>
 
 			<div class="col-md-6">
@@ -201,6 +205,7 @@
 				</div>
 			</div>
 		</div>
+
 
 	    <!-- Success -->
 	    <div class="popup-success">

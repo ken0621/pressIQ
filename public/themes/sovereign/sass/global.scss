@@ -55,11 +55,21 @@ body
 		{
 			left: 15px;
 			z-index: 2;
+
+			/* @media screen and (max-width: 500px)
+			{
+				display: none;
+			} */
 		}
 		.slick-next
 		{
 			right: 15px;
 			z-index: 2;
+
+			/* @media screen and (max-width: 500px)
+			{
+				display: none;
+			} */
 		}
 		.slick-prev, .slick-next
 		{

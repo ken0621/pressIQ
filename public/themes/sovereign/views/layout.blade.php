@@ -43,7 +43,7 @@
                             <div class="title">A Real Product Need</div>
                             <div class="list-product">
                                 @foreach($global_product as $product)
-                                <div style="cursor: pointer;" onClick="location.href='/product/view/{{ $product['eprod_id'] }}'">
+                                <div style="cursor: pointer;" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'">
                                     <div class="holder">
                                         <img class="img-responsive 4-3-ratio" src="{{ get_product_first_image($product) }}">
                                         <div class="name">{{ get_product_first_name($product) }}</div>
@@ -107,7 +107,7 @@
                             <a href="javascript:">PRODUCTS</a>
                         </li>
                             @foreach($global_product as $product)
-                                <ul class="product-mobile-dropdown-list" onClick="location.href='/product/view/{{ $product['eprod_id'] }}'">
+                                <ul class="product-mobile-dropdown-list" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'">
                                     <li><a href="javascript:">{{ get_product_first_name($product) }}</a></li>
                                 </ul>
                             @endforeach
@@ -141,7 +141,7 @@
                             <a href="javascript:">PRODUCTS</a>
                         </li>
                             @foreach($global_product as $product)
-                                <ul class="product-mobile-dropdown-list" onClick="location.href='/product/view/{{ $product['eprod_id'] }}'">
+                                <ul class="product-mobile-dropdown-list" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'">
                                     <li><a href="javascript:">{{ get_product_first_name($product) }}</a></li>
                                 </ul>
                             @endforeach

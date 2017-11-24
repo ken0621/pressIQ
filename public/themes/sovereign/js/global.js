@@ -46,7 +46,7 @@ function global()
 
 	function action_says_carousel()
 	{
-		if ($(window).width() < 769) 
+/*		if ($(window).width() < 769) 
 		{
     		$('.says-container').slick({
     			infinite: true,
@@ -68,7 +68,41 @@ function global()
 	      		autoplay: true,
 				autoplaySpeed: 4000,
 			});
-		}
+		}*/
+
+		$('.says-container').slick({
+			infinite: true,
+			slidesToShow: 3,
+			slidesToScroll: 1,	
+			prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/sovereign/img/carousel-left.png'>",
+      		nextArrow:"<img class='a-right control-c next slick-next' src='/themes/sovereign/img/carousel-right.png'>",
+      		autoplay: true,
+			autoplaySpeed: 4000,
+			responsive: [
+			  {
+			    breakpoint: 1024,
+			    settings: {
+			      slidesToShow: 3,
+			      slidesToScroll: 3,
+			      infinite: true
+			    }
+			  },
+			  {
+			    breakpoint: 600,
+			    settings: {
+			      slidesToShow: 2,
+			      slidesToScroll: 1
+			    }
+			  },
+			  {
+			    breakpoint: 480,
+			    settings: {
+			      slidesToShow: 1,
+			      slidesToScroll: 1
+			    }
+			  }
+			]
+		});
 	}
 
 	function action_product_image_carousel()
@@ -81,6 +115,30 @@ function global()
       		nextArrow:"<img class='a-right control-c next slick-next' src='/themes/sovereign/img/carousel-right.png'>",
       		autoplay: true,
 			autoplaySpeed: 4000,
+			responsive: [
+			  {
+			    breakpoint: 1024,
+			    settings: {
+			      slidesToShow: 3,
+			      slidesToScroll: 3,
+			      infinite: true
+			    }
+			  },
+			  {
+			    breakpoint: 600,
+			    settings: {
+			      slidesToShow: 2,
+			      slidesToScroll: 1
+			    }
+			  },
+			  {
+			    breakpoint: 480,
+			    settings: {
+			      slidesToShow: 1,
+			      slidesToScroll: 1
+			    }
+			  }
+			]
 		});
 	}
 

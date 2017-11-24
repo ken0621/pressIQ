@@ -35,6 +35,7 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_email_template;
 use App\Models\Tbl_transaction_list;
+use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_mlm_slot_bank;
 use App\Models\Tbl_mlm_slot_coinsph;
@@ -72,6 +73,10 @@ use App\Globals\PayMaya\Checkout\User;
 use App\Globals\PayMaya\Model\Checkout\ItemAmountDetails;
 use App\Globals\PayMaya\Model\Checkout\ItemAmount;
 use App\Globals\PayMaya\Core\Constants;
+
+
+use App\Models\Tbl_item;
+use App\Tbl_item_redeemable;
 
 class ShopMemberController extends Shop
 {
@@ -112,17 +117,19 @@ class ShopMemberController extends Shop
                 }
             }
 
-
-            if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
+            if(Self::$customer_info->customer_id != 12) //SIR ARNOLD
             {
-                $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
-                $data['mlm_pin'] = MLM2::get_code($data['check_unused_code'])['mlm_pin'];
-                $data['mlm_activation'] = MLM2::get_code($data['check_unused_code'])['mlm_activation'];
-                
-                $store["temp_pin"] = $data['mlm_pin'];
-                $store["temp_activation"] = $data['mlm_activation'];
-                $store["online_transaction"] = true;
-                session($store);
+                if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
+                {
+                    $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                    $data['mlm_pin'] = MLM2::get_code($data['check_unused_code'])['mlm_pin'];
+                    $data['mlm_activation'] = MLM2::get_code($data['check_unused_code'])['mlm_activation'];
+                    
+                    $store["temp_pin"] = $data['mlm_pin'];
+                    $store["temp_activation"] = $data['mlm_activation'];
+                    $store["online_transaction"] = true;
+                    session($store);
+                }
             }
    
             $data["not_placed_slot"] = new stdClass();
@@ -151,7 +158,7 @@ class ShopMemberController extends Shop
             }
         }
 
-        return Self::load_view_for_members('member.dashboard', $data);
+        return view("member.dashboard", $data);
     }
     public function getKit()
     {
@@ -1483,6 +1490,32 @@ class ShopMemberController extends Shop
             $data["_tree"] = MLM2::get_sponsor_network($this->shop_info->shop_id, request()->input("slot_no"), request('level'));
             return (Self::load_view_for_members("member.network_slot", $data));
         }
+    }
+    public function getRedeemable()
+    {
+        $sort_by = 0;
+        $data['page'] = "Redeemable";
+        $data['_redeemable'] = Tbl_item_redeemable::where("archived",0)->get();
+        return (Self::load_view_for_members("member.redeemable",$data));
+    }
+    public function getCodevault()
+    {
+        $data['page'] = "Code Vault";
+        $query = Tbl_transaction_list::CodeVaultTransaction();
+
+        $data['customer_id'] = Self::$customer_info->customer_id;
+
+        $q = $query->where("tbl_transaction.transaction_reference_id",Self::$customer_info->customer_id);
+        $data['_codes'] = $q->where("item_in_use","unused")->get();
+
+        return (Self::load_view_for_members("member.code-vault",$data));
+    }
+    public function getUsecode()
+    {
+        $data['page'] = "Use Code";
+        $data['pin'] = request("pin");
+        $data['activation'] = request("activation");
+        return view("member.use_code",$data);
     }
     public function getReport()
     {

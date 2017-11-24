@@ -46,13 +46,10 @@ body
 	{
 		border-bottom: 1px solid #d2d4d5;
 		background-color: #eaeff3;
-		@media screen and (max-width: 720px)
+
+		@media screen and (max-width: 768px)
 		{
 			text-align: center;
-			/* .pull-left, .pull-right
-			{
-				float: none !important;
-			} */
 		}
 		.slick-prev
 		{
@@ -235,7 +232,7 @@ body
 			background-color: #fd8a0e;
 			width: 200px;
 			z-index: 4;
-			@media screen and (max-width: 720px)
+			@media screen and (max-width: 768px)
 			{
 				background-color: transparent;
 			}

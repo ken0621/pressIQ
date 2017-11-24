@@ -291,9 +291,14 @@ nav-list.active { background-position: -331px top; }
          margin-top: 10px;
      }
 
+     .header-nav .header-nav-middle
+     {
+         margin-bottom: -10px;
+     }
+
      .header-nav .header-nav-middle .logo 
      {
-         margin-top: -50px;
+         margin-top: -55px;
      }
 
      .header-nav .header-nav-top .nav-holder a 
@@ -340,6 +345,7 @@ nav-list.active { background-position: -331px top; }
      #nav_list .fa 
      {
          margin-top: -10px;
+         font-size: 25px;
      }
 
      .header-nav .header-nav-middle .logo .img-responsive 
@@ -359,4 +365,10 @@ nav-list.active { background-position: -331px top; }
      {
          margin-top: -10px;
      }
+
+     .header-nav .header-nav-top .menu-container 
+     {
+         margin-top: -20px;
+     }
+
  }

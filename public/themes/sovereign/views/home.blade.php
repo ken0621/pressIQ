@@ -2,17 +2,18 @@
 @section("content")
 
 <div class="content">
-	
 	<div class="intro" style="background-image: url('/themes/{{ $shop_theme }}/img/intro-bg.jpg')">
 		<div class="container">
-			<div class="text">
-				<div class="title">{{ get_content($shop_theme_info, "home", "home_intro_first_title") }}</div>
-				<div></div>
-				<div class="desc">
-					<div class="first-line">{{ get_content($shop_theme_info, "home", "home_intro_second_title") }}</div>
-					<div class="second-line">{{ get_content($shop_theme_info, "home", "home_intro_third_title") }}</div>
-					<div class="objective">{{ get_content($shop_theme_info, "home", "home_intro_description") }}</div>
-					<button class="btn btn-learn">{{ get_content($shop_theme_info, "home", "home_intro_button") }}</button>
+			<div class="toperino">
+				<div class="text">
+					<div class="title">{{ get_content($shop_theme_info, "home", "home_intro_first_title") }}</div>
+					<div></div>
+					<div class="desc">
+						<div class="first-line">{{ get_content($shop_theme_info, "home", "home_intro_second_title") }}</div>
+						<div class="second-line">{{ get_content($shop_theme_info, "home", "home_intro_third_title") }}</div>
+						<div class="objective">{{ get_content($shop_theme_info, "home", "home_intro_description") }}</div>
+						<button class="btn btn-learn">{{ get_content($shop_theme_info, "home", "home_intro_button") }}</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -479,5 +480,5 @@
 @endsection
 
 @section("script")
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
+<!-- <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script> -->
 @endsection

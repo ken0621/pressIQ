@@ -46,16 +46,31 @@ function global()
 
 	function action_says_carousel()
 	{
-		$('.says-container').slick({
-			infinite: true,
-			slidesToShow: 3,
-			slidesToScroll: 1,
-			prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/sovereign/img/carousel-left.png'>",
-      		nextArrow:"<img class='a-right control-c next slick-next' src='/themes/sovereign/img/carousel-right.png'>",
-      		autoplay: true,
-			autoplaySpeed: 4000,
-		})
+		if ($(window).width() < 769) 
+		{
+    		$('.says-container').slick({
+    			infinite: true,
+    			slidesToShow: 1,
+    			slidesToScroll: 1,
+          		autoplay: true,
+    			autoplaySpeed: 4000,
+    		});
+		}
+		
+		else if($(window).width() > 768)
+		{
+			$('.says-container').slick({
+				infinite: true,
+				slidesToShow: 3,
+				slidesToScroll: 1,
+				prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/sovereign/img/carousel-left.png'>",
+	      		nextArrow:"<img class='a-right control-c next slick-next' src='/themes/sovereign/img/carousel-right.png'>",
+	      		autoplay: true,
+				autoplaySpeed: 4000,
+			});
+		}
 	}
+
 	function action_product_image_carousel()
 	{
 		$('.product-image-carousel').slick({
@@ -66,7 +81,7 @@ function global()
       		nextArrow:"<img class='a-right control-c next slick-next' src='/themes/sovereign/img/carousel-right.png'>",
       		autoplay: true,
 			autoplaySpeed: 4000,
-		})
+		});
 	}
 
 	function product_mobile_dropdown()

@@ -4,6 +4,7 @@
 	background-position: center;
 	min-height: 513px;
 	position: relative;
+
 	.text
 	{
 		color: #fff;
@@ -19,6 +20,11 @@
 			font-size: 34.93px;
 			font-weight: 700;
 			padding: 7.5px 15px;
+
+			@media screen and (max-width: 375px)
+			{
+				font-size: 30px;
+			}
 		}
 		.desc
 		{
@@ -30,10 +36,30 @@
 				font-weight: 600;
 				font-size: 53.57px;
 				line-height: 50px;
+
+				@media screen and (max-width: 375px)
+				{
+					font-size: 40px;
+				}
+
+				@media screen and (max-width: 320px)
+				{
+					font-size: 30px;
+				}
 			}
 			.second-line
 			{
 				font-size: 26.78px;
+
+				@media screen and (max-width: 375px)
+				{
+					font-size: 25px;
+				}
+
+				@media screen and (max-width: 320px)
+				{
+					font-size: 20px;
+				}
 			}
 			.objective
 			{
@@ -43,6 +69,27 @@
 				letter-spacing: 1px;
 				max-width: 425px;
 				margin-bottom: 25px;
+				
+				@media screen and (max-width: 425px)
+				{
+					max-width: 346px;
+				}
+
+				@media screen and (max-width: 414px)
+				{
+					max-width: 336px;
+				}
+
+				@media screen and (max-width: 375px)
+				{
+					max-width: 295px;
+				}
+
+				@media screen and (max-width: 320px)
+				{
+					max-width: 240px;
+				}
+
 			}
 			.btn-learn
 			{

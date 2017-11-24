@@ -1104,6 +1104,15 @@ function page_list()
         $nav[$page]['submenu'][$segment]['segment']= $segment;
         $nav[$page]['submenu'][$segment]['type']   = "submenu";
 
+             /* -- WAREHOUSE - INVENTORY */
+            $code = "warehouse-inventory";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Warehouse Inventory";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/v2/warehouse";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
              /* -- WAREHOUSE - WIS */
             $code = "warehouse-issuance-slip";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Warehouse Issuance Slip";

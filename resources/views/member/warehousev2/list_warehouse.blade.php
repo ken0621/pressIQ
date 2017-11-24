@@ -38,9 +38,44 @@
 
         <div class="form-group tab-content panel-body warehouse-container">
             <div id="all" class="tab-pane fade in active">
-                
+                <div class="table-responsive">
+                    <div class="load-data" target="warehouse-table-list">
+                        <div id="warehouse-table-list">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Warehouse Name</th>
+                                            <th class="text-center">Total Holding Items</th>
+                                            <th>Total Selling Price</th>
+                                            <th>Total Cost Price</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody class="table-warehouse">
+                                        @foreach($_warehouse as $warehouse)
+                                        <tr>
+                                            <td class="text-center">{{ $warehouse->warehouse_name }}</td>
+                                        </tr>
+                                        @endforeach 
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="text-center pull-right">
+                                {!!$_warehouse->render()!!}
+                            </div> 
+                        </div> 
+                    </div>
+                </div>
             </div>
         </div>        
     </div>
 </div>
+@endsection
+@section("script")
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
+<script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
 @endsection

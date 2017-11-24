@@ -121,7 +121,6 @@ class WarehouseController extends Member
                $data["_warehouse"]->where("warehouse_name","LIKE","%".Request::input("search_txt")."%");
             }
             $data["_warehouse"] = $data["_warehouse"]->paginate(10);
-
             // $data["_warehouse_archived"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 1)->groupBy("tbl_warehouse.warehouse_id")->get();
             
             $all_item = null;

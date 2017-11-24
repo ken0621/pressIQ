@@ -188,6 +188,7 @@ class CashierController extends Member
                 $return["status"]   = "success";
                 $return["status_message"]  = "Item Number " .  $item->item_id . " has been added.";
                 Cart2::add_item_to_cart($shop_id, $item_id, $quantity, true);
+                $return["call_function"] = "";
             }
             else
             {

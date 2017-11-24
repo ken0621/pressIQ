@@ -255,14 +255,10 @@ function pos()
 					data : {item_id : qty_item_id, qty : qty, _token : $('#_token').val()},
 					success : function(data)
 					{
-						if(data.status == 'success')
-						{
-							action_load_item_table();
-						}
+						action_load_item_table();
 						if(data.status == 'error')
 						{
 							toastr.warning(data.status_message);
-							action_load_item_table();
 						}
 					}
 				})

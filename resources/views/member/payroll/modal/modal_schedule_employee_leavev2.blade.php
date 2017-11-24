@@ -3,7 +3,7 @@
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Tag Employee</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
-		<input type="hidden" name="deduction_id" value="{{$deduction_id}}">
+		<input type="hidden" name="leave_id" class="leave_id" value="{{$leave_temp_id}}">
 	</div>
 	<div class="modal-body form-horizontal">
 		<div class="form-group">
@@ -14,7 +14,7 @@
 					@foreach($_company as $company)
 					<option value="{{$company->payroll_company_id}}">{{$company->payroll_company_name}}</option>
 					@endforeach
-				</select>	
+				</select>
 			</div>
 		</div>
 		<div class="form-group">
@@ -51,4 +51,4 @@
 	</div>
 </form>
 
-<script type="text/javascript" src="/assets/member/js/payroll/employee_tag.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/employee_tag_schedule_leavev2.js"></script>

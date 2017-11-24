@@ -166,7 +166,7 @@
 
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="square-container direct-ref-cont match-height">
+				<div class="square-container direct-ref-cont">
 					<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Direct Franchisee</div>
 					<div class="sub-container border-holder">
 						<div class="clearfix wow hidden">
@@ -212,7 +212,7 @@
 				</div>
 			</div>
 			<div class="col-md-6">
-				<div class="square-container recent-rewards-cont match-height">
+				<div class="square-container recent-rewards-cont">
 					<div class="match-height">
 						<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
 						<div class="sub-container">

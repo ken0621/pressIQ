@@ -207,6 +207,7 @@
 				</div>
 			</div>
 		</div>
+
 	    <!-- Success -->
 	    <div class="popup-success">
 	        <div id="success-modal" class="modal success-modal fade">
@@ -221,6 +222,7 @@
 	            </div>
 	        </div>
 	    </div>
+	    
 	</div>
 @endif
 @endsection

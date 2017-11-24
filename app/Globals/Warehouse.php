@@ -1259,4 +1259,48 @@ class Warehouse
         // }
     }
    
+    public static function checkStock($product_consume, $warehouse_id)
+    {
+        $err = 0;
+        $err_msg = "";
+        
+        foreach ($product_consume as $key_items => $value_items) 
+        {
+            $item_type = Tbl_item::where("item_id",$value_items['product_id'])->value("item_type_id");
+
+            if($item_type == 1) // Inventory
+            {
+                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_items['product_id'])->value('inventory_count');
+                
+                if($count_on_hand == null)
+                {
+                    $count_on_hand = 0;   
+                }
+
+                if($value_items['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value_items['quantity'])
+                {
+                    // Allowed
+                }
+                else
+                {
+                    $item_name = Item::get_item_details($value_items['product_id']);
+                    $err_msg[$key_items] = "The quantity of ".$item_name->item_name." is not enough for you to transfer.";
+                    $err++;
+                }            
+            }           
+        }
+
+        if($err_msg == "")
+        {
+            $data['status'] = 'success';
+            $data['status_message'] = "Success";
+        }
+        else
+        {
+            $data['status'] = 'error';
+            $data['status_message'] = $err_msg;
+        }
+
+        return $data;
+    }
 }

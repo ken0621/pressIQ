@@ -201,6 +201,7 @@ class Customer_InvoiceController extends Member
                 }
             } 
         }
+
         foreach ($product_consume as $key_items => $value_items) 
         {
              $i = null;
@@ -218,10 +219,11 @@ class Customer_InvoiceController extends Member
             if($i != null)
             {
                 unset($product_consume[$key_items]);
-            }           
+            }         
         }
         //END if bundle inventory_consume arcy
 
+        return $this->check_stock($product_consume);
 
         $json["status"] = null;
         $json["status_message"] = null;
@@ -246,8 +248,6 @@ class Customer_InvoiceController extends Member
                 }
             }
         }
-
-
 
         //CREDIT MEMO / RETURNS
         $cm_customer_info[] = null;
@@ -523,6 +523,8 @@ class Customer_InvoiceController extends Member
         }
         //END if bundle inventory_consume arcy
 
+        return $this->check_stock($product_consume);
+
         //CREDIT MEMO / RETURNS
         $cm_customer_info[] = null;
         $item_returns = null; 
@@ -773,5 +775,24 @@ class Customer_InvoiceController extends Member
         }
         $pdf = view('member.customer_invoice.invoice_pdf', $data);
         return Pdf_global::show_pdf($pdf);
+    }
+
+    public function check_stock($product_consume)
+    {
+        if (Purchasing_inventory_system::check()) 
+        {
+            $stock_validation = Warehouse::checkStock($product_consume, $this->current_warehouse->warehouse_id);
+            
+            if ($stock_validation["status"] == "error") 
+            {
+                $json["status"]         = "error-invoice";
+                $json["status_message"] = $stock_validation["status_message"];
+                $json["redirect"]       = "/member/customer/invoice";
+
+                Request::session()->flash('error', $stock_validation["status_message"]);
+
+                return json_encode($json);
+            }
+        }
     }
 }

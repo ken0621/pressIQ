@@ -63,13 +63,13 @@
 						</div>
 					</div>
 				</div>
+				@if($travel_and_tours)
 				<div class="square-container leadlink-cont" style="border: none !important;">
-					@if($travel_and_tours)
 					<div class="btn-container">
 						<a class="btn btn-lblue" style="width: 100%;" role="button" href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a>
 					</div>
-					@endif
 				</div>
+				@endif
 				<div class="square-container reward-points-cont">
 					<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 					<div class="sub-container">
@@ -133,12 +133,6 @@
 					</div>
 				</div>
 				@endif
-
-			</div>
-		</div>
-		
-		<div class="row clearfix">
-			<div class="col-md-6">
 				<div class="square-container enter-prod-code-cont match-height">
 					<div class="title">Enter Product Code</div>
 					<div class="sub-container">
@@ -148,7 +142,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
+		</div>
+		
+		<div class="row clearfix">
+			<div class="col-md-12">
 				<div class="square-container rep-link-cont match-height">
 					<div class="title">Replicated Link</div>
 					<div class="sub-container">
@@ -170,7 +167,7 @@
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="square-container direct-ref-cont">
-					<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Direct Referrals</div>
+					<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Direct Franchisee</div>
 					<div class="sub-container border-holder">
 						<div class="clearfix wow hidden">
 							<div class="badge right">6 New Members</div>

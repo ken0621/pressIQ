@@ -14,6 +14,7 @@
 		</div>
 	</div>
 </div>
+
 <div class="company">
 	<div class="container">
 		<ul class="nav nav-tabs">
@@ -463,6 +464,6 @@
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
 @endsection
 
-@section("js")
+@section("script")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
 @endsection

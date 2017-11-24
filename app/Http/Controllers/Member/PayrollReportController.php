@@ -28,6 +28,12 @@ use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_employee_contract;
 
+
+
+use App\Models\Tbl_payroll_leave_temp;
+use App\Models\Tbl_payroll_leave_schedule;
+use App\Models\Tbl_payroll_leave_employee;
+
 use App\Globals\AuditTrail;
 
 
@@ -1227,6 +1233,7 @@ class PayrollReportController extends Member
 		// dd($data["total_deduction_of_all_employee"]);
 		return $data;
 	}
+
 	/*END PAYROLL REGISTER REPORT*/
 
 

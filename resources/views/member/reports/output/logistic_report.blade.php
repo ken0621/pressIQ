@@ -4,7 +4,6 @@
 			@include('member.reports.report_header')
 			<h4 class="text-center">{{$payment_method or 'All Payment Type'}}</h4>
 			<div class="table-reponsive">
-				
 				<table class="table table-condensed collaptable">
 					<thead style="text-transform: uppercase">
 						<tr>

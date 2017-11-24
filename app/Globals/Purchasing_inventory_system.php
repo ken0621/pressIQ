@@ -50,6 +50,10 @@ use Session;
      */
 class Purchasing_inventory_system
 {
+    public static function get_cashier_sales_report()
+    {
+
+    }
     public static function check($for_tablet = false)
     {
         $shop_id = Purchasing_inventory_system::getShopId();

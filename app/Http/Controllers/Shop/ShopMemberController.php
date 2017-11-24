@@ -1621,6 +1621,7 @@ class ShopMemberController extends Shop
     }
     public function getWalletTransfer()
     {
+        dd("This page is under maintenance");
         $data['page'] = "Wallet Transfer";
         $data['customer_id'] = Self::$customer_info->customer_id;
         $slot_no = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->first();
@@ -1630,6 +1631,7 @@ class ShopMemberController extends Shop
     }
     public function postWalletTransfer(Request $request)
     {
+        dd("This page is under maintenance");
         $data['slot'] = $request->slot;
         $data['amount'] = $request->amount;
         $data['recipient'] = $request->recipient;
@@ -1760,12 +1762,14 @@ class ShopMemberController extends Shop
     }
     public function getWalletRefill()
     {
+        dd("This page is under maintenance");
         $data['page'] = 'Wallet Refill';
         $data['slot_owner'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
         return Self::load_view_for_members('member.wallet_refill', $data);
     }
     public function getWalletRefillRequest()
     {
+        dd("This page is under maintenance");
         $shop_id = $this->shop_info->shop_id;
         $data['page'] = "Request Wallet Refill";
         $data['slot_owner'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
@@ -1774,6 +1778,7 @@ class ShopMemberController extends Shop
     }
     public function postWalletRefillRequest(Request $request)
     {
+        dd("This page is under maintenance");
         $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
         $path ="";
         if($request->hasFile('attachment'))
@@ -1809,6 +1814,7 @@ class ShopMemberController extends Shop
     }
     public function getWalletRefillTable()
     {
+        dd("This page is under maintenance");
         $data['page'] = "Wallet Refill Table";
         $status = request("activetab");
         $slot_no = request("slotno");

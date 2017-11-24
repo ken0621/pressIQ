@@ -5,6 +5,7 @@
                     <table class="table table-bordered table-condensed">
                         <thead>
                             <tr>
+                                <th class="text-center">Leave Name</th>
                                 <th class="text-center wa">Employee Code</th>
                                 <th class="text-center empname">Employee Name</th>
                                 <th class="text-center wa">Leave Credits</th>
@@ -13,21 +14,20 @@
                             </tr>
                         </thead>
                         <tbody>
-             {{--                @if(isset($leave_report))
-                 			@foreach($leave_report as $leave_data)
+                            @if(isset($leave_report))
+                            @foreach($leave_report as $leave_data)
                                 @foreach($leave_data as $leave)
-                        	<tr>
-                        		<td class="text-center">{{ $leave->payroll_employee_id }}</td>
-                        		<td class="text-center">{{ $leave->payroll_employee_display_name }}</td>
-                        		<td class="text-center">{{ $leave->payroll_schedule_leave }}</td>
-                        		<td class="text-center">{{ $leave->payroll_leave_temp_hours }}</td>
-                        		<td class="text-center">{{ $leave->consume }}</td>
-                        		<td class="text-center">{{ $leave->remaining_leave }}</td>
-                        		<td class="text-center">{{ $leave->payroll_leave_temp_with_pay == '1' ? 'P' : 'NP'}}</td>
-                        	</tr>
+                            <tr>
+                                <td class="text-center">{{ $leave->payroll_leave_temp_name }}</td>
+                                <td class="text-center">{{ $leave->payroll_employee_id }}</td>
+                                <td class="text-center">{{ $leave->payroll_employee_display_name }}</td>
+                                <td class="text-center">{{ $leave->payroll_leave_temp_hours }}</td>
+                                <td class="text-center">{{ $leave->total_leave_consume }}</td>
+                                <td class="text-center">{{ $leave->remaining_leave }}</td>
+                            </tr>
                                  @endforeach
-                        	@endforeach
-                            @endif --}}
+                            @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>

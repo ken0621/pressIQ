@@ -5,6 +5,7 @@
                     <table class="table table-bordered table-condensed">
                         <thead>
                             <tr>
+                                <th class="text-center wa">Leave Name</th> 
                                 <th class="text-center wa">Employee Code</th>
                                 <th class="text-center empname">Employee Name</th>
                                 <th class="text-center wa">Date of Leave</th>
@@ -19,6 +20,7 @@
                             @foreach($leave_report as $leave_data)
                                 @foreach($leave_data as $leave)
                             <tr>
+                                <td class="text-center">{{ $leave->payroll_leave_temp_name }}</td>
                                 <td class="text-center">{{ $leave->payroll_employee_id }}</td>
                                 <td class="text-center">{{ $leave->payroll_employee_display_name }}</td>
                                 <td class="text-center">{{ $leave->payroll_schedule_leave }}</td>

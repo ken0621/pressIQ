@@ -12,7 +12,7 @@
 
 			<div class="col-md-6">
 				<small>Leave Name</small>
-				<select class="form-control select-leave" name="leave_reason" required>
+				<select class="form-control select-leave" name="leave_reason" id="leavetempid" required>
 					<option value="">Select Leave</option>
 					@foreach($_leave_name as $leave)
 					<option value="{{$leave->payroll_leave_temp_id}}">{{$leave->payroll_leave_temp_name}}</option>

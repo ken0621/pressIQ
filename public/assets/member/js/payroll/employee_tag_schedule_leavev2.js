@@ -1,4 +1,4 @@
-var employee_tag_schedule_leave = new employee_tag_schedule_leave();
+	var employee_tag_schedule_leave = new employee_tag_schedule_leave();
 
 function employee_tag_schedule_leave()
 {
@@ -132,12 +132,15 @@ function employee_tag_schedule_leave()
 
 
 	this.load_tagged_employee = function()
-	{
+	{	
+		
+		var leavetempid = $('#leavetempid').val();
 		var action = "/member/payroll/leave_schedule/v2/get_session_leave_tagv2";
 		var method = "POST";
 		var target = ".table-employee-tag";
 		var formdata = {
-			_token:misc('_token')
+			_token:misc('_token'),
+			leavetempid:leavetempid
 		};
 		var function_name = "modal_create_deduction.remove_tag";
 		$(target).html('<tr><td colspan="5">'+misc('loader') + '</td></tr>');
@@ -149,7 +152,7 @@ function employee_tag_schedule_leave()
 			{
 				var html = '';
 				result = JSON.parse(result);
-
+				console.log(result.new_record);
 				$(result.new_record).each(function(index, data){
 
 					$(data).each(function(index,data2){

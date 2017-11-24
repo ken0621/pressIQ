@@ -86,9 +86,7 @@
     <!-- FOOTER -->
     <footer>
         <div class="container">
-
             <div class="row clearfix">
-
                 <div class="col-md-3">
                     <div class="text-header">Featured Corporate Products</div>
                     <div><a href="#">MLM Systems</a></div>
@@ -103,7 +101,6 @@
                     <div><a href="#">Loyalty and Rewards System</a></div>
                     <div><a href="#">Mobile App Development</a></div>
                 </div>
-
                 <div class="col-md-3">
                     <div class="text-header">Contact Us</div>
                     <div><a href="#">Phone: 215-0757</a></div>
@@ -111,19 +108,16 @@
 
                     <div><a href="#">Email: sales@digimaweb.solutions</a></div>
                 </div>
-
                 <div class="col-md-3">
                     <div class="text-header">Newsletter</div>
                     <div><a href="#">Receive special offers and be the<br>first to know when the new products<br>are to be released.</a></div>
                     <input type="text">
                 </div>
-
                 <div class="col-md-3">
                     <div class="text-header">Newsletter</div>
                     <div><a href="#">Like us on our official<br>Facebook Page and<br>follow for our trends</a></div>
                     <a href="#" class="like-us"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
                 </div>
-
             </div>
         </div>
     </footer>

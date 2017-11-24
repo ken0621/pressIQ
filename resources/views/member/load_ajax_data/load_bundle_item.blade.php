@@ -41,7 +41,7 @@
                 @endif
             @else
             <tr>
-                <td colspan="5" class="text-center">NO ITEM</td>
+                <td colspan="6" class="text-center">NO ITEM</td>
             </tr>
             @endif
         </tbody>

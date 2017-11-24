@@ -235,7 +235,12 @@ class Customer_InvoiceController extends Member
             }         
         }
         //END if bundle inventory_consume arcy
-        return $this->check_stock($check_single, $check_bundle);
+        $check_stock = $this->check_stock($check_single, $check_bundle);
+
+        if ($check_stock) 
+        {
+            return json_encode($check_stock);
+        }
 
         $json["status"] = null;
         $json["status_message"] = null;
@@ -547,7 +552,12 @@ class Customer_InvoiceController extends Member
             }           
         }
         //END if bundle inventory_consume arcy
-        return $this->check_stock($check_single, $check_bundle);
+        $check_stock = $this->check_stock($check_single, $check_bundle);
+
+        if ($check_stock) 
+        {
+            return json_encode($check_stock);
+        }
 
         //CREDIT MEMO / RETURNS
         $cm_customer_info[] = null;
@@ -818,7 +828,7 @@ class Customer_InvoiceController extends Member
 
                 Request::session()->flash('error', $stock_validation["status_message"]);
 
-                return json_encode($json);
+                return $json;
             }
         }
     }

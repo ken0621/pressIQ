@@ -125,6 +125,26 @@ $text-dark: #272c2f;
 			}
 		}
 	}
+	
+	.to-left
+	{
+		float: left !important;
+	}
+
+	.to-right
+	{
+		float: right !important;
+
+		@media screen and (max-width: 425px)
+		{
+			float: none !important;
+
+			button
+			{
+				margin-top: 10px;
+			}
+		}
+	}
 
 	.chart-legend
 	{

@@ -63,13 +63,13 @@
 						</div>
 					</div>
 				</div>
+				@if($travel_and_tours)
 				<div class="square-container leadlink-cont" style="border: none !important;">
-					@if($travel_and_tours)
 					<div class="btn-container">
 						<a class="btn btn-lblue" style="width: 100%;" role="button" href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a>
 					</div>
-					@endif
 				</div>
+				@endif
 				<div class="square-container reward-points-cont">
 					<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 					<div class="sub-container">
@@ -133,12 +133,6 @@
 					</div>
 				</div>
 				@endif
-
-			</div>
-		</div>
-		
-		<div class="row clearfix">
-			<div class="col-md-6">
 				<div class="square-container enter-prod-code-cont match-height">
 					<div class="title">Enter Product Code</div>
 					<div class="sub-container">
@@ -148,7 +142,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
+		</div>
+		
+		<div class="row clearfix">
+			<div class="col-md-12">
 				<div class="square-container rep-link-cont match-height">
 					<div class="title">Replicated Link</div>
 					<div class="sub-container">
@@ -170,7 +167,7 @@
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="square-container direct-ref-cont">
-					<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Direct Referrals</div>
+					<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Direct Franchisee</div>
 					<div class="sub-container border-holder">
 						<div class="clearfix wow hidden">
 							<div class="badge right">6 New Members</div>
@@ -181,25 +178,29 @@
 							<div class="row clearfix">
 								<div class="col-md-6">
 									<div class="holder">
-										<div class="color">
-											<img src="{{ $direct->profile_image }}">
-										</div>	
-										<div class="text">
-											<div class="">
-												<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
-												<div class="email">{{ $direct->slot_no }}</div>
-												<div class="date">{{ $direct->time_ago }}</div>
+										<div class="to-left">
+											<div class="color">
+												<img src="{{ $direct->profile_image }}">
+											</div>	
+											<div class="text">
+												<div class="">
+													<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+													<div class="email">{{ $direct->slot_no }}</div>
+													<div class="date">{{ $direct->time_ago }}</div>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="col-md-6 col-sm-6">
-									<div class="action">
-										@if($direct->distributed == 1)
-											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-lblue"><i class="fa fa-star"></i> VIEW INFO</button>
-										@else
-											<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
-										@endif
+								<div class="col-md-6">
+									<div class="holder">
+										<div class="action to-right">
+											@if($direct->distributed == 1)
+												<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-lblue"><i class="fa fa-star"></i> VIEW INFO</button>
+											@else
+												<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+											@endif
+										</div>
 									</div>
 								</div>
 							</div>

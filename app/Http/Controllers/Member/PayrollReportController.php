@@ -512,63 +512,16 @@ class PayrollReportController extends Member
 		if ($payroll_company_id != 0) 
 		{
 			$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->basic()->get();
+			if (count($data["_employee"]) == 0 )
+			{
+				$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_company_id)->get();
+			}
 		}
 		
 		$data = $this->get_total_payroll_register($data);
 
 
 		return view('member.payrollreport.payroll_register_report_table', $data);
-
-		
-		if($payroll_employee_company_id == 0)
-		{
-			$data["company"] 			= Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
-			$data["_employee"] 			= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
-			
-			$data["period_info"] 		= $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
-			$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
-			$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
-			$data 						= $this->get_total_payroll_register($data);
-
-			$data['period_company_id_filter'] = 0 ;
-			$data['payroll_employee_company_id_filter'] = 0;
-
-
-			return view('member.payrollreport.payroll_register_report_period_filter',$data);
-		}
-		else
-		{
-			$data["company"] 		= Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
-			$data["_employee"] 		= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_employee_company_id)->Basic()->get();
-			
-			/*START Removed it on 2018*/
-			// $check_if_updated = true;
-
-			// foreach ($data["_employee"] as $key => $employee) 
-			// {
-
-			// 	if ($employee->employee_company_id != "NULL") 
-			// 	{
-			// 		$check_if_updated = false;
-			// 		break;
-			// 	}
-			// }
-			/*END Removed it on 2018*/
-
-			if (count($data["_employee"]) == 0 ) /*&& $check_if_updated*/
-			{
-				$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->get();
-			}
-
-			$data["period_info"] 		= $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
-			$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
-			$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
-			$data = $this->get_total_payroll_register($data);
-			$data['period_company_id_filter'] = $period_company_id ;
-			$data['payroll_employee_company_id_filter'] = $payroll_employee_company_id;
-			
-			return view('member.payrollreport.payroll_register_report_period_filter',$data);
-	    }
 	}
 
 	public function payroll_register_report_export_excel($period_company_id, $payroll_company_id)
@@ -599,33 +552,7 @@ class PayrollReportController extends Member
 		})->download('xls');
     }
 
-    public function payroll_register_report_export_excel_filter($id,$uid)
-	{
-		$period_company_id = $id;
-		$payroll_employee_company_id = $uid;
-
-		$data["_employee"] 		= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_employee_company_id)->Basic()->get();
-
-		if (count($data["_employee"]) == 0 ) 
-		{
-			$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_employee_company_id)->get();
-		}
-
-		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
-		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
-		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
-		$data['filter_company'] = Tbl_payroll_company::where('payroll_company_id',$payroll_employee_company_id)->first();
-		$data = $this->get_total_payroll_register($data);
-        $data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
-		
-		Excel::create($data["company"]->payroll_company_name." - ".$data['filter_company']->payroll_company_name,function($excel) use ($data)
-		{
-			$excel->sheet('clients',function($sheet) use ($data)
-			{
-				$sheet->loadView('member.payrollreport.payroll_register_report_export_excel_filter',$data);
-			});
-		})->download('xls');
-    }
+    
 
 	public function get_total_payroll_register($data)
 	{

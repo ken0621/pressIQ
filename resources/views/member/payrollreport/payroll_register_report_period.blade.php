@@ -36,6 +36,7 @@
 						<button style="margin-bottom: 20px;" type="button" class="btn btn-success pull-right btn-export-excel"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button>
 					</div>
 					<div class="payroll_register_report_table">
+						
 					</div>
 				</div>
 			</div>

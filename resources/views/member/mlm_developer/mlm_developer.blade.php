@@ -97,7 +97,7 @@
     </div> 
 </div>
 
-<script type="text/javascript" src="/assets/member/js/mlm/mlm_developer.js?v=2.0"></script>
+<script type="text/javascript" src="/assets/member/js/mlm/mlm_developer.js?v=3.0"></script>
 <script type="text/javascript" src="/assets/member/js/column.js"></script>
 <style type="text/css">
     .paginat .pagination

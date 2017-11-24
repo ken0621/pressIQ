@@ -27,5 +27,6 @@ class CreateTblPayrollLeaveEmployee extends Migration
      */
     public function down()
     {
-        Schema::drop('tbl_payroll_leave_employee');    }
+        Schema::drop('tbl_payroll_leave_employee');   
+     }
 }

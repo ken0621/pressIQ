@@ -634,7 +634,7 @@ class Item
     public static function generate_barcode($barcode = 0)
     {
         $return = $barcode;
-        $chk =  Tbl_item::where("item_barcode",$return)->where('item_shop',Item::getShopId())->get();
+        $chk =  Tbl_item::where("item_barcode",$return)->where('shop_id',Item::getShopId())->get();
         if(count($chk) > 1)
         {
             $num = '1234567890';

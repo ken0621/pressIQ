@@ -459,3 +459,49 @@
 		}
 	}
 }
+
+h3
+{
+	margin: 25px !important;
+}
+
+.modal-header
+{
+	background-color: #B17D2A;
+	color: #fff;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	.close
+	{
+		color: #fff;
+	}
+}
+
+.alert
+{
+	background-color: #ff5656;
+	color: #fff;
+}
+
+.alert-custom-success
+{
+	background-color: #32a300;
+	color: #fff;
+}
+
+.btn-jca-custom-default
+{
+	transition: 0.3s all ease;
+	background-color: #019771;
+	color: #fff;
+
+	&:hover
+	{
+		background-color: #B17D2A;
+		color: #fff;
+	}
+}

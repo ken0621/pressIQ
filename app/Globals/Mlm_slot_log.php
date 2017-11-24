@@ -179,6 +179,40 @@ class Mlm_slot_log
 
 		return $message;
 	}
+	public static function log_constructor_wallet_transfer($action,$amount,$from)
+	{
+		$message = "";
+		if($amount<0)
+		{
+			$amount *= -1;
+		}
+		switch ($action) 
+		{
+			case 'recieved':
+				$message.="You have successfully recieved ";
+				break;
+
+			case 'transfer':
+				$message.="You have successfully transfer ";
+				break;
+			
+			case 'fee':
+				$message.="Your wallet transfer to ".$from." has processing fee of ";
+				break;
+		}
+		$message.=$amount." ";
+		switch ($action) 
+		{
+			case 'recieved':
+				$message.="from slot ".$from;
+				break;
+
+			case 'transfer':
+				$message.="to slot ".$from;
+				break;
+		}
+		return $message;
+	}
 	public static function log_constructor_gc($earner, $sponsor,  $log_array)
 	{
 		$label = Mlm_slot_log::get_complan_label($log_array['complan'], $sponsor->shop_id);

@@ -568,6 +568,7 @@ function pos()
 		{
 			$(".customer-container").css("opacity", 1);
 			$('.price-level-select').val(price_level_id).change();
+			$('.input-slot-id').val($('.change-slot-id').val());
 		});
 	}
 	function customer_loading()
@@ -655,9 +656,9 @@ function success_process_sale(data)
 	if(data.status == 'success')
 	{
 		toastr.success('Success Process Sales');
-		setInterval(function()
-		{
-			location.href = '/member/cashier/transactions_list?receipt_id='+data.receipt_id;
-		},2000);
+		// setInterval(function()
+		// {
+		location.href = '/member/cashier/transactions_list?receipt_id='+data.receipt_id;
+		// },2000);
 	}	
 }

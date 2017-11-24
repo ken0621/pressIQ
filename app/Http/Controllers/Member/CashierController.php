@@ -256,7 +256,7 @@ class CashierController extends Member
                 if(!$validate)
                 {
                     Transaction::create_set_method('pos');
-                    $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, false);
+                    $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, '-');
 
                     if(is_numeric($transaction_list_id))
                     {
@@ -294,14 +294,25 @@ class CashierController extends Member
                         {
                             /** CONSUME - PAYMENT FOR GC AND WALLET **/ 
                             $validate = Transaction::consume_payment($shop_id, $transaction_list_id, $slot_id);
-                            
+
                             if(is_numeric($validate))
                             {
-                                Session::forget('customer_id');
-                                Cart2::clear_cart();
-                                $return['status'] = 'success';
-                                $return['receipt_id'] = $transaction_list_id;
-                                $return['call_function'] = 'success_process_sale';
+                                $transaction_receipt_list_id      = Transaction::create($shop_id, $get_transaction_list->transaction_id, 'RECEIPT', $transaction_date, '+');
+                                
+                                if(is_numeric($transaction_receipt_list_id))
+                                {
+                                    Session::forget('customer_id');
+                                    Cart2::clear_cart();
+                                    $return['status'] = 'success';
+                                    $return['receipt_id'] = $transaction_list_id;
+                                    $return['call_function'] = 'success_process_sale';
+                                }
+                                else
+                                {
+                                    $return['status'] = 'error';
+                                    $return['status_message'] = $$transaction_receipt_list_id;
+                                }
+
                             }
                             else
                             {

@@ -388,6 +388,11 @@ class Cart2
 		}
 		return $amount->sum('payment_amount');
 	}
+	public static function cart_payment_list($shop_id )
+	{
+        $cart_key = Self::get_cart_key();
+		return Tbl_cart_payment::where('unique_id_per_pc',$cart_key)->where('shop_id',$shop_id)->get();
+	}
 	public static function validate_cart()
 	{
 	}

@@ -26,12 +26,12 @@ use App\Globals\AuditTrail;
 
 class Mlm_slot_log
 {   
-	public static function slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on)
+	public static function slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on, $wallet_log_remarks = '')
 	{
 		$check_slot = Tbl_mlm_slot::where("slot_id",$wallet_log_slot)->first();
 		if($check_slot)
 		{
-			$insert['shop_id'] = $check_slot->shop_id; 
+			$insert['shop_id'] = $check_slot->shop_id;
 		}
 		$insert['wallet_log_slot'] = $wallet_log_slot; 
 		$insert['wallet_log_slot_sponsor'] = $wallet_log_slot_sponsor; 
@@ -42,6 +42,10 @@ class Mlm_slot_log
 		$insert['wallet_log_status'] = $wallet_log_status; 
 		$insert['wallet_log_claimbale_on'] = $wallet_log_claimbale_on; 
 		Tbl_mlm_slot_wallet_log::insert($insert);
+	}
+	public static function point_slot($points_info = array())
+	{
+		Tbl_mlm_slot_points_log::insert($points_info);
 	}
 	public static function slot_array($arry_log)
 	{

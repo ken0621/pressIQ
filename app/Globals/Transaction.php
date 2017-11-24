@@ -22,9 +22,11 @@ use App\Models\Tbl_cart_item_pincode;
 use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_transaction_item;
+use App\Models\Tbl_transaction_payment;
 use App\Models\Tbl_payment_logs;
 use App\Globals\AuditTrail;
 use App\Globals\Tablet_global;
+use App\Globals\Mlm_slot_log;
 
 use DB;
 use Log;
@@ -936,30 +938,52 @@ class Transaction
         $amount = Customer::get_points_wallet_per_slot($slot_id);
         $cart_wallet_amount = Cart2::cart_payment_amount($shop_id,'wallet');
         $cart_gc_amount = Cart2::cart_payment_amount($shop_id,'gc');
-        $transaction_info = Tbl_transaction_list::transaction()->where('transaction_type','receipt')->where('transaction_list_id', $transaction_list_id)->first();
+        $transaction_info = Tbl_transaction_list::transaction()->where('transaction_list_id', $transaction_list_id)->first();
+        $transaction_date = Carbon::now();
 
         $ins_wallet['shop_id'] = $shop_id;
-        $ins_wallet['wallet_log_slot'] = $slot_id;
-        $ins_wallet['wallet_log_slot_sponsor'] = $slot_id;
-        $ins_wallet['wallet_log_date_created'] = Carbon::now();
-        $ins_wallet['wallet_log_details'] = 'Thank you for purchasing. '.$cart_wallet_amount.' is deducted to your wallet';
-        $ins_wallet['wallet_log_amount'] = $cart_wallet_amount;
-        $ins_wallet['wallet_log_plan'] = 'REPURCHASE';
-        $ins_wallet['wallet_log_status'] = 'released';
-        $ins_wallet['wallet_log_claimbale_on'] = $ins_wallet['wallet_log_date_created'];
-        $ins_wallet['wallet_log_remarks'] = 'Purchase on POS - '.$transaction_info->transaction_number;
-        Tbl_mlm_slot_wallet_log::insert($ins_wallet);
+        $wallet_log_slot = $slot_id;
+        $wallet_log_slot_sponsor = $slot_id;
+        $wallet_log_claimbale_on = $transaction_date;
+        $wallet_log_details = 'Thank you for purchasing. '.$cart_wallet_amount.' is deducted to your wallet';
+        $wallet_log_amount = $cart_wallet_amount * -1;
+        $wallet_log_plan = 'REPURCHASE';
+        $wallet_log_status = 'released';
+        $wallet_log_remarks = 'Wallet Purchase on POS - '.$transaction_info->transaction_number;
+        Mlm_slot_log::slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on, $wallet_log_remarks);
 
-        $ins_gc['shop_id'] = $shop_id;
-        $ins_gc['wallet_log_slot'] = $slot_id;
-        $ins_gc['wallet_log_slot_sponsor'] = $slot_id;
-        $ins_gc['wallet_log_date_created'] = Carbon::now();
-        $ins_gc['wallet_log_details'] = 'Thank you for purchasing. '.$cart_wallet_amount.' is deducted to your wallet';
-        $ins_gc['wallet_log_amount'] = $cart_wallet_amount;
-        $ins_gc['wallet_log_plan'] = 'REPURCHASE';
-        $ins_gc['wallet_log_status'] = 'released';
-        $ins_gc['wallet_log_claimbale_on'] = $ins_gc['wallet_log_date_created'];
-        $ins_gc['wallet_log_remarks'] = 'Purchase on POS - '.$transaction_info->transaction_number;
-        Tbl_mlm_slot_wallet_log::insert($ins_gc);
+        $ins_gc['points_log_complan'] = 'PURCHASE_GC';
+        $ins_gc['points_log_level'] = 0;
+        $ins_gc['points_log_slot'] = $slot_id;
+        $ins_gc['points_log_Sponsor'] = $slot_id;
+        $ins_gc['points_log_date_claimed'] = $transaction_date;
+        $ins_gc['points_log_converted_date'] = $transaction_date;
+        $ins_gc['points_log_type'] = 'GC';
+        $ins_gc['points_log_from'] = 'GC Purchase on POS - '.$transaction_info->transaction_number;
+        $ins_gc['points_log_points'] = $cart_gc_amount * -1;
+        Mlm_slot_log::point_slot($ins_gc);
+
+        $get_all_payment = Cart2::cart_payment_list($shop_id);
+
+        $insert_payment = null;
+        foreach ($get_all_payment as $key => $value) 
+        {
+            $insert_payment[$key]['transaction_id'] = $transaction_info->transaction_id;
+            $insert_payment[$key]['transaction_payment_type'] = $value->payment_type;
+            $insert_payment[$key]['transaction_payment_amount'] = $value->payment_amount;
+            $insert_payment[$key]['transaction_payment_date'] = $transaction_date;
+        }
+
+        if(count($insert_payment) > 0)
+        {
+            Tbl_transaction_payment::insert($insert_payment);
+            $return = 1;
+        }
+
+        return $return;
     }
+    public static function get_payment($transaction_id)
+    {
+        return Tbl_transaction_payment::where('transaction_id',$transaction_id)->get();
+    }    
 }

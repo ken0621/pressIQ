@@ -21,7 +21,8 @@
     @yield("css")
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
-<body class="pushmenu-push">
+<body">
+
     <div class="loader hide">
         <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
@@ -29,6 +30,7 @@
     <!--[if lt IE 8]>
     <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
+
     <!-- HEADER -->
     <div class="header-nav">
         <div class="header-nav-top">
@@ -58,19 +60,19 @@
                     <div class="color-overlay"></div>
                     <div class="menu-container">
                         @if($customer)
-                            <div class="menu-holder">
-                                <a class="" href="/members/logout"><img src="/themes/{{ $shop_theme }}/img/key.png"> LOGOUT</a>
-                            </div>
-                            <div class="menu-holder">
-                                <a class="" href="/members"><img src="/themes/{{ $shop_theme }}/img/link.png"> MY ACCOUNT</a></a>
-                            </div>
+                        <div class="menu-holder">
+                            <a class="" href="/members/logout"><img src="/themes/{{ $shop_theme }}/img/key.png"> LOGOUT</a>
+                        </div>
+                        <div class="menu-holder">
+                            <a class="" href="/members"><img src="/themes/{{ $shop_theme }}/img/link.png"> MY ACCOUNT</a></a>
+                        </div>
                         @else
-                            <div class="menu-holder">
-                                <a class="" href="/members/login"><img src="/themes/{{ $shop_theme }}/img/key.png"> LOGIN</a>
-                            </div>
-                            <div class="menu-holder">
-                                <a class="" href="/members/register"><img src="/themes/{{ $shop_theme }}/img/link.png"> JOIN US TODAY</a></a>
-                            </div>
+                        <div class="menu-holder">
+                            <a class="" href="/members/login"><img src="/themes/{{ $shop_theme }}/img/key.png"> LOGIN</a>
+                        </div>
+                        <div class="menu-holder">
+                            <a class="" href="/members/register"><img src="/themes/{{ $shop_theme }}/img/link.png"> JOIN US TODAY</a></a>
+                        </div>
                         @endif
                     </div>
                 </div>
@@ -78,20 +80,41 @@
         </div>
         <div class="header-nav-middle">
             <div class="container clearfix">
-
-                <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
+                <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
                 <nav class="pushmenu pushmenu-left">
-
                     @if($customer)
+                    <div class="space1"></div>
+                    <a href="/members/profile">
+                         <div class="profile-img-container">
+                            <div class="row-no-padding clearfix">
+                                <div class="col-xs-3">
+                                    <div class="profile-img"><img src="{{ $profile_image }}"></div>
+                                </div>
+                                <div class="col-xs-9">
+                                    <div class="text-holder">
+                                        <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+                                        <div class="subtext text-overflow">{{ $customer->email }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
                     <div class="space1"></div>
                     <span>BROWSE</span>
                     <ul class="links">
                         <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">HOME</a> </li>
-                        <li class="nav-ext"> <a href="javascript:">PRODUCTS</a> </li>
-                        <li class="nav-ext"> <a href="/about">COMPANY</a> </li>
-                        <li class="nav-ext"> <a href="/contact">CONTACT US</a> </li>
+                        <li class="product-mobile-dropdown"> 
+                            <a href="javascript:">PRODUCTS</a>
+                        </li>
+                            @foreach($global_product as $product)
+                                <ul class="product-mobile-dropdown-list" onClick="location.href='/product/view/{{ $product['eprod_id'] }}'">
+                                    <li><a href="javascript:">{{ get_product_first_name($product) }}</a></li>
+                                </ul>
+                            @endforeach
+                        <li> <a href="/about">COMPANY</a> </li>
+                        <li> <a href="/contact">CONTACT US</a> </li>
                     </ul>
-                    
+
                     <div class="space2"></div>
                     <span>MEMBERS AREA</span>
                     <ul class="links">
@@ -103,30 +126,38 @@
                         <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
                         <li class="{{ Request::segment(2) == "code-vault" ? "active" : "" }}"> <a href="javascript:">CODE VAULT</a> </li>
                         <li class="{{ Request::segment(2) == "product-code-vault" ? "active" : "" }}"> <a href="javascript:">PRODUCT CODE VAULT</a> </li>
-                            @if($customer)
-                                <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
-                            @endif
+                        @if($customer)
+                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                        @endif
                         @else
                         @endif
                     </ul>
                     @else
-                        <div class="space1"></div>
-                        <span>BROWSE</span>
-                        <ul class="links">
-                            <li> <a href="/">HOME</a> </li>
-                            <li class="nav-ext"> <a href="javascript:">PRODUCTS</a> </li>
-                            <li class="nav-ext"> <a href="/about">COMPANY</a> </li>
-                            <li class="nav-ext"> <a href="/contact">CONTACT US</a> </li>
-                        </ul>
+                    <div class="space1"></div>
+                    <span>BROWSE</span>
+                    <ul class="links">
+                        <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">HOME</a> </li>
+                        <li class="product-mobile-dropdown"> 
+                            <a href="javascript:">PRODUCTS</a>
+                        </li>
+                            @foreach($global_product as $product)
+                                <ul class="product-mobile-dropdown-list" onClick="location.href='/product/view/{{ $product['eprod_id'] }}'">
+                                    <li><a href="javascript:">{{ get_product_first_name($product) }}</a></li>
+                                </ul>
+                            @endforeach
+                        <li> <a href="/about">COMPANY</a> </li>
+                        <li> <a href="/contact">CONTACT US</a> </li>
+                    </ul>
                     @endif
                 </nav>
+
+                <div id="overlay" onclick="off()"></div>    
 
                 <div class="pull-left">
                     <div class="logo">
                         <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/logo.jpg">
                     </div>
                 </div>
-
                 <div class="pull-right">
                     <div class="info">
                         <div class="holder">
@@ -153,9 +184,11 @@
             </div>
         </div>
     </div>
+
     <div id="scroll-to" class="clearfix">
         @yield("content")
     </div>
+
     <!-- FOOTER -->
     <footer>
         <div class="container">
@@ -192,6 +225,7 @@
             </div>
         </div>
     </footer>
+
     <div class="sub-footer">
         <div class="container">
             <div class="row clearfix">
@@ -219,8 +253,6 @@
     </div>
 
     @include("frontend.gfoot")
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
-    <script type="text/javascript" src="/assets/slick/slick.min.js"></script>
     <script type="text/javascript" src="/assets/front/js/global.js"></script>
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/assets/member/global.js"></script>

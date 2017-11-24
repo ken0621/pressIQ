@@ -1,4 +1,4 @@
-var theme_custom = new theme_custom()
+/*var theme_custom = new theme_custom()
 
 function theme_custom()
 {
@@ -30,69 +30,18 @@ function theme_custom()
                 }
              });
 
-            // use buttons to change slide
-            $('#gotoleft').bind("click", function(){
-                // Go to the previous slide
-                $('.slider3').diyslider("move", "back");
-            });
-            $('#gotoright').unbind("click")
-            $('#gotoright').bind("click", function(){
-                // Go to the previous slide
-                $('.slider3').diyslider("move", "forth");
-            });
-
             /*MOBILE SIDE NAV*/
-            $menuLeft = $('.pushmenu-left');
+/*            $menuLeft = $('.pushmenu-left');
             $nav_list = $('#nav_list');
 
             $nav_list.click(function() {
                 $(this).toggleClass('active');
                 $('.pushmenu-push').toggleClass('pushmenu-push-toright');
                 $menuLeft.toggleClass('pushmenu-open');
-            });
-
-            // NAVIRINO CLICK TOGGLE
-            $(".menu-nav").click(function()
-            {
-                $(".navirino").toggle("slow");
-            });
-
-            /*PRODUCT HOVER TOGGLE*/
-            $('.product-hover').hover(function()
-            {
-                $('.product-dropdown').stop();
-                $('.product-dropdown').fadeIn(400);
-            },
-            function()
-            {
-                $('.product-dropdown').stop();
-                $('.product-dropdown').fadeOut(400);
-            });
-
-            $('.company-hover').hover(function()
-            {
-                $('.company-dropdown').stop();
-                $('.company-dropdown').fadeIn(400);
-            },
-            function()
-            {
-                $('.company-dropdown').stop();
-                $('.company-dropdown').fadeOut(400);
-            });
-
-            $('.cart-hover').hover(function()
-            {
-                $('.cart-dropdown').stop();
-                $('.cart-dropdown').fadeIn(400);
-            },
-            function()
-            {
-                $('.cart-dropdown').stop();
-                $('.cart-dropdown').fadeOut(400);
-            });
+            });*/
 
             /*scroll up*/
-            $(window).scroll(function () {
+/*            $(window).scroll(function () {
                 if ($(this).scrollTop() > 700) {
                     $('.scroll-up').fadeIn();
                 } else {
@@ -105,13 +54,13 @@ function theme_custom()
                     scrollTop: 0
                 }, 700);
                 return false;
-            });
+            });*/
 
             /*EXIT SIDE NAV TOGGLE*/
-            $('.nav-ext').click(function()
+/*            $('.nav-ext').click(function()
             {
                 $('#nav_list').click();
             });
         });
     }
-}
+}*/

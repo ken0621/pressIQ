@@ -40,7 +40,8 @@
                         <option value="Incentives">Incentives</option>
                         <option value="Cash Advance">Cash Advance</option>
                         <option value="Cash Bond">Cash Bond</option>
-                        <option value="Additions">Additions</option>
+                        <option value="13th Month and Other Non Taxable Benefits">13th Month and Other Non Taxable Benefits</option>
+                        <option value="De Minimis Benefit">De Minimis Benefit</option>
                         <option value="Deductions">Deductions</option>
                         <option value="Others">Others</option>
                     </select>

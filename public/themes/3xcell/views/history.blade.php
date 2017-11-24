@@ -70,7 +70,7 @@
 			<div class="bot-content row clearfix">
 				@if(loop_content_condition($shop_theme_info, "history", "history_permit"))
 					@foreach(loop_content_get($shop_theme_info, "history", "history_permit") as $permit)
-						<div class="col-md-2">
+						<div class="col-md-2 col-sm-2 col-xs-6">
 							<div class="img-container">
 								<a href="{{ $permit }}" data-title="" data-lightbox="company-gallery">
 									<img src="{{ $permit }}">

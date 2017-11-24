@@ -56,6 +56,7 @@
 			<td>Checkout ID</td>
 			<td>Paymaya Response</td>
 			<td>Slot No.</td>
+			<td>Slot ID.</td>
 			<td>Investigation</td>
 		</tr>
 		@foreach($_transaction as $transaction)
@@ -78,6 +79,7 @@
 			<td>{{ $transaction->checkout_id }}</td>
 			<td>{{ $transaction->paymaya_response }}</td>
 			<td>{{ $transaction->slot_no }}</td>
+			<td>{{ $transaction->slot_id }}</td>
 			<td>{{ $transaction->paymaya_status }}</td>
 		</tr>
 		@endforeach

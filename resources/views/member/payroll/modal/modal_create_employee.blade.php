@@ -284,8 +284,7 @@
                 </div>
                         
                 <div class="form-group">
-                  <div class="col-md-6">
-                    
+                  <div class="col-md-6"> 
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Monthly Rate</small>
@@ -298,7 +297,13 @@
                         <input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right">
                       </div>
                     </div>
-                    <div class="form-group hidden">
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <small>Hourly Rate</small>
+                        <input type="number" step="any" name="payroll_employee_salary_hourly" class="form-control text-right">
+                      </div>
+                    </div>
+                    <div class="form-group">
                       <div class="col-md-12">
                         <small>COLA (Monthly)</small>
                         <input type="number" step="any" name="monthly_cola" class="form-control text-right">
@@ -316,8 +321,8 @@
                         <input type="number" step="any" name="payroll_employee_salary_pagibig" class="form-control text-right">
                       </div>
                     </div>
-
                   </div>
+
                   <div class="col-md-6 declared-salaries hidden">
                     <div class="form-group">
                       <div class="col-md-12">

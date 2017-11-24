@@ -19,26 +19,51 @@ function custom_theme()
 			ready_load_mini_ecom_cart();
 			event_sticky_nav();
 			event_toggle_subshop_container();
+			event_mobile_sidenav();
+			event_scroll_up();
 
-			/*MOBILE SIDE NAV*/
-            $menuLeft = $('.pushmenu-left');
-            $nav_list = $('#nav_list');
 
-            $nav_list.click(function() {
-                $(this).toggleClass('active');
-                $('.pushmenu-push').toggleClass('pushmenu-push-toright');
-                $menuLeft.toggleClass('pushmenu-open');
-            });
+            // /*DISABLE BODY SCROLLING*/
+            // var $body = $(document.body);
 
-            /*DISABLE BODY SCROLLING*/
-            var $body = $(document.body);
-
-            $('#nav_list').click(function()
-            {
-            	$body.toggleClass('disable-scroll');
-            });
+            // $('#nav_list').click(function()
+            // {
+            // 	$body.toggleClass('disable-scroll');
+            // });
 
 		});
+	}
+
+	function event_scroll_up()
+	{
+		/*scroll up*/
+		$(window).scroll(function () {
+		    if ($(this).scrollTop() > 700) {
+		        $('.scroll-up').fadeIn();
+		    } else {
+		        $('.scroll-up').fadeOut();
+		    }
+		});
+
+		$('.scroll-up').click(function () {
+		    $("html, body").animate({
+		        scrollTop: 0
+		    }, 700);
+		    return false;
+		});
+	}
+
+	function event_mobile_sidenav()
+	{
+		/*MOBILE SIDE NAV*/
+        $menuLeft = $('.pushmenu-left');
+        $nav_list = $('#nav_list');
+
+        $nav_list.click(function() {
+            $(this).toggleClass('active');
+            // $('.pushmenu-push').toggleClass('pushmenu-push-toright');
+            $menuLeft.toggleClass('pushmenu-open');
+        });
 	}
 
 	function event_toggle_subshop_container()
@@ -232,4 +257,19 @@ function onSearch(x)
 	}
     
     location.href="/product?search="+keyword;
+}
+
+/*JAVASCRIPT*/
+
+function on() 
+{
+    document.getElementById("overlay").style.display = "block";
+    $("body").css("overflow", "hidden");
+}
+
+function off()
+{
+    document.getElementById("overlay").style.display = "none";
+    $('.pushmenu').removeClass("pushmenu-open");
+    $("body").css("overflow", "auto");
 }

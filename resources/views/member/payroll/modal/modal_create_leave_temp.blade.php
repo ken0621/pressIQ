@@ -55,6 +55,7 @@
 		<div class="form-group">
 			<div class="col-md-12">
 				<span><b>Affected Employee<a href="#" class="btn btn-custom-primary pull-right popup" link="/member/payroll/leave/modal_leave_tag_employee/0'">Tag Employee</a></b></span>
+
 			</div>
 		</div>
 		<div class="form-group">

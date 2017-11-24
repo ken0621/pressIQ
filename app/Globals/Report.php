@@ -176,7 +176,7 @@ class Report
 	 * @param  string   $pdf_format		landscape or portrait : default is landscape	
 	 * @author BKA	
 	 */
-	public static function check_report_type($report_type, $view, $data, $name="File", $pdf_format = "landscape")
+	public static function check_report_type($report_type, $view, $data, $name="File", $pdf_format = "landscape", $paper_size = null)
     {   
         $_view = view($view, $data); 
 
@@ -187,7 +187,7 @@ class Report
          		break;
             case 'pdf':
                     $data['view'] = $_view->render();
-                    return Pdf_global::show_pdf($data['view'], $pdf_format == "landscape" ? $pdf_format : null);
+                    return Pdf_global::show_pdf($data['view'], $pdf_format == "landscape" ? $pdf_format : null,null, $paper_size);
                 break;
             case 'excel':
                     Excel::create($name, function($excel) use($view, $data) 

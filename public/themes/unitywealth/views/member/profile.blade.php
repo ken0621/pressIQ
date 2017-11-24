@@ -164,7 +164,7 @@
 						   		</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-default" type="submit"><i class="fa fa-pencil"></i> Update</button>
+							   			<button class="btn btn-unity-primary" type="submit"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -191,7 +191,7 @@
 				   					   			</div>
 				   						   		<div class="col-md-12">
 				   						   			<div class="form-group btn-holder">
-				   							   			<button type="submit" class="submit-button btn btn-default"><i class="fa fa-pencil"></i> Update</button>
+				   							   			<button type="submit" class="submit-button btn btn-unity-primary"><i class="fa fa-pencil"></i> Update</button>
 				   							   		</div>
 				   						   		</div>
 				   					   		</div>
@@ -255,7 +255,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-default" type="submit"><i class="fa fa-pencil"></i>  Update</button>
+							   			<button class="btn btn-unity-primary" type="submit"><i class="fa fa-pencil"></i>  Update</button>
 							   		</div>
 						   		</div>
 					   		</div>

@@ -64,8 +64,13 @@ function wallet_transfer()
 
 		});
 	}
+	function action_table_loader()
+	{
+		$(".load-prediction-here").html('<div style="margin-top:5px;text-align: center; font-size: 20px;"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>');
+	}
 	function action_load_table()
 	{
+		action_table_loader();
 		table_data.keyword = $('.search-recipient').val();
 		$.ajax(
 		{

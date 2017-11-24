@@ -71,7 +71,7 @@
 						<li class="{{ Request::segment(2) == "redeemable" ? "active" : "" }}">
 							<a href="/members/redeemable"><div class="nav-holder"><div class="icon fa fa-gift"></div> <span>Redeemable</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" || Request::segment(2) == "wallet-transfer" ? "active" : "" }}">
+						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" || Request::segment(2) == "wallet-transfer" || Request::segment(2) == "wallet-refill" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>
 								<li>
@@ -79,6 +79,9 @@
 								</li>
 								<li>
 									<a href="/members/wallet-transfer"><div class="nav-holder"> &nbsp;&nbsp;<span>Wallet Transfer</span></div></a>
+								</li>
+								<li>
+									<a href="/members/wallet-refill"><div class="nav-holder"> &nbsp;&nbsp;<span>Wallet Refill</span></div></a>
 								</li>
 							</ul>
 						</li>

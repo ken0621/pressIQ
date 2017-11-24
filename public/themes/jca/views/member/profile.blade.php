@@ -85,12 +85,12 @@
 				<div class="tab-content">
 				   <div id="basic_info" class="tab-pane fade in active">
 				   		<div class="profile_info_success_message hidden">
-							<div class="alert alert-success">
+							<div class="alert alert-custom-success">
 							  <strong>Success!</strong> Your info has been successfully updated.
 							</div>
 				   		</div>
 				   		<div class="profile_info_failed_message hidden">
-							<div class="alert alert-danger">
+							<div class="alert">
 							  <ul>
 							  	
 							  </ul>
@@ -167,7 +167,7 @@
 						   		</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-default" type="submit"><i class="fa fa-pencil"></i> Update</button>
+							   			<button class="btn btn-jca-custom-default" type="submit"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -176,7 +176,7 @@
 				   <!-- CONTACT INFO -->
 				   <div id="contact_info" class="tab-pane fade">
 				   		<div class="contact_info_success_message hidden">
-							<div class="alert alert-success">
+							<div class="alert alert-custom-success">
 							  <strong>Success!</strong> Sponsor Rule has been successfully updated.
 							</div>
 				   		</div>
@@ -194,7 +194,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button type="submit" class="submit-button btn btn-default"><i class="fa fa-pencil"></i> Update</button>
+							   			<button type="submit" class="submit-button btn btn-jca-custom-default"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -202,12 +202,12 @@
 				   </div>
 				   <div id="profile_picture" class="tab-pane fade">
 				   	<div class="profile_picture_success_message hidden">
-						<div class="alert alert-success">
+						<div class="alert alert-custom-success">
 						  <strong>Success!</strong> Your profile picture has been successfully updated.
 						</div>
 			   		</div>
 			   		<div class="profile_picture_failed_message hidden">
-						<div class="alert alert-danger">
+						<div class="alert">
 						  <strong>Failed!</strong> Please try again later.
 						</div>
 			   		</div>
@@ -228,12 +228,12 @@
 				   @if($allowed_change_pass)
 				   <div id="password" class="tab-pane fade">
 					   	<div class="profile_password_success_message hidden">
-							<div class="alert alert-success">
+							<div class="alert alert-custom-success">
 							  <strong>Success!</strong> Your password has been successfully updated.
 							</div>
 				   		</div>
 				   		<div class="profile_password_failed_message hidden">
-							<div class="alert alert-danger">
+							<div class="alert">
 							  <ul>
 							  	
 							  </ul>
@@ -258,7 +258,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-default" type="submit"><i class="fa fa-pencil"></i>  Update</button>
+							   			<button class="btn btn-jca-custom-default" type="submit"><i class="fa fa-pencil"></i>  Update</button>
 							   		</div>
 						   		</div>
 					   		</div>

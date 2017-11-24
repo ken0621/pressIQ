@@ -150,6 +150,8 @@ class Customer_InvoiceController extends Member
 
         $product_consume = [];
         $item_serial = [];
+
+        $check_single = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -168,6 +170,11 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['ref_id']             = Request::input('invline_ref_id')[$key];
                 
                 $item_type = Tbl_item::where("item_id",Request::input('invline_item_id')[$key])->value("item_type_id");
+
+                if ($item_type == 1) 
+                {
+                    $check_single[$key] = $item_info;
+                }
                 if($item_type == 4 || $item_type == 1)
                 {
                     $um_qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
@@ -184,18 +191,24 @@ class Customer_InvoiceController extends Member
             }
         }
         //START if bundle inventory_consume arcy
+        $check_bundle = [];
         foreach ($_itemline as $keyitem => $value_item) 
         {
             $item_bundle_info = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitem])->where("item_type_id",4)->first();
             if($item_bundle_info)
             {
                 $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("invline_item_id")[$keyitem])->get();
+                $check_bundle[$keyitem] = $bundle;
+                foreach ($check_bundle[$keyitem] as $key0 => $value0) 
+                {
+                    $check_bundle[$keyitem][$key0]->bundle_quantity = str_replace(",", "", Request::input('invline_qty')[$keyitem]);
+                }
                 foreach ($bundle as $key_bundle => $value_bundle) 
                 {
                     $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$keyitem]);
                     $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
                     $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
-                    $_bundle[$key_bundle]['quantity'] = (Request::input('invline_qty')[$keyitem] * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
+                    $_bundle[$key_bundle]['quantity'] = (str_replace(",", "", Request::input('invline_qty')[$keyitem]) * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
 
                     array_push($product_consume, $_bundle[$key_bundle]);
                 }
@@ -222,8 +235,7 @@ class Customer_InvoiceController extends Member
             }         
         }
         //END if bundle inventory_consume arcy
-
-        return $this->check_stock($product_consume);
+        return $this->check_stock($check_single, $check_bundle);
 
         $json["status"] = null;
         $json["status_message"] = null;
@@ -450,6 +462,8 @@ class Customer_InvoiceController extends Member
 
         $product_consume = [];
         $item_serial = [];
+
+        $check_single = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -468,6 +482,11 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['ref_id']             = Request::input('invline_ref_id')[$key];
 
                 $item_type = Tbl_item::where("item_id",Request::input('invline_item_id')[$key])->value("item_type_id");
+
+                if ($item_type == 1) 
+                {
+                    $check_single[$key] = $item_info;
+                }
                 if($item_type == 4 || $item_type == 1)
                 {
                     $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
@@ -485,18 +504,24 @@ class Customer_InvoiceController extends Member
         }
 
         //START if bundle inventory_consume arcy
+        $check_bundle = [];
         foreach ($_itemline as $keyitem => $value_item) 
         {
-            $item_bundle_info = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitem])->where("item_type_id",4)->first();
+            $item_bundle_info = Tbl_item::where("item_id", Request::input("invline_item_id")[$keyitem])->where("item_type_id",4)->first();
             if($item_bundle_info)
             {
-                $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("invline_item_id")[$keyitem])->get();
+                $bundle = Tbl_item_bundle::where("bundle_bundle_id", Request::input("invline_item_id")[$keyitem])->get();
+                $check_bundle[$keyitem] = $bundle;
+                foreach ($check_bundle[$keyitem] as $key0 => $value0) 
+                {
+                    $check_bundle[$keyitem][$key0]->bundle_quantity = str_replace(",", "", Request::input('invline_qty')[$keyitem]);
+                }
                 foreach ($bundle as $key_bundle => $value_bundle) 
                 {
                     $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$keyitem]);
                     $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
                     $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
-                    $_bundle[$key_bundle]['quantity'] = (Request::input('invline_qty')[$keyitem] * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
+                    $_bundle[$key_bundle]['quantity'] = (str_replace(",", "", Request::input('invline_qty')[$keyitem]) * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
 
                     array_push($product_consume, $_bundle[$key_bundle]);
                 }
@@ -522,8 +547,7 @@ class Customer_InvoiceController extends Member
             }           
         }
         //END if bundle inventory_consume arcy
-
-        return $this->check_stock($product_consume);
+        return $this->check_stock($check_single, $check_bundle);
 
         //CREDIT MEMO / RETURNS
         $cm_customer_info[] = null;
@@ -777,8 +801,11 @@ class Customer_InvoiceController extends Member
         return Pdf_global::show_pdf($pdf);
     }
 
-    public function check_stock($product_consume)
+    public function check_stock($check_single, $check_bundle)
     {
+        $product_consume['single'] = $check_single;
+        $product_consume['bundle'] = $check_bundle;
+
         if (Purchasing_inventory_system::check()) 
         {
             $stock_validation = Warehouse::checkStock($product_consume, $this->current_warehouse->warehouse_id);

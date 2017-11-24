@@ -14,6 +14,11 @@ class Tbl_item_bundle extends Model
     	return $query->join("tbl_item","item_id","=","bundle_item_id");
     }
 
+    public function scopeItemBundle($query)
+    {
+        return $query->join("tbl_item","item_id","=","bundle_bundle_id");
+    }
+
     /* Dependent on scopeItem() */
     public function scopeUm($query)
     {

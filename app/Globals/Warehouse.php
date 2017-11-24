@@ -1271,25 +1271,28 @@ class Warehouse
         $err = 0;
         $err_msg = "";
         
-        foreach ($product_consume["single"] as $key_items => $value_items) 
+        foreach ($product_consume["single"] as $key_item => $value_item) 
         {
-            $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_items['product_id'])->value('inventory_count');
-            
-            if($count_on_hand == null)
+            foreach ($value_item as $key_items => $value_items) 
             {
-                $count_on_hand = 0;   
-            }
+                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_items['item_id'])->value('inventory_count');
+                
+                if($count_on_hand == null)
+                {
+                    $count_on_hand = 0;   
+                }
 
-            if($value_items['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value_items['quantity'])
-            {
-                // Allowed
-            }
-            else
-            {
-                $item_name = Item::get_item_details($value_items['product_id']);
-                $err_msg[$err] = "The quantity of ".$item_name->item_name." is not enough for you to transfer.";
-                $err++;
-            }  
+                if($value_items['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value_items['quantity'])
+                {
+                    // Allowed
+                }
+                else
+                {
+                    $item_name = Item::get_item_details($value_items['item_id']);
+                    $err_msg[$err] = "The quantity of ".$item_name->item_name." is not enough for you to transfer.";
+                    $err++;
+                } 
+            } 
         }
 
         foreach ($product_consume["bundle"] as $key_item => $value_item) 

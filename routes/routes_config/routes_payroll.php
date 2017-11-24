@@ -623,4 +623,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::post('/biometrics/save_data','Member\PayrollBiometricsController@save_data');
 	Route::any('/biometrics/sample','Member\PayrollBiometricsController@sample');
 	/*END payroll biometrics*/
+
+	/*START payroll approve database manipulation*/
+	Route::any('/payroll_time_keeping_approve_manipulation/time_breakdown/{period_company_id}/{employee_id}','Member\PayrollTimeKeepingApproveManipulation@time_breakdown');
+	/*END payroll approve database manipulation*/
 });

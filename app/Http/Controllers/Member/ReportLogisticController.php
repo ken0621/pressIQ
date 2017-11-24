@@ -29,7 +29,7 @@ class ReportLogisticController extends Member
         $date['end']    = Request::input('to');
         $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
-        $data['_report'] = Transaction::get_all_transaction_item($this->user_info->shop_id, $data['from'], $data['to'], 'receipt', $payment_type);
+        $data['_report'] = Transaction::get_all_transaction_item($this->user_info->shop_id, $data['from'], $data['to'], 'receipt', $payment_type,'a0');
         $data['payment_method'] = $payment_type;
 
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */

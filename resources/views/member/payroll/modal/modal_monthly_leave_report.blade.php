@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-    <div class="text-center" id="spinningLoader" style="display:none;">
+    <div class="text-c  enter" id="spinningLoader" style="display:none;">
                 <img src="/assets/images/loader.gif">
     </div>
     <div class="load-filter-data">

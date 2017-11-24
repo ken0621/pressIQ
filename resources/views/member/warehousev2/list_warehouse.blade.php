@@ -13,8 +13,7 @@
                 </small>
             </h1>
             <div class="text-right">
-                <a class="btn btn-custom-white panel-buttons popup" link="/member/item/transferinventory" size="md" data-toggle="modal" data-target="#global_modal">Transfer Inventory</a>
-                <a class="btn btn-primary panel-buttons popup" link="/member/item/warehouse/add" size="lg" data-toggle="modal" data-target="#global_modal">Add Warehouse</a>
+                <a class="btn btn-primary panel-buttons popup" link="/member/item/v2/warehouse/add" size="lg" data-toggle="modal" data-target="#global_modal">Add Warehouse</a>
             </div>
         </div>
     </div>
@@ -46,32 +45,73 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">Warehouse Name</th>
-                                            <th class="text-center">Total Holding Items</th>
-                                            <th>Total Selling Price</th>
-                                            <th>Total Cost Price</th>
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
 
                                     <tbody class="table-warehouse">
+                                    @if(count($_warehouse) > 0)
                                         @foreach($_warehouse as $warehouse)
                                         <tr>
-                                            <td class="text-center">{{ $warehouse->warehouse_name }}</td>
+                                            <td class="text-center">{{$warehouse->warehouse_name}}</td>
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                  <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Action <span class="caret"></span>
+                                                  </button>
+                                                  <ul class="dropdown-menu dropdown-menu-custom">
+                                                    <li><a size="lg" link="/member/item/warehouse/refill?warehouse_id={{$warehouse->warehouse_id}}" href="javascript:" class="popup">Refill  Warehouse</a></li>
+                                                    <li><a href="javascript:" class="popup" link="/member/item/v2/warehouse/edit/{{$warehouse->warehouse_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit</a></li>
+                                                  </ul>
+                                                </div>
+                                            </td>
                                         </tr>
-                                        @endforeach 
-                                       
+                                        @endforeach
+                                    @else
+                                    <tr>
+                                        @if($pis == null)
+                                        <td colspan="5" class="text-center">No Warehouse Found</td>
+                                        @else
+                                        <td colspan="2" class="text-center">No Warehouse Found</td>
+                                        @endif
+                                    </tr>
+                                    @endif
                                     </tbody>
                                 </table>
                             </div>
-
                             <div class="text-center pull-right">
-                                {!!$_warehouse->render()!!}
-                            </div> 
+                               
+                            </div>   
                         </div> 
                     </div>
                 </div>
             </div>
-        </div>        
+            <div id="archived" class="tab-pane fade in">
+                <div class="form-group order-tags"></div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Warehouse Name</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-warehouse">
+                        @if($_warehouse_archived != null)
+                            @foreach($_warehouse_archived as $warehouse_archived)
+                            <tr>
+                                <td class="text-center">{{$warehouse_archived->warehouse_name}}</td>
+                                <td class="text-center">
+                                    <a href="javascript:" link="/member/item/warehouse/restore/{{$warehouse_archived->warehouse_id}}" href="javascript:" class="popup">RESTORE</a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

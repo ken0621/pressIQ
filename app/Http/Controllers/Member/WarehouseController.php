@@ -139,7 +139,6 @@ class WarehouseController extends Member
                     
                     $all_item = Tbl_sub_warehouse::select_item($value->warehouse_id)
                                                  ->get();
-                    
                     foreach ($all_item as $key2 => $value2) 
                     {
                         $qty = 0;

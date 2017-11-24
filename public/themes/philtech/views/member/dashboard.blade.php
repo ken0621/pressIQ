@@ -133,7 +133,7 @@
 					</div>
 				</div>
 				@endif
-				<div class="square-container enter-prod-code-cont match-height">
+				<div class="square-container enter-prod-code-cont">
 					<div class="title">Enter Product Code</div>
 					<div class="sub-container">
 						<div class="chart-legend text-center">
@@ -146,7 +146,7 @@
 		
 		<div class="row clearfix">
 			<div class="col-md-12">
-				<div class="square-container rep-link-cont match-height">
+				<div class="square-container rep-link-cont">
 					<div class="title">Replicated Link</div>
 					<div class="sub-container">
 						@foreach($_slot as $slot)
@@ -166,7 +166,7 @@
 
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="square-container direct-ref-cont">
+				<div class="square-container direct-ref-cont match-height">
 					<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Direct Franchisee</div>
 					<div class="sub-container border-holder">
 						<div class="clearfix wow hidden">
@@ -212,7 +212,7 @@
 				</div>
 			</div>
 			<div class="col-md-6">
-				<div class="square-container recent-rewards-cont">
+				<div class="square-container recent-rewards-cont match-height">
 					<div class="match-height">
 						<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
 						<div class="sub-container">

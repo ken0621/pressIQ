@@ -21,7 +21,10 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="text-right col-md-12">
+                        <div class="text-left col-md-6">
+                            <label class="transfer-fee" >Transfer fee: 0</label>
+                        </div>
+                        <div class="text-right col-md-6">
                             <label class="current_wallet" >Current Wallet: 0</label>
                         </div>
                     </div>

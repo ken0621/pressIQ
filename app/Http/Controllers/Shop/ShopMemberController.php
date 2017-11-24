@@ -1667,9 +1667,8 @@ class ShopMemberController extends Shop
     }
     public function getSendTransfer()
     {
-        //trasaction fee (static)
-        $transaction_fee =  -20;
-        $shop_id = 1; 
+        $shop_id = $this->shop_info->shop_id;
+        $transaction_fee =  -1*Tbl_mlm_slot_wallet_log_refill_settings::where("shop_id",$shop_id)->first()->wallet_log_refill_settings_transfer_processing_fee;
 
         $recipient_slot_no = request("recipient");
         $sender_slot_no = request("slot");
@@ -1752,6 +1751,12 @@ class ShopMemberController extends Shop
             $wallet=$current;
         }
         return $wallet;
+    }
+    public function getWalletTransferFee()
+    {
+        $shop_id = $this->shop_info->shop_id;
+        $transaction_fee =  Tbl_mlm_slot_wallet_log_refill_settings::where("shop_id",$shop_id)->first()->wallet_log_refill_settings_transfer_processing_fee;
+        return $transaction_fee;
     }
     public function getWalletRefill()
     {

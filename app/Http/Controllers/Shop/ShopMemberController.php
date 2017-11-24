@@ -33,6 +33,8 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 //mark
 use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Models\Tbl_mlm_slot_wallet_log_refill;
+use App\Models\Tbl_mlm_slot_wallet_log_refill_settings;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_email_template;
@@ -79,6 +81,8 @@ use App\Globals\PayMaya\Core\Constants;
 
 use App\Models\Tbl_item;
 use App\Tbl_item_redeemable;
+//for image upload
+use Illuminate\Support\Facades\Storage;
 
 class ShopMemberController extends Shop
 {
@@ -1748,6 +1752,65 @@ class ShopMemberController extends Shop
             $wallet=$current;
         }
         return $wallet;
+    }
+    public function getWalletRefill()
+    {
+        $data['page'] = 'Wallet Refill';
+        $data['slot_owner'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+        return Self::load_view_for_members('member.wallet_refill', $data);
+    }
+    public function getWalletRefillRequest()
+    {
+        $shop_id = $this->shop_info->shop_id;
+        $data['page'] = "Request Wallet Refill";
+        $data['slot_owner'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+        $data['fee'] = Tbl_mlm_slot_wallet_log_refill_settings::where('shop_id',$shop_id)->first()->wallet_log_refill_settings_processings_fee;
+        return Self::load_view_for_members('member.wallet_refill_request', $data);
+    }
+    public function postWalletRefillRequest(Request $request)
+    {
+        $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
+        $path ="";
+        if($request->hasFile('attachment'))
+        {
+            $path = Storage::putFile('payment-proof', $request->file('attachment'));
+        }
+        $shop_id = $this->shop_info->shop_id;
+        $fee = Tbl_mlm_slot_wallet_log_refill_settings::where("shop_id",$shop_id)->first()->wallet_log_refill_settings_processings_fee;
+        $amount = $request->amount;
+        $slot_id = Tbl_mlm_slot::where("slot_no",$request->slot)->first()->slot_id;
+
+        $insert['wallet_log_refill_date'] = Carbon::now();
+        $insert['wallet_log_refill_amount'] = $amount;
+        $insert['wallet_log_refill_processing_fee'] = $fee;
+        $insert['wallet_log_refill_amount_paid'] = $amount+$fee;
+        $insert['wallet_log_refill_approved'] = 0;
+        $insert['wallet_log_refill_remarks'] = $request->remarks;
+        if($path!="")
+        {
+            $insert['wallet_log_refill_attachment'] = $path_prefix.$path;
+        }
+        $insert['shop_id'] = $shop_id;
+        $insert['slot_id'] = $slot_id;
+        if($query = Tbl_mlm_slot_wallet_log_refill::insert($insert))
+        {
+            $response = "success";
+        }
+        else
+        {
+            $response = "error";
+        }
+        return Redirect::back()->with("response",$response);
+    }
+    public function getWalletRefillTable()
+    {
+        $data['page'] = "Wallet Refill Table";
+        $status = request("activetab");
+        $slot_no = request("slotno");
+        $slot_id = Tbl_mlm_slot::where('slot_no',$slot_no)->first()->slot_id;
+        $data['refills'] = Tbl_mlm_slot_wallet_log_refill::where("slot_id",$slot_id)->where('wallet_log_refill_approved',$status)->get();
+        $data['status'] = $status;
+        return Self::load_view_for_members('member.wallet_refill_table', $data);
     }
     public function getSlot()
     {

@@ -30,6 +30,12 @@ use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_employment_status;
 use App\Models\Tbl_payroll_employee_salary;
 
+
+
+use App\Models\Tbl_payroll_leave_temp;
+use App\Models\Tbl_payroll_leave_schedule;
+use App\Models\Tbl_payroll_leave_employee;
+
 use App\Globals\AuditTrail;
 
 
@@ -1175,19 +1181,20 @@ class PayrollReportController extends Member
 		$data["total_adjustment_13th_month_and_other"] 	= $total_adjustment_13th_month_and_other;
 		$data["total_adjustment_de_minimis_benefit"] 	= $total_adjustment_de_minimis_benefit;
 
-		$data["time_total_time_spent"]				=	$time_total_time_spent;				
-		$data["time_total_overtime"]				=	$time_total_overtime;				
-		$data["time_total_night_differential"]		=	$time_total_night_differential;		
-		$data["time_total_leave_hours"]				=	$time_total_leave_hours;				
-		$data["time_total_undertime"]				=	$time_total_undertime;				
-		$data["time_total_late"]					=	$time_total_late;					
-		$data["time_total_regular_holiday"]			=	$time_total_regular_holiday;		
-		$data["time_total_special_holiday"]			=	$time_total_special_holiday;
-		$data["time_total_absent"]					=	$time_total_absent;		
+		$data["time_total_time_spent"]				= $time_total_time_spent;				
+		$data["time_total_overtime"]				= $time_total_overtime;				
+		$data["time_total_night_differential"]		= $time_total_night_differential;		
+		$data["time_total_leave_hours"]				= $time_total_leave_hours;				
+		$data["time_total_undertime"]				= $time_total_undertime;				
+		$data["time_total_late"]					= $time_total_late;					
+		$data["time_total_regular_holiday"]			= $time_total_regular_holiday;		
+		$data["time_total_special_holiday"]			= $time_total_special_holiday;
+		$data["time_total_absent"]					= $time_total_absent;		
 		
 		// dd($data["total_deduction_of_all_employee"]);
 		return $data;
 	}
+
 	/*END PAYROLL REGISTER REPORT*/
 
 	public function employee_summary_report()

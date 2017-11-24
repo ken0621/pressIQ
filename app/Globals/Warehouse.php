@@ -25,9 +25,16 @@ use Carbon\Carbon;
 use Session;
 class Warehouse
 {   
-    public static function select_item_warehouse_per_bundle($warehouse_id, $manufacturer_id = 0, $keyword_search = '')
+    public static function select_item_warehouse_per_bundle($warehouse_id, $manufacturer_id = 0, $keyword_search = '', $item_bundle_id = null)
     {
-        $bundle = Tbl_item::category()->where("item_type_id",4)->where('is_mts',0)->where("shop_id",Warehouse::getShopId())->get();
+        if ($item_bundle_id) 
+        {
+            $bundle = Tbl_item::category()->where("item_id", $item_bundle_id)->where("shop_id", Warehouse::getShopId())->get();
+        }
+        else
+        {
+            $bundle = Tbl_item::category()->where("item_type_id", 4)->where('is_mts', 0)->where("shop_id", Warehouse::getShopId())->get();
+        }
 
         $item = [];
         $bundle_data = [];
@@ -240,7 +247,7 @@ class Warehouse
         $data['warehouse_item_bundle'] = Warehouse::select_item_warehouse_per_bundle($warehouse_id, $manufacturer_id);
         $data['warehouse_item_bundle_empties'] = Warehouse::select_item_warehouse_per_bundle_empties($warehouse_id, $manufacturer_id);
         $data['_inventory'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], $manufacturer_id);
-        $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], $manufacturer_id, 1);
+        $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle_empties'], $manufacturer_id, 1);
 
         return $data;
     }
@@ -289,11 +296,39 @@ class Warehouse
                     }
                 }
             }
+            $less2 = 0;
             if($is_mts == 1)
             {
-                $less = 0;
+                $bundled_item2 = Warehouse::select_item_warehouse_per_bundle($warehouse_id, $manufacturer_id);
+                 foreach ($bundled_item2 as $key_b2 => $value_b2) 
+                {
+                    $bundle_item2 = Tbl_item_bundle::where("bundle_bundle_id",$value_b2['bundle_id'])->get();
+
+                    foreach ($bundle_item2 as $key_bundle2 => $value_bundle2) 
+                    {
+                        if($value_bundle2->bundle_item_id == $value->product_id)
+                        {
+                            $bundle_inventory_qty2 = $value_b2['bundle_current_stocks'];
+
+                            // if($is_mts == 1) 
+                            // {
+                            //     if(isset($item_inventory[$value_bundle->bundle_item_id]))
+                            //     {
+                            //          $item_inventory[$value_bundle->bundle_item_id] = $bundle_inventory_qty - $item_inventory[$value_bundle->bundle_item_id];
+                            //     }
+                            //     else
+                            //     {
+                            //          $item_inventory[$value_bundle->bundle_item_id] = $bundle_inventory_qty;
+                            //     }                            
+                            // }
+
+                            $bundle_qty2 = UnitMeasurement::um_qty($value_bundle2->bundle_um_id) * $value_bundle2->bundle_qty;
+                            $less2 = $bundle_inventory_qty2 * $bundle_qty2;
+                        }
+                    }
+                }
             }
-            
+            $less = $less + $less2; 
             $_return[$key]['item_id'] = $value->product_id;
             $_return[$key]['orig_stock'] = $value->product_current_qty;
             $_return[$key]['orig_stock_um'] = UnitMeasurement::um_view($_return[$key]['orig_stock'], $item_data->item_measurement_id, $um_issued);
@@ -1259,4 +1294,80 @@ class Warehouse
         // }
     }
    
+    public static function checkStock($product_consume, $warehouse_id)
+    {
+        $err = 0;
+        $err_msg = "";
+        
+        foreach ($product_consume["single"] as $key_item => $value_item) 
+        {
+            foreach ($value_item as $key_items => $value_items) 
+            {
+                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_items['item_id'])->value('inventory_count');
+                
+                if($count_on_hand == null)
+                {
+                    $count_on_hand = 0;   
+                }
+
+                if($value_items['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value_items['quantity'])
+                {
+                    // Allowed
+                }
+                else
+                {
+                    $item_name = Item::get_item_details($value_items['item_id']);
+                    $err_msg[$err] = "The quantity of ".$item_name->item_name." is not enough for you to transfer.";
+                    $err++;
+                } 
+            } 
+        }
+
+        foreach ($product_consume["bundle"] as $key_item => $value_item) 
+        {
+            $ctr = 0;
+
+            foreach ($value_item as $key_items => $value_items) 
+            {
+                if ($ctr == 0) 
+                {
+                    $count_on_hand = Warehouse::select_item_warehouse_per_bundle($warehouse_id, 0, '', $value_items->bundle_item_id);
+                    
+                    if (isset($count_on_hand[0]["bundle_actual_stocks"])) 
+                    {
+                        $count_on_hand = $count_on_hand[0]["bundle_actual_stocks"];
+                    }
+                    else
+                    {
+                        $count_on_hand = 0;
+                    }
+
+                    if($value_items->bundle_quantity > 0 && $count_on_hand > 0 && $count_on_hand >= $value_items->bundle_quantity)
+                    {
+                        // Allowed
+                    }
+                    else
+                    {
+                        $item_name = Item::get_item_details($value_items->bundle_bundle_id);
+                        $err_msg[$err] = "The quantity of ".$item_name->item_name." is not enough for you to transfer.";
+                        $err++;
+                        $ctr++;
+                    }  
+                }
+            }
+        }
+
+        if($err_msg == "")
+        {
+            $data['status'] = 'success';
+            $data['status_message'] = "Success";
+        }
+        else
+        {
+            $data['status'] = 'error';
+            $data['status_message'] = $err_msg;
+        }
+
+        return $data;
+    }
 }

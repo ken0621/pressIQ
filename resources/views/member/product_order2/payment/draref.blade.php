@@ -39,7 +39,7 @@
 		</tr>
 		<tr class="head">
 			<td>Order ID</td>
-			<td>Paymaya Log Date</td>
+			<td>Dragonpay Log Date</td>
 			<td>Month</td>
 			<td>Ordered By</td>
 			<td>Email</td>

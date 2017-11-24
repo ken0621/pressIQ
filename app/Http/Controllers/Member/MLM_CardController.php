@@ -8,6 +8,7 @@ use App\Globals\Customer;
 use App\Globals\Vendor;
 
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Globals\Pdf_global;
 use PDF;
 use App;
@@ -23,12 +24,27 @@ class MLM_CardController extends Member
 {
     public function view()
     {
-        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $this->user_info->shop_id)
+        $data["used"] = Request::input("used");
+
+        if (Request::input("used") == 0) 
+        {
+            $slot = Tbl_warehouse_inventory_record_log::where("tbl_warehouse_inventory_record_log.record_shop_id", $this->user_info->shop_id)
+                                                 ->where("record_log_id", Request::input("id"))
+                                                 ->where("tbl_warehouse_inventory_record_log.item_in_use", "unused")
+                                                 ->item()
+                                                 ->membership()
+                                                 ->first();
+
+            $slot->slot_id = $slot->record_log_id;
+        }
+        else
+        {
+            $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $this->user_info->shop_id)
                             ->where("tbl_mlm_slot.slot_id", Request::input("id"))
                             ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_slot.slot_owner')
                             ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-                            ->where('tbl_customer_address.purpose', 'billing')
                             ->membership()->customer()->first();
+        }
 
         if ($slot) 
         {
@@ -104,19 +120,30 @@ class MLM_CardController extends Member
         // else
         // {
             $slot_card_printed = Request::input('card_status');
-            $all_slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
-            ->where('slot_card_printed', $slot_card_printed)
-            ->where('tbl_membership.membership_id', $membership_id)
-            ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-            ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-            ->where('tbl_customer_address.purpose', 'billing')
-            ->membership()->customer()->get();
-            $ret = null;
-            foreach ($all_slot as $key => $value) 
+            if ($slot_card_printed == 2) 
             {
-                // $ret .= Cards::card_all($value);
-                $value->membership_id = $value->slot_id;
-                $ret .= Cards::table($value);
+                $all_slot = Cards::pre_printing($this->user_info->shop_id, $membership_id);
+                $ret = null;
+                foreach ($all_slot as $key => $value) 
+                {
+                    $ret .= Cards::table($value);
+                }
+            }
+            else
+            {
+                $all_slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
+                ->where('slot_card_printed', $slot_card_printed)
+                ->where('tbl_membership.membership_id', $membership_id)
+                ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+                ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+                ->membership()->customerv2()->get();
+                $ret = null;
+                foreach ($all_slot as $key => $value) 
+                {
+                    // $ret .= Cards::card_all($value);
+                    $value->membership_id = $value->slot_id;
+                    $ret .= Cards::table($value);
+                }
             }
         // }
         // dd($all_slot);
@@ -130,11 +157,25 @@ class MLM_CardController extends Member
 	{
         $shop_id = $this->getShop_Id();
 
-		$slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
-        ->where('tbl_mlm_slot.slot_id', $slot_id)
-        ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-        ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-        ->membership()->customer()->first();
+        if (Request::input("used") == 0) 
+        {
+            $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
+                                ->where('tbl_mlm_slot.slot_id', $slot_id)
+                                ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+                                ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+                                ->membership()->customer()->first();
+        }
+        else
+        {
+            $slot = Tbl_warehouse_inventory_record_log::where("tbl_warehouse_inventory_record_log.record_shop_id", $this->user_info->shop_id)
+                                                      ->where("record_log_id", $slot_id)
+                                                      ->where("tbl_warehouse_inventory_record_log.item_in_use", "unused")
+                                                      ->item()
+                                                      ->membership()
+                                                      ->first();
+        }
+
+		
 
 
         if ($slot->membership_name == "Privilege Card") 

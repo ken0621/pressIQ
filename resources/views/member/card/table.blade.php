@@ -80,8 +80,8 @@
 
 
 <tr>
-	<td>{{ $name }}</td>
-	<td>{{ $membership_code }}</td>
+	<td>{{ $name ? $name : "Unused" }}</td>
+	<td>{{ $membership_code ? $membership_code : "Unused" }}</td>
 	<td>{{ $now }}</td>
-	<td><button class="btn btn-primary popup" link="/member/mlm/card/view?id={{ $membership_id }}" size="lg" type="button">View</button></td>
+	<td><button class="btn btn-primary popup" link="/member/mlm/card/view?id={{ $membership_id }}&used={{ $used }}" size="lg" type="button">View</button></td>
 </tr>

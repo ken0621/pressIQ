@@ -296,7 +296,7 @@ class Transaction
         {
             $data = $data->where('transaction_type',$transaction_type);
         }
-        $data = $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id')->get();
+        $data = $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id')->leftJoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id')->where('tbl_customer_address.purpose', 'shipping')->get();
         // die(var_dump($data));
         foreach ($data as $key => $value) 
         {

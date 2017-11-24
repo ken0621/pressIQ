@@ -167,9 +167,8 @@ class Payroll13thMonthPayController extends Member
 
 			if ($basis["payroll_13th_month_pay_basis"] == "net_pay") 
 			{
-				$payroll_13th_month_basis += $period["net_pay"];
+				$payroll_13th_month_basis += $period["net_basic_pay"];
 			}
-
 
 			if ($basis["payroll_13th_month_pay_basis"] == "gross_pay") 
 			{
@@ -183,8 +182,6 @@ class Payroll13thMonthPayController extends Member
 					}
 				}
 			}
-
-
 
 			if (isset($period->cutoff_breakdown)) 
 			{

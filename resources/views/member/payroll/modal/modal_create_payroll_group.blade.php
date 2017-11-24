@@ -39,6 +39,9 @@
 										<div class="radio">
 											<label><input type="radio" name="payroll_group_salary_computation" value="Monthly Rate" >Monthly Rate</label>
 										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_salary_computation" value="Hourly Rate" >Monthly Rate</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -51,7 +54,6 @@
 											<label><input type="radio" name="payroll_group_period" value="{{$period->payroll_tax_period}}">{{$period->payroll_tax_period}}</label>
 										</div>
 										@endforeach
-										
 									</div>
 								</div>
 							</div>

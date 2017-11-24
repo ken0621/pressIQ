@@ -30,6 +30,7 @@ use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
 use App\Globals\Item;
+use App\Globals\Warehouse2;
 use App\Globals\Purchasing_inventory_system;
 
 class CustomerController extends Member
@@ -203,6 +204,8 @@ class CustomerController extends Member
         	$data['_term'] = Tbl_term::where('shop_id',$shop_id)->where('archived',0)->orderBy('term_name','asc')->get();
     	    $data['_customer'] = Tbl_customer::where('shop_id',$shop_id)->where('IsWalkin',0)->where('archived',0)->get();
     	    $data['_delivery_method'] = Tbl_delivery_method::where('archived',0)->get();
+            $data['_warehouse'] = Warehouse2::get_all_warehouse($shop_id);
+
             $value = Request::input('value');
             if($value || $value != '')
             {
@@ -226,7 +229,8 @@ class CustomerController extends Member
         }
 	}	
 	
-	public function insertcustomer(){
+	public function insertcustomer()
+    {
 	    $shop_id = $this->checkuser('user_shop');
 	    $insert['shop_id'] = $shop_id;
         $insert['first_name'] = Request::input('first_name');
@@ -370,6 +374,8 @@ class CustomerController extends Member
         $company = Request::input('company');
         $billing_country = Request::input('billing_country');
         $customer_status = Request::input("customer_status");
+        $stockist_warehouse_id = Request::input("stockist_warehouse_id");
+
         $is_approved = 0;
         if($customer_status == "approved")
         {
@@ -497,6 +503,7 @@ class CustomerController extends Member
             $insertcustomer['IsWalkin'] = 0;
             $insertcustomer['tin_number']= $tin_number;
             $insertcustomer['approved']= $is_approved;
+            $insertcustomer['stockist_warehouse_id']= $stockist_warehouse_id;
 
             if($mlm_continue == 1)
             {
@@ -664,6 +671,7 @@ class CustomerController extends Member
             
             $data['_attachment'] = Tbl_customer_attachment::where('customer_id',$id)->get();
             $data['other'] = Tbl_customer_other_info::where('customer_id',$id)->first();
+            $data['_warehouse'] = Warehouse2::get_all_warehouse($shop_id);
             
             $data['_delivery_method'] = Tbl_delivery_method::where('archived',0)->get();
             if(isset($data['other']->customer_payment_method))
@@ -724,6 +732,7 @@ class CustomerController extends Member
         $suffix = Request::input('suffix');
         $email = Request::input('email');
         $company = Request::input('company');
+        $stockist_warehouse_id = Request::input('stockist_warehouse_id');
         $billing_country = Request::input('billing_country');
         
         
@@ -855,6 +864,7 @@ class CustomerController extends Member
             $updatecustomer['created_date'] = Carbon::now();
             $updatecustomer['IsWalkin'] = 0;
             $updatecustomer['tin_number'] = $tin_number;
+            $updatecustomer['stockist_warehouse_id'] = $stockist_warehouse_id;
             
 
             switch ($mlm_continue) {

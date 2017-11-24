@@ -114,6 +114,7 @@
           <li><a data-toggle="tab" href="#attachment">Attachment</a></li>
           @if(!$pis)
             <li><a data-toggle="tab" href="#mlm">MLM</a></li>
+            <li><a data-toggle="tab" href="#stockist">Stockist</a></li>
           @endif
         </ul>
         
@@ -408,6 +409,26 @@
                   <div class="col-md-6">
                     <label>Password</label>
                     <input type="password" class="form-control mlm_password" name="mlm_password" readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="stockist" class="tab-pane fade">
+            <br>
+            <div class="form-horizontal">
+              <div class="form-group">
+                <div class="col-md-12">
+                </div>
+                <div class="col-md-12">
+                  <div class="col-md-6">
+                    <label>Select Warehouse</label>
+                    <select class="form-control" name="stockist_warehouse_id">
+                      @foreach($_warehouse as $warehouse)
+                      <option value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
+                      @endforeach
+                    </select>
                   </div>
                 </div>
               </div>

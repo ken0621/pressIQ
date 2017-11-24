@@ -25,9 +25,16 @@ use Carbon\Carbon;
 use Session;
 class Warehouse
 {   
-    public static function select_item_warehouse_per_bundle($warehouse_id, $manufacturer_id = 0, $keyword_search = '')
+    public static function select_item_warehouse_per_bundle($warehouse_id, $manufacturer_id = 0, $keyword_search = '', $item_bundle_id = null)
     {
-        $bundle = Tbl_item::category()->where("item_type_id",4)->where('is_mts',0)->where("shop_id",Warehouse::getShopId())->get();
+        if ($item_bundle_id) 
+        {
+            $bundle = Tbl_item::category()->where("item_id", $item_bundle_id)->where("shop_id", Warehouse::getShopId())->get();
+        }
+        else
+        {
+            $bundle = Tbl_item::category()->where("item_type_id", 4)->where('is_mts', 0)->where("shop_id", Warehouse::getShopId())->get();
+        }
 
         $item = [];
         $bundle_data = [];
@@ -1287,4 +1294,80 @@ class Warehouse
         // }
     }
    
+    public static function checkStock($product_consume, $warehouse_id)
+    {
+        $err = 0;
+        $err_msg = "";
+        
+        foreach ($product_consume["single"] as $key_item => $value_item) 
+        {
+            foreach ($value_item as $key_items => $value_items) 
+            {
+                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_items['item_id'])->value('inventory_count');
+                
+                if($count_on_hand == null)
+                {
+                    $count_on_hand = 0;   
+                }
+
+                if($value_items['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value_items['quantity'])
+                {
+                    // Allowed
+                }
+                else
+                {
+                    $item_name = Item::get_item_details($value_items['item_id']);
+                    $err_msg[$err] = "The quantity of ".$item_name->item_name." is not enough for you to transfer.";
+                    $err++;
+                } 
+            } 
+        }
+
+        foreach ($product_consume["bundle"] as $key_item => $value_item) 
+        {
+            $ctr = 0;
+
+            foreach ($value_item as $key_items => $value_items) 
+            {
+                if ($ctr == 0) 
+                {
+                    $count_on_hand = Warehouse::select_item_warehouse_per_bundle($warehouse_id, 0, '', $value_items->bundle_item_id);
+                    
+                    if (isset($count_on_hand[0]["bundle_actual_stocks"])) 
+                    {
+                        $count_on_hand = $count_on_hand[0]["bundle_actual_stocks"];
+                    }
+                    else
+                    {
+                        $count_on_hand = 0;
+                    }
+
+                    if($value_items->bundle_quantity > 0 && $count_on_hand > 0 && $count_on_hand >= $value_items->bundle_quantity)
+                    {
+                        // Allowed
+                    }
+                    else
+                    {
+                        $item_name = Item::get_item_details($value_items->bundle_bundle_id);
+                        $err_msg[$err] = "The quantity of ".$item_name->item_name." is not enough for you to transfer.";
+                        $err++;
+                        $ctr++;
+                    }  
+                }
+            }
+        }
+
+        if($err_msg == "")
+        {
+            $data['status'] = 'success';
+            $data['status_message'] = "Success";
+        }
+        else
+        {
+            $data['status'] = 'error';
+            $data['status_message'] = $err_msg;
+        }
+
+        return $data;
+    }
 }

@@ -240,7 +240,7 @@ class Warehouse
         $data['warehouse_item_bundle'] = Warehouse::select_item_warehouse_per_bundle($warehouse_id, $manufacturer_id);
         $data['warehouse_item_bundle_empties'] = Warehouse::select_item_warehouse_per_bundle_empties($warehouse_id, $manufacturer_id);
         $data['_inventory'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], $manufacturer_id);
-        $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], $manufacturer_id, 1);
+        $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle_empties'], $manufacturer_id, 1);
 
         return $data;
     }
@@ -289,11 +289,6 @@ class Warehouse
                     }
                 }
             }
-            if($is_mts == 1)
-            {
-                $less = 0;
-            }
-            
             $_return[$key]['item_id'] = $value->product_id;
             $_return[$key]['orig_stock'] = $value->product_current_qty;
             $_return[$key]['orig_stock_um'] = UnitMeasurement::um_view($_return[$key]['orig_stock'], $item_data->item_measurement_id, $um_issued);

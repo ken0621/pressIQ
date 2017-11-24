@@ -71,6 +71,16 @@ class Tbl_mlm_slot extends Model
         // ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_slot.slot_owner')
 	    return $query;
     }
+    public function scopeCustomerv2($query)
+    {
+        $query->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner');
+        
+        // ->where('tbl_customer_address.purpose', 'billing');
+
+        // ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        // ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        return $query;
+    }
     public function scopeInfo($query)
     {
         $query->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');

@@ -151,16 +151,16 @@ $bold: 700;
         {
             text-decoration: none;
             color: #f1f1f1;
-            font-size: 14px;
+            font-size: 12px;
         }
 
-        @media screen and (max-width: 320px)
+        /* @media screen and (max-width: 320px)
         {
             a
             {
-                font-size: 13px;
+                font-size: 12px;
             }
-        }
+        } */
     }
 
     .user-logout

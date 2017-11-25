@@ -184,7 +184,7 @@
                             <ul class="links">
                                 <li><a onclick="off()" href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp; Home</a> </li>
                                 <li class="product-mobile-dropdown">
-                                    <a href="javascript:">PRODUCTS</a>
+                                    <a href="javascript:"><i class="fa fa-list" aria-hidden="true"></i>&nbsp; Products</a>
                                 </li>
                                     @foreach($global_product as $product)
                                         <ul class="product-mobile-dropdown-list" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'">

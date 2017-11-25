@@ -1887,45 +1887,72 @@ class ShopMemberController extends Shop
     }
     public function postCheckout()
     {
-        /* Update Address */
-        $exist_address = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->first();
-        if ($exist_address) 
-        {
-            $update["customer_street"] = request('customer_street');
-            Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->update($update);
+        $shop_id  = $this->shop_info->shop_id;
+        $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
+        $cart = Cart2::get_cart_info();
+        $validate = null;
+        if($cart)
+        {   
+            foreach ($cart["_item"] as $key => $value)
+            {
+                $item_type = Item::get_item_type($value->item_id);
+                if($item_type == 1 || $item_type == 5)
+                {
+                    $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity,'Consume');
+                }
+            }
         }
-        else
-        {
-            $insert["customer_street"] = request('customer_street');
-            $insert["customer_id"] = Self::$customer_info->customer_id;
-            $insert["country_id"] = 420;
-            $insert["purpose"] = "billing";
-            $insert["archived"] = 0;
-            Tbl_customer_address::insert($insert);
-            $insert["purpose"] = "shipping";
-            Tbl_customer_address::insert($insert);
-        }
-        
-        $method                                             = request('method');
-        $shop_id                                            = $this->shop_info->shop_id;
-        $transaction_new["transaction_reference_table"]     = "tbl_customer";
-        $transaction_new["transaction_reference_id"]        = Self::$customer_info->customer_id;
-        $transaction_type                                   = "ORDER";
-        $transaction_date                                   = Carbon::now();
-        
-        Transaction::create_set_method($method);
-        $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
 
-        if(is_numeric($transaction_list_id))
+        if(!$validate)
         {
-            $method_id  = request('method_id');
-            $success    = "/members?success=1"; //redirect if payment success
-            $failed     = "/members?failed=1"; //redirect if payment failed
-            $error      = Payment::payment_redirect($shop_id, $method, $transaction_list_id, $success, $failed, false, $method_id);
+            /* Update Address */
+            $exist_address = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->first();
+            if ($exist_address) 
+            {
+                $update["customer_street"] = request('customer_street');
+                Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->update($update);
+            }
+            else
+            {
+                $insert["customer_street"] = request('customer_street');
+                $insert["customer_id"] = Self::$customer_info->customer_id;
+                $insert["country_id"] = 420;
+                $insert["purpose"] = "billing";
+                $insert["archived"] = 0;
+                Tbl_customer_address::insert($insert);
+                $insert["purpose"] = "shipping";
+                Tbl_customer_address::insert($insert);
+            }
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+            $return = null;
+            $validate = null;
+
+
+            
+            $method                                             = request('method');
+            $transaction_new["transaction_reference_table"]     = "tbl_customer";
+            $transaction_new["transaction_reference_id"]        = Self::$customer_info->customer_id;
+            $transaction_type                                   = "ORDER";
+            $transaction_date                                   = Carbon::now();
+            
+            Transaction::create_set_method($method);
+            $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
+
+            if(is_numeric($transaction_list_id))
+            {
+                $method_id  = request('method_id');
+                $success    = "/members?success=1"; //redirect if payment success
+                $failed     = "/members?failed=1"; //redirect if payment failed
+                $error      = Payment::payment_redirect($shop_id, $method, $transaction_list_id, $success, $failed, false, $method_id);
+            }
+            else
+            {
+                return Redirect::to("/members/checkout")->with("error", "Your cart is empty.");
+            }            
         }
         else
         {
-            return Redirect::to("/members/checkout")->with("error", "Your cart is empty.");
+            return Redirect::to("/members/checkout")->with("error", $validate);
         }
     }
     public function getNonMember()

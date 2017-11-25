@@ -3,6 +3,7 @@ var global = new global()
 function global()
 {
 	init();
+
 	function init()
 	{
 		$(document).ready(function()
@@ -10,6 +11,7 @@ function global()
 			document_ready();
 		});
 	}
+
 	function document_ready()
 	{
 		action_match_height();
@@ -78,6 +80,33 @@ function global()
       		nextArrow:"<img class='a-right control-c next slick-next' src='/themes/sovereign/img/carousel-right.png'>",
       		autoplay: true,
 			autoplaySpeed: 4000,
+			responsive: [
+			  {
+			    breakpoint: 1024,
+			    settings: {
+			      slidesToShow: 4,
+			      slidesToScroll: 1,
+			      infinite: true,
+			    }
+			  },
+			  {
+			    breakpoint: 600,
+			    settings: {
+			      slidesToShow: 3,
+			      slidesToScroll: 1
+			    }
+			  },
+			  {
+			    breakpoint: 480,
+			    settings: {
+			      slidesToShow: 2,
+			      slidesToScroll: 1
+			    }
+			  }
+			  // You can unslick at a given breakpoint now by adding:
+			  // settings: "unslick"
+			  // instead of a settings object
+			]
 		})
 	}
 	function event_nav_dropdown()

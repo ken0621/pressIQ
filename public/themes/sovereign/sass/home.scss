@@ -19,6 +19,12 @@
 			font-size: 34.93px;
 			font-weight: 700;
 			padding: 7.5px 15px;
+
+			@media screen and (max-width: 320px)
+			{
+				font-size: 30px;
+			}
+
 		}
 		.desc
 		{
@@ -30,10 +36,26 @@
 				font-weight: 600;
 				font-size: 53.57px;
 				line-height: 50px;
+				
+				@media screen and (max-width: 425px)
+				{
+					font-size: 50px;
+				}
+
+				@media screen and (max-width: 320px)
+				{
+					font-size: 40px;
+				}
 			}
 			.second-line
 			{
 				font-size: 26.78px;
+
+				@media screen and (max-width: 320px)
+				{
+					font-size: 20px;
+				}
+
 			}
 			.objective
 			{
@@ -43,6 +65,27 @@
 				letter-spacing: 1px;
 				max-width: 425px;
 				margin-bottom: 25px;
+
+				@media screen and (max-width: 425px)
+				{
+					max-width: 345px;
+				}
+
+				@media screen and (max-width: 414px)
+				{
+					max-width: 335px;
+				}
+
+				@media screen and (max-width: 395px)
+				{
+					max-width: 295px;
+				}
+
+				@media screen and (max-width: 320px)
+				{
+				    max-width: 240px;
+				}
+
 			}
 			.btn-learn
 			{
@@ -411,6 +454,11 @@
 	{
 		width: 9px;
 		height: 14px;
+
+		@media screen and (max-width: 500px)
+		{
+			display: none;
+		}
 	}
 	.title
 	{
@@ -560,5 +608,14 @@
 				margin-bottom: -15px;
 			}
 		}
+	}
+}
+
+
+@media screen and (max-width: 800px)
+{
+	.header-nav .header-nav-middle .info 
+	{
+	    display: none;
 	}
 }

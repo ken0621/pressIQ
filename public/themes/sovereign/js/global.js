@@ -5,18 +5,39 @@ function global()
 	init();
 	function init()
 	{
-		document_ready();
+		$(document).ready(function()
+		{
+			document_ready();
+		});
 	}
 	function document_ready()
 	{
-		$(document).ready(function()
-		{
-			action_match_height();
-			action_product_carousel();
-			event_show_product();
-			event_nav_dropdown();
-		});
+		action_match_height();
+		action_product_carousel();
+		event_show_product();
+		event_nav_dropdown();
+		event_scroll_up();
 	}
+
+	function event_scroll_up()
+	{
+		/*scroll up*/
+		$(window).scroll(function () {
+	        if ($(this).scrollTop() > 700) {
+	            $('.scroll-up').fadeIn();
+	        } else {
+	            $('.scroll-up').fadeOut();
+	        }
+	    });
+
+	    $('.scroll-up').click(function () {
+	        $("html, body").animate({
+	            scrollTop: 0
+	        }, 700);
+	        return false;
+	    });
+	}
+
 	function action_match_height()
 	{
 		$(".match-height").matchHeight();

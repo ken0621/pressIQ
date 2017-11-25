@@ -8,6 +8,7 @@ use App\Models\Tbl_cart_info;
 use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Models\Tbl_cart_item_pincode;	
+use App\Models\Tbl_cart_payment;	
 use Session;
 use Carbon\Carbon;
 use App\Globals\Currency;
@@ -27,6 +28,31 @@ class Cart2
 	public static function get_cart_key()
 	{
 		return session("cart_key");
+	}
+	public static function scan_payment($shop_id, $payment_type = '', $payment_amount = 0)
+	{
+		$return = null;
+		if($payment_type != '' && $payment_amount != 0)
+		{
+			$cart_key = Self::get_cart_key();
+			$ins_payment['shop_id'] = $shop_id;
+			$ins_payment['unique_id_per_pc'] = $cart_key;
+			$ins_payment['payment_type'] = $payment_type;
+			$ins_payment['payment_amount'] = $payment_amount;
+
+			$return = Tbl_cart_payment::insertGetId($ins_payment);
+		}
+		return $return;
+	}
+
+	public static function load_payment($shop_id)
+	{
+		$cart_key = Self::get_cart_key();
+		return Tbl_cart_payment::where('shop_id',$shop_id)->where('unique_id_per_pc',$cart_key)->get();
+	}
+	public static function remove_payment($cart_payment_id = 0)
+	{
+		return Tbl_cart_payment::where('cart_payment_id',$cart_payment_id)->delete();
 	}
 	public static function set($key, $value)
 	{
@@ -363,6 +389,22 @@ class Cart2
 		$cart_key = Self::get_cart_key();
 		Tbl_cart::where("unique_id_per_pc", $cart_key)->delete();
 		Tbl_cart_item_pincode::where("unique_id_per_pc", $cart_key)->delete();
+		Tbl_cart_payment::where("unique_id_per_pc", $cart_key)->delete();
+	}
+	public static function cart_payment_amount($shop_id ,$type = '')
+	{
+        $cart_key = Self::get_cart_key();
+		$amount = Tbl_cart_payment::where('unique_id_per_pc',$cart_key)->where('shop_id',$shop_id);
+		if($type != '')
+		{
+			$amount = $amount->where('payment_type',$type);
+		}
+		return $amount->sum('payment_amount');
+	}
+	public static function cart_payment_list($shop_id )
+	{
+        $cart_key = Self::get_cart_key();
+		return Tbl_cart_payment::where('unique_id_per_pc',$cart_key)->where('shop_id',$shop_id)->get();
 	}
 	public static function validate_cart()
 	{

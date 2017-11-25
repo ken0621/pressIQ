@@ -3206,9 +3206,8 @@ class Payroll
 	{
 		$month[0] = date('Y-m-01', strtotime($date));
 		$month[1] = date('Y-m-t', strtotime($date));
-
+		
 		$_deduction = Tbl_payroll_deduction_employee_v2::getdeduction($employee_id, $date, $period, $month)->get();
-
 		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->pluck('payroll_record_id');
 
 		$data['deduction'] 			= array();

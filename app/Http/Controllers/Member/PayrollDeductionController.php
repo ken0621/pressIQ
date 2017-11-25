@@ -530,9 +530,10 @@ class PayrollDeductionController extends Member
           {
               $period_info['period_count'] == "Middle Period";
           }
-
-          $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id']);
+          dd($employee_id, $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id']);
           
+          $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id']);
+         
           foreach ($_deduction['deduction'] as $deduction) 
           {
 

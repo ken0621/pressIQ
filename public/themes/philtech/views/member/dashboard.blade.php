@@ -133,7 +133,7 @@
 					</div>
 				</div>
 				@endif
-				<div class="square-container enter-prod-code-cont match-height">
+				<div class="square-container enter-prod-code-cont">
 					<div class="title">Enter Product Code</div>
 					<div class="sub-container">
 						<div class="chart-legend text-center">
@@ -146,7 +146,7 @@
 		
 		<div class="row clearfix">
 			<div class="col-md-12">
-				<div class="square-container rep-link-cont match-height">
+				<div class="square-container rep-link-cont">
 					<div class="title">Replicated Link</div>
 					<div class="sub-container">
 						@foreach($_slot as $slot)

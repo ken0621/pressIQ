@@ -175,7 +175,7 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Job Title</small>
-                        <select class="form-control jobtitle-select" required name="payroll_jobtitle_id">
+                        <select class="form-control jobtitle-select" name="payroll_jobtitle_id" required>
                           <option value="">Select Job Title</option>
                         </select>
                       </div>

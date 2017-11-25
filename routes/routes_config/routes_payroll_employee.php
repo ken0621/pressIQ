@@ -1,6 +1,5 @@
 <?php
 
-
 Route::any('/employee_login', 'Login\EmployeeLoginController@employee_login');
 Route::any('/employee_logout', 'Login\EmployeeLoginController@employee_logout');
 

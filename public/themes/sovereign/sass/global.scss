@@ -404,3 +404,11 @@ footer
 		}
 	}
 }
+
+@media screen and (max-width: 800px)
+{
+	.header-nav .header-nav-middle .info 
+	{
+	    display: none;
+	}
+}

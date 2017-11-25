@@ -2788,7 +2788,6 @@ class Payroll
 		{
 			$next_month 	= date('m', strtotime("+7 day", $strtotime));
 
-
 			if($index_count  == 1)
 			{
 				$period_category = 'First Period';

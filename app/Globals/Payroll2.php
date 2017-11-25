@@ -5194,7 +5194,7 @@ class Payroll2
 				}
 			}
 		}
-		
+		// dd($employee_id, $end_date, $period_category_arr['period_category'], $period_category, $shop_id);
 		$deduction = Payroll::getdeductionv2($employee_id, $end_date, $period_category_arr['period_category'], $period_category, $shop_id);
 
 		if(isset($deduction["deduction"]))

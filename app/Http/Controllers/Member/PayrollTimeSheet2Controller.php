@@ -152,7 +152,6 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function approve_timesheets($period_id = 0, $employee_id = 0)
 	{
-
 		if(Request::input("period_id") != 0)
 		{
 			$period_id = Request::input("period_id");
@@ -176,9 +175,10 @@ class PayrollTimeSheet2Controller extends Member
 			Tbl_payroll_time_keeping_approved_daily_breakdown::insertBreakdown($time_keeping_approve_id, $compute_cutoff["cutoff_input"]);
 			Tbl_payroll_time_keeping_approved_performance::insertBreakdown($time_keeping_approve_id, $compute_cutoff["cutoff_breakdown"]->_time_breakdown);
 		}
-		
+	
 		//add payment in deduction
 		PayrollDeductionController::approve_deduction_payment($period_id, $employee_id, $payroll_period_id);
+		
 		return json_encode(Request::input());
 	}
 	

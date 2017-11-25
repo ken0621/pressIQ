@@ -394,15 +394,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/leave/v2/reload_leave_employeev2',"Member\PayrollController@reload_leave_employeev2");
 
-	
 	Route::any('/leave/v2/modal_save_leave_temp_v2',"Member\PayrollController@modal_save_leave_temp_v2");
-
 	//scheduling leave
-	Route::any('/leave_schedule/v2/save_schedule_leave_tagv2','Member\PayrollController@save_schedule_leave_tagv2')
-	;
+	Route::any('/leave_schedule/v2/save_schedule_leave_tagv2','Member\PayrollController@save_schedule_leave_tagv2');
 
 	Route::any('/leave_schedule/v2/leave_schedule_tag_employeev2/{leave_temp_id}','Member\PayrollController@leave_schedule_tag_employeev2');
-	
 
 	Route::any('/leave_schedule/v2/session_tag_leavev2','Member\PayrollController@session_tag_leavev2');
 
@@ -428,7 +424,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/leave/v2/archived_leave_tempv2',
 		"Member\PayrollController@archived_leave_tempv2");
-	
 	//end schedule
 
 	//reporting leave
@@ -710,4 +705,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/*START payroll approve database manipulation*/
 	Route::any('/payroll_time_keeping_approve_manipulation/time_breakdown/{period_company_id}/{employee_id}','Member\PayrollTimeKeepingApproveManipulation@time_breakdown');
 	/*END payroll approve database manipulation*/
+
+	/*START Admin dashboard*/
+	Route::any('/payroll_admin_dashboard/employees_approver','Member\PayrollAdminDashboard@employees_approver');
+	Route::any('/payroll_admin_dashboard/modal_create_approver','Member\PayrollAdminDashboard@modal_create_approver');
+	/*END Admin dashboard*/
 });

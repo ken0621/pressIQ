@@ -35,7 +35,13 @@
 
 @media screen and (max-width: 500px)
 {
-	
+	.mob-rem
+	{
+	    padding-right: 0px;
+	    padding-left: 0px;
+	    margin-right: auto;
+	    margin-left: auto;
+	}
 }
 
 @media screen and (max-width: 425px)

@@ -43,7 +43,7 @@
     <!-- HEADER -->
     <div class="header-nav">
     	<div class="header-nav-top">
-    		<div class="container clearfix">
+    		<div class="mob-rem container clearfix">
                 <div class="mobile-remove pull-left">
                     <div class="nav-holder {{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">HOME</a></div>
                     <div class="nav-holder">
@@ -182,8 +182,8 @@
                             <div class="space1"></div>
                             <span>BROWSE</span>
                             <ul class="links">
-                                <li> <a onclick="off()" href="/">Home</a> </li>
-                                <li class="product-mobile-dropdown"> 
+                                <li><a onclick="off()" href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp; Home</a> </li>
+                                <li class="product-mobile-dropdown">
                                     <a href="javascript:">PRODUCTS</a>
                                 </li>
                                     @foreach($global_product as $product)
@@ -191,8 +191,8 @@
                                             <li><a href="javascript:">{{ get_product_first_name($product) }}</a></li>
                                         </ul>
                                     @endforeach
-                                <li> <a onclick="off()" href="/about">Company</a> </li>
-                                <li> <a onclick="off()" href="/contact">Contact Us</a> </li>
+                                <li> <a onclick="off()" href="/about"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp; Company</a> </li>
+                                <li> <a onclick="off()" href="/contact"><i class="fa fa-phone" aria-hidden="true"></i>&nbsp; Contact Us</a> </li>
                             </ul>
                         </nav>
 

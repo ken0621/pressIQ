@@ -497,10 +497,11 @@ class Payroll2
 		$return->daily_salary		= 0;
 		$employee_contract			= Tbl_payroll_employee_contract::selemployee($employee_id, $date)->group()->first();
 		$shift_code_id 				= Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->value("shift_code_id");
-
+		
 		if($custom_shift == 1) //CUSTOM SHIFT
 		{
 			$_shift 				= Payroll2::db_get_shift_of_employee_by_code($custom_shift_id, $date);
+			
 		}
 		else //DEFAULT SHIFT
 		{

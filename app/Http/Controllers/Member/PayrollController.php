@@ -1926,7 +1926,6 @@ class PayrollController extends Member
                $return['function_name'] = 'employeelist.reload_employee_list';
           }
           
-          
           $return['status'] = 'success';
           return json_encode($return);
      }
@@ -1967,7 +1966,7 @@ class PayrollController extends Member
      }
 
      public function update_tbl_search()
-{
+     {
           Tbl_payroll_employee_search::truncate();
           $_emp = tbl_payroll_employee_basic::get();
 

@@ -260,6 +260,7 @@ body
 		}
 	}
 }
+
 .row-no-padding
 {
 	> div
@@ -410,5 +411,10 @@ footer
 	.header-nav .header-nav-middle .info 
 	{
 	    display: none;
+	}
+
+	.header-nav .header-nav-middle .logo 
+	{
+	    margin: 0;
 	}
 }

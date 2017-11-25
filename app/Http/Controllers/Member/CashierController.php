@@ -28,6 +28,8 @@ class CashierController extends Member
         {
             $data['customer'] = Customer::info(Session::get('customer_id'), $this->user_info->shop_id);
             $data['customer_points'] = Customer::get_points_wallet(Session::get('customer_id'));
+            $warehouse_id = Customer::get_info($this->user_info->shop_id, Session::get('customer_id'))->stockist_warehouse_id;
+            $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id, $warehouse_id);
             $data['exist'] = $data['customer'];
         }
         
@@ -103,6 +105,7 @@ class CashierController extends Member
             $return["status"]   = "success";
             $return["message"]  = "";
             $return["price_level_id"] = $data['customer']->membership_price_level;
+            $return["stockist_warehouse_id"] = $data['customer']->stockist_warehouse_id;
         }
         else
         {
@@ -212,6 +215,12 @@ class CashierController extends Member
         $return["status"] = "success";
         $return["item_id"] = $item_id;
         echo json_encode($return);
+    }
+    public function load_warehouse()
+    {
+        $warehouse_id = Request::input('w_id');
+        $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id, $warehouse_id);
+        return view('member.cashier.pos_load_warehouse',$data);
     }
     public function process_sale()
     {

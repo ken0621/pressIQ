@@ -140,11 +140,9 @@
                             </div>
                             <div class="form-group warehouse-destination" style="display: none">
                                 <label class="control-label col-sm-4 text-right" for="email">Warehouse Destination</label>
-                                <div class="col-sm-8"> 
+                                <div class="col-sm-8 warehouse-container"> 
                                     <select class="form-control select-warehouse" name="destination_warehouse_id">
-                                        @foreach($_warehouse as $warehouse)
-                                            <option warehouse-address="{{$warehouse->warehouse_address}}" value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
-                                        @endforeach
+                                        @include('member.cashier.pos_load_warehouse')
                                     </select>
                                 </div>
                             </div>

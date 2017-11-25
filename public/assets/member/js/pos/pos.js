@@ -334,7 +334,7 @@ function pos()
 				if(data.status == "success")
 				{
 					success_audio.play();
-					action_load_customer_info(data.price_level_id);
+					action_load_customer_info(data.price_level_id, data.stockist_warehouse_id);
 				}
 				else if(data.status == "error")
 				{
@@ -549,7 +549,7 @@ function pos()
 		$(".pos-search-container-customer").hide();
 		clearTimeout(item_search_delay_timer);
 	}
-	function action_load_customer_info(price_level_id = '')
+	function action_load_customer_info(price_level_id = '', stockist_warehouse_id = '')
 	{
 		if($(".customer-container").text() != "")
 		{
@@ -563,9 +563,30 @@ function pos()
 		$(".customer-container").load("/member/cashier/pos/customer", function()
 		{
 			$(".customer-container").css("opacity", 1);
-			$('.price-level-select').val(price_level_id).change();
+
+			if(price_level_id)
+			{
+				$('.price-level-select').val(price_level_id).change();
+			}
+			if(stockist_warehouse_id)
+			{
+				// $('.select-warehouse').val(stockist_warehouse_id).change();
+				// $('.select-warehouse').attr('readonly',true);
+				load_warehouse_destination(stockist_warehouse_id);
+			}
 			$('.input-slot-id').val($('.change-slot-id').val());
 		});
+	}
+	function load_warehouse_destination(stockist_warehouse_id = null)
+	{
+		if(stockist_warehouse_id)
+		{
+			$(".select-warehouse").load("/member/cashier/pos/load_warehouse?w_id="+stockist_warehouse_id, function()
+	        {                
+	             $(".select-warehouse").globalDropList("reload"); 
+	             $(".select-warehouse").val(stockist_warehouse_id).change();              
+	        });
+		}
 	}
 	function customer_loading()
 	{

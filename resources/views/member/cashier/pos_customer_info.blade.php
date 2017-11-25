@@ -38,8 +38,8 @@
         </div>
     </div>
 </div>
+@if(count($exist['_slot']) > 0)
 <div class="row" style="padding: 15px">
-    @if(count($exist['_slot']) > 0)
     <div class="col-md-12" >
         <div class="customer-name">
             <div class="row clearfix">
@@ -70,8 +70,8 @@
             </div>
         </div>
     </div>
-    @endif
 </div>
+@endif
 <div class="row pos-customer-action-button text-center" style="padding: 5px">
     <div class="col-md-6">
         <a class="btn btn-custom-white full-width popup" size="lg" link="/member/customer/customeredit/{{$exist['customer']->customer_id}}"><i class="fa fa-edit"></i> Update Customer</a>

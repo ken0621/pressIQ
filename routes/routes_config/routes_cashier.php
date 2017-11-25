@@ -12,6 +12,7 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::any('/pos/add_payment','Member\CashierController@add_payment');
 	Route::any('/pos/load_payment','Member\CashierController@load_payment');
 	Route::any('/pos/remove_payment','Member\CashierController@remove_payment');
+	Route::any('/pos/load_warehouse','Member\CashierController@load_warehouse');
 
 	/* CUSTOMER */
 	Route::any('/pos/search_customer','Member\CashierController@pos_search_customer');

@@ -42,7 +42,7 @@
                                 	<input type="hidden" name="airline[]" value="{{ $slot->slot_no }}">
                                     <td class="text-center" style="vertical-align: middle;">{{ $slot->slot_no }}</td>
                                     <td class="text-center">
-                                    	<input type="text" class="form-control text-center" name="tour_wallet_account_id[]" value="">
+                                    	<input type="text" class="form-control text-center" name="tour_wallet_account_id[]" value="{{ $slot->tour_wallet_account_id }}">
                                     </td>
                                 </tr>
                                 @endforeach
@@ -234,7 +234,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white btn-custom-close" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-		<button type="submit" class="btn btn-custom-primary" type="button"><i class="fa fa-pencil"></i> Update Payout Details</button>
+		<button type="submit" class="btn btn-custom-primary update-payout-button" type="button"><i class="fa fa-pencil"></i> Update Payout Details</button>
 	</div>
 </form>
 @else
@@ -275,6 +275,7 @@ function event_payout_submit()
 {
 	$(".form-payout-submit").submit(function(e)
 	{
+		$(".update-payout-button").prop("disabled", true);
 		action_submit_payout_details($(e.currentTarget).serialize());
 		return false;
 	});
@@ -290,12 +291,21 @@ function action_submit_payout_details(form_data)
 		type:"post",
 		success: function(data)
 		{
-			$("#global_modal").modal("hide");
-			setTimeout(function()
+			$(".update-payout-button").prop("disabled", false);
+
+			if (data.status == "success") 
 			{
-				action_load_link_to_modal("/members/payout-setting-success", "sm");
-				$(".top-message-warning.for-payout").fadeOut();
-			}, 350);
+				$("#global_modal").modal("hide");
+				setTimeout(function()
+				{
+					action_load_link_to_modal("/members/payout-setting-success", "sm");
+					$(".top-message-warning.for-payout").fadeOut();
+				}, 350);
+			}
+			else
+			{
+				toastr.error(data.message);
+			}
 		}
 	});
 }

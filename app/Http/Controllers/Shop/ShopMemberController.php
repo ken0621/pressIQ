@@ -667,7 +667,7 @@ class ShopMemberController extends Shop
     public function getPayoutSetting()
     {
         $data["page"] = "Payout";
-        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->coinsph()->money_remittance()->bank()->vmoney()->get();
+        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->coinsph()->money_remittance()->bank()->vmoney()->airline()->get();
         $data["_method"] = unserialize($this->shop_info->shop_payout_method);
 
         $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
@@ -682,7 +682,10 @@ class ShopMemberController extends Shop
         /* UPDATE CUSTOMER PAYOUT METHOD */
         $update_customer["customer_payout_method"] = request("customer_payout_method");
         $update_customer["tin_number"] = request("tin_number");
-        // Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
+        Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
+
+        $json["status"] = "success";
+        $json["message"] = "";
 
         /* UPDATE  METHOD */
         foreach(request("airline") as $key => $value)
@@ -693,7 +696,13 @@ class ShopMemberController extends Shop
             {
                 if ($customer) 
                 {
-                    AbsMain::update_info($customer->customer_id, $slot_info->slot_id, request("tour_wallet_account_id")[$key], $this->shop_info->shop_id); 
+                    $airline_result = AbsMain::update_info($customer->customer_id, $slot_info->slot_id, request("tour_wallet_account_id")[$key], $this->shop_info->shop_id); 
+                    
+                    if ($airline_result["status"] != 1) 
+                    {
+                        $json["status"] = "error";
+                        $json["message"] = "Your Airline Ticketing Account ID is incorrect.";
+                    }
                 }
             }
         }
@@ -809,7 +818,7 @@ class ShopMemberController extends Shop
         }
 
 
-        echo json_encode("success");
+        echo json_encode($json);
     }
 
     public function getPayoutSettingSuccess()

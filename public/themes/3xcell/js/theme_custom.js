@@ -215,7 +215,7 @@ function theme_custom()
 
 /*JAVASCRIPT*/
 
-function on() 
+/*function on() 
 {
     var $body = $(document.body);
 
@@ -229,5 +229,17 @@ function off()
     document.getElementById("overlay").style.display = "none";
     $('.pushmenu').removeClass("pushmenu-open");
     $body.css("overflow", "auto");
-    /*$("body").css("overflow", "auto");*/
+}*/
+
+function on() 
+{
+    document.getElementById("overlay").style.display = "block";
+    $("body").css({"overflow": "hidden","position": "fixed","margin": "0","padding": "0","right": "0","left": "0"});
+}
+
+function off()
+{
+    document.getElementById("overlay").style.display = "none";
+    $('.pushmenu').removeClass("pushmenu-open");
+    $("body").css({"overflow": "auto","position": "static"});
 }

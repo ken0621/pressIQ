@@ -515,8 +515,7 @@ class PayrollDeductionController extends Member
           // $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_start'], $period_info['period_category'], $period_info['period_category'], $period_info['shop_id']);
           // dd($employee_id, $period_info['payroll_period_start'], $period_info['period_category'], $period_info['period_category'], $period_info['shop_id']);
           
-          // dd($period_info);
-          // dd($period_info, $employee_id, $period_info);
+
           
           if ($period_info['period_count'] == "last_period") 
           {
@@ -530,8 +529,8 @@ class PayrollDeductionController extends Member
           {
               $period_info['period_count'] == "Middle Period";
           }
-          dd($employee_id, $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id']);
           
+          // dd($employee_id, $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id']);
           $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id']);
          
           foreach ($_deduction['deduction'] as $deduction) 

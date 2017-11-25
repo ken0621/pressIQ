@@ -8,6 +8,7 @@ use App\Models\Tbl_cart_info;
 use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Models\Tbl_cart_item_pincode;	
+use App\Models\Tbl_cart_payment;	
 use Session;
 use Carbon\Carbon;
 use App\Globals\Currency;
@@ -27,6 +28,31 @@ class Cart2
 	public static function get_cart_key()
 	{
 		return session("cart_key");
+	}
+	public static function scan_payment($shop_id, $payment_type = '', $payment_amount = 0)
+	{
+		$return = null;
+		if($payment_type != '' && $payment_amount != 0)
+		{
+			$cart_key = Self::get_cart_key();
+			$ins_payment['shop_id'] = $shop_id;
+			$ins_payment['unique_id_per_pc'] = $cart_key;
+			$ins_payment['payment_type'] = $payment_type;
+			$ins_payment['payment_amount'] = $payment_amount;
+
+			$return = Tbl_cart_payment::insertGetId($ins_payment);
+		}
+		return $return;
+	}
+
+	public static function load_payment($shop_id)
+	{
+		$cart_key = Self::get_cart_key();
+		return Tbl_cart_payment::where('shop_id',$shop_id)->where('unique_id_per_pc',$cart_key)->get();
+	}
+	public static function remove_payment($cart_payment_id = 0)
+	{
+		return Tbl_cart_payment::where('cart_payment_id',$cart_payment_id)->delete();
 	}
 	public static function set($key, $value)
 	{
@@ -99,50 +125,63 @@ class Cart2
 	{
 		$return = 0;
 		$pincode = explode('@',$pin_code);
-		$pin = $pin_code;
-		if($pin)
+		// $pin = $pin_code;
+
+		$pin = null;
+		$code = null;
+		if(isset($pincode[1]))
 		{
-			// $pin = $pincode[0];
-			// $code = $pincode[1];
-
-			$get_item = Tbl_warehouse_inventory_record_log::where('record_shop_id',$shop_id)
-														  ->where('record_warehouse_id',$warehouse_id)
-														  ->where('mlm_pin',$pin)->first();
-			if($get_item)
-			{
-				if($get_item->record_inventory_status == 0 && $get_item->item_in_use == 'unused')
-				{
-					$cart_key = Self::get_cart_key();
-					if($cart_key)
-					{
-						$pin_code = $get_item->mlm_pin.'@'.$get_item->mlm_activation;
-						$check_cart = Tbl_cart_item_pincode::where("unique_id_per_pc", $cart_key)->where('shop_id',$shop_id)->where('pincode',$pin_code)->where("product_id",$get_item->record_item_id)->count();
-						if($check_cart == 0) //ITEM DON'T EXIST IN CART
-						{
-							$ins['unique_id_per_pc'] = $cart_key;
-							$ins['shop_id'] 		 = $shop_id;
-							$ins['product_id'] 		 = $get_item->record_item_id;
-							$ins['pincode'] 		 = $pin_code;
-							Tbl_cart_item_pincode::insert($ins);
-
-							$return = $get_item->record_item_id;
-						}
-						else
-						{
-							$return = "Item Already in the cart.";
-						}
-					}
-				}
-				else
-				{
-					$return = "Item Already consumed or used.";
-				}
-			}			
+			$pin = $pincode[0];
+			$code = $pincode[1];
 		}
+		else
+		{
+			$pin = $pin_code;
+		}
+
+		$return = Cart2::search_pin_code($shop_id, $warehouse_id, $pin, $code);
 
 		return $return;
 	}
+	public static function search_pin_code($shop_id, $warehouse_id, $pin = '', $code = '')
+	{
+		$return = null;
 
+		$get_item = Tbl_warehouse_inventory_record_log::where('record_shop_id',$shop_id)
+													  ->where('record_warehouse_id',$warehouse_id)
+													  ->where('mlm_pin',$pin)->first();
+		if($get_item)
+		{
+			if($get_item->record_inventory_status == 0 && $get_item->item_in_use == 'unused')
+			{
+				$cart_key = Self::get_cart_key();
+				if($cart_key)
+				{
+					$pin_code = $get_item->mlm_pin.'@'.$get_item->mlm_activation;
+					$check_cart = Tbl_cart_item_pincode::where("unique_id_per_pc", $cart_key)->where('shop_id',$shop_id)->where('pincode',$pin_code)->where("product_id",$get_item->record_item_id)->count();
+					if($check_cart == 0) //ITEM DON'T EXIST IN CART
+					{
+						$ins['unique_id_per_pc'] = $cart_key;
+						$ins['shop_id'] 		 = $shop_id;
+						$ins['product_id'] 		 = $get_item->record_item_id;
+						$ins['pincode'] 		 = $pin_code;
+						Tbl_cart_item_pincode::insert($ins);
+
+						$return = $get_item->record_item_id;
+					}
+					else
+					{
+						$return = "Item Already in the cart.";
+					}
+				}
+			}
+			else
+			{
+				$return = "Item Already consumed or used.";
+			}
+		}
+		return $return;
+	}
 	public static function scan_ref_num($shop_id, $warehouse_id, $ref_num)
 	{
 		$return = null;
@@ -350,6 +389,22 @@ class Cart2
 		$cart_key = Self::get_cart_key();
 		Tbl_cart::where("unique_id_per_pc", $cart_key)->delete();
 		Tbl_cart_item_pincode::where("unique_id_per_pc", $cart_key)->delete();
+		Tbl_cart_payment::where("unique_id_per_pc", $cart_key)->delete();
+	}
+	public static function cart_payment_amount($shop_id ,$type = '')
+	{
+        $cart_key = Self::get_cart_key();
+		$amount = Tbl_cart_payment::where('unique_id_per_pc',$cart_key)->where('shop_id',$shop_id);
+		if($type != '')
+		{
+			$amount = $amount->where('payment_type',$type);
+		}
+		return $amount->sum('payment_amount');
+	}
+	public static function cart_payment_list($shop_id )
+	{
+        $cart_key = Self::get_cart_key();
+		return Tbl_cart_payment::where('unique_id_per_pc',$cart_key)->where('shop_id',$shop_id)->get();
 	}
 	public static function validate_cart()
 	{

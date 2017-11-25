@@ -36,9 +36,14 @@ use App\Globals\Merchant;
 use Validator;
 class Warehouse2
 {   
-    public static function get_all_warehouse($shop_id)
+    public static function get_all_warehouse($shop_id, $warehouse_id = '')
     {
-        return Tbl_warehouse::where('warehouse_shop_id',$shop_id)->where('archived',0)->get();
+        $data = Tbl_warehouse::where('warehouse_shop_id',$shop_id)->where('archived',0);
+        if($warehouse_id != '')
+        {
+            $data = $data->where('warehouse_id',$warehouse_id);
+        }
+        return $data->get();
     }
 	public static function get_current_warehouse($shop_id)
 	{
@@ -620,7 +625,7 @@ class Warehouse2
         $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
         if($quantity > $inventory_qty)
         {
-            $return .= "The quantity of ITEM No. <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
+            $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
         }
 
         return $return;

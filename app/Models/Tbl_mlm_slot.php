@@ -54,9 +54,11 @@ class Tbl_mlm_slot extends Model
             DB::raw("(select sum(wallet_log_amount) from tbl_mlm_slot_wallet_log where tbl_mlm_slot_wallet_log.wallet_log_slot = tbl_mlm_slot.slot_id AND wallet_log_amount > 0) AS total_earnings"),
             DB::raw("(select sum(wallet_log_amount) from tbl_mlm_slot_wallet_log where tbl_mlm_slot_wallet_log.wallet_log_slot = tbl_mlm_slot.slot_id AND wallet_log_amount < 0) AS total_payout")
         );
-
     }
-
+    public function scopeMlm_points($query)
+    {
+        $query->leftjoin("tbl_mlm_slot_points_log","tbl_mlm_slot_points_log.points_log_slot","=","tbl_mlm_slot.slot_id");
+    }
     public function scopeShop($query, $shop_id)
     {
         return $query->where("shop_id", $shop_id);

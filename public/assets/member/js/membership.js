@@ -26,10 +26,10 @@ function membership() {
     }
     function save_membership()
     {
-        $(".save_membership").unbind("click");
-        $(".save_membership").bind("click", function () {
-            $('#save_membership_form').submit();
-        });
+        // $(".save_membership").unbind("click");
+        // $(".save_membership").bind("click", function () {
+        //     $('#save_membership_form').submit();
+        // });
     }
     function update_membership() 
     {

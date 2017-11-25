@@ -65,6 +65,7 @@
         <form class="global-submit form-process-sale" action="/member/cashier/pos/process_sale" method="post">
         <input class="token" type="hidden" id="_token" name="_token" value="{{ csrf_token() }}">
             <!-- TOTAL -->
+        <input class="form-control input-slot-id" type="hidden" name="slot_id" value="{{$exist['_slot'][0]->slot_id or ''}}">
             <div class="panel panel-default panel-block panel-title-block big-total">
                 <div class="panel-body form-horizontal">
                     <div class="row">
@@ -139,21 +140,42 @@
                             </div>
                             <div class="form-group warehouse-destination" style="display: none">
                                 <label class="control-label col-sm-4 text-right" for="email">Warehouse Destination</label>
-                                <div class="col-sm-8"> 
+                                <div class="col-sm-8 warehouse-container"> 
                                     <select class="form-control select-warehouse" name="destination_warehouse_id">
-                                        @foreach($_warehouse as $warehouse)
-                                            <option warehouse-address="{{$warehouse->warehouse_address}}" value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
-                                        @endforeach
+                                        @include('member.cashier.pos_load_warehouse')
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group">
+                           <!--  <div class="form-group">
                                 <label class="control-label col-sm-4 text-right" for="email">Payment Method</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" name="payment_method">
                                         <option value="cash">Cash</option>
                                         <option value="cheque">Cheque</option>
                                     </select>
+                                </div>
+                            </div> -->
+                            <div class="form-group pos-payment row clearfix">
+                                @include('member.cashier.pos_payment_method')
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-4 text-right" for="email">Add Pyament</label>
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="payment_method" class="input-payment-method" value="cash">
+                                    <a href="javascript:" class="btn btn-primary cash btn-payment" onClick="select_payment('cash')">Cash</a>
+                                    <a href="javascript:" class="btn btn-custom-white check btn-payment" onClick="select_payment('check')">Check</a>
+                                    <a href="javascript:" class="btn btn-custom-white gc btn-payment" onClick="select_payment('gc')">GC</a>
+                                    <a href="javascript:" class="btn btn-custom-white wallet btn-payment" onClick="select_payment('wallet')">Wallet</a>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="input-group">
+                                      <input type="text" class="form-control input-payment-amount" name="payment_amount" placeholder="Amount...">
+                                      <span class="input-group-btn">
+                                        <button class="btn btn-custom-white btn-add-payment" type="button">Add Payment</button>
+                                      </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

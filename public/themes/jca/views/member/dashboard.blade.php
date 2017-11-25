@@ -30,7 +30,8 @@
 	        <div class="row clearfix">
 	            <div class="col-md-12">
 	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-dash.png')">
-	                    <div class="btn btn-text">
+	                    <!-- btn btn-text -->
+	                    <div class="caption-container">
 	                        <div class="text-header1">Not yet a Member?</div>
 	                        <div class="text-header2">Join Us Now!</div>
 	                    </div>

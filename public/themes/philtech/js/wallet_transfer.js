@@ -18,6 +18,7 @@ function wallet_transfer()
 		action_load_wallet();
 		event_search_recipient();
 		event_choose_prediction();
+		action_load_transfer_fee();
 	}
 	function action_load_wallet()
 	{
@@ -42,6 +43,18 @@ function wallet_transfer()
 			}
 		});
 
+	}
+	function action_load_transfer_fee()
+	{
+		$.ajax(
+		{
+			url: "/members/wallet-transfer-fee",
+			type: "get",
+			success: function(data)
+			{
+				$('.transfer-fee').text("Transfer fee: "+data);
+			}
+		});
 	}
 	function event_slot_change()
 	{

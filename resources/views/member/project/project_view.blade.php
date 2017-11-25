@@ -14,17 +14,17 @@
             </h1>
             <div class="dropdown pull-right">
                 <button onclick="location.href=''" class="btn btn-def-white btn-custom-white something-was-clicke"><i class="fa fa-check"></i> Secondary Command</button>
-                <button  class="btn btn-primary popup" link="/member/project/project_list/add" size="md"><i class="fa fa-star"></i> Create Project</button>
+                <button  class="btn btn-primary popup" link="/member/project/project_list/addtask" size="md"><i class="fa fa-star"></i> Add Task</button>
             </div>
         </div>
     </div>
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray "  style="margin-bottom: -10px;">
     <!-- TAB -->
-    <ul class="nav nav-tabs">
+    <!-- <ul class="nav nav-tabs">
         <li class="active change-tab pending-tab cursor-pointer" mode="active"><a class="cursor-pointer"><i class="fa fa-check"></i> Active</a></li>
         <li class="cursor-pointer change-tab approve-tab" mode="archived"><a class="cursor-pointer"><i class="fa fa-trash"></i> Archived</a></li>
-    </ul>
+    </ul> -->
     <div class="search-filter-box">
         <div class="col-md-4" style="padding: 10px">
             <select class="form-control">
@@ -45,7 +45,7 @@
             <div class="form-group order-tags"></div>
             <div class="clearfix">
                 <div class="col-md-12">
-                    <div class="table-responsive load-table-here">
+                    <div class="table-responsive table-of-task">
 
                     </div>
                 </div>

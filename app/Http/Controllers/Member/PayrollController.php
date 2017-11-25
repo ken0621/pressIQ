@@ -1081,9 +1081,12 @@ class PayrollController extends Member
 		$insert['payroll_employee_remarks'] 		= Request::input('payroll_employee_remarks');
           $insert['branch_location_id']                = Request::input('branch_location_id') != null ? Request::input('branch_location_id') : 0;
           $insert['shift_code_id']                     = Request::input('shift_code_id') != null ? Request::input('shift_code_id') : 0;
-		$payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
-
-
+		
+          if (Request::input('payroll_jobtitle_id') != null)
+          {
+               $payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
+          }
+     
 		/* employee contract */
 		$insert_contract['payroll_employee_id']					= $payroll_employee_id;
 		$insert_contract['payroll_department_id'] 				= Request::input("payroll_department_id");
@@ -1093,7 +1096,6 @@ class PayrollController extends Member
 		$insert_contract['payroll_employee_contract_status'] 		= Request::input("payroll_employee_contract_status");
 		$insert_contract['payroll_group_id'] 					= Request::input("payroll_group_id");
           Tbl_payroll_employee_contract::insert($insert_contract);
-
 
 		/* employee salary details */
 		$insert_salary['payroll_employee_id'] 					= $payroll_employee_id;

@@ -117,6 +117,7 @@
           <li><a data-toggle="tab" href="#attachment">Attachment</a></li>
           @if(!$pis)
           <li><a data-toggle="tab" href="#mlm">MLM</a></li>
+          <li><a data-toggle="tab" href="#stockist">Stockist</a></li>
           @endif
           @if ($customer->ismlm == 2)
           <li><a data-toggle="tab" href="#ecomm">E-commerce</a></li>
@@ -448,6 +449,33 @@
                   <div class="col-md-6">
                     <label>Password</label>
                     <input type="password" class="form-control mlm_password_e_commerce" value="@if($customer_info->password != null){{ Crypt::decrypt($customer_info->password)}}@endif" name="mlm_password_e_commerce" @if($customer_info->ismlm == 0) readonly @endif>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="stockist" class="tab-pane fade">
+            <br>
+            <div class="form-horizontal">
+              <div class="form-group">
+                <div class="col-md-12">
+                 <!--  <div class="col-md-12">
+                    <div class="checkbox display-inline-block">
+                      <label for="">
+                        <input type="checkbox" name="checkbox" class="is_stockist" value="1" @if($customer_info->stockist_warehouse_id != 0) checked @endif />Enable Stockist
+                        
+                        </label>
+                      </div>
+                  </div> -->
+                </div>
+                <div class="col-md-12">
+                  <div class="col-md-6">
+                    <label>Select Warehouse</label>
+                    <select class="form-control" name="stockist_warehouse_id">
+                      @foreach($_warehouse as $warehouse)
+                      <option {{$warehouse->warehouse_id == $customer_info->stockist_warehouse_id ? 'selected' : ''}} value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
+                      @endforeach
+                    </select>
                   </div>
                 </div>
               </div>

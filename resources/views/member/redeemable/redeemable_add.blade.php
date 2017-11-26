@@ -30,10 +30,10 @@
                             <label for="basic-input">Item Description</label>
                             @if(isset($row))
                             @foreach($row as $r)
-                            <textarea class="form-control" name="item_sales_information">{{$r->item_description}}</textarea>
+                            <textarea class="form-control" style="width:99.95%" name="item_sales_information">{{$r->item_description}}</textarea>
                             @endforeach
                             @else
-                            <textarea class="form-control" name="item_sales_information"></textarea>
+                            <textarea class="form-control" style="width:99.95%" name="item_sales_information"></textarea>
                             @endif
                         </div>
                     </div>

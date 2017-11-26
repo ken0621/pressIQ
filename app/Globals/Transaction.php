@@ -16,14 +16,17 @@ use App\Models\Tbl_warehouse_receiving_report;
 use App\Models\Tbl_warehouse_receiving_report_item;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_sponsor;
+use App\Models\Tbl_cart_payment;
 
 use App\Models\Tbl_cart_item_pincode;
 use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_transaction_item;
+use App\Models\Tbl_transaction_payment;
 use App\Models\Tbl_payment_logs;
 use App\Globals\AuditTrail;
 use App\Globals\Tablet_global;
+use App\Globals\Mlm_slot_log;
 
 use DB;
 use Log;
@@ -217,6 +220,9 @@ class Transaction
 
         return $return;
     }
+    public static function insert_payment($shop_id, $transaction_id, $method = array(), $amount = array())
+    {
+    }
     public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit', $get_to_warehouse = 0)
     {
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
@@ -292,7 +298,7 @@ class Transaction
         {
             $data = $data->where('transaction_type',$transaction_type);
         }
-        $data = $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id')->get();
+        $data = $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id')->leftJoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id')->where('tbl_customer_address.purpose', 'shipping')->get();
         // die(var_dump($data));
         foreach ($data as $key => $value) 
         {
@@ -898,4 +904,86 @@ class Transaction
 
         return $slot;
     }
+    public static function validate_payment($shop_id, $slot_id)
+    {
+        $return = null;
+        $cart_key = Cart2::get_cart_key();
+        $cart = Cart2::get_cart_info();
+        $amount = Customer::get_points_wallet_per_slot($slot_id);
+        $cart_wallet_amount = Cart2::cart_payment_amount($shop_id,'wallet');
+        $cart_gc_amount = Cart2::cart_payment_amount($shop_id,'gc');
+        $cart_total_amount = Cart2::cart_payment_amount($shop_id);
+
+        if($cart_wallet_amount > $amount['total_wallet'])
+        {
+            $return .= 'Not enough wallet in <b>slot no'.Customer::slot_info($slot_id)->slot_no.'</b>, wallet remaining '.currency('PHP ',$amount['total_wallet']).'. <br>'; 
+        }
+
+        if($cart_gc_amount > $amount['total_gc'])
+        {
+            $return .= 'Not enough GC in <b>slot no'.Customer::slot_info($slot_id)->slot_no.'</b>, GC remaining '.currency('',$amount['total_gc']).' point(s). <br>'; 
+        }
+        if($cart)
+        {
+            if($cart_total_amount < $cart["_total"]->grand_total)
+            {
+                $return .= 'Not enough payment';
+            }
+        }
+
+        return $return;
+    }
+    public static function consume_payment($shop_id, $transaction_list_id, $slot_id)
+    {        
+        $amount = Customer::get_points_wallet_per_slot($slot_id);
+        $cart_wallet_amount = Cart2::cart_payment_amount($shop_id,'wallet');
+        $cart_gc_amount = Cart2::cart_payment_amount($shop_id,'gc');
+        $transaction_info = Tbl_transaction_list::transaction()->where('transaction_list_id', $transaction_list_id)->first();
+        $transaction_date = Carbon::now();
+
+        $ins_wallet['shop_id'] = $shop_id;
+        $wallet_log_slot = $slot_id;
+        $wallet_log_slot_sponsor = $slot_id;
+        $wallet_log_claimbale_on = $transaction_date;
+        $wallet_log_details = 'Thank you for purchasing. '.$cart_wallet_amount.' is deducted to your wallet';
+        $wallet_log_amount = $cart_wallet_amount * -1;
+        $wallet_log_plan = 'REPURCHASE';
+        $wallet_log_status = 'released';
+        $wallet_log_remarks = 'Wallet Purchase on POS - '.$transaction_info->transaction_number;
+        Mlm_slot_log::slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on, $wallet_log_remarks);
+
+        $ins_gc['points_log_complan'] = 'PURCHASE_GC';
+        $ins_gc['points_log_level'] = 0;
+        $ins_gc['points_log_slot'] = $slot_id;
+        $ins_gc['points_log_Sponsor'] = $slot_id;
+        $ins_gc['points_log_date_claimed'] = $transaction_date;
+        $ins_gc['points_log_converted_date'] = $transaction_date;
+        $ins_gc['points_log_type'] = 'GC';
+        $ins_gc['points_log_from'] = 'GC Purchase on POS - '.$transaction_info->transaction_number;
+        $ins_gc['points_log_points'] = $cart_gc_amount * -1;
+        Mlm_slot_log::point_slot($ins_gc);
+
+        $get_all_payment = Cart2::cart_payment_list($shop_id);
+
+        $insert_payment = null;
+        foreach ($get_all_payment as $key => $value) 
+        {
+            $insert_payment[$key]['transaction_id'] = $transaction_info->transaction_id;
+            $insert_payment[$key]['transaction_payment_type'] = $value->payment_type;
+            $insert_payment[$key]['transaction_payment_amount'] = $value->payment_amount;
+            $insert_payment[$key]['transaction_payment_date'] = $transaction_date;
+        }
+
+        if(count($insert_payment) > 0)
+        {
+            Tbl_transaction_payment::insert($insert_payment);
+            $return = 1;
+        }
+
+        return $return;
+    }
+    public static function get_payment($transaction_id)
+    {
+        return Tbl_transaction_payment::where('transaction_id',$transaction_id)->get();
+    }    
 }

@@ -2,6 +2,7 @@
 namespace App\Globals;
 use DB;
 use Carbon\Carbon;
+use App\Models\Tbl_warehouse_inventory_record_log;
 class Cards
 {
     public static function show_card($info)
@@ -122,6 +123,7 @@ class Cards
         {
             $color = 'discount';
         }
+
         $name = name_format_from_customer_info($info);
         $membership_code = $info->slot_no;    
         $data['color'] = $color;
@@ -130,6 +132,7 @@ class Cards
         $data['info'] = $info;
         $data['number'] = phone_number($info);
         $data['address'] = address_customer_info($info);
+
         if($info->slot_card_printed == 0)
         {
             $data['now'] = Carbon::now()->format('m/d/Y');
@@ -139,8 +142,27 @@ class Cards
             $data['now'] = Carbon::parse($info->slot_card_issued)->format('m/d/Y');
         }
         
-        $data["membership_id"] = $info->membership_id;
-        
+        if ($info->slot_no) 
+        {
+            $data["membership_id"] = $info->membership_id;
+            $data["used"] = 1;
+        }
+        else
+        {
+            $data["membership_id"] = $info->record_log_id;
+            $data["used"] = 0;
+        }
+
         return view("member.card.table", $data);
+    }
+    public static function pre_printing($shop_id, $membership_id)
+    {
+        return Tbl_warehouse_inventory_record_log::where("tbl_warehouse_inventory_record_log.record_shop_id", $shop_id)
+                                                 ->where("tbl_warehouse_inventory_record_log.item_in_use", "unused")
+                                                 ->where("tbl_membership.membership_id", $membership_id)
+                                                 ->item()
+                                                 ->membership()
+                                                 ->slotInfo()
+                                                 ->get();
     }
 }

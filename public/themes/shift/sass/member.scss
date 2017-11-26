@@ -483,14 +483,25 @@
 	}
 } */
 
+
+/* PER THEME CUSTOM */
+
 .btn-primary
 {
+	transition: 0.3s all ease;
 	font-family: 'Rubik', sans-serif;
 	padding: 7px 15px;
 	border-radius: 25px !important;
 	font-size: 14px !important;
 	font-weight: 300 !important;
 	margin-left: 5px;
+}
+
+.btn-shift-view-info
+{
+	border-radius: 25px !important;
+	background-color: #D4B044 !important;
+	color: #fff !important;
 }
 
 .btn-gear
@@ -511,9 +522,9 @@
 	}
 }
 
-
 .btn-custom-white
 {
+	transition: 0.3s all ease;
 	background-color: #fd6060;
 	border-radius: 25px;
 	font-weight: 300;

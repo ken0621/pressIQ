@@ -2,7 +2,7 @@
 	<input type="hidden" class="_token" value="{{ csrf_token() }}" />
     <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h4 class="modal-title">Remaining Leave Records {{-- {{$month_today_string}} --}}</h4>
+		<h4 class="modal-title">Pay Leave Records {{-- {{$month_today_string}} --}}</h4>
 	</div>
     <div class="panel panel-default panel-block panel-title-block">
         <div class="panel-body form-horizontal">

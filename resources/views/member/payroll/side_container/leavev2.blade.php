@@ -18,7 +18,7 @@
 
 			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_remaining_leave_report" style="margin-right:20px;">Remaining Leave Report</a>
 
-			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_paid_leave_report" style="margin-right:20px;">Paid Leave Report</a>
+			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_pay_leave_report" style="margin-right:20px;">Paid Leave Report</a>
 
 
 			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_without_paid_leave_report" style="margin-right:20px;">Without Pay Leave</a>

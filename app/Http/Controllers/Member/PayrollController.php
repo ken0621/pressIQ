@@ -4323,6 +4323,11 @@ class PayrollController extends Member
                });
           })->download('xls');
      }
+
+     public function modal_pay_leave_report()
+     {
+          return view("member.payroll.modal.modal_pay_leave_report");
+     }
      //end reporting v2
 
      public function modal_leave_action($payroll_leave_employee_id,$action,$remaining_leave)

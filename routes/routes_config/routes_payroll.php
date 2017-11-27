@@ -443,6 +443,19 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/leave/v2/remaining_leave_report_excel',
 		"Member\PayrollController@remaining_leave_report_excel");
+
+
+	Route::any('/leave/v2/modal_pay_leave_report',
+		"Member\PayrollController@modal_pay_leave_report");
+
+	Route::any('/leave/v2/pay_leave_report_excel',
+		"Member\PayrollController@pay_leave_report_excel");
+
+	Route::any('/leave/v2/modal_withoutpay_leave_report',
+		"Member\PayrollController@modal_withoutpay_leave_report");
+
+	Route::any('/leave/v2/withoutpay_leave_report_excel',
+		"Member\PayrollController@withoutpay_leave_report_excel");
 	//end reporting
 
 	Route::any('/leave/v2/modal_view_leave_employee/{payroll_leave_temp_id}/',"Member\PayrollController@modal_view_leave_employee");

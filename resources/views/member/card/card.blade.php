@@ -32,8 +32,8 @@
 		</div> --}}
 		<div style="margin-left: 95px;">
 			<div>
-				<div style="font-weight: 700; font-size: 20px; line-height: 20px;">JUAN DELA CRUZ</div>
-				<div style="font-weight: 700; font-size: 20px; line-height: 20px; margin-top: 5px;">ISSUED: 31/01/2017</div>
+				<div style="font-weight: 700; font-size: 20px; line-height: 20px;">{{ $name }}</div>
+				<div style="font-weight: 700; font-size: 20px; line-height: 20px; margin-top: 5px;">ISSUED: {{$now}}</div>
 			</div>
 			<div style="width: 100%; text-align: right; margin-top: 160px;">
 				@if($membership_code)

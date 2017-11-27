@@ -21,13 +21,15 @@
 		</div>
 	</div>
 	<div class="wallet-encashment-content">
-		<div class="title">
-			<label>Slot no</label>
-			<select name="slot" class="form-control slot-owner" style="width:100;">
-			@foreach($slot_owner as $owner)
-			<option value="{{$owner->slot_no}}">{{$owner->slot_no}}</option>
-			@endforeach
-		</select>
+		<div class="col-md-12">
+			<div class="col-md-4 title" style="padding: 10px;">
+				<label>Slot no</label>
+				<select name="slot" class="form-control slot-owner">
+				@foreach($slot_owner as $owner)
+				<option value="{{$owner->slot_no}}">{{$owner->slot_no}}</option>
+				@endforeach
+				</select>
+			</div>
 		</div>
 	<div class="panel panel-default panel-block panel-title-block panel-gray "  style="margin-bottom: -10px;">
 		

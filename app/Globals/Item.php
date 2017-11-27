@@ -348,7 +348,7 @@ class Item
 
         if(session("get_inventory"))
         {
-            $query = $query->inventory(session("get_inventory"));
+            $query = $query->recordloginventory(session("get_inventory"));
         }
 
         /* SEARCH */

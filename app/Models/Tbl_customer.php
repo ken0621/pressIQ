@@ -104,9 +104,9 @@ class Tbl_customer extends Model
     }
     public function scopeUnionVendor($query, $shop_id)
     {
-        $raw = DB::table("tbl_vendor")->selectRaw("vendor_id as id, vendor_first_name as first_name, vendor_middle_name as middle_name, vendor_last_name as last_name, 'vendor' as reference, vendor_email as email")->where("archived", 0)->where("vendor_shop_id", $shop_id);
+        $raw = DB::table("tbl_vendor")->selectRaw("vendor_id as id, vendor_first_name as first_name, vendor_middle_name as middle_name, vendor_last_name as last_name, 'vendor' as reference, vendor_email as email")->where("tbl_vendor.archived", 0)->where("vendor_shop_id", $shop_id);
 
-        return $query->selectRaw("customer_id as id, first_name as first_name, middle_name as middle_name, last_name as last_name, 'customer' as reference, email")->where("archived", 0)->where("shop_id", $shop_id)->union($raw);
+        return $query->selectRaw("customer_id as id, first_name as first_name, middle_name as middle_name, last_name as last_name, 'customer' as reference, email")->where("tbl_customer.archived", 0)->where("shop_id", $shop_id)->union($raw);
     }
 
     public function scopeBalanceJournal($query)

@@ -284,7 +284,7 @@
 					<div class="per-event-container">
 						@if(count(get_front_news($shop_id)) > 0)
 							@foreach(limit_foreach(get_front_news($shop_id), 3) as $news)
-									<div class="per-event row clearfix">
+									<div class="per-event desk row clearfix">
 										<div class="col-md-4 col-sm-4 col-xs-4">
 											<div class="event-image-container">
 												<a href="/news?id={{ $news->post_id }}">
@@ -293,6 +293,28 @@
 											</div>
 										</div>
 										<div class="col-md-8 col-sm-8 col-xs-8">
+											<div class="event-details-container">
+												<h1>
+													<a href="/news?id={{ $news->post_id }}">
+														{{ $news->post_title }}	
+													</a>
+												</h1>
+												<h2>
+													{{ $news->post_excerpt }}
+												</h2>
+											</div>
+										</div>
+									</div>
+									<!-- MOBILE -->
+									<div class="per-event mob row clearfix">
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="event-image-container">
+												<a href="/news?id={{ $news->post_id }}">
+													<img src="{{ $news->post_image }}">
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-sm-6 col-xs-6">
 											<div class="event-details-container">
 												<h1>
 													<a href="/news?id={{ $news->post_id }}">
@@ -372,7 +394,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=2">
 
 @endsection
 

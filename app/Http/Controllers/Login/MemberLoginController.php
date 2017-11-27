@@ -22,6 +22,7 @@ class MemberLoginController extends Controller
 		Session::forget('user_email');
 		Session::forget('user_password');
 		Session::forget('product_info');
+		Session::forget('customer_id');
 		return Redirect::back();
 	}
 	public function login()

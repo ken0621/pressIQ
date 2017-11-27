@@ -10,6 +10,8 @@
 							<th>#</th>
 							@if($warehouse_data->main_warehouse == 3)
 							<th>Control Number</th>
+							@else
+							<th>Item Name</th>							
 							@endif
 							<th class="text-center">Code</th>
 							<!-- <th class="text-right">Discrepancy</th> -->
@@ -22,6 +24,8 @@
 							<td>{{$key+1}}</td>
 							@if($warehouse_data->main_warehouse == 3)
 							<td>{{str_pad($code->ctrl_number, 9, '0', STR_PAD_LEFT)}}</td>
+							@else
+							<td class="text-center">{{$code->item_name}}</td>
 							@endif
 							<td class="text-center">{{$code->mlm_pin}}</td>
 							<td class="text-center">{{$code->mlm_activation}}</td>

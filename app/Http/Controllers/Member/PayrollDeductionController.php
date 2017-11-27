@@ -507,13 +507,32 @@ class PayrollDeductionController extends Member
 
 
 
-     public static function approve_deduction_payment($payroll_company_period_id=0,$employee_id=0,$payroll_period_id=0)
+     public static function approve_deduction_payment($payroll_company_period_id = 0, $employee_id = 0, $payroll_period_id = 0)
      {
           $period_info = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
 
-          //dd($period_info);
-          $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_start'], $period_info['period_category'], $period_info['period_category'], $period_info['shop_id']);
+          /*original*/
+          // $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_start'], $period_info['period_category'], $period_info['period_category'], $period_info['shop_id']);
+          // dd($employee_id, $period_info['payroll_period_start'], $period_info['period_category'], $period_info['period_category'], $period_info['shop_id']);
+          
 
+          
+          if ($period_info['period_count'] == "last_period") 
+          {
+              $period_info['period_count'] = "Last Period";
+          }
+          if ($period_info['period_count'] == "first_period")  
+          {
+               $period_info['period_count'] = "First Period";
+          }
+          if ($period_info['period_count'] == "middle_period") 
+          {
+              $period_info['period_count'] == "Middle Period";
+          }
+          
+          // dd($employee_id, $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id']);
+          $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id']);
+         
           foreach ($_deduction['deduction'] as $deduction) 
           {
 

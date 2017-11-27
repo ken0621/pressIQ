@@ -27,13 +27,13 @@ $text-dark: #272c2f;
 			background-size: contain;
 		}
 
-		.btn-text
+		/* .btn-text */
+		.caption-container
 		{
 			width: 100%;
 			white-space: normal;
 			padding: 70px 0px 0px 80px;
 			
-
 			.text-header1
 			{
 				font-weight: $regular;
@@ -433,7 +433,7 @@ $text-dark: #272c2f;
 				margin-bottom: 27px;
 				font-size: 13px !important;
 				letter-spacing: 0.3px;
-				color: #613922 !important;
+				color: #B17D2A !important;
 			}
 			.value-set
 			{
@@ -471,9 +471,9 @@ $text-dark: #272c2f;
 				.btn-proceed-1
 				{
 					color: #fff;
-					background-color: #693d28;
+					background-color: #B17D2A;
 					padding: 12px 40px;
-					border: 2px solid #693d28;
+					border: 2px solid #B17D2A;
 					border-radius: 2px;
 				}
 			}

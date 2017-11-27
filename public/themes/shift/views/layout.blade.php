@@ -27,8 +27,6 @@
     </head>
     <body>
     
-    
-
     <div class="loader hide">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>

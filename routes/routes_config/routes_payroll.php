@@ -695,8 +695,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 	Route::any('/payroll_biometric/modal_import_biometric','Member\PayrollBiometricSystemController@modal_import_biometric');
 	Route::any('/payroll_biometric/biometric_import_record','Member\PayrollBiometricSystemController@biometric_import_record');
-
-	
 	//software controllers
 	Route::post('/biometrics/save_data','Member\PayrollBiometricsController@save_data');
 	Route::any('/biometrics/sample','Member\PayrollBiometricsController@sample');

@@ -3,20 +3,66 @@ var global = new global()
 function global()
 {
 	init();
+
 	function init()
-	{
-		document_ready();
-	}
-	function document_ready()
 	{
 		$(document).ready(function()
 		{
-			action_match_height();
-			action_product_carousel();
-			event_show_product();
-			event_nav_dropdown();
+			document_ready();
 		});
 	}
+
+	function document_ready()
+	{
+		action_match_height();
+		action_product_carousel();
+		event_show_product();
+		event_nav_dropdown();
+		event_scroll_up();
+		event_side_nav();
+		product_mobile_dropdown();
+	}
+
+	function product_mobile_dropdown()
+	{
+		$(".product-mobile-dropdown").on("click", function (e) 
+		{
+		    $(e.currentTarget).siblings(".product-mobile-dropdown-list").slideToggle();
+		});
+	}
+
+	function event_side_nav()
+	{
+		$menuLeft = $('.pushmenu-left');
+		$nav_list = $('#nav_list');
+		
+		$nav_list.on("click", function() 
+		{
+		    $(this).toggleClass('active');
+		   /* $('.pushmenu-push').toggleClass('pushmenu-push-toright');*/
+		    $menuLeft.toggleClass('pushmenu-open');
+		}); 
+	}
+
+	function event_scroll_up()
+	{
+		/*scroll up*/
+		$(window).scroll(function () {
+	        if ($(this).scrollTop() > 700) {
+	            $('.scroll-up').fadeIn();
+	        } else {
+	            $('.scroll-up').fadeOut();
+	        }
+	    });
+
+	    $('.scroll-up').click(function () {
+	        $("html, body").animate({
+	            scrollTop: 0
+	        }, 700);
+	        return false;
+	    });
+	}
+
 	function action_match_height()
 	{
 		$(".match-height").matchHeight();
@@ -57,6 +103,33 @@ function global()
       		nextArrow:"<img class='a-right control-c next slick-next' src='/themes/sovereign/img/carousel-right.png'>",
       		autoplay: true,
 			autoplaySpeed: 4000,
+			responsive: [
+			  {
+			    breakpoint: 1024,
+			    settings: {
+			      slidesToShow: 4,
+			      slidesToScroll: 1,
+			      infinite: true,
+			    }
+			  },
+			  {
+			    breakpoint: 600,
+			    settings: {
+			      slidesToShow: 3,
+			      slidesToScroll: 1
+			    }
+			  },
+			  {
+			    breakpoint: 480,
+			    settings: {
+			      slidesToShow: 2,
+			      slidesToScroll: 1
+			    }
+			  }
+			  // You can unslick at a given breakpoint now by adding:
+			  // settings: "unslick"
+			  // instead of a settings object
+			]
 		})
 	}
 	function event_nav_dropdown()
@@ -77,4 +150,22 @@ function global()
 		    }
 		});
 	}
+}
+
+
+/*JAVASCRIPT for event_side_nav*/
+function on()
+{
+    var $body = $(document.body);
+    document.getElementById("overlay").style.display = "block";
+    $body.css("overflow", "hidden");
+}
+
+function off()
+{
+    var $body = $(document.body);
+    document.getElementById("overlay").style.display = "none";
+    $('.pushmenu').removeClass("pushmenu-open");
+    $body.css("overflow", "auto");
+    /*$("body").css("overflow", "auto");*/
 }

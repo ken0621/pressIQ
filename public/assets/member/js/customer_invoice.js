@@ -282,6 +282,7 @@ function customer_invoice()
 			var qty 	= $(this).find(".txt-qty").val();
 			var rate 	= $(this).find(".txt-rate").val();
 			var discount= $(this).find(".txt-discount").val().toString();
+			var multiple_discount = discount.split("/");
 			var amount 	= $(this).find(".txt-amount");
 			var taxable = $(this).find(".taxable-check");
 
@@ -292,12 +293,19 @@ function customer_invoice()
 			}
 
 			/* CHECK THE DISCOUNT */
+	
+
+			/*for(discount = 0; discount < multiple_discount.length; discount++)
+			{	
+				alert(multiple_discount[discount]); //split
+			}*/
 			if(discount.indexOf('%') >= 0)
 			{
 				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
 				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
 			}
 			else if(discount == "" || discount == null)
+				
 			{
 				discount = 0;
 			}
@@ -838,19 +846,10 @@ function submit_done(data)
 	}
 	else if(data.status == "error-invoice")
 	{
-        if(data.redirect)
+        $.each(data.status_message, function(index, val) 
         {
-        	toastr.error("Error inv");
-        	location.href = data.redirect;
-    	}
-    	else
-    	{
-    		$(".load-data:last").load(data.link+" .load-data .data-container", function()
-    		{
-    			customer_invoice.action_initialized();
-    			toastr.error("Error");
-    		})
-    	}
+        	toastr.error(val);
+        });
 	}
 	else if(data.status == 'error-inv-no')
 	{

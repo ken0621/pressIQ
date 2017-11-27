@@ -63,7 +63,23 @@ function wis_create()
             	}
             }
 		});
-		
+		$('.droplist-vendor').globalDropList(
+		{ 
+		    width : "100%",
+		    link : "/member/vendor/add",
+		    onCreateNew : function()
+            {
+            	// item_selected = $(this);
+            	// console.log($(this));
+            },
+            onChangeValue : function()
+            {
+            	if($(this).val() != '')
+            	{
+            		action_load_item_info($(this));
+            	}
+            }
+		});
 		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
             link : "/member/item/add",
@@ -107,10 +123,10 @@ function wis_create()
 			$('.form-to-submit-add').submit();
 		});
 	}
-	function table_loading()
+	/*function table_loading()
 	{
 		$(".load-item-table-pos").css("opacity", 0.3);
-	}
+	}*/
 	function event_change_quantity()
 	{
 		$("body").on("keyup", ".quantity-item", function(e)

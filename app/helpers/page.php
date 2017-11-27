@@ -1109,7 +1109,7 @@ function page_list()
             $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Warehouse Inventory";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
             $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/v2/warehouse";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','refill'];
             $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 

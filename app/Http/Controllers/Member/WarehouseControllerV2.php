@@ -127,24 +127,48 @@ class WarehouseControllerV2 extends Member
     }
 
     public function postAddSubmit()
+    {       
+        //INSERT TO tbl_warehouse
+        $ins_warehouse["warehouse_name"]    = Request::input("warehouse_name");
+        $ins_warehouse["warehouse_address"] = Request::input("warehouse_address");
+        $ins_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
+        $ins_warehouse["warehouse_created"] = Carbon::now();
+
+        $id = Tbl_warehouse::insertGetId($ins_warehouse);
+
+        Warehouse::insert_access($id);
+              
+        $data['status'] = 'success';
+
+        if($data['status'] == 'success')
+        {
+            $w_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$id);
+            AuditTrail::record_logs("Added","warehouse",$id,"",serialize($w_data));
+        }
+
+         return json_encode($data);
+    }
+
+    public function getRefill()
     {
-           /* //INSERT TO tbl_warehouse
-            $ins_warehouse["warehouse_name"]    = Request::input("warehouse_name");
-            $ins_warehouse["warehouse_address"] = Request::input("warehouse_address");
-            $ins_warehouse["warehouse_created"] = Carbon::now();
-
-            $id = Tbl_warehouse::insertGetId($ins_warehouse);
-
-            Warehouse::insert_access($id);
-
-            $data['status'] = 'success';
-
-            if($data['status'] == 'success')
+        $access = Utilities::checkAccess('warehouse-inventory', 'refill');
+        if($access == 1)
+        { 
+            $id = Request::input("warehouse_id");
+            $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$id)->first();
+            if(!$check_if_owned)
             {
-                $w_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$id);
-                AuditTrail::record_logs("Added","warehouse",$id,"",serialize($w_data));
+                return $this->show_no_access_modal();
             }
-             return json_encode($data);
-    }*/
+            $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
+            $data["_vendor"]    = Vendor::getAllVendor('active');
+            /*$data["_item"] = Warehouse::select_item_warehouse_single($id,'array');
+            dd($data["_item"][0]);*/
+            $data['_item']  = Item::get_all_category_item([1,5]);
+            dd($data['_item']);
 
+            
+            return view("member.warehousev2.refill_warehouse",$data);
+        }
+    }
 }

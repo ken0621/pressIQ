@@ -35,36 +35,4 @@
 <!-- <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script> -->
 <!-- <script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script> -->
 <script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
-<script type="text/javascript">
 
-    check_checkbox();
-    checkbox_change();
-
-    function submit_selected_image_done(data) 
-    { 
-        $(".merchant_logo_container").attr("src",data.image_data[0].image_path);
-        $(".merchant_logo_input").val(data.image_data[0].image_path);
-    }
-
-    function check_checkbox()
-    {
-        if($("#merchantwarehouse").prop("checked"))
-        {
-            $(".merchant_logo_div").show();
-            $(".default_repurchase_class").show();
-        }
-        else
-        {
-            $(".merchant_logo_div").hide();
-            $(".default_repurchase_class").hide();
-        }   
-    }
-
-    function checkbox_change()
-    {
-        $("input[type=checkbox]").change(function()
-        {
-            check_checkbox();
-        });
-    }
-</script>

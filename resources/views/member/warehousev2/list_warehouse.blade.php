@@ -60,7 +60,7 @@
                                                     Action <span class="caret"></span>
                                                   </button>
                                                   <ul class="dropdown-menu dropdown-menu-custom">
-                                                    <li><a size="lg" link="/member/item/warehouse/refill?warehouse_id={{$warehouse->warehouse_id}}" href="javascript:" class="popup">Refill  Warehouse</a></li>
+                                                    <li><a href="/member/item/v2/warehouse/refill?warehouse_id={{$warehouse->warehouse_id}}" >Refill  Warehouse</a></li>
                                                     <li><a href="javascript:" class="popup" link="/member/item/v2/warehouse/edit/{{$warehouse->warehouse_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit</a></li>
                                                   </ul>
                                                 </div>
@@ -115,7 +115,7 @@
     </div>
 </div>
 @endsection
+
 @section("script")
-<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 <script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
 @endsection

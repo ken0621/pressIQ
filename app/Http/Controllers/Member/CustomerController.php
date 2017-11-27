@@ -46,9 +46,8 @@ class CustomerController extends Member
 	{
         if($this->hasAccess("customer-list","access_page"))
         {
-            
             $data['_customer'] = $this->customerlist();
-            
+
             if (Request::ajax()) 
             {
                 return view('member.customer.customer_tbl', $data)->render();  
@@ -207,6 +206,9 @@ class CustomerController extends Member
             $data['_warehouse'] = Warehouse2::get_all_warehouse($shop_id);
 
             $value = Request::input('value');
+
+            $data['check_user'] = Purchasing_inventory_system::check();
+            
             if($value || $value != '')
             {
                 $data["value"] = $value;

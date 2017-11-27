@@ -702,6 +702,7 @@ class CustomerController extends Member
                 $data["pis"] = false;
             }
             
+            $data['check_user'] = Purchasing_inventory_system::check();
     	    return view('member.modal.editcustomermodal',$data);
         }
         else

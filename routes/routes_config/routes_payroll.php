@@ -707,7 +707,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/*END payroll approve database manipulation*/
 
 	/*START Admin dashboard*/
-	Route::any('/payroll_admin_dashboard/employees_approver','Member\PayrollAdminDashboard@employees_approver');
+	Route::any('/payroll_admin_dashboard/employee_approver','Member\PayrollAdminDashboard@employee_approver');
 	Route::any('/payroll_admin_dashboard/modal_create_approver','Member\PayrollAdminDashboard@modal_create_approver');
+	Route::any('/payroll_admin_dashboard/set_employee_aprrover_tag','Member\PayrollAdminDashboard@set_employee_aprrover_tag');
 	/*END Admin dashboard*/
 });

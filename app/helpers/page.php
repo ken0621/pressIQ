@@ -930,10 +930,10 @@ function page_list()
     $nav[$page]['submenu'][$segment]['type']   = "submenu";
 
         /* -- REPORT => PRODUCTS  */
-        $code = "employees-approver";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']         = "Employee's Approver";
+        $code = "employee-approver";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']         = "Employee Approver";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code']          = $code;
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']           = $path . $page . "/payroll_admin_dashboard/employees_approver";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']           = $path . $page . "/payroll_admin_dashboard/employee_approver";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']        = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']     = "Everyone";

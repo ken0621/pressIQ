@@ -5,12 +5,12 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Payroll Reports &raquo; Register Report</span>
+                <span class="page-title">Admin Dashboard &raquo; Employee Approver</span>
                 <small>
-                select payroll period.
+                select employee.
                 </small>
             </h1>
-           <button class="btn btn-primary pull-right" onclick="action_load_link_to_modal('/member/payroll/payroll_admin_dashboard/modal_create_approver', 'sm')">Create Approver</button>
+           <button class="btn btn-primary pull-right" onclick="action_load_link_to_modal('/member/payroll/payroll_admin_dashboard/modal_create_approver', 'md')">Create Approver</button>
         </div>
     </div>
 </div>
@@ -23,12 +23,10 @@
                     <tr>
                         <th class="text-center">Employee Name</th>
                         <th class="text-center">Company</th>
-                        <th class="text-center">Period Type</th>
-                        <th class="text-center">Covered Month</th>
-                        <th class="text-center">Period Order</th>
-                        <th class="text-center">Period Type</th>
-                        <th class="text-center">Covered Month</th>
-                        <th class="text-center">Period Order</th>
+                        <th class="text-center">Overtime Approver</th>
+                        <th class="text-center">OB Approver</th>
+                        <th class="text-center">Leave Approver</th>
+                        <th class="text-center"></th>
                         <th class="text-center"></th>
                     </tr>
                 </thead>

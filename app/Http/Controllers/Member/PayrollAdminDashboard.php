@@ -19,7 +19,7 @@ use App\Models\Tbl_payroll_employee_salary;
 
 class PayrollAdminDashboard extends Member
 {
-	public function employees_approver()
+	public function employee_approver()
 	{
 		return view('member.payroll2.employees_approver');
 	}
@@ -35,8 +35,8 @@ class PayrollAdminDashboard extends Member
 
 	     $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
 
-	     $data['deduction_id']    =    $deduction_id;
-	     $data['action']               =    '/member/payroll/deduction/set_employee_deduction_tag';
+	     $data['deduction_id']    =  $deduction_id;
+	     $data['action']          =  '/member/payroll/deduction/set_employee_deduction_tag';
 
 	     return view('member.payroll.modal.modal_deduction_tag_employee', $data);
 	}

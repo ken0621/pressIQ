@@ -1641,9 +1641,13 @@ class Item
         {
             $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
         }
-        if($status == 'reserved' || $status == 'block')
+        if($status == 'reserved')
         {
-             $query->where('record_consume_ref_name',$status);
+            $query->where('record_consume_ref_name',$status)->reserved_customer();
+        }
+        else if($status == 'block')
+        {
+            $query->where('record_consume_ref_name',$status);            
         }
         else if($status == 'used')
         {
@@ -1717,7 +1721,11 @@ class Item
             $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
         }
 
-        if($status == 'reserved' || $status == 'block')
+        if($status == 'reserved')
+        {
+             $query->where('record_consume_ref_name',$status)->reserved_customer();
+        }
+        else if($status == 'block')
         {
              $query->where('record_consume_ref_name',$status);
         }

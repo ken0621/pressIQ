@@ -15,6 +15,18 @@
                             <h3>{{$item->item_name}}</h3>
                         </div>
                     </div>
+                    @if($action == 'reserved')
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label>Select Customer (Optional)</label>
+                        </div>
+                        <div class="col-md-12">
+                            <select name="reserved_customer"  class="select-customer form-control">
+                                @include('member.load_ajax_data.load_customer')
+                            </select>
+                        </div>
+                    </div>
+                    @endif
                     <div class="form-group">
                         <div class="col-md-12">
                             <textarea class="form-control" name="remarks" placeholder="Enter remarks here..."></textarea>
@@ -29,3 +41,10 @@
         <button class="btn btn-primary btn-custom-primary assemble-code-submit" type="submit">{{ucfirst($action)}}</button>
     </div>
 </form>
+<script type="text/javascript">
+    $('.select-customer').globalDropList(
+    { 
+        width : "100%",
+        link : "/member/customer/modalcreatecustomer"
+    });
+</script>

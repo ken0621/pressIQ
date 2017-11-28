@@ -1858,28 +1858,74 @@ class ShopMemberController extends Shop
         $shop_id = $this->shop_info->shop_id;
         $fee = Tbl_mlm_slot_wallet_log_refill_settings::where("shop_id",$shop_id)->first()->wallet_log_refill_settings_processings_fee;
         $amount = $request->amount;
-        $slot_id = Tbl_mlm_slot::where("slot_no",$request->slot)->first()->slot_id;
 
-        $insert['wallet_log_refill_date'] = Carbon::now();
-        $insert['wallet_log_refill_amount'] = $amount;
-        $insert['wallet_log_refill_processing_fee'] = $fee;
-        $insert['wallet_log_refill_amount_paid'] = $amount+$fee;
-        $insert['wallet_log_refill_approved'] = 0;
-        $insert['wallet_log_refill_remarks'] = $request->remarks;
-        if($path!="")
-        {
-            $insert['wallet_log_refill_attachment'] = $path_prefix.$path;
+        $logged_in_account = Self::$customer_info->customer_id;
+        $isSlotValid = false;
+        $slots = Tbl_mlm_slot::where('slot_owner',$logged_in_account)->get();
+        foreach ($slots as $validSlot) {
+            if($validSlot->slot_no == $request->slot)
+            {
+                $isSlotValid = true;
+            }
         }
-        $insert['shop_id'] = $shop_id;
-        $insert['slot_id'] = $slot_id;
-        if($query = Tbl_mlm_slot_wallet_log_refill::insert($insert))
+
+        if($isSlotValid)
         {
-            $response = "success";
+            $slot_id = Tbl_mlm_slot::where("slot_no",$request->slot)->first()->slot_id;
+
+            $insert['wallet_log_refill_date'] = Carbon::now();
+            $insert['wallet_log_refill_amount'] = $amount;
+            $insert['wallet_log_refill_processing_fee'] = $fee;
+            $insert['wallet_log_refill_amount_paid'] = $amount+$fee;
+            $insert['wallet_log_refill_approved'] = 0;
+            $insert['wallet_log_refill_remarks'] = $request->remarks;
+            if($path!="")
+            {
+                $insert['wallet_log_refill_attachment'] = $path_prefix.$path;
+            }
+            $insert['shop_id'] = $shop_id;
+            $insert['slot_id'] = $slot_id;
+            if($query = Tbl_mlm_slot_wallet_log_refill::insert($insert))
+            {
+                $response = "success";
+            }
+            else
+            {
+                $response = "error";
+            }
         }
         else
         {
-            $response = "error";
+            $response = "invalid_slot";
         }
+
+        
+        return Redirect::back()->with("response",$response);
+    }
+    public function getUploadAttachment()
+    {
+        $shop_id = $this->shop_info->shop_id;
+        $data['page'] = "Upload Attachment";
+        $data['id'] = request("id");
+        return Self::load_view_for_members('member.wallet_refill_upload_attachment', $data);
+    }
+    public function postUploadAttachment(Request $request)
+    {
+        $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
+        $path ="";
+        $response = 'error_upload';
+        if($request->hasFile('attachment'))
+        {
+            if($path = Storage::putFile('payment-proof', $request->file('attachment')))
+                {
+                    $update['wallet_log_refill_attachment'] = $path_prefix.$path;
+                    if(Tbl_mlm_slot_wallet_log_refill::where('wallet_log_refill_id',$request->id)->update($update))
+                        {
+                            $response = 'success_upload';
+                        }
+                }
+        }
+
         return Redirect::back()->with("response",$response);
     }
     public function getWalletRefillTable()

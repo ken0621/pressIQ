@@ -87,13 +87,12 @@ class Customer_InvoiceController extends Member
                 $data['_item'] = Item::get_all_item_sir($sir->sir_id);
             }
         }
-
+        
         foreach ($data["_customer"] as $key => $value) 
         {
             $address = Tbl_customer_address::where("customer_id", $value->customer_id)->where("purpose", "billing")->first();
             $data["_customer"][$key]->billing_address = isset($address->customer_street) ? $address->customer_street : "None";
         }
-
         return view('member.customer_invoice.customer_invoice', $data);
     }
 
@@ -115,6 +114,8 @@ class Customer_InvoiceController extends Member
               $data["_invoices"][$key]->inv_overall_price = $value->inv_overall_price - $cm->cm_amount;  
             }
         }
+
+        $data['check_user'] = Purchasing_inventory_system::check();
 
         return view("member.customer_invoice.customer_invoice_list",$data);
     }
@@ -785,6 +786,7 @@ class Customer_InvoiceController extends Member
             $data["transaction_type"] = "Sales Receipt";            
         }
         $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
+        //dd($data["invoice_item"]);
         foreach($data["invoice_item"] as $key => $value) 
         {
             $qty = UnitMeasurement::um_qty($value->invline_um);
@@ -807,6 +809,8 @@ class Customer_InvoiceController extends Member
                 $data["_cmline"][$keys]->cm_qty = UnitMeasurement::um_view($total_qtys,$values->item_measurement_id,$values->cmline_um);
             }
         }
+        //dd($data);
+        //return view('member.customer_invoice.invoice_pdf', $data);
         $pdf = view('member.customer_invoice.invoice_pdf', $data);
         return Pdf_global::show_pdf($pdf);
     }

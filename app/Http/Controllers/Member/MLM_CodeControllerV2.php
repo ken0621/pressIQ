@@ -158,12 +158,20 @@ class MLM_CodeControllerV2 extends Member
         if($request->isMethod("post"))
         {
             $status = $request->action_status;
+            $reserved_customer = $request->reserved_customer;
             $record_log_id = $request->record_log_id;
-
+            
             $update['record_consume_ref_name'] = NULL;
-            if($status == 'reserved' || $status == 'block')
+            $update['record_consume_ref_id'] = 0;
+
+            if($status == 'reserved')
             {
                 $update['record_consume_ref_name'] = $status;
+                $update['record_consume_ref_id'] = $reserved_customer;
+            }
+            if($status == 'block')
+            {
+                $update['record_consume_ref_name'] = $status;                
             }
             $update['record_item_remarks'] = $request->remarks;
 
@@ -180,6 +188,8 @@ class MLM_CodeControllerV2 extends Member
             $data['item'] = Item::info($request->item_id);
 
             $data['record_log_id'] = $request->record_id;
+            $data["_customer"]  = Customer::getAllCustomer();
+
 
             return view("member.mlm_code_v2.membership_code_change_status",$data);              
         }

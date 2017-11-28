@@ -3235,7 +3235,15 @@ class Payroll
 			{
 				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_total_payment_amount["total_payment"];
 			}
-
+			
+			if ($period == "Last Period") 
+			{
+				if (($temp["payroll_periodal_deduction"] + $payroll_month_payment_amount["total_payment"]) <=  $deduction->payroll_monthly_amortization) 
+				{
+					$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_month_payment_amount["total_payment"];
+				}
+			}
+			
 			if ($payroll_total_payment_amount["total_payment"] < $deduction->payroll_deduction_amount) 
 			{
 				$data['total_deduction'] += $temp['payroll_periodal_deduction'];

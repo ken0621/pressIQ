@@ -115,7 +115,7 @@
 
         if (province == "") 
         {
-            alert("Please select a province.");
+            alert("Please select your province.");
         }
 
         else if(shipping_address == "")

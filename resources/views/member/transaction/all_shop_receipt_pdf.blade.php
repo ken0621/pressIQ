@@ -154,9 +154,10 @@
             </div>
         </div>
         <footer>BIR PERMIT NO. : XXXX-XXX-XXXXXX-YYY
-Date Issued : February 21, 2014
-Approved Series FR : 10000001 TO: 19999999
-This Sales Invoice shall be valid for five (5) years from the date of ATP</footer>
+                Date Issued : February 21, 2014
+                Approved Series FR : 10000001 TO: 19999999
+                This Sales Invoice shall be valid for five (5) years from the date of ATP
+        </footer>
     </div>
 </body>
 </html>

@@ -113,7 +113,7 @@
         var payment_method = $(".payment-method-is-empty").val();
         var shipping_address = $(".textarea-is-empty").val();
 
-        if (province == "") 
+        if (province == "")
         {
             alert("Please select your province.");
         }

@@ -59,7 +59,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/replicated', 'Shop\ShopAboutController@replicated'); //MARK FIGS
 
 	Route::get('/terms_and_conditions', 'Shop\ShopAboutController@terms_and_conditions'); //MARK FIGS
-	Route::get('/acknowledgement_reciept', 'Shop\ShopAboutController@reciept');
 
 
 

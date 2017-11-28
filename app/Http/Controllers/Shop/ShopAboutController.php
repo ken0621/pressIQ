@@ -189,10 +189,4 @@ class ShopAboutController extends Shop
         return view("member.certificate", $data);
     }
 
-    // 3xcell Reciept
-    public function reciept()
-    {
-        $data["page"] = "acknowledgement_reciept";
-        return view("acknowledgement_reciept", $data);
-    }
 }

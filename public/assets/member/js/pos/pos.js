@@ -550,7 +550,7 @@ function pos()
 		$(".pos-search-container-customer").hide();
 		clearTimeout(item_search_delay_timer);
 	}
-	function action_load_customer_info(price_level_id = '', stockist_warehouse_id = '', reserve_item = '')
+	function action_load_customer_info(price_level_id = '', stockist_warehouse_id = '', reserve_item = 0)
 	{
 		if($(".customer-container").text() != "")
 		{
@@ -569,7 +569,7 @@ function pos()
 			{
 				$('.price-level-select').val(price_level_id).change();
 			}
-			if(reserve_item != 0 || reserve_item != '')
+			if(reserve_item)
 			{
 				action_load_item_table();
 			}

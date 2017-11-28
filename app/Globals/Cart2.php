@@ -196,6 +196,7 @@ class Cart2
                 Cart2::add_item_to_cart($shop_id, $value->record_item_id, 1);
             }
             $return = count($get_reserved_item);
+			Session::put("reserved_item", $return);
         }
 
         return $return;
@@ -408,6 +409,7 @@ class Cart2
 		Tbl_cart::where("unique_id_per_pc", $cart_key)->delete();
 		Tbl_cart_item_pincode::where("unique_id_per_pc", $cart_key)->delete();
 		Tbl_cart_payment::where("unique_id_per_pc", $cart_key)->delete();
+		Session::forget('reserved_item');
 	}
 	public static function cart_payment_amount($shop_id ,$type = '')
 	{

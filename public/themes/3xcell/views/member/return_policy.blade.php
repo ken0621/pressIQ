@@ -4,12 +4,11 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">ACCEPT RETURN POLICY AND PROCEDURE</h4>
+            <h4 class="modal-title">RETURN POLICY AND PROCEDURE</h4>
         </div>
         <div class="modal-body">
             <div class="policy">
                 <div class="holder">
-                    <div class="title-holder top-title"><strong>RETURN POLICY AND PROCEDURE</strong></div>
                     <div class="para-holder">
                         3xcell-E Sales & Marketing Inc. will accept returns of goods and evaluates for applicable replacements from distributor and customer in accordance with the conditions and procedure in effect at the time of return. 3xcell-E Sales & Marketing Inc. has sole discretion of final determination of replacement for all product returns.
                     </div>

@@ -15,7 +15,8 @@ function customer() {
         popover();
         
     }
-    function tabnavigation(){
+    function tabnavigation()
+    {
         $(".nav-option").unbind("click");
         $(".nav-option").bind("click", function () {
             var content = $(this).data("content");
@@ -23,7 +24,8 @@ function customer() {
         });
     }
     
-    function popModal(){
+    function popModal()
+    {
         $(".btn-create-modal").unbind("click");
         $(".btn-create-modal").bind("click", function(){
             $(".btn-save-modallarge").html("Save customer");

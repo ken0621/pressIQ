@@ -21,7 +21,7 @@
         <div class="customer-name">
             <div class="row">
                 <div class="col-md-5">Customer</div>
-                <div class="col-md-7">{{$exist['customer']->slot_no != null ? $exist['customer']->slot_no : $exist['customer']->customer_id}}</div>
+                <div class="col-md-7">{{$exist['customer']->customer_id}}</div>
             </div>
             <div class="customer-name">
                 <div class="row">
@@ -38,6 +38,40 @@
         </div>
     </div>
 </div>
+@if(count($exist['_slot']) > 0)
+<div class="row" style="padding: 15px">
+    <div class="col-md-12" >
+        <div class="customer-name">
+            <div class="row clearfix">
+                <div class="col-md-5">Slot No</div>
+                <div class="col-md-7">
+                    <select name="slot_id" class="form-control input-sm change-slot-id">
+                        @foreach($exist['_slot'] as $slot)
+                            <option value="{{$slot->slot_id}}">{{$slot->slot_no}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>                
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="customer-name">
+            <div class="row">
+                <div class="col-md-5">Current Wallet</div>
+                <div class="col-md-7 text-right">{{currency('PHP ',$customer_points['total_wallet'])}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="customer-name">
+            <div class="row">
+                <div class="col-md-5">Total GC</div>
+                <div class="col-md-7 text-right">{{currency('',$customer_points['total_gc'])}} POINT(S)</div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 <div class="row pos-customer-action-button text-center" style="padding: 5px">
     <div class="col-md-6">
         <a class="btn btn-custom-white full-width popup" size="lg" link="/member/customer/customeredit/{{$exist['customer']->customer_id}}"><i class="fa fa-edit"></i> Update Customer</a>

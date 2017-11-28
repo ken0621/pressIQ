@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 .member
 {
 	background-color: #ededed;
@@ -76,7 +78,7 @@
 			z-index: 10;
 			transition: 0.3s all ease;
 			// overflow: hidden;
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 768px)
 			{
 				display: none;
 			}
@@ -384,7 +386,7 @@
 			padding: 15px;
 
 			overflow: hidden;
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 768px)
 			{
 				margin-left: 0;
 			}
@@ -453,3 +455,81 @@
 		}
 	}
 }
+
+/* ALERT CUSTOM */
+.alert
+{
+	background-color: #ff5252;
+	color: #fff;
+}
+
+.alert-custom-success
+{
+	background-color: #32a300;
+	color: #fff;
+}
+/* END ALERT CUSTOM */
+
+/* PER THEMES POPUPS AND BUTTONS COLOR*/
+.modal-header
+{
+	background-color: #006CC5;
+	color: #fff;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	.close
+	{
+		color: #fff;
+	}
+}
+
+.btn-lblue
+{
+	background-color: inherit;
+	border: 1px solid #006CC5;
+	color: #006CC5;
+	@include transition(0.3s);
+
+	&:hover
+	{
+		background-color: #006CC5;
+		color: #fff;
+	}
+}
+
+.btn-primary
+{
+	background-color: inherit !important;
+	color: #006CC5 !important;
+	border: 1px solid #006CC5 !important;
+	font-weight: 400;
+	@include transition(0.3s);
+
+	&:hover
+	{
+		background-color: #006CC5 !important;
+		color: #fff !important;
+		border: 1px solid #006CC5 !important;
+	}
+}
+
+.btn-custom-white
+{
+	background-color: inherit !important;
+	color: #fd6060;
+	border: 1px solid #fd6060;
+    @include transition(0.3s);
+
+	&:hover
+	{
+		background-color: #fd6060 !important;
+		border: 1px solid #fd6060;
+		color: #fff;
+	}
+}
+
+/* END PER THEMES POPUPS AND BUTTONS COLOR*/

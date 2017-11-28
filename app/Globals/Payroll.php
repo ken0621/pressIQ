@@ -2788,7 +2788,6 @@ class Payroll
 		{
 			$next_month 	= date('m', strtotime("+7 day", $strtotime));
 
-
 			if($index_count  == 1)
 			{
 				$period_category = 'First Period';
@@ -3207,9 +3206,8 @@ class Payroll
 	{
 		$month[0] = date('Y-m-01', strtotime($date));
 		$month[1] = date('Y-m-t', strtotime($date));
-
+		
 		$_deduction = Tbl_payroll_deduction_employee_v2::getdeduction($employee_id, $date, $period, $month)->get();
-
 		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->pluck('payroll_record_id');
 
 		$data['deduction'] 			= array();
@@ -3237,7 +3235,15 @@ class Payroll
 			{
 				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_total_payment_amount["total_payment"];
 			}
-
+			
+			if ($period == "Last Period") 
+			{
+				if (($temp["payroll_periodal_deduction"] + $payroll_month_payment_amount["total_payment"]) <=  $deduction->payroll_monthly_amortization) 
+				{
+					$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_month_payment_amount["total_payment"];
+				}
+			}
+			
 			if ($payroll_total_payment_amount["total_payment"] < $deduction->payroll_deduction_amount) 
 			{
 				$data['total_deduction'] += $temp['payroll_periodal_deduction'];

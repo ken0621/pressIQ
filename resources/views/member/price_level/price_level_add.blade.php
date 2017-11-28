@@ -45,6 +45,7 @@
 					<div class="table-holder">
 						<table class="table table-condensed price-level-table table-striped">
 					        <tbody>
+					        	@if(isset($_item))
 					        	@foreach($_item as $item)
 					            <tr>
 					            	<td width="50px" class="text-center price-level-check-event">
@@ -56,6 +57,13 @@
 					                <td class="text-center"><input name="_item[{{ $item->item_id }}]" type="text" class="custom-price-textbox text-right" value="{{isset($price_level_item[$item->item_id]) ? ($price_level_item[$item->item_id] != 0 ? $price_level_item[$item->item_id] : '') : ''}}"></td>
 					            </tr>
 					            @endforeach
+					            @else
+					            <tr>
+					            	<td colspan="5">
+					            		No Item
+					            	</td>					            	
+					            </tr>
+					            @endif
 					        </tbody>
 						</table>
 					</div>
@@ -124,7 +132,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-primary btn-custom-primary" type="submit"><i class="fa fa-save"></i> &nbsp; Save Price Level</button>
+		<button class="btn btn-primary btn-custom-primary" type="submit" {{isset($_item) ? "" : "disabled"}}><i class="fa fa-save"></i> &nbsp; Save Price Level</button>
 	</div>
 </form>
 

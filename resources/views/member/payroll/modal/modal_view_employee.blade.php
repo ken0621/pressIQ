@@ -315,14 +315,21 @@
                           <input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_daily) ? $salary->payroll_employee_salary_daily : ''}}" readonly>
                         </div>
                       </div>
-                      <!--
+
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <small>Hourly Rate</small>
+                          <input type="number" step="any" name="payroll_employee_salary_hourly" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_hourly) ? $salary->payroll_employee_salary_hourly : ''}}" readonly>
+                        </div>
+                      </div>
+                      
                       <div class="form-group">
                         <div class="col-md-12">
                           <small>COLA (Monthly)</small>
                           <input type="number" step="any" name="monthly_cola" class="form-control text-right" value="{{isset($salary->monthly_cola) ? $salary->monthly_cola : ''}}" readonly>
                         </div>
                       </div>
-                      -->
+                      
                        <div class="form-group">
                         <div class="col-md-12">
                           <small>COLA (Daily)</small>

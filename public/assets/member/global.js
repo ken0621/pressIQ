@@ -402,7 +402,7 @@ function select_current_warehouse()
             },
             error: function()
             {
-
+                
             }
         })
     });

@@ -114,23 +114,50 @@
                 </div>
                 <!-- END TOTAL SUMMARY -->
             </div>
-            <div class="sub-title">PAYMENT DETAILS:</div>
-            <div class="holder">
-                <div class="clearfix">
-                    <div class="payment-detail pull-left">
-                        <div class="rows"><strong>Payment Date :</strong> {{date('M d, Y',strtotime($list->transaction_date_created))}}</div>
-                        <div class="rows"><strong>Payment Type :</strong> {{ ucfirst($list->payment_method) }}</div>
+            <div class="payment-detail-container">
+                <div class="sub-title">PAYMENT DETAILS:</div>
+                <div class="holder">
+                    <div class="clearfix">
+                        @if($list->payment_method != 'pos')
+                        <div class="payment-detail pull-left">
+                            <div class="rows"><strong>Payment Date :</strong> {{date('M d, Y',strtotime($list->transaction_date_created))}}</div>
+                            <div class="rows"><strong>Payment Type :</strong> {{ ucfirst($list->payment_method) }}</div>
+                        </div>
+                        <div class="total-summary pull-right">
+                            <div class="rows">TOTAL PAID AMOUNT : PHP {{ number_format($list->transaction_total, 2) }}</div>
+                        </div>
+                        @else
+                         <div class="payment-detail pull-left">
+                            <div class="rows"><strong>Payment Date :</strong> {{date('M d, Y',strtotime($list->transaction_date_created))}}</div>
+                            <div class="rows" {{$total_tendered = 0}}><strong>Payment Type :</strong> </div>
+                            @if(count($_payment_list) > 0)
+                                @foreach($_payment_list as $payment)
+                                <div class="rows">
+                                    <div class="{{$total_tendered += $payment->transaction_payment_amount}}" style="width:750px;margin-left: 30px;">
+                                        <span style="width: 375px">{{strtoupper($payment->transaction_payment_type)}}</span>
+                                        <span  class="pull-right" style="width: 175px">{{currency('',$payment->transaction_payment_amount)}}</span>
+                                    </div>
+                                </div>
+                                @endforeach
+                            @endif
+                        </div>
+                        @endif
                     </div>
-                    <div class="total-summary pull-right">
+                </div>
+                <div class="holder">
+                    <div class="total-summary text-right">
+                        <div class="rows">TENDERED PAYMENT : PHP {{ number_format($total_tendered, 2) }}</div>
                         <div class="rows">TOTAL PAID AMOUNT : PHP {{ number_format($list->transaction_total, 2) }}</div>
+                        <div class="rows">CHANGE : PHP {{ number_format($total_tendered - $list->transaction_total, 2) }}</div>
                     </div>
                 </div>
             </div>
         </div>
         <footer>BIR PERMIT NO. : XXXX-XXX-XXXXXX-YYY
-Date Issued : February 21, 2014
-Approved Series FR : 10000001 TO: 19999999
-This Sales Invoice shall be valid for five (5) years from the date of ATP</footer>
+                Date Issued : February 21, 2014
+                Approved Series FR : 10000001 TO: 19999999
+                This Sales Invoice shall be valid for five (5) years from the date of ATP
+        </footer>
     </div>
 </body>
 </html>
@@ -139,4 +166,8 @@ This Sales Invoice shall be valid for five (5) years from the date of ATP</foote
     {
         font-size: 12px;
     }
+</style>
+
+<style type="text/css">
+    div.payment-detail-container { page-break-inside: avoid; }
 </style>

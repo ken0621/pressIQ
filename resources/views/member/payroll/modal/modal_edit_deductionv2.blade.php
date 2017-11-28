@@ -1,7 +1,7 @@
 <form class="global-submit" role="form" action="/member/payroll/deduction/v2/modal_update_deduction" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
-		<h4 class="modal-title">Create Deduction</h4>
+		<h4 class="modal-title">Edit Deduction</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
 		<input type="hidden" name="payroll_deduction_id" id="payroll_deduction_id" value="{{$deduction->payroll_deduction_id}}">
 	</div>
@@ -71,7 +71,7 @@
 							</div>
 							<div class="col-md-6">
 								<div class="radio">
-									<label><input type="radio" name="payroll_deduction_period" value="Second Period" {{$deduction->payroll_deduction_period == 'Second Period' ? 'checked':''}}>Second Period</label>
+									<label><input type="radio" name="payroll_deduction_period" value="Middle Period" {{$deduction->payroll_deduction_period == 'Second Period' ? 'checked':''}}>Middle Period</label>
 								</div>
 							</div>
 							<div class="col-md-6">

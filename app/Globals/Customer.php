@@ -9,6 +9,7 @@ use App\Models\Tbl_order_item;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer_other_info;
+use App\Models\Tbl_mlm_slot_points_log;
 use App\Globals\Tablet_global;
 use App\Globals\Mlm_plan;
 use App\Globals\CommissionCalculator;
@@ -117,6 +118,7 @@ class Customer
 	public static function info($id = 0, $shop_id = 0, $order_id = 0)
 	{
         $data['customer'] = Tbl_customer::membership()->leftjoin('tbl_country','tbl_country.country_id','=','tbl_customer.country_id')->where('tbl_customer.customer_id',$id)->first();
+        $data['_slot'] = Tbl_mlm_slot::where('slot_owner',$id)->get();
         $data['shipping'] = Tbl_customer_address::leftjoin('tbl_country','tbl_country.country_id','=','tbl_customer_address.country_id')->where('tbl_customer_address.customer_id',$id)->where('tbl_customer_address.purpose','shipping')->where('tbl_customer_address.archived',0)->first();
         $data['other'] = Tbl_customer_other_info::where('customer_id',$id)->first();
         // $tax_exempt = $data['customer']->taxt_exempt;
@@ -127,7 +129,23 @@ class Customer
         $data['order_id'] = $order_id;
         return $data;
 	}
-	
+	public static function get_points_wallet($customer_id = 0)
+	{
+		$data['total_wallet'] = Tbl_mlm_slot::where("slot_owner", $customer_id)->currentWallet()->value('current_wallet');
+		$data['total_gc'] = Tbl_mlm_slot::mlm_points()->where("slot_owner",$customer_id)->where("points_log_type","GC")->sum("points_log_points");
+		return $data;
+	}	
+
+	public static function get_points_wallet_per_slot($slot_id = 0)
+	{
+		$data['total_wallet'] = Tbl_mlm_slot::where("slot_id", $slot_id)->currentWallet()->value('current_wallet');
+		$data['total_gc'] = Tbl_mlm_slot::mlm_points()->where("slot_id",$slot_id)->where("points_log_type","GC")->sum("points_log_points");
+		return $data;
+	}
+	public static function slot_info($slot_id)
+	{
+		return Tbl_mlm_slot::where('slot_id',$slot_id)->first();
+	}
 	public static function search($str = '', $shop_id = 0, $archived = 0)
 	{
 		if($str != '' && $str != null){
@@ -193,7 +211,7 @@ class Customer
 		{
 			$shop_id = Tablet_global::getShopId();
 		}
-		$customer = Tbl_customer::info()->where("tbl_customer.archived", 0)->where("tbl_customer.shop_id", $shop_id)->groupBy("tbl_customer.customer_id")->orderBy("tbl_customer.customer_id","DESC");
+		$customer = Tbl_customer::selectRaw("*, tbl_customer.customer_id as customer_id")->info()->where("tbl_customer.archived", 0)->where("tbl_customer.shop_id", $shop_id)->groupBy("tbl_customer.customer_id")->orderBy("tbl_customer.customer_id","DESC");
 		// if(CommissionCalculator::check_settings($shop_id) == 1)
 		// {
 		// 	$customer = $customer->selectRaw('*, tbl_employee.first_name as salesrep_fname, tbl_employee.middle_name as salesrep_mname,tbl_employee.last_name as salesrep_lname')->commission()->salesrep();

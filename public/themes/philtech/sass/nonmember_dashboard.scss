@@ -528,18 +528,10 @@ $text-dark: #272c2f;
 /* Proceed 2 */
 .popup-proceed2
 {
-	background-color: #fff;
 	font-family: $content-text;
-	
-	.modal-sm
-	{  
-		width: 100%;
-		max-width: 350px;
-	}
 
 	.modal-content
 	{
-		background-color: #fff;
 		.modal-header
 		{
 			background-color: #006CC5;
@@ -561,11 +553,8 @@ $text-dark: #272c2f;
 
 		.modal-body
 		{
-			
-
 			font-weight: $semi-bold;
 			margin: 0px 20px 0px 20px;
-
 
 			.message
 			{
@@ -612,7 +601,7 @@ $text-dark: #272c2f;
 				width: 100%;
 				font-size: 16px;
 				border: none;
-				border: 1px solid #693d28;
+				border: 1px solid #006CC5;
 				margin: 5px 0px;
 				margin-bottom: 15px;
 				padding: 5px;
@@ -628,33 +617,30 @@ $text-dark: #272c2f;
 				text-transform: uppercase;
 				padding-bottom: 20px;
 
-
 				.btn-proceed-2
 				{
+					@include transition(0.3s);
 					color: #fff;
-					background-color: #693d28;
+					background-color: #006CC5;
+					border: 1px solid #006CC5;
 					padding: 10px 40px;
 					border-radius: 2px;
-					border: 0px !important;
-
-				  	-webkit-transition: all 0.2s ease-in-out;
-				  	-moz-transition: all 0.2s ease-in-out;
-				  	-o-transition: all 0.2s ease-in-out;
-				  	transition: all 0.2s ease-in-out;
 				  	width: 100%;
 				  	margin-top: 20px;
 				  	text-transform: uppercase;
+
+				  	/* &:hover
+				  	{
+				  		background-color: rgba(0, 108, 197,0.1) !important;
+				  		border: 1px solid #006CC5 !important;
+				  		color: #006CC5;
+				  	} */
 				}
-				.btn-proceed-2:hover
-				{
-					opacity: 0.9;
-				}
+
 			}
 		}
 	}
 }
-
-
 
 /* Failed */
 .popup-failed

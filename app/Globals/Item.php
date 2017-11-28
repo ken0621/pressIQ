@@ -1931,5 +1931,8 @@ class Item
 
         return $return;
     }
-
+    public static function scan_reserved_code($shop_id, $customer_id)
+    {
+        
+    }
 }

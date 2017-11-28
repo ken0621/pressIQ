@@ -40,7 +40,7 @@
                             </tr>
                         </thead>
                         <tbody>
-{{--                             @if(isset($leave_report))
+                            @if(isset($leave_report))
                  			@foreach($leave_report as $leave_data)
                                 @foreach($leave_data as $leave)
                         	<tr>
@@ -53,14 +53,14 @@
                         	</tr>
                                  @endforeach
                         	@endforeach
-                            @endif --}}
+                            @endif
                         </tbody>
                     </table>
                 </div>
 	</div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-        &nbsp;<a href="/member/payroll/leave/v2/remaining_leave_report_excel"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
+        &nbsp;<a href="/member/payroll/leave/v2/pay_leave_report_excel"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
     </div>
     </div>
 </form>

@@ -12,12 +12,13 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Type of Leave</small>
-				<select class="form-control user-error" id="payroll_leave_type_id" required name="payroll_leave_type_id" aria-invalid="true">
+				<select class="form-control user-error" id="payroll_leave_type_id" required name="payroll_leave_temp_name" aria-invalid="true">
 					<option value="">Select Leave Type</option>
-					@foreach($_leave_type as $leavetype)
-					<option value="{{$leavetype->payroll_leave_type_id}}" {{$selected == $leavetype->payroll_leave_type_id ? 'selected="selected"' : ''}}>{{$leavetype->payroll_leave_type_name}}</option>
-					@endforeach
-	
+					<option value="Sick Leave">Sick Leave</option>
+					<option value="Vacation Leave">Vacation Leave</option>
+					<option value="Maternity Leave">Maternity Leave</option>
+					<option value="Paternity Leave">Paternity Leave</option>
+					<option value="Parental Leave">Parental Leave</option>
 				</select>
 			</div>
 
@@ -36,12 +37,6 @@
 					</div>					
 				</div>		
 			</div>
-
-			<div class="col-md-6">
-				<small>Leave Name</small>
-				<input type="text" name="payroll_leave_temp_name" class="form-control" required>
-			</div>
-
 
 		</div>
 

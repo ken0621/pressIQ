@@ -1,20 +1,20 @@
-	    <h4 class="modal-title"><b>Remaining - Leave Records</b> <i><br> Remaining - Leave Records</i></h4>
+	    <h4 class="modal-title"><b>Without Pay - Leave Records </b> <i><br> Without Pay - Leave Records </i></h4>
 
 <div class="modal-body clearfix">
                 <div class="table-responsive">
                     <table class="table table-bordered table-condensed">
                         <thead>
                             <tr>
-                                <th class="text-center">Leave Name</th>
-                                <th class="text-center">Employee Code</th>
-                                <th class="text-center">Employee Name</th>
-                                <th class="text-center">Leave Credits</th>
-                                <th class="text-center">Used Leave without Pay</th>
-                                <th class="text-center">Remaining Leave</th>
+                                <th class="text-center wa">Leave Name</th>
+                                <th class="text-center wa">Employee Code</th>
+                                <th class="text-center empname">Employee Name</th>
+                                <th class="text-center wa">Leave Credits</th> 
+                                <th class="text-center wa">Used Leave without Pay</th>
+                                <th class="text-center wa">Remaining Leave</th>
                             </tr>
                         </thead>
                         <tbody>
-{{--                             @if(isset($leave_report))
+                            @if(isset($leave_report))
                             @foreach($leave_report as $leave_data)
                                 @foreach($leave_data as $leave)
                             <tr>
@@ -27,7 +27,7 @@
                             </tr>
                                  @endforeach
                             @endforeach
-                            @endif --}}
+                            @endif
                         </tbody>
                     </table>
                 </div>

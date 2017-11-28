@@ -76,12 +76,15 @@ function employee_tag_schedule_leave()
 		var department 	= $(".change-filter-department").val();
 		var jobtitle 	= $(".change-filter-job-title").val();
 		var leave_id 	= $(".leave_id").val();
+		var payroll_leave_pay_value = $(".payroll_leave_temp_with_pay").val();
+
 
 		var formdata 	= {
 			company:company,
 			department:department,
 			jobtitle:jobtitle,
 			leave_id:leave_id,
+			payroll_leave_pay_value:payroll_leave_pay_value,
 			_token:misc('_token')
 		};
 
@@ -117,10 +120,20 @@ function employee_tag_schedule_leave()
 
 	function str_list(data)
 	{
-		var html = '<li class="list-group-item padding-3-10">';
-	  	html 	+= '<div class="checkbox">'
-	  	html 	+= '<label><input type="checkbox" name="employee_tag[]" class="check-tag" value="'+data.payroll_leave_employee_id_2+'">'+ data.payroll_employee_title_name + ' ' +data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name +'</label>';
-	  	html 	+= '</div></li>';
+		if(typeof(data.payroll_leave_employee_id_3) === 'undefined')
+		{
+				var html = '<li class="list-group-item padding-3-10">';
+			  	html 	+= '<div class="checkbox">'
+			  	html 	+= '<label><input type="checkbox" name="employee_tag[]" class="check-tag" value="'+data.payroll_leave_employee_id_2+'">'+ data.payroll_employee_title_name + ' ' +data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name +'</label>';
+			  	html 	+= '</div></li>';
+		}
+		else
+		{
+					var html = '<li class="list-group-item padding-3-10">';
+				  	html 	+= '<div class="checkbox">'
+				  	html 	+= '<label><input type="checkbox" name="employee_tags[]" class="check-tag" value="'+data.payroll_employee_id+'">'+ data.payroll_employee_title_name + ' ' +data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name +'</label>';
+				  	html 	+= '</div></li>';
+		}
 	  	return html;
 	  
 	}	

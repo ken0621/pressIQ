@@ -822,7 +822,6 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
-
     // /* PAYROLL REGISTER */
     // $code = "payroll-register";
     // $nav[$page]['submenu'][$code]['label'] = "Payroll Registered";
@@ -906,6 +905,15 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Kimbriel Oraya";
+        
+         /* -- REPORT => PRODUCTS  */
+        $code = "leave-reports";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Leave Reports";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/leavev2_reports";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "John Kenneth de Lara";
 
 
 

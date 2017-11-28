@@ -37,10 +37,7 @@
 										<span class="caret"></span></button>
 										<ul class="dropdown-menu dropdown-menu-custom">
 											<li>
-												<a href="#" class="popup" link=""><i class="fa fa-pencil"></i>&nbsp;Edit</a>
-											</li>
-											<li>
-												<a href="#" class="popup" link="" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archive</a>
+												<a href="#" class="popup .btn-archived" link="/member/payroll/leave/v2/modal_leave_action/{{$active->payroll_leave_history_id}}/archived_history/0" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archive</a>
 											</li>
 										</ul>
 									</div>

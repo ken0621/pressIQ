@@ -147,6 +147,7 @@ function pos()
 				success : function (data)
 				{
 					action_load_customer_info();
+					action_load_item_table();
 				}
 			});
 		});
@@ -334,7 +335,7 @@ function pos()
 				if(data.status == "success")
 				{
 					success_audio.play();
-					action_load_customer_info(data.price_level_id, data.stockist_warehouse_id, data.reserve_item);
+					action_load_customer_info(data.price_level_id, data.stockist_warehouse_id, data.reserved_item);
 				}
 				else if(data.status == "error")
 				{

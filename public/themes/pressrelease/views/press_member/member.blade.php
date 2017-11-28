@@ -3,7 +3,7 @@
 <div class="content">
 
 	<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
-
+	
 	<div class="background-container" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner.jpg')">
 		<div class="container">
     		<div class="row clearfix row-no-padding">

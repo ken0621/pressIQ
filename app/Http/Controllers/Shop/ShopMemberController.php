@@ -172,6 +172,11 @@ class ShopMemberController extends Shop
 
         return view("member.kit_modal", $data);
     }
+    public function getReturnpolicy()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.return_policy', $data);
+    }
     public function getDirect()
     {
         $data["_direct"] = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id);

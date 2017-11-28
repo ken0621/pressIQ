@@ -12,7 +12,7 @@
 		</div>
 	</div>
 
-	<form method="post">
+	<form method="post" class="submitt-asd">
 		{{ csrf_field() }}
 		<div class="bottom-container">
 			<div class="container">
@@ -136,11 +136,12 @@
 											@foreach($_payment as $payment)
 												<option value="{{ $payment->link_reference_name }}">{{ $payment->method_name }}</option>
 											@endforeach
-										</select>	
+										</select>
 									</div>
 								</div>
 								<div class="button-container">
-									<button type="submit" class="button-proceed" id="proceed">Proceed</button>
+									<!-- <button type="submit" class="button-proceed" id="proceed">Proceed</button> -->
+									<button type="button" class="button-proceed popup" id="proceed" link="/members/returnpolicy" size="md">Proceed</button>
 								</div>
 							</div>
 						</div>

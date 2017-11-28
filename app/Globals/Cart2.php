@@ -182,6 +182,24 @@ class Cart2
 		}
 		return $return;
 	}
+
+    public static function scan_reserved_code($shop_id, $customer_id)
+    {
+        $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+        $get_reserved_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','reserved')->where('record_consume_ref_id',$customer_id)->where('record_warehouse_id',$warehouse_id)->where('record_shop_id',$shop_id)->get();
+        $return = null;
+        if(count($get_reserved_item) > 0)
+        {
+            foreach ($get_reserved_item as $key => $value) 
+            {
+                Cart2::scan_pin_code($shop_id, $warehouse_id, $value->mlm_pin);
+                Cart2::add_item_to_cart($shop_id, $value->record_item_id, 1);
+            }
+            $return = count($get_reserved_item);
+        }
+
+        return $return;
+    }
 	public static function scan_ref_num($shop_id, $warehouse_id, $ref_num)
 	{
 		$return = null;

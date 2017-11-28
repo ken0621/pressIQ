@@ -1,6 +1,7 @@
 @extends('member.layout')
 @section('content')
-
+<form class="global-submit form-to-submit-add" action="/member/item/v2/warehouse/refill-submit" method="post">    
+<input type="hidden" name="_token" value="{{csrf_token()}}">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
@@ -10,14 +11,13 @@
                 <span class="page-title">Warehouse Refill Inventory</span>
             </h1>
                 <a href='/member/item/v2/warehouse' class="panel-buttons btn btn-custom-white pull-right">Cancel</a>
-                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Refill Warehouse</button>
+                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Refill Warehouse</button>
             </div>
         </div>
     </div>
 </div>
-<form class="global-submit form-to-submit-add" action="" method="post">
-<input type="hidden" name="_token" value="{{csrf_token()}}">
 <div class="panel panel-default panel-block panel-title-block">
+    <input type="hidden" name="warehouse_id" id="warehouse_id" value="{{$warehouse->warehouse_id}}">
     <div class="panel-body form-horizontal">
         <div class="form-group">
             <div class="col-md-6">            
@@ -27,7 +27,7 @@
         <div class="form-group">
             <div class="col-md-6">
                 <label>Vendor *</label>
-                <select name="reason_refill" required class="form-control droplist-vendor input-sm">
+                <select name="reference_name" required class="form-control droplist-vendor input-sm">
                     @include('member.load_ajax_data.load_vendor')
                     <option value="other">Others</option>
                 </select>
@@ -85,8 +85,6 @@
     </div>
 </div>
 </form>
-
-
 
 <div class="div-script">
     <table class="div-item-row-script-item hide">

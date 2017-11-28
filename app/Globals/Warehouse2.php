@@ -578,6 +578,7 @@ class Warehouse2
             }
 
             Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+
         }
 
         return $validate;

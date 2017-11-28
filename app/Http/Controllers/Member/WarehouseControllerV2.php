@@ -67,7 +67,6 @@ class WarehouseControllerV2 extends Member
         {
             return $this->show_no_access();
         }
-        
     }
 
     public function getEdit($id)
@@ -92,8 +91,7 @@ class WarehouseControllerV2 extends Member
         }
     }
     public function postEditSubmit()
-    {
-        
+    {     
         $warehouse_id  = Request::input("warehouse_id");
 
         $old_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$warehouse_id);
@@ -135,8 +133,6 @@ class WarehouseControllerV2 extends Member
         $ins_warehouse["warehouse_created"] = Carbon::now();
 
         $id = Tbl_warehouse::insertGetId($ins_warehouse);
-
-        Warehouse::insert_access($id);
               
         $data['status'] = 'success';
 
@@ -160,15 +156,45 @@ class WarehouseControllerV2 extends Member
             {
                 return $this->show_no_access_modal();
             }
+
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
             $data["_vendor"]    = Vendor::getAllVendor('active');
-            /*$data["_item"] = Warehouse::select_item_warehouse_single($id,'array');
-            dd($data["_item"][0]);*/
+            //$data["_item"] = Warehouse::select_item_warehouse_single($id,'array');
             $data['_item']  = Item::get_all_category_item([1,5]);
-            dd($data['_item']);
-
-            
+            //dd($data['_item']);
             return view("member.warehousev2.refill_warehouse",$data);
+
         }
+        else
+        {
+            return $this->show_no_access_modal();
+        }
+    }
+    public function postRefillSubmit()
+    {
+        $shop_id        = $this->user_info->shop_id;
+        $warehouse_id   = Request::input("warehouse_id");
+
+        $remarks        = Request::input("remarks");
+        $reference_name = Request::input("reference_name") == "other" ? "other" : "vendor";
+        $reference_id   = Request::input("reference_name") == "other" ? 0 : Request::input("reference_name");
+        
+        $item_quantity = Request::input("item_quantity");
+        $item_id = Request::input("item_id");
+
+        $_item = null;
+        foreach ($item_id as $key => $value) 
+        {
+            if($value)
+            {
+                $_item[$key]['item_id'] = $value;
+                $_item[$key]['quantity'] = str_replace(",","",$item_quantity[$key]); 
+                $_item[$key]['remarks'] = Request::input("remarks");
+            }
+        }
+
+        $data = Warehouse2::refill_bulk($shop_id, $warehouse_id, $reference_name, $reference_id, $remarks, $_item);
+        die(var_dump($data));
+        return $data;
     }
 }

@@ -2,18 +2,20 @@
 @section("content")
 <div class="content">
 
-<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+	<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
 
-<div class="background-container" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner.jpg')">
+	<div class="background-container" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner.jpg')">
 		<div class="container">
     		<div class="row clearfix row-no-padding">
     			<div class="col-md-12">
     				<div class="press-member">
+
     					<ul class="nav nav-tabs">
     					   <li><a data-toggle="tab" href="#dashboard">Dashboard</a></li>
     					   <li class="active"><a data-toggle="tab" href="#press_release">Press Release</a></li>
     					   <li><a data-toggle="tab" href="#my_press_releases">My Press Releases</a></li>
     					</ul>
+
     					<div class="tab-content">
 
     						<!-- Dashboard -->
@@ -102,10 +104,8 @@
 													</tr>
 												</table>
 											</div>
-											
 										</div>
 									</div>
-    					   
     					   		</div>
     					   </div>
 
@@ -125,6 +125,7 @@
 									<div class="details-container">Lorem ipsum dolor sit amet, consectetur adipisicing elit. sed do eiusmod tempor incididunt ut labore</div>
 								</div>
     					   </div>
+
     					</div>
     				</div>
     			</div>
@@ -181,7 +182,6 @@
 	    </div>
 	  </div>
 </div>
-
 
 @endsection
 

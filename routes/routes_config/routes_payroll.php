@@ -355,9 +355,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/* LEAVE START */
 	Route::any('/leave',"Member\PayrollController@leave");
+
 	/*Link to Modal Create leave_temp*/
 	Route::any('/leave/modal_create_leave_temp',"Member\PayrollController@modal_create_leave_temp");
 	/*Another Modal for tagging employee*/
+
 	Route::any('/leave/modal_leave_tag_employee/{leave_temp_id}',"Member\PayrollController@modal_leave_tag_employee");
 	Route::any('/leave/set_leave_employee_tag',"Member\PayrollController@set_leave_employee_tag");
 	Route::any('/leave/get_leave_tag_employee',"Member\PayrollController@get_leave_tag_employee");
@@ -563,8 +565,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/leave_schedule/ajax_shecdule_leave_tag_employee','Member\PayrollController@ajax_shecdule_leave_tag_employee');	
 	Route::any('/leave_schedule/session_tag_leave','Member\PayrollController@session_tag_leave');	
 	Route::any('/leave_schedule/get_session_leave_tag','Member\PayrollController@get_session_leave_tag');
-	Route::any('/leave_schedule/unset_session_leave_tag','Member\PayrollController@unset_session_leave_tag')
-	;
+	Route::any('/leave_schedule/unset_session_leave_tag','Member\PayrollController@unset_session_leave_tag');
 	Route::any('/leave_schedule/save_schedule_leave_tag','Member\PayrollController@save_schedule_leave_tag');
 
 	Route::any('/leave_schedule/delete_confirm_schedule_leave/{id}','Member\PayrollController@delete_confirm_schedule_leave')
@@ -700,8 +701,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 	Route::any('/payroll_biometric/modal_import_biometric','Member\PayrollBiometricSystemController@modal_import_biometric');
 	Route::any('/payroll_biometric/biometric_import_record','Member\PayrollBiometricSystemController@biometric_import_record');
-
-	
 	//software controllers
 	Route::post('/biometrics/save_data','Member\PayrollBiometricsController@save_data');
 	Route::any('/biometrics/sample','Member\PayrollBiometricsController@sample');

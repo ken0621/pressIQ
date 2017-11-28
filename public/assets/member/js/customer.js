@@ -652,7 +652,10 @@ function submit_modal(){
 	        data    :   form,
 	        success :   function(result){
 	            var res = JSON.parse(result);
-	            if(res['message'] == 'success'){
+	            if(res['message'] == 'success')
+	            {
+	            	toastr.success("New customer inserted");
+	                location.reload();
 	                $(".btn-save-modallarge").html('Save');
 	                $("#global_modal").modal("hide");
 	                if (typeof submit_done_customer == 'function')

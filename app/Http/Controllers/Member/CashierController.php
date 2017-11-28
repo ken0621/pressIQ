@@ -250,7 +250,7 @@ class CashierController extends Member
                 foreach ($cart["_item"] as $key => $value)
                 {
                     $item_type = Item::get_item_type($value->item_id);
-                    if($item_type == 1)
+                    if($item_type == 1 || $item_type == 5)
                     {
                         $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity,'Consume');
                     }

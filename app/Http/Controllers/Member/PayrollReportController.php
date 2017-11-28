@@ -144,7 +144,8 @@ class PayrollReportController extends Member
 
 	public function government_forms_hdmf_filter()
 	{
-		if (Request::input("company_id") > 0) {
+		if (Request::input("company_id") > 0) 
+		{
 			$company_id =	Request::input("company_id");
         	$month      =	Request::input('month');
 			$data["page"] = "Monthly Government Forms";

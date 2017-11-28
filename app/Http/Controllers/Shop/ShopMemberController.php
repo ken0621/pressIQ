@@ -1701,18 +1701,21 @@ class ShopMemberController extends Shop
 
         $slot_no = $sender_slot_no;
         $query = Tbl_mlm_slot::where('slot_no',$slot_no)->first();
-        $slot_id = $query->slot_id;
-        $q = Tbl_mlm_slot_wallet_log::where('wallet_log_slot',$slot_id)->get();
-        $counter = count($q);
         $wallet = 0;
-        if($counter>0)
+        if(count($query))
         {
-            $current=0;
-            foreach($q as $a)
+            $slot_id = $query->slot_id;
+            $q = Tbl_mlm_slot_wallet_log::where('wallet_log_slot',$slot_id)->get();
+            $counter = count($q);
+            if($counter>0)
             {
-                $current+=$a->wallet_log_amount;
+                $current=0;
+                foreach($q as $a)
+                {
+                    $current+=$a->wallet_log_amount;
+                }
+                $wallet=$current;
             }
-            $wallet=$current;
         }
         
         $minAmount = $amount+(-1*$transaction_fee);
@@ -1723,8 +1726,8 @@ class ShopMemberController extends Shop
 
 
 
-        $log_slot = Tbl_mlm_slot::where('slot_no',$recipient_slot_no)->first()->slot_id;
-        $log_slot_sponsor = Tbl_mlm_slot::where('slot_no',$sender_slot_no)->first()->slot_id;
+        // $log_slot = Tbl_mlm_slot::where('slot_no',$recipient_slot_no)->first()->slot_id;
+        // $log_slot_sponsor = Tbl_mlm_slot::where('slot_no',$sender_slot_no)->first()->slot_id;
         
 
         if(!$isSlotValid)

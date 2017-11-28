@@ -102,6 +102,7 @@ class CashierController extends Member
         if($data["customer"])
         {    
             /* SCAN IF HAVE RESERVED CODE */
+            $reserved_item = Item::scan_reserved_code($shop_id, $data['customer']->customer_id);
             
             Session::put('customer_id', $data['customer']->customer_id);
             $return["status"]   = "success";

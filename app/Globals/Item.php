@@ -1933,6 +1933,14 @@ class Item
     }
     public static function scan_reserved_code($shop_id, $customer_id)
     {
+        $get_reserved_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','reserved')->where('record_consume_ref_id',$customer_id)->where('record_shop_id',$shop_id)->get();
+
+        $return = null;
+        if(count($get_reserved_item) > 0)
+        {
+            
+        }
         
+        return $return;
     }
 }

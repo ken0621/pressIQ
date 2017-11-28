@@ -40,10 +40,10 @@ use App\Globals\Merchant;
 use Validator;
 class WarehouseTransfer
 {   
-	public static function get_all_wis($shop_id = 0, $status = 'pending')
+	public static function get_all_wis($shop_id = 0, $status = 'pending', $current_warehouse = 0)
 	{
 		$data = Tbl_warehouse_issuance_report::inventory_item()->where('wis_shop_id',$shop_id)->where('wis_status', $status)->groupBy
-		('tbl_warehouse_issuance_report.wis_id')->get();
+		('tbl_warehouse_issuance_report.wis_id')->where('wis_from_warehouse', $current_warehouse)->get();
 
 		foreach ($data as $key => $value) 
 		{

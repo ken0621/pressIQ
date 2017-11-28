@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Member;
 use App\Globals\Transaction;
 use App\Globals\Columns;
 use App\Models\Tbl_online_pymnt_method;
+use App\Models\Tbl_transaction;
 use App\Globals\Payment;
 use App\Globals\Settings;
 use App\Models\Tbl_transaction_list;
@@ -103,6 +104,12 @@ class ProductOrderController2 extends Member
         $transaction_list_id    = request("id");
         $transaction_list       = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
         $details                = $transaction_list->payment_details;
+
+        $transaction_id = Tbl_transaction_list::where("transaction_list_id",$transaction_list_id)->first()->transaction_id;
+        $transaction_payment_proof = Tbl_transaction::where('transaction_id',$transaction_id)->first()->transaction_payment_proof;
+        $path_prefix = "http://digimaweb.solutions/uploadthirdparty/";
+        $data['image_url'] = $path_prefix.$transaction_payment_proof;
+
     
         if (is_serialized($details)) 
         {

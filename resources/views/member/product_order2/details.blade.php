@@ -16,6 +16,11 @@
 				@endforeach
 			</tbody>
 		</table>
+		<div class="col-md-12">
+			<center>
+			<img width="auto" height="auto" style="max-height: 300px;" src="{{$image_url}}">
+			</center>
+		</div>
 	@endif
 </div>
 <div class="modal-footer">

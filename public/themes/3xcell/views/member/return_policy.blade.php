@@ -120,7 +120,7 @@
 
         else if(shipping_address == "")
         {
-            alert("Please add your complete address");
+            alert("Please type your complete address");
         }
 
         else if(payment_method == "")

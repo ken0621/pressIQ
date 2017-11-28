@@ -123,9 +123,11 @@ class CashierController extends Member
     {
         Session::forget('customer_id');
         $return['status'] = 'success';
+        $return['load_item_table'] = '';
         if(session('reserved_item'))
         {
             Cart2::clear_cart();
+            $return['load_item_table'] = 'true';
         }
 
         return json_encode($return);

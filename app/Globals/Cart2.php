@@ -335,6 +335,8 @@ class Cart2
 					$_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
 					$_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->item_price);
 					$_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
+					$_cart[$key]->pin_code 				= null;
+
 					$total += $_cart[$key]->subtotal;
 				}
 			}
@@ -378,6 +380,18 @@ class Cart2
 			$data["info"]								= $cart_info;
 			return $data;
 		}
+	}
+	public static function get_pincode($cart_key, $item_id)
+	{
+		$data = Tbl_cart_item_pincode::where('unique_id_per_pc',$cart_key)->where('product_id',$item_id)->get();
+		$return = null;
+		foreach ($data as $key => $value) 
+		{
+			$pincode = explode('@', $value->pincode);
+			$return[$key]['pin'] = $pincode[0];
+			$return[$key]['code'] = $pincode[1];
+		}
+		return $return;
 	}
 	public static function get_cart_quantity()
 	{

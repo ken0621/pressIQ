@@ -160,7 +160,10 @@ class MLM_CodeControllerV2 extends Member
             $status = $request->action_status;
             $reserved_customer = $request->reserved_customer;
             $record_log_id = $request->record_log_id;
+            
             $update['record_consume_ref_name'] = NULL;
+            $update['record_consume_ref_id'] = 0;
+
             if($status == 'reserved')
             {
                 $update['record_consume_ref_name'] = $status;

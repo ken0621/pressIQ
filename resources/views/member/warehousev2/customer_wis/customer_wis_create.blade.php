@@ -1,42 +1,55 @@
 @extends('member.layout')
 @section('content')
-<form class="global-submit form-to-submit-add" action="/member/item/v2/warehouse/refill-submit" method="post">    
-<input type="hidden" name="_token" value="{{csrf_token()}}">
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
-            <i class="fa fa-tags"></i>
+            <i class="fa fa-archive"></i>
             <h1>
-                <span class="page-title">Warehouse Refill Inventory</span>
+                <span class="page-title">CREATE - Customer Warehouse Issuance Slip</span>
             </h1>
-                <a href='/member/item/v2/warehouse' class="panel-buttons btn btn-custom-white pull-right">Cancel</a>
-                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Refill Warehouse</button>
+            <div class="text-right">
+                <a class="btn btn-custom-white panel-buttons" href="/member/item/warehouse/wis">Cancel</a>
+                <button class="btn btn-primary panel-buttons save-button" type="button">Save</button>
             </div>
         </div>
     </div>
 </div>
+
+<form class="global-submit form-to-submit-add" action="/member/item/warehouse/wis/create-submit" method="post">
+<input type="hidden" name="_token" value="{{csrf_token()}}">
 <div class="panel panel-default panel-block panel-title-block">
-    <input type="hidden" name="warehouse_id" id="warehouse_id" value="{{$warehouse->warehouse_id}}">
     <div class="panel-body form-horizontal">
         <div class="form-group">
-            <div class="col-md-6">            
-                <h3 style="margin-top: 10px">{{$warehouse->warehouse_name}}</h3>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-6">
-                <label>Vendor *</label>
-                <select name="reference_name" required class="form-control droplist-vendor input-sm">
-                    @include('member.load_ajax_data.load_vendor')
-                    <option value="other">Others</option>
+            <div class="col-md-4">
+                <label>Customer Name</label>
+                <select required class="form-control select-warehouse" name="destination_customer_warehouse_id">
+                    @foreach ($_customer as $customer)
+                            <option value="{{ $customer->customer_id}}">{{$customer->first_name." ".$customer->middle_name." ".$customer->last_name }}</option>
+                    @endforeach
                 </select>
             </div>
-        </div>
-        <div class="form-group">
+            <div class="col-md-4">
+                <label>WIS Number</label>
+                <input type="text" name="wis_number" class="form-control">
+            </div>
             <div class="col-md-6">
-                <label>Remarks *</label>
-                <textarea required class="form-control input-sm" name="remarks"></textarea>
+                <label>Ship to</label>
+                <div>
+                    <textarea class="form-control txt-warehouse-address" name="destination_customer_address"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label>Remarks</label>
+                <div>
+                    <textarea class="form-control" name="wis_remarks"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group hide">
+            <div class="col-md-12">
+                <div class="load-item-table-pos-s"></div>
             </div>
         </div>
         <div class="form-group">
@@ -45,10 +58,10 @@
                     <table class="digima-table table table-bordered table-condensed pos-table">
                         <thead>
                             <tr>
-                                <th class="text-left" >PRODUCT SKU</th>
-                                <th class="text-left" >PRODUCT DESCRIPTION</th>
-                                <th class="text-center" width="180px">CURRENT STOCK</th>
-                                <th class="text-center" width="180px">QUANTITY</th>
+                                <th class="text-left" >ITEM SKU</th>
+                                <th class="text-left" >ITEM DESCRIPTION</th>
+                                <th class="text-center" width="180px">REMAINING QTY</th>
+                                <th class="text-center" width="180px">ISSUED QUANTITY</th>
                                 <th width="50px"></th>
                             </tr>
                         </thead>
@@ -86,6 +99,8 @@
 </div>
 </form>
 
+
+
 <div class="div-script">
     <table class="div-item-row-script-item hide">
         <tr class="tr-draggable">
@@ -104,9 +119,8 @@
 </div>
 @endsection
 
-
 @section('script')
-<script type="text/javascript" src="/assets/member/js/warehouse/whse_refill.js"></script>
+<script type="text/javascript" src="/assets/member/js/warehouse/customer_wis_create.js"></script>
 @endsection
 
 @section('css')

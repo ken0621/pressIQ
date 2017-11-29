@@ -1279,7 +1279,16 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Done";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
-    
+
+     /* -- CUSTOMERS => WAREHOUSE ISSUANCE SLIP  */
+    $code = "customer-warehouse-issuance-slip";
+    $nav[$page]['submenu'][$code]['label'] = "WIS";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/wis";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
     /* -- CUSTOMERS => CUSTOMER RECEIVE PAYMENT  */
     $code = "customer-receive-payment";
     $nav[$page]['submenu'][$code]['label'] = "Receive Payment";

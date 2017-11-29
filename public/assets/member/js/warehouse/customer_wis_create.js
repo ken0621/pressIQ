@@ -1,4 +1,4 @@
-var wis_create = new wis_create()
+var customer_wis_create = new customer_wis_create()
 var load_item = null;
 var item_search_delay_timer;
 var settings_delay_timer;
@@ -8,7 +8,7 @@ var global_tr_html = $(".div-script tbody").html();
 var success_audio = new Audio('/assets/sounds/success.mp3');
 var error_audio = new Audio('/assets/sounds/error.mp3');
 
-function wis_create()
+function customer_wis_create()
 {
 	init();
 
@@ -63,23 +63,7 @@ function wis_create()
             	}
             }
 		});
-		$('.droplist-vendor').globalDropList(
-		{ 
-		    width : "100%",
-		    link : "/member/vendor/add",
-		    onCreateNew : function()
-            {
-            	// item_selected = $(this);
-            	// console.log($(this));
-            },
-            onChangeValue : function()
-            {
-            	if($(this).val() != '')
-            	{
-            		action_load_item_info($(this));
-            	}
-            }
-		});
+		
 		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
             link : "/member/item/add",
@@ -123,10 +107,10 @@ function wis_create()
 			$('.form-to-submit-add').submit();
 		});
 	}
-	/*function table_loading()
+	function table_loading()
 	{
 		$(".load-item-table-pos").css("opacity", 0.3);
-	}*/
+	}
 	function event_change_quantity()
 	{
 		$("body").on("keyup", ".quantity-item", function(e)
@@ -391,14 +375,14 @@ function new_price_level_save_done(data)
 	$(".price-level-select").globalDropList("reload");
 	$(".price-level-select").val(data.price_level_id).change();
 }
-function success_refill_warehouse(data)
+function success_create_wis(data)
 {
 	if(data.status == 'success')
 	{
 		toastr.success('Success');
 		setInterval(function()
 		{
-			location.href = '/member/item/v2/warehouse';
+			location.href = '/member/item/warehouse/wis';
 		},2000);
 	}
 }

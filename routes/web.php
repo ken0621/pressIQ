@@ -491,7 +491,9 @@ AdvancedRoute::controller('/member/item/warehouse/wis', 'Member\WarehouseIssuanc
 AdvancedRoute::controller('/member/item/warehouse/rr', 'Member\WarehouseReceivingReportController');
 /* End */
 
-
+/* WIS TO CUSTOMER */
+AdvancedRoute::controller('/member/customer/wis', 'Member\CustomerWarehouseIssuanceSlipController');
+/* End */
 
 /* START PIS ARCY*/
 Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');

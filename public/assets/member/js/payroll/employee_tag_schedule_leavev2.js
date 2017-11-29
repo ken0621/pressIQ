@@ -148,12 +148,21 @@ function employee_tag_schedule_leave()
 	{	
 		
 		var leavetempid = $('#leavetempid').val();
+	    if($('#pay').is(':checked'))
+	    {
+	    	var leave_pay_value = $('#pay').val();
+	    }
+	    else
+	    {
+	    	var leave_pay_value = $('#pays').val();
+	    }
 		var action = "/member/payroll/leave_schedule/v2/get_session_leave_tagv2";
 		var method = "POST";
 		var target = ".table-employee-tag";
 		var formdata = {
 			_token:misc('_token'),
-			leavetempid:leavetempid
+			leavetempid:leavetempid,
+			leave_pay_value:leave_pay_value
 		};
 		var function_name = "modal_create_deduction.remove_tag";
 		$(target).html('<tr><td colspan="5">'+misc('loader') + '</td></tr>');

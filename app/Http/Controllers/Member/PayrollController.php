@@ -4778,22 +4778,34 @@ class PayrollController extends Member
      public function session_tag_leavev2()
      {
           $employee_tag = array();
-          $employee_tags = array();
-          $pay_value = Request::input("payroll_leave_pay_value");
+             $pay_value = Request::input('payroll_leave_temp_with_pay');
 
           if(Session::has('employee_leave_tag'))
           {
                $employee_tag = Session::get('employee_leave_tag');
           }
 
-
-          foreach(Request::input('employee_tag') as $tag)
+          if($pay_value == 0)
           {
-               if(!in_array($tag, $employee_tag))
+               foreach(Request::input('employee_tags') as $tag)
                {
-                    array_push($employee_tag, $tag);
+                    if(!in_array($tag, $employee_tag))
+                    {
+                         array_push($employee_tag, $tag);
+                    }
                }
           }
+          else
+          {
+               foreach(Request::input('employee_tag') as $tag)
+               {
+                    if(!in_array($tag, $employee_tag))
+                    {
+                         array_push($employee_tag, $tag);
+                    }
+               }
+          }
+
            Session::put('employee_leave_tag', $employee_tag);
           
 
@@ -4818,7 +4830,11 @@ class PayrollController extends Member
      {    
           $leavetypeid = Request::input('leavetempid');
           $leavetempname = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_name')->where('payroll_leave_temp_id',$leavetypeid)->get();
-          $leave_pay_value = Request::input('payroll_leave_temp_with_pays');
+   
+          $leave_pay_value = Request::input('leave_pay_value');
+          $insert = array();
+          $leavedat = array();
+          $leaveempid = array();
 
           $employee = [0 => 0];
           if(Session::has('employee_leave_tag'))
@@ -4826,64 +4842,98 @@ class PayrollController extends Member
                $employee = Session::get('employee_leave_tag');
           }
 
-          // if($leave_pay_value == 0)
-          // {
-          //      $employee = Session::get('employee_leave_tag');
-
-          //      foreach($employee as $empid)
-          //      {               
-          //           $check_employee = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$empid)->get();
-          //           if(count($check_employee) == 0)
-          //           {
-          //                $insert['payroll_leave_temp_id'] = $leavetypeid;
-          //                $insert['payroll_leave_temp_hours'] = 8;
-          //                $insert['payroll_employee_id'] = $empid;
-          //           }
-
-          //      }
-          //      if(!empty($insert)) 
-          //      {  
-          //           Tbl_payroll_leave_employeev2::insert($insert);
-          //      }
-
-          // }
-
-          $leavedat = array();
-          foreach($employee as $emp)
+          if($leave_pay_value == 0)
           {
-               $employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id')
-                                                       ->join('tbl_payroll_leave_schedulev2','tbl_payroll_leave_employee_v2.payroll_leave_employee_id','=','tbl_payroll_leave_schedulev2.payroll_leave_employee_id')
-                                                       ->where('tbl_payroll_leave_schedulev2.payroll_leave_employee_id', $emp)
-                                                       ->distinct()
-                                                       ->get();
-                                   
-               if(count($employee_id) == 0)
+               foreach($employee as $emp)
                {
-                    $empdat = Tbl_payroll_employee_basic::join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id',$emp)->get();
+                    $checkemployee = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$emp)->where('payroll_leave_temp_id',$leavetypeid)->get();
 
-                    array_push($leavedat,$empdat);
-               }    
-               else
-               {
-                    $empdat = Tbl_payroll_leave_schedulev2::getallemployeeleavedata($emp)->get();
-                    if(count($empdat) != 0)
+                    if(count($checkemployee) == 0)
                     {
+                         $insert['payroll_leave_temp_id'] = $leavetypeid;
+                         $insert['payroll_leave_temp_hours'] = 8;
+                         $insert['payroll_employee_id'] = $emp;
+                         Tbl_payroll_leave_employeev2::insert($insert);
 
-                         array_push($leavedat,$empdat);
+                         $getlastleaveid = tbl_payroll_leave_employeev2::select('payroll_leave_employee_id')->orderBy('payroll_leave_employee_id','DESC')->first();
+                         $payroll_leave_temp_id = $getlastleaveid['payroll_leave_employee_id'];
+                         array_push($leaveempid,$payroll_leave_temp_id);
                     }
                     else
                     {
-                        
-                               $empdata = Tbl_payroll_employee_basic::join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id',$emp)->get();
+                              foreach($checkemployee as $key => $empid)
+                              {
+                                   $empdat = Tbl_payroll_leave_schedulev2::getallemployeeleavedata($empid['payroll_leave_employee_id'])->get();
+                                   if(count($empdat) != 0)
+                                   {
+
+                                        array_push($leavedat,$empdat);
+                                   }
+                                   else
+                                   {
+                                              $empdata = Tbl_payroll_employee_basic::join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id',$empid['payroll_leave_employee_id'])->get();
+
+                                              array_push($leavedat,$empdata);
+                                        
+                                   }
+                              }                    
+                    }
+
+               }
+
+               if(!empty($leaveempid))
+               {
+                    foreach($leaveempid as $leaveid)
+                    {
+
+                               $empdata = Tbl_payroll_employee_basic::join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id',$leaveid)->get();
 
                                array_push($leavedat,$empdata);
-                         
-
                     }
-                
-               }         
+               }
+
 
           }
+          else
+          {    
+                         foreach($employee as $emp)
+                         {
+                              $employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id')
+                                                                      ->join('tbl_payroll_leave_schedulev2','tbl_payroll_leave_employee_v2.payroll_leave_employee_id','=','tbl_payroll_leave_schedulev2.payroll_leave_employee_id')
+                                                                      ->where('tbl_payroll_leave_schedulev2.payroll_leave_employee_id', $emp)
+                                                                      ->distinct()
+                                                                      ->get();
+                                                  
+                              if(count($employee_id) == 0)
+                              {
+                                   $empdat = Tbl_payroll_employee_basic::join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id',$emp)->get();
+
+                                   array_push($leavedat,$empdat);
+                              }
+                              else    
+                              {
+                                   $empdat = Tbl_payroll_leave_schedulev2::getallemployeeleavedata($emp)->get();
+                                   if(count($empdat) != 0)
+                                   {
+
+                                        array_push($leavedat,$empdat);
+                                   }
+                                   else
+                                   {
+                                       
+                                              $empdata = Tbl_payroll_employee_basic::join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id',$emp)->get();
+
+                                              array_push($leavedat,$empdata);
+                                        
+
+                                   }
+                               
+                              }         
+
+                         }
+          }
+
+
 
           $data['new_record']  = $leavedat;
 

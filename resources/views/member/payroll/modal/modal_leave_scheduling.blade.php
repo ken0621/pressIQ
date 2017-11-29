@@ -38,12 +38,12 @@
 				<div class="form-control padding-b-37">
 					<div class="col-md-6">
 						<div class="radio">
-							<label><input type="radio" class="payroll_leave_temp_with_pays" name="payroll_leave_temp_with_pays" value="1" checked >Yes</label>
+							<label><input type="radio" class="payroll_leave_temp_with_pays" id="pay" name="payroll_leave_temp_with_pays" value="1" checked >Yes</label>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="radio">
-							<label><input type="radio" class="payroll_leave_temp_with_pays" name="payroll_leave_temp_with_pays" value="0" >No</label>
+							<label><input type="radio" class="payroll_leave_temp_with_pays" id="pays" name="payroll_leave_temp_with_pays" value="0" >No</label>
 						</div>
 					</div>					
 				</div>		
@@ -96,8 +96,16 @@
 	$(".select-leave").unbind("change");
 	$(".select-leave").bind("change", function()
 	{
+		if($('#pay').is(':checked'))
+	    {
+	    	var leave_pay_value = $('#pay').val();
+	    }
+	    else
+	    {
+	    	var leave_pay_value = $('#pays').val();
+	    }
 
-		var link = "/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/" + $(this).val() +"/" + $(".payroll_leave_temp_with_pays").val();
+		var link = "/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/" + $(this).val() +"/" + leave_pay_value;
 		 $(".employee-tag").attr('link',link);
 	});
 

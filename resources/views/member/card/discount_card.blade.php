@@ -29,7 +29,7 @@
 		<div class="top-container clearfix" style="opacity: 1;">
 			{{-- <span class="website">{{ URL::to('/') }}</span>
 			<div class="logo"><img style="width: 200px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/philtech-logo.png"></div> --}}
-			<div class="barcode">
+			<div class="barcode" style="{{ $membership_code ? '' : 'opacity: 0;' }}">
 				<div class="barcodeimg" style="background-color: #fff; padding: 7.5px 0;"><img src="{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/barcode?text={{ $membership_code }}&size=25"></div>
 				<div class="barcodetxt" style="font-size: 12px; margin-top: -7.5px; padding-bottom: 2px;">
 					{{-- <span>Membership Code</span> --}}

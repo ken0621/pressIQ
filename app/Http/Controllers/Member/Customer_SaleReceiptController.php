@@ -88,7 +88,6 @@ class Customer_SaleReceiptController extends Member
                 $data['_item'] = Item::get_all_item_sir($sir->sir_id);
             }
         }
-
         return view('member.customer.sales_receipt.create_sale_receipt', $data);
     }
 
@@ -104,6 +103,7 @@ class Customer_SaleReceiptController extends Member
               $data["_invoices"][$key]->inv_overall_price = $value->inv_overall_price - $cm->cm_amount;  
             }
         }
+        $data['check_user'] = Purchasing_inventory_system::check();
         return view("member.customer.sales_receipt.sales_receipt_list",$data);
     }
     public function create_sales_receipt()
@@ -367,7 +367,8 @@ class Customer_SaleReceiptController extends Member
                         $json["status"]         = "success-invoice";
                         if($button_action == "save-and-edit")
                         {
-                            $json["redirect"]    = "/member/customer/sales_receipt?id=".$inv_id;
+                            //$json["redirect"]    = "/member/customer/sales_receipt?id=".$inv_id;
+                            $json["redirect"] = '/member/customer/sales_receipt/list';
                         }
                         elseif($button_action == "save-and-new")
                         {

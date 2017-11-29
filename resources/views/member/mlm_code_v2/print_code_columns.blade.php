@@ -27,7 +27,7 @@
                 <div class="form-horizontal other-settings">
                     <div class="form-group">
                         <div class="col-md-12">
-                            @foreach($columns as $col)
+                            @foreach($columns as $col)  
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" {{$col['status'] == true ? 'checked' : ''}} name="{{$col['code']}}">
@@ -51,17 +51,15 @@
                             </select>
                         </div>
                     </div>
-                    @if($shop_id == 5)
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <label for="">Print Code as :</label>
-                                <select name="print_code_as" class="form-control">
-                                    <option value="pdf">PDF</option>
-                                    <option value="excel">Excel</option>
-                                </select>
-                            </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label for="">Print Code as :</label>
+                            <select name="print_code_as" class="form-control">
+                                <option value="pdf">PDF</option>   
+                                <option value="excel">Excel</option>
+                            </select>
                         </div>
-                    @endif
+                    </div>
                      <div class="form-group">
                         <div class="col-md-12"><label for="">Range</label></div>
                         <div class="col-md-6">

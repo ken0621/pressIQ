@@ -62,5 +62,34 @@ class ProjectController extends Member
         $update["archived"] = 0;
         Tbl_project::where("project_id", request("project_id"))->update($update);
     }
+    public function modify()
+    {
+        $id = request("id");
+        $data['project'] = Tbl_project::joinType()->where("project_id",$id)->first();
+        $data["_type"]  = Tbl_project_type::get();
+        return view("member.project.project_modify",$data);
+    }
+    public function submit_modify()
+    {
+        $update  = request()->all();
+        $id = request("project_id");
+        unset($update['_token']);
+        unset($update['project_id']);
+        if(Tbl_project::where("project_id",$id)->update($update))
+        {
+            $response['call_function'] = "success_project_create";   
+        }
+        return json_encode($response);
+    }
+    public function view()
+    {
+        return view("member.project.project_view");
+    }
+    public function addTask()
+    {
+        $data["page"]   = "Project Add";
+        $data['project_name'] = "Sample Project";
+        return view("member.project.project_task_add", $data);
+    }
 
 }

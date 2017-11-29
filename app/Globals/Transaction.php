@@ -950,7 +950,11 @@ class Transaction
         $wallet_log_plan = 'REPURCHASE';
         $wallet_log_status = 'released';
         $wallet_log_remarks = 'Wallet Purchase on POS - '.$transaction_info->transaction_number;
-        Mlm_slot_log::slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on, $wallet_log_remarks);
+        
+        if($slot_id)
+        {
+            Mlm_slot_log::slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on, $wallet_log_remarks);
+        }
 
         $ins_gc['points_log_complan'] = 'PURCHASE_GC';
         $ins_gc['points_log_level'] = 0;
@@ -961,7 +965,11 @@ class Transaction
         $ins_gc['points_log_type'] = 'GC';
         $ins_gc['points_log_from'] = 'GC Purchase on POS - '.$transaction_info->transaction_number;
         $ins_gc['points_log_points'] = $cart_gc_amount * -1;
-        Mlm_slot_log::point_slot($ins_gc);
+        
+        if($slot_id)
+        {
+            Mlm_slot_log::point_slot($ins_gc);
+        }
 
         $get_all_payment = Cart2::cart_payment_list($shop_id);
 

@@ -27,10 +27,10 @@
         if(data.status == 'success')
         {
             toastr.success('Success');
-            setInterval(function()
-            {
+            // setInterval(function()
+            // {
                 location.reload();
-            },1000)
+            // },1000)
         }
     }
 </script>

@@ -2232,7 +2232,7 @@ class Payroll2
      *
      */
  
-	public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $hourly_rate = 0, $group_id = 0, $cola = 0, $compute_type="", $time_compute_mode="regular")
+	public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $hourly_rate_employee_salary = 0, $group_id = 0, $cola = 0, $compute_type="", $time_compute_mode="regular")
 	{
 		$return = new stdClass();
 
@@ -2293,23 +2293,25 @@ class Payroll2
 		}
 
 		
-		$total_day_income 		= $daily_rate ;
-		$target_float 			= Self::time_float($_time['target_hours']);
-		$daily_rate_plus_cola	= $daily_rate + $cola;
-		$hourly_rate 			= $return->hourly_rate = divide($daily_rate, $target_float);
+		$total_day_income 				= $daily_rate ;
+		$target_float 					= Self::time_float($_time['target_hours']);
+		$daily_rate_plus_cola			= $daily_rate + $cola;
+
+		// $hourly_rate 			= $return->hourly_rate = divide($daily_rate, $target_float);
 
 		/*END determine the daily rate by compute type*/
 
 
 		/*START get hourly rate*/
-		if ($compute_type != "hourly") 
+		if($compute_type != "hourly")
 		{
 			$hourly_rate = $return->hourly_rate = divide($daily_rate, $target_float);
 		}
 		else
 		{
-			$return->hourly_rate = $hourly_rate;
+			$hourly_rate = $return->hourly_rate = $hourly_rate_employee_salary;
 		}
+		
 		/*END get hourly rate*/
 		
 		/* GET INITIAL DATA */
@@ -2773,7 +2775,7 @@ class Payroll2
 			/*Start Undertime Deduction Computation*/
 			if ($undertime_float != 0) 
 			{
-				$undertime_rate = Self::compute_undertime_deduction($_time['undertime'], $group->payroll_under_time_category, $undertime_float, $daily_rate, $hourly_rate, $additional_percentage, $group);
+				$undertime_rate = Self::compute_undertime_deduction($_time['undertime'], $group->payroll_under_time_category, $undertime_float, $daily_rate, $hourly_rate, $hourly_rate_employee_salary, $additional_percentage, $group);
 				
 				if ($compute_type == "hourly") 
 				{
@@ -2792,7 +2794,7 @@ class Payroll2
 			/*Start late Deduction Computation*/
 			if ($late_float != 0)
 			{
-				$late_rate = Self::compute_late_deduction($_time['late'], $group->payroll_late_category, $late_float, $daily_rate, $hourly_rate, $additional_percentage, $group);
+				$late_rate = Self::compute_late_deduction($_time['late'], $group->payroll_late_category, $late_float, $daily_rate, $hourly_rate, $hourly_rate_employee_salary, $additional_percentage, $group);
 				
 				if ($compute_type == "hourly") 
 				{
@@ -2829,13 +2831,20 @@ class Payroll2
 	}
 
 
-	public static function compute_undertime_deduction($undertime_hours = "00:00:00", $undertime_category = "Base on Salary", $undertime_float = 0, $daily_rate = 0, $hourly_rate = 0, $additional_percentage = 0, $group)
+	public static function compute_undertime_deduction($undertime_hours = "00:00:00", $undertime_category = "Base on Salary", $undertime_float = 0, $daily_rate = 0, $hourly_rate = 0, $hourly_rate_employee_salary = 0, $additional_percentage = 0, $group)
 	{
 		$undertime_rate = 0;
 
 		if ($undertime_category == 'Base on Salary') 
 		{
-			$undertime_rate = ($undertime_float * $hourly_rate) * $additional_percentage; 
+			//Normal late rate
+			$undertime_rate = ($undertime_float * $hourly_rate) * $additional_percentage;
+
+			//Monthly Rate hourly deduction if hourly_rate_employee_salary is not equal to zero
+			if ($group->payroll_group_salary_computation == "Monthly Rate" && $hourly_rate_employee_salary != 0) 
+			{
+				$undertime_rate = ($undertime_float * $hourly_rate_employee_salary)  * $additional_percentage;
+			}
 		}
 		else if ($undertime_category == 'Custom')
 		{
@@ -2854,11 +2863,12 @@ class Payroll2
 				$undertime_rate = $daily_rate * $undertime_percentage_deduction;
 			}
 		}
+
 		return $undertime_rate;
 	}
 
 
-	public static function compute_late_deduction($late_hours = "00:00:00", $late_category = "Base on Salary", $late_float = 0, $daily_rate = 0, $hourly_rate = 0, $additional_percentage = 0, $group)
+	public static function compute_late_deduction($late_hours = "00:00:00", $late_category = "Base on Salary", $late_float = 0, $daily_rate = 0, $hourly_rate = 0, $hourly_rate_employee_salary = 0, $additional_percentage = 0, $group)
 	{
 		$late_rate = 0;
 
@@ -2866,7 +2876,14 @@ class Payroll2
 		{
 			if($late_float != 0)
 			{
+				//Normal late rate
 				$late_rate = ($late_float * $hourly_rate)  * $additional_percentage;
+
+				//Monthly Rate hourly deduction if hourly_rate_employee_salary is not equal to zero
+				if ($group->payroll_group_salary_computation == "Monthly Rate" && $hourly_rate_employee_salary != 0) 
+				{
+					$late_rate = ($late_float * $hourly_rate_employee_salary)  * $additional_percentage;
+				}
 			}
 		}
 		else if ($late_category == 'Custom')
@@ -5194,9 +5211,9 @@ class Payroll2
 				}
 			}
 		}
-		
-		$deduction = Payroll::getdeductionv2($employee_id, $end_date, $period_category_arr['period_category'], $period_category, $shop_id);
 
+		$deduction = Payroll::getdeductionv2($employee_id, $end_date, $period_category_arr['period_category'], $period_category, $shop_id);
+	
 		if(isset($deduction["deduction"]))
 		{
 			if(count($deduction["deduction"]) > 0)

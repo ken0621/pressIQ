@@ -507,13 +507,32 @@ class PayrollDeductionController extends Member
 
 
 
-     public static function approve_deduction_payment($payroll_company_period_id=0,$employee_id=0,$payroll_period_id=0)
+     public static function approve_deduction_payment($payroll_company_period_id = 0, $employee_id = 0, $payroll_period_id = 0)
      {
           $period_info = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
 
-          //dd($period_info);
-          $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_start'], $period_info['period_category'], $period_info['period_category'], $period_info['shop_id']);
+          /*original*/
+          // $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_start'], $period_info['period_category'], $period_info['period_category'], $period_info['shop_id']);
+          // dd($employee_id, $period_info['payroll_period_start'], $period_info['period_category'], $period_info['period_category'], $period_info['shop_id']);
+          
 
+          
+          if ($period_info['period_count'] == "last_period") 
+          {
+              $period_info['period_count'] = "Last Period";
+          }
+          if ($period_info['period_count'] == "first_period")  
+          {
+               $period_info['period_count'] = "First Period";
+          }
+          if ($period_info['period_count'] == "middle_period") 
+          {
+              $period_info['period_count'] == "Middle Period";
+          }
+          
+          // dd($employee_id, $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id']);
+          $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id']);
+          
           foreach ($_deduction['deduction'] as $deduction) 
           {
 
@@ -527,7 +546,7 @@ class PayrollDeductionController extends Member
                ->first();
 
                // dd($deduction_employee);
-               if ($deduction_payment==null) 
+               if ($deduction_payment == null) 
                {
                     $insert['payroll_deduction_id']         = $deduction_employee['payroll_deduction_id'];
                     $insert['payroll_employee_id']          = $employee_id;
@@ -536,10 +555,10 @@ class PayrollDeductionController extends Member
                     $insert['deduction_name']               = $deduction_employee['payroll_deduction_name'];
                     $insert['deduction_category']           = $deduction_employee['payroll_deduction_category'];
                     $insert['payroll_payment_period']       = $period_info['payroll_period_end'];
-                    $insert['payroll_beginning_balance']    =  $deduction_employee['payroll_deduction_amount']; 
-                    $insert['payroll_payment_amount']       =          $deduction_employee['payroll_periodal_deduction'];  
-                    $insert['payroll_total_payment_amount'] = $deduction_employee['payroll_periodal_deduction']; 
-                    $insert['payroll_remaining_balance']    = $deduction_employee['payroll_deduction_amount'] - $deduction_employee['payroll_periodal_deduction']; 
+                    $insert['payroll_beginning_balance']    = $deduction_employee['payroll_deduction_amount']; 
+                    $insert['payroll_payment_amount']       = $deduction['payroll_periodal_deduction'];  
+                    $insert['payroll_total_payment_amount'] = $deduction['payroll_periodal_deduction']; 
+                    $insert['payroll_remaining_balance']    = $deduction_employee['payroll_deduction_amount'] - $deduction['payroll_periodal_deduction']; 
                     Tbl_payroll_deduction_payment_v2::insert($insert);
                    
                }
@@ -558,9 +577,9 @@ class PayrollDeductionController extends Member
                     $insert['deduction_category']                = $deduction_employee['payroll_deduction_category'];
                     $insert['payroll_payment_period']            = $period_info['payroll_period_end'];
                     $insert['payroll_beginning_balance']         = $balance = $deduction_employee["payroll_deduction_amount"] - $payroll_total_payment_amount["total_payment"]; 
-                    $insert['payroll_payment_amount']            =          $deduction_employee['payroll_periodal_deduction'];  
-                    $insert['payroll_total_payment_amount']      = $payroll_total_payment_amount["total_payment"] + $deduction_employee['payroll_periodal_deduction']; 
-                    $insert['payroll_remaining_balance']         = $balance - $deduction_employee['payroll_periodal_deduction']; 
+                    $insert['payroll_payment_amount']            = $deduction['payroll_periodal_deduction'];  
+                    $insert['payroll_total_payment_amount']      = $payroll_total_payment_amount["total_payment"] + $deduction['payroll_periodal_deduction']; 
+                    $insert['payroll_remaining_balance']         = $balance - $deduction['payroll_periodal_deduction']; 
                     Tbl_payroll_deduction_payment_v2::insert($insert);
 
                }

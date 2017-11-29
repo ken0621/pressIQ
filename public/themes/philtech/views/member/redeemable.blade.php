@@ -23,29 +23,33 @@
     
     <div class="report-content">
         <div class="animated fadeInUp holder">
-            <center>
-            <div class="table-responsive">
-                <center>
+            {{-- <center> --}}
+            <div class="row clearfix">
+                {{-- <center> --}}
                 @foreach($_redeemable as $redeemable)
-                <div class="item-redeemable">
-                    <img src="{{$redeemable->image_path}}" class="img-redeemable">
-                    @if(strlen($redeemable->item_description)>30)
-                    <div><h4><b>{{substr($redeemable->item_name,0,27)."..."}}</b></h4></div>
-                    @else
-                    <div><h4><b>{{$redeemable->item_name}}</b></h4></div>
-                    @endif
-                    <div><label>{{currency('',$redeemable->redeemable_points)." points"}}</label></div>
-                    <!-- @if(strlen($redeemable->item_description)>30)
-                    <div><label>{{substr($redeemable->item_description,0,27)."..."}}</label></div>
-                    @else
-                    <div><label>{{$redeemable->item_description}}</label></div>
-                    @endif -->
-                    <!-- <button class="btn-primary btn-primary btn-custom-primary" type="submit">Redeem</button> -->
+                <div class="col-md-4 col-sm-4 col-xs-6">
+                    <div class="item-redeemable">
+                        <div class="image-container match-height">
+                            <img src="{{$redeemable->image_path}}">
+                        </div>
+                        @if(strlen($redeemable->item_description)>30)
+                        <div class="item-name"><h4><b>{{substr($redeemable->item_name,0,27)."..."}}</b></h4></div>
+                        @else
+                        <div class="item-name"><h4><b>{{$redeemable->item_name}}</b></h4></div>
+                        @endif
+                        <div class="bottom-text"><label>{{currency('',$redeemable->redeemable_points)." points"}}</label></div>
+                        <!-- @if(strlen($redeemable->item_description)>30)
+                        <div><label>{{substr($redeemable->item_description,0,27)."..."}}</label></div>
+                        @else
+                        <div><label>{{$redeemable->item_description}}</label></div>
+                        @endif -->
+                        <!-- <button class="btn-primary btn-primary btn-custom-primary" type="submit">Redeem</button> -->
+                    </div>
                 </div>
                 @endforeach
-                </center>
+                {{-- </center> --}}
             </div>
-            </center>
+            {{-- </center> --}}
         </div>
     </div>
 

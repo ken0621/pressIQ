@@ -60,6 +60,8 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 	Route::get('/terms_and_conditions', 'Shop\ShopAboutController@terms_and_conditions'); //MARK FIGS
 
+
+
 	Route::get('/signin', 'Shop\ShopLoginController@signin'); //ROMMEL C.
 
 	Route::get('/sign_up', 'Shop\ShopRegisterController@press_signup'); //PRESS RELEASE

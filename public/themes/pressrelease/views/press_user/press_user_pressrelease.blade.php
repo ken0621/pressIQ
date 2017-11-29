@@ -10,9 +10,11 @@
                   <div class="tab">
                     <button class="tablinks" onclick="openCity(event, 'create_pr')" id="defaultOpen">Create Press Release</button>
                     <button class="tablinks" onclick="openCity(event, 'manage_pr')">Manage Press Release</button>
+                    <button class="tablinks" onclick="openCity(event, 'add_recipient')">Add Recipient</button>
                   </div>
                                             
                     <div class="press-release-content">
+
                         <div id="create_pr" class="tabcontent create-pr-container">
                             <div class="title-container">PRESS RELEASE</div>
                             <div class="title">Send To:</div>
@@ -57,6 +59,15 @@
                                     </tr>
                                 </table>
                             </div>
+                        </div>
+
+                        <div id="add_recipient" class="tabcontent manage-pr-container">
+                          
+
+                            
+                          
+                          
+                           
                         </div>
                     </div>
             </div>

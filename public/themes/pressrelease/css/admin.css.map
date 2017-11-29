@@ -1,7 +1,7 @@
 {
 "version": 3,
 "mappings": "AAAA,qBACA,CACC,OAAO,CAAE,QAAQ,CACjB,UAAU,CAAE,KAAK",
-"sources": ["../sass/member.scss"],
+"sources": ["../sass/admin.scss"],
 "names": [],
-"file": "member.css"
+"file": "admin.css"
 }

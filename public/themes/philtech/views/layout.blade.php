@@ -10,6 +10,8 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name='B-verify' content='8b63efb2920a681d6f877a59a414659d09831140' />
+        <meta property="og:image" content="http://philtech.digimahouse.dev/themes/philtech/img/social-thumb.jpg" />
+        
       
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
         {{-- PHILTECH ICON --}}

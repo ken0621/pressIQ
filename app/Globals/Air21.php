@@ -7,9 +7,13 @@ use Session;
 use Validator;
 use Redirect;
 use HttpRequest;
+use Carbon\Carbon;
 
 use App\Globals\Settings;
 use App\Globals\Transaction;
+
+use App\Models\Tbl_air21;
+use App\Models\Tbl_transaction_list;
 
 /**
  * Air21 - all sending and tracking ship module
@@ -32,9 +36,11 @@ class Air21
 		
 		$return['status']		  = "error";
 		$return['status_message'] = "Some error occurred. Please contact the administator.";
-		
-		if ($transaction && $customer) 
+
+		if ($transaction && $customer && $customer_address) 
 		{
+			$customer_zipcode  = Air21::getZipcode($customer_address->customer_street) ? Air21::getZipcode($customer_address->customer_street) : '3014';
+
 			$pnm["cons_acct_num"]     = null; // Consignee/Recipient's Account Number (if there's any) char (17)
 			$pnm["cons_name"]         = $customer->first_name . " " . $customer->middle_name . " " . $customer->last_name; // Consignee/Recipient's Name char (35)
 			$pnm["ship_to"]           = "Air21"; // Consignee/Recipient's Company Name (if there's any) char (35)
@@ -42,7 +48,7 @@ class Air21
 			$pnm["ship_to_addr2"]     = $customer_address->customer_zipcode ? $customer_address->customer_zipcode : 'None'; // Shipper's Barangay/Locality char (35)
 			$pnm["ship_to_addr3"]     = $customer_address->customer_city ? $customer_address->customer_city : 'None'; // Shipper's City/Municipality char (35)
 			$pnm["ship_to_addr4"]     = $customer_address->customer_state ? $customer_address->customer_state : 'None'; // Shipper's Province char (35)
-			$pnm["ship_to_zip"]       = "3014"; // Consignee/Recipient's ZIP Code. Follows PH postal code char (17)
+			$pnm["ship_to_zip"]       = $customer_zipcode; // Consignee/Recipient's ZIP Code. Follows PH postal code char (17)
 			$pnm["ship_to_tel"]       = ""; // Consignee/Recipient's Landline Number char (35)
 			$pnm["ship_to_email"]     = ""; // Consignee/Recipient's Email Address char (35)
 			$pnm["ship_to_mobile"]    = ""; // Consignee/Recipient's Mobile Number char (17)
@@ -81,7 +87,7 @@ class Air21
 			$booking["client_telfax"]  = ""; // Shipper's Landline Number char (35)
 			$booking["client_contact"] = "Juan dela Cruz"; // Shipper's Contact Person char (35)
 			$booking["rem_courier"]    = "landmark: near NAIA 2"; // NOTES TO COURIER char (100)
-			$booking["sched_pup_date"] = date('Y-m-d h:i:s A', time() + 86400); // SCHEDULE PICKUP DATE datetime
+			$booking["sched_pup_date"] = date('Y-m-d h:i:s A', time() + 172800); // SCHEDULE PICKUP DATE datetime
 			$booking["ready_time"]     = "14:00"; // PACKAGE/SHIPMENT READY TIME char (5)
 			$booking["close_time"]     = "17:00"; // PICKUP LOCATION CLOSING TIME char (5)
 		
@@ -135,16 +141,100 @@ class Air21
 				if (isJson($response)) 
 				{
 					$result = json_decode($response);
-					dd($result);
+					$update = Air21::updateResponse($transaction_list_id, $result);
+
 					if ($result->success) 
 					{
 						$return["status"]  = "success";
-						$return["message"] = $result->message;
+						$return["status_message"] = $result->message;
 					}
 				}
 			}
 		}
 		
 		return $return;
+	}
+	/**
+	 * [updateResponse update order via air21 response]
+	 * @param  [integer] $transaction_list_id [order id]
+	 * @param  [array] $response              [air21 response]
+	 * @return [array]                    	  ['status', 'status_message']
+	 */
+	public static function updateResponse($transaction_list_id, $response)
+	{
+		$return['status']		  = "error";
+		$return['status_message'] = "Some error occurred. Please contact the administator.";
+
+		$insert_air21["transaction_list_id"] = $transaction_list_id;
+		$insert_air21["response"]            = serialize($response);
+		$insert_air21["success"]             = $response->success ? 1 : 0;
+		$insert_air21["message"]             = $response->message;
+		$insert_air21["tracking_num"]        = $response->api_response[0]->cref[0]->track_num;
+		$insert_air21["shp_date"]            = $response->api_response[0]->pmn->shp_date;
+		$insert_air21["response_date"]       = Carbon::now();
+		
+		$result = Tbl_air21::insert($insert_air21);
+
+		if ($result) 
+		{
+			$return['status']		  = "success";
+			$return['status_message'] = "The tracking number has been updated.";
+		}
+
+		return $return;
+	}
+
+	/**
+	*
+	* Author: CodexWorld
+	* Author URI: http://www.codexworld.com
+	* Function Name: getZipcode()
+	* $address => Full address.
+	*
+	**/
+	public static function getZipcode($address)
+	{
+		try 
+		{
+			if(!empty($address))
+		    {
+		        //Formatted address
+		        $formattedAddr = str_replace(' ','+',$address);
+		        //Send request and receive json data by address
+		        $geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$formattedAddr.'&sensor=true_or_false'); 
+		        $output1 = json_decode($geocodeFromAddr);
+		        //Get latitude and longitute from json data
+		        $latitude  = $output1->results[0]->geometry->location->lat; 
+		        $longitude = $output1->results[0]->geometry->location->lng;
+		        //Send request and receive json data by latitude longitute
+		        $geocodeFromLatlon = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?latlng='.$latitude.','.$longitude.'&sensor=true_or_false');
+		        $output2 = json_decode($geocodeFromLatlon);
+		        if(!empty($output2))
+		        {
+		            $addressComponents = $output2->results[0]->address_components;
+		            foreach($addressComponents as $addrComp)
+		            {
+		                if($addrComp->types[0] == 'postal_code')
+		                {
+		                    //Return the zipcode
+		                    return $addrComp->long_name;
+		                }
+		            }
+		            return false;
+		        }
+		        else
+		        {
+		            return false;
+		        }
+		    }
+		    else
+		    {
+		        return false;   
+		    }
+		} 
+		catch (\Exception $e) 
+		{
+			return false;
+		}
 	}
 }

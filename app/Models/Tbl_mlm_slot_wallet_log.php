@@ -12,6 +12,7 @@ class Tbl_mlm_slot_wallet_log extends Model
     // wallet_log_status
     // n_ready = not ready for releasing
     // realeased
+    
     public function scopeSponsorslot($query)
     {
     	return $query->leftjoin("tbl_mlm_slot","tbl_mlm_slot.slot_id","=","tbl_mlm_slot_wallet_log.wallet_log_slot_sponsor");

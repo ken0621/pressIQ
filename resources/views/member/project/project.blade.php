@@ -56,5 +56,5 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="/assets/member/js/project/project-list.js"></script>
+<script type="text/javascript" src="/assets/member/js/project/project-list.js?v=2"></script>
 @endsection

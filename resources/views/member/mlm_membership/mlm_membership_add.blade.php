@@ -1,5 +1,6 @@
 @extends('member.layout')
 @section('content')
+<form class="form-horizontal" role="form" action="/member/mlm/membership/add/save" id="save_membership_form" method="post">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -10,7 +11,7 @@
                     The customer can create slot using different kinds of membership.
                 </small>
             </h1>
-            <a href="javascript:" class="panel-buttons btn btn-primary pull-right save_membership btn-custom-primary">Save Membership</a>
+            <button href="javascript:" class="panel-buttons btn btn-primary pull-right save_membership btn-custom-primary">Save Membership</button>
             <a href="/member/mlm/membership" class="panel-buttons btn btn-default pull-right btn-custom-white">&laquo; Back</a>
         </div>
     </div>
@@ -21,7 +22,7 @@
 		<div class="list-group">
 			<div class="list-group-item" id="input-fields-horizontal">
 				<h4 class="section-title">Membership Information</h4>
-				<form class="form-horizontal" role="form" action="/member/mlm/membership/add/save" id="save_membership_form" method="post">
+				
 					{!! csrf_field() !!}
 					<div class="form-group">
 						<label for="input-horizontal" class="col-lg-4 control-label">Membership Name</label>
@@ -38,19 +39,20 @@
 					<div class="form-group">
 						<label for="input-horizontal-counter" class="col-lg-4 control-label">Price Level</label>
 						<div class="col-lg-8">
-							<select class="select-price-level form-control" name="membership_price_level">
+							<select class="select-price-level form-control" name="membership_price_level" required>
 								@include('member.load_ajax_data.load_price_level')
 							</select>
 						</div>
 					</div>
-				</form>
 			</div>
 		</div>
 	</div>
 </div>
+
+				</form>
 @endsection
 @section('script')
-<script type="text/javascript" src='/assets/member/js/membership.js'></script>
+<script type="text/javascript" src='/assets/member/js/membership.js?version=1'></script>
 <script type="text/javascript">
 @if(count($errors) > 0)
    @foreach ($errors->all() as $error)

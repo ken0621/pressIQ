@@ -16,14 +16,17 @@ use App\Models\Tbl_warehouse_receiving_report;
 use App\Models\Tbl_warehouse_receiving_report_item;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_sponsor;
+use App\Models\Tbl_cart_payment;
 
 use App\Models\Tbl_cart_item_pincode;
 use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_transaction_item;
+use App\Models\Tbl_transaction_payment;
 use App\Models\Tbl_payment_logs;
 use App\Globals\AuditTrail;
 use App\Globals\Tablet_global;
+use App\Globals\Mlm_slot_log;
 
 use DB;
 use Log;
@@ -217,6 +220,9 @@ class Transaction
 
         return $return;
     }
+    public static function insert_payment($shop_id, $transaction_id, $method = array(), $amount = array())
+    {
+    }
     public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit', $get_to_warehouse = 0)
     {
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
@@ -280,6 +286,80 @@ class Transaction
     public static function get_transaction_item($transaction_list_id)
     {
         return Tbl_transaction_item::where('transaction_list_id', $transaction_list_id)->get();
+    }
+    public static function get_all_transaction_item($shop_id, $date_from = '',$date_to = '', $transaction_type = '', $payment_type = '')
+    {
+        $data = Tbl_transaction_item::transaction_list()->transaction()->where('tbl_transaction_list.shop_id', $shop_id);
+        if($date_from && $date_to)
+        {
+            $data = $data->whereBetween('transaction_date_created',[$date_from,$date_to]);
+        }
+        if($transaction_type)
+        {
+            $data = $data->where('transaction_type',$transaction_type);
+        }
+        $data = $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id')->leftJoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id')->where('tbl_customer_address.purpose', 'shipping')->get();
+        // die(var_dump($data));
+        foreach ($data as $key => $value) 
+        {
+            $payment_method = Transaction::getPaymentMethod($value->transaction_number, $value->transaction_list_id, is_serialized($value->transaction_details) ? unserialize($value->transaction_details) : null);
+            
+            $data[$key]->payment_method         = isset($payment_method->payment_method) ? $payment_method->payment_method : "None";
+
+            $data[$key]->checkout_id            = isset($payment_method->checkout_id) ? $payment_method->checkout_id : "None";
+            $data[$key]->paymaya_response       = isset($payment_method->paymaya_response) ? $payment_method->paymaya_response : "None";
+            $data[$key]->paymaya_status         = isset($payment_method->paymaya_status) ? $payment_method->paymaya_status : "None";
+            $data[$key]->dragonpay_response     = isset($payment_method->dragonpay_response) ? $payment_method->dragonpay_response : "None";
+            /* Old Date */
+            $old = DB::table("tbl_ec_order")->where("invoice_number", $value->transaction_number)->first();
+            if ($old) 
+            {
+                $data[$key]->transaction_date_created = $old->created_date;
+            }
+
+            $slot = Transaction::getSlotId($value->transaction_number, $value->transaction_list_id);
+            if ($slot) 
+            {
+                $tree = Tbl_tree_sponsor::where("sponsor_tree_child_id", $slot->slot_id)->first();
+                if ($tree) 
+                {
+                    $upline_slot = Tbl_mlm_slot::where("slot_id", $tree->sponsor_tree_parent_id)->first();
+                    if ($upline_slot) 
+                    {
+                        $data[$key]->slot_upline_no = $upline_slot->slot_no;
+                    }
+                    else
+                    {
+                        $data[$key]->slot_upline_no = "None";
+                    }
+                }
+                else
+                {
+                    $data[$key]->slot_upline_no = "HEAD";
+                }
+                $data[$key]->slot_no = $slot->slot_no;
+                $data[$key]->slot_id = $slot->slot_id;
+            }
+            else
+            {
+                $data[$key]->slot_no = "Unused";
+                $data[$key]->slot_id = "none";
+                $data[$key]->slot_upline_no = "Unused";
+            }
+        }
+        if($payment_type != '')
+        {
+            foreach ($data as $key => $value) 
+            {
+                if($value->payment_method != $payment_type)
+                {
+                    unset($data[$key]);
+                }
+            }
+        }
+        // die(var_dump($data));
+
+        return $data;
     }
     public static function get_data_transaction_list($transaction_list_id, $type = null)
     {
@@ -779,7 +859,6 @@ class Transaction
                 }
             }
         }
-
         return $data;
     }
 
@@ -825,4 +904,94 @@ class Transaction
 
         return $slot;
     }
+    public static function validate_payment($shop_id, $slot_id)
+    {
+        $return = null;
+        $cart_key = Cart2::get_cart_key();
+        $cart = Cart2::get_cart_info();
+        $amount = Customer::get_points_wallet_per_slot($slot_id);
+        $cart_wallet_amount = Cart2::cart_payment_amount($shop_id,'wallet');
+        $cart_gc_amount = Cart2::cart_payment_amount($shop_id,'gc');
+        $cart_total_amount = Cart2::cart_payment_amount($shop_id);
+
+        if($cart_wallet_amount > $amount['total_wallet'])
+        {
+            $return .= 'Not enough wallet in <b>slot no'.Customer::slot_info($slot_id)->slot_no.'</b>, wallet remaining '.currency('PHP ',$amount['total_wallet']).'. <br>'; 
+        }
+
+        if($cart_gc_amount > $amount['total_gc'])
+        {
+            $return .= 'Not enough GC in <b>slot no'.Customer::slot_info($slot_id)->slot_no.'</b>, GC remaining '.currency('',$amount['total_gc']).' point(s). <br>'; 
+        }
+        if($cart)
+        {
+            if($cart_total_amount < $cart["_total"]->grand_total)
+            {
+                $return .= 'Not enough payment';
+            }
+        }
+
+        return $return;
+    }
+    public static function consume_payment($shop_id, $transaction_list_id, $slot_id)
+    {        
+        $amount = Customer::get_points_wallet_per_slot($slot_id);
+        $cart_wallet_amount = Cart2::cart_payment_amount($shop_id,'wallet');
+        $cart_gc_amount = Cart2::cart_payment_amount($shop_id,'gc');
+        $transaction_info = Tbl_transaction_list::transaction()->where('transaction_list_id', $transaction_list_id)->first();
+        $transaction_date = Carbon::now();
+
+        $ins_wallet['shop_id'] = $shop_id;
+        $wallet_log_slot = $slot_id;
+        $wallet_log_slot_sponsor = $slot_id;
+        $wallet_log_claimbale_on = $transaction_date;
+        $wallet_log_details = 'Thank you for purchasing. '.$cart_wallet_amount.' is deducted to your wallet';
+        $wallet_log_amount = $cart_wallet_amount * -1;
+        $wallet_log_plan = 'REPURCHASE';
+        $wallet_log_status = 'released';
+        $wallet_log_remarks = 'Wallet Purchase on POS - '.$transaction_info->transaction_number;
+        
+        if($slot_id)
+        {
+            Mlm_slot_log::slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on, $wallet_log_remarks);
+        }
+
+        $ins_gc['points_log_complan'] = 'PURCHASE_GC';
+        $ins_gc['points_log_level'] = 0;
+        $ins_gc['points_log_slot'] = $slot_id;
+        $ins_gc['points_log_Sponsor'] = $slot_id;
+        $ins_gc['points_log_date_claimed'] = $transaction_date;
+        $ins_gc['points_log_converted_date'] = $transaction_date;
+        $ins_gc['points_log_type'] = 'GC';
+        $ins_gc['points_log_from'] = 'GC Purchase on POS - '.$transaction_info->transaction_number;
+        $ins_gc['points_log_points'] = $cart_gc_amount * -1;
+        
+        if($slot_id)
+        {
+            Mlm_slot_log::point_slot($ins_gc);
+        }
+
+        $get_all_payment = Cart2::cart_payment_list($shop_id);
+
+        $insert_payment = null;
+        foreach ($get_all_payment as $key => $value) 
+        {
+            $insert_payment[$key]['transaction_id'] = $transaction_info->transaction_id;
+            $insert_payment[$key]['transaction_payment_type'] = $value->payment_type;
+            $insert_payment[$key]['transaction_payment_amount'] = $value->payment_amount;
+            $insert_payment[$key]['transaction_payment_date'] = $transaction_date;
+        }
+
+        if(count($insert_payment) > 0)
+        {
+            Tbl_transaction_payment::insert($insert_payment);
+            $return = 1;
+        }
+
+        return $return;
+    }
+    public static function get_payment($transaction_id)
+    {
+        return Tbl_transaction_payment::where('transaction_id',$transaction_id)->get();
+    }    
 }

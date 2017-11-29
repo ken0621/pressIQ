@@ -7,20 +7,6 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
-.btn-lblue
-{
-	@include transition(0.2s);
-	background-color: inherit;
-	border: 1px solid #006CC5;
-	color: #006CC5;
-
-	&:hover
-	{
-		background-color: #006CC5;
-		color: #fff;
-	}
-}
-
 .profile-container
 {
 	font-family: $content-text;
@@ -155,17 +141,17 @@ $text-dark: #272c2f;
 
 				.btn-orange
 				{
-					@include transition(0.2s);
+					@include transition(0.3s);
 
-					background-color: inherit;
+					background-color: #ed5639;
 					border: 1px solid #ed5639;
-					color: #ed5639;
+					color: #fff;
 					font-weight: $semi-bold;
 
 					&:hover
 					{
-						background-color: #ed5639;
-						color: #fff;
+						background-color: inherit;
+						color: #ed5639;
 					}
 				}
 

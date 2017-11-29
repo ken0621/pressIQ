@@ -202,6 +202,36 @@ class ShopMemberController extends Shop
         $data = [];
         return Self::load_view_for_members('member.ebooks', $data);
     }
+
+    /*Press Release*/
+    public function pressuser()
+    {
+        $data["page"] = "Press Release";
+        return view("press_user.member", $data);
+    }
+    public function pressuser_view()
+    {
+        $data["page"] = "Press Release - View";
+        return view("press_user.pressrelease_view", $data);
+    }
+     public function pressuser_dashboard()
+    {
+        $data["page"] = "Press Release - Dashboard";
+        return view("press_user.press_user_dashboard", $data);
+    }
+     public function pressuser_pressrelease()
+    {
+        $data["page"] = "Press Release - Press Release";
+        return view("press_user.press_user_pressrelease", $data);
+    }
+     public function pressuser_my_pressrelease()
+    {
+        $data["page"] = "Press Release - My Press Release";
+        return view("press_user.press_user_my_pressrelease", $data);
+    }
+    /*Press Release*/
+
+
     public function getEventDetails(Request $request)
     {
         $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);

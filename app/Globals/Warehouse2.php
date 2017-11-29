@@ -647,7 +647,7 @@ class Warehouse2
             Tbl_warehouse_inventory_record_log::where("record_consume_ref_name",$ref_name)->where("record_item_id",$item_id)->where("record_consume_ref_id",$ref_id)->update($update);
         }
     }
-    public static function consume($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '', $allow_out_of_stock = false,$update_count = true)
+    public static function consume($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '',$allow_out_of_stock = false ,$update_count = true)
     {
         $return = null;
 

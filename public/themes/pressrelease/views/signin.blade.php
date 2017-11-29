@@ -15,7 +15,7 @@
 			    			</div>
 			    			<div class="forgot-password"><a href="#">Forgot Password?</a></div> 
 			    			<div class="button-container">
-			    			<a href="/pressmember">Login</a>
+			    			<a href="/pressuser">Login</a>
 			    	</div>
 			    </div>
 		    </div>

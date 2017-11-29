@@ -1,0 +1,42 @@
+.background-container
+{
+	padding: 30px 0px;
+	min-height: 820px;
+
+	.pressview
+	{
+		.my-press-release-container
+		{
+			background-color: #eeeeee;
+			min-height: 700px;
+			padding: 30px;
+			min-height: 700px;
+			.title-container
+			{
+				a
+				{
+					font-size: 20px;
+					font-weight: 700;
+					border-bottom: 1px solid #000;
+					text-decoration: none;
+					color: #404040;
+				}
+			}
+			.date-container
+			{
+				font-size: 13px;
+				padding-top: 5px;
+			}
+			.details-container
+			{
+				font-size: 15px;
+				padding-top: 5px;
+			}
+			.border
+			{
+				border: 1px solid #ccc;
+				margin: 10px 0px;
+			}
+		}
+	}
+}	

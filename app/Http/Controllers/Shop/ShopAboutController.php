@@ -188,4 +188,5 @@ class ShopAboutController extends Shop
         $data["page"] = "certificate";
         return view("member.certificate", $data);
     }
+
 }

@@ -33,6 +33,15 @@ class CreateTblCustomerWarehouseIssuanceReport extends Migration
             $table->foreign('cust_wis_from_warehouse')->references('warehouse_id')->on('tbl_warehouse')->onDelete('cascade');
             $table->foreign('cust_wis_shop_id')->references('shop_id')->on('tbl_shop')->onDelete('cascade');
         });
+
+        Schema::create('tbl_customer_wis_item', function (Blueprint $table) {
+            $table->increments('cust_wis_item_id');
+            $table->integer('cust_wis_id')->unsigned();
+            $table->integer('cust_wis_record_log_id');
+
+            $table->foreign('cust_wis_id')->references('cust_wis_id')->on('tbl_customer_wis')->onDelete('cascade');
+
+        });
     }
     /**
      * Reverse the migrations.

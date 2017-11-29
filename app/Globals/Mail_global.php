@@ -341,11 +341,12 @@ class Mail_global
         {
             Settings::set_mail_setting($shop_id);
 
-            $data["mail_to"] = $email_address;
-            $data["template"] = $email_template;
-            $data["subject"] = $email_content["subject"];
-            $data["body"] = $email_content["content"];
+            $data["mail_to"]       = $email_address;
+            $data["template"]      = $email_template;
+            $data["subject"]       = $email_content["subject"];
+            $data["body"]          = $email_content["content"];
             $data['mail_username'] = Config::get('mail.username');
+
             try 
             {
                 if ($data['mail_username'] == "ca457d75dd54c1") 
@@ -363,19 +364,12 @@ class Mail_global
                         $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
                         $m->to($data["mail_to"], $data['mail_username'])->subject($data["subject"]);
                     });
-
-                    // Mail::send('emails.full_body', $data, function ($m) use ($data) 
-                    // {
-                    //     $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
-                    //     $m->to("arcylen103095@gmail.com", $data['mail_username'])->subject($data["subject"]);
-                    // });
                 }
                 
                 $result = 1;
             } 
             catch (\Exception $e) 
             {
-                // Mail_global::fail_email($e->getMessage());
                 $result = 0; 
             }
         }       

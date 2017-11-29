@@ -197,6 +197,20 @@ class ShopMemberController extends Shop
         $data = [];
         return Self::load_view_for_members('member.ebooks', $data);
     }
+
+    /*carlo*/
+    public function pressmember()
+    {
+        $data["page"] = "Press Release";
+        return view("press_member.member", $data);
+    }
+    public function pressmember_view()
+    {
+        $data["page"] = "Press Release - View";
+        return view("press_member.pressrelease_view", $data);
+    }
+    /*carlo*/
+
     public function getEventDetails(Request $request)
     {
         $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);

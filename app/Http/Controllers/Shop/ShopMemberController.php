@@ -229,6 +229,26 @@ class ShopMemberController extends Shop
         $data["page"] = "Press Release - My Press Release";
         return view("press_user.press_user_my_pressrelease", $data);
     }
+     public function pressadmin()
+    {
+        $data["page"] = "Press Release";
+        return view("press_admin.admin", $data);
+    }
+     public function pressadmin_dashboard()
+    {
+        $data["page"] = "Press Release - Dashboard";
+        return view("press_admin.press_admin_dashboard", $data);
+    }
+     public function pressadmin_media_contacts()
+    {
+        $data["page"] = "Press Release - Media Contacts";
+        return view("press_admin.press_admin_media_contacts", $data);
+    }
+     public function pressadmin_pressrelease()
+    {
+        $data["page"] = "Press Release - Press Release";
+        return view("press_admin.press_admin_pressrelease", $data);
+    }
     /*Press Release*/
 
 

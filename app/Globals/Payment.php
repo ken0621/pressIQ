@@ -607,7 +607,7 @@ class Payment
                     Transaction::create_update_transaction_details(serialize($data));
                     $transaction_list_id = Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, "+", $source);
                     Transaction::consume_in_warehouse($shop_id, $transaction_list_id);
-                    
+                    Air21::sendInfo($transaction_list_id);
                 }
                 elseif($data["paymentStatus"] == "PAYMENT_FAIL" || $data["paymentStatus"] == "AUTH_FAILURE" || $data["paymentStatus"] == "PAYMENT_FAILURE" || $data["paymentStatus"] == "EXPIRED")
                 {

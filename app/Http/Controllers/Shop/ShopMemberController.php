@@ -1970,7 +1970,7 @@ class ShopMemberController extends Shop
         // $debug      = true;
 
         // $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
-        dd(Air21::sendInfo(1, 2));
+        dd(Air21::sendInfo(1697));
     }
     public function getVmoney()
     {

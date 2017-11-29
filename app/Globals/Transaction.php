@@ -287,6 +287,21 @@ class Transaction
     {
         return Tbl_transaction_item::where('transaction_list_id', $transaction_list_id)->get();
     }
+    public static function get_transaction_item_total($transaction_list_id)
+    {
+        $transaction = Transaction::get_transaction_item($transaction_list_id);
+        $total       = 0;
+
+        if (count($transaction) > 0) 
+        {
+            foreach ($transaction as $key => $value) 
+            {
+                $total += $value->subtotal;
+            }
+        }
+        
+        return $total;
+    }
     public static function get_all_transaction_item($shop_id, $date_from = '',$date_to = '', $transaction_type = '', $payment_type = '')
     {
         $data = Tbl_transaction_item::transaction_list()->transaction()->where('tbl_transaction_list.shop_id', $shop_id);

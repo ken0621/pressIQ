@@ -31,12 +31,18 @@ class Air21
 	{
 		$transaction	   = Transaction::get_data_transaction_list($transaction_list_id);
 		$transaction_total = Transaction::get_transaction_item_total($transaction_list_id);
-		$customer		   = Transaction::getCustomerInfoTransaction($transaction_list_id);
-		$customer_address  = Transaction::getCustomerAddressTransaction($transaction_list_id);
+		$customer		   = null;
+		$customer_address  = null;
+		
+		if ($transaction) 
+		{
+			$customer		   = Transaction::getCustomerInfoTransaction($transaction->transaction_id);
+			$customer_address  = Transaction::getCustomerAddressTransaction($transaction->transaction_id);
+		}
 		
 		$return['status']		  = "error";
 		$return['status_message'] = "Some error occurred. Please contact the administator.";
-
+		
 		if ($transaction && $customer && $customer_address) 
 		{
 			$customer_zipcode  = Air21::getZipcode($customer_address->customer_street) ? Air21::getZipcode($customer_address->customer_street) : '3014';

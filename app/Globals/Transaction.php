@@ -17,6 +17,7 @@ use App\Models\Tbl_warehouse_receiving_report_item;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_cart_payment;
+use App\Models\Tbl_air21;
 
 use App\Models\Tbl_cart_item_pincode;
 use App\Models\Tbl_transaction;
@@ -599,6 +600,11 @@ class Transaction
         $store["get_transaction_customer_details_v2"] = true;
         session($store);
     }
+    public static function get_transaction_tracking_number()
+    {
+        $store["get_transaction_tracking_number"] = true;
+        session($store);
+    }
     public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0)
     {
         $data = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id);
@@ -736,6 +742,30 @@ class Transaction
                     $data[$key]->slot_upline_no = "Unused";
                 }
             }
+            
+            if (session('get_transaction_tracking_number')) 
+            {
+                $get_transaction = Tbl_transaction_list::where("transaction_list_id", $value->transaction_list_id)->first();
+                
+                if ($get_transaction) 
+                {
+                    $get_order = Tbl_transaction_list::where("transaction_type", "RECEIPT")->where("transaction_id", $get_transaction->transaction_id)->first();
+                    $air21 = Tbl_air21::where("transaction_list_id", $get_order->transaction_list_id)->first();
+    
+                    if ($air21) 
+                    {
+                        $data[$key]->tracking_number = $air21->tracking_num;
+                    }
+                    else
+                    {
+                        $data[$key]->tracking_number = "NO TRACKING NUMBER YET";
+                    }
+                }
+                else
+                {
+                    $data[$key]->tracking_number = "NO TRACKING NUMBER YET";
+                }
+            }
         }
         
         session()->forget('get_transaction_filter_customer_id');
@@ -743,6 +773,7 @@ class Transaction
         session()->forget('get_transaction_date');
         session()->forget('get_transaction_payment_method');
         session()->forget('get_transaction_slot_id');
+        session()->forget('get_transaction_tracking_number');
         return $data;
     }
     public static function get_all_transaction_type()

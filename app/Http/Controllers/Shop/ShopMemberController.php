@@ -1839,7 +1839,9 @@ class ShopMemberController extends Shop
         $data["page"] = "Orders";
         $shop_id = $this->shop_info->shop_id;
         Transaction::get_transaction_filter_customer(Self::$customer_info->customer_id);
+        Transaction::get_transaction_tracking_number();
         $data["_order"] = Transaction::get_transaction_list($shop_id, 'ORDER', '', 20);
+        
         return (Self::load_view_for_members("member.order", $data));
     }
     public function getOrderDetails(Request $request, $transaction_list_id)
@@ -1970,7 +1972,7 @@ class ShopMemberController extends Shop
         // $debug      = true;
 
         // $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
-        dd(Air21::sendInfo(1697));
+        dd(Air21::sendInfo(3376));
     }
     public function getVmoney()
     {

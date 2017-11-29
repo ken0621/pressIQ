@@ -44,7 +44,7 @@
 								</tr>
 								<tr>
 									<td class="detail-label">Tracking Number:</td>
-									<td class="detail-value">NO TRACKING NUMBER YET</td>
+									<td class="detail-value">{{ $order->tracking_number }}</td>
 								</tr>
 								
 								<tr>

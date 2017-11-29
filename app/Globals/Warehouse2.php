@@ -587,7 +587,7 @@ class Warehouse2
 
         return $validate;
     }
-    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array())
+    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array(), $allow_out_of_stock = false)
     {
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
@@ -610,9 +610,12 @@ class Warehouse2
                 }
             }
         }
-        if(is_numeric($quantity) == false)
-        { 
-            $return .= "The quantity must be a number. <br>";
+        if($allow_out_of_stock == false)
+        {
+            if(is_numeric($quantity) == false)
+            { 
+                $return .= "The quantity must be a number. <br>";
+            }
         }
         if($quantity < 0)
         {
@@ -644,7 +647,7 @@ class Warehouse2
             Tbl_warehouse_inventory_record_log::where("record_consume_ref_name",$ref_name)->where("record_item_id",$item_id)->where("record_consume_ref_id",$ref_id)->update($update);
         }
     }
-    public static function consume($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '', $update_count = true)
+    public static function consume($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '', $allow_out_of_stock = false,$update_count = true)
     {
         $return = null;
 
@@ -744,13 +747,13 @@ class Warehouse2
             return $id;
         }
     }
-    public static function consume_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item, $update_count = true)
+    public static function consume_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item, $allow_out_of_stock = false, $update_count = true)
     {
         $validate = null;
         foreach ($_item as $key => $value)
         {
             $serial = isset($value['serial']) ? $value['serial'] : null;
-            $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+            $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial, $allow_out_of_stock);
         }
         if(!$validate)
         {

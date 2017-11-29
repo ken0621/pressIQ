@@ -846,19 +846,10 @@ function submit_done(data)
 	}
 	else if(data.status == "error-invoice")
 	{
-        if(data.redirect)
+        $.each(data.status_message, function(index, val) 
         {
-        	toastr.error("Error inv");
-        	location.href = data.redirect;
-    	}
-    	else
-    	{
-    		$(".load-data:last").load(data.link+" .load-data .data-container", function()
-    		{
-    			customer_invoice.action_initialized();
-    			toastr.error("Error");
-    		})
-    	}
+        	toastr.error(val);
+        });
 	}
 	else if(data.status == 'error-inv-no')
 	{

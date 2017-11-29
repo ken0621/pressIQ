@@ -103,9 +103,10 @@ class TransactionController extends Member
         $data['transaction_details'] = unserialize($data["list"]->transaction_details);
         $data['customer_info']       = Transaction::getCustomerInfoTransaction($data['list']->transaction_id);
         $data['customer_address']    = Transaction::getCustomerAddressTransaction($data['list']->transaction_id);
+        $data['_payment_list']       = Transaction::get_payment($data['list']->transaction_id);
 
         $data['_codes']    = Transaction::get_transaction_item_code($transaction_list_id, $this->user_info->shop_id);
-
+        // return view("member.transaction.all_shop_receipt_pdf", $data);
         $html = view("member.transaction.all_shop_receipt_pdf", $data);
         $pdf = Pdf_global::show_pdfv2($html);
         return $pdf;

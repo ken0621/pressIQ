@@ -339,7 +339,10 @@ function submit_done(data)
 		toastr.error(data.message);
 	}
 }
-
+function success_product_list(data)
+{
+	window.location.href = data.redirect;
+}
 function submit_done_item(data)
 {
 	console.log(data);

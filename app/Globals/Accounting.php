@@ -82,10 +82,10 @@ class Accounting
 		switch($filter)
 		{
 			case 'active':
-				$query->where("archived", 0);
+				$query->where("tbl_chart_of_account.archived", 0);
 				break;
 			case 'inactive':
-				$query->where("archived", 1);
+				$query->where("tbl_chart_of_account.archived", 1);
 				break;
 		}
 

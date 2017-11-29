@@ -66,7 +66,7 @@
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <select class="form-control droplist-customer input-sm pull-left" name="inv_customer_id" data-placeholder="Select a Customer" required>
-                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv) ? $inv->inv_customer_id : (isset($c_id) ? $c_id : '') ]);
+                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv) ? $inv->inv_customer_id : (isset($c_id) ? $c_id : '') ])
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
@@ -175,7 +175,7 @@
                                                     <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
                                                     <td><input type="text" class="for-datepicker" name="invline_service_date[]"/></td>    
-                                                    @include("member.load_ajax_data.load_td_serial_number");
+                                                    @include("member.load_ajax_data.load_td_serial_number")
                                                     <td class="invoice-number-td text-right">
                                                         1
                                                     </td>
@@ -354,7 +354,7 @@
 
                                                             <td class="cm-number-td text-right">1</td>
                                                             <td>
-                                                                <select class="required form-control select-item droplist-item-cm input-sm pull-left {{$cmline->cmline_item_id}}" name="cmline_item_id[]">
+                                                                <select class="form-control select-item droplist-item-cm input-sm pull-left {{$cmline->cmline_item_id}}" name="cmline_item_id[]">
                                                                     @include("member.load_ajax_data.load_item", ['_item' => $_cm_item, 'add_search' => "", 'item_id' => $cmline->cmline_item_id])
                                                                 </select>
                                                             </td>
@@ -533,10 +533,10 @@
     @elseif(Session::has('error'))
         @if(is_array(Session::get('error')) && count(Session::get('error')) > 0)
             @foreach(Session::get('error') as $error)
-                toastr.error('{{ $error }}');
+                // toastr.error('{{ $error }}');
             @endforeach
         @else
-            toastr.error('{{ Session::get('error') }}');
+            // toastr.error('{{ Session::get('error') }}');
         @endif
     @endif
 

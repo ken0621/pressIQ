@@ -29,7 +29,7 @@
 		<div class="top-container clearfix" style="opacity: 1;">
 			{{-- <span class="website">{{ URL::to('/') }}</span>
 			<div class="logo"><img style="width: 200px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/philtech-logo.png"></div> --}}
-			<div class="barcode">
+			<div class="barcode" style="{{ $membership_code ? '' : 'opacity: 0;' }}">
 				<div class="barcodeimg" style="background-color: #fff; padding: 7.5px 0;"><img src="{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/barcode?text={{ $membership_code }}&size=25"></div>
 				<div class="barcodetxt" style="font-size: 12px; margin-top: -7.5px; padding-bottom: 2px;">
 					{{-- <span>Membership Code</span> --}}
@@ -40,14 +40,14 @@
 		<div class="mid-container clearfix" style="opacity: 0; margin: 0; height: 149px;"><img style="display: block; width: 380px; margin-left: 15px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/{{ $color }}-logo.png"></div>
 		<div class="bottom-container clearfix" style="margin-top: 10px; margin-left: 110px;">
 			<div class="member">
-				<div class="member-label" style="letter-spacing: 0; padding: 0; font-weight: 700; font-size: 20px !important; line-height: 20px;">{{ $name }}</div>
+				<div class="member-label" style="letter-spacing: 0; padding: 0; font-weight: 700; font-size: 20px !important; line-height: 20px;">{{ $name ? $name : '&nbsp;' }}</div>
 				<div class="member-name" style="line-height: 20px;">ISSUED: {{ $now }}</div>
 			</div>
 			<div class="barcode" style="opacity: 0;">
 				<div class="barcodeimg" style="background-color: #fff; padding: 7.5px 0; margin-top: 10px;"><img src="{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/barcode?text={{ $membership_code }}&size=25"></div>
 				<div class="barcodetxt" style="font-size: 8px; margin-top: -5px; padding-bottom: 5px;">
 					<span>Membership Code</span>
-					<span>{{ $membership_code }}</span>
+					<span style="text-transform: uppercase;">{{ $membership_code }}</span>
 				</div>
 			</div>
 		</div>
@@ -116,7 +116,7 @@
 		Status : @if($info->slot_card_printed == 1) PRINTED @else PENDING @endif
 	</div>
 	<div class="col-md-3">
-		<a class="btn btn-primary" href="/member/mlm/card/image/{{$info->slot_id}}?pdf=true" target="_blank">Export to JPG</a>
+		<a class="btn btn-primary" href="/member/mlm/card/image/{{$info->slot_id}}?pdf=true&used={{$used}}" target="_blank">Export to JPG</a>
 	</div>
 	<div class="col-md-3">
 		<form class="global-submit" method="post" action="/member/mlm/card/done">

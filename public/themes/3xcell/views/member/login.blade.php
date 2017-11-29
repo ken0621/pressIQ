@@ -6,9 +6,9 @@
 		<table>
 			<tbody>
 				<tr>
-					<td class="c1" style="background-color: #ddd;">
+					<td class="c1">
 						<div class="register-side">
-					
+							<img src="/themes/{{ $shop_theme }}/img/login-img.jpg">
 						</div>
 					</td>
 					<td class="c2">
@@ -16,7 +16,7 @@
 					</td>
 				</tr>
 			</tbody>
-		</table>		
+		</table>	
 	</div>
 </div>
 @endsection

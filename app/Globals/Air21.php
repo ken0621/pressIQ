@@ -77,16 +77,16 @@ class Air21
 		
 			$reference_number["cref_num"] = $transaction->transaction_number; // Customer's own reference number char (35)
 		
-			$booking["client_name1"]   = "Juan dela Cruz"; // PICKUP LOCATION CONTACT PERSON char (35)
+			$booking["client_name1"]   = $customer->first_name . " " . $customer->middle_name . " " . $customer->last_name; // PICKUP LOCATION CONTACT PERSON char (35)
 			$booking["client_name2"]   = "MyPhone"; // PICKUP LOCATION COMPANY NAME char (35)
-			$booking["pup_addr1"]      = "4th Floor Cargohaus Bldg"; // PICKUP LOCATION ADDRESS 1 char (35)
-			$booking["pup_addr2"]      = "Brgy Vitalez"; // PICKUP LOCATION ADDRESS 2 char (35)
-			$booking["pup_addr3"]      = "Paranaque City"; // PICKUP LOCATION ADDRESS 3 char (35)
-			$booking["pup_addr4"]      = "Metro Manila"; // PICKUP LOCATION ADDRESS 4 char (35)
-			$booking["pup_zip_code"]   = "1709"; // PICKUP LOCATION ZIP CODE char (17)
+			$booking["pup_addr1"]      = $customer_address->customer_street ? $customer_address->customer_street : 'None'; // PICKUP LOCATION ADDRESS 1 char (35)
+			$booking["pup_addr2"]      = $customer_address->customer_zipcode ? $customer_address->customer_zipcode : 'None'; // PICKUP LOCATION ADDRESS 2 char (35)
+			$booking["pup_addr3"]      = $customer_address->customer_city ? $customer_address->customer_city : 'None'; // PICKUP LOCATION ADDRESS 3 char (35)
+			$booking["pup_addr4"]      = $customer_address->customer_state ? $customer_address->customer_state : 'None'; // PICKUP LOCATION ADDRESS 4 char (35)
+			$booking["pup_zip_code"]   = $customer_zipcode; // PICKUP LOCATION ZIP CODE char (17)
 			$booking["client_telfax"]  = ""; // Shipper's Landline Number char (35)
-			$booking["client_contact"] = "Juan dela Cruz"; // Shipper's Contact Person char (35)
-			$booking["rem_courier"]    = "landmark: near NAIA 2"; // NOTES TO COURIER char (100)
+			$booking["client_contact"] = "MyPhone"; // Shipper's Contact Person char (35)
+			$booking["rem_courier"]    = ""; // NOTES TO COURIER char (100)
 			$booking["sched_pup_date"] = date('Y-m-d h:i:s A', time() + 172800); // SCHEDULE PICKUP DATE datetime
 			$booking["ready_time"]     = "14:00"; // PACKAGE/SHIPMENT READY TIME char (5)
 			$booking["close_time"]     = "17:00"; // PICKUP LOCATION CLOSING TIME char (5)
@@ -162,23 +162,25 @@ class Air21
 	 */
 	public static function updateResponse($transaction_list_id, $response)
 	{
-		$return['status']		  = "error";
-		$return['status_message'] = "Some error occurred. Please contact the administator.";
-
 		$insert_air21["transaction_list_id"] = $transaction_list_id;
 		$insert_air21["response"]            = serialize($response);
 		$insert_air21["success"]             = $response->success ? 1 : 0;
-		$insert_air21["message"]             = $response->message;
-		$insert_air21["tracking_num"]        = $response->api_response[0]->cref[0]->track_num;
-		$insert_air21["shp_date"]            = $response->api_response[0]->pmn->shp_date;
+		$insert_air21["message"]             = isset($response->message) ? $response->message : '';
+		$insert_air21["tracking_num"]        = isset($response->api_response[0]->cref[0]->track_num) ? $response->api_response[0]->cref[0]->track_num : '';
+		$insert_air21["shp_date"]            = isset($response->api_response[0]->pmn->shp_date) ? $response->api_response[0]->pmn->shp_date : '';
 		$insert_air21["response_date"]       = Carbon::now();
 		
 		$result = Tbl_air21::insert($insert_air21);
 
-		if ($result) 
+		if ($result && isset($response->message) && isset($response->api_response[0]->cref[0]->track_num) && isset($response->api_response[0]->pmn->shp_date)) 
 		{
 			$return['status']		  = "success";
 			$return['status_message'] = "The tracking number has been updated.";
+		}
+		else
+		{
+			$return['status']		  = "error";
+			$return['status_message'] = isset($response->message) ? $response->message : "Some error occurred. Please contact the administator.";
 		}
 
 		return $return;

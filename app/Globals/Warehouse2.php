@@ -644,7 +644,7 @@ class Warehouse2
             Tbl_warehouse_inventory_record_log::where("record_consume_ref_name",$ref_name)->where("record_item_id",$item_id)->where("record_consume_ref_id",$ref_id)->update($update);
         }
     }
-    public static function consume($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '')
+    public static function consume($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '', $update_count = true)
     {
         $return = null;
 
@@ -707,7 +707,10 @@ class Warehouse2
             Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
         }
 
-        Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
+        if($update_count == true)
+        {
+            Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
+        }
 
         return $return;
     }
@@ -741,7 +744,7 @@ class Warehouse2
             return $id;
         }
     }
-    public static function consume_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item)
+    public static function consume_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item, $update_count = true)
     {
         $validate = null;
         foreach ($_item as $key => $value)
@@ -758,7 +761,7 @@ class Warehouse2
                 $consume['name'] = $reference_name;
                 $consume['id'] = $reference_id;
 
-                $validate = Warehouse2::consume($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $consume, $serial, 'inventory_history_recorded');
+                $validate = Warehouse2::consume($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $consume, $serial, 'inventory_history_recorded', $update_count);
             }
         }
 

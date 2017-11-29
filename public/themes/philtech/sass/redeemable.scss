@@ -6,7 +6,7 @@
 {
 	// width: 30%;
 	// height: auto;
-	padding-bottom: 25px;
+	padding-bottom: 30px;
 
 	.image-container
 	{
@@ -22,13 +22,11 @@
 	{
 		h4 
 		{
+			font-size: 15px;
+			
 			@media screen and (max-width: 768px)
 			{
-				font-size: 15px;
-			}
-			@media screen and (max-width: 375px)
-			{
-				font-size: 13px;
+				font-size: 12px;
 			}
 			@media screen and (max-width: 320px)
 			{
@@ -41,9 +39,9 @@
 	{
 		color: #006cc5;
 		
-		@media screen and (max-width: 375px)
+		@media screen and (max-width: 768px)
 		{
-			font-size: 13px;
+			font-size: 12px;
 		}
 		@media screen and (max-width: 320px)
 		{

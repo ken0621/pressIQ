@@ -19,6 +19,7 @@ use App\Globals\UnitMeasurement;
 use App\Models\Tbl_manufacturer;
 use App\Globals\ItemSerial;
 use App\Globals\AuditTrail;
+use App\Globals\Warehouse2;
 use App\Models\Tbl_unit_measurement_multi;
 use DB;
 use Carbon\Carbon;
@@ -994,7 +995,7 @@ class Warehouse
         $insert_slip['inventroy_source_reason']      = $reason_refill;
         $insert_slip['inventory_source_id']          = $refill_source;
         $insert_slip['inventory_slip_consume_refill']= 'refill';
-        $insert_slip['slip_user_id']= Warehouse::getUserid();
+        $insert_slip['slip_user_id'] = Warehouse::getUserid();
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
@@ -1004,8 +1005,16 @@ class Warehouse
         $err = 0;
         $insert_refill = [];
 
+        /*UPDATE FROM V1 to V2*/
+        $_v2_shop_id                = $shop_id;
+        $_v2_warehouse_id           = $warehouse_id;
+        $_v2_reference_name         = $reason_refill;
+        $_v2_reference_id           = $refill_source;
+        $_v2_remarks                = 'Refill from Warehouse v1 - '.$remarks;
+
         $for_serial_item = [];
         
+        $_itemv2 = null;
         if($warehouse_refill_product)
         {
             foreach($warehouse_refill_product as $key => $refill_product)
@@ -1033,6 +1042,10 @@ class Warehouse
                 $for_serial_item[$key]["quantity"] = $refill_product['quantity'];
                 $for_serial_item[$key]["product_id"] = $refill_product['product_id'];
                 $for_serial_item[$key]["inventory_id"] = $inventory_id;
+
+                $_itemv2[$key]["item_id"]    = $refill_product['product_id'];
+                $_itemv2[$key]["quantity"]   = $refill_product['quantity'];
+                $_itemv2[$key]["remarks"]    = 'Refill from Warehouse v1 - '.$remarks;
             }
            
             $data['status'] = ''; 
@@ -1054,6 +1067,11 @@ class Warehouse
             }
  
             $data['inventory_slip_id'] = $inventory_slip_id;
+
+            if(count($_itemv2) > 0)
+            {
+                Warehouse2::refill_bulk($_v2_shop_id, $_v2_warehouse_id, $_v2_reference_name, $_v2_reference_id, $_v2_remarks, $_itemv2, false);
+            }
 
             $slip_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id);
             AuditTrail::record_logs("Refill","warehouse_inventory",$inventory_slip_id,"",serialize($slip_data));
@@ -1094,6 +1112,15 @@ class Warehouse
 
         $insert_consume = null;
 
+        /*CONSUME FROM V1 to V2*/
+        $_v2_shop_id                = $shop_id;
+        $_v2_warehouse_id           = $warehouse_id;
+        $_v2_reference_name         = $transaction_type;
+        $_v2_reference_id           = $transaction_id;
+        $_v2_remarks                = 'Consume from Warehouse v1 - '.$remarks;
+
+        $_itemv2 = null;
+
         $inventory_success = null;
         $inventory_err = null;
         $success = 0;
@@ -1110,7 +1137,6 @@ class Warehouse
                 {
                     $count_on_hand = 0;   
                 }
-
                 
                 if($allow_out_of_stock == true)
                 {
@@ -1143,8 +1169,11 @@ class Warehouse
                         $inventory_err[$err] = Warehouse::array_tansfer('error', $product['product_id']);
                         $err++;
                     }
+                }
 
-                }                
+                $_itemv2[$key]["item_id"]    = $product['product_id'];
+                $_itemv2[$key]["quantity"]   = $product['quantity'];
+                $_itemv2[$key]["remarks"]    = 'Consume from Warehouse v1 - '.$remarks;              
             }
         }
         if(count($item_serial) > 0)
@@ -1164,6 +1193,8 @@ class Warehouse
 
                 $data['status'] = 'success';
                 $data['inventory_slip_id'] = $inventory_slip_id;     
+
+                
 
                 $slip_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id);
                 AuditTrail::record_logs("Consume","warehouse_inventory",$inventory_slip_id,"",serialize($slip_data));           

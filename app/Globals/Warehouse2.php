@@ -550,7 +550,7 @@ class Warehouse2
 
         dd($ret);
     */
-    public static function refill_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item = array())
+    public static function refill_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item = array(), $update_count = true)
     {
         $validate = null;
         foreach ($_item as $key => $value)
@@ -579,7 +579,7 @@ class Warehouse2
                 $history_item[$key]['quantity'] = $value['quantity'];
                 $history_item[$key]['item_remarks'] = $value['remarks'];
 
-                $validate = Warehouse2::refill($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $source, $serial, 'inventory_history_recorded');
+                $validate = Warehouse2::refill($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $source, $serial, 'inventory_history_recorded', $update_count);
             }
 
             Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
@@ -966,30 +966,31 @@ class Warehouse2
     }
     public static function migrate_warehouse_inventory()
     {
-        $all_warehouse = Tbl_warehouse::where('archived',0)->get();
+        $all_warehouse = Tbl_warehouse::where('archived',0)->where('warehouse_shop_id',1)->where('warehouse_id',3)->get();
         $return = null;
 
         $all_serial = Tbl_inventory_serial_number::selectRaw("item_id, serial_number")->where('archived',0)->where("item_consumed",0)->where("sold",0)->groupBy('serial_number')->get()->toArray();
             $_item = null;
         foreach ($all_warehouse as $key_warehouse => $value_warehouse) 
         {
-            $all_item = Tbl_item::inventory()->where('warehouse_id',$value_warehouse->warehouse_id)->get();
+            $all_item = Tbl_item::inventory($value_warehouse->warehouse_id)->get();
             
             $total_inventory = 0;
             foreach ($all_item as $key => $value)
             {
                 $log_count = 0;
 
-                $get_log_count = Tbl_item::recordloginventory()
+                $get_log_count = Tbl_item::recordloginventory($value_warehouse->warehouse_id)
                                      ->where('item_id',$value->item_id)
                                      ->where('record_inventory_status',0)
-                                     ->value('log_count');
+                                     ->value('inventory_count');
                 if($get_log_count)
                 {
                     $log_count = $get_log_count;
                 }
 
                 $total_inventory = $value->inventory_count - $log_count;
+                echo $total_inventory .' = '. $value->inventory_count .' - '. $log_count .'<br>' ;
                 if($total_inventory > 0)
                 {
                     $_item[$key]["item_id"]              = $value->item_id;
@@ -1005,6 +1006,7 @@ class Warehouse2
             //     $return = Warehouse2::refill_bulk($value_warehouse->warehouse_shop_id, $value_warehouse->warehouse_id, "inventory_migrate", 0 , "Refill - Inventory Migrated from old warehouse", $_item);
             // }
         }
+        die();
 
         return $_item;       
     }

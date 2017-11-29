@@ -218,18 +218,18 @@ class Customer_InvoiceController extends Member
 
         foreach ($product_consume as $key_items => $value_items) 
         {
-             $i = null;
-             foreach ($_itemline as $keyitemline => $valueitemline)
-             {
-                $type = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitemline])->value("item_type_id");
-                if($type == 4)
-                {
-                    if(Request::input("invline_item_id")[$keyitemline] == $value_items['product_id'])
-                    {
-                        $i = "true";
-                    }                    
-                }
-             }
+            $i = null;
+            foreach ($_itemline as $keyitemline => $valueitemline)
+            {
+               $type = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitemline])->value("item_type_id");
+               if($type == 4)
+               {
+                   if(Request::input("invline_item_id")[$keyitemline] == $value_items['product_id'])
+                   {
+                       $i = "true";
+                   }                    
+               }
+            }
             if($i != null)
             {
                 unset($product_consume[$key_items]);

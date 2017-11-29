@@ -1,0 +1,229 @@
+.background-container
+{
+	padding: 30px 0px;
+	min-height: 820px;
+	
+	.pressview
+	{
+		.press-release-container
+		{
+			padding: 20px 0px 20px 0px;	
+			.tab
+			{
+				float: left;
+				border: 1px solid #ccc;
+				background-color: #f1f1f1;
+				width: 14%;
+				border-right: none;
+				height: 98px;
+			}
+
+			.tabcontent 
+			{
+				background-color: #fff;
+				float: left;
+				padding: 0px 10px;
+				border: 1px solid #ccc;
+				width: 83%;
+			}
+
+			button
+			{
+				display: block;
+				background-color: inherit;
+				color: black;
+				padding: 15px 13px;
+				width: 100%;
+				border: none;
+				outline: none;
+				text-align: center;
+				cursor: pointer;
+				transition: 0.3s;
+				font-size: 13px;
+			}
+
+			button:hover
+			{
+				background-color: #ddd;
+			}
+
+			button.active
+			{
+				background-color: #ccc;
+			}
+
+			.press-release-content
+			{
+				.create-pr-container
+				{
+					padding: 20px 40px 50px 40px;
+					min-height: 700px;
+					.title-container
+					{
+						font-size: 25px;
+						color: #316df9;	
+						font-weight: 700;
+						padding-top: 20px;
+					}
+						
+					.title
+					{
+						color: #404040;
+						font-size: 15px;
+						padding-top: 20px;
+					}
+
+					input
+					{
+						color: #404040;
+						height: 40px;
+						font-size: 15px;
+						width: 80%;
+						background-color: inherit;
+						display: inline-block;
+						vertical-align: middle
+					}
+
+					span
+					{
+						display: inline-block;
+						vertical-align: middle;
+						padding-left: 10px;
+						a
+						{
+							background-color: #316df9;
+							color: #fff;
+							font-size: 13px;
+							padding: 8px 8px;
+							text-decoration: none;
+							display: inline-block;
+							vertical-align: middle
+						}
+					}
+
+					.button-container
+					{
+						padding-top: 30px;
+						.save-button
+						{
+							padding-right: 20px;
+							a
+							{
+								background-color: #316df9;
+								color: #fff;
+								font-size: 15px;
+								text-decoration: none;
+								padding: 10px 20px;
+							}
+						}
+						.send-button
+						{
+							a
+							{
+								padding: 10px 30px;
+								background-color: #316df9;
+								color: #fff;
+								font-size: 15px;
+								text-decoration: none;
+							}
+						}
+					}
+				}
+
+				.manage-pr-container
+				{
+					padding: 30px 10px 50px 10px;
+					border: 1px solid #ccc;
+					min-height: 700px;
+					.manage-holder-container
+					{
+						table
+						{
+							font-family: arial, sans-serif;
+							border-collapse: collapse;
+							width: 100%;
+						}
+
+						th
+						{
+							border: 1px solid #dddddd;
+							text-align: center;
+							padding: 8px;
+						}
+						td
+						{
+							border: 1px solid #dddddd;
+							text-align: center;
+							padding: 10px;
+						}
+
+						a
+						{
+							background-color: #316df9;
+							color: #fff;
+							font-size: 12px;
+							padding: 8px 8px;
+							text-decoration: none;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+.popup-choose
+{
+	.modal-content
+	{
+		.modal-header
+		{
+			button
+			{
+				color: #316df9;
+			}
+			.title-container
+			{
+				font-size: 20px;
+				font-weight: 700;
+			}
+		}
+
+		.modal-body
+		{
+			.title-container
+			{
+				font-size: 15px;
+				padding-bottom: 10px;
+			}
+			.right-container
+			{
+				padding: 10px 15px;
+				border: 2px solid #688ff0;
+			}
+			.left-container
+			{
+				padding: 10px 15px;
+				border: 2px solid #dddddd;
+				background-color: #eeeeee;
+				min-height: 300px;
+			}
+		}
+
+		.modal-footer
+		{
+			border-top: none;
+			.button-container
+			{
+				a
+				{
+					background-color: #316df9;
+					color: #fff;
+					font-size: 15px;
+					padding: 10px 10px;
+					text-decoration: none;
+				}
+			}
+		}
+	}
+}

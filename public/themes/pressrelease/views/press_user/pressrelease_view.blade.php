@@ -3,7 +3,7 @@
 	<div class="row-no-padding clearfix">
 		<div class="col-md-9">
 			<div class="press-view-holder">
-				<div class="title-container"><a href="/pressuser">Press Release 1</a></div>
+				<div class="title-container"><a href="/pressuser/mypressrelease">Press Release 1</a></div>
 				<div class="date-container">November 25, 2017</div>
 				<div class="details-container">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod corporis possimus laboriosam
 				</div>
@@ -15,9 +15,7 @@
 		</div>
 		<div class="col-md-3">
 			<div class="press-others-holder">
-				<div class="title-container"><a href="/pressuser/pressrelease/view">Press Release 1</a></div>
-				<div class="date-container">November 25, 2017</div>
-				<div class="border"></div>
+				<div class="header-container">Other Releases: </div>
 				<div class="title-container"><a data-toggle="tab" href="#">Press Release 2</a></div>
 				<div class="date-container">November 25, 2017</div>
 				<div class="border"></div>

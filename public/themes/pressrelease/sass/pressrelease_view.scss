@@ -39,14 +39,18 @@
 
 		.header-container
 		{
-			font-size: 20px;
+			font-size: 18px;
 			font-weight: 700;
 			text-decoration: none;
 			color: #404040;
-			padding-bottom: 30px;
+			padding-bottom: 20px;
+			background-color: #ededed;
 		}
 		.title-container
 		{
+			text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
 			a
 			{
 				font-size: 20px;

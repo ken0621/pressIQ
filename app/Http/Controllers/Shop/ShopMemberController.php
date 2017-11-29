@@ -214,7 +214,18 @@ class ShopMemberController extends Shop
         $data["page"] = "Press Release - Dashboard";
         return view("press_user.press_user_dashboard", $data);
     }
+     public function pressuser_pressrelease()
+    {
+        $data["page"] = "Press Release - Press Release";
+        return view("press_user.press_user_pressrelease", $data);
+    }
+     public function pressuser_my_pressrelease()
+    {
+        $data["page"] = "Press Release - My Press Release";
+        return view("press_user.press_user_my_pressrelease", $data);
+    }
     /*Press Release*/
+
 
     public function getEventDetails(Request $request)
     {

@@ -262,7 +262,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption"></div>
+	                        <div class="text-caption">You are now officially enrolled to SHIFT.</div>
 	                    </div>
 	                </div>
 	            </div>

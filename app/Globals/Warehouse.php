@@ -1188,7 +1188,7 @@ class Warehouse
         if($inventory_err == null)
         {
             if($insert_consume != null)
-            {
+            { 
                 Tbl_warehouse_inventory::insert($insert_consume);
 
                 $data['status'] = 'success';

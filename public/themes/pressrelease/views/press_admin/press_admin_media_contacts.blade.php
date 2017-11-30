@@ -23,42 +23,38 @@
                                 <th>Edit</th>
                                 <th>Delete</th>
                             </tr>
+                            @foreach($contacts as $contact)
                             <tr>
-                                <td>Contact 1</td>
-                                <td>UK</td>
-                                <td>contact1@mail.com</td>
-                                <td>contact1.uk</td>
-                                <td>food media</td>
+                                <td>{{$contact->contact_name}}</td>
+                                <td>{{$contact->country}}</td>
+                                <td>{{$contact->contact_email}}</td>
+                                <td>{{$contact->contact_website}}</td>
+                                <td>{{$contact->contact_description}}</td>
                                 <td><a href="#">Edit</a></td>
                                 <td><a href="#">Delete</a></td>
                             </tr>
-                            <tr>
-                                <td>Contact 2</td>
-                                <td>Philippines</td>
-                                <td>contact2@mail.com</td>
-                                <td>contact2.uk</td>
-                                <td>tech media</td>
-                                <td><a href="#">Edit</a></td>
-                                <td><a href="#">Delete</a></td>
-                            </tr>
+                            @endforeach
                         </table>
                     </div>
                 </div>
 
                 <div id="add_media" class="tabcontent add-media-container">
-                    <div class="title">Contact Name: </div>
-                    <input type="text" class="form-control">
-                    <div class="title">Country: </div>
-                    <input type="text" class="form-control">
-                    <div class="title">Email: </div>
-                    <input type="text" class="form-control">
-                    <div class="title">Website: </div>
-                    <input type="text" class="form-control">
-                    <div class="title">Description: </div>
-                    <textarea></textarea>
-                    <div class="button-container">
-                        <span class="add-button"><a href="#">Add Contacts</a></span>
-                    </div>
+                    <form method="post">
+                        {{csrf_field()}}
+                        <div class="title">Contact Name: </div>
+                        <input type="text" name="contact_name" class="form-control">
+                        <div class="title">Country: </div>
+                        <input type="text" name="country" class="form-control">
+                        <div class="title">Email: </div>
+                        <input type="text" name="contact_email" class="form-control">
+                        <div class="title">Website: </div>
+                        <input type="text" name="contact_website" class="form-control">
+                        <div class="title">Description: </div>
+                        <textarea name="contact_description"></textarea>
+                        <div class="button-container">
+                            <button class="add-button" type="submit">Add Contacts</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

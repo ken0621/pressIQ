@@ -55,6 +55,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Tbl_pressiq_media_contacts;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -239,12 +240,35 @@ class ShopMemberController extends Shop
         $data["page"] = "Press Release - Dashboard";
         return view("press_admin.press_admin_dashboard", $data);
     }
-     public function pressadmin_media_contacts()
+     public function pressadmin_add_media_contacts()
+    {   
+        $contacts = DB::table('tbl_pressiq_media_contacts')->get();
+        if (request()->isMethod("post"))
+        { 
+                $contact_info["contact_name"]=request('contact_name');
+                $contact_info["country"]=request('country');
+                $contact_info["contact_email"]=request('contact_email');
+                $contact_info["contact_website"]=request('contact_website');
+                $contact_info["contact_description"]=request('contact_description');
+                $contact_id = tbl_pressiq_media_contacts::insertGetId($contact_info); 
+                $data["page"] = "Press Release - Media Contacts";
+                $data["contacts"]=$contacts;
+                return view("press_admin.press_admin_media_contacts", $data);
+        }
+        else
+        {
+            
+            $data["page"] = "Press Release - Media Contacts";
+            $data["contacts"]=$contacts;
+            return view("press_admin.press_admin_media_contacts",$data);
+        }
+    }
+    public function pressadmin_media_contacts()
     {
         $data["page"] = "Press Release - Media Contacts";
         return view("press_admin.press_admin_media_contacts", $data);
     }
-     public function pressadmin_pressrelease()
+    public function pressadmin_pressrelease()
     {
         $data["page"] = "Press Release - Press Release";
         return view("press_admin.press_admin_pressrelease", $data);

@@ -2669,7 +2669,15 @@ class ShopMemberController extends Shop
         $data['mlm_activation'] = Request2::input('mlm_activation');
         $data['slot_no'] = Request2::input('slot_no');
         
-        $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) in your Slot No <b>".$data['slot_no']."</b> ?";
+        if ($this->shop_theme == "3xcell") 
+        {
+            $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) ?";
+        }
+        else
+        {
+            $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) in your Slot No <b>".$data['slot_no']."</b> ?";
+        }
+
         $data['action'] = '/members/slot-use-product-code';
 
         return view('mlm.slots.confirm_product_code',$data);

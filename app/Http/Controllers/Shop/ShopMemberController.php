@@ -451,7 +451,17 @@ class ShopMemberController extends Shop
       Session::flash('message', "Recipient Successfully Added!");
       return  redirect::back();
     }
-
+    public function pressadmin_pressrelease_addrecipient(Request $request)
+    {
+      $data["name"]                      = $request->name;
+      $data["country"]                   = $request->country;
+      $data["research_email_address"]    = $request->research_email_address;
+      $data["website"]                   = $request->website;
+      $data["description"]               = $request->description;
+      Tbl_press_release_recipient::insert($data); 
+      Session::flash('message', "Recipient Successfully Added!");
+      return  redirect::back();
+    }
     public function pressreleases_deleterecipient($id)
     {
       Tbl_press_release_recipient::where('recipient_id',$id)->delete();

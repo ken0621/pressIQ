@@ -78,7 +78,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressadmin/pressreleases_addrecipient', 'Shop\ShopMemberController@pressadmin_pressrelease_addrecipient');//PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_deleterecipient/{id}', 'Shop\ShopMemberController@pressreleases_deleterecipient');//PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_send_recipient/', 'Shop\ShopMemberController@pressreleases_send_recipient');//PRESS RELEASE
-
+	
 	Route::get('/blog', 'Shop\ShopBlogController@index');
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index');
 	Route::get('/payment', 'Shop\ShopPaymentController@index');

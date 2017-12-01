@@ -14,18 +14,22 @@
                                     
             <div class="press-release-content">
                 <div id="create_pr" class="tabcontent create-pr-container">
-                    <div class="title-container">PRESS RELEASE</div>
-                    <div class="title">Send To:</div>
-                    <input type="text" class="form-control"><span class="choose-button"><a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
-                    <div class="title">Headline:</div>
-                    <input type="text" class="form-control">
-                    <div class="title">Subheading:</div>
-                    <input type="text" class="form-control">
-                    <div class="title">Content:</div>
-                    <textarea></textarea>
-                    <div class="button-container">
-                        <span class="save-button"><a href="#">Save as draft</a></span><span class="send-button"><a href="#">Send</a></span>
-                    </div>
+                    <form method="post">
+                        {{csrf_field()}}
+                        <div class="title-container">PRESS RELEASE</div>
+                        <div class="title">Send To:</div>
+                        <input type="text" class="form-control"><span class="choose-button"><a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
+                        <div class="title">Headline:</div>
+                        <input type="text" name="pr_headline" class="form-control">
+                        <div class="title">Subheading:</div>
+                        <input type="text" name="pr_subheading" class="form-control">
+                        <div class="title">Content:</div>
+                        <textarea name="pr_content"></textarea>
+                        <div class="button-container">
+                            <span class="save-button"><a href="/sendrelease">Save as draft</a></span>
+                            <span class="send-button"><button type="submit"><a>Send</a></button></span>
+                        </div>
+                    </form>
                 </div>
 
                 <div id="manage_pr" class="tabcontent manage-pr-container">

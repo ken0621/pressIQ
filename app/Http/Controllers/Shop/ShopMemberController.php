@@ -275,7 +275,7 @@ class ShopMemberController extends Shop
     }
      public function pressuser_pressrelease()
     {
-
+        $data['add_recipient']   = Tbl_press_release_recipient::get();
         if(Session::exists('user_email'))
         {
            $level=request(session()->get('user_level'));
@@ -289,9 +289,9 @@ class ShopMemberController extends Shop
                     $pr_info["pr_from"]         =session('user_email');
                     $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
                     // $pr_info["pr_to"]           =;
-                    // $pr_info["pr_date_sent"]    =Carbon::now();
+                    $pr_info["pr_date_sent"]    =Carbon::now();
                     
-                    Mail::send('emails.sample_email', $pr_info, function($message) use ($pr_info)
+                    Mail::send('emails.press_email', $pr_info, function($message) use ($pr_info)
                     {
                         $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
                         $message->to('guevarra@gmail.com');
@@ -302,7 +302,7 @@ class ShopMemberController extends Shop
                 else
                 {
                     $data["page"] = "Press Release - Press Release";
-                     $data['add_recipient']   = Tbl_press_release_recipient::get();
+                     
                     return view("press_user.press_user_pressrelease", $data);
                 }
            }
@@ -440,17 +440,6 @@ class ShopMemberController extends Shop
         }
     }
 
-    public function pressadmin_pressrelease_addrecipient(Request $request)
-    {
-      $data["name"]                      = $request->name;
-      $data["country"]                   = $request->country;
-      $data["research_email_address"]    = $request->research_email_address;
-      $data["website"]                   = $request->website;
-      $data["description"]               = $request->description;
-      Tbl_press_release_recipient::insert($data); 
-      Session::flash('message', "Recipient Successfully Added!");
-      return  redirect::back();
-    }
     public function pressadmin_pressrelease_addrecipient(Request $request)
     {
       $data["name"]                      = $request->name;

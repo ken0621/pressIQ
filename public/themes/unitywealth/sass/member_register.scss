@@ -309,7 +309,9 @@ body
 							color: #76B83F !important;
 						}
 					}
-					.btn-signup
+
+					
+					.btn-custom
 					{
 						@include transition(0.2s);
 						background-color: #00A4E6;
@@ -393,7 +395,7 @@ body
 		.btn-semi
 		{
 			@include transition(0.2s);
-			background-color: #0087D1;
+			background-color: rgba(0,164,230,0.6);
 
 			&:hover
 			{

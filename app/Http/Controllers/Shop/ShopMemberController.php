@@ -211,13 +211,17 @@ class ShopMemberController extends Shop
     public function logout()
     {
         Session::forget('user_email');
+        Session::forget('user_first_name');
+        Session::forget('user_last_name');
+        Session::forget('user_level');
+
         return Redirect::to("/");
     }
     public function pressuser()
     {
         if(Session::exists('user_email'))
         {
-           $level=request(session()->get('user_level'));
+           $level=session('user_level');
            if($level!="1")
            {
                 $data["page"] = "Press Release";
@@ -237,7 +241,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=request(session()->get('user_level'));
+           $level=session('user_level');
            if($level!="1")
            {
                 $data["page"] = "Press Release - View";
@@ -257,7 +261,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=request(session()->get('user_level'));
+           $level=session('user_level');
            if($level!="1")
            {
                 $data["page"] = "Press Release - Dashboard";
@@ -278,7 +282,7 @@ class ShopMemberController extends Shop
         $data['add_recipient']   = Tbl_press_release_recipient::get();
         if(Session::exists('user_email'))
         {
-           $level=request(session()->get('user_level'));
+           $level=session('user_level');
            if($level!="1")
            {
                 if (request()->isMethod("post"))
@@ -288,13 +292,13 @@ class ShopMemberController extends Shop
                     $pr_info["pr_content"]      =request('pr_content');
                     $pr_info["pr_from"]         =session('user_email');
                     $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
-                    // $pr_info["pr_to"]           =;
+                    $pr_info["pr_to"]           =request('pr_to');
                     $pr_info["pr_date_sent"]    =Carbon::now();
                     
                     Mail::send('emails.press_email', $pr_info, function($message) use ($pr_info)
                     {
                         $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
-                        $message->to('guevarra@gmail.com');
+                        $message->to($pr_info["pr_to"]);
                     });
                     $data["page"] = "Press Release - Press Release";
                     return view("press_user.press_user_pressrelease", $data);
@@ -321,7 +325,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=request(session()->get('user_level'));
+           $level=session('user_level');
            if($level!="1")
            {
                 $data["page"] = "Press Release - My Press Release";
@@ -341,7 +345,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=request(session()->get('user_level'));
+           $level=session('user_level');
            if($level!="1")
            {
                 return Redirect::to("/pressuser");
@@ -361,7 +365,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=request(session()->get('user_level'));
+           $level=session('user_level');
            if($level!="1")
            {
                 return Redirect::to("/pressuser/dashboard");
@@ -423,7 +427,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=request(session()->get('user_level'));
+           $level=session('user_level');
            if($level!="1")
            {
                 return Redirect::to("/pressuser/mypressrelease");

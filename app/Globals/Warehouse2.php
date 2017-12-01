@@ -598,8 +598,8 @@ class Warehouse2
                     $history_item[$key]['item_remarks'] = $value['remarks'];
 
                     $validate = Warehouse2::refill($shop_id, $warehouse_id, $value['item_id'], $total_refill_qty, $value['remarks'], $source, $serial, 'inventory_history_recorded', $update_count);
-                    Self::update_offset_qty($warehouse_id, $value['item_id'], $count_offset, $value['quantity']);
                 }
+                Self::update_offset_qty($warehouse_id, $value['item_id'], $count_offset, $value['quantity']);
             }
             if(count($history_item) > 0)
             {
@@ -619,10 +619,19 @@ class Warehouse2
             for ($ctr_qty = 0; $ctr_qty < $update_qty; $ctr_qty++)
             {
                 $update['record_count_inventory'] = 1;
-                Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                $record_log_id = Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                    ->where('record_item_id', $item_id)
+                                                    ->where('record_count_inventory','<',0)->value('record_log_id');
+                Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->update($update);
+
+            }
+        }
+        else if($update_qty == 0)
+        {
+            $update['record_count_inventory'] = 1;
+            Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
                                                     ->where('record_item_id', $item_id)
                                                     ->where('record_count_inventory','<',0)->update($update);
-            }
         }
     }
     public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array(), $allow_out_of_stock = false)

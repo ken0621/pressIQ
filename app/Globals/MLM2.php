@@ -580,7 +580,6 @@ class MLM2
 	{
 		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
 		$query = Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id);
-		$settings = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
 
 		$query->where(function($q) use ($_slot)
 		{
@@ -615,17 +614,7 @@ class MLM2
 
 			$_reward[$key]->display_wallet_log_request = Currency::format($reward->wallet_log_request);
 			$_reward[$key]->display_wallet_log_tax = Currency::format($reward->wallet_log_tax);
-			$service_charge = $reward->wallet_log_service_charge;
-			if($settings)
-			{
-				$total_w = ($reward->wallet_log_request - $reward->wallet_log_tax);
-				if($settings->enchasment_settings_p_fee_type == 1)
-				{
-					$service_charge = $total_w * ($settings->enchasment_settings_p_fee/100);
-				}
-			}
-
-			$_reward[$key]->display_wallet_log_service_charge = Currency::format($service_charge);
+			$_reward[$key]->display_wallet_log_service_charge = Currency::format($reward->wallet_log_service_charge);
 			$_reward[$key]->display_wallet_log_other_charge = Currency::format($reward->wallet_log_other_charge);
 		}
 

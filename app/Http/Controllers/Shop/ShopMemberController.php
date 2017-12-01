@@ -580,6 +580,7 @@ class ShopMemberController extends Shop
 
         $tax = $payout_setting->enchasment_settings_tax;
         $service_charge = $payout_setting->enchasment_settings_p_fee;
+        $service_charge_type = $payout_setting->enchasment_settings_p_fee_type;
         $other_charge = $payout_setting->encashment_settings_o_fee;
         $minimum = $payout_setting->enchasment_settings_minimum;
 
@@ -605,7 +606,13 @@ class ShopMemberController extends Shop
                 $_slot[$key]->display_request_amount = Currency::format($amount);
 
                 $tax_amount = ($tax / 100) * $amount;
-                $take_home = $amount - ($tax_amount + $service_charge + $other_charge);
+                $take_home = $amount - ($tax_amount);
+                if($service_charge_type == 1)
+                {
+                    $service_charge = $take_home * ($service_charge /100);
+                }
+                $take_home = $take_home - ($service_charge + $other_charge);
+                
 
                 if($take_home < 0)
                 {

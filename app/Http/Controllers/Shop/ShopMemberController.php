@@ -1512,8 +1512,7 @@ class ShopMemberController extends Shop
         $data['customer_id'] = Self::$customer_info->customer_id;
 
         $q = $query->where("tbl_transaction.transaction_reference_id",Self::$customer_info->customer_id);
-        $data['_codes'] = $q->where("item_in_use","unused")->get();
-
+        $data['_codes'] = $q->where("transaction_reference_table","tbl_customer")->where("item_in_use","unused")->where("item_type_id",5)->where("tbl_transaction.shop_id",$this->shop_info->shop_id)->get();
         return (Self::load_view_for_members("member.code-vault",$data));
     }
     public function getUsecode()
@@ -1621,20 +1620,24 @@ class ShopMemberController extends Shop
     }
     public function getWalletTransfer()
     {
-        dd("This page is under maintenance");
+        // dd("This page is under maintenance");
         $data['page'] = "Wallet Transfer";
         $data['customer_id'] = Self::$customer_info->customer_id;
         $slot_no = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->first();
         $id = $slot_no->slot_id;
-        $data['transfer_history'] = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","wallet_transfer")->where("wallet_log_slot",$id)->get();
+        $data['transfer_history'] = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","wallet_transfer")->where("wallet_log_slot",$id)->paginate(8);
         return (Self::load_view_for_members("member.wallet_transfer", $data));
     }
     public function postWalletTransfer(Request $request)
     {
-        dd("This page is under maintenance");
+        // dd("This page is under maintenance");
+
         $data['slot'] = $request->slot;
+        // check if slot is belong to this user
         $data['amount'] = $request->amount;
+        // validate if amount+transfer fee is greater than validated slot
         $data['recipient'] = $request->recipient;
+        // check if the recipient is not himself 
 
         $rules['slot'] = 'required';
         $rules['amount'] = 'required';
@@ -1672,46 +1675,113 @@ class ShopMemberController extends Shop
         $shop_id = $this->shop_info->shop_id;
         $transaction_fee =  -1*Tbl_mlm_slot_wallet_log_refill_settings::where("shop_id",$shop_id)->first()->wallet_log_refill_settings_transfer_processing_fee;
 
+        $isSlotValid = false;
+        $isRecipientValid = false;
+        $isAmountValid = false;
+
         $recipient_slot_no = request("recipient");
         $sender_slot_no = request("slot");
         $amount = request("amount");
 
-        $log_slot = Tbl_mlm_slot::where('slot_no',$recipient_slot_no)->first()->slot_id;
-        $log_slot_sponsor = Tbl_mlm_slot::where('slot_no',$sender_slot_no)->first()->slot_id;
+        $logged_in_account = Self::$customer_info->customer_id;
+
+        $slots = Tbl_mlm_slot::where('slot_owner',$logged_in_account)->get();
+        foreach ($slots as $validSlot) {
+            if($validSlot->slot_no == $sender_slot_no)
+            {
+                $isSlotValid = true;
+            }
+        }
+
+
+        if($sender_slot_no != $recipient_slot_no)
+        {
+            $isRecipientValid = true;
+        }
+
+        $slot_no = $sender_slot_no;
+        $query = Tbl_mlm_slot::where('slot_no',$slot_no)->first();
+        $wallet = 0;
+        if(count($query))
+        {
+            $slot_id = $query->slot_id;
+            $q = Tbl_mlm_slot_wallet_log::where('wallet_log_slot',$slot_id)->get();
+            $counter = count($q);
+            if($counter>0)
+            {
+                $current=0;
+                foreach($q as $a)
+                {
+                    $current+=$a->wallet_log_amount;
+                }
+                $wallet=$current;
+            }
+        }
+        
+        $minAmount = $amount+(-1*$transaction_fee);
+        if($wallet>=$minAmount)
+        {
+            $isAmountValid = true;
+        }
+
+
+
+        // $log_slot = Tbl_mlm_slot::where('slot_no',$recipient_slot_no)->first()->slot_id;
+        // $log_slot_sponsor = Tbl_mlm_slot::where('slot_no',$sender_slot_no)->first()->slot_id;
         
 
-        //transfer
-        $arry_log['wallet_log_slot']         = Tbl_mlm_slot::where('slot_no',$sender_slot_no)->first()->slot_id;
-        $arry_log['shop_id']                 = $shop_id;
-        $arry_log['wallet_log_slot_sponsor'] = Tbl_mlm_slot::where('slot_no',$recipient_slot_no)->first()->slot_id;
-        $arry_log['wallet_log_details']      = Mlm_slot_log::log_constructor_wallet_transfer("transfer",$amount,$recipient_slot_no);
-        $arry_log['wallet_log_amount']       = ($amount*-1);
-        $arry_log['wallet_log_plan']         = "WALLET_TRANSFER";
-        $arry_log['wallet_log_status']       = "released";   // tatanong ko pa
-        $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
-        Mlm_slot_log::slot_array($arry_log);
+        if(!$isSlotValid)
+        {
+            $response = "error_slot";
+        }
+        else if(!$isAmountValid)
+        {
+            $response = "error_amount";
+        }
+        else if(!$isRecipientValid)
+        {
+            $response = "error_recipient";
+        }
+        else
+        {
+            //transfer
+            $arry_log['wallet_log_slot']         = Tbl_mlm_slot::where('slot_no',$sender_slot_no)->first()->slot_id;
+            $arry_log['shop_id']                 = $shop_id;
+            $arry_log['wallet_log_slot_sponsor'] = Tbl_mlm_slot::where('slot_no',$recipient_slot_no)->first()->slot_id;
+            $arry_log['wallet_log_details']      = Mlm_slot_log::log_constructor_wallet_transfer("transfer",$amount,$recipient_slot_no);
+            $arry_log['wallet_log_amount']       = ($amount*-1);
+            $arry_log['wallet_log_plan']         = "WALLET_TRANSFER";
+            $arry_log['wallet_log_status']       = "released";   // tatanong ko pa
+            $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+            Mlm_slot_log::slot_array($arry_log);
 
-        //recieved 
-        $arry_log['wallet_log_slot']         = Tbl_mlm_slot::where('slot_no',$recipient_slot_no)->first()->slot_id;
-        $arry_log['shop_id']                 = $shop_id;
-        $arry_log['wallet_log_slot_sponsor'] = Tbl_mlm_slot::where('slot_no',$sender_slot_no)->first()->slot_id;
-        $arry_log['wallet_log_details']      = Mlm_slot_log::log_constructor_wallet_transfer("recieved",$amount,$sender_slot_no);
-        $arry_log['wallet_log_amount']       = $amount;
-        $arry_log['wallet_log_plan']         = "WALLET_TRANSFER";
-        $arry_log['wallet_log_status']       = "released";   // tatanong ko pa
-        $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
-        Mlm_slot_log::slot_array($arry_log);
+            //recieved 
+            $arry_log['wallet_log_slot']         = Tbl_mlm_slot::where('slot_no',$recipient_slot_no)->first()->slot_id;
+            $arry_log['shop_id']                 = $shop_id;
+            $arry_log['wallet_log_slot_sponsor'] = Tbl_mlm_slot::where('slot_no',$sender_slot_no)->first()->slot_id;
+            $arry_log['wallet_log_details']      = Mlm_slot_log::log_constructor_wallet_transfer("recieved",$amount,$sender_slot_no);
+            $arry_log['wallet_log_amount']       = $amount;
+            $arry_log['wallet_log_plan']         = "WALLET_TRANSFER";
+            $arry_log['wallet_log_status']       = "released";   // tatanong ko pa
+            $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+            Mlm_slot_log::slot_array($arry_log);
 
-        // fee
-        $arry_log['wallet_log_slot']         = Tbl_mlm_slot::where('slot_no',$sender_slot_no)->first()->slot_id;
-        $arry_log['shop_id']                 = $shop_id;
-        $arry_log['wallet_log_slot_sponsor'] = Tbl_mlm_slot::where('slot_no',$recipient_slot_no)->first()->slot_id;
-        $arry_log['wallet_log_details']      = Mlm_slot_log::log_constructor_wallet_transfer("fee",$transaction_fee,$recipient_slot_no);
-        $arry_log['wallet_log_amount']       = $transaction_fee;
-        $arry_log['wallet_log_plan']         = "WALLET_TRANSFER";
-        $arry_log['wallet_log_status']       = "released";   // tatanong ko pa
-        $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
-        Mlm_slot_log::slot_array($arry_log);
+            // fee
+            $arry_log['wallet_log_slot']         = Tbl_mlm_slot::where('slot_no',$sender_slot_no)->first()->slot_id;
+            $arry_log['shop_id']                 = $shop_id;
+            $arry_log['wallet_log_slot_sponsor'] = Tbl_mlm_slot::where('slot_no',$recipient_slot_no)->first()->slot_id;
+            $arry_log['wallet_log_details']      = Mlm_slot_log::log_constructor_wallet_transfer("fee",$transaction_fee,$recipient_slot_no);
+            $arry_log['wallet_log_amount']       = $transaction_fee;
+            $arry_log['wallet_log_plan']         = "WALLET_TRANSFER";
+            $arry_log['wallet_log_status']       = "released";   // tatanong ko pa
+            $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+            Mlm_slot_log::slot_array($arry_log);
+
+            $response = "success";
+
+        }
+        return $response;
+        
     }
     public function getWalletTransferRequest()
     {
@@ -1737,8 +1807,8 @@ class ShopMemberController extends Shop
     }
     public function getCurrentWallet()
     {
-        $slot_owner = request('slot_owner');
-        $query = Tbl_mlm_slot::where('slot_no',$slot_owner)->first();
+        $slot_no = request('slot_owner');
+        $query = Tbl_mlm_slot::where('slot_no',$slot_no)->first();
         $slot_id = $query->slot_id;
         $q = Tbl_mlm_slot_wallet_log::where('wallet_log_slot',$slot_id)->get();
         $counter = count($q);
@@ -1752,24 +1822,24 @@ class ShopMemberController extends Shop
             }
             $wallet=$current;
         }
-        return $wallet;
+        return currency("P",$wallet);
     }
     public function getWalletTransferFee()
     {
         $shop_id = $this->shop_info->shop_id;
         $transaction_fee =  Tbl_mlm_slot_wallet_log_refill_settings::where("shop_id",$shop_id)->first()->wallet_log_refill_settings_transfer_processing_fee;
-        return $transaction_fee;
+        return currency('P',$transaction_fee);
     }
     public function getWalletRefill()
     {
-        dd("This page is under maintenance");
+        // dd("This page is under maintenance");
         $data['page'] = 'Wallet Refill';
         $data['slot_owner'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
         return Self::load_view_for_members('member.wallet_refill', $data);
     }
     public function getWalletRefillRequest()
     {
-        dd("This page is under maintenance");
+        // dd("This page is under maintenance");
         $shop_id = $this->shop_info->shop_id;
         $data['page'] = "Request Wallet Refill";
         $data['slot_owner'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
@@ -1778,7 +1848,7 @@ class ShopMemberController extends Shop
     }
     public function postWalletRefillRequest(Request $request)
     {
-        dd("This page is under maintenance");
+        // dd("This page is under maintenance");
         $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
         $path ="";
         if($request->hasFile('attachment'))
@@ -1788,33 +1858,79 @@ class ShopMemberController extends Shop
         $shop_id = $this->shop_info->shop_id;
         $fee = Tbl_mlm_slot_wallet_log_refill_settings::where("shop_id",$shop_id)->first()->wallet_log_refill_settings_processings_fee;
         $amount = $request->amount;
-        $slot_id = Tbl_mlm_slot::where("slot_no",$request->slot)->first()->slot_id;
 
-        $insert['wallet_log_refill_date'] = Carbon::now();
-        $insert['wallet_log_refill_amount'] = $amount;
-        $insert['wallet_log_refill_processing_fee'] = $fee;
-        $insert['wallet_log_refill_amount_paid'] = $amount+$fee;
-        $insert['wallet_log_refill_approved'] = 0;
-        $insert['wallet_log_refill_remarks'] = $request->remarks;
-        if($path!="")
-        {
-            $insert['wallet_log_refill_attachment'] = $path_prefix.$path;
+        $logged_in_account = Self::$customer_info->customer_id;
+        $isSlotValid = false;
+        $slots = Tbl_mlm_slot::where('slot_owner',$logged_in_account)->get();
+        foreach ($slots as $validSlot) {
+            if($validSlot->slot_no == $request->slot)
+            {
+                $isSlotValid = true;
+            }
         }
-        $insert['shop_id'] = $shop_id;
-        $insert['slot_id'] = $slot_id;
-        if($query = Tbl_mlm_slot_wallet_log_refill::insert($insert))
+
+        if($isSlotValid)
         {
-            $response = "success";
+            $slot_id = Tbl_mlm_slot::where("slot_no",$request->slot)->first()->slot_id;
+
+            $insert['wallet_log_refill_date'] = Carbon::now();
+            $insert['wallet_log_refill_amount'] = $amount;
+            $insert['wallet_log_refill_processing_fee'] = $fee;
+            $insert['wallet_log_refill_amount_paid'] = $amount+$fee;
+            $insert['wallet_log_refill_approved'] = 0;
+            $insert['wallet_log_refill_remarks'] = $request->remarks;
+            if($path!="")
+            {
+                $insert['wallet_log_refill_attachment'] = $path_prefix.$path;
+            }
+            $insert['shop_id'] = $shop_id;
+            $insert['slot_id'] = $slot_id;
+            if($query = Tbl_mlm_slot_wallet_log_refill::insert($insert))
+            {
+                $response = "success";
+            }
+            else
+            {
+                $response = "error";
+            }
         }
         else
         {
-            $response = "error";
+            $response = "invalid_slot";
         }
+
+        
+        return Redirect::back()->with("response",$response);
+    }
+    public function getUploadAttachment()
+    {
+        $shop_id = $this->shop_info->shop_id;
+        $data['page'] = "Upload Attachment";
+        $data['id'] = request("id");
+        return Self::load_view_for_members('member.wallet_refill_upload_attachment', $data);
+    }
+    public function postUploadAttachment(Request $request)
+    {
+        $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
+        $path ="";
+        $response = 'error_upload';
+        if($request->hasFile('attachment'))
+        {
+            if($path = Storage::putFile('payment-proof', $request->file('attachment')))
+                {
+                    $update['wallet_log_refill_attachment'] = $path_prefix.$path;
+                    if(Tbl_mlm_slot_wallet_log_refill::where('wallet_log_refill_id',$request->id)->update($update))
+                        {
+                            $response = 'success_upload';
+                        }
+                }
+        }
+
         return Redirect::back()->with("response",$response);
     }
     public function getWalletRefillTable()
     {
-        dd("This page is under maintenance");
+        // dd("This page is under maintenance");
         $data['page'] = "Wallet Refill Table";
         $status = request("activetab");
         $slot_no = request("slotno");

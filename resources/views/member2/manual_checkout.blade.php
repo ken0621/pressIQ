@@ -65,7 +65,7 @@
 						<input name="amount" class="form-control" type="number" step="any" placeholder="Amount">
 					</div>
 				@endif
-				<button class="btn btn-primary">Submit</button>
+				<button class="btn btn-primary btn-submit">Submit</button>
 			</form>
 		</div>
 	</div>
@@ -94,7 +94,7 @@
 <link rel="stylesheet" href="/assets/initializr/css/bootstrap.min.css">
 <link rel="stylesheet" href="/assets/initializr/css/bootstrap-theme.min.css">
 <link rel="stylesheet" type="text/css" href="/assets/initializr/css/datetimepicker.css">
-
+<link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
 <!-- GOOGLE FONT -->
 <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/assets/member/css/manual_checkout.css">
@@ -103,13 +103,19 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
 <script type="text/javascript" src="/assets/initializr/js/vendor/bootstrap.min.js"></script>
 <script type="text/javascript" src="/assets/initializr/js/vendor/datetimepicker.js"></script>
-
+<script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function()
 	{
 		$(".payment-proof").change(function()
 		{
 			// $(".upload-proof-of-payment").submit();
+			var input = this.files[0].type.split("/");
+			if(input[0] != 'image')
+			{
+				toastr.error("Error. File should be an image");
+				this.value="";
+			}
 		});
 
         $('.datetime-picker').datetimepicker();

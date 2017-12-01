@@ -648,6 +648,7 @@ class MlmSlotsController extends Mlm
                                         ->where("child_table.slot_owner","!=",Self::$customer_id)
                                         ->where("parent_table.shop_id","=",Self::$shop_id)
                                         ->groupBy("child_table.slot_owner")
+                                        ->orderBy('tbl_customer.first_name')
                                         ->get();
 
         return $_customer;

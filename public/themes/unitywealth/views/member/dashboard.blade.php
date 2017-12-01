@@ -97,19 +97,18 @@
 							<div class="col-md-12 text-center">
 								<div class="kit-holder">
 									<div class="name match-height">{{ $key }}</div>
-									<div class="btn-holder"><button type="button" class="btn btn-primary" onClick="location.href='/cartv2/buy_kit_mobile/{{ $kit }}'">BUY</button></div>
+									<div class="btn-holder"><button type="button" class="btn btn-custom-primary" onClick="location.href='/cartv2/buy_kit_mobile/{{ $kit }}'">BUY</button></div>
 								</div>
 							</div>
 							@endforeach
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
 					</div>
 				</div>
 			</div>
 		</div>
-
 	</div>
 @else
 	<div class="dashboard">

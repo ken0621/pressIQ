@@ -8,7 +8,7 @@
 				<tr>
 					<td class="c1">
 						<div class="register-side">
-							<img src="/themes/{{ $shop_theme }}/img/login-img.png">
+							<img src="/themes/{{ $shop_theme }}/img/login-img.jpg">
 						</div>
 					</td>
 					<td class="c2">

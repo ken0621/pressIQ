@@ -390,7 +390,7 @@ class Item
         $return = isset($_item_new) ? $_item_new : null;  
 
         Self::get_clear_session();
-
+        dd($return);
         return $return;
     }
     public static function get_per_warehouse($shop_id, $warehouse_id, $archive = 0)

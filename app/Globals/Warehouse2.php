@@ -409,7 +409,7 @@ class Warehouse2
 
         return $return;
     }
-    public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '', $update_count = true)
+    public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '', $update_count = true, $for_out_of_stock = '')
     {
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
@@ -457,6 +457,10 @@ class Warehouse2
                 $insert[$ctr_qty]['mlm_pin']                   = Warehouse2::get_mlm_pin($shop_id);
                 $insert[$ctr_qty]['mlm_activation']            = Item::get_mlm_activation($shop_id);
                 $insert[$ctr_qty]['ctrl_number']               = Warehouse2::get_control_number($warehouse_id, $shop_id, Item::get_item_type($item_id));
+                if($for_out_of_stock)
+                {
+                    $insert[$ctr_qty]['record_count_inventory'] = -1;
+                }
 
                 if($serial_qty > 0)
                 {
@@ -653,6 +657,7 @@ class Warehouse2
         if($quantity > $v2_qty)
         {
             $total_out_of_stock = $quantity - $v2_qty;
+            Self::refill($shop_id, $warehouse_id, $item_id, $total_out_of_stock, 'Migrate Inventory v1 to v2', $source, null, null, false, 'for_out_of_stock');
         }
     }
     public static function consume_update($ref_name, $ref_id, $item_id, $quantity)

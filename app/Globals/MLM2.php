@@ -545,7 +545,7 @@ class MLM2
 			$_reward[$key]->log_amount = number_format($reward->points_log_points,2);
 			$_reward[$key]->time_ago = time_ago($reward->points_log_date_claimed);
 			$_reward[$key]->display_date = date("F d, Y", strtotime($reward->points_log_date_claimed));
-			$_reward[$key]->log = Self::customer_rewards_points_contructor($reward);
+			$_reward[$key]->log = Self::customer_rewards_points_contructorV2($reward);
 			$_reward[$key]->slot_no = $reward_slot->slot_no;
 			$_reward[$key]->points_log_type = $reward->points_log_type;
 		}

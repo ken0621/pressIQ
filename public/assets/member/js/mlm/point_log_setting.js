@@ -4,6 +4,11 @@ function point_log_setting()
 {
 	init();
 
+	this.action_load_table = function()
+	{
+		action_load_table();
+	}
+
 	function init()
 	{
 		$(document).ready(function()

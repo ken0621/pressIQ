@@ -358,3 +358,4 @@ Route::get('/member/mlm/point_log_complan/add', 'Member\MLM_PointLogSettingContr
 Route::post('/member/mlm/point_log_complan/add', 'Member\MLM_PointLogSettingController@submit_add');
 Route::get('/member/mlm/point_log_complan/table', 'Member\MLM_PointLogSettingController@table');
 Route::get('/member/mlm/point_log_complan/modify', 'Member\MLM_PointLogSettingController@modify');
+Route::post('/member/mlm/point_log_complan/modify', 'Member\MLM_PointLogSettingController@submit_modify');

@@ -1,4 +1,8 @@
+@if(isset($settings))
+<form class="global-submit" role="form" action="/member/mlm/point_log_complan/modify" method="post">
+@else
 <form class="global-submit" role="form" action="/member/mlm/point_log_complan/add" method="post">
+@endif
     {{ csrf_field()  }}
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
@@ -14,7 +18,8 @@
                             <label>Plan Code</label>
                             @if(isset($settings))
                             @foreach($settings as $setting)
-                            <input id="basic-input" value="{{$setting->point_log_setting_plan_code}}" name="point_log_setting_name" class="form-control" autocomplete="off" required>
+                            <input id="basic-input" value="{{$setting->point_log_setting_plan_code}}" name="point_log_setting_plan_code" class="form-control" autocomplete="off" required>
+                            <input type="hidden" name="point_log_setting_id" value="{{$id}}">
                             @endforeach
                             @else
                             <input id="basic-input" name="point_log_setting_plan_code" class="form-control" autocomplete="off" required>
@@ -127,6 +132,19 @@
 
         $('.notification').text(sentence);
         $('.point_log_notification').val(sentence);
+    }
+</script>
+
+<script type="text/javascript">
+    function success(data)
+    {
+        toastr.success("Success");
+        data.element.modal("hide");
+        point_log_setting.action_load_table();
+    }
+    function error()
+    {
+        toastr.error("Error");
     }
 </script>
 

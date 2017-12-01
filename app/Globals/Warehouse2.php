@@ -631,7 +631,29 @@ class Warehouse2
             $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
         }
 
+        if($allow_out_of_stock == true)
+        {
+            Self::inventory_allow_out_of_stock($shop_id, $warehouse_id, $item_id, $quantity);
+        }
+
         return $return;
+    }
+    public static function inventory_allow_out_of_stock($shop_id, $warehouse_id, $item_id, $quantity = 1)
+    {
+        $v1_qty = Tbl_item::inventory($warehouse_id)->where('tbl_item.item_id', $item_id)->where('tbl_item.shop_id',$shop_id)->value('inventory_count');
+        $v2_qty = Tbl_item::recordloginventory($warehouse_id)->where('tbl_item.item_id', $item_id)->where('tbl_item.shop_id',$shop_id)->value('inventory_count');
+
+        $total_to_refill = $v1_qty - $v2_qty;
+        if($total_to_refill > 0)
+        {
+            $source['name'] = 'inventory_v1';
+            $source['id'] = 0;
+            Self::refill($shop_id, $warehouse_id, $item_id, $total_to_refill, 'Migrate Inventory v1 to v2', $source, null, null, false);
+        }
+        if($quantity > $v2_qty)
+        {
+            $total_out_of_stock = $quantity - $v2_qty;
+        }
     }
     public static function consume_update($ref_name, $ref_id, $item_id, $quantity)
     {
@@ -647,9 +669,9 @@ class Warehouse2
             Tbl_warehouse_inventory_record_log::where("record_consume_ref_name",$ref_name)->where("record_item_id",$item_id)->where("record_consume_ref_id",$ref_id)->update($update);
         }
     }
-    public static function consume($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '',$allow_out_of_stock = false ,$update_count = true)
+    public static function consume($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '',$update_count = true)
     {
-        $return = null;
+        $return = null;        
 
         $insert_slip['warehouse_id']                 = $warehouse_id;
         $insert_slip['inventory_remarks']            = $remarks;
@@ -709,7 +731,6 @@ class Warehouse2
 
             Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
         }
-
         if($update_count == true)
         {
             Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
@@ -764,7 +785,7 @@ class Warehouse2
                 $consume['name'] = $reference_name;
                 $consume['id'] = $reference_id;
 
-                $validate = Warehouse2::consume($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $consume, $serial, 'inventory_history_recorded', $update_count);
+                $validate = Warehouse2::consume($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $consume, $serial, 'inventory_history_recorded', $allow_out_of_stock, $update_count);
             }
         }
 

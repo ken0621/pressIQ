@@ -8,6 +8,57 @@
     <input type="hidden" name="client_id" value="{{$customer_info->customer_id}}">
     <input type="hidden" name="_token" value="{{csrf_token()}}">
     <div class="form-horizontal">
+    @if($check_user == true)
+    <div class="form-group">
+      <div class="col-md-6">
+        <label for="">Company</label>
+        <input type="text" name="company" value="{{$customer_info->company}}" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <div class="col-md-4 padding-lr-1">
+          <label for="">Phone</label>
+          <input type="text" value="@if(isset($other->customer_phone)){{$other->customer_phone}}@endif" name="phone" class="form-control"/>
+        </div>
+        <div class="col-md-4 padding-lr-1">
+          <label for="">Mobile</label>
+          <input type="text" value="@if(isset($other->customer_mobile)){{$other->customer_mobile}}@endif" name="mobile" class="form-control"/>
+        </div>
+        <div class="col-md-4 padding-lr-1">
+          <label for="">Fax</label>
+          <input type="text" value="@if(isset($other->customer_fax)){{$other->customer_fax}}@endif" name="fax" class="form-control"/>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-6">
+        <div class="col-md-2 padding-lr-1">
+          <label>Title</label>
+          <input type="text" value="{{$customer_info->title_name}}" name="title" class="form-control auto-name title margin-l-0"/>
+        </div>
+        <div class="col-md-3 padding-lr-1">
+          <label>First name</label>
+          <input type="text" value="{{$customer_info->first_name}}" name="first_name" class="form-control auto-name first_name" required/>
+        </div>
+        <div class="col-md-3 padding-lr-1">
+          <label>Middle name</label>
+          <input type="text" value="{{$customer_info->middle_name}}" name="middle_name" class="form-control auto-name middle_name"/>
+        </div>
+        <div class="col-md-3 padding-lr-1">
+          <label>Last name</label>
+          <input type="text" value="{{$customer_info->last_name}}" name="last_name" class="form-control auto-name last_name"/>
+        </div>
+        <div class="col-md-1 padding-lr-1">
+          <label>Suffix</label>
+          <input type="text" value="{{$customer_info->suffix_name}}" name="suffix" class="form-control auto-name suffix"/>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="">Email</label>
+        <input type="email" value="{{$customer_info->email}}" name="email" class="form-control"/>
+      </div>
+    </div>
+    
+    @else
     <div class="form-group">
       <div class="col-md-6">
         <div class="col-md-2 padding-lr-1">
@@ -56,6 +107,7 @@
         </div>
       </div>
     </div>
+    @endif
     <div class="form-group">
       <div class="col-md-6">
         <label for="">Display name as</label>
@@ -115,7 +167,10 @@
           <li><a data-toggle="tab" href="#tax-info">Tax info</a></li>
           <li><a data-toggle="tab" href="#payment-and-billing">Payment and billing</a></li>
           <li><a data-toggle="tab" href="#attachment">Attachment</a></li>
+          @if(!$pis)
           <li><a data-toggle="tab" href="#mlm">MLM</a></li>
+          <li><a data-toggle="tab" href="#stockist">Stockist</a></li>
+          @endif
           @if ($customer->ismlm == 2)
           <li><a data-toggle="tab" href="#ecomm">E-commerce</a></li>
           @endif
@@ -214,7 +269,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>a
           <div id="payment-and-billing" class="tab-pane fade">
             <br>
             <div class="form-horizontal">
@@ -446,6 +501,33 @@
                   <div class="col-md-6">
                     <label>Password</label>
                     <input type="password" class="form-control mlm_password_e_commerce" value="@if($customer_info->password != null){{ Crypt::decrypt($customer_info->password)}}@endif" name="mlm_password_e_commerce" @if($customer_info->ismlm == 0) readonly @endif>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="stockist" class="tab-pane fade">
+            <br>
+            <div class="form-horizontal">
+              <div class="form-group">
+                <div class="col-md-12">
+                 <!--  <div class="col-md-12">
+                    <div class="checkbox display-inline-block">
+                      <label for="">
+                        <input type="checkbox" name="checkbox" class="is_stockist" value="1" @if($customer_info->stockist_warehouse_id != 0) checked @endif />Enable Stockist
+                        
+                        </label>
+                      </div>
+                  </div> -->
+                </div>
+                <div class="col-md-12">
+                  <div class="col-md-6">
+                    <label>Select Warehouse</label>
+                    <select class="form-control" name="stockist_warehouse_id">
+                      @foreach($_warehouse as $warehouse)
+                      <option {{$warehouse->warehouse_id == $customer_info->stockist_warehouse_id ? 'selected' : ''}} value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
+                      @endforeach
+                    </select>
                   </div>
                 </div>
               </div>

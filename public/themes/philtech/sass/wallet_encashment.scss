@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
@@ -85,5 +87,33 @@ $text-dark: #272c2f;
 				}
 			}
 		}
+	}
+}
+
+.btn-custom-primary
+{
+	background-color: #006CC5;
+	border: 1px solid #006CC5;
+	color: #fff;
+	@include transition(0.3s);
+
+	&:hover
+	{
+		background-color: inherit;
+		color: #006CC5;
+	}
+}
+
+.btn-custom-default
+{
+	background-color: #FF8500;
+	border: 1px solid #FF8500;
+	color: #fff;
+	@include transition(0.3s);
+
+	&:hover
+	{
+		background-color: inherit;
+		color: #FF8500;
 	}
 }

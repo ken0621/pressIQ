@@ -37,17 +37,19 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/payroll_register_report','Member\PayrollReportController@payroll_register_report');
 	Route::any('/reports/modal_create_register_report/{id}','Member\PayrollReportController@modal_create_register_report');
 	Route::any('/reports/payroll_register_report_period/{id}','Member\PayrollReportController@payroll_register_report_period');
-	Route::any('/reports/payroll_register_report_period_filtering','Member\PayrollReportController@payroll_register_report_period_filtering');
+	Route::any('/reports/payroll_register_report_table','Member\PayrollReportController@payroll_register_report_table');
 	
-	Route::any('/reports/payroll_register_report_period/export_excel/{id}','Member\PayrollReportController@payroll_register_report_export_excel');
+	Route::any('/reports/payroll_register_report_period/export_excel/{period_company_id}/{payroll_company_id}','Member\PayrollReportController@payroll_register_report_export_excel');
 	Route::any('/reports/payroll_register_report_period/export_excel_filter/{id}/{uid}','Member\PayrollReportController@payroll_register_report_export_excel_filter');
 	/*END PAYROLL REGISTER REPORT*/
+
+	/*EMPLOYEE SUMMARY REPORT*/
+	Route::any('/reports/employee_summary_report','Member\PayrollReportController@employee_summary_report');
 
 	/*START 13th month pay*/
 	Route::any('/reports/13th_month_pay','Member\Payroll13thMonthPayController@index');
 	Route::any('/reports/employees_13th_month_pay_table','Member\Payroll13thMonthPayController@employees_13th_month_pay_table');
 	Route::any('/reports/modal_employee_13_month_pay_report','Member\Payroll13thMonthPayController@modal_employee_13_month_pay_report');
-
 
 	Route::any('/reports/employee_13_month_pay_report/{employee_id}','Member\Payroll13thMonthPayController@employee_13_month_pay_report');
 	Route::any('/reports/modal_employee_13_month_pay_report/{employee_id}','Member\Payroll13thMonthPayController@modal_employee_13_month_pay_report');
@@ -115,6 +117,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_timesheet2/income_summary/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@income_summary');
 	Route::any('/company_timesheet2/unapprove/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@unapprove');
 	Route::any('/company_timesheet2/change/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@time_change');
+	Route::any('/company_timesheet2/remarks_change/{period_id}/{employee_id}', 'Member\PayrollTimeSheet2Controller@remarks_change');
 	Route::any('/company_timesheet2/make_adjustment/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@make_adjustment');
 	Route::any('/company_timesheet2/delete_adjustment/{period_id}/{employee_id}/{adjustment_id}','Member\PayrollTimeSheet2Controller@delete_adjustment');	
 	Route::any('/company_timesheet_approve/approve_timesheet','Member\PayrollTimeSheet2Controller@approve_timesheets');
@@ -125,8 +128,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_timesheet_day_summary/info/{time_sheet_id}','Member\PayrollTimeSheet2Controller@day_summary_info');
 	Route::post('/company_timesheet_day_summary/change','Member\PayrollTimeSheet2Controller@day_summary_change');
 	Route::any('/company_timesheet_day_summary/{time_sheet_id}','Member\PayrollTimeSheet2Controller@day_summary');
-	
 	/* CUSTOM SHIFT */
+	
 	Route::any('/company_timesheet_custom_shift','Member\PayrollTimeSheet2Controller@custom_shift');
 	Route::post('/company_timesheet_custom_shift_update','Member\PayrollTimeSheet2Controller@custom_shift_update');
 	
@@ -352,9 +355,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/* LEAVE START */
 	Route::any('/leave',"Member\PayrollController@leave");
+
 	/*Link to Modal Create leave_temp*/
 	Route::any('/leave/modal_create_leave_temp',"Member\PayrollController@modal_create_leave_temp");
 	/*Another Modal for tagging employee*/
+
 	Route::any('/leave/modal_leave_tag_employee/{leave_temp_id}',"Member\PayrollController@modal_leave_tag_employee");
 	Route::any('/leave/set_leave_employee_tag',"Member\PayrollController@set_leave_employee_tag");
 	Route::any('/leave/get_leave_tag_employee',"Member\PayrollController@get_leave_tag_employee");
@@ -591,8 +596,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/leave_schedule/ajax_shecdule_leave_tag_employee','Member\PayrollController@ajax_shecdule_leave_tag_employee');	
 	Route::any('/leave_schedule/session_tag_leave','Member\PayrollController@session_tag_leave');	
 	Route::any('/leave_schedule/get_session_leave_tag','Member\PayrollController@get_session_leave_tag');
-	Route::any('/leave_schedule/unset_session_leave_tag','Member\PayrollController@unset_session_leave_tag')
-	;
+	Route::any('/leave_schedule/unset_session_leave_tag','Member\PayrollController@unset_session_leave_tag');
 	Route::any('/leave_schedule/save_schedule_leave_tag','Member\PayrollController@save_schedule_leave_tag');
 
 	Route::any('/leave_schedule/delete_confirm_schedule_leave/{id}','Member\PayrollController@delete_confirm_schedule_leave')
@@ -728,10 +732,12 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 	Route::any('/payroll_biometric/modal_import_biometric','Member\PayrollBiometricSystemController@modal_import_biometric');
 	Route::any('/payroll_biometric/biometric_import_record','Member\PayrollBiometricSystemController@biometric_import_record');
-
-	
 	//software controllers
 	Route::post('/biometrics/save_data','Member\PayrollBiometricsController@save_data');
 	Route::any('/biometrics/sample','Member\PayrollBiometricsController@sample');
 	/*END payroll biometrics*/
+
+	/*START payroll approve database manipulation*/
+	Route::any('/payroll_time_keeping_approve_manipulation/time_breakdown/{period_company_id}/{employee_id}','Member\PayrollTimeKeepingApproveManipulation@time_breakdown');
+	/*END payroll approve database manipulation*/
 });

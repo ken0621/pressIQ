@@ -1,6 +1,6 @@
 @extends("layout")
 @section("content")
-<div class="content">
+<div class="content mob-margin">
 	<div class="container">
 	<!-- TOP CONTENT -->
 		<div class="row clearfix">
@@ -760,6 +760,8 @@
 			</div>
 		</div>
 	</div>	
+	<!-- SCROLL TO TOP -->
+	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
 @endsection
 

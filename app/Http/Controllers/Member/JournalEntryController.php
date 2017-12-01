@@ -53,9 +53,9 @@ class JournalEntryController extends Member
 	public function getIndex()
 	{
 		$data["_account"] 	= Accounting::getAllAccount("active");
+		
 		$data["_name"]		= Tbl_customer::unionVendor($this->getShopId())->get();
 		$data["action"]		= "/member/accounting/journal/manual-journal-entry";
-
 		$je_id = Request::input("id");
 		if($je_id)
 		{

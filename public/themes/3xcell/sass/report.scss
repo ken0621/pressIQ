@@ -11,6 +11,13 @@ $text-dark: #272c2f;
 	padding: 15px;
 	letter-spacing: 0.2px;
 
+	.text-title
+	{
+		font-size: 21px; 
+		padding: 30px 0;
+		font-weight: $semi-bold;
+	}
+
 	.report-header
 	{
 		.left

@@ -2,6 +2,7 @@
 namespace App\Globals;
 use Session;
 use DB;
+use Carbon\Carbon;
 
 class Seed_manual
 {
@@ -860,6 +861,20 @@ class Seed_manual
             $ins_g['social_network_name'] = 'googleplus'; 
             $ins_g['shop_id'] = $shop_id; 
             DB::table('tbl_social_network_keys')->insert($ins_g);
+        }
+    }
+    public static function insert_brown_offline_warehouse($shop_id)
+    {
+        if($shop_id == 5)
+        {
+            if(!DB::table('tbl_warehouse')->where("main_warehouse",3)->where("warehouse_shop_id", $shop_id)->first())
+            {
+                $ins_offline_warehouse['warehouse_name'] = "Offline Codes Warehouse";
+                $ins_offline_warehouse['warehouse_shop_id'] = $shop_id;
+                $ins_offline_warehouse['main_warehouse'] = 3;
+                $ins_offline_warehouse['warehouse_created'] = Carbon::now();
+                DB::table('tbl_warehouse')->insert($ins_offline_warehouse);
+            }
         }
     }
 }

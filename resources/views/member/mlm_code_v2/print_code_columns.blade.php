@@ -27,7 +27,7 @@
                 <div class="form-horizontal other-settings">
                     <div class="form-group">
                         <div class="col-md-12">
-                            @foreach($columns as $col)
+                            @foreach($columns as $col)  
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" {{$col['status'] == true ? 'checked' : ''}} name="{{$col['code']}}">
@@ -42,22 +42,31 @@
                         <div class="col-md-12">
                             <label for="">Type of Forms</label>
                             <select name="barcode_type" class="form-control">
-                                <option value="ref_number">Reference Number</option>
                                 @if($shop_id == 5)
                                 <option value="register_form">Register Form</option>
                                 @else
                                 <option value="pin_code">Activation Code & Pin</option>
                                 @endif
+                                <option value="ref_number">Reference Number</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label for="">Print Code as :</label>
+                            <select name="print_code_as" class="form-control">
+                                <option value="pdf">PDF</option>   
+                                <option value="excel">Excel</option>
                             </select>
                         </div>
                     </div>
                      <div class="form-group">
                         <div class="col-md-12"><label for="">Range</label></div>
                         <div class="col-md-6">
-                            <input type="number" name="print_range_to" class='form-control range-to' value='1'/>
+                            <input type="number" name="print_range_to" class='form-control range-to' value="{{$from or '1'}}"/>
                         </div>
                         <div class="col-md-6">
-                            <input type="number" name="print_range_from" class='form-control range-from' value='100'/>
+                            <input type="number" name="print_range_from" class='form-control range-from' value="{{$from or '100'}}"/>
                         </div>
                     </div>
 
@@ -121,7 +130,7 @@
     $('.print-submit').unbind('click');
     $('.print-submit').bind('click',function()
     {
-        if(parseInt($('.range-from').val()) <= parseInt($('.range-to').val()))
+        if(parseInt($('.range-from').val()) < parseInt($('.range-to').val()))
         {
             alert('Invalid Range');
         }

@@ -252,8 +252,8 @@ class PayrollController extends Member
           $separated_status[1] = 9;
 
 		$data['_active']	 = Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $active_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_last_name')->paginate($this->paginate_count);
-
-		// $data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
+		
+          // $data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
 
 
           $data['_separated'] = DB::select('select * from `tbl_payroll_employee_contract` inner join `tbl_payroll_employee_basic` 
@@ -301,7 +301,7 @@ class PayrollController extends Member
           $excels['number_of_rows'] = Request::input('number_of_rows');
 
           $excels['data'] = ['Company*','Employee Number*','Title Name','First Name*','Middle Name*','Last Name*','Suffix Name*','ATM/Account Number','Gender (M/F)*','Birthdate','Civil Status*','Street*','City/Town*','State/Province','Country*','Zip Code', 'Contact','Email Address','Tax Status','Monthly Salary*','Daily Rate' ,'Taxable Salary','SSS Salary','HDMF Salary','PHIC Salary','Minimum Wage (Y/N)*','Department*','Position*','Start Date*','Employment Status*','SSS Number','Philhealth Number','Pagibig Number','TIN','BioData/Resume(Y/N)','Police Clearance(Y/N)','NBI(Y/N)','Health Certificate(Y/N)','School Credentials(Y/N)','Valid ID(Y/N)','Dependent Full Name(1)','Dependent Relationship(1)','Dependent Birthdate(1)','Dependent Full Name(2)','Dependent Relationship(2)','Dependent Birthdate(2)','Dependent Full Name(3)','Dependent Relationship(3)','Dependent Birthdate(3)','Dependent Full Name(4)','Dependent Relationship(4)','Dependent Birthdate(4)','Remarks'];
-          AuditTrail::record_logs("DOWNLOADED: 201 Files","Downloaded 201 FILES TEMPLATE",$this->shop_id(),"","");
+          // AuditTrail::record_logs("DOWNLOADED: 201 Files","Downloaded 201 FILES TEMPLATE",$this->shop_id(),"","");
           Excel::create('201 Template', function($excel) use ($excels) {
 
                $excel->sheet('template', function($sheet) use ($excels) {
@@ -1081,9 +1081,12 @@ class PayrollController extends Member
 		$insert['payroll_employee_remarks'] 		= Request::input('payroll_employee_remarks');
           $insert['branch_location_id']                = Request::input('branch_location_id') != null ? Request::input('branch_location_id') : 0;
           $insert['shift_code_id']                     = Request::input('shift_code_id') != null ? Request::input('shift_code_id') : 0;
-		$payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
-
-
+		
+          if (Request::input('payroll_jobtitle_id') != null)
+          {
+               $payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
+          }
+     
 		/* employee contract */
 		$insert_contract['payroll_employee_id']					= $payroll_employee_id;
 		$insert_contract['payroll_department_id'] 				= Request::input("payroll_department_id");
@@ -1093,7 +1096,6 @@ class PayrollController extends Member
 		$insert_contract['payroll_employee_contract_status'] 		= Request::input("payroll_employee_contract_status");
 		$insert_contract['payroll_group_id'] 					= Request::input("payroll_group_id");
           Tbl_payroll_employee_contract::insert($insert_contract);
-
 
 		/* employee salary details */
 		$insert_salary['payroll_employee_id'] 					= $payroll_employee_id;
@@ -1108,6 +1110,7 @@ class PayrollController extends Member
 		$insert_salary['payroll_employee_salary_minimum_wage'] 	= $payroll_employee_salary_minimum_wage;
 		$insert_salary['payroll_employee_salary_monthly'] 		= Request::input('payroll_employee_salary_monthly');
 		$insert_salary['payroll_employee_salary_daily'] 			= Request::input('payroll_employee_salary_daily');
+          $insert_salary['payroll_employee_salary_hourly']            = Request::input('payroll_employee_salary_hourly');
 		$insert_salary['payroll_employee_salary_taxable'] 		= Request::input('payroll_employee_salary_taxable');
 		$insert_salary['payroll_employee_salary_sss'] 			= Request::input('payroll_employee_salary_sss');
 		$insert_salary['payroll_employee_salary_pagibig'] 		= Request::input('payroll_employee_salary_pagibig');
@@ -1250,6 +1253,7 @@ class PayrollController extends Member
 
           /* INSERT ALLOWANCES */
           $_allowance = array();
+          
           if(Request::has('allowance'))
           {
                $_allowance = Request::input('allowance');
@@ -1327,7 +1331,7 @@ class PayrollController extends Member
           }
           
           $record = Tbl_payroll_employee_basic::where('payroll_employee_id', $payroll_employee_id)->first();
-          AuditTrail::record_logs("Create Employee","Payroll Create Employee",$payroll_employee_id,$record,$record);
+          // AuditTrail::record_logs("Create Employee","Payroll Create Employee",$payroll_employee_id , $record, $record);
 
           $return['data'] = '';
           $return['status'] = 'success';
@@ -1339,7 +1343,6 @@ class PayrollController extends Member
 
      public function modal_employee_view($id)
      {
-
 
           $data["source"]               = Request::input("source_page");
           // $data['_company']               = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
@@ -1358,6 +1361,7 @@ class PayrollController extends Member
           $data['contract']             = Tbl_payroll_employee_contract::selemployee($id)->first();
 
           $data['salary']               = Tbl_payroll_employee_salary::selemployee($id)->first();
+
           $data['requirement']          = Tbl_payroll_employee_requirements::selrequirements($id)->first();
           $data['_group']               = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
           $data['dependent']            = Tbl_payroll_employee_dependent::where('payroll_employee_id', $id)->get();
@@ -1566,6 +1570,7 @@ class PayrollController extends Member
           $payroll_employee_salary_id                       = Request::input('payroll_employee_salary_id');
           $update['payroll_employee_salary_monthly']        = Request::input('payroll_employee_salary_monthly');
           $update['payroll_employee_salary_daily']          = Request::input('payroll_employee_salary_daily');
+          $update['payroll_employee_salary_hourly']          = Request::input('payroll_employee_salary_hourly');
           $update['payroll_employee_salary_taxable']        = Request::input('payroll_employee_salary_taxable');
           $update['payroll_employee_salary_sss']            = Request::input('payroll_employee_salary_sss');
           $update['payroll_employee_salary_philhealth']     = Request::input('payroll_employee_salary_philhealth');
@@ -1573,7 +1578,6 @@ class PayrollController extends Member
           $update['payroll_employee_salary_cola']           = Request::input('payroll_employee_salary_cola');
           $update['monthly_cola']                           = Request::input('payroll_employee_salary_monthly_cola');
           $update['tbl_payroll_employee_custom_compute']    = Request::has('tbl_payroll_employee_custom_compute') ? Request::input('tbl_payroll_employee_custom_compute') : 0;
-
           
           $payroll_employee_salary_effective_date           = '';
           if(Request::input('payroll_employee_salary_effective_date') != '')
@@ -1589,14 +1593,14 @@ class PayrollController extends Member
           $update['payroll_employee_salary_minimum_wage'] = $payroll_employee_salary_minimum_wage;
           $update['payroll_employee_salary_effective_date'] = $payroll_employee_salary_effective_date;
 
-          $is_deduct_tax_default = 0;
-          $deduct_tax_custom = 0;
-          $is_deduct_sss_default = 0;
-          $deduct_sss_custom = Request::input('deduct_sss_custom');
+          $is_deduct_tax_default        = 0;
+          $deduct_tax_custom            = 0;
+          $is_deduct_sss_default        = 0;
+          $deduct_sss_custom            = Request::input('deduct_sss_custom');
           $is_deduct_philhealth_default = 0;
-          $deduct_philhealth_custom = Request::input('deduct_philhealth_custom');
-          $is_deduct_pagibig_default = 0;
-          $deduct_pagibig_custom = Request::input('deduct_pagibig_custom');
+          $deduct_philhealth_custom     = Request::input('deduct_philhealth_custom');
+          $is_deduct_pagibig_default    = 0;
+          $deduct_pagibig_custom        = Request::input('deduct_pagibig_custom');
 
           if(Request::has('is_deduct_tax_default'))
           {
@@ -1622,16 +1626,16 @@ class PayrollController extends Member
                $deduct_pagibig_custom       = 0;
           }
 
-          $update['is_deduct_tax_default']        = $is_deduct_tax_default;
-          $update['deduct_tax_custom']            = $deduct_tax_custom;
-          $update['is_deduct_sss_default']        = $is_deduct_sss_default;
-          $update['deduct_sss_custom']            = $deduct_sss_custom;
-          $update['is_deduct_philhealth_default'] = $is_deduct_philhealth_default;
-          $update['deduct_philhealth_custom']     = $deduct_philhealth_custom;
-          $update['is_deduct_pagibig_default']    = $is_deduct_pagibig_default;
-          $update['deduct_pagibig_custom']        = $deduct_pagibig_custom;
+          $update['is_deduct_tax_default']        =  $is_deduct_tax_default;
+          $update['deduct_tax_custom']            =  $deduct_tax_custom;
+          $update['is_deduct_sss_default']        =  $is_deduct_sss_default;
+          $update['deduct_sss_custom']            =  $deduct_sss_custom;
+          $update['is_deduct_philhealth_default'] =  $is_deduct_philhealth_default;
+          $update['deduct_philhealth_custom']     =  $deduct_philhealth_custom;
+          $update['is_deduct_pagibig_default']    =  $is_deduct_pagibig_default;
+          $update['deduct_pagibig_custom']        =  $deduct_pagibig_custom;
           Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$payroll_employee_salary_id)->update($update);
-          AuditTrail::record_logs("EDITED: Payroll Employee Salary","Updating Employee Salary with Salary ID #".$payroll_employee_salary_id,$payroll_employee_salary_id,"","");
+          // AuditTrail::record_logs("EDITED: Payroll Employee Salary","Updating Employee Salary with Salary ID #".$payroll_employee_salary_id,$payroll_employee_salary_id,"","");
 
           $return['function_name'] = 'employeelist.reload_salary_list';
           $return['status'] = 'success';
@@ -1922,7 +1926,6 @@ class PayrollController extends Member
                $return['function_name'] = 'employeelist.reload_employee_list';
           }
           
-          
           $return['status'] = 'success';
           return json_encode($return);
      }
@@ -1963,7 +1966,7 @@ class PayrollController extends Member
      }
 
      public function update_tbl_search()
-{
+     {
           Tbl_payroll_employee_search::truncate();
           $_emp = tbl_payroll_employee_basic::get();
 
@@ -6158,6 +6161,7 @@ class PayrollController extends Member
           $insert_code['shop_id']            = Self::shop_id();
 
           $shift_code_id = Tbl_payroll_shift_code::insertGetId($insert_code);
+
           AuditTrail::record_logs("CREATED: Shift Template","Shift Template Code Name : ".Request::input('shift_code_name'),"","","");
           $insert_shift = array();
 

@@ -156,11 +156,11 @@
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
-						<button class="btn btn-default" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+						<button class="btn btn-nice-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 					</div>
 				</div>
 
-				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="title"> Reward Points</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="max-height: auto;">
 						<div class="holder">
@@ -242,15 +242,13 @@
 				</div>
 			</div>
 		</div>
-
-
 	    <!-- Success -->
 	    <div class="popup-success">
 	        <div id="success-modal" class="modal success-modal fade">
 	            <div class="modal-md modal-dialog">
 	                <div class="modal-content">
 	                    <div class="modal-body">
-	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
+	                        <div><img src="/themes/{{ $shop_theme }}/img/done-img.png"></div>
 	                        <div class="text-header">Done!</div>
 	                        <div class="text-caption">You are now officially enrolled to<br><b>Nice Marketing</b></div>
 	                    </div>

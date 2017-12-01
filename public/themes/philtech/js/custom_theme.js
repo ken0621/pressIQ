@@ -18,19 +18,62 @@ function custom_theme()
 			ready_load_ecom_cart();
 			ready_load_mini_ecom_cart();
 			event_sticky_nav();
+			event_toggle_subshop_container();
+			event_mobile_sidenav();
+			event_scroll_up();
 
-			/*MOBILE SIDE NAV*/
-            $menuLeft = $('.pushmenu-left');
-            $nav_list = $('#nav_list');
 
-            $nav_list.click(function() {
-                $(this).toggleClass('active');
-                $('.pushmenu-push').toggleClass('pushmenu-push-toright');
-                $menuLeft.toggleClass('pushmenu-open');
-            });
+            // /*DISABLE BODY SCROLLING*/
+            // var $body = $(document.body);
+
+            // $('#nav_list').click(function()
+            // {
+            // 	$body.toggleClass('disable-scroll');
+            // });
 
 		});
 	}
+
+	function event_scroll_up()
+	{
+		/*scroll up*/
+		$(window).scroll(function () {
+		    if ($(this).scrollTop() > 700) {
+		        $('.scroll-up').fadeIn();
+		    } else {
+		        $('.scroll-up').fadeOut();
+		    }
+		});
+
+		$('.scroll-up').click(function () {
+		    $("html, body").animate({
+		        scrollTop: 0
+		    }, 700);
+		    return false;
+		});
+	}
+
+	function event_mobile_sidenav()
+	{
+		/*MOBILE SIDE NAV*/
+        $menuLeft = $('.pushmenu-left');
+        $nav_list = $('#nav_list');
+
+        $nav_list.click(function() {
+            $(this).toggleClass('active');
+            // $('.pushmenu-push').toggleClass('pushmenu-push-toright');
+            $menuLeft.toggleClass('pushmenu-open');
+        });
+	}
+
+	function event_toggle_subshop_container()
+	{
+		$(".shop-container").on("click", function (e) 
+		{
+		    $(e.currentTarget).siblings(".subshop-container").slideToggle();
+		});
+	}
+
 	function event_show_cart()
 	{
 		$('html').click(function() 
@@ -131,6 +174,7 @@ function custom_theme()
 	            $('.header-nav').css("margin-bottom", get_height+"px");
 		        $('.navbar').addClass("sticky");
 	        }
+	        
 	        else
 	        {
 	            $('.header-nav').css("margin-bottom", "0px");
@@ -201,8 +245,31 @@ function action_after_load()
 {
 	
 }
-function onSearch()
+function onSearch(x)
 {
-    var keyword = $('#keyword').val();
-    $("#submit_link").attr("href", "/product?search="+$('#keyword').val());
+	if (x == 1) 
+	{
+		var keyword = $('#keyword1').val();
+	}
+	else
+	{
+		var keyword = $('#keyword2').val();
+	}
+    
+    location.href="/product?search="+keyword;
+}
+
+/*JAVASCRIPT*/
+
+function on() 
+{
+    document.getElementById("overlay").style.display = "block";
+    $("body").css({"overflow": "hidden","position": "fixed","margin": "0","padding": "0","right": "0","left": "0"});
+}
+
+function off()
+{
+    document.getElementById("overlay").style.display = "none";
+    $('.pushmenu').removeClass("pushmenu-open");
+    $("body").css({"overflow": "auto","position": "static"});
 }

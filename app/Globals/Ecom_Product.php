@@ -212,7 +212,12 @@ class Ecom_Product
 	}
 	public static function getCategoryPerSub($shop_id, $category_id, $ctr)
 	{
-		$_category = Tbl_category::where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived",0)->get()->toArray();
+		$_category = Tbl_category::where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived",0);
+		if($shop_id == 1)
+		{
+			$_category = $_category->orderBy('type_name','asc');
+		}
+		$_category = $_category->get()->toArray();
 
 		foreach($_category as $key=>$category)
 		{	

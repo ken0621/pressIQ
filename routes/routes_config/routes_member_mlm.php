@@ -44,6 +44,8 @@ Route::any('/member/mlm/code2/disassemble', 'Member\MLM_CodeControllerV2@members
 Route::any('/member/mlm/product_code2', 'Member\MLM_CodeControllerV2@index'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/product_code2/table', 'Member\MLM_CodeControllerV2@product_code_table'); //GUILLERMO TABLIGAN
 
+Route::any('/member/mlm/report_codes', 'Member\MLM_CodeControllerV2@report_code'); //ARCY
+Route::any('/member/mlm/report_codes/data','Member\MLM_CodeControllerV2@report_code_table');
 Route::any('/member/mlm/print_codes', 'Member\MLM_CodeControllerV2@print_codes'); //ARCY
 Route::any('/member/mlm/print_codes/submit', 'Member\MLM_CodeControllerV2@print_codes_submit'); //ARCY
 Route::any('/member/mlm/print', 'Member\MLM_CodeControllerV2@print'); //ARCY
@@ -337,6 +339,8 @@ Route::get('member/mlm/developer/modify_slot', 'Member\MlmDeveloperController@mo
 Route::post('member/mlm/developer/modify_slot', 'Member\MlmDeveloperController@modify_slot_submit');
 
 Route::any('member/mlm/developer/allow_multiple_slot', 'Member\MlmDeveloperController@allow_multiple_slot');
+
+Route::any('member/mlm/developer/tag_as_ambassador', 'Member\MlmDeveloperController@tag_as_ambassador');
 
 
 

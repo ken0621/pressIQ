@@ -202,7 +202,9 @@
 	                    methods.close();
 	                  break;
                     case 9: // Tab
-                      methods.close();
+                      // methods.close();
+                      var inputs = $(this).closest('form').find('input:visible,select:visible');
+                      inputs.eq( inputs.index(this)+ 1 ).focus();
                     break;
 	                  default:
 	                    return true;

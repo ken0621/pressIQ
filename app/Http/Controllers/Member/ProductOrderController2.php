@@ -3,13 +3,20 @@ namespace App\Http\Controllers\Member;
 
 use App\Globals\Transaction;
 use App\Globals\Columns;
-use App\Models\Tbl_online_pymnt_method;
 use App\Globals\Payment;
+use App\Globals\Settings;
+use App\Globals\Mail_global;
+
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_online_pymnt_link;
+use App\Models\Tbl_online_pymnt_method;
+use App\Models\Tbl_transaction;
+
 use Excel;
 use DB;
 use Request;
+use Redirect;
+use URL;
 
 class ProductOrderController2 extends Member
 {
@@ -128,6 +135,7 @@ class ProductOrderController2 extends Member
         Transaction::get_transaction_slot_id();
 
         $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'receipt', '', 0);
+      
         foreach ($data["_transaction"] as $key => $value) 
         {
             if ($value->payment_method != "paymaya") 
@@ -260,6 +268,22 @@ class ProductOrderController2 extends Member
         $val = Payment::manual_confirm_payment($this->user_info->shop_id, request('transaction_list_id'));
         if(!$val)
         {
+            $get_transaction_list = Transaction::get_data_transaction_list(request('transaction_list_id'));
+            
+            if ($get_transaction_list) 
+            {
+                $get_transaction      = Tbl_transaction::where("transaction_id", $get_transaction_list->transaction_id)->first();
+
+                if ($get_transaction) 
+                {
+                    $email_content["subject"] = "Confirmed Payment";
+                    $email_content["content"] = '<img style="max-width: 100%; display: block; margin: auto;" src="'.URL::to('/themes/3xcell/img/payment-verified.jpg').'">';
+                    $email_address            = Transaction::getCustomerEmailTransaction($get_transaction->transaction_id);
+
+                    Mail_global::send_email(null, $email_content, $this->user_info->shop_id, $email_address);
+                }
+            }
+
             $return['status'] = 'success';
             $return['call_function'] = 'success_confirm';            
         }
@@ -270,5 +294,38 @@ class ProductOrderController2 extends Member
         }
 
         return json_encode($return);
+    }
+
+    public function settings()
+    {
+        $data["shipping_fee"] = isset(Settings::get_settings_php_shop_id("shipping_fee", $this->user_info->shop_id)["settings_value"]) ? Settings::get_settings_php_shop_id("shipping_fee", $this->user_info->shop_id)["settings_value"] : 0;
+
+        return view("member.product_order2.settings", $data);
+    }
+
+    public function settings_submit()
+    {
+        $shipping_fee = Request::input("shipping_fee");
+
+        if ($shipping_fee) 
+        {
+            $shipping_exist = Settings::get_settings_php_shop_id("shipping_fee", $this->user_info->shop_id);
+
+            if ($shipping_exist["response_status"] == "success") 
+            {
+                $result = Settings::update_settings_shop_id("shipping_fee", $shipping_fee, $this->user_info->shop_id);
+            }
+            else
+            {
+                $result = Settings::insert_settings_shop_id("shipping_fee", $shipping_fee, $this->user_info->shop_id);
+            }
+
+            if ($result["response_status"] == "error") 
+            {
+                dd($data["message"]);
+            }
+        }
+
+        return Redirect::back();
     }
 }

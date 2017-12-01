@@ -24,6 +24,8 @@
         <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css">
         <link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
         <!-- THEME COLOR -->
         <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
@@ -38,12 +40,11 @@
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
     <!-- HEADER -->
     <div class="header-nav">
     	<div class="header-nav-top">
-    		<div class="container clearfix">
-                <div class="pull-left">
+    		<div class="mob-rem container clearfix">
+                <div class="mobile-remove pull-left">
                     <div class="nav-holder {{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">HOME</a></div>
                     <div class="nav-holder">
                         <a class="show-product" href="javascript:">PRODUCTS</a>
@@ -51,7 +52,7 @@
                             <div class="title">A Real Product Need</div>
                             <div class="list-product">
                                 @foreach($global_product as $product)
-                                <div style="cursor: pointer;" onClick="location.href='/product/view/{{ $product['eprod_id'] }}'">
+                                <div style="cursor: pointer;" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'">
                                     <div class="holder">
                                         <img class="img-responsive 4-3-ratio" src="{{ get_product_first_image($product) }}">
                                         <div class="name">{{ get_product_first_name($product) }}</div>
@@ -175,6 +176,28 @@
     	<div class="header-nav-middle">
     		<div class="container clearfix">
                 <div class="pull-left">
+                    <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
+
+                        <nav class="pushmenu pushmenu-left">
+                            <div class="space1"></div>
+                            <span>BROWSE</span>
+                            <ul class="links">
+                                <li><a onclick="off()" href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp; Home</a> </li>
+                                <li class="product-mobile-dropdown">
+                                    <a href="javascript:"><i class="fa fa-list" aria-hidden="true"></i>&nbsp; Products</a>
+                                </li>
+                                    @foreach($global_product as $product)
+                                        <ul class="product-mobile-dropdown-list" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'">
+                                            <li><a href="javascript:">{{ get_product_first_name($product) }}</a></li>
+                                        </ul>
+                                    @endforeach
+                                <li> <a onclick="off()" href="/about"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp; Company</a> </li>
+                                <li> <a onclick="off()" href="/contact"><i class="fa fa-phone" aria-hidden="true"></i>&nbsp; Contact Us</a> </li>
+                            </ul>
+                        </nav>
+
+                        <div id="overlay" onclick="off()"></div>
+
                     <div class="logo">
                         <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/logo.jpg">
                     </div>

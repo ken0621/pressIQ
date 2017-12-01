@@ -22,6 +22,23 @@ $text-dark: #272c2f;
 		margin-top: -7px;
 	}
 
+	.btn-blue
+	{
+		background-color: #2161C8;
+		color: #fff;
+		@include transition(0.2s);
+
+		.fa
+		{
+			color: #fff;
+		}
+
+		&:hover
+		{
+			opacity: 0.8;
+		}
+	}
+
 	.title
 	{
 		color: #000;
@@ -346,6 +363,37 @@ $text-dark: #272c2f;
 	}
 }
 
+.modal-header
+{
+	background-color: #2161C8;
+	color: #fff;
+	
+	.modal-title
+	{
+		font-weight: $regular;
+		color: #fff !important;
+	}
+	
+	.fa
+	{
+		color: #fff;
+	}
+
+	.close
+	{
+		@extend .fa;
+	}
+}
+
+.modal-body
+{
+	h3
+	{
+		font-size: 21px !important;
+		color: #FF3300 !important;
+	}
+}
+
 /* Success */
 .popup-success
 {
@@ -405,5 +453,25 @@ $text-dark: #272c2f;
 				}
 			}
 		}
+	}
+}
+
+.btn-primary
+{
+	background-color: #2161C8 !important;
+	color: #fff !important;
+	background-image: none !important;
+	border-color: #2161C8 !important;
+}
+
+.btn-custom-white
+{
+	background-color: #ff5454 !important;
+	color: #fff;
+
+	&:hover
+	{
+		opacity: 0.8;
+		color: #fff;
 	}
 }

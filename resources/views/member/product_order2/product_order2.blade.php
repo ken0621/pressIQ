@@ -14,6 +14,7 @@
                 </small>
                 </h1>
                 <div class="dropdown pull-right">
+                    <button type="button" class="btn btn-def-white btn-custom-white popup" link="/member/ecommerce/product_order2/settings" size="lg"><i class="fa fa-cog"></i> Order Settings</button>
                     <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-upload"></i> Import Shipping</button>
                     <div class="dropdown" style="display: inline-block;">
                         <button class="btn btn-def-white btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-file-excel-o"></i> Export to Excel <span class="caret"></span></button>

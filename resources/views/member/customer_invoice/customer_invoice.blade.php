@@ -30,6 +30,7 @@
                     
                     </small>
                 </h1>
+                <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save</button>
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
                 @if(isset($inv))
@@ -65,7 +66,7 @@
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <select class="form-control droplist-customer input-sm pull-left" name="inv_customer_id" data-placeholder="Select a Customer" required>
-                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv) ? $inv->inv_customer_id : (isset($c_id) ? $c_id : '') ]);
+                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv) ? $inv->inv_customer_id : (isset($c_id) ? $c_id : '') ])
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
@@ -82,7 +83,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Billing Address</label>
-                                <textarea class="form-control input-sm textarea-expand" name="inv_customer_billing_address" placeholder="">{{$inv->inv_customer_billing_address or ''}}</textarea>
+                                <textarea class="form-control input-sm textarea-expand customer-billing-address" name="inv_customer_billing_address" placeholder="">{{$inv->inv_customer_billing_address or ''}}</textarea>
                             </div>
                             <div class="col-sm-2">  
                                 <label>Terms</label>
@@ -174,7 +175,7 @@
                                                     <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
                                                     <td><input type="text" class="for-datepicker" name="invline_service_date[]"/></td>    
-                                                    @include("member.load_ajax_data.load_td_serial_number");
+                                                    @include("member.load_ajax_data.load_td_serial_number")
                                                     <td class="invoice-number-td text-right">
                                                         1
                                                     </td>
@@ -353,7 +354,7 @@
 
                                                             <td class="cm-number-td text-right">1</td>
                                                             <td>
-                                                                <select class="form-control select-item droplist-item-cm input-sm pull-left {{$cmline->cmline_item_id}}" name="cmline_item_id[]" required>
+                                                                <select class="form-control select-item droplist-item-cm input-sm pull-left {{$cmline->cmline_item_id}}" name="cmline_item_id[]">
                                                                     @include("member.load_ajax_data.load_item", ['_item' => $_cm_item, 'add_search' => "", 'item_id' => $cmline->cmline_item_id])
                                                                 </select>
                                                             </td>
@@ -528,21 +529,31 @@
 @section('script')
 <script type="text/javascript">
     @if(Session::has('success'))
-        toastr.success('{{Session::get('success')}}');
+        toastr.success('{{ Session::get('success') }}');
+    @elseif(Session::has('error'))
+        @if(is_array(Session::get('error')) && count(Session::get('error')) > 0)
+            @foreach(Session::get('error') as $error)
+                // toastr.error('{{ $error }}');
+            @endforeach
+        @else
+            // toastr.error('{{ Session::get('error') }}');
+        @endif
     @endif
+
 </script>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 <script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
 <script type="text/javascript" src="/assets/member/js/customer_invoice.js"></script>
 <script type="text/javascript">
-    
+
 $(document).ready(function() 
 {
   $('.drawer').drawer({
     desktopEvent:'click'
   });
 });
+
 </script>
 @endsection
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <base href="{{ URL::to('/themes/'.$shop_theme.'') }}/">
     <!-- Title -->
-    <title>Alpha Global Prestige - {{ $page }}</title>
+    <title>Alpha Global Prestige - {{ $page or '' }}</title>
     <link rel="icon"  type="image/png" href="http://alpha-globalprestige.com/assets/front/img/agp.png">
     <!-- Responsive Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -42,7 +42,7 @@
     <link rel="stylesheet" type="text/css" href="resources/assets/slick/slick-theme.css">
     <!-- GLOBAL -->
     <link rel="stylesheet" type="text/css" href="resources/assets/front/css/global.css">
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
+    <!-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css"> -->
     <!-- OTHER -->
     @yield('css')
 
@@ -86,7 +86,8 @@
                 <div class="span9" id="ewan">
                     <div class="pull-left">
                         <div id="widget_topinfo-2" class="widget widget_topinfo">
-                            <div class="topinfo">{{ get_content($shop_theme_info, "header", "header_call_label") }}: {{ get_content($shop_theme_info, "header", "header_call_number") }}</span><span class="email">{{ get_content($shop_theme_info, "header", "header_email_label") }}: {{ get_content($shop_theme_info, "header", "header_email_address") }}</span></div>
+                            <div class="topinfo">{{ get_content($shop_theme_info, "header", "header_call_label") }}: {{ get_content($shop_theme_info, "header", "header_call_number") }}</span><span class="email">{{ get_content($shop_theme_info, "header", "header_email_label") }}: {{ get_content($shop_theme_info, "header", "header_email_address") }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -126,7 +127,8 @@
                     <div class="span12">
                         <!-- Logo -->
                         <div id="logo" class="">
-                            <a href='/'><img style="max-height: 100%; max-width: 100%; object-fit: contain;" src='{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : 'assets/front/img/small-logo.png' }}' alt='' /></a>
+                            <a href='/'><img style="max-height: 100%; max-width: 100%; object-fit: contain;" src='{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : 'assets/front/img/small-logo.png' }}' alt='' />
+                            </a>
                         </div>
                         <!-- #logo END -->
                         <div class="after_logo">

@@ -1047,6 +1047,7 @@ class WarehouseController extends Member
             else
             {                
                 $data['status'] = 'success';
+                $data['type'] = 'warehouse';
             }
             if($data['status'] == 'success')
             {

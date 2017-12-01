@@ -2,7 +2,7 @@
     <tbody>
 
     @if($access_salary_rate == 1)
-        @if($compute_type == "Daily Rate")
+        @if($compute_type == "Daily Rate" || $compute_type == "Hourly Rate")
         <tr>
             <td>Daily Rate</td>
             <td width="100px"></td>

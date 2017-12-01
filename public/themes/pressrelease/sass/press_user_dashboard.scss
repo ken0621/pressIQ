@@ -1,0 +1,77 @@
+.background-container
+{
+	padding: 30px 0px;
+	min-height: 820px;
+
+	.pressview
+	{
+		
+		.dashboard-container
+		{
+			background-color: #eeeeee;
+			min-height: 700px;
+			padding: 30px;
+
+			.title-container
+			{
+				font-size: 25px;
+				color: #316df9;	
+				font-weight: 700;
+				padding-top: 20px;
+				padding-bottom: 10px;
+			}
+			.button-container
+			{
+				padding-top: 25px;
+				.create-button
+				{
+					a
+					{
+						background-color: #316df9;
+						color: #fff;
+						font-size: 15px;
+						text-decoration: none;
+						padding: 10px 20px;
+					}
+					margin-right: 10px;
+				}
+				.drafts
+				{
+					background-color: #316df9;
+					color: #fff;
+					font-size: 15px;
+					text-decoration: none;
+					padding: 10px 20px;
+					margin-right: 10px;
+				}
+				.releases
+				{
+					background-color: #316df9;
+					color: #fff;
+					font-size: 15px;
+					text-decoration: none;
+					padding: 10px 20px;
+				}
+			}
+			table
+			{
+				font-family: arial, sans-serif;
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			th
+			{
+				border: 1px solid #dddddd;
+				text-align: center;
+				padding: 8px;
+			}
+			td
+			{
+				border: 1px solid #dddddd;
+				text-align: center;
+				padding: 10px;
+			}
+		}
+	}
+}

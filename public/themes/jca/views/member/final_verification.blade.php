@@ -31,7 +31,7 @@
 		</div>
 	</div>
 	<div class="modal-footer text-center">
-		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Cancel</button>
-		<button class="btn btn-primary btn-custom-primary process-slot-creation" type="button"><i class="fa fa-check"></i> Process Using Details Above</button>
+		<button type="button" class="btn btn-custom-def" data-dismiss="modal">Cancel</button>
+		<button class="btn btn-jca-custom-default process-slot-creation" type="button"><i class="fa fa-check"></i> Process Using Details Above</button>
 	</div>
 </form>

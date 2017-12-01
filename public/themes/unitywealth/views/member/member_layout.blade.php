@@ -62,7 +62,7 @@
 						<li class="{{ Request::segment(2) == "ebooks" ? "active" : "" }}">
 							<a href="/members/ebooks"><div class="nav-holder"><div class="fa fa-book"></div> <span>Ebooks</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "products" ? "active" : "" }}">
+						<li class="{{ Request::segment(2) == "videos" ? "active" : "" }}">
 							<a href="/members/videos"><div class="nav-holder"><div class="fa fa-play"></div> <span>Products</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "certificate" ? "active" : "" }}">
@@ -124,10 +124,9 @@
 			</div>	
 		</div>
 	</div>
+	<!-- SCROLL TO TOP -->
+	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
-
-
-
 
 
 @endsection

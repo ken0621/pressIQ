@@ -1,6 +1,6 @@
 @extends("layout")
 @section("content")
-<div class="member">
+<div class="member member-mob-margin">
 	<div class="container">
 		<div class="members">
 			<div class="header hidden">
@@ -68,12 +68,21 @@
 						<li class="{{ Request::segment(2) == "lead-list" ? "active" : "" }}">
 							<a href="/members/lead-list"><div class="nav-holder"><div class="icon brown-icon-heart"></div> <span>Lead List</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" ? "active" : "" }}">
+						<li class="{{ Request::segment(2) == "redeemable" ? "active" : "" }}">
+							<a href="/members/redeemable"><div class="nav-holder"><div class="icon fa fa-gift"></div> <span>Redeemable</span></div></a>
+						</li>
+						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" || Request::segment(2) == "wallet-transfer" || Request::segment(2) == "wallet-refill" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>
 								<li>
 									<a href="/members/wallet-encashment"><div class="nav-holder"> &nbsp;&nbsp;<span>Wallet Encashment</span></div></a>
 								</li>
+		<!-- 						<li>
+									<a href="/members/wallet-transfer"><div class="nav-holder"> &nbsp;&nbsp;<span>Wallet Transfer</span></div></a>
+								</li>
+								<li>
+									<a href="/members/wallet-refill"><div class="nav-holder"> &nbsp;&nbsp;<span>Wallet Refill</span></div></a>
+								</li> -->
 							</ul>
 						</li>
 						@else
@@ -88,6 +97,8 @@
 			</div>	
 		</div>
 	</div>
+	<!-- SCROLL TO TOP -->
+	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
 
 

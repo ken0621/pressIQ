@@ -99,7 +99,7 @@ class Tbl_item extends Model
     } 
     public function scopeRecordloginventory($query, $warehouse_id = null, $all = false)
     {
-        return $query->selectRaw("*, IFNULL(count(record_count_inventory),0) as inventory_count, count(CASE when record_count_inventory < 0 then record_count_inventory else 0 end) as offset_count")
+        return $query->selectRaw("*, IFNULL(count(record_log_id),0) as inventory_count, count(CASE when record_count_inventory < 0 then record_count_inventory else 0 end) as offset_count")
                      ->leftjoin(DB::raw("(Select wi.* from tbl_warehouse_inventory_record_log wi INNER JOIN tbl_warehouse wh on wh.warehouse_id = wi.record_warehouse_id where wh.archived = 0) warehouse"), function($join) use ($warehouse_id, $all)
                      {
                         $join->on("record_item_id","=","item_id");

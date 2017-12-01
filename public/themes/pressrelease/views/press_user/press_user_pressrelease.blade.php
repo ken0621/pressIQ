@@ -24,23 +24,23 @@
                          <center>{{ Session::get('delete') }}</center>
                       </div>
                       @endif
-                    <div class="title-container">PRESS RELEASE</div>
-                    <div class="title">Send To:</div>
-                    <input type="text" class="form-control" id="sendto" name="sendto" placeholder="Choose Recipient">
-                    <span class="choose-button"><a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
-
-                    <div class="title">Headline:</div>
-                    <input type="text" class="form-control" id="headline" name="headline">
-
-                    <div class="title">Subheading:</div>
-                    <input type="text" class="form-control" id="subheading" name="subheading">
-
-                    <div class="title">Content:</div>
-                    <textarea id="content" name="content"></textarea>
-                    <div class="button-container">
-                        <span class="save-button" id="btn_save" name="btn_save"><a href="#">Save & Draft </a></span>
-                        <span class="send-button" id="btn_send" name="btn_send"><a href="#">Send</a></span>
-                    </div>
+                 
+                    <form method="post">
+                        {{csrf_field()}}
+                        <div class="title-container">PRESS RELEASE</div>
+                        <div class="title">Send To:</div>
+                        <input type="text" class="form-control" name="pr_to"><span class="choose-button"><a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
+                        <div class="title">Headline:</div>
+                        <input type="text" name="pr_headline" class="form-control">
+                        <div class="title">Subheading:</div>
+                        <input type="text" name="pr_subheading" class="form-control">
+                        <div class="title">Content:</div>
+                        <textarea name="pr_content"></textarea>
+                        <div class="button-container">
+                            <span class="save-button"><a href="/sendrelease">Save as draft</a></span>
+                            <span class="send-button"><button type="submit"><a>Send</a></button></span>
+                        </div>
+                    </form>
 
                 </div>
 
@@ -109,8 +109,8 @@
 
                      </form>
                     </div>
-
-                     <table id="example" class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; cellspacing: 0;">
+                    <div style="overflow-x:auto;">
+                     <table id="example" class="display table table-bordered"                                                      style="background-color: #FFFFFF;width: 100%; empty-cells: 0;">
                                 <thead>
                                     <tr>
                                         <th style="text-align: center;">Contact Name</th>
@@ -124,7 +124,6 @@
                                 <tbody>
                                     @foreach($add_recipient as $addrecipients)
                                     <tr>
-                                       
                                         <td style="text-align: center;">{{$addrecipients->name}}</td>
                                         <td style="text-align: center;">{{$addrecipients->country}}</td>
                                         <td style="text-align: center;">{{$addrecipients->research_email_address}}</td>
@@ -138,7 +137,6 @@
                                     @endforeach
                                 </tbody>
                         </table>
-                      
                     </div>
                 </div>
 
@@ -173,21 +171,19 @@
             </div>
             <div class="col-md-9">
                 <div class="left-container">
+                   <div style="overflow-x:auto;">  
                    <table id="example" class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; cellspacing: 0;">
                                 <thead>
                                     <tr>
-                                        
                                         <th style="text-align: center;">Name</th>
                                         <th style="text-align: center;">Email</th>
                                         <th style="text-align: center;">Website</th>
-                                        <th style="text-align: center;">Description</th>
-                                       
+                                        <th style="text-align: center;">Description</th>   
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($add_recipient as $addrecipients)
                                     <tr>
-                                       
                                         <td style="text-align: center;"><a href="">{{$addrecipients->name}}</td>
                                         <td style="text-align: center;">{{$addrecipients->research_email_address}}</td>
                                         <td style="text-align: center;">{{$addrecipients->website}}</td>
@@ -196,6 +192,7 @@
                                     @endforeach
                                 </tbody>
                         </table>
+                    </div>
                 </div>
             </div>
           </div>

@@ -39,25 +39,33 @@ class ProductOrderController2 extends Member
         $dummy              = Transaction::get_transaction_date();
         $active_tab         = request("_active_tab");
 
+        $paginate=5; // default pagination
+
+        // unity pagination
+        if($shop_id == 55)
+        {
+            $paginate = 20;
+        }
+
         if($active_tab == "paid")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt');
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt','',$paginate);
         }
         elseif($active_tab == "unconfirmed")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof');
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof','',$paginate);
         }
         elseif($active_tab == "pending")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order');
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order','',$paginate);
         }
         elseif($active_tab == "reject")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'reject');
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'reject','',$paginate);
         }
         else
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt');
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt','',$paginate);
         }
 
         foreach($data["_raw_table"] as $key => $raw_table)
@@ -108,6 +116,12 @@ class ProductOrderController2 extends Member
         $transaction_list_id    = request("id");
         $transaction_list       = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
         $details                = $transaction_list->payment_details;
+
+        $transaction_id = Tbl_transaction_list::where("transaction_list_id",$transaction_list_id)->first()->transaction_id;
+        $transaction_payment_proof = Tbl_transaction::where('transaction_id',$transaction_id)->first()->transaction_payment_proof;
+        $path_prefix = "http://digimaweb.solutions/uploadthirdparty/";
+        $data['image_url'] = $path_prefix.$transaction_payment_proof;
+
     
         if (is_serialized($details)) 
         {

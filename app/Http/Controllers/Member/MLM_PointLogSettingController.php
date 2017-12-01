@@ -32,4 +32,16 @@ class MLM_PointLogSettingController extends Member
 		}
 		return json_encode($reponse);
     }
+    public function table()
+    {
+    	$data['settings'] = Tbl_mlm_point_log_setting::get();
+    	return view("member.mlm_point_log_setting.point_log_setting_table",$data);
+    }
+    public function modify()
+    {
+    	$data['page'] = "Modify";
+    	$data['settings'] = Tbl_mlm_point_log_setting::where("point_log_setting_id",request('id'))->get();
+    	$data['id'] = request('id');
+    	return view("member.mlm_point_log_setting.point_log_setting_add",$data);
+    }
 }

@@ -545,7 +545,7 @@ class MLM2
 			$_reward[$key]->log_amount = number_format($reward->points_log_points,2);
 			$_reward[$key]->time_ago = time_ago($reward->points_log_date_claimed);
 			$_reward[$key]->display_date = date("F d, Y", strtotime($reward->points_log_date_claimed));
-			$_reward[$key]->log = Self::customer_rewards_points_contructorV2($reward);
+			$_reward[$key]->log = Self::customer_rewards_points_contructor($reward);
 			$_reward[$key]->slot_no = $reward_slot->slot_no;
 			$_reward[$key]->points_log_type = $reward->points_log_type;
 		}
@@ -568,25 +568,34 @@ class MLM2
 	public static function customer_rewards_points_contructorV2($reward)
 	{
 		$from_slot = Tbl_mlm_slot::where("slot_id",$reward->points_log_Sponsor)->first();
-		$template = Tbl_mlm_point_log_setting::first()->point_log_notification;
-
-		$message="";
-		$notif = explode('/', $template);
-		foreach ($notif as $t)
+		$query = Tbl_mlm_point_log_setting::where("point_log_setting_type",$reward->points_log_type)->first();
+		$message="No Details";
+		if(count($query)>0)
 		{
-			if($t == 'slot_no')
+			$message="";
+			$template = $query->point_log_notification;
+			$notif = explode('/', $template);
+			foreach ($notif as $t)
 			{
-				$message.=$reward->slot_no;
-			}
-			else if($t == 'sponsor_slot_no')
-			{
-				$message.=$from_slot->slot_no;
-			}
-			else
-			{
-				$message.=$t;
+				if($t == '_slot_no')
+				{
+					$message.=$reward->slot_no;
+				}
+				else if($t == '_sponsor_slot_no')
+				{
+					$message.=$from_slot->slot_no;
+				}
+				else if($t == '_amount')
+				{
+					$message.=$reward->log_amount;
+				}
+				else
+				{
+					$message.=$t;
+				}
 			}
 		}
+		
 
 		return $message;
 	}

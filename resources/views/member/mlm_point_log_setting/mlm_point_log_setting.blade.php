@@ -58,3 +58,6 @@
 </div>
 </div>
 @endsection
+@section('script')
+<script type="text/javascript" src="/assets/member/js/mlm/point_log_setting.js"></script>
+@endsection

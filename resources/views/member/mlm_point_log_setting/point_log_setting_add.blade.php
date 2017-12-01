@@ -12,11 +12,17 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Plan Code</label>
-                            <input id="basic-input" name="point_log_setting_plan_code" class="form-control" autocomplete="off">
+                            @if(isset($settings))
+                            @foreach($settings as $setting)
+                            <input id="basic-input" value="{{$setting->point_log_setting_plan_code}}" name="point_log_setting_name" class="form-control" autocomplete="off" required>
+                            @endforeach
+                            @else
+                            <input id="basic-input" name="point_log_setting_plan_code" class="form-control" autocomplete="off" required>
+                            @endif
                         </div>
                         <div class="col-md-6">
                             <label>Type</label>
-                            <select name="point_log_setting_type" class="form-control type" style="width:100;">
+                            <select name="point_log_setting_type" class="form-control type" style="width:100;" required>
                                 <option value="RPV">RPV</option>
                                 <option value="RGPV">RGPV</option>
                                 <option value="SPV">SPV</option>
@@ -28,7 +34,13 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <label>Plan Name</label>
-                            <input id="basic-input" name="point_log_setting_name" class="form-control" autocomplete="off">
+                            @if(isset($settings))
+                            @foreach($settings as $setting)
+                            <input id="basic-input" value="{{$setting->point_log_setting_name}}" name="point_log_setting_name" class="form-control" autocomplete="off" required>
+                            @endforeach
+                            @else
+                            <input id="basic-input" name="point_log_setting_name" class="form-control" autocomplete="off" required>
+                            @endif
                         </div>
                     </div>
 
@@ -36,37 +48,49 @@
 
                     <div class="notif">
                         <div class="form-group" id="notif1">
-                            <div class="col-md-7">
-                                <input id="basic-input" class="form-control sentence" id="sentence" autocomplete="off">
+                            <div class="col-md-12">
+                                @if(isset($settings))
+                                @foreach($settings as $setting)
+                                <input id="basic-input" value="{{$setting->point_log_notification}}" class="form-control sentence" id="sentence" autocomplete="off" required>
+                                @endforeach
+                                @else
+                                <input id="basic-input" class="form-control sentence" id="sentence" autocomplete="off" required>
+                                @endif
                             </div>
-                            <div class="col-md-4">
-                                <select onchange="setSentence()" class="form-control variable" style="width:100;">
-                                    <option value=""></option>
-                                    <option value="<slot no>">&lt;slot no&gt;</option>
-                                    <option value="<sponsor slot no>">&lt;sponsor slot no&gt;</option>
-                                    <option value="<sponsor name>">&lt;sponsor name&gt;</option>
-                                </select>
-                            </div>
-                            <div class="col-md-1">
-                                <font color="green"><i style="margin-top: 10px;float: left;" class="fa fa-plus plus"></i></font>
-                                <font color="red"><i style="margin-top: 10px;float: right;" class="fa fa-close minus"></i></font>
-                            </div>
-                                
                         </div>
                     </div>
                     <br>
-                    <div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <a string="slot_no" style="width: 100%" class="btn btn-primary btn-custom-primary send append-variable">Slot no</a>
+                        </div>
+                        <div class="col-md-4">
+                            <a string="sponsor_slot_no" style="width: 100%" class="btn btn-primary btn-custom-primary send append-variable">Sponsor slot no</a>
+                        </div>
+                        <div class="col-md-4">
+                            <a string="amount" style="width: 100%" class="btn btn-primary btn-custom-primary send append-variable">Amount</a>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label>Notification: </label>
                         <label class="notification"></label>
                         <input type="hidden" name="point_log_notification" class="point_log_notification">
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><span class="fa fa-close" /> Close</button>
-        <button class="btn btn-primary btn-custom-primary send" type="submit"><span class="fa fa-save" />  Create</button>
+        <button class="btn btn-primary btn-custom-primary send" type="submit"><span class="fa fa-save" />
+        @if(isset($settings))
+         Save
+        @else
+         Create
+        @endif
+        </button>
     </div>
 </form>
 
@@ -75,6 +99,7 @@
     $(document).ready(function()
     {
         var counter = 1;
+        setSentence();
         $('body').on('keyup',function()
         {
             $('input').on('keyup',function()
@@ -91,76 +116,18 @@
 
             
         });
-        $('body').unbind('click');
-        $('body').on('click','.plus',function()
-        {
-            $('.notif').append('<div class="form-group" id="notif">'+
-                            '<div class="col-md-7">'+
-                                '<input id="basic-input" class="form-control sentence" id="sentence" autocomplete="off">'+
-                           '</div>'+
-                            '<div class="col-md-4">'+
-                                '<select onchange="setSentence()" class="form-control variable" style="width:100;">'+
-                                    '<option value=""></option>'+
-                                    '<option value="<slot no>">&lt;slot no&gt;</option>'+
-                                    '<option value="<sponsor slot no>">&lt;sponsor slot no&gt;</option>'+
-                                    '<option value="<sponsor name>">&lt;sponsor name&gt;</option>'+
-                                '</select>'+
-                            '</div>'+
-                            '<div class="col-md-1">'+
-                                '<font color="green"><i style="margin-top: 10px;float: left;" class="fa fa-plus plus"></i></font>'+
-                                '<font color="red"><i style="margin-top: 10px;float: right;" class="fa fa-close minus"></i></font>'+
-                            '</div>'+
-                                
-                        '</div>');
-        });
+        // $("body").unbind('click');
+        
     });
     function setSentence()
     {
         $('.notification').text("");
 
-                var x ="";
+        var sentence = $('.sentence').val();
 
-                var sentences='';
-                var variables='';
-
-                $( ".sentence" ).each(function( index )
-                {
-                    // var variable = document.getElementByClass('variable');
-                  sentences += $( this ).val()+"/";
-                });
-
-                $( ".variable" ).each(function( index )
-                {
-                    // var variable = document.getElementByClass('variable');
-                  variables += $( this ).val()+"/";
-                });
-
-                // console.log(sentences);
-                // console.log(variables);
-                var split_sen = sentences.split("/");
-                var split_var = variables.split("/");
-
-                // console.log(split_sen[0]+" "+split_var[0]);  
-
-                for(var y=0;y<split_sen.length;y++)
-                {
-                    x+=split_sen[y]+" "+split_var[y]+" ";
-                }
-
-                 $('.notification').text(x);
-                 $('.point_log_notification').val(x);
+        $('.notification').text(sentence);
+        $('.point_log_notification').val(sentence);
     }
 </script>
 
-<script type="text/javascript">
-    function success(data)
-    {
-        toastr.success("Setting created");
-        data.element.modal('hide');
-    }
-    function error(data)
-    {
-        toastr.error("Error");
-    }
-</script>
 

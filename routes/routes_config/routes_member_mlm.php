@@ -356,3 +356,5 @@ Route::any('member/mlm/developer/change_owner', 'Member\MlmDeveloperController@c
 Route::get('/member/mlm/point_log_complan', 'Member\MLM_PointLogSettingController@index');
 Route::get('/member/mlm/point_log_complan/add', 'Member\MLM_PointLogSettingController@add');
 Route::post('/member/mlm/point_log_complan/add', 'Member\MLM_PointLogSettingController@submit_add');
+Route::get('/member/mlm/point_log_complan/table', 'Member\MLM_PointLogSettingController@table');
+Route::get('/member/mlm/point_log_complan/modify', 'Member\MLM_PointLogSettingController@modify');

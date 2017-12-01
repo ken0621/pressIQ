@@ -159,10 +159,12 @@ class PayrollTimeSheet2Controller extends Member
 			$payroll_period_id = Request::input("payroll_period_id");
 		}
 		
-		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
-		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
-		$company_id 	= Tbl_payroll_employee_basic::where('payroll_employee_id',$employee_id)->value('payroll_employee_company_id');
-
+		$compute_cutoff 						= $this->compute_whole_cutoff($period_id, $employee_id);
+		$check_approved 						= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
+		$company_id 							= Tbl_payroll_employee_basic::where('payroll_employee_id',$employee_id)->value('payroll_employee_company_id');
+		$group 									= $this->db_get_current_employee_contract($employee_id, $compute_cutoff["period_info"]["payroll_period_start"]);
+		$compute_cutoff["salary_compute_type"] 	= $group["payroll_group_salary_computation"];
+		
 		if($check_approved)
 		{
 			Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->delete();
@@ -195,7 +197,7 @@ class PayrollTimeSheet2Controller extends Member
 		}
 
 		Tbl_payroll_deduction_payment_v2::where('payroll_period_company_id',$period_id)->where("payroll_employee_id", $employee_id)->delete();
-
+		
 		echo json_encode("success");
 	}
 
@@ -854,7 +856,21 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
 			$_timesheet[$from] = Payroll2::timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);
-			
+			$_timesheet[$from]->record = Payroll2::timesheet_process_in_out($timesheet_db);
+			$_timesheet[$from]->branch_source_company_id 	= 0;
+		
+			if ($_timesheet[$from]->record != null) 
+			{
+				foreach ($_timesheet[$from]->record as $key => $rec) 
+				{
+					$temp_time_float = 0;
+					if (Payroll::time_float(Payroll::time_diff($rec->time_sheet_in,$rec->time_sheet_out)) >= $temp_time_float) 
+					{
+						$temp_time_float = Payroll::time_float(Payroll::time_diff($rec->time_sheet_in,$rec->time_sheet_out));
+						$_timesheet[$from]->branch_source_company_id = $rec->branch_id;
+					}
+				}
+			}
 			//check if approved
 
 			if(!isset($timesheet_db))
@@ -882,7 +898,7 @@ class PayrollTimeSheet2Controller extends Member
 		$cutoff_cola = $this->identify_period_salary($salary->monthly_cola, $company_period->payroll_period_category);
 		
 		$cutoff_target_days = $this->identify_period_salary($salary->payroll_group_working_day_month, $group->payroll_period_category);
-		
+
 		$data["cutoff_input"] 		= $_timesheet;
 		$data["cutoff_compute"] 	= $cutoff_compute = Payroll2::cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days, $_timesheet);
 		$data["cutoff_breakdown"] 	= $cutoff_breakdown = Payroll2::cutoff_breakdown($period_company_id, $employee_id, $cutoff_compute, $data);
@@ -974,10 +990,8 @@ class PayrollTimeSheet2Controller extends Member
 				{
 					$computation_type = "Daily Rate";
 				}
-
 			}
 		}
-
 		else
 		{
 			$data = $this->compute_whole_cutoff($period_company_id, $employee_id);

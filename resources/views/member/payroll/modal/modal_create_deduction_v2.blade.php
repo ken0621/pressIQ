@@ -113,6 +113,15 @@
 				</select>
 			</div>
 		</div>
+		
+		<div class="form-group">
+			<div class="col-md-6">
+	            <label>Expense Account *</label>
+	            <select name="expense_account_id" class="drop-down-coa form-control expense_account_id" id="expense_account_id" required>                
+	            	@include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $default_expense])
+	            </select>
+	        </div>
+		</div>
 
 		<hr>
 		<div class="form-group">

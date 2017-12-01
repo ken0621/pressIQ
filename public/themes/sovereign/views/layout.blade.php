@@ -176,7 +176,7 @@
     	<div class="header-nav-middle">
     		<div class="container clearfix">
                 <div class="pull-left">
-                    <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
+                    <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
 
                         <nav class="pushmenu pushmenu-left">
                             <div class="space1"></div>

@@ -240,7 +240,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>JCA Wellness</b></div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>Alpha Global Prestige</b></div>
 	                    </div>
 	                </div>
 	            </div>

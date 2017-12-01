@@ -310,12 +310,12 @@ nav-list.active { background-position: -331px top; }
 
     .subheader-container .left-container
     {
-        display: none;
+        display: none !important;
     }
 
     .subheader-container .right-container 
     {
-        margin-top: 0;
+        margin-top: 0 !important;
     }
 }
 

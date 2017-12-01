@@ -55,6 +55,10 @@ class ProductOrderController2 extends Member
         {
             $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'reject');
         }
+        elseif($active_tab == "completed")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'completed');
+        }
         else
         {
             $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt');
@@ -67,7 +71,12 @@ class ProductOrderController2 extends Member
 
             if($active_tab == "paid") 
             {
-                $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
+                $data["_raw_table"][$key]->action = '<a link="/member/ecommerce/product_order2/deliver?id=' . $raw_table->transaction_list_id . '" class="popup" size="md">DELIVER</a> | ';
+                $data["_raw_table"][$key]->action .= '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
+            }
+            if($active_tab == "pending") 
+            {
+                $data["_raw_table"][$key]->action = '<a link="/member/ecommerce/product_order2/completed?id=' . $raw_table->transaction_list_id . '" class="popup" size="md">COMPLETED</a>';
             }
             if($active_tab == "unconfirmed")
             {
@@ -258,7 +267,7 @@ class ProductOrderController2 extends Member
         else
         {
             $return['status'] = 'error';
-            $return['status_message'] = "Something wen't wrong. Please try again later.";
+            $return['status_message'] = "Something went wrong. Please try again later.";
         }
 
         return json_encode($return);
@@ -327,5 +336,49 @@ class ProductOrderController2 extends Member
         }
 
         return Redirect::back();
+    }
+
+    public function deliver()
+    {
+        $shop_id             = $this->user_info->shop_id;
+        $data["page"]        = "DELIVER Product Orders";
+        $data['title']       = "DELIVER";
+        $transaction_list_id = request("id");
+                               Transaction::get_transaction_customer_details_v2();
+        $data['transaction'] = Transaction::get_data_transaction_list($transaction_list_id);
+        $data['action']      = '/member/ecommerce/product_order2/deliver_submit';
+
+        return view('member.product_order2.confirm_product_order2', $data); 
+    }
+
+    public function deliver_submit()
+    {
+        $val = Payment::manual_deliver_payment($this->user_info->shop_id, request('transaction_id'));
+        if($val)
+        {
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_confirm';            
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = "Something went wrong. Please try again later.";
+        }
+
+        return json_encode($return);
+    }
+
+    public function completed()
+    {
+        $shop_id             = $this->user_info->shop_id;
+        $data["page"]        = "DELIVER Product Orders";
+        $data['title']       = "DELIVER";
+        $transaction_list_id = request("id");
+                               Transaction::get_transaction_customer_details_v2();
+        $data['transaction'] = Transaction::get_data_transaction_list($transaction_list_id);
+        dd($data['transaction']);
+        $data['action']      = '/member/ecommerce/product_order2/deliver_submit';
+
+        return view('member.product_order2.confirm_product_order2', $data); 
     }
 }

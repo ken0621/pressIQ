@@ -209,6 +209,9 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::post('product_order2/confirm_payment_submit','Member\ProductOrderController2@confirm_payment_submit');
 	Route::get('product_order2/reject_payment','Member\ProductOrderController2@reject_payment');
 	Route::post('product_order2/reject_payment_submit','Member\ProductOrderController2@reject_payment_submit');
+	Route::get('product_order2/deliver','Member\ProductOrderController2@deliver');
+	Route::post('product_order2/deliver_submit','Member\ProductOrderController2@deliver_submit');
+	Route::get('product_order2/completed','Member\ProductOrderController2@completed');
 	
 	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
 	Route::get('product_order2/draref','Member\ProductOrderController2@draref');

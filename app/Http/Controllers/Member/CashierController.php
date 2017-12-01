@@ -16,21 +16,21 @@ class CashierController extends Member
     public function pos()
     {
         Cart2::set_cart_key("cashier-" . $this->user_info->user_id);
-    	$data["page"]           = "Point of Sale";
-        $data["cart"]           = $_items = Cart2::get_cart_info();
-        $data["_price_level"]   = Item::list_price_level($this->user_info->shop_id);
-        $data["current_level"]  = ($data["cart"]["info"] ? $data["cart"]["info"]->price_level_id : 0);
-        $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
-        $data['_salesperson'] = Utilities::get_all_users($this->user_info->shop_id, $this->user_info->user_id);
-        $data['_payment'] = Cart2::load_payment($this->user_info->shop_id);
+        $data["page"]          = "Point of Sale";
+        $data["cart"]          = $_items = Cart2::get_cart_info();
+        $data["_price_level"]  = Item::list_price_level($this->user_info->shop_id);
+        $data["current_level"] = ($data["cart"]["info"] ? $data["cart"]["info"]->price_level_id : 0);
+        $data['_warehouse']    = Warehouse2::get_all_warehouse($this->user_info->shop_id);
+        $data['_salesperson']  = Utilities::get_all_users($this->user_info->shop_id, $this->user_info->user_id);
+        $data['_payment']      = Cart2::load_payment($this->user_info->shop_id);
         
         if(Session::has('customer_id'))
         {
-            $data['customer'] = Customer::info(Session::get('customer_id'), $this->user_info->shop_id);
+            $data['customer']        = Customer::info(Session::get('customer_id'), $this->user_info->shop_id);
             $data['customer_points'] = Customer::get_points_wallet(Session::get('customer_id'));
-            $warehouse_id = Customer::get_info($this->user_info->shop_id, Session::get('customer_id'))->stockist_warehouse_id;
-            $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id, $warehouse_id);
-            $data['exist'] = $data['customer'];
+            $warehouse_id            = Customer::get_info($this->user_info->shop_id, Session::get('customer_id'))->stockist_warehouse_id;
+            $data['_warehouse']      = Warehouse2::get_all_warehouse($this->user_info->shop_id, $warehouse_id);
+            $data['exist']           = $data['customer'];
         }
         
        	return view("member.cashier.pos", $data);

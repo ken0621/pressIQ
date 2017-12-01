@@ -3,11 +3,6 @@ namespace App\Http\Controllers\Member;
 
 use App\Globals\Transaction;
 use App\Globals\Columns;
-<<<<<<< HEAD
-use App\Models\Tbl_online_pymnt_method;
-use App\Models\Tbl_transaction;
-=======
->>>>>>> e9b6aaaba5cc7e386374648cb897493432b2301b
 use App\Globals\Payment;
 use App\Globals\Settings;
 use App\Globals\Mail_global;

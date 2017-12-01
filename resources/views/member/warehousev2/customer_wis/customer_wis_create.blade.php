@@ -10,21 +10,21 @@
                 <span class="page-title">CREATE - Customer Warehouse Issuance Slip</span>
             </h1>
             <div class="text-right">
-                <a class="btn btn-custom-white panel-buttons" href="/member/item/warehouse/wis">Cancel</a>
+                <a class="btn btn-custom-white panel-buttons" href="/member/customer/wis">Cancel</a>
                 <button class="btn btn-primary panel-buttons save-button" type="button">Save</button>
             </div>
         </div>
     </div>
 </div>
 
-<form class="global-submit form-to-submit-add" action="/member/item/warehouse/wis/create-submit" method="post">
+<form class="global-submit form-to-submit-add" action="/member/customer/wis/create-submit" method="post">
 <input type="hidden" name="_token" value="{{csrf_token()}}">
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal">
         <div class="form-group">
             <div class="col-md-4">
                 <label>Customer Name</label>
-                <select required class="form-control select-warehouse" name="destination_customer_warehouse_id">
+                <select required class="form-control select-warehouse" name="customer_id">
                     @foreach ($_customer as $customer)
                             <option value="{{ $customer->customer_id}}">{{$customer->first_name." ".$customer->middle_name." ".$customer->last_name }}</option>
                     @endforeach
@@ -32,18 +32,22 @@
             </div>
             <div class="col-md-4">
                 <label>WIS Number</label>
-                <input type="text" name="wis_number" class="form-control">
+                <input type="text" name="cust_wis_number" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label>Delivery Date</label>
+                <input type="text" name="delivery_date" class="form-control" value="{{ date('m/d/Y') }}">
             </div>
             <div class="col-md-6">
                 <label>Ship to</label>
                 <div>
-                    <textarea class="form-control txt-warehouse-address" name="destination_customer_address"></textarea>
+                    <textarea required class="form-control" name="customer_address"></textarea>
                 </div>
             </div>
             <div class="col-md-6">
                 <label>Remarks</label>
                 <div>
-                    <textarea class="form-control" name="wis_remarks"></textarea>
+                    <textarea required class="form-control" name="cust_wis_remarks"></textarea>
                 </div>
             </div>
         </div>

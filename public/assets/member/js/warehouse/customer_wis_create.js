@@ -375,14 +375,14 @@ function new_price_level_save_done(data)
 	$(".price-level-select").globalDropList("reload");
 	$(".price-level-select").val(data.price_level_id).change();
 }
-function success_create_wis(data)
+function success_create_customer_wis(data)
 {
 	if(data.status == 'success')
 	{
 		toastr.success('Success');
 		setInterval(function()
 		{
-			location.href = '/member/item/warehouse/wis';
+			location.href = '/member/customer/wis';
 		},2000);
 	}
 }

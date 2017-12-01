@@ -204,7 +204,7 @@ class Mlm_slot_log
 				$message.="Your wallet transfer to ".$from." has processing fee of ";
 				break;
 		}
-		$message.=$amount." ";
+		$message.=currency('₱',$amount)." ";
 		switch ($action) 
 		{
 			case 'recieved':

@@ -50,11 +50,7 @@
             </div>
         </div>
     </div>
-			<div class="clearfix">
-				<div class="pull-right">
-					{!! session('payout_paginate') !!}
-				</div>
-			</div>
+			
 		</div>
 	</div>
 </div>

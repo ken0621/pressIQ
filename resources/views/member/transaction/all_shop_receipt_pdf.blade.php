@@ -116,20 +116,23 @@
             </div>
             <div class="payment-detail-container">
                 <div class="sub-title">PAYMENT DETAILS:</div>
-                <div class="holder">
+                <div class="holder" {{$total_tendered = 0}}>
                     <div class="clearfix">
                         @if($list->payment_method != 'pos')
-                        <div class="payment-detail pull-left">
+                        <div class="payment-detail pull-left"  {{$total_tendered = $list->transaction_total}}>
                             <div class="rows"><strong>Payment Date :</strong> {{date('M d, Y',strtotime($list->transaction_date_created))}}</div>
-                            <div class="rows"><strong>Payment Type :</strong> {{ ucfirst($list->payment_method) }}</div>
-                        </div>
-                        <div class="total-summary pull-right">
-                            <div class="rows">TOTAL PAID AMOUNT : PHP {{ number_format($list->transaction_total, 2) }}</div>
+                            <div class="rows"><strong>Payment Type :</strong> </div>
+                            <div class="rows">
+                                <div style="width:750px;margin-left: 30px;">
+                                    <span style="width: 375px">{{ ucfirst($list->payment_method) }}</span>
+                                    <span  class="pull-right" style="width: 175px">{{currency('',$list->transaction_total)}}</span>
+                                </div>
+                            </div>
                         </div>
                         @else
                          <div class="payment-detail pull-left">
                             <div class="rows"><strong>Payment Date :</strong> {{date('M d, Y',strtotime($list->transaction_date_created))}}</div>
-                            <div class="rows" {{$total_tendered = 0}}><strong>Payment Type :</strong> </div>
+                            <div class="rows" ><strong>Payment Type :</strong> </div>
                             @if(count($_payment_list) > 0)
                                 @foreach($_payment_list as $payment)
                                 <div class="rows">

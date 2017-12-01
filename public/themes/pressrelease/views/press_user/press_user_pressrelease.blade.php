@@ -109,8 +109,8 @@
 
                      </form>
                     </div>
-
-                     <table id="example" class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; cellspacing: 0;">
+                    <div style="overflow-x:auto;">
+                     <table id="example" class="display table table-bordered"                                                      style="background-color: #FFFFFF;width: 100%; empty-cells: 0;">
                                 <thead>
                                     <tr>
                                         <th style="text-align: center;">Contact Name</th>
@@ -124,7 +124,6 @@
                                 <tbody>
                                     @foreach($add_recipient as $addrecipients)
                                     <tr>
-                                       
                                         <td style="text-align: center;">{{$addrecipients->name}}</td>
                                         <td style="text-align: center;">{{$addrecipients->country}}</td>
                                         <td style="text-align: center;">{{$addrecipients->research_email_address}}</td>
@@ -138,7 +137,6 @@
                                     @endforeach
                                 </tbody>
                         </table>
-                      
                     </div>
                 </div>
 
@@ -173,21 +171,19 @@
             </div>
             <div class="col-md-9">
                 <div class="left-container">
+                   <div style="overflow-x:auto;">  
                    <table id="example" class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; cellspacing: 0;">
                                 <thead>
                                     <tr>
-                                        
                                         <th style="text-align: center;">Name</th>
                                         <th style="text-align: center;">Email</th>
                                         <th style="text-align: center;">Website</th>
-                                        <th style="text-align: center;">Description</th>
-                                       
+                                        <th style="text-align: center;">Description</th>   
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($add_recipient as $addrecipients)
                                     <tr>
-                                       
                                         <td style="text-align: center;"><a href="">{{$addrecipients->name}}</td>
                                         <td style="text-align: center;">{{$addrecipients->research_email_address}}</td>
                                         <td style="text-align: center;">{{$addrecipients->website}}</td>
@@ -196,6 +192,7 @@
                                     @endforeach
                                 </tbody>
                         </table>
+                    </div>
                 </div>
             </div>
           </div>

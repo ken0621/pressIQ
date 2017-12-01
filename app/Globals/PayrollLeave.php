@@ -20,6 +20,7 @@ use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_shift_code;
+use App\Models\Tbl_payroll_leave_schedulev2;
 use App\Globals\Payroll2;
 use App\Globals\Payroll;
 use App\Models\Tbl_payroll_company;
@@ -64,7 +65,19 @@ class PayrollLeave
 		$leave_data_all = Tbl_payroll_leave_schedule::getallemployeeleavedata($employee_id);
 		return $leave_data_all;
 	}
+	
 
+	//leave v2
+	public static function employee_leave_date_datav2($employee_id, $date)
+	{
+		$employee_leave_date_data = Tbl_payroll_leave_schedulev2::getemployeeleavedatedata($employee_id,$date)->first();
+		return $employee_leave_date_data;
+	}
 
+	public static function employee_leave_capacity_consume_remainingv2($employee_id = 0)
+	{
+		$leave_data_all = Tbl_payroll_leave_schedulev2::getallemployeeleavedata($employee_id);
+		return $leave_data_all;
+	}
 
 }

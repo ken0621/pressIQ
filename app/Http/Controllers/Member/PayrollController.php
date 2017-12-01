@@ -4880,7 +4880,6 @@ class PayrollController extends Member
                     }
 
                }
-
                if(!empty($leaveempid))
                {
                     foreach($leaveempid as $leaveid)
@@ -4891,7 +4890,6 @@ class PayrollController extends Member
                                array_push($leavedat,$empdata);
                     }
                }
-
 
           }
           else
@@ -4932,8 +4930,6 @@ class PayrollController extends Member
 
                          }
           }
-
-
 
           $data['new_record']  = $leavedat;
 

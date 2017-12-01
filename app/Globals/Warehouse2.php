@@ -577,6 +577,7 @@ class Warehouse2
             $inventory_details['history_reference_id'] = $reference_id;
             $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
 
+            $history_item = null;
             foreach ($_item as $key => $value) 
             {
                 $serial = isset($value['serial']) ? $value['serial'] : array();
@@ -584,17 +585,45 @@ class Warehouse2
                 $source['name'] = $reference_name;
                 $source['id'] = $reference_id;
 
-                $history_item[$key]['item_id'] = $value['item_id'];
-                $history_item[$key]['quantity'] = $value['quantity'];
-                $history_item[$key]['item_remarks'] = $value['remarks'];
+                $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $value['item_id'])->where('record_count_inventory','<',0)->count();
+                $total_refill_qty = 0;
+                if($count_offset > 0)
+                {
+                    $total_refill_qty = $value['quantity'] - $count_offset;
+                }
+                if($total_refill_qty > 0)
+                {
+                    $history_item[$key]['item_id'] = $value['item_id'];
+                    $history_item[$key]['quantity'] = $total_refill_qty;
+                    $history_item[$key]['item_remarks'] = $value['remarks'];
 
-                $validate = Warehouse2::refill($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $source, $serial, 'inventory_history_recorded', $update_count);
+                    $validate = Warehouse2::refill($shop_id, $warehouse_id, $value['item_id'], $total_refill_qty, $value['remarks'], $source, $serial, 'inventory_history_recorded', $update_count);
+                    Self::update_offset_qty($warehouse_id, $value['item_id'], $count_offset, $value['quantity']);
+                }
             }
-
-            Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+            if(count($history_item) > 0)
+            {
+                Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+            }
         }
 
         return $validate;
+    }
+    public static function update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity)
+    {
+        $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id)->where('record_count_inventory','<',0)->count();
+
+        $update_qty = abs($count_offset - $quantity);
+        if($update_qty > 0)
+        {
+            for ($ctr_qty = 0; $ctr_qty < $update_qty; $ctr_qty++)
+            {
+                $update['record_count_inventory'] = 1;
+                Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                    ->where('record_item_id', $item_id)
+                                                    ->where('record_count_inventory','<',0)->update($update);
+            }
+        }
     }
     public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array(), $allow_out_of_stock = false)
     {
@@ -643,6 +672,7 @@ class Warehouse2
         if($allow_out_of_stock == true)
         {
             Self::inventory_allow_out_of_stock($shop_id, $warehouse_id, $item_id, $quantity);
+            $return = null;
         }
 
         return $return;
@@ -653,10 +683,10 @@ class Warehouse2
         $v2_qty = Tbl_item::recordloginventory($warehouse_id)->where('tbl_item.item_id', $item_id)->where('tbl_item.shop_id',$shop_id)->value('inventory_count');
 
         $total_to_refill = $v1_qty - $v2_qty;
+        $source['name'] = 'inventory_v1';
+        $source['id'] = 0;
         if($total_to_refill > 0)
         {
-            $source['name'] = 'inventory_v1';
-            $source['id'] = 0;
             Self::refill($shop_id, $warehouse_id, $item_id, $total_to_refill, 'Migrate Inventory v1 to v2', $source, null, null, false);
         }
         if($quantity > $v2_qty)

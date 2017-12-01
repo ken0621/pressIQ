@@ -478,16 +478,6 @@ $(document).ready(function()
 	} 
 });
 </script>
-<script type="text/javascript">
-$(document).on('show.bs.modal', '.modal', function () 
-{
-    var zIndex = 1040 + (10 * $('.modal:visible').length);
-    $(this).css('z-index', zIndex);
-    setTimeout(function() {
-        $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
-    }, 0);
-});
-</script>
 @endsection
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css?v=2.2">

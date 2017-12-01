@@ -509,6 +509,7 @@ class PayrollReportController extends Member
 
 		return view('member.payrollreport.payroll_register_report_period',$data);
 	}
+	
 	public function payroll_register_report_table()
 	{
 		$payroll_company_id = request::input('payroll_company_id');

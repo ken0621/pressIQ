@@ -12,6 +12,7 @@ use Image;
 use Mail;
 use DB;
 use URL;
+use Session;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 use App\Globals\Payment;
@@ -55,6 +56,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_press_release_recipient;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -222,6 +224,7 @@ class ShopMemberController extends Shop
      public function pressuser_pressrelease()
     {
         $data["page"] = "Press Release - Press Release";
+        $data['add_recipient']   = Tbl_press_release_recipient::get();
         return view("press_user.press_user_pressrelease", $data);
     }
      public function pressuser_my_pressrelease()
@@ -249,6 +252,32 @@ class ShopMemberController extends Shop
         $data["page"] = "Press Release - Press Release";
         return view("press_admin.press_admin_pressrelease", $data);
     }
+
+    public function pressadmin_pressrelease_addrecipient(Request $request)
+    {
+      $data["name"]                      = $request->name;
+      $data["country"]                   = $request->country;
+      $data["research_email_address"]    = $request->research_email_address;
+      $data["website"]                   = $request->website;
+      $data["description"]               = $request->description;
+      Tbl_press_release_recipient::insert($data); 
+      Session::flash('message', "Recipient Successfully Added!");
+      return  redirect::back();
+    }
+
+    public function pressreleases_deleterecipient($id)
+    {
+      Tbl_press_release_recipient::where('recipient_id',$id)->delete();
+      Session::flash('delete', "Recipient Already Deleted!");
+      return  redirect::back();
+    }
+
+    public function pressreleases_send_recipient(Request $request)
+    {
+        dd('Hello World!');
+
+    }
+
     /*Press Release*/
 
 
@@ -2643,7 +2672,14 @@ class ShopMemberController extends Shop
         $data['action'] = '/members/slot-confirmation';
         $data['confirm_action'] = '/members/slot-confirmation-submit';
 
-        return view('mlm.slots.choose_slot',$data);
+        if ($this->shop_theme == "3xcell") 
+        {
+            return view('member.choose_slot', $data);
+        }
+        else
+        {
+            return view('mlm.slots.choose_slot', $data);
+        }
     }
     public function postSlotConfirmation()
     {
@@ -2662,7 +2698,15 @@ class ShopMemberController extends Shop
         $data['mlm_activation'] = Request2::input('mlm_activation');
         $data['slot_no'] = Request2::input('slot_no');
         
-        $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) in your Slot No <b>".$data['slot_no']."</b> ?";
+        if ($this->shop_theme == "3xcell") 
+        {
+            $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) ?";
+        }
+        else
+        {
+            $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) in your Slot No <b>".$data['slot_no']."</b> ?";
+        }
+
         $data['action'] = '/members/slot-use-product-code';
 
         return view('mlm.slots.confirm_product_code',$data);

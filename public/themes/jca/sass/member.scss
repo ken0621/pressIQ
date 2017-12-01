@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 .member
 {
 	background-color: #ededed;
@@ -493,9 +495,23 @@ h3
 	color: #fff;
 }
 
-.btn-jca-custom-default
+.btn-custom-white
 {
-	transition: 0.3s all ease;
+	@include transition(0.3s);
+	background-color: #fd6060;
+	color: #fff;
+	opacity: 0.8;
+
+	&:hover
+	{
+		color: #fff;
+		opacity: 1;
+	}
+}
+
+.btn-jca-custom-default, .btn-custom-primary
+{
+	@include transition(0.3s);
 	background-color: #019771;
 	color: #fff;
 
@@ -503,5 +519,59 @@ h3
 	{
 		background-color: #B17D2A;
 		color: #fff;
+	}
+}
+
+.popup-verify-placement
+{
+	.modal-header
+	{
+		background-color: #B17D2A !important;
+		color: #fff;
+	}
+
+	.modal-content
+	{
+		background-color: #fff !important;
+
+		.modal-body
+		{
+			.btn-container
+			{
+				.btn-verify-placement
+				{
+					@include transition(0.3s);
+					color: #fff;
+				    background-color: #019771;
+				    padding: 10px 40px;
+				    border: 2px solid #019771;
+				    border-radius: 2px;
+				    opacity: 0.9;
+				    width: 100%;
+				    margin-top: 20px;
+				    text-transform: uppercase;
+
+				    &:hover
+				    {
+				    	color: #fff;
+				    	border: 2px solid #B17D2A;
+				    	background-color: #B17D2A;
+				    	opacity: 1.0;
+				    }
+				}
+
+				.iamowner
+				{
+					color: #272c2f !important;
+				}
+			}
+		}
+
+		.labeld
+		{
+			color: #272c2f !important;
+			text-align: center;
+		    text-transform: uppercase;
+		}
 	}
 }

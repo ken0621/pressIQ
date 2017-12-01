@@ -228,7 +228,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_subheading"]=request('pr_subheading');
         $pr_info["pr_content"]=request('pr_content');
         
-        Mail::send('emails.press_email', $pr_info, function($message)
+        Mail::send('emails.sample_email', $pr_info, function($message)
         {
             $message->from('us@example.com', 'Laravel');
             $message->to('guevarra129@gmail.com');

@@ -71,8 +71,8 @@ class PayrollBranchTaggingReportController extends Member
 												->where('tbl_payroll_period_company.payroll_period_status', "!=", 'pending')
 												->get();
 
-		$data['_branch_report'] = PayrollBranchTaggingReportController::get_company_sub_branch();
-		$data = $this->compute_total_gross_pay_each_branch($data);
+		$data['_branch_report'] 		= PayrollBranchTaggingReportController::get_company_sub_branch();
+		$data 							= $this->compute_total_gross_pay_each_branch($data);
 		$data["_company_parent_report"] = $this->compute_company_parent_tagging($data);
 		
        	return view("member.payrollreport.payroll_branch_tagging_report_table", $data);
@@ -142,6 +142,7 @@ class PayrollBranchTaggingReportController extends Member
 						array_push($data['_branch_report'][$period_record->employee_company_id]['daily_employee_branch_rotational'], $total_daily_rate_plus_cola);
 						$data['_branch_report'][$period_record->employee_company_id]['total_daily_employee_branch_rotational'] += $total_daily_rate_plus_cola;
 					}
+					/*have source company id*/
 					else
 					{
 						$data['_branch_report'][$cutoff_input->branch_source_company_id]['rotational_gross_pay'] += $total_daily_rate_plus_cola;
@@ -150,10 +151,33 @@ class PayrollBranchTaggingReportController extends Member
 						$data['_branch_report'][$cutoff_input->branch_source_company_id]['total_daily_branch_rotational'] += $total_daily_rate_plus_cola;
 					}
 
+					//add rotational gross pay
 					$data['_branch_report'][$period_record->employee_company_id]['government_gross_pay'] += $total_daily_rate_plus_cola; 
-					
 					array_push($data['_branch_report'][$period_record->employee_company_id]['daily_employee_branch_government'], $total_daily_rate_plus_cola);
 					$data['_branch_report'][$period_record->employee_company_id]['total_daily_employee_branch_government'] += $total_daily_rate_plus_cola;
+					
+					//add salary 
+					foreach ($period_record['cutoff_breakdown']->_breakdown as $key2 => $breakdown) 
+					{
+						
+						if (isset($breakdown['type'])) 
+						{
+							if ($breakdown['add.gross_pay'] == true 
+								&& ($breakdown['type'] == 'adjustment' || $breakdown['type'] == 'allowance')) 
+							{
+								// dd($breakdown);
+								// $data['_branch_report'][$period_record->employee_company_id]['rotational_gross_pay'] += $breakdown['amount'];
+								// $data['_branch_report'][$period_record->employee_company_id]['government_gross_pay'] += $breakdown['amount'];
+
+								// $data['_branch_report'][$period_record->employee_company_id]['total_daily_employee_branch_rotational'] += $breakdown['amount'];
+								// $data['_branch_report'][$period_record->employee_company_id]['total_daily_employee_branch_government'] += $breakdown['amount'];
+
+								// array_push($data['_branch_report'][$period_record->employee_company_id]['daily_employee_branch_rotational'], $breakdown['amount']);
+								// array_push($data['_branch_report'][$period_record->employee_company_id]['daily_employee_branch_government'], $breakdown['amount']);
+							}
+						}
+					}
+
 				}
 			}
 			else if ($period_record["salary_compute_type"] != "Monthly Rate" || $period_record["salary_compute_type"] == "Flat Rate") 
@@ -161,7 +185,7 @@ class PayrollBranchTaggingReportController extends Member
 				$gross_pay = Payroll2::payroll_number_format($period_record['gross_pay'], 2);
 				$data['_branch_report'][$period_record->employee_company_id]['rotational_gross_pay'] += $gross_pay; 
 				$data['_branch_report'][$period_record->employee_company_id]['government_gross_pay'] += $gross_pay;
-
+				
 				array_push($data['_branch_report'][$period_record->employee_company_id]['other_employee_branch_rotational'], $gross_pay);
 				array_push($data['_branch_report'][$period_record->employee_company_id]['other_employee_branch_government'], $gross_pay);
 				$data['_branch_report'][$period_record->employee_company_id]['total_other_employee_branch_rotational'] += $gross_pay;

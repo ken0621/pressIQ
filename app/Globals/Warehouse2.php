@@ -49,6 +49,11 @@ class Warehouse2
 	{
 		return session('warehouse_id_'.$shop_id);
 	}
+    public static function get_offset_qty_v2($warehouse_id, $item_id)
+    {
+        $qty = Tbl_item::recordloginventory($warehouse_id, true)->value('offset_count');
+        return $qty * -1;
+    }
 	public static function get_main_warehouse($shop_id)
 	{
 	    return Tbl_warehouse::where('warehouse_shop_id',$shop_id)->where('main_warehouse',1)->where('archived',0)->value('warehouse_id');

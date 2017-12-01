@@ -350,7 +350,6 @@ class Item
         {
             $query = $query->recordloginventory(session("get_inventory"));
         }
-
         /* SEARCH */
         if (session("get_search")) 
         {
@@ -390,7 +389,6 @@ class Item
         $return = isset($_item_new) ? $_item_new : null;  
 
         Self::get_clear_session();
-        dd($return);
         return $return;
     }
     public static function get_per_warehouse($shop_id, $warehouse_id, $archive = 0)
@@ -480,6 +478,10 @@ class Item
         {
             $item = Self::add_info_display($item);
         }
+        // if(session('get_inventory'))
+        // {
+        //     $item->inventory_count = Warehouse2::get_offset_qty_v2(session('get_inventory'), $item->item_id);
+        // }
 
 
         return $item;

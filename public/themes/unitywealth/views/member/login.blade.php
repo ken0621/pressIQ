@@ -8,7 +8,7 @@
 				<tr>
 					<td class="c1">
 						<div class="register-side">
-							<img src="/themes/{{ $shop_theme }}/img/login-img.png">
+							<img src="/themes/{{ $shop_theme }}/img/login-img.jpg">
 						</div>
 					</td>
 					<td class="c2">
@@ -55,7 +55,7 @@
 								<div class="form-group">
 									<div class="choice">
 										<div class="holder">
-											<button class="btn">Login</button>
+											<button class="btn btn-custom">Login</button>
 										</div>
 										<div class="holder"><span class="or">OR</span></div>
 										<div class="holder"><a class="login-href" href="/members/register">Create an Account</a></div>

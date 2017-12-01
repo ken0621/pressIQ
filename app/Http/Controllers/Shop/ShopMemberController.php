@@ -172,6 +172,11 @@ class ShopMemberController extends Shop
 
         return view("member.kit_modal", $data);
     }
+    public function getReturnpolicy()
+    {
+        $data = [];
+        return Self::load_view_for_members('member.return_policy', $data);
+    }
     public function getDirect()
     {
         $data["_direct"] = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id);
@@ -197,6 +202,56 @@ class ShopMemberController extends Shop
         $data = [];
         return Self::load_view_for_members('member.ebooks', $data);
     }
+
+    /*Press Release*/
+    public function pressuser()
+    {
+        $data["page"] = "Press Release";
+        return view("press_user.member", $data);
+    }
+    public function pressuser_view()
+    {
+        $data["page"] = "Press Release - View";
+        return view("press_user.pressrelease_view", $data);
+    }
+     public function pressuser_dashboard()
+    {
+        $data["page"] = "Press Release - Dashboard";
+        return view("press_user.press_user_dashboard", $data);
+    }
+     public function pressuser_pressrelease()
+    {
+        $data["page"] = "Press Release - Press Release";
+        return view("press_user.press_user_pressrelease", $data);
+    }
+     public function pressuser_my_pressrelease()
+    {
+        $data["page"] = "Press Release - My Press Release";
+        return view("press_user.press_user_my_pressrelease", $data);
+    }
+     public function pressadmin()
+    {
+        $data["page"] = "Press Release";
+        return view("press_admin.admin", $data);
+    }
+     public function pressadmin_dashboard()
+    {
+        $data["page"] = "Press Release - Dashboard";
+        return view("press_admin.press_admin_dashboard", $data);
+    }
+     public function pressadmin_media_contacts()
+    {
+        $data["page"] = "Press Release - Media Contacts";
+        return view("press_admin.press_admin_media_contacts", $data);
+    }
+     public function pressadmin_pressrelease()
+    {
+        $data["page"] = "Press Release - Press Release";
+        return view("press_admin.press_admin_pressrelease", $data);
+    }
+    /*Press Release*/
+
+
     public function getEventDetails(Request $request)
     {
         $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);
@@ -2588,7 +2643,14 @@ class ShopMemberController extends Shop
         $data['action'] = '/members/slot-confirmation';
         $data['confirm_action'] = '/members/slot-confirmation-submit';
 
-        return view('mlm.slots.choose_slot',$data);
+        if ($this->shop_theme == "3xcell") 
+        {
+            return view('member.choose_slot', $data);
+        }
+        else
+        {
+            return view('mlm.slots.choose_slot', $data);
+        }
     }
     public function postSlotConfirmation()
     {
@@ -2607,7 +2669,15 @@ class ShopMemberController extends Shop
         $data['mlm_activation'] = Request2::input('mlm_activation');
         $data['slot_no'] = Request2::input('slot_no');
         
-        $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) in your Slot No <b>".$data['slot_no']."</b> ?";
+        if ($this->shop_theme == "3xcell") 
+        {
+            $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) ?";
+        }
+        else
+        {
+            $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) in your Slot No <b>".$data['slot_no']."</b> ?";
+        }
+
         $data['action'] = '/members/slot-use-product-code';
 
         return view('mlm.slots.confirm_product_code',$data);

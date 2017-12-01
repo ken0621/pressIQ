@@ -100,10 +100,14 @@ class CashierController extends Member
         $data["customer"]       = $item = Customer::scan_customer($data["shop_id"], $data["customer_id"]);
 
         if($data["customer"])
-        {
+        {    
+            /* SCAN IF HAVE RESERVED CODE */
+            $reserved_item = Cart2::scan_reserved_code($shop_id, $data['customer']->customer_id);
+            
             Session::put('customer_id', $data['customer']->customer_id);
             $return["status"]   = "success";
             $return["message"]  = "";
+            $return["reserved_item"]  = $reserved_item;
             $return["price_level_id"] = $data['customer']->membership_price_level;
             $return["stockist_warehouse_id"] = $data['customer']->stockist_warehouse_id;
         }
@@ -119,6 +123,12 @@ class CashierController extends Member
     {
         Session::forget('customer_id');
         $return['status'] = 'success';
+        $return['load_item_table'] = '';
+        if(session('reserved_item'))
+        {
+            Cart2::clear_cart();
+            $return['load_item_table'] = 'true';
+        }
 
         return json_encode($return);
     }

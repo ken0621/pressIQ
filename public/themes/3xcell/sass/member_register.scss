@@ -362,12 +362,30 @@ body
 	{
 		.contract
 		{
-			color: $text-dark;
-			font-size: 13px;
-			font-weight: 600;
-			white-space: pre-wrap;
+			/* white-space: pre-wrap; */
 			height: 420px;
 			overflow-y: auto;
+			
+			.step
+			{
+				padding: 10px 0;
+			}
+
+			.holder
+			{
+				.title-holder
+				{
+					color: $text-dark;
+					font-weight: $bold;
+					font-size: 13px;
+					padding: 10px 0;
+				}
+
+				.para-holder
+				{
+					
+				}
+			}
 		}
 	}
 	.modal-footer

@@ -182,6 +182,25 @@ class Cart2
 		}
 		return $return;
 	}
+
+    public static function scan_reserved_code($shop_id, $customer_id)
+    {
+        $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+        $get_reserved_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','reserved')->where('record_consume_ref_id',$customer_id)->where('record_warehouse_id',$warehouse_id)->where('record_shop_id',$shop_id)->get();
+        $return = null;
+        if(count($get_reserved_item) > 0)
+        {
+            foreach ($get_reserved_item as $key => $value) 
+            {
+                Cart2::scan_pin_code($shop_id, $warehouse_id, $value->mlm_pin);
+                Cart2::add_item_to_cart($shop_id, $value->record_item_id, 1);
+            }
+            $return = count($get_reserved_item);
+			Session::put("reserved_item", $return);
+        }
+
+        return $return;
+    }
 	public static function scan_ref_num($shop_id, $warehouse_id, $ref_num)
 	{
 		$return = null;
@@ -316,6 +335,8 @@ class Cart2
 					$_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
 					$_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->item_price);
 					$_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
+					$_cart[$key]->pin_code 				= null;
+
 					$total += $_cart[$key]->subtotal;
 				}
 			}
@@ -360,6 +381,18 @@ class Cart2
 			return $data;
 		}
 	}
+	public static function get_pincode($cart_key, $item_id)
+	{
+		$data = Tbl_cart_item_pincode::where('unique_id_per_pc',$cart_key)->where('product_id',$item_id)->get();
+		$return = null;
+		foreach ($data as $key => $value) 
+		{
+			$pincode = explode('@', $value->pincode);
+			$return[$key]['pin'] = $pincode[0];
+			$return[$key]['code'] = $pincode[1];
+		}
+		return $return;
+	}
 	public static function get_cart_quantity()
 	{
 		$quantity = 0;
@@ -390,6 +423,7 @@ class Cart2
 		Tbl_cart::where("unique_id_per_pc", $cart_key)->delete();
 		Tbl_cart_item_pincode::where("unique_id_per_pc", $cart_key)->delete();
 		Tbl_cart_payment::where("unique_id_per_pc", $cart_key)->delete();
+		Session::forget('reserved_item');
 	}
 	public static function cart_payment_amount($shop_id ,$type = '')
 	{

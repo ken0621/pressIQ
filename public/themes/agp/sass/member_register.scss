@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Lato', sans-serif;
 $light: 300;
 $regular: 400;
@@ -289,15 +291,20 @@ body
 						color: #75A04B !important;
 						font-size: 15px !important;
 					}
-					.btn-brown 
+					.btn-custom
 					{
+						@include transition(0.3s);
+						background-color: #75A04B;
+						color: #fff;
+
 						@media screen and (max-width: 991px)
 						{
 							width: 100%;
 						}
-						&:hover 
+
+						&:hover
 						{
-							background-color: #75A04B;
+							opacity: 0.8;
 						}
 					}
 				}
@@ -344,7 +351,7 @@ body
 			font-size: 13px;
 			font-weight: $light;
 			letter-spacing: 0.2px;
-			white-space: pre-wrap;
+			/* white-space: pre-wrap; */
 			height: 420px;
 			overflow-y: auto;
 		}
@@ -366,11 +373,19 @@ body
 		}
 		.btn-semi
 		{
-			background-color: #75A04B;
+			@include transition(0.3s);	
+			background-color: rgba(117,160,75,0.8);
 		}
+		
 		.btn-pure
 		{
+			@include transition(0.3s);
 			background-color: #75A04B;
+
+			&:hover
+			{
+				opacity: 0.8;
+			}
 		}
 	}
 }

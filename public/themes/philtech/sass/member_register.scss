@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
@@ -288,10 +290,16 @@ body
 						color: #006CC5 !important;
 						font-size: 15px !important;
 					}
-					.btn-phil
+					.btn-custom
 					{
+						@include transition(0.2s);
 						background-color: #006CC5;
 						color: #fff;
+
+						&:hover
+						{
+							opacity: 0.8;
+						}
 
 						@media screen and (max-width: 991px)
 						{

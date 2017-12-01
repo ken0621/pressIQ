@@ -224,9 +224,12 @@ class ShopMemberController extends Shop
     {
         if (request()->isMethod("post"))
         {
-        $pr_info["pr_headline"]=request('pr_headline');
-        $pr_info["pr_subheading"]=request('pr_subheading');
-        $pr_info["pr_content"]=request('pr_content');
+        $pr_info["pr_headline"]     =request('pr_headline');
+        $pr_info["pr_subheading"]   =request('pr_subheading');
+        $pr_info["pr_content"]      =request('pr_content');
+        // $pr_info["pr_from"]         =;
+        // $pr_info["pr_to"]           =;
+        // $pr_info["pr_date_sent"]    =Carbon::now();
         
         Mail::send('emails.sample_email', $pr_info, function($message)
         {
@@ -241,11 +244,6 @@ class ShopMemberController extends Shop
             $data["page"] = "Press Release - Press Release";
             return view("press_user.press_user_pressrelease", $data);
         }
-    }
-    public function send_release()
-    {
-        
-
     }
     public function pressuser_my_pressrelease()
     {
@@ -268,16 +266,16 @@ class ShopMemberController extends Shop
         
         if (request()->isMethod("post"))
         { 
-            $value["contact_name"]=request('contact_name');
-            $rules["contact_name"]=['required'];
-            $value["country"]=request('country');
-            $rules["country"]=['required'];
-            $value["contact_email"]=request('contact_email');
-            $rules["contact_email"]=['required','email','unique:tbl_pressiq_media_contacts,contact_email'];
-            $value["contact_website"]=request('contact_website');
-            $rules["contact_website"]=['required'];
-            $value["contact_description"]=request('contact_description');
-            $rules["contact_description"]=['required'];
+            $value["contact_name"]          =request('contact_name');
+            $rules["contact_name"]          =['required'];
+            $value["country"]               =request('country');
+            $rules["country"]               =['required'];
+            $value["contact_email"]         =request('contact_email');
+            $rules["contact_email"]         =['required','email','unique:tbl_pressiq_media_contacts,contact_email'];
+            $value["contact_website"]       =request('contact_website');
+            $rules["contact_website"]       =['required'];
+            $value["contact_description"]   =request('contact_description');
+            $rules["contact_description"]   =['required'];
             $validator = Validator::make($value, $rules);
 
             if ($validator->fails()) 

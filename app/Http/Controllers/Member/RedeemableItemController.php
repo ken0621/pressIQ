@@ -47,14 +47,15 @@ class RedeemableItemController extends Member
         else
         {
 
-        $insert['item_name'] = $request->item_name;
-        $insert['item_sales_information'] = $request->item_sales_information;
-        $insert['shop_id'] = $this->user_info->shop_id;
+        // $insert['item_name'] = $request->item_name;
+        // $insert['item_sales_information'] = $request->item_sales_information;
+        // $insert['shop_id'] = $this->user_info->shop_id;
 
-        $item_id = Tbl_item::insertGetId($insert);
+        // $item_id = Tbl_item::insertGetId($insert);
 
         $insertRedeem['redeemable_points'] = $request->redeemable_points;
-        $insertRedeem['item_id'] = $item_id;
+        $insertRedeem['item_id'] = 0;
+        // $insertRedeem['item_id'] = $item_id;
         $insertRedeem['item_name'] = $request->item_name;
         $insertRedeem['item_description'] = $request->item_sales_information;
         $insertRedeem['shop_id'] = $this->user_info->shop_id;

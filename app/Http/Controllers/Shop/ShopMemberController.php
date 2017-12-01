@@ -43,6 +43,7 @@ use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_mlm_slot_bank;
 use App\Models\Tbl_mlm_slot_coinsph;
+use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_mlm_slot_money_remittance;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
@@ -55,6 +56,8 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_item_redeemable_points;
+use App\Models\Tbl_item_redeemable_request;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -1558,7 +1561,55 @@ class ShopMemberController extends Shop
         $sort_by = 0;
         $data['page'] = "Redeemable";
         $data['_redeemable'] = Tbl_item_redeemable::where("archived",0)->get();
+        $slot_info           = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+        $data["_points"]     = $this->redeem_points_sum($slot_info->slot_id);
+        // dd($data);
         return (Self::load_view_for_members("member.redeemable",$data));
+    }
+    public function postRedeemItem(Request $request)
+    {
+        $slot_info          = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+        $item_redeemable_id = $request->item_id;
+        $redeemable_item    = Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->first();
+        if($redeemable_item)
+        {
+            $remaining_points = $this->redeem_points_sum($slot_info->slot_id);
+            $compute_points   = $remaining_points - $redeemable_item->redeemable_points;
+            if($compute_points >= 0)
+            {
+                $insert["amount"]       = -1 * $redeemable_item->redeemable_points;
+                $insert["shop_id"]      = $this->shop_info->shop_id;
+                $insert["slot_id"]      = $slot_info->slot_id;
+                $insert["date_created"] = Carbon::now();
+                Tbl_item_redeemable_points::insert($insert);
+
+                $insert_request["item_redeemable_id"]    = $redeemable_item->item_redeemable_id;
+                $insert_request["amount"]                = $redeemable_item->redeemable_points;
+                $insert_request["shop_id"]               = $this->shop_info->shop_id;
+                $insert_request["slot_id"]               = $slot_info->slot_id;
+                $insert_request["status"]                = "PENDING";
+                $insert_request["date_created"]          = Carbon::now();
+                Tbl_item_redeemable_request::insert($insert_request);
+                $response["status"] = "success";
+                $response["status_message"] = "Success";
+                return Redirect::back()->with("response",$response);
+            }
+        }
+        // return (Self::load_view_for_members("member.redeemable",$data));
+    }
+    public function redeem_points_sum($slot_id)
+    {
+        $points = Tbl_mlm_slot_points_log::where(function($query)
+        {
+            $query->where('points_log_complan','DIRECT_POINTS');
+            $query->orWhere('points_log_complan','INDIRECT_POINTS');
+            $query->orWhere('points_log_complan','REPURCHASE_POINTS');
+            $query->orWhere('points_log_complan','UNILEVEL_REPURCHASE_POINTS');
+            $query->orWhere('points_log_complan','INITIAL_POINTS');
+        })->where("points_log_slot",$slot_id)->sum("points_log_points");
+        $used_points = Tbl_item_redeemable_points::where("slot_id",$slot_id)->sum("amount");
+
+        return $points + $used_points;
     }
     public function getCodevault()
     {

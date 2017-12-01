@@ -409,15 +409,33 @@ class Payroll2
 			// $holiday = Payroll2::timesheet_get_is_holiday($employee_id, $from);
 			
 			$_timesheet[$from] = new stdClass();
-			$_timesheet[$from]->payroll_time_sheet_id 	= $timesheet_db->payroll_time_sheet_id;
-			$_timesheet[$from]->custom_shift 			= $timesheet_db->custom_shift;
-			$_timesheet[$from]->custom_shift_id 		= $timesheet_db->custom_shift_id;
-			$_timesheet[$from]->date 					= Carbon::parse($from)->format("Y-m-d");
-			$_timesheet[$from]->day_number 				= Carbon::parse($from)->format("d");
-			$_timesheet[$from]->day_word 				= Carbon::parse($from)->format("D");
-			$_timesheet[$from]->record 					= Payroll2::timesheet_process_in_out($timesheet_db);
-			$_timesheet[$from]->is_holiday 				= Payroll2::timesheet_get_is_holiday($employee_id, $from); //$holiday["holiday_day_type"];
-			$_timesheet[$from]->is_leave				= Payroll2::timesheet_get_is_leave($employee_id, $from);
+			$_timesheet[$from]->payroll_time_sheet_id 		= $timesheet_db->payroll_time_sheet_id;
+			$_timesheet[$from]->custom_shift 				= $timesheet_db->custom_shift;
+			$_timesheet[$from]->custom_shift_id 			= $timesheet_db->custom_shift_id;
+			$_timesheet[$from]->date 						= Carbon::parse($from)->format("Y-m-d");
+			$_timesheet[$from]->day_number 					= Carbon::parse($from)->format("d");
+			$_timesheet[$from]->day_word 					= Carbon::parse($from)->format("D");
+			$_timesheet[$from]->record 						= Payroll2::timesheet_process_in_out($timesheet_db);
+			$_timesheet[$from]->is_holiday 					= Payroll2::timesheet_get_is_holiday($employee_id, $from); //$holiday["holiday_day_type"];
+			$_timesheet[$from]->is_leave					= Payroll2::timesheet_get_is_leave($employee_id, $from);
+			$_timesheet[$from]->branch_source_company_id 	= 0;
+
+			/*Start Get Timesheet Company Source of the day*/
+			if ($_timesheet[$from]->record != null) 
+			{
+				foreach ($_timesheet[$from]->record as $key => $rec) 
+				{
+					$temp_time_float = 0;
+
+					if (Payroll::time_float(Payroll::time_diff($rec->time_sheet_in,$rec->time_sheet_out)) >= $temp_time_float) 
+					{
+						$temp_time_float = Payroll::time_float(Payroll::time_diff($rec->time_sheet_in,$rec->time_sheet_out));
+						
+						$_timesheet[$from]->branch_source_company_id = $rec->branch_id;
+					}
+				}
+			}
+			/*End*/
 
 			// $_timesheet[$from]->holiday_name = $holiday["holiday_name"];
 			if(isset($_shift_real[0]))
@@ -625,7 +643,7 @@ class Payroll2
         $leave 	   = "00:00:00";
         $data_this = PayrollLeave::employee_leave_capacity_consume_remaining($employee_id)->get();
 
-        if (count($leave_date_data)>0) 
+        if (count($leave_date_data) > 0) 
         {
         	// $used_leave_data = PayrollLeave::employee_leave_consumed($leave_date_data["payroll_leave_employee_id"]);
         	// $remaining_leave_data = PayrollLeave::employee_leave_remaining($employee_id, $leave_data_all["payroll_leave_employee_id"]);
@@ -1016,7 +1034,8 @@ class Payroll2
 			$_timesheet_record[$key]->time_sheet_in = gb_convert_time_from_db_to_timesheet($record->payroll_time_sheet_in);
 			$_timesheet_record[$key]->time_sheet_out = gb_convert_time_from_db_to_timesheet($record->payroll_time_sheet_out);
 			$_timesheet_record[$key]->time_sheet_activity = $record->payroll_time_shee_activity;
-			$_timesheet_record[$key]->branch = Payroll2::timesheet_get_branch($record->payroll_company_id)->name;
+			$_timesheet_record[$key]->branch 	= Payroll2::timesheet_get_branch($record->payroll_company_id)->name;
+			$_timesheet_record[$key]->branch_id = $record->payroll_company_id;
 			$_timesheet_record[$key]->source = $record->payroll_time_sheet_origin;
 			$_timesheet_record[$key]->payroll_time_sheet_id = $record->payroll_time_sheet_id;
 			$_timesheet_record[$key]->payroll_time_sheet_record_id = $record->payroll_time_sheet_record_id;
@@ -2238,7 +2257,7 @@ class Payroll2
 
 		$time_spent = Self::time_float($_time['time_spent']);
 
-		/* leave pay computation */
+		/* START leave pay computation */
 		if (Self::time_float($_time['leave_hours']) != 0) 
 		{
 			$target_float 						 			  = Self::time_float($_time['target_hours']);
@@ -2246,8 +2265,9 @@ class Payroll2
 			$return->_breakdown_addition['Leave Pay']['rate'] = Self::time_float($_time['leave_hours']) * @($daily_rate/$target_float);
 			$return->_breakdown_addition['Leave Pay']['hour'] = $_time['leave_hours'];
 		}
+		/* END leave pay computation */
 
-		/*START determine the daily rate by compute type, day type and holidays*/
+		/* START determine the daily rate by compute type, day type and holidays */
 		$daily_true_rate = $daily_rate;
 		
 		if($compute_type == "daily")
@@ -2299,7 +2319,7 @@ class Payroll2
 
 		// $hourly_rate 			= $return->hourly_rate = divide($daily_rate, $target_float);
 
-		/*END determine the daily rate by compute type*/
+		/* END determine the daily rate by compute type*/
 
 
 		/*START get hourly rate*/
@@ -2770,6 +2790,7 @@ class Payroll2
 			$return->_breakdown_deduction["absent"]["rate"] = $absent_deduction; 
 			$return->_breakdown_deduction["absent"]["hour"] = "";	
 		}
+
 		elseif($_time["is_absent"] == false && ($_time['day_type'] != 'rest_day'))
 		{
 			/*Start Undertime Deduction Computation*/
@@ -5293,7 +5314,7 @@ class Payroll2
 			$salary->deduct_pagibig_custom 					= 0;
 			$salary->tbl_payroll_employee_custom_compute 	= 0;
 		}
-
+		
 		/* GET EMPLOYEE DATA */
 		$employee 			= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->first();
 		

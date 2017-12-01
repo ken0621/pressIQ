@@ -43,6 +43,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/payroll_register_report_period/export_excel_filter/{id}/{uid}','Member\PayrollReportController@payroll_register_report_export_excel_filter');
 	/*END PAYROLL REGISTER REPORT*/
 
+	/*START PAYROLL BRANCH TAGGING REPORT*/
+	Route::any('/reports/branch_tagging_report','Member\PayrollBranchTaggingReportController@payroll_branch_tagging_report');
+	Route::any('/reports/branch_tagging_report_period_table','Member\PayrollBranchTaggingReportController@payroll_branch_tagging_report_table');
+	/*END PAYROLL BRANCH TAGGING REPORT*/
+
 	/*EMPLOYEE SUMMARY REPORT*/
 	Route::any('/reports/employee_summary_report','Member\PayrollReportController@employee_summary_report');
 

@@ -193,7 +193,7 @@ class Mlm_slot_log
 		switch ($action) 
 		{
 			case 'recieved':
-				$message.="You have successfully recieved ";
+				$message.="You have successfully received ";
 				break;
 
 			case 'transfer':

@@ -59,7 +59,7 @@
             <div class="row clearfix">
                 <div class="col-md-2 col-sm-12">
                     
-                    <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
+                    <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
 
                         <nav class="pushmenu pushmenu-left">
                             @if($customer)

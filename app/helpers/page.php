@@ -907,6 +907,15 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Kimbriel Oraya";
 
         /* -- REPORT => PRODUCTS  */
+        $code = "Branch-Tagging-Report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Branch Tagging Report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/branch_tagging_report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
+        
+        /* -- REPORT => PRODUCTS  */
         $code = "13th-Month-Pay";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "13th Month Pay";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;

@@ -15,24 +15,35 @@
 			    			<div class="title-container">Sign Up below, it's easy</div>
 			    			<div class="description">Press IQ makes it easier for you to create, manage, and distribute your press release</div>
 			    			<div class="border"></div>
+			    			<form method="post">
+			    				{{csrf_field()}}
+			    			@if(session()->has('message'))
+							<div class="details">
+							<span style="color: red;">
+								<strong>Error!</strong> {{ session('message') }}<br>
+							</span>
+							</div>
+							@endif
 			    			<div class="register-form">
-			    				<input type="text" placeholder="First Name">
+			    				<input type="text" name="user_first_name" id="user_first_name" placeholder="First Name">
 			    			</div>
 			    			<div class="register-form">
-			    				<input type="text" placeholder="Last Name">
+			    				<input type="text" name="user_last_name" id="user_last_name" placeholder="Last Name">
 			    			</div>
 			    			<div class="register-form">
-			    				<input type="text" placeholder="Email">
+			    				<input type="email" name="user_email" id="user_email" placeholder="Email">
 			    			</div>
 			    			<div class="register-form">
-			    				<input type="text" placeholder="Password">
+			    				<input type="password" name="user_password" id="user_password" placeholder="Password">
 			    			</div>
 			    			<div class="register-form">
-			    				<input type="text" placeholder="Confirm Password">
+			    				<input type="password" name="user_password_confirmation" id="user_password_confirmation" placeholder="Confirm Password">
 			    			</div>
+
 			    			<div class="button-container">
-			    			    <a href="#">REGISTER NOW</a>
+			    			    <button type="submit" href="">REGISTER NOW</button>
 			    			</div>
+			    			</form>
 			    			<div class="details">We respect your privacy and will never share your information.</div>
 			    		</div>
 		    		</div>

@@ -479,7 +479,7 @@ class Mlm_complan_manager_repurchase
 
             if($slot_stairstep->stairstep_bonus != 0)
             {
-                $computed_points = ($slot_stairstep->stairstep_bonus/100) * $slot_pv;
+                $computed_points = ($slot_stairstep->stairstep_bonus/100) * $stairstep_group_points;
                 $percentage      = $slot_stairstep->stairstep_bonus;
             }  
         }

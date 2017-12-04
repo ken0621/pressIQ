@@ -276,26 +276,17 @@ $text-dark: #404040;
 					text-align: right;
 					margin-top: 15px;
 
-					.btn-brown
+					.btn-custom
 					{
 						@include transition(0.2s);
-						border-radius: 2.5px;
-						padding: 10px 25px;
 						color: #fff;
-						font-weight: $bold;
 						font-size: 13px;
-
-						@media screen and (min-width: 150px)
-						{
-							width: 150px;
-						}
+						background-color: #75A04B;
 
 						&:hover
 						{
-							background-color: #301E10;
-							color: #f4f4f4;
+							opacity: 0.8;
 						}
-
 					}
 				}
 				.upload-profile-pic

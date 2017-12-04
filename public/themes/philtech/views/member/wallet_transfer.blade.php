@@ -56,7 +56,7 @@
 			</table>
 			<div class="clearfix">
 				<div class="pull-right">
-					{!! session('payout_paginate') !!}
+				{!! $transfer_history->render() !!}
 				</div>
 			</div>
 		</div>

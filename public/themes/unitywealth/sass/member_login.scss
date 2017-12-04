@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
@@ -9,14 +11,6 @@ body
 {
 	background-color: #ededed;
 }
-
-@mixin transition($transition)
-{
-  	-webkit-transition: all $transition ease-in-out;
-  	-moz-transition: all $transition ease-in-out;
-  	-o-transition: all $transition ease-in-out;
-  	transition: all $transition ease-in-out;
-}/* apply @inlude transition(0.2s); */
 
 .alert
 {
@@ -252,7 +246,7 @@ body
 				}
 				span
 				{
-					color: #693d28;
+					color: #76B83F;
 				}
 			}
 			.choice
@@ -264,7 +258,7 @@ body
 					display: inline-block;
 					vertical-align: middle;
 					
-					.btn
+					.btn-custom
 					{
 						@include transition(0.2s);
 						background-color: #00A4E6;

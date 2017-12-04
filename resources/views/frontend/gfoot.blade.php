@@ -43,6 +43,16 @@
 <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
 <script type="text/javascript" src="/assets/front/js/globalv2.js"></script>
 <script type="text/javascript" src="/assets/front/js/global_cart.js"></script>
+<script type="text/javascript">
+$(document).on('show.bs.modal', '.modal', function () 
+{
+    var zIndex = 1040 + (10 * $('.modal:visible').length);
+    $(this).css('z-index', zIndex);
+    setTimeout(function() {
+        $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+    }, 0);
+});
+</script>
 
 <!-- FOR GOOGLE LOGIN -->
 <script src="https://apis.google.com/js/platform.js" async defer></script>

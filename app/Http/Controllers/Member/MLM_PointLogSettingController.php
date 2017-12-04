@@ -16,6 +16,13 @@ class MLM_PointLogSettingController extends Member
     public function add()
     {
     	$data['page'] = "Add New Notification";
+        $types = Tbl_mlm_point_log_setting::get();
+        $existing_types = array();
+        foreach($types as $type)
+        {
+            array_push($existing_types, $type->point_log_setting_type);
+        }
+        $data['types'] = $existing_types;
     	return view("member.mlm_point_log_setting.point_log_setting_add",$data);
     }
     public function submit_add(Request $request)

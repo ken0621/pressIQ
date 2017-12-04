@@ -28,10 +28,20 @@
                         <div class="col-md-6">
                             <label>Type</label>
                             <select name="point_log_setting_type" class="form-control type" style="width:100;" required>
-                                <option value="RPV">RPV</option>
-                                <option value="RGPV">RGPV</option>
-                                <option value="SPV">SPV</option>
-                                <option value="SGPV">SGPV</option>
+                                @if(isset($types))
+                                    @if(!in_array('RPV',$types))
+                                    <option value="RPV">RPV</option>
+                                    @endif
+                                    @if(!in_array('RGPV',$types))
+                                    <option value="RGPV">RGPV</option>
+                                    @endif
+                                    @if(!in_array('SPV',$types))
+                                    <option value="SPV">SPV</option>
+                                    @endif
+                                    @if(!in_array('SGPV',$types))
+                                    <option value="SGPV">SGPV</option>
+                                    @endif
+                                @endif
                             </select>
                         </div>
                     </div>

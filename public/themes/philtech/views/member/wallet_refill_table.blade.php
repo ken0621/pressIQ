@@ -48,4 +48,8 @@
         @endforeach
     </tbody>
 </table>
+<<<<<<< HEAD
 <!-- <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/wallet_refill.js"></script> -->
+=======
+
+>>>>>>> mod_pat_wallet_transfer

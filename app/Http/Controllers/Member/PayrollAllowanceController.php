@@ -143,7 +143,7 @@ class PayrollAllowanceController extends Member
 
     public function modal_create_allowance()
     {
-         $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
+         $data["_expense"]        = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
          $data["default_expense"] = Tbl_chart_of_account::where("account_number", 66000)
                                             ->where("account_shop_id", Self::shop_id())->value("account_id");
 

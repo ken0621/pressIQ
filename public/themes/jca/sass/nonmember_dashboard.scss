@@ -11,7 +11,6 @@ $text-dark: #272c2f;
 /* Dashboard Top */
 .dashboard-top
 {
-	
 	.join-container
 	{
 		font-family: $content-text;
@@ -31,7 +30,7 @@ $text-dark: #272c2f;
 		{
 			width: 100%;
 			white-space: normal;
-			padding: 70px 0px 0px 80px;
+			padding: 70px 0px 0px 40px;
 			
 			.text-header1
 			{
@@ -39,6 +38,16 @@ $text-dark: #272c2f;
 				font-size: 45px;
 				color: #fff;
 				word-break: break-all;
+
+				@media screen and (max-width: 500px)
+				{
+					font-size: 30px;
+				}
+
+				@media screen and (max-width: 320px)
+				{
+					font-size: 20px;
+				}
 			}
 
 			.text-header2
@@ -48,17 +57,26 @@ $text-dark: #272c2f;
 				color: #fff;
 				letter-spacing: 0.2px;
 				word-break: break-all;
+
+				@media screen and (max-width: 320px)
+				{
+					font-size: 15px;
+				}
+			}
+
+			@media screen and (max-width: 500px)
+			{
+				padding: 0;
 			}
 		}
 
     	.btn-container
     	{
     		//text-align: center;
-			padding: 63px 0px 0px 0px;
+			padding: 63px 0px 0px 40px;
 			font-family: $content-text;
 			font-weight: $semi-bold;
 			font-size: 13px;
-			margin-left: 80px;
 
 			.btn-enter-a-code
 			{
@@ -74,11 +92,15 @@ $text-dark: #272c2f;
 				{
 					background-color: #019771;
 				}
+			}
 
+			@media screen and (max-width: 500px)
+			{
+				padding: 15px 0px 0px 0px;
 			}
 		}
 
-		@media screen and (max-width: 991px)
+/* 		@media screen and (max-width: 991px)
 		{
 			text-align: center;
 			max-height: auto;
@@ -97,9 +119,9 @@ $text-dark: #272c2f;
 	    		margin-left: 0;
 	    		padding: 0 0 75px 0;
 			}
-		}
+		} */
 
-		@media screen and (max-width: 565px)
+/* 		@media screen and (max-width: 565px)
 		{
 			.btn-text
 			{
@@ -116,7 +138,7 @@ $text-dark: #272c2f;
 			{
 				padding-top: 5px;
 			}
-		}
+		} */
 	}
 
 }

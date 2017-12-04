@@ -12,6 +12,7 @@ use Image;
 use Mail;
 use DB;
 use URL;
+use Session;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 use App\Globals\Payment;
@@ -43,7 +44,6 @@ use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_mlm_slot_bank;
 use App\Models\Tbl_mlm_slot_coinsph;
-use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_mlm_slot_money_remittance;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
@@ -56,9 +56,9 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
-use App\Models\Tbl_membership_package;
-use App\Models\Tbl_item_redeemable_points;
-use App\Models\Tbl_item_redeemable_request;
+
+use App\Models\Tbl_press_release_recipient;
+
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -98,28 +98,23 @@ class ShopMemberController extends Shop
         $data["zero_currency"] = Currency::format(0);
         session()->forget("get_success_mode");
         
-        $data["item_kit_id"]            = Item::get_first_assembled_kit($this->shop_info->shop_id);
-        $data["item_kit"]               = Item::get_all_assembled_kit($this->shop_info->shop_id);
+        $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
+        $data["item_kit"]    = Item::get_all_assembled_kit($this->shop_info->shop_id);
         if(Self::$customer_info)
         {
-            $data["current_plan_settings"]  = Tbl_mlm_plan_setting::where("shop_id",$this->shop_info->shop_id)->first();
-            $data["customer_summary"]       = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
-            $data["wallet"]                 = $data["customer_summary"]["_wallet"];
-            $data["points"]                 = $data["customer_summary"]["_points"];
-            $data["_wallet_plan"]           = $data["customer_summary"]["_wallet_plan"];
-            $data["_point_plan"]            = $data["customer_summary"]["_point_plan"];
-            $data["_slot"]                  = $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
-            $data["_recent_rewards"]        = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-            $data["_direct"]                = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-            $data['allow_multiple_slot']    = Self::$customer_info->allow_multiple_slot;
-            $data['mlm_pin']                = '';
-            $data['mlm_activation']         = '';            
-            $data["first_slot"]             = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
-            if($data["first_slot"])
-            {  
-                $data["first_membership"]   = Tbl_membership::where("membership_id",$data["first_slot"]->slot_membership)->first();
-            }
-
+            $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["wallet"]             = $data["customer_summary"]["_wallet"];
+            $data["points"]             = $data["customer_summary"]["_points"];
+            $data["_wallet_plan"]       = $data["customer_summary"]["_wallet_plan"];
+            $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
+            $data["_slot"]              = $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data['allow_multiple_slot'] = Self::$customer_info->allow_multiple_slot;
+            $data['mlm_pin'] = '';
+            $data['mlm_activation'] = '';            
+            $data["first_slot"]         = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+           
             if($this->shop_info->shop_theme == 'philtech')
             {
                 $data["travel_and_tours"] = false;
@@ -213,52 +208,267 @@ class ShopMemberController extends Shop
         return Self::load_view_for_members('member.ebooks', $data);
     }
 
-    /*Press Release*/
+    /*--------------------------------------------------------------------------Press Release*/
+    public function logout()
+    {
+        Session::forget('user_email');
+        Session::forget('user_first_name');
+        Session::forget('user_last_name');
+        Session::forget('user_level');
+
+        return Redirect::to("/");
+    }
     public function pressuser()
     {
-        $data["page"] = "Press Release";
-        return view("press_user.member", $data);
+        if(Session::exists('user_email'))
+        {
+           $level=session('user_level');
+           if($level!="1")
+           {
+                $data["page"] = "Press Release";
+                return view("press_user.member", $data);
+           }
+           else
+           {
+                return Redirect::to("/pressadmin");
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }   
     }
     public function pressuser_view()
     {
-        $data["page"] = "Press Release - View";
-        return view("press_user.pressrelease_view", $data);
+        if(Session::exists('user_email'))
+        {
+           $level=session('user_level');
+           if($level!="1")
+           {
+                $data["page"] = "Press Release - View";
+                return view("press_user.pressrelease_view", $data);
+           }
+           else
+           {
+                return Redirect::to("/pressadmin/pressreleases");
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
     }
      public function pressuser_dashboard()
     {
-        $data["page"] = "Press Release - Dashboard";
-        return view("press_user.press_user_dashboard", $data);
+        if(Session::exists('user_email'))
+        {
+           $level=session('user_level');
+           if($level!="1")
+           {
+                $data["page"] = "Press Release - Dashboard";
+                return view("press_user.press_user_dashboard", $data);
+           }
+           else
+           {
+                return Redirect::to("/pressadmin/dashboard");
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
     }
      public function pressuser_pressrelease()
     {
-        $data["page"] = "Press Release - Press Release";
-        return view("press_user.press_user_pressrelease", $data);
+        $data['add_recipient']   = Tbl_press_release_recipient::get();
+        if(Session::exists('user_email'))
+        {
+           $level=session('user_level');
+           if($level!="1")
+           {
+                if (request()->isMethod("post"))
+                {
+                    $pr_info["pr_headline"]     =request('pr_headline');
+                    $pr_info["pr_subheading"]   =request('pr_subheading');
+                    $pr_info["pr_content"]      =request('pr_content');
+                    $pr_info["pr_from"]         =session('user_email');
+                    $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
+                    $pr_info["pr_to"]           =request('pr_to');
+                    $pr_info["pr_date_sent"]    =Carbon::now();
+                    
+                    Mail::send('emails.press_email', $pr_info, function($message) use ($pr_info)
+                    {
+                        $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
+                        $message->to($pr_info["pr_to"]);
+                    });
+                    $data["page"] = "Press Release - Press Release";
+                    return view("press_user.press_user_pressrelease", $data);
+                }
+                else
+                {
+                    $data["page"] = "Press Release - Press Release";
+                     
+                    return view("press_user.press_user_pressrelease", $data);
+                }
+           }
+           else
+           {
+                return Redirect::to("/pressadmin/dashboard");
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
+
     }
-     public function pressuser_my_pressrelease()
+    public function pressuser_my_pressrelease()
     {
-        $data["page"] = "Press Release - My Press Release";
-        return view("press_user.press_user_my_pressrelease", $data);
+        if(Session::exists('user_email'))
+        {
+           $level=session('user_level');
+           if($level!="1")
+           {
+                $data["page"] = "Press Release - My Press Release";
+                return view("press_user.press_user_my_pressrelease", $data);
+           }
+           else
+           {
+                return Redirect::to("/pressadmin/pressreleases");
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
     }
      public function pressadmin()
     {
-        $data["page"] = "Press Release";
-        return view("press_admin.admin", $data);
+        if(Session::exists('user_email'))
+        {
+           $level=session('user_level');
+           if($level!="1")
+           {
+                return Redirect::to("/pressuser");
+           }
+           else
+           {                
+                $data["page"] = "Press Release";
+                return view("press_admin.admin", $data);
+           } 
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
     }
      public function pressadmin_dashboard()
     {
-        $data["page"] = "Press Release - Dashboard";
-        return view("press_admin.press_admin_dashboard", $data);
+        if(Session::exists('user_email'))
+        {
+           $level=session('user_level');
+           if($level!="1")
+           {
+                return Redirect::to("/pressuser/dashboard");
+           }
+           else
+           {
+                $data["page"] = "Press Release - Dashboard";
+                return view("press_admin.press_admin_dashboard", $data);
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
     }
-     public function pressadmin_media_contacts()
+    public function pressadmin_media_contacts()
     {
-        $data["page"] = "Press Release - Media Contacts";
-        return view("press_admin.press_admin_media_contacts", $data);
+        // if (request()->isMethod("post"))
+        // { 
+        //     $value["contact_name"]          =request('contact_name');
+        //     $rules["contact_name"]          =['required'];
+        //     $value["country"]               =request('country');
+        //     $rules["country"]               =['required'];
+        //     $value["contact_email"]         =request('contact_email');
+        //     $rules["contact_email"]         =['required','email','unique:tbl_pressiq_media_contacts,contact_email'];
+        //     $value["contact_website"]       =request('contact_website');
+        //     $rules["contact_website"]       =['required'];
+        //     $value["contact_description"]   =request('contact_description');
+        //     $rules["contact_description"]   =['required'];
+        //     $validator = Validator::make($value, $rules);
+
+        //     if ($validator->fails()) 
+        //     {
+        //         return Redirect::to("/pressadmin/mediacontacts")->with('message', $validator->errors()->first())->withInput();
+        //     }
+        //     else
+        //     {
+        //         $contact_info["contact_name"]=request('contact_name');
+        //         $contact_info["country"]=request('country');
+        //         $contact_info["contact_email"]=request('contact_email');
+        //         $contact_info["contact_website"]=request('contact_website');
+        //         $contact_info["contact_description"]=request('contact_description');
+        //         $contact_id = tbl_pressiq_media_contacts::insertGetId($contact_info); 
+        //         $data["page"] = "Press Release - Media Contacts";
+        //         $contacts = DB::table('tbl_pressiq_media_contacts')->get();
+        //         $data["contacts"]=$contacts;
+        //         return view("press_admin.press_admin_media_contacts",$data);                
+        //     }
+        // }
+        // else
+        // {
+        //     $data["page"] = "Press Release - Media Contacts";
+        //     $contacts = DB::table('tbl_pressiq_media_contacts')->get();
+        //     $data["contacts"]=$contacts;
+        //     return view("press_admin.press_admin_media_contacts",$data);
+        // }
     }
-     public function pressadmin_pressrelease()
+    public function pressadmin_pressreleases()
     {
-        $data["page"] = "Press Release - Press Release";
-        return view("press_admin.press_admin_pressrelease", $data);
+        if(Session::exists('user_email'))
+        {
+           $level=session('user_level');
+           if($level!="1")
+           {
+                return Redirect::to("/pressuser/mypressrelease");
+           }
+           else
+           {
+                $data["page"] = "Press Release - Press Release";
+                return view("press_admin.press_admin_pressrelease", $data);
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
     }
+
+    public function pressadmin_pressrelease_addrecipient(Request $request)
+    {
+      $data["name"]                      = $request->name;
+      $data["country"]                   = $request->country;
+      $data["research_email_address"]    = $request->research_email_address;
+      $data["website"]                   = $request->website;
+      $data["description"]               = $request->description;
+      Tbl_press_release_recipient::insert($data); 
+      Session::flash('message', "Recipient Successfully Added!");
+      return  redirect::back();
+    }
+    public function pressreleases_deleterecipient($id)
+    {
+      Tbl_press_release_recipient::where('recipient_id',$id)->delete();
+      Session::flash('delete', "Recipient Already Deleted!");
+      return  redirect::back();
+    }
+
+    public function pressreleases_send_recipient(Request $request)
+    {
+        dd('Hello World!');
+
+    }
+
     /*Press Release*/
 
 
@@ -561,6 +771,7 @@ class ShopMemberController extends Shop
 
         $tax = $payout_setting->enchasment_settings_tax;
         $service_charge = $payout_setting->enchasment_settings_p_fee;
+        $service_charge_type = $payout_setting->enchasment_settings_p_fee_type;
         $other_charge = $payout_setting->encashment_settings_o_fee;
         $minimum = $payout_setting->enchasment_settings_minimum;
 
@@ -586,7 +797,13 @@ class ShopMemberController extends Shop
                 $_slot[$key]->display_request_amount = Currency::format($amount);
 
                 $tax_amount = ($tax / 100) * $amount;
-                $take_home = $amount - ($tax_amount + $service_charge + $other_charge);
+                $take_home = $amount - ($tax_amount);
+                if($service_charge_type == 1)
+                {
+                    $service_charge = $take_home * ($service_charge /100);
+                }
+                $take_home = $take_home - ($service_charge + $other_charge);
+                
 
                 if($take_home < 0)
                 {
@@ -1573,55 +1790,7 @@ class ShopMemberController extends Shop
         $sort_by = 0;
         $data['page'] = "Redeemable";
         $data['_redeemable'] = Tbl_item_redeemable::where("archived",0)->get();
-        $slot_info           = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
-        $data["_points"]     = $this->redeem_points_sum($slot_info->slot_id);
-        // dd($data);
         return (Self::load_view_for_members("member.redeemable",$data));
-    }
-    public function postRedeemItem(Request $request)
-    {
-        $slot_info          = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
-        $item_redeemable_id = $request->item_id;
-        $redeemable_item    = Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->first();
-        if($redeemable_item)
-        {
-            $remaining_points = $this->redeem_points_sum($slot_info->slot_id);
-            $compute_points   = $remaining_points - $redeemable_item->redeemable_points;
-            if($compute_points >= 0)
-            {
-                $insert["amount"]       = -1 * $redeemable_item->redeemable_points;
-                $insert["shop_id"]      = $this->shop_info->shop_id;
-                $insert["slot_id"]      = $slot_info->slot_id;
-                $insert["date_created"] = Carbon::now();
-                Tbl_item_redeemable_points::insert($insert);
-
-                $insert_request["item_redeemable_id"]    = $redeemable_item->item_redeemable_id;
-                $insert_request["amount"]                = $redeemable_item->redeemable_points;
-                $insert_request["shop_id"]               = $this->shop_info->shop_id;
-                $insert_request["slot_id"]               = $slot_info->slot_id;
-                $insert_request["status"]                = "PENDING";
-                $insert_request["date_created"]          = Carbon::now();
-                Tbl_item_redeemable_request::insert($insert_request);
-                $response["status"] = "success";
-                $response["status_message"] = "Success";
-                return Redirect::back()->with("response",$response);
-            }
-        }
-        // return (Self::load_view_for_members("member.redeemable",$data));
-    }
-    public function redeem_points_sum($slot_id)
-    {
-        $points = Tbl_mlm_slot_points_log::where(function($query)
-        {
-            $query->where('points_log_complan','DIRECT_POINTS');
-            $query->orWhere('points_log_complan','INDIRECT_POINTS');
-            $query->orWhere('points_log_complan','REPURCHASE_POINTS');
-            $query->orWhere('points_log_complan','UNILEVEL_REPURCHASE_POINTS');
-            $query->orWhere('points_log_complan','INITIAL_POINTS');
-        })->where("points_log_slot",$slot_id)->sum("points_log_points");
-        $used_points = Tbl_item_redeemable_points::where("slot_id",$slot_id)->sum("amount");
-
-        return $points + $used_points;
     }
     public function getCodevault()
     {
@@ -1687,13 +1856,13 @@ class ShopMemberController extends Shop
 
         if(count($_slot) > 0)
         {
-    		$query->where(function($q) use ($_slot)
-    		{
-    			foreach($_slot as $slot)
-    			{
-    				$q->orWhere("customer_lead", $slot->slot_id);
-    			}
-    		});
+            $query->where(function($q) use ($_slot)
+            {
+                foreach($_slot as $slot)
+                {
+                    $q->orWhere("customer_lead", $slot->slot_id);
+                }
+            });
         }
         else
         {
@@ -1745,9 +1914,7 @@ class ShopMemberController extends Shop
         // $slot_no = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
         // $id = $slot_no->slot_id;
         // $data['transfer_history'] = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","wallet_transfer")->where("wallet_log_slot",$id)->paginate(8);
-
         $data['transfer_history'] = Tbl_mlm_slot_wallet_log::Slot()->where("wallet_log_plan","wallet_transfer")->where("slot_owner",Self::$customer_info->customer_id)->orderBy('wallet_log_date_created','DESC')->paginate(8);
-
         return (Self::load_view_for_members("member.wallet_transfer", $data));
     }
     public function postWalletTransfer(Request $request)
@@ -2550,8 +2717,8 @@ class ShopMemberController extends Shop
                 $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
                 
                 Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
-           		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
-           		MLM2::entry($shop_id,$slot_id);
+                Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+                MLM2::entry($shop_id,$slot_id);
                 
                 echo json_encode("success");
             }
@@ -2906,7 +3073,15 @@ class ShopMemberController extends Shop
         $data['mlm_activation'] = Request2::input('mlm_activation');
         $data['slot_no'] = Request2::input('slot_no');
         
-        $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) in your Slot No <b>".$data['slot_no']."</b> ?";
+        if ($this->shop_theme == "3xcell") 
+        {
+            $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) ?";
+        }
+        else
+        {
+            $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) in your Slot No <b>".$data['slot_no']."</b> ?";
+        }
+
         $data['action'] = '/members/slot-use-product-code';
 
         return view('mlm.slots.confirm_product_code',$data);
@@ -3094,184 +3269,5 @@ class ShopMemberController extends Shop
         }
 
         echo $message;
-    }
-    public function getAmbassadorPanel()
-    {
-        $enable_ambassador = 0;
-        $check_slot = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->first();
-        if($check_slot)
-        {
-            $enable_ambassador = $check_slot->ambassador;
-        }
-        if($enable_ambassador == 1)
-        {
-            $data["slot"] = $check_slot;
-            return Self::load_view_for_members('member.ambassador_panel', $data);
-        }
-        else
-        {
-            dd("You have no access (Error 713");
-        }
-    }
-    public function postAmbassadorPanelSubmitCheck(Request $request)
-    {
-       $shop_id                       = $this->shop_info->shop_id;
-       $insert["first_name"]          = $request->first_name;
-       $insert["last_name"]           = $request->last_name;
-       $insert["email"]               = $request->email;  
-       $insert["password"]            = $request->pass;
-       $insert["contact"]             = $request->customer_mobile;
-       $insert["pin_code"]            = $request->pin_code;
-       $insert["activation_code"]     = $request->activation_code;
-   
-  
-       $validate["first_name"]        = 'required';
-       $validate["last_name"]         = 'required';
-       $validate["email"]             = 'required|email';
-       $validate["password"]          = 'required';
-       // $validate["rpassword"]      = 'required';
-       // $validate["contact"]        = 'required';
-       $validate["pin_code"]          = 'required';
-       $validate["activation_code"]   = 'required';
-       $message["password.required"]  = 'Password is required';
-
-       $validator = Validator::make($insert, $validate,$message);
-       if(!$validator->fails()) 
-       {
-            $check = Tbl_customer::where('email',$request->email)->where('shop_id',$this->shop_info->shop_id)->first();
-            if(!$check)
-            {       
-                if($request->pass == $request->pass2)
-                {
-                    $check_membership_code = MLM2::check_membership_code($shop_id, $insert["pin_code"], $insert["activation_code"]);
-                    if($check_membership_code)
-                    {
-                        // unset($insert["pin_code"]);
-                        // unset($insert["activation_code"]);
-                        // Customer::register($this->shop_info->shop_id, $insert);
-                        return "success";
-                    }
-                    else
-                    {
-                        $return_message[0] = "Membership Code Incorrect";
-                        return $return_message;
-                    }
-                }
-                else
-                {   
-                    $return_message[0] = "Password mismatch";
-                    return $return_message;
-                }
-            }
-            else
-            {
-                $return_message[0] = "Email is already used.";
-                return $return_message;                
-            }
-       }
-       else
-       {
-            $return_message = $validator->errors()->all();
-
-            return $return_message;
-       }
-    }
-    public function postAmbassadorPanelSubmit(Request $request)
-    {
-       $shop_id                       = $this->shop_info->shop_id;
-       $insert["first_name"]          = ucfirst($request->first_name);
-       $insert["last_name"]           = ucfirst($request->last_name);
-       $insert["email"]               = $request->email;  
-       $insert["password"]            = $request->pass;
-       $insert["contact"]             = $request->customer_mobile;
-       $insert["pin_code"]            = $request->pin_code;
-       $insert["activation_code"]     = $request->activation_code;
-
-  
-       $validate["first_name"]        = 'required';
-       $validate["last_name"]         = 'required';
-       $validate["email"]             = 'required|email';
-       $validate["password"]          = 'required';
-       // $validate["rpassword"]      = 'required';
-       // $validate["contact"]        = 'required';
-       $validate["pin_code"]          = 'required';
-       $validate["activation_code"]   = 'required';
-       $message["password.required"]  = 'Password is required';
-
-       $validator = Validator::make($insert, $validate,$message);
-       if(!$validator->fails()) 
-       {
-            $check = Tbl_customer::where('email',$request->email)->where('shop_id',$this->shop_info->shop_id)->first();
-            if(!$check)
-            {       
-                if($request->pass == $request->pass2)
-                {
-                    $check_membership_code = MLM2::check_membership_code($shop_id, $insert["pin_code"], $insert["activation_code"]);
-                    if($check_membership_code)
-                    {
-                        $check_ambassador = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->first();
-                        if($check_ambassador)
-                        {     
-                            $sponsor                   = $check_ambassador->slot_sponsor;
-                            $placement_ambassador      = $check_ambassador->slot_id;
-                            $status                    = MLM2::create_slot_ambassador($shop_id, null,$sponsor,$placement_ambassador, $check_membership_code->membership_id,1,null);
-                            if($status == "success")
-                            {
-                                $pin             = $insert["pin_code"];
-                                $activation_code = $insert["activation_code"];
-
-                                unset($insert["pin_code"]);
-                                unset($insert["activation_code"]);
-
-                                $insert["password"] = Crypt::encrypt($insert["password"]);
-                                Customer::register($this->shop_info->shop_id, $insert);
-                                $get_customer = Tbl_customer::where("shop_id",$shop_id)->where("email",$insert["email"])->first();
-                                $slot_no_based_on_name = Self::generate_slot_no_based_on_name($get_customer->first_name, $get_customer->last_name);                  
-                                $new_slot_no           = $pin;
-                                $new_slot_no           = str_replace("MYPHONE", "BROWN", $new_slot_no);
-                                $new_slot_no           = str_replace("JCAWELLNESSINTCORP", "JCA", $slot_no_based_on_name);
-                               
-                                $slot_id_to_use        = MLM2::create_slot_ambassador($shop_id, $get_customer->customer_id,$sponsor,$placement_ambassador,$check_membership_code->membership_id,0,$new_slot_no);
-                                $remarks               = "Code used by " .$insert["first_name"] . " " . $insert["last_name"];
-                                MLM2::use_membership_code($shop_id, $pin, $activation_code, $slot_id_to_use, $remarks);
-                            }
-                            else
-                            {
-                                 $return_message[0] = $status;
-                                 return $return_message; 
-                            }
-
-                            return "success";
-                        }
-                        else
-                        {
-                            $return_message[0] = "Error 411";
-                            return $return_message;                 
-                        }
-                    }
-                    else
-                    {
-                        $return_message[0] = "Membership Code Incorrect";
-                        return $return_message;
-                    }
-                }
-                else
-                {   
-                    $return_message[0] = "Password mismatch";
-                    return $return_message;
-                }
-            }
-            else
-            {
-                $return_message[0] = "Email is already used.";
-                return $return_message;                
-            }
-       }
-       else
-       {
-            $return_message = $validator->errors()->all();
-
-            return $return_message;
-       }
     }
 }

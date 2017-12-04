@@ -42,22 +42,16 @@
                                         Action <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-custom">
-                                        
+                                        <li ><a href="/member/customer/wis/print/{{$wis->cust_wis_id}}"> Print </a></li>
                                         <li><a class="popup" link="/member/customer/wis/confirm/{{$wis->cust_wis_id}}" size="md">Confirm</a></li>
                                     </ul>
                                 </div>
                             </td>
                             @elseif($wis->cust_wis_status == 'confirm')
                             <td class="text-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Action <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-custom">
-                                       
-                                        <li><a href="/member/customer/wis/receive-items/{{$wis->cust_wis_id}}">Receive</a></li>
-                                    </ul>
-                                </div>
+                    
+                                        <a href="/member/customer/wis/print/{{$wis->cust_wis_id}}"> Print </a>
+
                             </td>
                             @endif
                         </tr>

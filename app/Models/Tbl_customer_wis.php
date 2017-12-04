@@ -16,5 +16,10 @@ class Tbl_customer_wis extends Model
 
         return $query;
     }
-   
+
+   public function scopeCustomerInfo($query)
+    {
+        $query->join("tbl_customer","tbl_customer.customer_id", "=", "tbl_customer_wis.destination_customer_id");
+        return $query;
+    }
 }

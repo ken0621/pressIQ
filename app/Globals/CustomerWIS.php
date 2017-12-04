@@ -7,6 +7,7 @@ use App\Models\Tbl_customer_wis;
 use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Models\Tbl_customer_wis_item;
 
+
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
@@ -113,7 +114,7 @@ class CustomerWIS
     }
     public static function get_customer_wis_data($cust_wis_id)
     {
-        return Tbl_customer_wis::where('cust_wis_shop_id',WarehouseTransfer::getShopId())->where('cust_wis_id',$cust_wis_id)->first();
+        return Tbl_customer_wis::where('cust_wis_shop_id',WarehouseTransfer::getShopId())->CustomerInfo()->where('cust_wis_id',$cust_wis_id)->first();
     }
 
     public static function update_customer_wis($shop_id, $cust_wis_id, $update)
@@ -127,7 +128,12 @@ class CustomerWIS
         return $return_item;
     }
 
-    public static function check_customer_existence($shop_id, $customer_id = 0)
+    public static function print_customer_wis_item($wis_id)
+    {
+        return Tbl_customer_wis_item::InventoryItem()->where('cust_wis_id',$wis_id)->groupBy('record_item_id')->get();
+    }
+
+    /*public static function check_customer_existence($shop_id, $customer_id = 0)
     {
         return Tbl_customer::where('customer_id',$customer_id)->where('shop_id',$shop_id)->first();
     }
@@ -144,9 +150,10 @@ class CustomerWIS
 
             if($wis_data->destination_customer_id != $ins_rr['cust_wis_id'])
             {
-                
+                die(var_dump($wis_data->destination_customer_id));
+
                 $warehouse_name = Warehouse2::check_warehouse_existence($shop_id, $ins_rr['cust_wis_id'])->warehouse_name;
-                die(var_dump($warehouse_name));
+                
                 $return .= '<b>'.ucfirst($warehouse_name).'</b> is not supposed to received items in this WIS - ('.$wis_data->wis_number.')';
             }   
         }
@@ -204,5 +211,5 @@ class CustomerWIS
         {
             return $return;
         }
-    }
+    }*/
 }

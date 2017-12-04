@@ -20,6 +20,7 @@ use App\Globals\Pdf_global;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\CustomerWIS;
+use App\Globals\WarehouseTransfer;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Session;
@@ -136,8 +137,22 @@ class CustomerWarehouseIssuanceSlipController extends Member
 
         return json_encode($data);
     }
+     public function getPrint(Request $request, $wis_id)
+    {
 
-    public function getReceiveItems(Request $request, $cust_wis_id)
+        $data['wis'] = CustomerWIS::get_customer_wis_data($wis_id);
+        //dd($data['wis']);
+        $data['wis_item'] = CustomerWIS::print_customer_wis_item($wis_id);
+        $data['user'] = $this->user_info;
+        $data['owner'] = WarehouseTransfer::get_warehouse_data($data['wis']->cust_wis_from_warehouse);
+        //dd($data['owner']);
+        
+        //return view('member.warehousev2.customer_wis.customer_wis_print', $data);
+        $pdf = view('member.warehousev2.customer_wis.customer_wis_print', $data);
+        return Pdf_global::show_pdf($pdf,null,$data['wis']->cust_wis_number);
+    }
+
+    /*public function getReceiveItems(Request $request, $cust_wis_id)
     {
         $check = CustomerWIS::get_customer_wis_data($cust_wis_id);
         if($check)
@@ -157,7 +172,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
             $data['customer_wis'] = CustomerWIS::get_customer_wis_data($cust_wis_id);
             $data['cust_wis_item'] = CustomerWIS::get_customer_wis_item($cust_wis_id);
 
-            dd($data);
+            //dd($data);
             return view('member.warehousev2.customer_wis.customer_wis_receive',$data);
         }
         else
@@ -230,5 +245,5 @@ class CustomerWarehouseIssuanceSlipController extends Member
 
         return json_encode($data);
 
-    }
+    }*/
 }

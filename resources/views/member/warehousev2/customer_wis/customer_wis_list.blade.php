@@ -20,9 +20,9 @@
         <div class="form-group">
             <div class="col-md-6">
                 <ul class="nav nav-tabs">
-                  <li id="all-list" class="active"><a data-toggle="tab" onClick="change_status('pending');"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;Pending</a></li>
-                  <li id="archived-list"><a data-toggle="tab" onClick="change_status('confirm');"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;Confirmed WIS</a></li>
-                  <li id="archived-list"><a data-toggle="tab" onClick="change_status('received');"><i class="fa fa-hand-grab-o" aria-hidden="true"></i>&nbsp;Received</a></li>
+                  <li id="all-list" class="active"><a data-toggle="tab" onClick="change_status('pending');"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;Pending Deliveries</a></li>
+                  <li id="archived-list"><a data-toggle="tab" onClick="change_status('confirm');"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;Confirm Deliveries</a></li>
+                  <!-- <li id="archived-list"><a data-toggle="tab" onClick="change_status('received');"><i class="fa fa-hand-grab-o" aria-hidden="true"></i>&nbsp;Received</a></li> -->
                 </ul>
             </div>
         </div>

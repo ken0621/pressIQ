@@ -7,8 +7,12 @@
 </div>
 <table  style="width: 100%">
     <tr>
+        <td>Deliver To: <h4>{{$wis->title_name}} {{$wis->first_name}} {{$wis->middle_name}} {{$wis->last_name}}</h4></td>
+        
+    </tr>
+    <tr>
         <td>{{date('F d, Y h:i:s A',strtotime($wis->created_at))}}</td>
-        <td class="text-right">{{strtoupper($wis->wis_number)}}</td>
+        <td class="text-right"><h4>{{strtoupper($wis->cust_wis_number)}}</td></h4>
     </tr>
     <tr>
         <td colspan="5">

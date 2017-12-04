@@ -49,7 +49,7 @@
 				<tr>
 					<td class="text-center">{{ $history->wallet_log_date_created }}</td>
 					<td class="text-center">{{ $history->slot_no }}</td>
-					<td class="text-left">{{ $history->wallet_log_details }}</td>
+					<td class="text-left"><b>{{ $history->wallet_log_details }}</b></td>
 					<td class="text-right"> {{ $history->wallet_log_status }} </td>
 				</tr>
 				@endforeach

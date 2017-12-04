@@ -33,16 +33,21 @@ class MLM_StairstepController extends Member
         return view("member.mlm_stairstep.stairstep");
     }
 
-    public function stairstep_view()
+    public function stairstep_view(Request $request)
     {
+        $keyword='';
+        if(Request::isMethod('post'))
+        {
+            $keyword = $request->search;
+        }
     	$shop_id 		  = $this->getShopId();
-		$data["_history"] = Tbl_stairstep_distribute::where("tbl_stairstep_distribute.shop_id",$shop_id)
+		$data["_history"] = Tbl_stairstep_distribute::where("tbl_stairstep_distribute.shop_id",$shop_id)->where('slot_no','LIKE','%'.$keyword.'%')
 													->leftJoin("tbl_stairstep_distribute_slot","tbl_stairstep_distribute_slot.stairstep_distribute_id","=","tbl_stairstep_distribute.stairstep_distribute_id")
 								  				    ->leftJoin("tbl_mlm_slot","tbl_mlm_slot.slot_id","=","tbl_stairstep_distribute_slot.slot_id")
 											        ->leftJoin("tbl_customer","tbl_customer.customer_id","=","tbl_mlm_slot.slot_owner")  
     								  				->groupBy("tbl_stairstep_distribute_slot.stairstep_distribute_id")
     								  				->select("tbl_stairstep_distribute.*",DB::raw("COUNT('tbl_stairstep_distribute_slot.slot_id') as total_processed_slot"))
-													->get();		
+													->paginate(10);		
 
     	$start  = Request::input("start");
     	$end    = Request::input("end");
@@ -57,7 +62,7 @@ class MLM_StairstepController extends Member
     		$end   = $this->get_end_date($start);
     	}
 
-    	$data["_slot"]    = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id",$shop_id)
+    	$data["_slot"]    = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id",$shop_id)->where('slot_no','LIKE','%'.$keyword.'%')
     								  	->customer()
     								  	->leftjoin("tbl_mlm_stairstep_settings","tbl_mlm_stairstep_settings.stairstep_id","=","tbl_mlm_slot.stairstep_rank")
     								  	->leftJoin("tbl_mlm_slot_points_log","tbl_mlm_slot_points_log.points_log_slot","=","tbl_mlm_slot.slot_id")
@@ -65,7 +70,7 @@ class MLM_StairstepController extends Member
     								  				,DB::raw("SUM( ( CASE WHEN points_log_type = 'SPV' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS personal_stairstep")
                                                     ,DB::raw("SUM( ( CASE WHEN points_log_type = 'SRB' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS stairstep_rebates_bonus"))
     								  	->groupBy("slot_id")
-								  	  	->get();
+								  	  	->paginate(10);
     								  	// ->where("points_log_date_claimed",">=",Carbon::parse($start)->format("Y-m-d 00:00:00"))
     								  	// ->where("points_log_date_claimed","<=",Carbon::parse($end)->format("Y-m-d 23:59:59"))
 

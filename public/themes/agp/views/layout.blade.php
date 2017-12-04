@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <base href="{{ URL::to('/themes/'.$shop_theme.'') }}/">
     <!-- Title -->
-    <title>Alpha Global Prestige - {{ $page }}</title>
+    <title>Alpha Global Prestige - {{ $page or '' }}</title>
     <link rel="icon"  type="image/png" href="http://alpha-globalprestige.com/assets/front/img/agp.png">
     <!-- Responsive Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">

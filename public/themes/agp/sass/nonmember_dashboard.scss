@@ -27,31 +27,31 @@ $text-dark: #404040;
 		font-family: $content-text;
 		border: 1px solid #dfdfdf;
 		padding: 15px;
-		min-height: 403px;
-		max-height: 403px;
+		min-height: 590px;
+		max-height: 590px;
+		background-repeat: none;
+		background-size: cover;
 
-		.btn-text
+		.caption-container
 		{
 			width: 100%;
 			white-space: normal;
-			@media screen and (min-width: 991px)
-			{
-				text-align: left;
-			}
+			text-align: center;
+			padding-top: 70px;
 
 			.text-header1
 			{
 				font-weight: $bold;
-				font-size: 21px;
-				color: $text-dark;
+				font-size: 35px;
+				color: #fff !important;
 				word-break: break-all;
 			}
 
 			.text-header2
 			{
 				font-weight: $regular;
-				font-size: 15px;
-				color: $text-light;
+				font-size: 20px;
+				color: #fff;
 				letter-spacing: 0.2px;
 				word-break: break-all;
 			}
@@ -64,15 +64,16 @@ $text-dark: #404040;
 			font-family: $content-text;
 			font-weight: $medium;
 			font-size: 13px;
+			margin-bottom: 25px;
 		
-			.btn-buy-a-kit
+			/* .btn-buy-a-kit
 			{
 				color: #fff;
 				background-color: #75A04B;
 				padding: 12px 40px 12px 40px;
 				border: 2px solid #75A04B;
 				border-radius: 2px;
-			}
+			} */
 			
 			img
 			{
@@ -87,18 +88,14 @@ $text-dark: #404040;
 			.btn-enter-a-code
 			{
 				@include transition(0.2s);
-				color: #75A04B;
-				background-color: inherit;
+				color: #fff;
+				background-color: #C4A75F;
+				border: 2px solid #C4A75F;
 				padding: 12px 30px 12px 30px;
-				border: 2px solid #75A04B;
-				border-radius: 2px;
-				//margin-bottom: 65px;
 
 				&:hover
 				{
-					color: #fff;
-					border: 2px solid #9b6d24;
-					background-color: #9b6d24;
+					background-color: #75A04B;
 				}
 			}
 		}

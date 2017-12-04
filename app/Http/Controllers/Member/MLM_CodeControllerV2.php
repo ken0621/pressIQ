@@ -221,7 +221,7 @@ class MLM_CodeControllerV2 extends Member
     public function print_codes(Request $request)
     {
         $data['shop_id'] = $this->user_info->shop_id;
-        $column[0]['name'] = 'PIN No';
+        $column[0]['name'] = 'Serial Code';
         $column[0]['code'] = 'pin_num';
         $column[0]['status'] = 'true';
 

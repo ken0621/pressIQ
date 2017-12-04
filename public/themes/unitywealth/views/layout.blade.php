@@ -147,7 +147,7 @@
             <div class="row clearfix">
                 <div class="col-md-3">
                     @if(request()->segment(1) != "replicated")
-                    <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
+                    <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
                     @endif
 
                     <div class="image-logo-holder">

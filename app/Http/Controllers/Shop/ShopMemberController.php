@@ -92,6 +92,7 @@ class ShopMemberController extends Shop
 {
     public function getIndex()
     {
+        
         $data["page"] = "Dashboard";
         $data["mode"] = session("get_success_mode");
         $data["zero_currency"] = Currency::format(0);
@@ -2787,23 +2788,77 @@ class ShopMemberController extends Shop
     }
     public function generate_slot_no_based_on_name($first_name, $last_name)
     {
-        $name = $first_name . substr($last_name, 0, 1);
-        $name = preg_replace("/[^A-Za-z0-9]/", "", $name);
-        $name = strtolower($name);
-
-        $count_exist = 1;
-        $loop = 1;
-        $return = "";
-
-        while($count_exist != 0)
+        if($this->shop_theme == "3xcell")
         {
-            $suffix_number  = str_pad($loop, 2, '0', STR_PAD_LEFT);
-            $return         = $name . $suffix_number;
-            $count_exist    = Tbl_mlm_slot::where("slot_no", $return)->count();
-            $loop++;
+            $name = "3X";
+
+            $count_exist      = 1;
+            $loop             = 1;
+            $return           = "";
+            $count_exist_slot = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->count();
+            while($count_exist != 0)
+            {
+                if($loop >= 999999 || $count_exist_slot >= 999999)
+                {
+                    $suffix_number  = rand(999999,$loop);
+                    $return         = $name . $suffix_number;
+                }
+                else
+                {
+                    $return         = $name . rand(0,9). rand(0,9). rand(0,9). rand(0,9). rand(0,9). rand(0,9);
+                }
+
+                $count_exist    = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->where("slot_no", $return)->count();
+                $loop++;
+            }
+            
+            return $return;
         }
-        
-        return $return;
+        else if($this->shop_theme == "brown")
+        {
+            $name = strtoupper(substr($first_name, 0, 3));
+
+            $count_exist      = 1;
+            $loop             = 1;
+            $return           = "";
+            while($count_exist != 0)
+            {
+                if($loop >= 9999)
+                {
+                    $suffix_number  = rand(9999,$loop);
+                    $return         = $name . $suffix_number;
+                }
+                else
+                {
+                    $return         = $name . rand(0,9). rand(0,9). rand(0,9). rand(0,9);
+                }
+
+                $count_exist    = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->where("slot_no", $return)->count();
+                $loop++;
+            }
+            
+            return $return;
+        }
+        else
+        {  
+            $name = $first_name . substr($last_name, 0, 1);
+            $name = preg_replace("/[^A-Za-z0-9]/", "", $name);
+            $name = strtolower($name);
+
+            $count_exist = 1;
+            $loop = 1;
+            $return = "";
+
+            while($count_exist != 0)
+            {
+                $suffix_number  = str_pad($loop, 2, '0', STR_PAD_LEFT);
+                $return         = $name . $suffix_number;
+                $count_exist    = Tbl_mlm_slot::where("slot_no", $return)->count();
+                $loop++;
+            }
+            
+            return $return;
+        }
     }    
     public function postFinalVerify()
     {

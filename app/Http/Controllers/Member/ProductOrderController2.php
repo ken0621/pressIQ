@@ -290,11 +290,14 @@ class ProductOrderController2 extends Member
 
                 if ($get_transaction) 
                 {
-                    $email_content["subject"] = "Confirmed Payment";
-                    $email_content["content"] = '<img style="max-width: 100%; display: block; margin: auto;" src="'.URL::to('/themes/3xcell/img/payment-verified.jpg').'">';
-                    $email_address            = Transaction::getCustomerEmailTransaction($get_transaction->transaction_id);
+                    if ($this->user_info->shop_id == 47) 
+                    {
+                        $email_content["subject"] = "Confirmed Payment";
+                        $email_content["content"] = '<img style="max-width: 100%; display: block; margin: auto;" src="'.URL::to('/themes/3xcell/img/payment-verified.jpg').'">';
+                        $email_address            = Transaction::getCustomerEmailTransaction($get_transaction->transaction_id);
 
-                    Mail_global::send_email(null, $email_content, $this->user_info->shop_id, $email_address);
+                        Mail_global::send_email(null, $email_content, $this->user_info->shop_id, $email_address);
+                    }
                 }
             }
 

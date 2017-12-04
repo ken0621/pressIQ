@@ -293,6 +293,7 @@ class MlmLoginController extends Controller
 			$data['message'] = 'Invalid Username/Password';
 		}
 
+        dd($data);
         $data['from'] = "login";
         
     	return json_encode($data);

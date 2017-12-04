@@ -88,4 +88,4 @@ function onImageSelect(input) {
 }
 </script>
 
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/wallet_refill.js"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/wallet_refill.js?v=1"></script>

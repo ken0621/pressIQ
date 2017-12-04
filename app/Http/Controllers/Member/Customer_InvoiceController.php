@@ -473,7 +473,7 @@ class Customer_InvoiceController extends Member
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
-            {               
+            {
                 $item_info[$key]['item_service_date']  = Request::input('invline_service_date')[$key];
                 $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
                 $item_info[$key]['item_description']   = Request::input('invline_description')[$key];

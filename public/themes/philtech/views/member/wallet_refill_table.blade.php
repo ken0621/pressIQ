@@ -13,30 +13,39 @@
             <th class="text-center">Refill Amount</th>
             <th class="text-center" width="120px">Amount Paid</th>
             <th class="text-center" width="120px">Remark</th>
+            <th class="text-center">Attachment</th>
         </tr>
         @else
         <tr>
-            <th class="text-center" colspan="5">No Data</th>
+            <th class="text-center" colspan="6">No Data</th>
         </tr>
         @endif
     </thead>
     <tbody>
         @foreach($refills as $refill)
-        <tr>
+        <tr id="{{$refill->wallet_log_refill_id}}">
             <td class="text-center">{{$refill->wallet_log_refill_date}}</td>
             @if($status!=0)
             <td class="text-center">{{$refill->wallet_log_refill_date_approved}}</td>
             @endif
             <td class="text-center">{{$refill->wallet_log_refill_amount}}</td>
             <td class="text-center">{{$refill->wallet_log_refill_amount_paid}}</td>
-            <td class="text-center" width="300px">
+            <td class="text-center" width="250px">
                 @if($refill->wallet_log_remarks!="")
                 {{$refill->wallet_log_remarks}}
                 @else
-                {{"No Remarks"}}
+                No Remarks
+                @endif
+            </td>
+            <td class="text-center">
+                @if($refill->wallet_log_refill_attachment!="")
+                <a href="{{$refill->wallet_log_refill_attachment}}">View</a>
+                @else
+                <a class="action-upload" href="javascript:">Upload</a>
                 @endif
             </td>
         </tr>
         @endforeach
     </tbody>
 </table>
+<!-- <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/wallet_refill.js"></script> -->

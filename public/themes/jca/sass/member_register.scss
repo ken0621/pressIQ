@@ -272,11 +272,11 @@ body
 				span
 				{
 					@include transition(0.2s);
-					color: #B17D2A;
+					color: #019771;
 
 					&:hover
 					{
-						color: #019771;
+						color: #B17D2A;
 					}
 				}
 			}
@@ -301,28 +301,23 @@ body
 						@include transition(0.2s);
 						/* color: $text-dark !important; */
 						font-weight: $regular;
-						color: #B17D2A !important;
+						color: #019771 !important;
 						font-size: 15px !important;
 
 						&:hover
 						{
-							color: #019771 !important;
+							color: #B17D2A !important;
 						}
 					}
-					.btn-brown 
+					.btn-custom
 					{
 						@include transition(0.2s);
-						background-color: #B17D2A;
+						background-color: #019771;
 						color: #fff;
 
-						@media screen and (max-width: 991px)
+						&:hover
 						{
-							width: 100%;
-						}
-						&:hover 
-						{
-							background-color: #019771;
-							color: #fff;
+							background-color: #B17D2A;
 						}
 					}
 				}
@@ -419,7 +414,7 @@ body
 		.btn-semi
 		{
 			@include transition(0.2s);
-			background-color: #B17D2A;
+			background-color: rgba(1,151,113,0.8);
 
 			&:hover
 			{
@@ -429,11 +424,11 @@ body
 		.btn-pure
 		{
 			@include transition(0.2s);
-			background-color: #B17D2A;
+			background-color: #019771;
 
 			&:hover
 			{
-				background-color: #019771;
+				background-color: #B17D2A;
 			}
 		}
 	}

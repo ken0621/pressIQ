@@ -40,10 +40,9 @@ class CustomerWarehouseIssuanceSlipController extends Member
     {
         $data['page'] = 'WIS';
         $data['status'] = isset($request->status) ? $request->status : 'pending';
-        //dd($data['status']);
         $current_warehouse = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         $data['_cust_wis'] = CustomerWIS::get_all_customer_wis($this->user_info->shop_id, $data['status'], $current_warehouse);
-        
+        //dd($data['_cust_wis']);
         return view('member.warehousev2.customer_wis.customer_wis_list',$data);
     }
 
@@ -141,11 +140,14 @@ class CustomerWarehouseIssuanceSlipController extends Member
     {
 
         $data['wis'] = CustomerWIS::get_customer_wis_data($wis_id);
-        //dd($data['wis']);
+
+        $customer_id = $data['wis']->destination_customer_id;
+
         $data['wis_item'] = CustomerWIS::print_customer_wis_item($wis_id);
         $data['user'] = $this->user_info;
         $data['owner'] = WarehouseTransfer::get_warehouse_data($data['wis']->cust_wis_from_warehouse);
-        //dd($data['owner']);
+        $data['customer'] = CustomerWIS::get_customer($this->user_info->shop_id)->where('customer_id',$customer_id);
+        //dd($data['customer']);
         
         //return view('member.warehousev2.customer_wis.customer_wis_print', $data);
         $pdf = view('member.warehousev2.customer_wis.customer_wis_print', $data);

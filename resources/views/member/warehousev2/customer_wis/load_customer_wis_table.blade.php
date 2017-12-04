@@ -7,6 +7,8 @@
                     <tr>
                         <th class="text-center">#</th>
                         <th class="text-center">SLIP NO.</th>
+                        <th class="text-center">CUSTOMER NAME</th>
+                        <th class="text-center">DELIVERY DATE</th>
                         <th class="text-center">TOTAL ISSUED INVENTORY</th>
                         @if($status== 'confirm')
                         <th class="text-center">RECEIVER CODE</th>
@@ -26,6 +28,8 @@
                         <tr>
                             <td class="text-center">{{$wis->cust_wis_id}}</td>
                             <td class="text-center">{{$wis->cust_wis_number}}</td>
+                            <td class="text-center">{{$wis->title_name}} {{$wis->first_name}} {{$wis->middle_name}} {{$wis->last_name}}</td>
+                            <td class="text-center">{{$wis->cust_delivery_date}}</td>
                             <td class="text-center">{{$wis->issued_qty}} pc(s)</td>
                             @if($wis->cust_wis_status == 'confirm')
                             <td class="text-center">{{$wis->cust_receiver_code}}</td>
@@ -49,9 +53,7 @@
                             </td>
                             @elseif($wis->cust_wis_status == 'confirm')
                             <td class="text-center">
-                    
-                                        <a href="/member/customer/wis/print/{{$wis->cust_wis_id}}"> Print </a>
-
+                                <a href="/member/customer/wis/print/{{$wis->cust_wis_id}}"> Print </a>
                             </td>
                             @endif
                         </tr>

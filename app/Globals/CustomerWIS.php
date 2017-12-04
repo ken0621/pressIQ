@@ -105,7 +105,7 @@ class CustomerWIS
 
     public static function get_all_customer_wis($shop_id = 0, $status = 'pending', $current_warehouse = 0)
     {
-        $data = Tbl_customer_wis::InventoryItem()->where('cust_wis_shop_id',$shop_id)->where('cust_wis_status', $status)->groupBy
+        $data = Tbl_customer_wis::CustomerInfo()->InventoryItem()->where('cust_wis_shop_id',$shop_id)->where('cust_wis_status', $status)->groupBy
         ('tbl_customer_wis.cust_wis_id')->where('cust_wis_from_warehouse', $current_warehouse)->get();
     
         //die(var_dump($data));
@@ -114,7 +114,7 @@ class CustomerWIS
     }
     public static function get_customer_wis_data($cust_wis_id)
     {
-        return Tbl_customer_wis::where('cust_wis_shop_id',WarehouseTransfer::getShopId())->CustomerInfo()->where('cust_wis_id',$cust_wis_id)->first();
+        return Tbl_customer_wis::where('cust_wis_shop_id',WarehouseTransfer::getShopId())->where('cust_wis_id',$cust_wis_id)->first();
     }
 
     public static function update_customer_wis($shop_id, $cust_wis_id, $update)

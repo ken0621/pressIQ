@@ -7,8 +7,9 @@
 </div>
 <table  style="width: 100%">
     <tr>
-        <td>Deliver To: <h4>{{$wis->title_name}} {{$wis->first_name}} {{$wis->middle_name}} {{$wis->last_name}}</h4></td>
-        
+        @foreach ($customer as $cust)
+        <td>Deliver To: <h4>{{$cust->title_name}} {{$cust->first_name}} {{$cust->middle_name}} {{$cust->last_name}}</h4></td>
+        @endforeach
     </tr>
     <tr>
         <td>{{date('F d, Y h:i:s A',strtotime($wis->created_at))}}</td>

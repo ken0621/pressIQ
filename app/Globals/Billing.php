@@ -221,7 +221,7 @@ class Billing
                                  ->first();
             $po_item_qty = $value->poline_qty * UnitMeasurement::um_qty($value->poline_um);
             $bill_item_qty = $bill_item->itemline_qty * UnitMeasurement::um_qty($bill_item->itemline_um);
-            if($value->poline_qty <= 0)
+            if($update_poline['poline_qty'] <= 0)
             {
                 $ctr++;
             }

@@ -369,14 +369,12 @@ $(document).ready(function()
 
 // And for a doughnut chart
 
-
 $(document).ready(function()
 {
 	if($("._mode").val() == "success")
 	{
 		$("#success-modal").modal("show");
 	}
-
 
 	$(".place_slot_btn").click(function()
 	{

@@ -25,7 +25,7 @@
                          <center>{{ Session::get('delete') }}</center>
                       </div>
                       @endif
-                    <form method="post" action="/pressadmin/pressreleases_addrecipient">
+                    <form method="post" >
                         {{csrf_field()}} 
                         <div class="title-container">PRESS RELEASE</div>
                         <div class="title">Send To:</div>
@@ -33,7 +33,7 @@
                         <span class="choose-button" readon>   
                         <a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
 
-                        <input type="text" name="pr_to" id="recipient_email" class="form-control" readonly>
+                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly>
 
                         <div class="title">Headline:</div>
                         <input type="text" name="pr_headline" class="form-control">
@@ -82,8 +82,8 @@
 
                 <div id="add_recipient" class="tabcontent create-pr-container">
                  
-                     <div class="title-container">ADD RECIPIENT</div>
-                    <div  class="col-md-8 form-bottom-container" id="">
+                <div class="title-container">ADD RECIPIENT</div>
+                    <div  class="col-md-8 form-bottom-container" >
                      <form class="form-horizontal" method="post" action="/pressadmin/pressreleases_addrecipient">
                         {{csrf_field()}}
                    
@@ -107,8 +107,7 @@
                                 <option value="Korea">Korea</option>
                             </select><br>
 
-                        <button type="submit" id="btn_add_recipient" class="btn_add_recipient" name="btn_add_recipient"   style="background-color: #316df9;width: 150px;">Add Recipients</button>
-                        
+                        <button type="submit" id="btn_add_recipient" class="btn_add_recipient" name="btn_add_recipient"   style="background-color: #316df9; width: 180px;display: block; margin: 0 auto;"">Add Recipients</button>
                      </form>
                 </div>
             </div>
@@ -145,16 +144,14 @@
                    <table id="example" class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; cellspacing: 0;">
                                 <thead>
                                     <tr>
-                                        <th style="text-align: center;">Name</th>
-                                        <th style="text-align: center;">Description</th>   
-                                        <th style="text-align: center;">Action</th>
+                                        <th style="text-align: center;">RECIPIENT</th>
+                                        <th style="text-align: center;">ACTION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($add_recipient as $addrecipients)
                                     <tr>   
                                         <td style="text-align: center;">{{$addrecipients->name}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->description}}</td>
                                         <td bgcolor="transparent" style="text-align: center;">
 
                                         <button type="button" id="choose_recipient" class="btn btn-success" data-name="{{$addrecipients->name}}" data-name1="{{$addrecipients->research_email_address}}">Choose</button>

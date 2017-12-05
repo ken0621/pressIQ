@@ -648,35 +648,17 @@ class Payroll2
 		$return->leave_fill_undertime = $leave_fill_undertime = 1;
 		$return->default_remarks = Payroll2::timesheet_default_remarks($return);
 
-        	$use_leave 	= true;
-        	$leave 		= $leave_date_data["leave_hours"];
-        }
-
-    	$return->use_leave 				= $use_leave;             
-		$return->leave 					= $leave;
-		$return->leave_fill_date 		= $leave_fill_late = 1;
-		$return->leave_fill_undertime 	= $leave_fill_undertime = 1;
-		$return->default_remarks 		= Payroll2::timesheet_default_remarks($return);
-
 		/*End leave function*/
 		
 		$compute_type = Payroll2::convert_period_cat($employee_contract->payroll_group_salary_computation);
 
 		if($return->time_compute_mode == "flexi")
-
 		{
-
 			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, $return->shift_break_hours, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $use_leave, $testing = false, $leavepay);
 		}
 		else
 		{
 			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours, $use_leave, false, $leavepay);
-
-			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, $return->shift_break_hours, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $use_leave, $compute_type, $testing = false);
-		}
-		else
-		{
-			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours, $use_leave, $compute_type, false);
 
 		}
 		
@@ -1458,8 +1440,6 @@ class Payroll2
 
 	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0, $use_leave = false ,$testing = false, $leavepay=0)
 
-	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0, $use_leave = false , $compute_type = "daily" ,$testing = false)
-
 	{
 
 		$leave_fill_undertime	= 1;
@@ -1952,8 +1932,6 @@ class Payroll2
 
 
 	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours=0, $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $use_leave = false, $testing = false,$leavepay=0)
-
-	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours=0, $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $use_leave = false, $compute_type ,$testing = false)
 
 	{
 

@@ -41,6 +41,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 	Route::any('/reports/payroll_register_report_period/export_excel/{period_company_id}/{payroll_company_id}','Member\PayrollReportController@payroll_register_report_export_excel');
 	Route::any('/reports/payroll_register_report_period/export_excel_filter/{id}/{uid}','Member\PayrollReportController@payroll_register_report_export_excel_filter');
+
+	Route::any('/reports/modal_filter_register_columns','Member\PayrollReportController@modal_filter_register_columns');
 	/*END PAYROLL REGISTER REPORT*/
 
 	/*EMPLOYEE SUMMARY REPORT*/

@@ -43,6 +43,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/payroll_register_report_period/export_excel_filter/{id}/{uid}','Member\PayrollReportController@payroll_register_report_export_excel_filter');
 
 	Route::any('/reports/modal_filter_register_columns','Member\PayrollReportController@modal_filter_register_columns');
+	Route::any('/reports/save_payroll_register_selected_columns','Member\PayrollReportController@save_payroll_register_selected_columns');
 	/*END PAYROLL REGISTER REPORT*/
 
 	/*START PAYROLL BRANCH TAGGING REPORT*/

@@ -29,7 +29,7 @@ use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_employment_status;
 use App\Models\Tbl_payroll_employee_salary;
-
+use App\Models\Tbl_payroll_register_column;
 
 
 use App\Models\Tbl_payroll_leave_temp;
@@ -527,13 +527,214 @@ class PayrollReportController extends Member
 		}
 
 		$data = $this->get_total_payroll_register($data);
-	
+		$data['columns'] = Tbl_payroll_register_column::select('*')->get();
 		return view('member.payrollreport.payroll_register_report_table', $data);
 	}
 
 	public function modal_filter_register_columns()
 	{
-			return view('member.payrollreport.modal_filter_register_columns');
+			$data['columns'] = Tbl_payroll_register_column::select('*')->get();
+			return view('member.payrollreport.modal_filter_register_columns',$data);
+	}
+
+	public function save_payroll_register_selected_columns()
+	{		
+			$update['name']							= 0;			
+			$update['gross_basic_pay']				= 0;
+			$update['absent']						= 0;
+			$update['late']							= 0;
+			$update['undertime']					= 0;
+			$update['basic_pay']					= 0;
+			$update['cola']							= 0;
+			$update['overtime_pay']					= 0;
+			$update['night_differential_pay']		= 0;
+			$update['regular_holiday_pay']			= 0;
+			$update['special_holiday_pay']			= 0;
+			$update['restday_pay']					= 0;
+			$update['leave_pay']					= 0;
+			$update['allowance']					= 0;
+			$update['bonus']						= 0;
+			$update['commision']					= 0;
+			$update['incentives']					= 0;
+			$update['additions']					= 0;
+			$update['month_13_and_other']			= 0;
+			$update['de_minimis_benefit']			= 0;
+			$update['others']						= 0;
+			$update['gross_pay']					= 0;
+			$update['deductions']					= 0;
+			$update['cash_bond']					= 0;
+			$update['cash_advance']					= 0;
+			$update['other_loan']					= 0;
+			$update['sss_loan']						= 0;
+			$update['sss_ee']						= 0;
+			$update['hdmf_loan']					= 0;
+			$update['hdmf_ee']						= 0;
+			$update['phic_ee']						= 0;
+			$update['with_holding_tax']				= 0;
+			$update['total_deduction']				= 0;
+			$update['take_home_pay']				= 0;
+			$update['sss_er']						= 0;
+			$update['sss_ec']						= 0;
+			$update['hdmf_er']						= 0;
+			$update['phic_er']						= 0;
+
+			if(!empty(request::input('name')))
+			{
+				$update['name'] = request::input('name');
+			}
+			if(!empty(request::input('gross_basic_pay')))
+			{
+				$update['gross_basic_pay'] = request::input('gross_basic_pay');
+			}
+			if(!empty(request::input('absent')))
+			{
+				$update['absent'] = request::input('absent');
+			}	
+			if(!empty(request::input('late')))
+			{
+				$update['late'] = request::input('late');
+			}
+			if(!empty(request::input('undertime')))
+			{
+				$update['undertime'] = request::input('undertime');
+			}
+			if(!empty(request::input('basic_pay')))
+			{
+				$update['basic_pay'] = request::input('basic_pay');
+			}
+			if(!empty(request::input('cola')))
+			{
+				$update['cola'] = request::input('cola');
+			}
+			if(!empty(request::input('overtime_pay')))
+			{
+				$update['overtime_pay'] = request::input('overtime_pay');
+			}
+			if(!empty(request::input('night_differential_pay')))
+			{
+				$update['night_differential_pay'] = request::input('night_differential_pay');
+			}	
+			if(!empty(request::input('regular_holiday_pay')))
+			{
+				$update['regular_holiday_pay'] = request::input('regular_holiday_pay');
+			}
+			if(!empty(request::input('special_holiday_pay')))
+			{
+				$update['special_holiday_pay'] = request::input('special_holiday_pay');
+			}
+			if(!empty(request::input('restday_pay')))
+			{
+				$update['restday_pay'] = request::input('restday_pay');
+			}
+			if(!empty(request::input('leave_pay')))
+			{
+				$update['leave_pay'] = request::input('leave_pay');
+			}
+			if(!empty(request::input('allowance')))
+			{
+				$update['allowance'] = request::input('allowance');
+			}
+			if(!empty(request::input('bonus')))
+			{
+				$update['bonus'] = request::input('bonus');
+			}		
+			if(!empty(request::input('commision')))
+			{
+				$update['commision'] = request::input('commision');
+			}
+			if(!empty(request::input('incentives')))
+			{
+				$update['incentives'] = request::input('incentives');
+			}
+			if(!empty(request::input('additions')))
+			{
+				$update['additions'] = request::input('additions');
+			}
+			if(!empty(request::input('month_13_and_other')))
+			{
+				$update['month_13_and_other'] = request::input('month_13_and_other');
+			}
+			if(!empty(request::input('de_minimis_benefit')))
+			{
+				$update['de_minimis_benefit'] = request::input('de_minimis_benefit');
+			}	
+			if(!empty(request::input('others')))
+			{
+				$update['others'] = request::input('others');
+			}
+			if(!empty(request::input('gross_pay')))
+			{
+				$update['gross_pay'] = request::input('gross_pay');
+			}
+			if(!empty(request::input('deductions')))
+			{
+				$update['deductions'] = request::input('deductions');
+			}	
+			if(!empty(request::input('cash_bond')))
+			{
+				$update['cash_bond'] = request::input('cash_bond');
+			}
+			if(!empty(request::input('cash_advance')))
+			{
+				$update['cash_advance'] = request::input('cash_advance');
+			}	
+			if(!empty(request::input('other_loan')))
+			{
+				$update['other_loan'] = request::input('other_loan');
+			}
+			if(!empty(request::input('sss_loan')))
+			{
+				$update['sss_loan'] = request::input('sss_loan');
+			}
+			if(!empty(request::input('sss_ee')))
+			{
+				$update['sss_ee'] = request::input('sss_ee');
+			}
+			if(!empty(request::input('hdmf_loan')))
+			{
+				$update['hdmf_loan'] = request::input('hdmf_loan');
+			}																							
+			if(!empty(request::input('hdmf_ee')))
+			{
+				$update['hdmf_ee'] = request::input('hdmf_ee');
+			}
+			if(!empty(request::input('phic_ee')))
+			{
+				$update['phic_ee'] = request::input('phic_ee');
+			}
+			if(!empty(request::input('with_holding_tax')))
+			{
+				$update['with_holding_tax'] = request::input('with_holding_tax');
+			}
+			if(!empty(request::input('total_deduction')))
+			{
+				$update['total_deduction'] = request::input('total_deduction');
+			}
+			if(!empty(request::input('take_home_pay')))
+			{
+				$update['take_home_pay'] = request::input('take_home_pay');
+			}
+			if(!empty(request::input('sss_er')))
+			{
+				$update['sss_er'] = request::input('sss_er');
+			}
+			if(!empty(request::input('sss_ec')))
+			{
+				$update['sss_ec'] = request::input('sss_ec');
+			}
+			if(!empty(request::input('hdmf_er')))
+			{
+				$update['hdmf_er'] = request::input('hdmf_er');
+			}
+			if(!empty(request::input('phic_er')))
+			{
+				$update['phic_er'] = request::input('phic_er');
+			}
+	         Tbl_payroll_register_column::where('payroll_register_columns_id', 6)->update($update);
+
+	      $return['status'] = 'success';
+	      $return['function_name']      = 'payroll_register_report.action_register_report_table';
+          return json_encode($return);
 	}
 
 	public function payroll_register_report_export_excel($period_company_id, $payroll_company_id)

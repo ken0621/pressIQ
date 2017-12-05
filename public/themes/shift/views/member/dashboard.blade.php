@@ -462,7 +462,7 @@ $(document).ready(function()
 	}
 
 
-	$(".place_slot_btn").click(function()
+	$("body").on('click','.place_slot_btn',function()
 	{
 		$(".message-return-slot-placement-verify").empty();
 		$(".chosen_slot_id").val($(this).attr("place_slot_id"));

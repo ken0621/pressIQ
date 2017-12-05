@@ -376,12 +376,20 @@ $(document).ready(function()
 		$("#success-modal").modal("show");
 	}
 
-	$(".place_slot_btn").click(function()
+	// $(".place_slot_btn").click(function()
+	// {
+	// 	$(".message-return-slot-placement-verify").empty();
+	// 	$(".chosen_slot_id").val($(this).attr("place_slot_id"));
+	// 	$("#slot-placement-modal").modal("show");
+	// });
+
+	$("body").on('click','.place_slot_btn',function()
 	{
 		$(".message-return-slot-placement-verify").empty();
 		$(".chosen_slot_id").val($(this).attr("place_slot_id"));
 		$("#slot-placement-modal").modal("show");
 	});
+
 });
 
 </script>

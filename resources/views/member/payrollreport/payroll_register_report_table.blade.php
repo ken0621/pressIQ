@@ -48,7 +48,7 @@
                        <!--  <th class="text-center" style="width: 100px">Allowances</th> -->
                       <!--   <th class="text-center" style="width: 100px">Adjustment Allowances</th> -->
                         
-                        <th class="text-center" style="width: 100px">DEDUCTION</th>
+                        <th class="text-center" style="width: 100px">DEDUCTIONS</th>
                         <th class="text-center" style="width: 100px">CASH BOND</th>
                         <th class="text-center" style="width: 100px">CASH ADVANCE</th>
                         <th class="text-center" style="width: 100px">OTHER LOAN</th>

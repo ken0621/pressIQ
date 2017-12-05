@@ -162,7 +162,7 @@ body{
     <td class="text-center" >({{ number_format($employee->sss_ee,2) }})</td>
 
     <td class="text-center" >({{ number_format($employee->hdmf_loan,2) }})</td>
-    <td class="text-center" >({{ number_format($employee->pagibig_er,2) }})</td>
+    <td class="text-center" >({{ number_format($employee->pagibig_ee,2) }})</td>
 
     <td class="text-center" >({{ number_format($employee->philhealth_ee,2) }})</td>
 

@@ -109,7 +109,7 @@ class ShopMemberController extends Shop
             $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
             $data["_slot"]              = $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
             $data['allow_multiple_slot'] = Self::$customer_info->allow_multiple_slot;
             $data['mlm_pin'] = '';
             $data['mlm_activation'] = '';            
@@ -169,7 +169,12 @@ class ShopMemberController extends Shop
             }
         }
 
-        return view("member.dashboard", $data);
+        return Self::load_view_for_members("member.dashboard", $data);
+    }
+    public function getDirectReferrals()
+    {
+        $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
+        return view('member.newest_direct_referrals',$data);
     }
     public function getKit()
     {
@@ -278,9 +283,10 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
     }
-     public function pressuser_pressrelease()
+     public function pressuser_pressrelease(Request $request)
     {
-        $data['add_recipient']   = Tbl_press_release_recipient::get();
+        $data['add_recipient']   = Tbl_press_release_recipient::paginate(10);
+      
         if(Session::exists('user_email'))
         {
            $level=session('user_level');
@@ -447,15 +453,17 @@ class ShopMemberController extends Shop
 
     public function pressadmin_pressrelease_addrecipient(Request $request)
     {
+
       $data["name"]                      = $request->name;
       $data["country"]                   = $request->country;
       $data["research_email_address"]    = $request->research_email_address;
       $data["website"]                   = $request->website;
       $data["description"]               = $request->description;
       Tbl_press_release_recipient::insert($data); 
-      Session::flash('message', "Recipient Successfully Added!");
+      Session::flash('message', 'Recipient Successfully Added!');
       return  redirect::back();
     }
+
     public function pressreleases_deleterecipient($id)
     {
       Tbl_press_release_recipient::where('recipient_id',$id)->delete();
@@ -468,7 +476,6 @@ class ShopMemberController extends Shop
         dd('Hello World!');
 
     }
-
     /*Press Release*/
 
 
@@ -2981,28 +2988,35 @@ class ShopMemberController extends Shop
 
     public function load_view_for_members($view, $data, $memberonly = true)
     {
-        $agent = new Agent();
-
-        if($agent->isMobile())
+        if ($this->shop_theme == "brown") 
         {
-            if (strpos($view, 'member2.') !== false)
+            $agent = new Agent();
+
+            if($agent->isMobile())
             {
-                $new_view = str_replace("member2.", "member2.mobile.", $view);
+                if (strpos($view, 'member2.') !== false)
+                {
+                    $new_view = str_replace("member2.", "member2.mobile.", $view);
+                }
+                else
+                {
+                    $new_view = str_replace("member.", "member.mobile.", $view);
+                }
+
+                if(view()->exists($new_view))
+                {
+                    $view = $new_view;
+                }
+            }
+
+            if ($memberonly) 
+            {
+                return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
             }
             else
             {
-                $new_view = str_replace("member.", "member.mobile.", $view);
+                return view($view, $data);
             }
-
-            if(view()->exists($new_view))
-            {
-                $view = $new_view;
-            }
-        }
-
-        if ($memberonly) 
-        {
-            return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
         }
         else
         {

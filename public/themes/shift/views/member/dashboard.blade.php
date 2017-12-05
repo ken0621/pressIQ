@@ -5,30 +5,6 @@
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 @if(!$mlm_member)
 	<div class="dashboard">
-	    <!-- TOP DASHBOARD-->
-		<!-- 	    <div class="dashboard-top">
-		    <div class="row clearfix">
-		        <div class="col-md-8">
-		            <div class="img-container">
-		                <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
-		            </div>
-		        </div>
-		        <div class="col-md-12">
-		            <div class="join-container">
-		                <div class="btn btn-text">
-		                    <div class="text-header1">Become a member now!</div>
-		                    <div class="text-header2">Enroll now and become one of us!</div>
-		                </div>
-		                <div class="btn-container">
-		                    <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
-		                    <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-		                    <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-		</div> -->
-
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
 	            <div class="col-md-12">
@@ -48,58 +24,6 @@
 	            </div>
 	        </div>
 	    </div>
-
-	    <!-- BOTTOM DASHBOARD -->
-	    <!-- <div class="dashboard-bottom">
-	        <div class="text-header">Profile Information</div>
-	        <div class="row clearfix">
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic1 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Personal Information</div>
-	                        </div>
-	                        
-	                    </div>
-	                    <div class="personal-info-container">
-	                        <div><label>Name </label><span>{{$customer->first_name}} {{$customer->middle_name}} {{$customer->last_name}}</span></div>
-	                        <div><label>Email </label><span>{{$customer->email}}</span></div>
-	                        <div><label>Birthday </label><span>{{$customer->birthday}}</span></div>
-	                        <div><label>Contact </label><span>{{$customer->contact}}</span></div>
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic2 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-shipping.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Default Shipping Address</div>
-	                        </div>
-	                    </div>
-	                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae similique nulla amet illum labore nostrum sapiente fugiat, pariatur ipsa distinctio.</p>
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic3 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-billing.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Default Billing Address</div>
-	                        </div>
-	                    </div>
-	                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos quibusdam nesciunt, dolor culpa architecto enim ratione error ipsum, animi sunt.</p>
-	                </div>
-	            </div>
-	        </div>
-	    </div> -->
 	</div>
 @else
 	<div class="dashboard">
@@ -181,7 +105,7 @@
 				<div class="title">Enter Product Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
-						<button class="btn btn-shift-use-pcode" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+						<button class="btn btn-shift-use-pcode" onclick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 					</div>
 				</div>
 			</div>
@@ -193,32 +117,9 @@
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
 					</div>
-					@if(count($_direct) > 0)
-						@foreach($_direct as $direct)
-						<div class="holder">
-							<div class="color">
-								<img src="{{ $direct->profile_image }}">
-							</div>	
-							<div class="text">
-								<div class="pull-left">
-									<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
-									<div class="email">{{ $direct->slot_no }}</div>
-									<div class="date">{{ $direct->time_ago }}</div>
-								</div>
-							</div>
-							<div class="action pull-right">
-								@if($direct->distributed == 1)
-									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-shift-view-info"><i class="fa fa-star"></i> VIEW INFO</button>
-								@else
-									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
-								@endif
-							</div>
-						</div>
-						@endforeach
-					@else
-
-						<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
-					@endif
+					<div class="load-direct-referrals-here">
+						
+					</div>
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -376,6 +277,41 @@
 @section("member_script")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
+
+<script>
+$(window).on('hashchange', function() {
+    if (window.location.hash) {
+        var page = window.location.hash.replace('#', '');
+        if (page == Number.NaN || page <= 0) {
+            return false;
+        } else {
+            getPosts(page);
+        }
+    }
+});
+$(document).ready(function() {
+	getPosts(1);
+    $(document).on('click', '.pagination a', function (e) {
+        getPosts($(this).attr('href').split('page=')[1]);
+        e.preventDefault();
+    });
+});
+function getPosts(page) {
+    $.ajax(
+    {
+        url : '/members/direct-referrals?page=' + page,
+        type: 'get',
+    }).done(function (data) 
+    {
+        $('.load-direct-referrals-here').html(data);
+        location.hash = page;
+    }).fail(function () 
+    {
+        alert('Posts could not be loaded.');
+    });
+}
+</script>
+
 <script>
 
 $(document).ready(function()

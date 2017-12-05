@@ -14,18 +14,7 @@
                 <div class="form-horizontal">
 
                     <div class="form-group">
-                        <div class="col-md-6">
-                            <label>Plan Code</label>
-                            @if(isset($settings))
-                            @foreach($settings as $setting)
-                            <input id="basic-input" value="{{$setting->point_log_setting_plan_code}}" name="point_log_setting_plan_code" class="form-control" autocomplete="off" required>
-                            <input type="hidden" name="point_log_setting_id" value="{{$id}}">
-                            @endforeach
-                            @else
-                            <input id="basic-input" name="point_log_setting_plan_code" class="form-control" autocomplete="off" required>
-                            @endif
-                        </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label>Type</label>
                             <select name="point_log_setting_type" class="form-control type" style="width:100;" required>
                                 @if(isset($types))
@@ -41,21 +30,12 @@
                                     @if(!in_array('SGPV',$types))
                                     <option value="SGPV">SGPV</option>
                                     @endif
+                                @elseif(isset($settings))
+                                    @foreach($settings as $setting)
+                                    <option value="{{$setting->point_log_setting_type}}">{{$setting->point_log_setting_type}}</option>
+                                    @endforeach
                                 @endif
                             </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label>Plan Name</label>
-                            @if(isset($settings))
-                            @foreach($settings as $setting)
-                            <input id="basic-input" value="{{$setting->point_log_setting_name}}" name="point_log_setting_name" class="form-control" autocomplete="off" required>
-                            @endforeach
-                            @else
-                            <input id="basic-input" name="point_log_setting_name" class="form-control" autocomplete="off" required>
-                            @endif
                         </div>
                     </div>
 

@@ -563,6 +563,7 @@ class PayrollReportController extends Member
 
 	public function get_total_payroll_register($data)
 	{
+		$test = array();
 		$total_gross_basic 			= 0;
 		$total_basic 				= 0;
 		$total_gross	 			= 0;
@@ -931,6 +932,7 @@ class PayrollReportController extends Member
 				$sss_er_total						+= Payroll2::payroll_number_format($sss_er, 2);
 				$sss_ec_total						+= Payroll2::payroll_number_format($sss_ec, 2);
 				$hdmf_ee_total						+= Payroll2::payroll_number_format($hdmf_ee, 2);
+				$test[] = $hdmf_ee_total;
 				$hdmf_er_total						+= Payroll2::payroll_number_format($hdmf_er, 2);
 				$philhealth_ee_total				+= Payroll2::payroll_number_format($philhealth_ee, 2);
 				$philhealth_er_total				+= Payroll2::payroll_number_format($philhealth_er, 2);
@@ -1119,7 +1121,7 @@ class PayrollReportController extends Member
 			$total_net 				+= Payroll2::payroll_number_format($employee->net_pay,2);
 			$total_tax 				+= Payroll2::payroll_number_format($employee->tax_ee,2);
 		}
-
+	
 		// $data["total_cutoff_basic"]					= $total_cutoff_basic;
 		$data["total_gross_basic"]					= $total_gross_basic;
 		$data["total_basic"] 						= $total_basic;

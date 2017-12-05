@@ -116,7 +116,7 @@
                             <span></span>
                             <span></span>
                         </div> -->
-                        <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
+                        <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
                         <div class="image-logo-holder">
                             <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/header-logo.png"></a>                       
                         </div>

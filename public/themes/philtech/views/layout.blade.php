@@ -10,6 +10,8 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name='B-verify' content='8b63efb2920a681d6f877a59a414659d09831140' />
+        <meta property="og:image" content="http://philtechglobalinc.com/themes/philtech/img/social-thumb.jpg" />
+        
       
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
         {{-- PHILTECH ICON --}}
@@ -320,7 +322,7 @@
             </div>  
             <div class="main-header">
                 <div class="container">
-                    <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
+                    <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
                     <div class="mob-cart-container popup" size="lg" link="/cartv2"><img src="/themes/{{ $shop_theme }}/img/cart-mob.png"></div>
                     <div class="mob-logo-container"><a href="/"><img src="/themes/{{ $shop_theme }}/img/logo.png"></a></div>
                 </div>

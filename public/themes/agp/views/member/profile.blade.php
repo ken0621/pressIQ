@@ -146,12 +146,12 @@
 							   				@endforeach
 							   			</select>
 							   		</div>
+				   		   			<div class="form-group">
+				   			   			<label>Province</label>
+				   			   			<select firstload="true" default="{{ isset($profile_address->state_id) ? $profile_address->state_id : '' }}" class="form-control load-location" name="customer_state" level="1"></select>
+				   			   		</div>
 					   			</div>
 						   		<div class="col-md-6">
-						   			<div class="form-group">
-							   			<label>Province</label>
-							   			<select firstload="true" default="{{ isset($profile_address->state_id) ? $profile_address->state_id : '' }}" class="form-control load-location" name="customer_state" level="1"></select>
-							   		</div>
 							   		<div class="form-group">
 							   			<label>City</label>
 							   			<select firstload="true" default="{{ isset($profile_address->city_id) ? $profile_address->city_id : '' }}" class="form-control load-location" name="customer_city" level="2"></select>
@@ -167,7 +167,7 @@
 						   		</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-default" type="submit"><i class="fa fa-pencil"></i> Update</button>
+							   			<button class="btn btn-custom" type="submit"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -194,7 +194,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button type="submit" class="submit-button btn btn-default"><i class="fa fa-pencil"></i> Update</button>
+							   			<button type="submit" class="submit-button btn btn-custom"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -258,7 +258,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-default" type="submit"><i class="fa fa-pencil"></i>  Update</button>
+							   			<button class="btn btn-custom" type="submit"><i class="fa fa-pencil"></i>  Update</button>
 							   		</div>
 						   		</div>
 					   		</div>

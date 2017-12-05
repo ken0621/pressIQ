@@ -59,9 +59,9 @@ class JournalEntryController extends Member
 		$je_id = Request::input("id");
 		if($je_id)
 		{
-			$data["journal"] = Tbl_journal_entry::where("je_id", $je_id)->first();
+			$data["journal"] 		 = Tbl_journal_entry::where("je_id", $je_id)->first();
 			$data["journal"]["line"] = Tbl_journal_entry_line::where("jline_je_id", $data["journal"]->je_id)->get();
-			$data["action"]		= "/member/accounting/journal/manual-journal-entry?je_id=".$data["journal"]->je_id;
+			$data["action"]			 = "/member/accounting/journal/manual-journal-entry?je_id=".$data["journal"]->je_id;
 		}
 
 		return view('member.accounting.journal_ledger.manual_journal_entry', $data);

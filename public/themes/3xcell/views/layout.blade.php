@@ -113,7 +113,7 @@
                 <div class="row clearfix">
                     <div class="col-md-3 cox-sm-12 col-xs-12">
 
-                        <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
+                        <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
                         
                         <nav class="pushmenu pushmenu-left">
                         
@@ -137,11 +137,11 @@
                             <div class="space1"></div>
                             <span>BROWSE</span>
                             <ul class="links">
-                                @if($customer_info)
+                                {{-- @if($customer_info) --}}
                                 <li> <a href="/">Home</a> </li>
-                                @else
+                                {{-- @else
                                 <li><a href="/members" id="home">MY ACCOUNT</a></li>
-                                @endif
+                                @endif --}}
                                 <li class="product-mobile-dropdown">
                                     <a href="javascript:">PRODUCTS</a>
                                 </li>
@@ -189,11 +189,11 @@
                                 <div class="space1"></div>
                                 <span>BROWSE</span>
                                 <ul class="links">
-                                    @if($customer_info)
+                                    {{-- @if($customer_info) --}}
                                     <li> <a href="/">Home</a> </li>
-                                    @else
+                                    {{-- @else
                                     <li><a href="/members" id="home">MY ACCOUNT</a></li>
-                                    @endif
+                                    @endif --}}
                                     <li class="product-mobile-dropdown">
                                         <a href="javascript:">PRODUCTS</a>
                                     </li>
@@ -219,6 +219,7 @@
                                         </ul>
                                     <li> <a href="/gallery">GALLERY</a> </li>
                                     <li> <a href="/contact">CONTACT US</a> </li>
+                                    
                                 </ul>
                             @endif
                         </nav>
@@ -240,11 +241,11 @@
                     <!-- NAVIGATION -->
                         <nav class="navirino clearfix">
                             <ul>
-                                @if($customer_info)
+                                {{-- @if($customer_info) --}}
                                 <li><a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a></li>
-                                @else
+                                {{-- @else
                                 <li><a href="/members" class="head-button link-nav {{ Request::segment(1) == 'members' ? 'active' : '' }}" id="home">MY ACCOUNT</a></li>
-                                @endif
+                                @endif --}}
                                 <li class="product-hover">
                                     <a class="head-button link-nav">PRODUCTS</a>
 

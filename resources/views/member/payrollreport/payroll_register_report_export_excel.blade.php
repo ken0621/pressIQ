@@ -124,7 +124,7 @@ body{
   @foreach($_employee as $lbl => $employee)
   <tr>  
     <td class="text-center" >{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_last_name }}</td>
-    <td class="text-center" >({{ number_format($employee->gross_basic_pay,2) }})</td>
+    <td class="text-center" >{{ number_format($employee->gross_basic_pay,2) }}</td>
     <td class="text-center" >({{ number_format($employee->absent,2) }}) <br> ({{$employee->time_absent}} times)</td>
     <td class="text-center" >({{ number_format($employee->late,2) }}) <br> ({{$employee->time_late}} hours)</td>
     <td class="text-center" >({{ number_format($employee->undertime,2) }}) <br> ({{$employee->time_undertime}} hours)</td>

@@ -35,10 +35,11 @@ function theme_custom()
             /*MOBILE SIDE NAV*/
             $menuLeft = $('.pushmenu-left');
             $nav_list = $('#nav_list');
-
-            $nav_list.click(function() {
+            
+            $nav_list.on("click", function() 
+            {
                 $(this).toggleClass('active');
-                $('.pushmenu-push').toggleClass('pushmenu-push-toright');
+               /* $('.pushmenu-push').toggleClass('pushmenu-push-toright');*/
                 $menuLeft.toggleClass('pushmenu-open');
             });
 
@@ -67,4 +68,17 @@ function theme_custom()
             
         });
     }
+}
+
+function on() 
+{
+    document.getElementById("overlay").style.display = "block";
+    $("body").css({"overflow": "hidden","position": "fixed","margin": "0","padding": "0","right": "0","left": "0"});
+}
+
+function off()
+{
+    document.getElementById("overlay").style.display = "none";
+    $('.pushmenu').removeClass("pushmenu-open");
+    $("body").css({"overflow": "auto","position": "static"});
 }

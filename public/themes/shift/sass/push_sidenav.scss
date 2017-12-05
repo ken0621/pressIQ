@@ -307,6 +307,16 @@ nav-list.active { background-position: -331px top; }
         margin-left: 112px;
         margin-top: -44px;
     }
+
+    .subheader-container .left-container
+    {
+        display: none !important;
+    }
+
+    .subheader-container .right-container 
+    {
+        margin-top: 0 !important;
+    }
 }
 
 @media screen and (max-width: 414px)

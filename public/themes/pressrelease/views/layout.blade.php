@@ -66,7 +66,7 @@
             </div>
             <div class="right-container">
                 @if(session()->has('user_email'))
-                <span class="smoth-scroll" style="cursor: pointer; text-transform: capitalize;" onClick="location.href='/pressuser'">{{ session('user_first_name')}}</span>
+                <span class="smoth-scroll" style="cursor: pointer; text-transform: capitalize;" onClick="location.href='/pressuser/dashboard'">{{ session('user_first_name')}}</span>
                 <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/logout'">
                     <div class="subhead-btn">Log out</div>
                 </span>

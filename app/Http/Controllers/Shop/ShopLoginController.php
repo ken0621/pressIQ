@@ -57,7 +57,7 @@ class ShopLoginController extends Shop
                             Session::put('user_last_name',$user_data->user_last_name);
                             Session::put('user_level',$user_data->user_level);
                             
-                            $level=request(session()->get('user_level'));
+                            $level=session('user_level');
                            if($level!="1")
                            {
                                 return Redirect::to("/pressuser/dashboard");

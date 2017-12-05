@@ -146,12 +146,12 @@
 							   				@endforeach
 							   			</select>
 							   		</div>
+				   		   			<div class="form-group">
+				   			   			<label>Province</label>
+				   			   			<select firstload="true" default="{{ isset($profile_address->state_id) ? $profile_address->state_id : '' }}" class="form-control load-location" name="customer_state" level="1"></select>
+				   			   		</div>
 					   			</div>
 						   		<div class="col-md-6">
-						   			<div class="form-group">
-							   			<label>Province</label>
-							   			<select firstload="true" default="{{ isset($profile_address->state_id) ? $profile_address->state_id : '' }}" class="form-control load-location" name="customer_state" level="1"></select>
-							   		</div>
 							   		<div class="form-group">
 							   			<label>City</label>
 							   			<select firstload="true" default="{{ isset($profile_address->city_id) ? $profile_address->city_id : '' }}" class="form-control load-location" name="customer_city" level="2"></select>

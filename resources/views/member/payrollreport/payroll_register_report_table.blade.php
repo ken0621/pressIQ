@@ -31,7 +31,7 @@
 
                         <th valign="center" rowspan="2" class="text-center" style="width: 100px">Witholding Tax</th>
                         <th valign="center" rowspan="2" class="text-center" style="width: 100px">TOTAL DEDUCTION</th>
-                        <th valign="center" rowspan="2" class="text-center" style="width: 100px">NET HOME PAY</th>
+                        <th valign="center" rowspan="2" class="text-center" style="width: 100px">TAKE HOME PAY</th>
 
                         <th colspan="4" class="text-center" style="width: 500px">GOVERNMENT EMPLOYER SHARE</th>
                   </tr>
@@ -48,7 +48,7 @@
                        <!--  <th class="text-center" style="width: 100px">Allowances</th> -->
                       <!--   <th class="text-center" style="width: 100px">Adjustment Allowances</th> -->
                         
-                        <th class="text-center" style="width: 100px">DEDUCTION</th>
+                        <th class="text-center" style="width: 100px">DEDUCTIONS</th>
                         <th class="text-center" style="width: 100px">CASH BOND</th>
                         <th class="text-center" style="width: 100px">CASH ADVANCE</th>
                         <th class="text-center" style="width: 100px">OTHER LOAN</th>
@@ -110,7 +110,7 @@
                         <td class="text-center" >({{ number_format($employee->sss_ee,2) }})</td>
 
                         <td class="text-center" >({{ number_format($employee->hdmf_loan,2) }})</td>
-                        <td class="text-center" >({{ number_format($employee->pagibig_er,2) }})</td>
+                        <td class="text-center" >({{ number_format($employee->pagibig_ee,2) }})</td>
 
                         <td class="text-center" >({{ number_format($employee->philhealth_ee,2) }})</td>
 

@@ -3592,9 +3592,10 @@ class PayrollController extends Member
           $insert['payroll_allowance_category']   = Request::input('payroll_allowance_category');
           $insert['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
           $insert['expense_account_id']           = Request::input('expense_account_id');
-          $insert['payroll_allowance_type']   = Request::input('payroll_allowance_type');
-          $insert['shop_id']                           = Self::shop_id();
-          $allowance_id = Tbl_payroll_allowance::insertGetId($insert);
+          $insert['payroll_allowance_type']       = Request::input('payroll_allowance_type');
+          $insert['shop_id']                      = Self::shop_id();
+          $allowance_id                           = Tbl_payroll_allowance::insertGetId($insert);
+
           AuditTrail::record_logs('CREATED: Payroll Allowance', 'Payroll Allowance Name: '.Request::input('payroll_allowance_name'),"", "" ,"");
 
           $insert_employee = array();
@@ -3614,6 +3615,7 @@ class PayrollController extends Member
 
           $return['status']             = 'success';
           $return['function_name']      = 'payrollconfiguration.reload_allowance';
+          
           return json_encode($return);
      }
 
@@ -5421,6 +5423,7 @@ class PayrollController extends Member
      public function payroll_jouarnal()
      {
           $data['_tag'] = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get();
+          
           return view('member.payroll.side_container.journal', $data);
      }
 
@@ -5432,8 +5435,8 @@ class PayrollController extends Member
 
           $data['_expense'] = Tbl_chart_of_account::getbytype(Self::shop_id(), $account_type_id)->orderBy('account_name')->get();
 
-          $data['_entity']  = Self::setentity();;
-          
+          $data['_entity']  = Self::setentity();
+         
           return view('member.payroll.modal.modal_create_journal_tag', $data);
      }
 
@@ -5464,7 +5467,6 @@ class PayrollController extends Member
           {
                Tbl_payroll_journal_tag_entity::insert($insert_entity);
           }    
-
 
           $return['status'] = 'success';
           $return['function_name'] = 'payrollconfiguration.reload_journal_tags';

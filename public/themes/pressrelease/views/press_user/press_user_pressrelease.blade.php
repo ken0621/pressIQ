@@ -29,7 +29,7 @@
                         {{csrf_field()}}
                         <div class="title-container">PRESS RELEASE</div>
                         <div class="title">Send To:</div>
-                        <input type="text" class="form-control"><span class="choose-button"><a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
+                        <input type="text" class="form-control" name="pr_to"><span class="choose-button"><a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
                         <div class="title">Headline:</div>
                         <input type="text" name="pr_headline" class="form-control">
                         <div class="title">Subheading:</div>

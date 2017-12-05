@@ -109,6 +109,37 @@
 
                         <button type="submit" id="btn_add_recipient" class="btn_add_recipient" name="btn_add_recipient"   style="background-color: #316df9; width: 180px;display: block; margin: 0 auto;"">Add Recipients</button>
                      </form>
+
+                    </div>
+                    <div style="overflow-x:auto;">
+                     <table id="example" class="display table table-bordered"                                                      style="background-color: #FFFFFF;width: 100%; empty-cells: 0;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center;">Contact Name</th>
+                                        <th style="text-align: center;">Country</th>
+                                        <th style="text-align: center;">Email</th>
+                                        <th style="text-align: center;">Website</th>
+                                        <th style="text-align: center;">Description</th>
+                                        <th style="text-align: center;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($add_recipient as $addrecipients)
+                                    <tr>
+                                        <td style="text-align: center;">{{$addrecipients->name}}</td>
+                                        <td style="text-align: center;">{{$addrecipients->country}}</td>
+                                        <td style="text-align: center;">{{$addrecipients->research_email_address}}</td>
+                                        <td style="text-align: center;">{{$addrecipients->website}}</td>
+                                        <td style="text-align: center;">{{$addrecipients->description}}</td>
+                                        <td bgcolor="transparent" style="text-align: center;">
+                                        <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="submit" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button></a>
+
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

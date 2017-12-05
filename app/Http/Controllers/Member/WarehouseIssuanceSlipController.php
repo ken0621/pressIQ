@@ -23,7 +23,7 @@ class WarehouseIssuanceSlipController extends Member
         $data['status'] = isset($request->status) ? $request->status : 'pending';
         $current_warehouse = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         $data['_wis'] = WarehouseTransfer::get_all_wis($this->user_info->shop_id, $data['status'], $current_warehouse);
-
+        
     	return view('member.warehousev2.wis.wis_list',$data);
     }
     public function getLoadWisTable(Request $request)

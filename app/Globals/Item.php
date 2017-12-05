@@ -980,14 +980,14 @@ class Item
             if($ismerchant == 1)
             {
                 $user_id = Merchant::getuserid();
-                $_category[$key]['item_list'] = Tbl_item::where("item_category_id",$category['type_id'])
+                $_category[$key]['item_list'] = Tbl_item::manufacturer()->where("item_category_id",$category['type_id'])
                 ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
                 ->where('item_merchant_requested_by', $user_id)
-                ->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+                ->whereIn("item_type_id",$type)->where("tbl_item.archived",0)->get()->toArray(); 
             }
             else
             {
-               $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+               $_category[$key]['item_list']   = Tbl_item::manufacturer()->where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->where("tbl_item.archived",0)->get()->toArray(); 
             }
             foreach($_category[$key]['item_list'] as $key1=>$item_list)
             {

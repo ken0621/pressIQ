@@ -10,9 +10,6 @@
                         <th class="text-center">CUSTOMER NAME</th>
                         <th class="text-center">DELIVERY DATE</th>
                         <th class="text-center">TOTAL ISSUED INVENTORY</th>
-                        @if($status== 'confirm')
-                        <th class="text-center">RECEIVER CODE</th>
-                        @endif
                         @if($status == 'received')
                         <th class="text-center">TOTAL RECEIVED INVENTORY</th>
                         <th class="text-center">TOTAL REMAINING INVENTORY</th>
@@ -31,9 +28,6 @@
                             <td class="text-center">{{$wis->title_name}} {{$wis->first_name}} {{$wis->middle_name}} {{$wis->last_name}}</td>
                             <td class="text-center">{{$wis->cust_delivery_date}}</td>
                             <td class="text-center">{{$wis->issued_qty}} pc(s)</td>
-                            @if($wis->cust_wis_status == 'confirm')
-                            <td class="text-center">{{$wis->cust_receiver_code}}</td>
-                            @endif
                             @if($wis->cust_wis_status == 'received')
                             <td class="text-center">{{$wis->total_received_qty}} pc(s)</td>
                             <td class="text-center">{{$wis->issued_qty - $wis->total_received_qty}} pc(s)</td>

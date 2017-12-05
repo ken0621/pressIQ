@@ -117,7 +117,10 @@ class ManufacturerController extends Member
 
                 if(Request::input("create_vendor") != "")
                 {
-                    Vendor::ins_vendor($insert);
+                    $vendor_id = Vendor::ins_vendor($insert);
+
+                    $update['vendor_id'] = $vendor_id;
+                    Tbl_manufacturer::where('manufacturer_id',$id)->update($update);
                 }
 
                 $manu_data = AuditTrail::get_table_data("tbl_manufacturer","manufacturer_id",$id);

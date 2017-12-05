@@ -1184,6 +1184,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
     
     /* -- VENDORS => PURCHASE ORDER  */
+    $code = "vendor-requisition-slip";
+    $nav[$page]['submenu'][$code]['label'] = "Requisition Slip";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/requisition_slip";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Layout Only";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    /* -- VENDORS => PURCHASE ORDER  */
     $code = "vendor-purchase-order";
     $nav[$page]['submenu'][$code]['label'] = "Purchase Order <span class='blink-ctr ctr-span hidden po-count pull-right'></span>";
     $nav[$page]['submenu'][$code]['code'] = $code;

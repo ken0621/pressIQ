@@ -156,5 +156,9 @@ class Tbl_item extends Model
                      ->join("tbl_warehouse as w","w.warehouse_id","=","tbl_warehouse_inventory.warehouse_id")
                      ->groupBy("w.warehouse_id");
     }
+    public function scopeManufacturer($query)
+    {
+        return $query->leftjoin('tbl_manufacturer', 'manufacturer_id','=', 'item_manufacturer_id');
+    }
 
 }

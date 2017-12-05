@@ -66,7 +66,8 @@ class Vendor
 		$ins_info["ven_info_vendor_id"] = $vendor_id;
 		$ins_info["ven_info_phone"] = $info["phone_number"];
 
-		Tbl_vendor_other_info::insert($ins_info);
+		$vendor_id = Tbl_vendor_other_info::insertGetId($ins_info);
+		return $vendor_id;
 	}
 
 	// public static function 

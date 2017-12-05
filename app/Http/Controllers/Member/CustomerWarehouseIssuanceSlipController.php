@@ -42,7 +42,6 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $data['status'] = isset($request->status) ? $request->status : 'pending';
         $current_warehouse = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         $data['_cust_wis'] = CustomerWIS::get_all_customer_wis($this->user_info->shop_id, $data['status'], $current_warehouse);
-        //dd($data['_cust_wis']);
         return view('member.warehousev2.customer_wis.customer_wis_list',$data);
     }
 

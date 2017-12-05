@@ -743,6 +743,10 @@ Route::any('/member/vendor/debit_memo/choose_type','Member\DebitMemoController@c
 Route::any('/member/vendor/debit_memo/db_view_pdf/{id}','Member\DebitMemoController@db_view_pdf');
 Route::any('/member/vendor/debit_memo/db_pdf/{id}','Member\DebitMemoController@db_pdf');
 
+/*Vendor RS*/
+AdvancedRoute::controller('/member/vendor/requisition_slip', 'Member\RequisitionSlipController');
+/*End Vendor RS*/
+
 /* Vendor - Purchase Order */
 Route::get('/member/vendor/purchase_order','Member\Vendor_PurchaseOrderController@index');
 Route::get('/member/vendor/purchase_order/list','Member\Vendor_PurchaseOrderController@po_list');

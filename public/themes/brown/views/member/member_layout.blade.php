@@ -104,6 +104,17 @@
 @section("css")
 @yield("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member.css">
+<style type="text/css">
+.lead-small-button, .lead-big-button
+{
+	box-shadow: none !important;
+	background: none !important;
+	color: #fff !important; 
+	background-color: #402A21 !important; 
+	border: 0px solid #402A21 !important; 
+	border-radius: 2px !important;
+}
+</style>
 @endsection
 @section("script")
 @yield("member_script")

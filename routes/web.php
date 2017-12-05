@@ -1204,6 +1204,7 @@ include_once('routes_config/routes_members_area.php');
 include_once('routes_config/routes_payroll_employee.php');
 Route::get('/ref/{id}', 'Shop\LeadController@ref');
 Route::get('/{id}', 'Shop\LeadController@ref');
+Route::get('/{id}/{product_id}', 'Shop\LeadController@ref');
 
 
 // Item Redeemable

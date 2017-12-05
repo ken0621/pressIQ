@@ -549,6 +549,8 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "LEAD";
         $data["url"] = "http://" . $_SERVER["SERVER_NAME"];
+        $data["_product"] = Ecom_Product::getAllProduct($this->shop_info->shop_id);
+        
         return view('member2.lead', $data);
     }
     public function getSlotInfo()

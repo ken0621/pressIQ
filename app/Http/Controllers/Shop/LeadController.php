@@ -6,7 +6,7 @@ use View;
 
 class LeadController extends Shop
 {
-    public function ref($slot_no)
+    public function ref($slot_no, $product_id = null)
     {
         $this->middleware(function ($request, $next)
         {  
@@ -29,12 +29,24 @@ class LeadController extends Shop
 
             if(view()->exists("replicated"))
             {
-                return view('replicated', $data);
+                if ($product_id) 
+                {
+                    return app('App\Http\Controllers\Shop\ShopProductContent2Controller')->index($product_id);
+                }
+                else
+                {
+                    return view('replicated', $data);
+                }
             }
             else
             {
             	return redirect("/");
             }
         }
+    }
+
+    public function ref_product($slot_no, $product_id)
+    {
+        return $this->ref($slot_no, $product_id);
     }
 }

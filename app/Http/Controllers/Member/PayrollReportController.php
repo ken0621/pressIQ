@@ -563,6 +563,7 @@ class PayrollReportController extends Member
 
 	public function get_total_payroll_register($data)
 	{
+		$test = array();
 		$total_gross_basic 			= 0;
 		$total_basic 				= 0;
 		$total_gross	 			= 0;

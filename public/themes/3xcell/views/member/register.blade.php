@@ -28,7 +28,7 @@
                     <div class="holder">
                         <div class="title-holder">REGISTRATION</div>
                         <div class="para-holder">
-                            Step 1: Go to our website <a target="_blank" href="www.3excell.com">www.3xcell.com</a><br>
+                            Step 1: Go to our website <a target="_blank" href="www.3xcell.com">www.3xcell.com</a><br>
                             Step 2: Click <strong>Join Us Today</strong><br>
                             Step 3: Fill out correctly all the information. Read and Accept the Terms & Conditions.<br>
                             Step 4: Click <strong>Sign Up</strong><br>

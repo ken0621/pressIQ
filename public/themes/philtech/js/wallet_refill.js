@@ -18,6 +18,7 @@ function wallet_refill()
 		event_change_tab();
 		event_change_slot_owner();
 		event_change_amount();
+		event_upload();
 	}
 	function action_table_loader()
 	{
@@ -80,5 +81,14 @@ function wallet_refill()
 	function action_load_amount()
 	{
 		$(".amount-container").html('<div style="text-align: right; font-size: 20px;"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>');
+	}
+	function event_upload()
+	{
+		$("body").on('click','.action-upload',function(e)
+		{
+			$('body').unbind("click");
+			var id = $(e.currentTarget).closest('tr').attr("id");
+			action_load_link_to_modal('/members/upload-attachment?id='+id, 'md');
+		});
 	}
 }

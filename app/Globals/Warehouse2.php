@@ -411,7 +411,6 @@ class Warehouse2
         {
             $return .= "The warehouse doesn't belong to your account <br>";
         }
-
         return $return;
     }
     public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '', $update_count = true, $for_out_of_stock = '')
@@ -436,7 +435,6 @@ class Warehouse2
         {
             $return .= "The warehouse doesn't belong to your account <br>";
         }
-
         if(!$return)
         {  
             $insert_slip['warehouse_id']                 = $warehouse_id;
@@ -567,7 +565,6 @@ class Warehouse2
             $serial = isset($value['serial']) ? $value['serial'] : array();
             $validate .= Warehouse2::refill_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
         }
-
         if(!$validate)
         {
             $inventory_details['history_description'] = "Refill items from ".$reference_name." #".$reference_id;
@@ -586,7 +583,7 @@ class Warehouse2
                 $source['id'] = $reference_id;
 
                 $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $value['item_id'])->where('record_count_inventory','<',0)->count();
-                $total_refill_qty = 0;
+                $total_refill_qty = $value['quantity'];
                 if($count_offset > 0)
                 {
                     $total_refill_qty = $value['quantity'] - $count_offset;
@@ -677,7 +674,6 @@ class Warehouse2
         {
             $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
         }
-
         if($allow_out_of_stock == true)
         {
             Self::inventory_allow_out_of_stock($shop_id, $warehouse_id, $item_id, $quantity);
@@ -694,10 +690,10 @@ class Warehouse2
         $total_to_refill = $v1_qty - $v2_qty;
         $source['name'] = 'inventory_v1';
         $source['id'] = 0;
-        if($total_to_refill > 0)
-        {
-            Self::refill($shop_id, $warehouse_id, $item_id, $total_to_refill, 'Migrate Inventory v1 to v2', $source, null, null, false);
-        }
+        // if($total_to_refill > 0)
+        // {
+        //     Self::refill($shop_id, $warehouse_id, $item_id, $total_to_refill, 'Migrate Inventory v1 to v2', $source, null, null, false);
+        // }
         if($quantity > $v2_qty)
         {
             $total_out_of_stock = $quantity - $v2_qty;

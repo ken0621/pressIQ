@@ -130,7 +130,7 @@
                                         <td style="text-align: center;">{{$addrecipients->website}}</td>
                                         <td style="text-align: center;">{{$addrecipients->description}}</td>
                                         <td bgcolor="transparent" style="text-align: center;">
-                                        <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="submit" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button>
+                                        <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="submit" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button></a>
 
                                         </td>
                                     </tr>

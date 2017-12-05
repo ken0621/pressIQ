@@ -166,6 +166,11 @@ class ShopMemberController extends Shop
 
         return view("member.dashboard", $data);
     }
+    public function getDirectReferrals()
+    {
+        $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
+        return view('member.newest_direct_referrals',$data);
+    }
     public function getKit()
     {
         $data["item_kit"] = Item::get_all_assembled_kit_v2($this->shop_info->shop_id);

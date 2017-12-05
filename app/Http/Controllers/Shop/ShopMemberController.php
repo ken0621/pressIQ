@@ -92,6 +92,7 @@ class ShopMemberController extends Shop
 {
     public function getIndex()
     {
+        
         $data["page"] = "Dashboard";
         $data["mode"] = session("get_success_mode");
         $data["zero_currency"] = Currency::format(0);
@@ -1243,9 +1244,15 @@ class ShopMemberController extends Shop
             $data["email"] = $email;
         }
 
-        Self::store_login_session($data["email"], $data["password"]);
-
-        return Redirect::to("/members")->send();
+        if(!Customer::check_account($this->shop_info->shop_id, $data["email"],$data["password"]))
+        {
+            return Redirect::to("/members/login")->send()->with('error', 'Incorrect email or password.');
+        }
+        else
+        {        
+            Self::store_login_session($data["email"], $data["password"]);
+            return Redirect::to("/members")->send();
+        }
     }
     public function getLogout()
     {
@@ -1851,13 +1858,13 @@ class ShopMemberController extends Shop
 
         if(count($_slot) > 0)
         {
-    		$query->where(function($q) use ($_slot)
-    		{
-    			foreach($_slot as $slot)
-    			{
-    				$q->orWhere("customer_lead", $slot->slot_id);
-    			}
-    		});
+            $query->where(function($q) use ($_slot)
+            {
+                foreach($_slot as $slot)
+                {
+                    $q->orWhere("customer_lead", $slot->slot_id);
+                }
+            });
         }
         else
         {
@@ -1906,9 +1913,10 @@ class ShopMemberController extends Shop
         // dd("This page is under maintenance");
         $data['page'] = "Wallet Transfer";
         $data['customer_id'] = Self::$customer_info->customer_id;
-        $slot_no = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->first();
-        $id = $slot_no->slot_id;
-        $data['transfer_history'] = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","wallet_transfer")->where("wallet_log_slot",$id)->paginate(8);
+        // $slot_no = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+        // $id = $slot_no->slot_id;
+        // $data['transfer_history'] = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","wallet_transfer")->where("wallet_log_slot",$id)->paginate(8);
+        $data['transfer_history'] = Tbl_mlm_slot_wallet_log::Slot()->where("wallet_log_plan","wallet_transfer")->where("slot_owner",Self::$customer_info->customer_id)->orderBy('wallet_log_date_created','DESC')->paginate(8);
         return (Self::load_view_for_members("member.wallet_transfer", $data));
     }
     public function postWalletTransfer(Request $request)
@@ -2711,8 +2719,8 @@ class ShopMemberController extends Shop
                 $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
                 
                 Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
-           		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
-           		MLM2::entry($shop_id,$slot_id);
+                Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+                MLM2::entry($shop_id,$slot_id);
                 
                 echo json_encode("success");
             }
@@ -2789,23 +2797,77 @@ class ShopMemberController extends Shop
     }
     public function generate_slot_no_based_on_name($first_name, $last_name)
     {
-        $name = $first_name . substr($last_name, 0, 1);
-        $name = preg_replace("/[^A-Za-z0-9]/", "", $name);
-        $name = strtolower($name);
-
-        $count_exist = 1;
-        $loop = 1;
-        $return = "";
-
-        while($count_exist != 0)
+        if($this->shop_theme == "3xcell")
         {
-            $suffix_number  = str_pad($loop, 2, '0', STR_PAD_LEFT);
-            $return         = $name . $suffix_number;
-            $count_exist    = Tbl_mlm_slot::where("slot_no", $return)->count();
-            $loop++;
+            $name = "3X";
+
+            $count_exist      = 1;
+            $loop             = 1;
+            $return           = "";
+            $count_exist_slot = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->count();
+            while($count_exist != 0)
+            {
+                if($loop >= 999999 || $count_exist_slot >= 999999)
+                {
+                    $suffix_number  = rand(999999,$loop);
+                    $return         = $name . $suffix_number;
+                }
+                else
+                {
+                    $return         = $name . rand(0,9). rand(0,9). rand(0,9). rand(0,9). rand(0,9). rand(0,9);
+                }
+
+                $count_exist    = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->where("slot_no", $return)->count();
+                $loop++;
+            }
+            
+            return $return;
         }
-        
-        return $return;
+        else if($this->shop_theme == "brown")
+        {
+            $name = strtoupper(substr($first_name, 0, 3));
+
+            $count_exist      = 1;
+            $loop             = 1;
+            $return           = "";
+            while($count_exist != 0)
+            {
+                if($loop >= 9999)
+                {
+                    $suffix_number  = rand(9999,$loop);
+                    $return         = $name . $suffix_number;
+                }
+                else
+                {
+                    $return         = $name . rand(0,9). rand(0,9). rand(0,9). rand(0,9);
+                }
+
+                $count_exist    = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->where("slot_no", $return)->count();
+                $loop++;
+            }
+            
+            return $return;
+        }
+        else
+        {  
+            $name = $first_name . substr($last_name, 0, 1);
+            $name = preg_replace("/[^A-Za-z0-9]/", "", $name);
+            $name = strtolower($name);
+
+            $count_exist = 1;
+            $loop = 1;
+            $return = "";
+
+            while($count_exist != 0)
+            {
+                $suffix_number  = str_pad($loop, 2, '0', STR_PAD_LEFT);
+                $return         = $name . $suffix_number;
+                $count_exist    = Tbl_mlm_slot::where("slot_no", $return)->count();
+                $loop++;
+            }
+            
+            return $return;
+        }
     }    
     public function postFinalVerify()
     {

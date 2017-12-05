@@ -219,6 +219,7 @@
                                         </ul>
                                     <li> <a href="/gallery">GALLERY</a> </li>
                                     <li> <a href="/contact">CONTACT US</a> </li>
+                                    
                                 </ul>
                             @endif
                         </nav>

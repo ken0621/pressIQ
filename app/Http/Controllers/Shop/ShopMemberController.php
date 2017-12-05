@@ -273,9 +273,10 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
     }
-     public function pressuser_pressrelease()
+     public function pressuser_pressrelease(Request $request)
     {
-        $data['add_recipient']   = Tbl_press_release_recipient::get();
+        $data['add_recipient']   = Tbl_press_release_recipient::paginate(10);
+      
         if(Session::exists('user_email'))
         {
            $level=request(session()->get('user_level'));
@@ -442,13 +443,14 @@ class ShopMemberController extends Shop
 
     public function pressadmin_pressrelease_addrecipient(Request $request)
     {
+
       $data["name"]                      = $request->name;
       $data["country"]                   = $request->country;
       $data["research_email_address"]    = $request->research_email_address;
       $data["website"]                   = $request->website;
       $data["description"]               = $request->description;
       Tbl_press_release_recipient::insert($data); 
-      Session::flash('message', "Recipient Successfully Added!");
+      Session::flash('message', 'Recipient Successfully Added!');
       return  redirect::back();
     }
 

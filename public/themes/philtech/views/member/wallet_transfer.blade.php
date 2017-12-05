@@ -30,9 +30,10 @@
 				<thead>
 					@if(count($transfer_history)>0)
 					<tr>
-						<th class="text-left" width="200px">Date</th>
-						<th class="text-center">Details</th>
-						<th class="text-center" width="200px">Status</th>
+						<th class="text-center" width="200px">Date</th>
+						<th class="text-center">Slot</th>
+						<th class="text-left">Details</th>
+						<th class="text-right" width="200px">Status</th>
 					</tr>
 					@else
 					<tr>
@@ -46,9 +47,10 @@
 				<tfoot style="background-color: #f3f3f3; font-size: 15px;">
 				@foreach($transfer_history as $history)
 				<tr>
-					<td class="text-left">{{ $history->wallet_log_date_created }}</td>
-					<td class="text-center"><b>{{ $history->wallet_log_details }}</b></td>
-					<td class="text-center"> {{ $history->wallet_log_status }} </td>
+					<td class="text-center">{{ $history->wallet_log_date_created }}</td>
+					<td class="text-center">{{ $history->slot_no }}</td>
+					<td class="text-left"><b>{{ $history->wallet_log_details }}</b></td>
+					<td class="text-right"> {{ $history->wallet_log_status }} </td>
 				</tr>
 				@endforeach
 				

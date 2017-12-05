@@ -177,7 +177,6 @@ class PayrollBranchTaggingReportController extends Member
 							}
 						}
 					}
-
 				}
 			}
 			else if ($period_record["salary_compute_type"] != "Monthly Rate" || $period_record["salary_compute_type"] == "Flat Rate") 

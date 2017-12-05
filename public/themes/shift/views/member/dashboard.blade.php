@@ -176,6 +176,14 @@
 							<div class="color"></div>
 							<div class="name"><span>Rebates Points</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
 						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Reward Points Redemption</span><span class="value">{{ currency('',$reward_point_redemption) }} POINT(S)</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Remaining Reward Points</span><span class="value">{{ currency('',$points->leadership_advertisement_bonus+$points->advertisement_bonus+$reward_point_redemption) }} POINT(S)</span></div>
+						</div>
 					</div>
 				</div>
 				<div class="title">Enter Product Code</div>

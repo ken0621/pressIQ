@@ -72,8 +72,14 @@
 <script type="text/javascript">
 	@if(Session::get("response")=='success')
 	toastr.success("Wallet request submitted");
-	@else if(Session::get("response")=='error')
+	@elseif(Session::get("response")=='error')
 	toastr.error("Error sending request");
+	@elseif(Session::get("response")=='invalid_slot')
+	toastr.error("The slot you are using does not belong to you. Please reload the page and try again");
+	@elseif(Session::get("response")=='success_upload')
+	toastr.success("Attachment uploaded");
+	@elseif(Session::get("response")=='error_upload')
+	toastr.error("Error uploading file");
 	@endif
 </script>
 @endsection

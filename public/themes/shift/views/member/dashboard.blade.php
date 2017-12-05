@@ -265,9 +265,9 @@
 	            <div class="modal-md modal-dialog">
 	                <div class="modal-content">
 	                    <div class="modal-body">
-	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
+	                        <div><img src="/themes/{{ $shop_theme }}/img/done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>Brown & Proud</b> movement</div>
+	                        <div class="text-caption">You are now officially enrolled to SHIFT.</div>
 	                    </div>
 	                </div>
 	            </div>
@@ -301,6 +301,7 @@
         </div>
     </div>
 </div>
+
 <!-- Proceed 1 -->
 <div class="popup-proceed1">
     <div id="proceed-modal-1" class="modal fade">
@@ -340,6 +341,7 @@
           </div>
       </div>
   </div>
+
 <!-- MANUAL PLACING OF SLOT -->
 <div class="popup-verify-placement">
     <div id="slot-placement-modal" class="modal fade">
@@ -373,6 +375,7 @@
           </div>
       </div>
   </div>
+
 @endsection
 
 @section("member_script")

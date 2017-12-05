@@ -732,6 +732,8 @@ class MLM2
 			{
 				$consume['name'] = 'offline_transaction';
 				$consume['id'] = $slot_id_created;
+
+            	Warehouse2::update_inventory_count($initial_record->record_warehouse_id, 0, $initial_record->record_item_id, -1);
 			}
             Warehouse2::insert_item_history($initial_record->record_log_id);
 		}

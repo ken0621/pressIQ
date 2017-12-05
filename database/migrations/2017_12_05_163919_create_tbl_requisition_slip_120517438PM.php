@@ -15,9 +15,14 @@ class CreateTblRequisitionSlip120517438PM extends Migration
     {
         Schema::create('tbl_requisition_slip', function (Blueprint $table) {
             $table->increments('requisition_slip_id');
+            $table->integer('shop_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->string('requisition_slip_number');
             $table->text('requisition_slip_remarks');
             $table->datetime('requisition_slip_date_created');
+
+            $table->foreign('shop_id')->references('shop_id')->on('tbl_shop')->onDelete('cascade');
+            $table->foreign('user_id')->references('user_id')->on('tbl_user')->onDelete('cascade');
         });
         Schema::create('tbl_requisition_slip_item', function (Blueprint $table) {
             $table->increments('rs_itemline_id');

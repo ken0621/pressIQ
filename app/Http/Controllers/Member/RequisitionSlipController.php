@@ -39,6 +39,9 @@ class RequisitionSlipController extends Member
 	}
 	public function postCreateSubmit(Request $request)
 	{
+		$return = RequisitionSlip::create($request);
 
+
+		return json_encode($return);
 	}
 }

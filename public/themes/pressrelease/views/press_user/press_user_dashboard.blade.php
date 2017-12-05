@@ -10,7 +10,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="button-container">
-                        <span class="create-button"><a href="#">Create a Press Release</a></span><span class="drafts">Drafts: 2</span><span class="releases">Releases: 3</span>
+                        <span class="create-button pull-right" ><a href="/pressuser/pressrelease">Create a Press Release</a>
+                      
                     </div>
                 </div>
             </div>

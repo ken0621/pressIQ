@@ -4,7 +4,6 @@
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 
-
 @if(!$mlm_member)
 	<!-- NON-MLM MEMBER -->
 	<div class="dashboard">
@@ -24,7 +23,7 @@
 	                        <a href="javascript:" onclick="action_load_link_to_modal('/members/enter-code')" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
 	                    </div>
 	                </div>
-	            </div>	
+	            </div>
 	        </div>
 	    </div>
 	</div>
@@ -34,7 +33,7 @@
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="square-container reward-summary-cont">
-					<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary <a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('members/enter-code')">Create New Slot</a></div>
+					<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary <a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('/members/enter-code')">Create New Slot</a></div>
 					<div class="sub-container">
 						<div class="table-holder">
 							<div class="chart-legend">
@@ -137,7 +136,7 @@
 					<div class="title">Enter Product Code</div>
 					<div class="sub-container">
 						<div class="chart-legend text-center">
-							<button class="btn btn-lblue" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+							<button class="btn btn-lblue" onclick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 						</div>
 					</div>
 				</div>

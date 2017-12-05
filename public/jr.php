@@ -1,1 +1,3 @@
-This is a sample file that I have uploaded.
+<?php    
+$curl_info = curl_version();
+echo $curl_info['ssl_version'];

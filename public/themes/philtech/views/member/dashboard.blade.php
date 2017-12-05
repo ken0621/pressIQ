@@ -4,7 +4,6 @@
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 
-
 @if(!$mlm_member)
 	<!-- NON-MLM MEMBER -->
 	<div class="dashboard">
@@ -24,7 +23,7 @@
 	                        <a href="javascript:" onclick="action_load_link_to_modal('/members/enter-code')" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
 	                    </div>
 	                </div>
-	            </div>	
+	            </div>
 	        </div>
 	    </div>
 	</div>
@@ -33,8 +32,8 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="square-container reward-summary-cont">
-					<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary <a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('members/enter-code')">Create New Slot</a></div>
+				<div class="square-container">
+					<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary <a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('/members/enter-code')">Create New Slot</a></div>
 					<div class="sub-container">
 						<div class="table-holder">
 							<div class="chart-legend">
@@ -64,13 +63,13 @@
 					</div>
 				</div>
 				@if($travel_and_tours)
-				<div class="square-container leadlink-cont" style="border: none !important;">
+				<div class="square-container" style="border: none !important;">
 					<div class="btn-container">
 						<a class="btn btn-lblue" style="width: 100%;" role="button" href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a>
 					</div>
 				</div>
 				@endif
-				<div class="square-container reward-points-cont">
+				<div class="square-container">
 					<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 					<div class="sub-container">
 						@if(count($_point_plan) > 0)
@@ -97,7 +96,7 @@
 			</div>
 
 			<div class="col-md-6">
-				<div class="square-container reward-summary-cont">
+				<div class="square-container">
 					<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
 					<div class="sub-container">
 						<div class="chart-legend">
@@ -121,7 +120,7 @@
 				</div>
 				
 				@if(isset($points->{ "display_repurchase_cashback"}))
-				<div class="square-container vip-cashback-cont">
+				<div class="square-container">
 					<div class="title"><i class="align-icon"></i> VIP Cashback</div>
 					<div class="sub-container">
 						<div class="chart-legend" style="min-height: 117px; max-height: auto;">
@@ -133,11 +132,11 @@
 					</div>
 				</div>
 				@endif
-				<div class="square-container enter-prod-code-cont">
+				<div class="square-container">
 					<div class="title">Enter Product Code</div>
 					<div class="sub-container">
 						<div class="chart-legend text-center">
-							<button class="btn btn-lblue" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+							<button class="btn btn-lblue" onclick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 						</div>
 					</div>
 				</div>
@@ -146,7 +145,7 @@
 		
 		<div class="row clearfix">
 			<div class="col-md-12">
-				<div class="square-container rep-link-cont">
+				<div class="square-container">
 					<div class="title">Replicated Link</div>
 					<div class="sub-container">
 						@foreach($_slot as $slot)
@@ -166,53 +165,20 @@
 
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="square-container direct-ref-cont">
+				<div class="square-container">
 					<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Direct Franchisee</div>
 					<div class="sub-container border-holder">
 						<div class="clearfix wow hidden">
 							<div class="badge right">6 New Members</div>
 						</div>
-						@if(count($_direct) > 0)
-							@foreach($_direct as $direct)
-							
-							<div class="row clearfix">
-								<div class="col-md-6">
-									<div class="holder">
-										<div class="to-left">
-											<div class="color">
-												<img src="{{ $direct->profile_image }}">
-											</div>	
-											<div class="text">
-												<div class="">
-													<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
-													<div class="email">{{ $direct->slot_no }}</div>
-													<div class="date">{{ $direct->time_ago }}</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="holder">
-										<div class="action to-right">
-											@if($direct->distributed == 1)
-												<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-lblue"><i class="fa fa-star"></i> VIEW INFO</button>
-											@else
-												<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
-											@endif
-										</div>
-									</div>
-								</div>
-							</div>
-							@endforeach
-						@else
-							<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
-						@endif
+						<div class="load-direct-referrals-here">
+													
+						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-6">
-				<div class="square-container recent-rewards-cont">
+				<div class="square-container">
 					<div class="match-height">
 						<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
 						<div class="sub-container">
@@ -266,6 +232,41 @@
 @section("member_script")
 <script type="text/javascript" src="assets/member/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
+
+<script>
+$(window).on('hashchange', function() {
+    if (window.location.hash) {
+        var page = window.location.hash.replace('#', '');
+        if (page == Number.NaN || page <= 0) {
+            return false;
+        } else {
+            getPosts(page);
+        }
+    }
+});
+$(document).ready(function() {
+	getPosts(1);
+    $(document).on('click', '.pagination a', function (e) {
+        getPosts($(this).attr('href').split('page=')[1]);
+        e.preventDefault();
+    });
+});
+function getPosts(page) {
+    $.ajax(
+    {
+        url : '/members/direct-referrals?page=' + page,
+        type: 'get',
+    }).done(function (data) 
+    {
+        $('.load-direct-referrals-here').html(data);
+        location.hash = page;
+    }).fail(function () 
+    {
+        alert('Posts could not be loaded.');
+    });
+}
+</script>
+
 @endsection
 
 @section("member_css")

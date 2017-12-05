@@ -102,7 +102,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["access_salary_rates"]	= $access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
 		$check_approved 				= Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_id)->first();
 		$data["time_keeping_approved"] 	= $check_approved ? true : false;
-		
+
 		$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["company_period"]->payroll_period_start);
 
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
@@ -164,7 +164,7 @@ class PayrollTimeSheet2Controller extends Member
 		$company_id 							= Tbl_payroll_employee_basic::where('payroll_employee_id',$employee_id)->value('payroll_employee_company_id');
 		$group 									= $this->db_get_current_employee_contract($employee_id, $compute_cutoff["period_info"]["payroll_period_start"]);
 		$compute_cutoff["salary_compute_type"] 	= $group["payroll_group_salary_computation"];
-		
+
 		if($check_approved)
 		{
 			Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->delete();

@@ -1,6 +1,7 @@
 @extends("press_user.member")
 @section("pressview")
-
+<script  src="/assets/js/ajax_offline.js"></script>
+<script  src="/assets/js/press_realease.js"></script>
 <div class="background-container">
     <div class="pressview">
     <div class="dashboard-container">
@@ -19,17 +20,21 @@
                          <center>{{ Session::get('message') }}</center>
                       </div>
                       @endif 
-                     @if (Session::has('delete'))
+                      @if (Session::has('delete'))
                       <div class="alert alert-danger ">
                          <center>{{ Session::get('delete') }}</center>
                       </div>
                       @endif
-                 
-                    <form method="post">
-                        {{csrf_field()}}
+                    <form method="post" action="/pressadmin/pressreleases_addrecipient">
+                        {{csrf_field()}} 
                         <div class="title-container">PRESS RELEASE</div>
                         <div class="title">Send To:</div>
-                        <input type="text" class="form-control" name="pr_to"><span class="choose-button"><a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
+                        <input type="text" class="form-control" id="recipient_name" readonly>
+                        <span class="choose-button" readon>   
+                        <a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
+
+                        <input type="text" name="pr_to" id="recipient_email" class="form-control" readonly>
+
                         <div class="title">Headline:</div>
                         <input type="text" name="pr_headline" class="form-control">
                         <div class="title">Subheading:</div>
@@ -76,12 +81,12 @@
                 </div>
 
                 <div id="add_recipient" class="tabcontent create-pr-container">
-                    <div class="manage-holder-container">
-
-                    <div role="tabpanel" class="tab-pane fade active in" id="">
+                 
+                     <div class="title-container">ADD RECIPIENT</div>
+                    <div  class="col-md-8 form-bottom-container" id="">
                      <form class="form-horizontal" method="post" action="/pressadmin/pressreleases_addrecipient">
                         {{csrf_field()}}
-                        
+                   
                         <div class="title">Contact Name:</div>
                         <input type="text" class="form-control" id="name" name="name"> </input><br>
 
@@ -95,19 +100,17 @@
                         <input type="text" class="form-control" id="description" name="description"> </input><br>
 
                         <div class="title">Country:</div>
-                        <select type="text" class="form-control" name="country" placeholder="select Country">
-                            <option value="">--Select Country--</option>
-                            <option value="Philippines">Philippines</option>
-                            <option value="USA">USA</option>
-                            <option value="China">China</option>
-                            <option value="Korea">Korea</option>
-                        </select><br>
+                        <select type="text" class="form-control" id="country" name="country" style="width: 450px;" >
+                                <option value="Philippines">Philippines</option>
+                                <option value="USA">USA</option>
+                                <option value="China">China</option>
+                                <option value="Korea">Korea</option>
+                            </select><br>
 
-                        <div class="button-container-add">
-                            <button type="submit" class="" id="btn_save" name="btn_save" style="background-color: #316df9;">Add Recipients</button>
-                        </div>  
-
+                        <button type="submit" id="btn_add_recipient" class="btn_add_recipient" name="btn_add_recipient"   style="background-color: #316df9;width: 150px;">Add Recipients</button>
+                        
                      </form>
+
                     </div>
                     <div style="overflow-x:auto;">
                      <table id="example" class="display table table-bordered"                                                      style="background-color: #FFFFFF;width: 100%; empty-cells: 0;">
@@ -130,7 +133,7 @@
                                         <td style="text-align: center;">{{$addrecipients->website}}</td>
                                         <td style="text-align: center;">{{$addrecipients->description}}</td>
                                         <td bgcolor="transparent" style="text-align: center;">
-                                        <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="submit" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button>
+                                        <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="submit" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button></a>
 
                                         </td>
                                     </tr>
@@ -139,7 +142,6 @@
                         </table>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -149,7 +151,6 @@
 <!-- Modal -->
   <div class="modal fade" id="recipient-modal" role="dialog">
     <div class="modal-dialog">
-    
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -160,46 +161,45 @@
           <div class="row clearfix">
             <div class="col-md-3">
                 <div class="title-container">Choose Country</div>
-                <div class="right-container">
-                    <input type="checkbox">Philippines<br>
-                    <input type="checkbox">Hongkong<br>
-                    <input type="checkbox">China<br>
-                    <input type="checkbox">Korea<br>
-                    <input type="checkbox">Malaysia<br>
-                    <input type="checkbox">USA
-                </div>
+                <select type="text" class="col-md-12" name="country" placeholder="select Country">
+                    <option value="">--Select Country--</option>
+                    <option value="Philippines">Philippines</option>
+                    <option value="USA">USA</option>
+                    <option value="China">China</option>
+                    <option value="Korea">Korea</option>
+                </select><br>
             </div>
+
             <div class="col-md-9">
                 <div class="left-container">
-                   <div style="overflow-x:auto;">  
+                   <div style="overflow-x:hidden;">  
                    <table id="example" class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; cellspacing: 0;">
                                 <thead>
                                     <tr>
                                         <th style="text-align: center;">Name</th>
-                                        <th style="text-align: center;">Email</th>
-                                        <th style="text-align: center;">Website</th>
                                         <th style="text-align: center;">Description</th>   
+                                        <th style="text-align: center;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($add_recipient as $addrecipients)
-                                    <tr>
-                                        <td style="text-align: center;"><a href="">{{$addrecipients->name}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->research_email_address}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->website}}</td>
+                                    <tr>   
+                                        <td style="text-align: center;">{{$addrecipients->name}}</td>
                                         <td style="text-align: center;">{{$addrecipients->description}}</td>
+                                        <td bgcolor="transparent" style="text-align: center;">
+
+                                        <button type="button" id="choose_recipient" class="btn btn-success" data-name="{{$addrecipients->name}}" data-name1="{{$addrecipients->research_email_address}}">Choose</button>
+                                            
+                                        <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="button" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                         </table>
+                    {!! $add_recipient->render() !!}    
                     </div>
                 </div>
             </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <div class="button-container">
-            <a data-dismiss="modal" href="#">Continue</a>
           </div>
         </div>
       </div>
@@ -222,9 +222,7 @@
 }
 .form-control
 {
-   
     width: 450px;
-
 }
 
 .form-text

@@ -525,10 +525,9 @@ class PayrollReportController extends Member
 				$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_company_id)->get();
 			}
 		}
-		
+
 		$data = $this->get_total_payroll_register($data);
-
-
+	
 		return view('member.payrollreport.payroll_register_report_table', $data);
 	}
 
@@ -564,6 +563,7 @@ class PayrollReportController extends Member
 
 	public function get_total_payroll_register($data)
 	{
+		$test = array();
 		$total_gross_basic 			= 0;
 		$total_basic 				= 0;
 		$total_gross	 			= 0;
@@ -643,7 +643,7 @@ class PayrollReportController extends Member
 
 		foreach($data["_employee"] as $key => $employee)
 		{
-
+			// dd(unserialize($employee["cutoff_input"]));
 			$payroll_group_salary_computation = Tbl_payroll_employee_contract::Group()->where('tbl_payroll_employee_contract.payroll_employee_id',$employee->payroll_employee_id)->first();
 
 			$total_er = $employee->sss_er + $employee->philhealth_er +  $employee->pagibig_er;
@@ -980,6 +980,7 @@ class PayrollReportController extends Member
 				// $rd_category = array('Rest Day','Legal Holiday Rest Day','Special Holiday Rest Day');
 				foreach ($_cutoff_input_breakdown as $value) 
 				{
+
 					if (isset($value->compute->_breakdown_addition)) 
 					{
 						foreach ($value->compute->_breakdown_addition as $lbl => $values) 
@@ -1033,6 +1034,8 @@ class PayrollReportController extends Member
 							}
 						}
 					}
+
+
 				}
 
 				$data["_employee"][$key]->overtime 			= $overtime;
@@ -1056,7 +1059,7 @@ class PayrollReportController extends Member
 				$restday_total 		 			+=	Payroll2::payroll_number_format($restday,2);
 			}
 
-			if (isset($employee["cutoff_breakdown"]->_breakdown )) 
+			if (isset($employee["cutoff_breakdown"]->_breakdown)) 
 			{
 				# code...
 				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)

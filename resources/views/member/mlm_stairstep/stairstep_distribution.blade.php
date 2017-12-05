@@ -299,6 +299,28 @@
       $(".submit_btn_distribute").removeAttr("disabled");
     });
   });
+  $('.search').on('keydown',function()
+  {
+    var keyCode = e.keyCode || e.which;
+    if (keyCode === 13) 
+    { 
+
+      // e.preventDefault();
+      // return false;
+
+      var link = '/member/mlm/stairstep/distribution?search='+$('.search').val();
+      window.location.href= link;
+      console.log(link);
+      // $('.body_distribute').load(link,function()
+      // {
+      //   console.log("search = "+$('.search').val());
+      // });
+    }
+    else
+    {
+      console.log(keyCode);
+    }
+  });
 </script>
 @endsection
 

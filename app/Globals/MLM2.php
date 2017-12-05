@@ -436,7 +436,7 @@ class MLM2
 
 		return $string;
 	}
-	public static function customer_direct($shop_id, $customer_id, $limit = 10)
+	public static function customer_direct($shop_id, $customer_id, $limit = 10,$paginate = 0)
 	{
 		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
 
@@ -450,9 +450,19 @@ class MLM2
 			}
 		});
 
-		$query->limit($limit);
-
-		$_direct = $query->orderBy("slot_id", "desc")->get();
+		if($limit!=0)
+		{
+			$query->limit($limit);
+		}
+		if($paginate!=0)
+		{
+			$_direct = $query->orderBy("slot_id", "desc")->paginate($paginate);
+		}
+		else
+		{
+			$_direct = $query->orderBy("slot_id", "desc")->get();
+		}
+		
 
 		foreach($_direct as $key => $direct)
 		{

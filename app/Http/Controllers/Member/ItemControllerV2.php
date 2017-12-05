@@ -384,8 +384,16 @@ class ItemControllerV2 extends Member
     	if(!$validate)
     	{
     		$return = Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, $remarks);
-    		$return['call_function'] = 'success_refill';
-    		$return['status'] = 'success';
+    		if(!$return)
+    		{
+	    		$return['call_function'] = 'success_refill';
+	    		$return['status'] = 'success';    			
+    		}
+	    	else
+	    	{
+	    		$return['status'] = 'error';
+	    		$return['message'] = $return;
+	    	}
     	}
     	else
     	{

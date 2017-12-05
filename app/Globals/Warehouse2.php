@@ -416,26 +416,24 @@ class Warehouse2
     }
     public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '', $update_count = true, $for_out_of_stock = '')
     {
+
+        $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','<',0)->count();
+        $total_refill_qty = $quantity;
+        if($count_offset > 0)
+        {
+            $total_refill_qty = $quantity - $count_offset;
+        }
+        if(!$for_out_of_stock)
+        {
+            Self::update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity);
+        }
+        $quantity = $total_refill_qty;       
+
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
         $return = null;
 
         $serial_qty = count($serial);
-        if($serial_qty != 0)
-        {
-            if($serial_qty != $quantity)
-            {
-                $return .= "The serial number are not equal from the quantity. <br> ";
-            }
-        }
-        if($quantity < 0)
-        {
-            $return .= "The quantity is less than 1. <br> ";
-        }
-        if(!$check_warehouse)
-        {
-            $return .= "The warehouse doesn't belong to your account <br>";
-        }
         if(!$return)
         {  
             $insert_slip['warehouse_id']                 = $warehouse_id;
@@ -493,7 +491,7 @@ class Warehouse2
             {
                 Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, $quantity);
             }
-        }       
+        }    
 
         return $return;
     }
@@ -583,21 +581,11 @@ class Warehouse2
                 $source['name'] = $reference_name;
                 $source['id'] = $reference_id;
 
-                $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $value['item_id'])->where('record_count_inventory','<',0)->count();
-                $total_refill_qty = $value['quantity'];
-                if($count_offset > 0)
-                {
-                    $total_refill_qty = $value['quantity'] - $count_offset;
-                }
-                if($total_refill_qty > 0)
-                {
-                    $history_item[$key]['item_id'] = $value['item_id'];
-                    $history_item[$key]['quantity'] = $total_refill_qty;
-                    $history_item[$key]['item_remarks'] = $value['remarks'];
+                $history_item[$key]['item_id'] = $value['item_id'];
+                $history_item[$key]['quantity'] = $value['quantity'];
+                $history_item[$key]['item_remarks'] = $value['remarks'];
 
-                    $validate = Warehouse2::refill($shop_id, $warehouse_id, $value['item_id'], $total_refill_qty, $value['remarks'], $source, $serial, 'inventory_history_recorded', $update_count);
-                }
-                Self::update_offset_qty($warehouse_id, $value['item_id'], $count_offset, $value['quantity']);
+                $validate = Warehouse2::refill($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $source, $serial, 'inventory_history_recorded', $update_count);
             }
             if(count($history_item) > 0)
             {
@@ -609,11 +597,9 @@ class Warehouse2
     }
     public static function update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity)
     {
-        $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id)->where('record_count_inventory','<',0)->count();
-
-        $update_qty = abs($count_offset - $quantity);
-        if($update_qty > 0)
+        if($count_offset > $quantity)
         {
+            $update_qty = abs($quantity);
             for ($ctr_qty = 0; $ctr_qty < $update_qty; $ctr_qty++)
             {
                 $update['record_count_inventory'] = 1;
@@ -624,7 +610,7 @@ class Warehouse2
 
             }
         }
-        else if($update_qty == 0)
+        else if($count_offset-$quantity <= 0)
         {
             $update['record_count_inventory'] = 1;
             Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)

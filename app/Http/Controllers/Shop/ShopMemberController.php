@@ -169,7 +169,7 @@ class ShopMemberController extends Shop
             }
         }
 
-        return view("member.dashboard", $data);
+        return Self::load_view_for_members("member.dashboard", $data);
     }
     public function getKit()
     {
@@ -2981,28 +2981,35 @@ class ShopMemberController extends Shop
 
     public function load_view_for_members($view, $data, $memberonly = true)
     {
-        $agent = new Agent();
-
-        if($agent->isMobile())
+        if ($this->shop_theme == "brown") 
         {
-            if (strpos($view, 'member2.') !== false)
+            $agent = new Agent();
+
+            if($agent->isMobile())
             {
-                $new_view = str_replace("member2.", "member2.mobile.", $view);
+                if (strpos($view, 'member2.') !== false)
+                {
+                    $new_view = str_replace("member2.", "member2.mobile.", $view);
+                }
+                else
+                {
+                    $new_view = str_replace("member.", "member.mobile.", $view);
+                }
+
+                if(view()->exists($new_view))
+                {
+                    $view = $new_view;
+                }
+            }
+
+            if ($memberonly) 
+            {
+                return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
             }
             else
             {
-                $new_view = str_replace("member.", "member.mobile.", $view);
+                return view($view, $data);
             }
-
-            if(view()->exists($new_view))
-            {
-                $view = $new_view;
-            }
-        }
-
-        if ($memberonly) 
-        {
-            return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
         }
         else
         {

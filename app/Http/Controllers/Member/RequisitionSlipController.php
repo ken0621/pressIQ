@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Session;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
+use App\Globals\RequisitionSlip;
 use Validator;
 use Excel;
 use DB;
@@ -35,5 +36,9 @@ class RequisitionSlipController extends Member
         $data['_item']  = Item::get_all_category_item([1]);
         $data["_vendor"] = Vendor::getAllVendor('active');
 		return view('member.requisition_slip.create_requisition_slip', $data);
+	}
+	public function postCreateSubmit(Request $request)
+	{
+
 	}
 }

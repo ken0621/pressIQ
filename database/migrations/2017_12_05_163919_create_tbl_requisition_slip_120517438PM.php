@@ -20,7 +20,7 @@ class CreateTblRequisitionSlip120517438PM extends Migration
             $table->datetime('requisition_slip_date_created');
         });
         Schema::create('tbl_requisition_slip_item', function (Blueprint $table) {
-            $table->increments('rs_item_id');
+            $table->increments('rs_itemline_id');
             $table->integer('rs_id')->unsigned();
             $table->integer('rs_item_id')->unsigned();
             $table->text('rs_item_description');

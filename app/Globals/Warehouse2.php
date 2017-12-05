@@ -610,7 +610,7 @@ class Warehouse2
 
             }
         }
-        else if($count_offset-$quantity <= 0)
+        else if($count_offset-$running_quantity <= 0)
         {
             $update['record_count_inventory'] = 1;
             Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)

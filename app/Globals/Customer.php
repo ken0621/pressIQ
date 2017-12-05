@@ -135,6 +135,13 @@ class Customer
 		$data['total_gc'] = Tbl_mlm_slot::mlm_points()->where("slot_owner",$customer_id)->where("points_log_type","GC")->sum("points_log_points");
 		return $data;
 	}	
+	public static function get_current_slot_gc()
+	{
+		$slot_no = request('slot_no');
+		$current_slot_gc = Tbl_mlm_slot::mlm_points()->where("slot_no",$slot_no)->where("points_log_type","GC")->sum("points_log_points");
+		// dd($current_slot_gc);
+		return currency('',$current_slot_gc);
+	}
 
 	public static function get_points_wallet_per_slot($slot_id = 0)
 	{

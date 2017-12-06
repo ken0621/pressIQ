@@ -23,6 +23,7 @@ use App\Models\Tbl_merchant_markup;
 use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_merchant_commission;
 use App\Models\Tbl_merchant_commission_report_setting;
+use App\Models\Tbl_warehouse_receiving_report;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -560,6 +561,10 @@ class MerchantController extends Member
 		{
 			$data['percentage'] = 0;
 		}
+
+		Tbl_warehouse_receiving_report::where('warehouse_id',$id)->get();
+
+
 		return view('member.merchant.commission_report.commission_report',$data);
 	}
 	public function submit_report_setting()

@@ -6,7 +6,7 @@
         <div>
             <i class="fa fa-calendar"></i>
             <h1>
-            <span class="page-title">Insert Table Here</span>
+            <span class="page-title">Commission Report</span>
             <small>
             Insert Description Here
             </small>
@@ -37,28 +37,25 @@
     </div>
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-12"  style="margin-bottom: -10px;">
-    <ul class="nav nav-tabs">
-        <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Active</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-trash"></i> Archived</a></li>
-    </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">
-            <select class="form-control">
-                <option value="0">Filter Sample 001</option>
-            </select>
+            <!-- <select class="form-control">
+                <option value="0">All</option>
+                <option value="1">Current Warehouse</option>
+            </select> -->
         </div>
         <div class="col-md-3" style="padding: 10px">
-            <select class="form-control">
+            <!-- <select class="form-control">
                 <option value="0">Filter Sample 002</option>
-            </select>
+            </select> -->
         </div>
         <div class="col-md-2" style="padding: 10px">
         </div>
         <div class="col-md-4" style="padding: 10px">
-            <div class="input-group">
+            <!-- <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
                 <input type="text" class="form-control search-employee-name" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="tab-content codes_container" style="min-height: 300px;">
@@ -70,24 +67,22 @@
                         <table class="table table-bordered table-striped table-condensed">
                             <thead style="text-transform: uppercase">
                                 <tr>
-                                    <th class="text-center">ID.</th>
-                                    <th class="text-center">Employee Name</th>
-                                    <th class="text-center" width="120px">NET BASIC PAY</th>
-                                    <th class="text-center" width="120px">GROSS PAY</th>
-                                    <th class="text-center" width="120px">NET PAY<br>(TAKE HOME)</th>
-                                    <th class="text-center" width="100px"></th>
-                                    <th class="text-center" width="100px"></th>
+                                    <th class="text-center">Used Code</th>
+                                    <th class="text-center" width="400px">Date Used</th>
+                                    <th class="text-center" >Amount</th>
+                                    <th class="text-center" >Commission Percentage</th>
+                                    <th class="text-center" >Receivable Amount</th>
+                                    <th class="text-center" ></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="text-center">1</td>
                                     <td class="text-center">Sample Name</td>
                                     <td class="text-center">1,500.00</td>
                                     <td class="text-center">1,500.00</td>
                                     <td class="text-center">1,500.00</td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
+                                    <td class="text-center">1000.00</td>
+                                    <td class="text-center"><a href="#">Modify</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -104,6 +99,36 @@
 <script type="text/javascript">
     function success(data)
     {
-        toastr.success('setting saved');
+        toastr.success('Setting saved');
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+        event_change_warehouse();
+    });
+    function event_change_warehouse()
+    {
+        $('.select_current_warehouse').change(function()
+        {
+            action_change_warehouse();
+        });
+    }
+    function action_change_warehouse()
+    {
+        var currentWarehouse = $('.select_current_warehouse').val();
+        $('.commission-percentage').attr('disabled',true);
+        $.ajax(
+        {
+            url: '/member/merchant/commission-report/getpercentage',
+            type: 'get',
+            data: 'warehouse_id='+currentWarehouse,
+            success: function(data)
+            {
+                $('.commission-percentage').val(data);
+                $('.commission-percentage').removeAttr('disabled');
+            }
+        });
     }
 </script>

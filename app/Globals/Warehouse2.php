@@ -1027,8 +1027,12 @@ class Warehouse2
 
         return $data->get();
     }
-    public static function load_warehouse($shop_id = 0)
+    public static function load_warehouse_list($shop_id, $parent = 0)
     {
+        $data = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('warehouse_parent_id', $parent)->get();
+
+        $return = null;
         
+
     }
 }

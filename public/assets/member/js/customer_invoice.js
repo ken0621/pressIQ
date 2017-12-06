@@ -294,11 +294,12 @@ function customer_invoice()
 
 			/* CHECK THE DISCOUNT */
 	
-
+			//dd(multiple_discount);
 			/*for(discount = 0; discount < multiple_discount.length; discount++)
 			{	
 				alert(multiple_discount[discount]); //split
 			}*/
+
 			if(discount.indexOf('%') >= 0)
 			{
 				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));

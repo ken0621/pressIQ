@@ -17,6 +17,7 @@ use App\Models\Tbl_warehouse_receiving_report_item;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_cart_payment;
+use App\Models\Tbl_transaction_ref_number;
 
 use App\Models\Tbl_cart_item_pincode;
 use App\Models\Tbl_transaction;
@@ -994,4 +995,10 @@ class Transaction
     {
         return Tbl_transaction_payment::where('transaction_id',$transaction_id)->get();
     }    
+   /* public static function get_transaction_reference_number($shop_id, $key)
+    {
+        $data = Tbl_transaction_ref_number::where('shop_id',$shop_id)->where('key',$key)->get();
+        //die(var_dump($data));
+        return $data;
+    }*/
 }

@@ -5,7 +5,7 @@
 			<div class="press-view-holder">
 				<div class="title-container"><a href="/pressuser/mypressrelease">Press Release 1</a></div>
 				<div class="date-container">November 25, 2017</div>
-				<div class="details-container">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod corporis possimus laboriosam
+				<div class="subtitle-container">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod corporis possimus laboriosam
 				</div>
 				<div class="details-container">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse ipsam mollitia velit, dicta optio, magni harum! Alias vero, doloremque, illo et nihil pariatur quidem, quia libero nisi reiciendis ut? Modi a corporis nesciunt, ullam commodi nostrum dolor dolores sint, molestias tenetur, delectus accusantium sunt sit, natus repellat. Ab tenetur commodi fugiat modi vero error, veritatis eligendi aut voluptas quae praesentium?
 				</div>

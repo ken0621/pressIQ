@@ -110,7 +110,7 @@
                      </form>
                     </div>
                     <div style="overflow-x:auto;">
-                     <table id="example" class="display table table-bordered"                                                      style="background-color: #FFFFFF;width: 100%; empty-cells: 0;">
+                     <table id="example" class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; empty-cells: 0;">
                                 <thead>
                                     <tr>
                                         <th style="text-align: center;">Contact Name</th>

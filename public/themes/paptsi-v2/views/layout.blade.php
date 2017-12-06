@@ -80,7 +80,7 @@
             <div class="row clearfix">
                 <div class="col-md-2">
 
-                    <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
+                    <div id="nav_list" style="display: none;"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
 
 
 

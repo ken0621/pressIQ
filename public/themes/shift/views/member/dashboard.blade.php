@@ -28,7 +28,6 @@
 @else
 	<div class="dashboard">
 		<div class="row clearfix">
-
 			<div class="col-md-6">
 				<div class="square-container">
 					<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right btn-enter-a-code">Create New Slot</a></div>
@@ -381,8 +380,8 @@ $(document).ready(function()
 	});
 });
 
-// And for a doughnut chart
 
+// And for a doughnut chart
 $(document).ready(function()
 {
 	if($("._mode").val() == "success")

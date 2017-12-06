@@ -83,14 +83,12 @@
         // }
         $(document).ready(function()
         {  
-
             $("li").show();   
             half = $(window).width() * 2500;
             g_width = $(".width-reference").width();
             $margin_left = ($(window).width() - $(".width-reference").width()) / 2;
             $(".tree-container").css("padding-left",half  + $margin_left);
             $(".overscroll").height($(document).height());
-            
             
             $parent_position = $(".parent").position();
             $window_size = $(window).width();
@@ -114,8 +112,6 @@
                     }
                 });
             }); 
-            
-            
         })
         
         var genealogy_loader = new genealogy_loader();

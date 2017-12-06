@@ -220,6 +220,9 @@ class ShopMemberController extends Shop
         Session::forget('user_first_name');
         Session::forget('user_last_name');
         Session::forget('pr_user_level');
+        Session::forget('pr_user_id');
+       
+        
 
         return Redirect::to("/");
     }
@@ -243,7 +246,9 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }   
     }
-    public function pressuser_dashboard()
+
+
+     public function pressuser_dashboard()
     {
         if(Session::exists('user_email'))
         {
@@ -315,17 +320,21 @@ class ShopMemberController extends Shop
     }
     public function pressuser_pressrelease(Request $request)
     {
-        $data['add_recipient']  = Tbl_press_release_recipient::paginate(10);
+        $data['add_recipient']   = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))->paginate(10);
+        $data['country']   = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))
+                            ->distinct()
+                            ->get(['country']);
         $data['drafts']         = DB::table('tbl_pressiq_press_releases')
                                 ->where('pr_from', session('user_email'))
                                 ->where('pr_status','draft')
                                 ->orderByRaw('pr_date_sent DESC')
                                 ->get();
+
         if(Session::exists('user_email'))
         {
            $level=session('pr_user_level');
            if($level!="1")
-           {
+           { 
                 if (request()->isMethod("post"))
                 {
                     $pr_info["pr_headline"]     =request('pr_headline');
@@ -602,6 +611,7 @@ class ShopMemberController extends Shop
       $data["research_email_address"]    = $request->research_email_address;
       $data["website"]                   = $request->website;
       $data["description"]               = $request->description;
+      $data["user_id"]                   = session("pr_user_id");
       Tbl_press_release_recipient::insert($data); 
       Session::flash('message', 'Recipient Successfully Added!');
       return  redirect::back();

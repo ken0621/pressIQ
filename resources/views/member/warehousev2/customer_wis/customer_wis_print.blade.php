@@ -33,7 +33,7 @@
     <tbody>
         @if(count($wis_item) > 0)
             @foreach($wis_item as $item)
-            <tr>
+            <tr class="td-row-item">
                 <td>{{$item->item_name}}</td>
                 <td>{{$item->item_sku}}</td>
                 <td>{{$item->wis_item_quantity}} pc(s)</td>
@@ -82,5 +82,11 @@
     {
         border: 1px solid #000;
     }
+
+    .td-row-item td
+    {
+        padding: 2px;   
+    }
+
 
 </style>

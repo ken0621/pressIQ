@@ -31,6 +31,11 @@ class RequisitionSlipController extends Member
 		$data['_list'] = RequisitionSlip::get($this->user_info->shop_id);
 		return view('member.requisition_slip.requisition_slip', $data);
 	}
+	public function getLoadRsTable(Request $request)
+	{
+		$data['_list'] = RequisitionSlip::get($this->user_info->shop_id, $request->status);
+		return view('member.requisition_slip.requisition_slip_table', $data);		
+	}
 	public function getCreate()
 	{
 		$data['page'] = 'Create Requisition Slip';

@@ -16,9 +16,25 @@ use Validator;
 
 class RequisitionSlip
 {
-    public static function get($shop_id)
+    public static function get($shop_id, $status = 'open', $pagination = 10)
     {
-        return Tbl_requisition_slip::where('shop_id',$shop_id)->get();
+        $data = Tbl_requisition_slip::where('shop_id',$shop_id);
+
+        if($status)
+        {
+            $data = $data->where('requisition_slip_status',$status);
+        }
+
+        if($pagination)
+        {
+            $data = $data->paginate($pagination);
+        }
+        else
+        {
+            $data = $data->get();
+        }
+        
+        return $data;
     }
     public static function get_slip($shop_id, $slip_id)
     {

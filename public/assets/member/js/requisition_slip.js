@@ -1,10 +1,10 @@
-var wis = new wis()
+var requisition_slip = new requisition_slip()
 var load_item = null;
 var item_search_delay_timer;
 var settings_delay_timer;
 var keysearch = {};
 
-function wis()
+function requisition_slip()
 {
 	init();
 
@@ -22,7 +22,7 @@ function wis()
 }
 function change_status(status)
 {
-	$('.wis-container').load('/member/item/warehouse/wis/load-wis-table?status='+status+' .wis-table');
+	$('.rs-container').load('/member/vendor/requisition_slip/load-rs-table?status='+status+' .rs-table');
 }
 function success_confirm(data)
 {

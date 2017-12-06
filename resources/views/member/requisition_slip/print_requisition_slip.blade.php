@@ -1,7 +1,7 @@
 <body>
 <div  class="text-center">
 	<h2>{{strtoupper($user->shop_key)}}</h2>
-    <div>Requisition Slip</div>
+    <h4>Requisition Slip</h4>
 </div>
 <table  style="width: 100%">
     <tr>
@@ -18,26 +18,26 @@
 <table style="width: 100%;">
     <thead style="font-weight: bold;">
         <tr>
-            <td>#</td>
-            <td>ITEM NAME</td>
-            <td>DESCRIPTION</td>
-            <td>QTY</td>
-            <td>RATE</td>
-            <td>AMOUNT</td>
-            <td>VENDOR NAME</td>
+            <td class="text-center">#</td>
+            <td class="text-center">ITEM NAME</td>
+            <td class="text-center">DESCRIPTION</td>
+            <td class="text-center">QTY</td>
+            <td class="text-center">RATE</td>
+            <td class="text-center">AMOUNT</td>
+            <td class="text-center">VENDOR NAME</td>
         </tr>
     </thead>
     <tbody>
         @if(count($_rs_item) > 0)
             @foreach($_rs_item as $key => $item)
-            <tr>
+            <tr class="td-row-item">
                 <td>{{$key+1}}</td>
                 <td>{{$item->item_name}}</td>
                 <td>{{$item->item_description}}</td>
-                <td>{{$item->rs_item_qty}} pc(s)</td>
-                <td>{{number_format($item->rs_item_rate,2)}}</td>
-                <td>{{number_format($item->rs_item_amount,2)}}</td>
-                <td>{{$item->vendor_company}}</td>
+                <td class="text-right">{{$item->rs_item_qty}} pc(s)</td>
+                <td class="text-right">{{number_format($item->rs_item_rate,2)}}</td>
+                <td class="text-right">{{number_format($item->rs_item_amount,2)}}</td>
+                <td class="text-center">{{$item->vendor_company != "" ? $item->vendor_company : $vendor->vendor_first_name.' '.$vendor->vendor_last_name}}</td>
             </tr>
             @endforeach
         @else
@@ -74,6 +74,7 @@
 	tr 
     {
         page-break-inside: avoid;
+        padding: 2px;
     }
     body 
     {
@@ -82,6 +83,10 @@
     thead
     {
         border: 1px solid #000;
+    }
+    .td-row-item td
+    {
+        padding: 2px;   
     }
 
 </style>

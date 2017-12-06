@@ -8,8 +8,8 @@
         <div class="press-release-container">
           <div class="tab"  style="border-style: none;">
             <button class="tablinks" onclick="openCity(event, 'create_pr')" id="defaultOpen">Create Press Release</button>
-            <button class="tablinks" onclick="openCity(event, 'manage_pr')">Manage Press Release</button>
-            <button class="tablinks" onclick="openCity(event, 'add_recipient')">Add Recipient</button>
+            <button class="tablinks" onclick="openCity(event, 'manage_pr')" id="">Drafts</button>
+            <button class="tablinks" onclick="openCity(event, 'add_recipient')" id="">Add Recipient</button>
           </div>
                                     
             <div class="press-release-content">
@@ -25,16 +25,15 @@
                          <center>{{ Session::get('delete') }}</center>
                       </div>
                       @endif
-                    <form method="post" >
+                    <form method="post">
                         {{csrf_field()}} 
                         <div class="title-container">PRESS RELEASE</div>
                         <div class="title">Send To:</div>
-                        <input type="text" class="form-control" id="recipient_name" readonly>
-                        <span class="choose-button" readon> 
-                        <a data-toggle="modal" data-target="#recipient-modal" href="#" style="border-radius: 3px;">Choose Recipient</a></span>
+                        <input type="text" name="pr_receiver_name" class="form-control" id="recipient_name" readonly>
+                        <span class="choose-button" readon>   
+                        <a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
 
-                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly>
-
+                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                         <div class="title">Headline:</div>
                         <input type="text" name="pr_headline" class="form-control">
                         <div class="title">Subheading:</div>
@@ -42,8 +41,8 @@
                         <div class="title">Content:</div>
                         <textarea name="pr_content"></textarea>
                         <div class="button-container">
-                            <span class="save-button"><a href="/sendrelease">Save as draft</a></span>
-                            <span class="send-button"><button type="submit"><a>Send</a></button></span>
+                        <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
+                        <span class="send-button"><button type="submit" name="send" value="send"><a>Send</a></button></span>
                         </div>
                     </form>
 
@@ -54,28 +53,22 @@
                         <table>
                             <tr>    
                                 <th>Press Release Title</th>
-                                <th>Publish Date</th>
+                                <th>Recipient</th>
                                 <th>Status</th>
                                 <th>Send</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
                             </tr>
+                            @foreach($drafts as $draft)
                             <tr>
-                                <td>Sample 1</td>
-                                <td>15/11/2017</td>
+                                <td>{{$draft->pr_headline}}</td>
+                                <td>{{$draft->pr_receiver_name}}</td>
                                 <td>Draft</td>
-                                <td><a href="#">Send</a></td>
+                                <td><a href="/pressuser/pressrelease/send_draft/{{$draft->pr_id}}">Send</a></td>
                                 <td><a href="#">Edit</a></td>
-                                <td><a href="#">Delete</a></td>
+                                <td><a href="/pressuser/pressrelease/delete_draft/{{$draft->pr_id}}">Delete</a></td>
                             </tr>
-                            <tr>
-                                <td>Sample 2</td>
-                                <td>16/11/2017</td>
-                                <td>Draft</td>
-                                <td><a href="#">Send</a></td>
-                                <td><a href="#">Edit</a></td>
-                                <td><a href="#">Delete</a></td>
-                            </tr>
+                            @endforeach
                         </table>
                     </div>
                 </div>

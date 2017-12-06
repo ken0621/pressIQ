@@ -21,16 +21,13 @@
                     <th>Publish Date</th>
                     <th>Status</th>
                 </tr>
+                @foreach($pr as $prs)
                 <tr>
-                    <td>Sample 1</td>
-                    <td>15/11/2017</td>
-                    <td>Draft</td>
+                    <td>{{$prs->pr_headline}}</td>
+                    <td>{{$prs->pr_date_sent}}</td>
+                    <td>{{$prs->pr_status}}</td>
                 </tr>
-                <tr>
-                    <td>Sample 2</td>
-                    <td>15/11/2017</td>
-                    <td>Draft</td>
-                </tr>
+                @endforeach
             </table>
         </div>
     </div>

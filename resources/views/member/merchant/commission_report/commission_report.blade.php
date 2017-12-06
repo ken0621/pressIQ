@@ -27,7 +27,7 @@
             <center>Commission Settings</center>
             <div class="col-md-12">
                 <label>Commission Percentage</label>
-                <input type="number" min="0" class="form-control" name="merchant_commission_percentage">
+                <input type="number" min="0" value="{{$percentage}}" class="form-control commission-percentage" name="merchant_commission_percentage">
                 <hr>
                 <button class="btn btn-primary pull-right">Save</button>
             </div>
@@ -99,7 +99,8 @@
 </div>
 </div>
 @endsection
-
+<script type="text/javascript" src="/assets/themes/js/jquery.min.js"></script>
+<script type="text/javascript" src="/assets/js/commission_report.js"></script>
 <script type="text/javascript">
     function success(data)
     {

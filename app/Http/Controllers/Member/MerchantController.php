@@ -550,7 +550,16 @@ class MerchantController extends Member
 	public function commission_report()
 	{
 		$data['page'] = "Commission Report";
-
+		$id = $this->current_warehouse->warehouse_id;
+		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$id)->first();
+		if(count($q)>0)
+		{
+			$data['percentage'] = $q->merchant_commission_percentage;
+		}
+		else
+		{
+			$data['percentage'] = 0;
+		}
 		return view('member.merchant.commission_report.commission_report',$data);
 	}
 	public function submit_report_setting()
@@ -574,6 +583,19 @@ class MerchantController extends Member
 		$response['call_function']='success';
 		return json_encode($response);
 
+	}
+	public function get_percentage()
+	{
+		$id = request('warehouse_id');
+		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$id)->first();
+		if(count($q)>0)
+		{
+			return $q->merchant_commission_percentage;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 }	

@@ -25,15 +25,15 @@
                          <center>{{ Session::get('delete') }}</center>
                       </div>
                       @endif
-                    <form method="post" action="/pressadmin/pressreleases_addrecipient">
+                    <form method="post" >
                         {{csrf_field()}} 
                         <div class="title-container">PRESS RELEASE</div>
                         <div class="title">Send To:</div>
                         <input type="text" class="form-control" id="recipient_name" readonly>
-                        <span class="choose-button" readon>   
-                        <a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
+                        <span class="choose-button" readon> 
+                        <a data-toggle="modal" data-target="#recipient-modal" href="#" style="border-radius: 3px;">Choose Recipient</a></span>
 
-                        <input type="text" name="pr_to" id="recipient_email" class="form-control" readonly>
+                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly>
 
                         <div class="title">Headline:</div>
                         <input type="text" name="pr_headline" class="form-control">
@@ -82,8 +82,8 @@
 
                 <div id="add_recipient" class="tabcontent create-pr-container">
                  
-                     <div class="title-container">ADD RECIPIENT</div>
-                    <div  class="col-md-8 form-bottom-container" id="">
+                <div class="title-container">ADD RECIPIENT</div>
+                    <div  class="col-md-8 form-bottom-container" >
                      <form class="form-horizontal" method="post" action="/pressadmin/pressreleases_addrecipient">
                         {{csrf_field()}}
                    
@@ -105,41 +105,10 @@
                                 <option value="USA">USA</option>
                                 <option value="China">China</option>
                                 <option value="Korea">Korea</option>
-                            </select><br>
+                            </select><br><br><br>
 
-                        <button type="submit" id="btn_add_recipient" class="btn_add_recipient" name="btn_add_recipient"   style="background-color: #316df9;width: 150px;">Add Recipients</button>
-                        
+                        <button type="submit" id="btn_add_recipient" class="btn_add_recipient col-md-5" name="btn_add_recipient"   style="background-color: #316df9; width: 180px;display: block; margin: 0 auto;border-radius: 7px;">Add Recipients</button>
                      </form>
-
-                    </div>
-                    <div style="overflow-x:auto;">
-                     <table id="example" class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; empty-cells: 0;">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center;">Contact Name</th>
-                                        <th style="text-align: center;">Country</th>
-                                        <th style="text-align: center;">Email</th>
-                                        <th style="text-align: center;">Website</th>
-                                        <th style="text-align: center;">Description</th>
-                                        <th style="text-align: center;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($add_recipient as $addrecipients)
-                                    <tr>
-                                        <td style="text-align: center;">{{$addrecipients->name}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->country}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->research_email_address}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->website}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->description}}</td>
-                                        <td bgcolor="transparent" style="text-align: center;">
-                                        <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="submit" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button></a>
-
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -161,49 +130,46 @@
           <div class="row clearfix">
             <div class="col-md-3">
                 <div class="title-container">Choose Country</div>
-                <select type="text" class="col-md-12" name="country" placeholder="select Country">
+                 <form method="post" >
+                <select type="text" class="col-md-12 " id="choose_country" name="choose_country">
                     <option value="">--Select Country--</option>
-                    <option value="Philippines">Philippines</option>
-                    <option value="USA">USA</option>
-                    <option value="China">China</option>
-                    <option value="Korea">Korea</option>
+                    @foreach($country as $country_name)
+                    <option value="{{$country_name->country}}">{{$country_name->country}}</option>
+                    @endforeach
                 </select><br>
+                </form>
+
             </div>
 
             <div class="col-md-9">
-                <div class="left-container">
-                   <div style="overflow-x:hidden;">  
-                   <table id="example" class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; cellspacing: 0;">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center;">Name</th>
-                                        <th style="text-align: center;">Description</th>   
-                                        <th style="text-align: center;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($add_recipient as $addrecipients)
-                                    <tr>   
-                                        <td style="text-align: center;">{{$addrecipients->name}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->description}}</td>
-                                        <td bgcolor="transparent" style="text-align: center;">
-
-                                        <button type="button" id="choose_recipient" class="btn btn-success" data-name="{{$addrecipients->name}}" data-name1="{{$addrecipients->research_email_address}}">Choose</button>
-                                            
-                                        <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="button" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                        </table>
+                <div class="left-container" id="country_table" name="country_table">
+                    <table  class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; cellspacing: 0;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">RECIPIENT</th>
+                                <th style="text-align: center;">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($add_recipient as $addrecipients)
+                            <tr>  
+                                <td style="text-align: center;">{{$addrecipients->name}}</td>
+                                <td style="text-align: center;">  
+                                
+                                <button  type="button" id="choose_recipient" class="btn btn-success" data-name="{{$addrecipients->name}}" data-name1="{{$addrecipients->research_email_address}}">Choose</button>
+                                <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="button" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                     {!! $add_recipient->render() !!}    
-                    </div>
                 </div>
+
             </div>
           </div>
         </div>
       </div>
-      
     </div>
   </div>
 </div>

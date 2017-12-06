@@ -22,6 +22,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_merchant_markup;
 use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_merchant_commission;
+use App\Models\Tbl_merchant_commission_report_setting;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -544,6 +545,35 @@ class MerchantController extends Member
 
 
 		return $collectable;														
+	}
+
+	public function commission_report()
+	{
+		$data['page'] = "Commission Report";
+
+		return view('member.merchant.commission_report.commission_report',$data);
+	}
+	public function submit_report_setting()
+	{
+		$warehouse_id = $this->current_warehouse->warehouse_id;
+		$data['merchant_commission_warehouse_id'] = $warehouse_id;
+		$data['merchant_commission_warehouse_name'] = $this->current_warehouse->warehouse_name;
+		$data['merchant_commission_shop_id'] = $this->current_warehouse->warehouse_shop_id;
+		$data['merchant_commission_percentage'] = Request('merchant_commission_percentage');
+
+		$count = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->first();
+
+		if($count>0)
+		{
+			Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->update($data);
+		}
+		else
+		{
+			Tbl_merchant_commission_report_setting::insert($data);
+		}
+		$response['call_function']='success';
+		return json_encode($response);
+
 	}
 
 }	

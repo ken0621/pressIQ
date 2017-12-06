@@ -1040,6 +1040,12 @@ Route::any('/member/merchant/commission/request', 'Member\MerchantController@com
 Route::any('/member/merchant/commission/request/range/verfiy', 'Member\MerchantController@commission_range_verify');
 Route::any('/member/merchant/commission/request/submit', 'Member\MerchantController@commission_request_submit');
 /* End */
+
+// Merchant Commission Report
+Route::get('/member/merchant/commission-report', 'Member\MerchantController@commission_report');
+Route::post('/member/merchant/commission-report','Member\MerchantController@submit_report_setting');
+// end
+
 /*  / Merchant - Ewallet*/
 Route::any('/member/merchant/ewallet', 'Member\MerchantewalletController@index');
 Route::any('/member/merchant/ewallet/list', 'Member\MerchantewalletController@payable_list');

@@ -12,7 +12,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</button>
+               <!--  <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</button> -->
                 <a href="/member/vendor/requisition_slip/create" class="btn btn-primary"><i class="fa fa-star"></i> Create Requisition Slip</a>
             </div>
         </div>
@@ -39,7 +39,7 @@
         <div class="col-md-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search-employee-name" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
+                <input type="text" class="form-control search-employee-name" placeholder="Search ..." aria-describedby="basic-addon1">
             </div>
         </div>
     </div>
@@ -52,25 +52,33 @@
                         <table class="table table-bordered table-striped table-condensed">
                             <thead style="text-transform: uppercase">
                                 <tr>
-                                    <th class="text-center">ID.</th>
-                                    <th class="text-center">Employee Name</th>
-                                    <th class="text-center" width="120px">NET BASIC PAY</th>
-                                    <th class="text-center" width="120px">GROSS PAY</th>
-                                    <th class="text-center" width="120px">NET PAY<br>(TAKE HOME)</th>
-                                    <th class="text-center" width="100px"></th>
-                                    <th class="text-center" width="100px"></th>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">SLIP REFERENCE NUMBER</th>
+                                    <th class="text-center" width="300px"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">Sample Name</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                </tr>
+                                @if(count($_list) > 0)
+                                @foreach($_list as $key => $list)
+                                    <tr>
+                                        <td class="text-center">{{$key+1}}</td>
+                                        <td class="text-center">{{$list->requisition_slip_number}}</td>
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Action <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-custom">
+                                                    <li ><a target="_blank" href="/member/vendor/requisition_slip/print/{{$list->requisition_slip_id}}"> Print </a></li>
+                                                    <li><a class="popup" link="/member/vendor/requisition_slip/confirm/{{$list->requisition_slip_id}}" size="md">Confirm</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                @else
+                                <tr><td class="text-center" colspan="3">NO PROCESS YET</td></tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>

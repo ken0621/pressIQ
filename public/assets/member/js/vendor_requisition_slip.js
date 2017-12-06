@@ -438,22 +438,11 @@ function vendor_requisition_slip()
 		return '<div style="padding: ' + $padding + 'px; font-size: 20px;" class="text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>';
 	}
 }
-
-function new_price_level_save_done(data)
-{
-	$("#global_modal").modal("hide");
-	$(".price-level-select").append('<option value="' + data.price_level_id + '">' + data.price_level_name + '</option>');
-	$(".price-level-select").globalDropList("reload");
-	$(".price-level-select").val(data.price_level_id).change();
-}
-function success_create_wis(data)
+function success_create_rs(data)
 {
 	if(data.status == 'success')
 	{
 		toastr.success('Success');
-		setInterval(function()
-		{
-			location.href = '/member/item/warehouse/wis';
-		},2000);
+		location.href = '/member/vendor/requisition_slip';
 	}
 }

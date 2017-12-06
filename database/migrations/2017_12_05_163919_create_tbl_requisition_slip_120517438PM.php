@@ -18,6 +18,7 @@ class CreateTblRequisitionSlip120517438PM extends Migration
             $table->integer('shop_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->string('requisition_slip_number');
+            $table->string('requisition_slip_status')->default('open')->comment('open/closed/void');
             $table->text('requisition_slip_remarks');
             $table->datetime('requisition_slip_date_created');
 

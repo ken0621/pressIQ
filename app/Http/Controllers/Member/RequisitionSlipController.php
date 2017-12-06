@@ -28,6 +28,7 @@ class RequisitionSlipController extends Member
 	public function getIndex()
 	{
 		$data['page'] = 'Requisition Slip';
+		$data['_list'] = RequisitionSlip::get($this->user_info->shop_id);
 		return view('member.requisition_slip.requisition_slip', $data);
 	}
 	public function getCreate()
@@ -39,9 +40,18 @@ class RequisitionSlipController extends Member
 	}
 	public function postCreateSubmit(Request $request)
 	{
-		$return = RequisitionSlip::create($request);
-
+		$return = RequisitionSlip::create($this->user_info->shop_id, $this->user_info->user_id, $request);
 
 		return json_encode($return);
+	}
+	public function getPrint(Request $request, $slip_id = 0)
+	{
+		$data['rs'] = RequisitionSlip::get_slip($this->user_info->shop_id, $slip_id);
+		$data['_rs_item'] = RequisitionSlip::get_slip_item($slip_id);
+        $data['user'] = $this->user_info;
+
+        // return view('member.requisition_slip.print_requisition_slip', $data);
+        $pdf = view('member.requisition_slip.print_requisition_slip', $data);
+        return Pdf_global::show_pdf($pdf,null, $data['rs']->requisition_slip_number);
 	}
 }

@@ -2898,6 +2898,20 @@ class ShopMemberController extends Shop
                     $setting = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
                     $slot_id = $create_slot;
 
+
+                    if($shop_id == 5)
+                    {
+                        $check_code_for_ez = Tbl_warehouse_inventory_record_log::where("mlm_pin",$data["pin"])->where("mlm_activation",$data["activation"])->where("record_shop_id",$shop_id)->first();
+                        if($check_code_for_ez)
+                        {
+                            $ez_code = Tbl_brown_ez_program::where("shop_program_id",$shop_id)->where("record_program_log_id",$check_code_for_ez->record_log_id)->first();
+                            if($ez_code)
+                            {
+                                $update_ez_slot["slot_status"] = "CD";
+                            }
+                        }
+                    }
+
                     if($setting->plan_settings_placement_required == 0)
                     {
                         $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();

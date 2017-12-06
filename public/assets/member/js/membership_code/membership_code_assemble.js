@@ -62,6 +62,17 @@ function membership_code_assemble()
 					{
 						$(".assemble-code-submit").removeAttr("disabled");
 					}
+
+
+				    if ($('#paid_price').length)
+				    {
+				    	var paid_price = $(".hidden_price").val();
+				    	var balance    = $("#cd_price").val();
+				    	
+				    	var totality   = parseFloat(paid_price) - (isNaN(parseFloat(balance)) ? 0 : parseFloat(balance));
+				        $("#paid_price").val(totality);
+				        $("#paid_price_no_change").val(paid_price);
+				    }
 				}
 			});
 		}, 500);

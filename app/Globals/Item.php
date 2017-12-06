@@ -1714,8 +1714,25 @@ class Item
         }
         if($item_membership_id)
         {
-            $query->where('tbl_item.membership_id',$item_membership_id);
+            if($item_membership_id == "EZ" && $shop_id == 5)
+            {
+                $query->join("tbl_brown_ez_program","tbl_brown_ez_program.record_program_log_id","=","tbl_warehouse_inventory_record_log.record_log_id");
+            }
+            else
+            {
+                $query->where('tbl_item.membership_id',$item_membership_id);
+            }
         }
+        else
+        {   
+            if($shop_id == 5)
+            {
+                $query->leftJoin("tbl_brown_ez_program","tbl_brown_ez_program.record_program_log_id","=","tbl_warehouse_inventory_record_log.record_log_id");
+                $query->where("record_program_log_id","=",null);
+            }
+        }
+
+
         if($search_keyword)
         {
             $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
@@ -1773,7 +1790,7 @@ class Item
         return $data; 
     } 
 
-    public static function assemble_membership_kit($shop_id, $warehouse_id, $item_id, $quantity)
+    public static function assemble_membership_kit($shop_id, $warehouse_id, $item_id, $quantity,$ez_program = null)
     {
         $item_list = Item::get_item_in_bundle($item_id);
         $_item = [];
@@ -1789,6 +1806,7 @@ class Item
         {
             $source['name'] = 'assemble_item';
             $source['id'] = $item_id;
+            $source['ez_program'] = $ez_program;
             $validate_consume .= Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, 'Refill Item upon assembling membership kit Item#'.$item_id, $source);            
         }
 

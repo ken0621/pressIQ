@@ -32,4 +32,6 @@
     @endif
 @endif
 
+<input type="hidden" class="hidden_price" value="{{$hidden_price}}">
+
 <input type="hidden" class="allowed-assembly" value="{{ $allowed }}">

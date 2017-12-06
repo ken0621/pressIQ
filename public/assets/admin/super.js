@@ -40,7 +40,7 @@ function admin()
         {
         	event_tab(page);
         	event_global_ajax_submit(page);
-
+        	
 			$$('form.ajax-submit').on('form:beforesend', function (e) { myApp.showIndicator(); });
 			$$('form.ajax-submit').on('form:error', function (e) { myApp.hideIndicator(); });
         });
@@ -59,8 +59,6 @@ function admin()
 		{
 			$(".tab-link.dashboard").addClass("active");
 		}
-
-        
 	}
 	function event_global_ajax_submit(page)
 	{

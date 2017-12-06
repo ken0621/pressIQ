@@ -31,7 +31,7 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Wallet Summary <a href="javascript:" onclick="action_load_link_to_modal('/members/enter-code')" class="title-button pull-right btn-enter-a-code">Create New Slot</a></div>
+				<div class="title">Wallet Summary <a href="javascript:" onclick="action_load_link_to_modal('/members/enter-code')" class="title-button btn-enter-a-code"><div>Create New Slot</div></a></div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">
@@ -131,14 +131,45 @@
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
 					</div>
-					<div class="load-direct-referrals-here">
+					{{-- <div class="load-direct-referrals-here">
 												
-					</div>
+					</div> --}}
+					@if(count($_direct) > 0)
+						@foreach($_direct as $direct)
+						<div class="holder">
+							<div class="row clearfix">
+								<div class="col-md-8">
+									<div class="color">
+										<img src="{{ $direct->profile_image }}">
+									</div>	
+									<div class="text">
+										<div class="pull-left">
+											<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+											<div class="email">{{ $direct->slot_no }}</div>
+											<div class="date">{{ $direct->time_ago }}</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="action" style="text-align: center;">
+										@if($direct->distributed == 1)
+											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
+										@else
+											<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+										@endif
+									</div>
+								</div>
+							</div>
+						</div>
+						@endforeach
+					@else
+						<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
+					@endif
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button" onclick="location.href='/members/report'"><div>View All Rewards</div></a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)

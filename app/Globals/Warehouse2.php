@@ -22,6 +22,7 @@ use App\Models\Tbl_price_level;
 use App\Models\Tbl_price_level_item;
 use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_settings;
+use App\Models\Tbl_customer;
 
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
@@ -583,6 +584,7 @@ class Warehouse2
             }
 
             Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+
         }
 
         return $validate;

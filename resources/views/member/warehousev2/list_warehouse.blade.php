@@ -117,7 +117,7 @@
 @endsection
 
 @section("script")
-<script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
+<script type="text/javascript" src="/assets/member/js/warehouse/warehousev2.js"></script>
 
 <script type="text/javascript">
     

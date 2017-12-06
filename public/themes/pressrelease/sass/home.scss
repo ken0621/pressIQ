@@ -46,15 +46,6 @@ body{
 				font-size: 50px;
 			}
 		}
-		.subtitle-container
-		{
-			color: #404040;
-			font-size: 35px;
-			padding-top: 20px;
-			font-family: 'Open Sans';
-			padding-left: 50px;
-			font-style: italic;
-		}
 		.button-container
 		{
 			border: 2px solid #316df9;
@@ -62,7 +53,7 @@ body{
 			text-align: center;
 			padding: 10px 0px;
 			margin-left: 50px;
-			margin-top: 100px;
+			margin-top: 60px;
 			margin-bottom: 150px;
 			a
 			{
@@ -119,7 +110,7 @@ body{
 	}
 	.image-holder
 	{
-		padding-top: 50px;
+		padding-top: 100px;
 		padding-left: 50px;
 	}
 	.caption-container
@@ -140,7 +131,7 @@ body{
 	{
 		padding-top: 30px;
 		font-size: 20px;
-		.details-red
+		.details-blue
 		{
 			color: #316df9;
 		}

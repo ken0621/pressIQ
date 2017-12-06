@@ -15,18 +15,13 @@ class TblTransactionRefNumber extends Migration
     {
         Schema::create('tbl_transaction_ref_number', function (Blueprint $table) {
             $table->increments('trans_ref_number_id');
-            $table->integer('po_id'); // tbl_purchase_order
-            
-
-
+            $table->string('shop_id');
             $table->string('key');
             $table->string('prefix');
-            $table->string('other');
+            $table->date('other');
             $table->string('separator');
-
             $table->timestamps();
-            
-            $table->foreign('po_id')->references('po_id')->on('tbl_purchase_order')->onDelete('cascade');
+
         });
     }
 

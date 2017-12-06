@@ -29,7 +29,7 @@
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="square-container">
-					<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('members/enter-code')">Create New Slot</a></div>
+					<div class="title">Wallet Summary <a href="javascript:" class="title-button" onclick="action_load_link_to_modal('members/enter-code')"><div>Create New Slot</div></a></div>
 					<div class="sub-container">
 						<div class="table-holder">
 							<div class="chart-legend">
@@ -124,7 +124,7 @@
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="square-container match-height">
-					<div class="title">Newest Direct Referrals  <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/direct'">View All Direct</a></div>
+					<div class="title">Newest Direct Referrals  <a href="javascript:" class="title-button" onclick="location.href='/members/direct'"><div>View All Direct</div></a></div>
 					<div class="sub-container border-holder">
 						<div class="clearfix wow hidden">
 							<div class="badge right">6 New Members</div>
@@ -135,22 +135,28 @@
 						@if(count($_direct) > 0)
 							@foreach($_direct as $direct)
 							<div class="holder">
-								<div class="color">
-									<img src="{{ $direct->profile_image }}">
-								</div>	
-								<div class="text">
-									<div class="pull-left">
-										<div style="max-width: 250px;" class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
-										<div class="email">{{ $direct->slot_no }}</div>
-										<div class="date">{{ $direct->time_ago }}</div>
+								<div class="row clearfix">
+									<div class="col-md-8">
+										<div class="color">
+											<img src="{{ $direct->profile_image }}">
+										</div>	
+										<div class="text">
+											<div class="pull-left">
+												<div style="max-width: 250px;" class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+												<div class="email">{{ $direct->slot_no }}</div>
+												<div class="date">{{ $direct->time_ago }}</div>
+											</div>
+										</div>
 									</div>
-								</div>
-								<div class="action pull-right">
-									@if($direct->distributed == 1)
-										<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-jca-custom-default"><i class="fa fa-star"></i> VIEW INFO</button>
-									@else
-										<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
-									@endif
+									<div class="col-md-4">
+										<div class="action" style="text-align: center;">
+											@if($direct->distributed == 1)
+												<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-jca-custom-default"><i class="fa fa-star"></i> VIEW INFO</button>
+											@else
+												<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+											@endif
+										</div>
+									</div>
 								</div>
 							</div>
 							@endforeach
@@ -162,7 +168,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="square-container match-height">
-					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a>
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button" onclick="location.href='/members/report'"><div>View All Rewards</div></a>
 					</div>
 					<div class="sub-container">
 						<div class="activities">
@@ -199,7 +205,7 @@
 	            <div class="modal-md modal-dialog">
 	                <div class="modal-content">
 	                    <div class="modal-body">
-	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
+	                        <div><img src="/themes/{{ $shop_theme }}/img/done-img.png"></div>
 	                        <div class="text-header">Done!</div>
 	                        <div class="text-caption">You are now officially enrolled to<br><b>JCA Wellness</b></div>
 	                    </div>

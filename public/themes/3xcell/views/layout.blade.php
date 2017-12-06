@@ -50,33 +50,45 @@
         <div class="subheader-container">
             <div class="container" style="position: relative;">
                 <div class="social-mob">
-                    <span>
-                        <i class="fa fa-facebook-square" aria-hidden="true"></i>
-                    </span>
-                    <span>
-                        <i class="fa fa-twitter-square" aria-hidden="true"></i>
-                    </span>
-                    <span>
-                        <i class="fa fa-instagram" aria-hidden="true"></i>
-                    </span>
-                    <span>
-                        <i class="fa fa-google-plus-square" aria-hidden="true"></i>
-                    </span>
-                </div>
-               <div class="button-container">
-                    <div class="social-media-container">
+                    <a href="https://www.facebook.com/3xcell.ph/">
                         <span>
                             <i class="fa fa-facebook-square" aria-hidden="true"></i>
                         </span>
+                    </a>
+                    <a href="https://twitter.com/3xcell">
                         <span>
                             <i class="fa fa-twitter-square" aria-hidden="true"></i>
                         </span>
+                    </a>  
+                    <a href="https://www.instagram.com/3xcell/?hl=en">
                         <span>
                             <i class="fa fa-instagram" aria-hidden="true"></i>
                         </span>
-                        <span>
+                    </a>             
+                    {{-- <span>
+                        <i class="fa fa-google-plus-square" aria-hidden="true"></i>
+                    </span> --}}
+                </div>
+               <div class="button-container">
+                    <div class="social-media-container">
+                        <a href="https://www.facebook.com/3xcell.ph/">
+                            <span>
+                                <i class="fa fa-facebook-square" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                        <a href="https://twitter.com/3xcell">
+                            <span>
+                                <i class="fa fa-twitter-square" aria-hidden="true"></i>
+                            </span>
+                        </a>  
+                        <a href="https://www.instagram.com/3xcell/?hl=en">
+                            <span>
+                                <i class="fa fa-instagram" aria-hidden="true"></i>
+                            </span>
+                        </a> 
+                        {{-- <span>
                             <i class="fa fa-google-plus-square" aria-hidden="true"></i>
-                        </span>
+                        </span> --}}
                     </div> 
                    @if($customer)
                    <div class="login-container">

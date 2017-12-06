@@ -45,7 +45,8 @@ function create_commission_calculator()
 	function action_initialize_select()
 	{
 		$('.select-customer').globalDropList({
-			hasPopup : 'false',
+			hasPopup : 'true',
+			link : '/member/customer/modalcreatecustomer',
 			width : '100%',
 			onChangeValue : function()
 			{
@@ -53,7 +54,8 @@ function create_commission_calculator()
 			}
 		});
 		$('.select-term').globalDropList({
-			hasPopup : 'false',
+			hasPopup : 'true',
+			link: '/member/maintenance/terms/terms',
 			width : '100%',
 			onChangeValue : function()
 			{
@@ -62,7 +64,8 @@ function create_commission_calculator()
 			}
 		});
 		$('.select-property').globalDropList({
-			hasPopup : 'false',
+			hasPopup : 'true',
+			link : "/member/item/add",
 			width : '100%',
 			onChangeValue : function()
 			{
@@ -70,17 +73,20 @@ function create_commission_calculator()
 				{
 					$(".sales-price").val(number_format($(this).find("option:selected").attr("price")));
 					tsp = parseFloat($(this).find("option:selected").attr("price"));
+					//dd(tsp);
 					event_compute_commission();
 				}
 				else
 				{
-					$(".sales-price").val('');	
+					$(".sales-price").val('');
 					tsp = 0;
+					event_compute_commission();
 				}
 			}
 		});
 		$('.select-agent').globalDropList({
-			hasPopup : 'false',
+			hasPopup : 'true',
+			link : '/member/cashier/sales_agent/add',
 			width : '100%',
 			onChangeValue : function()
 			{
@@ -136,7 +142,8 @@ function create_commission_calculator()
 	}
 	function event_compute_commission()
 	{
-		dp_string = $('.downpayment').val();
+		dp_string = $('.downpayment').val();		
+
 		downpayment = 0;
 		discount = parseFloat(($('.discount').val()).replace(',',''));
 		if(discount == '')
@@ -147,7 +154,18 @@ function create_commission_calculator()
 		{
 			downpayment = (parseFloat(dp_string.substring(0, dp_string.indexOf('%'))) / 100);
 		}
+		if(dp_string > 0)
+		{
+			downpayment = (parseFloat(dp_string.substring(0, dp_string)) / 100);
+		}
 
+		tsp_string = $('.sales-price').val();	
+		/*tsp = parseFloat(($('.sales-price').val()).replace(',',''));*/
+		if(tsp_string > 0)
+		{
+			tsp = (parseFloat(tsp_string));
+		}
+		
 		var amount_downpayment = tsp * downpayment;
 		$('.amount-downpayment').val(number_format(amount_downpayment));
 		var amount_net_downpayment = amount_downpayment - discount;
@@ -277,3 +295,4 @@ function success_commission(data)
 		location.reload();
 	},2000);
 }
+

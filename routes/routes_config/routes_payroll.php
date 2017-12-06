@@ -43,6 +43,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/payroll_register_report_period/export_excel_filter/{id}/{uid}','Member\PayrollReportController@payroll_register_report_export_excel_filter');
 	/*END PAYROLL REGISTER REPORT*/
 
+	/*START PAYROLL BRANCH TAGGING REPORT*/
+	Route::any('/reports/branch_tagging_report','Member\PayrollBranchTaggingReportController@payroll_branch_tagging_report');
+	Route::any('/reports/branch_tagging_report_period_table','Member\PayrollBranchTaggingReportController@payroll_branch_tagging_report_table');
+	/*END PAYROLL BRANCH TAGGING REPORT*/
+
 	/*EMPLOYEE SUMMARY REPORT*/
 	Route::any('/reports/employee_summary_report','Member\PayrollReportController@employee_summary_report');
 
@@ -165,7 +170,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/branch_name/modal_archive_branch/{archived}/{id}','Member\PayrollController@modal_archive_branch');
 	Route::any('/branch_name/archive_branch','Member\PayrollController@archive_branch');
 	/* BRANCH NAME END */
-
+	
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');
 	Route::any('/departmentlist/department_modal_create','Member\PayrollController@department_modal_create');

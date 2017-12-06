@@ -21,13 +21,15 @@
 		</div>
 	</div>
 	<div class="wallet-encashment-content">
-		<div class="title">
-			<label>Slot no</label>
-			<select name="slot" class="form-control slot-owner" style="width:100;">
-			@foreach($slot_owner as $owner)
-			<option value="{{$owner->slot_no}}">{{$owner->slot_no}}</option>
-			@endforeach
-		</select>
+		<div class="col-md-12">
+			<div class="col-md-4 title" style="padding: 10px;">
+				<label>Slot no</label>
+				<select name="slot" class="form-control slot-owner">
+				@foreach($slot_owner as $owner)
+				<option value="{{$owner->slot_no}}">{{$owner->slot_no}}</option>
+				@endforeach
+				</select>
+			</div>
 		</div>
 	<div class="panel panel-default panel-block panel-title-block panel-gray "  style="margin-bottom: -10px;">
 		
@@ -48,11 +50,7 @@
             </div>
         </div>
     </div>
-			<div class="clearfix">
-				<div class="pull-right">
-					{!! session('payout_paginate') !!}
-				</div>
-			</div>
+			
 		</div>
 	</div>
 </div>
@@ -74,8 +72,14 @@
 <script type="text/javascript">
 	@if(Session::get("response")=='success')
 	toastr.success("Wallet request submitted");
-	@else if(Session::get("response")=='error')
+	@elseif(Session::get("response")=='error')
 	toastr.error("Error sending request");
+	@elseif(Session::get("response")=='invalid_slot')
+	toastr.error("The slot you are using does not belong to you. Please reload the page and try again");
+	@elseif(Session::get("response")=='success_upload')
+	toastr.success("Attachment uploaded");
+	@elseif(Session::get("response")=='error_upload')
+	toastr.error("Error uploading file");
 	@endif
 </script>
 @endsection

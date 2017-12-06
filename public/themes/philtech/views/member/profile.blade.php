@@ -98,7 +98,7 @@
 					   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					   		<div class="row clearfix">
 					   			<div class="col-md-6">
-					   				<div class="form-group">
+					   				{{-- <div class="form-group">
 							   			<label>First Name</label>
 							   			<input type="text" class="form-control" name="first_name" value="{{ $profile->first_name }}">
 							   		</div>
@@ -109,7 +109,7 @@
 							   		<div class="form-group">
 							   			<label>Last Name</label>
 							   			<input type="text" class="form-control" name="last_name" value="{{ $profile->last_name }}">
-							   		</div>
+							   		</div> --}}
 							   		<div class="form-group">
 							   			<label>Birth Date</label>
 							   			<div style="margin-top: 5px;">
@@ -144,12 +144,12 @@
 							   				@endforeach
 							   			</select>
 							   		</div>
+				   		   			<div class="form-group">
+				   			   			<label>Province</label>
+				   			   			<select firstload="true" default="{{ isset($profile_address->state_id) ? $profile_address->state_id : '' }}" class="form-control load-location" name="customer_state" level="1"></select>
+				   			   		</div>
 					   			</div>
 						   		<div class="col-md-6">
-						   			<div class="form-group">
-							   			<label>Province</label>
-							   			<select firstload="true" default="{{ isset($profile_address->state_id) ? $profile_address->state_id : '' }}" class="form-control load-location" name="customer_state" level="1"></select>
-							   		</div>
 							   		<div class="form-group">
 							   			<label>City</label>
 							   			<select firstload="true" default="{{ isset($profile_address->city_id) ? $profile_address->city_id : '' }}" class="form-control load-location" name="customer_city" level="2"></select>

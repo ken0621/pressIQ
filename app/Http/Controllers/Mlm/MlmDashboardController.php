@@ -256,6 +256,8 @@ class MlmDashboardController extends Mlm
         ->where('marketing_plan_code', '!=', 'REPURCHASE_POINTS')
         ->where('marketing_plan_code', '!=', 'UNILEVEL_REPURCHASE_POINTS')
         ->where('marketing_plan_code', '!=', 'DISCOUNT_CARD_REPURCHASE')
+        ->where('marketing_plan_code', '!=', 'STAIRSTEP')
+        ->where('marketing_plan_code', '!=', 'RANK')
         ->get();
 
         $data['plan_settings_2'] = Tbl_mlm_plan::where('shop_id', $shop_id)
@@ -307,6 +309,13 @@ class MlmDashboardController extends Mlm
             ->where('wallet_log_slot', $slot_id)
             ->sum('wallet_log_amount');    
         $data['binary'] = $binary;
+
+        $rankPV = Tbl_mlm_slot_points_log::where("points_log_type","RPV")->where("points_log_slot",$slot_id)->sum('points_log_points');
+        $rankGroupPV = Tbl_mlm_slot_points_log::where("points_log_type","RGPV")->where("points_log_slot",$slot_id)->sum('points_log_points');
+        $data['rank_points'] = $rankPV+$rankGroupPV;
+        $stairstepPV = Tbl_mlm_slot_points_log::where("points_log_type","SPV")->where("points_log_slot",$slot_id)->sum('points_log_points');
+        $data['personal_maintenance_points'] = $stairstepPV;
+        
         $data['left'] = Self::$slot_now->slot_binary_left;
         $data['right'] = Self::$slot_now->slot_binary_right;
 
@@ -331,8 +340,8 @@ class MlmDashboardController extends Mlm
         else
         {
             $data["slot_stairstep"] = null;
-            $data["rebates"]        = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Rebates)")->where("wallet_log_slot",Self::$slot_id)->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
-            $data["override"]       = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Over-ride)")->where("wallet_log_slot",Self::$slot_id)->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
+            $data["rebates"]        = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","REBATES_BONUS")->where("wallet_log_slot",Self::$slot_id)->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
+            $data["override"]       = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP")->where("wallet_log_slot",Self::$slot_id)->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
         }
 
         

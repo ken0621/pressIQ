@@ -137,11 +137,10 @@
 						<div class="clearfix wow hidden">
 							<div class="badge right">6 New Members</div>
 						</div>
-						<div class="load-direct-referrals-here">
+						{{-- <div class="load-direct-referrals-here">
 							
-						</div>
-						<!-- PREVIOUS CODE -->
-						{{-- @if(count($_direct) > 0)
+						</div> --}}
+						@if(count($_direct) > 0)
 							@foreach($_direct as $direct)
 							<div class="holder">
 								<div class="color">
@@ -165,7 +164,7 @@
 							@endforeach
 						@else
 							<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
-						@endif --}}
+						@endif
 					</div>
 				</div>
 			</div>
@@ -354,39 +353,39 @@
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 
-<script>
-$(window).on('hashchange', function() {
-    if (window.location.hash) {
-        var page = window.location.hash.replace('#', '');
-        if (page == Number.NaN || page <= 0) {
-            return false;
-        } else {
-            getPosts(page);
-        }
-    }
-});
-$(document).ready(function() {
-	getPosts(1);
-    $(document).on('click', '.pagination a', function (e) {
-        getPosts($(this).attr('href').split('page=')[1]);
-        e.preventDefault();
-    });
-});
-function getPosts(page) {
-    $.ajax(
-    {
-        url : '/members/direct-referrals?page=' + page,
-        type: 'get',
-    }).done(function (data) 
-    {
-        $('.load-direct-referrals-here').html(data);
-        location.hash = page;
-    }).fail(function () 
-    {
-        alert('Posts could not be loaded.');
-    });
-}
-</script>
+{{-- <script>
+	$(window).on('hashchange', function() {
+	    if (window.location.hash) {
+	        var page = window.location.hash.replace('#', '');
+	        if (page == Number.NaN || page <= 0) {
+	            return false;
+	        } else {
+	            getPosts(page);
+	        }
+	    }
+	});
+	$(document).ready(function() {
+		getPosts(1);
+	    $(document).on('click', '.pagination a', function (e) {
+	        getPosts($(this).attr('href').split('page=')[1]);
+	        e.preventDefault();
+	    });
+	});
+	function getPosts(page) {
+	    $.ajax(
+	    {
+	        url : '/members/direct-referrals?page=' + page,
+	        type: 'get',
+	    }).done(function (data) 
+	    {
+	        $('.load-direct-referrals-here').html(data);
+	        location.hash = page;
+	    }).fail(function () 
+	    {
+	        alert('Posts could not be loaded.');
+	    });
+	}
+</script> --}}
 
 <script type="text/javascript">
 	function check_upgrade_code()

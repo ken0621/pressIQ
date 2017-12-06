@@ -989,6 +989,7 @@ class WarehouseController extends Member
             //INSERT TO tbl_warehouse
             $ins_warehouse["warehouse_name"]    = Request::input("warehouse_name");
             $ins_warehouse["warehouse_address"] = Request::input("warehouse_address");
+            $ins_warehouse["warehouse_parent_id"] = Request::input("warehouse_parent_id");
             $ins_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
             $ins_warehouse["warehouse_created"] = Carbon::now();
 
@@ -1061,6 +1062,7 @@ class WarehouseController extends Member
         $access = Utilities::checkAccess('item-warehouse', 'edit');
         if($access == 1)
         { 
+           $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
             $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$id)->first();
             if(!$check_if_owned)
             {

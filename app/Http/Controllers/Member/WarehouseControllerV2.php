@@ -76,6 +76,7 @@ class WarehouseControllerV2 extends Member
         if($access == 1)
         { 
 
+           $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
             $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$id)->first();
             if(!$check_if_owned)
             {
@@ -116,6 +117,7 @@ class WarehouseControllerV2 extends Member
         $data['$access'] = Utilities::checkAccess('warehouse-inventory', 'add');
         if($data['$access'] == 1)
         { 
+           $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
            return view("member.warehousev2.add_warehouse", $data);
         }
         else
@@ -129,6 +131,7 @@ class WarehouseControllerV2 extends Member
         //INSERT TO tbl_warehouse
         $ins_warehouse["warehouse_name"]    = Request::input("warehouse_name");
         $ins_warehouse["warehouse_address"] = Request::input("warehouse_address");
+        $ins_warehouse["warehouse_parent_id"] = Request::input("warehouse_parent_id");
         $ins_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
         $ins_warehouse["warehouse_created"] = Carbon::now();
 
@@ -194,7 +197,7 @@ class WarehouseControllerV2 extends Member
         }
 
         $data = Warehouse2::refill_bulk($shop_id, $warehouse_id, $reference_name, $reference_id, $remarks, $_item);
-        die(var_dump($data));
+       
         return $data;
     }
 }

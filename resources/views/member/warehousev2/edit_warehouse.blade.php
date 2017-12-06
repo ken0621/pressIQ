@@ -13,6 +13,16 @@
 </div>
 <div class="modal-body modallarge-body-layout background-white form-horizontal menu_container">
     <div class="panel-body form-horizontal">
+    <div class="form-group">
+            <div class="col-md-6">            
+                <label>Is Sub Warehouse of :</label>
+                <select class="form-control select-warehouse" name="warehouse_parent_id">
+                    @foreach($_warehouse as $ware)
+                        <option value="{{$ware->warehouse_id}}">{{$ware->warehouse_name}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-md-6">            
                 <label>Warehouse Name *</label>

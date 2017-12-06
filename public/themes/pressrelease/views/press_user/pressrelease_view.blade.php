@@ -6,7 +6,7 @@
 				@foreach ($pr as $prs)
 				<div class="title-container"><a href="/pressuser/mypressrelease">{{$prs->pr_headline}}</a></div>
 				<div class="date-container">{{$prs->pr_date_sent}}</div>
-				<div class="details-container">{{$prs->pr_subheading}}
+				<div class="subtitle-container">{{$prs->pr_subheading}}
 				</div>
 				<div class="details-container">{!!$prs->pr_content!!}
 				</div>

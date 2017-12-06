@@ -1027,4 +1027,8 @@ class Warehouse2
 
         return $data->get();
     }
+    public static function load_warehouse($shop_id = 0)
+    {
+        
+    }
 }

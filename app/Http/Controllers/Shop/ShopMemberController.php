@@ -56,8 +56,8 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
-
 use App\Models\Tbl_press_release_recipient;
+use App\Tbl_pressiq_press_releases;
 
 use App\Globals\Currency;
 use App\Globals\Cart2;
@@ -92,6 +92,7 @@ class ShopMemberController extends Shop
 {
     public function getIndex()
     {
+        
         $data["page"] = "Dashboard";
         $data["mode"] = session("get_success_mode");
         $data["zero_currency"] = Currency::format(0);
@@ -108,7 +109,7 @@ class ShopMemberController extends Shop
             $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
             $data["_slot"]              = $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
             $data['allow_multiple_slot'] = Self::$customer_info->allow_multiple_slot;
             $data['mlm_pin'] = '';
             $data['mlm_activation'] = '';            
@@ -168,7 +169,12 @@ class ShopMemberController extends Shop
             }
         }
 
-        return view("member.dashboard", $data);
+        return Self::load_view_for_members("member.dashboard", $data);
+    }
+    public function getDirectReferrals()
+    {
+        $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
+        return view('member.newest_direct_referrals',$data);
     }
     public function getKit()
     {
@@ -213,7 +219,7 @@ class ShopMemberController extends Shop
         Session::forget('user_email');
         Session::forget('user_first_name');
         Session::forget('user_last_name');
-        Session::forget('user_level');
+        Session::forget('pr_user_level');
 
         return Redirect::to("/");
     }
@@ -221,7 +227,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
                 $data["page"] = "Press Release";
@@ -237,31 +243,11 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }   
     }
-    public function pressuser_view()
-    {
-        if(Session::exists('user_email'))
-        {
-           $level=session('user_level');
-           if($level!="1")
-           {
-                $data["page"] = "Press Release - View";
-                return view("press_user.pressrelease_view", $data);
-           }
-           else
-           {
-                return Redirect::to("/pressadmin/pressreleases");
-           }
-        }
-        else
-        {
-            return Redirect::to("/"); 
-        }
-    }
      public function pressuser_dashboard()
     {
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
                 $data["page"] = "Press Release - Dashboard";
@@ -277,12 +263,13 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
     }
-     public function pressuser_pressrelease()
+     public function pressuser_pressrelease(Request $request)
     {
-        $data['add_recipient']   = Tbl_press_release_recipient::get();
+        $data['add_recipient']   = Tbl_press_release_recipient::paginate(10);
+      
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
                 if (request()->isMethod("post"))
@@ -291,17 +278,54 @@ class ShopMemberController extends Shop
                     $pr_info["pr_subheading"]   =request('pr_subheading');
                     $pr_info["pr_content"]      =request('pr_content');
                     $pr_info["pr_from"]         =session('user_email');
-                    $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
                     $pr_info["pr_to"]           =request('pr_to');
+                    $pr_info["pr_status"]       ="sent";
                     $pr_info["pr_date_sent"]    =Carbon::now();
+
+                    $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
+                    //$pr_info["pr_recipient_name"] =;
                     
-                    Mail::send('emails.press_email', $pr_info, function($message) use ($pr_info)
+                    
+                    $pr_rules["pr_headline"]   =['required'];
+                    $pr_rules["pr_subheading"] =['required'];
+                    $pr_rules["pr_content"]    =['required'];
+                    $pr_rules["pr_to"]  =['required'];
+                    
+                    $validator = Validator::make($pr_info, $pr_rules);
+
+                    if ($validator->fails()) 
                     {
-                        $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
-                        $message->to($pr_info["pr_to"]);
-                    });
-                    $data["page"] = "Press Release - Press Release";
-                    return view("press_user.press_user_pressrelease", $data);
+                        return Redirect::to("/pressuser/pressrelease")->with('message', $validator->errors()->first())->withInput();
+                    }
+                    else
+                    {                      
+                        Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
+                        {
+                            $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
+                            $message->to($pr_info["pr_to"]);
+                        });
+                        if( count(Mail::failures()) > 0 ) {
+
+                           Session::flash('message', "Error in sending the release!");
+
+                           foreach(Mail::failures as $email_address) 
+                            {
+                               echo " - $email_address <br />";
+                            }
+
+                        }
+                        else 
+                        {
+                            Session::flash('message', "Release Successfully Sent!");
+            
+                            $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info); 
+                            $data["page"] = "Press Release - My Press Release";
+                            return Redirect::to("/pressuser/mypressrelease");
+
+                        }
+                        $data["page"] = "Press Release - Press Release";
+                        return view("press_user.press_user_pressrelease", $data);
+                    }
                 }
                 else
                 {
@@ -325,11 +349,50 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
+                $pr = DB::table('tbl_pressiq_press_releases')
+                    ->where('pr_from', session('user_email'))
+                    ->orderByRaw('pr_date_sent DESC')
+                    ->get();
                 $data["page"] = "Press Release - My Press Release";
-                return view("press_user.press_user_my_pressrelease", $data);
+                $data["pr"]=$pr;
+                return view("press_user.press_user_my_pressrelease",$data);
+           }
+           else
+           {
+                return Redirect::to("/pressadmin/pressreleases");
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
+    }
+    public function pressuser_view($pid)
+    {
+        if(Session::exists('user_email'))
+        {
+           $level=session('pr_user_level');
+           if($level!="1")
+           {
+                $pr = DB::table('tbl_pressiq_press_releases')
+                    ->where('pr_id', $pid)
+                    ->where('pr_from', session('user_email'))
+                    ->get();
+                $data["page"] = "Press Release - View";
+                $data["pr"]=$pr;
+
+                $pr = DB::table('tbl_pressiq_press_releases')
+                    ->where('pr_id','!=', $pid)
+                    ->where('pr_from', session('user_email'))
+                    ->orderByRaw('pr_date_sent DESC')
+                    ->get();
+                $data["page"] = "Press Release - View";
+                $data["opr"]=$pr;
+
+                return view("press_user.pressrelease_view", $data);
            }
            else
            {
@@ -345,7 +408,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
                 return Redirect::to("/pressuser");
@@ -365,7 +428,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
                 return Redirect::to("/pressuser/dashboard");
@@ -427,7 +490,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
                 return Redirect::to("/pressuser/mypressrelease");
@@ -446,15 +509,17 @@ class ShopMemberController extends Shop
 
     public function pressadmin_pressrelease_addrecipient(Request $request)
     {
+
       $data["name"]                      = $request->name;
       $data["country"]                   = $request->country;
       $data["research_email_address"]    = $request->research_email_address;
       $data["website"]                   = $request->website;
       $data["description"]               = $request->description;
       Tbl_press_release_recipient::insert($data); 
-      Session::flash('message', "Recipient Successfully Added!");
+      Session::flash('message', 'Recipient Successfully Added!');
       return  redirect::back();
     }
+
     public function pressreleases_deleterecipient($id)
     {
       Tbl_press_release_recipient::where('recipient_id',$id)->delete();
@@ -467,7 +532,6 @@ class ShopMemberController extends Shop
         dd('Hello World!');
 
     }
-
     /*Press Release*/
 
 
@@ -1241,9 +1305,15 @@ class ShopMemberController extends Shop
             $data["email"] = $email;
         }
 
-        Self::store_login_session($data["email"], $data["password"]);
-
-        return Redirect::to("/members")->send();
+        if(!Customer::check_account($this->shop_info->shop_id, $data["email"],$data["password"]))
+        {
+            return Redirect::to("/members/login")->send()->with('error', 'Incorrect email or password.');
+        }
+        else
+        {        
+            Self::store_login_session($data["email"], $data["password"]);
+            return Redirect::to("/members")->send();
+        }
     }
     public function getLogout()
     {
@@ -1849,13 +1919,13 @@ class ShopMemberController extends Shop
 
         if(count($_slot) > 0)
         {
-    		$query->where(function($q) use ($_slot)
-    		{
-    			foreach($_slot as $slot)
-    			{
-    				$q->orWhere("customer_lead", $slot->slot_id);
-    			}
-    		});
+            $query->where(function($q) use ($_slot)
+            {
+                foreach($_slot as $slot)
+                {
+                    $q->orWhere("customer_lead", $slot->slot_id);
+                }
+            });
         }
         else
         {
@@ -1904,9 +1974,10 @@ class ShopMemberController extends Shop
         // dd("This page is under maintenance");
         $data['page'] = "Wallet Transfer";
         $data['customer_id'] = Self::$customer_info->customer_id;
-        $slot_no = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->first();
-        $id = $slot_no->slot_id;
-        $data['transfer_history'] = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","wallet_transfer")->where("wallet_log_slot",$id)->paginate(8);
+        // $slot_no = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+        // $id = $slot_no->slot_id;
+        // $data['transfer_history'] = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","wallet_transfer")->where("wallet_log_slot",$id)->paginate(8);
+        $data['transfer_history'] = Tbl_mlm_slot_wallet_log::Slot()->where("wallet_log_plan","wallet_transfer")->where("slot_owner",Self::$customer_info->customer_id)->orderBy('wallet_log_date_created','DESC')->paginate(8);
         return (Self::load_view_for_members("member.wallet_transfer", $data));
     }
     public function postWalletTransfer(Request $request)
@@ -2709,8 +2780,8 @@ class ShopMemberController extends Shop
                 $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
                 
                 Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
-           		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
-           		MLM2::entry($shop_id,$slot_id);
+                Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+                MLM2::entry($shop_id,$slot_id);
                 
                 echo json_encode("success");
             }
@@ -2787,23 +2858,77 @@ class ShopMemberController extends Shop
     }
     public function generate_slot_no_based_on_name($first_name, $last_name)
     {
-        $name = $first_name . substr($last_name, 0, 1);
-        $name = preg_replace("/[^A-Za-z0-9]/", "", $name);
-        $name = strtolower($name);
-
-        $count_exist = 1;
-        $loop = 1;
-        $return = "";
-
-        while($count_exist != 0)
+        if($this->shop_theme == "3xcell")
         {
-            $suffix_number  = str_pad($loop, 2, '0', STR_PAD_LEFT);
-            $return         = $name . $suffix_number;
-            $count_exist    = Tbl_mlm_slot::where("slot_no", $return)->count();
-            $loop++;
+            $name = "3X";
+
+            $count_exist      = 1;
+            $loop             = 1;
+            $return           = "";
+            $count_exist_slot = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->count();
+            while($count_exist != 0)
+            {
+                if($loop >= 999999 || $count_exist_slot >= 999999)
+                {
+                    $suffix_number  = rand(999999,$loop);
+                    $return         = $name . $suffix_number;
+                }
+                else
+                {
+                    $return         = $name . rand(0,9). rand(0,9). rand(0,9). rand(0,9). rand(0,9). rand(0,9);
+                }
+
+                $count_exist    = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->where("slot_no", $return)->count();
+                $loop++;
+            }
+            
+            return $return;
         }
-        
-        return $return;
+        else if($this->shop_theme == "brown")
+        {
+            $name = strtoupper(substr($first_name, 0, 3));
+
+            $count_exist      = 1;
+            $loop             = 1;
+            $return           = "";
+            while($count_exist != 0)
+            {
+                if($loop >= 9999)
+                {
+                    $suffix_number  = rand(9999,$loop);
+                    $return         = $name . $suffix_number;
+                }
+                else
+                {
+                    $return         = $name . rand(0,9). rand(0,9). rand(0,9). rand(0,9);
+                }
+
+                $count_exist    = Tbl_mlm_slot::where("shop_id",$this->shop_info->shop_id)->where("slot_no", $return)->count();
+                $loop++;
+            }
+            
+            return $return;
+        }
+        else
+        {  
+            $name = $first_name . substr($last_name, 0, 1);
+            $name = preg_replace("/[^A-Za-z0-9]/", "", $name);
+            $name = strtolower($name);
+
+            $count_exist = 1;
+            $loop = 1;
+            $return = "";
+
+            while($count_exist != 0)
+            {
+                $suffix_number  = str_pad($loop, 2, '0', STR_PAD_LEFT);
+                $return         = $name . $suffix_number;
+                $count_exist    = Tbl_mlm_slot::where("slot_no", $return)->count();
+                $loop++;
+            }
+            
+            return $return;
+        }
     }    
     public function postFinalVerify()
     {
@@ -2919,28 +3044,35 @@ class ShopMemberController extends Shop
 
     public function load_view_for_members($view, $data, $memberonly = true)
     {
-        $agent = new Agent();
-
-        if($agent->isMobile())
+        if ($this->shop_theme == "brown") 
         {
-            if (strpos($view, 'member2.') !== false)
+            $agent = new Agent();
+
+            if($agent->isMobile())
             {
-                $new_view = str_replace("member2.", "member2.mobile.", $view);
+                if (strpos($view, 'member2.') !== false)
+                {
+                    $new_view = str_replace("member2.", "member2.mobile.", $view);
+                }
+                else
+                {
+                    $new_view = str_replace("member.", "member.mobile.", $view);
+                }
+
+                if(view()->exists($new_view))
+                {
+                    $view = $new_view;
+                }
+            }
+
+            if ($memberonly) 
+            {
+                return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
             }
             else
             {
-                $new_view = str_replace("member.", "member.mobile.", $view);
+                return view($view, $data);
             }
-
-            if(view()->exists($new_view))
-            {
-                $view = $new_view;
-            }
-        }
-
-        if ($memberonly) 
-        {
-            return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
         }
         else
         {

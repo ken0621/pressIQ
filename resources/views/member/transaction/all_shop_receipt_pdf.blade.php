@@ -148,7 +148,7 @@
                     </div>
                 </div>
                 <div class="holder">
-                    <div class="total-summary text-right">
+                    <div class="total-summary text-right" {{isset($total_tendered) ? '' : $total_tendered = 0}}>
                         <div class="rows">TENDERED PAYMENT : PHP {{ number_format($total_tendered, 2) }}</div>
                         <div class="rows">TOTAL PAID AMOUNT : PHP {{ number_format($list->transaction_total, 2) }}</div>
                         <div class="rows">CHANGE : PHP {{ number_format($total_tendered - $list->transaction_total, 2) }}</div>
@@ -156,11 +156,11 @@
                 </div>
             </div>
         </div>
-        <footer>BIR PERMIT NO. : XXXX-XXX-XXXXXX-YYY
-                Date Issued : February 21, 2014
-                Approved Series FR : 10000001 TO: 19999999
-                This Sales Invoice shall be valid for five (5) years from the date of ATP
-        </footer>
+        {{-- <footer>BIR PERMIT NO. : XXXX-XXX-XXXXXX-YYY
+Date Issued : February 21, 2014
+Approved Series FR : 10000001 TO: 19999999
+This Sales Invoice shall be valid for five (5) years from the date of ATP
+        </footer> --}}
     </div>
 </body>
 </html>

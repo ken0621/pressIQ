@@ -26,8 +26,7 @@
           <button class="btn btn-custom-white pull-right btn-xs popup" link="/member/payroll/payroll_process/confirm_action_payroll/posted/{{$period['period']->payroll_period_company_id}}" size="sm">Post</button>
           <button class="btn btn-custom-red-white pull-right btn-xs margin-right-10 popup" link="/member/payroll/payroll_process/confirm_action_payroll/unregister/{{$period['period']->payroll_period_company_id}}" size="sm">Unregister</button>
           <button class="btn btn-custom-white-gray pull-right btn-xs margin-right-10 popup" link="" size="sm"><i class="fa fa-comments" aria-hidden="true"></i></button>
-         
-          </div>
+        </div>
         <div class="width-100 display-table">
           <div class="triangle-top-right"></div>
           <div class="custom-panel-body">

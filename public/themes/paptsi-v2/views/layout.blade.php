@@ -11,7 +11,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
-        <link rel="icon" href="/themes/{{ $shop_theme }}/img/nice-icon.png" type="image/png" />
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/header-logo.jpg" type="image/jpg" />
     
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> 
@@ -80,7 +80,7 @@
             <div class="row clearfix">
                 <div class="col-md-2">
 
-                    <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
+                    <div id="nav_list" style="display: none;"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
 
 
 

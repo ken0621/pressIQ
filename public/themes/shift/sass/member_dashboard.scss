@@ -17,6 +17,11 @@ $text-dark: #272c2f;
 		vertical-align: middle;
 		display: inline-block;
 	}
+	
+	.align-custom
+	{
+		text-align: center;
+	}
 
 	.brown-icon-money
 	{
@@ -117,7 +122,6 @@ $text-dark: #272c2f;
 	}
 	.chart-legend
 	{
-
 		.holder
 		{
 			font-size: 15px;
@@ -139,7 +143,7 @@ $text-dark: #272c2f;
 				letter-spacing: 0.5px;
 				font-weight: $semi-bold;
 				font-family: $content-text;
-				color: #019771;
+				color: #D4B044;
 
 				span
 				{

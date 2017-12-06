@@ -1,4 +1,4 @@
-@if(count($_direct) > 0)
+{{-- @if(count($_direct) > 0)
 	@foreach($_direct as $direct)
 	
 	<div class="row clearfix">
@@ -39,3 +39,4 @@
 @else
 	<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
 @endif
+ --}}

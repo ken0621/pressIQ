@@ -232,4 +232,12 @@ document.getElementById("defaultOpen").click();
 
 <script>tinymce.init({ selector:'textarea' });</script>
 
+<script type="text/javascript">
+   $(document).on('click','#btn_add_recipient',function()
+    {
+        toastr.success('success');
+
+    });
+</script>
+
 @endsection

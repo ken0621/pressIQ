@@ -526,7 +526,6 @@ class ShopMemberController extends Shop
       $data["description"]               = $request->description;
       $data["user_id"]                   = session("pr_user_id");
       Tbl_press_release_recipient::insert($data); 
-      Session::flash('message', 'Recipient Successfully Added!');
       return  redirect::back();
     }
 

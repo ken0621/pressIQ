@@ -63,29 +63,8 @@
             <div class="form-group order-tags"></div>
             <div class="clearfix">
                 <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-condensed">
-                            <thead style="text-transform: uppercase">
-                                <tr>
-                                    <th class="text-center">Used Code</th>
-                                    <th class="text-center" width="400px">Date Used</th>
-                                    <th class="text-center" >Amount</th>
-                                    <th class="text-center" >Commission Percentage</th>
-                                    <th class="text-center" >Receivable Amount</th>
-                                    <th class="text-center" ></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="text-center">Sample Name</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center">1000.00</td>
-                                    <td class="text-center"><a href="#">Modify</a></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="table-responsive load-table-here">
+                        
                     </div>
                 </div>
             </div>
@@ -95,40 +74,11 @@
 </div>
 @endsection
 <script type="text/javascript" src="/assets/themes/js/jquery.min.js"></script>
-<script type="text/javascript" src="/assets/js/commission_report.js"></script>
+<script type="text/javascript" src="/assets/js/commission_report.js?v=3"></script>
 <script type="text/javascript">
     function success(data)
     {
         toastr.success('Setting saved');
-    }
-</script>
-
-<script type="text/javascript">
-    $(document).ready(function()
-    {
-        event_change_warehouse();
-    });
-    function event_change_warehouse()
-    {
-        $('.select_current_warehouse').change(function()
-        {
-            action_change_warehouse();
-        });
-    }
-    function action_change_warehouse()
-    {
-        var currentWarehouse = $('.select_current_warehouse').val();
-        $('.commission-percentage').attr('disabled',true);
-        $.ajax(
-        {
-            url: '/member/merchant/commission-report/getpercentage',
-            type: 'get',
-            data: 'warehouse_id='+currentWarehouse,
-            success: function(data)
-            {
-                $('.commission-percentage').val(data);
-                $('.commission-percentage').removeAttr('disabled');
-            }
-        });
+        commission_report.action_load_table();
     }
 </script>

@@ -1056,7 +1056,7 @@ class Warehouse2
         }
         return $return;
     }
-    public static function load_all_warehouse_select($shop_id, $user_id, $parent = 0)
+    public static function load_all_warehouse_select($shop_id, $user_id, $parent = 0, $warehouse_id = 0)
     {
         $return = null;
         $warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('warehouse_parent_id', $parent)->get();
@@ -1066,11 +1066,12 @@ class Warehouse2
             if($check_if_owned)
             {
                 $data['warehouse'] = $value;
+                $data['warehouse_id'] = $warehouse_id;
                 $return .= view('member.warehousev2.load_warehouse_v2',$data)->render();
                 $count = Tbl_warehouse::where("warehouse_parent_id", $value->warehouse_id)->count();
                 if($count != 0)
                 {
-                    $return .= Self::load_all_warehouse_select($shop_id, $user_id, $value->warehouse_id);
+                    $return .= Self::load_all_warehouse_select($shop_id, $user_id, $value->warehouse_id, $warehouse_id);
                 } 
             } 
         }

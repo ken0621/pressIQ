@@ -65,15 +65,14 @@ class WarehouseControllerV2 extends Member
         $access = Utilities::checkAccess('warehouse-inventory', 'edit');
         if($access == 1)
         { 
-
-           $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
             $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$id)->first();
             if(!$check_if_owned)
             {
                 return $this->show_no_access_modal();
             }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
-     
+            
+            $data['_warehouse'] = Warehouse2::load_all_warehouse_select($this->user_info->shop_id, $this->user_info->user_id, 0, $data['warehouse']->warehouse_parent_id);
             return view("member.warehousev2.edit_warehouse",$data);
         }
         else
@@ -89,6 +88,13 @@ class WarehouseControllerV2 extends Member
 
         $up_warehouse["warehouse_name"] = Request::input("warehouse_name");
         $up_warehouse["warehouse_address"] = Request::input("warehouse_address");
+        $up_warehouse["warehouse_parent_id"] = Request::input("warehouse_parent_id");
+
+        if($up_warehouse['warehouse_parent_id'])
+        {            
+            $up_warehouse["warehouse_level"] = Tbl_warehouse::where('warehouse_id', $up_warehouse['warehouse_parent_id'])->value('warehouse_level');
+            $up_warehouse["warehouse_level"]++;
+        }
 
         Tbl_warehouse::where("warehouse_id",Request::input("warehouse_id"))->update($up_warehouse);
 

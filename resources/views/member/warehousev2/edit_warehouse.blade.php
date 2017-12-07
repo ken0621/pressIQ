@@ -17,9 +17,7 @@
             <div class="col-md-6">            
                 <label>Is Sub Warehouse of :</label>
                 <select class="form-control select-warehouse" name="warehouse_parent_id">
-                    @foreach($_warehouse as $ware)
-                        <option value="{{$ware->warehouse_id}}">{{$ware->warehouse_name}}</option>
-                    @endforeach
+                    @include('member.warehousev2.load_warehouse_v2_select')
                 </select>
             </div>
         </div>

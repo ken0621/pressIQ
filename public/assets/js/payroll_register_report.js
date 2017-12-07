@@ -42,6 +42,7 @@ function payroll_register_report()
 			success: function(data)
 				{
 					$(".payroll_register_report_table").html(data);
+				
 				}
 			});
 	}

@@ -16,6 +16,8 @@ use App\Models\Tbl_payroll_overtime_rate;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_shift_time;
 use App\Models\Tbl_payroll_shift_day;
+use App\Models\Tbl_payroll_leave_schedulev3;
+
 use App\Globals\Payroll2;
 use App\Globals\Payroll;
 use App\Globals\Utilities;
@@ -125,11 +127,7 @@ class EmployeeController extends PayrollMember
             return Redirect::to('/employee_profile')->with('warning', 'testing');
         }
 	}
-	public function employee_summary_of_leave()
-	{
-		$data['page']	= 'Summary of Leave';
-		return view('member.payroll2.employee_dashboard.employee_summary_of_leave',$data);
-	}
+
 	public function employee_official_business()
 	{
 		$data['page']	= 'Official Business Form';
@@ -207,12 +205,7 @@ class EmployeeController extends PayrollMember
 		//$data['shift'] = Tbl_payroll_shift_time::ShiftTime()->where("tbl_payroll_shift_day.shift_code_id", $data['shift']->shift_code_id)->get();
 		return view('member.payroll2.employee_dashboard.employee_overtime_view_shift',$data);
 	}
-	public function authorized_access_leave()
-	{
-		$data['page']	= 'Authorized Access Leave';
-		$data["_leave_name"] = tbl_payroll_leave_temp::where("shop_id", $this->employee_info->shop_id)->get();
-		return view('member.payroll2.employee_dashboard.authorized_access_leave',$data);
-	}
+
 	public function authorized_access_over_time()
 	{
 		$data['page']	= 'Authorized Access Over Time';
@@ -227,12 +220,6 @@ class EmployeeController extends PayrollMember
 	{
 		$data['page']	= 'Authorized Access Approver';
 		return view('member.payroll2.employee_dashboard.authorized_access_approver',$data);
-	}
-	public function employee_leave_management()
-	{
-		$data['page']			= 'Leave Management';
-		$data["_leave_name"] 	= tbl_payroll_leave_temp::where("shop_id", $this->employee_info->shop_id)->get();
-	  	return view('member.payroll2.employee_dashboard.employee_leave_management',$data);
 	}
 	
 	public function employee_overtime_management()
@@ -365,17 +352,7 @@ class EmployeeController extends PayrollMember
 		$data['page']	= 'Official Business Management';
 		return view('member.payroll2.employee_dashboard.sample',$data);
 	}
-	public function employee_leave_application()
-	{
-		$data['page']		= 'Employee Leave Application';
-        $data["company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
-    	return view('member.payroll2.employee_dashboard.employee_leave_application',$data);
-    }
-    public function create_employee_leave()
-    {
-		$data['page']	= 'Create Employee Leave';
-    	return view('member.payroll2.employee_dashboard.create_employee_leave',$data);
-    }
+
     public function create_employee_overtime()
     {
 		$data['page']	= 'Create Employee Overtime';
@@ -397,6 +374,44 @@ class EmployeeController extends PayrollMember
 		$data['employee'] 	= Self::employee_profile();
     	return view('member.payroll2.employee_dashboard.updated_layout',$data);
     }
+
+    //leave
+    public function save_leave()
+    {
+
+    	
+    }
     
+    public function employee_summary_of_leave()
+	{
+		$data['page']	= 'Summary of Leave';
+		return view('member.payroll2.employee_dashboard.employee_summary_of_leave',$data);
+	}
+
+	public function authorized_access_leave()
+	{
+		$data['page']	= 'Authorized Access Leave';
+		$data["_leave_name"] = tbl_payroll_leave_temp::where("shop_id", $this->employee_info->shop_id)->get();
+		return view('member.payroll2.employee_dashboard.authorized_access_leave',$data);
+	}
+
+	public function employee_leave_management()
+	{
+		$data['page']			= 'Leave Management';
+		$data["_leave_name"] 	= tbl_payroll_leave_temp::where("shop_id", $this->employee_info->shop_id)->get();
+	  	return view('member.payroll2.employee_dashboard.employee_leave_management',$data);
+	}
+
+	public function employee_leave_application()
+	{
+		$data['page']		= 'Employee Leave Application';
+        $data["company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
+    	return view('member.payroll2.employee_dashboard.employee_leave_application',$data);
+    }
+    public function create_employee_leave()
+    {
+		$data['page']	= 'Create Employee Leave';
+    	return view('member.payroll2.employee_dashboard.create_employee_leave',$data);
+    }
 }
 

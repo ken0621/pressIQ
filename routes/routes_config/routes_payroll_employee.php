@@ -47,3 +47,7 @@ Route::any('employee_timesheet_pdf/{payroll_period_id}','Member\PayrollEmployee\
 
 Route::any('sample', 'Member\PayrollEmployee\EmployeeController@sample');
 Route::any('updated_layout', 'Member\PayrollEmployee\EmployeeController@updated_layout');
+
+
+//leave
+Route::any('/leave/save_leave', 'Member\PayrollEmployee\EmployeeController@save_leave');

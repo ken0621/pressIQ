@@ -5,6 +5,7 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Payroll Register Columns</h4>
         <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="hidden" class="period_company_id" name="period_company_id" value="{{$period_company_id}}">
     </div>
     <div class="modal-body form-horizontal">
         <div class="form-group">
@@ -28,6 +29,9 @@
                 </div>
                 <div class="checkbox">
                     <label><input type="checkbox" name="basic_pay" value="1" {{$column->basic_pay == 1 ? 'checked' : 'unchecked'}}>Basic Pay</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="rendered_days" value="1" {{$column->rendered_days == 1 ? 'checked' : 'unchecked'}}>Rendered Days</label>
                 </div>
                 <div class="checkbox">
                     <label><input type="checkbox" name="cola" value="1" {{$column->cola == 1 ? 'checked' : 'unchecked'}}>Cola</label>
@@ -134,3 +138,5 @@
         <button class="btn btn-custom-primary btn-submit" type="submit">Save</button>
     </div>
 </form>
+{{-- <script type="text/javascript" src="/assets/js/ajax_offline.js"></script> --}}
+<script type="text/javascript" src="/assets/js/payroll_register_report.js"></script>

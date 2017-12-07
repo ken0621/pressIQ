@@ -526,13 +526,16 @@ class PayrollReportController extends Member
 			}
 		}
 
+		// dd(unserialize($data["_employee"][0]["cutoff_input"]));
 		$data = $this->get_total_payroll_register($data);
+		// dd($data);
 		$data['columns'] = Tbl_payroll_register_column::select('*')->get();
 		return view('member.payrollreport.payroll_register_report_table', $data);
 	}
 
-	public function modal_filter_register_columns()
+	public function modal_filter_register_columns($period_company_id)
 	{
+			$data['period_company_id'] = $period_company_id;
 			$data['columns'] = Tbl_payroll_register_column::select('*')->get();
 			return view('member.payrollreport.modal_filter_register_columns',$data);
 	}
@@ -545,6 +548,7 @@ class PayrollReportController extends Member
 			$update['late']							= 0;
 			$update['undertime']					= 0;
 			$update['basic_pay']					= 0;
+			$update['rendered_days']				= 0;
 			$update['cola']							= 0;
 			$update['overtime_pay']					= 0;
 			$update['night_differential_pay']		= 0;
@@ -601,6 +605,10 @@ class PayrollReportController extends Member
 			if(!empty(request::input('basic_pay')))
 			{
 				$update['basic_pay'] = request::input('basic_pay');
+			}
+			if(!empty(request::input('rendered_days')))
+			{
+				$update['rendered_days'] = request::input('rendered_days');
 			}
 			if(!empty(request::input('cola')))
 			{
@@ -730,10 +738,11 @@ class PayrollReportController extends Member
 			{
 				$update['phic_er'] = request::input('phic_er');
 			}
-	         Tbl_payroll_register_column::where('payroll_register_columns_id', 6)->update($update);
+
+	        Tbl_payroll_register_column::where('payroll_register_columns_id', 6)->update($update);
 
 	      $return['status'] = 'success';
-	      $return['function_name']      = 'payroll_register_report.action_register_report_table';
+	      $return['function_name']      = 'payroll_register_columns.action_register_report_table';
           return json_encode($return);
 	}
 
@@ -824,6 +833,7 @@ class PayrollReportController extends Member
 		$absent_total 		 				= 0;
 		$nightdiff_total 		 			= 0;
 		$restday_total 		 				= 0;
+		$rendered_days_total				= 0;
 
 		$total_adjustment_allowance					= 0;
 		$total_adjustment_bonus						= 0;
@@ -1180,6 +1190,7 @@ class PayrollReportController extends Member
 				$absent 		 = 0;
 				$nightdiff 		 = 0;
 				$restday 		 = 0;
+				$rendered_days   = 0;
 
 				$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
 				$nd_category = array('Legal Holiday Rest Day ND','Legal Holiday ND','Special Holiday Rest Day ND','Special Holiday ND','Rest Day ND','Night Differential');
@@ -1218,6 +1229,13 @@ class PayrollReportController extends Member
 						}
 					}
 
+					if(isset($value->compute->rendered_days))
+					{
+					
+							$rendered_days  		+= Payroll2::payroll_number_format($value->compute->rendered_days,2);
+						
+					}
+
 					if (isset($value->compute->_breakdown_deduction)) 
 					{
 						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
@@ -1253,6 +1271,7 @@ class PayrollReportController extends Member
 				$data["_employee"][$key]->undertime 		= $undertime;
 				$data["_employee"][$key]->nightdiff 		= $nightdiff;
 				$data["_employee"][$key]->restday 			= $restday;
+				$data["_employee"][$key]->rendered_days     = $rendered_days;
 
 				$overtime_total 		 		+=	Payroll2::payroll_number_format($overtime,2);
 				$special_holiday_total 			+=	Payroll2::payroll_number_format($regular_holiday,2);
@@ -1263,6 +1282,7 @@ class PayrollReportController extends Member
 				$absent_total 		 			+=	Payroll2::payroll_number_format($absent,2);
 				$nightdiff_total 		 		+=	Payroll2::payroll_number_format($nightdiff,2);
 				$restday_total 		 			+=	Payroll2::payroll_number_format($restday,2);
+				$rendered_days_total	        +=	Payroll2::payroll_number_format($rendered_days,2);
 			}
 
 			if (isset($employee["cutoff_breakdown"]->_breakdown)) 
@@ -1378,7 +1398,7 @@ class PayrollReportController extends Member
 		$data["absent_total"] 		 				= $absent_total;
 		$data["nightdiff_total"] 		 			= $nightdiff_total;
 		$data["restday_total"] 		 				= $restday_total;
-
+		$data["rendered_days_total"]				= $rendered_days_total;
 
 		$data["total_adjustment_allowance"]				= $total_adjustment_allowance;	
 		$data["total_adjustment_bonus"]					= $total_adjustment_bonus;		

@@ -2862,7 +2862,14 @@ class Payroll2
 		/*END BREAKDOWN DEDUCTIONS*/
 
 		$return->subtotal_after_addition	= $subtotal_after_addition;
-		$return->rendered_days 				= @($time_spent/$target_float);
+		if($time_spent > $target_float)
+		{
+			$return->rendered_days 		    = 1;
+		}
+		else
+		{
+			$return->rendered_days 		    = @($time_spent/$target_float);
+		}
 		$return->cola						= $cola->cola_day_pay;
 		$return->cola_daily 				= $cola->cola_daily;
 		$return->total_day_income_plus_cola = $cola->cola_plus_daily_rate;

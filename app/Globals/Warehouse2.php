@@ -1073,7 +1073,7 @@ class Warehouse2
                 {
                     $return .= Self::load_all_warehouse_select($shop_id, $user_id, $value->warehouse_id, $warehouse_id);
                 } 
-            } 
+            }
         }
         return $return;
     }

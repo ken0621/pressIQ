@@ -31,7 +31,7 @@
 			<div class="col-md-6">
 
 				<div class="square-container">
-					<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('members/enter-code')">Create New Slot</a></div>
+					<div class="title">Wallet Summary <a href="javascript:" class="title-button" onclick="action_load_link_to_modal('members/enter-code')"><div>Create New Slot</div></a></div>
 					<div class="sub-container">
 						<div class="table-holder">
 							<div class="chart-legend">
@@ -161,7 +161,7 @@
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="square-container">
-					<div class="title">Newest Direct Referrals  <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/direct'">View All Direct</a></div>
+					<div class="title">Newest Direct Referrals  <a href="javascript:" class="title-button" onclick="location.href='/members/direct'"><div>View All Direct</div></a></div>
 					<div class="sub-container border-holder">
 						<div class="clearfix wow hidden">
 							<div class="badge right">6 New Members</div>
@@ -176,7 +176,7 @@
 									<div class="col-md-8">
 										<div class="color">
 											<img src="{{ $direct->profile_image }}">
-										</div>	
+										</div>
 										<div class="text">
 											<div class="pull-left">
 												<div style="max-width: 250px;" class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
@@ -205,7 +205,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="square-container">
-					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button" onclick="location.href='/members/report'"><div>View All Rewards</div></a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)

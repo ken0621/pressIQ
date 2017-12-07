@@ -259,7 +259,7 @@ class ShopProductController extends Shop
 
         if ($this->shop_theme == "3xcell") 
         {
-            if (Self::$customer_info->customer_id) 
+            if (isset(Self::$customer_info->customer_id) && Self::$customer_info->customer_id) 
             {
                 foreach ($product as $key => $value) 
                 {

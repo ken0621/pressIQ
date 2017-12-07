@@ -27,13 +27,13 @@
 							</div>
 						</div>
 						<!-- PROMO CONTAINER -->
-						<div class="promo-container">
+						{{-- <div class="promo-container">
 							<div class="title-container">Promo</div>
 							<div class="promo-content">
 								<img src="/themes/{{ $shop_theme }}/img/promo-img.png">
 								<div class="learn-more-button">LEARN MORE</div>
 							</div>
-						</div>
+						</div> --}}
 					</div>
 					<div class="product-list-holder col-md-9 col-sm-12 col-xs-12">
 						<div class="prod-list-container">

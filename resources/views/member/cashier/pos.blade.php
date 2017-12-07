@@ -159,7 +159,7 @@
                                 @include('member.cashier.pos_payment_method')
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-4 text-right" for="email">Add Pyament</label>
+                                <label class="control-label col-sm-4 text-right" for="email">Add Payment</label>
                                 <div class="col-sm-8">
                                     <input type="hidden" name="payment_method" class="input-payment-method" value="cash">
                                     <a href="javascript:" class="btn btn-primary cash btn-payment" onClick="select_payment('cash')">Cash</a>

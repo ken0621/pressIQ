@@ -50,11 +50,11 @@
                     <div class="opportunity-holder">
                         <div class="title"><img src="/themes/{{ $shop_theme }}/img/icon/cloud.png"> Downloadable Forms</div>
                         <ul>
-                            <li><a href="javascript:">SHIFT Distributor Application Form</a></li>
-                            <li><a href="javascript:">ID Application Form</a></li>
-                            <li><a href="javascript:">Password Reset / Retreival Form</a></li>
-                            <li><a href="javascript:">Spelling Correction Form</a></li>
-                            <li><a href="javascript:">SHIFT Cares Claim Form</a></li>
+                            <li><a target="_blank" href="javascript:">SHIFT Distributor Application Form</a></li>
+                            <li><a target="_blank" href="javascript:">ID Application Form</a></li>
+                            <li><a target="_blank" href="javascript:">Password Reset / Retreival Form</a></li>
+                            <li><a target="_blank" href="javascript:">Spelling Correction Form</a></li>
+                            <li><a target="_blank" href="javascript:">SHIFT Cares Claim Form</a></li>
                         </ul>
                     </div>
                 </div>
@@ -62,11 +62,11 @@
                     <div class="opportunity-holder">
                         <div class="title"><img src="/themes/{{ $shop_theme }}/img/icon/powerpoint.png"> Shift Business Presentation</div>
                         <ul>
-                            <li><a href="javascript:">SHIFT Business Presentation</a></li>
+                            <li><a target="_blank" href="javascript:">SHIFT Business Presentation</a></li>
                         </ul>
                         <div class="title" style="margin-top: 60px;">Shift Cellcare Presentation</div>
                         <ul>
-                            <li><a href="javascript:">CELLCARE Complete Presentation</a></li>
+                            <li><a target="_blank" href="javascript:">CELLCARE Complete Presentation</a></li>
                         </ul>
                     </div>
                 </div>

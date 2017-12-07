@@ -27,6 +27,7 @@ use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_leave_schedule;
+use App\Models\Tbl_payroll_journal_tag;
 
 use DateTime;
 
@@ -4935,14 +4936,71 @@ class Payroll2
 
 
 
+	public static function get_total_allowance_for_a_year($employee_id, $year , $category)
+	{
+		$_employee = Tbl_payroll_time_keeping_approved::EmployeePeriod($employee_id)->where('tbl_payroll_period.year_contribution',2017)->get();
+		$_employee = Payroll2::unserialize_payroll_timesheet_approve_data($_employee);
+
+		$total_allowance_year_taxable 		= 0;
+		$total_allowance_year_hidden 		= 0;
+		$total_allowance_year_none_taxable 	= 0;
+
+		foreach ($_employee as $key => $employee) 
+		{
+			foreach ($employee['cutoff_breakdown']->_breakdown as $key => $cutoff_breakdown) 
+			{
+				
+				if (isset($cutoff_breakdown['record_type'])) 
+				{
+					//if non taxable
+					if ($category == "Non-Taxable" && $cutoff_breakdown['deduct.taxable_salary'] == true) 
+					{
+						if ($cutoff_breakdown['record_type'] == "allowance" || $cutoff_breakdown['record_type'] == "allowance_de_minimis") 
+						{
+							$total_allowance_year_none_taxable += $cutoff_breakdown['amount'];
+						}
+					}
+					if ($category == "Taxable") 
+					{
+						# code...
+					}
+					if ($category == "Hidden") 
+					{
+						
+					}
+					
+				}
+			}
+		}
+
+		return $total_allowance_year_none_taxable;
+	}
+
+
+	public static function unserialize_payroll_timesheet_approve_data($_approve_time_sheet)
+	{
+		foreach ($_approve_time_sheet as $key => $approve_time_sheet) 
+		{
+			$_approve_time_sheet[$key]['cutoff_input'] 		= unserialize($approve_time_sheet['cutoff_input']);
+			$_approve_time_sheet[$key]['cutoff_compute'] 	= unserialize($approve_time_sheet['cutoff_compute']);
+			$_approve_time_sheet[$key]['cutoff_breakdown'] 	= unserialize($approve_time_sheet['cutoff_breakdown']);
+		}
+
+		return $_approve_time_sheet;
+	}
+
+
+
 	public static function cutoff_breakdown_allowance_v2($return, $data)
 	{
-
 		$_allowance = Tbl_payroll_employee_allowance_v2::where("payroll_employee_id", $data["employee_id"])->where('tbl_payroll_allowance_v2.payroll_allowance_archived',0)->joinAllowance()->get();
-	
-		foreach($_allowance as $allowance)
+		$total_allowance_year_non_taxable = Payroll2::get_total_allowance_for_a_year($data["employee_id"], $data["period_info"]["year_contribution"], "Non-Taxable");
+		
+		foreach($_allowance as $key => $allowance)
 		{
 			$allowance_period = strtolower(str_replace(' ', '_', $allowance->payroll_allowance_add_period));
+
+			$deminimis_limit_allowance = 82000; 
 
 			if ($allowance_period == $data['period_info']['period_count'] || $allowance->payroll_allowance_add_period == "Every Period") 
 			{
@@ -4951,49 +5009,13 @@ class Payroll2
 
 				if($allowance->payroll_allowance_type == "fixed")
 				{
-					$val["label"] 	= $allowance_name;
-					$val["type"] 	= "additions";
-					$val["record_type"] = "allowance";
 					$val["amount"] 	= $allowance_amount;
-
-					if($allowance->payroll_allowance_category == "Taxable")
-					{
-						$val["add.gross_pay"] = true;
-						$val["deduct.gross_pay"] = false;
-						$val["add.taxable_salary"] = false;
-						$val["deduct.taxable_salary"] = false;
-						$val["add.net_pay"] = false;
-						$val["deduct.net_pay"] = false;
-					}
-					elseif ($allowance->payroll_allowance_category == "Hidden") {
-						$val["add.gross_pay"] = false;
-						$val["deduct.gross_pay"] = false;
-						$val["add.taxable_salary"] = false;
-						$val["deduct.taxable_salary"] = false;
-						$val["add.net_pay"] = true;
-						$val["deduct.net_pay"] = false;
-					}
-					else
-					{
-						$val["add.gross_pay"] = true;
-						$val["deduct.gross_pay"] = false;
-						$val["add.taxable_salary"] = false;
-						$val["deduct.taxable_salary"] = true;
-						$val["add.net_pay"] = true;
-						$val["deduct.net_pay"] = false;
-					}
-
-					array_push($return->_breakdown, $val);
-					$val = null;
 				}
 
 				else if($allowance->payroll_allowance_type == 'pro_rated')
 				{
 					$actual_gross_pay = 0;
 					$standard_gross_pay = 0;
-					$val["label"] = $allowance_name;
-					$val["type"] = "additions";
-					$val["record_type"] = "allowance";
 					$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
 					
 					if ($allowance->basic_pay==1) 
@@ -5101,43 +5123,73 @@ class Payroll2
 
 					// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
 
-					if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
-					{
-						$val["amount"] = $val["amount"] * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
-					}
-
-					if($allowance->payroll_allowance_category == "Taxable")
-					{
-						$val["add.gross_pay"] = true;
-						$val["deduct.gross_pay"] = false;
-						$val["add.taxable_salary"] = false;
-						$val["deduct.taxable_salary"] = false;
-						$val["add.net_pay"] = false;
-						$val["deduct.net_pay"] = false;
-					}
-					elseif ($allowance->payroll_allowance_category == "Hidden") {
-						$val["add.gross_pay"] = false;
-						$val["deduct.gross_pay"] = false;
-						$val["add.taxable_salary"] = false;
-						$val["deduct.taxable_salary"] = false;
-						$val["add.net_pay"] = true;
-						$val["deduct.net_pay"] = false;
-					}
-					else
-					{
-						$val["add.gross_pay"] = true;
-						$val["deduct.gross_pay"] = false;
-						$val["add.taxable_salary"] = false;
-						$val["deduct.taxable_salary"] = true;
-						$val["add.net_pay"] = true;
-						$val["deduct.net_pay"] = false;
-					}
 					
-					array_push($return->_breakdown, $val);
-					$val = null;
 				}
+				else if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
+				{
+					$val["amount"] = $val["amount"] * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
+				}
+
+				$val["label"] 	= $allowance_name;
+				$val["type"] 	= "additions";
+				$val["record_type"] = "allowance";
+				
+				/*Start Get Type*/
+				if($allowance->payroll_allowance_category == "Taxable")
+				{
+					$val["add.gross_pay"] = true;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = false;
+					$val["add.net_pay"] = false;
+					$val["deduct.net_pay"] = false;
+				}
+				elseif ($allowance->payroll_allowance_category == "Hidden") 
+				{
+					$val["add.gross_pay"] = false;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = false;
+					$val["add.net_pay"] = true;
+					$val["deduct.net_pay"] = false;
+				}
+				else
+				{
+					$val["add.gross_pay"] = true;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = true;
+					$val["add.net_pay"] = true;
+					$val["deduct.net_pay"] = false;
+
+					/*Start for deminis allowance payroll group*/
+					if ($total_allowance_year_non_taxable < $deminimis_limit_allowance) 
+					{
+						//split if total allowance plus val for allowance now is greater than the limit
+						if (($total_allowance_year_non_taxable + $val['amount']) > $deminimis_limit_allowance) 
+						{
+							$val["record_type"] 		 = "allowance_de_minimis";
+							$excess_de_minimis_allowance = ($total_allowance_year_non_taxable + $val['amount']) - $deminimis_limit_allowance;
+							$val['amount'] 				 = $val['amount'] - $excess_de_minimis_allowance;
+							$total_allowance_year_non_taxable += $val['amount'];
+							array_push($return->_breakdown, $val);
+							
+							$val["record_type"] 		 = "allowance";
+							$val['amount'] 				 = $excess_de_minimis_allowance;
+						}
+						else
+						{
+							$total_allowance_year_non_taxable += $val['amount'];
+							$val["record_type"] 		 	  = "allowance_de_minimis";
+						}
+					}
+					/*End for deminis allowance payroll group*/
+				}
+				/*End Get Type of allowance*/
+				
+				array_push($return->_breakdown, $val);
+				$val = null;
 			}
-			
 		}
 		
 		return $return;
@@ -6960,6 +7012,678 @@ class Payroll2
 		return $data;
 	}
 
+
+
+
+	public static function get_total_payroll_register($data)
+	{
+		$test = array();
+		$total_gross_basic 			= 0;
+		$total_basic 				= 0;
+		$total_gross	 			= 0;
+		$total_cutoff_basic 		= 0;
+		$total_net 					= 0;
+		$total_tax 					= 0;
+
+		$g_total_er 				= 0;
+		$g_total_ee 				= 0;
+		$g_total_ec 				= 0;
+
+		$total_sss_ee 				= 0;
+		$total_sss_er 				= 0;
+		$total_sss_ec 				= 0;
+		$total_philhealth_ee 		= 0;
+		$total_philhealth_er 		= 0;
+		$total_pagibig_ee 			= 0;
+		$total_pagibig_er 			= 0;
+		$total_deduction 			= 0;
+
+		$total_deduction_employee 	= 0;
+
+		$_other_deduction 					= null;
+		$_addition 							= null;
+		$_deduction 						= null;
+
+		$deduction_total 				= 0;
+		$cola_total 					= 0;
+		$sss_ee_total 					= 0;
+		$sss_er_total 					= 0;
+		$sss_ec_total 					= 0;
+		$hdmf_ee_total 					= 0;
+		$hdmf_er_total 					= 0;
+		$philhealth_ee_total 			= 0;
+		$philhealth_er_total 			= 0;
+		$witholding_tax_total 			= 0;
+		$adjustment_deduction_total 	= 0;
+		$adjustment_allowance_total 	= 0;
+		$allowance_total 				= 0;
+		$allowance_de_minimis_total 	= 0;
+		$cash_bond_total 				= 0;
+		$cash_advance_total				= 0;
+		$hdmf_loan_total				= 0;
+		$sss_loan_total					= 0;
+		$other_loans_total				= 0;
+
+		$overtime_total 		 			= 0;
+		$special_holiday_total 				= 0;
+		$regular_holiday_total 				= 0;
+		$leave_pay_total 	     			= 0;
+		$late_total 			 			= 0;
+		$undertime_total 		 			= 0;
+		$absent_total 		 				= 0;
+		$nightdiff_total 		 			= 0;
+		$restday_total 		 				= 0;
+
+		$total_adjustment_allowance					= 0;
+		$total_adjustment_bonus						= 0;
+		$total_adjustment_commission				= 0;
+		$total_adjustment_incentives				= 0;
+		$total_adjustment_cash_advance				= 0;
+		$total_adjustment_cash_bond					= 0;
+		$total_adjustment_additions					= 0;
+		$total_adjustment_deductions				= 0;
+		$total_adjustment_others					= 0;
+		$total_adjustment_13th_month_and_other 		= 0;
+		$total_adjustment_de_minimis_benefit 		= 0;
+
+		$time_total_time_spent				= 0;
+		$time_total_overtime				= 0;
+		$time_total_night_differential		= 0;
+		$time_total_leave_hours				= 0;
+		$time_total_undertime				= 0;
+		$time_total_late					= 0;
+		$time_total_regular_holiday			= 0;
+		$time_total_special_holiday			= 0;
+		$time_total_absent					= 0;
+
+		foreach($data["_employee"] as $key => $employee)
+		{
+			// dd(unserialize($employee["cutoff_input"]));
+			$payroll_group_salary_computation = Tbl_payroll_employee_contract::Group()->where('tbl_payroll_employee_contract.payroll_employee_id',$employee->payroll_employee_id)->first();
+
+			$total_er = $employee->sss_er + $employee->philhealth_er +  $employee->pagibig_er;
+			$total_ee = $employee->sss_ee + $employee->philhealth_ee +  $employee->pagibig_ee;
+			$total_ec = $employee->sss_ec;
+
+			$total_sss_ee 			+= Payroll2::payroll_number_format($employee->sss_ee,2);
+			$total_sss_er 			+= Payroll2::payroll_number_format($employee->sss_er,2);
+			$total_sss_ec 			+= Payroll2::payroll_number_format($employee->sss_ec,2);
+			$total_philhealth_ee 	+= Payroll2::payroll_number_format($employee->philhealth_er,2);
+			$total_philhealth_er 	+= Payroll2::payroll_number_format($employee->philhealth_er,2);
+			$total_pagibig_ee 		+= Payroll2::payroll_number_format($employee->pagibig_ee,2);
+			$total_pagibig_er 		+= Payroll2::payroll_number_format($employee->pagibig_er,2);
+
+			// $total_deduction_employee += $employee["total_deduction"];
+
+			$data["_employee"][$key] 		   = $employee;
+			$data["_employee"][$key]->total_er = $total_er;
+			$data["_employee"][$key]->total_ee = $total_ee;
+			$data["_employee"][$key]->total_ec = $total_ec;
+
+
+
+			$g_total_ec += Payroll2::payroll_number_format($total_ec,2);
+			$g_total_er += Payroll2::payroll_number_format($total_er,2);
+			$g_total_ee += Payroll2::payroll_number_format($total_ee,2);
+
+			$total_deduction += ($total_ee);
+
+			if (isset($employee->cutoff_breakdown)) 
+			{
+
+				$time_performance = unserialize($employee->cutoff_breakdown)->_time_breakdown;
+				
+				$data["_employee"][$key]->time_spent 				= $time_performance["time_spent"]["time"];
+				$data["_employee"][$key]->time_overtime 			= $time_performance["overtime"]["time"];
+				$data["_employee"][$key]->time_night_differential 	= $time_performance["night_differential"]["time"];
+				$data["_employee"][$key]->time_leave_hours 			= $time_performance["leave_hours"]["time"];
+				$data["_employee"][$key]->time_regular_holiday 		= $time_performance["regular_holiday"]["float"];
+				$data["_employee"][$key]->time_special_holiday 		= $time_performance["special_holiday"]["float"];
+
+				if ($payroll_group_salary_computation->payroll_group_code != "Flat Rate") 
+				{
+					$data["_employee"][$key]->time_absent 			= $time_performance["absent"]["float"];
+					$data["_employee"][$key]->time_undertime 		= $time_performance["undertime"]["time"];
+					$data["_employee"][$key]->time_late 			= $time_performance["late"]["time"];
+				}
+				else
+				{
+					$data["_employee"][$key]->time_absent 			= 0;
+					$data["_employee"][$key]->time_undertime 		= 0;
+					$data["_employee"][$key]->time_late 			= 0;
+				}
+
+				$time_total_time_spent				+= $time_performance["time_spent"]["time"];
+				$time_total_overtime				+= $time_performance["overtime"]["time"];
+				$time_total_night_differential		+= $time_performance["night_differential"]["time"];
+				$time_total_leave_hours				+= $time_performance["leave_hours"]["time"];
+				$time_total_regular_holiday			+= $time_performance["regular_holiday"]["float"];
+				$time_total_special_holiday			+= $time_performance["special_holiday"]["float"];
+				
+				if ($payroll_group_salary_computation->payroll_group_code != "Flat Rate") 
+				{
+					$time_total_undertime				+= $time_performance["undertime"]["time"];
+					$time_total_late					+= $time_performance["late"]["time"];
+					$time_total_absent					+= $time_performance["absent"]["float"];
+				}	
+			}
+
+
+			if(isset($employee->cutoff_breakdown))
+			{
+				$_duction_break_down = unserialize($employee->cutoff_breakdown)->_breakdown;
+				$deduction 				= 0;
+				$cola 					= 0;
+				$sss_ee 				= 0;
+				$sss_er 				= 0;
+				$sss_ec 				= 0;
+				$hdmf_ee 				= 0;
+				$hdmf_er 				= 0;
+				$philhealth_ee 			= 0;
+				$philhealth_er 			= 0;
+				$witholding_tax 		= 0;
+				$adjustment_deduction 	= 0;
+				$adjustment_allowance 	= 0;
+				$allowance 				= 0;
+				$allowance_de_minimis   = 0;
+				$cash_bond 				= 0;
+				$cash_advance			= 0;
+				$hdmf_loan				= 0;
+				$sss_loan				= 0;
+				$other_loans			= 0;
+
+				$adjustment_allowance 				= 0;
+				$adjustment_bonus 					= 0;
+				$adjustment_commission 				= 0;
+				$adjustment_incentives 				= 0;
+				$adjustment_cash_advance 			= 0;
+				$adjustment_cash_bond 				= 0;
+				$adjustment_additions 				= 0;
+				$adjustment_deductions 				= 0;
+				$adjustment_others 					= 0;
+				$adjustment_13th_month_and_other 	= 0;
+				$adjustment_de_minimis_benefit 		= 0;
+
+
+				$adj_allowance_plus_allowance				= 0;
+				$adj_de_menimis_plus_allowance_de_menimis	= 0;
+				$adj_cashbond_plus_cashbond					= 0;
+				$adj_cash_advance_plus_cash_advance			= 0;
+
+				foreach($_duction_break_down as $breakdown)
+				{
+					if($breakdown["deduct.net_pay"] == true)
+					{
+						$total_deduction_employee += $breakdown["amount"];
+						$deduction 				  += $breakdown["amount"];
+					}
+					if($breakdown["deduct.gross_pay"] == true)
+					{
+						$total_deduction_employee += $breakdown["amount"];
+						$deduction 				  += $breakdown["amount"];
+					}
+					if ($breakdown["label"] == "SSS EE" || $breakdown["label"] == "PHILHEALTH EE" || $breakdown["label"] == "PAGIBIG EE" ) 
+					{
+						$total_deduction_employee += Payroll2::payroll_number_format($breakdown["amount"], 2);
+						$deduction 			      += Payroll2::payroll_number_format($breakdown["amount"], 2);
+					}
+					if ($breakdown["label"] == "COLA") 
+					{
+						$cola 					  += Payroll2::payroll_number_format($breakdown["amount"], 2);
+					}
+					if($breakdown["label"] == "SSS EE")
+					{
+						$sss_ee 				  += Payroll2::payroll_number_format($breakdown["amount"], 2);
+					}
+					if($breakdown["label"] == "SSS ER")
+					{
+						$sss_er 				  += Payroll2::payroll_number_format($breakdown["amount"], 2);
+					}
+					if($breakdown["label"] == "SSS EC")
+					{
+						$sss_ec 				  += Payroll2::payroll_number_format($breakdown["amount"], 2);
+					}
+					if($breakdown["label"] == "PAGIBIG EE")
+					{
+						$hdmf_ee 				  += $breakdown["amount"];
+					}
+					if($breakdown["label"] == "PAGIBIG ER")
+					{
+						$hdmf_er 				  += Payroll2::payroll_number_format($breakdown["amount"], 2);
+					}
+					if($breakdown["label"] == "PHILHEALTH EE")
+					{
+						$philhealth_ee 			  += Payroll2::payroll_number_format($breakdown["amount"], 2);
+					}
+					if($breakdown["label"] == "PHILHEALTH ER")
+					{
+						$philhealth_er 			  += Payroll2::payroll_number_format($breakdown["amount"], 2);
+					}
+					if ($breakdown["label"] == "Witholding Tax") 
+					{
+						$witholding_tax 		  += Payroll2::payroll_number_format($breakdown["amount"], 2);
+					}
+					
+					if ($breakdown["type"] == "adjustment") 
+					{
+
+						if ($breakdown["deduct.net_pay"] == true) 
+						{
+							$adjustment_deduction += Payroll2::payroll_number_format($breakdown["amount"], 2);
+						}
+						else
+						{
+							$adjustment_allowance += Payroll2::payroll_number_format($breakdown["amount"], 2);
+						}
+
+
+						if (isset($breakdown["category"])) 
+						{
+							// dd(strcasecmp($breakdown["category"], "incentives") == 0);
+							if (strcasecmp($breakdown["category"], "Allowance") == 0) 
+							{
+								$adjustment_allowance += Payroll2::payroll_number_format($breakdown["amount"], 2);
+							}
+							if (strcasecmp($breakdown["category"], "Bonus") == 0) 
+							{
+								$adjustment_bonus 	  += Payroll2::payroll_number_format($breakdown["amount"], 2);
+							}
+							if (strcasecmp($breakdown["category"], "Commission") == 0) 
+							{
+								$adjustment_commission 	+= Payroll2::payroll_number_format($breakdown["amount"], 2);
+							}
+							if (strcasecmp($breakdown["category"], "incentives") == 0) 
+							{
+								$adjustment_incentives 	+= Payroll2::payroll_number_format($breakdown["amount"], 2);
+							}
+							if ($breakdown["category"] == "cash_advance") 
+							{
+								$adjustment_cash_advance += Payroll2::payroll_number_format($breakdown["amount"], 2);
+							}
+							if (strcasecmp($breakdown["category"], "cash_bond") == 0) 
+							{
+								$adjustment_cash_bond 	+= Payroll2::payroll_number_format($breakdown["amount"], 2);
+							}
+							if (strcasecmp($breakdown["category"], "additions") == 0) 
+							{
+								$adjustment_additions 	+= Payroll2::payroll_number_format($breakdown["amount"], 2);
+							}
+							if (strcasecmp($breakdown["category"], "deductions") == 0) 
+							{
+								$adjustment_deductions 	+= Payroll2::payroll_number_format( $breakdown["amount"], 2);
+							}
+							if (strcasecmp($breakdown["category"], "other") == 0) 
+							{
+								$adjustment_others 		+= $breakdown["amount"];
+							}
+							if (strcasecmp($breakdown["category"], "13th Month and Other Non Taxable Benefits") == 0) 
+							{
+								$adjustment_13th_month_and_other 	+= $breakdown["amount"];
+							}
+							if (strcasecmp($breakdown["category"], "De Minimis Benefit") == 0) 
+							{
+								$adjustment_de_minimis_benefit 		+= $breakdown["amount"];
+							}
+						}
+					}
+					if (isset($breakdown["record_type"])) 
+					{
+						if ($breakdown["record_type"] == "allowance_de_minimis") 
+						{
+							$allowance_de_minimis += Payroll2::payroll_number_format($breakdown["amount"],2);
+						}
+						if ($breakdown["record_type"] == "allowance") 
+						{
+							$allowance += Payroll2::payroll_number_format($breakdown["amount"],2);
+						}
+						if ($breakdown["record_type"] == "Cash Bond") 
+						{
+							$cash_bond += Payroll2::payroll_number_format($breakdown["amount"],2);
+						}
+						if ($breakdown["record_type"] == "Cash Advance") 
+						{
+							$cash_advance += Payroll2::payroll_number_format($breakdown["amount"],2);
+						}
+						if ($breakdown["record_type"] == "SSS Loan") 
+						{
+							$sss_loan += Payroll2::payroll_number_format($breakdown["amount"],2);
+						}
+						if ($breakdown["record_type"] == "HDMF Loan") 
+						{
+							$hdmf_loan += Payroll2::payroll_number_format($breakdown["amount"],2);
+						}
+						if ($breakdown["record_type"] == "Others") 
+						{
+							$other_loans += Payroll2::payroll_number_format($breakdown["amount"],2);	
+						}
+					}
+
+
+				}
+
+				$data["_employee"][$key]->total_deduction_employee 	= $deduction;
+				$data["_employee"][$key]->cola 						= $cola;
+				$data["_employee"][$key]->sss_ee 					= $sss_ee;
+				$data["_employee"][$key]->sss_er 					= $sss_er;
+				$data["_employee"][$key]->sss_ec 					= $sss_ec;
+				$data["_employee"][$key]->hdmf_ee 					= $hdmf_ee;
+				$data["_employee"][$key]->hdmf_er 					= $hdmf_er;
+				$data["_employee"][$key]->philhealth_ee 			= $philhealth_ee;
+				$data["_employee"][$key]->philhealth_er 			= $philhealth_er;
+				$data["_employee"][$key]->witholding_tax 			= $witholding_tax;
+				$data["_employee"][$key]->adjustment_deduction 		= $adjustment_deduction;
+				$data["_employee"][$key]->adjustment_allowance 		= $adjustment_allowance;
+				$data["_employee"][$key]->allowance_de_minimis 		= $allowance_de_minimis;
+				$data["_employee"][$key]->allowance 				= $allowance;
+				$data["_employee"][$key]->cash_bond					= $cash_bond;
+				$data["_employee"][$key]->cash_advance				= $cash_advance;
+				$data["_employee"][$key]->sss_loan					= $sss_loan;
+				$data["_employee"][$key]->hdmf_loan					= $hdmf_loan;
+				$data["_employee"][$key]->other_loans				= $other_loans;
+
+				$data["_employee"][$key]->adjustment_allowance 					= $adjustment_allowance;
+				$data["_employee"][$key]->adjustment_bonus 						= $adjustment_bonus;
+				$data["_employee"][$key]->adjustment_commission 				= $adjustment_commission;
+				$data["_employee"][$key]->adjustment_incentives 				= $adjustment_incentives;
+				$data["_employee"][$key]->adjustment_cash_advance 				= $adjustment_cash_advance;
+				$data["_employee"][$key]->adjustment_cash_bond 					= $adjustment_cash_bond;
+				$data["_employee"][$key]->adjustment_additions 					= $adjustment_additions;
+				$data["_employee"][$key]->adjustment_deductions 				= $adjustment_deductions;
+				$data["_employee"][$key]->adjustment_others 					= $adjustment_others;
+				$data["_employee"][$key]->adjustment_13th_month_and_other 		= $adjustment_13th_month_and_other;
+				$data["_employee"][$key]->adjustment_de_minimis_benefit 		= $adjustment_de_minimis_benefit;
+
+
+				$deduction_total				+= Payroll2::payroll_number_format($deduction, 2);
+				$cola_total						+= Payroll2::payroll_number_format($cola, 2);
+
+				$sss_ee_total						+= Payroll2::payroll_number_format($sss_ee, 2);
+				$sss_er_total						+= Payroll2::payroll_number_format($sss_er, 2);
+				$sss_ec_total						+= Payroll2::payroll_number_format($sss_ec, 2);
+				$hdmf_ee_total						+= Payroll2::payroll_number_format($hdmf_ee, 2);
+				$hdmf_er_total						+= Payroll2::payroll_number_format($hdmf_er, 2);
+				$philhealth_ee_total				+= Payroll2::payroll_number_format($philhealth_ee, 2);
+				$philhealth_er_total				+= Payroll2::payroll_number_format($philhealth_er, 2);
+				$witholding_tax_total				+= Payroll2::payroll_number_format($witholding_tax, 2);
+
+				$adjustment_deduction_total		+= Payroll2::payroll_number_format($adjustment_deduction,2);
+				$adjustment_allowance_total		+= Payroll2::payroll_number_format($adjustment_allowance,2);
+				$allowance_de_minimis_total		+= Payroll2::payroll_number_format($allowance_de_minimis,2);
+				$allowance_total				+= Payroll2::payroll_number_format($allowance,2);
+				$cash_bond_total				+= Payroll2::payroll_number_format($cash_bond,2);
+				$cash_advance_total				+= Payroll2::payroll_number_format($cash_advance,2);
+				$hdmf_loan_total				+= Payroll2::payroll_number_format($hdmf_loan,2);
+				$sss_loan_total					+= Payroll2::payroll_number_format($sss_loan,2);
+				$other_loans_total				+= Payroll2::payroll_number_format($other_loans,2);
+
+				$total_adjustment_allowance					+= Payroll2::payroll_number_format($adjustment_allowance,2);
+				$total_adjustment_bonus						+= Payroll2::payroll_number_format($adjustment_bonus,2);
+				$total_adjustment_commission				+= Payroll2::payroll_number_format($adjustment_commission,2);
+				$total_adjustment_incentives				+= Payroll2::payroll_number_format($adjustment_incentives,2);
+				$total_adjustment_cash_advance				+= Payroll2::payroll_number_format($adjustment_cash_advance,2);
+				$total_adjustment_cash_bond					+= Payroll2::payroll_number_format($adjustment_cash_bond,2);
+				$total_adjustment_additions					+= Payroll2::payroll_number_format($adjustment_additions,2);
+				$total_adjustment_deductions				+= Payroll2::payroll_number_format($adjustment_deductions,2);
+				$total_adjustment_others					+= Payroll2::payroll_number_format($adjustment_others,2);
+				
+				$total_adjustment_13th_month_and_other		+= Payroll2::payroll_number_format($adjustment_13th_month_and_other,2);
+				$total_adjustment_de_minimis_benefit		+= Payroll2::payroll_number_format($adjustment_de_minimis_benefit,2);
+			}
+
+
+			if (isset($employee->cutoff_input)) 
+			{
+				$_cutoff_input_breakdown = unserialize($employee->cutoff_input);
+				
+				$overtime 		 = 0;
+				$special_holiday = 0;
+				$regular_holiday = 0;
+				$leave_pay 	     = 0;
+				$late 			 = 0;
+				$undertime 		 = 0;
+				$absent 		 = 0;
+				$nightdiff 		 = 0;
+				$restday 		 = 0;
+
+				$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
+				$nd_category = array('Legal Holiday Rest Day ND','Legal Holiday ND','Special Holiday Rest Day ND','Special Holiday ND','Rest Day ND','Night Differential');
+				// $rd_category = array('Rest Day','Legal Holiday Rest Day','Special Holiday Rest Day');
+				foreach ($_cutoff_input_breakdown as $value) 
+				{
+
+					if (isset($value->compute->_breakdown_addition)) 
+					{
+						foreach ($value->compute->_breakdown_addition as $lbl => $values) 
+						{
+							if (in_array($lbl, $ot_category)) 
+							{
+								$overtime 			+= Payroll2::payroll_number_format($values['rate'],2);
+							}
+							if ($lbl == 'Legal Holiday' || $lbl == 'Legal Holiday Rest Day') 
+							{
+								$regular_holiday 	+= Payroll2::payroll_number_format($values['rate'],2);
+							}
+							if ($lbl == 'Special Holiday' || $lbl == 'Special Holiday Rest Day') 
+							{
+								$special_holiday 	+= Payroll2::payroll_number_format($values['rate'],2);
+							}
+							if ($lbl == 'Leave Pay') 
+							{
+								$leave_pay 			+= Payroll2::payroll_number_format($values['rate'],2);
+							}
+							if ($lbl == 'Rest Day') 
+							{
+								$restday 			+= Payroll2::payroll_number_format($values['rate'],2);
+							}
+							if (in_array($lbl, $nd_category)) 
+							{
+								$nightdiff 			+= Payroll2::payroll_number_format($values['rate'],2);
+							}
+						}
+					}
+
+					if (isset($value->compute->_breakdown_deduction)) 
+					{
+						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
+						{
+							if ($value->time_output["leave_hours"] == '00:00:00') 
+							{
+								if ($lbl == 'late') 
+								{
+									$late 			+= Payroll2::payroll_number_format($values['rate'],2);
+								}
+								if ($lbl == 'absent' && $payroll_group_salary_computation->payroll_group_code != "Flat Rate") 
+								{
+									$absent 		+= Payroll2::payroll_number_format($values['rate'],2);
+								}
+								if ($lbl == 'undertime') 
+								{
+									$undertime 		+= Payroll2::payroll_number_format($values['rate'],2);
+								}
+								$deduction 			+= Payroll2::payroll_number_format($values['rate'],2);
+							}
+						}
+					}
+
+
+				}
+
+				$data["_employee"][$key]->overtime 			= $overtime;
+				$data["_employee"][$key]->regular_holiday 	= $regular_holiday;
+				$data["_employee"][$key]->special_holiday 	= $special_holiday;
+				$data["_employee"][$key]->leave_pay 		= $leave_pay;
+				$data["_employee"][$key]->absent 			= $absent;
+				$data["_employee"][$key]->late 				= $late;
+				$data["_employee"][$key]->undertime 		= $undertime;
+				$data["_employee"][$key]->nightdiff 		= $nightdiff;
+				$data["_employee"][$key]->restday 			= $restday;
+
+				$overtime_total 		 		+=	Payroll2::payroll_number_format($overtime,2);
+				$special_holiday_total 			+=	Payroll2::payroll_number_format($regular_holiday,2);
+				$regular_holiday_total 			+=	Payroll2::payroll_number_format($special_holiday,2);
+				$leave_pay_total 	     		+=	Payroll2::payroll_number_format($leave_pay,2);
+				$late_total 			 		+=	Payroll2::payroll_number_format($late,2);
+				$undertime_total 		 		+=	Payroll2::payroll_number_format($undertime,2);
+				$absent_total 		 			+=	Payroll2::payroll_number_format($absent,2);
+				$nightdiff_total 		 		+=	Payroll2::payroll_number_format($nightdiff,2);
+				$restday_total 		 			+=	Payroll2::payroll_number_format($restday,2);
+			}
+
+			if (isset($employee["cutoff_breakdown"]->_breakdown)) 
+			{
+				# code...
+				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
+				{
+					if($breakdown["deduct.net_pay"] == true)
+					{
+						if(isset($_other_deduction[$breakdown["label"]]))
+						{
+							$_other_deduction[$breakdown["label"]]  += Payroll2::payroll_number_format($breakdown["amount"],2);
+							$total_deduction 						+= Payroll2::payroll_number_format($breakdown["amount"],2);
+						}
+						else
+						{
+							$_other_deduction[$breakdown["label"]] = $breakdown["amount"];
+							$total_deduction += Payroll2::payroll_number_format($breakdown["amount"],2);
+						}
+					}
+				}
+
+				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
+				{	
+					if($breakdown["add.gross_pay"] == true)
+					{
+						if(isset($_addition[$breakdown["label"]]))
+						{
+							$_addition[$breakdown["label"]] += Payroll2::payroll_number_format($breakdown["amount"],2);
+						}
+						else
+						{
+							$_addition[$breakdown["label"]] = Payroll2::payroll_number_format($breakdown["amount"],2);
+						}
+					}
+				}
+
+				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
+				{
+
+					if($breakdown["type"] == "deductions")
+					{
+						if(isset($_deduction[$breakdown["label"]]))
+						{
+							$_deduction[$breakdown["label"]] += Payroll2::payroll_number_format($breakdown["amount"],2);
+						}
+						else
+						{
+							$_deduction[$breakdown["label"]] = Payroll2::payroll_number_format($breakdown["amount"],2);
+						}
+					}
+				}
+			}
+			
+			$employee->net_basic_pay = $employee->net_basic_pay - $leave_pay;
+
+			// $total_cutoff_basic 	+= Payroll2::payroll_number_format(unserialize($employee->cutoff_compute)->cutoff_basic,2);
+			$total_gross_basic		+= Payroll2::payroll_number_format($employee->gross_basic_pay,2);
+			$total_basic 			+= Payroll2::payroll_number_format($employee->net_basic_pay,2);
+			$total_gross 			+= Payroll2::payroll_number_format($employee->gross_pay,2);
+			$total_net 				+= Payroll2::payroll_number_format($employee->net_pay,2);
+			$total_tax 				+= Payroll2::payroll_number_format($employee->tax_ee,2);
+
+			/*combination*/
+			$data["_employee"][$key]->adj_allowance_plus_allowance 			   = $allowance + $adjustment_allowance;
+			$data["_employee"][$key]->adj_de_menimis_plus_allowance_de_menimis = $allowance_de_minimis + $adjustment_de_minimis_benefit;
+			$data["_employee"][$key]->adj_cashbond_plus_cashbond 			   = $cash_bond + $adjustment_cash_bond;
+			$data["_employee"][$key]->adj_cash_advance_plus_cash_advance 	   = $cash_advance + $adjustment_cash_advance;
+
+
+
+		}
+
+		// $data["total_cutoff_basic"]					= $total_cutoff_basic;
+		$data["total_gross_basic"]					= $total_gross_basic;
+		$data["total_basic"] 						= $total_basic;
+		$data["total_gross"] 						= $total_gross;
+		$data["total_net"] 							= $total_net;
+		$data["total_er"] 							= $g_total_er;
+		$data["total_ee"] 							= $g_total_ee;
+		$data["total_ec"] 							= $g_total_ec;
+		$data["total_tax"] 							= $total_tax;
+		$data["total_grand"] 						= $total_net + $g_total_er + $g_total_ee + $g_total_ec + $total_tax;
+		$data["total_sss_ee"] 						= $total_sss_ee;
+		$data["total_sss_er"] 						= $total_sss_er;
+		$data["total_sss_ec"] 						= $total_sss_ec;
+		$data["total_philhealth_ee"] 				= $total_philhealth_ee;
+		$data["total_philhealth_er"] 				= $total_philhealth_er;
+		$data["total_pagibig_ee"] 					= $total_pagibig_ee;
+		$data["total_pagibig_er"] 					= $total_pagibig_er;
+		$data["_other_deduction"] 					= $_other_deduction;
+		$data["_addition"] 							= $_addition;
+		$data["_deduction"] 						= $_deduction;
+		$data["total_deduction"] 					= $total_deduction;
+		$data["total_deduction_of_all_employee"] 	= $total_deduction_employee;
+
+		$data["deduction_total"] 						= $deduction_total;
+		$data["cola_total"] 							= $cola_total;
+		$data["sss_ee_total"] 							= $sss_ee_total;
+		$data["sss_er_total"] 							= $sss_er_total;
+		$data["sss_ec_total"] 							= $sss_ec_total;
+		$data["hdmf_ee_total"] 							= $hdmf_ee_total;
+		$data["hdmf_er_total"] 							= $hdmf_er_total;
+		$data["philhealth_ee_total"] 					= $philhealth_ee_total;
+		$data["philhealth_er_total"] 					= $philhealth_er_total;
+		$data["witholding_tax_total"] 					= $witholding_tax_total;
+		$data["adjustment_deduction_total"] 			= $adjustment_deduction_total;
+		$data["adjustment_allowance_total"] 			= $adjustment_allowance_total;
+		$data["allowance_de_minimis_total"]				= $allowance_de_minimis_total;
+		$data["allowance_total"] 						= $allowance_total;
+		$data["cash_bond_total"] 						= $cash_bond_total;
+		$data["cash_advance_total"]						= $cash_advance_total;
+		$data["hdmf_loan_total"]						= $hdmf_loan_total;
+		$data["sss_loan_total"]							= $sss_loan_total;
+		$data["other_loans_total"]						= $other_loans_total;
+
+		$data["overtime_total"] 		 			= $overtime_total;
+		$data["special_holiday_total"] 				= $special_holiday_total;
+		$data["regular_holiday_total"] 				= $regular_holiday_total;
+		$data["leave_pay_total"] 	     			= $leave_pay_total;
+		$data["late_total"] 			 			= $late_total;
+		$data["undertime_total"] 		 			= $undertime_total;
+		$data["absent_total"] 		 				= $absent_total;
+		$data["nightdiff_total"] 		 			= $nightdiff_total;
+		$data["restday_total"] 		 				= $restday_total;
+
+
+		$data["total_adjustment_allowance"]				= $total_adjustment_allowance;	
+		$data["total_adjustment_bonus"]					= $total_adjustment_bonus;		
+		$data["total_adjustment_commission"]			= $total_adjustment_commission;
+		$data["total_adjustment_incentives"]			= $total_adjustment_incentives;
+		$data["total_adjustment_cash_advance"]			= $total_adjustment_cash_advance;
+		$data["total_adjustment_cash_bond"]				= $total_adjustment_cash_bond;	
+		$data["total_adjustment_additions"]				= $total_adjustment_additions;	
+		$data["total_adjustment_deductions"]			= $total_adjustment_deductions;
+		$data["total_adjustment_others"]				= $total_adjustment_others;	
+		$data["total_adjustment_13th_month_and_other"] 	= $total_adjustment_13th_month_and_other;
+		$data["total_adjustment_de_minimis_benefit"] 	= $total_adjustment_de_minimis_benefit;
+
+		$data["time_total_time_spent"]				= $time_total_time_spent;				
+		$data["time_total_overtime"]				= $time_total_overtime;				
+		$data["time_total_night_differential"]		= $time_total_night_differential;		
+		$data["time_total_leave_hours"]				= $time_total_leave_hours;				
+		$data["time_total_undertime"]				= $time_total_undertime;				
+		$data["time_total_late"]					= $time_total_late;					
+		$data["time_total_regular_holiday"]			= $time_total_regular_holiday;		
+		$data["time_total_special_holiday"]			= $time_total_special_holiday;
+		$data["time_total_absent"]					= $time_total_absent;
+
+		$data["total_adj_allowance_plus_allowance"]					= $total_adjustment_allowance + $allowance_total;
+		$data["total_adj_de_menimis_plus_allowance_de_menimis"]		= $total_adjustment_de_minimis_benefit + $allowance_de_minimis_total;
+		$data["total_adj_cashbond_plus_cashbond"]					= $total_adjustment_cash_bond + $cash_bond_total;
+		$data["total_adj_cash_advance_plus_cash_advance"]			= $total_adjustment_cash_advance + $cash_advance_total;
+		
+		return $data;
+	}
+
 	public static function payroll_number_format($number,$decimal_places)
 	{
 		return number_format((float)$number, $decimal_places, '.', '');
@@ -6999,6 +7723,50 @@ class Payroll2
 		}
 		
 		return $salary_period;
+	}
+
+
+	public static function insert_journal_entry_per_period($period_company_id, $shop_id)
+	{
+		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();;
+		$data = Payroll2::get_total_payroll_register($data);
+		$_chart_of_account= Tbl_payroll_journal_tag::gettag($shop_id)
+												 ->join('tbl_payroll_journal_tag_entity','tbl_payroll_journal_tag_entity.payroll_journal_tag_id','=','tbl_payroll_journal_tag.payroll_journal_tag_id')
+												 ->join('tbl_payroll_entity','tbl_payroll_entity.payroll_entity_id','=','tbl_payroll_journal_tag_entity.payroll_entity_id')
+												 ->get();
+		
+		$_chart_of_account = collect($_chart_of_account)->groupBy('payroll_journal_tag_id','account_id');
+		
+		$total_period_record = array('Gross Basic Pay' => $data['total_gross_basic'], 'Basic Pay' => $data['total_basic'], 'Gross Pay' => $data['total_gross'], 'Take Home Pay' => $data['total_net'], 'Leave Pay' => $data['leave_pay_total'], 'Night Differential Pay' => $data['nightdiff_total'], 'Regular Holiday Pay' => $data['regular_holiday_total'], 'Special Holiday Pay' => $data['special_holiday_total'], 'Over Time Pay' => $data['overtime_total'], 'Rest Day Pay' => $data['restday_total'], 'COLA' => $data['cola_total']
+									  , 'Allowance Pay' => $data['total_adj_allowance_plus_allowance'], 'Bonus Pay' => $data['total_adjustment_bonus'], 'Commission Pay' => $data['total_adjustment_commission'], '13th Month and Other Non Taxable Benifits Pay' => $data['total_adjustment_13th_month_and_other'], 'Incentive Pay' => $data['total_adjustment_incentives'], 'Deminimis Pay' => $data['total_adj_de_menimis_plus_allowance_de_menimis'], 'Other Allowances' => $data['total_adjustment_others']
+									  , 'HDMF EE' => $data['hdmf_ee_total'], 'HDMF ER' => $data['hdmf_er_total'], 'Philhealth EE' => $data['philhealth_ee_total'], 'Philhealth ER' => $data['philhealth_er_total'], 'SSS EC' => $data['sss_ec_total'], 'SSS EE' => $data['sss_ee_total'], 'SSS ER' => $data['sss_er_total'], 'Witholding Tax' => $data['witholding_tax_total']
+									  , 'Deductions' => $data['total_adjustment_deductions'], 'Cash Advance' => $data['total_adj_cash_advance_plus_cash_advance'], 'Cash Bond' => $data['total_adj_cashbond_plus_cashbond'], 'SSS Loans' => $data['sss_loan_total'], 'HDMF Loans' => $data['hdmf_loan_total'], 'Other Loan' => $data['other_loans_total'], 'Late' => $data['late_total'], 'Absent' => $data['absent_total'], 'Undertime' => $data['undertime_total']);
+		
+		$_chart_of_account_insert = array();
+
+		foreach ($_chart_of_account as $key => $_chart_of_account_record) 
+		{
+			foreach ($_chart_of_account_record as $key2 => $chart_of_account_record) 
+			{
+				if (in_array($chart_of_account_record['entity_name'], $total_period_record)) 
+				{
+					if (isset($_chart_of_account_insert[$key])) 
+					{
+						$_chart_of_account_insert[$key]['amount'] += $total_period_record[$chart_of_account_record['entity_name']];
+					}
+					else
+					{
+						$_chart_of_account_insert[$key]['amount'] = $total_period_record[$chart_of_account_record['entity_name']];
+						$_chart_of_account_insert[$key]['account_id'] = $chart_of_account_record['account_id'];
+						$_chart_of_account_insert[$key]['date'] 		= date('Y-m-d');
+					}
+				}
+				
+			}
+		}
+		// dd($_chart_of_account_insert);
+		// dd($_chart_of_account);
+		return $_chart_of_account_insert;
 	}
 
 }

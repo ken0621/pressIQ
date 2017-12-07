@@ -30,7 +30,7 @@ class ShopProductContent2Controller extends Shop
 
         if ($this->shop_theme == "3xcell") 
         {
-            if (Self::$customer_info->customer_id) 
+            if (isset(Self::$customer_info->customer_id) && Self::$customer_info->customer_id) 
             {
                 foreach ($data["product"]["variant"] as $key => $value) 
                 {

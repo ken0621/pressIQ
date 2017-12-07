@@ -6,14 +6,14 @@
         <div>
             <i class="fa fa-file-o"></i>
             <h1>
-            <span class="page-title">Requisition Slip</span>
+            <span class="page-title">Purchase Requisition</span>
             <small>
             Purchase Request
             </small>
             </h1>
             <div class="dropdown pull-right">
                <!--  <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</button> -->
-                <a href="/member/vendor/requisition_slip/create" class="btn btn-primary"><i class="fa fa-star"></i> Create Requisition Slip</a>
+                <a href="/member/vendor/requisition_slip/create" class="btn btn-primary"><i class="fa fa-star"></i> Create Purchase Requisition</a>
             </div>
         </div>
     </div>

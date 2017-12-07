@@ -51,14 +51,14 @@
                         <div class="dropdown">
                           <a class="">BUSINESS PRESENTATION</a>
                           <div class="dropdown-content">
-                            <a href="https://drive.google.com/open?id=0B_zVgtlTtv89dU1Ub2toMXBLc2M">MILLIONAIRE SYSTEM</a>
+                            <a href="https://drive.google.com/file/d/1Q4Tr0k5kpKalUzV-vODb6mU_tNyPMQmD">MILLIONAIRE SYSTEM</a>
                             <a href="https://drive.google.com/open?id=0B_zVgtlTtv89ZzlKSnI3ckpxd1k">PRIVILEGE CARD PRESENTATION</a>
-                            <a href="https://drive.google.com/open?id=0B_zVgtlTtv89RDVSZ2QteUwzaVE">TRADITIONAL BUSINESS PRESENTATION</a>
+                            <a href="https://drive.google.com/file/d/1gxsG3wL8emRvzxhG4Rriwz9FgnB7D84o">FRANCHISE BUSINESS PRESENTATION</a>
                           </div>
                         </div>
                     </div>
                     @else
-                    <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
+                    <div class="holder"><a href="https://drive.google.com/file/d/1gxsG3wL8emRvzxhG4Rriwz9FgnB7D84o">BUSINESS PRESENTATION</a></div>
                     @endif
                     <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 
@@ -322,7 +322,7 @@
             </div>  
             <div class="main-header">
                 <div class="container">
-                    <div id="nav_list"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
+                    <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
                     <div class="mob-cart-container popup" size="lg" link="/cartv2"><img src="/themes/{{ $shop_theme }}/img/cart-mob.png"></div>
                     <div class="mob-logo-container"><a href="/"><img src="/themes/{{ $shop_theme }}/img/logo.png"></a></div>
                 </div>
@@ -356,7 +356,8 @@
                         <div class="img-footer">
                             <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech.jpg">
                         </div>
-                        <p>PHILTECH, INC. “We provide Business” Is a subsidiary company of ZENAR TELECOMS, INC. with highly experienced both in retail and distribution of technology industry for almost 20years. PHILTE... <a style="color: #fff" href="/about">See more</a></p>
+                        <p>PHILTECH, INC. “Business and Benefits”
+offers New Franchise Business Model and New Rewards System using New Generation of Advanced Technology. PHILTECH, INC. is a pioneer...<a style="color: #fff" href="/about">See more</a></p>
                     </div> 
                     <div class="col-md-2 col-sm-6 match-height">
                         <div class="btm-title">INFORMATION</div>

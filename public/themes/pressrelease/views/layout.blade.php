@@ -16,7 +16,8 @@
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> 
         <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet"> 
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet">  
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet"> 
 
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
@@ -65,10 +66,17 @@
                 <span>pressiq@gmail.com</span>
             </div>
             <div class="right-container">
+                @if(session()->has('user_email'))
+                <span class="smoth-scroll" style="cursor: pointer; text-transform: capitalize;" onClick="location.href='/pressuser/dashboard'">{{ session('user_first_name')}}  {{ session('user_last_name')}}</span>
+                <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/logout'">
+                    <div class="subhead-btn">Log out</div>
+                </span>
+                @else
                 <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/sign_up'">Register</span>
                 <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/signin'">
                     <div class="subhead-btn">Log in</div>
                 </span>
+                @endif
             </div>
             @endif
         </div>
@@ -88,28 +96,23 @@
                         <span></span>
                     </div>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-10">
                 <!-- NAVIGATION -->
                     <nav class="navirino">
                         <ul>
                             @if(Request::segment(1)=="members")
                                 <li><a class="smoth-scroll" href="/#home">Home</a></li>
-                                <li><a class="smoth-scroll" href="/#aboutus">Releases</a></li>
+                                <li><a class="smoth-scroll" href="/newsroom">News Room</a></li>
                                 <li><a class="smoth-scroll" href="/#whytojoin">About</a></li>
-                                <li><a class="smoth-scroll" href="/#packages">Contact Us</a></li>
+                                <li><a class="smoth-scroll" href="/contact">Contact Us</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="/#home">Home</a></li>
-                                <li><a class="smoth-scroll" href="/#aboutus">Releases</a></li>
+                                <li><a class="smoth-scroll" href="/newsroom">News Room</a></li>
                                 <li><a class="smoth-scroll" href="/#whytojoin">About</a></li>
-                                <li><a class="smoth-scroll" href="/#packages">Contact Us</a></li>
+                                <li><a class="smoth-scroll" href="/contact">Contact Us</a></li>
                             @endif
                         </ul>
                     </nav>
-                </div>
-                <div class="col-md-5">
-                    <div class="search-container">
-                        <input type="text" placeholder="Search News"><span><i class="fa fa-search" aria-hidden="true"></i></span>
-                    </div>
                 </div>
             </div>
         </div>

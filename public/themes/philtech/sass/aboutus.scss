@@ -119,6 +119,11 @@
     margin-top: 40px;
     padding: 50px;
 
+    @media screen and (max-width: 425px)
+    {
+        padding: 65px 15px 15px 15px;
+    }
+
     .holder 
     {
         margin-bottom: 50px;

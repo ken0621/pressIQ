@@ -6,6 +6,7 @@ use Redirect;
 use Request;
 use View;
 use App\Models\Tbl_category;
+use App\Models\Tbl_mlm_slot;
 use App\Globals\Category;
 use App\Globals\Ecom_Product;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -253,6 +254,20 @@ class ShopProductController extends Shop
             else
             {
                 $data["category_name"] = "All";
+            }
+        }
+
+        if ($this->shop_theme == "3xcell") 
+        {
+            if (isset(Self::$customer_info->customer_id) && Self::$customer_info->customer_id) 
+            {
+                foreach ($product as $key => $value) 
+                {
+                    $price_level = Tbl_mlm_slot::priceLevel($value["variant"][0]["item_id"])->where("tbl_mlm_slot.slot_owner", Self::$customer_info->customer_id)->first();
+
+                    $product[$key]["min_price"] = $price_level ? $price_level->custom_price : null;
+                    $product[$key]["max_price"] = $price_level ? $price_level->custom_price : null;
+                }
             }
         }
 

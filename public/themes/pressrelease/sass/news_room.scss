@@ -1,0 +1,82 @@
+.content
+{
+	background-color: transparent;
+	padding-top: 5px;
+}
+
+.background-container
+{
+	.border-container
+	{
+		.background-border-container
+		{
+			background-color: #fff;
+			min-height: 700px;
+			.search-container
+			{
+				padding: 30px 60px;
+				vertical-align: middle;
+				text-align: left;
+				input
+				{
+					font-size: 15px;
+					vertical-align: middle;
+					border: 1px solid #e1e1e1;
+					padding: 10px;
+					vertical-align: middle;
+					min-width: 50%;
+				}
+				i
+				{
+					color: #fff;
+					background-color: #c51f33;
+					font-size: 32px;
+					vertical-align: middle;
+					padding: 5px;
+				}
+			}
+			.news-title-container
+			{
+				padding: 0px 60px 0px 60px;
+				.title
+				{
+					a
+					{
+						font-family: 'PT Serif';
+						font-size: 30px;
+						font-weight: 700;
+						text-decoration: none;
+						color: #585858;
+					}
+				}
+			}
+			.details-container
+			{
+				padding: 0px 60px 20px 60px;
+				.details
+				{
+					margin-top: 10px;
+					font-size: 16px;
+					text-align: justify;
+					display: -webkit-box;
+					-webkit-line-clamp: 6;
+					-webkit-box-orient: vertical;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+			}
+			.button-container
+			{
+				padding: 0px 60px 0px 60px;
+				button
+				{
+					background-color: #316df9;
+					color: #fff;
+					border: none;
+					padding: 10px 20px;
+					margin-bottom: 30px;
+				}
+			}
+		}
+	}
+}

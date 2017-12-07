@@ -29,7 +29,8 @@
 
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
-<body class="pushmenu-push">
+<body>
+    <div id="overlay" onclick="off()"></div>
     {{-- LOADER --}}
     <div class="loader hide">
         <span><img src="/resources/assets/frontend/img/loader.gif"></span>
@@ -59,7 +60,7 @@
     <nav class="navbar">
         <div class="container">
             
-            <div id="nav_list"><i class="fa fa-bars hamburger"></i></div>
+            <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
             <nav class="pushmenu pushmenu-left">
 
                 @if($customer)

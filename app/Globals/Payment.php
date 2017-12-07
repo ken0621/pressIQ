@@ -275,7 +275,7 @@ class Payment
 
         /* Customization */
         $shopCustomization = new Customization();
-        $shopCustomization->logoUrl = "https://brown.com.ph/images/Brown_Logo2.png";
+        $shopCustomization->logoUrl = "https://brownportal.com/images/Brown_Logo2.png";
         $shopCustomization->iconUrl = "https://paymaya.com/assets/favicon.ico";
         $shopCustomization->appleTouchIconUrl = "https://paymaya.com/assets/favicon.ico";
         $shopCustomization->customTitle = "Brown and Proud - Checkout";

@@ -70,9 +70,25 @@ function confirm_transfer(data)
             url: "/members/send-transfer",
             data: {"recipient":recipient,"slot":slot,"amount":amount},
             type: "get",
-            success: function()
+            success: function(response)
             {
-                success_wallet_transfer(data);
+                if(response == 'error_recipient')
+                {
+                    error_recipient(data);
+                }
+                else if(response=='error_slot')
+                {
+                    error_slot(data);
+                }
+                else if(response=='error_amount')
+                {
+                    error_amount(data);
+                }
+                else
+                {
+                    success_wallet_transfer(data);
+                }
+                
             }
         });
     }
@@ -86,6 +102,18 @@ function success_wallet_transfer(data)
 function error(data)
 {
     toastr.error("Slot no. does not exist");
+}
+function error_slot(data)
+{
+    toastr.error("The slot you are using does not belong to you");
+}
+function error_amount(data)
+{
+    toastr.error("Not enough wallet");
+}
+function error_recipient(data)
+{
+    toastr.error("You cannot transfer wallet to the same slot");
 }
 
 </script>

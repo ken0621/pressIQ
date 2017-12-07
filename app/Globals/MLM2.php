@@ -19,6 +19,7 @@ use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_plan_setting;
 use App\Models\Tbl_mlm_cashback_convert_history;
 use App\Models\Rel_cashback_convert_history;
+use App\Models\Tbl_mlm_encashment_settings;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
@@ -601,7 +602,6 @@ class MLM2
 			$query->limit($limit);
 			$_reward = $query->orderBy("wallet_log_id", "desc")->get();
 		}
-		
 
 		foreach($_reward as $key => $reward)
 		{
@@ -722,6 +722,8 @@ class MLM2
 			{
 				$consume['name'] = 'offline_transaction';
 				$consume['id'] = $slot_id_created;
+
+            	Warehouse2::update_inventory_count($initial_record->record_warehouse_id, 0, $initial_record->record_item_id, -1);
 			}
             Warehouse2::insert_item_history($initial_record->record_log_id);
 		}

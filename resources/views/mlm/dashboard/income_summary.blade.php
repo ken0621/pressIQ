@@ -85,7 +85,7 @@
                       <td>{{currency('PHP', $rebates)}}</td>
                     </tr>
                     <tr>
-                      <td>Over-ride Bonus</td>
+                      <td>Stairstep Bonus</td>
                       <td>{{currency('PHP', $override)}}</td>
                     </tr>
                     <tr>
@@ -132,7 +132,8 @@
                       <td colspan="2" class="badge bg-red">{{ Session::get('message') }}</td>
                     </tr>
                   @endif
-                  @foreach($plan_settings_2 as $key => $value)
+
+                  <!-- @foreach($plan_settings_2 as $key => $value)
                     <tr>
                       <td>{{$value->marketing_plan_label}}</td>
                       <td>{{$earning_2[$key]}}</td>
@@ -142,7 +143,19 @@
                     <tr>
                       <td>Total</td>
                       <td>{{array_sum($earning_2)}}</td>
+                    </tr> -->
+
+                  
+                    <tr>
+                      <td>Rank Points</td>
+                      <td>{{$rank_points}}</td>
                     </tr>
+                    <tr>
+                      <td>Personal Maintenance Points</td>
+                      <td>{{$personal_maintenance_points}}</td>
+                    </tr>
+                  
+
                   @if($binary == 1)
                     <tr>
                       <td>Binary Left Points</td>

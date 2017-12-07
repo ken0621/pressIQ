@@ -242,15 +242,13 @@
 				</div>
 			</div>
 		</div>
-
-
 	    <!-- Success -->
 	    <div class="popup-success">
 	        <div id="success-modal" class="modal success-modal fade">
 	            <div class="modal-md modal-dialog">
 	                <div class="modal-content">
 	                    <div class="modal-body">
-	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
+	                        <div><img src="/themes/{{ $shop_theme }}/img/done-img.png"></div>
 	                        <div class="text-header">Done!</div>
 	                        <div class="text-caption">You are now officially enrolled to<br><b>Nice Marketing</b></div>
 	                    </div>

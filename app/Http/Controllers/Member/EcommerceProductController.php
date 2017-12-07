@@ -254,6 +254,7 @@ class EcommerceProductController extends Member
 			$this->InsertVariantInfo($product_id, $insert_product["eprod_is_single"]);
 
 			$json["status"] 	= "success";
+			$json["call_function"] 	= "success_product_list";
 			$json["type"]	 	= "add";
 			$json["product_id"] = $product_id;
 			if($button_action == "save-and-edit")

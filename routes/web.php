@@ -979,7 +979,6 @@ Route::group(array('prefix' => 'api/{auth}/{store}'), function()
 });
 
 Route::group(['middleware' => ['web']], function () {
-
     Route::get('payPremium', ['as'=>'payPremium','uses'=>'PaypalController@payPremium']);
 
     Route::post('getCheckout', ['as'=>'getCheckout','uses'=>'PaypalController@getCheckout']);
@@ -987,7 +986,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('getDone', ['as'=>'getDone','uses'=>'PaypalController@getDone']);
 
     Route::get('getCancel', ['as'=>'getCancel','uses'=>'PaypalController@getCancel']);
-
 });
 
 Route::get('/testing','Member\MLM_CodeController@tester');

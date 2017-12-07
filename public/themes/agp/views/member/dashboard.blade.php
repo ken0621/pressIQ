@@ -31,8 +31,8 @@
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
 	            <div class="col-md-12">
-	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-dash.png')">
-	                    <div class="btn btn-text">
+	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-dash.jpg')">
+	                    <div class="caption-container">
 	                        <div class="text-header1">Not yet a Member?</div>
 	                        <div class="text-header2">Join Us Now!</div>
 	                    </div>
@@ -240,7 +240,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>JCA Wellness</b></div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>Alpha Global Prestige</b></div>
 	                    </div>
 	                </div>
 	            </div>

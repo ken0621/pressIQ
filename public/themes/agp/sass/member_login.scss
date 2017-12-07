@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Lato', sans-serif;
 $light: 300;
 $regular: 400;
@@ -17,6 +19,24 @@ body
     background-color: #DA473F !important;
     color: white;
     border:none !important;
+}
+
+.btn-custom
+{
+	@include transition(0.3s);
+	background-color: #75A04B;
+	color: #fff;
+
+	@media screen and (max-width: 991px)
+	{
+		width: 100%;
+	}
+
+	&:hover
+	{
+		opacity: 0.8;
+		color: #fff;
+	}
 }
 
 .register

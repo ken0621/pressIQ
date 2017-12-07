@@ -37,9 +37,10 @@ class Tbl_payroll_time_keeping_approved extends Model
 		$insert["cutoff_input"] 				= serialize($compute_cutoff["cutoff_input"]);
 		$insert["cutoff_compute"] 				= serialize($compute_cutoff["cutoff_compute"]);
 		$insert["cutoff_breakdown"] 			= serialize($compute_cutoff["cutoff_breakdown"]);
+		$insert["salary_compute_type"]			= $compute_cutoff["salary_compute_type"];
 		
 		$time_keeping_approve_id = Tbl_payroll_time_keeping_approved::insertGetId($insert);
-
+		
 		return $time_keeping_approve_id;
 	}
 	public function scopemonthrecord($query, $employee_id = 0, $payroll_period_category, $month_contribution, $year_contribution, $isfirst = false, $islast = false)

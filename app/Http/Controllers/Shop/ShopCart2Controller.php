@@ -42,8 +42,9 @@ class ShopCart2Controller extends Shop
 
         /* Get Active Cart */
         $active_cart_key = Cart2::get_cart_key();
-
-        if (!$active_cart_key) 
+        $customer_cart   = preg_match('/customer/', $active_cart_key);
+        
+        if (!$active_cart_key || !$customer_cart) 
         {
             if ($customer_id != 0) 
             {

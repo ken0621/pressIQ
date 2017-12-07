@@ -169,6 +169,15 @@
                                     <textarea class="form-control" placeholder="Description on purchase forms" name="item_purchasing_information">{{ get_request_old($item_info, 'item_purchasing_information') }}</textarea>
                                 </div>
                             </div>
+                            @if($shop_id == 5)
+                            <!-- SHOW ONLY IF BROWN -->
+                            <div class="form-group text-right">
+                                <div class="col-md-12">
+                                    <label for="ez_credit_program">This item is a credit points?</label>
+                                    <input type="checkbox" value="yes" id="ez_credit_program" name="ez_credit_program">
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>

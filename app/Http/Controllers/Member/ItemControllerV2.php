@@ -120,6 +120,7 @@ class ItemControllerV2 extends Member
 		$insert['has_serial_number']           = Request::input('item_has_serial') == null ? 0 : Request::input('item_has_serial');
 		$insert['membership_id']       		   = Request::input('membership_id') == null ? 0 : Request::input('membership_id');
 		$insert['gc_earning']         		   = Request::input('gc_earning')  == null ? 0 : Request::input('gc_earning');
+		$insert['ez_program_credit']           = Request::input('ez_credit_program')  == null ? 0 : 1;
 		
 		/*For inventory refill*/
 		$insert['item_quantity'] 		  	   = Request::input('item_initial_qty') == null ? 0 :Request::input('item_initial_qty');
@@ -200,8 +201,8 @@ class ItemControllerV2 extends Member
 		$access = Utilities::checkAccess('item-list-v2', 'add');
         if($access == 1)
         { 
-			$data = $this->get_item();
-
+			$data 			 = $this->get_item();
+			$data["shop_id"] = $this->user_info->shop_id;
 			return view("member.itemv2.add_item",$data);
 		}
 		else

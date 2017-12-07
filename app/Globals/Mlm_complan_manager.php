@@ -952,6 +952,9 @@ class Mlm_complan_manager
         {
             $count_level_1 = Tbl_tree_placement::where('placement_tree_parent_id', $selected)
             ->where('placement_tree_level', 1)
+            ->childslot()
+            ->where("slot_status","!=","CD")
+            ->where("slot_status","!=","EZ")
             ->count();
             // dd($count_level_1);
             if($count_level_1 == 2)

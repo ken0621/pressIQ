@@ -16,6 +16,10 @@ class UpdateTblWarehouse120617254PM extends Migration
         Schema::table('tbl_warehouse', function (Blueprint $table) {
             $table->integer('warehouse_parent_id')->default(0)->after('warehouse_name');
         });
+        Schema::table('tbl_warehouse', function (Blueprint $table) {
+            $table->integer('warehouse_level')->default(0)->after('warehouse_parent_id');
+        });
+
     }
 
     /**

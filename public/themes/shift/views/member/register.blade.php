@@ -132,7 +132,7 @@
 											<button class="btn btn-brown">Sign Up</button>
 										</div>
 										<div class="holder"><span class="or">OR</span></div>
-										<div class="holder"><a class="login-href" href="javascript:">Login an Account</a></div>
+										<div class="holder"><a class="login-href" href="/members/login">Login an Account</a></div>
 									</div>
 								</div>
 							</div>

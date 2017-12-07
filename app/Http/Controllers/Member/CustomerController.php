@@ -22,6 +22,7 @@ use App\Models\Tbl_payment_method;
 use App\Models\Tbl_term;
 use App\Models\Tbl_item;
 use App\Models\Tbl_delivery_method;
+use App\Models\Tbl_mlm_slot;
 use Session;
 use App\Globals\Customer;
 use App\Globals\Utilities;
@@ -29,6 +30,8 @@ use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
 use App\Globals\Item;
+use App\Globals\Warehouse2;
+use App\Globals\Purchasing_inventory_system;
 
 class CustomerController extends Member
 {
@@ -43,14 +46,22 @@ class CustomerController extends Member
 	{
         if($this->hasAccess("customer-list","access_page"))
         {
-            
             $data['_customer'] = $this->customerlist();
-            
+
             if (Request::ajax()) 
             {
                 return view('member.customer.customer_tbl', $data)->render();  
             }
 
+            if(Purchasing_inventory_system::check())
+            {
+                $data["pis"] = true;                
+            }
+            else
+            {
+                $data["pis"] = false;
+            }
+            
     		return view('member.customer.index',$data);
         }
         else
@@ -58,7 +69,27 @@ class CustomerController extends Member
             return $this->show_no_access();
         }
 	}
+    public function viewlead($id)
+    {
+        if(request()->isMethod("post"))
+        {
+            $update["customer_lead"] = 0;
+            Tbl_customer::where("customer_id", $id)->where("shop_id", $this->user_info->shop_id)->update($update);
 
+            $return["status"] = "success";
+            $return["call_function"] = "clear_lead_success";
+            echo json_encode($return);
+        }
+        else
+        {
+            $data["page"] = "Lead";
+            $data["id"] = $id;
+            $customer = Tbl_customer::where("customer_id", $id)->first();
+            $data["lead"] = Tbl_mlm_slot::where("slot_id", $customer->customer_lead)->customer()->first();
+            return view("member.customer.view_lead", $data);
+        }
+
+    }
     public function bulk_archive()
     {
         $data["_customer"]  = Customer::getAllCustomer();
@@ -91,7 +122,7 @@ class CustomerController extends Member
                                     ->where('tbl_customer.shop_id',$shop_id)
                                     ->where('tbl_customer.archived',$archived)
                                     ->where('tbl_customer.IsWalkin',$IsWalkin)
-    								->orderBy('tbl_customer.first_name');
+    								->orderBy('tbl_customer.customer_id', 'desc');
 
     		if($filter_by_slot == 'w_slot')
             {
@@ -108,6 +139,7 @@ class CustomerController extends Member
     public function load_customer()
     {
         $data["_customer"]  = Customer::getAllCustomer();
+
         return view('member.load_ajax_data.load_customer', $data);
     }
 	
@@ -171,10 +203,24 @@ class CustomerController extends Member
         	$data['_term'] = Tbl_term::where('shop_id',$shop_id)->where('archived',0)->orderBy('term_name','asc')->get();
     	    $data['_customer'] = Tbl_customer::where('shop_id',$shop_id)->where('IsWalkin',0)->where('archived',0)->get();
     	    $data['_delivery_method'] = Tbl_delivery_method::where('archived',0)->get();
+            $data['_warehouse'] = Warehouse2::get_all_warehouse($shop_id);
+
             $value = Request::input('value');
+
+            $data['check_user'] = Purchasing_inventory_system::check();
+            
             if($value || $value != '')
             {
                 $data["value"] = $value;
+            }
+
+            if(Purchasing_inventory_system::check())
+            {
+                $data["pis"] = true;                
+            }
+            else
+            {
+                $data["pis"] = false;
             }
 
     	    return view('member.modal.createcustomer',$data);
@@ -185,7 +231,8 @@ class CustomerController extends Member
         }
 	}	
 	
-	public function insertcustomer(){
+	public function insertcustomer()
+    {
 	    $shop_id = $this->checkuser('user_shop');
 	    $insert['shop_id'] = $shop_id;
         $insert['first_name'] = Request::input('first_name');
@@ -329,6 +376,8 @@ class CustomerController extends Member
         $company = Request::input('company');
         $billing_country = Request::input('billing_country');
         $customer_status = Request::input("customer_status");
+        $stockist_warehouse_id = Request::input("stockist_warehouse_id");
+
         $is_approved = 0;
         if($customer_status == "approved")
         {
@@ -456,6 +505,7 @@ class CustomerController extends Member
             $insertcustomer['IsWalkin'] = 0;
             $insertcustomer['tin_number']= $tin_number;
             $insertcustomer['approved']= $is_approved;
+            $insertcustomer['stockist_warehouse_id']= $stockist_warehouse_id;
 
             if($mlm_continue == 1)
             {
@@ -623,6 +673,7 @@ class CustomerController extends Member
             
             $data['_attachment'] = Tbl_customer_attachment::where('customer_id',$id)->get();
             $data['other'] = Tbl_customer_other_info::where('customer_id',$id)->first();
+            $data['_warehouse'] = Warehouse2::get_all_warehouse($shop_id);
             
             $data['_delivery_method'] = Tbl_delivery_method::where('archived',0)->get();
             if(isset($data['other']->customer_payment_method))
@@ -641,7 +692,17 @@ class CustomerController extends Member
             {
                 $data['termname'] = [];
             }
+
+            if(Purchasing_inventory_system::check())
+            {
+                $data["pis"] = true;                
+            }
+            else
+            {
+                $data["pis"] = false;
+            }
             
+            $data['check_user'] = Purchasing_inventory_system::check();
     	    return view('member.modal.editcustomermodal',$data);
         }
         else
@@ -674,6 +735,7 @@ class CustomerController extends Member
         $suffix = Request::input('suffix');
         $email = Request::input('email');
         $company = Request::input('company');
+        $stockist_warehouse_id = Request::input('stockist_warehouse_id');
         $billing_country = Request::input('billing_country');
         
         
@@ -805,6 +867,7 @@ class CustomerController extends Member
             $updatecustomer['created_date'] = Carbon::now();
             $updatecustomer['IsWalkin'] = 0;
             $updatecustomer['tin_number'] = $tin_number;
+            $updatecustomer['stockist_warehouse_id'] = $stockist_warehouse_id;
             
 
             switch ($mlm_continue) {

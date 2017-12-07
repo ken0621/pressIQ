@@ -47,8 +47,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @if($_cm)
+                        @if($_cm)
                         @foreach($_cm as $cm)
+                            @if($cm->credit_memo_id == 0)
                             <tr>
                                 <td>{{$cm->cm_id}}</td>
                                 <td>{{$cm->title_name." ".$cm->first_name." ".$cm->middle_name." ".$cm->last_name." ".$cm->suffix_name}}</td>
@@ -70,6 +71,7 @@
                                     </div>
                                 </td>
                             </tr>
+                            @endif
                         @endforeach
                     @endif
                     </tbody>

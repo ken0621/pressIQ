@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Rubik', sans-serif;
 $light: 300;
 $regular: 400;
@@ -5,14 +7,6 @@ $medium: 500;
 $bold: 700;
 $text-light: #585858;
 $text-dark: #404040;
-
-@mixin transition($transition)
-{
-	  -webkit-transition: all $transition ease-in-out;
-	  -moz-transition: all $transition ease-in-out;
-	  -o-transition: all $transition ease-in-out;
-	  transition: all $transition ease-in-out;
-}
 
 .top-message-warning
 {
@@ -311,16 +305,16 @@ $text-dark: #404040;
 			text-decoration: none;
 			margin-top: 3px;
 			text-transform: uppercase;
-			opacity: 0;
+			/* opacity: 0; */
 		}
 
-		&:hover
+		/* &:hover
 		{
 			.title-button
 			{
 				opacity: 1;
 			}
-		}
+		} */
 	}
 
 	.sub-container
@@ -706,7 +700,7 @@ $text-dark: #404040;
 	{
 		.modal-header
 		{
-			background-color: #693d28;
+			background-color: #402A21;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 			.modal-title
@@ -751,9 +745,9 @@ $text-dark: #404040;
 				.btn-ok
 				{
 					color: #fff;
-					background-color: #693d28;
+					background-color: #402A21;
 					padding: 12px 60px;
-					border: 2px solid #693d28;
+					border: 2px solid #402A21;
 					border-radius: 2px;
 				}
 			}
@@ -791,9 +785,9 @@ $text-dark: #404040;
 	{
 		.btn-notification
 		{
-			border: 2px solid #693d28 !important;
+			border: 2px solid #402A21 !important;
 			background-color: transparent !important;
-			color: #693d28 !important;
+			color: #402A21 !important;
 			font-size: 15px !important;
 			font-weight: 500 !important;
 		}

@@ -56,21 +56,20 @@
 							<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
 						</li> -->
 						@if($mlm_member)
-						<li class="{{ Request::segment(2) == "videos" ? "active" : "" }}">
-							<a href="javascript:"><div class="nav-holder"><div class="fa fa-video-camera"></div> <span>Videos</span></div></a>
-						</li>
+						<!-- <li class="{{ Request::segment(2) == "videos" ? "active" : "" }}">
+							<a href="/members/videos"><div class="nav-holder"><div class="fa fa-video-camera"></div> <span>Videos</span></div></a>
+						</li> -->
 						<li class="{{ Request::segment(2) == "ebooks" ? "active" : "" }}">
-							<a href="javascript:"><div class="nav-holder"><div class="fa fa-book"></div> <span>Ebooks</span></div></a>
+							<a href="/members/ebooks"><div class="nav-holder"><div class="fa fa-book"></div> <span>Ebooks</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "products" ? "active" : "" }}">
-							<a href="/members/products"><div class="nav-holder"><div class="fa fa-play"></div> <span>Products</span></div></a>
+						<li class="{{ Request::segment(2) == "videos" ? "active" : "" }}">
+							<a href="/members/videos"><div class="nav-holder"><div class="fa fa-play"></div> <span>Products</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "certificate" ? "active" : "" }}">
 							<a href="/members/certificate"><div class="nav-holder"><div class="fa fa-certificate"></div> <span>Certificate</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
-
 							<ul>
 								<!-- <li>
 									<a href="/members/genealogy?mode=binary"><div class="nav-holder"> &nbsp;&nbsp;<span>Binary Tree</span></div></a>
@@ -83,6 +82,9 @@
 						</li>
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
 							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports</span></div></a>
+						</li>
+						<li class="{{ Request::segment(2) == "lead-list" ? "active" : "" }}">
+							<a href="/members/lead-list"><div class="nav-holder"><div class="icon brown-icon-heart"></div> <span>Lead List</span></div></a>
 						</li>
 						<!-- <li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
 							<a href="/members/network"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Network List</span></div></a>
@@ -122,10 +124,9 @@
 			</div>	
 		</div>
 	</div>
+	<!-- SCROLL TO TOP -->
+	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
-
-
-
 
 
 @endsection

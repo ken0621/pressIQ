@@ -27,15 +27,15 @@
 							</div>
 						</div>
 						<!-- PROMO CONTAINER -->
-						<div class="promo-container">
+						{{-- <div class="promo-container">
 							<div class="title-container">Promo</div>
 							<div class="promo-content">
 								<img src="/themes/{{ $shop_theme }}/img/promo-img.png">
 								<div class="learn-more-button">LEARN MORE</div>
 							</div>
-						</div>
+						</div> --}}
 					</div>
-					<div class="product-list-holder col-md-9 col-sm-9 col-xs-8">
+					<div class="product-list-holder col-md-9 col-sm-12 col-xs-12">
 						<div class="prod-list-container">
 							<div class="title-container">{{ $category_name }}<div class="line-bot"></div></div>
 							<div class="prod-list row clearfix">
@@ -43,7 +43,7 @@
 								@if(count($_product) > 0)
 									@foreach($_product as $product)
 									<a href="/product/view2/{{ $product['eprod_id'] }}">
-										<div class="col-md-4 col-sm-6">
+										<div class="col-md-4 col-sm-4 col-xs-6">
 											<div class="per-item">
 												<div class="image-container">
 													<img class="1-1-ratio" src="{{ get_product_first_image($product) }}">
@@ -61,7 +61,7 @@
 									@endforeach
 								@else
 									<a href="/product/view/test">
-										<div class="col-md-4 col-sm-6">
+										<div class="col-md-4 col-sm-4 col-xs-6">
 											<div class="per-item">
 												<div class="image-container">
 													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
@@ -77,7 +77,7 @@
 										</div>
 									</a>
 									<a href="/product/view/test">
-										<div class="col-md-4">
+										<div class="col-md-4 col-sm-4 col-xs-6>
 											<div class="per-item">
 												<div class="image-container">
 													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
@@ -93,7 +93,7 @@
 										</div>
 									</a>
 									<a href="/product/view/test">
-										<div class="col-md-4">
+										<div class="col-md-4 col-sm-4 col-xs-6">
 											<div class="per-item">
 												<div class="image-container">
 													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
@@ -109,7 +109,7 @@
 										</div>
 									</a>
 									<a href="/product/view/test">
-										<div class="col-md-4">
+										<div class="col-md-4 col-sm-4 col-xs-6">
 											<div class="per-item">
 												<div class="image-container">
 													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
@@ -125,7 +125,7 @@
 										</div>
 									</a>
 									<a href="/product/view/test">
-										<div class="col-md-4">
+										<div class="col-md-4 col-sm-4 col-xs-6">
 											<div class="per-item">
 												<div class="image-container">
 													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
@@ -141,7 +141,7 @@
 										</div>
 									</a>
 									<a href="/product/view/test">
-										<div class="col-md-4">
+										<div class="col-md-4 col-sm-4 col-xs-6">
 											<div class="per-item">
 												<div class="image-container">
 													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">

@@ -17,24 +17,36 @@ use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_plan_setting;
+use App\Models\Tbl_mlm_cashback_convert_history;
+use App\Models\Rel_cashback_convert_history;
+use App\Models\Tbl_mlm_encashment_settings;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
 use App\Globals\Mlm_compute;
+use App\Globals\Warehouse2;
+use App\Globals\Mlm_slot_log;
 
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 use Validator;
 use stdClass;
 use DB;
+use session;
 
 class MLM2
 {
 	public static $shop_id;
 
-	public static function current_wallet($shop_id, $slot_id)
+	public static function current_wallet($shop_id, $slot_id, $ignore_pending = false)
 	{
-		return Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_slot", $slot_id)->sum("wallet_log_amount");
+		$data = Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_slot", $slot_id)->sum("wallet_log_amount");
+		if($ignore_pending == true)
+		{
+			$data = Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_slot", $slot_id)->where('wallet_log_payout_status','!=','PENDING')->sum("wallet_log_amount");
+		}
+
+		return $data;
 	}
 	public static function check_unused_code($shop_id, $customer_id)
 	{
@@ -123,11 +135,10 @@ class MLM2
 		
 		return $return;
 	}
-	public static function slot_payout($shop_id, $slot_id, $method, $remarks, $amount, $tax = 0, $service = 0, $other = 0, $date = null, $status = "DONE")
+	public static function slot_payout($shop_id, $slot_id, $method, $remarks, $amount, $tax = 0, $service = 0, $other = 0, $date = null, $status = "DONE", $ignore_pending = false)
 	{
 		$total = doubleval(str_replace(",","",$amount)) + doubleval(str_replace(",","",$tax)) + doubleval(str_replace(",","",$service)) + doubleval(str_replace(",","",$other));
-		$current_wallet = Self::current_wallet($shop_id, $slot_id);
-
+		$current_wallet = Self::current_wallet($shop_id, $slot_id, $ignore_pending);
 
 		if(doubleval(round($current_wallet, 0)) < doubleval(round($total, 0)))
 		{
@@ -147,6 +158,10 @@ class MLM2
 			$insert["wallet_log_payout_status"] 	= $status;
 			$insert["wallet_log_date_created"]		= ($date == null ? Carbon::now() : date("Y-m-d", strtotime($date)));
 
+			if($ignore_pending == true)
+			{
+				Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot_id)->where('shop_id',$shop_id)->where('wallet_log_payout_status','PENDING')->delete();
+			}
 			return Tbl_mlm_slot_wallet_log::insertGetId($insert);
 		}
 	}
@@ -366,6 +381,16 @@ class MLM2
 				}
 
 				$return["_wallet"]->total_points += $slot_points->points_log_points;
+
+				if($wallet_plan == "repurchase_cashback")
+				{
+					if($slot_points->points_log_converted == 1)
+					{
+						$return["_points"]->$wallet_plan -= $slot_points->points_log_points;
+					}
+					
+					$return["_wallet"]->total_points -= $slot_points->points_log_points;
+				}
 			}
 		}
 
@@ -389,7 +414,7 @@ class MLM2
 		$return["_slot"] = $_slot;
 		$return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
 		$return["_wallet"]->display_total_points = number_format($return["_wallet"]->total_points, 2) . " POINT(S)";;
-
+		
 		return $return;
 	}
 	public static function complan_to_label($shop_id, $string)
@@ -412,7 +437,7 @@ class MLM2
 
 		return $string;
 	}
-	public static function customer_direct($shop_id, $customer_id, $limit = 10)
+	public static function customer_direct($shop_id, $customer_id, $limit = 10,$paginate = 0)
 	{
 		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
 
@@ -426,23 +451,39 @@ class MLM2
 			}
 		});
 
-		$query->limit($limit);
-
-		$_direct = $query->orderBy("slot_id", "desc")->get();
+		if($limit!=0)
+		{
+			$query->limit($limit);
+		}
+		if($paginate!=0)
+		{
+			$_direct = $query->orderBy("slot_id", "desc")->paginate($paginate);
+		}
+		else
+		{
+			$_direct = $query->orderBy("slot_id", "desc")->get();
+		}
+		
 
 		foreach($_direct as $key => $direct)
 		{
+			$_direct[$key]->display_date = date("F d, Y", strtotime($direct->slot_created_date));
 			$_direct[$key]->time_ago = time_ago($direct->slot_created_date);
-
 			$_direct[$key]->profile_image = ($direct->profile == "" ? "/themes/brown/img/user-placeholder.png" : $direct->profile);
 		}
 
 		return $_direct;
 	}
-	public static function customer_rewards($shop_id, $customer_id, $limit = 10)
+	public static function customer_rewards($shop_id, $customer_id, $limit = 10,$sort_by = "0")
 	{
 		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
 		$query = Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id);
+
+		if($sort_by != "0")
+		{
+			$sort_by = strtoupper($sort_by);
+			$query = $query->where("wallet_log_plan",$sort_by);
+		}
 
 		$query->where(function($q) use ($_slot)
 		{
@@ -462,7 +503,7 @@ class MLM2
 		if($limit == 0)
 		{
 			$_reward = $query->orderBy("wallet_log_id", "desc")->paginate(10);
-			$store_pagine["notification_paginate"] = $_reward->render();
+			$store_pagine["notification_paginate"] = $_reward->appends(request()->except('page'))->render();
 			session($store_pagine);
 		}
 		else
@@ -483,6 +524,55 @@ class MLM2
 		}
 
 		return $_reward;
+	}
+	public static function customer_rewards_points($shop_id, $customer_id, $limit = 10,$sort_by = "0")
+	{
+		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
+		$query = Tbl_mlm_slot_points_log::slot()->where("shop_id", $shop_id)->where("slot_owner",$customer_id);
+		
+		if($sort_by != "0")
+		{
+			$query = $query->where("points_log_type",$sort_by);
+		}
+
+		if($limit == 0)
+		{
+			$_reward = $query->orderBy("points_log_id", "desc")->paginate(10);
+			$store_pagine["notification_paginate_points"] = $_reward->appends(request()->except('page'))->render();
+			session($store_pagine);
+		}
+		else
+		{
+			$query->limit($limit);
+			$_reward = $query->orderBy("points_log_id", "desc")->get();
+		}
+		
+
+		foreach($_reward as $key => $reward)
+		{
+			$reward_slot = Tbl_mlm_slot::where("slot_id", $reward->points_log_slot)->first();
+			$_reward[$key]->log_amount = number_format($reward->points_log_points,2);
+			$_reward[$key]->time_ago = time_ago($reward->points_log_date_claimed);
+			$_reward[$key]->display_date = date("F d, Y", strtotime($reward->points_log_date_claimed));
+			$_reward[$key]->log = Self::customer_rewards_points_contructor($reward);
+			$_reward[$key]->slot_no = $reward_slot->slot_no;
+			$_reward[$key]->points_log_type = $reward->points_log_type;
+		}
+
+		return $_reward;
+	}
+	public static function customer_rewards_points_contructor($reward)
+	{
+		$from_slot = Tbl_mlm_slot::where("slot_id",$reward->points_log_Sponsor)->first();
+		if($from_slot)
+		{
+			$message   = "Your slot no ".$reward->slot_no." earned ".$reward->log_amount." ".$reward->points_log_type." from slot no ".$from_slot->slot_no;
+			return $message;
+		}
+		else
+		{
+			return "---";
+		}
 	}
 	public static function customer_total_payout($customer_id)
 	{
@@ -522,7 +612,6 @@ class MLM2
 			$query->limit($limit);
 			$_reward = $query->orderBy("wallet_log_id", "desc")->get();
 		}
-		
 
 		foreach($_reward as $key => $reward)
 		{
@@ -607,6 +696,12 @@ class MLM2
  		$mlm_member     = ($count_slots > 0 ? true : false);
  		return $mlm_member;
 	}
+	public static function is_privilage_card_holder($shop_id, $customer_id)
+	{
+ 		$membership 	= Tbl_mlm_slot::where("slot_owner", $customer_id)->where("shop_id", $shop_id)->value('slot_membership');
+ 		$privilage_card_holder = ($membership == 1 ? true : false);
+ 		return $privilage_card_holder;
+	}
 	public static function membership_info($shop_id, $membership_id)
 	{
 		$return = Tbl_membership::where("membership_archive", 0)->where("shop_id", $shop_id)->where("membership_id", $membership_id)->first();
@@ -619,19 +714,34 @@ class MLM2
 	public static function use_membership_code($shop_id, $pin, $activation, $slot_id_created, $remarks = null, $consume = array())
 	{
 		$update["mlm_slot_id_created"] 		= $slot_id_created;
+		$update["record_log_date_updated"]	= Carbon::now();
 		$update["item_in_use"] 				= "used";
 		$update["record_inventory_status"]	= 1;
-		
-		if(count($consume) > 0)
-		{
-			$update["record_consume_ref_name"] 	= $consume['name'];
-			$update["record_consume_ref_id"]	= $consume['id'];
-		}
 
 		if($remarks)
 		{
 			$initial_record 					= Tbl_warehouse_inventory_record_log::codes($shop_id, $pin, $activation)->first();
 			$update["record_item_remarks"]	 	= $initial_record->record_item_remarks . "\r\n" . $remarks;
+
+			if($initial_record->record_warehouse_id != Warehouse2::get_main_warehouse($shop_id))
+			{
+				$consume['name'] = 'offline_transaction';
+				$consume['id'] = $slot_id_created;
+			}
+			if(!session('online_transaction'))
+			{
+				$consume['name'] = 'offline_transaction';
+				$consume['id'] = $slot_id_created;
+
+            	Warehouse2::update_inventory_count($initial_record->record_warehouse_id, 0, $initial_record->record_item_id, -1);
+			}
+            Warehouse2::insert_item_history($initial_record->record_log_id);
+		}
+		
+		if(count($consume) > 0)
+		{
+			$update["record_consume_ref_name"] 	= $consume['name'];
+			$update["record_consume_ref_id"]	= $consume['id'];
 		}
 
 		Tbl_warehouse_inventory_record_log::codes($shop_id, $pin, $activation)->update($update);
@@ -643,6 +753,8 @@ class MLM2
 	}
 	public static function create_slot($shop_id, $customer_id, $membership_id, $sponsor, $slot_no = null, $slot_type = "PS")
 	{
+		$slot_creation_limit = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->max_slot_per_account;
+		$slot_creation_count = Tbl_mlm_slot::where("slot_owner",$customer_id)->count();
 		if($slot_no)
 		{
 			$insert["slot_no"] = $slot_no;
@@ -677,9 +789,17 @@ class MLM2
     											$query->where('shop_id', Self::$shop_id);
 											});
 
+		$check_restriction = MLM2::check_membership_restriction($membership_id,$sponsor);
         $validator = Validator::make($insert, $rules);
-
-		if ($validator->fails())
+        if($slot_creation_limit != 0 && $slot_creation_count >= $slot_creation_limit)
+        {
+        	return "Your account cannot create more than ".$slot_creation_limit." slots";
+        }
+        else if($check_restriction == 1)
+        {
+        	return "Your sponsor cannot recruit this type of membership.";
+        }
+		else if ($validator->fails())
 		{
 			$errors = $validator->errors();
 			foreach ($errors->all() as $message)
@@ -1107,12 +1227,14 @@ class MLM2
         						 ->membership_points()
         						 ->customer()
         						 ->first();
+
             // Mlm Computation Plan
             $plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')
             ->get();
             // dd($slot_info,$slot_id);
+            
             if($slot_info->slot_status == 'PS')
             {
                 foreach($plan_settings as $key => $value)
@@ -1138,6 +1260,10 @@ class MLM2
             // $c = Mlm_gc::slot_gc($slot_id);
 
             Mlm_compute::set_slot_nick_name_2($slot_info);
+            if($slot_info->slot_date_computed == "0000-00-00 00:00:00")
+            {
+            	$update_slot["slot_date_computed"] = Carbon::now();
+            }
 
             $update_slot["distributed"] = 1;
             Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->update($update_slot);
@@ -1170,6 +1296,7 @@ class MLM2
 			$data["REPURCHASE_POINTS"]			= isset($item_points->REPURCHASE_POINTS) ? $item_points->REPURCHASE_POINTS : 0;
 			$data["UNILEVEL_REPURCHASE_POINTS"]	= isset($item_points->UNILEVEL_REPURCHASE_POINTS) ? $item_points->UNILEVEL_REPURCHASE_POINTS : 0;
 			$data["REPURCHASE_CASHBACK"]		= isset($item_points->REPURCHASE_CASHBACK) ? $item_points->REPURCHASE_CASHBACK : 0;
+			$data["REPURCHASE_CASHBACK_POINTS"]	= isset($item_points->REPURCHASE_CASHBACK_POINTS) ? $item_points->REPURCHASE_CASHBACK_POINTS : 0;
 			$data["DISCOUNT_CARD_REPURCHASE"]	= isset($item_points->DISCOUNT_CARD_REPURCHASE) ? $item_points->DISCOUNT_CARD_REPURCHASE : 0;
 			$data["STAIRSTEP"]					= isset($item_points->STAIRSTEP) ? $item_points->STAIRSTEP : 0;
 			$data["BINARY_REPURCHASE"]			= isset($item_points->BINARY_REPURCHASE) ? $item_points->BINARY_REPURCHASE : 0;
@@ -1243,5 +1370,80 @@ class MLM2
 		}
 
 		return $data["RANK_REPURCHASE_CASHBACK"];
+	}
+	public static function check_membership_restriction($membership_id,$sponsor_id)
+	{
+		$return 	= 0;
+		$membership = Tbl_membership::where("membership_id",$membership_id)->first();
+		if($membership)
+		{
+			$sponsor_slot = Tbl_mlm_slot::where("slot_id",$sponsor_id)->first();
+			if($sponsor_slot)
+			{
+				$sponsor_membership = Tbl_membership::where("membership_id",$sponsor_slot->slot_membership)->first();
+				if($sponsor_membership)
+				{
+					if($membership->membership_restricted == 0 && $sponsor_membership->membership_restricted == 1)
+					{
+						$return = 1;
+					}
+				}
+			}
+		}
+
+		return $return;
+	}
+	public static function convert_repurchase_cashback_points($shop_id)
+	{
+		$get_cashback 	  						 = Tbl_mlm_slot_points_log::slot()->where("shop_id",$shop_id)->where("points_log_type","RCP")->where("points_log_converted",0)->get();
+		$converted_points 						 = null;
+		// dd($get_cashback);
+		$insert["cashback_convert_history_date"] = Carbon::now();
+		$insert["shop_id"] 						 = $shop_id;
+		$history_id 							 = Tbl_mlm_cashback_convert_history::insertGetId($insert);
+		foreach($get_cashback as $cashback)
+		{
+			if(!isset($converted_points[$cashback->points_log_slot]))
+			{
+				$converted_points[$cashback->points_log_slot]  = $cashback->points_log_points;
+			}
+			else
+			{
+				$converted_points[$cashback->points_log_slot] += $cashback->points_log_points;
+			}
+
+			$rel_insert["rel_points_log_id"] 			   = $cashback->points_log_id;
+			$rel_insert["rel_cashback_convert_history_id"] = $history_id;
+			$rel_insert["shop_id"] 						   = $history_id;
+			Rel_cashback_convert_history::insert($rel_insert);
+		}	
+
+		if($converted_points != null)
+		{
+			foreach($converted_points as $key => $convert)
+			{
+				$slot_info               = Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$key)->first();
+                $log_array['earning']    = $convert;
+                $log_array['level']      = 0;
+                $log_array['level_tree'] = 'Binary Tree';
+                $log_array['complan']    = 'REPURCHASE_CASHBACK_POINTS';
+
+                $log = Mlm_slot_log::log_constructor($slot_info, $slot_info,  $log_array);
+
+                $arry_log['wallet_log_slot']         = $slot_info->slot_id;
+                $arry_log['shop_id']                 = $slot_info->shop_id;
+                $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                $arry_log['wallet_log_details']      = $log;
+                $arry_log['wallet_log_amount']       = $convert;
+                $arry_log['wallet_log_plan']         = "REPURCHASE_CASHBACK_POINTS";
+                $arry_log['wallet_log_status']       = "n_ready";   
+                $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK_POINTS', $slot_info->shop_id); 
+                Mlm_slot_log::slot_array($arry_log);
+			}
+
+
+			Tbl_mlm_slot_points_log::slot()->where("shop_id",$shop_id)->where("points_log_type","RCP")->where("points_log_converted",0)->update(['points_log_converted' => 1]);
+		}
+
 	}
 }

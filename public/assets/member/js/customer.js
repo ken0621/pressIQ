@@ -15,7 +15,8 @@ function customer() {
         popover();
         
     }
-    function tabnavigation(){
+    function tabnavigation()
+    {
         $(".nav-option").unbind("click");
         $(".nav-option").bind("click", function () {
             var content = $(this).data("content");
@@ -23,7 +24,8 @@ function customer() {
         });
     }
     
-    function popModal(){
+    function popModal()
+    {
         $(".btn-create-modal").unbind("click");
         $(".btn-create-modal").bind("click", function(){
             $(".btn-save-modallarge").html("Save customer");
@@ -650,7 +652,10 @@ function submit_modal(){
 	        data    :   form,
 	        success :   function(result){
 	            var res = JSON.parse(result);
-	            if(res['message'] == 'success'){
+	            if(res['message'] == 'success')
+	            {
+	            	toastr.success("New customer inserted");
+	                location.reload();
 	                $(".btn-save-modallarge").html('Save');
 	                $("#global_modal").modal("hide");
 	                if (typeof submit_done_customer == 'function')

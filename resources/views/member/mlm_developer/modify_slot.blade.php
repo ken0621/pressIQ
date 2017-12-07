@@ -14,6 +14,7 @@
                             <input disabled type="text" class="form-control" value="{{ $slot_info->slot_no }}">
                         </div>
                     </div>
+
                     @if($sponsor_info != null)
                     <div class="form-group">
                         <div class="col-md-12">
@@ -22,6 +23,7 @@
                         </div>
                     </div>
                     @endif
+
                     @if($placement_info != null)
                     <div class="form-group">
                         <div class="col-md-12">
@@ -39,6 +41,19 @@
                         </div>
                     </div>    
                     @endif
+
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label for="basic-input">Membership</label>
+                            <select name="membership_id" class="form-control">
+                                @foreach($_membership as $membership)
+                                <option {{ $slot_info->slot_membership == $membership->membership_id ? 'selected' : '' }} value="{{ $membership->membership_id }}">{{ $membership->membership_name }}</option>
+                                @endforeach
+                                <option value="delete_slot">DELETE SLOT</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <div class="col-md-12">

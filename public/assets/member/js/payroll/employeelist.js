@@ -114,7 +114,8 @@ function employeelist()
 	/* USE THIS FOR FILTERING THE EMPLOYEE LIST */
 	function reload_employee_list(employement_status = 0, company_id = 0)
 	{
-		var formdata = {
+		var formdata = 
+		{
 			_token:misc('_token'),
 			company_id:company_id,
 			employement_status:employement_status
@@ -212,6 +213,7 @@ function employeelist()
 
 /* CALL A FUNCTION BY NAME */
 function executeFunctionByName(functionName, context /*, args */) {
+  
   var args = [].slice.call(arguments).splice(2);
   var namespaces = functionName.split(".");
   var func = namespaces.pop();
@@ -232,17 +234,19 @@ function submit_done(data)
 	{
 
 	}
-	
 
 	data.element.modal("toggle");
+	
 	if(data.function_name == 'payrollconfiguration.reload_tbl_jobtitle')
 	{
 		modal_create_employee.reload_option(data.view, '.jobtitle-select');
 	}
+
 	if(data.function_name == 'payrollconfiguration.relaod_tbl_department')
 	{
 		modal_create_employee.reload_department(data.selected);
 	}	
+
 	if(data.function_name == 'payrollconfiguration.reload_payroll_group')
 	{
 		modal_create_employee.reload_option(data.view, '.payroll-group-select');

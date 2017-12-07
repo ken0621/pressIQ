@@ -7,6 +7,57 @@
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
     <input type="hidden" name="customer_status" value="{{$customer_status or 'approved'}}">
     <div class="form-horizontal">
+
+    @if($check_user == true)
+    <div class="form-group">
+      <div class="col-md-6">
+        <label for="">Company</label>
+        <input type="text" name="company" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label for="">Email</label>
+        <input type="email" name="email" class="form-control"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-6">
+        <div class="col-md-2 padding-lr-1">
+          <label>Title</label>
+          <input type="text" name="title" class="form-control auto-name title margin-l-0"/>
+        </div>
+        <div class="col-md-3 padding-lr-1">
+          <label>First name</label>
+          <input type="text" name="first_name" class="form-control auto-name first_name" value="{{$value or ''}}" required/>
+        </div>
+        <div class="col-md-3 padding-lr-1">
+          <label>Middle name</label>
+          <input type="text" name="middle_name" class="form-control auto-name middle_name"/>
+        </div>
+        <div class="col-md-3 padding-lr-1">
+          <label>Last name</label>
+          <input type="text" name="last_name" class="form-control auto-name last_name"/>
+        </div>
+        <div class="col-md-1 padding-lr-1">
+          <label>Suffix</label>
+          <input type="text" name="suffix" class="form-control auto-name suffix"/>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="col-md-4 padding-lr-1">
+          <label for="">Phone</label>
+          <input type="text" name="phone" class="form-control"/>
+        </div>
+        <div class="col-md-4 padding-lr-1">
+          <label for="">Mobile</label>
+          <input type="text" name="mobile" class="form-control"/>
+        </div>
+        <div class="col-md-4 padding-lr-1">
+          <label for="">Fax</label>
+          <input type="text" name="fax" class="form-control"/>
+        </div>
+      </div>
+    </div>
+    @else
     <div class="form-group">
       <div class="col-md-6">
         <div class="col-md-2 padding-lr-1">
@@ -55,6 +106,7 @@
         </div>
       </div>
     </div>
+    @endif
     <div class="form-group">
       <div class="col-md-6">
         <label for="">Display name as</label>
@@ -112,7 +164,10 @@
           <li><a data-toggle="tab" href="#tax-info">Tax info</a></li>
           <li><a data-toggle="tab" href="#payment-and-billing">Payment and billing</a></li>
           <li><a data-toggle="tab" href="#attachment">Attachment</a></li>
-          <li><a data-toggle="tab" href="#mlm">MLM</a></li>
+          @if(!$pis)
+            <li><a data-toggle="tab" href="#mlm">MLM</a></li>
+            <li><a data-toggle="tab" href="#stockist">Stockist</a></li>
+          @endif
         </ul>
         
         <div class="tab-content tab-content-custom">
@@ -406,6 +461,26 @@
                   <div class="col-md-6">
                     <label>Password</label>
                     <input type="password" class="form-control mlm_password" name="mlm_password" readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="stockist" class="tab-pane fade">
+            <br>
+            <div class="form-horizontal">
+              <div class="form-group">
+                <div class="col-md-12">
+                </div>
+                <div class="col-md-12">
+                  <div class="col-md-6">
+                    <label>Select Warehouse</label>
+                    <select class="form-control" name="stockist_warehouse_id">
+                      @foreach($_warehouse as $warehouse)
+                      <option value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
+                      @endforeach
+                    </select>
                   </div>
                 </div>
               </div>

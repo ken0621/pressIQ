@@ -17,6 +17,11 @@ $text-dark: #272c2f;
 		vertical-align: middle;
 		display: inline-block;
 	}
+	
+	.align-custom
+	{
+		text-align: center;
+	}
 
 	.brown-icon-money
 	{
@@ -29,7 +34,7 @@ $text-dark: #272c2f;
 		color: $text-dark;
 		font-size: 18px;
 		letter-spacing: 0.5px;
-		font-weight: normal;
+		font-weight: $light;
 		background-color: #fff;
 		padding: 5px 15px;
 		margin-top: 5px;
@@ -40,7 +45,7 @@ $text-dark: #272c2f;
 			//mixin
 			@include transition(0.2s);
 
-			font-weight: bold;
+			font-weight: $semi-bold;
 			font-size: 14px;
 			text-decoration: none;
 			margin-top: 3px;
@@ -81,7 +86,7 @@ $text-dark: #272c2f;
 						color: #344049;
 						font-size: 14px;
 						padding-bottom: 15px;
-						font-weight: bold;
+						font-weight: $semi-bold;
 						text-transform: uppercase;
 					}
 				}
@@ -117,7 +122,6 @@ $text-dark: #272c2f;
 	}
 	.chart-legend
 	{
-
 		.holder
 		{
 			font-size: 15px;
@@ -137,18 +141,26 @@ $text-dark: #272c2f;
 				vertical-align: middle;
 				font-size: 15px;
 				letter-spacing: 0.5px;
-				font-weight: bold;
+				font-weight: $semi-bold;
 				font-family: $content-text;
-				color: #019771;
+				color: #D4B044;
 
 				span
 				{
 					color: #333;
 					width: 200px;
 					display: inline-block;
-					font-weight: normal;
+					font-weight: $light;
 				}
 			}
+		}
+
+		.btn-shift-use-pcode
+		{
+			@include transition(0.2s);
+			border-radius: 25px;
+			background-color: #D4B044;
+			color: #fff;
 		}
 	}
 
@@ -348,6 +360,11 @@ $text-dark: #272c2f;
 	}
 }
 
+/* .modal-open
+{
+	overflow-x: auto;
+} */
+
 /* Success */
 .popup-success
 {
@@ -376,7 +393,7 @@ $text-dark: #272c2f;
 
 			.text-header
 			{
-				font-weight: bold;
+				font-weight: $semi-bold;
 				font-size: 25px;
 				color: #344049;
 				padding-top: 5px;
@@ -393,7 +410,7 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: "Arial";
-				font-weight: bold;
+				font-weight: $semi-bold;
 				font-size: 13px;
 				padding-bottom: 20px;
 

@@ -4,7 +4,7 @@ use PDF;
 use App;
 class Pdf_global
 {
-	public static function show_pdf($html, $orient = null, $footer = '')
+	public static function show_pdf($html, $orient = null, $footer = '', $paper_size = 'a4')
 	{
 		$html_b = Pdf_global::bootstrap($html);
         $pdf = App::make('snappy.pdf.wrapper');
@@ -17,7 +17,11 @@ class Pdf_global
         {
         	$pdf->setOrientation('landscape');
         }
-        $pdf->setOption('viewport-size', '1366x1024');
+        if($paper_size != null)
+        {
+        	$pdf->setPaper($paper_size);
+        }
+        $pdf->setOption('viewport-size','1366x1024');
         return $pdf->inline();
 	}
 	public static function show_pdfv2($html, $orient = null, $footer = '')

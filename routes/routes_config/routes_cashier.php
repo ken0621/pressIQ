@@ -9,6 +9,10 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::any('/pos/remove_item','Member\CashierController@pos_remove_item');
 	Route::any('/pos/set_cart_info/{key}/{value}','Member\CashierController@set_cart_info');
 	Route::any('/pos/process_sale','Member\CashierController@process_sale');
+	Route::any('/pos/add_payment','Member\CashierController@add_payment');
+	Route::any('/pos/load_payment','Member\CashierController@load_payment');
+	Route::any('/pos/remove_payment','Member\CashierController@remove_payment');
+	Route::any('/pos/load_warehouse','Member\CashierController@load_warehouse');
 
 	/* CUSTOMER */
 	Route::any('/pos/search_customer','Member\CashierController@pos_search_customer');
@@ -24,4 +28,10 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::any('/transactions_list/table','Member\TransactionController@transaction_list_table');
 	Route::any('/transactions_list/view/{id}','Member\TransactionController@view_pdf');
 	Route::any('/transactions_list/view_receipt/{id}','Member\TransactionController@view_receipt');
+
+
+	/* COMMISSION CALCULATOR */
+	AdvancedRoute::controller('/commission_calculator', 'Member\CommissionCalculatorController');
+	AdvancedRoute::controller('/sales_agent', 'Member\SalesAgentController');
+	/* End */
 });

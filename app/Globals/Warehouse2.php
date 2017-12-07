@@ -36,9 +36,14 @@ use App\Globals\Merchant;
 use Validator;
 class Warehouse2
 {   
-    public static function get_all_warehouse($shop_id)
+    public static function get_all_warehouse($shop_id, $warehouse_id = '')
     {
-        return Tbl_warehouse::where('warehouse_shop_id',$shop_id)->where('archived',0)->get();
+        $data = Tbl_warehouse::where('warehouse_shop_id',$shop_id)->where('archived',0);
+        if($warehouse_id != '')
+        {
+            $data = $data->where('warehouse_id',$warehouse_id);
+        }
+        return $data->get();
     }
 	public static function get_current_warehouse($shop_id)
 	{
@@ -451,6 +456,7 @@ class Warehouse2
                 $insert[$ctr_qty]['record_log_date_updated']   = Carbon::now();
                 $insert[$ctr_qty]['mlm_pin']                   = Warehouse2::get_mlm_pin($shop_id);
                 $insert[$ctr_qty]['mlm_activation']            = Item::get_mlm_activation($shop_id);
+                $insert[$ctr_qty]['ctrl_number']               = Warehouse2::get_control_number($warehouse_id, $shop_id, Item::get_item_type($item_id));
 
                 if($serial_qty > 0)
                 {
@@ -482,6 +488,24 @@ class Warehouse2
         }       
 
         return $return;
+    }
+    public static function get_control_number($warehouse_id, $shop_id, $item_type = null)
+    {
+        $return = 0;
+        if($shop_id == 5) // SPECIAL FOR BROWN 
+        {
+            if($item_type == 5) // MEMBERSHIP KIT TYPE ITEM
+            {
+                $check = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->value('main_warehouse');
+                if($check == 3)
+                {
+                    $count = Tbl_warehouse_inventory_record_log::item()->where('record_warehouse_id',$warehouse_id)->where('item_type_id',$item_type)->count();
+                    $return = $count + 1;
+                }
+            }
+        }
+        return $return;
+
     }
     public static function update_inventory_count($warehouse_id, $slip_id, $item_id, $quantity)
     {
@@ -601,7 +625,7 @@ class Warehouse2
         $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
         if($quantity > $inventory_qty)
         {
-            $return .= "The quantity of ITEM No. <b>".$item_id."</b> is not enough to consume. <br>";
+            $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
         }
 
         return $return;
@@ -776,7 +800,7 @@ class Warehouse2
         return $return;
 
     }
-    public static function consume_product_codes($shop_id = 0, $mlm_pin = '', $mlm_activation = '', $consume = array())
+    public static function consume_product_codes($shop_id = 0, $mlm_pin = '', $mlm_activation = '', $consume = array(), $remarks = "Consume using product codes.", $code_used = 'used')
     {
         $return = null;
         $val = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
@@ -786,7 +810,7 @@ class Warehouse2
                                                  ->first();
         if($val)
         {
-            Warehouse2::consume_record_log($shop_id, $val->record_warehouse_id, $val->record_item_id,$val->record_log_id, 1, "Consume using product codes.", $consume);
+            Warehouse2::consume_record_log($shop_id, $val->record_warehouse_id, $val->record_item_id,$val->record_log_id, 1, $remarks, $consume,null, $code_used);
             $return = $val->record_item_id;
         }
         else
@@ -797,7 +821,7 @@ class Warehouse2
         return $return;
 
     }
-    public static function consume_record_log($shop_id, $warehouse_id, $item_id = 0, $recor_log_id = 0, $quantity = 1, $remarks = '', $consume = array(), $inventory_history = '')
+    public static function consume_record_log($shop_id, $warehouse_id, $item_id = 0, $recor_log_id = 0, $quantity = 1, $remarks = '', $consume = array(), $inventory_history = '', $code_used = 'used')
     {
         $return = null;
 
@@ -820,7 +844,7 @@ class Warehouse2
         $insert['record_consume_ref_id']     = isset($consume['id']) ? $consume['id'] : 0;
         $insert['record_inventory_status']   = 1;
         $insert['record_log_date_updated']   = Carbon::now();
-        $insert['item_in_use']               = 'used';
+        $insert['item_in_use']               = $code_used;
        
         Warehouse2::insert_item_history($recor_log_id);
         Tbl_warehouse_inventory_record_log::where('record_log_id',$recor_log_id)->update($insert);
@@ -983,5 +1007,23 @@ class Warehouse2
         }
 
         return $_item;       
+    }
+    public static function get_codes($warehouse_id, $start_date, $end_date, $transaction_type = '')
+    {
+        $data = Tbl_warehouse_inventory_record_log::warehouse()->item()->slotinfo()->customerinfo()->where("item_in_use",'used')->where("record_inventory_status",1)->where('record_warehouse_id',$warehouse_id)->whereBetween('record_log_date_updated',[$start_date, $end_date]);
+
+        if($transaction_type != '')
+        {
+            if($transaction_type == 'online')
+            {
+                $data = $data->where('record_consume_ref_name', 'transaction_list');
+            }
+            if($transaction_type == 'offline')
+            {
+                $data = $data->where('record_consume_ref_name','!=', 'transaction_list');
+            }
+        }
+
+        return $data->get();
     }
 }

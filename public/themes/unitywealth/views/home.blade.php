@@ -2,17 +2,45 @@
 @section("content")
 <div class="content">
     <!-- Media Slider -->
-    <!-- <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/front-img2.jpg')">
+    <div id="home" class="slider-wrapper" style="background-image: url('{{ get_content($shop_theme_info, "home", "home_banner") }}')">
         <div class="container">
-            <div class="caption-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-caption.png"></div>
+            <div class="caption-logo-container"><img src="{{ get_content($shop_theme_info, "home", "home_banner_image_logo") }}"></div>
             <div class="caption-container">
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                {{-- <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p> --}}
             </div>
-            <div class="btn-container animated fadeInDown">SHOW MORE</div>
-            <span class="animated fadeInDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+            <a href="#company-profile" class="smoth-scroll"><div class="btn-container animated fadeInDown">SHOW MORE</div></a>
+            <div class="scroll-down animated fadeInDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></div>
+            <!-- COMPANY PROFILE -->
+            <div id="company-profile" class="wrapper-2">
+                <div class="container">
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="content-details">
+                                <p class="title wow fadeInLeft" data-wow-delay=".1s">COMPANY PROFILE</p>
+                                <p class="desc wow fadeInLeft" data-wow-delay=".2s">
+                                    {{ get_content($shop_theme_info, "home", "home_company_profile") }} 
+                                </p>
+                                <p class="title-2 wow fadeInLeft" data-wow-delay=".3s">MISSION</p>
+                                <p class="desc wow fadeInLeft" data-wow-delay=".4s">
+                                    {{ get_content($shop_theme_info, "home", "home_company_mission") }} 
+                                </p>
+                                <p class="title-2 wow fadeInLeft" data-wow-delay=".5s">VISION</p>
+                                <p class="des wow fadeInLeft" data-wow-delay=".6s">
+                                    {{ get_content($shop_theme_info, "home", "home_company_vision") }} 
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="img-container wow fadeInRight">
+                                <img src="{{ get_content($shop_theme_info, "home", "home_company_profile_image") }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div> -->
-    <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/countdown-img.jpg')">
+    </div>
+    {{-- <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/countdown-img.jpg')">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12 col-xs-12">
@@ -48,7 +76,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>

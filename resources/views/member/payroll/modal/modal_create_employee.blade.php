@@ -30,11 +30,15 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="col-md-6 padding-lr-1">
+          <div class="col-md-4 padding-lr-1">
             <small>Employee number</small>
             <input type="text" name="payroll_employee_number" class="form-control" required/>
           </div>
-          <div class="col-md-6 padding-lr-1">
+          <div class="col-md-4 padding-lr-1">
+            <small>Biometric number</small>
+            <input type="text" name="payroll_employee_biometric_number" class="form-control" required/>
+          </div>
+          <div class="col-md-4 padding-lr-1">
             <small>ATM No.</small>
             <input type="text" name="payroll_employee_atm_number" class="form-control"/>
           </div>
@@ -171,7 +175,7 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Job Title</small>
-                        <select class="form-control jobtitle-select" required name="payroll_jobtitle_id">
+                        <select class="form-control jobtitle-select" name="payroll_jobtitle_id" required>
                           <option value="">Select Job Title</option>
                         </select>
                       </div>
@@ -280,8 +284,7 @@
                 </div>
                         
                 <div class="form-group">
-                  <div class="col-md-6">
-                    
+                  <div class="col-md-6"> 
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Monthly Rate</small>
@@ -294,7 +297,13 @@
                         <input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right">
                       </div>
                     </div>
-                    <div class="form-group hidden">
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <small>Hourly Rate</small>
+                        <input type="number" step="any" name="payroll_employee_salary_hourly" class="form-control text-right">
+                      </div>
+                    </div>
+                    <div class="form-group">
                       <div class="col-md-12">
                         <small>COLA (Monthly)</small>
                         <input type="number" step="any" name="monthly_cola" class="form-control text-right">
@@ -312,8 +321,8 @@
                         <input type="number" step="any" name="payroll_employee_salary_pagibig" class="form-control text-right">
                       </div>
                     </div>
-
                   </div>
+
                   <div class="col-md-6 declared-salaries hidden">
                     <div class="form-group">
                       <div class="col-md-12">

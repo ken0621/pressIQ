@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $content-text2: 'Raleway', sans-serif;
 $regular: 400;
@@ -5,14 +7,6 @@ $semi-bold: 600;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
-
-@mixin transition($transition)
-{
-	  -webkit-transition: all $transition ease-in-out;
-	  -moz-transition: all $transition ease-in-out;
-	  -o-transition: all $transition ease-in-out;
-	  transition: all $transition ease-in-out;
-}
 
 .dashboard
 {
@@ -45,13 +39,18 @@ $text-dark: #272c2f;
 		{
 			//mixin
 			@include transition(0.2s);
-
 			font-weight: bold;
 			font-size: 14px;
 			text-decoration: none;
 			margin-top: 3px;
 			text-transform: uppercase;
 			opacity: 0;
+			float: right;
+
+			@media screen and (max-width: 500px)
+			{
+				float: none;
+			}
 		}
 
 		&:hover
@@ -352,6 +351,11 @@ $text-dark: #272c2f;
 			}
 		}
 	}
+}
+
+.leadlink
+{
+	padding: 5px;
 }
 
 /* Success */

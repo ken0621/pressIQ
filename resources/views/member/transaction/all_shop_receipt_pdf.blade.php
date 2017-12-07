@@ -63,7 +63,9 @@
                 @if($customer_address)
                 <div class="detail-row"><strong>Shipping Address :</strong> {{ $customer_address->customer_street }} {{ $customer_address->customer_state }} {{ $customer_address->customer_city }} {{ $customer_address->customer_zipcode }}</div>
                 @endif
+                @if($customer_info)
                 <div class="detail-row"><strong>TIN :</strong> {{ $customer_info->tin_number }}</div>
+                @endif
             </div>
             <div class="sub-title">INVOICE DETAILS:</div>
             <div class="holder invoice-details">
@@ -91,9 +93,11 @@
                         @if(count($_codes) > 0)
                         <tr>
                             <td colspan="5">
-                                @foreach($_codes[$item->item_id] as $c)
-                                <div>PIN <b>{{$c['item_pin']}}</b> - ACTIVATION CODE <b>{{$c['item_activation']}}</b></div>
-                                @endforeach
+                                @if(isset($_codes[$item->item_id]) && count($_codes[$item->item_id]) > 0)
+                                    @foreach($_codes[$item->item_id] as $c)
+                                    <div>PIN <b>{{$c['item_pin']}}</b> - ACTIVATION CODE <b>{{$c['item_activation']}}</b></div>
+                                    @endforeach
+                                @endif
                             </td>
                         </tr>
                         @endif
@@ -110,23 +114,53 @@
                 </div>
                 <!-- END TOTAL SUMMARY -->
             </div>
-            <div class="sub-title">PAYMENT DETAILS:</div>
-            <div class="holder">
-                <div class="clearfix">
-                    <div class="payment-detail pull-left">
-                        <div class="rows"><strong>Payment Date :</strong> {{date('M d, Y',strtotime($list->transaction_date_created))}}</div>
-                        <div class="rows"><strong>Payment Type :</strong> {{ ucfirst($list->payment_method) }}</div>
+            <div class="payment-detail-container">
+                <div class="sub-title">PAYMENT DETAILS:</div>
+                <div class="holder" {{$total_tendered = 0}}>
+                    <div class="clearfix">
+                        @if($list->payment_method != 'pos')
+                        <div class="payment-detail pull-left"  {{$total_tendered = $list->transaction_total}}>
+                            <div class="rows"><strong>Payment Date :</strong> {{date('M d, Y',strtotime($list->transaction_date_created))}}</div>
+                            <div class="rows"><strong>Payment Type :</strong> </div>
+                            <div class="rows">
+                                <div style="width:750px;margin-left: 30px;">
+                                    <span style="width: 375px">{{ ucfirst($list->payment_method) }}</span>
+                                    <span  class="pull-right" style="width: 175px">{{currency('',$list->transaction_total)}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        @else
+                         <div class="payment-detail pull-left">
+                            <div class="rows"><strong>Payment Date :</strong> {{date('M d, Y',strtotime($list->transaction_date_created))}}</div>
+                            <div class="rows" ><strong>Payment Type :</strong> </div>
+                            @if(count($_payment_list) > 0)
+                                @foreach($_payment_list as $payment)
+                                <div class="rows">
+                                    <div class="{{$total_tendered += $payment->transaction_payment_amount}}" style="width:750px;margin-left: 30px;">
+                                        <span style="width: 375px">{{strtoupper($payment->transaction_payment_type)}}</span>
+                                        <span  class="pull-right" style="width: 175px">{{currency('',$payment->transaction_payment_amount)}}</span>
+                                    </div>
+                                </div>
+                                @endforeach
+                            @endif
+                        </div>
+                        @endif
                     </div>
-                    <div class="total-summary pull-right">
+                </div>
+                <div class="holder">
+                    <div class="total-summary text-right" {{isset($total_tendered) ? '' : $total_tendered = 0}}>
+                        <div class="rows">TENDERED PAYMENT : PHP {{ number_format($total_tendered, 2) }}</div>
                         <div class="rows">TOTAL PAID AMOUNT : PHP {{ number_format($list->transaction_total, 2) }}</div>
+                        <div class="rows">CHANGE : PHP {{ number_format($total_tendered - $list->transaction_total, 2) }}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <footer>BIR PERMIT NO. : XXXX-XXX-XXXXXX-YYY
+        {{-- <footer>BIR PERMIT NO. : XXXX-XXX-XXXXXX-YYY
 Date Issued : February 21, 2014
 Approved Series FR : 10000001 TO: 19999999
-This Sales Invoice shall be valid for five (5) years from the date of ATP</footer>
+This Sales Invoice shall be valid for five (5) years from the date of ATP
+        </footer> --}}
     </div>
 </body>
 </html>
@@ -135,4 +169,8 @@ This Sales Invoice shall be valid for five (5) years from the date of ATP</foote
     {
         font-size: 12px;
     }
+</style>
+
+<style type="text/css">
+    div.payment-detail-container { page-break-inside: avoid; }
 </style>

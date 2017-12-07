@@ -13,6 +13,9 @@
                 </small>
             </h1>
             <a class="panel-buttons btn btn-custom-primary pull-right popup" link="/member/item/add" size="lg" data-toggle="modal" data-target="#global_modal">Add Item</a>
+            @if($pis)
+            <a href="/member/item/print_new_item" target="_blank" class="pull-right btn btn-custom-white"><i class="fa fa-print"></i> Print New Added Item</a>
+            @endif
         </div>
     </div>
 </div>
@@ -63,6 +66,7 @@
                                     </th>
                                     <th>Item Details</th>
                                     <th>Item Price History</th>
+                                    <!-- <th>Receipt</th> -->
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -98,6 +102,13 @@
                                         {!! $item->item_price_history !!}
                                         </small>
                                     </td>
+     <!--                                <td class="text-center">
+                                        @if(App\Globals\Item::view_item_receipt($item->item_id) != null)
+                                            <a href="#" class="popup" link="/member/item/view_item_receipt/{{$item->item_id}}" size="lg" data-toggle="modal" data-target="#global_modal">View</a>
+                                        @else
+                                            No Record
+                                        @endif
+                                    </td> -->
                                     <td>
                                     @if($can_edit_other_item == 1)
                                     <div class="btn-group">

@@ -232,6 +232,54 @@
                                             <option value="0" {{$plan_settings->plan_settings_placement_required == 0 ? 'selected' : ''}}>Not Required</option>
                                         </select>
                                     </td>
+                                </tr>                        
+                                <tr>
+                                    <td>Max Slot Per Account <b>(0 = infinite)</b></td>
+                                    <td>
+                                        <input type="number" class="form-control" name="max_slot_per_account" value="{{$plan_settings->max_slot_per_account}}">
+                                    </td>
+                                </tr>                    
+                                <tr>
+                                    <td>Max Slot Per Account <b>(0 = infinite)</b></td>
+                                    <td>
+                                        <input type="number" class="form-control" name="max_slot_per_account" value="{{$plan_settings->max_slot_per_account}}">
+                                    </td>
+                                </tr>                  
+                                <tr>
+                                    <td>Enable Privilege</td>
+                                    <td>
+                                        <select class="form-control" name="enable_privilege_system">
+                                            <option value="0" {{$plan_settings->enable_privilege_system == 0 ? 'selected' : ''}}>Disable</option>
+                                            <option value="1" {{$plan_settings->enable_privilege_system == 1 ? 'selected' : ''}}>Enable</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                    <td>Privilege Membership</td>
+                                    <td>
+                                        <select class="form-control" name="membership_chosen_id">
+                                                <option value="0">None</option>
+                                            @foreach($membership_list as $list)
+                                                <option value="{{$list->membership_id}}" {{$list->membership_privilege == 1 ? 'selected' : ''}}>{{$list->membership_name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                                </tr>
+                                    <td>Restricted Membership</td>
+                                    <td>
+                                        <select class="form-control" name="membership_restricted_id">
+                                                <option value="0">None</option>
+                                                @foreach($membership_list as $list)
+                                                    <option value="{{$list->membership_id}}" {{$list->membership_restricted == 1 ? 'selected' : ''}}>{{$list->membership_name}}</option>
+                                                @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                                </tr>
+                                    <td>Repurchase Cashback Points Convert Day</td>
+                                    <td>
+                                        <input type="number" class="form-control" name="repurchase_cashback_date_convert" value="{{$plan_settings->repurchase_cashback_date_convert}}">
+                                    </td>
                                 </tr>
                             </tbody>
                         

@@ -42,6 +42,14 @@ function theme_custom()
 	            }
 	         });
 
+	        // Open a URL in a lightbox
+			// var lightbox = lity('//www.youtube.com/watch?v=XSGBVzeBUbk');
+
+			// Bind as an event handler
+			$(document).on('click', '[data-lightbox]', lity);
+
+			
+
 	        $('.slider3').diyslider({
 	            width: "580px", // width of the slider
 	            height: "120px", // height of the slider
@@ -60,13 +68,38 @@ function theme_custom()
 	            $('.slider3').diyslider("move", "forth");
 	        });
 
+	        //Mel push menu
+	        /*$(document).ready(function() {
+        		$menuLeft = $('.pushmenu-left');
+        		$nav_list = $('#nav_list');
+        		
+        		$nav_list.click(function() {
+        			$(this).toggleClass('active');
+        			$('.pushmenu-push').toggleClass('pushmenu-push-toright');
+        			$menuLeft.toggleClass('pushmenu-open');
+        		});
+        	});*/
+
+    		$menuLeft = $('.pushmenu-left');
+    		$nav_list = $('#nav_list');
+    		
+    		$nav_list.click(function() {
+    			$(this).toggleClass('active');
+    			// $('.pushmenu-push').toggleClass('pushmenu-push-toright');
+    			$menuLeft.toggleClass('pushmenu-open');
+    		});
+
+    		/*EXIT SIDE NAV TOGGLE*/
+            $('.nav-ext').click(function()
+            {
+                $('#nav_list').click();
+            });
 
 	        // NAVIRINO CLICK TOGGLE
 	        $(".menu-nav").click(function()
 	        {
 	            $(".navirino").toggle("slow");
 	        });
-
 
 	        /*PRODUCT HOVER TOGGLE*/
 	        $('.product-hover').hover(function()
@@ -220,4 +253,17 @@ function ready_load_mini_ecom_cart()
 		$('.mini-cart-quantity').html(quantity);
 		$('.mini-cart-total-price').html(total_price);
 	});
+}
+
+function on() 
+{
+    document.getElementById("overlay").style.display = "block";
+    $("body").css("overflow", "hidden");
+}
+
+function off()
+{
+    document.getElementById("overlay").style.display = "none";
+    $('.pushmenu').removeClass("pushmenu-open");
+    $("body").css("overflow", "auto");
 }

@@ -14,6 +14,7 @@
                 </small>
                 </h1>
                 <div class="dropdown pull-right">
+                    <button type="button" class="btn btn-def-white btn-custom-white popup" link="/member/ecommerce/product_order2/settings" size="lg"><i class="fa fa-cog"></i> Order Settings</button>
                     <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-upload"></i> Import Shipping</button>
                     <div class="dropdown" style="display: inline-block;">
                         <button class="btn btn-def-white btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-file-excel-o"></i> Export to Excel <span class="caret"></span></button>
@@ -46,6 +47,7 @@
             <li class="active change-tab pending-tab cursor-pointer" mode="paid"><a class="cursor-pointer"><i class="fa fa-check"></i> Paid</a></li>
             <li class="change-tab pending-tab cursor-pointer" mode="unconfirmed"><a class="cursor-pointer"><i class="fa fa-money"></i> Unconfirmed Payment</a></li>
             <li class="change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-truck"></i> Pending for Delivery</a></li>
+            <li class="cursor-pointer change-tab approve-tab" mode="reject"><a class="cursor-pointer"><i class="fa fa-close"></i> Rejected Payment</a></li>
             <li class="cursor-pointer change-tab approve-tab" mode="failed"><a class="cursor-pointer"><i class="fa fa-clock-o"></i> Failed Orders</a></li>
         </ul>
         <div class="search-filter-box hidden">

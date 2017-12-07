@@ -111,6 +111,7 @@ class Tbl_payroll_employee_basic extends Model
     public function scopeShift($query)
     {
     	$query->join("tbl_payroll_shift_code", "tbl_payroll_shift_code.shift_code_id", "=", "tbl_payroll_employee_basic.shift_code_id");
+    	return $query;
     }
     public function scopeDay($query)
     {
@@ -120,5 +121,11 @@ class Tbl_payroll_employee_basic extends Model
     {
     	$query->join("tbl_payroll_shift_time", "tbl_payroll_shift_time.shift_day_id", "=", "tbl_payroll_shift_day.shift_day_id");
     }
+    public function scopeEmployeeShift($query, $employee_id)
+    {
+    	$query->join("tbl_payroll_shift_code", "tbl_payroll_shift_code.shift_code_id", "=", "tbl_payroll_employee_basic.shift_code_id")
+    		  ->where('payroll_employee_id',$employee_id);
 
+    	return $query;
+    }
 }

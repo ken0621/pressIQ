@@ -1,4 +1,10 @@
 <?php
+AdvancedRoute::controller('/exam', 'ExamController');
+AdvancedRoute::controller('/super/client', 'Super\SuperClientController');
+AdvancedRoute::controller('/super/admin', 'Super\SuperAdminController');
+AdvancedRoute::controller('/super/user', 'Super\SuperUserController');
+AdvancedRoute::controller('/super', 'Super\SuperDashboardController');
+
 Route::get('/ref/{id}', 'LeadController@ref');
 Route::any('/inspirers', 'SampleTesting@inspirer');
 Route::any('/inspirer', 'SampleTesting@inspirer');
@@ -139,9 +145,6 @@ Route::any('/register', 'Login\MemberLoginController@register');
 Route::post('/createAccount', 'Frontend\HomeController@createAccount');
 
 
-Route::any('/employee_login', 'Login\EmployeeLoginController@employee_login');
-
-
 Route::group(array('prefix' => '/member/{page}/'), function()
 {
 	//order start
@@ -201,11 +204,18 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::get('product_order2','Member\ProductOrderController2@index');
 	Route::post('product_order2/table','Member\ProductOrderController2@table');
 	Route::get('product_order2/proof','Member\ProductOrderController2@proof');
+	Route::get('product_order2/details','Member\ProductOrderController2@details');
 	Route::get('product_order2/confirm_payment','Member\ProductOrderController2@confirm_payment');
 	Route::post('product_order2/confirm_payment_submit','Member\ProductOrderController2@confirm_payment_submit');
+	Route::get('product_order2/reject_payment','Member\ProductOrderController2@reject_payment');
+	Route::post('product_order2/reject_payment_submit','Member\ProductOrderController2@reject_payment_submit');
+	
 	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
 	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
 	Route::get('product_order2/export','Member\ProductOrderController2@export');
+
+	Route::get('product_order2/settings','Member\ProductOrderController2@settings');
+	Route::post('product_order2/settings','Member\ProductOrderController2@settings_submit');
 	//product order end
 });
 
@@ -244,6 +254,7 @@ Route::get("/member/ecommerce/wishlist/list","Member\WishlistController@list");
 
 Route::any('/member/item', 'Member\ItemController@index'); /* ERWIN */  
 Route::any('/member/item/add', 'Member\ItemController@add'); /* ERWIN */
+Route::any('/member/item/view_item_receipt/{id}', 'Member\ItemController@view_item_receipt'); /* ERWIN */
 Route::any('/member/item/load_all_um','Member\ItemController@load_all_um');
 Route::any('/member/item/add_submit', 'Member\ItemController@add_submit'); /* ERWIN */
 Route::any('/member/item/edit/{id}', 'Member\ItemController@edit'); /* ERWIN */
@@ -258,6 +269,7 @@ Route::any('/member/item/data', 'Member\ItemController@data'); /* ERWIN */
 Route::get('/member/item/mulitple_price_modal/{id}', 'Member\ItemController@get_multiple_price_modal'); /* B */
 Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_multiple_price_modal'); /* B */
 Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_item_new_price'); /* B */
+Route::get('/member/item/print_new_item','Member\ItemController@print_new_item');
 
 Route::get('/member/item/approve_request/{id}', 'Member\ItemController@merchant_approve_request'); /* ERWIN */
 Route::post('/member/item/approve_request_post/approve', 'Member\ItemController@merchant_approve_request_post'); /* ERWIN */
@@ -273,6 +285,8 @@ Route::any('/member/pis_counter','Member\PurchasingInventorySystemController@pis
 Route::any('/member/item/view_item_history/{id}','Member\ItemController@view_item_history');
 Route::any('/member/item/add_submit_pis','Member\ItemController@add_submit_pis');
 Route::any('/member/item/edit_submit_pis','Member\ItemController@edit_submit_pis');
+Route::any('/member/item/delete_item_history','Member\ItemController@delete_item_history');
+
 
 Route::any('/member/enable_disable_pis/{pass}/{action}','Member\PurchasingInventorySystemController@enable_pis');
 /*END ITEM FOR PIS*/
@@ -330,8 +344,10 @@ Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController
 
 /* PRICE LEVEL */
 Route::any('/member/item/price_level','Member\ItemPriceLevelController@index');
+Route::any('/member/item/price_level/table','Member\ItemPriceLevelController@index_table');
 Route::get('/member/item/price_level/add','Member\ItemPriceLevelController@add');
 Route::post('/member/item/price_level/add','Member\ItemPriceLevelController@add_submit');
+Route::post('/member/item/price_level/edit_submit','Member\ItemPriceLevelController@edit_submit');
 
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
@@ -377,6 +393,9 @@ Route::any('/member/pis/agent/archived/{id}/{action}','Member\AgentController@ar
 Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_submit');
 /* END AGENT*/
 Route::any('/member/report/agent/profit_loss','Member\ReportAgentProfitLossController@index');
+
+/*LOGISTIC REPORT*/
+Route::any('/member/report/logistic','Member\ReportLogisticController@index');
 
 /*SALES LIQUIDATION*/
 Route::any('member/cashier/sales_liquidation','Member\PisSalesLiquidationController@index');
@@ -471,6 +490,7 @@ AdvancedRoute::controller('/member/item/warehouse/wis', 'Member\WarehouseIssuanc
 /* RR */
 AdvancedRoute::controller('/member/item/warehouse/rr', 'Member\WarehouseReceivingReportController');
 /* End */
+
 
 
 /* START PIS ARCY*/
@@ -583,6 +603,7 @@ Route::any('/tablet/sales_receipt/create_submit','Member\TabletPISController@cre
 Route::any('/tablet/sales_receipt/update_submit','Member\TabletPISController@update_sales_receipt_submit');
 
 Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_submission');
+
 Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
 
 Route::any('/tablet/sync_data/{table}/{date}','Member\TabletSyncController@sync');
@@ -912,6 +933,7 @@ Route::get('/member/customer','Customer\CustomerController@index');
 Route::get('/member/customer/bulk_archive','Member\CustomerController@bulk_archive');
 Route::post('/member/customer/bulk_archive','Member\CustomerController@bulk_archive_post');
 Route::get('/member/customer/list','Member\CustomerController@index');
+Route::any('/member/customer/viewlead/{id}','Member\CustomerController@viewlead');
 Route::any('/member/customer/modalcreatecustomer','Member\CustomerController@modalcreatecustomer');
 Route::post('/member/customer/insertcustomer','Member\CustomerController@insertcustomer');
 Route::post('/member/customer/editcustomer','Member\CustomerController@editcustomer');
@@ -957,7 +979,6 @@ Route::group(array('prefix' => 'api/{auth}/{store}'), function()
 });
 
 Route::group(['middleware' => ['web']], function () {
-
     Route::get('payPremium', ['as'=>'payPremium','uses'=>'PaypalController@payPremium']);
 
     Route::post('getCheckout', ['as'=>'getCheckout','uses'=>'PaypalController@getCheckout']);
@@ -965,7 +986,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('getDone', ['as'=>'getDone','uses'=>'PaypalController@getDone']);
 
     Route::get('getCancel', ['as'=>'getCancel','uses'=>'PaypalController@getCancel']);
-
 });
 
 Route::get('/testing','Member\MLM_CodeController@tester');
@@ -1168,6 +1188,8 @@ Route::any("/kim/compute_flexi_time","Core\Times2@compute_flexi_time");
 include_once('routes_config/routes_payroll.php');
 /* PAYROLL END */
 
+include_once('routes_config/routes_project.php');
+
 /* PAYMENT FACILITIES */
 include_once('routes_config/routes_payment.php');
 include_once('routes_config/routes_reward.php');
@@ -1178,5 +1200,17 @@ include_once('routes_config/routes_item.php');
 include_once('routes_config/routes_members_area.php');
 
 
+/*PAYROLL EMPLOYEE*/
+include_once('routes_config/routes_payroll_employee.php');
 Route::get('/ref/{id}', 'Shop\LeadController@ref');
 Route::get('/{id}', 'Shop\LeadController@ref');
+
+
+// Item Redeemable
+Route::get('member/item/redeemable','Member\RedeemableItemController@index');
+Route::get('member/item/redeemable/add','Member\RedeemableItemController@add');
+Route::post('member/item/redeemable/add','Member\RedeemableItemController@submit_add');
+Route::get('member/item/redeemable/redeemable_table', 'Member\RedeemableItemController@table');
+Route::get('member/item/redeemable/archive', 'Member\RedeemableItemController@archive');
+Route::get('member/item/redeemable/modify','Member\RedeemableItemController@modify');
+Route::post('member/item/redeemable/modify','Member\RedeemableItemController@submit_modify');

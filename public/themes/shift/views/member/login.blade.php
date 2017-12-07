@@ -8,15 +8,15 @@
 				<tr>
 					<td class="c1">
 						<div class="register-side">
-							<img src="/themes/{{ $shop_theme }}/img/jca-login-img.png">
+							<img src="/themes/{{ $shop_theme }}/img/img-login.jpg">
 						</div>
 					</td>
 					<td class="c2">
 						<div class="register-form">
 							<div class="text-right social-button">
-								<a href="{{$fb_login_url or '#'}}" class="holder fb">
+								{{-- <a href="{{$fb_login_url or '#'}}" class="holder fb">
 									<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
-								</a>
+								</a> --}}
 								<a href="javascript:" class="holder gp" id="customBtn">
 									<div class="name "><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
 								</a>

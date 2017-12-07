@@ -83,12 +83,12 @@
 				<div class="tab-content">
 				   <div id="basic_info" class="tab-pane fade in active">
 				   		<div class="profile_info_success_message hidden">
-							<div class="alert alert-success">
+							<div class="alert alert-custom-success">
 							  <strong>Success!</strong> Your info has been successfully updated.
 							</div>
 				   		</div>
 				   		<div class="profile_info_failed_message hidden">
-							<div class="alert alert-danger">
+							<div class="alert">
 							  <ul>
 							  	
 							  </ul>
@@ -98,7 +98,7 @@
 					   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					   		<div class="row clearfix">
 					   			<div class="col-md-6">
-					   				<div class="form-group">
+					   				{{-- <div class="form-group">
 							   			<label>First Name</label>
 							   			<input type="text" class="form-control" name="first_name" value="{{ $profile->first_name }}">
 							   		</div>
@@ -109,7 +109,7 @@
 							   		<div class="form-group">
 							   			<label>Last Name</label>
 							   			<input type="text" class="form-control" name="last_name" value="{{ $profile->last_name }}">
-							   		</div>
+							   		</div> --}}
 							   		<div class="form-group">
 							   			<label>Birth Date</label>
 							   			<div style="margin-top: 5px;">
@@ -144,12 +144,12 @@
 							   				@endforeach
 							   			</select>
 							   		</div>
+				   		   			<div class="form-group">
+				   			   			<label>Province</label>
+				   			   			<select firstload="true" default="{{ isset($profile_address->state_id) ? $profile_address->state_id : '' }}" class="form-control load-location" name="customer_state" level="1"></select>
+				   			   		</div>
 					   			</div>
 						   		<div class="col-md-6">
-						   			<div class="form-group">
-							   			<label>Province</label>
-							   			<select firstload="true" default="{{ isset($profile_address->state_id) ? $profile_address->state_id : '' }}" class="form-control load-location" name="customer_state" level="1"></select>
-							   		</div>
 							   		<div class="form-group">
 							   			<label>City</label>
 							   			<select firstload="true" default="{{ isset($profile_address->city_id) ? $profile_address->city_id : '' }}" class="form-control load-location" name="customer_city" level="2"></select>
@@ -174,7 +174,7 @@
 				   <!-- CONTACT INFO -->
 				   <div id="contact_info" class="tab-pane fade">
 				   		<div class="contact_info_success_message hidden">
-							<div class="alert alert-success">
+							<div class="alert alert-custom-success">
 							  <strong>Success!</strong> Sponsor Rule has been successfully updated.
 							</div>
 				   		</div>
@@ -200,12 +200,12 @@
 				   </div>
 				   <div id="profile_picture" class="tab-pane fade">
 				   	<div class="profile_picture_success_message hidden">
-						<div class="alert alert-success">
+						<div class="alert alert-custom-success">
 						  <strong>Success!</strong> Your profile picture has been successfully updated.
 						</div>
 			   		</div>
 			   		<div class="profile_picture_failed_message hidden">
-						<div class="alert alert-danger">
+						<div class="alert">
 						  <strong>Failed!</strong> Please try again later.
 						</div>
 			   		</div>
@@ -226,12 +226,12 @@
 				   @if($allowed_change_pass)
 				   <div id="password" class="tab-pane fade">
 					   	<div class="profile_password_success_message hidden">
-							<div class="alert alert-success">
+							<div class="alert alert-custom-success">
 							  <strong>Success!</strong> Your password has been successfully updated.
 							</div>
 				   		</div>
 				   		<div class="profile_password_failed_message hidden">
-							<div class="alert alert-danger">
+							<div class="alert">
 							  <ul>
 							  	
 							  </ul>

@@ -1,0 +1,93 @@
+.content{
+	background-color: transparent;
+	padding-top: 5px;
+}
+
+.background-container
+{
+	background-color: #f3f3f3;
+}
+
+.signup-left-container
+{
+	font-size: 25px;
+	padding-top: 100px;
+	padding-bottom: 50px;
+	.desc-red
+	{
+		color: #c51f33;
+	}
+	.desc-black
+	{
+		color: #545454;
+	}
+}
+
+.background-border
+{
+	border: 1px solid #919191;
+	margin-top: 60px;
+	margin-bottom: 30px;
+	.signup-rght-container
+	{
+		padding-top: 20px;
+		padding-bottom: 50px;
+		background-color: #fff;
+		.title-container
+		{
+			font-size: 30px;
+			padding-left: 30px;
+			padding-right: 20px;
+		}
+		.description
+		{
+			padding-top: 10px;
+			padding-left: 30px;
+			padding-right: 10px;
+			font-size: 18px;
+			color: #545454;
+		}
+		.border
+		{
+			border-bottom: 1px solid #919191;
+			padding-top: 20px;
+			margin: 0px 30px;
+		}
+		.details
+		{
+			text-align: center;
+			color: #545454;
+		}
+	}
+
+	.register-form
+	{
+		padding: 20px 30px 0px 30px;
+		input
+		{
+			padding: 0px 10px;
+			color: #545454;
+			height: 50px;
+			font-size: 18px;
+			width: 100%;
+		}
+	}
+
+	.button-container
+	{
+		padding-top: 40px;
+		padding-bottom: 40px;
+		padding-left: 15px;
+		text-align: center;
+		button
+		{
+			background-color: #316df9;
+			color: #fff;
+			font-size: 15px;
+			padding: 15px 50px;
+			text-decoration: none;
+			border: none;
+		}
+	}
+
+}

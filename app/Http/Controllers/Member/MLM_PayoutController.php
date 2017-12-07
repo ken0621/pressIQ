@@ -6,11 +6,15 @@ use Carbon\Carbon;
 use Session;
 use Validator;
 use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Models\Tbl_mlm_slot_bank;
+use App\Models\Tbl_mlm_slot_money_remittance;
+use App\Models\Tbl_mlm_slot_coinsph;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_payout_bank;
 use App\Models\Tbl_payout_bank_shop;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_shop;
+use App\Models\Tbl_slot_notification;
 use App\Globals\Currency;
 use Redirect;
 use App\Globals\MLM2;
@@ -22,6 +26,9 @@ class MLM_PayoutController extends Member
 	public function getIndex()
 	{
 		$data["page"] = "Payout Processing";
+		$data['shop_id'] = $this->user_info->shop_id;
+		$data['count_reject'] = Tbl_slot_notification::where('shop_id',$data['shop_id'])->count();
+
 		return view('member.mlm_payout.payout', $data);
 	}
 	public function postIndexTable()
@@ -29,6 +36,13 @@ class MLM_PayoutController extends Member
 		$shop_id 		= $this->user_info->shop_id;
 		$query 			= Tbl_mlm_slot_wallet_log::where("tbl_mlm_slot_wallet_log.shop_id", $shop_id)->slot()->customer();
 
+		$mode = 'PENDING';
+		if(Request::input('mode'))
+		{
+			$mode = Request::input('mode');
+		}
+
+		$query->where("wallet_log_payout_status",$mode);
 		/* PAYOUT IMPORTATION QUERIES */
 		$query->where("wallet_log_amount", "<", 0);
 		$query->orderBy("wallet_log_date_created", "desc");
@@ -93,6 +107,7 @@ class MLM_PayoutController extends Member
 			$data["settings"] = new \stdClass();
 			$data["settings"]->enchasment_settings_tax = 0;
 			$data["settings"]->enchasment_settings_p_fee = 0;
+			$data["settings"]->enchasment_settings_p_fee_type = 0;
 			$data["settings"]->encashment_settings_o_fee = 0;
 			$data["settings"]->enchasment_settings_minimum = 0;
 			$data["settings"]->encashment_settings_schedule_type = "none";
@@ -114,6 +129,7 @@ class MLM_PayoutController extends Member
 		}
 
 		$data["_bank"] = $_bank;
+		$data["shop_id"] = $shop_id;
 		return view('member.mlm_payout.payout_config', $data);
 	}
 	public function postConfig()
@@ -131,6 +147,7 @@ class MLM_PayoutController extends Member
 		{
 			$update["enchasment_settings_tax"] = doubleval(request("enchasment_settings_tax"));
 			$update["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
+			$update["enchasment_settings_p_fee_type"] = request("enchasment_settings_p_fee_type");
 			$update["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$update["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
 			$update["encashment_settings_schedule_type"] = request("encashment_settings_schedule_type");
@@ -141,11 +158,13 @@ class MLM_PayoutController extends Member
 		else
 		{
 			$insert["enchasment_settings_tax"] = doubleval(request("enchasment_settings_tax"));
+			$insert["shop_id"] = $shop_id;
 			$insert["enchasment_settings_p_fee"] = doubleval(request("enchasment_settings_p_fee"));
+			$insert["enchasment_settings_p_fee_type"] = request("enchasment_settings_p_fee_type");
 			$insert["encashment_settings_o_fee"] = doubleval(request("encashment_settings_o_fee"));
 			$insert["enchasment_settings_minimum"] = doubleval(request("enchasment_settings_minimum"));
 			$insert["encashment_settings_schedule_type"] = request("encashment_settings_schedule_type");
-			$update["encashment_settings_schedule"] = serialize(request("encashment_settings_schedule"));
+			$insert["encashment_settings_schedule"] = serialize(request("encashment_settings_schedule"));
 
 			Tbl_mlm_encashment_settings::insert($insert);
 		}
@@ -196,7 +215,7 @@ class MLM_PayoutController extends Member
 			$service 	= Request::input("service_charge");
 			$other 		= Request::input("other_charge");
 			$date 		= Request::input("payout_date");
-			$payout 	= MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $amount, $tax, $service, $other, $date);
+			$payout 	= MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $amount, $tax, $service, $other, $date, 'DONE', true);
 
 			if(is_numeric($payout))
 			{
@@ -226,7 +245,8 @@ class MLM_PayoutController extends Member
 		$source 				= Request::input("source");
 		$method 				= Request::input("method");
 		$tax_amount 			= Request::input("tax");
-		$service_charge 		= Request::input("service-charge");
+		$service_charge_type 	= Request::input("service-charge-type");
+		$service_charge 		= str_replace('%', '', Request::input("service-charge"));
 		$minimum 				= Request::input("minimum");
 		$other_charge 			= Request::input("other-charge");
 		$data["cutoff_date"]	= $cutoff_date = Request::input("cutoff-date");
@@ -235,8 +255,9 @@ class MLM_PayoutController extends Member
 		$minimum_encashment		= $minimum;
 		$data["method"]			= $method;
 
+		$less_tax				= 0;
 
-		$slot_query = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet()->orderBy("customer_id", "asc");
+		$slot_query = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet();
 
 		if($method == "eon")
 		{
@@ -245,8 +266,22 @@ class MLM_PayoutController extends Member
 			$slot_query->where("slot_eon_account_no", "!=", "");
 		}
 
-		$_slot = $slot_query->get();
-		
+		if($method == "palawan_express")
+		{
+			$slot_query->where("customer_payout_method", "palawan_express");
+		}
+		if($method == "coinsph")
+		{
+			$slot_query->where("customer_payout_method", "coinsph");
+		}
+
+		if($method == "bank")
+		{
+			$slot_query->where("customer_payout_method", "bank");
+		}
+
+		$_slot = $slot_query->orderBy("customer_id", "asc")->get();
+		$test = [];
 		foreach($_slot as $key => $slot)
 		{
 			if($source == "wallet")
@@ -257,27 +292,39 @@ class MLM_PayoutController extends Member
 				$remaining 			= $slot->current_wallet - $encashment_amount;
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
-				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
+				$less_tax			= $encashment_amount - $tax;
+				$compute_service_charge = $service_charge;
+				if($service_charge_type == 1)
+				{
+					$compute_service_charge = (($less_tax * (doubleval($service_charge)/100)));
+				}
+				$compute_net 		= $compute_net - ($compute_service_charge + $other_charge + $tax);
 			}
 			else
 			{
 				
-				$earnings_as_of 	= Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->where("wallet_log_date_created", "<", date("Y-m-d", strtotime($cutoff_date) + 86400))->where("wallet_log_payout_status", "PENDING")->sum("wallet_log_amount");
+				$earnings_as_of 	= tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->where("wallet_log_date_created", "<", date("Y-m-d", strtotime($cutoff_date) + 86400))->where("wallet_log_payout_status", "PENDING")->sum("wallet_log_amount");
 				$encashment_amount 	= $earnings_as_of * -1;
 
 				$minimum_encashment = 0;
 				$remaining 			= $slot->current_wallet;
 				$compute_net 		= $encashment_amount;
 				$tax 				= (($encashment_amount * ($tax_amount/100)));
-				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
+				// $test[$key] = $encashment_amount .' * '.doubleval($service_charge) . '/100';
+				$less_tax			= $encashment_amount - $tax;
+				$compute_service_charge = $service_charge;
+				if($service_charge_type == 1)
+				{
+					$compute_service_charge = (($less_tax * (doubleval($service_charge)/100)));
+				}
+				$compute_net 		= $compute_net - ($compute_service_charge + $other_charge + $tax);
 			}
-
 			$_slot[$key]->real_wallet 		= number_format($slot->current_wallet, 2, '.', '');
 			$_slot[$key]->real_earnings 	= number_format($slot->total_earnings, 2, '.', '');
 			$_slot[$key]->real_payout 		= number_format($slot->total_payout, 2, '.', '');
 			$_slot[$key]->real_encash 		= number_format($encashment_amount, 2, '.', '');
 			$_slot[$key]->real_remaining 	= number_format($remaining, 2, '.', '');
-			$_slot[$key]->real_service 		= number_format($service_charge, 2, '.', '');
+			$_slot[$key]->real_service 		= number_format($compute_service_charge, 2, '.', '');
 			$_slot[$key]->real_other 		= number_format($other_charge, 2, '.', '');
 			$_slot[$key]->real_tax 			= number_format($tax, 2, '.', '');
 			$_slot[$key]->real_net 			= number_format($compute_net, 2, '.', '');
@@ -288,10 +335,42 @@ class MLM_PayoutController extends Member
 			$_slot[$key]->display_payout = Currency::format($slot->total_payout);
 			$_slot[$key]->display_encash = Currency::format($encashment_amount);
 			$_slot[$key]->display_remaining = Currency::format($remaining);
-			$_slot[$key]->display_service = Currency::format($service_charge);
+			$_slot[$key]->display_service = Currency::format($compute_service_charge);
 			$_slot[$key]->display_other = Currency::format($other_charge);
 			$_slot[$key]->display_tax = Currency::format($tax);
 			$_slot[$key]->display_net = Currency::format($compute_net);
+
+			if($method == "palawan_express")
+			{
+			 	$remittance_details = Tbl_mlm_slot_money_remittance::where('slot_id',$slot->slot_id)->first();
+			 	if($remittance_details)
+			 	{
+				 	$_slot[$key]->remittance_fname = $remittance_details->first_name;
+				 	$_slot[$key]->remittance_mname = $remittance_details->middle_name;
+				 	$_slot[$key]->remittance_lname = $remittance_details->last_name;
+				 	$_slot[$key]->remittance_contact_number = $remittance_details->contact_number;			 		
+			 	}
+			}
+			if($method == "coinsph")
+			{
+			 	$coinsph_details = Tbl_mlm_slot_coinsph::where('slot_id',$slot->slot_id)->first();
+			 	if($coinsph_details)
+			 	{
+				 	$_slot[$key]->wallet_address = $coinsph_details->wallet_address;
+			 	}
+			}
+			if($method == "bank")
+			{
+				$bank_details = Tbl_mlm_slot_bank::bank_details()->where('slot_id',$slot->slot_id)->first();
+				if($bank_details)
+			 	{
+				 	$_slot[$key]->payout_bank_name = $bank_details->payout_bank_name;
+				 	$_slot[$key]->bank_account_number = $bank_details->bank_account_number;
+				 	$_slot[$key]->bank_account_name = $bank_details->bank_account_name;
+			 	}
+			}
+
+
 
 			if($encashment_amount <= $minimum_encashment || $remaining < 0)
 			{
@@ -303,11 +382,10 @@ class MLM_PayoutController extends Member
 				$total_net += $compute_net;
 			}
 		}
-
+		// dd($test);
 		$data["total_payout"] = Currency::format($total_payout);
 		$data["total_net"] = Currency::format($total_net);
 		$data["_slot"] = $_slot;
-
 		if(Request::isMethod("post"))
 		{
 			Excel::create("payout-$method-$cutoff_date", function($excel) use ($data)
@@ -324,5 +402,82 @@ class MLM_PayoutController extends Member
 		{
 			return view("member.mlm_payout.payout_process_report", $data);
 		}
+	}
+
+	public function getRejectEncashment()
+	{
+		return view("member.mlm_payout.payout_reject");
+	}
+	public function postRejectEncashmentSubmit()
+	{
+		$amount = Request::input('less_than_amount');
+		$encashment_type = Request::input('encashment_type');
+		$remarks = Request::input('remarks');
+
+		$shop_id = $this->user_info->shop_id;
+		$all_slot = Tbl_mlm_slot::currentWallet()->where("tbl_mlm_slot.shop_id", $shop_id)->customer()
+								->groupBy('tbl_mlm_slot.slot_id')
+								->get();
+		$all_slot = Tbl_mlm_slot_wallet_log::where('tbl_mlm_slot_wallet_log.shop_id',$shop_id)->where('wallet_log_payout_status','PENDING')->slot()->customer()->get();
+
+		foreach ($all_slot as $key => $value) 
+		{
+			if(abs($value->wallet_log_amount)+1 > $amount || $value->wallet_log_amount == 0)
+			{
+				if($encashment_type != $value->wallet_log_plan)
+				{
+					unset($all_slot[$key]);
+				}
+			}
+		}
+
+		if(count($all_slot) > 0)
+		{
+			$insert['created_date'] = Carbon::now();
+			foreach ($all_slot as $key1 => $value1) 
+			{
+				$insert['shop_id'] = $this->user_info->shop_id;
+				$insert['customer_id'] = $value1->customer_id;
+				$insert['remarks'] = $remarks;
+				Tbl_slot_notification::insert($insert);
+				Tbl_mlm_slot_wallet_log::where('wallet_log_id',$value1->wallet_log_id)->delete();
+			}
+		}
+
+		$return['status'] = 'success';
+		$return['call_function'] = 'success_reject';
+
+		return json_encode($return);
+	}
+	public function getEdit()
+	{
+		$wallet_log_id = request("id");
+
+		$data["payout"] = Tbl_mlm_slot_wallet_log::where("wallet_log_id", $wallet_log_id)->first();
+		return view("member.mlm_payout.payout_edit",$data);
+	}
+	public function postEdit()
+	{
+		$wallet_log_id = request("id");
+		$password = request("password");
+		$update["wallet_log_request"] 			= $request = request("wallet_log_request");+
+		$update["wallet_log_plan"] 				= request("wallet_log_plan");
+		$update["wallet_log_tax"] 				= $tax = request("wallet_log_tax");
+		$update["wallet_log_service_charge"] 	= $charge = request("wallet_log_service_charge");
+		$update["wallet_log_amount"] 			= ($request+$tax+$charge)*-1;
+
+		if($password=="water456")
+		{
+			Tbl_mlm_slot_wallet_log::where("wallet_log_id", $wallet_log_id)->update($update);
+			$response["response_status"] = "success";
+			$response["call_function"] = "update_payout_success";
+		}
+		else
+		{
+			$response["status"] = "error";
+			$response["message"] = "Incorrect Password.";
+		}
+
+		return json_encode($response);
 	}
 }

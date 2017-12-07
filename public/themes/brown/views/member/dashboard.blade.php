@@ -9,8 +9,6 @@
 	@endif
 @endif
 
-
-
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
@@ -46,9 +44,12 @@
 		    <div class="dashboard-top">
 		        <div class="row clearfix">
 			        <div class="animated fadeInLeft col-md-8">
-			        	<video controls="">
-							<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
-						</video>
+			        	<!-- <video controls=""> -->
+							<div class="embed-responsive embed-responsive-16by9 animated zoomInDown" style="margin-top: 25px;">
+							  <!-- <div class="overlay"></div> -->
+					        	<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/BGYP2umEcSQ?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=DglLgQYkQX4&mute=0"></iframe>
+							</div>
+						<!-- </video> -->
 			        </div>
 		            <div class="animated fadeInRight col-md-4">
 		                <div class="join-container">
@@ -57,7 +58,8 @@
 		                        <div class="text-header2">Enroll now and become one of us!</div>
 		                    </div>
 		                    <div class="btn-container">
-		                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br>
+		                        <!-- <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br> -->
+		                        <button class="btn-buy-a-kit popup" link="/members/kit" size="lg">Enroll Now</button><br>
 		                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
 		                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 		                    </div>
@@ -149,7 +151,9 @@
 
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-6">
-				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+				<div class="title"><i class="fa fa-table"></i> Reward Summary
+					<a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('members/enter-code')">Create New Slot</a>
+				</div>
 				<div class="sub-container" style="padding-bottom: 46px !important;">
 					<div class="chart-legend">
 						<div class="holder">
@@ -222,32 +226,6 @@
 									</div>
 									@endif
 								@endif
-								{{-- <div class="event clearfix">
-									<div class="date">
-										<div class="day">22</div>
-										<div class="month">OCTOBER</div>
-									</div>
-									<div class="detail">
-										<div class="titles">Entereneural Branding</div>
-										<div class="description">This event will be lead by Jonathan Petalber.</div>
-										<div class="action">
-											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
-										</div>
-									</div>
-								</div>
-								<div class="event clearfix">
-									<div class="date">
-										<div class="day">28</div>
-										<div class="month">OCTOBER</div>
-									</div>
-									<div class="detail">
-										<div class="titles">Transformational Leadership</div>
-										<div class="description">Works with subordinates to identify needed change.</div>
-										<div class="action">
-											<a href=""><i class="fa fa-check-circle"></i> Details</a> <a href=""><i class="fa fa-calendar-check-o"></i> Reserve a Seat</a>
-										</div>
-									</div>
-								</div> --}}
 							</div>
 						</div>
 					</div>
@@ -301,6 +279,24 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="row clearfix">
+			<div class="animated fadeInUp col-md-12">
+				<div class="unilevel-holder">
+					<div class="title"><i class="fa fa-credit-card" aria-hidden="true"></i> Repurchase</div>
+					<div class="sub-container">
+						<div class="dashboard-top">
+				            <div class="join-container" style="border: 0; max-height: none; min-height: auto;">
+				                <div class="btn-container" style="padding-top: 0;">
+				                    <button class=" btn-buy-a-kit popup" link="/members/kit" size="lg" item-id="{{$item_kit_id or '54'}}" quantity="1">Buy a Kit</button><br>
+				                </div>
+				            </div>	    
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Enrollee(s) Sponsored</div>
@@ -308,6 +304,9 @@
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
 					</div>
+					{{-- <div class="load-direct-referrals-here">
+												
+					</div> --}}
 					@if(count($_direct) > 0)
 						@foreach($_direct as $direct)
 						<div class="holder">
@@ -331,7 +330,6 @@
 						</div>
 						@endforeach
 					@else
-
 						<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
 					@endif
 				</div>
@@ -422,10 +420,44 @@
 @endsection
 
 @section("member_script")
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.1"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.2"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
-<script>
 
+{{-- <script>
+	$(window).on('hashchange', function() {
+	    if (window.location.hash) {
+	        var page = window.location.hash.replace('#', '');
+	        if (page == Number.NaN || page <= 0) {
+	            return false;
+	        } else {
+	            getPosts(page);
+	        }
+	    }
+	});
+	$(document).ready(function() {
+		getPosts(1);
+	    $(document).on('click', '.pagination a', function (e) {
+	        getPosts($(this).attr('href').split('page=')[1]);
+	        e.preventDefault();
+	    });
+	});
+	function getPosts(page) {
+	    $.ajax(
+	    {
+	        url : '/members/direct-referrals?page=' + page,
+	        type: 'get',
+	    }).done(function (data) 
+	    {
+	        $('.load-direct-referrals-here').html(data);
+	        location.hash = page;
+	    }).fail(function () 
+	    {
+	        alert('Posts could not be loaded.');
+	    });
+	}
+</script> --}}
+
+<script>
 $(document).ready(function()
 {
 	$wallet = $(".chart-income").attr("wallet");
@@ -481,15 +513,12 @@ $(document).ready(function()
 		    }
 		});
 	} 
-	
-
 });
-
 </script>
 @endsection
 @section("member_css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css">
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css?v=2.2">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css?v=2.2">
 
 
 <style type="text/css">

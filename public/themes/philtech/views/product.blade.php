@@ -1,7 +1,7 @@
 @extends("layout")
 
 @section("content")
-<div class="content">
+<div class="content mob-margin">
 	<div class="container">
 	<!-- TOP CONTENT -->
 		<div class="row clearfix">
@@ -261,5 +261,5 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product.css?updated1">
 @endsection

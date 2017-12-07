@@ -41,26 +41,38 @@ class PayrollBiometricsController
 {
 	public function save_data()
 	{
-		$app_key 		= Request::input("appkey");
-		$app_secret 	= Request::input("appsecret");
-		$branch_id 		= Request::input("branchid");
-		$_time_in_out 	= json_decode(Request::input("data_input"));
-		$check_access 	= Tbl_shop::where('shop_api_key',$app_key)->first();
 		
-		$return = null;
-		$employee_record = null;
-		if ($check_access->shop_api_key) 
+		if (Request::input("data_input") == 'null')
 		{
-			$shop_id 	= $check_access->shop_id;
-			/*$employee_record =  */$this->import_data_from_biometric($_time_in_out, $shop_id, $branch_id);
-			$return 	= "success";
+			$return 	= "No Data Found!";
 		}
 		else
 		{
-			$return 	= "failed";
+			$app_key 		= Request::input("appkey");
+			$app_secret 	= Request::input("appsecret");
+			$branch_id 		= Request::input("branchid");
+			$_time_in_out 	= json_decode(Request::input("data_input"));
+			$check_access 	= Tbl_shop::where('shop_api_key',$app_key)->first();
+			
+			$return = null;
+			$employee_record = null;
+
+			if ($check_access->shop_api_key) 
+			{
+				$shop_id 	= $check_access->shop_id;
+				$employee_record =  $this->import_data_from_biometric($_time_in_out, $shop_id, $branch_id);
+				$return 	= "Success!";
+			}
+			else
+			{
+				$return 	= "Failed!";
+			}
 		}
 		
+		
 		echo $return;
+		// echo json_decode($_time_in_out);
+		// echo (json_encode($_time_in_out) == null ? "has value": "null");
 	}
 
 
@@ -101,18 +113,23 @@ class PayrollBiometricsController
 			foreach ($time_record as $key => $value) 
 			{
 				$employee_info = Tbl_payroll_employee_basic::where('shop_id',$shop_id)->where('payroll_employee_number',$key)->first();
+				
+				if (!$employee_info) 
+				{
+					$employee_info = Tbl_payroll_employee_basic::where('shop_id',$shop_id)->where('payroll_employee_biometric_number',$key)->first();
+				}
+
 				if ($employee_info) 
 				{
 					$check_biometric_exist = Tbl_payroll_biometric_record::where("shop_id",$shop_id)
-									->where("payroll_employee_id",$employee_info["payroll_employee_id"])
-									->where("payroll_company_id",$employee_info["payroll_employee_company_id"])
-									->where("payroll_time_date",$key_date)
-									->first();
-
+						->where("payroll_employee_id",$employee_info["payroll_employee_id"])
+						->where("payroll_company_id",$branch_id)
+						->where("payroll_time_date",$key_date)
+						->first();
+					// return $shop_id." ".$employee_info["payroll_employee_id"]. " " .$employee_info["payroll_employee_company_id"]. " " .$key_date;
 					if ($check_biometric_exist) 
 					{
 						Tbl_payroll_biometric_time_sheet::where('payroll_biometric_record_id',$check_biometric_exist->payroll_biometric_record_id)->delete();
-						
 						$insert_time['payroll_biometric_record_id'] 	= $check_biometric_exist->payroll_biometric_record_id;
 						$insert_time["payroll_time_in"] 				= $value["time_in"];
 						$insert_time["payroll_time_out"] 				= $value["time_out"];
@@ -135,6 +152,7 @@ class PayrollBiometricsController
 				}
 			}	
 		}
+
 	}
 
 
@@ -191,8 +209,8 @@ class PayrollBiometricsController
 
 
 		// $date = date("Y-m-d");
-		$_insert = null;
-		$_update = null;
+		$_insert[] = "";
+		$_update[] = "";
 
 		foreach ($employee_in_out as $key_date => $time_record) 
 		{
@@ -213,7 +231,7 @@ class PayrollBiometricsController
 					$insert_time['payroll_biometric_record_id'] 	= $check_biometric_exist->payroll_biometric_record_id;
 					$insert_time["payroll_time_in"] 				= $value["time_in"];
 					$insert_time["payroll_time_out"] 				= $value["time_out"];
-
+					array_push($_update, $insert_time);
 					Tbl_payroll_biometric_time_sheet::insert($insert_time);
 
 				}
@@ -228,13 +246,13 @@ class PayrollBiometricsController
 					$insert_time["payroll_biometric_record_id"] = Tbl_payroll_biometric_record::insertGetId($insert);
 					$insert_time["payroll_time_in"] 		= 	$value["time_in"];
 					$insert_time["payroll_time_out"] 		= $value["time_out"];
-
+					array_push($_insert, $insert_time);
 					Tbl_payroll_biometric_time_sheet::insert($insert_time);
 				}
 			}	
 		}
 
-		dd("wew");
+		dd($_insert, $_update);
 		
 	}
 }

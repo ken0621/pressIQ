@@ -12,6 +12,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
+                <a class="btn btn-def-white btn-custom-white" href="/member/mlm/report_codes"><i class="fa fa-table"></i> View Codes Report</a>
                 <button class="btn btn-def-white btn-custom-white popup" link="/member/mlm/print_codes?type=membership_code" size='md'><i class="fa fa-print"></i> Print Membership Codes</button>
                 <button onclick="action_load_link_to_modal('/member/mlm/code2/disassemble', 'md')"  class="btn btn-def-white btn-custom-white"><i class="fa fa-yelp"></i> Disassemble Kit</button>
                 <button onclick="action_load_link_to_modal('/member/mlm/code2/assemble', 'md')" class="btn btn-primary"><i class="fa fa-qrcode"></i> Assemble Membership Kit</button>
@@ -49,7 +50,7 @@
         <div class="col-md-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search-keyword" placeholder="Search Activation or Pin" aria-describedby="basic-addon1">
+                <input type="text" class="form-control search-keyword" placeholder="Search PIN" aria-describedby="basic-addon1">
             </div>
         </div>
     </div>

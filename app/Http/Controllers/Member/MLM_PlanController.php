@@ -46,6 +46,8 @@ class MLM_PlanController extends Member
 {
     public function index()
     {
+        // dd(Carbon::now());
+        // dd(Carbon::now()->format("d"));
         $access = Utilities::checkAccess('mlm-plan', 'access_page');
         if($access == 0)
         {
@@ -60,6 +62,7 @@ class MLM_PlanController extends Member
         $data["page"] = "Membership";
         $data['mlm_plan'] = Tbl_mlm_plan::where('shop_id', $this->user_info->shop_id)->orderBy('marketing_plan_enable', 'DESC')->orderBy('marketing_plan_code', 'ASC')->get();
         $data['plan_settings'] = Tbl_mlm_plan_setting::where('shop_id', $this->user_info->shop_id)->first();
+        $data['membership_list'] = Tbl_membership::where('shop_id', $this->user_info->shop_id)->get();
         // end datas
         
         return view('member.mlm_plan.mlm_plan_list', $data);
@@ -111,19 +114,42 @@ class MLM_PlanController extends Member
             $old_marketing_plan = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->toArray();
 
     		// update column
-    		$update['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
-    		$update['plan_settings_enable_mlm'] = Request::input('plan_settings_enable_mlm');
-    		$update['plan_settings_enable_replicated'] = Request::input('plan_settings_enable_replicated');
-    		$update['plan_settings_slot_id_format'] = Request::input('plan_settings_slot_id_format');
-    		$update['plan_settings_format'] = Request::input('plan_settings_format');
-    		$update['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
-            $update['plan_settings_use_item_code'] = Request::input('plan_settings_use_item_code');
-            $update['plan_settings_email_membership_code'] = Request::input('plan_settings_email_membership_code');
-            $update['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
-            $update['plan_settings_upgrade_slot'] = Request::input('plan_settings_upgrade_slot');
-            $update['plan_settings_default_downline_rule'] = Request::input('plan_settings_default_downline_rule');
-            $update['plan_settings_new_gen_placement'] = Request::input('plan_settings_new_gen_placement');
-            $update['plan_settings_placement_required'] = Request::input('plan_settings_placement_required');
+    		$update['plan_settings_prefix_count']           = Request::input('plan_settings_prefix_count');
+    		$update['plan_settings_enable_mlm']             = Request::input('plan_settings_enable_mlm');
+    		$update['plan_settings_enable_replicated']      = Request::input('plan_settings_enable_replicated');
+    		$update['plan_settings_slot_id_format']         = Request::input('plan_settings_slot_id_format');
+    		$update['plan_settings_format']                 = Request::input('plan_settings_format');
+    		$update['plan_settings_prefix_count']           = Request::input('plan_settings_prefix_count');
+            $update['plan_settings_use_item_code']          = Request::input('plan_settings_use_item_code');
+            $update['plan_settings_email_membership_code']  = Request::input('plan_settings_email_membership_code');
+            $update['plan_settings_email_product_code']     = Request::input('plan_settings_email_product_code');
+            $update['plan_settings_upgrade_slot']           = Request::input('plan_settings_upgrade_slot');
+            $update['plan_settings_default_downline_rule']  = Request::input('plan_settings_default_downline_rule');
+            $update['plan_settings_new_gen_placement']      = Request::input('plan_settings_new_gen_placement');
+            $update['plan_settings_placement_required']     = Request::input('plan_settings_placement_required');
+            $update['max_slot_per_account']                 = Request::input('max_slot_per_account');
+            $update['enable_privilege_system']              = Request::input('enable_privilege_system');
+            $update['repurchase_cashback_date_convert']     = Request::input('repurchase_cashback_date_convert');
+
+            $update_membership_privilege["membership_privilege"] = 0;
+            $update_membership_privilege["membership_restricted"] = 0;
+            Tbl_membership::where("shop_id",$shop_id)->update($update_membership_privilege);
+
+            if(Request::input("enable_privilege_system") == 1)
+            {
+                if(Request::input("membership_chosen_id") != 0)
+                {
+                    $update_membership_privilege["membership_privilege"] = 1;
+                    Tbl_membership::where("shop_id",$shop_id)->where("membership_id",Request::input("membership_chosen_id"))->update($update_membership_privilege);
+                }
+            }
+
+            if(Request::input("membership_restricted_id") != 0)
+            {
+                $update_membership_privilege["membership_restricted"] = 1;
+                Tbl_membership::where("shop_id",$shop_id)->where("membership_id",Request::input("membership_restricted_id"))->update($update_membership_privilege);
+            }
+
     		// end
     		
     		// update settings
@@ -1402,6 +1428,7 @@ class MLM_PlanController extends Member
         $data['stair_get']                      = MLM_PlanController::get_rank($shop_id);
         $data['include_rpv_on_rgpv']            = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->include_rpv_on_rgpv; 
         $data['rank_real_time_update']          = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->rank_real_time_update; 
+        $data['rank_update_email']              = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->rank_update_email; 
         $data['rank_real_time_update_counter']  = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first()->rank_real_time_update_counter; 
         $data['stair_count']                    = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->count();
         $data['points_settings']                = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->orderBy("stairstep_points_level","ASC ")->get();
@@ -1458,6 +1485,7 @@ class MLM_PlanController extends Member
             $insert['direct_rank_bonus'] = Request::input('direct_rank_bonus');
             $insert['stairstep_rebates_bonus'] = Request::input('stairstep_rebates_bonus');
             $insert['stairstep_genealogy_color'] = "#".Request::input('stairstep_genealogy_color');
+            $insert['stairstep_genealogy_border_color'] = "#".Request::input('stairstep_genealogy_border_color');
             $insert['shop_id'] = $this->user_info->shop_id;
             Tbl_mlm_stairstep_settings::insert($insert);
             $data['response_status'] = "success_add_stairstep";
@@ -1512,6 +1540,7 @@ class MLM_PlanController extends Member
             $update['direct_rank_bonus'] = Request::input('direct_rank_bonus');
             $update['stairstep_rebates_bonus'] = Request::input('stairstep_rebates_bonus');
             $update['stairstep_genealogy_color'] = "#".Request::input('stairstep_genealogy_color');
+            $update['stairstep_genealogy_border_color'] = "#".Request::input('stairstep_genealogy_border_color');
             Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
             $data['response_status'] = "success_edit_stairstep";
             $data['response_rank_name'] = Request::input('stairstep_name');
@@ -1567,6 +1596,7 @@ class MLM_PlanController extends Member
         $shop_id = $this->user_info->shop_id;
         $update["include_rpv_on_rgpv"]           = Request::input("include_rpv_on_rgpv") ? Request::input("include_rpv_on_rgpv") : 0 ;
         $update["rank_real_time_update"]         = Request::input("rank_real_time_update") ? Request::input("rank_real_time_update") : 0;
+        $update["rank_update_email"]             = Request::input("rank_update_email") ? Request::input("rank_update_email") : 0;
         $update["rank_real_time_update_counter"] = Request::input("rank_real_time_update_counter");
         Tbl_mlm_plan_setting::where("shop_id",$shop_id)->update($update); 
         $data['response_status'] = "success";
@@ -2287,11 +2317,13 @@ class MLM_PlanController extends Member
     }
     public static function repurchase_cashback_add()
     {
-        $validate['membership_id'] = Request::input("membership_id");
-        $validate['membership_points_repurchase_cashback'] = Request::input("membership_points_repurchase_cashback");
+        $validate['membership_id']                                = Request::input("membership_id");
+        $validate['membership_points_repurchase_cashback']        = Request::input("membership_points_repurchase_cashback");
+        $validate['membership_points_repurchase_cashback_points'] = Request::input("membership_points_repurchase_cashback_points");
 
-        $rules['membership_id']   = "required";
-        $rules['membership_points_repurchase_cashback']    = "required";
+        $rules['membership_id']                                   = "required";
+        $rules['membership_points_repurchase_cashback']           = "required";
+        $rules['membership_points_repurchase_cashback_points']    = "required";
         
         
         $validator = Validator::make($validate,$rules);
@@ -2300,13 +2332,15 @@ class MLM_PlanController extends Member
             $count = Tbl_membership_points::where('membership_id', $validate['membership_id'])->count();
             if($count == 0)
             {
-                $insert['membership_id'] = $validate['membership_id'];
-                $insert['membership_points_repurchase_cashback'] = $validate['membership_points_repurchase_cashback'];
+                $insert['membership_id']                                = $validate['membership_id'];
+                $insert['membership_points_repurchase_cashback']        = $validate['membership_points_repurchase_cashback'];
+                $insert['membership_points_repurchase_cashback_points'] = $validate['membership_points_repurchase_cashback_points'];
                 Tbl_membership_points::insert($insert);
             }
             else
             {
-                $update['membership_points_repurchase_cashback'] = $validate['membership_points_repurchase_cashback'];
+                $update['membership_points_repurchase_cashback']        = $validate['membership_points_repurchase_cashback'];
+                $update['membership_points_repurchase_cashback_points'] = $validate['membership_points_repurchase_cashback_points'];
                 Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
             }
             $data['response_status'] = "success";
@@ -2792,7 +2826,7 @@ class MLM_PlanController extends Member
         {
             $insert["level_end"]                            = Request::input("level_end");
             $insert["advertisement_income"]                 = Request::input("advertisement_income");
-            $insert["advertisement_income_gc"]               = Request::input("advertisement_income_gc");
+            $insert["advertisement_income_gc"]              = Request::input("advertisement_income_gc");
             $insert["shop_id"]                              = $shop_id;
             Tbl_advertisement_bonus_settings::insert($insert);
         }

@@ -27,10 +27,15 @@
                 <div class="tree">
                     <ul>
                         <li class="width-reference">
+                            @if(isset($genealogy_color))
+                            <span class="downline parent parent-reference PS" x="{{ $slot->slot_id }}" style="{{$genealogy_color}};{{$genealogy_border_color}}">   
+                            @else
                             <span class="downline parent parent-reference PS" x="{{ $slot->slot_id }}">   
+                            @endif 
                                 <div id="info">
                                     <div id="photo">
-                                        <img src="/assets/slot_genealogy/member/img/default-image.jpg">
+                                        {{-- <img src="/assets/slot_genealogy/member/img/default-image.jpg"> --}}
+                                        <img style="border-radius: 100%;" src="{{ $profile_image }}">
                                     </div>
                                     <div id="cont">
                                         <div>{{ strtoupper($slot->first_name) }}</div>
@@ -41,6 +46,13 @@
                                     
                                     @else
                                         <div>L:{{$l}} R:{{$r}}</div>
+                                    @endif
+
+                                    @if(isset($rank_points["rpersonal_pv"]))
+                                        <div>&nbsp</div>
+                                        <div>&nbsp</div>
+                                        <div>Rank PV:{{$rank_points["rpersonal_pv"]}}</div>
+                                        <div>Rank Group PV:{{$rank_points["rgroup_pv"]}}</div>
                                     @endif
                                 </div>
                                 <div class="id">

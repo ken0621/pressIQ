@@ -115,13 +115,14 @@ class WarehouseController extends Member
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
         { 
-            $data["_warehouse"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get();
+            $data["_warehouse"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id");
             if(Request::input("search_txt"))
             {
-               $data["_warehouse"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 0)->where("warehouse_name","LIKE","%".Request::input("search_txt")."%")->groupBy("tbl_warehouse.warehouse_id")->get();            
+               $data["_warehouse"]->where("warehouse_name","LIKE","%".Request::input("search_txt")."%");
             }
+            $data["_warehouse"] = $data["_warehouse"]->paginate(10);
 
-            $data["_warehouse_archived"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 1)->groupBy("tbl_warehouse.warehouse_id")->get();
+            // $data["_warehouse_archived"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 1)->groupBy("tbl_warehouse.warehouse_id")->get();
             
             $all_item = null;
             foreach($data["_warehouse"] as $key => $value)
@@ -143,7 +144,8 @@ class WarehouseController extends Member
                     foreach ($all_item as $key2 => $value2) 
                     {
                         $qty = 0;
-                        $qty = Tbl_warehouse_inventory::where("warehouse_id",$value2->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("item_id",$value2->item_id)->where("tbl_item.archived",0)->sum("inventory_count");
+                        // $qty = Tbl_warehouse_inventory::where("warehouse_id",$value2->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("item_id",$value2->item_id)->where("tbl_item.archived",0)->sum("inventory_count");
+                        $qty = Tbl_item::where('item_id',$value2->item_id)->inventory($value2->warehouse_id)->value('inventory_count');
 
                         $selling_price += $value2->item_price * $qty;
                         $cost_price += $value2->item_cost * $qty;
@@ -158,34 +160,35 @@ class WarehouseController extends Member
                 }
             }
             $archive_item = null;
-            foreach($data["_warehouse_archived"] as $key3 => $value3)
-            {
-                $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$value3->warehouse_id)->first();
-                if(!$check_if_owned)
-                {
-                    unset($data["_warehouse_archived"][$key3]);
-                }
-                else
-                {
-                    $selling_price_a = 0;
-                    $cost_price_a = 0;
-                    $total_qty = 0;
-                    $archive_item = Tbl_sub_warehouse::select_item($value3->warehouse_id)
-                                                 ->get();
-                    $qty = 0;
-                    foreach ($archive_item as $key4 => $value4) 
-                    {
-                        $qty = Tbl_warehouse_inventory::where("warehouse_id",$value4->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("item_id",$value4->item_id)->where("tbl_item.archived",0)->sum("inventory_count");
+            // foreach($data["_warehouse_archived"] as $key3 => $value3)
+            // {
+            //     $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$value3->warehouse_id)->first();
+            //     if(!$check_if_owned)
+            //     {
+            //         unset($data["_warehouse_archived"][$key3]);
+            //     }
+            //     else
+            //     {
+            //         $selling_price_a = 0;
+            //         $cost_price_a = 0;
+            //         $total_qty = 0;
+            //         $archive_item = Tbl_sub_warehouse::select_item($value3->warehouse_id)
+            //                                      ->get();
+            //         $qty = 0;
+            //         foreach ($archive_item as $key4 => $value4) 
+            //         {
+            //             $qty = Tbl_warehouse_inventory::where("warehouse_id",$value4->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("item_id",$value4->item_id)->where("tbl_item.archived",0)->sum("inventory_count");
 
-                        $selling_price_a += $value4->item_price * $qty;
-                        $cost_price_a += $value4->item_cost * $qty;
-                        $total_qty += $qty;
-                    }
-                    $data["_warehouse_archived"][$key3]->total_selling_price = $selling_price_a;
-                    $data["_warehouse_archived"][$key3]->total_cost_price = $cost_price_a;
-                    $data["_warehouse_archived"][$key3]->total_qty = $total_qty;
-                }
-            }
+            //             $selling_price_a += $value4->item_price * $qty;
+            //             $cost_price_a += $value4->item_cost * $qty;
+            //             $total_qty += $qty;
+            //         }
+            //         $data["_warehouse_archived"][$key3]->total_selling_price = $selling_price_a;
+            //         $data["_warehouse_archived"][$key3]->total_cost_price = $cost_price_a;
+            //         $data["_warehouse_archived"][$key3]->total_qty = $total_qty;
+            //     }
+            // }
+            $data["_warehouse_archived"] = null;
             $data["enable_serial"] = Tbl_settings::where("shop_id",$this->user_info->shop_id)->where("settings_key","item_serial")->value("settings_value");
 
             $data['pis'] = Purchasing_inventory_system::check();
@@ -1044,6 +1047,7 @@ class WarehouseController extends Member
             else
             {                
                 $data['status'] = 'success';
+                $data['type'] = 'warehouse';
             }
             if($data['status'] == 'success')
             {

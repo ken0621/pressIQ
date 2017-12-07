@@ -8,6 +8,7 @@ use App\Globals\Accounting;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
+use App\Globals\Billing;
 use App\Globals\Pdf_global;
 use App\Globals\Utilities;
 
@@ -136,7 +137,7 @@ class Vendor_PurchaseOrderController extends Member
             {
                 $qty = UnitMeasurement::um_qty($value->poline_um);
 
-                $total_qty = $value->poline_qty * $qty;
+                $total_qty = $value->poline_orig_qty * $qty;
                 $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
             }
             $pdf = view("member.vendor_list.po_pdf",$data);

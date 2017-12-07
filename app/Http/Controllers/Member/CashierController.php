@@ -22,14 +22,52 @@ class CashierController extends Member
         $data["current_level"]  = ($data["cart"]["info"] ? $data["cart"]["info"]->price_level_id : 0);
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
         $data['_salesperson'] = Utilities::get_all_users($this->user_info->shop_id, $this->user_info->user_id);
+        $data['_payment'] = Cart2::load_payment($this->user_info->shop_id);
         
         if(Session::has('customer_id'))
         {
             $data['customer'] = Customer::info(Session::get('customer_id'), $this->user_info->shop_id);
+            $data['customer_points'] = Customer::get_points_wallet(Session::get('customer_id'));
+            $warehouse_id = Customer::get_info($this->user_info->shop_id, Session::get('customer_id'))->stockist_warehouse_id;
+            $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id, $warehouse_id);
             $data['exist'] = $data['customer'];
         }
         
        	return view("member.cashier.pos", $data);
+    }
+    public function add_payment()
+    {
+        $payment_type = Request::input('payment_method');
+        $payment_amount = Request::input('payment_amount');
+
+        if($payment_amount > 0)
+        {
+            $return = Cart2::scan_payment($this->user_info->shop_id, $payment_type, $payment_amount);
+            if(is_numeric($return))
+            {
+                $return = null;
+                $return['status'] = 'success';
+            }            
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = "You can't add zero amount of payment";
+
+        }
+        return json_encode($return);
+    }
+    public function load_payment()
+    {
+        $data['_payment'] = Cart2::load_payment($this->user_info->shop_id);
+
+        return view('member.cashier.pos_payment_method',$data);
+    }
+    public function remove_payment()
+    {
+        $return = Cart2::remove_payment(Request::input('cart_payment_id'));
+
+        return json_encode('success');
     }
     public function pos_table_item()
     {
@@ -62,11 +100,16 @@ class CashierController extends Member
         $data["customer"]       = $item = Customer::scan_customer($data["shop_id"], $data["customer_id"]);
 
         if($data["customer"])
-        {
+        {    
+            /* SCAN IF HAVE RESERVED CODE */
+            $reserved_item = Cart2::scan_reserved_code($shop_id, $data['customer']->customer_id);
+            
             Session::put('customer_id', $data['customer']->customer_id);
             $return["status"]   = "success";
             $return["message"]  = "";
+            $return["reserved_item"]  = $reserved_item;
             $return["price_level_id"] = $data['customer']->membership_price_level;
+            $return["stockist_warehouse_id"] = $data['customer']->stockist_warehouse_id;
         }
         else
         {
@@ -80,6 +123,12 @@ class CashierController extends Member
     {
         Session::forget('customer_id');
         $return['status'] = 'success';
+        $return['load_item_table'] = '';
+        if(session('reserved_item'))
+        {
+            Cart2::clear_cart();
+            $return['load_item_table'] = 'true';
+        }
 
         return json_encode($return);
     }
@@ -89,7 +138,8 @@ class CashierController extends Member
         if(Session::has('customer_id'))
         {
             $data = Customer::info(Session::get('customer_id'), $this->user_info->shop_id);
-            $data['exist'] = $data;   
+            $data['exist'] = $data;
+            $data['customer_points'] = Customer::get_points_wallet(Session::get('customer_id'));
         }
         return view('member.cashier.pos_customer_info',$data);
     }
@@ -99,16 +149,34 @@ class CashierController extends Member
         $data["item_id"]    = $item_id = Request::input("item_id");
         $data["item"]       = $item = Cart2::scan_item($data["shop_id"], $data["item_id"]);
 
-        if($data["item"])
+        if(!$data['item'])
+        {
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+            $data['item'] = $val = Cart2::scan_ref_num($data["shop_id"], $warehouse_id, $data["item_id"]);
+            $item_id = $val;
+        }
+
+        $val = 0;
+        if(!$data['item'])
+        {
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+            $data['item'] = $val = Cart2::scan_pin_code($data["shop_id"], $warehouse_id, $data["item_id"]);
+            $item_id = $val;
+        }
+        if($data["item"] && is_numeric($val))
         {
             $return["status"]   = "success";
-            $return["message"]  = "Item Number " .  $item->item_id . " has been added.";
+            $return["message"]  = "Item Number " .  $item_id . " has been added.";
             Cart2::add_item_to_cart($shop_id, $item_id, 1);
         }
         else
         {
             $return["status"]   = "error";
             $return["message"]  = "The ITEM you scanned didn't match any record.";
+            if(!is_numeric($val))
+            {
+                $return["message"]  = $val;
+            }
         }
 
         echo json_encode($return);
@@ -119,17 +187,27 @@ class CashierController extends Member
         $data["item_id"]    = $item_id = Request::input("item_id");
         $quantity           = Request::input("qty");
         $data["item"]       = $item = Cart2::scan_item($data["shop_id"], $data["item_id"]);
+        $count = Cart2::get_item_pincode($shop_id, $item_id);
 
-        if($data["item"])
+        if(count($count) > 0)
         {
-            $return["status"]   = "success";
-            $return["message"]  = "Item Number " .  $item->item_id . " has been added.";
-            Cart2::add_item_to_cart($shop_id, $item_id, $quantity, true);
+            $return["status"]   = "error";
+            $return["status_message"]  = "The ITEM cannot change quantity.";
         }
         else
         {
-            $return["status"]   = "error";
-            $return["message"]  = "The ITEM you scanned didn't match any record.";
+            if($data["item"])
+            {
+                $return["status"]   = "success";
+                $return["status_message"]  = "Item Number " .  $item->item_id . " has been added.";
+                Cart2::add_item_to_cart($shop_id, $item_id, $quantity, true);
+                $return["call_function"] = "";
+            }
+            else
+            {
+                $return["status"]   = "error";
+                $return["status_message"]  = "The ITEM you scanned didn't match any record.";
+            }   
         }
 
         echo json_encode($return);
@@ -143,16 +221,26 @@ class CashierController extends Member
     public function pos_remove_item()
     {
         $item_id = Request::input("item_id");
-        Cart2::delete_item_from_cart($item_id);
+        Cart2::delete_item_from_cart($item_id); 
         $return["status"] = "success";
         $return["item_id"] = $item_id;
         echo json_encode($return);
+    }
+    public function load_warehouse()
+    {
+        $warehouse_id = Request::input('w_id');
+        $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id, $warehouse_id);
+        return view('member.cashier.pos_load_warehouse',$data);
     }
     public function process_sale()
     {
         $cart = Cart2::get_cart_info();
         $consume_inventory                                  = Request::input('consume_inventory');
+            
         $method                                             = Request::input('payment_method');
+        $amount                                             = Request::input('payment_amount');
+        $slot_id                                            = Request::input('slot_id');
+
         $shop_id                                            = $this->user_info->shop_id;
         $transaction_new["transaction_reference_table"]     = "tbl_customer";
         $transaction_new["transaction_reference_id"]        = Session::get('customer_id');
@@ -167,68 +255,108 @@ class CashierController extends Member
 
         if($cart)
         {   
-            foreach ($cart["_item"] as $key => $value)
+            if($transaction_new["transaction_reference_id"])
             {
-                $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity,'Consume');
-            }
-
-            if(!$destination_warehouse_id && $consume_inventory == 'wis')
-            {
-                $validate .= 'Please choose a warehouse destination <br>';
-            }
-
-            if(!$validate)
-            {                
-                Transaction::create_set_method($method);
-                $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
-
-                if(is_numeric($transaction_list_id))
+                foreach ($cart["_item"] as $key => $value)
                 {
-                    $get_transaction_list = Transaction::get_data_transaction_list($transaction_list_id);
-                    $get_item = Transaction::get_transaction_item($transaction_list_id);
-                    $remarks = 'Consume in Transaction Number : '.$get_transaction_list->transaction_number;
-                    if($consume_inventory == 'instant')
+                    $item_type = Item::get_item_type($value->item_id);
+                    if($item_type == 1 || $item_type == 5)
                     {
-                        Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks);
-                        $validate = 1;
+                        $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value->item_id, $value->quantity,'Consume');
                     }
-                    if($consume_inventory == 'wis')
-                    {
-                        $ins_wis['wis_shop_id'] = $shop_id;
-                        $ins_wis['wis_number'] = $get_transaction_list->transaction_number;
-                        $ins_wis['wis_from_warehouse'] = $warehouse_id;
-                        $ins_wis['destination_warehouse_id'] = Request::input('destination_warehouse_id');
-                        $ins_wis['wis_remarks'] = $remarks;
-                        $ins_wis['created_at'] = Carbon::now();
+                }
 
-                        $_item = null;
-                        foreach ($get_item as $key_item => $value_item) 
+                if(!$destination_warehouse_id && $consume_inventory == 'wis')
+                {
+                    $validate .= 'Please choose a warehouse destination <br>';
+                }
+
+                $validate .= Transaction::validate_payment($shop_id, $slot_id);
+
+                if(!$validate)
+                {
+                    Transaction::create_set_method('pos');
+                    $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, '-');
+
+                    if(is_numeric($transaction_list_id))
+                    {
+                        $get_transaction_list = Transaction::get_data_transaction_list($transaction_list_id);
+                        $get_item = Transaction::get_transaction_item($transaction_list_id);
+                        $remarks = 'Consume in Transaction Number : '.$get_transaction_list->transaction_number;
+
+
+                        if($consume_inventory == 'instant')
                         {
-                            $_item[$key_item]['item_id'] = $value_item->item_id;
-                            $_item[$key_item]['quantity'] = $value_item->quantity;
-                            $_item[$key_item]['remarks'] = 'wis';
+                            Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks, $warehouse_id);
+                            $validate = 1;
                         }
-                        $validate = WarehouseTransfer::create_wis($shop_id, $remarks, $ins_wis, $_item);
+                        if($consume_inventory == 'wis')
+                        {
+                            $ins_wis['wis_shop_id'] = $shop_id;
+                            $ins_wis['wis_number'] = $get_transaction_list->transaction_number;
+                            $ins_wis['wis_from_warehouse'] = $warehouse_id;
+                            $ins_wis['destination_warehouse_id'] = Request::input('destination_warehouse_id');
+                            $ins_wis['wis_remarks'] = $remarks;
+                            $ins_wis['created_at'] = Carbon::now();
+
+                            $_item = null;
+                            foreach ($get_item as $key_item => $value_item) 
+                            {
+                                $_item[$key_item]['item_id'] = $value_item->item_id;
+                                $_item[$key_item]['quantity'] = $value_item->quantity;
+                                $_item[$key_item]['remarks'] = 'wis';
+                            }
+                            $validate = WarehouseTransfer::create_wis($shop_id, $remarks, $ins_wis, $_item);
+                        }
+
+
+                        if(is_numeric($validate))
+                        {
+                            /** CONSUME - PAYMENT FOR GC AND WALLET **/ 
+                            $validate = Transaction::consume_payment($shop_id, $transaction_list_id, $slot_id);
+
+                            if(is_numeric($validate))
+                            {
+                                $transaction_receipt_list_id      = Transaction::create($shop_id, $get_transaction_list->transaction_id, 'RECEIPT', $transaction_date, '+');
+                                
+                                if(is_numeric($transaction_receipt_list_id))
+                                {
+                                    Session::forget('customer_id');
+                                    Cart2::clear_cart();
+                                    $return['status'] = 'success';
+                                    $return['receipt_id'] = $transaction_list_id;
+                                    $return['call_function'] = 'success_process_sale';
+                                }
+                                else
+                                {
+                                    $return['status'] = 'error';
+                                    $return['status_message'] = $$transaction_receipt_list_id;
+                                }
+
+                            }
+                            else
+                            {
+                                $return['status'] = 'error';
+                                $return['status_message'] = $validate;                                
+                            }
+                        }
+                        else
+                        {
+                            $return['status'] = 'error';
+                            $return['status_message'] = $validate;
+                        }
                     }
-                    if(is_numeric($validate))
-                    {
-                        Session::forget('customer_id');
-                        Cart2::clear_cart();
-                        $return['status'] = 'success';
-                        $return['receipt_id'] = $transaction_list_id;
-                        $return['call_function'] = 'success_process_sale';
-                    }
-                    else
-                    {
-                        $return['status'] = 'error';
-                        $return['status_message'] = $validate;
-                    }
-                } 
+                }
+                else
+                {
+                    $return['status'] = 'error';
+                    $return['status_message'] = $validate;
+                }
             }
             else
             {
                 $return['status'] = 'error';
-                $return['status_message'] = $validate;
+                $return['status_message'] = 'Please Select Customer';
             }
         }
         else

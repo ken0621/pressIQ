@@ -12,6 +12,8 @@ use App\Models\Tbl_product;
 use App\Globals\Ecom_Product;
 use App\Models\Tbl_ec_product;
 use App\Globals\Ec_wishlist;
+use App\Globals\MLM2;
+use App\Models\Tbl_mlm_slot;
 
 class ShopProductContent2Controller extends Shop
 {
@@ -25,6 +27,40 @@ class ShopProductContent2Controller extends Shop
         $data["_related"]    		= Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
         $data["_related"] 	 		= $this->filter_related($data["_related"], $data["product"]["eprod_id"]);
         $data["product"]["variant"] = $this->filter_variant($data["product"]["variant"]);
+
+        if ($this->shop_theme == "3xcell") 
+        {
+            if (isset(Self::$customer_info->customer_id) && Self::$customer_info->customer_id) 
+            {
+                foreach ($data["product"]["variant"] as $key => $value) 
+                {
+                    $price_level = Tbl_mlm_slot::priceLevel($value["item_id"])->where("tbl_mlm_slot.slot_owner", Self::$customer_info->customer_id)->first();
+
+                    $data["product"]["variant"][$key]["price_level"] = $price_level ? $price_level->custom_price : null;
+                }
+            }
+            
+            if(isset(Self::$customer_info->customer_id))
+            {
+                $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
+            }
+            else
+            {
+                $slot = null;
+            }
+
+            foreach ($data["product"]["variant"] as $key => $value) 
+            {
+                if ($slot) 
+                {
+                    $data["product"]["variant"][$key]["pv"] = MLM2::item_points($this->shop_info->shop_id, $value["item_id"], $slot->slot_id);
+                }
+                else
+                {
+                    $data["product"]["variant"][$key]["pv"] = 0;
+                }
+            }
+        }
 
         return view("product_content", $data);
     }

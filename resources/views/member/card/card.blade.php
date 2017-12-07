@@ -3,9 +3,9 @@
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">  
 @endif
 <div class="{{ Request::input('pdf') == 'true' ? '' : 'row' }} clearfix">
-<div class="{{ Request::input('pdf') == 'true' ? '' : 'col-md-6' }} clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 450px;' : '' }}">
-	<div class="containers" style="overflow: hidden; {{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : '' }} ;height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}.jpg') !important;">
-		<div class="top-container clearfix">
+<div class="clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 450px;' : '' }}">
+	<div class="containers" style="overflow: hidden; {{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : 'margin-top: 0;' }} ;height: 285px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}.jpg') !important;">
+		{{-- <div class="top-container clearfix">
 			<span class="website" style="font-weight: 700; letter-spacing: 0px;">{{ URL::to('/') }}</span>
 			<div class="logo"><img style="width: 200px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/philtech-logo-blue-2.png"></div>
 		</div>
@@ -29,13 +29,29 @@
 					<span>{{ $membership_code }}</span>
 				</div>
 			</div>
+		</div> --}}
+		<div style="margin-left: 95px;">
+			<div>
+				<div style="font-weight: 700; font-size: 20px; line-height: 20px;">{{ $name }}</div>
+				<div style="font-weight: 700; font-size: 20px; line-height: 20px; margin-top: 5px;">ISSUED: {{$now}}</div>
+			</div>
+			<div style="width: 100%; text-align: right; margin-top: 160px;">
+				@if($membership_code)
+				<div class="barcode" style="text-align: center;">
+					<div class="barcodeimg" style="background-color: #fff; padding: 7.5px 0;"><img src="{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/barcode?text={{ $membership_code }}&size=35"></div>
+					<div class="barcodetxt" style="font-size: 12px; margin-top: -7.5px; padding-bottom: 2px;">
+						<span style="text-transform: uppercase;">{{ $membership_code }}</span>
+					</div>
+				</div>
+				@endif
+			</div>
 		</div>
 	</div>
 </div>
 
-<div class="{{ Request::input('pdf') == 'true' ? '' : 'col-md-6' }} clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 1000px;' : '' }}">
-	<div class="containers" style="{{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : '' }} height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}.jpg') !important;">
-		<div class="backdesu">
+<div class="clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 1000px;' : '' }}">
+	<div class="containers" style="{{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : 'margin-top: 15px;' }} height: 285px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}-back.jpg') !important;">
+		{{-- <div class="backdesu">
 			<div style="font-weight: 600;"><center>For inquiries, email at philtechglobalmainoffice@gmail.com</center></div>
 			<div class="signature">
 			</div>
@@ -74,9 +90,15 @@
 					</tbody>
 				</table>
 			</div>
-			<div style="font-weight: 700; color: @if($color == 'gold') black @else white @endif ; font-size: 10px; text-align: justify; margin-top: 3px; letter-spacing: 0.5px;" style="margin-top: 5px;  ">By signing this card, the Cardholder agrees to be bound by the terms and conditions of the VIP Loyalty Program. Present this card along with the valid ID when purchasing or availing privilleges and benefits in the head office, all BCO and partner merchants nationwide.</div>
+			<div style="font-weight: 700; color: white; font-size: 10px; text-align: justify; margin-top: 3px; letter-spacing: 0.5px;" style="margin-top: 5px;  ">By signing this card, the Cardholder agrees to be bound by the terms and conditions of the VIP Loyalty Program. Present this card along with the valid ID when purchasing or availing privilleges and benefits in the head office, all BCO and partner merchants nationwide.</div>
 			<div style="color: white; font-weight: 600; font-size: 15px; text-align: center; margin-top: 8px;">Non-Transferable&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Annual Fee&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Expiry</div>
-			<div class="text-right" style="font-weight: 600; color: @if($color == 'gold') black @else white @endif ; font-size: 12px;">Tampering invalidates the card.</div>
+			<div class="text-right" style="font-weight: 600; color: white; font-size: 12px;">Tampering invalidates the card.</div>
+		</div> --}}
+		<div style="color: #000; margin-top: 70px;">
+			<div style="margin-left: 115px;">{{$info->slot_created_date ? $info->slot_created_date : '&nbsp;'}}</div>
+			<div style="margin-top: 4px; margin-left: 83px;">{{$number ? $number : '&nbsp;'}}</div>
+			<div style="width: 291px; margin-top: 5px; margin-left: 135px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $address ? $address : '&nbsp;' }}</div>
+			<div style="margin-left: 320px; margin-top: 3px;"><small>(+63)9175422614</small></div>
 		</div>
 	</div>
 	<br>

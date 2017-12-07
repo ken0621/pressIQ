@@ -7,6 +7,7 @@ use App\Models\Tbl_bill_item_line;
 use App\Models\Tbl_pay_bill;
 use App\Models\Tbl_pay_bill_line;
 use App\Models\Tbl_purchase_order;
+use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Globals\AuditTrail;
@@ -161,7 +162,6 @@ class Billing
         if($bill_id != null)
         {
             Tbl_bill_po::where("billed_id",$bill_id)->delete();
-            // dd($po_data);
             foreach ($po_data as $key => $value) 
             {
                 $chk = Tbl_bill_po::where("billed_id",$bill_id)->where("purchase_order_id",$value["poline_po_id"])->first();
@@ -172,8 +172,10 @@ class Billing
                     
                     Tbl_bill_po::insert($ins);
 
-                    $up_po["po_is_billed"] = $bill_id;
-                    Tbl_purchase_order::where("po_id",$value["poline_po_id"])->update($up_po);  
+                    // $up_po["po_is_billed"] = $bill_id;
+                    // Tbl_purchase_order::where("po_id",$value["poline_po_id"])->update($up_po);  
+
+                    Self::check_partial_po($bill_id, $value["poline_po_id"]);  
                 }
             }            
         }
@@ -196,11 +198,38 @@ class Billing
                         
                         Tbl_bill_po::insert($ins);
 
-                        $up_po["po_is_billed"] = $bill_id;
-                        Tbl_purchase_order::where("po_id",$value)->update($up_po);                        
+                        // $up_po["po_is_billed"] = $bill_id;
+                        // Tbl_purchase_order::where("po_id",$value)->update($up_po);
+                        Self::check_partial_po($bill_id, $value);                        
                     }
                 }
             }            
+        }
+    }
+    public static function check_partial_po($bill_id, $po_id)
+    {
+        $po_item = Tbl_purchase_order_line::where('poline_po_id',$po_id)->get();
+        $ctr = 0;
+        foreach ($po_item as $key => $value) 
+        {
+            $up_item_po = Tbl_bill_item_line::where("itemline_bill_id",$bill_id)->where('itemline_ref_name','purchase_order')->where('itemline_item_id', $value->poline_item_id)
+                                 ->first();
+            $update_poline['poline_qty'] =  $value->poline_qty - $up_item_po->itemline_qty;
+            Tbl_purchase_order_line::where('poline_id',$value->poline_id)->update($update_poline);
+
+            $bill_item = Tbl_bill_item_line::where("itemline_bill_id",$bill_id)->where('itemline_ref_name','purchase_order')->where('itemline_item_id', $value->poline_item_id)
+                                 ->first();
+            $po_item_qty = $value->poline_qty * UnitMeasurement::um_qty($value->poline_um);
+            $bill_item_qty = $bill_item->itemline_qty * UnitMeasurement::um_qty($bill_item->itemline_um);
+            if($update_poline['poline_qty'] <= 0)
+            {
+                $ctr++;
+            }
+        }
+        if($ctr >= count($po_item))
+        {
+            $up_po["po_is_billed"] = $bill_id;
+            Tbl_purchase_order::where("po_id",$po_id)->update($up_po);
         }
     }
     public static function updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info)

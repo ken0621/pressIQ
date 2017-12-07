@@ -15,8 +15,8 @@
 		</div>
 		<div class="right">
 			<div class="text-right">
-				<!-- <button type="button" class="btn btn-default"><i class="fa fa-bank"></i> PAYOUT METHOD</button> -->
-				{{-- <button type="button" class="btn btn-primary popup" link="/members/vmoney" size="md"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button> --}}
+				<button type="button" class="btn btn-custom-default popup" link="/members/payout-setting" size="md"><i class="fa fa-bank"></i> PAYOUT METHOD</button>
+				<button type="button" class="btn btn-custom-primary popup" link="/members/request-payout" size="md"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button>
 			</div>
 		</div>
 	</div>

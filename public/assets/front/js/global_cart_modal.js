@@ -17,6 +17,7 @@ function cart_modal()
 	{
 		event_quantity_price();
 		event_remove_item();
+		event_footable_cart();
 	}
 
 	function event_quantity_price()
@@ -91,7 +92,6 @@ function cart_modal()
 		{
 			console.log("complete");
 		});
-		
 	}
 
 	function reload_cart(quantity = null)
@@ -118,5 +118,10 @@ function cart_modal()
 	{
 		$(".not-loader").removeClass("hide");
 		$(".cart-loader").addClass("hide");
+	}
+
+	function event_footable_cart()
+	{
+		// $('.footable-cart').footable();
 	}
 }

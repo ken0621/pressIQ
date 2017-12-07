@@ -12,6 +12,127 @@ $text-dark: #272c2f;
 {
 	font-family: $content-text;
 
+	.square-container
+	{
+		border: 1px solid #ddd;
+		margin: 10px 5px;
+
+		.title
+		{
+			color: #000;
+			font-size: 21px;
+			letter-spacing: 0.5px;
+			font-weight: $regular;
+			/* background-color: #fff; */
+			padding: 5px 15px;
+			margin-top: 5px;
+			border-bottom: 1px solid #ddd;
+
+			.align-icon
+			{
+				vertical-align: middle;
+				display: inline-block;
+			}
+
+			.brown-icon-money
+			{
+				margin-top: -7px; 
+			}
+
+			.title-button
+			{
+				//mixin
+				@include transition(0.2s);
+				font-weight: bold;
+				font-size: 14px;
+				text-decoration: none;
+				margin-top: 3px;
+				text-transform: uppercase;
+				opacity: 0;
+				float: right;
+
+				@media screen and (max-width: 500px)
+				{
+					float: none;
+				}
+			}
+
+			&:hover
+			{
+				.title-button
+				{
+					opacity: 1;
+				}
+			}
+		}
+
+		.sub-container
+		{
+			padding: 10px 20px;
+			/* margin-top: -1px; */
+			background-color: #fff;
+			margin-bottom: 10px;
+
+			/* .btn
+			{
+				background-color: inherit;
+				@include border-radius(2px);
+				border: 1px solid #006CC5;
+				color: #006CC5;
+			} */
+
+			.table-holder
+			{
+				.table
+				{
+					thead	
+					{
+						tr
+						{
+							th
+							{
+								border-bottom: 0;
+								text-align: left;
+								color: #344049;
+								font-size: 14px;
+								padding-bottom: 15px;
+								font-weight: bold;
+								text-transform: uppercase;
+							}
+						}
+					}
+					tbody
+					{
+						background-color: #ededed;
+						tr
+						{
+							position: relative;
+							.progress
+							{
+								width: 10%;
+								background-color: #ddd;
+								position: absolute;
+								top: 0;
+								left: 0;
+								right: 0;
+								bottom: 0;
+								height: 100%;
+							}
+							td
+							{
+								border: 0;
+								text-align: left;
+								border-bottom: 1px solid #ededed;
+								font-size: 14px;
+								color: #344049;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	.align-icon
 	{
 		vertical-align: middle;
@@ -21,39 +142,6 @@ $text-dark: #272c2f;
 	.brown-icon-money
 	{
 		margin-top: -7px;
-	}
-
-	.title
-	{
-		font-family: $content-text2;
-		color: $text-dark;
-		font-size: 18px;
-		letter-spacing: 0.5px;
-		font-weight: normal;
-		background-color: #fff;
-		padding: 5px 15px;
-		margin-top: 5px;
-		border: 1px solid #ddd;
-
-		.title-button
-		{
-			@include transition(0.2s);
-			font-weight: $bold;
-			font-size: 14px;
-			text-decoration: none;
-			margin-top: 3px;
-			text-transform: uppercase;
-			/* opacity: 0; */
-		}
-	}
-
-	.sub-container
-	{
-		padding: 10px 20px;
-		border: 1px solid #ddd;
-		margin-top: -1px;
-		background-color: #fff;
-		margin-bottom: 10px;
 	}
 
 	.table-holder

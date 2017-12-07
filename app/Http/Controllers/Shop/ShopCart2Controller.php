@@ -13,6 +13,7 @@ use App\Globals\Ecom_Product;
 use App\Models\Tbl_ec_product;
 use App\Globals\Cart2;
 use App\Globals\Ec_wishlist;
+use App\Globals\Settings;
 
 class ShopCart2Controller extends Shop
 {
@@ -22,7 +23,7 @@ class ShopCart2Controller extends Shop
         $this->set_cart_key($request);
 
         /* Get Cart */
-        $data["cart"] = Cart2::get_cart_info();
+        $data["cart"] = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
         
         /* Return View */
         return view("cart_modal", $data);
@@ -41,8 +42,9 @@ class ShopCart2Controller extends Shop
 
         /* Get Active Cart */
         $active_cart_key = Cart2::get_cart_key();
-
-        if (!$active_cart_key) 
+        $customer_cart   = preg_match('/customer/', $active_cart_key);
+        
+        if (!$active_cart_key || !$customer_cart) 
         {
             if ($customer_id != 0) 
             {
@@ -83,7 +85,7 @@ class ShopCart2Controller extends Shop
 
         /* Set Shipping Fee */
         $key    = "shipping_fee";
-        $value  = "0";
+        $value  = isset(Settings::get_settings_php_shop_id("shipping_fee", $this->shop_info->shop_id)["settings_value"]) ? Settings::get_settings_php_shop_id("shipping_fee", $this->shop_info->shop_id)["settings_value"] : 0;
 
         Cart2::set($key, $value);
 

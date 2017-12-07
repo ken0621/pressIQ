@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
@@ -9,14 +11,6 @@ body
 {
 	background-color: #ededed;
 }
-
-@mixin transition($transition)
-{
-  	-webkit-transition: all $transition ease-in-out;
-  	-moz-transition: all $transition ease-in-out;
-  	-o-transition: all $transition ease-in-out;
-  	transition: all $transition ease-in-out;
-}/* apply @inlude transition(0.2s); */
 
 .alert
 {
@@ -252,7 +246,7 @@ body
 				}
 				span
 				{
-					color: #693d28;
+					color: #B17D2A;
 				}
 			}
 			.choice
@@ -264,15 +258,15 @@ body
 					display: inline-block;
 					vertical-align: middle;
 					
-					.btn
+					.btn-custom
 					{
 						@include transition(0.2s);
-						background-color: #B17D2A;
+						background-color: #019771;
 						color: #fff;
 
 						&:hover
 						{
-							background-color: #019771;
+							background-color: #B17D2A;
 						}
 					}
 
@@ -297,7 +291,7 @@ body
 				.login-href
 				{
 					@include transition(0.2s);
-					color: #B17D2A;
+					color: #019771;
 					font-size: 15px;
 					font-weight: $regular;
 
@@ -308,17 +302,7 @@ body
 
 					&:hover
 					{
-						color: #019771;
-					}
-				}
-				.btn-brown
-				{
-					@media screen and (min-width: 125px)
-					{
-						width: 125px;
-					}
-					&:hover {
-						background-color: #613922;
+						color: #B17D2A;
 					}
 				}
 			}

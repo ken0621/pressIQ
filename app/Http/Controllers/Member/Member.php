@@ -184,14 +184,17 @@ class Member extends Controller
 			Seed_manual::put_mlm_pin_prefix($this->user_info->shop_id, $this->user_info->shop_key);
 			/* INSERT DEFAULT NAME FOR SOCIAL NETWORKING SITE */
 			Seed_manual::put_name_social_networking_site($this->user_info->shop_id);
-
 			/* INSERT MAIN WAREHOUSE */
+			/* INSERT DEFAULT OFFLINE WAREHOUSE */
+			Seed_manual::insert_brown_offline_warehouse($this->user_info->shop_id);
+			
 			Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);
 			// dd($this->user_info);
 
 			return $next($request);
 		});
 	}
+	
 	public function show_no_access()
 	{
 		return view('member.no_access');

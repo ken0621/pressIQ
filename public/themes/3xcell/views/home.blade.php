@@ -18,7 +18,7 @@
 		<div class="container">
 		<!-- INFO -->
 			<div class="info-container row-no-padding clearfix">
-				<div class="col-md-4 col-sm-4 col-xs-4 col-padding">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="box1-container">
 						<div class="title-container">
 							<span class="info-icon"><img src="/themes/{{ $shop_theme }}/img/people-icon.png"></span>
@@ -32,22 +32,19 @@
 						<a href="/history"><div class="small-button">Read More</div></a>
 					</div>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4 col-padding">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="box2-container">
 						<div class="title-container">
 							<span class="info-icon"><img src="/themes/{{ $shop_theme }}/img/handshake-icon.png"></span>
 							<span class="info-title">Opportunity</span>	
 						</div>
-						<!-- <div class="context-container">							
-								<div>{!! get_content($shop_theme_info, "home", "home_top_middle_description") !!}</div>
-						</div> -->
 						<div class="context-container">							
 								{!! get_content($shop_theme_info, "home", "home_top_middle_description") !!}
 						</div>
 						<a href="/how_to_join"><div class="small-button">Know More</div></a>
 					</div>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4 col-padding">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="box3-container">
 						<div class="title-container">
 							<span class="info-icon"><img src="/themes/{{ $shop_theme }}/img/buah-merah-icon.png"></span>
@@ -73,7 +70,7 @@
 					{{ get_content($shop_theme_info, "home", "home_division_3_title") }}
 				</div>
 				<div class="prod-container row clearfix">
-					<div class="col-md-6 col-sm-6 col-xs-6 prod-holder">
+					<div class="col-md-6 col-sm-6 col-xs-12 prod-holder">
 						<div class="prod-cat">
 							<div class="hover-detail-container">
 								<h3>TAKE IT EVERYDAY</h3>
@@ -107,7 +104,7 @@
 							<!-- <div class="medium-button">Shop Now</div> -->
 						</div>
 					</div>
-					<div class="col-md-6 col-sm-6 col-xs-6 prod-holder">
+					<div class="col-md-6 col-sm-6 col-xs-12 prod-holder">
 						<div class="prod-cat">
 							<div class="hover-detail-container">
 								<h5>YOUR EVERYDAY</h5>
@@ -173,7 +170,7 @@
 			<div class="trusted-brand">
 				<div class="title-container"></div>
 				<div class="brand-container row clearfix">
-					<div class="col-md-4 col-sm-4 col-xs-4 per-brand-holder">
+					<div class="col-md-4 col-sm-4 col-xs-12 per-brand-holder">
 						<div class="per-brand">
 							<img src="/themes/{{ $shop_theme }}/img/shield-icon.png">
 							<h1>{{ get_content($shop_theme_info, "home", "home_division_5_left_title") }}</h1>
@@ -182,7 +179,7 @@
 							</h2>
 						</div>
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-4 per-brand-holder">
+					<div class="col-md-4 col-sm-4 col-xs-12 per-brand-holder">
 						<div class="per-brand">
 							<img src="/themes/{{ $shop_theme }}/img/quality-icon.png">
 							<h1>{{ get_content($shop_theme_info, "home", "home_division_5_middle_title") }} </h1>
@@ -191,7 +188,7 @@
 							</h2>
 						</div>
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-4 per-brand-holder">
+					<div class="col-md-4 col-sm-4 col-xs-12 per-brand-holder">
 						<div class="per-brand">
 							<img src="/themes/{{ $shop_theme }}/img/cart-icon.png">
 							<h1>{{ get_content($shop_theme_info, "home", "home_division_5_right_title") }}</h1>
@@ -283,19 +280,41 @@
 		<div class="container">
 			<div class="title-container">Events</div>
 			<div class="events-container row-no-padding clearfix">
-				<div class="col-md-8 col-sm-8 col-xs-6 events-holder">
+				<div class="col-md-8 col-sm-8 col-xs-12 events-holder">
 					<div class="per-event-container">
 						@if(count(get_front_news($shop_id)) > 0)
 							@foreach(limit_foreach(get_front_news($shop_id), 3) as $news)
-									<div class="per-event row clearfix">
-										<div class="col-md-4 col-sm-4">
+									<div class="per-event desk row clearfix">
+										<div class="col-md-4 col-sm-4 col-xs-4">
 											<div class="event-image-container">
 												<a href="/news?id={{ $news->post_id }}">
 													<img src="{{ $news->post_image }}">
 												</a>
 											</div>
 										</div>
-										<div class="col-md-8 col-sm-8">
+										<div class="col-md-8 col-sm-8 col-xs-8">
+											<div class="event-details-container">
+												<h1>
+													<a href="/news?id={{ $news->post_id }}">
+														{{ $news->post_title }}	
+													</a>
+												</h1>
+												<h2>
+													{{ $news->post_excerpt }}
+												</h2>
+											</div>
+										</div>
+									</div>
+									<!-- MOBILE -->
+									<div class="per-event mob row clearfix">
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="event-image-container">
+												<a href="/news?id={{ $news->post_id }}">
+													<img src="{{ $news->post_image }}">
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-sm-6 col-xs-6">
 											<div class="event-details-container">
 												<h1>
 													<a href="/news?id={{ $news->post_id }}">
@@ -318,7 +337,7 @@
 					</div>
 				</div>
 				<!-- FACEBOOK FANPAGE -->
-				<div class="col-md-4 col-sm-4 col-xs-6 fb-fanpage-holder">
+				<div class="col-md-4 col-sm-4 col-xs-12 fb-fanpage-holder">
 					<div class="fb-container">
 						<div class="container-title-header">Facebook Fanpage</div>
 						<div class="body-container">
@@ -369,55 +388,35 @@
 			</div>
 		</div>
 	</div>
-	
-
 	<!-- SCROLL TO TOP -->
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=2">
 
 @endsection
 
 @section("js")
 
-
 <script type="text/javascript">
 
-$(document).ready(function()
-{
+	$(document).ready(function()
+	{
+		$('.single-item').slick({
+			prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/arrow-left.png'>",
+	      	nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right.png'>",
+	      	dots: false,
+	      	autoplay: true,
+	  		autoplaySpeed: 3000,
+		});
 
-	$('.single-item').slick({
-		prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/arrow-left.png'>",
-      	nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right.png'>",
-      	dots: false,
-      	autoplay: true,
-  		autoplaySpeed: 3000,
+	    lightbox.option({
+	      'disableScrolling': true,
+	      'wrapAround': true
+	    });
+
 	});
-
-    lightbox.option({
-      'disableScrolling': true,
-      'wrapAround': true
-    });
-
-	/*scroll up*/
-	$(window).scroll(function () {
-        if ($(this).scrollTop() > 700) {
-            $('.scroll-up').fadeIn();
-        } else {
-            $('.scroll-up').fadeOut();
-        }
-    });
-
-    $('.scroll-up').click(function () {
-        $("html, body").animate({
-            scrollTop: 0
-        }, 700);
-        return false;
-    });
-
-});
 </script>
 @endsection

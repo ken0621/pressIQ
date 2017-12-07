@@ -29,6 +29,7 @@
                     
                     </small>
                 </h1>
+                <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save</button>
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
                 @if(isset($inv))
@@ -352,7 +353,6 @@
                                                                 <td class="cm-number-td text-right">1</td>
                                                                 <td>
                                                                     <select class="form-control select-item droplist-item-cm input-sm pull-left {{$cmline->cmline_item_id}}" name="cmline_item_id[]" required>
-                                                                        @include("member.load_ajax_data.load_item", ['add_search' => "", 'item_id' => $cmline->cmline_item_id])
                                                                     </select>
                                                                 </td>
                                                                 <td><textarea class="textarea-expand txt-desc" name="cmline_description[]" value="{{$cmline->cmline_service_date}}"></textarea></td>

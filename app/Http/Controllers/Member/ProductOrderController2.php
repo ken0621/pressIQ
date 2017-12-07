@@ -3,13 +3,20 @@ namespace App\Http\Controllers\Member;
 
 use App\Globals\Transaction;
 use App\Globals\Columns;
-use App\Models\Tbl_online_pymnt_method;
 use App\Globals\Payment;
+use App\Globals\Settings;
+use App\Globals\Mail_global;
+
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_online_pymnt_link;
+use App\Models\Tbl_online_pymnt_method;
+use App\Models\Tbl_transaction;
+
 use Excel;
 use DB;
 use Request;
+use Redirect;
+use URL;
 
 class ProductOrderController2 extends Member
 {
@@ -32,21 +39,33 @@ class ProductOrderController2 extends Member
         $dummy              = Transaction::get_transaction_date();
         $active_tab         = request("_active_tab");
 
+        $paginate=5; // default pagination
+
+        // unity pagination
+        if($shop_id == 55)
+        {
+            $paginate = 20;
+        }
+
         if($active_tab == "paid")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt');
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt','',$paginate);
         }
         elseif($active_tab == "unconfirmed")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof');
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof','',$paginate);
         }
         elseif($active_tab == "pending")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order');
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order','',$paginate);
+        }
+        elseif($active_tab == "reject")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'reject','',$paginate);
         }
         else
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt');
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt','',$paginate);
         }
 
         foreach($data["_raw_table"] as $key => $raw_table)
@@ -54,11 +73,20 @@ class ProductOrderController2 extends Member
             $data["_raw_table"][$key]->action = "NO ACTION";
             $data["_raw_table"][$key]->name = $raw_table->first_name . " " . $raw_table->last_name;
 
+            if($active_tab == "paid") 
+            {
+                $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
+            }
             if($active_tab == "unconfirmed")
             {
-                $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a> | ';
+                $data["_raw_table"][$key]->action = '<a href="javascript:" class="popup" link="/member/ecommerce/product_order2/details?id=' . $raw_table->transaction_list_id . '" size="lg">VIEW DETAILS</a> | ';
+                $data["_raw_table"][$key]->action .= '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a> | ';
                 $data["_raw_table"][$key]->action .= '<a link="/member/ecommerce/product_order2/confirm_payment?id='. $raw_table->transaction_list_id .'" class="popup" size="md">CONFIRM</a> | ';
-                $data["_raw_table"][$key]->action .= '<a href="javascript:">REJECT</a>';
+                $data["_raw_table"][$key]->action .= '<a link="/member/ecommerce/product_order2/reject_payment?id='. $raw_table->transaction_list_id .'" class="popup" size="md">REJECT</a>';
+            }
+            if($active_tab == "reject")
+            { 
+                $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
             }
         }
 
@@ -83,6 +111,29 @@ class ProductOrderController2 extends Member
         $url = $this->user_info->upload_server . $proof;
         return redirect($url);
     }
+    public function details()
+    {
+        $transaction_list_id    = request("id");
+        $transaction_list       = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
+        $details                = $transaction_list->payment_details;
+
+        $transaction_id = Tbl_transaction_list::where("transaction_list_id",$transaction_list_id)->first()->transaction_id;
+        $transaction_payment_proof = Tbl_transaction::where('transaction_id',$transaction_id)->first()->transaction_payment_proof;
+        $path_prefix = "http://digimaweb.solutions/uploadthirdparty/";
+        $data['image_url'] = $path_prefix.$transaction_payment_proof;
+
+    
+        if (is_serialized($details)) 
+        {
+            $data["details"]               = unserialize($details);
+        }
+        else
+        {
+            $data["details"]               = [];
+        }
+
+        return view("member.product_order2.details", $data);
+    }
     public function payref()
     {
         /* Session */
@@ -98,6 +149,7 @@ class ProductOrderController2 extends Member
         Transaction::get_transaction_slot_id();
 
         $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'receipt', '', 0);
+      
         foreach ($data["_transaction"] as $key => $value) 
         {
             if ($value->payment_method != "paymaya") 
@@ -105,7 +157,6 @@ class ProductOrderController2 extends Member
                 unset($data["_transaction"][$key]);
             }
         }
-
         Excel::create('Paymaya Report', function($excel) use ($data)
         {
             $excel->sheet('Paymaya', function($sheet) use ($data)
@@ -189,18 +240,67 @@ class ProductOrderController2 extends Member
     {
         $shop_id            = $this->user_info->shop_id;
         $data["page"]       = "Confirm Product Orders";
+        $data['title']      = "CONFIRM";
         $transaction_list_id    = request("id");
         Transaction::get_transaction_customer_details_v2();
         $data['transaction'] = Transaction::get_data_transaction_list($transaction_list_id);
+        $data['action'] = '/member/ecommerce/product_order2/confirm_payment_submit';
+
+        return view('member.product_order2.confirm_product_order2', $data);        
+    }
+    public function reject_payment()
+    {
+        $shop_id            = $this->user_info->shop_id;
+        $data["page"]       = "REJECT Product Orders";
+        $data['title']      = "REJECT";
+        $transaction_list_id    = request("id");
+        Transaction::get_transaction_customer_details_v2();
+        $data['transaction'] = Transaction::get_data_transaction_list($transaction_list_id);
+        $data['action'] = '/member/ecommerce/product_order2/reject_payment_submit';
 
         return view('member.product_order2.confirm_product_order2', $data);        
     }
     
+    public function reject_payment_submit()
+    {
+        $val = Payment::manual_reject_payment($this->user_info->shop_id, request('transaction_id'));
+        if($val)
+        {
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_confirm';            
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = "Something wen't wrong. Please try again later.";
+        }
+
+        return json_encode($return);
+    }
     public function confirm_payment_submit()
     {
         $val = Payment::manual_confirm_payment($this->user_info->shop_id, request('transaction_list_id'));
         if(!$val)
         {
+            $get_transaction_list = Transaction::get_data_transaction_list(request('transaction_list_id'));
+            
+            if ($get_transaction_list) 
+            {
+                $get_transaction      = Tbl_transaction::where("transaction_id", $get_transaction_list->transaction_id)->first();
+
+                if ($get_transaction) 
+                {
+                    if ($this->user_info->shop_id == 47) 
+                    {
+                        $email_content["subject"] = "Confirmed Payment";
+                        $email_content["content"] = '<img style="max-width: 100%; display: block; margin: auto;" src="'.URL::to('/themes/3xcell/img/payment-verified.jpg').'">';
+                        $email_address            = Transaction::getCustomerEmailTransaction($get_transaction->transaction_id);
+
+                        Mail_global::send_email(null, $email_content, $this->user_info->shop_id, $email_address);
+                    }
+                }
+            }
+
             $return['status'] = 'success';
             $return['call_function'] = 'success_confirm';            
         }
@@ -211,5 +311,38 @@ class ProductOrderController2 extends Member
         }
 
         return json_encode($return);
+    }
+
+    public function settings()
+    {
+        $data["shipping_fee"] = isset(Settings::get_settings_php_shop_id("shipping_fee", $this->user_info->shop_id)["settings_value"]) ? Settings::get_settings_php_shop_id("shipping_fee", $this->user_info->shop_id)["settings_value"] : 0;
+
+        return view("member.product_order2.settings", $data);
+    }
+
+    public function settings_submit()
+    {
+        $shipping_fee = Request::input("shipping_fee");
+
+        if ($shipping_fee) 
+        {
+            $shipping_exist = Settings::get_settings_php_shop_id("shipping_fee", $this->user_info->shop_id);
+
+            if ($shipping_exist["response_status"] == "success") 
+            {
+                $result = Settings::update_settings_shop_id("shipping_fee", $shipping_fee, $this->user_info->shop_id);
+            }
+            else
+            {
+                $result = Settings::insert_settings_shop_id("shipping_fee", $shipping_fee, $this->user_info->shop_id);
+            }
+
+            if ($result["response_status"] == "error") 
+            {
+                dd($data["message"]);
+            }
+        }
+
+        return Redirect::back();
     }
 }

@@ -6,13 +6,13 @@
 			<div class="top-container-content">Payment Summary</div>
 			@if(session('error'))
 			<div class="alert alert-danger">
-			  <strong>Error!</strong> {{ session('error') }}
+			  <strong>Error!</strong> {!! session('error') !!}
 			</div>
 			@endif
 		</div>
 	</div>
 
-	<form method="post">
+	<form method="post" class="submitt-asd">
 		{{ csrf_field() }}
 		<div class="bottom-container">
 			<div class="container">
@@ -27,7 +27,7 @@
 								<div class="form-container">
 									<div class="form-label">Province</div>
 									<div class="form-input">
-										<select name="customer_state">
+										<select name="customer_state" class="province-is-empty">
 											<option value="" hidden>Select Province</option>
 											@foreach($_locale as $locale)
 											<option value="{{ $locale->locale_name }}">{{ $locale->locale_name }}</option>
@@ -38,7 +38,7 @@
 								<div class="form-container">
 									<div class="form-label">Complete Shipping Address</div>
 									<div class="form-input">
-										<textarea required name="customer_street" placeholder="Type your complete address here"></textarea>
+										<textarea class="textarea-is-empty" required name="customer_street" placeholder="Type your complete address here"></textarea>
 									</div>
 								</div>
 							</div>
@@ -131,16 +131,17 @@
 								<div class="top-title">How do you want to pay?</div>
 								<div class="option">
 									<div class="form-input">
-										<select name="method" required="required">
+										<select name="method" required="required" class="payment-method-is-empty">
 											<option value="" hidden>Select Payment Method</option>
 											@foreach($_payment as $payment)
 												<option value="{{ $payment->link_reference_name }}">{{ $payment->method_name }}</option>
 											@endforeach
-										</select>	
+										</select>
 									</div>
 								</div>
 								<div class="button-container">
-									<button type="submit" class="button-proceed" id="proceed">Proceed</button>
+									<!-- <button type="submit" class="button-proceed" id="proceed">Proceed</button> -->
+									<button type="button" class="button-proceed popup" id="proceed" link="/members/returnpolicy" size="md">Proceed</button>
 								</div>
 							</div>
 						</div>

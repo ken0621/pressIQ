@@ -68,8 +68,19 @@
 
     <div class="form-group col-md-12" style="margin-top: 15px;">
         <div class="pull-left">
-            <select class="form-control" style="width: 250px;">
+            <select class="form-control change-filter-membership" style="width: 250px;">
                 <option value="0">All Membership</option>
+                @foreach($_membership as $membership)
+                    <option value="{{ $membership->membership_id }}">{{ $membership->membership_name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="pull-left">
+            <select class="form-control change-filter-type" style="width: 250px; margin-left: 15px;">
+                <option value="NA">All Type</option>
+                <option value="PS">PS</option>
+                <option value="FS">FS</option>
+                <option value="CD">CD</option>
             </select>
         </div>
         <div class="input-group pull-right" style="width: 300px;">
@@ -86,7 +97,7 @@
     </div> 
 </div>
 
-<script type="text/javascript" src="/assets/member/js/mlm/mlm_developer.js"></script>
+<script type="text/javascript" src="/assets/member/js/mlm/mlm_developer.js?v=3.0"></script>
 <script type="text/javascript" src="/assets/member/js/column.js"></script>
 <style type="text/css">
     .paginat .pagination

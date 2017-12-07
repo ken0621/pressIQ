@@ -9,6 +9,7 @@ use App\Globals\Cart2;
 use App\Globals\WarehouseTransfer;
 use App\Globals\Warehouse2;
 use App\Globals\Item;
+use App\Models\Tbl_warehouse_issuance_report;
 
 use Session;
 use Carbon\Carbon;
@@ -20,14 +21,16 @@ class WarehouseIssuanceSlipController extends Member
     {
     	$data['page'] = 'WIS';
         $data['status'] = isset($request->status) ? $request->status : 'pending';
-        $data['_wis'] = WarehouseTransfer::get_all_wis($this->user_info->shop_id);
+        $current_warehouse = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+        $data['_wis'] = WarehouseTransfer::get_all_wis($this->user_info->shop_id, $data['status'], $current_warehouse);
 
     	return view('member.warehousev2.wis.wis_list',$data);
     }
     public function getLoadWisTable(Request $request)
     {
+        $current_warehouse = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         $data['status'] = isset($request->status) ? $request->status : 'pending';
-        $data['_wis'] = WarehouseTransfer::get_all_wis($this->user_info->shop_id, $data['status']);
+        $data['_wis'] = WarehouseTransfer::get_all_wis($this->user_info->shop_id, $data['status'], $current_warehouse);
 
         return view('member.warehousev2.wis.load_wis_table',$data);
     }

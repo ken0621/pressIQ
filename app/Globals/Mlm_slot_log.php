@@ -26,12 +26,12 @@ use App\Globals\AuditTrail;
 
 class Mlm_slot_log
 {   
-	public static function slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on)
+	public static function slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on, $wallet_log_remarks = '')
 	{
 		$check_slot = Tbl_mlm_slot::where("slot_id",$wallet_log_slot)->first();
 		if($check_slot)
 		{
-			$insert['shop_id'] = $check_slot->shop_id; 
+			$insert['shop_id'] = $check_slot->shop_id;
 		}
 		$insert['wallet_log_slot'] = $wallet_log_slot; 
 		$insert['wallet_log_slot_sponsor'] = $wallet_log_slot_sponsor; 
@@ -42,6 +42,10 @@ class Mlm_slot_log
 		$insert['wallet_log_status'] = $wallet_log_status; 
 		$insert['wallet_log_claimbale_on'] = $wallet_log_claimbale_on; 
 		Tbl_mlm_slot_wallet_log::insert($insert);
+	}
+	public static function point_slot($points_info = array())
+	{
+		Tbl_mlm_slot_points_log::insert($points_info);
 	}
 	public static function slot_array($arry_log)
 	{
@@ -172,6 +176,53 @@ class Mlm_slot_log
 		$message = "Your slot " . $earner->slot_no;
 		$message .= ", earned " . $log_array['earning'];
 		$message .= " from " .  $label;
+		$message .= " in level " . $log_array['level'];
+		$message .= " of " . $log_array['level_tree'];
+		$message .= ". Sponsor : " . $sponsor->slot_no;
+		$message .= "(" .name_format_from_customer_info($sponsor). ")";
+
+		return $message;
+	}
+	public static function log_constructor_wallet_transfer($action,$amount,$from)
+	{
+		$message = "";
+		if($amount<0)
+		{
+			$amount *= -1;
+		}
+		switch ($action) 
+		{
+			case 'recieved':
+				$message.="You have successfully received ";
+				break;
+
+			case 'transfer':
+				$message.="You have successfully transfer ";
+				break;
+			
+			case 'fee':
+				$message.="Your wallet transfer to ".$from." has processing fee of ";
+				break;
+		}
+		$message.=currency('₱',$amount)." ";
+		switch ($action) 
+		{
+			case 'recieved':
+				$message.="from slot ".$from;
+				break;
+
+			case 'transfer':
+				$message.="to slot ".$from;
+				break;
+		}
+		return $message;
+	}
+	public static function log_constructor_gc($earner, $sponsor,  $log_array)
+	{
+		$label = Mlm_slot_log::get_complan_label($log_array['complan'], $sponsor->shop_id);
+		$message = "Your slot " . $earner->slot_no;
+		$message .= ", earned " . $log_array['earning'];
+		$message .= " GC from " .  $label;
 		$message .= " in level " . $log_array['level'];
 		$message .= " of " . $log_array['level_tree'];
 		$message .= ". Sponsor : " . $sponsor->slot_no;

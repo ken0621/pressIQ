@@ -111,8 +111,8 @@
                 <div class="clearfix">
                     <div class="payment-detail pull-left">
                         <div class="rows"><strong>Payment Date :</strong> {{date('M d, Y',strtotime($list->transaction_date_created))}}</div>
-                        <div class="rows"><strong>Payment Type :</strong> {{ ucfirst($customer_payment->payment_method) }}</div>
-                        <div class="rows"><strong>Payment Receipt Number :</strong> {{ $customer_payment->checkout_id }}</div>
+                        <div class="rows"><strong>Payment Type :</strong> {{ ucfirst(isset($customer_payment->payment_method) ? $customer_payment->payment_method : '' ) }}</div>
+                        <div class="rows"><strong>Payment Receipt Number :</strong> {{ isset($customer_payment->checkout_id) ?  $customer_payment->checkout_id : ''}}</div>
                     </div>
                     <div class="total-summary pull-right">
                         <div class="rows">TOTAL PAID AMOUNT : PHP {{ number_format($list->transaction_total, 2) }}</div>

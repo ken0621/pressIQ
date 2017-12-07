@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <base href="{{ URL::to('/themes/'.$shop_theme.'') }}/">
     <!-- Title -->
-    <title>Alpha Global Prestige - {{ $page }}</title>
+    <title>Alpha Global Prestige - {{ $page or '' }}</title>
     <link rel="icon"  type="image/png" href="http://alpha-globalprestige.com/assets/front/img/agp.png">
     <!-- Responsive Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -42,6 +42,7 @@
     <link rel="stylesheet" type="text/css" href="resources/assets/slick/slick-theme.css">
     <!-- GLOBAL -->
     <link rel="stylesheet" type="text/css" href="resources/assets/front/css/global.css">
+    <!-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css"> -->
     <!-- OTHER -->
     @yield('css')
 
@@ -76,7 +77,7 @@
 </head>
 <!-- End of Header -->
 
-<body class="home page page-template-default header_1_body fullwidth_slider_page with_slider_page wpb-js-composer vc_responsive">
+<body class="pushmenu-push home page page-template-default header_1_body fullwidth_slider_page with_slider_page wpb-js-composer vc_responsive">
     <!-- Used for boxed layout -->
     <!-- Start Top Navigation -->
     <div class="top_nav">
@@ -85,7 +86,8 @@
                 <div class="span9" id="ewan">
                     <div class="pull-left">
                         <div id="widget_topinfo-2" class="widget widget_topinfo">
-                            <div class="topinfo">{{ get_content($shop_theme_info, "header", "header_call_label") }}: {{ get_content($shop_theme_info, "header", "header_call_number") }}</span><span class="email">{{ get_content($shop_theme_info, "header", "header_email_label") }}: {{ get_content($shop_theme_info, "header", "header_email_address") }}</span></div>
+                            <div class="topinfo">{{ get_content($shop_theme_info, "header", "header_call_label") }}: {{ get_content($shop_theme_info, "header", "header_call_number") }}</span><span class="email">{{ get_content($shop_theme_info, "header", "header_email_label") }}: {{ get_content($shop_theme_info, "header", "header_email_address") }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -95,7 +97,14 @@
                             <div class="row-fluid social_row">
                                 <div class="span12 account-button">
                                     <ul class="text-center" style="margin-top: 0;">
-                                        <li><a href="/mlm/login">LOG IN</a></li>
+                                        <!-- <li><a href="/mlm/login">LOG IN</a></li> -->
+                                        @if($customer)
+                                            <li><a href="/members/logout">LOGOUT</a></li>
+                                            <li><a href="/members">MY ACCOUNT</a></li>
+                                        @else
+                                            <li><a href="/members/login">LOGIN</a></li>
+                                            <li><a href="/members/register">REGISTER</a></li>
+                                        @endif
                                         <!-- <li><div class="divider">|</div></li> -->
                                         <!-- <li><a href="/mlm/register">SIGN UP</a></li> -->
                                     </ul>
@@ -118,7 +127,8 @@
                     <div class="span12">
                         <!-- Logo -->
                         <div id="logo" class="">
-                            <a href='/'><img style="max-height: 100%; max-width: 100%; object-fit: contain;" src='{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : 'assets/front/img/small-logo.png' }}' alt='' /></a>
+                            <a href='/'><img style="max-height: 100%; max-width: 100%; object-fit: contain;" src='{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : 'assets/front/img/small-logo.png' }}' alt='' />
+                            </a>
                         </div>
                         <!-- #logo END -->
                         <div class="after_logo">
@@ -207,7 +217,6 @@
         </div>
     </footer>
     
-    
     <script type='text/javascript' src='resources/assets/ausart/assets/js/jquery.hoverex.js'></script>
     <script type='text/javascript' src='resources/assets/ausart/assets/js/imagesloaded.pkgd.min.js'></script>
     <script type='text/javascript' src='resources/assets/ausart/assets/js/jquery.parallax.js'></script>
@@ -228,6 +237,9 @@
     <!-- EXTERNAL JS -->
     <script type="text/javascript" src="resources/assets/external/matchheight.js"></script>
     <script type="text/javascript" src="resources/assets/slick/slick.min.js"></script>
+
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     <!-- EXECUTE JS -->
     <script type="text/javascript">
     ;(function($){

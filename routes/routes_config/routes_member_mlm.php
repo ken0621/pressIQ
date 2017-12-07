@@ -44,6 +44,8 @@ Route::any('/member/mlm/code2/disassemble', 'Member\MLM_CodeControllerV2@members
 Route::any('/member/mlm/product_code2', 'Member\MLM_CodeControllerV2@index'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/product_code2/table', 'Member\MLM_CodeControllerV2@product_code_table'); //GUILLERMO TABLIGAN
 
+Route::any('/member/mlm/report_codes', 'Member\MLM_CodeControllerV2@report_code'); //ARCY
+Route::any('/member/mlm/report_codes/data','Member\MLM_CodeControllerV2@report_code_table');
 Route::any('/member/mlm/print_codes', 'Member\MLM_CodeControllerV2@print_codes'); //ARCY
 Route::any('/member/mlm/print_codes/submit', 'Member\MLM_CodeControllerV2@print_codes_submit'); //ARCY
 Route::any('/member/mlm/print', 'Member\MLM_CodeControllerV2@print'); //ARCY
@@ -230,6 +232,7 @@ Route::any('/member/mlm/encashment/request/all/selected', 'Member\Mlm_Encashment
 Route::any('/member/mlm/encashment/deny/all/selected', 'Member\Mlm_EncashmentController@deny_all_selected');//luke
 
 AdvancedRoute::controller("/member/mlm/payout","Member\MLM_PayoutController");
+AdvancedRoute::controller("/member/mlm/gcmaintenance","Member\MLM_GCMaintenanceController");
 /* end MLM Product */
 
 /* start MLM Product */
@@ -263,6 +266,7 @@ Route::any('/member/mlm/product_code/receipt/view/{id}', 'Member\MLM_ProductCode
 /* end MLM PRODUCT CODE */
 
 Route::get('member/mlm/card', 'Member\MLM_CardController@all_slot');
+Route::get('member/mlm/card/view', 'Member\MLM_CardController@view');
 Route::post('member/mlm/card/filter', 'Member\MLM_CardController@filter');
 Route::get('member/mlm/card/image/{slot}', 'Member\MLM_CardController@generate');
 Route::get('member/mlm/card/image/discount/{id}', 'Member\MLM_CardController@generate_discount');
@@ -334,9 +338,15 @@ Route::post('member/mlm/developer/redistribute', 'Member\MlmDeveloperController@
 Route::get('member/mlm/developer/modify_slot', 'Member\MlmDeveloperController@modify_slot');
 Route::post('member/mlm/developer/modify_slot', 'Member\MlmDeveloperController@modify_slot_submit');
 
+Route::any('member/mlm/developer/allow_multiple_slot', 'Member\MlmDeveloperController@allow_multiple_slot');
+
+Route::any('member/mlm/developer/tag_as_ambassador', 'Member\MlmDeveloperController@tag_as_ambassador');
+
 
 
 Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');
 Route::any('member/mlm/developer/popup_slot_created', 'Member\MlmDeveloperController@popup_slot_created');
 Route::any('member/mlm/developer/popup_earnings', 'Member\MlmDeveloperController@popup_earnings');
+Route::any('member/mlm/developer/distributed_income', 'Member\MlmDeveloperController@distributed_income');
 Route::any('member/mlm/developer/popup_points', 'Member\MlmDeveloperController@popup_points');
+Route::any('member/mlm/developer/change_owner', 'Member\MlmDeveloperController@change_owner');

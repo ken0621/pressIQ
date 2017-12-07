@@ -719,4 +719,18 @@ class Payment
 
       return $return;
    }
+   public static function manual_complete_payment($shop_id, $transaction_id = 0)
+   {
+      $update['order_status'] = 'completed';
+      $update['payment_status'] = 'completed';
+      $data = Tbl_transaction::where('shop_id', $shop_id)->where('transaction_id', $transaction_id)->first();
+      $return = 0;
+      if($data)
+      {
+         Tbl_transaction::where('shop_id', $shop_id)->where('transaction_id', $transaction_id)->update($update);
+         $return = 1;
+      }
+
+      return $return;
+   }
 }

@@ -65,7 +65,7 @@ class ProductOrderController2 extends Member
         }
         elseif($active_tab == "completed")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'completed');
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'completed','',$paginate);
         }
         else
         {
@@ -79,7 +79,14 @@ class ProductOrderController2 extends Member
 
             if($active_tab == "paid") 
             {
-                $data["_raw_table"][$key]->action = '<a link="/member/ecommerce/product_order2/deliver?id=' . $raw_table->transaction_list_id . '" class="popup" size="md">DELIVER</a> | ';
+                if($raw_table->order_status != 'paid')
+                {
+                    $data["_raw_table"][$key]->action = '<a link="/member/ecommerce/product_order2/deliver?id=' . $raw_table->transaction_list_id . '" class="popup" size="md">DELIVER</a> | ';
+                }
+                else
+                {
+                    $data["_raw_table"][$key]->action = 'TO DELIVER | ';
+                }
                 $data["_raw_table"][$key]->action .= '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
             }
             if($active_tab == "pending") 
@@ -388,14 +395,30 @@ class ProductOrderController2 extends Member
     public function completed()
     {
         $shop_id             = $this->user_info->shop_id;
-        $data["page"]        = "DELIVER Product Orders";
-        $data['title']       = "DELIVER";
+        $data["page"]        = "COMPLETED Product Orders";
+        $data['title']       = "COMPLETED";
         $transaction_list_id = request("id");
                                Transaction::get_transaction_customer_details_v2();
         $data['transaction'] = Transaction::get_data_transaction_list($transaction_list_id);
-        dd($data['transaction']);
-        $data['action']      = '/member/ecommerce/product_order2/deliver_submit';
+        $data['action']      = '/member/ecommerce/product_order2/completed_submit';
 
         return view('member.product_order2.confirm_product_order2', $data); 
+    }
+
+    public function completed_submit()
+    {
+        $val = Payment::manual_complete_payment($this->user_info->shop_id, request('transaction_id'));
+        if($val)
+        {
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_confirm';            
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = "Something went wrong. Please try again later.";
+        }
+
+        return json_encode($return);
     }
 }

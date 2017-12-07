@@ -604,9 +604,17 @@ class Transaction
                 {
                     $data->where('transaction_type', $transaction_type)->where('payment_status','pending');
                 }
+                elseif($transaction_type == 'order')
+                {
+                     $data->where('transaction_type','order')->where('payment_status','paid')->where('order_status','paid');
+                }
                 elseif($transaction_type == 'reject')
                 {
                     $data->where('transaction_type','proof')->where('payment_status','reject')->where('order_status','reject');
+                }
+                elseif($transaction_type == 'completed')
+                {
+                    $data->where('transaction_type','order')->where('payment_status','completed')->where('order_status','completed');
                 }
                 else
                 {

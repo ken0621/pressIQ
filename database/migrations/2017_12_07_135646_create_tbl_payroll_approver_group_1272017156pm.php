@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblPressiqPressReleases extends Migration
+class CreateTblPayrollApproverGroup1272017156pm extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class UpdateTblPressiqPressReleases extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_pressiq_press_releases', function (Blueprint $table) 
+        Schema::create('tbl_payroll_approver_group', function (Blueprint $table)
         {
-            $table->string('pr_date_sent');
-            $table->string('pr_sender_name');
+            $table->increments("payroll_approver_group_id");
+            $table->string("payroll_approver_group_name");
+            $table->string("payroll_approver_group_type"); 
+            $table->integer("archived");            
         });
     }
 

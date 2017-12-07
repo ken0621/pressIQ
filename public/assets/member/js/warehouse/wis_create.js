@@ -63,14 +63,7 @@ function wis_create()
             	}
             }
 		});
-		$('.select-warehouse').globalDropList({
-	        hasPopup : 'false',
-	        width    : '100%',
-	        onChangeValue : function()
-	        {
-	        	$('.txt-warehouse-address').text($(this).find("option:selected").attr('warehouse-address'));
-	        }
-    	});
+		
 		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
             link : "/member/item/add",

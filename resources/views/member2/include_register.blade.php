@@ -19,9 +19,9 @@
 										<a href="{{$fb_login_url or '#'}}" class="holder fb">
 											<!--<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign up with Facebook</div>-->
 										</a>
-										<a href="javascript:" class="holder gp" id="customBtn">
+										{{-- <a href="javascript:" class="holder gp" id="customBtn">
 											<div class="name"><i class="fa fa-google-plus" aria-hidden="true"></i> Sign up with Google+</div>
-										</a>
+										</a> --}}
 									</div>
 								</div>
 							</div>

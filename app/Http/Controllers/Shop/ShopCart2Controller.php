@@ -23,7 +23,7 @@ class ShopCart2Controller extends Shop
         $this->set_cart_key($request);
 
         /* Get Cart */
-        $data["cart"] = Cart2::get_cart_info();
+        $data["cart"] = Cart2::get_cart_info(Self::$customer_info->customer_id);
         
         /* Return View */
         return view("cart_modal", $data);

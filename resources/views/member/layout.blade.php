@@ -46,7 +46,7 @@
     cursor: pointer;
     }
     </style>
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/assets/member/css/global.css?version=1">
     @yield('css')
     <script>
     (function () {
@@ -167,7 +167,7 @@
                         <span>Choose a warehouse</span>
                         <a href="javascript:;" class="close-user-menu"><i class="icon-remove"></i></a>
                         
-                        <div class="col-md-12" style="margin-top: 5px">
+                        <div class="col-md-12" style="margin-top: 20px">
                             <select class="form-control select_current_warehouse">
                                 @include('member.warehousev2.load_warehouse_v2_select',['_warehouse' => $_warehouse_list_shortcut])
                             </select>

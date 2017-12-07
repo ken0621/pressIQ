@@ -60,6 +60,11 @@ button:hover{
 	{
 		float: left;
 		display: none;
+
+		a 
+		{
+			text-decoration: none;
+		}
 		span 
 		{
 			color: white;
@@ -96,6 +101,10 @@ button:hover{
 				&:hover {
 					cursor: pointer;
 				}
+			}
+			a 
+			{
+				text-decoration: none;
 			}
 		}
 		.login-container{

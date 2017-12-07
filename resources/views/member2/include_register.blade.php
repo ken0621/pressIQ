@@ -13,7 +13,7 @@
 								</div>
 								<div class="right">
 									<div class="or">
-										<img src="/themes/{{ $shop_theme }}/img/or-2.png">
+										{{-- <img src="/themes/{{ $shop_theme }}/img/or-2.png"> --}}
 									</div>
 									<div class="text-right social-button">
 										<a href="{{$fb_login_url or '#'}}" class="holder fb">

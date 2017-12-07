@@ -4676,7 +4676,7 @@ class PayrollController extends Member
      public function payroll_group()
      {
           // Tbl_payroll_overtime_rate
-          $data['_active'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->paginate($this->paginate_count);
+          $data['_active']   = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->paginate($this->paginate_count);
           $data['_archived'] = Tbl_payroll_group::sel(Self::shop_id(), 1)->orderBy('payroll_group_code')->paginate($this->paginate_count);
           // dd($data);
           return view('member.payroll.side_container.payroll_group', $data);
@@ -4694,7 +4694,6 @@ class PayrollController extends Member
 
      public function modal_save_payroll_group()
      {
-          
           $insert['shop_id']                                = Self::shop_id();
           $insert['payroll_group_code']                     = Request::input('payroll_group_code');
           $insert['payroll_group_salary_computation']       = Request::input('payroll_group_salary_computation');
@@ -4702,12 +4701,13 @@ class PayrollController extends Member
           $insert['payroll_group_13month_basis']            = Request::input('payroll_group_13month_basis');
           $insert['payroll_group_cola_basis']               = Request::input('payroll_group_cola_basis');
           
-          if( Request::has('payroll_group_deduct_before_absences'))
+          if(Request::has('payroll_group_deduct_before_absences'))
           {
                $insert['payroll_group_deduct_before_absences'] = Request::input('payroll_group_deduct_before_absences');
           }
 
           $payroll_group_before_tax                         = 0;
+
           if(Request::has("payroll_group_before_tax"))
           {
                $payroll_group_before_tax = Request::input('payroll_group_before_tax');
@@ -4715,6 +4715,7 @@ class PayrollController extends Member
 
           $insert['display_monthly_rate']    = 0;
           $insert['display_daily_rate']      = 0;
+          
           if(Request::has("display_monthly_rate"))
           {
                $insert['display_monthly_rate'] = 1;

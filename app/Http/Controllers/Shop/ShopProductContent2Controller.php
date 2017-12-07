@@ -28,18 +28,18 @@ class ShopProductContent2Controller extends Shop
         $data["_related"] 	 		= $this->filter_related($data["_related"], $data["product"]["eprod_id"]);
         $data["product"]["variant"] = $this->filter_variant($data["product"]["variant"]);
 
-        if (Self::$customer_info->customer_id) 
-        {
-            foreach ($data["product"]["variant"] as $key => $value) 
-            {
-                $price_level = Tbl_mlm_slot::priceLevel($value["item_id"])->where("tbl_mlm_slot.slot_owner", Self::$customer_info->customer_id)->first();
-
-                $data["product"]["variant"][$key]["price_level"] = $price_level ? $price_level->custom_price : null;
-            }
-        }
-        
         if ($this->shop_theme == "3xcell") 
         {
+            if (isset(Self::$customer_info->customer_id) && Self::$customer_info->customer_id) 
+            {
+                foreach ($data["product"]["variant"] as $key => $value) 
+                {
+                    $price_level = Tbl_mlm_slot::priceLevel($value["item_id"])->where("tbl_mlm_slot.slot_owner", Self::$customer_info->customer_id)->first();
+
+                    $data["product"]["variant"][$key]["price_level"] = $price_level ? $price_level->custom_price : null;
+                }
+            }
+            
             if(isset(Self::$customer_info->customer_id))
             {
                 $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();

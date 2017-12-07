@@ -2435,7 +2435,7 @@ class ShopMemberController extends Shop
         $shop_id            = $this->shop_info->shop_id;
         $data["_payment"]   = $_payment = Payment::get_list($shop_id);
         $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
-        $data["cart"]       = Cart2::get_cart_info();
+        $data["cart"]       = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
         
         if(!Self::$customer_info)
         {
@@ -2454,7 +2454,7 @@ class ShopMemberController extends Shop
     {
         $shop_id  = $this->shop_info->shop_id;
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
-        $cart = Cart2::get_cart_info();
+        $cart = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
         $validate = null;
         if($cart)
         {   

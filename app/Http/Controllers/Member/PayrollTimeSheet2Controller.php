@@ -1433,11 +1433,7 @@ class PayrollTimeSheet2Controller extends Member
 			$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.employee_id","=", "tbl_payroll_employee_basic.payroll_employee_id")->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", $period_company_id);
 		}
 
-
-
 		$query->where("tbl_payroll_employee_basic.shop_id", $this->user_info->shop_id);
-
-
 		$query->join("tbl_payroll_company", "tbl_payroll_employee_basic.payroll_employee_company_id", "=", "tbl_payroll_company.payroll_company_id");
 		
 		if($branch == 0)
@@ -1447,13 +1443,11 @@ class PayrollTimeSheet2Controller extends Member
 				$quer->where("payroll_company_id", $company_id);
 				$quer->orWhere("payroll_parent_company_id", $company_id);
 			});
-			
 		}
 		else
 		{
 			$query->where("payroll_company_id", $branch);
 		}
-
 
 		$query->orderBy("payroll_employee_last_name");
 		$query->groupBy("tbl_payroll_employee_basic.payroll_employee_id");
@@ -1463,22 +1457,27 @@ class PayrollTimeSheet2Controller extends Member
 			$query->where("tbl_payroll_employee_basic.payroll_employee_display_name", "LIKE", "%" . $search . "%");
 		}
 
+	
+
 		$query->where('tbl_payroll_employee_contract.payroll_employee_contract_status','<=','7')
 				->join('tbl_payroll_employee_contract','tbl_payroll_employee_contract.payroll_employee_id', '=', 'tbl_payroll_employee_basic.payroll_employee_id');
+
 		
 		$_table = $query->get();
-	
+		
 		$_return = null;
 		
+		$period_info = Tbl_payroll_period::where('tbl_payroll_period_company.payroll_period_company_id', $period_company_id)->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')->first();
+
 		foreach($_table as $key => $row)
 		{
 			$payroll_employee_contract = Tbl_payroll_employee_contract::where('payroll_employee_id',$row->payroll_employee_id)->first(); 
 
-		
-			$_return[$key] = $row;
 			$payroll_group = $this->db_get_current_employee_contract($row->payroll_employee_id, $period_start);
 			
-			
+			if ($payroll_group["payroll_group_period"] == $period_info["payroll_period_category"]) 
+			{	
+				$_return[$key] = $row;
 
 				if($payroll_group)
 				{
@@ -1503,8 +1502,9 @@ class PayrollTimeSheet2Controller extends Member
 					$_return[$key]->shift_code_name = "";
 					$_return[$key]->shift_code_link = "";
 				}
+			}	
+		}
 
-		} 
 		return $_return;
 	}
 	public function db_get_company_period_information($period_id)

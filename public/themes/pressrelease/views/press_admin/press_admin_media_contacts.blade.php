@@ -57,7 +57,7 @@
                         <div class="title">Description: *</div>
                         <textarea name="contact_description"></textarea>
                         <div class="button-container">
-                            <button class="add-button" type="submit">Add Contacts</button>
+                            <button type="submit">Add Contacts</button>
                         </div>
                     </form>
                 </div>

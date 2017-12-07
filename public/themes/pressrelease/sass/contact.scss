@@ -1,98 +1,73 @@
-body{
-	font-family: 'Open Sans', sans-serif;
-	background-color: #ededed;
-	color: #747474;
-}
-.top-1-container {
-	padding: 40px 0px 40px 0px;
-	background-color: #ededed;
 
-	.title-container {
-		font-size: 18px;
-		font-weight: 600;
-		color: #1c1c1c;
+.main-wrapper
+{
+	padding-bottom: 20px;
+	.title-container
+	{
+		font-size: 25px;
+		font-weight: 700;
+		color: #585858;
+		text-align: left;
+		padding: 20px 0px;
 	}
-}
-.top-2-container {
-	padding: 40px 0px 40px 0px;
-	background-color: white;
-
-	.content-container {
-		
-		.title-container {
+	input
+	{
+		padding: 0px 10px;
+		color: #545454;
+		height: 50px;
+		font-size: 18px;
+		width: 100%;
+		border: 1px solid #919191;
+	}
+	textarea
+	{
+		padding: 10px 10px;
+		color: #545454;
+		height: 50px;
+		font-size: 18px;
+		width: 100%;
+		max-height: 150px;
+		max-width: 100%;
+		min-height: 150px;
+		min-width: 100%;
+		border: 1px solid #919191;
+	}
+	.button-container
+	{
+		padding: 20px 0px;
+		text-align: left;
+		width: 180px;
+		a
+		{
+			background-color: #316df9;
+			color: #fff;
 			font-size: 18px;
-			font-weight: 600;
-			color: #1c1c1c;
+			padding: 15px 50px;
+			text-decoration: none;
 		}
-
-		.location-content-container {
-			padding: 20px 0px 20px 0px;
-
-			.title-2-container {
-				color: #1c1c1c;
+	}
+	.background-border
+	{
+		.background-container
+		{
+			text-align: left;
+			.title-info-container
+			{
+				font-size: 25px;
 				font-weight: 700;
+				color: #585858;
+				padding: 30px 0px 5px 0px;
 			}
-			.detail-container {
-				margin-top: 5px;
-				margin-bottom: 20px;
-				font-size: 13px;
+			i
+			{
+				padding-right: 5px;
+				color: #585858;
+				font-size: 25px;
 			}
-		}
-		
-		.fill-up-container {
-			width: 100%;
-			
-			.textfield-container {
-				width: 100%;
-				padding: 10px 0px 10px 0px;
-				color: #979797;
-
-				.form-control {
-					height: 40px;
-				    width: 100%;
-				    border-radius: 20px;
-				    color: #979797;
-				    font-size: 12px;
-				}
-				
-				button {
-					background-color: #48b920;
-					width: 30%;
-					text-align: center;
-					border-radius: 20px;
-					color: white;
-					border: none;
-					padding: 10px 0px 10px 0px;
-				}
+			span
+			{
+				font-size: 20px;
 			}
-		}
-	}
-}
-.bot-container {
-	padding: 40px 0px 40px 0px;
-	background-color: white;
-
-	.title-container {
-		font-size: 18px;
-		font-weight: 600;
-		color: #1c1c1c;
-	}
-	.content-container {
-		padding: 20px 0px 40px 0px;
-
-		.map-container {
-			width: 100%;
-			padding-right: 25px;
-
-			.map {
-				width: 100%;
-				border-radius: 20px;
-			}
-		}
-
-		.title-container {
-			font-size: 13px;
-			font-weight: 700;
 		}
 	}
 }

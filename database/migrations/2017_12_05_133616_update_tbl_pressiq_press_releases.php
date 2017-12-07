@@ -15,8 +15,15 @@ class UpdateTblPressiqPressReleases extends Migration
     {
         Schema::table('tbl_pressiq_press_releases', function (Blueprint $table) 
         {
-            $table->string('pr_date_sent');
-            $table->string('pr_sender_name');
+            if (!Schema::hasColumn('pr_date_sent'))
+            {
+                $table->string('pr_date_sent');
+            }
+            
+            if (!Schema::hasColumn('pr_sender_name'))
+            {
+                $table->string('pr_sender_name');
+            }
         });
     }
 

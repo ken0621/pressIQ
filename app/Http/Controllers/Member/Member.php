@@ -133,7 +133,7 @@ class Member extends Controller
 						View::share('user_info', $user_info);
 						View::share('current_warehouse', $current_warehouse);
 						View::share('_warehouse_list_shortcut', $warehouse_list);
-
+						
 						View::share('_for_pis_only', Purchasing_inventory_system::check());
 
 

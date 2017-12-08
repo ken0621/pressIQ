@@ -113,10 +113,14 @@ function warehouse()
                 }
         });
         $("#transfer_to").globalDropList(
-            {
-                width     :  "100%",
-                placeholder : "Select warehouse...",
-            });
+        {
+            width     :  "100%",
+            placeholder : "Select warehouse...",
+        });
+        $('.select-warehouse').globalDropList({
+            hasPopup : 'false',
+            placeholder : "Select warehouse..."
+        });
     }
     function select_filter_item()
     {

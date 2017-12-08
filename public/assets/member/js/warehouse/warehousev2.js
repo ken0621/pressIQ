@@ -28,6 +28,16 @@ function warehousev2()
         load_mydropdown_list_warehouse();
         load_mydropdown_list_item();
         load_warehouse_list(id);
+        event_toggle_warehouse_list();
+    }
+    function event_toggle_warehouse_list()
+    {
+        $("body").on("click",".toggle-warehouse", function(e)
+        {
+            $parent = $(e.currentTarget).attr('data-content');
+            $(e.currentTarget).toggleClass("fa-caret-down fa-caret-right");
+            $("tr.tr-sub-"+$parent).toggle();
+        });
     }
     function load_mydropdown_list_item()
     {
@@ -113,10 +123,14 @@ function warehousev2()
                 }
         });
         $("#transfer_to").globalDropList(
-            {
-                width     :  "100%",
-                placeholder : "Select warehouse...",
-            });
+        {
+            width     :  "100%",
+            placeholder : "Select warehouse...",
+        });
+        $('.select-warehouse').globalDropList({
+            hasPopup : 'false',
+            placeholder : "Select warehouse..."
+        });
     }
     function select_filter_item()
     {

@@ -619,7 +619,7 @@ function customer_invoice()
     		placeholder : "Terms...",
             onChangeValue: function()
             {
-            	var start_date 		= $(".datepicker[name='inv_date']").val();
+            	var start_date 		= $(".datepicker[name='date']").val();
             	var days 			= $(this).find("option:selected").attr("days");
             	var new_due_date 	= AddDaysToDate(start_date, days, "/");
             	$(".datepicker[name='inv_due_date']").val(new_due_date);

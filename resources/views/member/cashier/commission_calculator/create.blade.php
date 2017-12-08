@@ -30,7 +30,7 @@
                         <div class="col-md-6">
                             <div class="col-md-6">
                                 <strong>Start Date</strong>
-                                <input type="text" class="form-control input-sm datepicker" name="date">
+                                <input type="text" class="form-control input-sm datepicker" name="date" value="{{date('m/d/Y')}}">
                             </div>
                             <div class="col-md-6">
                                 <strong>Due Date</strong>

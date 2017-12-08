@@ -54,12 +54,18 @@ function create_commission_calculator()
 			}
 		});
 		$('.select-term').globalDropList({
-			hasPopup : 'true',
+			hasPopup : 'false',
 			link: '/member/maintenance/terms/terms',
 			width : '100%',
 			onChangeValue : function()
 			{
 				payment_term = $(this).val();
+				var start_date 		= $(".datepicker[name='date']").val().split('/');
+				var year = start_date[2];
+				var day = start_date[1];
+				var month = start_date[0];
+				var new_due_date = add_months(year, month, day, payment_term);
+            	$(".datepicker[name='due_date']").val(new_due_date);
 				event_compute_commission();
 			}
 		});
@@ -130,16 +136,28 @@ function create_commission_calculator()
 	}
 	function event_change_tcp()
 	{
-		$('.change-tcp').unbind('keyup');
-		$('.change-tcp').bind('keyup', function()
+		$('.change-tcp').unbind('change');
+		$('.change-tcp').bind('change', function()
 		{
-			tcp_string = $(this).val();
-			/*Commission Percent*/
-			var tcp_percent = parseFloat(tcp_string.substring(0, tcp_string.indexOf('%')));
-			$('.ndp-commission').val((100 - tcp_percent)+'%');
-			ndp_string = (100 - tcp_percent)+'%';
+			// tcp_string = $(this).val();
+			// if(tcp_string.indexOf('%') > 0)
+			// {
+			// 	/*Commission Percent*/
+			// 	var tcp_percent = parseFloat(tcp_string.substring(0, tcp_string.indexOf('%')));
+			// 	$('.ndp-commission').val((100 - tcp_percent + '%'));
+			// 	ndp_string = (100 - tcp_percent + '%');
+			// 	$('.ndp-commission').val(ndp_string);
+			// }
+			// else
+			// {
+			// 	/*Commission Percent*/
+			// 	var tcp_percent = parseFloat(tcp_string);
+			// 	$('.ndp-commission').val((100 - tcp_percent));
+			// 	ndp_string = (100 - tcp_percent);
+			// 	$('.ndp-commission').val(ndp_string);
+			// }
 
-			event_compute_commission();
+			// event_compute_commission();
 		});
 	}
 	function event_compute_commission()
@@ -180,6 +198,10 @@ function create_commission_calculator()
 		{
 			misc = (parseFloat(misc_string.substring(0, misc_string.indexOf('%'))) / 100);
 		}
+		else
+		{
+			misc = parseFloat(misc_string/100);
+		}
 		var amount_misc = tsp * misc;
 		$('.amount-misc').html('P '+ number_format(amount_misc));
 		var amount_loanable = tsp - amount_downpayment;
@@ -191,16 +213,30 @@ function create_commission_calculator()
 		
 		tcp_string = $('.tcp-commission').val();
 		ndp_string = $('.ndp-commission').val();
-		/*Commission Percent*/
-		var ndp_percent = parseFloat(ndp_string.substring(0, ndp_string.indexOf('%')));
-		$('.tcp-commission').val((100 - ndp_percent)+'%');
-		tcp_string = (100 - ndp_percent)+'%';
+		if(ndp_string.indexOf('%') > 0)
+		{
+			/*Commission Percent*/
+			var ndp_percent = parseFloat(ndp_string.substring(0, ndp_string.indexOf('%')));
+			$('.tcp-commission').val((100 - ndp_percent)+'%');
+			tcp_string = (100 - ndp_percent)+'%';			
+		}
+		else
+		{
+			/*Commission Percent*/
+			var ndp_percent = parseFloat(ndp_string);
+			$('.tcp-commission').val((100 - ndp_percent));
+			tcp_string = String(100 - ndp_percent);
+		}
 
 
 		tcp = 0;
 		if(tcp_string.indexOf('%') > 0)
 		{
 			tcp = (parseFloat(tcp_string.substring(0, tcp_string.indexOf('%'))) / 100);
+		}
+		else
+		{
+			tcp = parseFloat(tcp_string/100);
 		}
 		var amount_tcp1 = amount_tc * tcp;
 		$('.amount-tcp1').html('P '+number_format(amount_tcp1));
@@ -209,6 +245,10 @@ function create_commission_calculator()
 		if(ndp_string.indexOf('%') > 0)
 		{
 			ndp = (parseFloat(ndp_string.substring(0, ndp_string.indexOf('%'))) / 100);
+		}
+		else
+		{
+			ndp = parseFloat(ndp_string/100);
 		}
 		var amount_ndp = amount_tc * ndp;
 		$('.amount-ndp').html('P '+number_format(amount_ndp));
@@ -286,16 +326,17 @@ function create_commission_calculator()
             x1 = x1.replace(rgx, '$1' + ',' + '$2');
         return x1 + x2;
     }
-
+	function add_months($year, $months, $day, $add_months)
+	{
+		var start_date = new Date($year, $months, $day);
+		return start_date.setMonth(start_date.getMonth() + $add_months);
+	}
 
 }
 function success_commission(data)
 {
 	toastr.success('Success');
-	setInterval(function()
-	{
-		location.reload();
-	},2000);
+	location.reload();
 }
 
 /* AFTER ADDING A CUSTOMER */

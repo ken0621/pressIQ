@@ -175,6 +175,7 @@ class WarehouseControllerV2 extends Member
             return $this->show_no_access_modal();
         }
     }
+    
     public function postRefillSubmit()
     {
         $shop_id        = $this->user_info->shop_id;
@@ -199,7 +200,28 @@ class WarehouseControllerV2 extends Member
         }
 
         $data = Warehouse2::refill_bulk($shop_id, $warehouse_id, $reference_name, $reference_id, $remarks, $_item);
-       
-        return $data;
+
+        //die(var_dump($data));
+        
+        $data['status'] = 'success';
+        $data['call_function'] = 'success_refill_warehouse';
+
+       /*
+        $return = 0;
+        if(is_numeric($data))
+        {
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_refill_warehouse';
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $data;
+
+        }
+        return json_encode($return);*/
+        
+        return json_encode($data);
     }
+
 }

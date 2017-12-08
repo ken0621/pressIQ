@@ -139,6 +139,7 @@ class CustomerController extends Member
     public function load_customer()
     {
         $data["_customer"]  = Customer::getAllCustomer();
+        $data['add_search']     = "";
 
         return view('member.load_ajax_data.load_customer', $data);
     }
@@ -962,6 +963,7 @@ class CustomerController extends Member
             }
             
             $data['message'] = 'success';
+            $data['call_function'] = 'success_update_customer';
             $data['customer'] = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')->where('tbl_customer.customer_id',$client_id)->select('tbl_customer.customer_id as customer_id1', 'tbl_customer.*', 'tbl_customer_other_info.*', 'tbl_customer_other_info.customer_id as cus_id')->first();
             $data['view'] = view('member.customer.customer_update_result',$data)->render();
             $data['address'] = Tbl_customer_address::where('customer_id',$client_id)->get();

@@ -23,6 +23,7 @@ use App\Models\Tbl_price_level_item;
 use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_settings;
+use App\Models\Tbl_customer;
 
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;

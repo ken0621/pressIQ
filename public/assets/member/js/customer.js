@@ -725,3 +725,15 @@ function  misc(str) {
         	break;
     }
 }
+
+function success_update_customer(data)
+{
+	if(data.message == 'success')
+	{
+		toastr.success('Success');
+		setInterval(function()
+		{
+			location.href = '/member/customer/list';
+		},2000);
+	}
+}

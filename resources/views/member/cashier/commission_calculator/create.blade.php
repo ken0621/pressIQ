@@ -12,7 +12,7 @@
                         <div class="col-md-6">
                             <strong>Select Customer</strong>
                             <select class="select-customer form-control input-sm" name="customer_id">
-                                 @include('member.load_ajax_data.load_customer')
+                                 @include('member.load_ajax_data.load_customer',['add_search' => ""])
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -49,7 +49,7 @@
                         </div>
                         <div class="col-md-6">
                             <strong>Total Selling Price</strong>
-                            <input type="text" class="number-input form-control input-sm sales-price text-right compute-all" name="total_selling_price">
+                            <input type="text" class="form-control input-sm sales-price text-right compute-all" name="total_selling_price">
                         </div>
                     </div>                    
                     <div class="form-group">
@@ -206,6 +206,18 @@
     </div>
 </div>
 <script type="text/javascript">
+
+/*  function setTwoNumberDecimal(x) 
+    {
+        var value = parseFloat($(x).val()).toFixed(2);
+        $(x).val(value);
+    }
+
+    $('.number-input').change(function(e)
+    {
+        setTwoNumberDecimal(e.currentTarget);
+    });*/
+
     $('#popover_tc').popover({ 
         html : true,
         title: '<h4 style="padding:0px">Commission Computation</h4>',

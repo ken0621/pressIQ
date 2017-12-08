@@ -655,9 +655,6 @@ function submit_modal(){
 	            if(res['message'] == 'success')
 	            {
 	            	toastr.success("New customer inserted");
-	                location.reload();
-	                $(".btn-save-modallarge").html('Save');
-	                $("#global_modal").modal("hide");
 	                if (typeof submit_done_customer == 'function')
 		            {
 		            	// console.log("meron");
@@ -724,16 +721,4 @@ function  misc(str) {
         	return '<i class="fa fa-times" aria-hidden="true"></i>';
         	break;
     }
-}
-
-function success_update_customer(data)
-{
-	if(data.message == 'success')
-	{
-		toastr.success('Success');
-		setInterval(function()
-		{
-			location.href = '/member/customer/list';
-		},2000);
-	}
 }

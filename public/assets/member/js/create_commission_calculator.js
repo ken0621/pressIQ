@@ -65,8 +65,9 @@ function create_commission_calculator()
 		});
 		$('.select-property').globalDropList({
 			hasPopup : 'true',
-			link : "/member/item/add",
+			link : "/member/item/v2/add",
 			width : '100%',
+			link_size : 'lg',
 			onChangeValue : function()
 			{
 				if($(this).val() != '')
@@ -88,6 +89,7 @@ function create_commission_calculator()
 			hasPopup : 'true',
 			link : '/member/cashier/sales_agent/add',
 			width : '100%',
+			link_size : 'md',
 			onChangeValue : function()
 			{
 				if($(this).val())
@@ -294,5 +296,34 @@ function success_commission(data)
 	{
 		location.reload();
 	},2000);
+}
+
+/* AFTER ADDING A CUSTOMER */
+function success_update_customer(data)
+{
+    $(".select-customer").load("/member/customer/load_customer", function()
+    {                
+         data.element.modal("hide");
+         $(".select-customer").globalDropList("reload");
+         $(".select-customer").val(data.id).change();          
+    });
+}
+function success_agent(data)
+{
+    $(".select-agent").load("/member/cashier/sales_agent/load-agent", function()
+    {                
+         data.element.modal("hide");
+         $(".select-agent").globalDropList("reload");
+         $(".select-agent").val(data.id).change();      
+    });
+}
+function success_item(data)
+{
+    $(".select-property").load("/member/cashier/commission_calculator/load-item", function()
+    {
+    	data.element.modal("hide");
+        $(".select-property").globalDropList("reload");
+		$(".select-property").val(data.item_id).change();
+    });
 }
 

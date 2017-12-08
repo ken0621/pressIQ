@@ -77,7 +77,7 @@ class Utilities
     public static function filterPageListSub($page_list, $position_id)
     {
         $_page_list         = $page_list;
-        // dd( $_page_list);
+        //dd($_page_list);
         foreach($_page_list as $key=>$page)
         {
             if(array_has($page, "submenu"))

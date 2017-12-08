@@ -62,11 +62,11 @@ class Customer_InvoiceController extends Member
         $data["c_id"] = Request::input("customer_id");
         $data["_estimate"] = Tbl_customer_estimate::where("est_customer_id",$data["c_id"])->where("est_status",'accepted')->get();
         $id = Request::input('id');
-
         if($id)
         {
             $data["inv"]            = Tbl_customer_invoice::where("inv_id", $id)->first();
             $data["_estimate"] = Tbl_customer_estimate::where("est_customer_id",$data["inv"]->inv_customer_id)->where("est_status",'accepted')->get();
+            
             $data["_invline"]       = Tbl_customer_invoice_line::um()->where("invline_inv_id", $id)->get();
 
             foreach ($data["_invline"] as $key => $value) 
@@ -77,6 +77,7 @@ class Customer_InvoiceController extends Member
             $data["_cmline"]       = Tbl_customer_invoice::returns_item()->where("inv_id", $id)->get();
             $data["action"]         = "/member/customer/invoice/update";
 
+            // dd($data["inv"]);
 
             $sir = Tbl_manual_invoice::where("inv_id",$id)->first();
             if($sir)
@@ -85,9 +86,7 @@ class Customer_InvoiceController extends Member
                 $data["action"] = "/member/customer/invoice/manual_invoice_update";
                 $data['_item'] = Item::get_all_item_sir($sir->sir_id);
             }
-            
         }
-        
         
         foreach ($data["_customer"] as $key => $value) 
         {

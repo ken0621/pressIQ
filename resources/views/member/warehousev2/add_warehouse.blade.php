@@ -34,5 +34,5 @@
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <!-- <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script> -->
 <!-- <script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script> -->
-<script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
+<script type="text/javascript" src="/assets/member/js/warehousev2.js"></script>
 

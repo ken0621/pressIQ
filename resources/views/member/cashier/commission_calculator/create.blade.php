@@ -12,7 +12,8 @@
                         <div class="col-md-6">
                             <strong>Select Customer</strong>
                             <select class="select-customer form-control input-sm" name="customer_id">
-                                 @include('member.load_ajax_data.load_customer',['add_search' => ""])
+
+                                @include('member.load_ajax_data.load_customer',['add_search' => ""])
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -49,7 +50,7 @@
                         </div>
                         <div class="col-md-6">
                             <strong>Total Selling Price</strong>
-                            <input type="text" class="form-control input-sm sales-price text-right compute-all" name="total_selling_price">
+                            <input type="text" class="number-input form-control input-sm sales-price text-right compute-all" name="total_selling_price">
                         </div>
                     </div>                    
                     <div class="form-group">
@@ -67,7 +68,7 @@
                             <strong>Discount</strong>
                         </div>
                         <div class="col-md-6">
-                            <input type="text" value="0.00" class="number-input form-control input-sm text-right discount discount-auto-add-comma" name="discount">
+                            <input type="text" value="0.00" class="form-control input-sm text-right discount discount-auto-add-comma" name="discount">
                         </div>
                     </div>
                 </div>
@@ -207,7 +208,7 @@
 </div>
 <script type="text/javascript">
 
-/*  function setTwoNumberDecimal(x) 
+  function setTwoNumberDecimal(x) 
     {
         var value = parseFloat($(x).val()).toFixed(2);
         $(x).val(value);
@@ -216,7 +217,9 @@
     $('.number-input').change(function(e)
     {
         setTwoNumberDecimal(e.currentTarget);
-    });*/
+    });
+
+
 
     $('#popover_tc').popover({ 
         html : true,

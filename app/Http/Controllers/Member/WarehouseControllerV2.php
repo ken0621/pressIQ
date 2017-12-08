@@ -142,7 +142,7 @@ class WarehouseControllerV2 extends Member
             AuditTrail::record_logs("Added","warehouse",$id,"",serialize($w_data));
         }
 
-         return json_encode($data);
+        return json_encode($data);
     }
 
     public function getRefill()

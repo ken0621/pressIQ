@@ -15,8 +15,9 @@ class CreateTblPayrollApproverEmployee1272017158pm extends Migration
     {
         Schema::create('tbl_payroll_approver_employee', function (Blueprint $table)
         {
-            $table->increments("payroll_approver_employee_id");
-            $table->integer("payroll_employee_basic_id")->references('payroll_employee_basic_id')->on('tbl_payroll_employee_basic')->onDelete('cascade');
+            $table->increments("payroll_approver_employee_id")->unsigned();
+            $table->integer("payroll_employee_id")->unsigned();
+            $table->foreign("payroll_employee_id")->references('payroll_employee_id')->on('tbl_payroll_employee_basic')->onDelete('cascade');
             $table->string("payroll_approver_employee_type");
             $table->integer("payroll_approver_employee_level");
             $table->integer("archived");         

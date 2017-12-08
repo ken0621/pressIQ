@@ -11,7 +11,7 @@
 					<label><input type="checkbox" name="payroll_approver_overtime">Overtime Approver</label>
 				</div>
 				<div class="checkbox col-md-4">
-					<label><input type="checkbox" name="payroll_approver_ob">Official Business Approver</label>
+					<label><input type="checkbox" name="payroll_approver_rfp">Request For Payment</label>
 				</div>
 				<div class="checkbox col-md-4">
 					<label><input type="checkbox" name="payroll_approver_leave">Leave Approver</label>

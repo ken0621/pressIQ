@@ -16,28 +16,30 @@
 </div>
 
 <div class="panel panel-default panel-block panel-title-block">
-    <div class="panel-body form-horizontal">
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped table-condensed">
-                <thead style="text-transform: uppercase">
-                    <tr>
-                        <th class="text-center">Employee Name</th>
-                        <th class="text-center">Company</th>
-                        <th class="text-center">Overtime Approver</th>
-                        <th class="text-center">OB Approver</th>
-                        <th class="text-center">Leave Approver</th>
-                        <th class="text-center"></th>
-                        <th class="text-center"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                   
-                </tbody>
-            </table>
-        </div>
-    </div>
+   
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#leave-approver"><i class="fa fa-calendar" aria-hidden="true" style="font-size: 19px; vertical-align: middle;"></i>    Leave Approver</a></li>
+        <li><a data-toggle="tab" href="#ot-approver"><i class="fa fa-clock-o" aria-hidden="true" style="font-size: 23px; vertical-align: middle;"></i>    Over Time Approver</a></li>
+        <li><a data-toggle="tab" href="#rfp-approver"><i class="fa fa-money" aria-hidden="true" style="font-size: 23px; vertical-align: middle;"></i>    RFP Approver</a></li>
+      </ul>
+
+      <div class="tab-content tab-pane-div padding-top-10">
+         <div id="leave-approver" class="tab-pane fade in active">
+           <h3>HOME</h3>
+           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+         </div>
+         <div id="ot-approver" class="tab-pane fade">
+           <h3>Menu 1</h3>
+           <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+         </div>
+         <div id="rfp-approver" class="tab-pane fade">
+           <h3>Menu 2</h3>
+           <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+         </div>
+      </div>
 </div>
 @endsection('content')
 @section('script')
 <script type="text/javascript"></script>
+<script type="text/javascript" src="/assets/js/payroll_employee_approver.js"></script>
 @endsection('script')

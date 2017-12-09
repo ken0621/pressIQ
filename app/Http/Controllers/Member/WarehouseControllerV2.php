@@ -72,7 +72,7 @@ class WarehouseControllerV2 extends Member
             }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
             
-            $data['_warehouse'] = Warehouse2::load_all_warehouse_select($this->user_info->shop_id, $this->user_info->user_id, 0, $data['warehouse']->warehouse_parent_id);
+            $data['_warehouse'] = Warehouse2::load_all_warehouse_select($this->user_info->shop_id, $this->user_info->user_id, 0, $data['warehouse']->warehouse_parent_id, $id);
             return view("member.warehousev2.edit_warehouse",$data);
         }
         else

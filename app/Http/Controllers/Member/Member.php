@@ -127,7 +127,11 @@ class Member extends Controller
 						// {
 						// 	$warehouse_list  = Tbl_warehouse::inventory()->join("tbl_user_warehouse_access","tbl_user_warehouse_access.warehouse_id","=","tbl_warehouse.warehouse_id")->where("tbl_user_warehouse_access.user_id",$user_info->user_id)->where('tbl_warehouse.archived',0)->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get(); 
 						// }
-						$warehouse_list = Warehouse2::load_all_warehouse_select($this->user_info->shop_id, $this->user_info->user_id, 0,$this->current_warehouse->warehouse_id);
+						$warehouse_list = null;
+						if(isset($this->current_warehouse->warehouse_id))
+						{
+							$warehouse_list = Warehouse2::load_all_warehouse_select($this->user_info->shop_id, $this->user_info->user_id, 0,$this->current_warehouse->warehouse_id);
+						}
 
 						View::share('user_info', $user_info);
 						View::share('current_warehouse', $current_warehouse);
@@ -192,6 +196,10 @@ class Member extends Controller
 			
 			Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);
 			// dd($this->user_info);
+			
+			/*TRANSACTION REFERENCE NUMBER*/
+			Seed_manual::put_transaction_reference_number($this->user_info->shop_id);
+			//dd($this->user_info->shop_id);
 
 			return $next($request);
 		});

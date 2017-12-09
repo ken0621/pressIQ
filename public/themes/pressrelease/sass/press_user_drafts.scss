@@ -1,0 +1,43 @@
+.background-container
+{
+	padding: 30px 0px;
+	min-height: 820px;
+
+	.pressview
+	{
+		.drafts-holder-container
+		{
+			background-color: #eeeeee;
+			min-height: 700px;
+			padding: 30px;
+			table
+			{
+				font-family: arial, sans-serif;
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			th
+			{
+				border: 1px solid #dddddd;
+				text-align: center;
+				padding: 8px;
+			}
+			td
+			{
+				border: 1px solid #dddddd;
+				text-align: center;
+				padding: 10px;
+			}
+
+			a
+			{
+				background-color: #316df9;
+				color: #fff;
+				font-size: 12px;
+				padding: 8px 8px;
+				text-decoration: none;
+			}
+		}
+	}
+}

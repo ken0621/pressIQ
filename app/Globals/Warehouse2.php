@@ -23,6 +23,7 @@ use App\Models\Tbl_price_level_item;
 use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_settings;
+use App\Models\Tbl_customer;
 
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
@@ -1056,22 +1057,27 @@ class Warehouse2
         }
         return $return;
     }
-    public static function load_all_warehouse_select($shop_id, $user_id, $parent = 0, $warehouse_id = 0)
+    public static function load_all_warehouse_select($shop_id, $user_id, $parent = 0, $warehouse_id_selected = 0, $excluded_warehouse = 0)
     {
         $return = null;
-        $warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('warehouse_parent_id', $parent)->get();
+        $warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('warehouse_parent_id', $parent);
+        if($excluded_warehouse)
+        {
+            $warehouse = $warehouse->where('warehouse_id', '!=', $excluded_warehouse);
+        }
+        $warehouse = $warehouse->get();
         foreach ($warehouse as $key => $value) 
         {
             $check_if_owned = Tbl_user_warehouse_access::where("user_id",$user_id)->where("warehouse_id",$value->warehouse_id)->first();
             if($check_if_owned)
             {
                 $data['warehouse'] = $value;
-                $data['warehouse_id'] = $warehouse_id;
+                $data['warehouse_id'] = $warehouse_id_selected;
                 $return .= view('member.warehousev2.load_warehouse_v2',$data)->render();
                 $count = Tbl_warehouse::where("warehouse_parent_id", $value->warehouse_id)->count();
                 if($count != 0)
                 {
-                    $return .= Self::load_all_warehouse_select($shop_id, $user_id, $value->warehouse_id, $warehouse_id);
+                    $return .= Self::load_all_warehouse_select($shop_id, $user_id, $value->warehouse_id, $warehouse_id_selected);
                 } 
             }
         }

@@ -48,16 +48,21 @@ class Vendor_ReceiveInventoryController extends Member
         { 
             $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderby("bill_id","DESC")->where("inventory_only",1)->get();
 
+            
             foreach ($data["_bill_list"] as $key => $value) 
             {
                $price = 0;
                $item = Tbl_bill_item_line::where("itemline_bill_id",$value->bill_id)->get();
+
                foreach ($item as $key_item => $value_item) 
-               {
+               {             
                     $price += (UnitMeasurement::um_qty($value_item->itemline_um) * $value_item->itemline_qty) * $value_item->itemline_rate;
                }
+
                $data["_bill_list"][$key]->bill_price = $price;
+
             }
+
             return view("member.receive_inventory.receive_inventory_list",$data);
         }
         else
@@ -81,13 +86,15 @@ class Vendor_ReceiveInventoryController extends Member
             $data['vendor_id']     = Request::input("vendor_id");
             
             $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_billed",0)->get();
-
+            //die(var_dump($data));
+            //dd($data["_po"]);
             $id = Request::input("id");
             if($id)
             {
                $data["bill"] = Tbl_bill::where("bill_id",$id)->first();
                $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["bill"]->bill_vendor_id)->where("po_is_billed",0)->get();
                $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
+               //dd($data["_bill_item_line"]);
                foreach ($data["_bill_item_line"] as $key => $value) 
                {
                     $data["_bill_item_line"][$key]->serial_number = ItemSerial::get_serial("receive_inventory",$id,$value->itemline_item_id);
@@ -96,6 +103,7 @@ class Vendor_ReceiveInventoryController extends Member
                $data['_account']   = Accounting::getAllAccount();
                $data['action']     = "/member/vendor/receive_inventory/update";
             }
+            
 
             $data["serial"] = ItemSerial::check_setting();
             

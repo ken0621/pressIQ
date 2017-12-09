@@ -6,12 +6,12 @@
     <div class="container">
     	<div class="border-container">
     		<div class="border-background-container">
-    			<div class="heading-container">Liana Technologies</div>
-    			<div class="subheading-container">Technologies for Liana</div>
+                @foreach ($pr as $prs)
+    			<div class="heading-container">{{$prs->pr_headline}}</div>
     			<div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">Carlo Segovia</span></div>
     			<div class="date-container">10/05/2017</div>
-    			<div class="content-container">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos asperiores in recusandae officiis quae soluta culpa eveniet explicabo, iusto atque doloribus id accusamus dolores aspernatur veritatis. Ab minus, amet nam cupiditate eligendi ad harum dolorem commodi inventore minima, dolores. Est magnam, molestiae temporibus ex optio blanditiis quas! In, voluptates, laborum. Soluta sit impedit illo architecto iste provident ipsa eveniet qui praesentium odit laudantium quam obcaecati, ducimus eos itaque eum tempora, possimus quidem error ipsam minima assumenda minus. Ipsa, sint natus voluptates laborum perspiciatis inventore harum aliquid odio.</div>
-    			<div class="content-container">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos asperiores in recusandae officiis quae soluta culpa eveniet explicabo, iusto atque doloribus id accusamus dolores aspernatur veritatis. Ab minus, amet nam cupiditate eligendi ad harum dolorem commodi inventore minima, dolores. Est magnam, molestiae temporibus ex optio blanditiis quas! In, voluptates, laborum. Soluta sit impedit illo architecto iste provident ipsa eveniet qui praesentium odit laudantium quam obcaecati, ducimus eos itaque eum tempora, possimus quidem error ipsam minima assumenda minus. Ipsa, sint natus voluptates laborum perspiciatis inventore harum aliquid odio.</div>
+    			<div class="content-container">{!!$prs->pr_content!!}</div>
+                @endforeach
     		</div>
     	</div>
     </div>

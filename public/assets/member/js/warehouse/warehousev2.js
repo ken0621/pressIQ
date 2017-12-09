@@ -123,6 +123,7 @@ function warehousev2()
                 }
         });
         $("#transfer_to").globalDropList(
+<<<<<<< HEAD
         {
             width     :  "100%",
             placeholder : "Select warehouse...",
@@ -131,6 +132,12 @@ function warehousev2()
             hasPopup : 'false',
             placeholder : "Select warehouse..."
         });
+=======
+            {
+                width     :  "100%",
+                placeholder : "Select warehouse...",
+            });
+>>>>>>> mod_eden_erp
     }
     function select_filter_item()
     {

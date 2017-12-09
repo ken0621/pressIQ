@@ -2117,13 +2117,15 @@ class ShopMemberController extends Shop
 
 
             
-            $method                                             = request('method');
+            $method                                             = "manual1";
+            $method_id                                          = request('method');
             $transaction_new["transaction_reference_table"]     = "tbl_customer";
             $transaction_new["transaction_reference_id"]        = Self::$customer_info->customer_id;
             $transaction_type                                   = "ORDER";
             $transaction_date                                   = Carbon::now();
             
             Transaction::create_set_method($method);
+            Transaction::create_set_method_id($method_id);
             $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
 
             if(is_numeric($transaction_list_id))

@@ -235,6 +235,39 @@ class ProductOrderController2 extends Member
         })
         ->download('xls');
     }
+    public function exportpayin()
+    {
+       
+        $id = request("method_id");
+        $query = Tbl_online_pymnt_method::where('method_id',$id)->first();
+        $method_name = "";
+        if(count($query)>0)
+        {
+            $method_name = $query->method_name;
+        }
+        $data['method'] = $method_name;
+        $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'order', '', 0);
+        foreach ($data["_transaction"] as $key => $value) 
+        {
+            $transaction = Transaction::getCustomerTransaction($value->transaction_id);
+            if ($transaction) 
+            {
+                if ($transaction->method_id != $id) 
+                {
+                    unset($data["_transaction"][$key]);
+                }
+            }
+        }
+        
+        Excel::create('Order Report', function($excel) use ($data)
+        {
+            $excel->sheet('Order', function($sheet) use ($data)
+            {
+                $sheet->loadView('member.product_order2.payment.export', $data);
+            });
+        })
+        ->download('xls');
+    }
 
     public function confirm_payment()
     {

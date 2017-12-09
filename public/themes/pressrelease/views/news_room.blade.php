@@ -13,24 +13,17 @@
                         </div>
                     </div>
                 </div>
+                @foreach ($pr as $prs)
                 <div class="news-title-container">
-                    <div class="title"><a href="/newsroom/view">Liana Technology</a></div>
+                    <div class="title"><a href="/newsroom/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
                 </div>  
                 <div class="details-container">
-                    <p class="details">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos asperiores in recusandae officiis quae soluta culpa eveniet explicabo, iusto atque doloribus id accusamus dolores aspernatur veritatis. Ab minus, amet nam cupiditate eligendi ad harum dolorem commodi inventore minima, dolores. Est magnam, molestiae temporibus ex optio blanditiis quas! In, voluptates, laborum. Soluta sit impedit illo architecto iste provident ipsa eveniet qui praesentium odit laudantium quam obcaecati, ducimus eos itaque eum tempora, possimus quidem error ipsam minima assumenda minus. Ipsa, sint natus voluptates laborum perspiciatis inventore harum aliquid odio.<br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos asperiores in recusandae officiis quae soluta culpa eveniet explicabo, iusto atque doloribus id accusamus dolores aspernatur veritatis. Ab minus, amet nam cupiditate eligendi ad harum dolorem commodi inventore minima, dolores. Est magnam, molestiae temporibus ex optio blanditiis quas! In, voluptates, laborum. Soluta sit impedit illo architecto iste provident ipsa eveniet qui praesentium odit laudantium quam obcaecati, ducimus eos itaque eum tempora, possimus quidem error ipsam minima assumenda minus. Ipsa, sint natus voluptates laborum perspiciatis inventore harum aliquid odio.</p>
+                    <p class="details">{{$prs->pr_subheading}}<br>{!!$prs->pr_content!!}</p>
                 </div>
                 <div class="button-container">
-                    <button onclick="window.location.href='/newsroom/view'">Read More</button>
+                    <button onclick="window.location.href='/newsroom/view/{{$prs->pr_id}}'">Read More</button>
                 </div>
-                <div class="news-title-container">
-                    <div class="title"><a href="/newsroom/view">Press Release</a></div>
-                </div>  
-                <div class="details-container">
-                    <p class="details">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos asperiores in recusandae officiis quae soluta culpa eveniet explicabo, iusto atque doloribus id accusamus dolores aspernatur veritatis. Ab minus, amet nam cupiditate eligendi ad harum dolorem commodi inventore minima, dolores. Est magnam, molestiae temporibus ex optio blanditiis quas! In, voluptates, laborum. Soluta sit impedit illo architecto iste provident ipsa eveniet qui praesentium odit laudantium quam obcaecati, ducimus eos itaque eum tempora, possimus quidem error ipsam minima assumenda minus. Ipsa, sint natus voluptates laborum perspiciatis inventore harum aliquid odio.<br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos asperiores in recusandae officiis quae soluta culpa eveniet explicabo, iusto atque doloribus id accusamus dolores aspernatur veritatis. Ab minus, amet nam cupiditate eligendi ad harum dolorem commodi inventore minima, dolores. Est magnam, molestiae temporibus ex optio blanditiis quas! In, voluptates, laborum. Soluta sit impedit illo architecto iste provident ipsa eveniet qui praesentium odit laudantium quam obcaecati, ducimus eos itaque eum tempora, possimus quidem error ipsam minima assumenda minus. Ipsa, sint natus voluptates laborum perspiciatis inventore harum aliquid odio.</p>
-                </div>
-                <div class="button-container">
-                    <button onclick="window.location.href='/newsroom/view'">Read More</button>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

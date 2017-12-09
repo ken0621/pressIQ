@@ -2,6 +2,7 @@
 namespace App\Globals;
 use stdClass;
 use App\Globals\Payroll;
+use App\Globals\PayrollAccounting;
 use App\Globals\Utilities;
 use DB;
 use Carbon\Carbon;
@@ -7766,8 +7767,8 @@ class Payroll2
 				
 			}
 		}
-		dd(Carbon::now(),$_chart_of_account_insert);
-		// dd($_chart_of_account);
+		$return = PayrollAccounting::postPayrollManualJournalEntries(Carbon::now(),$_chart_of_account_insert);
+		dd($return);
 		return $_chart_of_account_insert;
 	}
 

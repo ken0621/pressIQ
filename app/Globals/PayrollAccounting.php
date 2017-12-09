@@ -83,7 +83,7 @@ class PayrollAccounting
 		}
 		else
 		{
-			$return .= "Please fill entry."
+			$return .= "Please fill entry.";
 		}
 		return $return;
 	}

@@ -34,11 +34,11 @@ class PayrollAccounting
 			$total_debit = 0;
 			foreach ($entry_data as $key_check => $value_check) 
 			{
-				if($value_check['account_type'] == 'credit')
+				if($value_check['account_type'] == 'Credit')
 				{
 					$total_credit += $value_check['amount'];
 				}
-				elseif($value_check['account_type'] == 'debit')
+				elseif($value_check['account_type'] == 'Debit')
 				{
 					$total_debit += $value_check['amount'];
 				}

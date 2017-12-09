@@ -188,15 +188,6 @@ function remove_item(id)
 		}
 	});
 }
-function success_item(data)
-{
-	if(data.status == 'success')
-	{
-        toastr.success(data.message);
-        data.element.modal("hide");
-        item_list.action_load_table();
-	}
-}
 function success_choose_item(data)
 {
 	if(data.status == 'success')

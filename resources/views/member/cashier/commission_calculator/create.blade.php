@@ -25,15 +25,13 @@
                         <div class="col-md-6">
                             <strong>Select Agent</strong>
                             <select class="select-agent form-control input-sm" name="agent_id">
-                                @foreach($_agent as $agent)
-                                <option commission-percent="{{$agent->commission_percent}}" value="{{$agent->employee_id}}">{{ucwords($agent->first_name.' '.$agent->middle_name.' '.$agent->last_name)}}</option>
-                                @endforeach
+                                @include('member.cashier.sales_agent.load_sales_agent')
                             </select>
                         </div>
                         <div class="col-md-6">
                             <div class="col-md-6">
                                 <strong>Start Date</strong>
-                                <input type="text" class="form-control input-sm datepicker" name="date">
+                                <input type="text" class="form-control input-sm datepicker" name="date" value="{{date('m/d/Y')}}">
                             </div>
                             <div class="col-md-6">
                                 <strong>Due Date</strong>
@@ -243,3 +241,5 @@
     }
 </style>
 <script type="text/javascript" src="/assets/member/js/create_commission_calculator.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/assets/member/css/item_add_v2.css">

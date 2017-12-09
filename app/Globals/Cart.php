@@ -1363,11 +1363,11 @@ class Cart
         {
             if ($key != count($data["cart"])) 
             {
-                $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . "";
+                $product_summary = "Product " . $value["item_id"];
             }
             else
             {
-                $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . ", ";
+                $product_summary = "Product " . $value["item_id"] . " ";
             }
         }
 

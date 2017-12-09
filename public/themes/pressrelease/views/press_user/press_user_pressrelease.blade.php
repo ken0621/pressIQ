@@ -25,21 +25,40 @@
                          <center>{{ Session::get('delete') }}</center>
                       </div>
                       @endif
+
                     <form method="post">
-                        {{csrf_field()}} 
+                        {{csrf_field()}}
                         <div class="title-container">PRESS RELEASE</div>
                         <div class="title">Send To:</div>
+                        @if (Session::has('pr_edit'))
+                        @foreach($edit as $edits)
+                        <input type="text" name="pr_receiver_name" value="{{$edits->pr_receiver_name}}" class="form-control" id="recipient_name" readonly>
+
+                        <span class="choose-button" readon>   
+                        <a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
+
+                        <input type="hidden" name="pr_to" id="recipient_email" value="{{$edits->pr_to}}" class="form-control" readonly >
+                        <div class="title">Headline:</div>
+                        <input type="text" name="pr_headline" value="{{$edits->pr_headline}}" class="form-control" style="text-transform: capitalize;">
+                        <div class="title">Subheading:</div>
+                        <input type="text" name="pr_subheading" value="{{$edits->pr_subheading}}" class="form-control">
+                        <div class="title">Content:</div>
+                        <textarea name="pr_content">{{$edits->pr_content}}</textarea>
+                        @endforeach
+                        @else
                         <input type="text" name="pr_receiver_name" class="form-control" id="recipient_name" readonly>
+
                         <span class="choose-button" readon>   
                         <a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
 
                         <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                         <div class="title">Headline:</div>
-                        <input type="text" name="pr_headline" class="form-control">
+                        <input type="text" name="pr_headline" class="form-control" style="text-transform: capitalize;">
                         <div class="title">Subheading:</div>
                         <input type="text" name="pr_subheading" class="form-control">
                         <div class="title">Content:</div>
                         <textarea name="pr_content"></textarea>
+                        @endif
                         <div class="button-container">
                         <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
                         <span class="send-button"><button type="submit" name="send" value="send"><a>Send</a></button></span>
@@ -65,7 +84,7 @@
                                 <td>{{$draft->pr_receiver_name}}</td>
                                 <td>Draft</td>
                                 <td><a href="/pressuser/pressrelease/send_draft/{{$draft->pr_id}}">Send</a></td>
-                                <td><a href="#">Edit</a></td>
+                                <td><a href="/pressuser/pressrelease/edit_draft/{{$draft->pr_id}}">Edit</a></td>
                                 <td><a href="/pressuser/pressrelease/delete_draft/{{$draft->pr_id}}">Delete</a></td>
                             </tr>
                             @endforeach

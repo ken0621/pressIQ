@@ -7767,7 +7767,7 @@ class Payroll2
 				
 			}
 		}
-		$return = PayrollAccounting::postPayrollManualJournalEntries(Carbon::now(),$_chart_of_account_insert);
+		$return = PayrollAccounting::postPayrollManualJournalEntries($shop_id, Carbon::now(), $_chart_of_account_insert);
 		dd($return);
 		return $_chart_of_account_insert;
 	}

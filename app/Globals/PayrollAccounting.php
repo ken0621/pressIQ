@@ -25,7 +25,7 @@ use Carbon\carbon;
  */
 class PayrollAccounting
 {
-	public static function postPayrollManualJournalEntries($date = '',$entry_data = array())
+	public static function postPayrollManualJournalEntries($shop_id ,$date = '',$entry_data = array())
 	{
 		$return = null;
 		if(count($entry_data) > 0)
@@ -46,18 +46,18 @@ class PayrollAccounting
 			if($total_debit == $total_credit)
 			{
 				$account_type_string = '';
-				foreach ($entry as $key => $value) 
+				foreach ($entry_data as $key => $value) 
 				{
 					if($value['account_id'])
 					{
-						$account_type_id = Tbl_chart_of_account::accountInfo($this->getShopId())->where("account_id", $value['account_id'])->value("chart_type_id");
+						$account_type_id = Tbl_chart_of_account::accountInfo($shop_id)->where("account_id", $value['account_id'])->value("chart_type_id");
 						$account_type_id == 2 ? $account_type_string.='2' : ($account_type_id == 6 ? $account_type_string.='6' : '');
 
 						$entry["entry_date"] = $date;
 						$entry["je_id"]		 = "";
 						
 						$entry_data[$key]["account_id"] 	= $value['account_id'];
-						$entry_data[$key]["type"] 			= $value['accpunt_type'];
+						$entry_data[$key]["type"] 			= $value['account_type'];
 						$entry_data[$key]["entry_amount"] 	= $value['amount'];
 						$entry_data[$key]["name_id"] 		= "";
 						$entry_data[$key]["name_reference"] = "";

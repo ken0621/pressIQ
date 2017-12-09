@@ -7760,7 +7760,8 @@ class Payroll2
 					{
 						$_chart_of_account_insert[$key]['amount'] = $total_period_record[$chart_of_account_record['entity_name']];
 						$_chart_of_account_insert[$key]['account_id'] = $chart_of_account_record['account_id'];
-						$_chart_of_account_insert[$key]['account_type'] = $chart_of_account_record['normal_balance'];
+						$_chart_of_account_insert[$key]['account_type'] = ucfirst($chart_of_account_record['normal_balance']);
+
 						// $_chart_of_account_insert[$key]['date'] 		= date('Y-m-d');
 					}
 				}

@@ -358,18 +358,18 @@ class ShopMemberController extends Shop
     }
     public function pressuser_pressrelease()
     {
-        $data['add_recipient']   = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))->paginate(10);
-        $data['country']   = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))
-                            ->distinct()
-                            ->get(['country']);
-        $data['drafts']     = DB::table('tbl_pressiq_press_releases')
-                            ->where('pr_from', session('user_email'))
-                            ->where('pr_status','draft')
-                            ->orderByRaw('pr_date_sent DESC')
-                            ->get();
-        $data['edit']     = DB::table('tbl_pressiq_press_releases')
-                            ->where('pr_id',session('pr_edit'))
-                            ->get();
+        $data['add_recipient']  = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))->paginate(10);
+        $data['country']        = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))
+                                 ->distinct()
+                                 ->get(['country']);
+        $data['drafts']         = DB::table('tbl_pressiq_press_releases')
+                                 ->where('pr_from', session('user_email'))
+                                 ->where('pr_status','draft')
+                                 ->orderByRaw('pr_date_sent DESC')
+                                 ->get();
+        $data['edit']           = DB::table('tbl_pressiq_press_releases')
+                                 ->where('pr_id',session('pr_edit'))
+                                 ->get();
 
         if(Session::exists('user_email'))
         {
@@ -473,6 +473,7 @@ class ShopMemberController extends Shop
             $message->to($pr_info["pr_to"]);
         });
     }
+
     public function press_release_save_as_draft(Request $request)
     {   
         $pr_info["pr_headline"]     =$request->pr_headline;

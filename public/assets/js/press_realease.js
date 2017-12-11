@@ -8,7 +8,7 @@ $(document).ready(function ()
 	
 $(document).ready(function () 
 {
-	$(document).on("#choose_recipient1",function()
+	$(document).on("#choose_recipient",function()
 	{	
 		alert("123");
 		var name = $(this).data("name");

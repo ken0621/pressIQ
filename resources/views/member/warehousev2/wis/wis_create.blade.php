@@ -49,7 +49,7 @@
             </div>
             <div class="col-md-4">
                 <label>WIS Number</label>
-                <input type="text" name="wis_number" class="form-control">
+                <input type="text" name="wis_number" value='{{$transaction_ref_number}}' class="form-control">
             </div>
             <div class="col-md-6">
                 <label>Ship to</label>

@@ -19,6 +19,8 @@ var ndp = 0;
 var tcp_string = '';
 var tcp = 0;
 
+var selected_customer='';
+
 function create_commission_calculator()
 {
 	init();
@@ -60,6 +62,10 @@ function create_commission_calculator()
 			hasPopup : 'true',
 			link : '/member/customer/modalcreatecustomer',
 			width : '100%',
+			onCreateNew : function()
+            {
+            	selected_customer = $(this);
+            },
 			onChangeValue : function()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
@@ -117,6 +123,18 @@ function create_commission_calculator()
 				}
 			}
 		});
+	}
+
+	/* AFTER ADDING AN  ITEM */
+	function submit_done_item(data)
+	{
+	    selected_customer.load("/member/customer/load_customer", function()
+	    {
+	        $(this).globalDropList("reload");
+			$(this).val(data.customer_id).change();
+			toastr.success("Success");
+	    });
+	    data.element.modal("hide");
 	}
 	function number_format(number, tofixed = true)
 	{

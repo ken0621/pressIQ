@@ -123,7 +123,6 @@ function warehousev2()
                 }
         });
         $("#transfer_to").globalDropList(
-<<<<<<< HEAD
         {
             width     :  "100%",
             placeholder : "Select warehouse...",
@@ -132,12 +131,6 @@ function warehousev2()
             hasPopup : 'false',
             placeholder : "Select warehouse..."
         });
-=======
-            {
-                width     :  "100%",
-                placeholder : "Select warehouse...",
-            });
->>>>>>> mod_eden_erp
     }
     function select_filter_item()
     {
@@ -266,7 +259,7 @@ function warehousev2()
             {
                 if(srch_txt != '')
                 {
-                    $(".warehouse-container").load("/member/item/warehouse?search_txt="+srch_txt+" .warehouse-container"); 
+                    $(".warehouse-container").load("/member/item/v2/warehouse?search_txt="+srch_txt+" .warehouse-container"); 
                     $(".load-data").attr("search_txt",$(this).val());
                 }                
             }
@@ -495,7 +488,7 @@ function submit_done_item(data)
     if(data.status == "success")
     {
         toastr.success("Success");
-        $(".warehouse-container").load("/member/item/warehouse .warehouse-container"); 
+        $(".warehouse-container").load("/member/item/v2/warehouse .warehouse-container"); 
         $('#global_modal').modal('toggle');
         data.element.modal("hide");
     }

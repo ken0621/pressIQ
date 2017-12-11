@@ -33,7 +33,7 @@
                         <tr>
                            <td style="text-align: center;">{{$addrecipients->name}}</td>
                            <td style="text-align: center;">  
-                              <button  type="button" id="choose_recipient" class="btn btn-success" data-name="{{$addrecipients->name}}" data-name1="{{$addrecipients->research_email_address}}">Choose</button>
+                              <button  type="button" id="choose_recipient1" class="btn btn-success" data-name="{{$addrecipients->name}}" >Choose</button>
                               <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="button" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button>
                            </td>
                         </tr>

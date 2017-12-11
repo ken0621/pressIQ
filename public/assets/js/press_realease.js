@@ -8,14 +8,13 @@ $(document).ready(function ()
 	
 $(document).ready(function () 
 {
-	$(document).on("#choose_recipient",function()
+	$(document).on("#choose_recipient1",function()
 	{	
+		alert("123");
 		var name = $(this).data("name");
-		var email = $(this).data("name1");
 		$('#recipient_name').val(name);
-		$('#recipient_email').val(email);
 		$('#recipient-modal').modal('hide');
-		// alert(email);
+		alert(pr_receiver_name);
 	});
 });
 
@@ -25,7 +24,6 @@ $(document).ready(function ()
 	{
 		var country = $(this).val();
 		var name = $(this).val();
-		alert(country);
 
 		 $.ajax({
             type:'POST',

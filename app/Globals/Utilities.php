@@ -3,6 +3,7 @@ namespace App\Globals;
 use DB;
 use App\Models\Tbl_user;
 use App\Models\Tbl_user_access;
+use App\Globals\Purchasing_inventory_system;
 use App\Models\Tbl_mlm_plan;
 use Log;
 use Request;
@@ -63,7 +64,8 @@ class Utilities
 
     public static function filterPageList($position_id = null)
     {
-        return Utilities::filterPageListSub(page_list(), $position_id);
+        $pis = Purchasing_inventory_system::check();
+        return Utilities::filterPageListSub(page_list($pis), $position_id);
     }
     public static function get_all_users($shop_id, $user_id = 0)
     {

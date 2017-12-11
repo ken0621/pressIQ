@@ -290,10 +290,37 @@ class Invoice
                 /* DISCOUNT PER LINE */
                 $discount       = $item_line['discount'];
                 $discount_type  = 'fixed';
-                if(strpos($discount, '%'))
-                {   
-                    $discount       = substr($discount, 0, strpos($discount, '%')) / 100;
-                    $discount_type  = 'percent';
+                if (strpos($discount, '/')) 
+                {
+                    $explode_discount = explode("/", $discount);
+                    $main_rate = convertToNumber($item_line['rate']) * convertToNumber($item_line['quantity']);
+
+                    foreach ($explode_discount as $key => $value) 
+                    {
+                        if(strpos($value, '%'))
+                        {
+                            $main_rate = convertToNumber($main_rate) * ((100-convertToNumber(str_replace("%", "", $value))) / 100);
+                        }
+                        else if($value == "" || $value == null) 
+                        {
+                            $main_rate -= 0;
+                        }
+                        else
+                        {
+                            $main_rate -= convertToNumber($value);
+                        }
+                    }
+                    
+                    $discount      = (convertToNumber($item_line['rate']) * convertToNumber($item_line['quantity'])) - $main_rate;
+                    $discount_type = 'percent';                
+                }
+                else
+                {
+                    if(strpos($discount, '%'))
+                    {   
+                        $discount       = substr($discount, 0, strpos($discount, '%')) / 100;
+                        $discount_type  = 'percent';
+                    }
                 }
 
                 /* AMOUNT PER LINE */

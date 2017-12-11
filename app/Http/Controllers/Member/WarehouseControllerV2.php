@@ -147,7 +147,7 @@ class WarehouseControllerV2 extends Member
             AuditTrail::record_logs("Added","warehouse",$id,"",serialize($w_data));
         }
 
-         return json_encode($data);
+        return json_encode($data);
     }
 
     public function getRefill()
@@ -222,6 +222,27 @@ class WarehouseControllerV2 extends Member
         return json_encode($return);*/
         
         return json_encode($data);
+    }
+    public function load_warehouse()
+    {
+        $access = Utilities::checkAccess('item-warehouse', 'access_page');
+        if($access == 1)
+        { 
+            if(Request::input("id"))
+            {
+                $data = Tbl_user_warehouse_access::join("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_user_warehouse_access.warehouse_id")->where("user_id",$this->user_info->user_id)->where("archived",0)->where("tbl_warehouse.warehouse_id","!=",Request::input("id"))->get();
+            }
+            else
+            {
+                $data = Tbl_user_warehouse_access::join("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_user_warehouse_access.warehouse_id")->where("user_id",$this->user_info->user_id)->where("archived",0)->get();
+            }
+
+            return json_encode($data);
+        }
+        else
+        {
+            return $this->show_no_access();
+        }
     }
 
 }

@@ -3330,7 +3330,7 @@ class ShopMemberController extends Shop
 
         $shop_id = $this->shop_info->shop_id;
 
-        $check = Item::check_product_code($shop_id, $mlm_pin, $mlm_activation);
+        $check = Item::check_unused_product_code($shop_id, $mlm_pin, $mlm_activation);
         $return = [];
         if($check == true)
         {

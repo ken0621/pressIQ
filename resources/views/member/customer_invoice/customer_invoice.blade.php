@@ -145,7 +145,14 @@
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $invline->invline_item_id])
                                                             </select>
                                                         </td>
-                                                        <td><textarea class="textarea-expand txt-desc" name="invline_description[]" value="{{$invline->invline_service_date}}"></textarea></td>
+                                                        
+                                                        <td>
+                                                            @if($pis)
+                                                                <label class="textarea-expand txt-desc" name="invline_description[]" value="{{$invline->invline_service_date}}"></label>
+                                                            @else
+                                                                <textarea class="textarea-expand txt-desc" name="invline_description[]" value="{{$invline->invline_service_date}}"></textarea>
+                                                            @endif
+                                                        </td>
                                                         <td>
                                                             <select class="1111 droplist-um select-um {{isset($invline->multi_id) ? 'has-value' : ''}}" name="invline_um[]">
                                                                 @if($invline->invline_um)
@@ -171,7 +178,7 @@
                                         </tbody>
                                         <tbody class="draggable tbody-item estimate-tbl">
                                                 @include("member.load_ajax_data.load_est_session_item")  
-                                                 <tr class="tr-draggable">
+                                                <tr class="tr-draggable">
                                                     <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
                                                     <td><input type="text" class="for-datepicker" name="invline_service_date[]"/></td>    
@@ -187,7 +194,13 @@
                                                             <option class="hidden" value="" />
                                                         </select>
                                                     </td>
-                                                    <td><textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea></td>
+                                                    <td>
+                                                    @if($pis)
+                                                        <label class="textarea-expand txt-desc" name="invline_description[]"></label>
+                                                    @else
+                                                        <textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea>
+                                                    @endif
+                                                    </td>
                                                     <td><select class="2222 droplist-um select-um" name="invline_um[]"><option class="hidden" value="" /></select></td>
                                                     <td><input class="text-center number-input txt-qty compute" type="text" name="invline_qty[]"/></td>
                                                     <td><input class="text-right number-input txt-rate compute" type="text" name="invline_rate[]"/></td>
@@ -487,7 +500,13 @@
                     <option class="hidden" value="" />
                 </select>
             </td>
-            <td><textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea></td>
+            <td>
+            @if($pis)
+                <label class="textarea-expand txt-desc" name="invline_description[]"></label>
+            @else
+                <textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea>
+            @endif
+            </td>
             <td><select class="select-um" name="invline_um[]"><option class="hidden" value="" /></select></td>
             <td><input class="text-center number-input txt-qty compute" type="text" name="invline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="invline_rate[]"/></td>

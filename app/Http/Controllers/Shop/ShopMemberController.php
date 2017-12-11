@@ -318,17 +318,34 @@ class ShopMemberController extends Shop
         }
 
     }
+
+    public function pressuser_pressrelease_recipient(Request $request)
+    {
+
+      $data["name"]                      = $request->name;
+      $data["country"]                   = $request->country;
+      $data["research_email_address"]    = $request->research_email_address;
+      $data["website"]                   = $request->website;
+      $data["description"]               = $request->description;
+      $data["user_id"]                   = session("pr_user_id");
+      Tbl_press_release_recipient::insert($data); 
+      $data['_country_list']   = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))
+                                  ->distinct()
+                                  ->get(['country']);
+      return Redirect::back();
+    }
+
     public function pressuser_pressrelease(Request $request)
     {
-        $data['add_recipient']   = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))->paginate(10);
-        $data['country']   = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))
-                            ->distinct()
-                            ->get(['country']);
+        $data['add_recipient']  = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))->paginate(10);
+        $data['country']        = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))
+                                  ->distinct()
+                                  ->get(['country']);
         $data['drafts']         = DB::table('tbl_pressiq_press_releases')
-                                ->where('pr_from', session('user_email'))
-                                ->where('pr_status','draft')
-                                ->orderByRaw('pr_date_sent DESC')
-                                ->get();
+                                  ->where('pr_from', session('user_email'))
+                                  ->where('pr_status','draft')
+                                  ->orderByRaw('pr_date_sent DESC')
+                                  ->get();
 
         if(Session::exists('user_email'))
         {
@@ -517,7 +534,7 @@ class ShopMemberController extends Shop
         }
         else
         {
-            return Redirect::to("/"); 
+            return Redirect::to("/signin"); 
         }
     }
      public function pressadmin_dashboard()

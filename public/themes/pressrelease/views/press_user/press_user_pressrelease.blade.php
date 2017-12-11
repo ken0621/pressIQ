@@ -20,20 +20,15 @@
                          <center>{{ Session::get('message') }}</center>
                       </div>
                       @endif 
-                      @if (Session::has('delete'))
-                      <div class="alert alert-danger ">
-                         <center>{{ Session::get('delete') }}</center>
-                      </div>
-                      @endif
                     <form method="post">
                         {{csrf_field()}} 
                         <div class="title-container">PRESS RELEASE</div>
                         <div class="title">Send To:</div>
-                        <input type="text" name="pr_receiver_name" class="form-control" id="recipient_name" readonly>
+                        <input type="text" name="pr_receiver_name" class="form-control" id="recipient_name" >
                         <span class="choose-button" readon>   
                         <a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
 
-                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
+                        <input type="text" name="pr_to" id="recipient_email" class="form-control" >
                         <div class="title">Headline:</div>
                         <input type="text" name="pr_headline" class="form-control">
                         <div class="title">Subheading:</div>
@@ -41,8 +36,8 @@
                         <div class="title">Content:</div>
                         <textarea name="pr_content"></textarea>
                         <div class="button-container">
-                        <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                        <span class="send-button"><button type="submit" name="send" value="send"><a>Send</a></button></span>
+                        <span class="save-button"><button type="submit"  name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
+                        <span class="send-button"><button type="submit"  name="send" value="send"><a>Send</a></button></span>
                         </div>
                     </form>
 
@@ -93,14 +88,14 @@
                         <input type="text" class="form-control" id="description" name="description"> </input><br>
 
                         <div class="title">Country:</div>
-                        <select type="text" class="form-control" id="country" name="country" style="width: 450px;" >
+                            <select type="text" class="form-control" id="country" name="country" style="width: 450px;" >
                                 <option value="Philippines">Philippines</option>
                                 <option value="USA">USA</option>
                                 <option value="China">China</option>
                                 <option value="Korea">Korea</option>
-                            </select><br><br><br>
+                            </select><br><br>
 
-                        <button type="submit" id="btn_add_recipient" class="btn_add_recipient col-md-5" name="btn_add_recipient"   style="background-color: #316df9; width: 180px;display: block; margin: 0 auto;border-radius: 7px;">Add Recipients</button>
+                        <button type="submit" id="btn_add_recipient" class="btn_add_recipient col-md-5" name="btn_add_recipient"   style="background-color: #316df9; width: 180px;display: block; margin: 0 auto;;">Add Recipients</button>
                      </form>
                     </div>
                 </div>
@@ -123,7 +118,7 @@
           <div class="row clearfix">
             <div class="col-md-3">
                 <div class="title-container">Choose Country</div>
-                 <form method="post" >
+                 <form method="post">
                 <select type="text" class="col-md-12 " id="choose_country" name="choose_country">
                     <option value="">--Select Country--</option>
                     @foreach($country as $country_name)
@@ -131,34 +126,38 @@
                     @endforeach
                 </select><br>
                 </form>
-
             </div>
-
             <div class="col-md-9">
                 <div class="left-container" id="country_table" name="country_table">
                     <table  class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; cellspacing: 0;">
                         <thead>
                             <tr>
-                                <th style="text-align: center;">RECIPIENT</th>
+                                <th style="text-align: center;">NAME</th>
+                                <th style="text-align: center;">COMPANY NAME</th>
+                                 <th style="text-align: center;">INDUSTRY TYPE</th>
                                 <th style="text-align: center;">ACTION</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($add_recipient as $addrecipients)
                             <tr>  
-                                <td style="text-align: center;">{{$addrecipients->name}}</td>
                                 <td style="text-align: center;">  
-                                
-                                <button  type="button" id="choose_recipient" class="btn btn-success" data-name="{{$addrecipients->name}}" data-name1="{{$addrecipients->research_email_address}}">Choose</button>
-                                <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="button" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button>
+                                <input type="checkbox"  class="btn btn-success" data-name="{{$addrecipients->name}}" data-name1="{{$addrecipients->research_email_address}}"></input>
+                               <!--  <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="button" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button> -->
                                 </td>
+                                <td style="text-align: center;">{{$addrecipients->name}}</td>
+                                <td style="text-align: center;">{{$addrecipients->company_name}}</td>
+                                <td style="text-align: center;">{{$addrecipients->industry_type}}</td>
+                                
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                     {!! $add_recipient->render() !!}    
+                </div><br>
+                <div class="pull right">
+                      <button  type="button" id="choose_recipient" class="btn btn-success" data-name="{{$addrecipients->name}}" data-name1="{{$addrecipients->research_email_address}}">Select Recipient</button>
                 </div>
-
             </div>
           </div>
         </div>
@@ -170,7 +169,12 @@
 <style>
 .modal-content
 {
-  width: 800px;
+  width: 900px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%);
+
 
 }
 .button-container-add
@@ -190,6 +194,10 @@
    width:350px;
    padding:10px 10px 10px 10px;
    }
+.left-container
+{
+   padding:10px 10px 10px 10px;  
+}
 
 </style>
 
@@ -228,9 +236,12 @@ document.getElementById("defaultOpen").click();
 <script type="text/javascript">
    $(document).on('click','#btn_add_recipient',function()
     {
-        toastr.success('success');
+        toastr.success("Recipient Already Added!",{ fadeAway: 1000 }, { timeOut: 1000 });
+    });
 
+    $(document).on('click','#delete_recipients',function()
+    {
+        toastr.error("Recipient Deleted!",{ fadeAway: 1000 }, { timeOut: 1000 });
     });
 </script>
-
 @endsection

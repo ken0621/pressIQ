@@ -259,7 +259,7 @@ function warehousev2()
             {
                 if(srch_txt != '')
                 {
-                    $(".warehouse-container").load("/member/item/warehouse?search_txt="+srch_txt+" .warehouse-container"); 
+                    $(".warehouse-container").load("/member/item/v2/warehouse?search_txt="+srch_txt+" .warehouse-container"); 
                     $(".load-data").attr("search_txt",$(this).val());
                 }                
             }

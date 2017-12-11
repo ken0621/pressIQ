@@ -2,6 +2,7 @@
 namespace App\Globals;
 use stdClass;
 use App\Globals\Payroll;
+use App\Globals\PayrollAccounting;
 use App\Globals\Utilities;
 use DB;
 use Carbon\Carbon;
@@ -7731,6 +7732,7 @@ class Payroll2
 		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();;
 		$data = Payroll2::get_total_payroll_register($data);
 		$_chart_of_account= Tbl_payroll_journal_tag::gettag($shop_id)
+												 ->join('tbl_chart_account_type','tbl_chart_of_account.account_type_id','=','tbl_chart_account_type.chart_type_id')
 												 ->join('tbl_payroll_journal_tag_entity','tbl_payroll_journal_tag_entity.payroll_journal_tag_id','=','tbl_payroll_journal_tag.payroll_journal_tag_id')
 												 ->join('tbl_payroll_entity','tbl_payroll_entity.payroll_entity_id','=','tbl_payroll_journal_tag_entity.payroll_entity_id')
 												 ->get();
@@ -7758,14 +7760,17 @@ class Payroll2
 					{
 						$_chart_of_account_insert[$key]['amount'] = $total_period_record[$chart_of_account_record['entity_name']];
 						$_chart_of_account_insert[$key]['account_id'] = $chart_of_account_record['account_id'];
-						$_chart_of_account_insert[$key]['date'] 		= date('Y-m-d');
+						$_chart_of_account_insert[$key]['account_type'] = ucfirst($chart_of_account_record['normal_balance']);
+
+						// $_chart_of_account_insert[$key]['date'] 		= date('Y-m-d');
 					}
 				}
 				
 			}
 		}
-		// dd($_chart_of_account_insert);
-		// dd($_chart_of_account);
+		
+		$return = PayrollAccounting::postPayrollManualJournalEntries($shop_id, Carbon::now(), $_chart_of_account_insert);
+		
 		return $_chart_of_account_insert;
 	}
 

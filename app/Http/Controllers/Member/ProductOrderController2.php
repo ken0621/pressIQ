@@ -258,12 +258,52 @@ class ProductOrderController2 extends Member
                 }
             }
         }
+
+        // details
+        $date = array();
+        $refnum = array();
+        $sendername = array();
+        $amount = array();
+        foreach ($data["_transaction"] as $key => $value)
+        {
+            $detail = $value->payment_details;
+            if (is_serialized($details)) 
+            {
+                $detail               = unserialize($detail);
+            }
+            else
+            {
+                $detail               = [];
+            }
+
+            foreach ($detail as $key => $value)
+            {
+                switch ($key) {
+                    case 'date_and_time':
+                        array_push($date, $value)
+                        break;
+                    case 'reference_number':
+                        array_push($date, $value)
+                        break;
+                    case 'sender_name':
+                        array_push($date, $value)
+                        break;
+                    case 'amount':
+                        array_push($date, $value)
+                        break;
+                }
+            }
+        }
+        $data['date'] = $date;
+        $data['refnum'] = $refnum;
+        $data['sendername'] = $sendername;
+        $data['amount'] = $amount;
         
         Excel::create('Order Report', function($excel) use ($data)
         {
             $excel->sheet('Order', function($sheet) use ($data)
             {
-                $sheet->loadView('member.product_order2.payment.export', $data);
+                $sheet->loadView('member.product_order2.payment.exportpayin', $data);
             });
         })
         ->download('xls');

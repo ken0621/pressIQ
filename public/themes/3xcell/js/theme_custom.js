@@ -234,7 +234,7 @@ function off()
 function on() 
 {
     document.getElementById("overlay").style.display = "block";
-    $("body").css({"overflow": "hidden","position": "fixed","margin": "0","padding": "0","right": "0","left": "0"});
+    $("body").css({"overflow": "hidden","position": "fixed","margin": "0","padding": "0","right": "0","left": "0"});zz
 }
 
 function off()

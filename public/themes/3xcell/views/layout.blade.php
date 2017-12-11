@@ -126,7 +126,7 @@
                     <div class="col-md-3 cox-sm-12 col-xs-12">
 
                         <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
-                        z
+                        
                         <nav class="pushmenu pushmenu-left">
                         
                             @if($customer)

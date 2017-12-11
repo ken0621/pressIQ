@@ -178,7 +178,7 @@
 							@foreach($_direct as $direct)
 							<div class="holder">
 								<div class="row clearfix">
-									<div class="col-md-8">
+									<div class="col-md-7">
 										<div class="color">
 											<img src="{{ $direct->profile_image }}">
 										</div>	
@@ -190,7 +190,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-4">
+									<div class="col-md-5">
 										<div class="action" style="text-align: center;">
 											@if($direct->distributed == 1)
 												<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-lblue"><i class="fa fa-star"></i> VIEW INFO</button>

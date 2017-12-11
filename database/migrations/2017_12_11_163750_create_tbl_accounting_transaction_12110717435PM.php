@@ -20,6 +20,17 @@ class CreateTblAccountingTransaction12110717435PM extends Migration
 
             $table->foreign('shop_id')->references('shop_id')->on("tbl_shop")->onDelete('cascade');
         });
+         Schema::create('tbl_accounting_transaction_list', function (Blueprint $table) {
+            $table->increments('accounting_transaction_list_id');
+            $table->integer('accounting_transaction_id')->unsigned();
+            $table->string('transaction_ref_name');
+            $table->integer('transaction_ref_id');
+            $table->string('transaction_list_number');
+            $table->date('transaction_date');
+            $table->datetime('date_created');
+            
+            $table->foreign('accounting_transaction_id')->references('accounting_transaction_id')->on("tbl_accounting_transaction")->onDelete('cascade');
+        });
     }
 
     /**

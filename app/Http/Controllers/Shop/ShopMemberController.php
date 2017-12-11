@@ -32,6 +32,7 @@ use App\Globals\Warehouse2;
 use App\Globals\Ecom_Product;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_image;
 //mark
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_mlm_slot_wallet_log_refill;
@@ -769,6 +770,46 @@ class ShopMemberController extends Shop
         }
 
         return view("press_user.choose_recipient", $data);
+    }
+    
+    public function pressreleases_image_upload()
+    {
+        $shop_id    = $this->shop_info->shop_id;
+        $shop_key   = $this->shop_info->shop_key;
+
+        /* SAVE THE IMAGE IN THE FOLDER */
+        $file               = Input::file('file');
+        $extension          = $file->getClientOriginalExtension();
+        $filename           = str_random(15).".".$extension;
+        $destinationPath    = 'uploads/'.$shop_key."-".$shop_id;
+
+        $image_path = Storage::putFile($destinationPath, Input::file('file'));
+
+        if ($image_path) 
+        {
+            $upload_success = true;
+        }
+        else
+        {
+            $upload_success = false;
+        }
+
+        $insert_image["image_path"]         = "/" . $image_path; 
+        $insert_image["image_shop"]         = $this->shop_info->shop_id;
+        $insert_image["image_reason"]       = "product";
+        $insert_image["image_reason_id"]    = 0;
+        $insert_image["image_date_created"] = Carbon::now();
+        $insert_image["image_key"]          = uniqid();
+        $image_id = Tbl_image::insertGetId($insert_image);
+
+        if( $upload_success ) 
+        {
+           return json_encode(array('location' => "/" . $image_path));
+        } 
+        else 
+        {
+           return Response::json('error', 400);
+        }
     }
     /*Press Release*/
 
@@ -3330,7 +3371,7 @@ class ShopMemberController extends Shop
 
         $shop_id = $this->shop_info->shop_id;
 
-        $check = Item::check_product_code($shop_id, $mlm_pin, $mlm_activation);
+        $check = Item::check_unused_product_code($shop_id, $mlm_pin, $mlm_activation);
         $return = [];
         if($check == true)
         {

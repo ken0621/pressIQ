@@ -1113,6 +1113,15 @@ function page_list()
         $nav[$page]['submenu'][$segment]['segment']= $segment;
         $nav[$page]['submenu'][$segment]['type']   = "submenu";
 
+             /* -- WAREHOUSE - INVENTORY */
+            $code = "warehouse-inventory";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Warehouse Inventory";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/v2/warehouse";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','refill'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
              /* -- WAREHOUSE - WIS */
             $code = "warehouse-issuance-slip";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Warehouse Issuance Slip";
@@ -1279,7 +1288,16 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Done";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
-    
+
+     /* -- CUSTOMERS => WAREHOUSE ISSUANCE SLIP  */
+    $code = "customer-warehouse-issuance-slip";
+    $nav[$page]['submenu'][$code]['label'] = "WIS";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/wis";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
     /* -- CUSTOMERS => CUSTOMER RECEIVE PAYMENT  */
     $code = "customer-receive-payment";
     $nav[$page]['submenu'][$code]['label'] = "Receive Payment";

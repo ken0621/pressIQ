@@ -54,7 +54,7 @@
 
 			.press-release-content
 			{
-				.create-pr-container
+				.create-release-container
 				{
 					padding: 20px 40px 50px 40px;
 					min-height: 700px;
@@ -101,6 +101,12 @@
 						}
 					}
 
+					iframe
+					{
+						min-height: 300px;
+						max-height: 300px;
+					}
+
 					.button-container
 					{
 						padding-top: 30px;
@@ -116,7 +122,94 @@
 								padding: 10px 20px;
 							}
 						}
-						.send-button
+						.preview-button
+						{
+							a
+							{
+								padding: 10px 30px;
+								background-color: #316df9;
+								color: #fff;
+								font-size: 15px;
+								text-decoration: none;
+							}
+						}
+						.import-button
+						{
+							margin-bottom: 30px;
+							a
+							{
+								padding: 10px 30px;
+								background-color: #316df9;
+								color: #fff;
+								font-size: 15px;
+								text-decoration: none;
+							}
+						}
+					}
+				}
+
+				.choose-recipient-container
+				{
+					padding: 20px 40px 50px 40px;
+					min-height: 400px;
+					.title-container
+					{
+						font-size: 25px;
+						color: #316df9;	
+						font-weight: 700;
+						padding-top: 20px;
+					}
+					.title
+					{
+						color: #404040;
+						font-size: 15px;
+						padding-top: 20px;
+					}
+
+					input
+					{
+						color: #404040;
+						height: 40px;
+						font-size: 15px;
+						width: 50%;
+						background-color: inherit;
+						display: inline-block;
+						vertical-align: middle
+					}
+
+					span
+					{
+						display: inline-block;
+						vertical-align: middle;
+						padding-left: 10px;
+						a
+						{
+							background-color: #316df9;
+							color: #fff;
+							font-size: 13px;
+							padding: 8px 8px;
+							text-decoration: none;
+							display: inline-block;
+							vertical-align: middle
+						}
+					}
+
+					.button-container
+					{
+						padding-top: 30px;
+						.preview-button
+						{
+							padding-right: 20px;
+							a
+							{
+								background-color: #316df9;
+								color: #fff;
+								font-size: 15px;
+								text-decoration: none;
+								padding: 10px 20px;
+							}
+						}
+						.continue-button
 						{
 							a
 							{
@@ -130,43 +223,45 @@
 					}
 				}
 
-				.manage-pr-container
+				.send-release-container
 				{
-					padding: 30px 10px 50px 10px;
-					border: 1px solid #ccc;
+					padding: 20px 40px 50px 40px;
 					min-height: 700px;
-					.manage-holder-container
+					.title-container
 					{
-						table
+						font-size: 25px;
+						color: #316df9;	
+						font-weight: 700;
+						padding-top: 20px;
+					}
+					.title
+					{
+						color: #404040;
+						font-size: 25px;
+						padding-top: 30px;
+						font-weight: 700;
+					}
+					.content
+					{
+						color: #404040;
+						font-size: 18px;
+					}
+					.button-container
+					{
+						padding-top: 30px;
+						.send-button
 						{
-							font-family: arial, sans-serif;
-							border-collapse: collapse;
-							width: 100%;
-						}
-
-						th
-						{
-							border: 1px solid #dddddd;
-							text-align: center;
-							padding: 8px;
-						}
-						td
-						{
-							border: 1px solid #dddddd;
-							text-align: center;
-							padding: 10px;
-						}
-
-						a
-						{
-							background-color: #316df9;
-							color: #fff;
-							font-size: 12px;
-							padding: 8px 8px;
-							text-decoration: none;
+							a
+							{
+								padding: 10px 30px;
+								background-color: #316df9;
+								color: #fff;
+								font-size: 15px;
+								text-decoration: none;
+							}
 						}
 					}
-				}
+				}		
 			}
 		}
 	}

@@ -22,6 +22,7 @@
                 @if($method == "bank")
                     <th style="text-align: left; width: 30;">BANK NAME</th>
                     <th style="text-align: left; width: 30;">ACCOUNT NAME</th>
+                    <th style="text-align: left; width: 30;">ACCOUNT TYPE</th>
                     <th style="text-align: left; width: 30;">ACCOUNT NUMBER</th>
                 @endif
                 <th style="text-align: right; width: 20;">PAYOUT AMOUNT</th>
@@ -53,6 +54,7 @@
                 @if($method == "bank")
                     <td>{{ $slot->payout_bank_name }}</td>
                     <td>{{ $slot->bank_account_name }}</td>
+                    <td>{{ $slot->bank_account_type }}</td>
                     <td>{{ $slot->bank_account_number}}</td>
                 @endif
                 <td>{{ $slot->real_net }}</td>

@@ -66,6 +66,7 @@ use App\Globals\Item;
 use App\Globals\Mlm_tree;
 use Jenssegers\Agent\Agent;
 use App\Globals\Mlm_slot_log;
+use App\Globals\Mlm_complan_manager;
 use Validator;
 use Google_Client; 
 use Google_Service_Drive;
@@ -93,7 +94,6 @@ class ShopMemberController extends Shop
 {
     public function getIndex()
     {
-        
         $data["page"] = "Dashboard";
         $data["mode"] = session("get_success_mode");
         $data["zero_currency"] = Currency::format(0);

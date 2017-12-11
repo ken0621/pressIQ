@@ -389,6 +389,7 @@ function bill()
 			onChangeValue: function()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
+				$('textarea[name="bill_mailing_address"]').val($(this).find("option:selected").attr("billing-address"));
 				load_purchase_order_vendor($(this).find("option:selected").attr("value"));
 
 			}

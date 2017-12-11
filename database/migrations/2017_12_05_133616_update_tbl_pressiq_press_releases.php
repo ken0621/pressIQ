@@ -13,7 +13,8 @@ class UpdateTblPressiqPressReleases extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_pressiq_press_releases', function (Blueprint $table) {
+        Schema::table('tbl_pressiq_press_releases', function (Blueprint $table) 
+        {
             $table->string('pr_date_sent');
             $table->string('pr_sender_name');
         });

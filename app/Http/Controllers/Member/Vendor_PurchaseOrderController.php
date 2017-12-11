@@ -38,7 +38,7 @@ class Vendor_PurchaseOrderController extends Member
     public function add_item($po_id)
     {
         $po_data = Tbl_purchase_order_line::um()->where("poline_po_id",$po_id)->get();
-
+        
         foreach ($po_data as $key => $value) 
         {
             Session::push('po_item',collect($value)->toArray());
@@ -108,9 +108,10 @@ class Vendor_PurchaseOrderController extends Member
             $data["_po"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->where("po_shop_id",Purchase_Order::getShopId())->get();
 
             $data["_po_open"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->where("po_shop_id",Purchase_Order::getShopId()) ->where("po_is_billed",0) ->get();
+            //dd($data["_po_open"]);
 
-            $data["_po_close"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->where("po_shop_id",Purchase_Order::getShopId()) ->where("po_is_billed","!=",0) ->get();
-
+            $data["_po_close"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->where("po_shop_id",Purchase_Order::getShopId()) ->where("po_is_billed","!=",0)->get();
+            //dd($data["_po_close"]);
             return view("member.purchase_order.purchase_order_list",$data);
         }
         else

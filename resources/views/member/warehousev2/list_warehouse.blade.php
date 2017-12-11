@@ -51,29 +51,10 @@
 
                                     <tbody class="table-warehouse">
                                     @if(count($_warehouse) > 0)
-                                        @foreach($_warehouse as $warehouse)
-                                        <tr>
-                                            <td class="text-center">{{$warehouse->warehouse_name}}</td>
-                                            <td class="text-center">
-                                                <div class="btn-group">
-                                                  <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Action <span class="caret"></span>
-                                                  </button>
-                                                  <ul class="dropdown-menu dropdown-menu-custom">
-                                                    <li><a href="/member/item/v2/warehouse/refill?warehouse_id={{$warehouse->warehouse_id}}" >Refill  Warehouse</a></li>
-                                                    <li><a href="javascript:" class="popup" link="/member/item/v2/warehouse/edit/{{$warehouse->warehouse_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit</a></li>
-                                                  </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        @endforeach
+                                    {!! $_warehouse_list !!}
                                     @else
                                     <tr>
-                                        @if($pis == null)
-                                        <td colspan="5" class="text-center">No Warehouse Found</td>
-                                        @else
                                         <td colspan="2" class="text-center">No Warehouse Found</td>
-                                        @endif
                                     </tr>
                                     @endif
                                     </tbody>
@@ -117,7 +98,7 @@
 @endsection
 
 @section("script")
-<script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
+<script type="text/javascript" src="/assets/member/js/warehouse/warehousev2.js"></script>
 
 <script type="text/javascript">
     

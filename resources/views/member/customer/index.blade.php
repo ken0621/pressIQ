@@ -107,8 +107,9 @@
                                     <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id1}}">Create Invoice</a></li>
                                     <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
                                     <!-- <li><a href="/member/customer/transaction_list">Transaction List</a></li> -->
-                                    <li><a href="/member/customer/estimate">Create Estimate</li>
                                     @if(!$pis)
+                                    <li><a href="/member/customer/estimate">Create Estimate</li>
+                                   
                                         <li><a class="popup" link="/member/customer/viewlead/{{$customer->customer_id}}" size="md" data-toggle="modal">View Lead</li>   
                                     @endif
                                     <li><a href="/member/customer/details/{{$customer->customer_id1}}">View Customer Details</a></li>
@@ -145,6 +146,17 @@
         if(data.message == "success")
         {
             console.log(121212);
+        }
+    }
+    function success_update_customer(data)
+    {
+        if(data.message == 'success')
+        {
+            toastr.success('Success');
+            setInterval(function()
+            {
+                location.href = '/member/customer/list';
+            },2000);
         }
     }
 </script>

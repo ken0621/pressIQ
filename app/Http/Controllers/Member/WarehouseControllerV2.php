@@ -46,20 +46,10 @@ class WarehouseControllerV2 extends Member
                $data["_warehouse"]->where("warehouse_name","LIKE","%".Request::input("search_txt")."%");
             }
             
-            $all_item = null;
-            foreach($data["_warehouse"] as $key => $value)
-            {
-                $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$value->warehouse_id)->first();
-                
-                if(!$check_if_owned)
-                {
-                    unset($data["_warehouse"][$key]);
-                }
-            }
-            
             $data["_warehouse_archived"] = null;
 
             $data['pis'] = Purchasing_inventory_system::check();
+            $data['_warehouse_list'] = Warehouse2::load_warehouse_list($this->user_info->shop_id, $this->user_info->user_id);
 
             return view('member.warehousev2.list_warehouse',$data);
         }
@@ -75,14 +65,14 @@ class WarehouseControllerV2 extends Member
         $access = Utilities::checkAccess('warehouse-inventory', 'edit');
         if($access == 1)
         { 
-
             $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$id)->first();
             if(!$check_if_owned)
             {
                 return $this->show_no_access_modal();
             }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
-     
+            
+            $data['_warehouse'] = Warehouse2::load_all_warehouse_select($this->user_info->shop_id, $this->user_info->user_id, 0, $data['warehouse']->warehouse_parent_id, $id);
             return view("member.warehousev2.edit_warehouse",$data);
         }
         else
@@ -98,6 +88,13 @@ class WarehouseControllerV2 extends Member
 
         $up_warehouse["warehouse_name"] = Request::input("warehouse_name");
         $up_warehouse["warehouse_address"] = Request::input("warehouse_address");
+        $up_warehouse["warehouse_parent_id"] = Request::input("warehouse_parent_id");
+
+        if($up_warehouse['warehouse_parent_id'])
+        {            
+            $up_warehouse["warehouse_level"] = Tbl_warehouse::where('warehouse_id', $up_warehouse['warehouse_parent_id'])->value('warehouse_level');
+            $up_warehouse["warehouse_level"]++;
+        }
 
         Tbl_warehouse::where("warehouse_id",Request::input("warehouse_id"))->update($up_warehouse);
 
@@ -116,6 +113,7 @@ class WarehouseControllerV2 extends Member
         $data['$access'] = Utilities::checkAccess('warehouse-inventory', 'add');
         if($data['$access'] == 1)
         { 
+           $data['_warehouse'] = Warehouse2::load_all_warehouse_select($this->user_info->shop_id, $this->user_info->user_id);
            return view("member.warehousev2.add_warehouse", $data);
         }
         else
@@ -129,8 +127,15 @@ class WarehouseControllerV2 extends Member
         //INSERT TO tbl_warehouse
         $ins_warehouse["warehouse_name"]    = Request::input("warehouse_name");
         $ins_warehouse["warehouse_address"] = Request::input("warehouse_address");
+        $ins_warehouse["warehouse_parent_id"] = Request::input("warehouse_parent_id");
         $ins_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
         $ins_warehouse["warehouse_created"] = Carbon::now();
+
+        if($ins_warehouse['warehouse_parent_id'])
+        {            
+            $ins_warehouse["warehouse_level"] = Tbl_warehouse::where('warehouse_id', $ins_warehouse['warehouse_parent_id'])->value('warehouse_level');
+            $ins_warehouse["warehouse_level"]++;
+        }
 
         $id = Tbl_warehouse::insertGetId($ins_warehouse);
               
@@ -195,6 +200,7 @@ class WarehouseControllerV2 extends Member
         }
 
         $data = Warehouse2::refill_bulk($shop_id, $warehouse_id, $reference_name, $reference_id, $remarks, $_item);
+
         //die(var_dump($data));
         
         $data['status'] = 'success';
@@ -216,7 +222,6 @@ class WarehouseControllerV2 extends Member
         return json_encode($return);*/
         
         return json_encode($data);
-       
     }
 
 }

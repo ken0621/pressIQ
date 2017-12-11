@@ -279,12 +279,12 @@ function customer_invoice()
 		$(".tr-draggable").each(function()
 		{
 			/* GET ALL DATA */
-			var qty 	= $(this).find(".txt-qty").val();
-			var rate 	= $(this).find(".txt-rate").val();
-			var discount= $(this).find(".txt-discount").val().toString();
+			var qty               = $(this).find(".txt-qty").val();
+			var rate              = $(this).find(".txt-rate").val();
+			var discount          = $(this).find(".txt-discount").val().toString();
 			var multiple_discount = discount.split("/");
-			var amount 	= $(this).find(".txt-amount");
-			var taxable = $(this).find(".taxable-check");
+			var amount            = $(this).find(".txt-amount");
+			var taxable           = $(this).find(".taxable-check");
 
 			/* CHECK IF QUANTITY IS EMPTY */
 			if(qty == "" || qty == null)
@@ -299,20 +299,48 @@ function customer_invoice()
 			{	
 				alert(multiple_discount[discount]); //split
 			}*/
+			if (discount.indexOf('/') >= 0)
+			{
+				var split_discount = discount.split('/');
+				var main_rate      = rate * qty;
 
-			if(discount.indexOf('%') >= 0)
-			{
-				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
-				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
-			}
-			else if(discount == "" || discount == null)
-				
-			{
-				discount = 0;
+				$.each(split_discount, function(index, val) 
+				{
+					console.log(val + " - Discount");
+
+					if(val.indexOf('%') >= 0)
+					{
+						console.log(parseFloat(main_rate) + " - " + ((100-parseFloat(val.replace("%", ""))) / 100));
+						main_rate = parseFloat(main_rate) * ((100-parseFloat(val.replace("%", ""))) / 100);
+						console.log(main_rate);
+					}
+					else if(val == "" || val == null)	
+					{
+						main_rate -= 0;
+					}
+					else
+					{
+						main_rate -= parseFloat(val);
+					}
+				});
+
+				discount = (rate * qty) - main_rate;
 			}
 			else
 			{
-				discount = parseFloat(discount);
+				if(discount.indexOf('%') >= 0)
+				{
+					$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
+					discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
+				}
+				else if(discount == "" || discount == null)	
+				{
+					discount = 0;
+				}
+				else
+				{
+					discount = parseFloat(discount);
+				}
 			}
 
 			/* RETURN TO NUMBER IF THERE IS COMMA */
@@ -572,6 +600,7 @@ function customer_invoice()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
 				$(".customer-billing-address").val($(this).find("option:selected").attr("billing-address"));
+				$('textarea[name="inv_customer_billing_address"]').val($(this).find("option:selected").attr("billing-address"));
 				load_all_estimate($(this).val());
 			}
 		});
@@ -619,7 +648,7 @@ function customer_invoice()
     		placeholder : "Terms...",
             onChangeValue: function()
             {
-            	var start_date 		= $(".datepicker[name='inv_date']").val();
+            	var start_date 		= $(".datepicker[name='date']").val();
             	var days 			= $(this).find("option:selected").attr("days");
             	var new_due_date 	= AddDaysToDate(start_date, days, "/");
             	$(".datepicker[name='inv_due_date']").val(new_due_date);

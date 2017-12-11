@@ -130,6 +130,7 @@ class Vendor_CreateBillController extends Member
     public function load_purchase_order($vendor_id)
     {
         $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$vendor_id)->where("po_is_billed",0)->get();
+        //dd($data["_po"]);
 
         return view("member.load_ajax_data.load_purchase_order",$data);
     }

@@ -127,6 +127,12 @@ class Mlm_complan_manager_cd
 
 	public static function gradute_ez($slot_info)
 	{
+	    
+        $update['slot_status']          = "PS";
+        $update['old_slot_status']      = $slot_info->slot_status;
+        $update['old_slot_status_date'] = Carbon::now();
+        Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->update($update);
+        
 		$plan_settings = Tbl_mlm_plan::where('shop_id', $slot_info->shop_id)
         ->where('marketing_plan_enable', 1)
         ->where('marketing_plan_trigger', 'Slot Creation')
@@ -141,7 +147,7 @@ class Mlm_complan_manager_cd
         // end distribute
 
         // change status from cd to ps
-        $log = "Congratulations! Your " . $slot_info->slot_no . " Has been changed from CD TO PS.";
+        $log = "Congratulations! Your " . $slot_info->slot_no . " Has been changed from EZ TO PS.";
         $arry_log['wallet_log_slot'] = $slot_info->slot_id;
         $arry_log['shop_id'] = $slot_info->shop_id;
         $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
@@ -151,10 +157,5 @@ class Mlm_complan_manager_cd
         $arry_log['wallet_log_status'] = "released";   
         $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
         Mlm_slot_log::slot_array($arry_log);
-
-        $update['slot_status']          = "PS";
-        $update['old_slot_status']      = $slot_info->slot_status;
-        $update['old_slot_status_date'] = Carbon::now();
-        Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->update($update);
 	}
 }

@@ -2895,7 +2895,26 @@ class ShopMemberController extends Shop
 
             if($return)
             {
-                $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
+                if($shop_id == 5)
+                {
+                  $slot_stats = "PS";
+                  
+                  $check_code_for_ez = Tbl_warehouse_inventory_record_log::where("mlm_pin",$data["pin"])->where("mlm_activation",$data["activation"])->where("record_shop_id",$shop_id)->first();
+                  if($check_code_for_ez)
+                  {
+                     $ez_code = Tbl_brown_ez_program::where("shop_program_id",$shop_id)->where("record_program_log_id",$check_code_for_ez->record_log_id)->first();
+                     if($ez_code)
+                     {
+                         $slot_stats = "EZ";
+                     }
+                  }
+                  
+                  $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no,$slot_stats);
+                }
+                else
+                {
+                  $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
+                }
 
                 if(is_numeric($create_slot))
                 {

@@ -764,7 +764,7 @@ class Warehouse2
                                 $arry_log['wallet_log_details']      = $log;
                                 $arry_log['wallet_log_amount']       = $amount_given;
                                 $arry_log['wallet_log_plan']         = "CREDITS_PAID";
-                                $arry_log['wallet_log_status']       = "n_ready";   
+                                $arry_log['wallet_log_status']       = "released";   
                                 $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('CREDITS_PAID', $mlm_slot->shop_id); 
                                 Mlm_slot_log::slot_array($arry_log);
                           }

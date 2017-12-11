@@ -53,6 +53,7 @@ class PayrollAdminDashboard extends Member
 
 	public function set_employee_approver_tag()
 	{
+		dd(Request::all());
 		return json_encode('');
 	}
 }

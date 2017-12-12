@@ -45,11 +45,10 @@
 			<td>Invoice #</td>
 			<td>Invoice Date</td>
 			<td>Contact No</td>
-			<td>Birthday</td>
-			<td>Street</td>
-			<td>Zip</td>
-			<td>City</td>
-			<td>State</td>
+			<td>Date</td>
+			<td>Reference Number</td>
+			<td>Sender Name</td>
+			<td>Amount</td>
 		</tr>
 		@foreach($_transaction as $transaction)
 		<tr>
@@ -60,11 +59,10 @@
 			<td>{{ $transaction->transaction_number }}</td>
 			<td>{{ date("m/d/y", strtotime($transaction->transaction_date_created)) }}</td>
 			<td>"{{ $transaction->customer_mobile }}"</td>
-			<td>{{ date("m/d/y", strtotime(($transaction->b_day ? $transaction->b_day : $transaction->birthday))) }}</td>
-			<td>{{ $transaction->customer_street }}</td>
-			<td>{{ $transaction->customer_zipcode }}</td>
-			<td>{{ $transaction->customer_city }}</td>
-			<td>{{ $transaction->customer_state }}</td>
+			<td>{{ $date[$transaction->transaction_id] }}</td>
+			<td>{{ $refnum[$transaction->transaction_id] }}</td>
+			<td>{{ $sendername[$transaction->transaction_id] }}</td>
+			<td>{{ $amount[$transaction->transaction_id] }}</td>
 		</tr>
 		@endforeach
 	</table>

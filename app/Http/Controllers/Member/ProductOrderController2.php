@@ -267,7 +267,7 @@ class ProductOrderController2 extends Member
         foreach ($data["_transaction"] as $key => $value)
         {
             $detail = $value->payment_details;
-            if (is_serialized($details)) 
+            if (is_serialized($detail)) 
             {
                 $detail               = unserialize($detail);
             }
@@ -276,20 +276,20 @@ class ProductOrderController2 extends Member
                 $detail               = [];
             }
 
-            foreach ($detail as $key => $value)
+            foreach ($detail as $key => $val)
             {
                 switch ($key) {
                     case 'date_and_time':
-                        array_push($date, $value)
+                        $date[$value->transaction_id] = $val;
                         break;
                     case 'reference_number':
-                        array_push($date, $value)
+                        $refnum[$value->transaction_id] = $val;
                         break;
                     case 'sender_name':
-                        array_push($date, $value)
+                        $sendername[$value->transaction_id] = $val;
                         break;
                     case 'amount':
-                        array_push($date, $value)
+                        $amount[$value->transaction_id] = $val;
                         break;
                 }
             }
@@ -298,7 +298,7 @@ class ProductOrderController2 extends Member
         $data['refnum'] = $refnum;
         $data['sendername'] = $sendername;
         $data['amount'] = $amount;
-        
+        $data['x'] = 0;
         Excel::create('Order Report', function($excel) use ($data)
         {
             $excel->sheet('Order', function($sheet) use ($data)

@@ -29,6 +29,10 @@
                                     @foreach($_method as $method)
                                     <li><a href="/member/ecommerce/product_order2/export?method={{ $method->gateway_code_name }}" target="_blank">{{ $method->gateway_name }}</a></li>
                                     @endforeach
+                                    @if($shop_id == 55)
+                                    <li><a href="/member/ecommerce/product_order2/exportpayin?method_id=35" target="_blank">Palawan Express Payments</a></li>
+                                    <li><a href="/member/ecommerce/product_order2/exportpayin?method_id=36" target="_blank">Cebuana Payments</a></li>
+                                    @endif
                                 </ul>
                             @else
                                 <ul class="dropdown-menu">

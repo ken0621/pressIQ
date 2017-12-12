@@ -100,6 +100,11 @@ class Transaction
         $store["create_set_method"] = $method;
         session($store);
     }
+    public static function create_set_method_id($method)
+    {
+        $store['create_set_method_id'] = $method;
+        session($store);
+    }
     public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null)
     {
         $transaction_sales_person = isset($transaction_id["transaction_sales_person"]) ? $transaction_id["transaction_sales_person"] : null;
@@ -124,7 +129,9 @@ class Transaction
                 if(session('create_set_method'))
                 {
                     $insert_transaction["payment_method"] = session("create_set_method");
+                    $insert_transaction["method_id"]      = session("create_set_method_id");
                     session()->forget('create_set_method');
+                    session()->forget('create_set_method_id');
                 }
 
                 $transaction_id = Tbl_transaction::insertGetId($insert_transaction);

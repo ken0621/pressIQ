@@ -30,7 +30,7 @@
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="square-container">
-					<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right btn-enter-a-code">Create New Slot</a></div>
+					<div class="title">Wallet Summary <a href="javascript:" class="title-button btn-enter-a-code"><div>Create New Slot</div></a></div>
 					<div class="sub-container">
 						<div class="table-holder">
 							<div class="chart-legend">
@@ -139,7 +139,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="square-container">
-					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button" onclick="location.href='/members/report'"><div>View All Rewards</div></a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)

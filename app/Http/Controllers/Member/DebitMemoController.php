@@ -46,6 +46,9 @@ class DebitMemoController extends Member
             $data["serial"] = ItemSerial::check_setting();
 
             $data["type"] = "Debit Memo";
+
+            $data['pis']        = Purchasing_inventory_system::check();
+        
             if(Request::input("type") == "bad_order")
             {
                 $data["type"] = "Bad Orders";

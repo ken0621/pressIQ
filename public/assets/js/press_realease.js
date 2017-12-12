@@ -8,29 +8,26 @@ $(document).ready(function ()
 	
 $(document).ready(function () 
 {
-	$(document).on("#choose_recipient",function()
+	$(document).on("#done_recipients",function()
 	{	
-		alert("123");
 		var name = $(this).data("name");
 		$('#recipient_name').val(name);
 		$('#recipient-modal').modal('hide');
 		alert(pr_receiver_name);
 	});
-});
+});	
 
 $(document).ready(function () 
 {
 	$(document).on("change","#choose_country",function()
 	{
 		var country = $(this).val();
-		var name = $(this).val();
 
 		 $.ajax({
             type:'POST',
             url:'/pressuser/pressrelease/recipient',
             data:
             	{
-            	name: name,
             	country: country,
             	},
             dataType:'text',

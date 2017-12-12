@@ -18,7 +18,12 @@
         <option class="hidden" value="" />
         </select>
     </td>
-    <td><textarea class="textarea-expand txt-desc" name="invline_description[]">{{$items['estline_description']}}</textarea></td>
+    <td>
+    @if($pis)
+        <label class="textarea-expand txt-desc" name="invline_description[]">{{$items['estline_description']}}</label></td>
+    @else
+        <textarea class="textarea-expand txt-desc" name="invline_description[]">{{$items['estline_description']}}</textarea></td>
+    @endif
     <td>
         <select class="2222 droplist-um select-um" name="invline_um[]">
         @if($items['estline_um'])
@@ -57,7 +62,13 @@
     <option class="hidden" value="" />
 </select>
 </td>
-<td><textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea></td>
+<td>
+@if($pis)
+    <label class="textarea-expand txt-desc" name="invline_description[]"></label>
+@else
+    <textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea>
+@endif
+</td>
 <td><select class="2222 droplist-um select-um" name="invline_um[]"><option class="hidden" value="" /></select></td>
 <td><input class="text-center number-input txt-qty compute" type="text" name="invline_qty[]"/></td>
 <td><input class="text-right number-input txt-rate compute" type="text" name="invline_rate[]"/></td>

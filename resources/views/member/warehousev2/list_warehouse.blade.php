@@ -3,6 +3,7 @@
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <div class="panel panel-default panel-block panel-title-block" id="top">
+    <input type="hidden" id="_token" value="{{csrf_token()}}" name="">
     <div class="panel-heading">
         <div>
             <i class="fa fa-building"></i>
@@ -30,7 +31,7 @@
             <div class="col-md-4 pull-right">
                 <div class="input-group">
                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                    <input type="search" name="" class="form-control srch-warehouse-txt" placeholder="Start typing warehouse">
+                    <!-- <input type="search" name="" class="form-control srch-warehouse-txt" placeholder="Start typing warehouse"> -->
                 </div>
             </div>
         </div>

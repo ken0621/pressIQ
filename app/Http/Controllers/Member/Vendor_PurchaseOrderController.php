@@ -11,6 +11,7 @@ use App\Globals\Warehouse;
 use App\Globals\Billing;
 use App\Globals\Pdf_global;
 use App\Globals\Utilities;
+use App\Globals\Purchasing_inventory_system;
 
 use App\Models\Tbl_customer;
 use App\Models\Tbl_warehousea;
@@ -77,10 +78,13 @@ class Vendor_PurchaseOrderController extends Member
         if($access == 1)
         { 
             $data["page"]       = "Purchase order";
+            $data['pis']        = Purchasing_inventory_system::check();
+            
             $data["_vendor"]    = Vendor::getAllVendor('active');
             $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Purchase_Order::getShopId())->get();
             $data['_item']      = Item::get_all_category_item();
             $data['_um']        = UnitMeasurement::load_um_multi();
+
             $data["action"]     = "/member/vendor/purchase_order/create_po";
             $data["v_id"]       = Request::input("vendor_id");
             $id = Request::input('id');
@@ -151,13 +155,13 @@ class Vendor_PurchaseOrderController extends Member
     }
     public function create_po()
     {
-        // dd(Request::input());
+        //dd(Request::input());
 
         $button_action = Request::input('button_action');
 
         $vendor_info                        = [];
-        $vendor_info['po_vendor_id']       = Request::input('po_vendor_id');;
-        $vendor_info['po_vendor_email']    = Request::input('po_vendor_email');
+        $vendor_info['po_vendor_id']        = Request::input('po_vendor_id');;
+        $vendor_info['po_vendor_email']     = Request::input('po_vendor_email');
 
         $po_info                            = [];
         $po_info['po_terms_id']             = Request::input('po_terms_id');
@@ -217,7 +221,7 @@ class Vendor_PurchaseOrderController extends Member
     {
         $po_id = Request::input("po_id");
 
-       $vendor_info                        = [];
+        $vendor_info                        = [];
         $vendor_info['po_vendor_id']       = Request::input('po_vendor_id');;
         $vendor_info['po_vendor_email']    = Request::input('po_vendor_email');
 

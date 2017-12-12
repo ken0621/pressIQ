@@ -38,7 +38,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/replicated.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/replicated.css?version=2">
 <style>
 	header
 	{

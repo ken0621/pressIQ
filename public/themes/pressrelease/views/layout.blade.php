@@ -18,6 +18,7 @@
         <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet"> 
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet"> 
         <link href="https://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet"> 
+        <link rel="stylesheet" href="/assets/external/chosen/chosen/chosen.css" media="screen"/>
 
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
@@ -27,18 +28,18 @@
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
-        .content
-        {
-            background-color: transparent;
-        }
-        .navbar.sticky
-        {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-        }
+            .content
+            {
+                background-color: transparent;
+            }
+            .navbar.sticky
+            {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+            }
         </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
@@ -172,6 +173,7 @@
     @include("frontend.gfoot")
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+    <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script>
     
     <!-- HEADER FIXED -->
     <script type="text/javascript">

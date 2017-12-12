@@ -13,6 +13,7 @@ use App\Globals\Utilities;
 use App\Globals\Payroll;
 use App\Globals\Settings;
 use App\Globals\Warehouse2;
+use App\Globals\Purchasing_inventory_system;
 
 use Crypt;
 use Redirect;
@@ -136,6 +137,8 @@ class Member extends Controller
 						View::share('user_info', $user_info);
 						View::share('current_warehouse', $current_warehouse);
 						View::share('_warehouse_list_shortcut', $warehouse_list);
+						//View::share('_for_pis_only', Purchasing_inventory_system::check());
+
 
 						/* CHECK IF SHOP STATUS IS INITIAL - REDIRECT TO INITIAL PAGE */
 						if($user_info->shop_status == "initial" && Request::segment(2) != "setup")

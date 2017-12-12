@@ -19,6 +19,8 @@ var ndp = 0;
 var tcp_string = '';
 var tcp = 0;
 
+var selected_customer='';
+
 function create_commission_calculator()
 {
 	init();
@@ -37,10 +39,22 @@ function create_commission_calculator()
 		action_load_datepicker();
 		event_compute_all();
 		event_change_tcp();
+		action_load_date();
+
 	}
 	function action_load_datepicker()
 	{
 		$('.datepicker').datepicker();
+	}
+	function action_load_date()
+	{		
+		var start_date 		= $(".datepicker[name='date']").val().split('/');
+		var payment_term = 1;
+		var year = start_date[2];
+		var day = start_date[1];
+		var month = start_date[0];
+		var new_due_date = add_months(year, month, day, payment_term);
+    	$(".datepicker[name='due_date']").val(new_due_date);
 	}
 	function action_initialize_select()
 	{
@@ -48,6 +62,10 @@ function create_commission_calculator()
 			hasPopup : 'true',
 			link : '/member/customer/modalcreatecustomer',
 			width : '100%',
+			onCreateNew : function()
+            {
+            	selected_customer = $(this);
+            },
 			onChangeValue : function()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
@@ -105,6 +123,18 @@ function create_commission_calculator()
 				}
 			}
 		});
+	}
+
+	/* AFTER ADDING AN  ITEM */
+	function submit_done_item(data)
+	{
+	    selected_customer.load("/member/customer/load_customer", function()
+	    {
+	        $(this).globalDropList("reload");
+			$(this).val(data.customer_id).change();
+			toastr.success("Success");
+	    });
+	    data.element.modal("hide");
 	}
 	function number_format(number, tofixed = true)
 	{
@@ -329,7 +359,10 @@ function create_commission_calculator()
 	function add_months($year, $months, $day, $add_months)
 	{
 		var start_date = new Date($year, $months, $day);
-		return start_date.setMonth(start_date.getMonth() + $add_months);
+		var new_date_string = start_date.setMonth(parseInt(start_date.getMonth() + parseInt($add_months-1)));
+		var dt = new Date(new_date_string);
+		var real_date = parseInt(dt.getMonth() + 1)+'/'+dt.getDate()+'/'+dt.getFullYear();
+		return real_date;
 	}
 
 }

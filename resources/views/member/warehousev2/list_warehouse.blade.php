@@ -100,20 +100,4 @@
 @section("script")
 <script type="text/javascript" src="/assets/member/js/warehouse/warehousev2.js"></script>
 
-<script type="text/javascript">
-    
-$('.droplist-vendor').globalDropList(
-{ 
-    width : "100%",
-    link : "/member/vendor/add",
-    onChangeValue : function ()
-    {
-        var vendor_id = $(this).val();
-        if(vendor_id != "other")
-        {
-            var warehouse_id = $("#warehouse_id").val();
-            $(".warehouse-refill-container").load("/item/warehouse/refill/by_vendor/"+warehouse_id+"/"+vendor_id +" .warehouse-refill-container") 
-        }
-    }
-});
 @endsection

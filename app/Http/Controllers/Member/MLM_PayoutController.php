@@ -366,6 +366,7 @@ class MLM_PayoutController extends Member
 			 	{
 				 	$_slot[$key]->payout_bank_name = $bank_details->payout_bank_name;
 				 	$_slot[$key]->bank_account_number = $bank_details->bank_account_number;
+				 	$_slot[$key]->bank_account_type = $bank_details->bank_account_type;
 				 	$_slot[$key]->bank_account_name = $bank_details->bank_account_name;
 			 	}
 			}

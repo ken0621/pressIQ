@@ -8,6 +8,15 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
+
+.w2hpx
+{
+	@media screen and (max-width: 500px)
+	{
+		width: 200px;
+	}
+}
+
 .dashboard
 {
 	font-family: $content-text;

@@ -85,7 +85,7 @@ class CreditMemoController extends Member
 
             return view("member.receive_payment.modal_receive_payment",$data);
         }
-        if($cm_type == "invoice_tablet")
+        else if($cm_type == "invoice_tablet")
         {
             $data["_customer"]      = Tbl_customer::where("customer_id",$data["c_id"])->first();
             $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
@@ -103,7 +103,7 @@ class CreditMemoController extends Member
             }
             return view("member.receive_payment.modal_receive_payment",$data);
         }
-        if($cm_type == "others")
+        else if($cm_type == "others")
         {
             $up["cm_type"] = 1;
             $up["cm_used_ref_name"] = "others";
@@ -112,7 +112,8 @@ class CreditMemoController extends Member
 
             return Redirect::to("/member/customer/credit_memo/list");
         }
-        if($cm_type == "others_tablet")
+
+        else if($cm_type == "others_tablet")
         {
             $up["cm_type"] = 1;
             $up["cm_used_ref_name"] = "others";
@@ -120,6 +121,15 @@ class CreditMemoController extends Member
             Tbl_credit_memo::where("cm_id",$cm_id)->update($up);
 
             return Redirect::to("/tablet/credit_memo");
+        }
+        else
+        {
+            $up["cm_type"] = 1;
+            $up["cm_used_ref_name"] = $cm_type;
+
+            Tbl_credit_memo::where("cm_id",$cm_id)->update($up);
+
+            return Redirect::to("/member/customer/credit_memo/list");            
         }
     }
     public function index()

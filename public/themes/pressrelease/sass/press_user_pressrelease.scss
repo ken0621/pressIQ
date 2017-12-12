@@ -63,14 +63,16 @@
 						font-size: 25px;
 						color: #316df9;	
 						font-weight: 700;
-						padding-top: 20px;
+						padding-top: 30px;
 					}
 						
 					.title
 					{
 						color: #404040;
-						font-size: 15px;
-						padding-top: 20px;
+						font-size: 16px;
+						padding-top: 25px;
+						padding-bottom: 5px;
+						font-weight: 700;
 					}
 
 					input
@@ -152,6 +154,15 @@
 				{
 					padding: 20px 40px 50px 40px;
 					min-height: 400px;
+					.chosen-container
+					{
+						min-width: 65%;
+						.search-choice
+						{
+							margin-top: 10px;
+							padding-left: 0px;
+						}
+					}
 					.title-container
 					{
 						font-size: 25px;
@@ -162,8 +173,10 @@
 					.title
 					{
 						color: #404040;
-						font-size: 15px;
-						padding-top: 20px;
+						font-size: 16px;
+						padding-top: 25px;
+						padding-bottom: 5px;
+						font-weight: 700;
 					}
 
 					input
@@ -192,6 +205,12 @@
 							display: inline-block;
 							vertical-align: middle
 						}
+
+					}
+					.result-container
+					{
+						font-size: 15px;
+						font-weight: 700;
 					}
 
 					.button-container
@@ -207,17 +226,6 @@
 								font-size: 15px;
 								text-decoration: none;
 								padding: 10px 20px;
-							}
-						}
-						.continue-button
-						{
-							a
-							{
-								padding: 10px 30px;
-								background-color: #316df9;
-								color: #fff;
-								font-size: 15px;
-								text-decoration: none;
 							}
 						}
 					}

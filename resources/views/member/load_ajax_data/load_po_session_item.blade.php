@@ -13,7 +13,13 @@
                 @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $items['poline_item_id']])
             </select>
         </td>
-        <td><textarea class="textarea-expand txt-desc" name="itemline_description[]">{{$items['poline_description']}}</textarea></td>
+        <td>
+            @if($pis)
+                <label class="textarea-expand txt-desc" name="itemline_description[]">{{$items['poline_description']}}</label>
+            @else
+                <textarea class="textarea-expand txt-desc" name="itemline_description[]">{{$items['poline_description']}}</textarea>
+            @endif
+        </td>
         <td>
             <select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" />
                 @if($items['poline_um'])
@@ -47,7 +53,13 @@
             @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
         </select>
     </td>
-    <td><textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea></td>
+    <td>
+        @if($pis)
+            <label class="textarea-expand txt-desc" name="itemline_description[]"></label>
+        @else
+            <textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea>
+        @endif
+    </td>
     <td><select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
     <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
     <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>

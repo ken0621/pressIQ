@@ -13,7 +13,7 @@
                         </div>
                     </div>
                 </div>
-                @foreach ($pr as $prs)
+                {{-- @foreach ($pr as $prs)
                 <div class="news-title-container">
                     <div class="title"><a href="/newsroom/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
                 </div>  
@@ -23,7 +23,16 @@
                 <div class="button-container">
                     <button onclick="window.location.href='/newsroom/view/{{$prs->pr_id}}'">Read More</button>
                 </div>
-                @endforeach
+                @endforeach --}}
+                <div class="news-title-container">
+                    <div class="title"><a href="/newsroom/view">Liana Technology</a></div>
+                </div>  
+                <div class="details-container">
+                    <p class="details">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor consequuntur eaque autem nihil excepturi fugiat, voluptates aspernatur provident odit beatae aliquam natus eveniet, iusto ex alias eum officia quod labore voluptatem corporis, sunt expedita ullam rerum non! Minus officiis ratione eum. Quasi, molestiae! Sequi vel debitis non, nostrum sit iste hic tenetur expedita! Ut molestiae reprehenderit tempora fugit. Perferendis autem cumque et, itaque asperiores eligendi culpa ipsam exercitationem explicabo, distinctio enim unde harum laborum ducimus aspernatur ratione accusantium neque! Rem itaque, saepe nobis consectetur quod provident iure, doloremque culpa tempora delectus voluptas accusantium repellendus optio. Ducimus corrupti architecto amet vero.</p>
+                </div>
+                <div class="button-container">
+                    <button onclick="window.location.href='/newsroom/view'">Read More</button>
+                </div>
             </div>
         </div>
     </div>

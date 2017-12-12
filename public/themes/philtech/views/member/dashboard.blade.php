@@ -38,25 +38,25 @@
 						<div class="table-holder">
 							<div class="chart-legend">
 								<div class="holder">
-									<div class="color" style="background-color: #76b6ec"></div>
-									<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
+									<div class="color" {{-- style="background-color: #76b6ec" --}}></div>
+									<div class="name"><span>Current Wallet</span> <div class="name w2hpx">{{ $wallet->display_current_wallet }}</div></div>
 								</div>
 								<div class="holder">
-									<div class="color" style="background-color: #8E5EA2"></div>
-									<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
-								</div>
-								<div class="holder">
-									<div class="color"></div>
-									<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
+									<div class="color" {{-- style="background-color: #8E5EA2" --}}></div>
+									<div class="name"><span>Total Pay-out</span> <div class="name w2hpx">{{ $wallet->display_total_payout }}</div></div>
 								</div>
 								<div class="holder">
 									<div class="color"></div>
-									<div class="name"><span>Total Earnings</span> {{ $wallet->display_total_earnings }}</div>
+									<div class="name"><span>Current Slot(s)</span> <div class="name w2hpx">{{ $customer_summary["display_slot_count"] }}</div></div>
+								</div>
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>Total Earnings</span> <div class="name w2hpx">{{ $wallet->display_total_earnings }}</div></div>
 								</div>
 
 								<div class="holder">
 									<div class="color"></div>
-									<div class="name"><span>Total Points</span> {{ $wallet->display_total_points }}</div>
+									<div class="name"><span>Total Points</span> <div class="name w2hpx">{{ $wallet->display_total_points }}</div></div>
 								</div>
 							</div>
 						</div>
@@ -83,7 +83,7 @@
 								@else
 									<div class="holder">
 										<div class="color"></div>
-										<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+										<div class="name"><span>{{ $plan->label }}</span> <div class="name w2hpx">{{ $points->{ "display_" . $plan->string_plan } }}</div></div>
 									</div>
 								@endif
 							@endforeach
@@ -106,11 +106,11 @@
 									<div class="color"></div>
 
 									@if($plan->label == "Membership Matching")
-										<div class="name"><span>Franchise Matching</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+										<div class="name"><span>Franchise Matching</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 									@elseif($plan->label == "Vmoney")
-										<div class="name"><span>E-Money</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+										<div class="name"><span>E-Money</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 									@else
-										<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+										<div class="name"><span>{{ $plan->label }}</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 									@endif
 
 								</div>
@@ -178,7 +178,7 @@
 							@foreach($_direct as $direct)
 							<div class="holder">
 								<div class="row clearfix">
-									<div class="col-md-8">
+									<div class="mob-center col-md-7">
 										<div class="color">
 											<img src="{{ $direct->profile_image }}">
 										</div>	
@@ -190,7 +190,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-4">
+									<div class="col-md-5">
 										<div class="action" style="text-align: center;">
 											@if($direct->distributed == 1)
 												<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-lblue"><i class="fa fa-star"></i> VIEW INFO</button>

@@ -233,3 +233,89 @@
 		width: 25%;
 	}
 }
+/* RETURN POLICY */
+.popup-return-policy
+{
+	.modal-content
+	{
+		.modal-header
+		{
+			background-color: #2161C8;
+			color: #fff;
+
+			.close
+			{
+				color: #fff;
+			}
+		}
+
+		.modal-body
+		{
+			.policy
+			{
+				height: 420px;
+				overflow-y: auto;
+
+				.title-holder
+				{
+					padding: 10px 0;
+				}
+
+				.para-holder
+				{
+					ol
+					{
+						padding-top: 10px;
+						padding-bottom: 10px;
+
+						li
+						{
+							padding-top: 10px;
+
+							.address
+							{
+								padding-left: 20px;
+								padding-bottom: 10px;
+							}
+
+							ol
+							{
+								list-style-type: lower-alpha;
+
+								li
+								{
+
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.modal-footer
+		{
+			.btn-cancel
+			{
+				background-color: #ff5454 !important;
+				color: #fff;
+
+				&:hover
+				{
+					opacity: 0.8;
+				}
+			}
+
+			.btn-proceed
+			{
+				background-color: #2161c8;
+				color: #fff;
+
+				&:hover
+				{
+					opacity: 0.8;
+				}
+			}
+		}
+	}
+}

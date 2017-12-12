@@ -178,7 +178,7 @@
 							@foreach($_direct as $direct)
 							<div class="holder">
 								<div class="row clearfix">
-									<div class="col-md-7">
+									<div class="mob-center col-md-7">
 										<div class="color">
 											<img src="{{ $direct->profile_image }}">
 										</div>	

@@ -23,7 +23,7 @@ class ReportStockLedgerController extends Member
         $shop_id = $this->user_info->shop_id;
 
         $current_warehouse = Warehouse2::get_current_warehouse($shop_id);
-
+        //dd($current_warehouse);
        	$data['_report'] = Warehouse2::stock_ledger_report($shop_id, $current_warehouse);
 
        	//dd($data['_report']);

@@ -27,6 +27,7 @@ use App\Globals\UnitMeasurement;
 use App\Globals\Utilities;
 use App\Globals\Pdf_global;
 use App\Globals\ItemSerial;
+use App\Globals\Purchasing_inventory_system;
 
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
@@ -88,7 +89,8 @@ class Vendor_CreateBillController extends Member
         if($access == 1)
         { 
             Session::forget("po_item");
-            $data["serial"] = ItemSerial::check_setting();
+            $data["serial"]     = ItemSerial::check_setting();
+            $data['pis']        = Purchasing_inventory_system::check();
             $data["_vendor"]    = Vendor::getAllVendor('active');
             $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
             $data['_item']      = Item::get_all_category_item();

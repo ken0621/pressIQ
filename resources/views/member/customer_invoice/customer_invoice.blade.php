@@ -371,7 +371,13 @@
                                                                     @include("member.load_ajax_data.load_item", ['_item' => $_cm_item, 'add_search' => "", 'item_id' => $cmline->cmline_item_id])
                                                                 </select>
                                                             </td>
-                                                            <td><textarea class="textarea-expand txt-desc" name="cmline_description[]" value="{{$cmline->cmline_service_date}}"></textarea></td>
+                                                            <td>
+                                                                @if($pis)
+                                                                    <label class="textarea-expand txt-desc" name="cmline_description[]" value="{{$cmline->cmline_service_date}}"></label>
+                                                                @else    
+                                                                    <textarea class="textarea-expand txt-desc" name="cmline_description[]" value="{{$cmline->cmline_service_date}}"></textarea>
+                                                                @endif
+                                                            </td>
                                                             <td>
                                                                 <select class="1111 droplist-um-cm select-um {{isset($cmline->multi_id) ? 'has-value' : ''}}" name="cmline_um[]">
                                                                     @if($cmline->cmline_um)
@@ -404,7 +410,13 @@
                                                                 <option class="hidden" value="" />
                                                             </select>
                                                         </td>
-                                                        <td><textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea></td>
+                                                        <td>
+                                                            @if($pis)
+                                                                <label class="textarea-expand txt-desc" name="cmline_description[]"></label>
+                                                            @else
+                                                                <textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea>
+                                                            @endif
+                                                        </td>
                                                         <td><select class="2222 droplist-um-cm select-um" name="cmline_um[]"><option class="hidden" value="" /></select></td>
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="cmline_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="cmline_rate[]"/></td>
@@ -427,7 +439,13 @@
                                                                 <option class="hidden" value="" />
                                                             </select>
                                                         </td>
-                                                        <td><textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea></td>
+                                                        <td>
+                                                            @if($pis)
+                                                                <label class="textarea-expand txt-desc" name="cmline_description[]"></label>
+                                                            @else
+                                                                <textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea>
+                                                            @endif
+                                                        </td>
                                                         <td><select class="3333 droplist-um-cm select-um" name="cmline_um[]"><option class="hidden" value="" /></select></td>
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="cmline_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="cmline_rate[]"/></td>
@@ -533,7 +551,13 @@
                     <option class="hidden" value="" />
                 </select>
             </td>
-            <td><textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea></td>
+            <td>
+                @if($pis)
+                    <label class="textarea-expand txt-desc" name="cmline_description[]"></label>
+                @else
+                    <textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea>
+                @endif
+            </td>
             <td><select class="3333 select-um" name="cmline_um[]"><option class="hidden" value="" /></select></td>
             <td><input class="text-center number-input txt-qty compute" type="text" name="cmline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="cmline_rate[]"/></td>

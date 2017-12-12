@@ -1215,6 +1215,7 @@ class ImportController extends Member
 
 	public function postCoaReadFile()
 	{
+		//dd('12312');
 		Session::forget("import_coa_error");
 
 		$value     = Request::input('value');

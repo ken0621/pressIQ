@@ -1083,4 +1083,8 @@ class Warehouse2
         }
         return $return;
     }
+    public static function stock_ledger_report($shop_id, $current_warehouse)
+    {
+        return Tbl_inventory_history_items::HistoryPerItem()->where('tbl_inventory_history.shop_id',$shop_id)->where('tbl_inventory_history.warehouse_id',$current_warehouse)->get();
+    }
 }

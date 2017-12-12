@@ -479,7 +479,7 @@ Route::any('/member/item/inventory_log','Member\InventoryLogController@index');
 /*END INVENTORY LOG*/
 
 /* REPORT - STOCK LEDGER*/
-AdvancedRoute::controller('/member/accounting/stock_ledger', 'Member\ReportStockLedgerController');
+AdvancedRoute::controller('/member/report/accounting/stock_ledger', 'Member\ReportStockLedgerController');
 /* End */
 
 /* WAREHOUSE V2*/

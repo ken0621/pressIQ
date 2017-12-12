@@ -1274,7 +1274,7 @@ function page_list($pis = 0)
     $code = "vendor-import-list";
     $nav[$page]['submenu'][$code]['label'] = "Import";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . "/vendors" . "/import/vendor";
+    $nav[$page]['submenu'][$code]['url'] = $path . "vendors" . "/import/vendor";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";

@@ -5,8 +5,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	//audit_trail_transaction
 	Route::any('/employee_list/modal_view_all_transaction/{id}/{uid}','Member\PayrollController@modal_view_all_transaction');
 	//audit_trail_transaction
-
 	Route::any('/payroll_api','Member\PayrollApiController@index');
+
 	// /reports/payroll_ledger
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
 	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
@@ -712,10 +712,17 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/*START Admin dashboard*/
 	Route::any('/payroll_admin_dashboard/employee_approver','Member\PayrollAdminDashboard@employee_approver');
-	Route::any('/payroll_admin_dashboard/modal_create_approver','Member\PayrollAdminDashboard@modal_create_approver');
-	Route::any('/payroll_admin_dashboard/modal_approver_tag_employee','Member\PayrollAdminDashboard@modal_approver_tag_employee');
-	Route::any('/payroll_admin_dashboard/modal_approver_tag_employee/ajax_deduction_tag_employee','Member\PayrollAdminDashboard@ajax_deduction_tag_employee');
-	Route::any('/payroll_admin_dashboard/set_employee_approver_tag','Member\PayrollAdminDashboard@set_employee_approver_tag');
+	Route::any('/payroll_admin_dashboard/create_approver','Member\PayrollAdminDashboard@create_approver');
+	Route::any('/payroll_admin_dashboard/create_approver_table','Member\PayrollAdminDashboard@create_approver_table');
+	Route::any('/payroll_admin_dashboard/save_approver','Member\PayrollAdminDashboard@save_approver');
+	Route::any('/payroll_admin_dashboard/edit_approver/{approver_id}','Member\PayrollAdminDashboard@modal_edit_approver');
+	Route::any('/payroll_admin_dashboard/save_edit_approver','Member\PayrollAdminDashboard@save_edit_approver');
+	Route::any('/payroll_admin_dashboard/delete_approver/{approver_id}','Member\PayrollAdminDashboard@modal_delete_approver');
+	
+	// Route::any('/payroll_admin_dashboard/modal_create_approver','Member\PayrollAdminDashboard@modal_create_approver');
+	// Route::any('/payroll_admin_dashboard/modal_approver_tag_employee','Member\PayrollAdminDashboard@modal_approver_tag_employee');
+	// Route::any('/payroll_admin_dashboard/modal_approver_tag_employee/ajax_deduction_tag_employee','Member\PayrollAdminDashboard@ajax_deduction_tag_employee');
+	// Route::any('/payroll_admin_dashboard/set_employee_approver_tag','Member\PayrollAdminDashboard@set_employee_approver_tag');
 
 	/*END Admin dashboard*/
 });

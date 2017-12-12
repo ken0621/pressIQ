@@ -48,7 +48,6 @@
 				</table>
 			</div>
 		</div>
-		
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>

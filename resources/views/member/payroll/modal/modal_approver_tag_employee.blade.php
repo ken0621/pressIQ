@@ -26,8 +26,6 @@
           @endforeach
         </select>
       </div>
-
-
       <div class="col-md-6">
         <small>Select Job Title</small>
         <select class="form-control change-filter change-filter-job-title">
@@ -45,8 +43,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
-    <button class="btn btn-custom-primary btn-submit" type="submit">Tag</button>
-    
+    <button class="btn btn-custom-primary btn-submit" type="submit">Tag</button>   
   </div>
 </form>
 

@@ -10,12 +10,12 @@
                 select employee.
                 </small>
             </h1>
-           <button class="btn btn-primary pull-right" onclick="action_load_link_to_modal('/member/payroll/payroll_admin_dashboard/modal_create_approver', 'md')">Create Approver</button>
+           <a href="/member/payroll/payroll_admin_dashboard/create_approver"><button class="btn btn-primary pull-right">Create Approver</button></a>
         </div>
     </div>
 </div>
 
-<div class="panel panel-default panel-block panel-title-block">
+<div class="panel panel-default panel-block panel-title-block load-data">
    
       <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#leave-approver"><i class="fa fa-calendar" aria-hidden="true" style="font-size: 19px; vertical-align: middle;"></i>    Leave Approver</a></li>
@@ -24,17 +24,101 @@
       </ul>
 
       <div class="tab-content tab-pane-div padding-top-10">
+
          <div id="leave-approver" class="tab-pane fade in active">
-           <h3>HOME</h3>
-           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+           <table class="table table-bordered table-condensed table-hover">
+             <thead>
+                <th class="text-center">Employee Name</th>
+                <th class="text-center">Approver Level</th>
+                <th class="text-center">Action</th>
+             </thead>
+             <tbody>
+                @foreach($overtime_approver as $approver)
+                <tr>
+                  <td class="text-center">{{  $approver->payroll_employee_display_name  }}</td>
+                  <td class="text-center">{{  $approver->payroll_approver_employee_level  }}</td>
+                  <td class="text-center">
+                    <div class="dropdown">
+                      <button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu dropdown-menu-custom">
+                        <li>
+                          <a href="#" class="popup" link="/member/payroll/payroll_admin_dashboard/edit_approver/{{$approver->payroll_approver_employee_id}}?approver_type=overtime" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                        </li>
+                        <li>
+                          <a href="#" class="popup" link="/member/payroll/payroll_admin_dashboard/delete_approver/{{$approver->payroll_approver_employee_id}}?approver_type=overtime" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Delete</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+                @endforeach
+             </tbody>
+           </table>
          </div>
+
          <div id="ot-approver" class="tab-pane fade">
-           <h3>Menu 1</h3>
-           <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+           <table class="table table-bordered table-condensed table-hover">
+             <thead>
+                <th class="text-center">Employee Name</th>
+                <th class="text-center">Approver Level</th>
+                <th class="text-center">Action</th>
+             </thead>
+             <tbody>
+                @foreach($leave_approver as $approver)
+                <tr>
+                  <td class="text-center">{{  $approver->payroll_employee_display_name  }}</td>
+                  <td class="text-center">{{  $approver->payroll_approver_employee_level  }}</td>
+                  <td class="text-center">
+                    <div class="dropdown">
+                      <button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu dropdown-menu-custom">
+                        <li>
+                          <a href="#" class="popup" link="/member/payroll/payroll_admin_dashboard/edit_approver/{{$approver->payroll_approver_employee_id}}?approver_type=leave" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                        </li>
+                        <li>
+                          <a href="#" class="popup" link="/member/payroll/payroll_admin_dashboard/delete_approver/{{$approver->payroll_approver_employee_id}}?approver_type=leave" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Delete</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+                @endforeach
+             </tbody>
+           </table>
          </div>
+
          <div id="rfp-approver" class="tab-pane fade">
-           <h3>Menu 2</h3>
-           <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+           <table class="table table-bordered table-condensed table-hover">
+             <thead>
+                <th class="text-center">Employee Name</th>
+                <th class="text-center">Approver Level</th>
+                <th class="text-center">Action</th>
+             </thead>
+             <tbody>
+                @foreach($rfp_approver as $approver)
+                <tr>
+                  <td class="text-center">{{  $approver->payroll_employee_display_name  }}</td>
+                  <td class="text-center">{{  $approver->payroll_approver_employee_level  }}</td>
+                  <td class="text-center">
+                    <div class="dropdown">
+                      <button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu dropdown-menu-custom">
+                        <li>
+                          <a href="#" class="popup" link="/member/payroll/payroll_admin_dashboard/edit_approver/{{$approver->payroll_approver_employee_id}}?approver_type=rfp" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                        </li>
+                        <li>
+                          <a href="#" class="popup" link="/member/payroll/payroll_admin_dashboard/delete_approver/{{$approver->payroll_approver_employee_id}}?approver_type=rfp" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Delete</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+                @endforeach
+             </tbody>
+           </table>
          </div>
       </div>
 </div>

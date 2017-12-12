@@ -33,6 +33,7 @@ use App\Globals\Ecom_Product;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_image;
+use App\Models\Tbl_mlm_slot_points_log;
 //mark
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_mlm_slot_wallet_log_refill;
@@ -93,7 +94,6 @@ class ShopMemberController extends Shop
 {
     public function getIndex()
     {
-        
         $data["page"] = "Dashboard";
         $data["mode"] = session("get_success_mode");
         $data["zero_currency"] = Currency::format(0);
@@ -170,7 +170,16 @@ class ShopMemberController extends Shop
             }
         }
 
-        return Self::load_view_for_members("member.dashboard", $data);
+
+        // for shift only
+        if($this->shop_info->shop_id == 54)
+        {
+            $slot_id = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id);
+            $data['reward_point_redemption'] = Tbl_mlm_slot_points_log::Slot()->where('tbl_mlm_slot.slot_owner',Self::$customer_info->customer_id)->where("points_log_complan","PURCHASE_GC")->sum('points_log_points');
+        }
+        // dd($slot_id." ; ".$data['reward_point_redemption']);
+
+        return view("member.dashboard", $data);
     }
     public function getDirectReferrals()
     {
@@ -2150,7 +2159,7 @@ class ShopMemberController extends Shop
 
         $data["_rewards_points"]    = MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by);
 
-        
+        // return MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by)->first();
         
         return (Self::load_view_for_members("member.report_points", $data));
     }
@@ -2642,13 +2651,15 @@ class ShopMemberController extends Shop
 
 
             
-            $method                                             = request('method');
+            $method                                             = "manual1";
+            $method_id                                          = request('method');
             $transaction_new["transaction_reference_table"]     = "tbl_customer";
             $transaction_new["transaction_reference_id"]        = Self::$customer_info->customer_id;
             $transaction_type                                   = "ORDER";
             $transaction_date                                   = Carbon::now();
             
             Transaction::create_set_method($method);
+            Transaction::create_set_method_id($method_id);
             $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
 
             if(is_numeric($transaction_list_id))

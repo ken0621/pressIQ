@@ -15,11 +15,11 @@ class CreateTblMerchantReportSetting1206171130 extends Migration
     {
         Schema::create('tbl_merchant_commission_report_setting', function (Blueprint $table) {
             $table->increments('merchant_report_id');
-            $table->integer('merchant_warehouse_id')->unsigned();
-            $table->string('merchant_warehouse_name');
-            $table->integer('merchant_shop_id');
-            $table->integer('merchant_percentage');
-            $table->foreign("merchant_warehouse_id")->references("warehouse_id")->on("tbl_warehouse")->onDelete("cascade");
+            $table->integer('merchant_commission_warehouse_id')->unsigned();
+            $table->string('merchant_commission_warehouse_name');
+            $table->integer('merchant_commission_shop_id');
+            $table->integer('merchant_commission_percentage');
+            // $table->foreign("merchant_warehouse_id")->references("warehouse_id")->on("tbl_warehouse")->onDelete("cascade");
             
         });
     }

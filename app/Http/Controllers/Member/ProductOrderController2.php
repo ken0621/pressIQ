@@ -38,6 +38,7 @@ class ProductOrderController2 extends Member
         $dummy              = Transaction::get_transaction_customer_details_v2();
         $dummy              = Transaction::get_transaction_date();
         $active_tab         = request("_active_tab");
+        $keyword            = request("keyword");
 
         $paginate=5; // default pagination
 
@@ -49,23 +50,23 @@ class ProductOrderController2 extends Member
 
         if($active_tab == "paid")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt','',$paginate);
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate);
         }
         elseif($active_tab == "unconfirmed")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof','',$paginate);
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof',$keyword,$paginate);
         }
         elseif($active_tab == "pending")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order','',$paginate);
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order',$keyword,$paginate);
         }
         elseif($active_tab == "reject")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'reject','',$paginate);
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'reject',$keyword,$paginate);
         }
         else
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt','',$paginate);
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate);
         }
 
         foreach($data["_raw_table"] as $key => $raw_table)
@@ -99,7 +100,7 @@ class ProductOrderController2 extends Member
         $default[]          = ["CONTACT","phone_number", true];
         $default[]          = ["ACTIONS","action", true];
         $data["_table"]     = Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "Order List V2", $data["_raw_table"], $default);
-
+        // dd($data['_table']);
         return view('member.global_table', $data);
     }
     public function proof()

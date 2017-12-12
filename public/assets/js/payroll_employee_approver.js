@@ -20,9 +20,10 @@ function payroll_employee_approver()
 	{
 		reload();
 	}
+	
 	function reload()
 	{
-		console.log('done daw');
+		window.location.href = "/member/payroll/payroll_admin_dashboard/employee_approver";
 	}
 
 }

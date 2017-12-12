@@ -23,21 +23,21 @@ class PayrollAdminDashboard extends Member
 {
 	public function employee_approver()
 	{
-		$data['overtime_approver'] = Tbl_payroll_approver_employee::where('payroll_approver_employee_type','overtime')->EmployeeInfo()->get();
-		$data['rfp_approver'] = Tbl_payroll_approver_employee::where('payroll_approver_employee_type','rfp')->EmployeeInfo()->get();
-		$data['leave_approver'] = Tbl_payroll_approver_employee::where('payroll_approver_employee_type','leave')->EmployeeInfo()->get();
+		$data['overtime_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','overtime')->EmployeeInfo()->get();
+		$data['rfp_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','rfp')->EmployeeInfo()->get();
+		$data['leave_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','leave')->EmployeeInfo()->get();
 		
 		return view('member.payroll2.employees_approver', $data);
 	}
 
-	public function employee_approver_data()
-	{
-		$data['overtime_approver'] = Tbl_payroll_approver_employee::where('payroll_approver_employee_type','overtime')->EmployeeInfo()->get();
-		$data['rfp_approver'] = Tbl_payroll_approver_employee::where('payroll_approver_employee_type','rfp')->EmployeeInfo()->get();
-		$data['leave_approver'] = Tbl_payroll_approver_employee::where('payroll_approver_employee_type','leave')->EmployeeInfo()->get();
+	// public function employee_approver_data()
+	// {
+	// 	$data['overtime_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','overtime')->EmployeeInfo()->get();
+	// 	$data['rfp_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','rfp')->EmployeeInfo()->get();
+	// 	$data['leave_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','leave')->EmployeeInfo()->get();
 		
-		return view('member.payroll2.employees_approver_data', $data);
-	}
+	// 	return view('member.payroll2.employees_approver_data', $data);
+	// }
 
 	public function modal_create_approver()
 	{
@@ -84,6 +84,7 @@ class PayrollAdminDashboard extends Member
 				{
 					$temp = null;
 					$temp['payroll_employee_id'] = $selected_employee;
+					$temp['shop_id'] = $this->user_info->shop_id;
 					$temp['payroll_approver_employee_type'] = $approver_type;
 					$temp['payroll_approver_employee_level'] = $approver_level;
 					$temp['archived'] = 0;

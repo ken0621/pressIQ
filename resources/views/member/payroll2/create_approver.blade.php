@@ -116,7 +116,7 @@
 <script type="text/javascript">
 	function success_saving_import()
 	{	
-		console.log('done yey');
+		window.location.href = "/member/payroll/payroll_admin_dashboard/employee_approver";
 	}
 </script>
 @endsection('script')

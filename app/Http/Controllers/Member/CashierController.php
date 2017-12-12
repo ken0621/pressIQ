@@ -143,6 +143,12 @@ class CashierController extends Member
         }
         return view('member.cashier.pos_customer_info',$data);
     }
+    public function get_current_gc()
+    {
+        $slot_no = request('slot_no');
+        $current_slot_gc = Customer::get_current_slot_gc($slot_no);
+        return $current_slot_gc;
+    }
     public function pos_scan_item()
     {
         $data["shop_id"]    = $shop_id = $this->user_info->shop_id;

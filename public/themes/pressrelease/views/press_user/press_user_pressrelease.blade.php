@@ -13,7 +13,16 @@
           </div>
                                     
             <div class="press-release-content">
+              <form method="post">
+                {{csrf_field()}}
+                <!-- @if (Session::has('pr_edit'))
+                    @foreach($edit as $edits) -->
                 <div id="create_release" class="tabcontent create-release-container">
+                    @if (Session::has('message'))
+                      <div class="alert alert-success">
+                         <center>{{ Session::get('message') }}</center>
+                      </div>
+                    @endif 
                   <div class="title">Headline:</div>
                   <input type="text" name="pr_headline" class="form-control">
                   <div class="title">Content:</div>
@@ -24,13 +33,13 @@
                   <div class="title">Boilerplate:</div>
                   <textarea name="bolier_content"></textarea>
                   <div class="button-container">
-                  <span class="save-button"><a href="#">Save as draft</a></span>
+                  <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
                   <span class="preview-button"><a href="#">Preview</a></span>
                   </div>
                 </div>
 
                 <div id="choose_recipient" class="tabcontent choose-recipient-container">
-                  <div class="title-container">Choose Recipient</div>
+                  <div class="title-container">Choose Recipient</div> 
                   <div class="title">Country:</div>
                   <input type="text" class="form-control">
                   <div class="title">Industry Type:</div>
@@ -40,7 +49,9 @@
                   <div class="title">Title of Journalist:</div>
                   <input type="text" class="form-control">
                   <div class="title">Send To:</div>
-                  <input type="text" name="pr_receiver_name" class="form-control" id="recipient_name" readonly>
+                    <input type="text" name="pr_receiver_name" value="{{$edits->pr_receiver_name}}" class="form-control" id="recipient_name" readonly>
+                  <input type="hidden" name="pr_to" id="recipient_email" value="{{$edits->pr_to}}" class="form-control" readonly >
+                  
                   <span class="choose-button" readon>  
                    {{-- POPUP CHOOSE RECIPIENT --}}
                   <a href="javascript:" onclick="action_load_link_to_modal('/pressuser/choose_recipient', 'md');">Choose Recipient</a></span>
@@ -48,6 +59,9 @@
                   <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                   <div class="button-container">
                   </div>
+                </div>
+                   <!--  @endforeach
+                @endif -->
 
                 <!-- <div id="create_pr" class="tabcontent create-pr-container">
                       @if (Session::has('message'))
@@ -62,7 +76,7 @@
                       @endif
 
                     <form method="post">
-                        {{csrf_field()}}
+                        
                         <div class="title-container">PRESS RELEASE</div>
                         <div class="title">Send To:</div>
                         @if (Session::has('pr_edit'))
@@ -100,33 +114,10 @@
                         </div>
                     </form>
 
-                </div>
+                </div> -->
 
-                <div id="manage_pr" class="tabcontent manage-pr-container">
-                    <div class="manage-holder-container">
-                        <table>
-                            <tr>    
-                                <th>Press Release Title</th>
-                                <th>Recipient</th>
-                                <th>Status</th>
-                                <th>Send</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                            @foreach($drafts as $draft)
-                            <tr>
-                                <td>{{$draft->pr_headline}}</td>
-                                <td>{{$draft->pr_receiver_name}}</td>
-                                <td>Draft</td>
-                                <td><a href="/pressuser/pressrelease/send_draft/{{$draft->pr_id}}">Send</a></td>
-                                <td><a href="/pressuser/pressrelease/edit_draft/{{$draft->pr_id}}">Edit</a></td>
-                                <td><a href="/pressuser/pressrelease/delete_draft/{{$draft->pr_id}}">Delete</a></td>
-                            </tr>
-                            @endforeach
-                        </table>
-                    </div>
-                </div>
- -->
+                <!--  -->
+
                 <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">New Release Summary</div>
                   <div class="title">Publisher:</div>
@@ -134,10 +125,10 @@
                   <div class="title">Title:</div>
                   <div class="content">Press Release</div>
                   <div class="button-container">
-                    <div class="send-button"><a href="#">Send</a></div>
-                  </div>
+                    <span class="send-button"><button type="submit" name="send" value="send" ><a href="#">Send</a></button></span>
                   </div>
                 </div>
+              </form>  
             </div>
         </div>
     </div>

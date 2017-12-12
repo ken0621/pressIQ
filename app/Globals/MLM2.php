@@ -532,7 +532,14 @@ class MLM2
 		
 		if($sort_by != "0")
 		{
-			$query = $query->where("points_log_type",$sort_by);
+			if($sort_by == 'RPV')
+			{
+				$query = $query->whereIn("points_log_type",array('RPV','RGPV'));
+			}
+			else
+			{
+				$query = $query->where("points_log_type",$sort_by);
+			}
 		}
 
 		if($limit == 0)

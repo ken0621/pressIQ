@@ -24,10 +24,9 @@
 		<div class="col-md-3" style="bottom: 20px;">
 			<select class="form-control sort_by_log">
 				<option value="0">All</option>
-				<option {{Request::input("sort_by") == "RPV" ? "selected" : ""}} value="RPV">RPV</option>
-				<option {{Request::input("sort_by") == "RGPV" ? "selected" : ""}} value="RGPV">RGPV</option>
-				<option {{Request::input("sort_by") == "SGPV" ? "selected" : ""}} value="SGPV">SGPV</option>
-				<option {{Request::input("sort_by") == "SPV" ? "selected" : ""}} value="SPV">SPV</option>
+				<option {{Request::input("sort_by") == "RPV" ? "selected" : ""}} value="RPV">Rank PV</option>
+				<option {{Request::input("sort_by") == "SPV" ? "selected" : ""}} value="SPV">Personal Volume</option>
+				<option {{Request::input("sort_by") == "SGPV" ? "selected" : ""}} value="SGPV">Group Sales PV</option>
 			</select>
 		</div>
 		<div class="report-content">

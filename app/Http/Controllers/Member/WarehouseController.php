@@ -115,7 +115,7 @@ class WarehouseController extends Member
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
         { 
-            $data["_warehouse"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id");
+            $data["_warehouse"] = Tbl_warehouse::select_info($this->user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id");
             if(Request::input("search_txt"))
             {
                $data["_warehouse"]->where("warehouse_name","LIKE","%".Request::input("search_txt")."%");
@@ -133,28 +133,28 @@ class WarehouseController extends Member
                 }
                 else
                 {          
-                    $selling_price = 0;
-                    $cost_price = 0;
-                    $total_qty = 0;
+                    // $selling_price = 0;
+                    // $cost_price = 0;
+                    // $total_qty = 0;
                     
-                    $all_item = Tbl_sub_warehouse::select_item($value->warehouse_id)
-                                                 ->get();
-                    foreach ($all_item as $key2 => $value2) 
-                    {
-                        $qty = 0;
-                        // $qty = Tbl_warehouse_inventory::where("warehouse_id",$value2->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("item_id",$value2->item_id)->where("tbl_item.archived",0)->sum("inventory_count");
-                        $qty = Tbl_item::where('item_id',$value2->item_id)->inventory($value2->warehouse_id)->value('inventory_count');
+                    // $all_item = Tbl_sub_warehouse::select_item($value->warehouse_id)
+                    //                              ->get();
+                    // foreach ($all_item as $key2 => $value2) 
+                    // {
+                    //     $qty = 0;
+                    //     // $qty = Tbl_warehouse_inventory::where("warehouse_id",$value2->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("item_id",$value2->item_id)->where("tbl_item.archived",0)->sum("inventory_count");
+                    //     $qty = Tbl_item::where('item_id',$value2->item_id)->inventory($value2->warehouse_id)->value('inventory_count');
 
-                        $selling_price += $value2->item_price * $qty;
-                        $cost_price += $value2->item_cost * $qty;
-                        $total_qty += $qty;
-                    }
-                    $data["_warehouse"][$key]->total_selling_price = $selling_price;
-                    $data["_warehouse"][$key]->total_cost_price = $cost_price;
-                    $data["_warehouse"][$key]->total_qty = $total_qty;
+                    //     $selling_price += $value2->item_price * $qty;
+                    //     $cost_price += $value2->item_cost * $qty;
+                    //     $total_qty += $qty;
+                    // }
+                    // $data["_warehouse"][$key]->total_selling_price = $selling_price;
+                    // $data["_warehouse"][$key]->total_cost_price = $cost_price;
+                    // $data["_warehouse"][$key]->total_qty = $total_qty;
 
 
-                    $data["_warehouse"][$key]->count_no_serial = count(Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->where("tbl_item.shop_id",$this->user_info->shop_id)->where("tbl_item.archived",0)->where("tbl_warehouse.warehouse_id",$value->warehouse_id)->whereNull("serial_id")->get()->toArray());
+                    // $data["_warehouse"][$key]->count_no_serial = count(Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->where("tbl_item.shop_id",$this->user_info->shop_id)->where("tbl_item.archived",0)->where("tbl_warehouse.warehouse_id",$value->warehouse_id)->whereNull("serial_id")->get()->toArray());
                 }
             }
             $archive_item = null;

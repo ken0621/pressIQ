@@ -12,7 +12,8 @@
                         <div class="col-md-6">
                             <strong>Select Customer</strong>
                             <select class="select-customer form-control input-sm" name="customer_id">
-                                 @include('member.load_ajax_data.load_customer')
+
+                                @include('member.load_ajax_data.load_customer',['add_search' => ""])
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -24,15 +25,13 @@
                         <div class="col-md-6">
                             <strong>Select Agent</strong>
                             <select class="select-agent form-control input-sm" name="agent_id">
-                                @foreach($_agent as $agent)
-                                <option commission-percent="{{$agent->commission_percent}}" value="{{$agent->employee_id}}">{{ucwords($agent->first_name.' '.$agent->middle_name.' '.$agent->last_name)}}</option>
-                                @endforeach
+                                @include('member.cashier.sales_agent.load_sales_agent')
                             </select>
                         </div>
                         <div class="col-md-6">
                             <div class="col-md-6">
                                 <strong>Start Date</strong>
-                                <input type="text" class="form-control input-sm datepicker" name="date">
+                                <input type="text" class="form-control input-sm datepicker" name="date" value="{{date('m/d/Y')}}">
                             </div>
                             <div class="col-md-6">
                                 <strong>Due Date</strong>
@@ -67,7 +66,7 @@
                             <strong>Discount</strong>
                         </div>
                         <div class="col-md-6">
-                            <input type="text" value="0.00" class="number-input form-control input-sm text-right discount discount-auto-add-comma" name="discount">
+                            <input type="text" value="0.00" class="form-control input-sm text-right discount discount-auto-add-comma" name="discount">
                         </div>
                     </div>
                 </div>
@@ -206,6 +205,20 @@
     </div>
 </div>
 <script type="text/javascript">
+
+  function setTwoNumberDecimal(x) 
+    {
+        var value = parseFloat($(x).val()).toFixed(2);
+        $(x).val(value);
+    }
+
+    $('.number-input').change(function(e)
+    {
+        setTwoNumberDecimal(e.currentTarget);
+    });
+
+
+
     $('#popover_tc').popover({ 
         html : true,
         title: '<h4 style="padding:0px">Commission Computation</h4>',
@@ -228,3 +241,5 @@
     }
 </style>
 <script type="text/javascript" src="/assets/member/js/create_commission_calculator.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/assets/member/css/item_add_v2.css">

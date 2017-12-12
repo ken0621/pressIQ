@@ -65,4 +65,9 @@ class CommissionCalculatorController extends Member
             return json_encode($data);
         }
     }
+    public function getLoadItem(Request $request)
+    {
+        $data['_item'] = Item::get_all_category_item([2]);
+        return view('member.load_ajax_data.load_item_category',$data);
+    }
 }

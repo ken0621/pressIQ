@@ -111,6 +111,12 @@
 										<!--<div class="col-md-6">-->
 										<!--	<div class="right-detail">{{ $cart["_total"]->display_total }}</div>-->
 										<!--</div>-->
+										<div class="col-md-6">
+											<div class="left-detail">Shipping Fee</div>
+										</div>
+										<div class="col-md-6">
+											<div class="right-detail">PHP {{ number_format($cart["info"]->shipping_fee, 2) }}</div>
+										</div>
 										<!-- TOTAL -->
 										<div class="col-md-6">
 											<div class="left-detail">Total</div>

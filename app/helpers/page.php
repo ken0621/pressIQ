@@ -1,6 +1,6 @@
 <?php
 
-function page_list()
+function page_list($pis = 0)
 {
     $path = '/member/';
 
@@ -86,6 +86,14 @@ function page_list()
     $nav[$page]['submenu'][$segment]['type']   = "submenu";
 
         /* -- Accounting => Sales Report  */
+        $code = "report-stock-ledger";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Stock Ledger";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/accounting/stock_ledger";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
         $code = "report-sales-account";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Sales By Customer";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
@@ -860,7 +868,29 @@ function page_list()
     // $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
 
+    /* PAYROLL REPORTS */
+    $segment = "submenu-payroll-entries";
+    $nav[$page]['submenu'][$segment]['name']   = "Payroll Entries";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
 
+         /* -- ACCOUNTING => JOURNAL ENTRY */
+        $code = "submenu-payroll-entries-journal-entries";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Journal Entry";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . "accounting/journal/list";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "<span style='color: green'>Bryan Kier Aradanas</span>";
+
+        /* -- ACCOUNTING => CHART OF ACCOUNTS */
+        $code = "submenu-payroll-entries-chart-of-account";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Chart of Account";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . "accounting/chart_of_account";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
 
     /* PAYROLL REPORTS */
@@ -1062,14 +1092,17 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
 
-     /* -- ITEM => UNIT OF MEASUREMENTS  */
-    $code = "item-pis-unit-measurement";
-    $nav[$page]['submenu'][$code]['label'] = "Unit of Measurements (P.I.S)";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/pis_unit_of_measurement";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Still developing";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    /* -- ITEM => UNIT OF MEASUREMENTS  */
+    if($pis != 0)
+    { 
+        $code = "item-pis-unit-measurement";
+        $nav[$page]['submenu'][$code]['label'] = "Unit of Measurements (P.I.S)";
+        $nav[$page]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$code]['url'] = $path . $page . "/pis_unit_of_measurement";
+        $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$code]['status'] = "Still developing";
+        $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    }
 
      /* -- ITEM => UNIT OF MEASUREMENTS  */
     $code = "item-unit-measurement";

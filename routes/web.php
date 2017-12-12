@@ -478,6 +478,9 @@ AdvancedRoute::controller("/member/item/warehouse/v2/refill","Member\WarehouseRe
 Route::any('/member/item/inventory_log','Member\InventoryLogController@index');
 /*END INVENTORY LOG*/
 
+/* REPORT - STOCK LEDGER*/
+AdvancedRoute::controller('/member/accounting/stock_ledger', 'Member\ReportStockLedgerController');
+/* End */
 
 /* WAREHOUSE V2*/
 AdvancedRoute::controller('/member/item/v2/warehouse', 'Member\WarehouseControllerV2');

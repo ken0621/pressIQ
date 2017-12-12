@@ -36,22 +36,22 @@
 							<div class="chart-legend">
 								<div class="holder">
 									<div class="color" style="background-color: #0D91E3"></div>
-									<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
+									<div class="name"><span>Current Wallet</span> <div class="name" style="width: 200px;">{{ $wallet->display_current_wallet }}</div></div>
 								</div>
 								<div class="holder">
 									<div class="color" style="background-color: #8E5EA2"></div>
-									<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
+									<div class="name"><span>Total Pay-out</span> <div class="name" style="width: 200px;">{{ $wallet->display_total_payout }}</div></div>
 								</div>
 								<div class="chart-holder">
 									<canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="400" height="400"></canvas>
 								</div>
 								<div class="holder">
 									<div class="color"></div>
-									<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
+									<div class="name"><span>Current Slot(s)</span> <div class="name" style="width: 200px;">{{ $customer_summary["display_slot_count"] }}</div></div>
 								</div>
 								<div class="holder">
 									<div class="color"></div>
-									<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
+									<div class="name"><span>Total Reward</span> <div class="name" style="width: 200px;">{{ $wallet->display_total_earnings }}</div></div>
 								</div>
 							</div>
 						</div>
@@ -67,19 +67,19 @@
 						<div class="chart-legend">
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Advertisement Bonus</span> {{ $wallet->display_complan_advertisement_bonus }}</div>
+								<div class="name"><span>Advertisement Bonus</span> <div class="name" style="width: 200px;">{{ $wallet->display_complan_advertisement_bonus }}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Direct</span> {{ $wallet->display_complan_direct }}</div>
+								<div class="name"><span>Direct</span> <div class="name" style="width: 200px;">{{ $wallet->display_complan_direct }}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Leadership Advertisement Bonus</span> {{ $wallet->display_complan_leadership_advertisement_bonus }}</div>
+								<div class="name"><span>Leadership Advertisement Bonus</span> <div class="name" style="width: 200px;">{{ $wallet->display_complan_leadership_advertisement_bonus }}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Rebates Bonus</span> {{ $wallet->display_complan_stairstep }}</div>
+								<div class="name"><span>Rebates Bonus</span> <div class="name" style="width: 200px;">{{ $wallet->display_complan_stairstep }}</div></div>
 							</div>
 						</div>
 					</div>

@@ -22,7 +22,8 @@
 						<div style="max-width: 803px; margin: auto;">
 							<div class="embed-responsive embed-responsive-16by9 animated zoomInDown" style="margin-top: 25px;">
 							  <!-- <div class="overlay"></div> -->
-					        	<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/BGYP2umEcSQ?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=DglLgQYkQX4&mute=0"></iframe>
+					        	<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/I7kIfi2RlcE?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=DglLgQYkQX4&mute=0"></iframe>
+					        	
 							</div>
 						</div>
 						<h1>Turn Your Spending Into Earnings!</h1>

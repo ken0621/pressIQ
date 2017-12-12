@@ -99,7 +99,13 @@
                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $poline->poline_item_id])
                                                         </select>
                                                     </td>
-                                                    <td><textarea class="textarea-expand txt-desc" name="poline_description[]" value="{{$poline->poline_description}}"></textarea></td>
+                                                    <td>
+                                                        @if($pis)
+                                                            <label class="textarea-expand txt-desc" name="poline_description[]" value="{{$poline->poline_description}}"></label>
+                                                        @else
+                                                            <textarea class="textarea-expand txt-desc" name="poline_description[]" value="{{$poline->poline_description}}"></textarea>
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         <select class="1111 droplist-um select-um {{isset($poline->poline_um) ? 'has-value' : ''}}" name="poline_um[]">
                                                             @if($poline->poline_um)
@@ -134,7 +140,14 @@
                                                         <option class="hidden" value="" />
                                                     </select>
                                                 </td>
-                                                <td><textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea></td>
+                                                <td>
+                                                    @if($pis)
+                                                        <label class="textarea-expand txt-desc" name="poline_description[]"></label>
+                                                    @else
+                                                        <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
+                                                    @endif
+                                                </td>
+
                                                 <td><select class="2222 droplist-um select-um" name="poline_um[]"><option class="hidden" value="" /></select></td>
                                                 <td><input class="text-center number-input txt-qty compute" type="text" name="poline_qty[]"/></td>
                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
@@ -158,7 +171,13 @@
                                                         <option class="hidden" value="" />
                                                     </select>
                                                 </td>
-                                                <td><textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea></td>
+                                                <td>
+                                                    @if($pis)
+                                                        <label class="textarea-expand txt-desc" name="poline_description[]"></label>
+                                                    @else
+                                                        <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
+                                                    @endif
+                                                </td>
                                                 <td><select class="3333 droplist-um select-um" name="poline_um[]"><option class="hidden" value="" /></select></td>
                                                 <td><input class="text-center number-input txt-qty compute" type="text" name="poline_qty[]"/></td>
                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
@@ -281,7 +300,14 @@
                     <option class="hidden" value="" />
                 </select>
             </td>
-            <td><textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea></td>
+            <td>
+                @if($pis)
+                    <label class="textarea-expand txt-desc" name="poline_description[]"></label>
+                @else
+                    <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
+                @endif
+            </td>
+
             <td><select class="select-um" name="poline_um[]"><option class="hidden" value="" /></select></td>
             <td><input class="text-center number-input txt-qty compute" type="text" name="poline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>

@@ -128,7 +128,7 @@ function warehousev2()
             placeholder : "Select warehouse...",
         });
         $('.select-warehouse').globalDropList({
-            hasPopup : 'false',
+            hasPopup : 'true',
             placeholder : "Select warehouse..."
         });
     }
@@ -259,7 +259,7 @@ function warehousev2()
             {
                 if(srch_txt != '')
                 {
-                    $(".warehouse-container").load("/member/item/v2/warehouse?search_txt="+srch_txt+" .warehouse-container"); 
+                    $(".warehouse-container").load("/member/item/warehouse?search_txt="+srch_txt+" .warehouse-container"); 
                     $(".load-data").attr("search_txt",$(this).val());
                 }                
             }
@@ -488,7 +488,7 @@ function submit_done_item(data)
     if(data.status == "success")
     {
         toastr.success("Success");
-        $(".warehouse-container").load("/member/item/v2/warehouse .warehouse-container"); 
+        $(".warehouse-container").load("/member/item/warehouse .warehouse-container"); 
         $('#global_modal').modal('toggle');
         data.element.modal("hide");
     }

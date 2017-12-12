@@ -713,7 +713,7 @@ function customer_invoice()
 	function action_load_item_info($this)
 	{
 		$parent = $this.closest(".tr-draggable");
-		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
+		$parent.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
 
@@ -740,7 +740,7 @@ function customer_invoice()
 	function action_load_item_info_cm($this)
 	{
 		$parent_cm = $this.closest(".tr-cm-draggable");
-		$parent_cm.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
+		$parent_cm.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
 		$parent_cm.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent_cm.find(".txt-qty").val(1).change();
 

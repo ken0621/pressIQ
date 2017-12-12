@@ -34,9 +34,27 @@ $text-dark: #272c2f;
 			@media screen and (max-width: 991px)
 			{
 				margin-top: 25px;
+
 				.text-right
 				{
 					text-align: left !important;
+				}
+
+			}
+
+			@media screen and (max-width: 500px)
+			{
+				.text-right
+				{
+					.btn-gear
+					{
+						margin-bottom: 10px;
+					}
+
+					.btn-primary
+					{
+						margin-left: 0px;
+					}
 				}
 			}
 		}

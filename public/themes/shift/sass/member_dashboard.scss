@@ -8,6 +8,15 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
+
+.w2hpx
+{
+	@media screen and (max-width: 500px)
+	{
+		width: 200px;
+	}
+}
+
 .dashboard
 {
 	font-family: $content-text;
@@ -44,12 +53,17 @@ $text-dark: #272c2f;
 		{
 			//mixin
 			@include transition(0.2s);
-
 			font-weight: $semi-bold;
 			font-size: 14px;
 			text-decoration: none;
 			margin-top: 3px;
 			text-transform: uppercase;
+			float: right;
+
+			@media screen and (max-width: 500px)
+			{
+				float: none;
+			}
 			/* opacity: 0; */
 		}
 
@@ -268,6 +282,7 @@ $text-dark: #272c2f;
 			{
 				display: inline-block;
 				vertical-align: top;
+				width: 190px;
 
 				.name
 				{

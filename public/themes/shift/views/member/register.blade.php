@@ -18,9 +18,9 @@
 										<img src="/themes/{{ $shop_theme }}/img/or-2.png">
 									</div>
 									<div class="text-right social-button">
-										<a href="{{$fb_login_url or '#'}}" class="holder fb">
+										{{-- <a href="{{$fb_login_url or '#'}}" class="holder fb">
 											<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign up with Facebook</div>
-										</a>
+										</a> --}}
 										<a href="javascript:" class="holder gp" id="customBtn">
 											<div class="name"><i class="fa fa-google-plus" aria-hidden="true"></i> Sign up with Google+</div>
 										</a>
@@ -129,7 +129,7 @@
 								<div class="form-group">
 									<div class="choice">
 										<div class="holder">
-											<button class="btn btn-brown">Sign Up</button>
+											<button class="btn btn-custom">Sign Up</button>
 										</div>
 										<div class="holder"><span class="or">OR</span></div>
 										<div class="holder"><a class="login-href" href="/members/login">Login an Account</a></div>

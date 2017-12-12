@@ -4,7 +4,7 @@
     <!-- Media Slider -->
     <div class="slider-wrapper">
         <div class="container">
-            <div class="row clearfix">
+            <div class="row clearfix mob-vid-wrapper">
                 {{-- <div class="media-wrapper">
                     <div class="embed-responsive embed-responsive-16by9">
                         <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/I7kIfi2RlcE?ecver=1&modestbranding=1&rel=0&autohide=1&showinfo=0&controls=0" controls="0" frameborder="0" allowfullscreen>
@@ -38,7 +38,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/replicated.css?version=2">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/replicated.css?version=2.1">
 <style>
 	header
 	{

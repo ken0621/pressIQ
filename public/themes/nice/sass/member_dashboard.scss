@@ -1,7 +1,6 @@
 @import "../../../assets/front/sass/mixin";
 
-$content-text: 'Open Sans', sans-serif;
-$content-text2: 'Raleway', sans-serif;
+$content-text: 'Lato', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
@@ -45,7 +44,7 @@ $text-dark: #272c2f;
 
 	.title
 	{
-		font-family: $content-text2;
+		font-family: $content-text;
 		color: $text-dark;
 		font-size: 18px;
 		letter-spacing: 0.5px;

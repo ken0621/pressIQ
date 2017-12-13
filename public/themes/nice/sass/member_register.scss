@@ -1,4 +1,6 @@
-$content-text: 'Open Sans', sans-serif;
+@import "../../../assets/front/sass/mixin";
+
+$content-text: 'Lato', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
@@ -8,14 +10,6 @@ $text-dark: #272c2f;
 body
 {
 	background-color: #ededed;
-}
-
-@mixin transition($transition)
-{
-	  -webkit-transition: all $transition ease-in-out;
-	  -moz-transition: all $transition ease-in-out;
-	  -o-transition: all $transition ease-in-out;
-	  transition: all $transition ease-in-out;
 }
 
 .register

@@ -809,7 +809,7 @@ class Warehouse2
         $val = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
                                                  ->where('mlm_activation',$mlm_activation)
                                                  ->where('mlm_pin',$mlm_pin)
-                                                 ->where('record_inventory_status',0)
+                                                 ->where('item_in_use', 'unused')
                                                  ->first();
         if($val)
         {

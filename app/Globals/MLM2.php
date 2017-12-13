@@ -26,6 +26,8 @@ use App\Globals\Mlm_complan_manager_cd;
 use App\Globals\Mlm_compute;
 use App\Globals\Warehouse2;
 use App\Globals\Mlm_slot_log;
+use App\Models\Tbl_mlm_point_log_setting;
+
 
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
@@ -554,7 +556,7 @@ class MLM2
 			$_reward[$key]->log_amount = number_format($reward->points_log_points,2);
 			$_reward[$key]->time_ago = time_ago($reward->points_log_date_claimed);
 			$_reward[$key]->display_date = date("F d, Y", strtotime($reward->points_log_date_claimed));
-			$_reward[$key]->log = Self::customer_rewards_points_contructor($reward);
+			$_reward[$key]->log = Self::customer_rewards_points_contructorV2($reward);
 			$_reward[$key]->slot_no = $reward_slot->slot_no;
 			$_reward[$key]->points_log_type = $reward->points_log_type;
 		}
@@ -573,6 +575,40 @@ class MLM2
 		{
 			return "---";
 		}
+	}
+	public static function customer_rewards_points_contructorV2($reward)
+	{
+		$from_slot = Tbl_mlm_slot::where("slot_id",$reward->points_log_Sponsor)->first();
+		$query = Tbl_mlm_point_log_setting::where("point_log_setting_type",$reward->points_log_type)->first();
+		$message="No Details";
+		if(count($query)>0)
+		{
+			$message="";
+			$template = $query->point_log_notification;
+			$notif = explode('/', $template);
+			foreach ($notif as $t)
+			{
+				if($t == '_slot_no')
+				{
+					$message.=$reward->slot_no;
+				}
+				else if($t == '_sponsor_slot_no')
+				{
+					$message.=$from_slot->slot_no;
+				}
+				else if($t == '_amount')
+				{
+					$message.=$reward->log_amount;
+				}
+				else
+				{
+					$message.=$t;
+				}
+			}
+		}
+		
+
+		return $message;
 	}
 	public static function customer_total_payout($customer_id)
 	{

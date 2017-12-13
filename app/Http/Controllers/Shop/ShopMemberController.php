@@ -458,31 +458,7 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
     }
-
-    public function pressuser_pressrelease_recipient_done(Request $request)
-    {
-      // $data_id = $request->checkbox;
-      // if ($data_id) 
-      // {
-      //  foreach($data_id as $key=>$id)
-      //   {
-      //     $data['recipient_id'] = $id;
-      //     $data['recipient_id'] = session('recipient_id');
-      //     $_check  = Tbl_press_release_recipient::where('recipient_id',$id)->first();
-      //     if($_check)
-      //     {
-      //       echo "hi";
-      //     } 
-      //     else
-      //     {
-
-      //     }
-      //   }  
-      // }
-      
-      // return Redirect::back();
-    }
-
+    
     public function pressuser_pressrelease_recipient_search(Request $request)
     {
 
@@ -490,7 +466,7 @@ class ShopMemberController extends Shop
       $data['_recipient'] = Tbl_press_release_recipient::where('name','like','%'.$search_key.'%')
                             ->Orwhere('company_name','like','%'.$search_key.'%')
                             ->Orwhere('position','like','%'.$search_key.'%')
-                            ->paginate();
+                            ->get();
       return view("press_user.search_recipient", $data);
     }
 
@@ -734,18 +710,21 @@ class ShopMemberController extends Shop
 
     }
 
-    public function pressuser_choose_recipient()
+    public function pressuser_choose_recipient(Request $request)
     {
-        $data['_recipient']   = Tbl_press_release_recipient::get();
-        
-        $data['drafts']         = DB::table('tbl_pressiq_press_releases')
-                                ->where('pr_from', session('user_email'))
-                                ->where('pr_status','draft')
-                                ->orderByRaw('pr_date_sent DESC')
+        $filter["country"]             = $request->choose_country;
+        $filter["industry_type"]       = $request->industry_type;
+        $filter["media_type"]          = $request->media_type;
+        $filter["title_of_journalist"] = $request->title_of_journalist;
+        $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('country', $filter["country"])
+                                ->whereIn('industry_type', $filter["industry_type"])
+                                ->whereIn('media_type', $filter["media_type"])
+                                ->whereIn('title_of_journalist', $filter["title_of_journalist"])
                                 ->get();
-
         return view("press_user.choose_recipient", $data);
     }
+
     
     public function pressreleases_image_upload()
     {

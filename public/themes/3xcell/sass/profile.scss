@@ -66,10 +66,13 @@ $text-dark: #272c2f;
 				border-bottom: 2px solid;
 				padding: 15px 0;
 			}
+
 			@media screen and (max-width: 500px)
 			{
 				width: 100%;
-				display: block;
+				//display: block;
+				text-align: center;
+
 				tbody, tr, td
 				{
 					width: 100%;

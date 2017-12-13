@@ -57,6 +57,10 @@ class Warehouse2
 	}
     public static function get_item_qty($warehouse_id, $item_id)
     {
+        $warehouse_data = Tbl_warehouse::where('warehouse_id', $warehouse_id)->first();
+        $get_child = Tbl_warehouse::where('warehouse_parent_id', $warehouse_id)->get();
+        $get_parent = Tbl_warehouse::where('warehouse_id', $warehouse_data->warehouse_parent_id)->get();
+
         $count = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
                                                    ->where("record_item_id",$item_id)
                                                    ->where("record_inventory_status",0)

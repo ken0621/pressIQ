@@ -70,5 +70,15 @@ class AccountingTransaction
 			}
 		}
 	}
-
+	public static function check_transaction($shop_id, $transaction_name, $transaction_id)
+	{
+		$check = Tbl_acctg_transaction_list::where("transaction_ref_name", $transaction_name)-
+											->where("transaction_ref_id", $transaction_id)->first();
+		
+		return $check;
+	}
+	public static function updateTransaction($shop_id, $acctg_trans_id, $trans_item = array())
+	{
+		
+	}
 }

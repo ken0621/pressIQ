@@ -26,13 +26,19 @@
         </div>
         <div  style="margin-top: 15px" class=" row clearfix form-group">
             <div class="col-md-2 " style="padding: 5px">
-                <select class="form-control input-sm" name="payment_type">
-                    <option value="">All Type</option>
-                    <option value="paymaya">Paymaya</option>
-                    <option value="dragonpay">Dragonpay</option>
+                <select class="form-control input-sm" name="item">
+                   @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                 </select>
             </div>
         </div>
+        <div class="col-md-2 " style="padding: 5px">
+            <select class="form-control input-sm" name="vendor">
+                <option value="">All Vendor</option>
+                @foreach($_vendor as $vendor)
+                <option value="{{$vendor->vendor_id}}">{{$vendor->vendor_company}}</option>
+                @endforeach
+            </select>
+        </div
         </form>
     </div>
 </div>

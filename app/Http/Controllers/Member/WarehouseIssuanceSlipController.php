@@ -44,12 +44,13 @@ class WarehouseIssuanceSlipController extends Member
         
         $ref_key = 'warehouse_issuance_slip';
         
-        $ref_number = Transaction::get_transaction_reference_number($this->user_info->shop_id,$ref_key)->get();
+        /*$ref_number = Transaction::get_transaction_reference_number($this->user_info->shop_id,$ref_key)->get();
         
+        $data = null;
         foreach ($ref_number as $key => $value) 
         {
-            $ref_number[$key]->prefix = $value->prefix;
-            $ref_number[$key]->separator = $value->separator;
+            $data[$key]->prefix = $value->prefix;
+            $data[$key]->separator = $value->separator;
         }
 
         $prefix = $value->prefix;
@@ -57,7 +58,7 @@ class WarehouseIssuanceSlipController extends Member
         $other = date('Y-m-d');
         $ref_other = str_replace('-','',$other);
         
-        $data['transaction_ref_number'] = $prefix.$ref_other.$separator;
+        $data['transaction_ref_number'] = $prefix.$ref_other.$separator;*/
        
     	return view('member.warehousev2.wis.wis_create',$data);
     }

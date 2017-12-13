@@ -85,4 +85,7 @@ class Tbl_vendor extends Model
         
         return $query = $purchase_order->union($item_receipt)->union($bill)->union($pay_bill)->union($write_check)->union($debit_memo)->union($journal_entry)->orderBy("date_created","desc");
     }
+
+    
+                
 }

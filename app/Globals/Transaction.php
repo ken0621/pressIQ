@@ -291,9 +291,11 @@ class Transaction
     public static function get_all_transaction_item($shop_id, $date_from = '',$date_to = '', $transaction_type = '', $payment_type = '')
     {
         $data = Tbl_transaction_item::transaction_list()->transaction()->where('tbl_transaction_list.shop_id', $shop_id);
+        //dd($data);
         if($date_from && $date_to)
         {
             $data = $data->whereBetween('transaction_date_created',[$date_from,$date_to]);
+            //dd($data);
         }
         if($transaction_type)
         {

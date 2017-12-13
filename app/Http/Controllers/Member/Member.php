@@ -201,7 +201,7 @@ class Member extends Controller
 			// dd($this->user_info);
 			
 			/*TRANSACTION REFERENCE NUMBER*/
-			Seed_manual::put_transaction_reference_number($this->user_info->shop_id);
+			Seed_manual::transaction_reference_number($this->user_info->shop_id);
 			//dd($this->user_info->shop_id);
 
 			return $next($request);

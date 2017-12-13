@@ -23,7 +23,7 @@
     </div>
     <div class="report-content">
         <div class="col-md-12">
-             <b>Remaining Points: {{$_points}}</b>
+            <h4><b>Remaining Points: <span style="font-weight: 300;">{{currency('',$_points)}} POINT(S)</span></b></h4>             
         </div>
         <div class="animated fadeInUp holder">
             {{-- <center> --}}
@@ -51,6 +51,15 @@
                 </div>
                 @endforeach
                 {{-- </center> --}}
+
+                @if(count($_redeemable)<1)
+                <div class="col-md-12">
+                    <center>
+                        <h3>No Items available</h3>
+                    </center>
+                </div>
+                @endif
+                
             </div>
             {{-- </center> --}}
         </div>
@@ -92,6 +101,9 @@
                                         </div>  
                                     </div>
                                 </div>
+
+                                
+
                             </div>
                         </div>
                     </div>
@@ -133,6 +145,13 @@
         }
     });
 
+</script>
+<script type="text/javascript">
+    @if(Session::get("response")=='success')
+    toastr.success("Item redeemed");
+    @elseif(Session::get("response")=='error')
+    toastr.error("no stock available");
+    @endif
 </script>
 @endsection
 

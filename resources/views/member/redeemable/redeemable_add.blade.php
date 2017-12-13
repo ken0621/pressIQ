@@ -13,7 +13,7 @@
             <div class="clearfix modal-body"> 
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="basic-input">Item Name</label>
                             @if(isset($row))
                             @foreach($row as $r)
@@ -22,6 +22,16 @@
                             @endforeach
                             @else
                             <input id="basic-input"  class="form-control" name="item_name">
+                            @endif
+                        </div>
+                        <div class="col-md-6">
+                            <label for="basic-input">Item Quantity</label>
+                            @if(isset($row))
+                            @foreach($row as $r)
+                            <input id="basic-input" type="number" class="form-control" name="quantity" value="{{$r->quantity}}">
+                            @endforeach
+                            @else
+                            <input id="basic-input" type="number" class="form-control" name="quantity">
                             @endif
                         </div>
                     </div>

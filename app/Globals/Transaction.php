@@ -951,34 +951,39 @@ class Transaction
         $transaction_info = Tbl_transaction_list::transaction()->where('transaction_list_id', $transaction_list_id)->first();
         $transaction_date = Carbon::now();
 
-        $ins_wallet['shop_id'] = $shop_id;
-        $wallet_log_slot = $slot_id;
-        $wallet_log_slot_sponsor = $slot_id;
-        $wallet_log_claimbale_on = $transaction_date;
-        $wallet_log_details = 'Thank you for purchasing. '.$cart_wallet_amount.' is deducted to your wallet';
-        $wallet_log_amount = $cart_wallet_amount * -1;
-        $wallet_log_plan = 'REPURCHASE';
-        $wallet_log_status = 'released';
-        $wallet_log_remarks = 'Wallet Purchase on POS - '.$transaction_info->transaction_number;
-        
-        if($slot_id)
-        {
-            Mlm_slot_log::slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on, $wallet_log_remarks);
+        if($cart_wallet_amount != 0)
+        {        
+            $ins_wallet['shop_id'] = $shop_id;
+            $wallet_log_slot = $slot_id;
+            $wallet_log_slot_sponsor = $slot_id;
+            $wallet_log_claimbale_on = $transaction_date;
+            $wallet_log_details = 'Thank you for purchasing. '.$cart_wallet_amount.' is deducted to your wallet';
+            $wallet_log_amount = $cart_wallet_amount * -1;
+            $wallet_log_plan = 'REPURCHASE';
+            $wallet_log_status = 'released';
+            $wallet_log_remarks = 'Wallet Purchase on POS - '.$transaction_info->transaction_number;
+            
+            if($slot_id)
+            {
+                Mlm_slot_log::slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on, $wallet_log_remarks);
+            }
         }
-
-        $ins_gc['points_log_complan'] = 'PURCHASE_GC';
-        $ins_gc['points_log_level'] = 0;
-        $ins_gc['points_log_slot'] = $slot_id;
-        $ins_gc['points_log_Sponsor'] = $slot_id;
-        $ins_gc['points_log_date_claimed'] = $transaction_date;
-        $ins_gc['points_log_converted_date'] = $transaction_date;
-        $ins_gc['points_log_type'] = 'GC';
-        $ins_gc['points_log_from'] = 'GC Purchase on POS - '.$transaction_info->transaction_number;
-        $ins_gc['points_log_points'] = $cart_gc_amount * -1;
-        
-        if($slot_id)
+        if($cart_gc_amount != 0)
         {
-            Mlm_slot_log::point_slot($ins_gc);
+            $ins_gc['points_log_complan'] = 'PURCHASE_GC';
+            $ins_gc['points_log_level'] = 0;
+            $ins_gc['points_log_slot'] = $slot_id;
+            $ins_gc['points_log_Sponsor'] = $slot_id;
+            $ins_gc['points_log_date_claimed'] = $transaction_date;
+            $ins_gc['points_log_converted_date'] = $transaction_date;
+            $ins_gc['points_log_type'] = 'GC';
+            $ins_gc['points_log_from'] = 'GC Purchase on POS - '.$transaction_info->transaction_number;
+            $ins_gc['points_log_points'] = $cart_gc_amount * -1;
+            
+            if($slot_id)
+            {
+                Mlm_slot_log::point_slot($ins_gc);
+            }
         }
 
         $get_all_payment = Cart2::cart_payment_list($shop_id);

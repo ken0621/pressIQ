@@ -64,13 +64,17 @@
                     <span class="choose-button" readonly>  
                       
                     <span class="choose-button" readon>  
+                        
                        {{-- POPUP CHOOSE RECIPIENT --}}
-                    <a href="javascript:" onclick="action_load_link_to_modal('/pressuser/choose_recipient', 'md');">Choose Recipient</a></span>
+                    <a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
+
                       {{-- POPUP CHOOSE RECIPIENT --}}
                     <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                     <div class="button-container">
                     </div>
                 </div>
+                </form>
+
                 <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">New Release Summary</div>
                   <div class="title">Publisher:</div>
@@ -84,7 +88,7 @@
                     
                   </div>
                 </div>
-              </form>  
+                
             </div>
          </div>
       </div>

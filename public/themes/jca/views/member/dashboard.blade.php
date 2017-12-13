@@ -63,7 +63,7 @@
 							</div>
 							<div class="holder">
 								<div class="color dirre"></div>
-								<div class="name"><span>Direct Referral</span><div class="name w2hpx dirre-text"><strong>{{ $wallet->display_complan_direct }}</strong></div></div>
+								<div class="name"><span>Direct Referral</span> <div class="name w2hpx dirre-text"><strong>{{ $wallet->display_complan_direct }}</strong></div></div>
 							</div>
 						</div>
 					</div>

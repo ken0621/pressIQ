@@ -794,19 +794,20 @@ $text-dark: #404040;
 				{
 					@include transition(0.2s);
 					color: #fff;
-					background-color: #C4A75F;
+					background-color: #C4A860;
 					padding: 10px 40px;
 					border-radius: 2px;
 					border: 0px !important;
 				  	width: 100%;
 				  	margin-top: 20px;
 				  	text-transform: uppercase;
+
+				  	&:hover
+				  	{
+				  		background-color: #75A04B;
+				  	}
 				}
 
-				.btn-proceed-2:hover
-				{
-					opacity: 0.9;
-				}
 			}
 		}
 	}

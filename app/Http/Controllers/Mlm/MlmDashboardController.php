@@ -313,6 +313,7 @@ class MlmDashboardController extends Mlm
         $rankPV = Tbl_mlm_slot_points_log::where("points_log_type","RPV")->where("points_log_slot",$slot_id)->sum('points_log_points');
         $rankGroupPV = Tbl_mlm_slot_points_log::where("points_log_type","RGPV")->where("points_log_slot",$slot_id)->sum('points_log_points');
         $data['rank_points'] = $rankPV+$rankGroupPV;
+        $data['slot_id'] = $slot_id;
         $stairstepPV = Tbl_mlm_slot_points_log::where("points_log_type","SPV")->where("points_log_slot",$slot_id)->sum('points_log_points');
         $data['personal_maintenance_points'] = $stairstepPV;
         

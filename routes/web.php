@@ -213,6 +213,7 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
 	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
 	Route::get('product_order2/export','Member\ProductOrderController2@export');
+	Route::get('product_order2/exportpayin','Member\ProductOrderController2@exportpayin');
 
 	Route::get('product_order2/settings','Member\ProductOrderController2@settings');
 	Route::post('product_order2/settings','Member\ProductOrderController2@settings_submit');
@@ -1047,6 +1048,14 @@ Route::any('/member/merchant/commission/request', 'Member\MerchantController@com
 Route::any('/member/merchant/commission/request/range/verfiy', 'Member\MerchantController@commission_range_verify');
 Route::any('/member/merchant/commission/request/submit', 'Member\MerchantController@commission_request_submit');
 /* End */
+
+// Merchant Commission Report
+// Route::get('/member/merchant/commission-report', 'Member\MerchantController@commission_report');
+Route::get('/member/merchant/commission-report/getpercentage','Member\MerchantController@get_percentage');
+Route::post('/member/merchant/commission-report','Member\MerchantController@submit_report_setting');
+Route::get('/member/merchant/commission_report/table', 'Member\MerchantController@table');
+// end
+
 /*  / Merchant - Ewallet*/
 Route::any('/member/merchant/ewallet', 'Member\MerchantewalletController@index');
 Route::any('/member/merchant/ewallet/list', 'Member\MerchantewalletController@payable_list');

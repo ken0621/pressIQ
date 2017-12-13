@@ -642,6 +642,17 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
 
+        $code = "mlm-point-log-complan";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Points Log Settings";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/point_log_complan";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Still Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Patrick Manarang";
+
+
+
+
 
     /* ACCOUNTING*/
     $page = "accounting"; 
@@ -1406,6 +1417,14 @@ function page_list($pis = 0)
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Everyone</span>";
+
+    // $code = "merchant-commission-report";
+    // $nav[$page]['submenu'][$code]['label'] = "Commission Report";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . "merchant" . "/commission-report";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "on progress";
+    // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Patrick Manarang</span>";
 
     $code = "merchant-ewallet";
     $nav[$page]['submenu'][$code]['label'] = "E-Wallet";

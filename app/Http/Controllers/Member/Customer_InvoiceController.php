@@ -50,6 +50,7 @@ class Customer_InvoiceController extends Member
 
         $data["page"]       = "Customer Invoice";
         $data["pis"]        = Purchasing_inventory_system::check();
+        //dd($data["pis"]);
         $data["_customer"]  = Customer::getAllCustomer();
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
 

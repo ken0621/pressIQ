@@ -4,24 +4,41 @@
     <!-- Media Slider -->
     <div class="slider-wrapper">
         <div class="container">
-            <div class="row clearfix">
-                <div class="media-wrapper">
+            <div class="row clearfix mob-vid-wrapper">
+                {{-- <div class="media-wrapper">
                     <div class="embed-responsive embed-responsive-16by9">
-                        <!-- <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/sy655Z-7TZE?autoplay=1&showinfo=0&controls=0" controls="0" allowfullscreen="" frameborder="0">                            
-                        </iframe> -->
-                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/BGYP2umEcSQ?ecver=1&modestbranding=1&rel=0&autohide=1&showinfo=0&controls=0" controls="0" frameborder="0" allowfullscreen>
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/I7kIfi2RlcE?ecver=1&modestbranding=1&rel=0&autohide=1&showinfo=0&controls=0" controls="0" frameborder="0" allowfullscreen>
                         </iframe>
                     </div>
                     <a href="/members/register"><div class="btn-container animated fadeInDown watt">GET FREE ACCESS</div></a>
+                </div> --}}
+                <div class="col-md-6">
+                	<div class="media-wrapper">
+                	    <div class="embed-responsive embed-responsive-16by9">
+                	        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/gcVHATfMQns?ecver=1&modestbranding=1&rel=0&autohide=1&showinfo=0&controls=0" controls="0" frameborder="0" allowfullscreen>
+                	        </iframe>
+                	    </div>
+                	    {{-- <a href="/members/register"><div class="btn-container animated fadeInDown watt">GET FREE ACCESS</div></a> --}}
+                	</div>
                 </div>
+                <div class="col-md-6">
+                	<div class="media-wrapper mob-vid">
+                	    <div class="embed-responsive embed-responsive-16by9">
+                	        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/eHtKQ2TSr8c?ecver=1&modestbranding=1&rel=0&autohide=1&showinfo=0&controls=0" controls="0" frameborder="0" allowfullscreen>
+                	        </iframe>
+                	    </div>
+                	    
+                	</div>
+                </div>                
             </div>
+            <a href="/members/register"><div class="btn-container animated fadeInDown watt">GET FREE ACCESS</div></a>
         </div>
     </div>
 </div>
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/replicated.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/replicated.css?version=2.1">
 <style>
 	header
 	{

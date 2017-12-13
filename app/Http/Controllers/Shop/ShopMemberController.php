@@ -3348,7 +3348,7 @@ class ShopMemberController extends Shop
 
         $check = Item::check_unused_product_code($shop_id, $mlm_pin, $mlm_activation);
         $return = [];
-        if($check == true)
+        if($check)
         {
             $return['status'] = 'success';
             $return['mlm_pin'] = $mlm_pin;

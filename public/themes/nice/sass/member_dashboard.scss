@@ -8,6 +8,26 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
+
+@media screen and (max-width: 800px)
+{
+	.holder
+	{
+		.mob-center
+		{
+			text-align: center;
+			
+			.text
+			{
+				.pull-left
+				{
+					float: none !important;
+				}
+			}
+		}
+	}
+}
+
 .dashboard
 {
 	font-family: $content-text;
@@ -137,7 +157,7 @@ $text-dark: #272c2f;
 				letter-spacing: 0.5px;
 				font-weight: bold;
 				font-family: $content-text;
-				color: #019771;
+				color: #02295E;
 
 				span
 				{
@@ -254,6 +274,7 @@ $text-dark: #272c2f;
 			{
 				display: inline-block;
 				vertical-align: top;
+				width: 190px;
 
 				.name
 				{
@@ -271,6 +292,12 @@ $text-dark: #272c2f;
 					color: #85939e;
 					font-size: 16px;
 					opacity: 0.5;
+				}
+
+				@media screen and (max-width: 800px)
+				{
+					display: block;
+					width: auto;
 				}
 			}
 			.action

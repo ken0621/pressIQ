@@ -41,20 +41,20 @@
 						<div class="table-holder">
 							<div class="chart-legend">
 								<div class="holder">
-									<div class="color" style="background-color: #76b6ec"></div>
-									<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
+									<div class="color cw"></div>
+									<div class="name"><span>Current Wallet</span> <div class="name cw-text">{{ $wallet->display_current_wallet }}</div></div>
 								</div>
 								<div class="holder">
-									<div class="color" style="background-color: #8E5EA2"></div>
-									<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
+									<div class="color tp"></div>
+									<div class="name"><span>Total Pay-out</span> <div class="name tp-text">{{ $wallet->display_total_payout }}</div></div>
 								</div>
 								<!-- <div class="holder">
 									<div class="color"></div>
 									<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
 								</div> -->
 								<div class="holder">
-									<div class="color"></div>
-									<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
+									<div class="color tr"></div>
+									<div class="name"><span>Total Reward</span> <div class="name tr-text">{{ $wallet->display_total_earnings }}</div></div>
 								</div>
 							</div>
 						</div>
@@ -65,20 +65,20 @@
 					<div class="sub-container">
 						<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Rank PV</span><span class="value">{{ $points->display_rank_pv + $points->display_rank_gpv }}</span></div>
+								<div class="color rpv"></div>
+								<div class="name"><span>Rank PV</span><span class="value"><div class="name rpv-text">{{ $points->display_rank_pv + $points->display_rank_gpv }}</div></span></div>
 							</div>
 							<!-- <div class="holder">
 								<div class="color"></div>
 								<div class="name"><span>Rank Group PV</span><span class="value">{{ $points->display_rank_gpv }}</span></div>
 							</div> -->
 							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Personal Volume</span><span class="value">{{ $points->display_stairstep_pv }}</span></div>
+								<div class="color pv"></div>
+								<div class="name"><span>Personal Volume</span><span class="value"><div class="name pv-text">{{ $points->display_stairstep_pv }}</div></span></div>
 							</div>
 							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Group Sales PV</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
+								<div class="color gs"></div>
+								<div class="name"><span>Group Sales PV</span><span class="value"><div class="name gs-text">{{ $points->display_stairstep_gpv }}</div></span></div>
 							</div>
 						</div>
 					</div>
@@ -434,6 +434,7 @@
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/atomic_color.css">
 @endsection
 
 <style type="text/css">

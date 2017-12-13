@@ -17,7 +17,12 @@
 
 .popup-verify-placement
 {
-	background-color: #402A21;
+	.modal-header
+	{
+		border-top-left-radius: 0 !important;
+	 	border-top-right-radius: 0 !important;
+	}
+
 }
 
 .member

@@ -2,11 +2,13 @@
 	<button type="button" class="close" data-dismiss="modal">×</button>
 	<h4 class="modal-title">All Available Credits</h4>
 </div>
+<form class="global-submit" action="/member/customer/receive_payment/apply_credit_submit" method="post">
 <div class="modal-body clearfix">
 	<div class="row">
         <div class="clearfix modal-body">
             <div class="form-horizontal">
                 @if($customer_id)
+                <input type="hidden" name="customer_id" value="{{$customer_id or ''}}">
                 <div class="form-group">
                     <h4>Customer Name : {{isset($customer_data) ? ($customer_data->company != '' ? $customer_data->company  : $customer_data->first_name. ' '.$customer_data->last_name) : 'No Customer'}}</h4>
                 </div>
@@ -23,7 +25,7 @@
                         <tbody>
                         @foreach($_credits as $credit)
                         <tr class="{{$total_credit+= $credit->cm_amount}} tr-credit">
-                            <td class="text-center"><input type="checkbox" class="td-credit" name="apply_credit[{{$credit->cm_id}}]" data-content="{{$credit->cm_amount}}"></td>
+                            <td class="text-center"><input type="checkbox" class="td-credit" value="{{$credit->cm_amount}}" name="apply_credit[{{$credit->cm_id}}]" data-content="{{$credit->cm_amount}}"></td>
                             <td>{{$credit->cm_id}}</td>
                             <td class="text-center">{{currency('PHP',$credit->cm_amount)}}</td>
                         </tr>
@@ -51,8 +53,10 @@
 </div>
 <div class="modal-footer">
 	<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-	<button class="btn btn-primary btn-custom-primary" type="button">Apply</button>
+	<button class="btn btn-primary btn-custom-primary" type="submit">Apply</button>
 </div>
+<input type="hidden" name="_token" value="{{ csrf_token() }}">
+</form>
 <script type="text/javascript">
     $(document).ready(function()
     {

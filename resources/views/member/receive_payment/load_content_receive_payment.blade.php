@@ -108,6 +108,15 @@
                     <span class="amount-credit">PHP 0.00</span>
                 </div>
             </div> 
+            <div class="row">
+                <div class="col-md-7 text-right digima-table-label">
+                    Credits Applied
+                </div>
+                <div class="col-md-5 text-right digima-table-value total">
+                    <input type="hidden" name="rp_total_amount" class="amount-to-apply" />
+                    <span class="amount-apply">PHP 0.00</span>
+                </div>
+            </div> 
         </div>
     </div>
     

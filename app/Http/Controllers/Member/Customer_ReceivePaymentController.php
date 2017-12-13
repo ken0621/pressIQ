@@ -236,4 +236,8 @@ class Customer_ReceivePaymentController extends Member
 
         return view('member.receive_payment.load_all_credit',$data);
     }
+    public function apply_credit_submit()
+    {
+        die(var_dump(Request::input()));
+    }
 }

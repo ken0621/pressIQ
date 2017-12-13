@@ -792,20 +792,17 @@ $text-dark: #404040;
 
 				.btn-proceed-2
 				{
+					@include transition(0.2s);
 					color: #fff;
-					background-color: #75A04B;
+					background-color: #C4A75F;
 					padding: 10px 40px;
 					border-radius: 2px;
 					border: 0px !important;
-
-				  	-webkit-transition: all 0.2s ease-in-out;
-				  	-moz-transition: all 0.2s ease-in-out;
-				  	-o-transition: all 0.2s ease-in-out;
-				  	transition: all 0.2s ease-in-out;
 				  	width: 100%;
 				  	margin-top: 20px;
 				  	text-transform: uppercase;
 				}
+
 				.btn-proceed-2:hover
 				{
 					opacity: 0.9;
@@ -814,7 +811,6 @@ $text-dark: #404040;
 		}
 	}
 }
-
 
 
 /* Failed */

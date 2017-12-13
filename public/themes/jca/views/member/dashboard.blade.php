@@ -59,11 +59,11 @@
 						<div class="chart-legend">
 							<div class="holder">
 								<div class="color binpa"></div>
-								<div class="name"><span>Binary Pairing</span><span class="value"><div class="w2hpx binpa-text"><strong>{{ $wallet->display_complan_binary }}</strong></div></span></div>
+								<div class="name"><span>Binary Pairing</span> <div class="name w2hpx binpa-text"><strong>{{ $wallet->display_complan_binary }}</strong></div></div>
 							</div>
 							<div class="holder">
 								<div class="color dirre"></div>
-								<div class="name"><span>Direct Referral</span><span class="value"><div class="w2hpx dirre-text"><strong>{{ $wallet->display_complan_direct }}</strong></div></span></div>
+								<div class="name"><span>Direct Referral</span><div class="name w2hpx dirre-text"><strong>{{ $wallet->display_complan_direct }}</strong></div></div>
 							</div>
 						</div>
 					</div>
@@ -74,19 +74,19 @@
 						<div class="chart-legend" style="max-height: auto;">
 							<div class="holder">
 								<div class="color fpgc"></div>
-								<div class="name"><span>5th Pair GC</span><span class="value"><div class="w2hpx fpgc-text"><strong>{{ $points->display_binary }}</strong></div></span></div>
+								<div class="name"><span>5th Pair GC</span> <div class="name w2hpx fpgc-text"><strong>{{ $points->display_binary }}</strong></div></div>
 							</div>
 						</div>
 						<div class="chart-legend" style="max-height: auto;">
 							<div class="holder">
 								<div class="color dgc"></div>
-								<div class="name"><span>Direct GC</span><span class="value"><div class="w2hpx dgc-text"><strong>{{ $points->display_direct }}</strong></div></span></div>
+								<div class="name"><span>Direct GC</span> <div class="name w2hpx dgc-text"><strong>{{ $points->display_direct }}</strong></div></div>
 							</div>
 						</div>
 						<div class="chart-legend" style="max-height: auto;">
 							<div class="holder">
 								<div class="color mgc"></div>
-								<div class="name"><span>Maintenance GC</span><span class="value"><div class="w2hpx mgc-text"><strong>{{ $points->display_maintenance }}</strong></div></span></div>
+								<div class="name"><span>Maintenance GC</span> <div class="name w2hpx mgc-text"><strong>{{ $points->display_maintenance }}</strong></div></div>
 							</div>
 						</div>
 					</div>

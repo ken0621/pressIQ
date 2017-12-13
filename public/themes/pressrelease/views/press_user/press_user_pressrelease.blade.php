@@ -15,14 +15,7 @@
             <div class="press-release-content">
               <form method="post">
                 {{csrf_field()}}
-                <!-- @if (Session::has('pr_edit'))
-                    @foreach($edit as $edits) -->
                 <div id="create_release" class="tabcontent create-release-container">
-                    @if (Session::has('message'))
-                      <div class="alert alert-success">
-                         <center>{{ Session::get('message') }}</center>
-                      </div>
-                    @endif 
                   <div class="title">Headline:</div>
                   <input type="text" name="pr_headline" class="form-control">
                   <div class="title">Content:</div>
@@ -60,8 +53,6 @@
                   <div class="button-container">
                   </div>
                 </div>
-                   <!--  @endforeach
-                @endif -->
 
                 <!-- <div id="create_pr" class="tabcontent create-pr-container">
                       @if (Session::has('message'))

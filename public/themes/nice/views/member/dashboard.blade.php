@@ -102,7 +102,7 @@
 
 				<div class="square-container">
 					<div class="title">Binary Points</div>
-					<div class="sub-container" style="max-height: 421px; overflow-y: auto;">
+					<div class="sub-container" style="min-height: 421px; max-height: 421px; overflow-y: auto;">
 	                    <div class="table-responsive">
 	                        <table style="margin-top: 5px;" class="table table-condensed">
 	                            <thead style="text-transform: uppercase">
@@ -131,7 +131,7 @@
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="title">Newest Direct Referrals</div>
-				<div class="sub-container border-holder">
+				<div class="sub-container border-holder mob-view">
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
 					</div>

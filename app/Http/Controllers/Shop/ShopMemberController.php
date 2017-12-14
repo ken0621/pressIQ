@@ -179,7 +179,7 @@ class ShopMemberController extends Shop
         }
         // dd($slot_id." ; ".$data['reward_point_redemption']);
 
-        return view("member.dashboard", $data);
+        return Self::load_view_for_members("member.dashboard", $data);
     }
     public function getDirectReferrals()
     {

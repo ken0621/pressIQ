@@ -1422,17 +1422,18 @@ class PayrollTimeSheet2Controller extends Member
 	public function db_get_list_of_employees_by_company_with_search($company_id, $search = "", $time_keeping_approved = 0, $period_company_id, $period_start, $branch = 0)
 	{
 		$query = Tbl_payroll_employee_basic::select("*");
-		//DB::raw("(SELECT time_keeping_approve_id FROM tbl_payroll_time_keeping_approved WHERE employee_id = tbl_payroll_employee_basic.payroll_employee_id AND tbl_payroll_time_keeping_approved.payroll_period_company_id = '" . $period_company_id . "')
+
+		// DB::raw("(SELECT time_keeping_approve_id FROM tbl_payroll_time_keeping_approved WHERE employee_id = tbl_payroll_employee_basic.payroll_employee_id AND tbl_payroll_time_keeping_approved.payroll_period_company_id = '" . $period_company_id . "');
 		if($time_keeping_approved == 0)
 		{
-			//dd("(SELECT time_keeping_approve_id FROM tbl_payroll_time_keeping_approved WHERE employee_id = tbl_payroll_employee_basic.payroll_employee_id AND tbl_payroll_time_keeping_approved.payroll_period_company_id = '" . $period_company_id . "')");
+			// dd("(SELECT time_keeping_approve_id FROM tbl_payroll_time_keeping_approved WHERE employee_id = tbl_payroll_employee_basic.payroll_employee_id AND tbl_payroll_time_keeping_approved.payroll_period_company_id = '" . $period_company_id . "')");
 			$query->whereNull(DB::raw("(SELECT time_keeping_approve_id FROM tbl_payroll_time_keeping_approved WHERE employee_id = tbl_payroll_employee_basic.payroll_employee_id AND tbl_payroll_time_keeping_approved.payroll_period_company_id = '" . $period_company_id . "')"));
 		}
 		else
 		{
 			$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.employee_id","=", "tbl_payroll_employee_basic.payroll_employee_id")->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", $period_company_id);
 		}
-
+		
 		$query->where("tbl_payroll_employee_basic.shop_id", $this->user_info->shop_id);
 		$query->join("tbl_payroll_company", "tbl_payroll_employee_basic.payroll_employee_company_id", "=", "tbl_payroll_company.payroll_company_id");
 		
@@ -1448,6 +1449,8 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$query->where("payroll_company_id", $branch);
 		}
+
+		
 
 		$query->orderBy("payroll_employee_last_name");
 		$query->groupBy("tbl_payroll_employee_basic.payroll_employee_id");

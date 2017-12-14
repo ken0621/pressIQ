@@ -1,49 +1,66 @@
+<style >
+.table 
+{
+   width: 100%;
+   display:block;
+   height: 400px;
+   overflow-y: scroll;
+}
+</style>
 <div class="popup-choose">
    <!-- Modal content-->
-   <div class="modal-content">
+   <div class="modal-content" id="recipient-modal" name="recipient-modal">
       <div class="modal-header">
          <button type="button" class="close" data-dismiss="modal">&times;</button>
-         <div class="title-container">RECIPIENT</div>
+         <div class="title-container">Found Result</div>
       </div>
       <div class="modal-body">
-         <div class="row clearfix">
-            <div class="col-md-3">
-               <div class="title-container">Choose Country</div>
-               <form method="post" >
-                  <select type="text" class="col-md-12 " id="choose_country" name="choose_country">
-                     <option value="">--Select Country--</option>
-                     @foreach($country as $country_name)
-                     <option value="{{$country_name->country}}">{{$country_name->country}}</option>
-                     @endforeach
-                  </select>
-                  <br>
-               </form>
+            <div class="row pull-right" style="padding:10px 10px 10px 10px; ">
+               <button  type="button" id="select_all" name="select_all" class="btn btn-success" >Select All Found</button>
+               <button  type="button" id="unselect_all" name="unselect_all" class="btn btn-success" >Unselect All Found</button>
             </div>
-            <div class="col-md-9">
-               <div class="left-container" id="country_table" name="country_table">
-                  <table  class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; cellspacing: 0;">
+         <div class="row clearfix">
+            <div class="" style="padding:10px 10px 10px 10px;">
+               <input type="text"  name="search_key" id="search_key">
+               <button  type="button" name="search_button" id="search_button" class="btn btn-success" >Search</button>
+            </div>
+            <div class="col-md-12">
+
+               <form class="" action="/pressuser/pressrelease/recipient/done" method="POST" style="">
+               <div class="left-container" id="recipient_table" name="recipient_table">
+                  <table  class="display table table-bordered" style="background-color: #FFFFFF;" id="showHere_table">
                      <thead>
                         <tr>
-                           <th style="text-align: center;">RECIPIENT</th>
-                           <th style="text-align: center;">ACTION</th>
+                           <th style="text-align: center;width: 5%;">ACTION</th>
+                           <th style="text-align: center;width: 25%;">COMPANY</th>
+                           <th style="text-align: center;width: 25%;">RECIPIENT</th>
+                           <th style="text-align: center;width: 25%;">POSITION</th>   
+                           <th style="display:none;">Email</th>   
+                         
                         </tr>
-                     </thead>
+                     </thead> 
                      <tbody>
-                        @foreach($add_recipient as $addrecipients)
+                        @foreach($_recipient as $recipients)
                         <tr>
-                           <td style="text-align: center;">{{$addrecipients->name}}</td>
-                           <td style="text-align: center;">  
-                              <button  type="button" id="choose_recipient" class="btn btn-success" data-name="{{$addrecipients->name}}" data-name1="{{$addrecipients->research_email_address}}">Choose</button>
-                              <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="button" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button>
-                           </td>
+                           <input type="hidden" id="recipient_id" name="recipient_id[]" value="{{$recipients->recipient_id}}">
+                           <td style="text-align: center;"><input type="checkbox" class="recipient_checkbox" name="checkbox" value="{{$recipients->recipient_id}}" ></td>
+                           <td style="text-align: center;">{{$recipients->company_name}}</td>
+                           <td class="rec_name_{{$recipients->recipient_id}}" style="text-align: center;">{{$recipients->name}}</td>
+                           <td style="text-align: center;">{{$recipients->position}}</td>
+
+                           <td class="rec_email_{{$recipients->recipient_id}}" style="display:none;">{{$recipients->research_email_address}}</td>
                         </tr>
                         @endforeach
                      </tbody>
                   </table>
-                  {!! $add_recipient->render() !!}    
                </div>
+               <div class="row pull-right" style="padding:10px 10px 10px 10px;">
+                  <button type="button" id="recipient_button" name="recipient_button" class="btn btn-success">Done</button>
+               </div> 
+               </form>  
             </div>
          </div>
       </div>
    </div>
 </div>
+<script  src="/assets/js/choose_recipient_release.js"></script>

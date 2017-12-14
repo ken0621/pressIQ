@@ -12,7 +12,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-star"></i> Create Sales Order</button>
+                <button onclick="location.href='/member/transaction/sales_order/create'" class="btn btn-primary"><i class="fa fa-star"></i> Create Sales Order</button>
             </div>
         </div>
     </div>

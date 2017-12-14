@@ -12,7 +12,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-star"></i> Create Estimate & Quotation</button>
+                <button onclick="location.href='/member/transaction/estimate_quotation/create'" class="btn btn-primary"><i class="fa fa-star"></i> Create Estimate & Quotation</button>
             </div>
         </div>
     </div>

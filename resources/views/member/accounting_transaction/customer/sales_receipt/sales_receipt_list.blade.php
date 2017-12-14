@@ -12,7 +12,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-star"></i> Create Sales Receipt</button>
+                <button onclick="location.href='/member/transaction/sales_receipt/create'" class="btn btn-primary"><i class="fa fa-star"></i> Create Sales Receipt</button>
             </div>
         </div>
     </div>

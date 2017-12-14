@@ -595,7 +595,6 @@ class Warehouse2
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
-
         $serial_qty = count($serial);
         if($serial_qty != 0)
         {
@@ -630,7 +629,6 @@ class Warehouse2
         {
             $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
         }
-
         return $return;
     }
     public static function consume_update($ref_name, $ref_id, $item_id, $quantity)

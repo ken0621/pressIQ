@@ -126,3 +126,8 @@
         });
 	});
 </script>
+<script type="text/javascript">
+	@if(Session::get("response")=='error')
+	toastr.error("You already send a proof");
+	@endif
+</script>

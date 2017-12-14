@@ -212,7 +212,7 @@ $bold: 700;
 
 #overlay
 {
-    @include transition(0.4s);
+    @include transition(0.3s);
     position: fixed;
     display: none;
     width: 100%;
@@ -241,7 +241,7 @@ $bold: 700;
 
 .pushmenu, .pushmenu-push
 {
-  @include transition(0.5s)
+  @include transition(0.3s)
 }
 
 #nav_list

@@ -34,20 +34,20 @@
 						<div class="table-holder">
 							<div class="chart-legend">
 								<div class="holder">
-									<div class="color" style="background-color: #019771"></div>
-									<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
+									<div class="color cw"></div>
+									<div class="name"><span>Current Wallet</span> <div class="name w2hpx cw-text">{{ $wallet->display_current_wallet }}</div></div>
 								</div>
 								<div class="holder">
-									<div class="color" style="background-color: #8E5EA2"></div>
-									<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
+									<div class="color tpo"></div>
+									<div class="name"><span>Total Pay-out</span> <div class="name w2hpx tpo-text">{{ $wallet->display_total_payout }}</div></div>
 								</div>
 								<div class="holder">
-									<div class="color"></div>
-									<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
+									<div class="color cslots"></div>
+									<div class="name"><span>Current Slot(s)</span> <div class="name w2hpx cslots-text">{{ $customer_summary["display_slot_count"] }}</div></div>
 								</div>
 								<div class="holder">
-									<div class="color"></div>
-									<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
+									<div class="color treward"></div>
+									<div class="name"><span>Total Reward</span> <div class="name w2hpx treward-text">{{ $wallet->display_total_earnings }}</div></div>
 								</div>
 							</div>
 						</div>
@@ -58,12 +58,12 @@
 					<div class="sub-container">
 						<div class="chart-legend">
 							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Binary Pairing</span><span class="value">{{ $wallet->display_complan_binary }}</span></div>
+								<div class="color binpa"></div>
+								<div class="name"><span>Binary Pairing</span> <div class="name w2hpx binpa-text"><strong>{{ $wallet->display_complan_binary }}</strong></div></div>
 							</div>
 							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Direct Referral</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
+								<div class="color dirre"></div>
+								<div class="name"><span>Direct Referral</span> <div class="name w2hpx dirre-text"><strong>{{ $wallet->display_complan_direct }}</strong></div></div>
 							</div>
 						</div>
 					</div>
@@ -73,20 +73,20 @@
 					<div class="sub-container">
 						<div class="chart-legend" style="max-height: auto;">
 							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
+								<div class="color fpgc"></div>
+								<div class="name"><span>5th Pair GC</span> <div class="name w2hpx fpgc-text"><strong>{{ $points->display_binary }}</strong></div></div>
 							</div>
 						</div>
 						<div class="chart-legend" style="max-height: auto;">
 							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Direct GC</span><span class="value">{{ $points->display_direct }}</span></div>
+								<div class="color dgc"></div>
+								<div class="name"><span>Direct GC</span> <div class="name w2hpx dgc-text"><strong>{{ $points->display_direct }}</strong></div></div>
 							</div>
 						</div>
 						<div class="chart-legend" style="max-height: auto;">
 							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Maintenance GC</span><span class="value">{{ $points->display_maintenance }}</span></div>
+								<div class="color mgc"></div>
+								<div class="name"><span>Maintenance GC</span> <div class="name w2hpx mgc-text"><strong>{{ $points->display_maintenance }}</strong></div></div>
 							</div>
 						</div>
 					</div>
@@ -136,13 +136,13 @@
 							@foreach($_direct as $direct)
 							<div class="holder">
 								<div class="row clearfix">
-									<div class="col-md-7">
+									<div class="mob-center col-md-7">
 										<div class="color">
 											<img src="{{ $direct->profile_image }}">
 										</div>	
 										<div class="text">
 											<div class="pull-left">
-												<div style="max-width: 250px;" class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+												<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
 												<div class="email">{{ $direct->slot_no }}</div>
 												<div class="date">{{ $direct->time_ago }}</div>
 											</div>
@@ -333,6 +333,7 @@ $(document).ready(function()
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/atomic_color.css">
 <style type="text/css">
 
 input:-webkit-autofill {

@@ -1,3 +1,30 @@
+
+.modal-header
+{
+	background-color: #402A21 !important;
+	color: #fff;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	.close
+	{
+		color: #fff;
+	}
+}
+
+.popup-verify-placement
+{
+	.modal-header
+	{
+		border-top-left-radius: 0 !important;
+	 	border-top-right-radius: 0 !important;
+	}
+
+}
+
 .member
 {
 	background-image: url("/themes/brown/img/bg.jpg");

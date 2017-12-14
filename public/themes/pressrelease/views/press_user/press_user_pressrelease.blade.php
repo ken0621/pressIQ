@@ -13,7 +13,7 @@
             </div>
             <div class="press-release-content">
 
-               <div id="create_release" class="tabcontent create-release-container">
+                <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
                   <input type="text" name="pr_headline" class="form-control">
@@ -22,68 +22,69 @@
                   <div class="title">Boilerplate:</div>
                   <textarea name="bolier_content" id="tinymce"></textarea>
                   <div class="button-container">
-                     <span class="save-button"><a href="#">Save as draft</a></span>
-                     <span class="preview-button"><a href="#">Preview</a></span>
+                  <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
+                  <span class="preview-button"><a href="#">Preview</a></span>w</a></span>
                   </div>
-               </div>
+                </div>
 
               <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST" style="">
-               <div id="choose_recipient" class="tabcontent choose-recipient-container">
-                  <div class="title-container">Choose Recipient</div>
+                <div id="choose_recipient" class="tabcontent choose-recipient-container">
+                    <div class="title-container">Choose Recipient</div>
 
-                  <div class="title">Country:</div>
-                  <select data-placeholder="--Choose a country--" multiple class="chosen-select" id="choose_country" name="choose_country[]">
-                     @foreach($_country as $country_name)
-                     <option value="{{$country_name->country}}">{{$country_name->country}}</option>
-                     @endforeach
-                  </select>
+                    <div class="title">Country:</div>
+                    <select data-placeholder="--Choose a country--" multiple class="chosen-select" id="choose_country" name="choose_country[]">
+                         @foreach($_country as $country_name)
+                         <option value="{{$country_name->country}}">{{$country_name->country}}</option>
+                         @endforeach
+                    </select>
 
-                  <div class="title">Industry Type:</div>
-                  <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]">
-                      @foreach($_industry_type as $industry)
-                      <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
-                      @endforeach
-                  </select>
+                    <div class="title">Industry Type:</div>
+                    <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]">
+                          @foreach($_industry_type as $industry)
+                        <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
+                          @endforeach
+                    </select>
 
-                  <div class="title">Media Type:</div>
-                  <select data-placeholder="--Choose a media type--" multiple class="chosen-select" id="media_type" name="media_type[]">
-                      @foreach($_media_type as $media)
-                      <option value="{{$media->media_type}}">{{$media->media_type}}</option>
-                      @endforeach
-                  </select>
+                    <div class="title">Media Type:</div>
+                    <select data-placeholder="--Choose a media type--" multiple class="chosen-select" id="media_type" name="media_type[]">
+                          @foreach($_media_type as $media)
+                        <option value="{{$media->media_type}}">{{$media->media_type}}</option>
+                          @endforeach
+                    </select>
 
-                  <div class="title">Title of Journalist:</div>
-                  <select data-placeholder="--Choose a title of journalist--" multiple class="chosen-select" id="title_of_journalist" name="title_of_journalist[]">
-                      @foreach($_title_of_journalist as $title)
-                      <option value="{{$title->title_of_journalist}}">{{$title->title_of_journalist}}</option>
-                      @endforeach
-                  </select>
+                    <div class="title">Title of Journalist:</div>
+                    <select data-placeholder="--Choose a title of journalist--" multiple class="chosen-select" id="title_of_journalist" name="title_of_journalist[]">
+                          @foreach($_title_of_journalist as $title)
+                        <option value="{{$title->title_of_journalist}}">{{$title->title_of_journalist}}</option>
+                          @endforeach
+                    </select>
 
-                  <div class="title">Send To:</div>
-                  <input type="text"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
-                  <span class="choose-button" readonly>  
+                    <div class="title">Send To:</div>
+                    <input type="text"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
+                    <span class="choose-button" readonly>  
+                      
+                    <span class="choose-button" readon>  
+                        
+                       {{-- POPUP CHOOSE RECIPIENT --}}
+                    <a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
 
-                  {{-- POPUP CHOOSE RECIPIENT --}}
-                  <a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
+                      {{-- POPUP CHOOSE RECIPIENT --}}
+                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
+                    <div class="button-container">
+                    </div>
+                </div>
+                </form>
 
-                  {{-- POPUP CHOOSE RECIPIENT --}}
-                  <input type="text" id="recipient_email"  name="pr_to"  class="col-md-16" multiple readonly>
-                  <div class="button-container" readonly>
-                  </div>
-               </div>
-              </form>
-            
-               <div id="send_release" class="tabcontent send-release-container">
+                <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">New Release Summary</div>
                   <div class="title">Publisher:</div>
                   <div class="content">Digima Web Solution</div>
                   <div class="title">Title:</div>
                   <div class="content">Press Release</div>
                   <div class="button-container">
-                     <div class="send-button"><a href="#">Send</a></div>
+                     <span class="send-button"><button type="submit" name="send" value="send" ><a href="#">Send</a></button></span>
                   </div>
-               </div>
-               
+                </div>   
             </div>
          </div>
       </div>

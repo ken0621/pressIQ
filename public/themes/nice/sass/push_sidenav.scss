@@ -260,7 +260,7 @@ $bold: 700;
             width: 50px;
             padding: 7.5px 12px 7.5px 12px;
             margin-right: auto;
-            margin-top: 20px;
+            // margin-top: 20px;
 
             .fa
             {
@@ -297,9 +297,14 @@ $bold: 700;
         margin: auto;
     }
 
+    #nav_list .fa 
+    {
+        margin-top: 20px;
+    }
+
     .image-logo-holder img 
     {
-        margin-top: -65px;
+        margin-top: -70px;
     }
 }
 

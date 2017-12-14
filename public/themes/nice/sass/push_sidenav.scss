@@ -6,10 +6,16 @@ $regular: 400;
 $semi-bold: 600;
 $bold: 700;
 
+.blur-me
+{
+    @include transition(0.3s);
+}
+
 .pushmenu 
 { 
     /*this is the nav*/
-     background: #02295E;
+     // background: #02295E;
+     background-color: rgba(2,41,94,0.8);
      text-align: left;
      width: 300px;
      height: 100%;
@@ -192,7 +198,7 @@ $bold: 700;
 
 .pushmenu-left
 { 
-    left: -300px; 
+    left: -300px;
 }
 
 .pushmenu-left.pushmenu-open { left: 0;}
@@ -206,7 +212,7 @@ $bold: 700;
 
 #overlay
 {
-    @include transition(0.2s);
+    @include transition(0.3s);
     position: fixed;
     display: none;
     width: 100%;
@@ -235,7 +241,7 @@ $bold: 700;
 
 .pushmenu, .pushmenu-push
 {
-  @include transition(0.5s)
+  @include transition(0.3s)
 }
 
 #nav_list
@@ -284,69 +290,35 @@ $bold: 700;
 
  /* MEDIA SCREEN */
 
- @media screen and (max-width: 768px)
+ @media screen and (max-width: 800px)
  {
-    /* .header-container 
-    {
-        padding-bottom: 0px;
-    } */
-
-    #nav_list
-    {
-        padding-bottom: 25px;
-        margin-top: 5px;
-    }
-
     .image-logo-holder
     {
-        margin-left: 265px;
-        margin-top: -60px;
+        margin: auto;
+    }
+
+    .image-logo-holder img 
+    {
+        margin-top: -65px;
     }
 }
 
 @media screen and (max-width: 414px)
 {
-    .image-logo-holder
-    {
-        margin-left: 125px;
-        margin-top: -65px;
-    }
+
 }
 
 @media screen and (max-width: 425px)
 {
-    .image-logo-holder
-    {
-        margin-left: 125px;
-        margin-top: -65px;
-    }
+
 }
 
 @media screen and (max-width: 375px)
 {
-    #nav_list .fa 
-    {
-        font-size: 25px;
-    }
 
-    .image-logo-holder
-    {
-        margin-left: 105px;
-        margin-top: -65px;
-    }
 }
 
 @media screen and (max-width: 320px)
 {
-    #nav_list
-    {
-        padding-bottom: 25px;
-        margin-top: 0px;
-    }
 
-   .image-logo-holder 
-   {
-       margin-left: 85px;
-       margin-top: -60px;
-   }
 }

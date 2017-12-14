@@ -50,7 +50,7 @@
     </div>
 
     <!-- HEADER -->
-    <div id="home" class="subheader-container">
+    <div id="home" class="subheader-container blur-me">
         <div class="container">
             @if($customer)
             <div class="left-container">
@@ -80,81 +80,81 @@
             @endif
         </div>
     </div>
-    <div class="header-container">
+
+    <div class="side-nav">
+        <nav class="pushmenu pushmenu-left">
+            @if($customer)
+            <div class="space1"></div>
+            <a href="/members/profile">
+               <div class="profile-img-container">
+                    <div class="row-no-padding clearfix">
+                        <div class="col-xs-3">
+                            <div class="profile-img"><img src="{{ $profile_image }}"></div>
+                        </div>
+                        <div class="col-xs-9">
+                            <div class="text-holder">
+                                <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+                                <div class="subtext text-overflow">{{ $customer->email }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <div class="space1"></div>
+            <span>BROWSE</span>
+            <ul class="links">
+                <li> <a onclick="off()" href="/#home">Home</a> </li>
+                <li> <a onclick="off()" href="/#aboutus">ABOUT US</a> </li>
+                <li> <a onclick="off()" href="/#whytojoin">WHY TO JOIN</a> </li>
+                <li> <a onclick="off()" href="/#packages">PACKAGES</a> </li>
+                <li> <a onclick="off()" href="/#partners">OUR PARTNERS</a> </li>
+                <li> <a onclick="off()" href="/#contactus">CONTACT US</a> </li>
+            </ul>
+            
+            <div class="space2"></div>
+            <span>MEMBERS AREA</span>
+            <ul class="links">
+                <li> <a href="/members">Dashboard</a> </li>
+                <li> <a href="/members/profile">Profile</a> </li>
+                @if($mlm_member)
+                <!-- <li> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li> -->
+                <li class="genealogy-mobile-dropdown"> 
+                    <a href="javascript:">Genealogy</a> 
+                </li>
+                    <ul class="genealogy-mobile-dropdown-list">
+                        <li><a href="/members/genealogy?mode=binary">Binary Tree</a></li>
+                        <li><a href="/members/genealogy?mode=sponsor">Sponsor Tree</a></li>
+                    </ul>
+
+                <li> <a href="/members/report">Reports</a> </li>
+                <li> <a href="/members/report-points">Network List</a> </li>
+                <li> <a href="/members/wallet-encashment">Wallet Encashment</a> </li>
+                    @if($customer)
+                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                    @endif
+                @else
+                @endif
+            </ul>
+            @else
+                <div class="space1"></div>
+                <span>BROWSE</span>
+                <ul class="links">
+                    <li> <a onclick="off()" href="/#home">Home</a> </li>
+                    <li> <a onclick="off()" href="/#aboutus">ABOUT US</a> </li>
+                    <li> <a onclick="off()" href="/#whytojoin">WHY TO JOIN</a> </li>
+                    <li> <a onclick="off()" href="/#packages">PACKAGES</a> </li>
+                    <li> <a onclick="off()" href="/#partners">OUR PARTNERS</a> </li>
+                    <li> <a onclick="off()" href="/#contactus">CONTACT US</a> </li>
+                </ul>
+            @endif
+        </nav>
+    </div>
+
+    <div class="header-container blur-me">
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-2">
-
-                    <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
-
-                        <nav class="pushmenu pushmenu-left">
-                            @if($customer)
-                            <div class="space1"></div>
-                            <a href="/members/profile">
-                               <div class="profile-img-container">
-                                    <div class="row-no-padding clearfix">
-                                        <div class="col-xs-3">
-                                            <div class="profile-img"><img src="{{ $profile_image }}"></div>
-                                        </div>
-                                        <div class="col-xs-9">
-                                            <div class="text-holder">
-                                                <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
-                                                <div class="subtext text-overflow">{{ $customer->email }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="space1"></div>
-                            <span>BROWSE</span>
-                            <ul class="links">
-                                <li> <a onclick="off()" href="/#home">Home</a> </li>
-                                <li> <a onclick="off()" href="/#aboutus">ABOUT US</a> </li>
-                                <li> <a onclick="off()" href="/#whytojoin">WHY TO JOIN</a> </li>
-                                <li> <a onclick="off()" href="/#packages">PACKAGES</a> </li>
-                                <li> <a onclick="off()" href="/#partners">OUR PARTNERS</a> </li>
-                                <li> <a onclick="off()" href="/#contactus">CONTACT US</a> </li>
-                            </ul>
-                            
-                            <div class="space2"></div>
-                            <span>MEMBERS AREA</span>
-                            <ul class="links">
-                                <li> <a href="/members">Dashboard</a> </li>
-                                <li> <a href="/members/profile">Profile</a> </li>
-                                @if($mlm_member)
-                                <!-- <li> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li> -->
-                                <li class="genealogy-mobile-dropdown"> 
-                                    <a href="javascript:">Genealogy</a> 
-                                </li>
-                                    <ul class="genealogy-mobile-dropdown-list">
-                                        <li><a href="/members/genealogy?mode=binary">Binary Tree</a></li>
-                                        <li><a href="/members/genealogy?mode=sponsor">Sponsor Tree</a></li>
-                                    </ul>
-
-                                <li> <a href="/members/report">Reports</a> </li>
-                                <li> <a href="/members/report-points">Network List</a> </li>
-                                <li> <a href="/members/wallet-encashment">Wallet Encashment</a> </li>
-                                    @if($customer)
-                                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
-                                    @endif
-                                @else
-                                @endif
-                            </ul>
-                            @else
-                                <div class="space1"></div>
-                                <span>BROWSE</span>
-                                <ul class="links">
-                                    <li> <a onclick="off()" href="/#home">Home</a> </li>
-                                    <li> <a onclick="off()" href="/#aboutus">ABOUT US</a> </li>
-                                    <li> <a onclick="off()" href="/#whytojoin">WHY TO JOIN</a> </li>
-                                    <li> <a onclick="off()" href="/#packages">PACKAGES</a> </li>
-                                    <li> <a onclick="off()" href="/#partners">OUR PARTNERS</a> </li>
-                                    <li> <a onclick="off()" href="/#contactus">CONTACT US</a> </li>
-                                </ul>
-                            @endif
-                        </nav>
-
-
+                    <div id="nav_list" class="blur-me" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/">
                             <img src="/themes/{{ $shop_theme }}/img/header-logo.png">
@@ -193,12 +193,12 @@
     </div> 
     
     <!-- CONTENT -->
-    <div id="scroll-to" class="clearfix">
+    <div id="scroll-to" class="clearfix blur-me">
        @yield("content")
     </div>
 
     <!-- FOOTER -->
-    <footer id="bottom-footer">
+    <footer id="bottom-footer" class="blur-me">
         <div class="container">
             <div class="footer-container">
                 <div class="upper row clearfix">

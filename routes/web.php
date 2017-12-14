@@ -1213,6 +1213,7 @@ include_once('routes_config/routes_item.php');
 /* Members Area */
 include_once('routes_config/routes_members_area.php');
 
+include_once('routes_config/routes_transaction.php');
 
 /*PAYROLL EMPLOYEE*/
 include_once('routes_config/routes_payroll_employee.php');

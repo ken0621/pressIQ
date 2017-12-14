@@ -10,6 +10,7 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_mlm_slot_points_log;
+use App\Models\Tbl_terms;
 use App\Globals\Tablet_global;
 use App\Globals\Mlm_plan;
 use App\Globals\CommissionCalculator;
@@ -41,6 +42,10 @@ class Customer
 		//dd($info);
 		Tbl_customer::insert($info);
 		return true;	
+	}
+	public static function getTerms($shop_id, $archived = 0)
+	{
+		return Tbl_terms::where("archived", $archived)->where("terms_shop_id", $shop_id)->get();
 	}
 	public static function scan_customer($shop_id, $id = 0)
 	{

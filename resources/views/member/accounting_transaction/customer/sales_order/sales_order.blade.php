@@ -33,7 +33,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="reference_number" value="EQ20171214-0002">
+                                <input type="text" class="form-control" name="reference_number" value="SO20171214-0002">
                             </div>
                         </div>
                     </div>
@@ -57,10 +57,6 @@
                         <div class="col-sm-2">
                             <label>Estimate Date</label>
                             <input type="text" class="datepicker form-control input-sm" name="est_date" value="{{date('m/d/y')}}"/>
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Expiration Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="est_exp_date" value="{{date('m/d/y')}}" />
                         </div>
                     </div>
                     
@@ -142,7 +138,7 @@
                     </div>
                     <div class="row clearfix">
                         <div class="col-sm-3">
-                            <label>Message Displayed on Estimate</label>
+                            <label>Message Displayed on Sales Order</label>
                             <textarea class="form-control input-sm textarea-expand" name="est_message" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-3">
@@ -177,5 +173,5 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/member/js/accounting_transaction/customer/estimate_quotation.js"></script>
+<script type="text/javascript" src="/assets/member/js/accounting_transaction/customer/sales_order.js"></script>
 @endsection

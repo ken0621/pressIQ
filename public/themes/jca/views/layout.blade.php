@@ -282,7 +282,6 @@
                     <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
                 </div>
             </div>
-
         </div>
         
         @include("frontend.gfoot")

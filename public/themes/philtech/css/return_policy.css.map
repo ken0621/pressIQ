@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "",
-"sources": [],
+"mappings": "AAAA,QACA,CACC,gBAAgB,CAAC,KAAK,CACtB,UAAU,CAAE,IAAI,CAChB,aAAa,CAAE,IAAI",
+"sources": ["../sass/return_policy.scss"],
 "names": [],
 "file": "return_policy.css"
 }

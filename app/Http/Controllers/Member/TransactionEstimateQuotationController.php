@@ -18,5 +18,9 @@ use App\Globals\Pdf_global;
 
 class TransactionEstimateQuotationController extends Member
 {
-  
+	public function getIndex()
+	{
+		$data['page'] = "Estimate and Quotation";
+		return view('member.accounting_transaction.customer.estimate_quotation.estimate_quotation_list',$data);
+	}  
 }

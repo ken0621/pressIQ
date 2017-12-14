@@ -18,5 +18,9 @@ use App\Globals\Pdf_global;
 
 class TransactionCreditMemoController extends Member
 {
-  
+    public function getIndex()
+	{
+		$data['page'] = "Credit Memo";
+		return view('member.accounting_transaction.customer.credit_memo.credit_memo_list',$data);
+	}  
 }

@@ -30,28 +30,28 @@
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="square-container">
-					<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right btn-enter-a-code">Create New Slot</a></div>
+					<div class="title">Wallet Summary <a href="javascript:" class="title-button btn-enter-a-code"><div>Create New Slot</div></a></div>
 					<div class="sub-container">
 						<div class="table-holder">
 							<div class="chart-legend">
 								<div class="holder">
 									<div class="color" style="background-color: #0D91E3"></div>
-									<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
+									<div class="name"><span>Current Wallet</span> <div class="name w2hpx">{{ $wallet->display_current_wallet }}</div></div>
 								</div>
 								<div class="holder">
 									<div class="color" style="background-color: #8E5EA2"></div>
-									<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
+									<div class="name"><span>Total Pay-out</span> <div class="name w2hpx">{{ $wallet->display_total_payout }}</div></div>
 								</div>
 								<div class="chart-holder">
 									<canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="400" height="400"></canvas>
 								</div>
 								<div class="holder">
 									<div class="color"></div>
-									<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
+									<div class="name"><span>Current Slot(s)</span> <div class="name w2hpx">{{ $customer_summary["display_slot_count"] }}</div></div>
 								</div>
 								<div class="holder">
 									<div class="color"></div>
-									<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
+									<div class="name"><span>Total Reward</span> <div class="name w2hpx">{{ $wallet->display_total_earnings }}</div></div>
 								</div>
 							</div>
 						</div>
@@ -67,19 +67,19 @@
 						<div class="chart-legend">
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Advertisement Bonus</span> {{ $wallet->display_complan_advertisement_bonus }}</div>
+								<div class="name"><span>Advertisement Bonus</span> <div class="name w2hpx">{{ $wallet->display_complan_advertisement_bonus }}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Direct</span> {{ $wallet->display_complan_direct }}</div>
+								<div class="name"><span>Direct</span> <div class="name w2hpx">{{ $wallet->display_complan_direct }}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Leadership Advertisement Bonus</span> {{ $wallet->display_complan_leadership_advertisement_bonus }}</div>
+								<div class="name"><span>Leadership Advertisement Bonus</span> <div class="name w2hpx">{{ $wallet->display_complan_leadership_advertisement_bonus }}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Rebates Bonus</span> {{ $wallet->display_complan_stairstep }}</div>
+								<div class="name"><span>Rebates Bonus</span> <div class="name w2hpx">{{ $wallet->display_complan_stairstep }}</div></div>
 							</div>
 						</div>
 					</div>
@@ -91,19 +91,27 @@
 						<div class="chart-legend" style="max-height: auto;">
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_leadership_advertisement_bonus}}</span></div>
+								<div class="name"><span>5th Pair GC</span> <div class="name w2hpx">{{ $points->display_leadership_advertisement_bonus}}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Advertisement GC</span><span class="value">{{ $points->display_advertisement_bonus}}</span></div>
+								<div class="name"><span>Advertisement GC</span> <div class="name w2hpx">{{ $points->display_advertisement_bonus}}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Rank PV</span><span class="value">{{ $points->display_rank_pv }}</span></div>
+								<div class="name"><span>Rank PV</span> <div class="name w2hpx">{{ $points->display_rank_pv }}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Rebates Points</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
+								<div class="name"><span>Rebates Points</span> <div class="name w2hpx">{{ $points->display_stairstep_gpv }}</div></div>
+							</div>
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Reward Points Redemption</span> <div class="name">{{ currency('',$reward_point_redemption) }} POINT(S)</div></div>
+							</div>
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Remaining Reward Points</span> <div class="name">{{ currency('',$points->leadership_advertisement_bonus+$points->advertisement_bonus+$reward_point_redemption) }} POINT(S)</div></div>
 							</div>
 						</div>
 					</div>
@@ -139,7 +147,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="square-container">
-					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button" onclick="location.href='/members/report'"><div>View All Rewards</div></a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)

@@ -52,7 +52,7 @@
             <div class="lol-row clearfix">
                 @foreach($_product as $product)
                 <div class="vc_col-sm-4 wpb_column column_container">
-                    <div class="product-holder green match-height" onClick="location.href='/product/view/{{ $product["eprod_id"] }}'">
+                    <div class="product-holder green match-height" onClick="location.href='/product/view2/{{ $product["eprod_id"] }}'">
                         <div class="pic"><img src="{{ get_product_first_image($product) }}" alt=""></div>
                         <div class="divider"></div>
                         <div class="name">{{ get_product_first_name($product) }}</div>

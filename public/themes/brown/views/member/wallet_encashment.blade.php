@@ -15,7 +15,7 @@
 		</div>
 		<div class="animated fadeInRight right">
 			<div class="text-right">
-				<button onclick="action_load_link_to_modal('/members/payout-setting', 'lg')" type="button" class="btn btn-gear"><i class="fa fa-bank"></i> PAYOUT SETTINGS</button>
+				<button onclick="action_load_link_to_modal('/members/payout-setting', 'lg')" type="button" class="btn btn-brown-r2"><i class="fa fa-bank"></i> PAYOUT SETTINGS</button>
 			</div>
 		</div>
 	</div>

@@ -25,7 +25,7 @@ use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_vendor;
-use App\Models\Tbl_purchase_order_line;
+use App\Models\Tbl_purchase_order;
 
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
@@ -1087,19 +1087,23 @@ class Warehouse2
     }
     public static function stock_ledger_report($shop_id, $current_warehouse, $date_from = '', $date_to = '', $item_id)
     {
-        $data = Tbl_inventory_history_items::HistoryPerItem()->where('tbl_inventory_history.shop_id',$shop_id)->where('tbl_inventory_history.warehouse_id',$current_warehouse)->where('tbl_inventory_history_items.item_id', $item_id)->orderBy('item_sku', 'DESC');
-        //dd($data);
+        $history_item = Tbl_inventory_history_items::HistoryPerItem()->where('tbl_inventory_history.shop_id',$shop_id)->where('tbl_inventory_history.warehouse_id',$current_warehouse)->where('tbl_inventory_history_items.item_id', $item_id)->orderBy('item_sku', 'DESC');
+        
+        $date = null;
+
         if($date_from && $date_to)
         {
-            $data = $data->whereBetween('history_date',[$date_from,$date_to]);       
+            $data = $history_item->whereBetween('history_date',[$date_from,$date_to]);       
         }
+
         $return = $data->get();
-            //dd($return);
+
+        //dd($return);
         return $return;
     }
 
-    public static function get_vendor($item_id, $vendor_id)
+    public static function get_vendor($shop_id)
     {
-        return Tbl_purchase_order_line::GetVendor()->where('item_id', $item_id)->where('vendor_id', $vendor_id)->get();
+        return Tbl_vendor::where('vendor_shop_id', $shop_id)->get();
     }
 }

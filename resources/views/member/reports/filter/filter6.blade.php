@@ -27,6 +27,7 @@
         <div  style="margin-top: 15px" class=" row clearfix form-group">
             <div class="col-md-2 " style="padding: 5px">
                 <select class="form-control input-sm" name="item">
+                    <option value="">All Items</option>
                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                 </select>
             </div>

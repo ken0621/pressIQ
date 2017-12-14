@@ -38,8 +38,8 @@ class ReportStockLedgerController extends Member
 
        	$data['_report'] = Warehouse2::stock_ledger_report($shop_id, $current_warehouse, $data['from'],$data['to'], $item);
 
-       	$data['_vendor'] = Warehouse2::get_vendor($item, $vendor);
-       	//dd($data['vendor']);
+       	$data['_vendor'] = Warehouse2::get_vendor($shop_id);
+       	//dd($data['_vendor']);
        	$data['_item']  = Item::get_all_category_item([1,4,5]);
 
        	$data['item'] = $item;

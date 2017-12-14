@@ -80,10 +80,26 @@ button
 {
 	color: #ffffff;
 	font-size: 13px;
-	background-color: #502d19;
+	background-color: #402A21;
 	padding: 7.5px 25px;
 	border-radius: 25px;
 	font-weight: $medium;
+
+	&:hover
+	{
+		color: #fff;
+	}
+}
+
+.btn-custom-danger
+{
+	color: #ffffff;
+	font-size: 13px;
+	background-color: #C43430;
+	padding: 7.5px 25px;
+	border-radius: 25px;
+	font-weight: $medium;
+	
 	&:hover
 	{
 		color: #fff;
@@ -105,6 +121,7 @@ button
 {
 	border: 0;
 	box-shadow: none;
+	border-radius: 0;
 }
 
 .cart
@@ -168,8 +185,6 @@ button
 		.modal-header
 		{
 			background-color: #693d28;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
 			border-bottom: none;
 
 			.close

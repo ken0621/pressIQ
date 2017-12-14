@@ -6,7 +6,7 @@
     <div class="report-header clearfix">
         <div class="animated fadeInLeft left">
             <div class="icon">
-                <img src="/themes/{{ $shop_theme }}/img/report-icon.png">
+                <h1><i class="fa fa-gift"></i></h1>
             </div>
             <div class="text">
                     <div class="name">{{$page}}</div>

@@ -1593,7 +1593,8 @@ class ShopMemberController extends Shop
                     $insert_report["amount"] = -1 * $redeemable_item->redeemable_points;
                     $insert_report['log_type'] = 'Request';
                     // you redeem <item> for <cost>. Please wait for admin's approval.
-                    $insert_report['log'] = 'You redeemed '.$redeemable_item->item_name.' for '.$redeemable_item->redeemable_points.". Please wait for admin's approval.";
+                    $insert_report['log'] = 'You redeemed '.$redeemable_item->item_name.' for '.currency("",$redeemable_item->redeemable_points)." POINTS. Please wait for admin's approval.";
+                    $insert_report['date_created'] = Carbon::now();
                     Tbl_item_redeemable_report::insert($insert_report);
                     Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->increment('number_of_redeem');
 
@@ -1630,6 +1631,14 @@ class ShopMemberController extends Shop
         $used_points = Tbl_item_redeemable_points::where("slot_id",$slot_id)->sum("amount");
 
         return $points + $used_points;
+    }
+    public function getRedeemHistory()
+    {
+        $sort_by = 0;
+        $data['page'] = "Redeem History";
+        $slot_info = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+        $data['redeem_history'] = Tbl_item_redeemable_report::where('slot_id',$slot_info->slot_id)->paginate(10);
+        return (Self::load_view_for_members("member.redeem_history",$data));
     }
     public function getCodevault()
     {

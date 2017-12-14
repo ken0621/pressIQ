@@ -52,7 +52,6 @@ button:hover{
 
 .content{
 	background-color: transparent;
-	padding-top: 5px;
 }
 
 /* HEADER */
@@ -134,28 +133,9 @@ button:hover{
 		{
 			color: #76b83f;
 		}
-	}
-	
-	.search-container
-	{
-		float: right;
-		padding-top: 13px;
-		vertical-align: middle;
-		input
+		a:hover
 		{
-			font-size: 15px;
-			vertical-align: middle;
-			border: 1px solid #e1e1e1;
-			padding: 6px;
-			vertical-align: middle;
-		}
-		i
-		{
-			color: #fff;
-			background-color: #c51f33;
-			font-size: 25px;
-			vertical-align: middle;
-			padding: 5px;
+			border-bottom: 2px solid #c51f33;
 		}
 	}
 }
@@ -360,6 +340,15 @@ button:hover{
 	{
 		// background-color: #2b5fd9;
 		padding: 35px 0px 55px 0px;
+		@media screen and (max-width: 768px)
+		{
+			padding: 15px 0px 30px 0px;
+		}
+		@media screen and (max-width: 425px)
+		{
+			padding: 15px 0px 30px 0px;
+			text-align: center;
+		}
 		p 
 		{
 			font-size: 11px;
@@ -371,6 +360,29 @@ button:hover{
 			color: rgba(255,255,255, 0.5);
 		}
 
+		.footer-follow-container
+		{
+			padding-left: 110px !important;
+			@media screen and (max-width: 768px)
+			{
+				padding-left: 0px !important;
+			}
+			.footer-follow-title
+			{
+				font-family: "Lato", sans-serif;
+				font-size: 15px !important;
+				font-weight: 300;
+				color: #ffffff;
+				margin-bottom: 25px;
+
+				@media screen and (max-width: 768px)
+				{
+					margin-bottom: 5px;
+					margin-top: 20px;
+				}
+			}
+		}
+
 		.footer-title-container
 		{
 			.footer-title
@@ -380,11 +392,21 @@ button:hover{
 				font-weight: 300;
 				color: #ffffff;
 				margin-bottom: 25px;
+
+				@media screen and (max-width: 768px)
+				{
+					margin-bottom: 5px;
+					margin-top: 20px;
+				}
 			}
 		}
 
 		.email-textbox-container
 		{
+			@media screen and (max-width: 425px)
+			{
+				margin: auto;
+			}
 			width: 80%;
 			position: relative;
 			::-webkit-input-placeholder { /* Chrome */
@@ -465,6 +487,14 @@ button:hover{
 	    font-family: "Raleway Regular", sans-serif;
 		font-size: 12px;
 	    padding: 12px 0px 12px 0px;
+	    @media screen and (max-width: 425px)
+	    {
+	    	font-size: 10px;
+	    }
+	    @media screen and (max-width: 375px)
+	    {
+	    	font-size: 8px;
+	    }
 	}
 	.ftr-title-2
 	{
@@ -473,6 +503,18 @@ button:hover{
 	    font-family: "Raleway Regular", sans-serif;
 		font-size: 12px;
 		padding: 12px 0px 12px 0px;
+		@media screen and (max-width: 425px)
+		{
+			font-size: 10px;
+		}
+		@media screen and (max-width: 375px)
+	    {
+	    	font-size: 8px;
+	    }
+    	@media screen and (max-width: 320px)
+        {
+        	font-size: 6px;
+        }
 	}
 }
 

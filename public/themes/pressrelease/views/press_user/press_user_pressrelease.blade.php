@@ -72,84 +72,6 @@
                     </div>
                   </div>
 
-                <!-- <div id="create_pr" class="tabcontent create-pr-container">
-                      @if (Session::has('message'))
-                      <div class="alert alert-success">
-                         <center>{{ Session::get('message') }}</center>
-                      </div>
-                      @endif 
-                      @if (Session::has('delete'))
-                      <div class="alert alert-danger ">
-                         <center>{{ Session::get('delete') }}</center>
-                      </div>
-                      @endif
-
-                    <form method="post">
-                        {{csrf_field()}}
-                        <div class="title-container">PRESS RELEASE</div>
-                        <div class="title">Send To:</div>
-                        @if (Session::has('pr_edit'))
-                        @foreach($edit as $edits)
-                        <input type="text" name="pr_receiver_name" value="{{$edits->pr_receiver_name}}" class="form-control" id="recipient_name" readonly>
-
-                        <span class="choose-button" readon>   
-                        <a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
-
-                        <input type="hidden" name="pr_to" id="recipient_email" value="{{$edits->pr_to}}" class="form-control" readonly >
-                        <div class="title">Headline:</div>
-                        <input type="text" name="pr_headline" value="{{$edits->pr_headline}}" class="form-control" style="text-transform: capitalize;">
-                        <div class="title">Subheading:</div>
-                        <input type="text" name="pr_subheading" value="{{$edits->pr_subheading}}" class="form-control">
-                        <div class="title">Content:</div>
-                        <textarea name="pr_content">{{$edits->pr_content}}</textarea>
-                        @endforeach
-                        @else
-                        <input type="text" name="pr_receiver_name" class="form-control" id="recipient_name" readonly>
-
-                        <span class="choose-button" readon>   
-                        <a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
-
-                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
-                        <div class="title">Headline:</div>
-                        <input type="text" name="pr_headline" class="form-control" style="text-transform: capitalize;">
-                        <div class="title">Subheading:</div>
-                        <input type="text" name="pr_subheading" class="form-control">
-                        <div class="title">Content:</div>
-                        <textarea name="pr_content"></textarea>
-                        @endif
-                        <div class="button-container">
-                        <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                        <span class="send-button"><button type="submit" name="send" value="send"><a>Send</a></button></span>
-                        </div>
-                    </form>
-
-                </div>
-
-                <div id="manage_pr" class="tabcontent manage-pr-container">
-                    <div class="manage-holder-container">
-                        <table>
-                            <tr>    
-                                <th>Press Release Title</th>
-                                <th>Recipient</th>
-                                <th>Status</th>
-                                <th>Send</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                            @foreach($drafts as $draft)
-                            <tr>
-                                <td>{{$draft->pr_headline}}</td>
-                                <td>{{$draft->pr_receiver_name}}</td>
-                                <td>Draft</td>
-                                <td><a href="/pressuser/pressrelease/send_draft/{{$draft->pr_id}}">Send</a></td>
-                                <td><a href="/pressuser/pressrelease/edit_draft/{{$draft->pr_id}}">Edit</a></td>
-                                <td><a href="/pressuser/pressrelease/delete_draft/{{$draft->pr_id}}">Delete</a></td>
-                            </tr>
-                            @endforeach
-                        </table>
-                    </div>
-                </div>
- -->
                 <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">New Release Summary</div>
                   <div class="title">Publisher:</div>
@@ -221,7 +143,9 @@ document.getElementById("defaultOpen").click();
 
 $(".chosen-select").chosen({disable_search_threshold: 10});
 </script>
-<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+<script src="/email_assets/tinymce/js/tinymce/tinymce.min.js"></script>
+<script src="/email_assets/tinymce/js/tinymce/tinymce.js"></script>
+<script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
 <script>
 tinymce.init({ 
 selector:'textarea', 
@@ -230,7 +154,7 @@ image_description: false,
 image_title: true,
 height: 500,
 plugins: ["autolink lists image charmap print preview anchor","visualblocks code","insertdatetime table contextmenu paste imagetools", "wordcount"],
-toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview',
+toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image | preview',
 
 
   // we override default upload handler to simulate successful upload
@@ -266,18 +190,7 @@ toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignrig
 
     // formData.append('file', blobInfo.blob(), fileName(blobInfo));
     xhr.send(formData);
-
-    // setTimeout(function() 
-    // {
-    //   // no matter what you upload, we will turn it into TinyMCE logo :)
-    //   success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
-    // }, 2000);
   },
-
-  // init_instance_callback: function (ed) 
-  // {
-  //   ed.execCommand('mceImage');
-  // }
 });
 </script>
 

@@ -22,6 +22,7 @@
 
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        {{-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css"> --}}
 
         @include("frontend.ghead")
 
@@ -104,12 +105,12 @@
                             @if(Request::segment(1)=="members")
                                 <li><a class="smoth-scroll" href="/#home">Home</a></li>
                                 <li><a class="smoth-scroll" href="/newsroom">News Room</a></li>
-                                <li><a class="smoth-scroll" href="/#whytojoin">About</a></li>
+                                <li><a class="smoth-scroll" href="/about">About</a></li>
                                 <li><a class="smoth-scroll" href="/contact">Contact Us</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="/#home">Home</a></li>
                                 <li><a class="smoth-scroll" href="/newsroom">News Room</a></li>
-                                <li><a class="smoth-scroll" href="/#whytojoin">About</a></li>
+                                <li><a class="smoth-scroll" href="/about">About</a></li>
                                 <li><a class="smoth-scroll" href="/contact">Contact Us</a></li>
                             @endif
                         </ul>
@@ -151,13 +152,13 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-md-4" style="padding-left: 150px !important;">
-                        <div class="footer-title-container">
-                            <p class="footer-title">FOLLOW US ON</p>
+                    <div class="col-md-4">
+                        <div class="footer-follow-container">
+                            <p class="footer-follow-title">FOLLOW US ON</p>
+                            <span><i class="fa fa-facebook-square" aria-hidden="true"></i></span>
+                            <span><i class="fa fa-twitter-square" aria-hidden="true"></i></span>
+                            <span><i class="fa fa-pinterest-square" aria-hidden="true"></i></span>
                         </div>
-                        <span><i class="fa fa-facebook-square" aria-hidden="true"></i></span>
-                        <span><i class="fa fa-twitter-square" aria-hidden="true"></i></span>
-                        <span><i class="fa fa-pinterest-square" aria-hidden="true"></i></span>
                     </div>
                 </div>
             </div>

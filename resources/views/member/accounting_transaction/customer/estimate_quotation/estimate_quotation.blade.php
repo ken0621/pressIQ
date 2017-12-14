@@ -89,13 +89,13 @@
                                             <td class="invoice-number-td text-right">1</td>
                                             <td><input type="text" class="for-datepicker" name="estline_service_date[]"/></td>
                                             <td>
-                                                <select class="form-control droplist-item input-sm pull-left" name="estline_item_id[]" >
+                                                <select class="form-control droplist-item select-item input-sm pull-left" name="estline_item_id[]" >
                                                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                     <option class="hidden" value="" />
                                                 </select>
                                             </td>
                                             <td><textarea class="textarea-expand txt-desc" name="estline_description[]"></textarea></td>
-                                            <td><select class="droplist-um" name="estline_um[]"><option class="hidden" value="" /></select></td>
+                                            <td><select class="droplist-um select-um" name="estline_um[]"><option class="hidden" value="" /></select></td>
                                             <td><input class="text-center number-input txt-qty compute" type="text" name="estline_qty[]"/></td>
                                             <td><input class="text-right number-input txt-rate compute" type="text" name="estline_rate[]"/></td>
                                             <td><input class="text-right txt-discount compute" type="text" name="estline_discount[]"/></td>
@@ -112,13 +112,13 @@
                                             <td class="invoice-number-td text-right">2</td>
                                             <td><input type="text" class="datepicker" name="estline_service_date[]"/></td>
                                             <td>
-                                                <select class="form-control droplist-item input-sm pull-left" name="estline_item_id[]" >
+                                                <select class="form-control droplist-item select-item input-sm pull-left" name="estline_item_id[]" >
                                                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                     <option class="hidden" value="" />
                                                 </select>
                                             </td>
                                             <td><textarea class="textarea-expand txt-desc" name="estline_description[]"></textarea></td>
-                                            <td><select class="droplist-um" name="estline_um[]"><option class="hidden" value="" /></select></td>
+                                            <td><select class="droplist-um select-um" name="estline_um[]"><option class="hidden" value="" /></select></td>
                                             <td><input class="text-center number-input txt-qty compute" type="text" name="estline_qty[]"/></td>
                                             <td><input class="text-right number-input txt-rate compute" type="text" name="estline_rate[]"/></td>
                                             <td><input class="text-right txt-discount compute" type="text" name="estline_discount[]"/></td>

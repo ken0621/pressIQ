@@ -54,6 +54,43 @@ function estimate_quotation()
             	action_load_item_info($(this));
             }
         });
+
+        $('.droplist-um').globalDropList(
+    	{
+    		hasPopup: "false",
+    		width : "100%",
+    		placeholder : "um..",
+    		onChangeValue: function()
+    		{
+    			action_load_unit_measurement($(this));
+    		}
+
+    	});
+        $('.droplist-um:not(.has-value)').globalDropList("disabled");
+
+        $(".draggable .tr-draggable:last td select.select-um").globalDropList(
+        {
+        	hasPopup: "false",
+    		width : "100%",
+    		placeholder : "um..",
+    		onChangeValue: function()
+    		{  
+    			action_load_unit_measurement($(this));
+    		}
+
+        }).globalDropList('disabled');
+	}
+
+	function action_load_unit_measurement($this)
+	{
+		$parent = $this.closest(".tr-draggable");
+		$item   = $this.closest(".tr-draggable").find(".select-item");
+
+		$um_qty = parseFloat($this.find("option:selected").attr("qty") || 1);
+		$sales  = parseFloat($item.find("option:selected").attr("price"));
+		$qty    = parseFloat($parent.find(".txt-qty").val());
+
+		$parent.find(".txt-rate").val( $um_qty * $sales * $qty ).change();
 	}
 	function event_click_last_row()
 	{
@@ -68,16 +105,8 @@ function estimate_quotation()
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
-
-		$parent.find(".txt-rate").attr("readonly",false);
-		$parent.find(".txt-discount").attr("disabled",false);
-		if($this.find("option:selected").attr("item-type") == 4)
+		if($this.find("option:selected").attr("has-um"))
 		{
-			$parent.find(".txt-rate").attr("readonly",true);
-			$parent.find(".txt-discount").attr("disabled","disabled");
-		}
-		if($this.find("option:selected").attr("has-um") != '')
-		{			
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$(this).globalDropList("reload").globalDropList("enabled");

@@ -464,18 +464,6 @@
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
         <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
         
-    <!--     <script>
-        function on() 
-        {
-            document.getElementById("overlay").style.display = "block";
-        }
-    
-        function off() 
-        {
-            document.getElementById("overlay").style.display = "none";
-        }
-    </script> -->
-
         @yield("js")
     </body>
 </html>

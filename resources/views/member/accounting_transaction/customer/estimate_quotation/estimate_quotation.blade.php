@@ -40,27 +40,27 @@
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
                             <div class="col-sm-4">
-                                <select class="form-control droplist-customer input-sm pull-left" name="est_customer_id" data-placeholder="Select a Customer" required>
-                                    @include('member.load_ajax_data.load_customer', ['customer_id' => isset($est) ? $est->est_customer_id : (isset($c_id) ? $c_id : '') ]);
+                                <select class="form-control droplist-customer input-sm pull-left" name="customer_id" data-placeholder="Select a Customer" required>
+                                    @include('member.load_ajax_data.load_customer', ['customer_id' => isset($est) ? $est->customer_id : (isset($c_id) ? $c_id : '') ]);
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control input-sm customer-email" name="est_customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$est->est_customer_email or ''}}"/>
+                                <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$est->customer_email or ''}}"/>
                             </div>
                         </div>
                     </div>                          
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Billing Address</label>
-                            <textarea class="form-control input-sm textarea-expand" name="est_customer_billing_address" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="customer_billing_address" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-2">
                             <label>Estimate Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="est_date" value="{{date('m/d/y')}}"/>
+                            <input type="text" class="datepicker form-control input-sm" name="date" value="{{date('m/d/y')}}"/>
                         </div>
                         <div class="col-sm-2">
                             <label>Expiration Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="est_exp_date" value="{{date('m/d/y')}}" />
+                            <input type="text" class="datepicker form-control input-sm" name="exp_date" value="{{date('m/d/y')}}" />
                         </div>
                     </div>
                     
@@ -143,11 +143,11 @@
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Message Displayed on Estimate</label>
-                            <textarea class="form-control input-sm textarea-expand" name="est_message" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="message" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-3">
                             <label>Statement Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="est_memo" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="memo" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-6">
                             <div class="row">

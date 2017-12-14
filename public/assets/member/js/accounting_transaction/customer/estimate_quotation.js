@@ -10,6 +10,9 @@ function estimate_quotation()
 	}
 	function action_load_initialize_select()
 	{
-		alert(123);
+		$('.droplist-customer').globalDropList(function()
+		{
+			
+		});
 	}
 }

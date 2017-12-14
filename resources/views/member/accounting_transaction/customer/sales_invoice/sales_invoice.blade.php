@@ -199,6 +199,15 @@
                                     PHP&nbsp;<span class="tax-total">0.00</span>
                                 </div>
                             </div> 
+                            <div class="row">
+                                    <div class="col-md-7 text-right digima-table-label">
+                                      Total
+                                    </div>
+                                    <div class="col-md-5 text-right digima-table-value total">
+                                        <input type="hidden" name="overall_price" class="total-amount-input" />
+                                        PHP&nbsp;<span class="total-amount">0.00</span>
+                                    </div>
+                                </div>
                             @if(isset($inv))
                                 <div class="row">
                                     <div class="col-md-7 text-right digima-table-label">

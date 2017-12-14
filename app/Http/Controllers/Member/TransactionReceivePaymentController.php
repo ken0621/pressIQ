@@ -18,5 +18,9 @@ use App\Globals\Pdf_global;
 
 class TransactionReceivePaymentController extends Member
 {
-  
+	public function getIndex()
+	{
+		$data['page'] = "Receive Payment";
+		return view('member.accounting_transaction.customer.receive_payment.receive_payment_list',$data);
+	}  
 }

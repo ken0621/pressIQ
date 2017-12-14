@@ -18,5 +18,9 @@ use App\Globals\Pdf_global;
 
 class TransactionSalesReceiptController extends Member
 {
-  
+  	public function getIndex()
+	{
+		$data['page'] = "Sales Receipt";
+		return view('member.accounting_transaction.customer.sales_receipt.sales_receipt_list',$data);
+	} 
 }

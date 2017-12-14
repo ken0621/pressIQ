@@ -463,7 +463,7 @@
         <div id="fb-root"></div>
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
         <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
-        
+
         @yield("js")
     </body>
 </html>

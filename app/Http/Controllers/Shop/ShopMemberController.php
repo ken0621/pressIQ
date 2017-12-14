@@ -170,7 +170,6 @@ class ShopMemberController extends Shop
             }
         }
 
-
         // for shift only
         if($this->shop_info->shop_id == 54)
         {

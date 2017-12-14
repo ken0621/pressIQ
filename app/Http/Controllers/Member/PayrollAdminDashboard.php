@@ -30,15 +30,6 @@ class PayrollAdminDashboard extends Member
 		return view('member.payroll2.employees_approver', $data);
 	}
 
-	// public function employee_approver_data()
-	// {
-	// 	$data['overtime_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','overtime')->EmployeeInfo()->get();
-	// 	$data['rfp_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','rfp')->EmployeeInfo()->get();
-	// 	$data['leave_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','leave')->EmployeeInfo()->get();
-		
-	// 	return view('member.payroll2.employees_approver_data', $data);
-	// }
-
 	public function modal_create_approver()
 	{
 		return view('member.payroll2.modal_create_approver');
@@ -120,9 +111,31 @@ class PayrollAdminDashboard extends Member
 		return json_encode($response);
  	}
 
-	public function modal_delete_approver()
+	public function modal_delete_approver($approver_id)
 	{
+		
 
+		if (Request::isMethod('post')) 
+		{
+			$response['response_status']  = 'success';
+			$response['call_function']	= 'submit_done';
+			$response['function_name'] = 'payroll_employee_approver.reload';
+			Tbl_payroll_approver_employee::where('payroll_approver_employee_id',$approver_id)->delete();
+
+			return json_encode($response);
+		}
+		else
+		{
+			$data['approver_type'] = Request::input('approver_type');
+			$data['approver_info'] = Tbl_payroll_approver_employee::where('payroll_approver_employee_id',$approver_id)->EmployeeInfo()->first();
+			$data['action'] = '/member/payroll/payroll_admin_dashboard/delete_approver/'.$approver_id;
+			$data['id']   = $approver_id;
+			$data['message'] = 'do you really want to delete approver employee approver '. $data['approver_info']['payroll_employee_display_name'] . '?';
+			$data['btn'] = ' <button type="submit" class="btn btn-custom-white">confirm</button>';
+
+			return view('member.modal.confirm', $data);
+		}
+		// 
 	}
 
 	public function create_approver_tag_employee()
@@ -164,6 +177,17 @@ class PayrollAdminDashboard extends Member
 	{
 	
 		return json_encode('');
+	}
+
+	/*start group approver*/
+	public function group_approver()
+	{
+		return view('member.payroll2.group_approver');
+	}
+
+	public function modal_create_group_approver()
+	{
+		return view('member.payroll2.modal_create_group_approver');
 	}
 
 

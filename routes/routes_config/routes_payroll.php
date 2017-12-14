@@ -719,10 +719,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_admin_dashboard/save_edit_approver','Member\PayrollAdminDashboard@save_edit_approver');
 	Route::any('/payroll_admin_dashboard/delete_approver/{approver_id}','Member\PayrollAdminDashboard@modal_delete_approver');
 	
-	// Route::any('/payroll_admin_dashboard/modal_create_approver','Member\PayrollAdminDashboard@modal_create_approver');
-	// Route::any('/payroll_admin_dashboard/modal_approver_tag_employee','Member\PayrollAdminDashboard@modal_approver_tag_employee');
-	// Route::any('/payroll_admin_dashboard/modal_approver_tag_employee/ajax_deduction_tag_employee','Member\PayrollAdminDashboard@ajax_deduction_tag_employee');
-	// Route::any('/payroll_admin_dashboard/set_employee_approver_tag','Member\PayrollAdminDashboard@set_employee_approver_tag');
+	Route::any('/payroll_admin_dashboard/group_approver','Member\PayrollAdminDashboard@group_approver');
+	Route::any('/payroll_admin_dashboard/modal_create_group_approver','Member\PayrollAdminDashboard@modal_create_group_approver');
+
 
 	/*END Admin dashboard*/
 });

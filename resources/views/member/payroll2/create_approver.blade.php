@@ -76,8 +76,8 @@
 					  </div>
 					  <div class="col-md-4">
 					    <small><b>Filter Department</b></small>
-					    <select class="form-control change-filter change-filter-department">
-					      <option value="0">Select Department</option>
+					    <select class="form-control change-filter change-filter-department"  >
+					      <option value="0" >Select Department</option>
 					      @foreach($_department as $department)
 					      <option value="{{$department->payroll_department_id}}">{{$department->payroll_department_name}}</option>
 					      @endforeach

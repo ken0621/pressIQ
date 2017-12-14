@@ -1316,9 +1316,9 @@ function page_list($pis = 0)
 
          /* -- VENDOR => RECEIVE INVENTORY WITH BILL V2 */
         $code = "vendor-receive-inventory-with-bill-v2";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Enter Bills";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Receive Inventory with Bills";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/enter_bill";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/receive_inventory_with_bill";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";

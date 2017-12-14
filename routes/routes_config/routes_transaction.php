@@ -6,7 +6,7 @@ Route::group(array('prefix' => '/member/transaction'), function()
 	/* Receive Inventory */
 	AdvancedRoute::controller('/receive_inventory', 'Member\TransactionReceiveInventoryController');
 	/* Receive Inventory With Bill */
-	AdvancedRoute::controller('/receive_inventory_with_bill', 'Member\TransactionReceiveInventoryWithBillController');
+	AdvancedRoute::controller('/enter_bills', 'Member\TransactionEnterBillsController');
 	/* 	Pay Bills */
 	AdvancedRoute::controller('/pay_bills', 'Member\TransactionPayBIllsController');
 	/* 	Write Check */
@@ -14,7 +14,7 @@ Route::group(array('prefix' => '/member/transaction'), function()
 	/* 	Debit Memo */
 	AdvancedRoute::controller('/debit_memo', 'Member\TransactionDebitMemoController');
 	/* 	Import */
-	AdvancedRoute::controller('/import', 'Member\TransactionVendorImportController');
+	AdvancedRoute::controller('/bad_order', 'Member\TransactionBadOrderController');
 
 
 	/* <-- CUSTOMER TRANSACTION --> */

@@ -1285,7 +1285,7 @@ function page_list($pis = 0)
     $code = "vendor-import-list";
     $nav[$page]['submenu'][$code]['label'] = "Import";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . "/vendors" . "/import/vendor";
+    $nav[$page]['submenu'][$code]['url'] = $path . "vendors" . "/import/vendor";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
@@ -1315,10 +1315,10 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
          /* -- VENDOR => RECEIVE INVENTORY WITH BILL V2 */
-        $code = "vendor-receive-inventory-with-bill-v2";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Receive Inventory with Bills";
+        $code = "vendor-enter-bills-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Enter Bills";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/receive_inventory_with_bill";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/enter_bills";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
@@ -1351,10 +1351,10 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
          /* -- VENDOR => IMPORT V2 */
-        $code = "vendor-import-v2";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Import";
+        $code = "vendor-bad-order-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Bad Order";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/import";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/bad_order";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";

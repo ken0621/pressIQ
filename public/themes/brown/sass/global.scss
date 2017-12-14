@@ -78,7 +78,7 @@ button
 
 .btn-brown
 {
-	color: #ffffff;
+	color: #fff;
 	font-size: 13px;
 	background-color: #402A21;
 	padding: 7.5px 25px;
@@ -86,6 +86,22 @@ button
 	font-weight: $medium;
 
 	&:hover
+	{
+		color: #fff;
+	}
+}
+
+.btn-brown-r2
+{
+	@extend .btn-brown;
+	border-radius: 2px;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	&:focus
 	{
 		color: #fff;
 	}

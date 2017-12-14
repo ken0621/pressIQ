@@ -10,6 +10,7 @@ function estimate_quotation()
 	{
 		action_load_initialize_select();
 		event_click_last_row();
+		event_remove_tr();
 	}
 	function action_load_initialize_select()
 	{
@@ -80,6 +81,22 @@ function estimate_quotation()
 
         }).globalDropList('disabled');
 	}
+	function event_remove_tr()
+	{
+		$(document).on("click", ".remove-tr", function(e){
+			var len = $(".tbody-item .remove-tr").length;
+			if($(".tbody-item .remove-tr").length > 1)
+			{
+				$(this).parent().remove();
+				action_reassign_number();
+			}
+			else
+			{
+				console.log("success");
+			}
+		});
+	}
+
 
 	function action_load_unit_measurement($this)
 	{

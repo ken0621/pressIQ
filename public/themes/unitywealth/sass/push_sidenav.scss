@@ -46,24 +46,39 @@ $bold: 700;
         font-size: 16px;
         font-weight: $medium;
         color: #fff;
-        padding-left: 30px;
+        padding-left: 22px;
     }
 
     .profile-img-container
     {
         padding: 20px;
+        text-align: center;
 
+        // .profile-img 
+        // {
+        //     border-radius: 100%;
+        //     overflow: hidden;
+
+        //     img 
+        //     {
+        //         width: 100%;
+        //     }
+        // }
+        
         .profile-img 
         {
             border-radius: 100%;
             overflow: hidden;
+            text-align: center;
+            margin: auto;
+            width: 30%;
 
             img 
             {
                 width: 100%;
             }
         }
-        
+
         .text-holder
         {
              padding-left: 10px;
@@ -115,6 +130,7 @@ $bold: 700;
      font-family: $content-text;
      text-transform: uppercase;
      padding-left: 20px;
+     padding-top: 10px;
 
 
      li
@@ -122,7 +138,15 @@ $bold: 700;
         //margin-top: 30px;
         border-bottom: 1px solid rgba(255,255,255, 0.2);
         padding: 10px 0px;
-        padding-left: 10px;
+        // padding-left: 10px;
+
+        .fa
+        {
+           color: #f1f1f1;
+           padding-right: 5px;
+           width: 25px;
+           text-align: center;
+        }
 
         a
         {
@@ -161,7 +185,7 @@ $bold: 700;
 
 /* .links li a:hover:after { width: 100%; } */
 
-.links li:active { background-color: #1A84B1; }
+.links li:active { background-color: rgba(255,255,255,0.2); }
 
 .pushmenu-left
 { 
@@ -324,7 +348,7 @@ $bold: 700;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.2);
+    // background-color: rgba(0,0,0,0.2);
     z-index: 145;
     cursor: pointer;
 }

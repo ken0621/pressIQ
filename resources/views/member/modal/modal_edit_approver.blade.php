@@ -27,12 +27,17 @@
 					<option value="5" {{ $approver_info->payroll_approver_employee_level == 5 ? 'selected':''}} >Level 5</option>
 				</select>
 			</div>
-
 		</div>
-		
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
 		<button class="btn btn-primary btn-custom-primary" type="Submit">Submit</button>
 	</div>
 </form>
+<script type="text/javascript" src="/assets/js/modal_payroll_group_approver.js"></script>
+<script type="text/javascript">
+  function reload_page()
+  {
+    window.location.href = "/member/payroll/payroll_admin_dashboard/group_approver";
+  }
+</script>

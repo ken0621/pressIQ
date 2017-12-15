@@ -15,6 +15,7 @@ class UpdateTblPayrollApproverGroup121220171017am extends Migration
     {
         Schema::table('tbl_payroll_approver_group', function (Blueprint $table) {
             $table->integer('shop_id')->default(0)->after('payroll_approver_group_id');
+            $table->integer('payroll_approver_group_level')->after('payroll_approver_group_type');
         });
     }
 

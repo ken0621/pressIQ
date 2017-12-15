@@ -721,7 +721,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 	Route::any('/payroll_admin_dashboard/group_approver','Member\PayrollAdminDashboard@group_approver');
 	Route::any('/payroll_admin_dashboard/modal_create_group_approver','Member\PayrollAdminDashboard@modal_create_group_approver');
-
-
+	Route::any('/payroll_admin_dashboard/get_employee_approver_by_level','Member\PayrollAdminDashboard@get_employee_approver_by_level');
+	Route::any('/payroll_admin_dashboard/save_approver_group','Member\PayrollAdminDashboard@save_approver_group');
+	Route::any('/payroll_admin_dashboard/modal_edit_group_approver/{approver_group_id}','Member\PayrollAdminDashboard@modal_edit_group_approver');
+	
 	/*END Admin dashboard*/
 });

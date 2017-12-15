@@ -6,6 +6,8 @@ use stdClass;
 use Redirect;
 use Excel;
 use DB;
+
+
 use App\Models\Tbl_payroll_deduction_v2;
 use App\Models\Tbl_payroll_deduction_employee_v2;
 use App\Models\Tbl_payroll_deduction_payment_v2;
@@ -18,9 +20,29 @@ use App\Models\Tbl_payroll_employment_status;
 use App\Models\Tbl_payroll_employee_salary;
 use App\Models\Tbl_payroll_department;
 use App\Models\Tbl_payroll_approver_employee;
+use App\Models\Tbl_payroll_approver_group;
+use App\Models\Tbl_payroll_approver_group_employee;
 
 class PayrollAdminDashboard extends Member
 {
+
+	public function shop_id($return = 'shop_id')
+	{
+	     switch ($return) {
+	          case 'shop_id':
+	               return $shop_id = $this->user_info->user_shop;
+	               break;
+
+	          case 'user_id':
+	               return $shop_id = $this->user_info->user_id;
+	               break;
+	          
+	          default:
+	               # code...
+	               break;
+	     }
+	}
+
 	public function employee_approver()
 	{
 		$data['overtime_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','overtime')->EmployeeInfo()->get();
@@ -85,8 +107,8 @@ class PayrollAdminDashboard extends Member
 		}
 
 		Tbl_payroll_approver_employee::insert($insert);
-		$response["response_status"] = "success";
-		$response['call_function'] = 'success_saving_import';
+		$response["response_status"] 	= "success";
+		$response['call_function'] 		= 'success_saving_import';
 
 		return $response;
 	}
@@ -104,9 +126,9 @@ class PayrollAdminDashboard extends Member
 	{
 		$update['payroll_approver_employee_level'] = Request::input('approver_level');
 		Tbl_payroll_approver_employee::where('payroll_approver_employee_id',Request::input('approver_id'))->update($update);
-		$response['response_status']  = 'success';
-		$response['call_function']	= 'submit_done';
-		$response['function_name'] = 'payroll_employee_approver.reload';
+		$response['response_status']  	= 'success';
+		$response['call_function']		= 'submit_done';
+		$response['function_name'] 		= 'payroll_employee_approver.reload';
 		
 		return json_encode($response);
  	}
@@ -117,21 +139,21 @@ class PayrollAdminDashboard extends Member
 
 		if (Request::isMethod('post')) 
 		{
-			$response['response_status']  = 'success';
-			$response['call_function']	= 'submit_done';
-			$response['function_name'] = 'payroll_employee_approver.reload';
+			$response['response_status']  	= 'success';
+			$response['call_function']		= 'submit_done';
+			$response['function_name'] 		= 'payroll_employee_approver.reload';
 			Tbl_payroll_approver_employee::where('payroll_approver_employee_id',$approver_id)->delete();
 
 			return json_encode($response);
 		}
 		else
 		{
-			$data['approver_type'] = Request::input('approver_type');
-			$data['approver_info'] = Tbl_payroll_approver_employee::where('payroll_approver_employee_id',$approver_id)->EmployeeInfo()->first();
-			$data['action'] = '/member/payroll/payroll_admin_dashboard/delete_approver/'.$approver_id;
-			$data['id']   = $approver_id;
-			$data['message'] = 'do you really want to delete approver employee approver '. $data['approver_info']['payroll_employee_display_name'] . '?';
-			$data['btn'] = ' <button type="submit" class="btn btn-custom-white">confirm</button>';
+			$data['approver_type'] 	= Request::input('approver_type');
+			$data['approver_info'] 	= Tbl_payroll_approver_employee::where('payroll_approver_employee_id',$approver_id)->EmployeeInfo()->first();
+			$data['action'] 		= '/member/payroll/payroll_admin_dashboard/delete_approver/'.$approver_id;
+			$data['id']   			= $approver_id;
+			$data['message'] 		= 'do you really want to delete approver employee approver '. $data['approver_info']['payroll_employee_display_name'] . '?';
+			$data['btn'] 			= ' <button type="submit" class="btn btn-custom-white">confirm</button>';
 
 			return view('member.modal.confirm', $data);
 		}
@@ -165,10 +187,10 @@ class PayrollAdminDashboard extends Member
 
 	public function ajax_deduction_tag_employee()
 	{
-	     $company  = Request::input('company');
-	     $department = Request::input('department');
+	     $company  		= Request::input('company');
+	     $department 	= Request::input('department');
 	     $jobtitle      = Request::input('jobtitle');
-	     $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), $this->user_info->shop_id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->groupBy('tbl_payroll_employee_basic.payroll_employee_id')->get();
+	     $emp 			= Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), $this->user_info->shop_id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->groupBy('tbl_payroll_employee_basic.payroll_employee_id')->get();
 	     
 	     return json_encode($emp);
 	}
@@ -182,7 +204,9 @@ class PayrollAdminDashboard extends Member
 	/*start group approver*/
 	public function group_approver()
 	{
-		return view('member.payroll2.group_approver');
+		$data['_group_approver'] 	= Tbl_payroll_approver_group::where('tbl_payroll_approver_group.shop_id', $this->user_info->shop_id)->get();
+		
+		return view('member.payroll2.group_approver',$data);
 	}
 
 	public function modal_create_group_approver()
@@ -190,6 +214,78 @@ class PayrollAdminDashboard extends Member
 		return view('member.payroll2.modal_create_group_approver');
 	}
 
+	public function get_employee_approver_by_level()
+	{
+		$data['level'] = Request::input('level');
+		$data['type'] = Request::input('type');
+		$data['approver_by_level'] = array();
+		
+		for ($i = 1; $i <= $data['level']; $i++) 
+		{ 
+			$_approver = Tbl_payroll_approver_employee::GetApproverByLevelAndType($this->user_info->shop_id, $i, $data['type'])->EmployeeInfo()->get();
+			/*Check if level has approver*/
+			if (count($_approver) > 0)
+			{
+				$data['approver_by_level'][$i] = array();
+				foreach ($_approver as $key => $approver) 
+				{
+					array_push($data['approver_by_level'][$i], $approver);
+				}
+			}
+		}
+		
+		return view('member.payroll2.get_employee_approver_by_level', $data);
+	}
 
 
+	public function save_approver_group()
+	{
+		$approver_group_name  = Request::input('approver_group_name');
+		$approver_type 		  = Request::input('approver_type');
+		$approver_level_count = Request::input('approver_level_count');
+
+		$_approver_by_level   = Request::input('approver_level');
+		$approver_group_level = Request::input('approver_level_count');
+
+		$insert_group['shop_id'] = Self::shop_id();
+		$insert_group['payroll_approver_group_name']  = $approver_group_name;
+		$insert_group['payroll_approver_group_type']  = $approver_type;
+		$insert_group['payroll_approver_group_level'] = $approver_group_level;
+		$insert_group['archived'] = 0;
+
+		$payroll_approver_group_id = Tbl_payroll_approver_group::insertGetId($insert_group);
+
+		for ($level = 1; $level < $approver_level_count; $level++) 
+		{ 
+			foreach ($_approver_by_level[$level] as $key => $approver) 
+			{
+				$insert_group_employee['payroll_approver_group_id']    =  $payroll_approver_group_id;
+				$insert_group_employee['payroll_approver_employee_id'] = $approver;
+				$insert_group_employee['payroll_approver_group_level'] = $level;
+
+				Tbl_payroll_approver_group_employee::insert($insert_group_employee);
+
+				$insert_group_employee = null;
+			}
+		}
+
+		$response['success'] 		= 'success';
+		$response['call_function'] 	= 'reload_page';
+
+		return $response;
+	}
+
+
+	public function modal_edit_group_approver($approver_group_id)
+	{
+		$data['approver_group_info'] = Tbl_payroll_approver_group::where('tbl_payroll_approver_group.shop_id',Self::shop_id())
+										->where('tbl_payroll_approver_group.payroll_approver_group_id',$approver_group_id)->first();
+		
+		$data['_approver_group'] = collect(Tbl_payroll_approver_group::where('tbl_payroll_approver_group.shop_id',Self::shop_id())
+											->where('tbl_payroll_approver_group.payroll_approver_group_id',$approver_group_id)->EmployeeApproverInfo()->get())->groupBy('payroll_approver_group_level');
+
+		
+		// dd($data);
+		return view('member.payroll2.modal_edit_group_approver', $data);
+	}
 }

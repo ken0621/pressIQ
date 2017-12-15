@@ -36,10 +36,17 @@
                 <a href="/members/profile">
                    <div class="profile-img-container">
                         <div class="row-no-padding clearfix">
-                            <div class="col-xs-3">
+                            {{-- <div class="col-xs-3">
                                 <div class="profile-img"><img src="{{ $profile_image }}"></div>
                             </div>
                             <div class="col-xs-9">
+                                <div class="text-holder">
+                                    <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+                                    <div class="subtext text-overflow">{{ $customer->email }}</div>
+                                </div>
+                            </div> --}}
+                            <div class="col-xs-12">
+                                <div class="profile-img"><img src="{{ $profile_image }}"></div>
                                 <div class="text-holder">
                                     <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
                                     <div class="subtext text-overflow">{{ $customer->email }}</div>
@@ -51,45 +58,45 @@
                 <div class="space1"></div>
                 <span>BROWSE</span>
                 <ul class="links">
-                    <li> <a onclick="off()" href="/">Home</a> </li>
-                    <li> <a onclick="off()" href="/about">Company</a> </li>
-                    <li> <a onclick="off()" href="/product">Products</a> </li>
-                    <li> <a onclick="off()" href="/contact">Get in touch</a> </li>
+                    <li> <a onclick="off()" href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                    <li> <a onclick="off()" href="/about"><i class="fa fa-building-o" aria-hidden="true"></i> Company</a></li>
+                    <li> <a onclick="off()" href="/product"><i class="fa fa-list-ul" aria-hidden="true"></i> Products</a> </li>
+                    <li> <a onclick="off()" href="/contact"><i class="fa fa-envelope" aria-hidden="true"></i> Get in touch</a></li>
                 </ul>
                 
                 <div class="space2"></div>
-                <span>MEMBERS AREA</span>
+                <span>MEMBER'S AREA</span>
                 <ul class="links">
-                    <li> <a href="/members">Dashboard</a> </li>
-                    <li> <a href="/members/profile">Profile</a> </li>
+                    <li> <a href="/members"><i class="fa brown-icon-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                    <li> <a href="/members/profile"><i class="fa brown-icon-profile" aria-hidden="true"></i> Profile</a></li>
                     @if($mlm_member)
                     <!-- <li> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li> -->
                     <li class="genealogy-mobile-dropdown"> 
-                        <a href="javascript:">Genealogy</a> 
+                        <a href="javascript:"><i class="fa brown-icon-flow-tree" area-hidden="true"></i> Genealogy</a> 
                     </li>
                         <ul class="genealogy-mobile-dropdown-list">
                             <li><a href="/members/genealogy?mode=binary">Binary Tree</a></li>
                             <li><a href="/members/genealogy?mode=sponsor">Unilevel Tree</a></li>
                         </ul>
-                    <li> <a href="/members/report">Reports</a> </li>
-                    <li> <a href="/members/report-points">Network List</a> </li>
-                    <li> <a href="/members/wallet-encashment">Wallet Encashment</a> </li>
+                    <li> <a href="/members/report"><i class="fa fa-bar-chart" aria-hidden="true"></i> Reports</a></li>
+                    <li> <a href="/members/report-points"><i class="fa brown-icon-flow-tree" area-hidden="true"></i> Network List</a></li>
+                    <li> <a href="/members/wallet-encashment"><i class="fa brown-icon-wallet" aria-hidden="true"></i> Wallet Encashment</a></li>
 
                     @else
                     @endif
-                    <li> <a href="/members/order">Orders</a> </li>
+                    <li> <a href="/members/order"><i class="fa brown-icon-bag" aria-hidden="true"></i> Orders</a></li>
                     @if($customer)
-                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></li>
                     @endif
                 </ul>
                 @else
                     <div class="space1"></div>
                     <span>BROWSE</span>
                     <ul class="links">
-                        <li> <a onclick="off()" href="/">Home</a> </li>
-                        <li> <a onclick="off()" href="/about">Company</a> </li>
-                        <li> <a onclick="off()" href="/product">Products</a> </li>
-                        <li> <a onclick="off()" href="/contact">Get in touch</a> </li>
+                        <li> <a onclick="off()" href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                        <li> <a onclick="off()" href="/about"><i class="fa fa-building-o" aria-hidden="true"></i> Company</a></li>
+                        <li> <a onclick="off()" href="/product"><i class="fa fa-list-ul" aria-hidden="true"></i> Products</a> </li>
+                        <li> <a onclick="off()" href="/contact"><i class="fa fa-envelope" aria-hidden="true"></i> Get in touch</a></li>
                     </ul>
                 @endif
             </nav>

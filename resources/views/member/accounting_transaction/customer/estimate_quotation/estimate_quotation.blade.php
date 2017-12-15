@@ -145,7 +145,7 @@
                             <textarea class="form-control input-sm textarea-expand" name="memo" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-6">
-                            <div class="row">
+                           <!--  <div class="row">
                                 <div class="col-md-7 text-right digima-table-label">
                                     Sub Total
                                 </div>
@@ -153,7 +153,7 @@
                                     <input type="hidden" name="subtotal_price" class="subtotal-amount-input" />
                                     PHP&nbsp;<span class="sub-total">0.00</span>
                                 </div>
-                            </div> 
+                            </div>  -->
                             <div class="row">
                                 <div class="col-md-7 text-right digima-table-label">
                                   Total

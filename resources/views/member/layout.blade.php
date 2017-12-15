@@ -47,6 +47,7 @@
     }
     </style>
     <link rel="stylesheet" type="text/css" href="/assets/member/css/global.css?version=1">
+    <link rel="stylesheet" type="text/css" href="/assets/member/css/item_add_v2.css">
     @yield('css')
     <script>
     (function () {

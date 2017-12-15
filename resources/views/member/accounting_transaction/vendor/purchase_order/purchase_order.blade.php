@@ -84,9 +84,8 @@
                                 <table class="digima-table">
                                     <thead >
                                         <tr>
-                                            <th style="width: 10px;" ></th>
-                                            <th style="width: 120px;">Service Date</th>
                                             <th style="width: 15px;" class="text-right">#</th>
+                                            <th style="width: 120px;">Service Date</th>
                                             <th style="width: 180px;">Product/Service</th>
                                             <th>Description</th>
                                             <th style="width: 120px;">U/M</th>
@@ -103,11 +102,8 @@
                                         @if(isset($po))
                                             @foreach($_poline as $poline)
                                                 <tr class="tr-draggable">
-                                                    <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-
-                                                    <td><input type="text" class="for-datepicker" name="poline_service_date[]" value="{{$poline->poline_service_date}}" /></td>
-
                                                     <td class="invoice-number-td text-right">1</td>
+                                                    <td><input type="text" class="for-datepicker" name="poline_service_date[]" value="{{$poline->poline_service_date}}" /></td>
                                                     <td>
                                                         <select class="form-control select-item droplist-item input-sm pull-left {{$poline->poline_item_id}}" name="poline_item_id[]" required>
                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $poline->poline_item_id])
@@ -143,11 +139,8 @@
                                             @endforeach
                                         @else                                
                                             <tr class="tr-draggable">
-                                                <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-
-                                                <td><input type="text" class="for-datepicker" name="poline_service_date[]"/></td>
-
                                                 <td class="invoice-number-td text-right">1</td>
+                                                <td><input type="text" class="for-datepicker" name="poline_service_date[]"/></td>
                                                 <td>
                                                     <select class="1111 form-control select-item droplist-item input-sm pull-left" name="poline_item_id[]" >
                                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
@@ -176,9 +169,8 @@
                                             </tr>
                                                 
                                             <tr class="tr-draggable">
-                                                <td class="text-center cursor-move move" ><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-                                                <td><input type="text" class="datepicker" name="poline_service_date[]"/></td>
                                                 <td class="invoice-number-td text-right">2</td>
+                                                <td><input type="text" class="datepicker" name="poline_service_date[]"/></td>
                                                 <td>
                                                     <select class="22222 form-control select-item droplist-item input-sm pull-left" name="poline_item_id[]" >
                                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
@@ -305,9 +297,8 @@
 <div class="div-script">
     <table class="div-item-row-script hide">
         <tr class="tr-draggable">
-            <td class="text-center cursor-move move" ><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-            <td><input type="text" class="for-datepicker"  name="poline_service_date[]"/></td>
             <td class="invoice-number-td text-right">2</td>
+            <td><input type="text" class="for-datepicker"  name="poline_service_date[]"/></td>
             <td>
                 <select class="form-control select-item input-sm pull-left" name="poline_item_id[]">
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])

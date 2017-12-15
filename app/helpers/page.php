@@ -1184,6 +1184,16 @@ function page_list($pis = 0)
             $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
+             /* -- WAREHOUSE - INVENTORY ADJUSTMENT */
+            $code = "warehouse-inventory-adjustment";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Inventory Adjustment";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/warehouse/inventory_adjustment";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','adjust'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+
     /* -- ITEM => INVENTORY LOGS  */
     $code = "item-inventory-log";
     $nav[$page]['submenu'][$code]['label'] = "Inventory Logs";

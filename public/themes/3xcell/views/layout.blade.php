@@ -125,6 +125,7 @@
                 </ul>
                 @else
                     <div class="space1"></div>
+                    <div class="space1"></div>
                     <span>BROWSE</span>
                     <ul class="links">
                         {{-- @if($customer_info) --}}

@@ -1,5 +1,5 @@
 <?php
-if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "digimatest.com") || (hasSubdomain() && $domain != "my168shop-primia.c9users.io"))
+if(($domain != "digimahouse.com" && $domain != "digimahouse.test" && $domain != "digimahouse.dev" && $domain != "digimatest.com") || (hasSubdomain() && $domain != "my168shop-primia.c9users.io"))
 {
 	Route::get('/', 'Shop\ShopHomeController@index');
 	Route::get('/cart', 'Shop\ShopCartController@index');

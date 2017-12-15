@@ -65,6 +65,11 @@ class Warehouse2
                                                    ->where("record_item_id",$item_id)
                                                    ->where("record_inventory_status",0)
                                                    ->count();
+
+        foreach ($get_parent as $key => $value) 
+        {
+            
+        }
         return $count;
     }
     public static function get_transaction_item($transaction_ref_name = '', $transaction_ref_id = 0)

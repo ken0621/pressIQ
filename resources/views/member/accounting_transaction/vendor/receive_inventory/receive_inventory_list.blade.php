@@ -12,7 +12,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-star"></i> Receive Inventory</button>
+                <button onclick="location.href='/member/transaction/receive_inventory/create'" class="btn btn-primary"><i class="fa fa-star"></i> Receive Inventory</button>
             </div>
         </div>
     </div>

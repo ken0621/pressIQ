@@ -12,7 +12,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-star"></i> Create D.M.</button>
+                <button onclick="location.href='/member/transaction/debit_memo/create'" class="btn btn-primary"><i class="fa fa-star"></i> Create Debit Memo</button>
             </div>
         </div>
     </div>

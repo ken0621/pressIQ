@@ -29,6 +29,7 @@
         {
             event_run_report_click();
             action_collaptible(true);
+            initialize_select();
         }
     }
 
@@ -51,6 +52,14 @@
         {
             toastr.success('Success');
         }
+    }
+
+    function initialize_select()
+    {
+        $(".select-item").globalDropList({
+            hasPopup : 'false',
+            witdh : '100%'
+        });
     }
 
 </script>

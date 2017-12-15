@@ -8,9 +8,8 @@
 					<thead style="text-transform: uppercase">
 						
 						<tr>
-							
+							<th class="text-center">Item Name</th>
 							<th class="text-center">Item SKU</th>
-							<th class="text-center">Item Description</th>
 							<th class="text-center">Date of Transaction</th>
 							<th class="text-center">Vendor</th>
 							<th class="text-center">Quantity in</th>
@@ -25,8 +24,8 @@
 						@if(count($_report) > 0)
 							@foreach($_report as $report)
 							<tr>
-								<td class="text-center">{{ $report->item_sku }}</td>
 								<td class="text-center">{{ $report->item_name }}</td>
+								<td class="text-center">{{ $report->item_sku }}</td>
 								<td class="text-center">{{ date('m/d/y',strtotime($report->history_date)) }}</td>
 								@if($report->history_type == 'RR')
 									<td class="text-center">{{ $report->vendor_company }}</td>

@@ -1085,12 +1085,15 @@ class Warehouse2
         }
         return $return;
     }
-    public static function stock_ledger_report($shop_id, $current_warehouse, $date_from = '', $date_to = '', $item_id)
+    public static function stock_ledger_report($shop_id, $current_warehouse, $date_from = '', $date_to = '', $item_id = null)
     {
-        $history_item = Tbl_inventory_history_items::HistoryPerItem()->where('tbl_inventory_history.shop_id',$shop_id)->where('tbl_inventory_history.warehouse_id',$current_warehouse)->where('tbl_inventory_history_items.item_id', $item_id)->orderBy('item_sku', 'DESC');
+        $history_item = Tbl_inventory_history_items::HistoryPerItem()->where('tbl_inventory_history.shop_id',$shop_id)->where('tbl_inventory_history.warehouse_id',$current_warehouse)->orderBy('item_sku', 'DESC');
         
         $date = null;
-
+        if($item_id)
+        {
+            $history_item = $history_item->where('tbl_inventory_history_items.item_id', $item_id);
+        }
         if($date_from && $date_to)
         {
             $data = $history_item->whereBetween('history_date',[$date_from,$date_to]);       

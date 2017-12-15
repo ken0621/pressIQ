@@ -26,26 +26,29 @@
         </div>
         <div  style="margin-top: 15px" class=" row clearfix form-group">
             <div class="col-md-2 " style="padding: 5px">
-                <select class="form-control input-sm" name="item">
-                    <option value="">All Items</option>
+                <select class="form-control input-sm select-item" required name="item">
+                    <option value="">All Item</option>
                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                 </select>
             </div>
+            <!-- <div class="col-md-2 " style="padding: 5px">
+                <select class="form-control input-sm" name="vendor">
+                    <option value="">All Vendor</option>
+                    @foreach($_vendor as $vendor)
+                    <option value="{{$vendor->vendor_id}}">{{$vendor->vendor_company}}</option>
+                    @endforeach
+                </select>
+            </div> -->
         </div>
-        <div class="col-md-2 " style="padding: 5px">
-            <select class="form-control input-sm" name="vendor">
-                <option value="">All Vendor</option>
-                @foreach($_vendor as $vendor)
-                <option value="{{$vendor->vendor_id}}">{{$vendor->vendor_company}}</option>
-                @endforeach
-            </select>
-        </div
         </form>
     </div>
 </div>
 
 <script type="text/javascript">
-
+$(".select-item").globalDropList({
+            hasPopup : 'false',
+            witdh : '100%'
+        });
     var new_report = new new_report();
     function new_report()
     {
@@ -55,7 +58,6 @@
         {
             event_run_report_click();
         }
-
         function event_run_report_click()
         {
             $(document).on("click", ".run-report", function()

@@ -86,6 +86,9 @@ function on()
 {
     document.getElementById("overlay").style.display = "block";
     $("body").css({"overflow": "hidden","position": "fixed","margin": "0","padding": "0","right": "0","left": "0"});
+    $(".blur-me").css({
+        filter: 'blur(20px)'
+    });
 }
 
 function off()
@@ -93,4 +96,7 @@ function off()
     document.getElementById("overlay").style.display = "none";
     $('.pushmenu').removeClass("pushmenu-open");
     $("body").css({"overflow": "auto","position": "static"});
+    $(".blur-me").css({
+        filter: 'blur(0)'
+    });
 }

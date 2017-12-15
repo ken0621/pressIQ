@@ -4,18 +4,20 @@
 	<div class="row clearfix row-no-padding">
 		<div class="col-md-4 left match-height load-profile">
 			<div class="load-profile-holder">
+				
 				<div class="profile-main">
 					<div class="img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
 					<div class="name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
 					<div class="sub">{{ $profile->email }}</div>
 				</div>
+
 				<div class="profile-status">
 					<table>
 						<tr>
-							<!-- <td class="blue">
+							{{--  <td class="blue">
 								<div class="status-number">{{ $customer_summary["display_slot_count"] }}</div>
 								<div class="status-label">Slot Owned</div>
-							</td> -->
+							</td>  --}}
 							<td class="orange">
 								<div class="status-number">{{ $wallet->display_current_wallet }}</div>
 								<div class="status-label">Current Wallet</div>
@@ -26,7 +28,7 @@
 	
 				<!-- <div class="profile-lead">
 					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
-						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
+						{{-- <img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link --}}
 					</a>
 					Modal
 					<div id="leads_modal" class="modal fade leads-modal" role="dialog">
@@ -101,7 +103,7 @@
 					   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					   		<div class="row clearfix">
 					   			<div class="col-md-6">
-					   				<!-- <div class="form-group">
+					   				{{--  <div class="form-group">
 							   			<label>First Name</label>
 							   			<input type="text" class="form-control" name="first_name" value="{{ $profile->first_name }}">
 							   		</div>
@@ -112,7 +114,7 @@
 							   		<div class="form-group">
 							   			<label>Last Name</label>
 							   			<input type="text" class="form-control" name="last_name" value="{{ $profile->last_name }}">
-							   		</div> -->
+							   		</div>  --}}
 							   		<div class="form-group">
 							   			<label>Birth Date</label>
 							   			<div style="margin-top: 5px;">

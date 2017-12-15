@@ -9,15 +9,15 @@
     		<div class="row clearfix row-no-padding">
     			<div class="col-md-12">
     				<div class="press-member">
-							<ul class="nav nav-tabs">
-							   <li class="{{ Request::segment(2) == "dashboard" ? "active" : "" }}"><a href="/pressuser/dashboard">Dashboard</a></li>
-							   <li class="{{ Request::segment(2) == "pressrelease" ? "active" : "" }}"><a href="/pressuser/pressrelease">Press Release</a></li><!-- Add link -->
-							   <li class="{{ Request::segment(2) == "mypressrelease" ? "active" : "" }}"><a href="/pressuser/mypressrelease">My Press Releases</a></li><!-- add link -->
-							   <li class="{{ Request::segment(2) == "drafts" ? "active" : "" }}"><a href="/pressuser/drafts">Drafts</a></li><!-- add link -->
-							</ul>
-							<div class="tab-content">
-								@yield("pressview")
-							</div>
+						<ul class="nav nav-tabs">
+						   <li class="{{ Request::segment(2) == "dashboard" ? "active" : "" }}"><a href="/pressuser/dashboard">Dashboard</a></li>
+						   <li class="{{ Request::segment(2) == "pressrelease" ? "active" : "" }}"><a href="/pressuser/pressrelease">Press Release</a></li><!-- Add link -->
+						   <li class="{{ Request::segment(2) == "mypressrelease" ? "active" : "" }}"><a href="/pressuser/mypressrelease">My Press Releases</a></li><!-- add link -->
+						   <li class="{{ Request::segment(2) == "drafts" ? "active" : "" }}"><a href="/pressuser/drafts">Drafts</a></li><!-- add link -->
+						</ul>
+						<div class="tab-content">
+							@yield("pressview")
+						</div>
     				</div>
     			</div>
     		</div>

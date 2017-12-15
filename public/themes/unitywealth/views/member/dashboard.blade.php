@@ -119,23 +119,23 @@
 					<div class="table-holder">
 						<div class="chart-legend">
 							<div class="holder">
-								<div class="color" style="background-color: #019771"></div>
-								<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
+								<div class="color cw" style="background-color: #3E95CD;"></div>
+								<div class="name"><span>Current Wallet</span> <div class="name cw-text">{{ $wallet->display_current_wallet }}</div></div>
 							</div>
 							<div class="holder">
-								<div class="color" style="background-color: #8E5EA2"></div>
-								<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
+								<div class="color tp" style="background-color: #8E5EA2;"></div>
+								<div class="name"><span>Total Pay-out</span> <div class="name tp-text">{{ $wallet->display_total_payout }}</div></div>
 							</div>
 							<div class="chart-holder">
 								<canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="400" height="400"></canvas>
 							</div>
 							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
+								<div class="color cs"></div>
+								<div class="name"><span>Current Slot(s)</span> <div class="name cs-text">{{ $customer_summary["display_slot_count"] }}</div></div>
 							</div>
 							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
+								<div class="color tr"></div>
+								<div class="name"><span>Total Reward</span> <div class="name tr-text">{{ $wallet->display_total_earnings }}</div></div>
 							</div>
 						</div>
 					</div>
@@ -147,10 +147,43 @@
 				<div class="sub-container">
 					<div class="chart-legend">
 						@foreach($_wallet_plan as $plan)
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
-							</div>
+
+							@if($plan->label == "Bank Remittance")
+								<div class="holder">
+									<div class="color bk"></div>
+									<div class="name"><span>{{ $plan->label }}</span> <div class="name bk-text">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+								</div>
+							@elseif($plan->label == "Coinsph")
+								<div class="holder">
+									<div class="color cph"></div>
+									<div class="name"><span>{{ $plan->label }}</span> <div class="name cph-text">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+								</div>
+							@elseif($plan->label == "Direct")
+								<div class="holder">
+									<div class="color dir"></div>
+									<div class="name"><span>{{ $plan->label }}</span> <div class="name dir-text">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+								</div>
+							@elseif($plan->label == "Direct Pass Up")
+								<div class="holder">
+									<div class="color dpu"></div>
+									<div class="name"><span>{{ $plan->label }}</span> <div class="name dpu-text">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+								</div>
+							@elseif($plan->label == "Indirect")
+								<div class="holder">
+									<div class="color ind"></div>
+									<div class="name"><span>{{ $plan->label }}</span> <div class="name ind-text">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+								</div>
+							@elseif($plan->label == "Palawan Express")
+								<div class="holder">
+									<div class="color palex"></div>
+									<div class="name"><span>{{ $plan->label }}</span> <div class="name palex-text">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+								</div>
+							@else
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+								</div>
+							@endif
 						@endforeach
 					</div>
 				</div>
@@ -418,6 +451,7 @@ function action_click_buy_kit()
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/atomic_color.css">
 <style type="text/css">
 
 input:-webkit-autofill {

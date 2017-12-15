@@ -8,17 +8,6 @@ $(document).ready(function ()
 	
 $(document).ready(function () 
 {
-	$(document).on("#done_recipients",function()
-	{	
-		var name = $(this).data("name");
-		$('#recipient_name').val(name);
-		$('#recipient-modal').modal('hide');
-		alert(pr_receiver_name);
-	});
-});	
-
-$(document).ready(function () 
-{
 	$(document).on("change","#choose_country",function()
 	{
 		var country = $(this).val();

@@ -17,6 +17,11 @@
 				padding: 30px 60px;
 				vertical-align: middle;
 				text-align: left;
+				@media screen and (max-width: 425px)
+				{
+				   padding: 30px 0px;
+				}
+
 				input
 				{
 					font-size: 15px;
@@ -25,6 +30,10 @@
 					padding: 10px;
 					vertical-align: middle;
 					min-width: 50%;
+					@media screen and (max-width: 425px)
+					{
+					   min-width: 86%;
+					}
 				}
 				i
 				{
@@ -38,21 +47,29 @@
 			.news-title-container
 			{
 				padding: 0px 60px 0px 60px;
-				.title
+				@media screen and (max-width: 425px)
 				{
-					a
-					{
-						font-family: 'PT Serif';
-						font-size: 30px;
-						font-weight: 700;
-						text-decoration: none;
-						color: #585858;
-					}
+				   padding: 0px 15px 0px 0px;
+				   text-overflow: ellipsis;
+				   overflow: hidden;
+				   white-space: nowrap;
+				}
+				a
+				{
+					font-family: 'PT Serif';
+					font-size: 30px;
+					font-weight: 700;
+					text-decoration: none;
+					color: #585858;
 				}
 			}
 			.details-container
 			{
 				padding: 0px 60px 20px 60px;
+				@media screen and (max-width: 425px)
+				{
+				   padding: 0px 15px 20px 0px;
+				}
 				.details
 				{
 					margin-top: 10px;
@@ -68,6 +85,10 @@
 			.button-container
 			{
 				padding: 0px 60px 0px 60px;
+				@media screen and (max-width: 425px)
+				{
+				   padding: 0px 15px 0px 0px;
+				}
 				button
 				{
 					background-color: #316df9;

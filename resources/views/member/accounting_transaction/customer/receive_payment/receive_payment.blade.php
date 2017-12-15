@@ -41,7 +41,7 @@
                     <!-- START CONTENT -->
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <select class="drop-down-customer" name="rp_customer_id" required>
                                     @include("member.load_ajax_data.load_customer", ['customer_id' => isset($rcvpayment) ? $rcvpayment->rp_customer_id : (isset($c_id) ? $c_id : '')])
                                 </select>

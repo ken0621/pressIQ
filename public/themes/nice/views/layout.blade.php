@@ -248,6 +248,7 @@
                 </div>
             </div>
         </div>
+        
     @include("frontend.gfoot")
     <!-- <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script> -->
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>

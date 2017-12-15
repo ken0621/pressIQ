@@ -33,6 +33,7 @@ function estimate_quotation()
 			if(discount_string.indexOf('%') > 0)
 			{
 				discount_amount = (parseFloat(discount_string.substring(0, discount_string.indexOf('%'))) / 100);
+				discount_amount = (rate * qty) * discount_amount;
 			}
 			else
 			{
@@ -78,7 +79,7 @@ function estimate_quotation()
 			{
 				total_taxable += parseFloat(total_per_tr);
 			}
-			$(this).find(".txt-rate").val(action_add_comma(rate));
+			$(this).find(".txt-rate").val(action_add_comma(rate.toFixed(2)));
 		});
 
 		$(".total-amount").html(action_add_comma(subtotal.toFixed(2)));
@@ -144,7 +145,7 @@ function estimate_quotation()
 
 	    $(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
-            link : "/member/item/add",
+            link : "/member/item/v2/add",
             width : "100%",
             maxHeight: "309px",
             onCreateNew : function()
@@ -281,7 +282,6 @@ function success_item(data)
     {
         $(this).globalDropList("reload");
 		$(this).val(data.item_id).change();
-		toastr.success("Success");
     });
     data.element.modal("hide");
 }

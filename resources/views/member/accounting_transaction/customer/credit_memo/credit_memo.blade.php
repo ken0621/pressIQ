@@ -52,15 +52,11 @@
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Billing Address</label>
-                            <textarea class="form-control input-sm textarea-expand" name="est_customer_billing_address" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand customer-billing-address" name="est_customer_billing_address" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-2">
-                            <label>Estimate Date</label>
+                            <label>Date</label>
                             <input type="text" class="datepicker form-control input-sm" name="est_date" value="{{date('m/d/y')}}"/>
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Expiration Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="est_exp_date" value="{{date('m/d/y')}}" />
                         </div>
                     </div>
                     
@@ -70,7 +66,6 @@
                                 <table class="digima-table">
                                     <thead>
                                         <tr>
-                                            <th style="" ></th>
                                             <th style="" class="text-right">#</th>
                                             <th style="width: 200px">Product/Service</th>
                                             <th style="">Description</th>
@@ -83,7 +78,6 @@
                                     </thead>
                                     <tbody class="draggable tbody-item">                                 
                                             <tr class="tr-draggable">
-                                                <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
                                                 <td class="invoice-number-td text-right">1</td>
                                                 <td>
                                                     <select class="form-control select-item droplist-item input-sm pull-left" name="estline_item_id[]" >
@@ -100,7 +94,6 @@
                                             </tr>
                                                 
                                             <tr class="tr-draggable">
-                                                <td class="text-center cursor-move move" ><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
                                                 <td class="invoice-number-td text-right">2</td>
                                                 <td>
                                                     <select class="form-control select-item droplist-item input-sm pull-left" name="estline_item_id[]" >
@@ -130,7 +123,7 @@
                             <textarea class="form-control input-sm textarea-expand" name="est_memo" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-6">
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-md-7 text-right digima-table-label">
                                     Sub Total
                                 </div>
@@ -138,7 +131,7 @@
                                     <input type="hidden" name="subtotal_price" class="subtotal-amount-input" />
                                     PHP&nbsp;<span class="sub-total">0.00</span>
                                 </div>
-                            </div> 
+                            </div>  -->
                             <div class="row">
                                 <div class="col-md-7 text-right digima-table-label">
                                   Total
@@ -154,6 +147,26 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="div-script">
+    <table class="div-item-row-script hide">
+        <tr class="tr-draggable">
+            <td class="invoice-number-td text-right">2</td>
+            <td>
+                <select class="form-control select-item input-sm pull-left" name="estline_item_id[]" >
+                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                    <option class="hidden" value="" />
+                </select>
+            </td>
+            <td><textarea class="textarea-expand txt-desc" name="estline_description[]"></textarea></td>
+            <td><select class="select-um" name="estline_um[]"><option class="hidden" value="" /></select></td>
+            <td><input class="text-center number-input txt-qty compute" type="text" name="estline_qty[]"/></td>
+            <td><input class="text-right number-input txt-rate compute" type="text" name="estline_rate[]"/></td>
+            <td><input class="text-right number-input txt-amount" type="text" name="estline_amount[]"/></td>
+            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+        </tr>
+    </table>
 </div>
 @endsection
 @section('script')

@@ -36,12 +36,14 @@
                     <table  class="table table-bordered" style="background-color: #FFFFFF;" id="showHere_table">
                         <tr>
                             <th style="text-align: center;">Contact Name</th>
+                            <th style="text-align: center;">Contact Name</th>
                             <th style="text-align: center;">Country</th>
                             <th style="text-align: center;">Action</th>
                         </tr>
                         @foreach($_media_contacts as $contact)
                         <tr>
                             <td style="text-align: center;">{{$contact->name}}</td>
+                            <td style="text-align: center;">{{$contact->company_name}}</td>
                             <td style="text-align: center;">{{$contact->country}}</td>
                             <td style="text-align: center;">
                                
@@ -130,3 +132,4 @@ document.getElementById("defaultOpen").click();
 </script>
 
 @endsection
+

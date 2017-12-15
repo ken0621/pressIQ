@@ -72,7 +72,7 @@
                     </span>
 
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" multiple readonly > 
+                    <input type="text" name="pr_to" id="recipient_email" class="form-control" multiple readonly > 
 
                 </div>
                 </form>

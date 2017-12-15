@@ -91,27 +91,27 @@
 						<div class="chart-legend" style="max-height: auto;">
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>5th Pair GC</span><span class="value"><div class="name w2hpx">{{ $points->display_leadership_advertisement_bonus}}</div></span></div>
+								<div class="name"><span>5th Pair GC</span> <div class="name w2hpx">{{ $points->display_leadership_advertisement_bonus}}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Advertisement GC</span><span class="value"><div class="name w2hpx">{{ $points->display_advertisement_bonus}}</div></span></div>
+								<div class="name"><span>Advertisement GC</span> <div class="name w2hpx">{{ $points->display_advertisement_bonus}}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Rank PV</span><span class="value"><div class="name w2hpx">{{ $points->display_rank_pv }}</div></span></div>
+								<div class="name"><span>Rank PV</span> <div class="name w2hpx">{{ $points->display_rank_pv }}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Rebates Points</span><span class="value"><div class="name w2hpx">{{ $points->display_stairstep_gpv }}</div></span></div>
+								<div class="name"><span>Rebates Points</span> <div class="name w2hpx">{{ $points->display_stairstep_gpv }}</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Reward Points Redemption</span><span class="value">{{ currency('',$reward_point_redemption) }} POINT(S)</span></div>
+								<div class="name"><span>Reward Points Redemption</span> <div class="name">{{ currency('',$reward_point_redemption) }} POINT(S)</div></div>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
-								<div class="name"><span>Remaining Reward Points</span><span class="value">{{ currency('',$points->leadership_advertisement_bonus+$points->advertisement_bonus+$reward_point_redemption) }} POINT(S)</span></div>
+								<div class="name"><span>Remaining Reward Points</span> <div class="name">{{ currency('',$points->leadership_advertisement_bonus+$points->advertisement_bonus+$reward_point_redemption) }} POINT(S)</div></div>
 							</div>
 						</div>
 					</div>

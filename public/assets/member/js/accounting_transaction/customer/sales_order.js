@@ -33,6 +33,7 @@ function sales_order()
 			if(discount_string.indexOf('%') > 0)
 			{
 				discount_amount = (parseFloat(discount_string.substring(0, discount_string.indexOf('%'))) / 100);
+				discount_amount = (rate * qty) * discount_amount;
 			}
 			else
 			{

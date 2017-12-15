@@ -276,13 +276,9 @@ $text-dark: #404040;
 		max-width: 370px;
 	}
 
-
-	background-color: #fff;
 	.modal-header
 	{
 		background-color: #75A04B;
-		border-top-left-radius: 3px;
-		border-top-right-radius: 3px;
 
 		.close
 		{
@@ -453,8 +449,6 @@ $text-dark: #404040;
 		.modal-header
 		{
 			background-color: #75A04B;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
 
 			.close
 			{
@@ -618,12 +612,9 @@ $text-dark: #404040;
 
 	.modal-content
 	{
-		
 		.modal-header
 		{
 			background-color: #75A04B;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
 
 			.close
 			{
@@ -700,7 +691,6 @@ $text-dark: #404040;
 /* Proceed 2 */
 .popup-proceed2
 {
-	background-color: #fff;
 	font-family: $content-text;
 	
 	.modal-sm
@@ -716,8 +706,6 @@ $text-dark: #404040;
 		.modal-header
 		{
 			background-color: #252525;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
 
 			.close
 			{
@@ -804,29 +792,26 @@ $text-dark: #404040;
 
 				.btn-proceed-2
 				{
+					@include transition(0.2s);
 					color: #fff;
-					background-color: #75A04B;
+					background-color: #C4A860;
 					padding: 10px 40px;
 					border-radius: 2px;
 					border: 0px !important;
-
-				  	-webkit-transition: all 0.2s ease-in-out;
-				  	-moz-transition: all 0.2s ease-in-out;
-				  	-o-transition: all 0.2s ease-in-out;
-				  	transition: all 0.2s ease-in-out;
 				  	width: 100%;
 				  	margin-top: 20px;
 				  	text-transform: uppercase;
+
+				  	&:hover
+				  	{
+				  		background-color: #75A04B;
+				  	}
 				}
-				.btn-proceed-2:hover
-				{
-					opacity: 0.9;
-				}
+
 			}
 		}
 	}
 }
-
 
 
 /* Failed */
@@ -837,8 +822,6 @@ $text-dark: #404040;
 		.modal-header
 		{
 			background-color: #ed5639;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
 
 			.close
 			{

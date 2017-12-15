@@ -599,7 +599,6 @@ class Warehouse2
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
-
         $serial_qty = count($serial);
         if($serial_qty != 0)
         {
@@ -634,7 +633,6 @@ class Warehouse2
         {
             $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
         }
-
         return $return;
     }
     public static function consume_update($ref_name, $ref_id, $item_id, $quantity)
@@ -813,11 +811,22 @@ class Warehouse2
         $val = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
                                                  ->where('mlm_activation',$mlm_activation)
                                                  ->where('mlm_pin',$mlm_pin)
-                                                 ->where('record_inventory_status',0)
+                                                 ->where('item_in_use', 'unused')
                                                  ->first();
         if($val)
         {
-            Warehouse2::consume_record_log($shop_id, $val->record_warehouse_id, $val->record_item_id,$val->record_log_id, 1, $remarks, $consume,null, $code_used);
+            if($val->record_inventory_status == 1)
+            {
+                $update['record_log_date_updated']   = Carbon::now();
+                $update['item_in_use']               = $code_used;
+               
+                Warehouse2::insert_item_history($val->record_log_id);
+                Tbl_warehouse_inventory_record_log::where('record_log_id',$val->record_log_id)->update($update);
+            }
+            else
+            {
+                Warehouse2::consume_record_log($shop_id, $val->record_warehouse_id, $val->record_item_id,$val->record_log_id, 1, $remarks, $consume,null, $code_used);
+            }
             $return = $val->record_item_id;
         }
         else

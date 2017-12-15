@@ -55,9 +55,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/item_checkout', 'Shop\ShopItemCheckoutController@item_checkout'); //MARK FIGS
 	Route::get('/item_payment', 'Shop\ShopItemPaymentController@item_payment'); //MARK FIGS
 	Route::get('/payment_success', 'Shop\ShopItemPaymentController@payment_success'); //MARK FIGS
-
 	Route::get('/replicated', 'Shop\ShopAboutController@replicated'); //MARK FIGS
-
 	Route::get('/terms_and_conditions', 'Shop\ShopAboutController@terms_and_conditions'); //MARK FIGS
 
 
@@ -71,7 +69,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 	Route::any('/pressuser/pressrelease', 'Shop\ShopMemberController@pressuser_pressrelease'); //PRESS RELEASE
 	Route::any('/pressuser/pressrelease/recipient', 'Shop\ShopMemberController@pressuser_pressrelease_recipient'); //PRESS RELEASE
-	Route::any('/pressuser/pressrelease/recipient/done', 'Shop\ShopMemberController@pressuser_pressrelease_recipient_done'); //PRESS RELEASE
 
 	Route::any('/pressuser/pressrelease/recipient/search', 'Shop\ShopMemberController@pressuser_pressrelease_recipient_search'); //PRESS RELEASE
 
@@ -102,7 +99,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/order_placed', 'Shop\ShopCheckoutController@order_placed');
 	Route::get('/addto_cart', 'Shop\ShopCheckoutController@addtocart');
 	Route::get('/file/{theme}/{type}/{filename}', 'Shop\Shop@file');
-
 	/*Product search*/
 	Route::get('/product_search', 'Shop\ShopSearchController@index');
 	/*End Product search*/

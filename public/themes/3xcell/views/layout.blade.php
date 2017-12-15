@@ -108,7 +108,7 @@
                 </ul>
                 
                 <div class="space2"></div>
-                <span>MEMBERS AREA</span>
+                <span>MEMBER'S AREA</span>
                 <ul class="links">
                     <li> <a href="/members"><i class="fa brown-icon-dashboard" aria-hidden="true"></i> Dashboard</a></li>
                     <li> <a href="/members/profile"><i class="fa brown-icon-profile" aria-hidden="true"></i> Profile</a></li>

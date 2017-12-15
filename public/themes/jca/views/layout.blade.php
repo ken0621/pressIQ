@@ -82,7 +82,7 @@
                 </ul>
                 
                 <div class="space2"></div>
-                <span>MEMBERS AREA</span>
+                <span>MEMBER'S AREA</span>
                 <ul class="links">
                     <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members"><i class="fa brown-icon-dashboard" aria-hidden="true"></i> DASHBOARD</a> </li>
                     <li> <a href="/members/profile"><i class="fa brown-icon-profile" aria-hidden="true"></i> PROFILE</a></li>

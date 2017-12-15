@@ -247,7 +247,7 @@
                             <a href="/contact"><li>CONTACT US</li></a>
                         </ul>
                     <div class="space2"></div>
-                    <span>MEMBERS AREA</span>
+                    <span>MEMBER'S AREA</span>
                     <ul class="links">
                         <a href="/members"><li class="{{ Request::segment(1) == "members" ? "active" : "" }}" >DASHBOARD</li></a> 
                         <a href="/members/profile"><li>PROFILE</li></a>

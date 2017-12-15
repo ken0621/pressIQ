@@ -16,7 +16,7 @@ $bold: 700;
 { 
     /*this is the nav*/
      // background: #9b6d24;
-     background-color: rgba(155,109,36,0.6);
+     background-color: rgba(155,109,36,0.7);
      text-align: left;
      width: 300px;
      height: 100%;
@@ -168,7 +168,7 @@ $bold: 700;
 
 /* .links li a:hover:after { width: 100%; } */
 
-.links li:active { background-color: #1A84B1; }
+.links li:active { background-color: rgba(255,255,255,0.2); }
 
 .pushmenu-left
 { 

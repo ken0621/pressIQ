@@ -144,7 +144,7 @@ function estimate_quotation()
 
 	    $(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
-            link : "/member/item/add",
+            link : "/member/item/v2/add",
             width : "100%",
             maxHeight: "309px",
             onCreateNew : function()
@@ -281,7 +281,6 @@ function success_item(data)
     {
         $(this).globalDropList("reload");
 		$(this).val(data.item_id).change();
-		toastr.success("Success");
     });
     data.element.modal("hide");
 }

@@ -73,8 +73,10 @@
 
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <input type="hidden" name="pr_to" id="recipient_email" class="form-control" multiple readonly > 
+
                 </div>
                 </form>
+
 
                 <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">New Release Summary</div>
@@ -154,15 +156,14 @@
 <script src="/email_assets/tinymce/js/tinymce/tinymce.js"></script>
 <script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
 <script>
-   tinymce.init({ 
-   selector:'textarea', 
-   branding: false,
-   image_description: false,
-   image_title: true,
-   height: 500,
-   plugins: ["autolink lists image charmap print preview anchor","visualblocks code","insertdatetime table contextmenu paste imagetools", "wordcount"],
-   toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview',
-   
+tinymce.init({ 
+selector:'textarea', 
+branding: false,
+image_description: false,
+image_title: true,
+height: 500,
+plugins: ["autolink lists image charmap print preview anchor","visualblocks code","insertdatetime table contextmenu paste imagetools", "wordcount"],
+toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image | preview',
    
      // we override default upload handler to simulate successful upload
      images_upload_handler: function (blobInfo, success, failure) 
@@ -217,8 +218,7 @@
   {
     var data = $('.recipient_form').serialize();
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
-
-  })
+});
 </script>
 
 @endsection

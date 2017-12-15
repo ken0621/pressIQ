@@ -170,7 +170,6 @@ class ShopMemberController extends Shop
             }
         }
 
-
         // for shift only
         if($this->shop_info->shop_id == 54)
         {
@@ -179,7 +178,7 @@ class ShopMemberController extends Shop
         }
         // dd($slot_id." ; ".$data['reward_point_redemption']);
 
-        return view("member.dashboard", $data);
+        return Self::load_view_for_members("member.dashboard", $data);
     }
     public function getDirectReferrals()
     {
@@ -2648,8 +2647,15 @@ class ShopMemberController extends Shop
 
 
             
-            $method                                             = "manual1";
-            $method_id                                          = request('method');
+
+            $method = request('method');
+            $method_id = 0;
+            if($shop_id == 55)
+            {
+                $method                                             = "manual1";
+                $method_id                                          = request('method');            
+            }
+
             $transaction_new["transaction_reference_table"]     = "tbl_customer";
             $transaction_new["transaction_reference_id"]        = Self::$customer_info->customer_id;
             $transaction_type                                   = "ORDER";
@@ -2661,7 +2667,7 @@ class ShopMemberController extends Shop
 
             if(is_numeric($transaction_list_id))
             {
-                $method_id  = request('method_id');
+                $method_id  = $method_id;
                 $success    = "/members?success=1"; //redirect if payment success
                 $failed     = "/members?failed=1"; //redirect if payment failed
                 $error      = Payment::payment_redirect($shop_id, $method, $transaction_list_id, $success, $failed, false, $method_id);

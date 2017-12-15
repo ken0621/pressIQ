@@ -53,6 +53,7 @@ class TransactionPurchaseOrderController extends Member
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Purchase_Order::getShopId())->get();
         //dd($data["_terms"]);
         $data['_item']      = Item::get_all_category_item();
+        //dd($data['_item']);
         $data['_um']        = UnitMeasurement::load_um_multi();
 
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order', $data);

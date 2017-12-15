@@ -18,6 +18,7 @@ function purchase_order(){
 		action_lastclick_row();
 		action_compute();
 		action_date_picker();
+
 		action_reassign_number();
 		event_button_action_click();
 	}
@@ -384,8 +385,8 @@ function purchase_order(){
         $('.droplist-um:not(.has-value)').globalDropList("disabled");
 	}
 
+	//Purpose: Add the specified number of dates to a given date.
 	function AddDaysToDate(sDate, iAddDays, sSeperator) {
-    //Purpose: Add the specified number of dates to a given date.
 	    var date = new Date(sDate);
 	    date.setDate(date.getDate() + parseInt(iAddDays));
 	    var sEndDate = LPad(date.getMonth() + 1, 2) + sSeperator + LPad(date.getDate(), 2) + sSeperator + date.getFullYear();

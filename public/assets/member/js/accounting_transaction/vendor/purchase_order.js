@@ -1,5 +1,6 @@
 var purchase_order = new purchase_order();
 var global_tr_html = $(".div-script tbody").html();
+var item_selected = ''; 
 
 function purchase_order()
 {
@@ -39,6 +40,96 @@ function purchase_order()
 			}
 		});
 
+		$('.droplist-item').globalDropList(
+        {
+            link : "/member/item/v2/add",
+            width : "100%",
+            maxHeight: "309px",
+            onCreateNew : function()
+            {
+            	item_selected = $(this);
+            },
+            onChangeValue : function()
+            {
+            	action_load_item_info($(this));
+            }
+        });
+
+	    $(".draggable .tr-draggable:last td select.select-item").globalDropList(
+        {
+            link : "/member/item/add",
+            width : "100%",
+            maxHeight: "309px",
+            onCreateNew : function()
+            {
+            	item_selected = $(this);
+            },
+            onChangeValue : function()
+            {
+            	action_load_item_info($(this));
+            }
+        });
+
+        $('.droplist-um').globalDropList(
+    	{
+    		hasPopup: "false",
+    		width : "100%",
+    		placeholder : "um..",
+    		onChangeValue: function()
+    		{
+    			action_load_unit_measurement($(this));
+    		}
+
+    	});
+
+        $('.droplist-um:not(.has-value)').globalDropList("disabled");
+
+        $(".draggable .tr-draggable:last td select.select-um").globalDropList(
+        {
+        	hasPopup: "false",
+    		width : "100%",
+    		placeholder : "um..",
+    		onChangeValue: function()
+    		{  
+    			action_load_unit_measurement($(this));
+    		}
+
+        }).globalDropList('disabled');
+	}
+
+	function action_load_item_info($this)
+	{
+		$parent = $this.closest(".tr-draggable");
+		$parent.find(".txt-desc").html($this.find("option:selected").attr("purchase-info")).change();
+		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
+		$parent.find(".txt-qty").val(1).change();
+		if($this.find("option:selected").attr("has-um"))
+		{
+			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
+			{
+				$(this).globalDropList("reload").globalDropList("enabled");
+				$(this).val($(this).find("option:first").val()).change();
+			})
+		}
+		else
+		{
+			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+		}
+    	action_compute();
+	}
+
+
+	function AddDaysToDate(sDate, iAddDays, sSeperator) {
+    //Purpose: Add the specified number of dates to a given date.
+	    var date = new Date(sDate);
+	    date.setDate(date.getDate() + parseInt(iAddDays));
+	    var sEndDate = LPad(date.getMonth() + 1, 2) + sSeperator + LPad(date.getDate(), 2) + sSeperator + date.getFullYear();
+	    return sEndDate;
+	}
+
+	function LPad(sValue, iPadBy) {
+	    sValue = sValue.toString();
+	    return sValue.length < iPadBy ? LPad("0" + sValue, iPadBy) : sValue;
 	}
 
 	function action_date_picker()
@@ -88,15 +179,29 @@ function purchase_order()
 	}
 
 }
+/*AFTER ADDING VENDOR*/
 function success_vendor(data)
 {
 	$('.droplist-vendor').load("/member/vendor/load_vendor", function()
-		{
-			$('.droplist-vendor').globalDropList('reload');
-			$('.droplist-vendor').val(data.vendor_id).change();
+	{
+		$('.droplist-vendor').globalDropList('reload');
+		$('.droplist-vendor').val(data.vendor_id).change();
+		toastr.success("Success");
 
-			data.element.modal("hide");
+		data.element.modal("hide");
+	});
+}
 
-		});
+/*AFTER ADDING ITEM*/
+function success_item(data)
+{
+	$('.droplist-item').load("/member/item/load_item_category", function()
+	{
+		$(this).globalDropList("reload");
+		$(this).val(data.item_id).change();
+		toastr.success("Success");
+
+		data.element.modal("hide");
+	});
 }
 

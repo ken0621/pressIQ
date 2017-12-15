@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $display-text: 'Raleway', sans-serif;
 $content-text: 'Ubuntu', sans-serif;
 $light: 300;
@@ -5,10 +7,16 @@ $regular: 400;
 $medium: 500;
 $bold: 700;
 
+.blur-me
+{
+    @include transition(0.3s);
+}
+
 .pushmenu 
 { 
     /*this is the nav*/
-     background: #0095DA;
+     // background: #0095DA;
+     background-color: rgba(0,149,218,0.7);
      text-align: left;
      width: 300px;
      height: 100%;
@@ -183,10 +191,8 @@ $bold: 700;
 /*Transition*/
 
 .pushmenu, .pushmenu-push
-{
- -webkit-transition: all 0.5s ease;
- -moz-transition: all 0.5s ease;
- transition: all 0.5s ease;
+{  
+    @include transition(0.3s);
 }
 
 #nav_list
@@ -309,7 +315,7 @@ $bold: 700;
 
 #overlay
 {
-    transition: 0.2s;
+    transition: 0.3s;
     position: fixed;
     display: none;
     width: 100%;
@@ -318,7 +324,7 @@ $bold: 700;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.2);
     z-index: 145;
     cursor: pointer;
 }

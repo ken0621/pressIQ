@@ -97,7 +97,8 @@ button:hover{
 		}
 	}
 }
-.header-container{
+.header-container
+{
 	padding: 10px 0px;
 	position: relative;
 	background-color: #fff;
@@ -125,6 +126,31 @@ button:hover{
 	@media screen and (max-width: 320px)
 	{
 		padding-bottom: 12px;
+	}
+
+	.menu-mobile-nav
+	{
+		display: none;
+		padding: 10px 0px 30px 0px;
+		margin-top: 10px;
+		text-align: center;
+		background-color: #f3f3f3;
+		@media screen and (max-width: 800px)
+		{
+			span
+			{
+				display: block;
+				padding-top: 15px;
+				a
+				{
+					color: #585858;
+					font-weight: 700;
+					border-bottom: 1px solid #316df9;
+					text-decoration: none;
+					font-size: 15px;
+				}
+			}
+		}
 	}
 
 	nav
@@ -277,7 +303,7 @@ button:hover{
 
 .menu-nav
 {
-	display: none;
+	// display: none;
 
 	@media screen and (max-width: 991px)
 	{
@@ -428,7 +454,7 @@ button:hover{
 				width: 100%;
 				background-color: #122f72;
 				border: 1px solid rgba(255,255,255,0.5);
-				padding: 5px 5px 5px 20px;
+				padding: 5px 30px 5px 20px;
 				color: rgba(255,255,255,0.5);
 			}
 			i

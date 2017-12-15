@@ -97,6 +97,12 @@
                         <span></span>
                         <span></span>
                     </div>
+                    <div class="menu-mobile-nav">
+                        <span><a class="smoth-scroll" href="/#home">Home</a></span>
+                        <span><a class="smoth-scroll" href="/newsroom">News Room</a></span>
+                        <span><a class="smoth-scroll" href="/about">About</a></span>
+                        <span><a class="smoth-scroll" href="/contact">Contact Us</a></span>
+                    </div>
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
@@ -134,9 +140,10 @@
                         <div class="footer-title-container">
                             <p class="footer-title">INFORMATION</p>
                         </div>
-                        <a href="/"><p>HOME</p></a>
-                        <a href="/#aboutus"><p>ABOUT US</p></a>
-                        <a href="/#whytojoin"><p>CONTACT US</p></a>
+                        <a href="/#home"><p>HOME</p></a>
+                        <a href="/newsroom"><p>NEWS ROOM</p></a>
+                        <a href="/about"><p>ABOUT US</p></a>
+                        <a href="/contact"><p>CONTACT US</p></a>
                     </div>
                     <div class="col-md-4">
                         <div class="footer-title-container">

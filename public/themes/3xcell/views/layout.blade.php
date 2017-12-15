@@ -53,10 +53,17 @@
                 <a href="/members/profile">
                    <div class="profile-img-container">
                         <div class="row-no-padding clearfix">
-                            <div class="col-xs-3">
+                            {{-- <div class="col-xs-3">
                                 <div class="profile-img"><img src="{{ $profile_image }}"></div>
                             </div>
                             <div class="col-xs-9">
+                                <div class="text-holder">
+                                    <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+                                    <div class="subtext text-overflow">{{ $customer->email }}</div>
+                                </div>
+                            </div> --}}
+                            <div class="col-xs-12">
+                                <div class="profile-img"><img src="{{ $profile_image }}"></div>
                                 <div class="text-holder">
                                     <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
                                     <div class="subtext text-overflow">{{ $customer->email }}</div>
@@ -69,12 +76,12 @@
                 <span>BROWSE</span>
                 <ul class="links">
                     {{-- @if($customer_info) --}}
-                    <li> <a href="/">Home</a> </li>
+                    <li><a href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
                     {{-- @else
                     <li><a href="/members" id="home">MY ACCOUNT</a></li>
                     @endif --}}
                     <li class="product-mobile-dropdown">
-                        <a href="javascript:">PRODUCTS</a>
+                        <a href="javascript:"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS</a>
                     </li>
                         @if(count($_categories) > 0)
                             <ul class="product-mobile-dropdown-list">
@@ -87,29 +94,29 @@
                                 @endforeach
                             </ul>
                         @endif
-                    <li> <a href="/promos">PROMOS</a> </li>
+                    <li> <a href="/promos"><i class="fa fa-percent" aria-hidden="true"></i> PROMOS</a></li>
                     <li class="company-mobile-dropdown"> 
-                        <a href="javascript:">COMPANY</a> 
+                        <a href="javascript:"><i class="fa fa-building-o" aria-hidden="true"></i> COMPANY</a> 
                     </li>
                         <ul class="company-mobile-dropdown-list">
-                            <li><a href="/history">Our History</a></li>
-                            <li><a href="/how_to_join">How to Join</a></li>
-                            <li><a href="/events">Company Events</a></li>
+                            <li><a href="/history"><i class="fa fa-history" aria-hidden="true"></i> Our History</a></li>
+                            <li><a href="/how_to_join"><i class="fa fa-question-circle-o" aria-hidden="true"></i> How to Join</a></li>
+                            <li><a href="/events"><i class="fa fa-calendar" aria-hidden="true"></i> Company Events</a></li>
                         </ul>
-                    <li> <a href="/gallery">GALLERY</a> </li>
-                    <li> <a href="/contact">CONTACT US</a> </li>
+                    <li> <a href="/gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> GALLERY</a> </li>
+                    <li> <a href="/contact"><i class="fa fa-phone" aria-hidden="true"></i> CONTACT US</a> </li>
                 </ul>
                 
                 <div class="space2"></div>
                 <span>MEMBERS AREA</span>
                 <ul class="links">
-                    <li> <a href="/members">Dashboard</a> </li>
-                    <li> <a href="/members/profile">Profile</a> </li>
+                    <li> <a href="/members"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a> </li>
+                    <li> <a href="/members/profile"><i class="fa fa-user" aria-hidden="true"></i> Profile</a> </li>
                     @if($mlm_member)
-                    <li> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li>
-                    <li> <a href="/members/report">Reports</a> </li>
-                    <li> <a href="/members/report-points">Reports (Points)</a> </li>
-                    <li> <a href="/members/wallet-encashment">Wallet Encashment</a> </li>
+                    <li> <a href="/members/genealogy?mode=sponsor"><i class="fa brown-icon-flow-tree" area-hidden="true"></i> Genealogy</a> </li>
+                    <li> <a href="/members/report"><i class="fa fa-bar-chart" aria-hidden="true"></i> Reports</a> </li>
+                    <li> <a href="/members/report-points"><i class="fa fa-bar-chart" aria-hidden="true"></i> Reports (Points)</a> </li>
+                    <li> <a href="/members/wallet-encashment"><i class="fa fa-money" aria-hidden="true"></i> Wallet Encashment</a> </li>
                         @if($customer)
                             <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
                         @endif
@@ -121,12 +128,12 @@
                     <span>BROWSE</span>
                     <ul class="links">
                         {{-- @if($customer_info) --}}
-                        <li> <a href="/">Home</a> </li>
+                        <li> <a href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
                         {{-- @else
                         <li><a href="/members" id="home">MY ACCOUNT</a></li>
                         @endif --}}
                         <li class="product-mobile-dropdown">
-                            <a href="javascript:">PRODUCTS</a>
+                            <a href="javascript:"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS</a>
                         </li>
                             @if(count($_categories) > 0)
                                 <ul class="product-mobile-dropdown-list">
@@ -139,17 +146,17 @@
                                     @endforeach
                                 </ul>
                             @endif
-                        <li> <a href="/promos">PROMOS</a> </li>
+                        <li> <a href="/promos"><i class="fa fa-percent" aria-hidden="true"></i> PROMOS</a></li>
                         <li class="company-mobile-dropdown"> 
-                            <a href="javascript:">COMPANY</a> 
+                            <a href="javascript:"><i class="fa fa-building-o" aria-hidden="true"></i> COMPANY</a> 
                         </li>
                             <ul class="company-mobile-dropdown-list">
-                                <li><a href="/history">Our History</a></li>
-                                <li><a href="/how_to_join">How to Join</a></li>
-                                <li><a href="/events">Company Events</a></li>
+                                <li><a href="/history"><i class="fa fa-history" aria-hidden="true"></i> Our History</a></li>
+                                <li><a href="/how_to_join"><i class="fa fa-question-circle-o" aria-hidden="true"></i> How to Join</a></li>
+                                <li><a href="/events"><i class="fa fa-calendar" aria-hidden="true"></i> Company Events</a></li>
                             </ul>
-                        <li> <a href="/gallery">GALLERY</a> </li>
-                        <li> <a href="/contact">CONTACT US</a> </li>
+                        <li> <a href="/gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> GALLERY</a></li>
+                        <li> <a href="/contact"><i class="fa fa-phone" aria-hidden="true"></i> CONTACT US</a></li>
                         
                     </ul>
                 @endif

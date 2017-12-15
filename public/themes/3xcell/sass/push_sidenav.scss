@@ -33,6 +33,11 @@ $bold: 700;
     .space1
     {
         padding: 10px 0px 10px 0px;
+
+        &:first-child
+        {
+           padding: 0;
+        }
     }
 
     .space2
@@ -57,11 +62,16 @@ $bold: 700;
     .profile-img-container
     {
         padding: 20px;
+        text-align: center;
+        background-color: rgba(33,97,200,0.1);
 
         .profile-img 
         {
             border-radius: 100%;
             overflow: hidden;
+            text-align: center;
+            margin: auto;
+            width: 30%;
 
             img 
             {
@@ -121,6 +131,9 @@ $bold: 700;
      font-family: $display-text;
      text-transform: uppercase;
      padding-left: 20px;
+     padding-top: 10px;
+
+
 
      li
      {
@@ -128,6 +141,19 @@ $bold: 700;
         border-bottom: 1px solid rgba(255,255,255, 0.2);
         padding: 10px 0px;
         padding-left: 10px;
+
+        .fa
+        {
+           color: #f1f1f1;
+           padding-right: 5px;
+           width: 25px;
+        }
+
+        .icon
+        {
+            color: #f1f1f1;
+            padding-right: 11px;
+        }
 
         a
         {

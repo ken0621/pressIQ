@@ -17,6 +17,25 @@ $text-dark: #272c2f;
 	}
 }
 
+@media screen and (max-width: 800px)
+{
+	.holder
+	{
+		.mob-center
+		{
+			text-align: center;
+			
+			.text
+			{
+				.pull-left
+				{
+					float: none !important;
+				}
+			}
+		}
+	}
+}
+
 .dashboard
 {
 	font-family: $content-text;
@@ -300,6 +319,12 @@ $text-dark: #272c2f;
 					color: #85939e;
 					font-size: 16px;
 					opacity: 0.5;
+				}
+
+				@media screen and (max-width: 800px)
+				{
+					display: block;
+					width: auto;
 				}
 			}
 			.action

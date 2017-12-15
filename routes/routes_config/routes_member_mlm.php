@@ -350,3 +350,12 @@ Route::any('member/mlm/developer/popup_earnings', 'Member\MlmDeveloperController
 Route::any('member/mlm/developer/distributed_income', 'Member\MlmDeveloperController@distributed_income');
 Route::any('member/mlm/developer/popup_points', 'Member\MlmDeveloperController@popup_points');
 Route::any('member/mlm/developer/change_owner', 'Member\MlmDeveloperController@change_owner');
+
+
+// point log setting
+Route::get('/member/mlm/point_log_complan', 'Member\MLM_PointLogSettingController@index');
+Route::get('/member/mlm/point_log_complan/add', 'Member\MLM_PointLogSettingController@add');
+Route::post('/member/mlm/point_log_complan/add', 'Member\MLM_PointLogSettingController@submit_add');
+Route::get('/member/mlm/point_log_complan/table', 'Member\MLM_PointLogSettingController@table');
+Route::get('/member/mlm/point_log_complan/modify', 'Member\MLM_PointLogSettingController@modify');
+Route::post('/member/mlm/point_log_complan/modify', 'Member\MLM_PointLogSettingController@submit_modify');

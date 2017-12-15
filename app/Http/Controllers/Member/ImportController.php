@@ -624,7 +624,12 @@ class ImportController extends Member
 
 			/* Validation */
 			$duplicate_customer	= Tbl_customer::where("shop_id", $this->getShopId())->where("first_name", $first_name)->where("middle_name", $middle_name)->where("last_name", $last_name)->first();
-			$duplicate_email 	= Tbl_customer::where("shop_id", $this->getShopId())->where("email", $email)->first();
+			
+			$duplicate_email = null;
+			if($email)
+			{
+				$duplicate_email 	= Tbl_customer::where("shop_id", $this->getShopId())->where("email", $email)->first();
+			}
 			$has_bill_country 	= Tbl_country::where("country_name", $bill_country)->first();
 			$has_ship_country 	= Tbl_country::where("country_name", $bill_country)->first();
 
@@ -963,8 +968,17 @@ class ImportController extends Member
 			$tax_resale_no	= isset($value["Tax Resale No"])	? $value["Tax Resale No"] : '' ;
 
 			/* Validation */
-			$duplicate_vendor	= Tbl_vendor::where("vendor_shop_id", $this->getShopId())->where("vendor_first_name", $first_name)->where("vendor_middle_name", $middle_name)->where("vendor_last_name", $last_name)->first();
-			$duplicate_email 	= Tbl_vendor::where("vendor_shop_id", $this->getShopId())->where("vendor_email", $email)->first();
+			$duplicate_vendor = null;
+			$duplicate_email = null;
+			if($first_name && $middle_name && $last_name)
+			{
+				$duplicate_vendor	= Tbl_vendor::where("vendor_shop_id", $this->getShopId())->where("vendor_first_name", $first_name)->where("vendor_middle_name", $middle_name)->where("vendor_last_name", $last_name)->first();
+
+			}
+			if($email)
+			{
+				$duplicate_email 	= Tbl_vendor::where("vendor_shop_id", $this->getShopId())->where("vendor_email", $email)->first();	
+			}
 			$has_bill_country 	= Tbl_country::where("country_name", $bill_country)->first();
 			$has_ship_country 	= Tbl_country::where("country_name", $bill_country)->first();
 

@@ -6,10 +6,16 @@ $regular: 400;
 $semi-bold: 600;
 $bold: 700;
 
+.blur-me
+{
+    @include transition(0.3s);
+}
+
 .pushmenu 
 { 
     /*this is the nav*/
-     background: #353739;
+     // background: #353739;
+     background-color: rgba(53,55,57,0.8);
      text-align: left;
      width: 300px;
      height: 100%;
@@ -206,7 +212,7 @@ $bold: 700;
 
 #overlay
 {
-    @include transition(0.2s);
+    @include transition(0.3s);
     position: fixed;
     display: none;
     width: 100%;
@@ -215,7 +221,7 @@ $bold: 700;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.2);
     z-index: 100;
     cursor: pointer;
 }
@@ -235,7 +241,7 @@ $bold: 700;
 
 .pushmenu, .pushmenu-push
 {
-  @include transition(0.5s)
+  @include transition(0.3s)
 }
 
 #nav_list

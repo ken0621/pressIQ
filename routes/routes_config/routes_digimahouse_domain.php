@@ -86,7 +86,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::post('/pressadmin/pressreleases/recipient', 'Shop\ShopMemberController@pressadmin_pressreleases_recipient'); //PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_addrecipient', 'Shop\ShopMemberController@pressadmin_pressrelease_addrecipient');//PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_deleterecipient/{id}', 'Shop\ShopMemberController@pressreleases_deleterecipient');//PRESS RELEASE
-	Route::any('/pressadmin/pressreleases_send_recipient/', 'Shop\ShopMemberController@pressreleases_send_recipient');//PRESS RELEASE
 	Route::get('/newsroom','Shop\ShopNewsRoomController@index');//PRESS RELEASE
 
 	Route::get('/pressuser/choose_recipient', 'Shop\ShopMemberController@pressuser_choose_recipient');

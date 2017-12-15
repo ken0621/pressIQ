@@ -37,6 +37,7 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
+
 	$(document).on('click','#recipient_button',function()
 	{
     	var name_array = [];
@@ -58,5 +59,10 @@ $(document).ready(function(){
     	
     });
 });
+
+
+
+
+
 
 

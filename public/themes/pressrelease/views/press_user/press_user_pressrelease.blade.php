@@ -23,37 +23,38 @@
                   <textarea name="bolier_content" id="tinymce"></textarea>
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                  <span class="preview-button"><a href="#">Preview</a></span>w</a></span>
+
+                  <span class="preview-button"><a href="#">Preview</a></span></a></span>
                   </div>
                 </div>
 
-              <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST" style="">
+              <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST">
                 <div id="choose_recipient" class="tabcontent choose-recipient-container">
                     <div class="title-container">Choose Recipient</div>
 
                     <div class="title">Country:</div>
-                    <select data-placeholder="--Choose a country--" multiple class="chosen-select" id="choose_country" name="choose_country[]">
+                    <select data-placeholder="--Choose a country--" multiple class="chosen-select" id="choose_country" name="choose_country[]" required>
                          @foreach($_country as $country_name)
                          <option value="{{$country_name->country}}">{{$country_name->country}}</option>
                          @endforeach
-                    </select>
+                    </select> 
 
                     <div class="title">Industry Type:</div>
-                    <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]">
+                    <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]" required>
                           @foreach($_industry_type as $industry)
                         <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
                           @endforeach
                     </select>
 
                     <div class="title">Media Type:</div>
-                    <select data-placeholder="--Choose a media type--" multiple class="chosen-select" id="media_type" name="media_type[]">
+                    <select data-placeholder="--Choose a media type--" multiple class="chosen-select" id="media_type" name="media_type[]" required>
                           @foreach($_media_type as $media)
                         <option value="{{$media->media_type}}">{{$media->media_type}}</option>
                           @endforeach
                     </select>
 
                     <div class="title">Title of Journalist:</div>
-                    <select data-placeholder="--Choose a title of journalist--" multiple class="chosen-select" id="title_of_journalist" name="title_of_journalist[]">
+                    <select data-placeholder="--Choose a title of journalist--" multiple class="chosen-select" id="title_of_journalist" name="title_of_journalist[]" required>
                           @foreach($_title_of_journalist as $title)
                         <option value="{{$title->title_of_journalist}}">{{$title->title_of_journalist}}</option>
                           @endforeach
@@ -62,16 +63,16 @@
                     <div class="title">Send To:</div>
                     <input type="text"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
                     <span class="choose-button" readonly>  
-                      
-                    <span class="choose-button" readon>  
+            
                         
-                       {{-- POPUP CHOOSE RECIPIENT --}}
-                    <a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
+                    {{-- POPUP CHOOSE RECIPIENT --}}
+                   <a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span>
+                    <span class="result-container">
+                    <label id="" name="">2154 results found</label>
+                    </span>
 
-                      {{-- POPUP CHOOSE RECIPIENT --}}
-                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
-                    <div class="button-container">
-                    </div>
+                    {{-- POPUP CHOOSE RECIPIENT --}}
+                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" multiple readonly > 
                 </div>
                 </form>
 
@@ -91,6 +92,7 @@
    </div>
 </div>
 <style>
+  
    .modal-content
    {
    width: 900px;
@@ -123,9 +125,9 @@
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_user_pressrelease.css">
-<!-- <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script> -->
 @endsection
 @section("script")
+
 <script>
    function openCity(evt, cityName) 
    {
@@ -148,6 +150,9 @@
    $(".chosen-select").chosen({disable_search_threshold: 10});
 </script>
 
+<script src="/email_assets/tinymce/js/tinymce/tinymce.min.js"></script>
+<script src="/email_assets/tinymce/js/tinymce/tinymce.js"></script>
+<script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
 <script>
    tinymce.init({ 
    selector:'textarea', 
@@ -215,4 +220,6 @@
 
   })
 </script>
+
 @endsection
+

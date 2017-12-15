@@ -233,8 +233,7 @@ class ShopMemberController extends Shop
         Session::forget('pr_user_id');
        
         
-
-        return Redirect::to("/");
+        return Redirect::to("/home");
     }
     public function pressuser()
     {
@@ -350,6 +349,7 @@ class ShopMemberController extends Shop
     }
     public function pressuser_pressrelease()
     {
+
         $data['_country']              = Tbl_press_release_recipient::distinct()->get(['country']);
         $data['_industry_type']        = Tbl_press_release_recipient::distinct()->get(['industry_type']);
         $data['_title_of_journalist']  = Tbl_press_release_recipient::distinct()->get(['title_of_journalist']);
@@ -364,7 +364,7 @@ class ShopMemberController extends Shop
         $data['edit']     = DB::table('tbl_pressiq_press_releases')
                             ->where('pr_id',session('pr_edit'))
                             ->get();
-        
+
         if(Session::exists('user_email'))
         {
            $level=session('pr_user_level');
@@ -471,7 +471,6 @@ class ShopMemberController extends Shop
       return view("press_user.search_recipient", $data);
     }
 
-
     public function send($pr_info)
     {
         Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
@@ -499,7 +498,7 @@ class ShopMemberController extends Shop
 
         // if ($validator->fails()) 
         // {
-        //     return Redirect::to("/pressuser/pressrelease")->with('message', $validator->errors()->first())->withInput();
+        //     return Redirect::to("/pressuser/pressrelease")->wicontactsth('message', $validator->errors()->first())->withInput();
         // }
         // else
         // {
@@ -641,6 +640,8 @@ class ShopMemberController extends Shop
     }
     public function pressadmin_media_contacts()
     {
+         $data['_media_contacts'] = Tbl_press_release_recipient::get();
+
         if (request()->isMethod("post"))
         { 
             $value["contact_name"]          =request('contact_name');
@@ -697,22 +698,25 @@ class ShopMemberController extends Shop
            }
         }
         else
-        {
+        {   
             return Redirect::to("/"); 
         }
     }
 
     public function pressadmin_pressrelease_addrecipient(Request $request)
     {
-
-      $data["name"]                      = $request->name;
+      $data["name"]                      = $request->contact_name;
+      $data["position"]                  = $request->position;
+      $data["company_name"]              = $request->company_name;
       $data["country"]                   = $request->country;
-      $data["research_email_address"]    = $request->research_email_address;
-      $data["website"]                   = $request->website;
+      $data["research_email_address"]    = $request->contact_email;
+      $data["website"]                   = $request->contact_website;
+      $data["media_type"]                = $request->media_type;
+      $data["industry_type"]             = $request->industry_type;
+      $data["title_of_journalist"]       = $request->title_journalist;
       $data["description"]               = $request->description;
-      $data["user_id"]                   = session("pr_user_id");
       Tbl_press_release_recipient::insert($data); 
-      Session::flash('message', 'Recipient Successfully Added!');
+      Session::flash('success_merchant', 'Success!..New Media Contacts Added');
       return  redirect::back();
     }
 
@@ -723,32 +727,27 @@ class ShopMemberController extends Shop
       return  redirect::back();
     }
 
-    public function pressreleases_send_recipient(Request $request)
-    {
-        dd('Hello World!');
-
-    }
-
     public function pressuser_choose_recipient(Request $request)
     {
         $filter["country"]             = $request->choose_country;
         $filter["industry_type"]       = $request->industry_type;
         $filter["media_type"]          = $request->media_type;
         $filter["title_of_journalist"] = $request->title_of_journalist;
-        $data['_recipient']   = Tbl_press_release_recipient::
-                                whereIn('country', $filter["country"])
+        $data['_recipient']   = Tbl_press_release_recipient::whereIn('country', $filter["country"])
                                 ->whereIn('industry_type', $filter["industry_type"])
                                 ->whereIn('media_type', $filter["media_type"])
                                 ->whereIn('title_of_journalist', $filter["title_of_journalist"])
                                 ->get();
-        return view("press_user.choose_recipient", $data);
+
+        return view("press_user.choose_recipient", $data);  
     }
 
     
     public function pressreleases_image_upload()
+
     {
-        $shop_id    = $this->shop_info->shop_id;
-        $shop_key   = $this->shop_info->shop_key;
+        $shop_id            = $this->shop_info->shop_id;
+        $shop_key           = $this->shop_info->shop_key;
 
         /* SAVE THE IMAGE IN THE FOLDER */
         $file               = Input::file('file');

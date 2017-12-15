@@ -50,25 +50,48 @@
 
                 @if($customer)
                 <div class="space1"></div>
+                <a href="/members/profile">
+                   <div class="profile-img-container">
+                        <div class="row-no-padding clearfix">
+                            {{-- <div class="col-xs-3">
+                                <div class="profile-img"><img src="{{ $profile_image }}"></div>
+                            </div>
+                            <div class="col-xs-9">
+                                <div class="text-holder">
+                                    <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+                                    <div class="subtext text-overflow">{{ $customer->email }}</div>
+                                </div>
+                            </div> --}}
+                            <div class="col-xs-12">
+                                <div class="profile-img"><img src="{{ $profile_image }}"></div>
+                                <div class="text-holder">
+                                    <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+                                    <div class="subtext text-overflow">{{ $customer->email }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <div class="space1"></div>
                 <span>BROWSE</span>
                 <ul class="links">
-                    <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/">Home</a> </li>
-                    <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
-                    <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
-                    <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
+                    <li class="{{ Request::segment(2) == "" ? "active" : "" }}"> <a href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                    <li onclick="off()"> <a class="smoth-scroll" href="/#aboutus"><i class="fa fa-info" aria-hidden="true"></i> ABOUT US</a></li>
+                    <li onclick="off()"> <a class="smoth-scroll" href="/#mission-vision"><i class="fa fa-rocket" aria-hidden="true"></i> MISSION & VISION</a></li>
+                    <li onclick="off()"> <a class="smoth-scroll" href="/#products"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS</a></li>
                 </ul>
                 
                 <div class="space2"></div>
                 <span>MEMBERS AREA</span>
                 <ul class="links">
-                    <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members">DASHBOARD</a> </li>
-                    <li> <a href="/members/profile">PROFILE</a> </li>
+                    <li class="{{ Request::segment(1) == "members" ? "active" : "" }}" > <a href="/members"><i class="fa brown-icon-dashboard" aria-hidden="true"></i> DASHBOARD</a> </li>
+                    <li> <a href="/members/profile"><i class="fa brown-icon-profile" aria-hidden="true"></i> PROFILE</a></li>
                     @if($mlm_member)
-                    <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary">GENEALOGY</a> </li>
-                    <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report">REPORTS</a> </li>
-                    <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment">WALLET</a> </li>
+                    <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=binary"><i class="fa brown-icon-flow-tree" area-hidden="true"></i> GENEALOGY</a></li>
+                    <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report"><i class="fa fa-bar-chart" aria-hidden="true"></i> REPORTS</a></li>
+                    <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment"><i class="fa brown-icon-wallet" aria-hidden="true"></i> WALLET</a></li>
                         @if($customer)
-                            <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                            <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></li>
                         @endif
                     @else
                     @endif
@@ -77,10 +100,10 @@
                     <div class="space1"></div>
                     <span>BROWSE</span>
                     <ul class="links">
-                        <li> <a href="/">HOME</a> </li>
-                        <li class="nav-ext"> <a class="smoth-scroll" href="/#aboutus">ABOUT US</a> </li>
-                        <li class="nav-ext"> <a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a> </li>
-                        <li class="nav-ext"> <a class="smoth-scroll" href="/#products">PRODUCTS</a> </li>
+                        <li> <a href="/"><i class="fa fa-home" aria-hidden="true"></i> HOME</a></li>
+                        <li onclick="off()"> <a class="smoth-scroll" href="/#aboutus"><i class="fa fa-info" aria-hidden="true"></i> ABOUT US</a></li>
+                        <li onclick="off()"> <a class="smoth-scroll" href="/#mission-vision"><i class="fa fa-rocket" aria-hidden="true"></i> MISSION & VISION</a></li>
+                        <li onclick="off()"> <a class="smoth-scroll" href="/#products"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS</a></li>
                     </ul>
                 @endif
             </nav>

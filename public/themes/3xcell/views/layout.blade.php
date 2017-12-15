@@ -110,15 +110,15 @@
                 <div class="space2"></div>
                 <span>MEMBERS AREA</span>
                 <ul class="links">
-                    <li> <a href="/members"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a> </li>
-                    <li> <a href="/members/profile"><i class="fa fa-user" aria-hidden="true"></i> Profile</a> </li>
+                    <li> <a href="/members"><i class="fa brown-icon-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                    <li> <a href="/members/profile"><i class="fa brown-icon-profile" aria-hidden="true"></i> Profile</a></li>
                     @if($mlm_member)
-                    <li> <a href="/members/genealogy?mode=sponsor"><i class="fa brown-icon-flow-tree" area-hidden="true"></i> Genealogy</a> </li>
-                    <li> <a href="/members/report"><i class="fa fa-bar-chart" aria-hidden="true"></i> Reports</a> </li>
-                    <li> <a href="/members/report-points"><i class="fa fa-bar-chart" aria-hidden="true"></i> Reports (Points)</a> </li>
-                    <li> <a href="/members/wallet-encashment"><i class="fa fa-money" aria-hidden="true"></i> Wallet Encashment</a> </li>
+                    <li> <a href="/members/genealogy?mode=sponsor"><i class="fa brown-icon-flow-tree" area-hidden="true"></i> Genealogy</a></li>
+                    <li> <a href="/members/report"><i class="fa fa-bar-chart" aria-hidden="true"></i> Reports</a></li>
+                    <li> <a href="/members/report-points"><i class="fa fa-bar-chart" aria-hidden="true"></i> Reports (Points)</a></li>
+                    <li> <a href="/members/wallet-encashment"><i class="fa brown-icon-wallet" aria-hidden="true"></i> Wallet Encashment</a></li>
                         @if($customer)
-                            <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                            <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></li>
                         @endif
                     @else
                     @endif

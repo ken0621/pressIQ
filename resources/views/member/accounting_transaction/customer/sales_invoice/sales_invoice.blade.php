@@ -224,7 +224,7 @@
                                     PHP&nbsp;<span class="tax-total">0.00</span>
                                 </div>
                             </div> 
-                            <div class="row">
+                                <div class="row">
                                     <div class="col-md-7 text-right digima-table-label">
                                       Total
                                     </div>

@@ -79,7 +79,7 @@ function sales_order()
 			{
 				total_taxable += parseFloat(total_per_tr);
 			}
-			$(this).find(".txt-rate").val(action_add_comma(rate));
+			$(this).find(".txt-rate").val(action_add_comma(rate.toFixed(2)));
 		});
 
 		$(".total-amount").html(action_add_comma(subtotal.toFixed(2)));

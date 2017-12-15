@@ -12,7 +12,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-star"></i> Receive Payment</button>
+                <button onclick="location.href='/member/transaction/receive_payment/create'" class="btn btn-primary"><i class="fa fa-star"></i> Receive Payment</button>
             </div>
         </div>
     </div>

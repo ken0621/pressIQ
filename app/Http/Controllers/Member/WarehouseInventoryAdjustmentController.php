@@ -36,9 +36,17 @@ class WarehouseInventoryAdjustmentController extends Member
     {
         $data['page'] = "Inventory Adjustment";
        
-                
-
         return view('member.warehousev2.invtentory_adjustment.inventory_adjustment_list',$data);
+    }
+
+    public function getCreate()
+    {
+        $data['page'] = "Inventory Adjustment";
+        $data['pis']        = Purchasing_inventory_system::check();
+        $data['_item']      = Item::get_all_category_item();
+        $data['_um']        = UnitMeasurement::load_um_multi();
+
+        return view('member.warehousev2.invtentory_adjustment.inventory_adjustment',$data);
     }
 
 }

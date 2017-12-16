@@ -12,7 +12,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href='/member'" class="btn btn-primary"><i class="fa fa-star"></i> Adjust Inventory</button>
+                <button onclick="location.href='/member/item/warehouse/inventory_adjustment/create'" class="btn btn-primary"><i class="fa fa-star"></i> Adjust Inventory</button>
             </div>
         </div>
     </div>
@@ -50,9 +50,9 @@
                                 <tr>
                                     <th class="text-center">SKU</th>
                                     <th class="text-center">ITEM DESCRIPTION</th>
-                                    <th class="text-center" width="120px">ACTUAL QUANTITY</th>
-                                    <th class="text-center" width="120px">NEW QUANTITY</th>
-                                    <th class="text-center" width="120px">DIFFERENCE</th>
+                                    <th class="text-center">ACTUAL QUANTITY</th>
+                                    <th class="text-center">NEW QUANTITY</th>
+                                    <th class="text-center">DIFFERENCE</th>
                                 </tr>
                             </thead>
                             <tbody>

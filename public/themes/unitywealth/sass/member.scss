@@ -535,4 +535,9 @@
 		color: #fff;
 		opacity: 0.8;
 	}
+
+	@media screen and (max-width: 425px)
+	{
+		margin-top: 10px;
+	}
 }

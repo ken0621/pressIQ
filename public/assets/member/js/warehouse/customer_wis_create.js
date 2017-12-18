@@ -46,6 +46,17 @@ function customer_wis_create()
 	}
 	function action_initialize_select()
 	{
+		$('.droplist-customer').globalDropList(
+		{
+			width : "100%",
+    		placeholder : "Select Customer...",
+			link : "/member/customer/modalcreatecustomer",
+			onChangeValue: function()
+			{				
+		
+			}
+		});
+
 		$('.droplist-item').globalDropList({
 			link : "/member/item/add",
             width : "100%",

@@ -196,7 +196,6 @@
                                                         </tr>
                                                         @endforeach
                                                     @endif
-
                                                 <tbody class="draggable tbody-item po-tbl">
                                                     @include("member.load_ajax_data.load_po_session_item")  
                                                     <tr class="tr-draggable">

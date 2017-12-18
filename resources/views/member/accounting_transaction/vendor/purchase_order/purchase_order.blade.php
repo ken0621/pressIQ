@@ -15,14 +15,18 @@
                     </small>
                 </h1>
 	            <div class="dropdown pull-right">
-	                <select class="form-control">
-	                    <option>Save & Close</option>
-	                    <option>Save & Edit</option>
-	                    <option>Save & Print</option>
-	                    <option>Save & New</option>
-	                </select>
-	            </div>
-                <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
+                    <div>
+                        <a class="btn btn-custom-white" href="/member/transaction/estimate_quotation">Cancel</a>
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu  dropdown-menu-custom">
+                          <li><a class="select-action" code="sclose">Save & Close</a></li>
+                          <li><a class="select-action" code="sedit">Save & Edit</a></li>
+                          <li><a class="select-action" code="sprint">Save & Print</a></li>
+                          <li><a class="select-action" code="snew">Save & New</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -40,41 +44,40 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="reference_number" value="EQ20171214-0002">
+                                <input type="text" class="form-control" name="transaction_refnumber" value="PO20171225-0001">
                             </div>
                         </div>
                     </div>
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
-                            <div class="col-sm-4">
-                                <select class="form-control droplist-vendor input-sm pull-left" name="po_vendor_id" data-placeholder="Select a Customer" required>
+                            <div class="col-sm-3">
+                                <select class="form-control droplist-vendor input-sm pull-left" name="vendor_id" required>
                                     @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($po->po_vendor_id) ? $po->po_vendor_id : (isset($v_id) ? $v_id : '')]);
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control input-sm customer-email" name="po_vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$po->po_vendor_email or ''}}"/>
+                                <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$po->po_vendor_email or ''}}"/>
                             </div>
                         </div>
                     </div>
-                    
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Billing Address</label>
-                            <textarea class="form-control input-sm textarea-expand" name="po_billing_address" placeholder="">{{$po->po_billing_address or ''}}</textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="vendor_address" placeholder="">{{$po->po_billing_address or ''}}</textarea>
                         </div>
                         <div class="col-sm-2">  
                             <label>Terms</label>
-                            <select class="form-control input-sm droplist-terms" name="po_terms_id">
+                            <select class="form-control input-sm droplist-terms" name="vendor_terms">
                                     @include("member.load_ajax_data.load_terms")
                                 </select>
                         </div>
                         <div class="col-sm-2">
                             <label>P.O Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="po_date" value="{{$po->po_date or date('m/d/y')}}"/>
+                            <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{$po->po_date or date('m/d/y')}}"/>
                         </div>
                         <div class="col-sm-2">
                             <label>Due Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="po_due_date" value="{{$po->po_due_date or date('m/d/y')}}" />
+                            <input type="text" class="datepicker form-control input-sm" name="transaction_duedate" value="{{$po->po_due_date or date('m/d/y')}}" />
                         </div>
                     </div>
                     
@@ -206,11 +209,11 @@
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Message Displayed on P.O</label>
-                            <textarea class="form-control input-sm textarea-expand" name="po_message" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="vendor_message" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-3">
                             <label>Statement Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="po_memo" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="vendor_memo" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-6">
                             <div class="row">
@@ -230,7 +233,7 @@
                                         </div>
                                         <div class="col-sm-3  padding-lr-1">
                                             <!-- <input class="form-control input-sm text-right ewt_value number-input" type="text" name="ewt"> -->
-                                            <select class="form-control input-sm ewt-value compute" name="ewt">  
+                                            <select class="form-control input-sm ewt-value compute" name="vendor_ewt">  
                                                 <option value="0" {{isset($po) ? $po->ewt == 0 ? 'selected' : '' : ''}}></option>
                                                 <option value="0.01" {{isset($po) ? $po->ewt == 0.01 ? 'selected' : '' : ''}}>1%</option>
                                                 <option value="0.02" {{isset($po) ? $po->ewt == 0.02 ? 'selected' : '' : ''}}>2%</option>
@@ -246,13 +249,13 @@
                                 <div class="col-md-7 text-right digima-table-label">
                                     <div class="row">
                                         <div class="col-sm-6 col-sm-offset-4  padding-lr-1">
-                                            <select class="form-control input-sm compute discount_selection" name="po_discount_type">  
+                                            <select class="form-control input-sm compute discount_selection" name="vendor_type">  
                                                 <option value="percent" {{isset($po) ? $po->po_discount_type == 'percent' ? 'selected' : '' : ''}}>Discount percentage</option>
                                                 <option value="value" {{isset($po) ? $po->po_discount_type == 'value' ? 'selected' : '' : ''}}>Discount value</option>
                                             </select>
                                         </div>
                                         <div class="col-sm-2  padding-lr-1">
-                                            <input class="form-control input-sm text-right number-input discount_txt compute" type="text" name="po_discount_value" value="{{$po->po_discount_value or ''}}">
+                                            <input class="form-control input-sm text-right number-input discount_txt compute" type="text" name="vendor_discount" value="{{$po->po_discount_value or ''}}">
                                         </div>
                                     </div>
                                 </div>
@@ -264,7 +267,7 @@
                                 <div class="col-md-7 text-right digima-table-label">
                                     <div class="row">
                                         <div class="col-sm-4 col-sm-offset-8  padding-lr-1">
-                                            <select class="form-control input-sm tax_selection compute" name="taxable">  
+                                            <select class="form-control input-sm tax_selection compute" name="vendor_tax">  
                                                 <option value="0" {{isset($po) ? $po->taxable == 0 ? 'selected' : '' : ''}}>No Tax</option>
                                                 <option value="1" {{isset($po) ? $po->taxable == 1 ? 'selected' : '' : ''}}>Vat (12%)</option>
                                             </select>

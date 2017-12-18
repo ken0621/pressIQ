@@ -39,14 +39,18 @@
                     </small>
                 </h1>
                 <div class="dropdown pull-right">
-                    <select class="form-control">
-                        <option>Save & Close</option>
-                        <option>Save & Edit</option>
-                        <option>Save & Print</option>
-                        <option>Save & New</option>
-                    </select>
+                    <div>
+                        <a class="btn btn-custom-white" href="/member/transaction/estimate_quotation">Cancel</a>
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu  dropdown-menu-custom">
+                          <li><a class="select-action" code="sclose">Save & Close</a></li>
+                          <li><a class="select-action" code="sedit">Save & Edit</a></li>
+                          <li><a class="select-action" code="sprint">Save & Print</a></li>
+                          <li><a class="select-action" code="snew">Save & New</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
                 @if(isset($wc))
                 <div class="pull-right">
                     <div class="dropdown">
@@ -77,7 +81,7 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-4">
                                             <label>Reference Number</label>
-                                            <input type="text" class="form-control" name="reference_number" value="EQ20171214-0002">
+                                            <input type="text" class="form-control" name="transaction_refnumber" value="WC20171225-0001">
                                         </div>
                                     </div>
                                 </div>
@@ -166,7 +170,6 @@
                                             <table class="digima-table">
                                                 <thead >
                                                     <tr>
-                                                        <th style="width: 15px;"></th>
                                                         <th style="width: 15px;">#</th>
                                                         <th style="width: 200px;">Product/Service</th>
                                                         <th>Description</th>
@@ -181,8 +184,6 @@
                                                     @if(isset($wc))
                                                         @foreach($_wc_item_line as $item)
                                                         <tr class="tr-draggable tr-id-{{$item->wcline_ref_id}}">
-                                                            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i>                
-                                                            </td>
                                                             <td class="invoice-number-td text-right">1</td>
                                                             <td>
 
@@ -212,11 +213,23 @@
                                                     @endif
 
                                                 <tbody class="draggable tbody-item po-tbl">
-                                                    @include("member.load_ajax_data.load_po_session_item")  
                                                     <tr class="tr-draggable">
-                                                         <td class="text-center cursor-move move">
-                                                            <i class="fa fa-th-large colo-mid-dark-gray"></i>
-                                                         </td>
+                                                        <td class="invoice-number-td text-right">1</td>
+                                                        <td>
+                                                        <input type="hidden" class="poline_id" name="itemline_ref_name[]">
+                                                        <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
+                                                                @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                            </select>
+                                                        </td>
+                                                        <td><textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea></td>
+                                                        <td><select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
+                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
+                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
+                                                        <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
+                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                    </tr>
+                                                    <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
                                                         <input type="hidden" class="poline_id" name="itemline_ref_name[]">
@@ -275,11 +288,6 @@
 <div class="div-script">
     <table class="div-item-row-script hide">
        <tr class="tr-draggable">
-            <td class="text-center cursor-move move">
-                <i class="fa fa-th-large colo-mid-dark-gray"></i>
-                <input type="text" class="hidden poline_id" name="poline_id[]">
-                <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]">
-            </td>
             <td class="invoice-number-td text-right">1</td>
             <td>
                 <select class="1111 form-control select-item input-sm pull-left" name="itemline_item_id[]" >

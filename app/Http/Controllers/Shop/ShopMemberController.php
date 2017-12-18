@@ -643,7 +643,7 @@ class ShopMemberController extends Shop
     public function pressadmin_media_contacts()
     {
 
-        $data['_media_contacts'] = Tbl_press_release_recipient::get();
+         $data['_media_contacts'] = Tbl_press_release_recipient::get();
 
         if(Session::exists('user_email'))
         {
@@ -658,6 +658,7 @@ class ShopMemberController extends Shop
                 return view("press_admin.press_admin_media_contacts", $data);
            }
 
+        }
         else
         {   
             return Redirect::to("/"); 

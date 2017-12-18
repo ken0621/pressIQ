@@ -33,6 +33,7 @@ function global()
 		$(".genealogy-mobile-dropdown").on("click", function (e) 
 		{
 		    $(e.currentTarget).siblings(".genealogy-mobile-dropdown-list").slideToggle();
+		    $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
 		});
 	}
 

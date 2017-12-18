@@ -10,8 +10,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="button-container">
-                        <span class="create-button pull-right" ><a href="/pressuser/pressrelease">Create a Press Release</a>
-                      
+                        <span class="create-button" ><a href="/pressuser/pressrelease">Create a Press Release</a>
                     </div>
                 </div>
             </div>
@@ -22,6 +21,11 @@
                     <th>Status</th>
                 </tr>
                 @foreach($pr as $prs)
+                <tr>
+                    <td>{{$prs->pr_headline}}</td>
+                    <td>{{$prs->pr_date_sent}}</td>
+                    <td>{{$prs->pr_status}}</td>
+                </tr>
                 <tr>
                     <td>{{$prs->pr_headline}}</td>
                     <td>{{$prs->pr_date_sent}}</td>

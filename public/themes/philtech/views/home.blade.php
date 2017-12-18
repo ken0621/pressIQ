@@ -11,6 +11,9 @@
 							<div class="grid-1">
 								<div class="single-slide">
 									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide4.jpg">
+									</div>
+									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide3.jpg">
 									</div>
 									<div>
@@ -199,6 +202,9 @@
 						<div class="col-xs-8">
 							<div class="grid-1">
 								<div class="single-slide">
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide4.jpg">
+									</div>
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide3.jpg">
 									</div>

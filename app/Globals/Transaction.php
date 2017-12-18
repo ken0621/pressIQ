@@ -739,6 +739,24 @@ class Transaction
         session()->forget('get_transaction_date');
         session()->forget('get_transaction_payment_method');
         session()->forget('get_transaction_slot_id');
+
+        //patrick
+        $emails = array();
+        if($transaction_type == 'proof')
+        {
+            foreach ($data as $key => $value) 
+            {
+                if(in_array($value->email, $emails))
+                {
+                    unset($data[$key]);                
+                }
+                else
+                {
+                    array_push($emails, $value->email);
+                }
+            }
+        }
+        
         return $data;
     }
     public static function get_all_transaction_type()

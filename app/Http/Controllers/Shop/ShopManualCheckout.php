@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_transaction_list;
+use App\Models\Tbl_transaction;
 use App\Models\Tbl_online_pymnt_gateway;
 use App\Models\Tbl_online_pymnt_api;
 use Crypt;
@@ -12,6 +13,7 @@ use stdClass;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Tbl_online_pymnt_method;
+use Redirect;
 
 
 class ShopManualCheckout extends Shop
@@ -20,7 +22,8 @@ class ShopManualCheckout extends Shop
     {
         $transaction_list_id 	= Crypt::decrypt(request("tid"));
         $data["transaction"] 	= $transaction_list = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
-       	$method					= $transaction_list->payment_method;
+       	
+        $method					= $transaction_list->payment_method;
        	$shop_id 				= $transaction_list->shop_id;
        	$gateway_id 			= Tbl_online_pymnt_gateway::where("gateway_code_name", $method)->value("gateway_id");
        	$api					= Tbl_online_pymnt_api::where("api_gateway_id", $gateway_id)->where("api_shop_id", $shop_id)->first();
@@ -47,6 +50,37 @@ class ShopManualCheckout extends Shop
     public function submit_proof(Request $request)
     {
       $transaction_list_id  = Crypt::decrypt(request("tid"));
+
+      $transaction_list = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
+      $proof = $transaction_list->transaction_payment_proof;
+      $status = $transaction_list->payment_status;
+      if($proof == "")
+      {
+        $this->send_proof($transaction_list_id,$request);
+      return redirect("/manual_checkout/success");
+      }
+      else
+      {
+        if($status == "reject")
+        {
+          $this->send_proof($transaction_list_id,$request);
+      return redirect("/manual_checkout/success");
+          //update status
+        }
+        else
+        {
+          $response = 'error';
+          return Redirect::back()->with("response",$response);
+        }
+      }
+
+
+        
+
+      
+    }
+    public function send_proof($transaction_list_id,$request)
+    {
       $transaction_list     = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
       $transaction_type     = "PROOF";
       $transaction_id       = $transaction_list->transaction_id;
@@ -60,7 +94,6 @@ class ShopManualCheckout extends Shop
       Transaction::create_update_proof_details(request()->except(['proofupload', '_token', "tid", "method_id"]));
       $transaction_list_id  = Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, null, $source);
     
-      return redirect("/manual_checkout/success");
     }
     public function success()
     {

@@ -369,85 +369,8 @@ class ShopMemberController extends Shop
            $level=session('pr_user_level');
            if($level!="1")
            { 
-                // if (request()->isMethod("post"))
-                // {
-                //     $pr_info["pr_headline"]     =request('pr_headline');
-                //     $pr_info["pr_subheading"]   =request('pr_subheading');
-                //     $pr_info["pr_content"]      =request('pr_content');
-                //     $pr_info["pr_from"]         =session('user_email');
-                //     $pr_info["pr_to"]           =request('pr_to');
-                //     $pr_info["pr_status"]       ="sent";
-                //     $pr_info["pr_date_sent"]    =Carbon::now();
-                //     $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
-                //     $pr_info["pr_receiver_name"]=request('pr_receiver_name');
-                    
-                //     $pr_rules["pr_headline"]   =['required'];
-                //     $pr_rules["pr_subheading"] =['required'];
-                //     $pr_rules["pr_content"]    =['required'];
-                //     $pr_rules["pr_to"]         =['required'];
-                    
-                //     $validator = Validator::make($pr_info, $pr_rules);
-
-                //     if ($validator->fails()) 
-                //     {
-                //         return Redirect::to("/pressuser/pressrelease")->with('message', $validator->errors()->first())->withInput();
-                //     }
-                //     else
-                //     {                      
-                //         $this->send($pr_info);
-
-                //         if( count(Mail::failures()) > 0 ) 
-                //             {
-
-                //            Session::flash('message', "Error in sending the release!");
-
-                //            foreach(Mail::failures as $email_address) 
-                //             {
-                //                echo " - $email_address <br />";
-                //             }
-
-                //         }
-                //         else 
-                //         {
-                //             Session::flash('message', "Release Successfully Sent!");
-            
-                //             if(Session::has('pr_edit'))
-                //             {
-                //                 $date=Carbon::now();
-                //                 DB::table('tbl_pressiq_press_releases')
-                //                     ->where('pr_id', session('pr_edit'))
-                //                     ->update([
-                //                         'pr_headline'     =>request('pr_headline'),
-                //                         'pr_subheading'   =>request('pr_subheading'),
-                //                         'pr_content'      =>request('pr_content'),
-                //                         'pr_from'         =>session('user_email'),
-                //                         'pr_to'           =>request('pr_to'),
-                //                         'pr_status'       =>"sent",
-                //                         'pr_date_sent'    =>$date,
-                //                         'pr_sender_name'  =>session('user_first_name').' '.session('user_last_name'),
-                //                         'pr_receiver_name'=>request('pr_receiver_name')
-                //                         ]);
-                //             }
-                //             else
-                //             {
-                //                 $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info); 
-                //             }
-                //             $data["page"] = "Press Release - My Press Release";
-                //             Session::forget('pr_edit');
-                //             return Redirect::to("/pressuser/mypressrelease");
-
-                //         }
-                //         $data["page"] = "Press Release - Press Release";
-                //         return view("press_user.press_user_pressrelease", $data);
-                //     }
-
-                // }
-                // else
-                // {
-                    $data["page"] = "Press Release - Press Release";
-                    return view("press_user.press_user_pressrelease", $data);
-
-                // }
+                $data["page"] = "Press Release - Press Release";
+                return view("press_user.press_user_pressrelease", $data);
            }
            else
            {

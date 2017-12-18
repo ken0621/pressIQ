@@ -1341,7 +1341,7 @@ function page_list()
     $code = "merchant-commission-report";
     $nav[$page]['submenu'][$code]['label'] = "Commission Report";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . "merchant" . "/commission-reoprt";
+    $nav[$page]['submenu'][$code]['url'] = $path . "merchant" . "/commission-report";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "on progress";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Patrick Manarang</span>";

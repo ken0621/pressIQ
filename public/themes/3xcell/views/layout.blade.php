@@ -72,8 +72,14 @@
                         </div>
                     </div>
                 </a>
+
                 <div class="space1"></div>
-                <span>BROWSE</span>
+                <div class="row-no-padding clearfix">
+                    <div class="col-xs-12">
+                        <div class="divider"><span>BROWSE</span></div>
+                    </div>
+                </div>
+
                 <ul class="links">
                     {{-- @if($customer_info) --}}
                     <li><a href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
@@ -108,7 +114,12 @@
                 </ul>
                 
                 <div class="space2"></div>
-                <span>MEMBER'S AREA</span>
+                <div class="row-no-padding clearfix">
+                    <div class="col-xs-12">
+                        <div class="divider"><span>MEMBER'S AREA</span></div>
+                    </div>
+                </div>
+
                 <ul class="links">
                     <li> <a href="/members"><i class="fa brown-icon-dashboard" aria-hidden="true"></i> Dashboard</a></li>
                     <li> <a href="/members/profile"><i class="fa brown-icon-profile" aria-hidden="true"></i> Profile</a></li>
@@ -118,7 +129,7 @@
                     <li> <a href="/members/report-points"><i class="fa fa-bar-chart" aria-hidden="true"></i> Reports (Points)</a></li>
                     <li> <a href="/members/wallet-encashment"><i class="fa brown-icon-wallet" aria-hidden="true"></i> Wallet Encashment</a></li>
                         @if($customer)
-                            <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></li>
+                            <li class="user-logout"> <a href="/members/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout{{-- &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i> --}}</a></li>
                         @endif
                     @else
                     @endif

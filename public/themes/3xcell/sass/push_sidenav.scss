@@ -32,7 +32,7 @@ $bold: 700;
 
     .space1
     {
-        padding: 10px 0px 10px 0px;
+        padding: 15px 0px 10px 0px;
 
         &:first-child
         {
@@ -42,7 +42,7 @@ $bold: 700;
 
     .space2
     {
-        padding: 20px 0px 10px 0px;
+        padding: 5px 0px 10px 0px;
     }
 
     span
@@ -52,10 +52,20 @@ $bold: 700;
         font-weight: $semi-bold;
         color: #fff;
         padding-left: 22px;
+    }
 
-        @media screen and (max-width: 414px)
+    .divider
+    {
+        text-align: center;
+        background-color: rgba(255,255,255,0.2);
+        padding: 5px 10px;
+        margin: 0 20px;
+        border-radius: 2px;
+        
+        span
         {
-            font-size: 16px;
+            padding-left: 0;
+            font-weight: $regular;
         }
     }
 
@@ -63,7 +73,7 @@ $bold: 700;
     {
         padding: 20px;
         text-align: center;
-        background-color: rgba(33,97,200,0.1);
+        //background-color: rgba(255,255,255,0.2);
 
         .profile-img 
         {

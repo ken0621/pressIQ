@@ -17,14 +17,14 @@
                <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
-                  <input type="text" name="pr_headline" class="form-control">
+                  <input type="text" name="pr_headline" class="form-control" autofocus>
                   <div class="title">Content:</div>
                   <textarea name="pr_content" id="tinymce"></textarea>
                   <div class="title">Boilerplate:</div>
                   <textarea name="bolier_content" id="tinymce"></textarea>
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                  <span class="preview-button"><a href="#">Preview</a></span></a></span>
+                  <span class="preview-button"><button onclick="tinyMCE.activeEditor.execCommand('mcePreview');">Preview</button></span>
                   </div>
                </div>
 

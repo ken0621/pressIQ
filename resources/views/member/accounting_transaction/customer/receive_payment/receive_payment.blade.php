@@ -34,7 +34,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="reference_number" value="RP20171214-0002">
+                                <input type="text" class="form-control" name="transaction_refnumber" value="RP20171214-0002">
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
                             <div class="col-sm-4">
-                                <select class="drop-down-customer" name="rp_customer_id" required>
+                                <select class="drop-down-customer" name="customer_id" required>
                                     @include("member.load_ajax_data.load_customer", ['customer_id' => isset($rcvpayment) ? $rcvpayment->rp_customer_id : (isset($c_id) ? $c_id : '')])
                                 </select>
                             </div>
@@ -59,17 +59,17 @@
                         <div class="row clearfix">
                             <div class="col-sm-2">
                                     <label>Payment Date</label>
-                                    <input type="text" class="datepicker form-control input-sm" name="rp_date" value="{{isset($rcvpayment) ? dateFormat($rcvpayment->rp_date) : date('m/d/y')}}" />
+                                    <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{isset($rcvpayment) ? dateFormat($rcvpayment->rp_date) : date('m/d/y')}}" />
                                 </div>
                             <div class="col-sm-3">
                                 <label>Payment Method</label>
-                                <select class="drop-down-payment" name="rp_payment_method">
+                                <select class="drop-down-payment" name="transaction_payment_method">
                                     @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($rcvpayment) ? $rcvpayment->rp_payment_method : ''])
                                 </select>
                             </div>
                             <div class="col-sm-2">
                                 <label>Reference No</label>
-                                <input type="text" class="form-control input-sm" />
+                                <input type="text" class="form-control input-sm" name="transaction_ref_no"/>
                             </div>
                             <div class="col-sm-3">
                                 <label>Deposit to</label>
@@ -113,7 +113,7 @@
                     <div class="row clearfix">
                         <div class="col-sm-6">
                             <label>Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="rp_memo" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-6">
                             <div class="row">

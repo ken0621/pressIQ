@@ -89,6 +89,14 @@ class ShopLoginController extends Shop
         }
     }
 
+      public function thank_you()
+    {
+        
+        $data["page"] = "Thank You";
+        return view("press_user.thank_you", $data);
+    }
+
+    
     public function submit()
     {
     	$email = Request::input('email');

@@ -23,7 +23,7 @@
                   <div class="title">Boilerplate:</div>
                   <textarea name="bolier_content" id="tinymce"></textarea>
                   <div class="button-container">
-                  <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
+                  <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft">Save as draft</button></span>
                   <span class="preview-button"><button onclick="tinyMCE.activeEditor.execCommand('mcePreview');">Preview</button></span>
                   </div>
                </div>

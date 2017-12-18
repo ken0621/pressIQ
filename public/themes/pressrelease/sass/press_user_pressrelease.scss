@@ -115,17 +115,6 @@
 						.save-button
 						{
 							padding-right: 20px;
-							a
-							{
-								background-color: #316df9;
-								color: #fff;
-								font-size: 15px;
-								text-decoration: none;
-								padding: 10px 20px;
-							}
-						}
-						.preview-button
-						{
 							button
 							{
 								padding: 10px 30px;
@@ -135,10 +124,9 @@
 								text-decoration: none;
 							}
 						}
-						.import-button
+						.preview-button
 						{
-							margin-bottom: 30px;
-							a
+							button
 							{
 								padding: 10px 30px;
 								background-color: #316df9;

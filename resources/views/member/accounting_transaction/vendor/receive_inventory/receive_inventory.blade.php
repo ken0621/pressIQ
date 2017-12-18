@@ -70,7 +70,7 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-3">
                                             <select class="form-control droplist-vendor input-sm pull-left" name="bill_vendor_id">
-                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')]);
+                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')])
                                             </select>
                                         </div>
                                         <div class="col-sm-4">
@@ -167,7 +167,7 @@
                                                         <th style="width: 70px;">Qty</th>
                                                         <th style="width: 120px;">Rate</th>
                                                         <th style="width: 120px;">Amount</th>
-                                                        @include("member.load_ajax_data.load_th_serial_number");
+                                                        @include("member.load_ajax_data.load_th_serial_number")
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>

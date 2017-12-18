@@ -102,7 +102,7 @@
                         @endif
                     <li> <a href="/promos"><i class="fa fa-percent" aria-hidden="true"></i> PROMOS</a></li>
                     <li class="company-mobile-dropdown">
-                        <a href="javascript:"><i class="fa fa-building-o" aria-hidden="true"></i> COMPANY <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a>
+                        <a href="javascript:"><i class="fa fa-info-circle" aria-hidden="true"></i> COMPANY <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a>
                     </li>
                         <ul class="company-mobile-dropdown-list">
                             <li><a href="/history"><i class="fa fa-history" aria-hidden="true"></i> Our History</a></li>
@@ -164,7 +164,7 @@
                             @endif
                         <li> <a href="/promos"><i class="fa fa-percent" aria-hidden="true"></i> PROMOS</a></li>
                         <li class="company-mobile-dropdown"> 
-                            <a href="javascript:"><i class="fa fa-building-o" aria-hidden="true"></i> COMPANY <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a> 
+                            <a href="javascript:"><i class="fa fa-info-circle" aria-hidden="true"></i> COMPANY <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a> 
                         </li>
                             <ul class="company-mobile-dropdown-list">
                                 <li><a href="/history"><i class="fa fa-history" aria-hidden="true"></i> Our History</a></li>

@@ -461,13 +461,14 @@ class ShopMemberController extends Shop
     
     public function pressuser_pressrelease_recipient_search(Request $request)
     {
-                       
+      
       $search_key = $request->search_key;
       $data['_recipient'] = Tbl_press_release_recipient::where('name','like','%'.$search_key.'%')
                             ->Orwhere('company_name','like','%'.$search_key.'%')
                             ->Orwhere('position','like','%'.$search_key.'%')
                             ->get();
       return view("press_user.search_recipient", $data);
+
     }
 
     public function send($pr_info)
@@ -480,14 +481,14 @@ class ShopMemberController extends Shop
     }
     public function press_release_save_as_draft(Request $request)
     {   
-        $pr_info["pr_headline"]     =$request->pr_headline;
-        $pr_info["pr_content"]      =$request->pr_content;
-        $pr_info["pr_from"]         =session('user_email');
-        $pr_info["pr_to"]           =$request->pr_to;
-        $pr_info["pr_status"]       ="draft";
-        $pr_info["pr_date_sent"]    =Carbon::now();
-        $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
-        $pr_info["pr_receiver_name"]=request('pr_receiver_name');
+        $pr_info["pr_headline"]      =$request->pr_headline;
+        $pr_info["pr_content"]       =$request->pr_content;
+        $pr_info["pr_from"]          =session('user_email');
+        $pr_info["pr_to"]            =$request->pr_to;
+        $pr_info["pr_status"]        ="draft";
+        $pr_info["pr_date_sent"]     =Carbon::now();
+        $pr_info["pr_sender_name"]   =session('user_first_name').' '.session('user_last_name');
+        $pr_info["pr_receiver_name"] =request('pr_receiver_name');
 
         // $pr_rules["pr_headline"]   =['required'];
         // $pr_rules["pr_content"]    =['required'];
@@ -741,7 +742,6 @@ class ShopMemberController extends Shop
         return view("press_user.choose_recipient", $data);  
     }
 
-    
     public function pressreleases_image_upload()
 
     {

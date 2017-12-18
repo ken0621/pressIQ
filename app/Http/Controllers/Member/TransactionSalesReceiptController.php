@@ -31,7 +31,43 @@ class TransactionSalesReceiptController extends Member
         $data["_customer"]  = Customer::getAllCustomer();
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
+        $data['action']		= "/member/transaction/sales_receipt/create-sales-receipt";
 
 		return view('member.accounting_transaction.customer.sales_receipt.sales_receipt',$data);
 	} 
+	public function postCreateSalesReceipt(Request $request)
+	{
+		$btn_action = $request->button_action;
+
+		$insert['transaction_refnumber'] = $request->transaction_refnumber;
+		$insert['customer_id'] 			 = $request->customer_id;
+		$insert['customer_email']        = $request->customer_email;
+		$insert['customer_address']      = $request->customer_address;
+		$insert['transaction_date']      = $request->transaction_date;
+		$insert['customer_message']      = $request->customer_message;
+		$insert['customer_memo']         = $request->customer_memo;
+		$insert['customer_ewt']          = $request->customer_ewt;
+		$insert['customer_discount']     = $request->customer_discount;
+		$insert['customer_discounttype'] = $request->customer_discounttype;
+		$insert['customer_tax'] 		 = $request->customer_tax;
+
+		$insert_item = null;
+		foreach ($request->item_id as $key => $value) 
+		{
+			if($value)
+			{
+				$insert_item[$key]['item_id'] = $value;
+				$insert_item[$key]['item_servicedate'] = $request->item_servicedate[$key];
+				$insert_item[$key]['item_description'] = $request->item_description[$key];
+				$insert_item[$key]['item_um'] = $request->item_um[$key];
+				$insert_item[$key]['item_qty'] = str_replace(',', '', $request->item_qty[$key]);
+				$insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
+				$insert_item[$key]['item_discount'] = str_replace(',', '', $request->item_discount[$key]);
+				$insert_item[$key]['item_remarks'] = $request->item_remarks[$key];
+				$insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
+				$insert_item[$key]['item_taxable'] = $request->item_taxable[$key];
+			}
+		}
+		die(var_dump($btn_action));
+	}
 }

@@ -32,6 +32,7 @@ class TransactionReceivePaymentController extends Member
         $data["_customer"]       = Customer::getAllCustomer();
         $data['_payment_method'] = Payment::get_payment_method($this->user_info->shop_id);
         $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
+        
 		return view('member.accounting_transaction.customer.receive_payment.receive_payment',$data);
 	}
 }

@@ -1,6 +1,9 @@
 @extends('member.layout')
 @section('content')
+
+<form class="global-submit" action="{{$action or ''}}" method="post">
 <div class="panel panel-default panel-block panel-title-block">
+    <input type="hidden" class="button-action" name="button_action" value="">
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
     <div class="panel-heading">
         <div>
@@ -12,12 +15,17 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <select class="form-control">
-                    <option>Save & Close</option>
-                    <option>Save & Edit</option>
-                    <option>Save & Print</option>
-                    <option>Save & New</option>
-                </select>
+                <div>
+                    <a class="btn btn-custom-white" href="/member/transaction/credit_memo">Cancel</a>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu  dropdown-menu-custom">
+                      <li><a class="select-action" code="sclose">Save & Close</a></li>
+                      <li><a class="select-action" code="sedit">Save & Edit</a></li>
+                      <li><a class="select-action" code="sprint">Save & Print</a></li>
+                      <li><a class="select-action" code="snew">Save & New</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -149,6 +157,7 @@
         </div>
     </div>
 </div>
+</form>
 
 <div class="div-script">
     <table class="div-item-row-script hide">

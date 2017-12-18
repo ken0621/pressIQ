@@ -89,7 +89,7 @@
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
                  <div class="img">
                   @if($collection["product"]["eprod_detail_image"])
-                      <img style="top: -10px; right: -10px;" class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
+                      <img style="top: 0px; right: 0px;" class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
                   @endif
                   <img src="{{ get_collection_first_image($collection) }}">
                  </div>

@@ -14,21 +14,22 @@
 
             <div class="press-release-content">
 
-               <div id="create_release" class="tabcontent create-release-container">
+              <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST" style="">
+                {{csrf_field()}}
+                <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
                   <input type="text" name="pr_headline" class="form-control" autofocus>
                   <div class="title">Content:</div>
                   <textarea name="pr_content" id="tinymce"></textarea>
                   <div class="title">Boilerplate:</div>
-                  <textarea name="bolier_content" id="tinymce"></textarea>
+                  <textarea name="pr_boiler_content" id="tinymce"></textarea>
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
                   <span class="preview-button"><button onclick="tinyMCE.activeEditor.execCommand('mcePreview');">Preview</button></span>
                   </div>
-               </div>
+                </div>
 
-               <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST">
                 <div id="choose_recipient" class="tabcontent choose-recipient-container">
                     <div class="title-container">Choose Recipient</div>
 
@@ -68,9 +69,8 @@
                       {{-- POPUP CHOOSE RECIPIENT --}}
 
                     <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
-                  </div>
-               </form>
-
+                    <div class="button-container"></div>
+                </div>
 
                <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">New Release Summary</div>
@@ -79,10 +79,10 @@
                   <div class="title">Title:</div>
                   <div class="content">Press Release</div>
                   <div class="button-container">
-                     <span class="send-button"><a href="#">Send</a></span>
+                     <span class="send-button"><button type="submit" formaction="/pressuser/pressrelease/pr"><a href="">Send</a></button></span>
                   </div>
-               </div>
-                    
+                </div>
+              </form>
             </div>
          </div>
       </div>

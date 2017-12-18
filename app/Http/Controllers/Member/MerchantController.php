@@ -556,7 +556,7 @@ class MerchantController extends Member
 		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$id)->first();
 		if(count($q)>0)
 		{
-			$data['percentage'] = $q->merchant_percentage;
+			$data['percentage'] = $q->merchant_commission_percentage;
 		}
 		else
 		{
@@ -574,7 +574,7 @@ class MerchantController extends Member
 		$data['merchant_commission_warehouse_id'] = $warehouse_id;
 		$data['merchant_commission_warehouse_name'] = $this->current_warehouse->warehouse_name;
 		$data['merchant_commission_shop_id'] = $this->current_warehouse->warehouse_shop_id;
-		$data['merchant_commission_percentage'] = Request('merchant_percentage');
+		$data['merchant_commission_percentage'] = Request('merchant_commission_percentage');
 
 		$count = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->get();
 
@@ -586,6 +586,7 @@ class MerchantController extends Member
 		{
 			Tbl_merchant_commission_report_setting::insert($data);
 		}
+
 		$response['call_function']='success';
 		return json_encode($response);
 
@@ -593,10 +594,10 @@ class MerchantController extends Member
 	public function get_percentage()
 	{
 		$id = request('warehouse_id');
-		$q = Tbl_merchant_commission_report_setting::where('merchant_warehouse_id',$id)->first();
+		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$id)->first();
 		if(count($q)>0)
 		{
-			return $q->merchant_percentage;
+			return $q->merchant_commission_percentage;
 		}
 		else
 		{
@@ -614,7 +615,7 @@ class MerchantController extends Member
 		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->first();
 		if(count($q)>0)
 		{
-			$commission = $q->merchant_percentage;
+			$commission = $q->merchant_commission_percentage;
 		}
 		else
 		{

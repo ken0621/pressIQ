@@ -73,8 +73,8 @@
 </div>
 </div>
 @endsection
-<script type="text/javascript" src="/assets/themes/js/jquery.min.js"></script>
-<script type="text/javascript" src="/assets/js/commission_report.js?v=3"></script>
+<script type="text/javascript" src="/assets/themes/js/jquery.min.js?v=1"></script>
+<script type="text/javascript" src="/assets/js/commission_report.js?v=5"></script>
 <script type="text/javascript">
     function success(data)
     {

@@ -5,7 +5,7 @@
     	<div class="border-container">
     		<i class="fa fa-check-circle-o" aria-hidden="true"></i>
     		<div class="title-container">Thank You</div>
-    		<div class="description-container">Your account is sucessfully registered</div>
+    		<div class="description-container">Your account is successfully registered</div>
     		<div class="button-container"><a href="/signin">Proceed to login</a></div>
     	</div>
     </div>

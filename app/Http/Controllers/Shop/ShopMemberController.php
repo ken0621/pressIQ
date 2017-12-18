@@ -234,6 +234,7 @@ class ShopMemberController extends Shop
         
         return Redirect::to("/home");
     }
+ 
     public function pressuser()
     {
         if(Session::exists('user_email'))
@@ -783,12 +784,6 @@ class ShopMemberController extends Shop
         }
     }
 
-    public function thank_you()
-    {
-        
-        $data["page"] = "Thank You";
-        return view("press_user.thank_you", $data);
-    }
     /*Press Release*/
 
 

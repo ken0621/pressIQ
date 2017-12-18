@@ -46,7 +46,7 @@
                         @else
                         <div><label>{{$redeemable->item_description}}</label></div>
                         @endif -->
-                        <button class="btn-primary btn-primary btn-custom-primary redeem_item" item_name="{{$redeemable->item_name}}" redeemable_points="{{$redeemable->redeemable_points}}" item_description="{{$redeemable->item_description}}" item_redeem_id="{{$redeemable->item_redeemable_id}}" type="button">Redeem</button>
+                        <button class="btn-primary btn-primary btn-custom-primary redeem_item" item_name="{{$redeemable->item_name}}" redeemable_points="{{$redeemable->redeemable_points}}" item_description="{{$redeemable->item_description}}" item_redeem_id="{{$redeemable->item_redeemable_id}}" type="button">View</button>
                     </div>
                 </div>
                 @endforeach
@@ -110,7 +110,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-                    <button class="btn btn-primary btn-custom-primary redeemable_submit" type="submit">Proceed</button>
+                    <button class="btn btn-primary btn-custom-primary redeemable_submit" type="submit">Redeem</button>
                 </div>
             </form>
         </div>

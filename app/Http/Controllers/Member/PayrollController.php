@@ -3956,6 +3956,7 @@ class PayrollController extends Member
      {
           Session::put('leave_tag_employee', array());
           $selected = 0;
+          
           if(Request::has('selected'))
           {
                $selected = Request::input('selected');

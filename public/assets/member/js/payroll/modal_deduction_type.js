@@ -139,7 +139,8 @@ function deduction_type()
 	}
 
 	/* CALL A FUNCTION BY NAME */
-	function executeFunctionByName(functionName, context /*, args */) {
+	function executeFunctionByName(functionName, context /*, args */) 
+	{
 	  var args = [].slice.call(arguments).splice(2);
 	  var namespaces = functionName.split(".");
 	  var func = namespaces.pop();

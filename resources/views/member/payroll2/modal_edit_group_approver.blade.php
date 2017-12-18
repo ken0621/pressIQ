@@ -1,7 +1,7 @@
-<form class="global-submit" role="form" action="/member/payroll/payroll_admin_dashboard/save_edit_approver" method="post">
+<form class="global-submit" role="form" action="/member/payroll/payroll_admin_dashboard/save_edit_group_approver" method="post">
 	<div class="modal-header">
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
-		<input type="hidden" name="approver_group_id" value="{{ $approver_group_info->payroll_approver_group_id }}">
+		<input type="hidden" id="approver_group_id" name="approver_group_id" value="{{ $approver_group_info->payroll_approver_group_id }}">
 		
 		<h4 class="modal-title">Edit Group Employee Approver</h4>
 	</div>
@@ -40,3 +40,5 @@
 		<button class="btn btn-primary btn-custom-primary" type="Submit">Submit</button>
 	</div>
 </form>
+
+<script type="text/javascript" src="/assets/js/modal_payroll_group_approver.js"></script>

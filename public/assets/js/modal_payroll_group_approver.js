@@ -1,9 +1,17 @@
 var modal_payroll_group_approver = new modal_payroll_group_approver();
 var approver_level_count;
 var approver_type; 
+var approver_group_id;
+
 function modal_payroll_group_approver()
 {
 	init();
+
+
+	this.reload_group_approver = function()
+	{
+		reload_group_approver();
+	}
 
 	function init()
 	{
@@ -14,9 +22,12 @@ function modal_payroll_group_approver()
 	{
 		$(document).ready(function() 
 		{
+			approver_level_count = $('#approver_level_count').val();
+			approver_type = $('#approver_type').val();
+			approver_group_id = $('#approver_group_id').val();
+			
 			action_change_level_and_type();
-			approver_level_count = 0;
-			approver_type = 0;
+			action_edit_group_modal();
 		});
 	}
 
@@ -28,7 +39,7 @@ function modal_payroll_group_approver()
 			
 			approver_level_count = $(this).val();
 
-			if (approver_type != 0 && approver_level_count != 0) 
+			if (approver_type != '' && approver_level_count != 0) 
 			{
 				append_selector(approver_level_count ,approver_type);
 			}
@@ -39,11 +50,13 @@ function modal_payroll_group_approver()
 		{
 			approver_type = $(this).val();
 
-			if (approver_type != 0 && approver_level_count != 0) 
+			if (approver_type != '' && approver_level_count != 0) 
 			{
 				append_selector(approver_level_count ,approver_type);
 			}
 		});
+
+		
 	}
 
 
@@ -58,12 +71,49 @@ function modal_payroll_group_approver()
 			success: function(data)
 			{
 				target.html('<hr>'+data);
-				$('.multiple-select-2').select2(
-				{placeholder: 'Select an option', closeOnSelect : false,  allowClear: true});
 			}
 		});
 		
 	}
+
+	function action_edit_group_modal()
+	{
+		/*check if dom exist*/
+		if ($('#approver_group_id').length != 0) 
+		{
+			approver_level_count = $('#approver_level_count').val();
+			approver_type = $('#approver_type').val();
+			approver_group_id = $('#approver_group_id').val();
+
+			if (approver_type != '' && approver_level_count != 0) 
+			{
+				append_selector_edit_modal(approver_level_count ,approver_type, approver_group_id);
+			}
+		}
+	}
+
+	function append_selector_edit_modal(level, type, approver_group_id)
+	{
+		var target = $('.approver-container');
+		target.html(misc('loader'))
+		$.ajax({
+			url: '/member/payroll/payroll_admin_dashboard/get_employee_approver_by_level',
+			type: 'get',
+			data: {level : level, type : type, approver_group_id : approver_group_id},
+			success: function(data)
+			{
+				target.html('<hr>'+data);
+			}
+		});
+		
+	}
+
+
+	function reload_group_approver()
+	{
+		window.location.href = '/member/payroll/payroll_admin_dashboard/group_approver';
+	}
+
 
 
 	function misc(str){
@@ -97,5 +147,43 @@ function modal_payroll_group_approver()
 				return pencil
 				break;
 		}
+	}
+}
+
+
+/* CALL A FUNCTION BY NAME */
+function executeFunctionByName(functionName, context /*, args */) 
+{
+  var args = [].slice.call(arguments).splice(2);
+  var namespaces = functionName.split(".");
+  var func = namespaces.pop();
+  for(var i = 0; i < namespaces.length; i++) {
+    context = context[namespaces[i]];
+  }
+  return context[func].apply(context, args);
+}
+
+function submit_done(data)
+{
+	console.log(data.function_name);
+	try
+	{
+		data = JSON.parse(data);
+	}
+	catch(err)
+	{
+
+	}
+	conole.log(data);
+
+
+	if(typeof data.type  !== 'undefined')
+	{
+		
+	}
+	else
+	{
+		console.log(data.function_name);
+		executeFunctionByName(data.function_name, window);
 	}
 }

@@ -72,7 +72,7 @@
                     @if($mlm_member)
                     <!-- <li> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li> -->
                     <li class="genealogy-mobile-dropdown"> 
-                        <a href="javascript:"><i class="fa brown-icon-flow-tree" area-hidden="true"></i> Genealogy</a> 
+                        <a href="javascript:"><i class="fa brown-icon-flow-tree" area-hidden="true"></i> Genealogy <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a> 
                     </li>
                         <ul class="genealogy-mobile-dropdown-list">
                             <li><a href="/members/genealogy?mode=binary">Binary Tree</a></li>

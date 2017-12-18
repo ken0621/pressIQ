@@ -354,17 +354,58 @@ class MLM2
 
 			foreach($_slot_wallet as $slot_wallet)
 			{
-				$wallet_plan = strtolower("complan_" .$slot_wallet->wallet_log_plan);
-
-				if(!isset($return["_wallet"]->$wallet_plan))
+				if($slot_wallet->wallet_log_plan == "DIRECT_PASS_UP")
 				{
-					$return["_wallet"]->$wallet_plan = $slot_wallet->wallet_log_amount;
+					$proceed_passup_direct = 0;
+					$check_level_tree = Tbl_tree_sponsor::where("sponsor_tree_child_id",$slot_wallet->wallet_log_slot_sponsor)->where("sponsor_tree_parent_id",$slot->slot_id)->first();
+					if($check_level_tree)
+					{
+						if($check_level_tree->sponsor_tree_level == 1)
+						{
+							$proceed_passup_direct = 1;
+						}
+					}
+
+					if($proceed_passup_direct == 1)
+					{
+						$wallet_plan = strtolower("complan_DIRECT");
+
+						if(!isset($return["_wallet"]->$wallet_plan))
+						{
+							$return["_wallet"]->$wallet_plan = $slot_wallet->wallet_log_amount;
+						}
+						else
+						{
+							$return["_wallet"]->$wallet_plan += $slot_wallet->wallet_log_amount;
+						}	
+					}
+					else
+					{
+						$wallet_plan = strtolower("complan_" .$slot_wallet->wallet_log_plan);
+
+						if(!isset($return["_wallet"]->$wallet_plan))
+						{
+							$return["_wallet"]->$wallet_plan = $slot_wallet->wallet_log_amount;
+						}
+						else
+						{
+							$return["_wallet"]->$wallet_plan += $slot_wallet->wallet_log_amount;
+						}	
+					}
 				}
 				else
 				{
-					$return["_wallet"]->$wallet_plan += $slot_wallet->wallet_log_amount;
+					$wallet_plan = strtolower("complan_" .$slot_wallet->wallet_log_plan);
+
+					if(!isset($return["_wallet"]->$wallet_plan))
+					{
+						$return["_wallet"]->$wallet_plan = $slot_wallet->wallet_log_amount;
+					}
+					else
+					{
+						$return["_wallet"]->$wallet_plan += $slot_wallet->wallet_log_amount;
+					}	
 				}
-				
 			}
 
 			$_slot_points = Tbl_mlm_slot_points_log::where("points_log_slot", $slot->slot_id)->get();
@@ -534,7 +575,14 @@ class MLM2
 		
 		if($sort_by != "0")
 		{
-			$query = $query->where("points_log_type",$sort_by);
+			if($sort_by == 'RPV')
+			{
+				$query = $query->whereIn("points_log_type",array('RPV','RGPV'));
+			}
+			else
+			{
+				$query = $query->where("points_log_type",$sort_by);
+			}
 		}
 
 		if($limit == 0)

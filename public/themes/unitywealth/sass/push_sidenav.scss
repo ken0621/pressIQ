@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $display-text: 'Raleway', sans-serif;
 $content-text: 'Ubuntu', sans-serif;
 $light: 300;
@@ -5,10 +7,16 @@ $regular: 400;
 $medium: 500;
 $bold: 700;
 
+.blur-me
+{
+    @include transition(0.3s);
+}
+
 .pushmenu 
 { 
     /*this is the nav*/
-     background: #0095DA;
+     // background: #0095DA;
+     background-color: rgba(0,149,218,0.7);
      text-align: left;
      width: 300px;
      height: 100%;
@@ -38,24 +46,39 @@ $bold: 700;
         font-size: 16px;
         font-weight: $medium;
         color: #fff;
-        padding-left: 30px;
+        padding-left: 22px;
     }
 
     .profile-img-container
     {
         padding: 20px;
+        text-align: center;
 
+        // .profile-img 
+        // {
+        //     border-radius: 100%;
+        //     overflow: hidden;
+
+        //     img 
+        //     {
+        //         width: 100%;
+        //     }
+        // }
+        
         .profile-img 
         {
             border-radius: 100%;
             overflow: hidden;
+            text-align: center;
+            margin: auto;
+            width: 30%;
 
             img 
             {
                 width: 100%;
             }
         }
-        
+
         .text-holder
         {
              padding-left: 10px;
@@ -107,6 +130,7 @@ $bold: 700;
      font-family: $content-text;
      text-transform: uppercase;
      padding-left: 20px;
+     padding-top: 10px;
 
 
      li
@@ -114,7 +138,15 @@ $bold: 700;
         //margin-top: 30px;
         border-bottom: 1px solid rgba(255,255,255, 0.2);
         padding: 10px 0px;
-        padding-left: 10px;
+        // padding-left: 10px;
+
+        .fa
+        {
+           color: #f1f1f1;
+           padding-right: 5px;
+           width: 25px;
+           text-align: center;
+        }
 
         a
         {
@@ -153,7 +185,7 @@ $bold: 700;
 
 /* .links li a:hover:after { width: 100%; } */
 
-.links li:active { background-color: #1A84B1; }
+.links li:active { background-color: rgba(255,255,255,0.2); }
 
 .pushmenu-left
 { 
@@ -183,10 +215,8 @@ $bold: 700;
 /*Transition*/
 
 .pushmenu, .pushmenu-push
-{
- -webkit-transition: all 0.5s ease;
- -moz-transition: all 0.5s ease;
- transition: all 0.5s ease;
+{  
+    @include transition(0.3s);
 }
 
 #nav_list
@@ -309,7 +339,7 @@ $bold: 700;
 
 #overlay
 {
-    transition: 0.2s;
+    transition: 0.3s;
     position: fixed;
     display: none;
     width: 100%;
@@ -318,7 +348,7 @@ $bold: 700;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.5);
+    // background-color: rgba(0,0,0,0.2);
     z-index: 145;
     cursor: pointer;
 }

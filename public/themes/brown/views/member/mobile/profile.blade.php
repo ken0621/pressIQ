@@ -92,7 +92,7 @@
                 </div>
                 <div class="list-block">
                     <ul>
-                        <li>
+                        {{-- <li>
                             <div class="item-content">
                                 <div class="item-inner">
                                     <div class="item-input">
@@ -118,7 +118,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
@@ -156,7 +156,6 @@
                                 </div>
                             </div>
                         </li>
-
                     </ul>
                 </div>
             </form>

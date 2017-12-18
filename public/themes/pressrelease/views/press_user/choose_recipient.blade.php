@@ -6,9 +6,7 @@
    height: 400px;
    overflow-y: scroll;
 }
-
 </style>
-
 <div class="popup-choose">
    <!-- Modal content-->
    <div class="modal-content" id="recipient-modal" name="recipient-modal">
@@ -17,7 +15,7 @@
          <div class="title-container">Found Result</div>
       </div>
       <div class="modal-body">
-            <div class="row pull-right" style="padding:10px 10px 10px 10px;">
+            <div class="row pull-right" style="padding:10px 10px 10px 10px; ">
                <button  type="button" id="select_all" name="select_all" class="btn btn-success" >Select All Found</button>
                <button  type="button" id="unselect_all" name="unselect_all" class="btn btn-success" >Unselect All Found</button>
             </div>
@@ -26,9 +24,11 @@
                <input type="text"  name="search_key" id="search_key">
                <button  type="button" name="search_button" id="search_button" class="btn btn-success" >Search</button>
             </div>
+          <!--   <div class="" style="padding:10px 10px 10px 10px;">
+               <label id="" name="">Chosen Recipient</label>
+            </div> -->
             <div class="col-md-12">
-
-               <form class="" action="/pressuser/pressrelease/recipient/done" method="POST" style="">
+               <form action="/pressuser/pressrelease/recipient/done" method="POST" >
                <div class="left-container" id="recipient_table" name="recipient_table">
                   <table  class="display table table-bordered" style="background-color: #FFFFFF;" id="showHere_table">
                      <thead>
@@ -37,26 +37,27 @@
                            <th style="text-align: center;width: 25%;">COMPANY</th>
                            <th style="text-align: center;width: 25%;">RECIPIENT</th>
                            <th style="text-align: center;width: 25%;">POSITION</th>   
+                           <th style="display:none;">Email</th>   
                          
                         </tr>
-                     </thead>
+                     </thead> 
                      <tbody>
                         @foreach($_recipient as $recipients)
                         <tr>
-                           <input type="hidden" id="recipient_id" name="recipient_id" value="{{$recipients->recipient_id}}">
-                           <td style="text-align: center;"><input type="checkbox" name="checkbox" value="{{$recipients->recipient_id}}" ></td>
+                           <input type="hidden" id="recipient_id" name="recipient_id[]" value="{{$recipients->recipient_id}}">
+                           <td style="text-align: center;"><input type="checkbox" class="recipient_checkbox" name="checkbox" value="{{$recipients->recipient_id}}" ></td>
                            <td style="text-align: center;">{{$recipients->company_name}}</td>
-                           <td style="text-align: center;">{{$recipients->name}}</td>
+                           <td class="rec_name_{{$recipients->recipient_id}}" style="text-align: center;">{{$recipients->name}}</td>
                            <td style="text-align: center;">{{$recipients->position}}</td>
-                           
+
+                           <td class="rec_email_{{$recipients->recipient_id}}" style="display:none;">{{$recipients->research_email_address}}</td>
                         </tr>
                         @endforeach
                      </tbody>
-                     
                   </table>
                </div>
                <div class="row pull-right" style="padding:10px 10px 10px 10px;">
-                  <button type="button" id="recipient_submit" name="recipient_submit" class="btn btn-success">Done</button>
+                  <button type="button" id="recipient_button" name="recipient_button" class="btn btn-success">Done</button>
                </div> 
                </form>  
             </div>

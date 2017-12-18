@@ -282,6 +282,7 @@ class CashierController extends Member
                 if(!$validate)
                 {
                     Transaction::create_set_method('pos');
+                    Transaction::create_set_method_id(0);
                     $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, '-');
 
                     if(is_numeric($transaction_list_id))

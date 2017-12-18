@@ -633,8 +633,9 @@ class Transaction
         if(isset($search_keyword))
         {
             $data->where('transaction_number', "LIKE", "%" . $search_keyword . "%");
-            // $data->orWhere('transaction_number', "LIKE", "%" . $search_keyword . "%");
-            // $data->orWhere('transaction_number', "LIKE", "%" . $search_keyword . "%");
+            $data->orWhere('first_name', "LIKE", "%" . $search_keyword . "%");
+            $data->orWhere('last_name', "LIKE", "%" . $search_keyword . "%");
+            $data->orWhere('email', "LIKE", "%" . $search_keyword . "%");
         }
         
         if(session('get_transaction_customer_details'))

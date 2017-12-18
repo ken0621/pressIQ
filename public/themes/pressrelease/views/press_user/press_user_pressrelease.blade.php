@@ -72,8 +72,8 @@
 
                       {{-- POPUP CHOOSE RECIPIENT --}}
                     <input type="text" name="pr_to" id="recipient_email" class="form-control" readonly >
-                  </div>
-               </form>
+                </div>
+               
 
                <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">New Release Summary</div>
@@ -82,14 +82,14 @@
                   <div class="title">Title:</div>
                   <div class="content" >Press Release</div>
                   <div class="button-container">
-                     <span class="send-button"><button type="submit" formaction="/pressuser/pressrelease/pr"><a href="">Send</a></button></span>
+                     <span class="send-button"><button type="submit" formaction="/pressuser/pressrelease/pr"><a>Send</a></button></span>
                   </div>
                 </div>  
 
                 <div id="summary" class="tabcontent send-release-container">
                   <div class="title-container">Analytics</div>
                 </div>    
-
+              </form>
             </div>
          </div>
       </div>

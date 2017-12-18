@@ -300,8 +300,8 @@ class ShopMemberController extends Shop
         foreach ($pr as $data) {
         
         $pr_info["pr_headline"]     =$data->pr_headline;
-        $pr_info["pr_subheading"]   =$data->pr_subheading;
         $pr_info["pr_content"]      =$data->pr_content;
+        $pr_info["pr_boiler_content"]=$data->pr_boiler_content;
         $pr_info["pr_from"]         =$data->pr_from;
         $pr_info["pr_to"]           =$data->pr_to;
         $pr_info["pr_status"]       =$data->pr_status;

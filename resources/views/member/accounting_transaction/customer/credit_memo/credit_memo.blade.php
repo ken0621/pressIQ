@@ -1,6 +1,9 @@
 @extends('member.layout')
 @section('content')
+
+<form class="global-submit" action="{{$action or ''}}" method="post">
 <div class="panel panel-default panel-block panel-title-block">
+    <input type="hidden" class="button-action" name="button_action" value="">
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
     <div class="panel-heading">
         <div>
@@ -12,12 +15,17 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <select class="form-control">
-                    <option>Save & Close</option>
-                    <option>Save & Edit</option>
-                    <option>Save & Print</option>
-                    <option>Save & New</option>
-                </select>
+                <div>
+                    <a class="btn btn-custom-white" href="/member/transaction/credit_memo">Cancel</a>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu  dropdown-menu-custom">
+                      <li><a class="select-action" code="sclose">Save & Close</a></li>
+                      <li><a class="select-action" code="sedit">Save & Edit</a></li>
+                      <li><a class="select-action" code="sprint">Save & Print</a></li>
+                      <li><a class="select-action" code="snew">Save & New</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -33,30 +41,30 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="reference_number" value="CM20171214-0002">
+                                <input type="text" class="form-control" name="transaction_refnumber" value="CM20171214-0002">
                             </div>
                         </div>
                     </div>
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
                             <div class="col-sm-4">
-                                <select class="form-control droplist-customer input-sm pull-left" name="est_customer_id" data-placeholder="Select a Customer" required>
+                                <select class="form-control droplist-customer input-sm pull-left" name="customer_id" data-placeholder="Select a Customer" required>
                                     @include('member.load_ajax_data.load_customer', ['customer_id' => isset($est) ? $est->est_customer_id : (isset($c_id) ? $c_id : '') ]);
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control input-sm customer-email" name="est_customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$est->est_customer_email or ''}}"/>
+                                <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$est->est_customer_email or ''}}"/>
                             </div>
                         </div>
                     </div>                          
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Billing Address</label>
-                            <textarea class="form-control input-sm textarea-expand customer-billing-address" name="est_customer_billing_address" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand customer-billing-address" name="customer_address" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-2">
                             <label>Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="est_date" value="{{date('m/d/y')}}"/>
+                            <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{date('m/d/y')}}"/>
                         </div>
                     </div>
                     
@@ -80,34 +88,35 @@
                                             <tr class="tr-draggable">
                                                 <td class="invoice-number-td text-right">1</td>
                                                 <td>
-                                                    <select class="form-control select-item droplist-item input-sm pull-left" name="estline_item_id[]" >
+                                                    <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                         <option class="hidden" value="" />
                                                     </select>
                                                 </td>
-                                                <td><textarea class="textarea-expand txt-desc" name="estline_description[]"></textarea></td>
-                                                <td><select class="droplist-um select-um" name="estline_um[]"><option class="hidden" value="" /></select></td>
-                                                <td><input class="text-center number-input txt-qty compute" type="text" name="estline_qty[]"/></td>
-                                                <td><input class="text-right number-input txt-rate compute" type="text" name="estline_rate[]"/></td>
-                                                <td><input class="text-right number-input txt-amount" type="text" name="estline_amount[]"/></td>
+                                                <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
+                                                <td><select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                                <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+                                                <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                                <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
                                                 
-                                            <tr class="tr-draggable">
+                                          <tr class="tr-draggable">
                                                 <td class="invoice-number-td text-right">2</td>
                                                 <td>
-                                                    <select class="form-control select-item droplist-item input-sm pull-left" name="estline_item_id[]" >
+                                                    <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                         <option class="hidden" value="" />
                                                     </select>
                                                 </td>
-                                                <td><textarea class="textarea-expand txt-desc" name="estline_description[]"></textarea></td>
-                                                <td><select class="droplist-um select-um" name="estline_um[]"><option class="hidden" value="" /></select></td>
-                                                <td><input class="text-center number-input txt-qty compute" type="text" name="estline_qty[]"/></td>
-                                                <td><input class="text-right number-input txt-rate compute" type="text" name="estline_rate[]"/></td>
-                                                <td><input class="text-right number-input txt-amount" type="text" name="estline_amount[]"/></td>
+                                                <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
+                                                <td><select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                                <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+                                                <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                                <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
+                                                
                                     </tbody>
                                 </table>
                             </div>
@@ -116,11 +125,11 @@
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Message Displayed on Credit Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="est_message" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-3">
                             <label>Statement Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="est_memo" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-6">
                             <!-- <div class="row">
@@ -148,24 +157,25 @@
         </div>
     </div>
 </div>
+</form>
 
 <div class="div-script">
     <table class="div-item-row-script hide">
         <tr class="tr-draggable">
-            <td class="invoice-number-td text-right">2</td>
+            <td class="invoice-number-td text-right">1</td>
             <td>
-                <select class="form-control select-item input-sm pull-left" name="estline_item_id[]" >
+                <select class="form-control select-item input-sm pull-left" name="item_id[]" >
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                     <option class="hidden" value="" />
                 </select>
             </td>
-            <td><textarea class="textarea-expand txt-desc" name="estline_description[]"></textarea></td>
-            <td><select class="select-um" name="estline_um[]"><option class="hidden" value="" /></select></td>
-            <td><input class="text-center number-input txt-qty compute" type="text" name="estline_qty[]"/></td>
-            <td><input class="text-right number-input txt-rate compute" type="text" name="estline_rate[]"/></td>
-            <td><input class="text-right number-input txt-amount" type="text" name="estline_amount[]"/></td>
+            <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
+            <td><select class="select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-        </tr>
+        </tr>                                                
     </table>
 </div>
 @endsection

@@ -55,9 +55,6 @@
                                     @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($po->po_vendor_id) ? $po->po_vendor_id : (isset($v_id) ? $v_id : '')]);
                                 </select>
                             </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$po->po_vendor_email or ''}}"/>
-                            </div>
                         </div>
                     </div>
                     <div class="row clearfix">

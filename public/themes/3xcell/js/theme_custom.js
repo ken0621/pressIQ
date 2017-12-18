@@ -204,7 +204,7 @@ function theme_custom()
 
             // $(this).find($(".fa-change")).removeClass('fa-angle-down').addClass('fa-angle-up');
 
-            // $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
+            $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
 
         });
     }
@@ -215,7 +215,7 @@ function theme_custom()
         {
             $(e.currentTarget).siblings(".company-mobile-dropdown-list").slideToggle();
             
-            // $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
+            $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
 
         });
     }

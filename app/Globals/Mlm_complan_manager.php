@@ -708,16 +708,21 @@ class Mlm_complan_manager
             /* CHECK IF PERCENTAGE OR FIXED AMOUNT */
             //indirect_seting_percent  0 = fixed
             //indirect_seting_percent  1 = percentage
-            $value = 0;
+            $value  = 0;
+            $value2 = 0;
             if($level->indirect_seting_percent == 0)
             {
                 $value = $level->indirect_seting_value;
+                $value2 = $level->additional_points;
             }
             else
             {
                 $value = $slot_info->membership_price * ($level->indirect_seting_value/100);
+                $value2 = $slot_info->membership_price * ($level->additional_points/100);
             }
+
             $indirect_level[$level->membership_id][$level->indirect_seting_level] = $value;
+            $indirect_level_additional[$level->membership_id][$level->indirect_seting_level] = $value2;
         }
         /* CHECK IF LEVEL EXISTS */
         if($indirect_level)
@@ -727,12 +732,14 @@ class Mlm_complan_manager
                 /* COMPUTE FOR BONUS */
                 if(isset($indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level]))
                 {
-                    $indirect_bonus = $indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level];
+                    $indirect_bonus    = $indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level];
+                    $additional_points = $indirect_level_additional[$slot_info->membership_id][$tree->sponsor_tree_level];
                     // $indirect_bonus = $indirect_level[$tree->membership_id][$tree->sponsor_tree_level];     
                 }
                 else
                 {
-                    $indirect_bonus = 0;
+                    $indirect_bonus    = 0;
+                    $additional_points = 0;
                 }
                 /* CHECK IF BONUS IS ZERO */
                 if($indirect_bonus != 0)
@@ -753,6 +760,29 @@ class Mlm_complan_manager
                     $arry_log['wallet_log_plan'] = "INDIRECT";
                     $arry_log['wallet_log_status'] = "n_ready";   
                     $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('INDIRECT', $slot_info->shop_id); 
+                    
+                    Mlm_slot_log::slot_array($arry_log);
+                }
+
+                /* CHECK IF BONUS IS ZERO */
+                if($additional_points != 0)
+                {
+                    $log_array['earning'] = $additional_points;
+                    $log_array['level'] = $tree->sponsor_tree_level;
+                    $log_array['level_tree'] = 'Sponsor Tree';
+                    $log_array['complan'] = 'INDIRECT_ADDITIONAL';
+
+                    $slot_sponsor = Mlm_compute::get_slot_info($tree->slot_id);
+                    $log = Mlm_slot_log::log_constructor($slot_sponsor, $slot_info,  $log_array);
+
+                    $arry_log['wallet_log_slot'] = $tree->slot_id;
+                    $arry_log['shop_id'] = $slot_info->shop_id;
+                    $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                    $arry_log['wallet_log_details'] = $log;
+                    $arry_log['wallet_log_amount'] = $additional_points;
+                    $arry_log['wallet_log_plan'] = "INDIRECT_ADDITIONAL";
+                    $arry_log['wallet_log_status'] = "n_ready";   
+                    $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('INDIRECT_ADDITIONAL', $slot_info->shop_id); 
                     
                     Mlm_slot_log::slot_array($arry_log);
                 }

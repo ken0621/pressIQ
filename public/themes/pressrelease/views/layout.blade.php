@@ -98,9 +98,13 @@
                         <span></span>
                     </div>
                     <div class="menu-mobile-nav">
+                        <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="/#home">Home</a></span>
+                        <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="/newsroom">News Room</a></span>
+                        <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="/about">About</a></span>
+                        <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="/contact">Contact Us</a></span>
                     </div>
                 </div>

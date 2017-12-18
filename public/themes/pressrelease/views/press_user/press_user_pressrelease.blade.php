@@ -11,20 +11,20 @@
                <button class="tablinks" onclick="openCity(event, 'choose_recipient')" id="">Choose Recipients</button>
                <button class="tablinks" onclick="openCity(event, 'send_release')" id="">Send Release</button>
             </div>
+
             <div class="press-release-content">
 
-                <div id="create_release" class="tabcontent create-release-container">
+               <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
-                  <input type="text" name="pr_headline" class="form-control">
+                  <input type="text" name="pr_headline" class="form-control" autofocus>
                   <div class="title">Content:</div>
                   <textarea name="pr_content" id="tinymce"></textarea>
                   <div class="title">Boilerplate:</div>
                   <textarea name="bolier_content" id="tinymce"></textarea>
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-
-                  <span class="preview-button"><a href="#">Preview</a></span></a></span>
+                  <span class="preview-button"><button onclick="tinyMCE.activeEditor.execCommand('mcePreview');">Preview</button></span>
                   </div>
                 </div>
 
@@ -62,32 +62,29 @@
 
                     <div class="title">Send To:</div>
                     <input type="text"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
-                    <span class="choose-button" readonly>  
-            
-                        
+                    
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                   <a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span>
-                    <span class="result-container">
-                    <label id="" name="">2154 results found</label>
-                    </span>
-
-                    {{-- POPUP CHOOSE RECIPIENT --}}
-                    <input type="text" name="pr_to" id="recipient_email" class="form-control" multiple readonly > 
-
-                </div>
-                </form>
+                    <span class="choose-button" readonly>
+                    <a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span>
+                    <span class="result-container">2154 results found</span>
+                    
+                      {{-- POPUP CHOOSE RECIPIENT --}}
+                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
+                  </div>
+               </form>
 
 
-                <div id="send_release" class="tabcontent send-release-container">
+               <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">New Release Summary</div>
                   <div class="title">Publisher:</div>
                   <div class="content">Digima Web Solution</div>
                   <div class="title">Title:</div>
                   <div class="content">Press Release</div>
                   <div class="button-container">
-                     <span class="send-button"><button type="submit" name="send" value="send" ><a href="#">Send</a></button></span>
+                     <span class="send-button"><a href="#">Send</a></span>
                   </div>
                 </div>   
+
             </div>
          </div>
       </div>

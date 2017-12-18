@@ -81,7 +81,7 @@
                     <li><a href="/members" id="home">MY ACCOUNT</a></li>
                     @endif --}}
                     <li class="product-mobile-dropdown">
-                        <a href="javascript:"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS</a>
+                        <a href="javascript:"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a>
                     </li>
                         @if(count($_categories) > 0)
                             <ul class="product-mobile-dropdown-list">
@@ -95,8 +95,8 @@
                             </ul>
                         @endif
                     <li> <a href="/promos"><i class="fa fa-percent" aria-hidden="true"></i> PROMOS</a></li>
-                    <li class="company-mobile-dropdown"> 
-                        <a href="javascript:"><i class="fa fa-building-o" aria-hidden="true"></i> COMPANY</a> 
+                    <li class="company-mobile-dropdown">
+                        <a href="javascript:"><i class="fa fa-building-o" aria-hidden="true"></i> COMPANY <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a>
                     </li>
                         <ul class="company-mobile-dropdown-list">
                             <li><a href="/history"><i class="fa fa-history" aria-hidden="true"></i> Our History</a></li>

@@ -201,6 +201,11 @@ function theme_custom()
         $(".product-mobile-dropdown").on("click", function (e) 
         {
             $(e.currentTarget).siblings(".product-mobile-dropdown-list").slideToggle();
+
+            // $(this).find($(".fa-change")).removeClass('fa-angle-down').addClass('fa-angle-up');
+
+            $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
+
         });
     }
 
@@ -209,6 +214,9 @@ function theme_custom()
         $(".company-mobile-dropdown").on("click", function (e) 
         {
             $(e.currentTarget).siblings(".company-mobile-dropdown-list").slideToggle();
+            
+            $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
+
         });
     }
 }

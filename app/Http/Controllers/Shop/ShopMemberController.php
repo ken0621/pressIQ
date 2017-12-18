@@ -724,45 +724,62 @@ class ShopMemberController extends Shop
     {
          $data['_media_contacts'] = Tbl_press_release_recipient::get();
 
-        if (request()->isMethod("post"))
-        { 
-            $value["contact_name"]          =request('contact_name');
-            $rules["contact_name"]          =['required'];
-            $value["country"]               =request('country');
-            $rules["country"]               =['required'];
-            $value["contact_email"]         =request('contact_email');
-            $rules["contact_email"]         =['required','email','unique:tbl_pressiq_media_contacts,contact_email'];
-            $value["contact_website"]       =request('contact_website');
-            $rules["contact_website"]       =['required'];
-            $value["contact_description"]   =request('contact_description');
-            $rules["contact_description"]   =['required'];
-            $validator = Validator::make($value, $rules);
-
-            if ($validator->fails()) 
-            {
-                return Redirect::to("/pressadmin/mediacontacts")->with('message', $validator->errors()->first())->withInput();
-            }
-            else
-            {
-                $contact_info["contact_name"]=request('contact_name');
-                $contact_info["country"]=request('country');
-                $contact_info["contact_email"]=request('contact_email');
-                $contact_info["contact_website"]=request('contact_website');
-                $contact_info["contact_description"]=request('contact_description');
-                $contact_id = tbl_pressiq_media_contacts::insertGetId($contact_info); 
-                $data["page"] = "Press Release - Media Contacts";
-                $contacts = DB::table('tbl_pressiq_media_contacts')->get();
-                $data["contacts"]=$contacts;
-                return view("press_admin.press_admin_media_contacts",$data);                
-            }
+        if(Session::exists('user_email'))
+        {
+           $level=session('pr_user_level');
+           if($level!="1")
+           {
+                return Redirect::to("/pressuser/mypressrelease");
+           }
+           else
+           {
+                $data["page"] = "Press Release - Press Release";
+                return view("press_admin.press_admin_media_contacts", $data);
+           }
         }
         else
-        {
-            $data["page"] = "Press Release - Media Contacts";
-            $contacts = DB::table('tbl_pressiq_media_contacts')->get();
-            $data["contacts"]=$contacts;
-            return view("press_admin.press_admin_media_contacts",$data);
+        {   
+            return Redirect::to("/"); 
         }
+        // if (request()->isMethod("post"))
+        // { 
+        //     $value["contact_name"]          =request('contact_name');
+        //     $rules["contact_name"]          =['required'];
+        //     $value["country"]               =request('country');
+        //     $rules["country"]               =['required'];
+        //     $value["contact_email"]         =request('contact_email');
+        //     $rules["contact_email"]         =['required','email','unique:tbl_pressiq_media_contacts,contact_email'];
+        //     $value["contact_website"]       =request('contact_website');
+        //     $rules["contact_website"]       =['required'];
+        //     $value["contact_description"]   =request('contact_description');
+        //     $rules["contact_description"]   =['required'];
+        //     $validator = Validator::make($value, $rules);
+
+        //     if ($validator->fails()) 
+        //     {
+        //         return Redirect::to("/pressadmin/mediacontacts")->with('message', $validator->errors()->first())->withInput();
+        //     }
+        //     else
+        //     {
+        //         $contact_info["contact_name"]=request('contact_name');
+        //         $contact_info["country"]=request('country');
+        //         $contact_info["contact_email"]=request('contact_email');
+        //         $contact_info["contact_website"]=request('contact_website');
+        //         $contact_info["contact_description"]=request('contact_description');
+        //         $contact_id = tbl_pressiq_media_contacts::insertGetId($contact_info); 
+        //         $data["page"] = "Press Release - Media Contacts";
+        //         $contacts = DB::table('tbl_pressiq_media_contacts')->get();
+        //         $data["contacts"]=$contacts;
+        //         return view("press_admin.press_admin_media_contacts",$data);                
+        //     }
+        // }
+        // else
+        // {
+        //     $data["page"] = "Press Release - Media Contacts";
+        //     $contacts = DB::table('tbl_pressiq_media_contacts')->get();
+        //     $data["contacts"]=$contacts;
+        //     return view("press_admin.press_admin_media_contacts",$data);
+        // }
     }
     public function pressadmin_pressreleases()
     {

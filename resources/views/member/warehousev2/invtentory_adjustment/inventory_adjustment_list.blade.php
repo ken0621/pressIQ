@@ -12,7 +12,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href='/member/transaction/purchase_order/create'" class="btn btn-primary"><i class="fa fa-star"></i> Create Purchase Order</button>
+                <button onclick="location.href='/member/item/warehouse/inventory_adjustment/create'" class="btn btn-primary"><i class="fa fa-star"></i> Adjust Inventory</button>
             </div>
         </div>
     </div>
@@ -48,33 +48,27 @@
                         <table class="table table-bordered table-striped table-condensed">
                             <thead>
                                 <tr>
-                                    <th>NAME</th>
-                                    <th class="text-center">REFERENCE NUMBER</th>
-                                    <th class="text-center">TRANSACTION DATE</th>
-                                    <th class="text-center" width="120px">TOTAL PRICE</th>
-                                    <th class="text-center" width="100px"></th>
+                                    <th class="text-center">SKU</th>
+                                    <th class="text-center">ITEM DESCRIPTION</th>
+                                    <th class="text-center">ACTUAL QUANTITY</th>
+                                    <th class="text-center">NEW QUANTITY</th>
+                                    <th class="text-center">DIFFERENCE</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Vendor 1<br>
-                                        <small>Contact Person</small>
-                                    </td>
-                                    <td class="text-center">PO20171213-0001</td>
-                                    <td class="text-center">2017-12-14</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center">
-                                        <div class="btn-group">
-                                          <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Action <span class="caret"></span>
-                                          </button>
-                                          <ul class="dropdown-menu dropdown-menu-custom">
-                                            <li>
-                                                <a link="" class="popup" size="lg">Print</a>
-                                            </li>
-                                          </ul>
-                                        </div>
-                                    </td>
+                                    <td class="text-center">000111</td>
+                                    <td class="text-center">ITEM 1</td>
+                                    <td class="text-center">10</td>
+                                    <td class="text-center">20</td>
+                                    <td class="text-center">10</td>
+                                </tr>
+                                 <tr>
+                                    <td class="text-center">000222</td>
+                                    <td class="text-center">ITEM 2</td>
+                                    <td class="text-center">5</td>
+                                    <td class="text-center">3</td>
+                                    <td class="text-center">2</td>
                                 </tr>
                             </tbody>
                         </table>

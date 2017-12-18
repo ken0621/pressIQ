@@ -1,8 +1,8 @@
-var purchase_order = new purchase_order();
+var inventory_adjustment = new inventory_adjustment();
 var global_tr_html = $(".div-script tbody").html();
 var item_selected = ''; 
 
-function purchase_order()
+function inventory_adjustment()
 {
 	init();
 
@@ -21,31 +21,6 @@ function purchase_order()
 	}
 	function action_load_initialize_select()
 	{
-		$('.droplist-vendor').globalDropList(
-		{ 	
-			width : "100%",
-			link : "/member/vendor/add",
-			placeholder : "Select Vendor...",
-			onChangeValue: function()
-			{
-				$(".customer-email").val($(this).find("option:selected").attr("email"));
-				$('textarea[name="po_billing_address"]').val($(this).find("option:selected").attr("billing-address"));
-			}
-		});
-
-		$('.droplist-terms').globalDropList(
-		{ 	
-			width : "100%",
-			link : "/member/maintenance/terms/terms",
-			placeholder : "Select Term...",
-			onChangeValue: function()
-			{
-				var start_date 		= $(".datepicker[name='po_date']").val();
-            	var days 			= $(this).find("option:selected").attr("days");
-            	var new_due_date 	= AddDaysToDate(start_date, days, "/");
-            	$(".datepicker[name='po_due_date']").val(new_due_date);
-			}
-		});
 
 		$('.droplist-item').globalDropList(
         {
@@ -114,9 +89,11 @@ function purchase_order()
 			/* GET ALL DATA */
 			var qty 	= $(this).find(".txt-qty").val();
 			var rate 	= $(this).find(".txt-rate").val();
-			var discount= $(this).find(".txt-discount").val();
 			var amount 	= $(this).find(".txt-amount");
-			var taxable = $(this).find(".taxable-check");
+			var new_quantity	= $(this).find(".txt-new-quantity").val();
+			var difference 		= $(this).find(".txt-difference");
+			var total_amount 	= $(this).find(".txt-total-amount");
+
 			
 			/* CHECK IF QUANTITY IS EMPTY */
 			if(qty == "" || qty == null)
@@ -124,27 +101,24 @@ function purchase_order()
 				qty = 1;
 			}
 
-			/* CHECK THE DISCOUNT */
-			if(discount.indexOf('%') >= 0)
-			{
-				discount_amount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100);
-				discount_amount = (rate * qty) * discount_amount;
-			}
-			else if(discount == "" || discount == null)
-			{
-				discount = 0;
-			}
-			else
-			{
-				discount = parseFloat(discount);
-			}
-
 			/* RETURN TO NUMBER IF THERE IS COMMA */
 			qty = action_return_to_number(qty);
 			rate = action_return_to_number(rate);
-			discount = action_return_to_number(discount);
+			new_quantity = action_return_to_number(new_quantity);
 
-			var total_per_tr = ((qty * rate) - discount).toFixed(2);
+			/*ENTERED NEW QUANTITY*/
+			if (new_quantity == "" || new_quantity == null)
+			{
+				var total_per_tr = ((qty * rate)).toFixed(2);
+			}
+			else
+			{
+				var total_per_tr = ((new_quantity * rate)).toFixed(2);
+
+				var diff = qty - new_quantity;
+				difference.val(action_add_comma(diff));
+			}
+			
 
 			/* action_compute SUB TOTAL PER LINE */
 			subtotal += parseFloat(total_per_tr);
@@ -174,59 +148,11 @@ function purchase_order()
 				amount.val(action_add_comma(total_per_tr));
 			}
 
-			/*CHECK IF TAXABLE*/	
-			if(taxable.is(':checked'))
-			{
-				total_taxable += parseFloat(total_per_tr);
-			}
-			$(this).find(".txt-rate").val(action_add_comma(rate.toFixed(2)));
-
 		});
 		
-		/* action_compute EWT */
-		var ewt_value 			= $(".ewt-value").val();
 
-		ewt_value = parseFloat(ewt_value) * subtotal;
-
-		/* action_compute DISCOUNT */
-		var discount_selection 	= $(".discount_selection").val();
-		var discount_txt 		= $(".discount_txt").val();
-		var tax_selection 		= $(".tax_selection").val();
-		var taxable_discount 	= 0;
-
-		if(discount_txt == "" || discount_txt == null)
-		{
-			discount_txt = 0;
-		}
-
-		discount_total = discount_txt;
-
-		if(discount_selection == 'percent')
-		{
-			discount_total = subtotal * (discount_txt / 100);
-			taxable_discount = total_taxable * (discount_txt / 100);
-		}
-
-		discount_total = parseFloat(discount_total);
-
-		/* action_compute TOTAL */
-		var total = 0;
-		total     = subtotal - discount_total - ewt_value;
-
-		/* action_compute TAX */
-		var tax   = 0;
-		if(tax_selection == 1){
-			tax = total_taxable * (12 / 100);
-		}
-		total += tax;
-
-		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));
-		$(".subtotal-amount-input").val(action_add_comma(subtotal.toFixed(2)));
-		$(".ewt-total").html(action_add_comma(ewt_value.toFixed(2)));
-		$(".discount-total").html(action_add_comma(discount_total.toFixed(2)));
-		$(".tax-total").html(action_add_comma(tax.toFixed(2)));
-		$(".total-amount").html(action_add_comma(total.toFixed(2)));
-		$(".total-amount-input").val(total.toFixed(2));
+		$(".total-amount").html(action_add_comma(subtotal.toFixed(2)));
+		$(".total-amount-input").val(action_add_comma(subtotal.toFixed(2)));
 	}
 
 	function action_load_unit_measurement($this)
@@ -310,7 +236,8 @@ function purchase_order()
 		$parent = $this.closest(".tr-draggable");
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("purchase-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
-		$parent.find(".txt-qty").val(1).change();
+		$parent.find(".txt-qty").html(1).change();
+
 		console.log($this.find("option:selected").attr("item-type"));
 		
 

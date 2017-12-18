@@ -51,7 +51,9 @@ class TransactionPurchaseOrderController extends Member
         $data['pis']        = Purchasing_inventory_system::check();
         $data["_vendor"]    = Vendor::getAllVendor('active');
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Purchase_Order::getShopId())->get();
+        //dd($data["_terms"]);
         $data['_item']      = Item::get_all_category_item();
+        //dd($data['_item']);
         $data['_um']        = UnitMeasurement::load_um_multi();
 
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order', $data);

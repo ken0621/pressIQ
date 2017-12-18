@@ -232,7 +232,7 @@ class ShopMemberController extends Shop
         Session::forget('pr_user_id');
        
         
-        return Redirect::to("/home");
+        return Redirect::to("/");
     }
  
     public function pressuser()
@@ -463,7 +463,7 @@ class ShopMemberController extends Shop
     
     public function send_pr()
     {
-                    //$to = request('pr_to');
+                    // $to = request('pr_to');
 
                     $pr_info["pr_headline"]     =request('pr_headline');
                     $pr_info["pr_content"]      =request('pr_content');
@@ -892,7 +892,6 @@ class ShopMemberController extends Shop
                                 ->get();
         }
         return view("press_user.choose_recipient", $data);
-
     }
 
     public function pressreleases_image_upload()

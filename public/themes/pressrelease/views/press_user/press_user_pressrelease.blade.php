@@ -10,6 +10,7 @@
                <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Create New Release</button>
                <button class="tablinks" onclick="openCity(event, 'choose_recipient')" id="">Choose Recipients</button>
                <button class="tablinks" onclick="openCity(event, 'send_release')" id="">Send Release</button>
+               <button class="tablinks" onclick="openCity(event, 'summary')" id="">Summary</button>
             </div>
 
             <div class="press-release-content">
@@ -17,7 +18,7 @@
                <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
-                  <input type="text" name="pr_headline" class="form-control" autofocus>
+                  <input type="text" name="pr_headline" id="pr_headline" class="form-control" autofocus>
                   <div class="title">Content:</div>
                   <textarea name="pr_content" id="tinymce"></textarea>
                   <div class="title">Boilerplate:</div>
@@ -67,23 +68,27 @@
                     <span class="choose-button" readonly>
                     <a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span>
                     <span class="result-container">2154 results found</span>
-                    
+
                       {{-- POPUP CHOOSE RECIPIENT --}}
-                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
+                    <input type="text" name="pr_to" id="recipient_email" class="form-control" readonly >
                   </div>
                </form>
 
 
                <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">New Release Summary</div>
-                  <div class="title">Publisher:</div>
+                  <div class="title" >Publisher:</div>
                   <div class="content">Digima Web Solution</div>
                   <div class="title">Title:</div>
-                  <div class="content">Press Release</div>
+                  <div class="content" >Press Release</div>
                   <div class="button-container">
                      <span class="send-button"><a href="#">Send</a></span>
                   </div>
-                </div>   
+                </div>  
+
+                <div id="summary" class="tabcontent send-release-container">
+                  <div class="title-container">Analytics</div>
+                </div>    
 
             </div>
          </div>

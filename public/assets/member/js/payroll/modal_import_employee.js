@@ -27,6 +27,7 @@ function modal_import_employee()
 		$(".btn-import").bind("click", function()
 		{
 			var file = $("#file-201")[0].files[0];
+			console.log(file);
 			if(file != undefined)
 			{
 				var url = "/member/payroll/employee_list/modal_import_employee/import_201_template";
@@ -35,6 +36,8 @@ function modal_import_employee()
 
 				formdata.append("_token", $("#_token").val());
 				formdata.append("file", file);
+
+
 				ajax.upload.addEventListener("progress", function(event)
 				{
 					$(".import-status").html(loader);

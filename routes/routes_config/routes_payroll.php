@@ -220,7 +220,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/sss_table_list/sss_table_save_default',"Member\PayrollController@sss_table_save_default");
 	/* SSS TABLE END */
 
-
 	/* PHILHEALTH TABLE START */
 	Route::any('/philhealth_table_list',"Member\PayrollController@philhealth_table_list");
 	Route::any('/philhealth_table_list/philhealth_table_save',"Member\PayrollController@philhealth_table_save");

@@ -239,7 +239,7 @@
 					</div>
 				</div>
 				<div class="bottom-img-container col-md-6">
-					<img class="bottom-img" width="388" height="390" src="/themes/{{ $shop_theme }}/img/bottom-container-img1.png">
+					<img class="bottom-img" src="/themes/{{ $shop_theme }}/img/bottom-container-img1.png">
 				</div>
 			</div>
 			<div class="core-products-offered ">
@@ -343,7 +343,6 @@
 			<div class="clients-logo-container">
 				<div class="text-header-bottom">Our outstanding clients</div>
 
-
 				<section class="autoplay logo-slider">
 					<div>
 						<img src="/themes/{{ $shop_theme }}/img/myphone-logo.png">
@@ -368,6 +367,7 @@
 			</div>
 		</div>
 	</div>
+
 	<!-- SCROLL TO TOP -->
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>

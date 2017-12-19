@@ -94,6 +94,12 @@ class ImageController extends Member
 			$get_only_exist[$key] = $image;
 		}
 		$data['_image'] = $get_only_exist;
+
+		usort($data['_image'], function($a, $b) 
+		{
+		    return $b['image_date_created'] <=> $a['image_date_created'];
+		});
+
 		return view('member.modal.load_media_library', $data);
 	}
 }

@@ -91,8 +91,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         if(is_numeric($val))
         {
             $data['status'] = 'success';
-            $data['call_function'] = 'success_create_customer_wis';
-            
+            $data['call_function'] = 'success_create_customer_wis';            
         }
         else
         {

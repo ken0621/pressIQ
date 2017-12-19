@@ -14,6 +14,8 @@ use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\CustomerWIS;
 use App\Globals\WarehouseTransfer;
+use App\Globals\TransactionPurchaseRequisition;
+
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Session;
@@ -41,12 +43,12 @@ class TransactionPurchaseRequisitionController extends Member
 		$data['page'] = 'Create Purchase Requisition';
         $data['_item']  = Item::get_all_category_item([1]);
         $data["_vendor"] = Vendor::getAllVendor('active');
+        $data['count_so'] = TransactionPurchaseRequisition::countTransaction($this->user_info->shop_id);
 		return view('member.accounting_transaction.vendor.purchase_requisition.create_requisition_slip', $data);
 	}
 	public function postCreateSubmit(Request $request)
 	{
 		$return = RequisitionSlip::create($this->user_info->shop_id, $this->user_info->user_id, $request);
-
 		return json_encode($return);
 	}
 	public function getPrint(Request $request, $slip_id = 0)
@@ -61,5 +63,9 @@ class TransactionPurchaseRequisitionController extends Member
 	public function getConfirm(Request $request, $slip_id = 0)
 	{
 		dd(123);
+	}
+	public function getLoadTransaction()
+	{
+		dd('Wait Langs!');
 	}
 }

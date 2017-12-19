@@ -12,6 +12,7 @@ use App\Globals\Billing;
 use App\Globals\Pdf_global;
 use App\Globals\Utilities;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\TransactionPurchaseOrder;
 
 use App\Models\Tbl_customer;
 use App\Models\Tbl_warehousea;
@@ -45,6 +46,7 @@ class TransactionPurchaseOrderController extends Member
     }
     public function getCreate()
     {
+        $shop_id = $this->user_info->shop_id;
         $data["page"]       = "Create Purchase order";
         $data["_vendor"]    = Vendor::getAllVendor('active');
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Purchase_Order::getShopId())->get();
@@ -52,7 +54,7 @@ class TransactionPurchaseOrderController extends Member
         $data['_um']        = UnitMeasurement::load_um_multi();
 
         $data['action']     = "/member/transaction/purchase_order/create-purchase-order";
-
+        $data['count_so']   = TransactionPurchaseOrder::countTransaction($this->user_info->shop_id);
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order', $data);
     }
     public function postCreatePurchaseOrder(Request $request)
@@ -86,5 +88,10 @@ class TransactionPurchaseOrderController extends Member
             }
         }
         die(var_dump($btn_action));
+    }
+
+    public function getLoadTransaction()
+    {
+        dd('Wail Langs!');
     }
 }

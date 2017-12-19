@@ -1639,7 +1639,13 @@ class Item
         
         if($search_keyword)
         {
-            $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
+            // $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
+            $query->where(function($q) use ($search_keyword)
+            {
+                $q->orWhere("mlm_pin", "LIKE", "%$search_keyword%");
+                $q->orWhere("mlm_activation", "LIKE", "%$search_keyword%");
+                $q->orWhere("item_name", "LIKE", "%$search_keyword%");
+            });
         }
         if($status == 'reserved')
         {
@@ -1718,7 +1724,13 @@ class Item
         }
         if($search_keyword)
         {
-            $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
+            // $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
+            $query->where(function($q) use ($search_keyword)
+            {
+                $q->orWhere("mlm_pin", "LIKE", "%$search_keyword%");
+                $q->orWhere("mlm_activation", "LIKE", "%$search_keyword%");
+                $q->orWhere("item_name", "LIKE", "%$search_keyword%");
+            });
         }
 
         if($status == 'reserved')

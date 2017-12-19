@@ -40,19 +40,7 @@
                             <th style="text-align: center;">Country</th>
                             <th style="text-align: center;">Action</th>
                         </tr>
-                        @foreach($_media_contacts as $contact)
-                        <tr>
-                            <td style="text-align: center;">{{$contact->name}}</td>
-                            <td style="text-align: center;">{{$contact->company_name}}</td>
-                            <td style="text-align: center;">{{$contact->country}}</td>
-                            <td style="text-align: center;">
-                               
-
-                                <a href="/pressadmin/pressreleases_deleterecipient/{{$contact->recipient_id }}"><button type="button"  class="btn btn-danger center">
-                                <i class="fa fa-trash" name="" aria-hidden="true"></i>Delete</button>
-                            </td>
-                        </tr>
-                        @endforeach
+                        
                     </table>
                   </div>
                 </div>

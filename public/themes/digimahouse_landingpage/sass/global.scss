@@ -73,30 +73,30 @@ button:hover
 {
 	background-color: #fff;
 
-	@media screen and (max-width: 900px)
-	{
-		padding-bottom: 12px;
-	}
-	@media screen and (max-width: 768px)
-	{
-		padding-bottom: 12px;
-	}
-	@media screen and (max-width: 600px)
-	{
-		padding-bottom: 12px;
-	}
-	@media screen and (max-width: 375px)
-	{
-		padding-bottom: 12px;
-	}
-	@media screen and (max-width: 360px)
-	{
-		padding-bottom: 12px;
-	}
-	@media screen and (max-width: 320px)
-	{
-		padding-bottom: 12px;
-	}
+	// @media screen and (max-width: 900px)
+	// {
+	// 	padding-bottom: 12px;
+	// }
+	// @media screen and (max-width: 768px)
+	// {
+	// 	padding-bottom: 12px;
+	// }
+	// @media screen and (max-width: 600px)
+	// {
+	// 	padding-bottom: 12px;
+	// }
+	// @media screen and (max-width: 375px)
+	// {
+	// 	padding-bottom: 12px;
+	// }
+	// @media screen and (max-width: 360px)
+	// {
+	// 	padding-bottom: 12px;
+	// }
+	// @media screen and (max-width: 320px)
+	// {
+	// 	padding-bottom: 12px;
+	// }
 
 	nav
 	{
@@ -161,7 +161,6 @@ button:hover
 
 		nav
 		{
-
 			padding: 5px;
 			margin-top: 10px;
 			font-size: 12px;
@@ -256,29 +255,37 @@ nav
 			}
 		}
 
-	@media screen and (max-width: 991px)
-	{
-		float: none;
-
-		.head-button
+		@media screen and (max-width: 991px)
 		{
-			display: block;
-			padding: 10px 0;
-			border-top: 1px solid #ddd;
+			float: none;
 
-			&:last-child
+			padding: 0;
+			margin-top: 0;
+
+			ul li
 			{
-				border-bottom: 1px solid #ddd;
+				display: block;
+			}
+
+			.head-button
+			{
+				display: block;
+				padding: 10px 0;
+				border-top: 1px solid #ddd;
+
+				&:last-child
+				{
+					border-bottom: 1px solid #ddd;
+				}
+			}
+
+			.btn-signin
+			{
+				border-bottom: none !important;
+				border-left: none !important;
+				border-right: none !important;
 			}
 		}
-
-		.btn-signin
-		{
-			border-bottom: none !important;
-			border-left: none !important;
-			border-right: none !important;
-		}
-	}
 }
 
 
@@ -296,44 +303,34 @@ nav
 		}
 	}
 
-	@media screen and (max-width: 320px)
-	{
-		img
-		{
-			width: 85%;
-			margin-left: -20px;
-			margin-top: 10px;
-		}
-	}
-
 	&:hover
 	{
 		cursor: pointer;
 	}
 
-	.menu-nav
-	{
-		display: none;
+	// .menu-nav
+	// {
+	// 	display: none;
 
-		@media screen and (max-width: 991px)
-		{
-			display: block;
-			width: 50px;
-			padding: 7.5px 9px 7.5px 9px;
-			margin-left: auto;
-			margin-top: 15px;
-			background-color: #fff;
-			border: 2px solid #0051ff;
+	// 	@media screen and (max-width: 991px)
+	// 	{
+	// 		display: block;
+	// 		width: 50px;
+	// 		padding: 7.5px 9px 7.5px 9px;
+	// 		margin-left: auto;
+	// 		margin-top: 15px;
+	// 		background-color: #fff;
+	// 		border: 2px solid #0051ff;
 
-			span
-			{
-				display: block;
-				height: 3px;
-				background-color: #0051ff;
-				margin: 5px 0;
-			}
-		}
-	}
+	// 		span
+	// 		{
+	// 			display: block;
+	// 			height: 3px;
+	// 			background-color: #0051ff;
+	// 			margin: 5px 0;
+	// 		}
+	// 	}
+	// }
 }
 
 
@@ -474,58 +471,62 @@ footer
 
 .navirino
 {
-	@media screen and (max-width: 900px)
+	@media screen and (max-width: 800px)
 	{
-		padding: 0px;
-
-		&:last-child
-		{
-			padding-bottom: 10px;
-		}
+		display: none;
 	}
-	@media screen and (max-width: 768px)
-	{
-		padding: 0px;
+	// @media screen and (max-width: 900px)
+	// {
+	// 	padding: 0px;
 
-		&:last-child
-		{
-			padding-bottom: 10px;
-		}
-	}
-	@media screen and (max-width: 600px)
-	{
-		padding: 0px;
+	// 	&:last-child
+	// 	{
+	// 		padding-bottom: 10px;
+	// 	}
+	// }
+	// @media screen and (max-width: 768px)
+	// {
+	// 	padding: 0px;
 
-		&:last-child
-		{
-			padding-bottom: 10px;
-		}
-	}
-	@media screen and (max-width: 375px)
-	{
-		padding: 0px;
+	// 	&:last-child
+	// 	{
+	// 		padding-bottom: 10px;
+	// 	}
+	// }
+	// @media screen and (max-width: 600px)
+	// {
+	// 	padding: 0px;
 
-		&:last-child
-		{
-			padding-bottom: 10px;
-		}
-	}
-	@media screen and (max-width: 360px)
-	{
-		padding: 0px;
+	// 	&:last-child
+	// 	{
+	// 		padding-bottom: 10px;
+	// 	}
+	// }
+	// @media screen and (max-width: 375px)
+	// {
+	// 	padding: 0px;
 
-		&:last-child
-		{
-			padding-bottom: 10px;
-		}
-	}
-	@media screen and (max-width: 320px)
-	{
-		padding: 0px;
+	// 	&:last-child
+	// 	{
+	// 		padding-bottom: 10px;
+	// 	}
+	// }
+	// @media screen and (max-width: 360px)
+	// {
+	// 	padding: 0px;
 
-		&:last-child
-		{
-			padding-bottom: 10px;
-		}
-	}
+	// 	&:last-child
+	// 	{
+	// 		padding-bottom: 10px;
+	// 	}
+	// }
+	// @media screen and (max-width: 320px)
+	// {
+	// 	padding: 0px;
+
+	// 	&:last-child
+	// 	{
+	// 		padding-bottom: 10px;
+	// 	}
+	// }
 }

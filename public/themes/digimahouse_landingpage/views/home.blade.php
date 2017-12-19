@@ -22,24 +22,30 @@
 			</div>
 		</div>
 	</div>
-	<!-- Devider -->
-	<div class="devider">
+	<!-- Divider -->
+	<div class="divider">
 		<div class="container">
 			<div class="row clearfix">
 				<div class="col-md-4">
-					<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/devider-icon1.png">
-					<div class="devider-text-header">Easy Customizable</div>
-					<div class="devider-sub-text-header">Over 20+ Website Templates to choose</div>
+					<div class="div-cont">
+						<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/divider-icon1.png">
+						<div class="divider-text-header">Easy Customizable</div>
+						<div class="divider-sub-text-header">Over 20+ Website Templates to choose</div>
+					</div>
 				</div>
 				<div class="col-md-4">
-					<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/devider-icon2.png">
-					<div class="devider-text-header">Mobile Responsive</div>
-					<div class="devider-sub-text-header">Viewable for any mobile devices</div>
+					<div class="div-cont">
+						<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/divider-icon2.png">
+						<div class="divider-text-header">Mobile Responsive</div>
+						<div class="divider-sub-text-header">Viewable for any mobile devices</div>
+					</div>
 				</div>
 				<div class="col-md-4">
-					<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/devider-icon3.png">
-					<div class="devider-text-header">Quality and Effective</div>
-					<div class="devider-sub-text-header">Trusted and high quality designs</div>
+					<div class="div-cont">
+						<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/divider-icon3.png">
+						<div class="divider-text-header">Quality and Effective</div>
+						<div class="divider-sub-text-header">Trusted and high quality designs</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -47,27 +53,30 @@
 	<!-- top-container -->
 	<div class="top-container">
 		<div class="container">
-			
 			<div class="text-header">We offer a high quality brand</div>
 			<div class="sub-text-header">The way your website looks and responds directly impacts impression.<br>Why not take the best shot?</div>
-
 			<div class="img-with-captions">
 				<div class="row clearfix">
-					<div class="img-container col-md-4">
-						<img width="313" height="313" src="/themes/{{ $shop_theme }}/img/img-functionality.png">
-						<div class="img-caption">Functionality</div>
+					<div class="col-md-4">
+						<div class="img-container">
+							<img width="313" height="313" src="/themes/{{ $shop_theme }}/img/img-functionality.png">
+							<div class="img-caption">Functionality</div>
+						</div>
 					</div>
-					<div class="img-container col-md-4">
-						<img width="313" height="313" src="/themes/{{ $shop_theme }}/img/img-quality.png">
-						<div class="img-caption">Quality</div>
+					<div class="col-md-4">
+						<div class="img-container">
+							<img width="313" height="313" src="/themes/{{ $shop_theme }}/img/img-quality.png">
+							<div class="img-caption">Quality</div>
+						</div>
 					</div>
-					<div class="img-container col-md-4">
-						<img width="313" height="313" src="/themes/{{ $shop_theme }}/img/img-effectivity.png">
-						<div class="img-caption">Effectivity</div>
+					<div class="col-md-4">
+						<div class="img-container">
+							<img width="313" height="313" src="/themes/{{ $shop_theme }}/img/img-effectivity.png">
+							<div class="img-caption">Effectivity</div>
+						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
 	

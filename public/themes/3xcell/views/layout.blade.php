@@ -282,7 +282,7 @@
                             </div>
 
                             <div class="image-logo-mob">
-                                <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></a>                      
+                                <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></a>
                             </div>
                         </div>
                         <div class="col-md-9">

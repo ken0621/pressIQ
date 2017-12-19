@@ -434,7 +434,7 @@
         <script type="text/javascript" src='/assets/member/js/image_gallery.js'></script>
         <script type="text/javascript" src='/assets/custom_plugin/myDropList/js/myDropList.js'></script>
         <script type="text/javascript" src="/assets/member/js/prompt_serial_number.js"></script>
-        <script type="text/javascript" src="/assets/member/js/select_button.js"></script>
+        <script type="text/javascript" src="/assets/member/js/accounting_transaction.js"></script>
         <script type="text/javascript" src='/assets/member/js/match-height.js'></script>
         <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
         <script type="text/javascript" src="/assets/mlm/pace.min.js"></script>

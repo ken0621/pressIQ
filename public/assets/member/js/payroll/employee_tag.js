@@ -133,17 +133,20 @@ function employee_tag()
 	}
 
 	/* CALL A FUNCTION BY NAME */
-	function executeFunctionByName(functionName, context /*, args */) {
+	function executeFunctionByName(functionName, context /*, args */) 
+	{
 	  var args = [].slice.call(arguments).splice(2);
 	  var namespaces = functionName.split(".");
 	  var func = namespaces.pop();
-	  for(var i = 0; i < namespaces.length; i++) {
+	  for(var i = 0; i < namespaces.length; i++) 
+	  {
 	    context = context[namespaces[i]];
 	  }
 	  return context[func].apply(context, args);
 	}
 
-	function misc(str){
+	function misc(str)
+	{
 		var spinner = '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
 		var plus = '<i class="fa fa-plus" aria-hidden="true"></i>';
 		var times = '<i class="fa fa-times" aria-hidden="true"></i>';
@@ -175,6 +178,4 @@ function employee_tag()
 				break;
 		}
 	}
-
-
 }

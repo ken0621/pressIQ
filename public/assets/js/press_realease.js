@@ -1,22 +1,12 @@
 $(document).ready(function () 
 {
-	$(document).on('#btn_add_recipient',function(){
-	
+	$(document).on('#submit_button',function(){
+	   
+       alert('123');
 
 	});
 });
 	
-$(document).ready(function () 
-{
-	$(document).on("#done_recipients",function()
-	{	
-		var name = $(this).data("name");
-		$('#recipient_name').val(name);
-		$('#recipient-modal').modal('hide');
-		alert(pr_receiver_name);
-	});
-});	
-
 $(document).ready(function () 
 {
 	$(document).on("change","#choose_country",function()

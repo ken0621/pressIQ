@@ -15,6 +15,7 @@ class ShopNewsRoomController extends Shop
     {
         $pr = DB::table('tbl_pressiq_press_releases')
                 ->where('pr_status', "sent")
+                ->orderByRaw('pr_date_sent DESC')
                 ->get();
 
         $data["pr"]=$pr;

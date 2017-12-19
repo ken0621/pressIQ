@@ -235,6 +235,9 @@ AdvancedRoute::controller("/member/mlm/payout","Member\MLM_PayoutController");
 AdvancedRoute::controller("/member/mlm/gcmaintenance","Member\MLM_GCMaintenanceController");
 /* end MLM Product */
 
+Route::any("/member/mlm/distribute_cashback","Member\MLM_DistributeCashbackController@index");
+Route::any("/member/mlm/distribute_cashback/distribute","Member\MLM_DistributeCashbackController@distribute");
+
 /* start MLM Product */
 Route::any('/member/mlm/product', 'Member\MLM_ProductController@index');//luke
 Route::any('/member/mlm/product/point/add', 'Member\MLM_ProductController@add_product_points');
@@ -350,3 +353,12 @@ Route::any('member/mlm/developer/popup_earnings', 'Member\MlmDeveloperController
 Route::any('member/mlm/developer/distributed_income', 'Member\MlmDeveloperController@distributed_income');
 Route::any('member/mlm/developer/popup_points', 'Member\MlmDeveloperController@popup_points');
 Route::any('member/mlm/developer/change_owner', 'Member\MlmDeveloperController@change_owner');
+
+
+// point log setting
+Route::get('/member/mlm/point_log_complan', 'Member\MLM_PointLogSettingController@index');
+Route::get('/member/mlm/point_log_complan/add', 'Member\MLM_PointLogSettingController@add');
+Route::post('/member/mlm/point_log_complan/add', 'Member\MLM_PointLogSettingController@submit_add');
+Route::get('/member/mlm/point_log_complan/table', 'Member\MLM_PointLogSettingController@table');
+Route::get('/member/mlm/point_log_complan/modify', 'Member\MLM_PointLogSettingController@modify');
+Route::post('/member/mlm/point_log_complan/modify', 'Member\MLM_PointLogSettingController@submit_modify');

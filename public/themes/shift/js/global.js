@@ -33,6 +33,7 @@ function global()
 		$(".genealogy-mobile-dropdown").on("click", function (e) 
 		{
 		    $(e.currentTarget).siblings(".genealogy-mobile-dropdown-list").slideToggle();
+		    $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
 		});
 	}
 
@@ -212,6 +213,10 @@ function on()
 {
     document.getElementById("overlay").style.display = "block";
     $("body").css({"overflow": "hidden","position": "fixed","margin": "0","padding": "0","right": "0","left": "0"});
+    $(".blur-me").css({
+        filter: 'blur(50px)'
+    });
+
 }
 
 function off()
@@ -219,4 +224,7 @@ function off()
     document.getElementById("overlay").style.display = "none";
     $('.pushmenu').removeClass("pushmenu-open");
     $("body").css({"overflow": "auto","position": "static"});
+    $(".blur-me").css({
+        filter: 'blur(0)'
+    });
 }

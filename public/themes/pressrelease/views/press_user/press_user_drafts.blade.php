@@ -13,14 +13,16 @@
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
+                @foreach($drafts as $draft)
                 <tr>
-                    <td>Sample 1</td>
-                    <td>Contact 1</td>
+                    <td>{{$draft->pr_headline}}</td>
+                    <td>{{$draft->pr_receiver_name}}</td>
                     <td>Draft</td>
-                    <td><a href="#">Send</a></td>
-                    <td><a href="#">Edit</a></td>
-                    <td><a href="#">Delete</a></td>
+                    <td><a href="/pressuser/pressrelease/send_draft/{{$draft->pr_id}}">Send</a></td>
+                    <td><a href="/pressuser/pressrelease/edit_draft/{{$draft->pr_id}}">Edit</a></td>
+                    <td><a href="/pressuser/pressrelease/delete_draft/{{$draft->pr_id}}">Delete</a></td>
                 </tr>
+                @endforeach
             </table>
         </div>
     </div>

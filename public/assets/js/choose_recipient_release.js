@@ -1,16 +1,9 @@
-$(document).ready(function () 
-{
-	$(document).on('#btn_add_recipient',function(){
-	
 
-	});
-});
-	
 $(document).ready(function () 
 {
 	$(document).on('click',"#select_all",function()
 	{	
-		  $('input[name=checkbox').prop('checked', true);
+		  $('input[name=checkbox]').prop('checked', true);
 		
 	});
 });	
@@ -19,11 +12,10 @@ $(document).ready(function ()
 {
 	$(document).on('click',"#unselect_all",function()
 	{	
-		  $('input[name=checkbox').prop('checked', false);
+		  $('input[name=checkbox]').prop('checked', false);
 		
 	});
 });	
-
 
 $(document).ready(function(){
 	$(document).on('click','#search_button',function()
@@ -44,15 +36,33 @@ $(document).ready(function(){
     });
 });
 
-
 $(document).ready(function(){
-	$(document).on('click','#recipient_submit',function()
-	{
-	    var recipient_id = $(this).data("id");
-        alert(recipient_id);
 
-  
+	$(document).on('click','#recipient_button',function()
+	{
+    	var name_array = [];
+    	var email_array = [];
+    	var ctr = 0;
+	   $('input.recipient_checkbox:checkbox:checked').each(function ()
+	    {
+	    	var data = $(this).val();
+	    	var name =$('.rec_name_'+data).text();
+	    	var email =$('.rec_email_'+data).text();
+	    	name_array[ctr] = name;
+	    	email_array[ctr] = email;
+	    	ctr++; 
+
+  		});
+	    	$('#recipient_name').val(name_array);
+	    	$('#recipient_email').val(email_array);
+	    	$("#global_modal").modal('hide');
+    	
     });
 });
+
+
+
+
+
 
 

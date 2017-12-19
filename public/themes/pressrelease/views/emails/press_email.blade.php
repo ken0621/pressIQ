@@ -71,8 +71,10 @@
 		<div class="container">
 			<div class="heading-container">{{$pr_headline}}</div>
 			<div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">{{$pr_sender_name}}</span></div>
-			<div class="date-container">10/05/2017</div>
+			<div class="date-container">{{$pr_date_sent}}</div>
 			<div class="content-container"><p>{!!$pr_content!!}</p></div>
+			<div class="sender-container"><span class="title-sender">About </span><span class="sender-name">{{$pr_sender_name}}</span></div>
+			<div class="content-container"><p>{!!$pr_boiler_content!!}</p></div>
 		</div>
 	</div>
 </body>

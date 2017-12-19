@@ -82,7 +82,7 @@ class ChartOfAccountController extends Member
 
         if($validator->fails() || $account_name)
         {
-            $json['response_status']= "error";
+            $json['status']         = "error";
             $json['title']          = "Error adding a new account";
             $json['message']        = 'Duplicate Name "'.$account_name.'"';
 

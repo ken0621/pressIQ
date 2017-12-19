@@ -201,6 +201,11 @@ function theme_custom()
         $(".product-mobile-dropdown").on("click", function (e) 
         {
             $(e.currentTarget).siblings(".product-mobile-dropdown-list").slideToggle();
+
+            // $(this).find($(".fa-change")).removeClass('fa-angle-down').addClass('fa-angle-up');
+
+            $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
+
         });
     }
 
@@ -209,6 +214,9 @@ function theme_custom()
         $(".company-mobile-dropdown").on("click", function (e) 
         {
             $(e.currentTarget).siblings(".company-mobile-dropdown-list").slideToggle();
+            
+            $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
+
         });
     }
 }
@@ -235,6 +243,10 @@ function on()
 {
     document.getElementById("overlay").style.display = "block";
     $("body").css({"overflow": "hidden","position": "fixed","margin": "0","padding": "0","right": "0","left": "0"});
+        $(".blur-me").css({
+        filter: 'blur(20px)'
+    });
+
 }
 
 function off()
@@ -242,4 +254,7 @@ function off()
     document.getElementById("overlay").style.display = "none";
     $('.pushmenu').removeClass("pushmenu-open");
     $("body").css({"overflow": "auto","position": "static"});
+        $(".blur-me").css({
+        filter: 'blur(0)'
+    });
 }

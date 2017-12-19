@@ -1337,10 +1337,19 @@ function page_list($pis = 0)
 
          /* -- VENDOR => PURCHASE ORDER V2 */
         $code = "vendor-purchase-order-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Purchase Requisition";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/purchase_requisition";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+         /* -- VENDOR => PURCHASE ORDER V2 */
+        $code = "vendor-purchase-order-v2";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Purchase Order";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/purchase_order";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
@@ -1349,7 +1358,7 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Receive Inventory";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/receive_inventory";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
@@ -1358,7 +1367,7 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Enter Bills";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/enter_bills";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
@@ -1367,7 +1376,7 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Pay Bills";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/pay_bills";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
@@ -1376,7 +1385,7 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Write Check";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/write_check";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
@@ -1385,7 +1394,7 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Debit Memo";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/debit_memo";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
@@ -1394,7 +1403,7 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Bad Order";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/bad_order";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 

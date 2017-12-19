@@ -63,11 +63,12 @@ function wis_create()
             	}
             }
 		});
-		$('.droplist-vendor').globalDropList(
-		{ 
-		    width : "100%",
-		    link : "/member/vendor/add",
-		    onCreateNew : function()
+		$('.droplist-customer').globalDropList(
+		{
+			width : "100%",
+    		placeholder : "Select Customer...",
+			link : "/member/customer/modalcreatecustomer",
+			onChangeValue: function()
             {
             	// item_selected = $(this);
             	// console.log($(this));

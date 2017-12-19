@@ -24,10 +24,8 @@
         <div class="form-group">
             <div class="col-md-4">
                 <label>Customer Name</label>
-                <select required class="form-control select-warehouse" name="customer_id">
-                    @foreach ($_customer as $customer)
-                            <option value="{{ $customer->customer_id}}">{{$customer->first_name." ".$customer->middle_name." ".$customer->last_name }}</option>
-                    @endforeach
+                <select class="form-control droplist-customer input-sm pull-left" name="customer_id" data-placeholder="Select a Customer" required>
+                    @include('member.load_ajax_data.load_customer', ['customer_id' => isset($est) ? $est->customer_id : (isset($c_id) ? $c_id : '') ]);
                 </select>
             </div>
             <div class="col-md-4">

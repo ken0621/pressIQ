@@ -28,8 +28,8 @@ function purchase_order()
 			placeholder : "Select Vendor...",
 			onChangeValue: function()
 			{
-				$(".customer-email").val($(this).find("option:selected").attr("email"));
-				$('textarea[name="po_billing_address"]').val($(this).find("option:selected").attr("billing-address"));
+				$(".vendor-email").val($(this).find("option:selected").attr("email"));
+				$('textarea[name="vendor_address"]').val($(this).find("option:selected").attr("billing-address"));
 			}
 		});
 
@@ -40,10 +40,10 @@ function purchase_order()
 			placeholder : "Select Term...",
 			onChangeValue: function()
 			{
-				var start_date 		= $(".datepicker[name='po_date']").val();
+				var start_date 		= $(".datepicker[name='transaction_date']").val();
             	var days 			= $(this).find("option:selected").attr("days");
             	var new_due_date 	= AddDaysToDate(start_date, days, "/");
-            	$(".datepicker[name='po_due_date']").val(new_due_date);
+            	$(".datepicker[name='transaction_duedate']").val(new_due_date);
 			}
 		});
 
@@ -130,6 +130,13 @@ function purchase_order()
 				discount_amount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100);
 				discount_amount = (rate * qty) * discount_amount;
 			}
+			
+			/*if(discount.indexOf('%') >= 0)
+			{
+				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
+				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * action_return_to_number(rate);
+			}*/
+
 			else if(discount == "" || discount == null)
 			{
 				discount = 0;

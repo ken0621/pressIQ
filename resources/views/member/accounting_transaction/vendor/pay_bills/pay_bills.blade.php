@@ -14,14 +14,18 @@
                     </small>
                 </h1>
                 <div class="dropdown pull-right">
-                    <select class="form-control">
-                        <option>Save & Close</option>
-                        <option>Save & Edit</option>
-                        <option>Save & Print</option>
-                        <option>Save & New</option>
-                    </select>
+                    <div>
+                        <a class="btn btn-custom-white" href="/member/transaction/estimate_quotation">Cancel</a>
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu  dropdown-menu-custom">
+                          <li><a class="select-action" code="sclose">Save & Close</a></li>
+                          <li><a class="select-action" code="sedit">Save & Edit</a></li>
+                          <li><a class="select-action" code="sprint">Save & Print</a></li>
+                          <li><a class="select-action" code="snew">Save & New</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
                 @if(isset($paybill))
                 <div class="pull-right">
                     <div class="dropdown">
@@ -51,14 +55,14 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="reference_number" value="EQ20171214-0002">
+                                <input type="text" class="form-control" name="transaction_refnumber" value="PB20171225-0001">
                             </div>
                         </div>
                     </div>
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
                             <div class="col-sm-3">
-                                <select class="drop-down-vendor" name="paybill_vendor_id" required>
+                                <select class="drop-down-vendor" name="vendor_id" required>
                                     @include("member.load_ajax_data.load_vendor", ['vendor_id' => isset($paybill) ? $paybill->paybill_vendor_id : (isset($v_id) ? $v_id : '')])
                                 </select>
                             </div>

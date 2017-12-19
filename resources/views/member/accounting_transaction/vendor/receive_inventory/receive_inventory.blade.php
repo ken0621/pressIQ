@@ -39,14 +39,18 @@
                     </small>
                 </h1>
                 <div class="dropdown pull-right">
-                    <select class="form-control">
-                        <option>Save & Close</option>
-                        <option>Save & Edit</option>
-                        <option>Save & Print</option>
-                        <option>Save & New</option>
-                    </select>
+                    <div>
+                        <a class="btn btn-custom-white" href="/member/transaction/estimate_quotation">Cancel</a>
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu  dropdown-menu-custom">
+                          <li><a class="select-action" code="sclose">Save & Close</a></li>
+                          <li><a class="select-action" code="sedit">Save & Edit</a></li>
+                          <li><a class="select-action" code="sprint">Save & Print</a></li>
+                          <li><a class="select-action" code="snew">Save & New</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
             </div>
         </div>
     </div>
@@ -62,19 +66,19 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-4">
                                             <label>Reference Number</label>
-                                            <input type="text" class="form-control" name="reference_number" value="EQ20171214-0002">
+                                            <input type="text" class="form-control" name="transaction_refnumber" value="RI20171225-0001">
                                         </div>
                                     </div>
                                 </div>
                                 <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                                     <div class="row clearfix">
                                         <div class="col-sm-3">
-                                            <select class="form-control droplist-vendor input-sm pull-left" name="bill_vendor_id">
-                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')])
+                                            <select class="form-control droplist-vendor input-sm pull-left" name="vendor_id">
+                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')]);
                                             </select>
                                         </div>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control input-sm customer-email" name="bill_vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$bill->bill_vendor_email or ''}}"/>
+                                            <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$bill->bill_vendor_email or ''}}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -83,21 +87,21 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-3">
                                             <label>Mailing Address</label>
-                                            <textarea class="form-control input-sm textarea-expand" name="bill_mailing_address" placeholder="">{{isset($bill) ? $bill->bill_mailing_address : ''}}</textarea>
+                                            <textarea class="form-control input-sm textarea-expand" name="vendor_mailing_address" placeholder="">{{isset($bill) ? $bill->bill_mailing_address : ''}}</textarea>
                                         </div>              
                                         <div class="col-sm-2">
                                         <label>Terms</label>
-                                            <select class="form-control input-sm droplist-terms" name="bill_terms_id">
+                                            <select class="form-control input-sm droplist-terms" name="vendor_terms">
                                                 @include("member.load_ajax_data.load_terms", ['terms_id' => isset($bill) ? $bill->bill_terms_id : ''])
                                             </select>
                                         </div>
                                         <div class="col-sm-2">
                                             <label>Billing Date</label>
-                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_date : date('m/d/y')}}" name="bill_date">
+                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_date : date('m/d/y')}}" name="transaction_date">
                                         </div>
                                         <div class="col-sm-2">
                                             <label>Due Date</label>
-                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_due_date : date('m/d/y')}}" name="bill_due_date">
+                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_due_date : date('m/d/y')}}" name="transaction_duedate">
                                         </div>
                                     </div>
                                 </div>
@@ -153,13 +157,12 @@
                                         <h3><a > <i class="fa fa-caret-down"></i>  Item Details </a></h3>
                                     </div> 
                                 </div> -->
-                                 <div class="row clearfix draggable-container">
+                                <div class="row clearfix draggable-container">
                                     <div class="table-responsive " id="item-tbl">
                                         <div class="col-sm-12">
                                             <table class="digima-table">
                                                 <thead >
                                                     <tr>
-                                                        <th style="width: 15px;"></th>
                                                         <th style="width: 15px;">#</th>
                                                         <th style="width: 200px;">Product/Service</th>
                                                         <th>Description</th>
@@ -175,10 +178,6 @@
                                                     @if(isset($bill))
                                                         @foreach($_bill_item_line as $item)
                                                         <tr class="tr-draggable tr-id-{{$item->itemline_ref_id}}">
-                                                            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i>                
-                                                                <input type="text" class="hidden poline_id" name="poline_id[]" value="{{$item->itemline_poline_id}}">
-                                                                <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]" value="{{$item->itemline_po_id}}">
-                                                            </td>
                                                             <td class="invoice-number-td text-right">1</td>
                                                             <td>
 
@@ -213,13 +212,64 @@
                                                     @endif
 
                                                 <tbody class="draggable tbody-item po-tbl">
-                                                    @include("member.load_ajax_data.load_po_session_item")  
+                                                    @if(count(Session::get('po_item')) > 0)
+                                                        @foreach(Session::get('po_item') as $items)
+                                                                                                        <tr class="trcount tr-draggable tr-id-{{$items['poline_po_id']}}">
+                                                            <td class="invoice-number-td text-right">1</td>
+                                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
+                                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $items['poline_item_id']])
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                @if($pis)
+                                                                    <label class="textarea-expand txt-desc" name="itemline_description[]">{{$items['poline_description']}}</label>
+                                                                @else
+                                                                    <textarea class="textarea-expand txt-desc" name="itemline_description[]">{{$items['poline_description']}}</textarea>
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                <select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" />
+                                                                    @if($items['poline_um'])
+                                                                        @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $items['multi_um_id'], 'selected_um_id' => $items['poline_um']])
+                                                                    @else
+                                                                        <option class="hidden" value="" />
+                                                                    @endif
+                                                                </select>
+                                                            </td>
+                                                            <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]" value="{{$items['poline_qty']}}" /></td>
+                                                            <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]" value="{{$items['poline_rate']}}" />
+                                                            </td>
+                                                            <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]" value="{{$items['poline_amount']}}"/>
+                                                            </td>
+                                                            @include("member.load_ajax_data.load_td_serial_number")
+                                                            <td tr_id="{{$items['poline_po_id']}}" linked_in="no" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                        </tr>
+                                                        @endforeach
+                                                    @endif
                                                     <tr class="tr-draggable">
-                                                         <td class="text-center cursor-move move">
-                                                            <i class="fa fa-th-large colo-mid-dark-gray"></i>         
-                                                            <input type="text" class="hidden poline_id" name="poline_id[]">
-                                                            <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]">
-                                                         </td>
+                                                        <td class="invoice-number-td text-right">1</td>
+                                                        <td>
+                                                            <input type="hidden" class="poline_id" name="itemline_ref_name[]">
+                                                            <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
+                                                                @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            @if($pis)
+                                                                <label class="textarea-expand txt-desc" name="itemline_description[]"></label>
+                                                            @else
+                                                                <textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea>
+                                                            @endif
+                                                        </td>
+                                                        <td><select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
+                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
+                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
+                                                        <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
+                                                        @include("member.load_ajax_data.load_td_serial_number");
+                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                    </tr>
+                                                    <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
                                                         <input type="hidden" class="poline_id" name="itemline_ref_name[]">
@@ -233,7 +283,7 @@
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
                                                         <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
-                                                        @include("member.load_ajax_data.load_td_serial_number");
+                                                            @include("member.load_ajax_data.load_td_serial_number")
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                 </tbody>
@@ -244,7 +294,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <label>Memo</label>
-                                        <textarea class="form-control input-sm textarea-expand" name="bill_memo" ></textarea>
+                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" ></textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">
@@ -272,11 +322,8 @@
 <div class="div-script">
     <table class="div-item-row-script hide">
        <tr class="tr-draggable">
-            <td class="text-center cursor-move move">
-                <i class="fa fa-th-large colo-mid-dark-gray"></i>
                 <input type="text" class="hidden poline_id" name="poline_id[]">
                 <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]">
-            </td>
             <td class="invoice-number-td text-right">1</td>
             <td>
                 <input type="hidden" class="poline_id" name="itemline_ref_name[]">
@@ -298,20 +345,19 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
-<script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
+
 <script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
 <script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/receive_inventory.js"></script>
 <script type="text/javascript">
 $("#acct-a").click(function()
 {
-	$('#account-tbl').toggle();
-	$('i',this).toggleClass("fa-caret-right fa-caret-down")
+    $('#account-tbl').toggle();
+    $('i',this).toggleClass("fa-caret-right fa-caret-down")
 });
 $("#item-a").click(function()
 {
-	$('#item-tbl').toggle();
-	$('i',this).toggleClass("fa-caret-right fa-caret-down")
+    $('#item-tbl').toggle();
+    $('i',this).toggleClass("fa-caret-right fa-caret-down")
 });
 $(document).ready(function() 
 {

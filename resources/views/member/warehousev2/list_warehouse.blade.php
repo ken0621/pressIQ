@@ -31,7 +31,7 @@
             <div class="col-md-4 pull-right">
                 <div class="input-group">
                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                    <!-- <input type="search" name="" class="form-control srch-warehouse-txt" placeholder="Start typing warehouse"> -->
+                    <input type="search" name="" class="form-control srch-warehouse-txt" placeholder="Start typing warehouse">
                 </div>
             </div>
         </div>

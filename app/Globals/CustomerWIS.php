@@ -5,6 +5,7 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_customer_wis;
 use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_customer_wis_item;
 
 
@@ -142,6 +143,12 @@ class CustomerWIS
     public static function print_customer_wis_item($wis_id)
     {
         return Tbl_customer_wis_item::InventoryItem()->where('cust_wis_id',$wis_id)->groupBy('record_item_id')->get();
+    }
+    public static function countTransaction($shop_id, $customer_id)
+    {
+        $so = Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_customer_id",$customer_id)->where("est_status","accepted")->count();
+        $inv = 0;
+        return $so + $inv;
     }
 
     /*public static function check_customer_existence($shop_id, $customer_id = 0)

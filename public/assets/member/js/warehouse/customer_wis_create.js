@@ -61,8 +61,8 @@ function customer_wis_create()
     		placeholder : "Select Customer...",
 			link : "/member/customer/modalcreatecustomer",
 			onChangeValue: function()
-			{				
-		
+			{			
+				action_load_open_transaction($(this).val());		
 			}
 		});
 
@@ -101,6 +101,27 @@ function customer_wis_create()
             	}
             }
         });
+	}
+	function action_load_open_transaction($customer_id)
+	{
+		if($customer_id)
+		{
+			$.ajax({
+				url : '/member/customer/wis/count-transaction',
+				type : 'get',
+				data : {customer_id : $customer_id},
+				success : function(data)
+				{
+					$(".open-transaction").slideDown();
+					$(".popup-link-open-transaction").attr('link','/member/customer/wis/load-transaction?c='+$customer_id);
+					$(".count-open-transaction").html(data);
+				}
+			});
+		}
+		else
+		{
+			$(".open-transaction").slideUp();
+		}
 	}
 	function action_load_item_info($this)
 	{

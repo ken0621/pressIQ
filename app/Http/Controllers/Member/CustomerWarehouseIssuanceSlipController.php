@@ -2,14 +2,6 @@
 
 namespace App\Http\Controllers\Member;
 use Illuminate\Http\Request;
-
-use App\Models\Tbl_warehouse;
-use App\Models\Tbl_user_warehouse_access;
-use App\Models\Tbl_item;
-use App\Models\Tbl_sub_warehouse;
-use App\Models\Tbl_warehouse_inventory;
-use App\Models\Tbl_settings;
-use App\Models\Tbl_customer_wis;
 use Redirect;
 
 use App\Globals\Warehouse2;
@@ -20,6 +12,7 @@ use App\Globals\Pdf_global;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\CustomerWIS;
+use App\Globals\Customer;
 use App\Globals\WarehouseTransfer;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -59,7 +52,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
     {
         $data['page'] = 'CREATE - CUSTOMER WIS';
         $data['_item']  = Item::get_all_category_item([1,5]);
-        $data['_customer'] = CustomerWIS::get_customer($this->user_info->shop_id);
+        $data["_customer"]  = Customer::getAllCustomer();
 
         return view('member.warehousev2.customer_wis.customer_wis_create',$data);
     }
@@ -152,5 +145,14 @@ class CustomerWarehouseIssuanceSlipController extends Member
         //return view('member.warehousev2.customer_wis.customer_wis_print', $data);
         $pdf = view('member.warehousev2.customer_wis.customer_wis_print', $data);
         return Pdf_global::show_pdf($pdf,null,$data['wis']->cust_wis_number);
+    }
+    public function getCountTransaction(Request $request)
+    {
+        $customer_id = $request->customer_id;
+        return CustomerWIS::countTransaction($this->user_info->shop_id, $customer_id);
+    }
+    public function getLoadTransaction(Request $request)
+    {
+        dd("Under Maintenance");
     }
 }

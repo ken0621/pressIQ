@@ -47,6 +47,9 @@
                 <label>Delivery Date</label>
                 <input type="text" name="delivery_date" class="form-control" value="{{ date('m/d/Y') }}">
             </div>
+            <div class="col-sm-4 text-right open-transaction" style="display: none;">
+                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/sales_invoice/load_transaction?customer_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
+            </div>
             <div class="col-md-6">
                 <label>Ship to</label>
                 <div>

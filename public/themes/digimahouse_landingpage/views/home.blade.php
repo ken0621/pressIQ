@@ -101,9 +101,9 @@
 	<!-- MID-CONTAINER-2 -->
 	<div class="mid-container-2" style="background-image: url('/themes/{{ $shop_theme }}/img/mid-container2-bg.png');">
 		<div class="container">
-			
 			<div class="text-header">Select a plan that fits your business</div>
 			<div class="row clearfix">
+
 				<div class="col-md-3">
 					<div class="box">
 						<div class="icon-container">
@@ -126,6 +126,7 @@
 							<div>
 								<span style="padding-top: -10px;"></span>
 							</div>
+
 						</div>
 					</div>
 				</div>
@@ -221,6 +222,7 @@
 						</div>
 					</div>
 				</div>
+
 			</div>
 			<div class="btn-container">
 				<button class="inquire-now">Inquire Now</button>
@@ -238,8 +240,10 @@
 						<div class="sub-text-header">Digima Web Solutions provides us with critical insight into our business which allows us to make fast decision and ultimately become more dynamic and competitive in marketplace.</div>
 					</div>
 				</div>
-				<div class="bottom-img-container col-md-6">
-					<img class="bottom-img" src="/themes/{{ $shop_theme }}/img/bottom-container-img1.png">
+				<div class="col-md-6">
+					<div class="bottom-img-container">
+						<img class="bottom-img" src="/themes/{{ $shop_theme }}/img/bottom-container-img1.png">
+					</div>
 				</div>
 			</div>
 			<div class="core-products-offered ">

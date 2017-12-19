@@ -52,11 +52,15 @@
                                     @include("member.load_ajax_data.load_customer", ['customer_id' => isset($rcvpayment) ? $rcvpayment->rp_customer_id : (isset($c_id) ? $c_id : '')])
                                 </select>
                             </div>
+                            <div class="col-sm-4"></div>                            
                             <!-- <div class="col-sm-4">
                                 <button class="btn btn-custom-white btn-sm" data-placement="bottom" data-html="true" id="example" data-content="<form><br><input type='text' class='form-control input-sm' ><br><a style='cursor:pointer' class='pull-left' onclick='$(&quot;#example&quot;).popover(&quot;hide&quot;);'>Cancel</a><a style='cursor:pointer' class='pull-right'>Find</a><br></form>" data-toggle="popover">Find by invoice no.</button>
                             </div> -->
-                            <div class="pull-right col-sm-6 text-right">
+                            <!-- <div class="pull-right col-sm-6 text-right">
                                 <h4><a class="popup popup-link-credit" size="md" link="/member/customer/receive_payment/apply_credit"><i class="fa fa-address-card"></i> Apply Available Credits</a></h4>
+                            </div> -->
+                            <div class="col-sm-4 text-right open-transaction" style="display: none;">
+                                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/receive_payment/load-credit"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Available Credits</a></h4>
                             </div>
                         </div>
                     </div>

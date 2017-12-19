@@ -61,6 +61,7 @@ function receive_payment()
 			    		action_compute_maximum_amount();
 			    	})		    		
 	    		}
+	    		action_load_open_transaction(customer_id);
 		    }
 		});
 
@@ -79,6 +80,28 @@ function receive_payment()
 		    width 		: "100%",
 		    placeholder : 'Account'
 		});
+	}
+
+	function action_load_open_transaction($customer_id)
+	{
+		if($customer_id)
+		{
+			$.ajax({
+				url : '/member/transaction/receive_payment/count-transaction',
+				type : 'get',
+				data : {customer_id : $customer_id},
+				success : function(data)
+				{
+					$(".open-transaction").slideDown();
+					$(".popup-link-open-transaction").attr('link','/member/transaction/receive_payment/load-credit?c='+$customer_id);
+					$(".count-open-transaction").html(data);
+				}
+			});
+		}
+		else
+		{
+			$(".open-transaction").slideUp();
+		}
 	}
 
 	/* CHECK BOX FOR LINE ITEM */

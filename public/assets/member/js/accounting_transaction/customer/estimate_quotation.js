@@ -228,8 +228,10 @@ function estimate_quotation()
 		$parent.find(".txt-qty").val(1).change();
 		if($this.find("option:selected").attr("has-um"))
 		{
+			$parent.find(".txt-qty").attr("disabled",true);
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
+				$parent.find(".txt-qty").removeAttr("disabled");
 				$(this).globalDropList("reload").globalDropList("enabled");
 				$(this).val($(this).find("option:first").val()).change();
 			})

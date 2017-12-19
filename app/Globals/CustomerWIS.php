@@ -5,6 +5,7 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_customer_wis;
 use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_customer_wis_item;
 
 
@@ -56,14 +57,26 @@ class CustomerWIS
         
         return $return;
     }
-    public static function customer_create_wis($shop_id, $remarks, $ins, $_item)
+    public static function customer_create_wis($shop_id, $remarks, $ins, $_item = array())
     {
         $validate = null;
         $warehouse_id = $ins['cust_wis_from_warehouse'];
         // dd($_item);
-        foreach ($_item as $key => $value)
+
+        if(count($_item) <= 0)
         {
-            $validate .= CustomerWIS::get_consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
+            $validate .= "Please Select item.<br>";
+        }
+        if(!$ins['destination_customer_id'])
+        {
+            $validate .= "Please Select customer.<br>";
+        }
+        if(!$validate)
+        {
+            foreach ($_item as $key => $value)
+            {
+                $validate .= CustomerWIS::get_consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
+            }        
         }
         
         $check = Tbl_customer_wis::where('cust_wis_number',$ins['cust_wis_number'])->where('cust_wis_shop_id',$shop_id)->first();
@@ -73,7 +86,6 @@ class CustomerWIS
         {
             $validate .= 'WIS number already exist';
         }
-
         if(!$validate)
         {
             $wis_id = Tbl_customer_wis::insertGetId($ins);
@@ -131,6 +143,12 @@ class CustomerWIS
     public static function print_customer_wis_item($wis_id)
     {
         return Tbl_customer_wis_item::InventoryItem()->where('cust_wis_id',$wis_id)->groupBy('record_item_id')->get();
+    }
+    public static function countTransaction($shop_id, $customer_id)
+    {
+        $so = Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_customer_id",$customer_id)->where("est_status","accepted")->count();
+        $inv = 0;
+        return $so + $inv;
     }
 
     /*public static function check_customer_existence($shop_id, $customer_id = 0)

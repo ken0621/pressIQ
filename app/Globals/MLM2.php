@@ -590,6 +590,7 @@ class MLM2
 		});
 
 		$query->where("wallet_log_amount", "<", 0);	
+		$query->where("wallet_log_plan", "!=", "EZ");	
 
 		if($limit == 0)
 		{

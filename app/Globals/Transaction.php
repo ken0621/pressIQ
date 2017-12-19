@@ -633,8 +633,9 @@ class Transaction
         if(isset($search_keyword))
         {
             $data->where('transaction_number', "LIKE", "%" . $search_keyword . "%");
-            // $data->orWhere('transaction_number', "LIKE", "%" . $search_keyword . "%");
-            // $data->orWhere('transaction_number', "LIKE", "%" . $search_keyword . "%");
+            $data->orWhere('first_name', "LIKE", "%" . $search_keyword . "%");
+            $data->orWhere('last_name', "LIKE", "%" . $search_keyword . "%");
+            $data->orWhere('email', "LIKE", "%" . $search_keyword . "%");
         }
         
         if(session('get_transaction_customer_details'))
@@ -738,6 +739,24 @@ class Transaction
         session()->forget('get_transaction_date');
         session()->forget('get_transaction_payment_method');
         session()->forget('get_transaction_slot_id');
+
+        //patrick
+        $emails = array();
+        if($transaction_type == 'proof')
+        {
+            foreach ($data as $key => $value) 
+            {
+                if(in_array($value->email, $emails))
+                {
+                    unset($data[$key]);                
+                }
+                else
+                {
+                    array_push($emails, $value->email);
+                }
+            }
+        }
+        
         return $data;
     }
     public static function get_all_transaction_type()

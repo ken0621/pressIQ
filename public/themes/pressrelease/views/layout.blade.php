@@ -22,6 +22,7 @@
 
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member.css">
         {{-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css"> --}}
 
         @include("frontend.ghead")
@@ -98,9 +99,13 @@
                         <span></span>
                     </div>
                     <div class="menu-mobile-nav">
+                        <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="/#home">Home</a></span>
+                        <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="/newsroom">News Room</a></span>
+                        <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="/about">About</a></span>
+                        <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="/contact">Contact Us</a></span>
                     </div>
                 </div>

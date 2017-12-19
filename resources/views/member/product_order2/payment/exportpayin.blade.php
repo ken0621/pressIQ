@@ -59,10 +59,12 @@
 			<td>{{ $transaction->transaction_number }}</td>
 			<td>{{ date("m/d/y", strtotime($transaction->transaction_date_created)) }}</td>
 			<td>"{{ $transaction->customer_mobile }}"</td>
+			@if(array_key_exists($transaction->transaction_id,$date))
 			<td>{{ $date[$transaction->transaction_id] }}</td>
 			<td>{{ $refnum[$transaction->transaction_id] }}</td>
 			<td>{{ $sendername[$transaction->transaction_id] }}</td>
 			<td>{{ $amount[$transaction->transaction_id] }}</td>
+			@endif
 		</tr>
 		@endforeach
 	</table>

@@ -59,6 +59,7 @@
                             <th>Customer Name</th>
                             <th>Invoice No</th>
                             <th>Total</th>
+                            <th>Balance</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -70,6 +71,7 @@
                                 <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
                                 <td>{{$invoice->new_inv_id}}</td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
+                                <td>{{currency("PHP",$invoice->inv_balance)}}</td>
                                 <td>
                                     @if($invoice->inv_is_paid == 0)
                                     <a class="btn btn-warning form-control">Open</a>
@@ -106,6 +108,7 @@
                             <th>Customer Name</th>
                             <th>Invoice No</th>
                             <th>Total</th>
+                            <th>Balance</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -117,6 +120,7 @@
                                 <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
                                 <td>{{$invoice->new_inv_id}}</td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
+                                <td>{{currency("PHP",$invoice->inv_balance)}}</td>
                                 <td>
                                     @if($invoice->inv_is_paid == 0)
                                     <a class="btn btn-warning form-control">Open</a>
@@ -153,6 +157,7 @@
                             <th>Customer Name</th>
                             <th>Invoice No</th>
                             <th>Total</th>
+                            <th>Balance</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -164,6 +169,7 @@
                                 <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
                                 <td>{{$invoice->new_inv_id}}</td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
+                                <td>{{currency("PHP",$invoice->inv_balance)}}</td>
                                 <td>
                                     @if($invoice->inv_is_paid == 0)
                                     <a class="btn btn-warning form-control">Open</a>

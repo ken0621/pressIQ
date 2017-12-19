@@ -46,7 +46,7 @@
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Billing Address</label>
-                            <textarea class="form-control input-sm textarea-expand" name="po_billing_address" placeholder="">{{$po->po_billing_address or ''}}</textarea>
+                            <textarea class="form-control input-sm textarea-expand po-billing-address" name="po_billing_address" placeholder="">{{$po->po_billing_address or ''}}</textarea>
                         </div>
                         <div class="col-sm-2">  
                             <label>Terms</label>
@@ -101,9 +101,9 @@
                                                     </td>
                                                     <td>
                                                         @if($pis)
-                                                            <label class="textarea-expand txt-desc" name="poline_description[]" value="{{$poline->poline_description}}"></label>
+                                                            <textarea class="textarea-expand txt-desc" name="poline_description[]" readonly="true" >{{$poline->poline_description}}</textarea>
                                                         @else
-                                                            <textarea class="textarea-expand txt-desc" name="poline_description[]" value="{{$poline->poline_description}}"></textarea>
+                                                            <textarea class="textarea-expand txt-desc" name="poline_description[]" >{{$poline->poline_description}}</textarea>
                                                         @endif
                                                     </td>
                                                     <td>
@@ -142,7 +142,7 @@
                                                 </td>
                                                 <td>
                                                     @if($pis)
-                                                        <label class="textarea-expand txt-desc" name="poline_description[]"></label>
+                                                         <textarea class="textarea-expand txt-desc" name="poline_description[]" readonly="true" ></textarea>
                                                     @else
                                                         <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
                                                     @endif
@@ -173,7 +173,7 @@
                                                 </td>
                                                 <td>
                                                     @if($pis)
-                                                        <label class="textarea-expand txt-desc" name="poline_description[]"></label>
+                                                         <textarea class="textarea-expand txt-desc" name="poline_description[]" readonly="true" ></textarea>
                                                     @else
                                                         <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
                                                     @endif
@@ -302,7 +302,7 @@
             </td>
             <td>
                 @if($pis)
-                    <label class="textarea-expand txt-desc" name="poline_description[]"></label>
+                     <textarea class="textarea-expand txt-desc" name="poline_description[]" readonly="true" ></textarea>
                 @else
                     <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
                 @endif

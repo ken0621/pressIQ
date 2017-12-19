@@ -24,9 +24,11 @@
                <input type="text"  name="search_key" id="search_key">
                <button  type="button" name="search_button" id="search_button" class="btn btn-success" >Search</button>
             </div>
+          <!--   <div class="" style="padding:10px 10px 10px 10px;">
+               <label id="" name="">Chosen Recipient</label>
+            </div> -->
             <div class="col-md-12">
-
-               <form class="" action="/pressuser/pressrelease/recipient/done" method="POST" style="">
+               <form action="/pressuser/pressrelease/recipient/done" method="POST" >
                <div class="left-container" id="recipient_table" name="recipient_table">
                   <table  class="display table table-bordered" style="background-color: #FFFFFF;" id="showHere_table">
                      <thead>

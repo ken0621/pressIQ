@@ -84,6 +84,7 @@ class Vendor_ReceiveInventoryController extends Member
             $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
             $data['action']     = "/member/vendor/receive_inventory/add";
             $data['vendor_id']     = Request::input("vendor_id");
+            $data['pis']        = Purchasing_inventory_system::check();
             
             $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_billed",0)->get();
             //die(var_dump($data));

@@ -115,18 +115,7 @@
 						.save-button
 						{
 							padding-right: 20px;
-							a
-							{
-								background-color: #316df9;
-								color: #fff;
-								font-size: 15px;
-								text-decoration: none;
-								padding: 10px 20px;
-							}
-						}
-						.preview-button
-						{
-							a
+							button
 							{
 								padding: 10px 30px;
 								background-color: #316df9;
@@ -135,10 +124,9 @@
 								text-decoration: none;
 							}
 						}
-						.import-button
+						.preview-button
 						{
-							margin-bottom: 30px;
-							a
+							button
 							{
 								padding: 10px 30px;
 								background-color: #316df9;
@@ -219,7 +207,7 @@
 						.preview-button
 						{
 							padding-right: 20px;
-							a
+							button
 							{
 								background-color: #316df9;
 								color: #fff;
@@ -257,16 +245,14 @@
 					.button-container
 					{
 						padding-top: 30px;
-						.send-button
+						button
 						{
-							a
-							{
-								padding: 10px 30px;
-								background-color: #316df9;
-								color: #fff;
-								font-size: 15px;
-								text-decoration: none;
-							}
+							background-color: #316df9;
+							color: #fff;
+							font-size: 15px;
+							text-decoration: none;
+							padding: 10px 20px;
+							width: 150px;
 						}
 					}
 				}		

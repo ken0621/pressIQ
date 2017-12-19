@@ -1336,7 +1336,7 @@ function page_list($pis = 0)
     $nav[$page]['submenu'][$segment]['type']   = "submenu";
 
          /* -- VENDOR => PURCHASE ORDER V2 */
-        $code = "vendor-purchase-order-v2";
+        $code = "vendor-purchase-request-v2";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Purchase Requisition";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/purchase_requisition";

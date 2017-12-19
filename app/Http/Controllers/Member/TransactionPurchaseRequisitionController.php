@@ -55,7 +55,6 @@ class TransactionPurchaseRequisitionController extends Member
 		$data['_rs_item'] = RequisitionSlip::get_slip_item($slip_id);
         $data['user'] = $this->user_info;
 
-        // return view('member.requisition_slip.print_requisition_slip', $data);
         $pdf = view('member.accounting_transaction.vendor.purchase_requisition.print_requisition_slip', $data);
         return Pdf_global::show_pdf($pdf,null, $data['rs']->requisition_slip_number);
 	}

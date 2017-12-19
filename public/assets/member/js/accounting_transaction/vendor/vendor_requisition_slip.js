@@ -443,6 +443,6 @@ function success_create_rs(data)
 	if(data.status == 'success')
 	{
 		toastr.success('Success');
-		location.href = '/member/vendor/requisition_slip';
+		location.href = '/member/transaction/purchase_requisition';
 	}
 }

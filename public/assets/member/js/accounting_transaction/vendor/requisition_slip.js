@@ -22,7 +22,7 @@ function requisition_slip()
 }
 function change_status(status)
 {
-	$('.rs-container').load('/member/vendor/requisition_slip/load-rs-table?status='+status+' .rs-table');
+	$('.rs-container').load('/member/transaction/requisition_slip/load-rs-table?status='+status+' .rs-table');
 }
 function success_confirm(data)
 {

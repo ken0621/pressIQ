@@ -8,6 +8,10 @@ function commission_report()
 	{
 		action_load_table();
 	}
+	this.action_change_warehouse = function()
+	{
+		action_change_warehouse();
+	}
 
 	function init()
 	{
@@ -23,10 +27,7 @@ function commission_report()
 	}
 	function event_change_warehouse()
     {
-        $('.select_current_warehouse').change(function()
-        {
-            action_change_warehouse();
-        });
+    	action_change_warehouse();
     }
     function action_change_warehouse()
     {

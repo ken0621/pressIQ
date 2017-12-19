@@ -66,9 +66,9 @@
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
-
                       {{-- POPUP CHOOSE RECIPIENT --}}
-                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
+
+                    <input type="text" name="pr_to" id="recipient_email" class="form-control" readonly >
                     <div class="button-container"></div>
                 </div>
 
@@ -83,12 +83,12 @@
                   </div>
                 </div>
               </form>
-
             </div>
          </div>
       </div>
    </div>
 </div>
+
 <style>
    .modal-content
    {
@@ -197,7 +197,7 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
    
        // setTimeout(function() 
        // {
-       //   // no matter what you upload, we will turn it into TinyMCE logo :)
+       //   // no matter what you upload, we will turn it into TinyMCE logo (smiley)
        //   success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
        // }, 2000);
      },

@@ -4,14 +4,11 @@
     <!-- Media Slider -->
     <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner.jpg')">
         <div class="container">
-                <div class="caption-container">
-                    <span class="title-caption-red">Smart</span><span class="title-caption-black"> and</span><span class="title-caption-blue"> cost effective</span><span class="title-caption-black"> press release distribution platform</span>
-                </div>
-                 <div class="button-container">
-                    <a class="smoth-scroll" href="#requestdemo">REQUEST A DEMO</a>
-                </div>
-            <div class="scroll-down-container">
-                <a class="smoth-scroll" href="#aboutus"><span class="animated fadeInDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></span></a>           
+            <div class="caption-container">
+                <span class="title-caption-red">Smart</span><span class="title-caption-black"> and</span><span class="title-caption-blue"> cost effective</span><span class="title-caption-black"> press release distribution platform</span>
+            </div>
+             <div class="button-container smoth-scroll" href="#requestdemo">
+                <a class="smoth-scroll" href="#requestdemo">REQUEST A DEMO</a>
             </div>
         </div>
     </div>

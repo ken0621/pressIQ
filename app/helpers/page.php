@@ -506,6 +506,14 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
+        $code = "mlm-wallet-distribute-cashback-points";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Distribute Cashback Points";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/distribute_cashback";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
         $code = "mlm-wallet-gc-maintenance";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "GC Maintenance";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
@@ -833,12 +841,12 @@ function page_list($pis = 0)
     
     /* -- EMPLOYEE TIMESHEET=> LIST  */
     // $code = "employee-timesheet";
-    // $nav[$page]['submenu'][$code]['label'] = "Employee Timesheet";
-    // $nav[$page]['submenu'][$code]['code'] = $code;
-    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/employee_timesheet";
+    // $nav[$page]['submenu'][$code]['label']         = "Employee Timesheet";
+    // $nav[$page]['submenu'][$code]['code']          = $code;
+    // $nav[$page]['submenu'][$code]['url']           = $path . $page . "/employee_timesheet";
     // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    // $nav[$page]['submenu'][$code]['developer'] = "Guillermo Tabligan";
+    // $nav[$page]['submenu'][$code]['status']        = "No progress Yet";
+    // $nav[$page]['submenu'][$code]['developer']     = "Guillermo Tabligan";
 
     /* PAYROLL CALENDAR LEAVE */
     $code = "payroll-calendar-leave";
@@ -974,6 +982,27 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
 
+    $segment = "admin-dashboard";
+    $nav[$page]['submenu'][$segment]['name']   = "Admin Dashboard";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+        /* -- REPORT => PRODUCTS  */
+        $code = "employee-approver";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']         = "Employee Approver";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']          = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']           = $path . $page . "/payroll_admin_dashboard/employee_approver";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']        = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']     = "Everyone";
+
+        $code = "group-approver";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']         = "Group Approver";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']          = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']           = $path . $page . "/payroll_admin_dashboard/group_approver";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']        = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']     = "Everyone";
 
     /* PAYROLL Biometric */
     $code = "payroll-biometric";

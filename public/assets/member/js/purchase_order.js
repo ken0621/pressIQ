@@ -341,7 +341,7 @@ function purchase_order(){
 			onChangeValue: function()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
-				$('textarea[name="po_billing_address"]').val($(this).find("option:selected").attr("billing-address"));
+				$(".po-billing-address").val($(this).find("option:selected").attr("billing-address"));
 			}
 		});
 		$('.droplist-terms').globalDropList(

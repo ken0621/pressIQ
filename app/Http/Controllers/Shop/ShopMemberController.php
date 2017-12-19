@@ -459,7 +459,11 @@ class ShopMemberController extends Shop
                     }
     }
     public function pressuser_pressrelease_recipient_search(Request $request)
-    {
+    {  
+        // $filter["country"]             = $request->choose_country;
+        // $filter["industry_type"]       = $request->industry_type;
+        // $filter["media_type"]          = $request->media_type;
+        // $filter["title_of_journalist"] = $request->title_of_journalis
 
       $search_key = $request->search_key;
       $data['_recipient'] = Tbl_press_release_recipient::where('name','like','%'.$search_key.'%')
@@ -766,6 +770,20 @@ class ShopMemberController extends Shop
                                 ->whereIn('media_type', $filter["media_type"])
                                 ->get();
         }
+        elseif ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]!="" && $filter["title_of_journalist"]=="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('country', $filter["country"])
+                                ->whereIn('media_type', $filter["media_type"])
+                                ->get();
+        }
+        elseif ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["title_of_journalist"]!="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('country', $filter["country"])
+                                ->whereIn('title_of_journalist', $filter["title_of_journalist"])
+                                ->get();
+        }
         elseif ($filter["country"]=="" && $filter["industry_type"]!="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="") 
         {
             $data['_recipient']   = Tbl_press_release_recipient::
@@ -777,6 +795,13 @@ class ShopMemberController extends Shop
             $data['_recipient']   = Tbl_press_release_recipient::
                                 whereIn('industry_type', $filter["industry_type"])
                                 ->whereIn('media_type', $filter["media_type"])
+                                ->get();
+        }
+        elseif ($filter["country"]=="" && $filter["industry_type"]!="" && $filter["media_type"]=="" && $filter["title_of_journalist"]!="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('industry_type', $filter["industry_type"])
+                                ->whereIn('title_of_journalist', $filter["title_of_journalist"])
                                 ->get();
         }
         elseif ($filter["country"]=="" && $filter["industry_type"]!="" && $filter["media_type"]!="" && $filter["title_of_journalist"]!="") 

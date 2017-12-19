@@ -459,7 +459,11 @@ class ShopMemberController extends Shop
                     }
     }
     public function pressuser_pressrelease_recipient_search(Request $request)
-    {
+    {  
+        // $filter["country"]             = $request->choose_country;
+        // $filter["industry_type"]       = $request->industry_type;
+        // $filter["media_type"]          = $request->media_type;
+        // $filter["title_of_journalist"] = $request->title_of_journalis
 
       $search_key = $request->search_key;
       $data['_recipient'] = Tbl_press_release_recipient::where('name','like','%'.$search_key.'%')

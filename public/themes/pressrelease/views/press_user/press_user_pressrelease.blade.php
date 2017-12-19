@@ -64,7 +64,7 @@
                     </select>
 
                     <div class="title">Send To:</div>
-                    <input type="text"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
+                    <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
@@ -121,7 +121,7 @@
                     </select>
 
                     <div class="title">Send To:</div>
-                    <input type="text"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
+                    <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
@@ -139,7 +139,10 @@
                   <div class="title">Title:</div>
                   <div class="content">Press Release</div>
                   <div class="button-container">
-                     <span class="send-button"><button type="submit" formaction="/pressuser/pressrelease/pr"><a href="">Send</a></button></span>
+                  <div class="send-button" >
+                    <!-- <input type = "checkbox" class="to_check" id="check" value="yes" name="to_newsroom">Publish to Newsroom -->
+                    <button type="submit" formaction="/pressuser/pressrelease/pr"><a href="">Send</a></button>
+                  </div>
                   </div>
                 </div>
               </form>

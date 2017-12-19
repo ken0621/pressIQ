@@ -27,7 +27,7 @@
                   <textarea name="pr_boiler_content" id="tinymce"></textarea>
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft">Save as draft</button></span>
-                  <span class="preview-button"><button onclick="tinyMCE.activeEditor.execCommand('mcePreview');">Preview</button></span>
+                  <span class="preview-button"><button type="button" data-toggle="modal" data-target="#previewPopup" {{-- onclick="tinyMCE.activeEditor.execCommand('mcePreview'); --}}>Preview</button></span>
                   </div>
                 </div>
 
@@ -82,7 +82,7 @@
                   <div class="title">Title:</div>
                   <div class="content" >Press Release</div>
                   <div class="button-container">
-                     <span class="send-button"><button type="submit" formaction="/pressuser/pressrelease/pr"><a href="">Send</a></button></span>
+                    <button type="submit" formaction="/pressuser/pressrelease/pr">Send</button>
                   </div>
                 </div>  
 
@@ -95,8 +95,26 @@
       </div>
    </div>
 </div>
+
+  <!-- Preview Popup -->
+  <div class="modal fade" id="previewPopup" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <p>This is a large modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <style>
-  
    .modal-content
    {
    width: 900px;

@@ -1,8 +1,8 @@
-var purchase_order = new purchase_order();
+var write_check = new write_check();
 var global_tr_html = $(".div-script tbody").html();
 var item_selected = ''; 
 
-function purchase_order()
+function write_check()
 {
 	init();
 
@@ -75,6 +75,20 @@ function purchase_order()
             	action_load_item_info($(this));
             }
         });
+        $(".draggable .tr-draggable:last td select.select-item").globalDropList(
+        {
+            link : "/member/item/v2/add",
+            width : "100%",
+            maxHeight: "309px",
+            onCreateNew : function()
+            {
+            	item_selected = $(this);
+            },
+            onChangeValue : function()
+            {
+            	action_load_item_info($(this));
+            }
+        });
         $('.droplist-um').globalDropList(
     	{
     		hasPopup: "false",
@@ -86,6 +100,19 @@ function purchase_order()
     		}
 
     	});
+    	$('.droplist-um:not(.has-value)').globalDropList("disabled");
+
+        $(".draggable .tr-draggable:last td select.select-um").globalDropList(
+        {
+        	hasPopup: "false",
+    		width : "100%",
+    		placeholder : "um..",
+    		onChangeValue: function()
+    		{  
+    			action_load_unit_measurement($(this));
+    		}
+
+        }).globalDropList('disabled');
         // $('.droplist-um:not(.has-value)').globalDropList("disabled");
 		$(".drop-down-payment").globalDropList(
 		{

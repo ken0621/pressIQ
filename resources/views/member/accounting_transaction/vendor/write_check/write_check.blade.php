@@ -1,10 +1,9 @@
 @extends('member.layout')
 @section('content')
 
-<form class="global-submit form-to-submit-transfer" id="check_form" role="form" action="" method="POST" >
+<form class="global-submit" role="form" action="{{ $action or ''}}" method="post" >
     <input type="hidden" class="token" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" class="button-action" name="button_action" value="">
-    <input type="hidden" name="wc_id" value="{{Request::input('id')}}" >
 
     <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
 
@@ -33,14 +32,14 @@
             <div>
                 <i class="fa fa-tags"></i>
                 <h1>
-                    <span class="page-title">Write Checks</span>
+                    <span class="page-title">{{ $page or ''}}</span>
                     <small>
                     <!--Add a product on your website-->
                     </small>
                 </h1>
                 <div class="dropdown pull-right">
                     <div>
-                        <a class="btn btn-custom-white" href="/member/transaction/estimate_quotation">Cancel</a>
+                        <a class="btn btn-custom-white" href="/member/transaction/write_check">Cancel</a>
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu  dropdown-menu-custom">
@@ -186,17 +185,16 @@
                                                         <tr class="tr-draggable tr-id-{{$item->wcline_ref_id}}">
                                                             <td class="invoice-number-td text-right">1</td>
                                                             <td>
-
                                                                 <input type="hidden" class="poline_id" name="itemline_ref_name[]" value="{{$item->wcline_ref_name}}">
                                                                 <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]" value="{{$item->wcline_ref_id}}">
 
-                                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
+                                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                     @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $item->wcline_item_id])
                                                                 </select>
                                                             </td>
-                                                            <td><textarea class="textarea-expand txt-desc" name="itemline_description[]">{{$item->wcline_description}}</textarea></td>
+                                                            <td><textarea class="textarea-expand txt-desc" name="item_description[]">{{$item->wcline_description}}</textarea></td>
                                                             <td>
-                                                                <select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" />
+                                                                <select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" />
                                                                     @if($item->wcline_um)
                                                                         @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $item->multi_um_id, 'selected_um_id' => $item->wcline_um])
                                                                     @else
@@ -204,29 +202,28 @@
                                                                     @endif
                                                                 </select>
                                                             </td>
-                                                            <td><input class="text-center number-input txt-qty compute" type="text" value="{{$item->wcline_qty}}" name="itemline_qty[]"/></td>
-                                                            <td><input class="text-right number-input txt-rate compute" type="text" value="{{$item->wcline_rate}}" name="itemline_rate[]"/></td>
-                                                            <td><input class="text-right number-input txt-amount" type="text" value="{{$item->wcline_amount}}" name="itemline_amount[]"/></td>
+                                                            <td><input class="text-center number-input txt-qty compute" type="text" value="{{$item->wcline_qty}}" name="item_qty[]"/></td>
+                                                            <td><input class="text-right number-input txt-rate compute" type="text" value="{{$item->wcline_rate}}" name="item_rate[]"/></td>
+                                                            <td><input class="text-right number-input txt-amount" type="text" value="{{$item->wcline_amount}}" name="item_amount[]"/></td>
                                                             <td  tr_id="{{$item->wcline_ref_id}}" linked_in="{{$item->itemline_ref_name}}" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                         </tr>
                                                         @endforeach
                                                     @endif
-
                                                 <tbody class="draggable tbody-item po-tbl">
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
                                                         <input type="hidden" class="poline_id" name="itemline_ref_name[]">
                                                         <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
-                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
+                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
                                                         </td>
-                                                        <td><textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea></td>
-                                                        <td><select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
-                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
-                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
-                                                        <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
+                                                        <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
+                                                        <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                                        <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                     <tr class="tr-draggable">
@@ -234,15 +231,15 @@
                                                         <td>
                                                         <input type="hidden" class="poline_id" name="itemline_ref_name[]">
                                                         <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
-                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
+                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
                                                         </td>
-                                                        <td><textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea></td>
-                                                        <td><select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
-                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
-                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
-                                                        <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
+                                                        <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
+                                                        <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                                        <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                 </tbody>
@@ -253,7 +250,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <label>Memo</label>
-                                        <textarea class="form-control input-sm textarea-expand" name="wc_memo" ></textarea>
+                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" ></textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">
@@ -287,18 +284,20 @@
 </div>
 <div class="div-script">
     <table class="div-item-row-script hide">
-       <tr class="tr-draggable">
+        <tr class="tr-draggable">
             <td class="invoice-number-td text-right">1</td>
             <td>
-                <select class="1111 form-control select-item input-sm pull-left" name="itemline_item_id[]" >
+            <input type="hidden" class="poline_id" name="itemline_ref_name[]">
+            <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                <select class="1111 form-control select-item input-sm pull-left" name="item_id[]" >
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                 </select>
             </td>
-            <td><textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea></td>
-            <td><select class="2222 select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
-            <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
-            <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
-            <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
+            <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
+            <td><select class="2222 select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>
@@ -306,8 +305,6 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
-<script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 <script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
 
 <!-- <script type="text/javascript" src="/assets/member/js/write_check.js"></script> -->

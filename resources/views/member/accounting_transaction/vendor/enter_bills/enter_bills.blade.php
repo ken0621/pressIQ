@@ -1,10 +1,9 @@
 @extends('member.layout')
 @section('content')
 
-<form class="global-submit form-to-submit-transfer" id="billing_form" role="form" action="" method="POST" >
+<form class="global-submit" role="form" action="{{ $action or ''}}" method="post" >
     <input type="hidden" class="token" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" class="button-action" name="button_action" value="">
-    <input type="hidden" name="bill_id" value="{{Request::input('id')}}" >
 
     <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
 
@@ -33,14 +32,14 @@
             <div>
                 <i class="fa fa-tags"></i>
                 <h1>
-                    <span class="page-title">Vendor &raquo; Create Bill</span>
+                    <span class="page-title">{{ $page or ''}}</span>
                     <small>
                     <!--Add a product on your website-->
                     </small>
                 </h1>
                 <div class="dropdown pull-right">
                     <div>
-                        <a class="btn btn-custom-white" href="/member/transaction/estimate_quotation">Cancel</a>
+                        <a class="btn btn-custom-white" href="/member/transaction/enter_bills">Cancel</a>
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu  dropdown-menu-custom">
@@ -102,7 +101,7 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-3">
                                             <label>Mailing Address</label>
-                                            <textarea class="form-control input-sm textarea-expand" name="vendor_mailing_address" placeholder="">{{isset($bill) ? $bill->bill_mailing_address : ''}}</textarea>
+                                            <textarea class="form-control input-sm textarea-expand" name="vendor_address" placeholder="">{{isset($bill) ? $bill->bill_mailing_address : ''}}</textarea>
                                         </div>              
                                         <div class="col-sm-2">
                                             <label>Terms</label>
@@ -199,19 +198,15 @@
                                                                 <input type="hidden" class="poline_id" name="itemline_ref_name[]" value="{{$item->itemline_ref_name}}">
                                                                 <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]" value="{{$item->itemline_ref_id}}">
 
-                                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
+                                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                     @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $item->itemline_item_id])
                                                                 </select>
                                                             </td>
                                                             <td>
-                                                                @if($pis)
-                                                                    <label class="textarea-expand txt-desc" name="itemline_description[]">{{$item->itemline_description}}</label>
-                                                                @else
-                                                                    <textarea class="textarea-expand txt-desc" name="itemline_description[]">{{$item->itemline_description}}</textarea>
-                                                                @endif
+                                                                <textarea class="textarea-expand txt-desc" name="item_description[]">{{$item->itemline_description}}</textarea>
                                                             </td>
                                                             <td>
-                                                                <select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" />
+                                                                <select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" />
                                                                     @if($item->itemline_um)
                                                                         @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $item->multi_um_id, 'selected_um_id' => $item->itemline_um])
                                                                     @else
@@ -219,9 +214,9 @@
                                                                     @endif
                                                                 </select>
                                                             </td>
-                                                            <td><input class="text-center number-input txt-qty compute" type="text" value="{{$item->itemline_qty}}" name="itemline_qty[]"/></td>
-                                                            <td><input class="text-right number-input txt-rate compute" type="text" value="{{$item->itemline_rate}}" name="itemline_rate[]"/></td>
-                                                            <td><input class="text-right number-input txt-amount" type="text" value="{{$item->itemline_amount}}" name="itemline_amount[]"/></td>
+                                                            <td><input class="text-center number-input txt-qty compute" type="text" value="{{$item->itemline_qty}}" name="item_qty[]"/></td>
+                                                            <td><input class="text-right number-input txt-rate compute" type="text" value="{{$item->itemline_rate}}" name="item_rate[]"/></td>
+                                                            <td><input class="text-right number-input txt-amount" type="text" value="{{$item->item_amount}}" name="item_amount[]"/></td>
                                                             @if(isset($serial)) 
                                                             <td>
                                                                 <textarea class="txt-serial-number" name="serial_number[]">{{$item->serial_number}}</textarea>
@@ -238,21 +233,17 @@
                                                         <td>
                                                         <input type="hidden" class="poline_id" name="itemline_ref_name[]">
                                                         <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
-                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
+                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            @if($pis)
-                                                                <label class="textarea-expand txt-desc" name="itemline_description[]"></label>
-                                                            @else
-                                                                <textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea>
-                                                            @endif
+                                                            <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
                                                         </td>
-                                                        <td><select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
-                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
-                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
-                                                        <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
+                                                        <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                                        <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                         @include("member.load_ajax_data.load_td_serial_number")
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
@@ -261,21 +252,17 @@
                                                         <td>
                                                         <input type="hidden" class="poline_id" name="itemline_ref_name[]">
                                                         <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
-                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
+                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            @if($pis)
-                                                                <label class="textarea-expand txt-desc" name="itemline_description[]"></label>
-                                                            @else
-                                                                <textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea>
-                                                            @endif
+                                                            <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
                                                         </td>
-                                                        <td><select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
-                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
-                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
-                                                        <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
+                                                        <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                                        <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                         @include("member.load_ajax_data.load_td_serial_number")
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
@@ -287,7 +274,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <label>Memo</label>
-                                        <textarea class="form-control input-sm textarea-expand" name="bill_memo" ></textarea>
+                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" ></textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">
@@ -326,22 +313,18 @@
             <td>
                 <input type="hidden" class="poline_id" name="itemline_ref_name[]">
                 <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
-                <select class="1111 form-control select-item input-sm pull-left" name="itemline_item_id[]" >
+                <select class="1111 form-control select-item input-sm pull-left" name="item_id[]" >
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                 </select>
             </td>
             <td>
-                @if($pis)
-                    <label class="textarea-expand txt-desc" name="itemline_description[]"></label>
-                @else
-                    <textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea>
-                @endif
+                <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
             </td>
-            <td><select class="2222 select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
-            <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
-            <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
-            <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
-            @include("member.load_ajax_data.load_td_serial_number");
+            <td><select class="2222 select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
+            @include("member.load_ajax_data.load_td_serial_number")
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>
@@ -349,8 +332,6 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
-<script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 <script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
 
 <script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/enter_bills.js"></script>

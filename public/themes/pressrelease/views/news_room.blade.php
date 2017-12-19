@@ -13,18 +13,18 @@
                         </div>
                     </div>
                 </div>
-                {{-- @foreach ($pr as $prs)
+                @foreach ($pr as $prs)
                 <div class="news-title-container">
                     <div class="title"><a href="/newsroom/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
                 </div>  
                 <div class="details-container">
-                    <p class="details">{{$prs->pr_subheading}}<br>{!!$prs->pr_content!!}</p>
+                    <p class="details">{!!$prs->pr_content!!}</p>
                 </div>
                 <div class="button-container">
                     <button onclick="window.location.href='/newsroom/view/{{$prs->pr_id}}'">Read More</button>
                 </div>
-                @endforeach --}}
-                <div class="news-title-container">
+                @endforeach
+                {{-- <div class="news-title-container">
                     <a href="/newsroom/view">Liana Technology</a>
                 </div>  
                 <div class="details-container">
@@ -32,7 +32,7 @@
                 </div>
                 <div class="button-container">
                     <button onclick="window.location.href='/newsroom/view'">Read More</button>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

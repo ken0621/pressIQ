@@ -193,11 +193,11 @@ function vendor_requisition_slip()
 	}
 	function event_submit_form()
 	{
-		$('.save-button').unbind('click')
-		$('.save-button').bind('click', function()
-		{
-			$('.form-to-submit-add').submit();
-		});
+		// $('.save-button').unbind('click')
+		// $('.save-button').bind('click', function()
+		// {
+		// 	$('.form-to-submit-add').submit();
+		// });
 	}
 	function table_loading()
 	{

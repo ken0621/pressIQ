@@ -1,6 +1,8 @@
 @extends('member.layout')
 @section('content')
 
+<form class="global-submit form-to-submit-add" action="/member/transaction/purchase_requisition/create-submit" method="post">
+<input type="hidden" class="button-action" name="button_action" value="">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -8,9 +10,18 @@
             <h1>
                 <span class="page-title">CREATE - Requisition Slip</span>
             </h1>
-            <div class="text-right">
-                <a class="btn btn-custom-white panel-buttons" href="/member/transaction/purchase_requisition">Cancel</a>
-                <button class="btn btn-primary panel-buttons save-button" type="button">Save</button>
+            <div class="dropdown pull-right">
+                <div>
+                    <a class="btn btn-custom-white" href="/member/transaction/purchase_requisition">Cancel</a>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu  dropdown-menu-custom">
+                      <li><a class="select-action" code="sclose">Save & Close</a></li>
+                      <li><a class="select-action" code="sedit">Save & Edit</a></li>
+                      <li><a class="select-action" code="sprint">Save & Print</a></li>
+                      <li><a class="select-action" code="snew">Save & New</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -33,7 +44,6 @@
     </div>
 </div> -->
 
-<form class="global-submit form-to-submit-add" action="/member/transaction/purchase_requisition/create-submit" method="post">
 <input type="hidden" name="_token" value="{{csrf_token()}}">
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal">

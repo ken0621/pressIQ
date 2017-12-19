@@ -74,6 +74,7 @@
                     <div class="button-container"></div>
                 </div>
                 @endforeach
+
                 @else
                 <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
@@ -127,8 +128,8 @@
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span>
                     <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px">0</span></span>
-                    {{-- POPUP CHOOSE RECIPIENT --}}
 
+                    {{-- POPUP CHOOSE RECIPIENT --}}
                     <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                     <div class="button-container"></div>
                 </div>

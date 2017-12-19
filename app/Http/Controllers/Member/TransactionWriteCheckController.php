@@ -44,6 +44,7 @@ class TransactionWriteCheckController extends Member
         $data['page'] = 'Write Check';
         return view('member.accounting_transaction.vendor.write_check.write_check_list', $data);
     }
+
     public function getCreate()
     {
         $data['page'] = 'Create Write Check';
@@ -55,7 +56,44 @@ class TransactionWriteCheckController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
+
+        $data['action']     = '/member/transaction/write_check/create-write-check';
+
         return view('member.accounting_transaction.vendor.write_check.write_check', $data);
     }
-    
+
+    public function postCreateWriteCheck(Request $request)
+    {
+        $btn_action = $request->button_action;
+
+        $insert['wc_reference_id']         = $request->wc_reference_id;
+        $insert['wc_reference_name']       = $request->wc_reference_name;
+        $insert['wc_customer_vendor_email']= $request->wc_customer_vendor_email;
+        $insert['wc_mailing_address']      = $request->wc_mailing_address;
+        $insert['wc_payment_date']         = $request->wc_payment_date;
+        $insert['wc_memo']                 = $request->wc_memo;
+        $insert['wc_total_amount']         = $request->wc_total_amount;
+        
+        $insert_item = null;
+        $ctr_items = 0;
+        foreach($request->item_id as $key => $value)
+        {
+            if($value)
+            {
+                $ctr_items++;
+            
+                /*$insert_item[$key]['itemline_ref_id']       = $value;
+                $insert_item[$key]['itemline_ref_name']     = $request->itemline_ref_name[$key];*/
+
+                $insert_item[$key]['item_id']           = $value;
+                $insert_item[$key]['item_description']  = $request->item_description[$key];
+                $insert_item[$key]['item_um']           = $request->item_um[$key];
+                $insert_item[$key]['item_qty']          = str_replace(',', '', $request->item_qty[$key]);
+                $insert_item[$key]['item_rate']         = str_replace(',', '', $request->item_rate[$key]);
+                $insert_item[$key]['item_amount']       = str_replace(',', '', $request->item_amount[$key]);
+            }
+
+            die(var_dump($btn_action));
+        }
+    }
 }

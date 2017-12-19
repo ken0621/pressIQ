@@ -49,7 +49,36 @@ class TransactionPayBillsController extends Member
         $data['_account']       = Accounting::getAllAccount('all',null,['Bank']);
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
 
+        $data['action']     = "/member/transaction/pay_bills/create-pay-bills";
+
         return view('member.accounting_transaction.vendor.pay_bills.pay_bills', $data);
     }
-    
+
+    public function postCreatePayBills(Request $request)
+    {
+        $btn_action  = $request->button_action;
+
+        $insert["paybill_vendor_id"]         = $request->paybill_vendor_id;
+        $insert["paybill_ap_id"]             = $request->paybill_ap_id != "" ? $request->paybill_ap_id : 0;
+        $insert["paybill_date"]              = $request->paybill_date;
+        $insert["paybill_total_amount"]      = $request->paybill_total_amount;
+        $insert["paybill_payment_method"]    = $request->paybill_payment_method;
+        $insert["paybill_memo"]              = $request->paybill_memo;
+
+        $insert = null;
+        $ctr_bill = 0;
+        foreach($request->line_is_checked as $key => $value)
+        {
+            if($value)
+            {
+                $ctr_bill++;
+                $insert[$key]["line_is_checked"]         = $request->line_is_checked[$key];
+                $insert[$key]["pbline_reference_name"]   = $request->pbline_txn_type[$key];
+                $insert[$key]["pbline_reference_id"]     = $request->pbline_bill_id[$key];
+                $insert[$key]["pbline_amount"]           = str_replace(',', '',$request->pbline_amount[$key]);
+            }
+
+            die(var_dump($btn_action));
+        }
+    }
 }

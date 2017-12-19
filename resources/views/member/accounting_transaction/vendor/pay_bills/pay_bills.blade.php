@@ -1,6 +1,6 @@
 @extends('member.layout')
 @section('content')
-<form class="global-submit" action="" method="post">
+<form class="global-submit" action="{{ $action or ''}}" method="post">
     <input type="hidden" name="_token" value="{{csrf_token()}}"> 
     <input type="hidden" class="button-action" name="button_action" value="">
     <div class="panel panel-default panel-block panel-title-block" id="top">
@@ -8,7 +8,7 @@
             <div>
                 <i class="fa fa-tags"></i>
                 <h1>
-                    <span class="page-title">Vendor &raquo; Pay Bills</span>
+                    <span class="page-title">{{ $page or ''}}</span>
                     <small>
                     <!--Add a product on your website-->
                     </small>
@@ -130,7 +130,7 @@
                     <div class="row clearfix">
                         <div class="col-sm-6">
                             <label>Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="paybill_memo" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="vendor_memo" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-6">
                             <div class="row">
@@ -168,6 +168,5 @@
     $(".chosen-select").chosen({no_results_text: "The customer doesn't exist."});
     $('[data-toggle="popover"]').popover(); 
 </script>
-<script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/pay_bills.js"></script>
 @endsection

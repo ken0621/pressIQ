@@ -28,11 +28,10 @@ function debit_memo()
 			placeholder : "Select Vendor...",
 			onChangeValue: function()
 			{
-				$(".customer-email").val($(this).find("option:selected").attr("email"));
-				$('textarea[name="po_billing_address"]').val($(this).find("option:selected").attr("billing-address"));
+				$(".vendor-email").val($(this).find("option:selected").attr("email"));
 			}
 		});
-
+/*
 		$('.droplist-terms').globalDropList(
 		{ 	
 			width : "100%",
@@ -45,7 +44,7 @@ function debit_memo()
             	var new_due_date 	= AddDaysToDate(start_date, days, "/");
             	$(".datepicker[name='po_due_date']").val(new_due_date);
 			}
-		});
+		});*/
 
 		$('.droplist-item').globalDropList(
         {

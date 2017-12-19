@@ -174,5 +174,5 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="/assets/member/js/vendor_requisition_slip.js"></script>
+<script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/vendor_requisition_slip.js"></script>
 @endsection

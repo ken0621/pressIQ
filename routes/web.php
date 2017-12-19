@@ -1050,7 +1050,7 @@ Route::any('/member/merchant/commission/request/submit', 'Member\MerchantControl
 /* End */
 
 // Merchant Commission Report
-// Route::get('/member/merchant/commission-report', 'Member\MerchantController@commission_report');
+Route::get('/member/merchant/commission-report', 'Member\MerchantController@commission_report');
 Route::get('/member/merchant/commission-report/getpercentage','Member\MerchantController@get_percentage');
 Route::post('/member/merchant/commission-report','Member\MerchantController@submit_report_setting');
 Route::get('/member/merchant/commission_report/table', 'Member\MerchantController@table');

@@ -85,6 +85,7 @@ function image_crop(selector, width, height)
     $(selector).css("object-fit", "contain").css("object-position", "center");
     $(selector).keepRatio({ ratio: width/height, calculate: 'height' });
 }
+
 function add_event_login_form()
 {
     $(".remodal-login-form").submit(function(e)

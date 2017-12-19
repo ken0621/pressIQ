@@ -131,21 +131,26 @@ button:hover{
 	.menu-mobile-nav
 	{
 		display: none;
-		padding: 10px 0px 30px 0px;
+		padding: 10px 0px 0px 0px;
 		margin-top: 10px;
 		text-align: center;
-		background-color: #f3f3f3;
+		// background-color: #f3f3f3;
+		.border-container
+		{
+			border: 0.5px solid #ededed;
+			text-align: center;
+			margin: 10px 5px;
+
+		}
 		@media screen and (max-width: 800px)
 		{
 			span
 			{
 				display: block;
-				padding-top: 15px;
 				a
 				{
 					color: #585858;
 					font-weight: 700;
-					border-bottom: 1px solid #316df9;
 					text-decoration: none;
 					font-size: 15px;
 				}

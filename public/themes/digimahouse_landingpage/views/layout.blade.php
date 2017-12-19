@@ -60,10 +60,13 @@
         <nav class="pushmenu pushmenu-left">
 
             <div class="space1"></div>
-            <div class="row-no-padding clearfix">
+            {{-- <div class="row-no-padding clearfix">
                 <div class="col-xs-12">
                     <div class="divider-bottom"><span>BROWSE</span></div>
                 </div>
+            </div> --}}
+            <div class="digima-mob-logo">
+                <img src="/themes/{{ $shop_theme }}/img/digimahouse-logo.png">
             </div>
 
             <ul class="links">

@@ -24,9 +24,9 @@
                <input type="text"  name="search_key" id="search_key">
                <button  type="button" name="search_button" id="search_button" class="btn btn-success" >Search</button>
             </div>
-          <!--   <div class="" style="padding:10px 10px 10px 10px;">
-               <label id="" name="">Chosen Recipient</label>
-            </div> -->
+            <div class="" style="padding:10px 10px 10px 10px;">
+               <label style="font-size:18px">Results Found :  </label> <span class="result-container" style="font-weight:bold;font-size:18px">  {{$total_query}}</span>
+            </div>
             <div class="col-md-12">
                <form action="/pressuser/pressrelease/recipient/done" method="POST" >
                <div class="left-container" id="recipient_table" name="recipient_table">

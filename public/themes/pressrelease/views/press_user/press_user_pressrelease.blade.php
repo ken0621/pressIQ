@@ -26,7 +26,8 @@
                   <textarea name="pr_boiler_content" id="tinymce"></textarea>
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft">Save as draft</button></span>
-                  <span class="preview-button"><button type="button" data-toggle="modal" data-target="#previewPopup" {{-- onclick="tinyMCE.activeEditor.execCommand('mcePreview'); --}}>Preview</button></span>
+                  <span class="preview-button"><button type="button" data-toggle="modal" data-target="#previewPopup" 
+                  >Preview</button></span>
                   </div>
                 </div>
 
@@ -62,18 +63,19 @@
                     </select>
 
                     <div class="title">Send To:</div>
-                    <input type="text"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
+                    <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                    <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
-                      {{-- POPUP CHOOSE RECIPIENT --}}
+                    <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span>
+                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px">0</span></span>
+                    {{-- POPUP CHOOSE RECIPIENT --}}
 
-                    <input type="text" name="pr_to" id="recipient_email" class="form-control" readonly >
+                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                     <div class="button-container"></div>
                 </div>
 
                 <div id="send_release" class="tabcontent send-release-container">
-                  <div class="title-container">New Release Summary</div>
+                  <div class="title-container">Send Release</div>
                   <div class="title">Publisher:</div>
                   <div class="content">Digima Web Solution</div>
                   <div class="title">Title:</div>

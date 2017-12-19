@@ -639,7 +639,7 @@ class ShopMemberController extends Shop
     public function pressadmin_media_contacts()
     {
 
-         $data['_media_contacts'] = Tbl_press_release_recipient::get();
+        $data['_media_contacts'] = Tbl_press_release_recipient::get();
 
         if(Session::exists('user_email'))
         {
@@ -720,17 +720,47 @@ class ShopMemberController extends Shop
         }
     }
 
+    public function pressadmin_email()
+    {   
+
+        $data['_email'] = Tbl_pressiq_press_releases::get();
+
+
+        if(Session::exists('user_email'))
+        {
+           $level=session('pr_user_level');
+           if($level!="1")
+           {
+                return Redirect::to("/pressuser/mypressrelease");
+           }
+           else
+           {
+                $data["page"] = "Press Release - Press Release";
+                return view("press_admin.press_admin_email", $data);
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
+    }
+
+
     public function pressadmin_pressrelease_addrecipient(Request $request)
     {
 
       $data["name"]                      = $request->name;
+      $data["position"]                  = $request->position;
+      $data["company_name"]              = $request->company_name;
       $data["country"]                   = $request->country;
-      $data["research_email_address"]    = $request->research_email_address;
-      $data["website"]                   = $request->website;
+      $data["research_email_address"]    = $request->contact_email;
+      $data["website"]                   = $request->contact_website;
+      $data["media_type"]                = $request->media_type;
+      $data["industry_type"]             = $request->industry_type;
+      $data["title_of_journalist"]       = $request->title_journalist;
       $data["description"]               = $request->description;
-      $data["user_id"]                   = session("pr_user_id");
       Tbl_press_release_recipient::insert($data); 
-      Session::flash('message', 'Recipient Successfully Added!');
+      Session::flash('success_merchant', 'Recipient Successfully Added!');
       return  redirect::back();
     }
 
@@ -764,14 +794,14 @@ class ShopMemberController extends Shop
             //dd($request->choose_country);
             $data['_recipient']   = Tbl_press_release_recipient::
                                 whereIn('country', $filter["country"])
-                                ->get();
+                                 ->get();
         }
         elseif ($filter["country"]!="" && $filter["industry_type"]!="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="") 
         {   
             $data['_recipient']   = Tbl_press_release_recipient::
                                 whereIn('country', $filter["country"])
                                 ->whereIn('industry_type', $filter["industry_type"])
-                                ->get();
+                                 ->get();
         }
         elseif ($filter["country"]!="" && $filter["industry_type"]!="" && $filter["media_type"]!="" && $filter["title_of_journalist"]=="") 
         {
@@ -779,20 +809,20 @@ class ShopMemberController extends Shop
                                 whereIn('country', $filter["country"])
                                 ->whereIn('industry_type', $filter["industry_type"])
                                 ->whereIn('media_type', $filter["media_type"])
-                                ->get();
+                                 ->get();
         }
         elseif ($filter["country"]=="" && $filter["industry_type"]!="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="") 
         {
             $data['_recipient']   = Tbl_press_release_recipient::
                                 whereIn('industry_type', $filter["industry_type"])
-                                ->get();
+                                 ->get();
         }
         elseif ($filter["country"]=="" && $filter["industry_type"]!="" && $filter["media_type"]!="" && $filter["title_of_journalist"]=="") 
         {
             $data['_recipient']   = Tbl_press_release_recipient::
                                 whereIn('industry_type', $filter["industry_type"])
                                 ->whereIn('media_type', $filter["media_type"])
-                                ->get();
+                                 ->get();
         }
         elseif ($filter["country"]=="" && $filter["industry_type"]!="" && $filter["media_type"]!="" && $filter["title_of_journalist"]!="") 
         {
@@ -800,13 +830,13 @@ class ShopMemberController extends Shop
                                 whereIn('industry_type', $filter["industry_type"])
                                 ->whereIn('media_type', $filter["media_type"])
                                 ->whereIn('title_of_journalist', $filter["title_of_journalist"])
-                                ->get();
+                                 ->get();
         }
         elseif ($filter["country"]=="" && $filter["industry_type"]=="" && $filter["media_type"]!="" && $filter["title_of_journalist"]=="") 
         {
             $data['_recipient']   = Tbl_press_release_recipient::
                                 whereIn('media_type', $filter["media_type"])
-                                ->get();
+                                 ->get();
         }
         elseif ($filter["country"]=="" && $filter["industry_type"]=="" && $filter["media_type"]!="" && $filter["title_of_journalist"]!="") 
         {
@@ -821,6 +851,7 @@ class ShopMemberController extends Shop
                                 whereIn('title_of_journalist', $filter["title_of_journalist"])
                                 ->get();
         }
+
         else
         {
         $data['_recipient']   = Tbl_press_release_recipient::
@@ -830,6 +861,10 @@ class ShopMemberController extends Shop
                                 ->whereIn('title_of_journalist', $filter["title_of_journalist"])
                                 ->get();
         }
+
+
+        $data['total_query'] = $data['_recipient']->count();
+        
         return view("press_user.choose_recipient", $data);
     }
 

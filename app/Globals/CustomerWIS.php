@@ -56,14 +56,26 @@ class CustomerWIS
         
         return $return;
     }
-    public static function customer_create_wis($shop_id, $remarks, $ins, $_item)
+    public static function customer_create_wis($shop_id, $remarks, $ins, $_item = array())
     {
         $validate = null;
         $warehouse_id = $ins['cust_wis_from_warehouse'];
         // dd($_item);
-        foreach ($_item as $key => $value)
+
+        if(count($_item) <= 0)
         {
-            $validate .= CustomerWIS::get_consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
+            $validate .= "Please Select item.<br>";
+        }
+        if(!$ins['destination_customer_id'])
+        {
+            $validate .= "Please Select customer.<br>";
+        }
+        if(!$validate)
+        {
+            foreach ($_item as $key => $value)
+            {
+                $validate .= CustomerWIS::get_consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
+            }        
         }
         
         $check = Tbl_customer_wis::where('cust_wis_number',$ins['cust_wis_number'])->where('cust_wis_shop_id',$shop_id)->first();
@@ -73,7 +85,6 @@ class CustomerWIS
         {
             $validate .= 'WIS number already exist';
         }
-
         if(!$validate)
         {
             $wis_id = Tbl_customer_wis::insertGetId($ins);

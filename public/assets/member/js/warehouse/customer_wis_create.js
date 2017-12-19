@@ -33,6 +33,15 @@ function customer_wis_create()
 		event_remove_tr();
 
 	}
+
+	function action_reassign_number()
+	{
+		var num = 1;
+		$(".invoice-number-td").each(function(){
+			$(this).html(num);
+			num++;
+		});
+	}
 	function event_remove_tr()
 	{		
 		$(document).on("click", ".remove-tr", function(e)
@@ -109,6 +118,7 @@ function customer_wis_create()
 	{
 		$("tbody.draggable").append(global_tr_html);
 		action_initialize_select();
+		action_reassign_number();
 	}
 	function event_submit_form()
 	{

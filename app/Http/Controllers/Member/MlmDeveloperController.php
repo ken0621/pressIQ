@@ -40,6 +40,7 @@ class MlmDeveloperController extends Member
 
     public function myTest()
     {
+        dd(Tbl_mlm_slot::where('slot_id', 65834)->membership()->first());
         $data =  $plan_settings = Tbl_mlm_plan::where('shop_id', $this->user_info->shop_id)
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')

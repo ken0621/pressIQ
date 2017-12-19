@@ -321,13 +321,16 @@ class Item
         Tbl_item::where('item_id',$item_id)->update($insert);
         Tbl_item_bundle::where('bundle_bundle_id',$item_id)->delete();
 
-        foreach ($_item as $key => $value) 
+        if(count($_item) > 0)
         {
-            $ins_item['bundle_bundle_id'] = $item_id;
-            $ins_item['bundle_item_id'] = $value['item_id'];
-            $ins_item['bundle_qty'] = $value['quantity'];
+            foreach ($_item as $key => $value) 
+            {
+                $ins_item['bundle_bundle_id'] = $item_id;
+                $ins_item['bundle_item_id'] = $value['item_id'];
+                $ins_item['bundle_qty'] = $value['quantity'];
 
-            Tbl_item_bundle::insert($ins_item);
+                Tbl_item_bundle::insert($ins_item);
+            }
         }
 
         $return['item_id']       = $item_id;
@@ -1716,7 +1719,7 @@ class Item
         {
             if($item_membership_id == "EZ" && $shop_id == 5)
             {
-                $query->join("tbl_brown_ez_program","tbl_brown_ez_program.record_program_log_id","=","tbl_warehouse_inventory_record_log.record_log_id");
+                $query->where("apply_ez_program",1);
             }
             else
             {
@@ -1790,7 +1793,7 @@ class Item
         return $data; 
     } 
 
-    public static function assemble_membership_kit($shop_id, $warehouse_id, $item_id, $quantity,$ez_program = null)
+    public static function assemble_membership_kit($shop_id, $warehouse_id, $item_id, $quantity)
     {
         $item_list = Item::get_item_in_bundle($item_id);
         $_item = [];
@@ -1806,7 +1809,6 @@ class Item
         {
             $source['name'] = 'assemble_item';
             $source['id'] = $item_id;
-            $source['ez_program'] = $ez_program;
             $validate_consume .= Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, 'Refill Item upon assembling membership kit Item#'.$item_id, $source);            
         }
 

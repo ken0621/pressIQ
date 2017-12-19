@@ -171,12 +171,12 @@
                             </div>
                             @if($shop_id == 5)
                             <!-- SHOW ONLY IF BROWN -->
-                            <div class="form-group text-right">
+<!--                             <div class="form-group text-right">
                                 <div class="col-md-12">
                                     <label for="ez_credit_program">This item is a credit points?</label>
                                     <input type="checkbox" value="yes" id="ez_credit_program" name="ez_credit_program">
                                 </div>
-                            </div>
+                            </div> -->
                             @endif
                         </div>
                     </div>
@@ -331,6 +331,33 @@
                         </table>
                     </div>
                 </div>
+
+                @if($shop_id == 5)
+                <!-- SHOW ONLY IF BROWN -->
+                <div class="form-group text-right">
+                    <div class="col-md-12">
+                        <label for="apply_ez_program">EZ Program Kit</label>
+                        @if(isset($item_info->apply_ez_program))
+                            <input type="checkbox" value="yes" id="apply_ez_program" name="apply_ez_program" {{$item_info->apply_ez_program == 1 ? "checked" : ""}}>
+                        @else
+                            <input type="checkbox" value="yes" id="apply_ez_program" name="apply_ez_program">
+                        @endif
+                    </div>
+                </div>
+                <!-- SHOW ONLY IF BROWN -->
+                <div class="form-group text-right ez_program_container">
+                    <div class="col-md-12">
+                        <div class="col-md-4 pull-right">
+                            <label for="apply_ez_program_balance">Amount needed to pay</label>
+                            @if(isset($item_info->apply_ez_program_balance))
+                                <input type="text" class="form-control" value="{{$item_info->apply_ez_program_balance}}" id="apply_ez_program_balance" name="apply_ez_program_balance">
+                            @else
+                                <input type="text" class="form-control" value="0" id="apply_ez_program_balance" name="apply_ez_program_balance">
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
     </div>

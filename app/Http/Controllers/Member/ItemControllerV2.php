@@ -121,7 +121,16 @@ class ItemControllerV2 extends Member
 		$insert['membership_id']       		   = Request::input('membership_id') == null ? 0 : Request::input('membership_id');
 		$insert['gc_earning']         		   = Request::input('gc_earning')  == null ? 0 : Request::input('gc_earning');
 		$insert['ez_program_credit']           = Request::input('ez_credit_program')  == null ? 0 : 1;
-		
+		$insert['apply_ez_program']            = Request::input('apply_ez_program')  == null ? 0 : 1;
+		if($insert["apply_ez_program"] == 1)
+		{
+			$insert['apply_ez_program_balance']    = Request::input('apply_ez_program_balance') ? Request::input('apply_ez_program_balance') : 0;
+		}
+		else
+		{
+			$insert['apply_ez_program_balance']    = 0;
+		}
+
 		/*For inventory refill*/
 		$insert['item_quantity'] 		  	   = Request::input('item_initial_qty') == null ? 0 :Request::input('item_initial_qty');
 		$insert['item_date_tracked'] 		   = Request::input('item_date_track') == null ? '' :Request::input('item_date_track');
@@ -223,7 +232,7 @@ class ItemControllerV2 extends Member
         if($access == 1)
         { 
 			$data = $this->get_item();
-
+			$data["shop_id"] = $this->user_info->shop_id;
 			return view("member.itemv2.add_item",$data);
 		}
 		else

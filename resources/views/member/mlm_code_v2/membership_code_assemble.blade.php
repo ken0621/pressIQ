@@ -26,7 +26,7 @@
                         <div class="col-md-12 assembly-table-container-projection">
                         </div>
                     </div>
-                    @if($check_shop_id == 5)
+<!--                     @if($check_shop_id == 5)
                     <div style="border-bottom:1px solid #e5e5e5;"></div>
                         <div class="form-group">
                         	<div class="col-md-12" style="margin-top:25px;">
@@ -47,7 +47,7 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    @endif -->
                 </div>
             </div>
     	</div>

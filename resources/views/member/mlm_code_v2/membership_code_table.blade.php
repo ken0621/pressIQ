@@ -6,8 +6,7 @@
             <th class="text-center" width="200px">Membership</th>
             <th class="text-center" width="250px">Membership Kit</th>
             @if($ez_program == "EZ")
-                <th class="text-center" width="250px">Paid Price</th>
-                <th class="text-center" width="250px">Remaining Balance Price</th>
+                <th class="text-center" width="250px">Amount needed to pay</th>
             @endif
             <th class="text-center"></th>
             <th class="text-center"></th>
@@ -24,8 +23,7 @@
             <td class="text-center">{{$item->membership_name}}</td>
             <td class="text-center">{{$item->item_name}}</td>
             @if($ez_program == "EZ")
-                <td class="text-center">{{$item->paid_price}}</td>
-                <td class="text-center">{{$item->cd_price}}</td>
+                <td class="text-center">{{$item->apply_ez_program_balance}}</td>
             @endif
             @if($item->item_in_use == 'unused')
                 @if($item->record_consume_ref_name == 'reserved')

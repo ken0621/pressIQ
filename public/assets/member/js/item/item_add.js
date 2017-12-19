@@ -15,7 +15,31 @@ function item_add()
 			add_event_change_type();
 			add_action_initialize_select();
 			add_event_click_save();
+			check_ez_kit();
 		});
+	}
+	function check_ez_kit()
+	{
+		$("#apply_ez_program").change(function()
+		{
+			if($(this).is(':checked'))
+			{
+				$(".ez_program_container").show();
+			}
+			else
+			{
+				$(".ez_program_container").hide();
+			}
+		});
+
+		if($("#apply_ez_program").is(':checked'))
+		{
+			$(".ez_program_container").show();
+		}
+		else
+		{
+			$(".ez_program_container").hide();
+		}
 	}
 	function add_event_click_save()
 	{

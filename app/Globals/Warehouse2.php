@@ -26,6 +26,7 @@ use App\Models\Tbl_brown_ez_program;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_transaction;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_membership;
 
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
@@ -468,21 +469,8 @@ class Warehouse2
                 {
                     $insert[$ctr_qty]['record_serial_number'] = $serial[$ctr_qty];
                 }
-                /*FOR BROWN EZ PROGRAM*/
-                if(isset($source['ez_program']))
-                {
-                    $ez_program_id = Tbl_warehouse_inventory_record_log::insertGetId($insert[$ctr_qty]);
 
-                    $insert_ez_program["record_program_log_id"] = $ez_program_id;
-                    $insert_ez_program["shop_program_id"]       = $shop_id;
-                    $insert_ez_program["paid_price"]            = isset($source['ez_program']["paid_price"]) ? $source['ez_program']["paid_price"] : 0;
-                    $insert_ez_program["cd_price"]              = isset($source['ez_program']["cd_price"]) ? $source['ez_program']["cd_price"] : 0;
-                    Tbl_brown_ez_program::insert($insert_ez_program);
-                }
-                else
-                {
-                    Tbl_warehouse_inventory_record_log::insert($insert[$ctr_qty]);
-                }
+                Tbl_warehouse_inventory_record_log::insert($insert[$ctr_qty]);
             }
 
             if(!$inventory_history)

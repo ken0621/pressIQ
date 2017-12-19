@@ -629,6 +629,41 @@ class Mlm_complan_manager
                     Mlm_slot_log::slot_log_points_array($array_gc);
                 }
 
+                if(isset($slot_info->membership_points_direct_ez_bonus))
+                {
+                    if($slot_info->slot_status == "EZ")
+                    {             
+                        $direct_points_ez_bonus = $slot_info->membership_points_direct_ez_bonus;
+                        if($direct_points_ez_bonus)
+                        {
+                            $log_array['earning'] = $direct_points_ez_bonus;
+                            $log_array['level'] = 1;
+                            $log_array['level_tree'] = 'Sponsor Tree';
+                            $log_array['complan'] = 'EZ_REFERRAL_BONUS';
+
+                            $label_ez   = "EZ REFERRAL BONUS";
+                            $message_ez = "Your slot " . $slot_sponsor->slot_no;
+                            $message_ez .= ", earned " . $log_array['earning'];
+                            $message_ez .= " from " .  $label_ez;
+                            $message_ez .= " in level " . $log_array['level'];
+                            $message_ez .= " of " . $log_array['level_tree'];
+                            $message_ez .= ". Sponsor : " . $slot_info->slot_no;
+
+                            $log = $message_ez;
+
+                            $arry_log['wallet_log_slot'] = $slot_sponsor->slot_id;
+                            $arry_log['shop_id'] = $slot_info->shop_id;
+                            $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                            $arry_log['wallet_log_details'] = $log;
+                            $arry_log['wallet_log_amount'] = $direct_points_ez_bonus;
+                            $arry_log['wallet_log_plan'] = "EZ_REFERRAL_BONUS";
+                            $arry_log['wallet_log_status'] = "released";   
+                            $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('EZ_REFERRAL_BONUS', $slot_info->shop_id); 
+                            Mlm_slot_log::slot_array($arry_log);
+                        }
+                    }
+                }
+
 
                 $log_array['earning'] = $direct_points_given;
                 $log_array['level'] = 1;
@@ -653,9 +688,20 @@ class Mlm_complan_manager
                     {
                         /* LEADER REWARD FOR BROWN RANK */
                         $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_sponsor->slot_id)->parent_info()->get();
-
                         foreach($_sponsor_tree as $sponsor_tree)
                         {
+                            $check_brown_null = Tbl_mlm_slot::where("slot_id",$sponsor_tree->slot_id)->where("shop_id",$slot_info->shop_id)->first();
+                            if($check_brown_null)
+                            {
+                                if($check_brown_null->brown_rank_id == null)
+                                {
+                                    $update_rank_null["brown_rank_id"] = 1;
+                                    Tbl_mlm_slot::where("slot_id",$check_brown_null->slot_id)->update($update_rank_null);
+
+                                    $sponsor_tree = Tbl_mlm_slot::where("slot_id",$sponsor_tree->slot_id)->where("shop_id",$slot_info->shop_id)->first();
+                                }
+                            }
+                            
                             Mlm_complan_manager_repurchasev2::brown_leader_reward($sponsor_tree, $slot_sponsor , "Direct Referral", $direct_points_given);
                         }
                     }

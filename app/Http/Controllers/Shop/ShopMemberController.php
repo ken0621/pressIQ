@@ -2902,10 +2902,13 @@ class ShopMemberController extends Shop
                   $check_code_for_ez = Tbl_warehouse_inventory_record_log::where("mlm_pin",$data["pin"])->where("mlm_activation",$data["activation"])->where("record_shop_id",$shop_id)->first();
                   if($check_code_for_ez)
                   {
-                     $ez_code = Tbl_brown_ez_program::where("shop_program_id",$shop_id)->where("record_program_log_id",$check_code_for_ez->record_log_id)->first();
+                     $ez_code = Tbl_item::where("shop_id",$shop_id)->where("item_id",$check_code_for_ez->record_item_id)->first();
                      if($ez_code)
                      {
-                         $slot_stats = "EZ";
+                        if($ez_code->apply_ez_program == 1)
+                        {
+                          $slot_stats = "EZ";
+                        }
                      }
                   }
                   
@@ -2930,24 +2933,31 @@ class ShopMemberController extends Shop
                         $check_code_for_ez = Tbl_warehouse_inventory_record_log::where("mlm_pin",$data["pin"])->where("mlm_activation",$data["activation"])->where("record_shop_id",$shop_id)->first();
                         if($check_code_for_ez)
                         {
-                            $ez_code = Tbl_brown_ez_program::where("shop_program_id",$shop_id)->where("record_program_log_id",$check_code_for_ez->record_log_id)->first();
+                            $ez_code = Tbl_item::where("shop_id",$shop_id)->where("item_id",$check_code_for_ez->record_item_id)->first();
                             if($ez_code)
                             {
-                                $ez_slot_info  = Tbl_mlm_slot::where("slot_id",$slot_id)->first();
-                                $update_ez_slot["slot_status"] = "EZ";
-                                Tbl_mlm_slot::where("slot_id",$ez_slot_info->slot_id)->where("shop_id",$ez_slot_info->shop_id)->update($update_ez_slot);
+                                if($ez_code->apply_ez_program == 1)
+                                {           
+                                    $ez_slot_info  = Tbl_mlm_slot::where("slot_id",$slot_id)->first();
 
-                                // set income to negative
-                                $log                                    = "Congratulations! Your EZ Program Slot " . $ez_slot_info->slot_no . " has been created. " ;
-                                $ez_arry_log['wallet_log_slot']         = $ez_slot_info->slot_id;
-                                $ez_arry_log['shop_id']                 = $ez_slot_info->shop_id;
-                                $ez_arry_log['wallet_log_slot_sponsor'] = $ez_slot_info->slot_id;
-                                $ez_arry_log['wallet_log_details']      = $log;
-                                $ez_arry_log['wallet_log_amount']       = ($ez_code->cd_price * -1);
-                                $ez_arry_log['wallet_log_plan']         = "EZ";
-                                $ez_arry_log['wallet_log_status']       = "released";   
-                                $ez_arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
-                                Mlm_slot_log::slot_array($ez_arry_log);
+
+                                    $update_ez_slot["slot_status"] = "EZ";
+                                    Tbl_mlm_slot::where("slot_id",$ez_slot_info->slot_id)->where("shop_id",$ez_slot_info->shop_id)->update($update_ez_slot);
+                                    $ez_slot_info  = Tbl_mlm_slot::where("slot_id",$slot_id)->membership()->membership_points()->customer()->first();
+                                    Mlm_complan_manager::direct($ez_slot_info);
+
+                                    // set income to negative
+                                    $log                                    = "Congratulations! Your EZ Program Slot " . $ez_slot_info->slot_no . " has been created. " ;
+                                    $ez_arry_log['wallet_log_slot']         = $ez_slot_info->slot_id;
+                                    $ez_arry_log['shop_id']                 = $ez_slot_info->shop_id;
+                                    $ez_arry_log['wallet_log_slot_sponsor'] = $ez_slot_info->slot_id;
+                                    $ez_arry_log['wallet_log_details']      = $log;
+                                    $ez_arry_log['wallet_log_amount']       = ($ez_code->apply_ez_program_balance * -1);
+                                    $ez_arry_log['wallet_log_plan']         = "EZ";
+                                    $ez_arry_log['wallet_log_status']       = "released";   
+                                    $ez_arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                                    Mlm_slot_log::slot_array($ez_arry_log);
+                                }
                             }
                         }
                     }

@@ -65,15 +65,9 @@ class MLM_CodeControllerV2 extends Member
         {
             $item_id            = $request->item_id;
             $quantity           = ($request->quantity <= 0 ? 1 : $request->quantity);
-            $ez_program         = null; 
 
-            if($request->ez_program)
-            {
-                $ez_program["paid_price"] = $request->paid_price;
-                $ez_program["cd_price"]   = $request->cd_price;
-            }
 
-            $return_assemble = Item::assemble_membership_kit($this->user_info->shop_id, $this->current_warehouse->warehouse_id, $item_id, $quantity,$ez_program);
+            $return_assemble = Item::assemble_membership_kit($this->user_info->shop_id, $this->current_warehouse->warehouse_id, $item_id, $quantity);
             
             if(!$return_assemble)
             {

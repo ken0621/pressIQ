@@ -26,10 +26,12 @@
         @yield("css")
         
         <style type="text/css">
+
         .content
         {
             background-color: transparent;
         }
+
         .navbar.sticky
         {
             position: fixed;
@@ -38,8 +40,11 @@
             right: 0;
             z-index: 100;
         }
+
         </style>
+
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        
     </head>
 
     <body>

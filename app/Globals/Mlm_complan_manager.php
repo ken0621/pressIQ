@@ -698,8 +698,16 @@ class Mlm_complan_manager
                                     $update_rank_null["brown_rank_id"] = 1;
                                     Tbl_mlm_slot::where("slot_id",$check_brown_null->slot_id)->update($update_rank_null);
 
-                                    $sponsor_tree = Tbl_mlm_slot::where("slot_id",$sponsor_tree->slot_id)->where("shop_id",$slot_info->shop_id)->first();
+                                    $sponsor_tree->brown_rank_id = 1;
                                 }
+                            }
+                            
+                            
+                            if($slot_sponsor->brown_rank_id == null)
+                            {
+                                $update_rank_null["brown_rank_id"] = 1;
+                                Tbl_mlm_slot::where("slot_id",$slot_sponsor->slot_id)->update($update_rank_null);
+                                $slot_sponsor = Tbl_mlm_slot::where('slot_id', $slot_info->slot_sponsor)->membership()->first();
                             }
                             
                             Mlm_complan_manager_repurchasev2::brown_leader_reward($sponsor_tree, $slot_sponsor , "Direct Referral", $direct_points_given);

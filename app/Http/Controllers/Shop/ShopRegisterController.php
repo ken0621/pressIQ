@@ -51,7 +51,7 @@ class ShopRegisterController extends Shop
                     $insert_user["user_password"]=Crypt::encrypt(request('user_password'));
                     $insert_user["user_date_created"]=Carbon::now();
                     $user_id = tbl_pressiq_user::insertGetId($insert_user);  
-                    return Redirect::to("/signin");   
+                    return Redirect::to("/thank_you");   
                 }       
             }
             else

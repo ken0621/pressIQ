@@ -12,6 +12,7 @@ use App\Globals\Item;
 use App\Globals\Customer;
 use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
+use App\Globals\TransactionSalesReceipt;
 
 use Session;
 use Carbon\Carbon;
@@ -69,5 +70,15 @@ class TransactionSalesReceiptController extends Member
 			}
 		}
 		die(var_dump($btn_action));
+	}
+
+	public function getCountTransaction(Request $request)
+	{
+		$customer_id = $request->customer_id;
+		return TransactionSalesReceipt::CountTransaction($this->user_info->shop_id, $customer_id);
+	}
+	public function getLoadTransaction(Request $request)
+	{
+		dd("Under Maintenance");
 	}
 }

@@ -758,7 +758,7 @@ class Payroll_BioImportController extends Member
     	foreach ($insert_time_record as $key => $value) 
     	{
     		$_time_sheet = Tbl_payroll_time_sheet::where('payroll_time_sheet_id',$value["payroll_time_sheet_id"])->first();
-
+    		//if approve do nothing
     		if ($_time_sheet->time_keeping_approved == 1) 
     		{
     			$insert_time_record[$key]["report"]["status"] = "Failed, Timesheet already approved";
@@ -773,6 +773,7 @@ class Payroll_BioImportController extends Member
     			{
     				$time_in_record = $time_sheet_record->payroll_time_sheet_in;
     				$time_out_record = $time_sheet_record->payroll_time_sheet_out;
+
     				if(($time_in_record > $value["payroll_time_sheet_in"] && $value["payroll_time_sheet_out"]  < $time_out_record)
     				|| ($time_in_record > $value["payroll_time_sheet_in"] && $value["payroll_time_sheet_out"]  < $time_out_record) 
     				|| ($time_in_record == $value["payroll_time_sheet_in"])
@@ -800,13 +801,15 @@ class Payroll_BioImportController extends Member
 
     	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
     	
-
+    	// dd($insert_time_record);
     	$data["success"] 		= $success;
     	$data["overwritten"] 	= $overwritten;
     	$data["failed"]			= $failed;
+
     	if(!empty($insert_time_record))
     	{
     		Tbl_payroll_time_sheet_record::insert($insert_time_record);
+    		
     		$count_inserted = count($insert_time_record);
     		if ($company != null || $company != 0) 
     		{

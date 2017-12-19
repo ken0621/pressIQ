@@ -610,8 +610,8 @@ class MerchantController extends Member
 		$data['table'] = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('record_source_ref_name','rr')->where('item_in_use','used')->paginate(10);
 		$total = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('item_in_use','used')->sum('item_price');
 		
-		$commission = Tbl_merchant_commission_report_setting::where('merchant_warehouse_id',$warehouse_id);
-		$q = Tbl_merchant_commission_report_setting::where('merchant_warehouse_id',$warehouse_id)->first();
+		$commission = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id);
+		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->first();
 		if(count($q)>0)
 		{
 			$commission = $q->merchant_percentage;

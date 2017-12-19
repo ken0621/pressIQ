@@ -3,6 +3,8 @@ Route::group(array('prefix' => '/member/transaction'), function()
 {
 	/* Purchase Order */
 	AdvancedRoute::controller('/purchase_order', 'Member\TransactionPurchaseOrderController');
+	/* Purchase Requesition */
+	AdvancedRoute::controller('/purchase_requisition', 'Member\TransactionPurchaseRequisitionController');
 	/* Receive Inventory */
 	AdvancedRoute::controller('/receive_inventory', 'Member\TransactionReceiveInventoryController');
 	/* Receive Inventory With Bill */

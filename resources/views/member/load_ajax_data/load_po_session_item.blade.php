@@ -12,7 +12,7 @@
         </td>
         <td>
             @if($pis)
-                <label class="textarea-expand txt-desc" name="itemline_description[]">{{$items['poline_description']}}</label>
+                <textarea class="textarea-expand txt-desc" name="itemline_description[]" readonly="true">{{$items['poline_description']}}</textarea>
             @else
                 <textarea class="textarea-expand txt-desc" name="itemline_description[]">{{$items['poline_description']}}</textarea>
             @endif
@@ -51,7 +51,7 @@
     </td>
     <td>
         @if($pis)
-            <label class="textarea-expand txt-desc" name="itemline_description[]"></label>
+            <textarea class="textarea-expand txt-desc" readonly="true" name="itemline_description[]"></textarea>
         @else
             <textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea>
         @endif

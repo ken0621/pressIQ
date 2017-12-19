@@ -1,7 +1,8 @@
 $(document).ready(function () 
 {
-	$(document).on('#btn_add_recipient',function(){
-	
+	$(document).on('#submit_button',function(){
+	   
+       alert('123');
 
 	});
 });

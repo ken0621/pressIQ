@@ -148,7 +148,7 @@
                                                         
                                                         <td>
                                                             @if($pis)
-                                                                <label class="textarea-expand txt-desc" name="invline_description[]" value="{{$invline->invline_service_date}}"></label>
+                                                                <textarea class="textarea-expand txt-desc" readonly="true" name="invline_description[]">{{$invline->invline_service_date}}</textarea>
                                                             @else
                                                                 <textarea class="textarea-expand txt-desc" name="invline_description[]" value="{{$invline->invline_service_date}}"></textarea>
                                                             @endif
@@ -196,7 +196,7 @@
                                                     </td>
                                                     <td>
                                                     @if($pis)
-                                                        <label class="textarea-expand txt-desc" name="invline_description[]"></label>
+                                                        <textarea class="textarea-expand txt-desc" readonly="true" name="invline_description[]" value=""></textarea>
                                                     @else
                                                         <textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea>
                                                     @endif
@@ -373,7 +373,7 @@
                                                             </td>
                                                             <td>
                                                                 @if($pis)
-                                                                    <label class="textarea-expand txt-desc" name="cmline_description[]" value="{{$cmline->cmline_service_date}}"></label>
+                                                                    <textarea readonly="true" class="textarea-expand txt-desc" name="cmline_description[]">{{$cmline->cmline_service_date}}</textarea>
                                                                 @else    
                                                                     <textarea class="textarea-expand txt-desc" name="cmline_description[]" value="{{$cmline->cmline_service_date}}"></textarea>
                                                                 @endif
@@ -412,7 +412,7 @@
                                                         </td>
                                                         <td>
                                                             @if($pis)
-                                                                <label class="textarea-expand txt-desc" name="cmline_description[]"></label>
+                                                                <textarea class="textarea-expand txt-desc" readonly="true" name="cmline_description[]"></textarea>
                                                             @else
                                                                 <textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea>
                                                             @endif
@@ -441,7 +441,7 @@
                                                         </td>
                                                         <td>
                                                             @if($pis)
-                                                                <label class="textarea-expand txt-desc" name="cmline_description[]"></label>
+                                                                <textarea readonly="true" class="textarea-expand txt-desc" name="cmline_description[]"></textarea>
                                                             @else
                                                                 <textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea>
                                                             @endif
@@ -520,7 +520,7 @@
             </td>
             <td>
             @if($pis)
-                <label class="textarea-expand txt-desc" name="invline_description[]"></label>
+                <textarea class="textarea-expand txt-desc" readonly="true" name="invline_description[]"></textarea>
             @else
                 <textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea>
             @endif
@@ -553,7 +553,7 @@
             </td>
             <td>
                 @if($pis)
-                    <label class="textarea-expand txt-desc" name="cmline_description[]"></label>
+                    <textarea class="textarea-expand txt-desc" name="cmline_description[]" readonly="true"></textarea>
                 @else
                     <textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea>
                 @endif

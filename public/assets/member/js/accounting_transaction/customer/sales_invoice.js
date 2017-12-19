@@ -169,6 +169,7 @@ function sales_invoice()
 			{				
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
 				$(".customer-billing-address").val($(this).find("option:selected").attr("billing-address"));
+				action_load_open_transaction($(this).val());
 			}
 		});
 
@@ -226,6 +227,27 @@ function sales_invoice()
     		}
 
         }).globalDropList('disabled');
+	}
+	function action_load_open_transaction($customer_id)
+	{
+		if($customer_id)
+		{
+			$.ajax({
+				url : '/member/transaction/sales_invoice/count-transaction',
+				type : 'get',
+				data : {customer_id : $customer_id},
+				success : function(data)
+				{
+					$(".open-transaction").slideDown();
+					$(".popup-link-open-transaction").attr('link','/member/transaction/sales_invoice/load-transaction?c='+$customer_id);
+					$(".count-open-transaction").html(data);
+				}
+			});
+		}
+		else
+		{
+			$(".open-transaction").slideUp();
+		}
 	}
 	function event_remove_tr()
 	{

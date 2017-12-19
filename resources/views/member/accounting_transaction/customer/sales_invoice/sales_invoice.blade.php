@@ -54,8 +54,11 @@
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$inv->inv_customer_email or ''}}"/>
                                 </div>
+                                <div class="col-sm-4 text-right open-transaction" style="display: none;">
+                                    <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/sales_invoice/load_transaction?customer_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
+                                </div>
                             </div>
-                        </div>                          
+                        </div>
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Billing Address</label>
@@ -63,17 +66,17 @@
                             </div>
                             <div class="col-sm-2">  
                                 <label>Terms</label>
-                                <select class="form-control input-sm droplist-terms" name="customer_terms">
+                                <select class="form-control input-sm new droplist-terms" name="customer_terms">
                                     @include("member.load_ajax_data.load_terms", ['terms_id' => isset($inv) ? $inv->inv_terms_id : ''])
                                 </select>
                             </div>
                             <div class="col-sm-2">
                                 <label>Invoice Date</label>
-                                <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{isset($inv) ? dateFormat($inv->inv_date) : date('m/d/y')}}"/>
+                                <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{isset($inv) ? dateFormat($inv->inv_date) : date('m/d/Y')}}"/>
                             </div>
                             <div class="col-sm-2">
                                 <label>Due Date</label>
-                                <input type="text" class="datepicker form-control input-sm" name="transaction_duedate" value="{{isset($inv) ? dateFormat($inv->inv_due_date) : date('m/d/y')}}" />
+                                <input type="text" class="datepicker form-control input-sm" name="transaction_duedate" value="{{isset($inv) ? dateFormat($inv->inv_due_date) : date('m/d/Y')}}" />
                             </div>
                         </div>
                         

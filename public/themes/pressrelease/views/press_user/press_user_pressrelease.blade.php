@@ -21,14 +21,14 @@
                 <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
-                  <input type="text" name="pr_headline" class="form-control" autofocus value="{{$edits->pr_headline}}">
+                  <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus value="{{$edits->pr_headline}}">
                   <div class="title">Content:</div>
-                  <textarea name="pr_content" id="tinymce">{!!$edits->pr_content!!}</textarea>
+                  <textarea name="pr_content" id="pr_content">{!!$edits->pr_content!!}</textarea>
                   <div class="title">Boilerplate:</div>
-                  <textarea name="pr_boiler_content" id="tinymce">{!!$edits->pr_boiler_content!!}</textarea>
+                  <textarea name="pr_boiler_content" id="pr_boiler_content">{!!$edits->pr_boiler_content!!}</textarea>
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                  <span class="preview-button"><button onclick="tinyMCE.activeEditor.execCommand('mcePreview');">Preview</button></span>
+                  <span class="preview-button"><button onclick="preview()">Preview</button></span>
                   </div>
                 </div>
 
@@ -81,13 +81,12 @@
                   <div class="title">Headline:</div>
                   <input type="text" name="pr_headline" class="form-control" id="pr_headline"  onclick="showMessage()" autofocus>
                   <div class="title">Content:</div>
-                  <textarea name="pr_content" id="tinymce"></textarea>
+                  <textarea name="pr_content" id="pr_content"></textarea>
                   <div class="title">Boilerplate:</div>
-                  <textarea name="pr_boiler_content" id="tinymce"></textarea>
+                  <textarea name="pr_boiler_content" id="pr_boiler_content"></textarea>
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft">Save as draft</button></span>
-                  <span class="preview-button"><button type="button" data-toggle="modal" data-target="#previewPopup" 
-                  >Preview</button></span>
+                  <span class="preview-button"><button type="button" onclick="preview()">Preview</button></span>
                   </div>
                 </div>
 
@@ -165,8 +164,7 @@
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Modal Header</h4>
         </div>
-        <div class="modal-body">
-          <p>This is a large modal.</p>
+        <div class="modal-body" id="preview_content">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -308,5 +306,13 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     var data = $('.recipient_form').serialize();
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
 });
+  function preview()
+  {
+    var headline = document.getElementById('pr_headline').value;
+    var content = tinymce.get('pr_content').getContent();
+    var boiler_content = tinymce.get('pr_boiler_content').getContent();
+    document.getElementById('preview_content').innerHTML =headline+ "<br>" + content + "<br>About the Publisher" + boiler_content;
+    $('#previewPopup').modal('show'); 
+  }
 </script>
 @endsection

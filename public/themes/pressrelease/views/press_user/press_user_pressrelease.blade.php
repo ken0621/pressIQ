@@ -162,9 +162,16 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
+          <h4 class="modal-title">Preview</h4>
         </div>
-        <div class="modal-body" id="preview_content">
+        <div class="modal-body">
+          <div id="preview_headline">
+          </div>
+          <div id="preview_content">
+          </div>
+          <div><p>About the Publisher</p></div>
+          <div id="preview_boiler_content">
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -311,7 +318,9 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     var headline = document.getElementById('pr_headline').value;
     var content = tinymce.get('pr_content').getContent();
     var boiler_content = tinymce.get('pr_boiler_content').getContent();
-    document.getElementById('preview_content').innerHTML =headline+ "<br>" + content + "<br>About the Publisher" + boiler_content;
+    document.getElementById('preview_headline').innerHTML =headline;
+    document.getElementById('preview_content').innerHTML =content;
+    document.getElementById('preview_boiler_content').innerHTML =boiler_content;
     $('#previewPopup').modal('show'); 
   }
 </script>

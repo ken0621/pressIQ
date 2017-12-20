@@ -57,7 +57,7 @@
     <div id="overlay" onclick="off()"></div>
 
     <div class="side-nav">
-        <nav class="pushmenu pushmenu-left">
+        <div class="pushmenu pushmenu-left">
 
             <div class="space1"></div>
             {{-- <div class="row-no-padding clearfix">
@@ -74,7 +74,7 @@
                 <li onclick="off()"> <a href="javascript:"><i class="fa fa-phone" aria-hidden="true"></i> SUPPORT</a></li>
                 <li onclick="off()"> <a href="/login"> <i class="fa fa-sign-in" aria-hidden="true"></i> SIGN IN</a></li>
             </ul>
-        </nav>
+        </div>
     </div>
 
     <div class="blur-me">

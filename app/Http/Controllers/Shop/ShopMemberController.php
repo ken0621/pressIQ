@@ -464,6 +464,7 @@ class ShopMemberController extends Shop
                             ->Orwhere('position','like','%'.$search_key.'%')
                             ->get();
       return view("press_user.search_recipient", $data);
+      
     }
 
 
@@ -480,6 +481,7 @@ class ShopMemberController extends Shop
             });
         }
     }
+
     public function press_release_save_as_draft(Request $request)
     {   
         $pr_info["pr_headline"]     =$request->pr_headline;
@@ -722,7 +724,7 @@ class ShopMemberController extends Shop
     public function pressadmin_email()
     {   
 
-        $data['_email'] = Tbl_pressiq_press_releases::get();
+        $data['_email'] = Tbl_pressiq_press_releases::paginate(5);
 
 
         if(Session::exists('user_email'))
@@ -744,6 +746,12 @@ class ShopMemberController extends Shop
         }
     }
 
+    public function email_delete($id)
+    {
+      Tbl_pressiq_press_releases::where('pr_id',$id)->delete();
+      Session::flash('delete_email', "Email Already Deleted!");
+      return  redirect::back();
+    }
 
     public function pressadmin_pressrelease_addrecipient(Request $request)
     {

@@ -79,7 +79,7 @@
                 <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
-                  <input type="text" name="pr_headline" class="form-control" autofocus>
+                  <input type="text" name="pr_headline" class="form-control" id="pr_headline"  onclick="showMessage()" autofocus>
                   <div class="title">Content:</div>
                   <textarea name="pr_content" id="tinymce"></textarea>
                   <div class="title">Boilerplate:</div>
@@ -140,7 +140,7 @@
                   <div class="title">Publisher:</div>
                   <div class="content">{{session('user_first_name')}} {{session('user_last_name')}}</div>
                   <div class="title">Title:</div>
-                  <div class="content">Press Release</div>
+                  <div class="content" id = "display_message"></div>
                   <div class="title">Send To:</div>
                   <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
 
@@ -293,6 +293,13 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
      //   ed.execCommand('mceImage');
      // }
    });
+</script>
+
+<script type="text/JavaScript">
+    function showMessage(){
+        var pr_headline = document.getElementById("pr_headline").value;
+        display_message.innerHTML= pr_headline;
+    }
 </script>
 
 <script type="text/javascript">

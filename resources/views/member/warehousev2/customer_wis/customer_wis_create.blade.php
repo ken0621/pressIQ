@@ -38,81 +38,33 @@
         </div>
         <div class="form-group">
             <div class="col-md-4">
-                <label>Customer Name</label>
                 <select class="form-control droplist-customer input-sm pull-left" name="customer_id" data-placeholder="Select a Customer" required>
                     @include('member.load_ajax_data.load_customer', ['customer_id' => isset($est) ? $est->customer_id : (isset($c_id) ? $c_id : '') ]);
                 </select>
             </div>
             <div class="col-md-4">
-                <label>Delivery Date</label>
-                <input type="text" name="delivery_date" class="form-control" value="{{ date('m/d/Y') }}">
+                 <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)"/>
             </div>
             <div class="col-sm-4 text-right open-transaction" style="display: none;">
                 <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/sales_invoice/load_transaction?customer_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
             </div>
-            <div class="col-md-6">
+        </div>
+        <div class="form-group">
+            <div class="col-md-4">
                 <label>Ship to</label>
                 <div>
-                    <textarea required class="form-control" name="customer_address"></textarea>
+                    <textarea required class="form-control customer-billing-address" name="customer_address"></textarea>
                 </div>
             </div>
-            <div class="col-md-6">
-                <label>Remarks</label>
-                <div>
-                    <textarea required class="form-control" name="cust_wis_remarks"></textarea>
-                </div>
+            <div class="col-md-4">
+                <label>Delivery Date</label>
+                <input type="text" name="delivery_date" class="form-control" value="{{ date('m/d/Y') }}">
             </div>
         </div>
         <div class="form-group hide">
             <div class="col-md-12">
                 <div class="load-item-table-pos-s"></div>
             </div>
-        </div>
-        <div class="form-group draggable-container hidden">
-            <div class="col-md-12">
-                <div class="table">
-                    <table class="digima-table">
-                        <thead>
-                            <tr>
-                                <th class="text-center" >#</th>
-                                <th class="text-left" >ITEM</th>
-                                <th class="text-left" >ITEM DESCRIPTION</th>
-                                <th class="text-center" width="180px">REMAINING QTY</th>
-                                <th class="text-center" width="180px">ISSUED QUANTITY</th>
-                                <th width="50px"></th>
-                            </tr>                            
-                        </thead>
-                        <tbody class="draggable tbody-item">
-                            <tr class="tr-draggable">
-                                <td class="invoice-number-td text-center">1</td>
-                                <td>
-                                    <select class="form-control droplist-item input-sm" name="item_id[]" >
-                                        @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                        <option class="hidden" value="" />
-                                    </select>
-                                </td>
-                                <td><textarea class="form-control txt-desc" name="item_remarks[]"></textarea></td>
-                                <td class="text-center"><label class="txt-remaining-qty"></label> </td>
-                                <td><input class="form-control number-input" type="text" name="item_quantity[]"/></td>
-                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                            </tr>
-                            <tr class="tr-draggable">
-                                <td class="invoice-number-td text-center">2</td>
-                                <td>
-                                    <select class="form-control droplist-item input-sm" name="item_id[]" >
-                                        @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                        <option class="hidden" value="" />
-                                    </select>
-                                </td>
-                                <td><textarea class="form-control txt-desc" name="item_remarks[]"></textarea></td>
-                                <td class="text-center"><label class="txt-remaining-qty"></label> </td>
-                                <td><input class="form-control number-input" type="text" name="item_quantity[]"/></td>
-                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                            </tr>
-                        </tbody>
-                    </table>                    
-                </div>                
-            </div>            
         </div>
 
         <div class="form-group draggable-container">
@@ -135,14 +87,14 @@
                             <tr class="tr-draggable">
                                 <td class="invoice-number-td text-center">1</td>
                                 <td>
-                                    <select class="form-control droplist-item input-sm" name="item_id[]" >
+                                    <select class="form-control droplist-item select-item input-sm" name="item_id[]" >
                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                         <option class="hidden" value="" />
                                     </select>
                                 </td>
                                 <td><textarea class="form-control txt-desc" name="item_remarks[]"></textarea></td>
                                 <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                <td><input class="form-control number-input txt-qty" type="text" name="item_quantity[]"/></td>
+                                <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_quantity[]"/></td>
                                 <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]"/></td>
                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
@@ -150,14 +102,14 @@
                             <tr class="tr-draggable">
                                 <td class="invoice-number-td text-center">2</td>
                                 <td>
-                                    <select class="form-control droplist-item input-sm" name="item_id[]" >
+                                    <select class="form-control droplist-item select-item input-sm" name="item_id[]" >
                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                         <option class="hidden" value="" />
                                     </select>
                                 </td>
                                 <td><textarea class="form-control txt-desc" name="item_remarks[]"></textarea></td>
                                 <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                <td><input class="form-control number-input txt-qty" type="text" name="item_quantity[]"/></td>
+                                <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_quantity[]"/></td>
                                 <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]"/></td>
                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
@@ -166,6 +118,26 @@
                     </table>                    
                 </div>                
             </div>            
+        </div>
+
+        <div class="row clearfix">
+            <div class="col-md-6">
+                <label>Remarks</label>
+                <div>
+                    <textarea required class="form-control" name="cust_wis_remarks"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-7 text-right digima-table-label">
+                      Total
+                    </div>
+                    <div class="col-md-5 text-right digima-table-value total">
+                        <input type="hidden" name="overall_price" class="total-amount-input" />
+                        PHP&nbsp;<span class="total-amount">0.00</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -185,7 +157,7 @@
             </td>
             <td><textarea class="form-control txt-desc" name="item_remarks[]"></textarea></td>
             <td><select class="2222 select-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-            <td><input class="form-control number-input txt-qty" type="text" name="item_quantity[]"/></td>
+            <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_quantity[]"/></td>
             <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]"/></td>
             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>

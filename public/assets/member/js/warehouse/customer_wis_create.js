@@ -31,6 +31,7 @@ function customer_wis_create()
 		action_initialize_select();
 		action_lastclick_row();
 		event_remove_tr();
+		event_compute_class_change();
 
 	}
 
@@ -61,7 +62,9 @@ function customer_wis_create()
     		placeholder : "Select Customer...",
 			link : "/member/customer/modalcreatecustomer",
 			onChangeValue: function()
-			{			
+			{
+				$(".customer-email").val($(this).find("option:selected").attr("email"));
+				$(".customer-billing-address").val($(this).find("option:selected").attr("billing-address"));
 				action_load_open_transaction($(this).val());		
 			}
 		});
@@ -136,7 +139,17 @@ function customer_wis_create()
 		$sales  = parseFloat($item.find("option:selected").attr("price"));
 		$qty    = parseFloat($parent.find(".txt-qty").val());
 
-		$parent.find(".txt-rate").val( $um_qty * $sales * $qty ).change();
+		$parent.find(".txt-rate").val($um_qty * $sales * $qty).change();
+
+    	action_compute();
+	}
+
+	function event_compute_class_change()
+	{
+		$(document).on("change",".compute", function()
+		{
+			action_compute();
+		});
 	}
 	function action_load_open_transaction($customer_id)
 	{

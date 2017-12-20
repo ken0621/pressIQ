@@ -1,13 +1,14 @@
 <?php
 namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Crypt;
 use Redirect;
-use Request;
 use View;
 use DB;
-
+use App\Models\Tbl_press_release_recipient;
 use App\Tbl_pressiq_press_releases;
+
 
 class ShopNewsRoomController extends Shop
 {
@@ -16,7 +17,7 @@ class ShopNewsRoomController extends Shop
         $pr = DB::table('tbl_pressiq_press_releases')
                 ->where('pr_status', "sent")
                 ->orderByRaw('pr_date_sent DESC')
-                ->get();
+                ->paginate(5);
 
         $data["pr"]=$pr;
         $data["page"] = "News Room";
@@ -31,5 +32,14 @@ class ShopNewsRoomController extends Shop
         $data["pr"]=$pr;
         $data["page"] = "News Room";
         return view("news_room_view", $data);
+    }
+
+    public function newsroom_search(Request $request)
+    {  
+      $search_newsroom = $request->search_newsroom;
+      $data["pr"] = Tbl_pressiq_press_releases::where('pr_headline','like','%'.$search_newsroom.'%')
+                    ->get();
+
+      return view("search_news_room", $data);
     }
 }

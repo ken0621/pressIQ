@@ -75,7 +75,12 @@ class AccountingTransaction
 		$check = Tbl_acctg_transaction_list::where("transaction_ref_name", $transaction_name)-
 											->where("transaction_ref_id", $transaction_id)->first();
 		
-		return $check;
+		$return = null;
+		if($check)
+		{
+			$return = $check->acctg_transaction_id;
+		}
+		return $return;
 	}
 	public static function updateTransaction($shop_id, $acctg_trans_id, $trans_item = array())
 	{

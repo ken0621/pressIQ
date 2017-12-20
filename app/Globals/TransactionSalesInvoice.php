@@ -19,6 +19,8 @@ class TransactionSalesInvoice
 	}
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
+		$return  = null; 
+
 		$ins['inv_shop_id']                  = $shop_id;  
 		$ins['inv_customer_id']              = $insert['customer_id'];  
 		$ins['transaction_refnumber'] 		 = $insert['transaction_refnumber'];   
@@ -53,5 +55,23 @@ class TransactionSalesInvoice
 
         $ins['inv_subtotal_price']           = $subtotal_price;
         $ins['inv_overall_price']            = $overall_price;
+
+
+        if(count($insert_item) <= 0)
+        {
+        	$return .= "Please Select item. <br>";
+        }
+        if(!$insert['customer_id'])
+        {
+        	$return .= "Please Select customer. <br>";        	
+        }
+
+
+
+        return $return; 
+	}
+	public static function insertline($id, $insert_item)
+	{
+		
 	}
 }

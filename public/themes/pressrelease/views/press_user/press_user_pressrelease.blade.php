@@ -79,7 +79,7 @@
                 <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
-                  <input type="text" name="pr_headline" class="form-control" autofocus>
+                  <input type="text" name="pr_headline" class="form-control" id="pr_headline"  onclick="showMessage()" autofocus>
                   <div class="title">Content:</div>
                   <textarea name="pr_content" id="tinymce"></textarea>
                   <div class="title">Boilerplate:</div>
@@ -126,8 +126,8 @@
                     <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                    <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span>
-                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px">0</span></span>
+                    <span class="choose-button"><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span>
+                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
 
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
@@ -138,12 +138,17 @@
                 <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">Send Release</div>
                   <div class="title">Publisher:</div>
-                  <div class="content">Digima Web Solution</div>
+                  <div class="content">{{session('user_first_name')}} {{session('user_last_name')}}</div>
                   <div class="title">Title:</div>
-                  <div class="content">Press Release</div>
+                  <div class="content" id = "display_message"></div>
+                  <div class="title">Send To:</div>
+                  <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
+
+
                   <div class="button-container">
                     <button type="submit" formaction="/pressuser/pressrelease/pr">Send</button>
                   </div>
+
                 </div>
               </form>
             </div>
@@ -288,6 +293,13 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
      //   ed.execCommand('mceImage');
      // }
    });
+</script>
+
+<script type="text/JavaScript">
+    function showMessage(){
+        var pr_headline = document.getElementById("pr_headline").value;
+        display_message.innerHTML= pr_headline;
+    }
 </script>
 
 <script type="text/javascript">

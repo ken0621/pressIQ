@@ -72,9 +72,19 @@ class TransactionSalesInvoiceController extends Member
 				$insert_item[$key]['item_taxable'] = $request->item_taxable[$key];
 			}
 		}
+		$return = null;
+		$validate = TransactionSalesInvoice::postInsert($this->user_info->shop_id, $insert, $insert_item);
+		if(is_numeric($validate))
+		{
+			
+		}
+		else
+		{
+			$return['status'] = 'error';
+			$return['status_message'] = $validate;
+		}
 
-		$return = TransactionSalesInvoice::postInsert($this->user_info->shop_id, $insert, $insert_item);
-		die(var_dump($btn_action));
+		return json_encode($return);
 	}
 	public function getCountTransaction(Request $request)
 	{

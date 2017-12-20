@@ -38,14 +38,14 @@ class TransactionSalesInvoice
         $ins['date_created']                 = Carbon::now();
 
         /* SUBTOTAL */
-        $subtotal_price = collect($item_info)->sum('item_amount');
+        $subtotal_price = collect($insert_item)->sum('item_amount');
 
         /* DISCOUNT */
         $discount = $insert['customer_discount'];
         if($insert['customer_discounttype'] == 'percent') $discount = (convertToNumber($insert['customer_discount']) / 100) * $subtotal_price;
 
         /* TAX */
-        $tax = (collect($item_info)->where('item_taxable', '1')->sum('item_amount')) * 0.12;
+        $tax = (collect($insert_item)->where('item_taxable', '1')->sum('item_amount')) * 0.12;
 
         /* EWT */
         $ewt = $subtotal_price*convertToNumber($insert['customer_ewt']);
@@ -72,6 +72,10 @@ class TransactionSalesInvoice
 	}
 	public static function insertline($id, $insert_item)
 	{
-		
+
+	}
+	public static function validation($insert, $insert_item)
+	{
+
 	}
 }

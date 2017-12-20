@@ -18,6 +18,7 @@
                 {{csrf_field()}}
                 @if(session()->has("pr_edit"))
                 @foreach($edit as $edits)
+                <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST" style="">
                 <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
@@ -73,6 +74,7 @@
                     <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
                     <div class="button-container"></div>
                 </div>
+
                 @endforeach
 
                 @else
@@ -215,9 +217,9 @@
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_user_pressrelease.css">
-<!-- <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script> -->
 @endsection
 @section("script")
+
 <script>
    function openCity(evt, cityName) 
    {
@@ -235,7 +237,7 @@
    }
    
    // Get the element with id="defaultOpen" and click on it
-   document.getElementById("defaultOpen").click();
+   document.getElementById("defaultOpen").onclick();
    
    $(".chosen-select").chosen({disable_search_threshold: 10});
 </script>

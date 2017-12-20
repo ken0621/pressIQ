@@ -45,8 +45,8 @@ class TransactionSalesInvoiceController extends Member
 		$insert['customer_id'] 			 = $request->customer_id;
 		$insert['customer_email']        = $request->customer_email;
 		$insert['customer_address']      = $request->customer_address;
-		$insert['transaction_date']      = $request->transaction_date;
-		$insert['transaction_duedate']   = $request->transaction_duedate;
+		$insert['transaction_date']      = date("Y-m-d", strtotime($request->transaction_date));
+		$insert['transaction_duedate']   = date("Y-m-d", strtotime($request->transaction_duedate));
 		$insert['customer_message']      = $request->customer_message;
 		$insert['customer_memo']         = $request->customer_memo;
 		$insert['customer_ewt']          = $request->customer_ewt;
@@ -72,6 +72,8 @@ class TransactionSalesInvoiceController extends Member
 				$insert_item[$key]['item_taxable'] = $request->item_taxable[$key];
 			}
 		}
+
+		$return = TransactionSalesInvoice::postInsert($this->user_info->shop_id, $insert, $insert_item);
 		die(var_dump($btn_action));
 	}
 	public function getCountTransaction(Request $request)

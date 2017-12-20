@@ -90,5 +90,10 @@ class TransactionReceiveInventoryController extends Member
 
         die(var_dump($btn_action));
     }
+    public function getCountTransaction(Request $request)
+    {
+        $vendor_id = $request->vendor_id;
+        return TransactionReceiveInventory::countTransaction();
+    }
     
 }

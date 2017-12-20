@@ -54,6 +54,10 @@
                    <input type="text" class="form-control" name="requisition_slip_number">
                 </div>
             </div>
+            <div class="col-sm-3 text-right"></div>
+            <div class="col-sm-3 text-right">
+                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_requisition/load-transaction"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">{{$count_so}}</span> Open Transaction</a></h4>
+            </div>
         </div>
         <div class="form-group">
             <div class="col-md-6">

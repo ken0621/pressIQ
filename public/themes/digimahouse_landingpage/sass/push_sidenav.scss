@@ -12,7 +12,7 @@ $bold: 700;
 }
 
 .pushmenu 
-{ 
+{
     /*this is the nav*/
      // background-color: #0051FF;
      background-color: rgba(0,81,255,0.8);
@@ -307,8 +307,9 @@ $bold: 700;
             .fa
             {
                 display: block;
-                background-color: #0051FF;
-                color: #fff;
+                background-color: inherit;
+                color: #0051FF;
+                border: 2px solid #0051FF;
                 padding: 8px;
                 font-size: 25px;
                 font-weight: 300;

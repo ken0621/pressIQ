@@ -44,6 +44,7 @@ function write_check()
 				if($(this).find("option:selected").attr("reference") == "vendor")
 				{
 					load_purchase_order_vendor($(this).find("option:selected").attr("value"));
+					action_load_open_transaction($(this).val());
 				}
 			}
 		});
@@ -130,7 +131,27 @@ function write_check()
 		    placeholder : 'Account'
 		});
 	}
-
+	function action_load_open_transaction($vendor_id)
+	{
+		if($vendor_id)
+		{
+			$.ajax({
+				url : '/member/transaction/write_check/count-transaction',
+				type : 'get',
+				data : {vendor_id : $vendor_id},
+				success : function(data)
+				{
+					$(".open-transaction").slideDown();
+					$(".popup-link-open-transaction").attr('link','/member/transaction/write_check/load-transaction?v='+$vendor_id);
+					$(".count-open-transaction").html(data);
+				}
+			});
+		}
+		else
+		{
+			$(".open-transaction").slideUp();
+		}
+	}
 	function action_compute()
 	{
 		var subtotal = 0;

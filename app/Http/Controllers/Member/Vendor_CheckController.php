@@ -27,6 +27,7 @@ use App\Globals\Billing;
 use App\Globals\Item;
 use App\Globals\Warehouse;
 use App\Globals\UnitMeasurement;
+use App\Globals\Purchasing_inventory_system;
 
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
@@ -47,6 +48,7 @@ class Vendor_CheckController extends Member
     public function write_check()
     {
         Session::forget("po_item");
+        $data['pis']        = Purchasing_inventory_system::check();
         $data["_vendor"]    = Vendor::getAllVendor('active');
         $data["_name"]      = Tbl_customer::unionVendor(WriteCheck::getShopId())->get();
         $data['_item']      = Item::get_all_category_item();

@@ -31,6 +31,7 @@ function vendor_requisition_slip()
 		action_initialize_select();
 		action_lastclick_row();
 		event_remove_tr();
+		event_compute_class_change();
 
 	}
 	function event_remove_tr()
@@ -133,6 +134,16 @@ function vendor_requisition_slip()
 
 	}
 
+	/*ITEM NUMBER*/
+	function action_reassign_number()
+	{
+		var num = 1;
+		$(".invoice-number-td").each(function(){
+			$(this).html(num);
+			num++;
+		});
+	}
+
 	function action_load_unit_measurement($this)
 	{
 		$parent = $this.closest(".tr-draggable");
@@ -153,6 +164,7 @@ function vendor_requisition_slip()
 			$parent = $($this.currentTarget).closest(".tr-draggable");
 			console.log($parent);
 			$parent.find(".txt-amount").val($parent.find('.txt-rate').val() * $($this.currentTarget).val()).change();
+			
 		});
 	}
 	function action_load_item_info($this)
@@ -179,7 +191,91 @@ function vendor_requisition_slip()
 		{
 			$parent.find('.select-vendor').val($this.find("option:selected").attr('item-vendor')).change();
 		}
+
+		action_compute();
 	}
+	function action_add_comma(number)
+	{
+		number += '';
+		if(number == ''){
+			return '';
+		}
+
+		else{
+			return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+	}
+	function event_compute_class_change()
+	{
+		$(document).on("change",".compute", function()
+		{
+			action_compute();
+		});
+	}
+	function action_return_to_number(number = '')
+	{
+		number += '';
+		number = number.replace(/,/g, "");
+		if(number == "" || number == null || isNaN(number)){
+			number = 0;
+		}
+		
+		return parseFloat(number);
+	}
+	function action_compute()
+	{
+		var subtotal = 0;
+		var total_taxable = 0;
+
+
+		$(".tr-draggable").each(function()
+		{
+			/* GET ALL DATA */
+			var qty               = $(this).find(".txt-qty").val();
+			var rate              = $(this).find(".txt-rate").val();
+			var amount            = $(this).find(".txt-amount");
+
+
+			if(!qty)
+			{
+				qty = 1;
+			}
+
+			/* RETURN TO NUMBER IF THERE IS COMMA */
+			qty 		= action_return_to_number(qty);
+			rate 		= action_return_to_number(rate);
+
+			var total_per_tr = (qty * rate).toFixed(2);
+
+			/* action_compute SUB TOTAL PER LINE */
+			subtotal += parseFloat(total_per_tr);
+
+
+			var amount_val = amount.val();
+
+			if(amount_val != '' && amount_val != null && total_per_tr == '') //IF QUANTITY, RATE IS [NOT EMPTY]
+			{
+				var sub = parseFloat(action_return_to_number(amount_val));
+				if(isNaN(sub))
+				{
+					sub = 0;
+				}
+				subtotal += sub;
+				total_per_tr = sub;
+				amount.val(action_add_comma(sub));
+			}
+			else //IF QUANTITY, RATE IS [EMPTY]
+			{
+				amount.val(action_add_comma(total_per_tr));
+			}
+
+			$(this).find(".txt-rate").val(action_add_comma(rate.toFixed(2)));
+		});
+
+		$(".total-amount").html(action_add_comma(subtotal.toFixed(2)));
+		$(".total-amount-input").val(action_add_comma(subtotal.toFixed(2)));
+	}
+
 	function action_lastclick_row()
 	{
 		$(document).on("click", "tbody.draggable tr:last td:not(.remove-tr)", function(){
@@ -189,6 +285,7 @@ function vendor_requisition_slip()
 	function action_lastclick_row_op()
 	{
 		$("tbody.draggable").append(global_tr_html);
+		action_reassign_number();
 		action_initialize_select();
 	}
 	function event_submit_form()

@@ -14,6 +14,7 @@ use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_terms;
 
+use App\Globals\TransactionEnterBills;
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
@@ -57,6 +58,7 @@ class TransactionEnterBillsController extends Member
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['action']     = '/member/transactio/create-enter-bills';
+        $data['count_receive_inventory']   = TransactionEnterBills::countTransaction($this->user_info->shop_id);
         
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills', $data);
     }
@@ -92,6 +94,10 @@ class TransactionEnterBillsController extends Member
             }
         }
         die(var_dump($btn_action));
+    }
+    public function getLoadTransaction()
+    {
+        dd('Wail Langs!');
     }
     
 }

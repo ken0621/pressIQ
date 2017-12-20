@@ -49,7 +49,7 @@
     <div class="panel-body form-horizontal">
         <div class="form-group">
             <div class="col-md-6">
-                <label>Requisition Slip Number</label>
+                <label>Transaction Number</label>
                 <div>
                    <input type="text" class="form-control" name="requisition_slip_number">
                 </div>
@@ -100,7 +100,7 @@
                                 </td>
                                 <td><textarea class="form-control txt-desc" name="rs_item_description[]"></textarea></td>
                                 <td class="text-center">
-                                    <input type="text" class="form-control text-center txt-qty compute" name="rs_item_qty[]">
+                                    <input type="text" class="form-control text-center txt-qty" name="rs_item_qty[]">
                                 </td>
                                 <td class="text-center">
                                     <select class="form-control droplist-item-um select-um" name="rs_item_um[]"></select>
@@ -128,7 +128,7 @@
                                 </td>
                                 <td><textarea class="form-control txt-desc" name="rs_item_description[]"></textarea></td>
                                 <td class="text-center">
-                                    <input type="text" class="form-control text-center txt-qty compute" name="rs_item_qty[]">
+                                    <input type="text" class="form-control text-center txt-qty" name="rs_item_qty[]">
                                 </td>
                                 <td class="text-center">
                                     <select class="form-control droplist-item-um select-um" name="rs_item_um[]"></select>
@@ -186,7 +186,7 @@
             </td>
             <td><textarea class="form-control txt-desc" name="rs_item_description[]"></textarea></td>
             <td class="text-center">
-                <input type="text" class="form-control text-center txt-qty compute" name="rs_item_qty[]">
+                <input type="text" class="form-control text-center txt-qty" name="rs_item_qty[]">
             </td>
             <td class="text-center">
                 <select class="form-control select-um" name="rs_item_um[]"></select>

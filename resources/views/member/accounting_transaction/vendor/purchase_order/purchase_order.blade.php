@@ -45,7 +45,7 @@
                                 <label>Reference Number</label>
                                 <input type="text" class="form-control" name="transaction_refnumber" value="PO20171225-0001">
                             </div>
-                             <div class="col-sm-5 text-right"></div>
+                            <div class="col-sm-5 text-right"></div>
                             <div class="col-sm-3 text-right">
                                 <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_order/load-transaction"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">{{$count_so}}</span> Open Transaction</a></h4>
                             </div>
@@ -179,7 +179,7 @@
                                                 <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
                                                 <td><input class="text-right txt-discount compute" type="text" name="item_discount[]"/></td>
-                                                <td><input class="text-right number-input" type="text" name="item_remark[]"/></td>
+                                                <td><textarea class="text-right number-input" type="text" name="item_remark[]"></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center">
                                                     <input type="hidden" class="poline_taxable" name="item_taxable[]" value="" >

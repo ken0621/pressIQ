@@ -187,13 +187,13 @@
                                                                 <input type="hidden" class="poline_id" name="itemline_ref_name[]" value="{{$item->itemline_ref_name}}">
                                                                 <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]" value="{{$item->itemline_ref_id}}">
 
-                                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                                <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                     @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $item->itemline_item_id])
                                                                 </select>
                                                             </td>
                                                             <td><textarea class="textarea-expand txt-desc" name="item_description[]">{{$item->itemline_description}}</textarea></td>
                                                             <td>
-                                                                <select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" />
+                                                                <select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" />
                                                                     @if($item->itemline_um)
                                                                         @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $item->multi_um_id, 'selected_um_id' => $item->itemline_um])
                                                                     @else
@@ -217,9 +217,9 @@
                                                 <tbody class="draggable tbody-item po-tbl">
                                                     @if(count(Session::get('po_item')) > 0)
                                                         @foreach(Session::get('po_item') as $items)
-                                                                                                        <tr class="trcount tr-draggable tr-id-{{$items['poline_po_id']}}">
+                                                        <tr class="trcount tr-draggable tr-id-{{$items['poline_po_id']}}">
                                                             <td class="invoice-number-td text-right">1</td>
-                                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                                <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                     @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $items['poline_item_id']])
                                                                 </select>
                                                             </td>
@@ -227,7 +227,7 @@
                                                                 <textarea class="textarea-expand txt-desc" name="item_description[]">{{$items['poline_description']}}</textarea>
                                                             </td>
                                                             <td>
-                                                                <select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" />
+                                                                <select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" />
                                                                     @if($items['poline_um'])
                                                                         @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $items['multi_um_id'], 'selected_um_id' => $items['poline_um']])
                                                                     @else
@@ -250,14 +250,14 @@
                                                         <td>
                                                             <input type="hidden" class="poline_id" name="itemline_ref_name[]">
                                                             <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
-                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                            <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
                                                         </td>
                                                         <td>
                                                             <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
                                                         </td>
-                                                        <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                                        <td><select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
                                                         <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
@@ -269,12 +269,12 @@
                                                         <td>
                                                         <input type="hidden" class="poline_id" name="itemline_ref_name[]">
                                                         <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
-                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                            <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
                                                         </td>
                                                         <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
-                                                        <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                                        <td><select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
                                                         <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
@@ -323,12 +323,12 @@
             <td>
                 <input type="hidden" class="poline_id" name="itemline_ref_name[]">
                 <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
-                <select class="1111 form-control select-item input-sm pull-left" name="item_id[]" >
+                <select class="form-control select-item input-sm pull-left" name="item_id[]" >
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                 </select>
             </td>
             <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
-            <td><select class="2222 select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+            <td><select class="select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
             <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>

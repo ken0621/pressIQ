@@ -6,10 +6,16 @@ $regular: 400;
 $semi-bold: 600;
 $bold: 700;
 
+.blur-me
+{
+    @include transition(0.3s);
+}
+
 .pushmenu 
 { 
     /*this is the nav*/
-     background: #353739;
+     // background: #353739;
+     background-color: rgba(53,55,57,0.6);
      text-align: left;
      width: 300px;
      height: 100%;
@@ -36,28 +42,39 @@ $bold: 700;
     span
     {
         font-family: $display-text;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: $semi-bold;
         color: #fff;
-        padding-left: 30px;
-
-        @media screen and (max-width: 768px)
-        {
-            font-size: 15px;
-        }
+        padding-left: 22px;
     }
 
     .profile-img-container
     {
         padding: 20px;
+        text-align: center;
+
+        // .profile-img 
+        // {
+        //     border-radius: 100%;
+        //     overflow: hidden;
+
+        //     img 
+        //     {
+        //         width: 100%;
+        //     }
+        // }
 
         .profile-img 
         {
-            border-radius: 100%;
             overflow: hidden;
+            text-align: center;
+            margin: auto;
+            width: 30%;
 
             img 
             {
+                border-radius: 100%;
+                border: 1px solid #fff;
                 width: 100%;
             }
         }
@@ -82,14 +99,14 @@ $bold: 700;
             {
                 color: #fff;
                 font-weight: $regular;
-                font-size: 18px;
+                font-size: 16px;
             }
 
             .subtext
             {
                 color: rgba(255,255,255,0.5);
                 font-weight: $light;
-                font-size: 15px;
+                font-size: 14px;
             }
         }
     }
@@ -114,13 +131,27 @@ $bold: 700;
      font-family: $display-text;
      text-transform: uppercase;
      padding-left: 20px;
+     padding-top: 10px;
 
      li
      {
         //margin-top: 30px;
         border-bottom: 1px solid rgba(255,255,255, 0.2);
         padding: 10px 0px;
-        padding-left: 10px;
+        // padding-left: 10px;
+
+        .fa
+        {
+           color: #f1f1f1;
+           //padding-right: 5px;
+           width: 25px;
+           text-align: center;
+        }
+        
+        .fa-user
+        {
+            color: #f1f1f1 !important;
+        }
 
         a
         {
@@ -188,7 +219,7 @@ $bold: 700;
 
 /* .links li a:hover:after { width: 100%; } */
 
-.links li:active { background-color: #D4B044; }
+.links li:active { background-color: rgba(255,255,255,0.2); }
 
 .pushmenu-left
 { 
@@ -206,7 +237,7 @@ $bold: 700;
 
 #overlay
 {
-    @include transition(0.2s);
+    @include transition(0.3s);
     position: fixed;
     display: none;
     width: 100%;
@@ -215,7 +246,7 @@ $bold: 700;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.5);
+    // background-color: rgba(0,0,0,0.2);
     z-index: 100;
     cursor: pointer;
 }
@@ -235,7 +266,7 @@ $bold: 700;
 
 .pushmenu, .pushmenu-push
 {
-  @include transition(0.5s)
+  @include transition(0.3s)
 }
 
 #nav_list

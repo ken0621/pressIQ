@@ -499,6 +499,10 @@ AdvancedRoute::controller('/member/item/warehouse/rr', 'Member\WarehouseReceivin
 AdvancedRoute::controller('/member/customer/wis', 'Member\CustomerWarehouseIssuanceSlipController');
 /* End */
 
+/* INVENTORY ADJUSTMENT */
+AdvancedRoute::controller('/member/item/warehouse/inventory_adjustment', 'Member\WarehouseInventoryAdjustmentController');
+/* End */
+
 /* START PIS ARCY*/
 Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
 
@@ -1046,7 +1050,7 @@ Route::any('/member/merchant/commission/request/submit', 'Member\MerchantControl
 /* End */
 
 // Merchant Commission Report
-// Route::get('/member/merchant/commission-report', 'Member\MerchantController@commission_report');
+Route::get('/member/merchant/commission-report', 'Member\MerchantController@commission_report');
 Route::get('/member/merchant/commission-report/getpercentage','Member\MerchantController@get_percentage');
 Route::post('/member/merchant/commission-report','Member\MerchantController@submit_report_setting');
 Route::get('/member/merchant/commission_report/table', 'Member\MerchantController@table');
@@ -1213,6 +1217,7 @@ include_once('routes_config/routes_item.php');
 /* Members Area */
 include_once('routes_config/routes_members_area.php');
 
+include_once('routes_config/routes_transaction.php');
 
 /*PAYROLL EMPLOYEE*/
 include_once('routes_config/routes_payroll_employee.php');

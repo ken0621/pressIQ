@@ -247,7 +247,7 @@
                             <a href="/contact"><li>CONTACT US</li></a>
                         </ul>
                     <div class="space2"></div>
-                    <span>MEMBERS AREA</span>
+                    <span>MEMBER'S AREA</span>
                     <ul class="links">
                         <a href="/members"><li class="{{ Request::segment(1) == "members" ? "active" : "" }}" >DASHBOARD</li></a> 
                         <a href="/members/profile"><li>PROFILE</li></a>
@@ -372,6 +372,7 @@ offers New Franchise Business Model and New Rewards System using New Generation 
                             <li class="{{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">Legalities</a></li>
                             <li><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">Business Presentation</a></li>
                             <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
+                            <li><a href="/return_policy" >Return Policy</a></li>
                         </ul>
                     </div>
                     <div class="col-md-2 col-sm-6 match-height">

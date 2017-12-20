@@ -56,6 +56,7 @@
 
 @section('script')
 <script type="text/javascript" src="/assets/member/js/paginate_ajax.js"></script>
+<script type="text/javascript" src="/assets/member/js/vendor.js"></script>
 <script type="text/javascript">
 function submit_done(data)
 {

@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 
 .modal-header
 {
@@ -15,6 +17,7 @@
 	}
 }
 
+
 .popup-verify-placement
 {
 	.modal-header
@@ -29,6 +32,7 @@
 {
 	background-image: url("/themes/brown/img/bg.jpg");
 	background-size: cover;
+
 	.members
 	{
 		background-color: #fff;
@@ -221,9 +225,11 @@
 									text-decoration: none;
 									border-color: #402A21;
 									
-									.icon {
+									.icon 
+									{
 										color: #fff;
 									}
+
 									img
 									{
 										-webkit-filter: brightness(2);
@@ -357,6 +363,7 @@
 									.nav-holder
 									{
 										background-color: #613922;
+
 										.icon
 										{
 											img

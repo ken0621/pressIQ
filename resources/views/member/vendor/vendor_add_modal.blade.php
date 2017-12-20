@@ -250,4 +250,3 @@
     <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Save Vendor</button>
   </div>
 </form>
-<script type="text/javascript" src="/assets/member/js/vendor.js"></script>

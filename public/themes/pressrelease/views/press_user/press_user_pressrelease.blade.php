@@ -11,23 +11,43 @@
                <button class="tablinks" onclick="openCity(event, 'choose_recipient')" id="">Choose Recipients</button>
                <button class="tablinks" onclick="openCity(event, 'send_release')" id="">Send Release</button>
             </div>
+
             <div class="press-release-content">
 
+              <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST" style="">
+                {{csrf_field()}}
                 <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
-                  <input type="text" name="pr_headline" class="form-control">
+                    @if(session()->has("pr_edit"))
+                      @foreach($edit as $edits)
+                        <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus value="{{$edits->pr_headline}}">
+                      @endforeach
+                    @else
+                      <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus>
+                    @endif
                   <div class="title">Content:</div>
-                  <textarea name="pr_content" id="tinymce"></textarea>
+                    @if(session()->has("pr_edit"))
+                      @foreach($edit as $edits)
+                        <textarea name="pr_content" id="pr_content">{!!$edits->pr_content!!}</textarea>
+                      @endforeach
+                    @else
+                      <textarea name="pr_content" id="pr_content"></textarea>
+                    @endif  
                   <div class="title">Boilerplate:</div>
-                  <textarea name="bolier_content" id="tinymce"></textarea>
+                    @if(session()->has("pr_edit"))
+                      @foreach($edit as $edits)
+                        <textarea name="pr_boiler_content" id="pr_boiler_content">{!!$edits->pr_boiler_content!!}</textarea>
+                      @endforeach
+                    @else
+                      <textarea name="pr_boiler_content" id="pr_boiler_content"></textarea>
+                    @endif
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                  <span class="preview-button"><a href="#">Preview</a></span>w</a></span>
+                  <span class="preview-button"><button onclick="preview()">Preview</button></span>
                   </div>
-               </div>
+                </div>
 
-              <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST" style="">
                 <div id="choose_recipient" class="tabcontent choose-recipient-container">
                     <div class="title-container">Choose Recipient</div>
 
@@ -60,40 +80,74 @@
                     </select>
 
                     <div class="title">Send To:</div>
-                    <input type="text"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
-                    <span class="choose-button" readonly>  
-                      
-                    <span class="choose-button" readon>  
-                        
-                       {{-- POPUP CHOOSE RECIPIENT --}}
-                    <a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
-
-                      {{-- POPUP CHOOSE RECIPIENT --}}
-                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
-                    <div class="button-container">
-                    </div>
-                </div>
-                </form>
-
-                <div id="send_release" class="tabcontent send-release-container">
-                  <div class="title-container">New Release Summary</div>
-                  <div class="title">Publisher:</div>
-                  <div class="content">Digima Web Solution</div>
-                  <div class="title">Title:</div>
-                  <div class="content">Press Release</div>
-                  <div class="button-container">
-                     <span class="send-button"><button type="submit" name="send" value="send" ><a href="#">Send</a></button></span>
-                  </div>
-                </div>
+                      @if(session()->has("pr_edit"))
+                        @foreach($edit as $edits)
+                          <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
+                        @endforeach
+                      @else
+                        <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
+                      @endif
                     
-                  </div>
+                    {{-- POPUP CHOOSE RECIPIENT --}}
+                    <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
+                      {{-- POPUP CHOOSE RECIPIENT --}}
+
+                    @if(session()->has("pr_edit"))
+                      @foreach($edit as $edits)
+                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
+                      @endforeach
+                    @else
+                      <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
+                    @endif
+                    <div class="button-container"></div>
                 </div>
-                
+                <div id="send_release" class="tabcontent send-release-container">
+                  <div class="title-container">Send Release</div>
+                  <div class="title">Publisher:</div>
+                  <div class="content">{{session('user_first_name')}} {{session('user_last_name')}}</div>
+                  <div class="title">Title:</div>
+                  <div class="content" id="headline_pr"></div>
+                  <div class="title">Send To:</div>
+                  <span class="result-container">
+                  <span id="results_number_sendto" style="font-size:18px"></span></span>
+
+
+                  <div class="button-container">
+                    <button type="submit" formaction="/pressuser/pressrelease/pr">Send</button>
+                  </div>
+
+                </div>
+              </form>
             </div>
          </div>
       </div>
    </div>
 </div>
+
+  <!-- Preview Popup -->
+  <div class="modal fade" id="previewPopup" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Preview</h4>
+        </div>
+        <div class="modal-body">
+          <div id="preview_headline">
+          </div>
+          <div id="preview_content">
+          </div>
+          <div><p>About the Publisher</p></div>
+          <div id="preview_boiler_content">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <style>
    .modal-content
    {
@@ -152,16 +206,19 @@
    $(".chosen-select").chosen({disable_search_threshold: 10});
 </script>
 
+<script src="/email_assets/tinymce/js/tinymce/tinymce.min.js"></script>
+<script src="/email_assets/tinymce/js/tinymce/tinymce.js"></script>
+<script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
+
 <script>
-   tinymce.init({ 
-   selector:'textarea', 
-   branding: false,
-   image_description: false,
-   image_title: true,
-   height: 500,
-   plugins: ["autolink lists image charmap print preview anchor","visualblocks code","insertdatetime table contextmenu paste imagetools", "wordcount"],
-   toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview',
-   
+tinymce.init({ 
+selector:'textarea', 
+branding: false,
+image_description: false,
+image_title: true,
+height: 500,
+plugins: ["autolink lists image charmap print preview anchor","visualblocks code","insertdatetime table contextmenu paste imagetools", "wordcount"],
+toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image | preview',
    
      // we override default upload handler to simulate successful upload
      images_upload_handler: function (blobInfo, success, failure) 
@@ -199,7 +256,7 @@
    
        // setTimeout(function() 
        // {
-       //   // no matter what you upload, we will turn it into TinyMCE logo :)
+       //   // no matter what you upload, we will turn it into TinyMCE logo (smiley)
        //   success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
        // }, 2000);
      },
@@ -211,12 +268,29 @@
    });
 </script>
 
+<script type="text/JavaScript">
+    $('#pr_headline').on("input", function() {
+      var dInput = this.value;
+      console.log(dInput);
+      $('#headline_pr').text(dInput);
+    });
+</script>
+
 <script type="text/javascript">
   $('.pop_recipient_btn').click(function()
   {
     var data = $('.recipient_form').serialize();
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
-
-  })
+});
+  function preview()
+  {
+    var headline = document.getElementById('pr_headline').value;
+    var content = tinymce.get('pr_content').getContent();
+    var boiler_content = tinymce.get('pr_boiler_content').getContent();
+    document.getElementById('preview_headline').innerHTML =headline;
+    document.getElementById('preview_content').innerHTML =content;
+    document.getElementById('preview_boiler_content').innerHTML =boiler_content;
+    $('#previewPopup').modal('show'); 
+  }
 </script>
 @endsection

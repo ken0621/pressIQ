@@ -54,7 +54,7 @@
         <div class="col-md-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search-name" placeholder="Search by ref no." name="keyword" aria-describedby="basic-addon1">
+                <input type="text" class="form-control search-name" placeholder="Search by ref no. / name / email" name="keyword" aria-describedby="basic-addon1">
             </div>
         </div>
         <ul class="nav nav-tabs">

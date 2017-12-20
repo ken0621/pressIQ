@@ -6,10 +6,16 @@ $regular: 400;
 $semi-bold: 600;
 $bold: 700;
 
+.blur-me
+{
+    @include transition(0.3s);
+}
+
 .pushmenu 
 { 
     /*this is the nav*/
-     background: #02295E;
+     // background: #02295E;
+     background-color: rgba(2,41,94,0.6);
      text-align: left;
      width: 300px;
      height: 100%;
@@ -36,29 +42,42 @@ $bold: 700;
     span
     {
         font-family: $display-text;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: $semi-bold;
         color: #fff;
-        padding-left: 30px;
-
-        @media screen and (max-width: 768px)
-        {
-            font-size: 15px;
-        }
+        padding-left: 22px;
     }
 
     .profile-img-container
     {
         padding: 20px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+
+        // .profile-img 
+        // {
+        //     border-radius: 100%;
+        //     overflow: hidden;
+
+        //     img 
+        //     {
+        //         width: 100%;
+        //     }
+        // }
 
         .profile-img 
         {
-            border-radius: 100%;
+            // border-radius: 100%;
             overflow: hidden;
+            text-align: center;
+            margin: auto;
+            width: 30%;
 
             img 
             {
                 width: 100%;
+                border: 1px solid #f1f1f1;
+                border-radius: 100%;
             }
         }
         
@@ -82,14 +101,14 @@ $bold: 700;
             {
                 color: #fff;
                 font-weight: $regular;
-                font-size: 18px;
+                font-size: 16px;
             }
 
             .subtext
             {
                 color: rgba(255,255,255,0.5);
                 font-weight: $light;
-                font-size: 15px;
+                font-size: 14px;
             }
         }
     }
@@ -114,13 +133,22 @@ $bold: 700;
      font-family: $display-text;
      text-transform: uppercase;
      padding-left: 20px;
+     padding-top: 10px;
 
      li
      {
         //margin-top: 30px;
         border-bottom: 1px solid rgba(255,255,255, 0.2);
         padding: 10px 0px;
-        padding-left: 10px;
+        // padding-left: 10px;
+
+        .fa
+        {
+           color: #f1f1f1;
+           //padding-right: 5px;
+           width: 25px;
+           text-align: center;
+        }
 
         a
         {
@@ -188,11 +216,12 @@ $bold: 700;
 
 /* .links li a:hover:after { width: 100%; } */
 
-.links li:active { background-color: #EDAC0E; }
+// .links li:active { background-color: #EDAC0E; }
+.links li:active { background-color: rgba(255,255,255,0.2); }
 
 .pushmenu-left
 { 
-    left: -300px; 
+    left: -300px;
 }
 
 .pushmenu-left.pushmenu-open { left: 0;}
@@ -206,7 +235,7 @@ $bold: 700;
 
 #overlay
 {
-    @include transition(0.2s);
+    @include transition(0.3s);
     position: fixed;
     display: none;
     width: 100%;
@@ -215,7 +244,7 @@ $bold: 700;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.5);
+    // background-color: rgba(0,0,0,0.2);
     z-index: 100;
     cursor: pointer;
 }
@@ -235,7 +264,7 @@ $bold: 700;
 
 .pushmenu, .pushmenu-push
 {
-  @include transition(0.5s)
+  @include transition(0.3s)
 }
 
 #nav_list
@@ -254,7 +283,7 @@ $bold: 700;
             width: 50px;
             padding: 7.5px 12px 7.5px 12px;
             margin-right: auto;
-            margin-top: 20px;
+            // margin-top: 20px;
 
             .fa
             {
@@ -284,69 +313,40 @@ $bold: 700;
 
  /* MEDIA SCREEN */
 
- @media screen and (max-width: 768px)
+ @media screen and (max-width: 800px)
  {
-    /* .header-container 
-    {
-        padding-bottom: 0px;
-    } */
-
-    #nav_list
-    {
-        padding-bottom: 25px;
-        margin-top: 5px;
-    }
-
     .image-logo-holder
     {
-        margin-left: 265px;
-        margin-top: -60px;
+        margin: auto;
+    }
+
+    #nav_list .fa 
+    {
+        margin-top: 20px;
+    }
+
+    .image-logo-holder img 
+    {
+        margin-top: -70px;
     }
 }
 
 @media screen and (max-width: 414px)
 {
-    .image-logo-holder
-    {
-        margin-left: 125px;
-        margin-top: -65px;
-    }
+
 }
 
 @media screen and (max-width: 425px)
 {
-    .image-logo-holder
-    {
-        margin-left: 125px;
-        margin-top: -65px;
-    }
+
 }
 
 @media screen and (max-width: 375px)
 {
-    #nav_list .fa 
-    {
-        font-size: 25px;
-    }
 
-    .image-logo-holder
-    {
-        margin-left: 105px;
-        margin-top: -65px;
-    }
 }
 
 @media screen and (max-width: 320px)
 {
-    #nav_list
-    {
-        padding-bottom: 25px;
-        margin-top: 0px;
-    }
 
-   .image-logo-holder 
-   {
-       margin-left: 85px;
-       margin-top: -60px;
-   }
 }

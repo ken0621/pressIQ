@@ -449,5 +449,22 @@
 			],
 			"size":"12"
 		}
+	},
+	"about-red-fruit":
+	{
+		"about_red_fruit" :
+		{
+			"label":"About Red Fruit Information",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"about_red_fruit_image" :
+		{
+			"label":"About Red Fruit Image",
+			"type":"image",
+			"default":"/themes/3xcell/img/buah-merah.png",
+			"size":"6"
+		}
 	}
 }

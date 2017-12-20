@@ -13,6 +13,7 @@ use App\Globals\Transaction;
 use App\Globals\Customer;
 use App\Globals\Estimate;
 use App\Globals\ItemSerial;
+use App\Globals\ReceivePayment;
 
 use App\Models\Tbl_customer;
 use App\Models\Tbl_item_bundle;
@@ -52,7 +53,7 @@ class Customer_InvoiceController extends Member
         $data["pis"]        = Purchasing_inventory_system::check();
         //dd($data["pis"]);
         $data["_customer"]  = Customer::getAllCustomer();
-        $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
+        $data["_terms"]     = Customer::getTerms($this->user_info->shop_id,0);
 
         $data['_item']      = Item::get_all_category_item();
         $data['_cm_item']   = Item::get_returnable_item();
@@ -110,11 +111,33 @@ class Customer_InvoiceController extends Member
         foreach ($data["_invoices"] as $key => $value) 
         {
             $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
-            if($cm != null)
+            if($cm)
             {
               $data["_invoices"][$key]->inv_overall_price = $value->inv_overall_price - $cm->cm_amount;  
             }
+            $data["_invoices"][$key]->inv_balance = ReceivePayment::getBalance($this->user_info->shop_id, $value->inv_id, $data["_invoices"][$key]->inv_overall_price);
         }
+        foreach ($data["_invoices_unpaid"] as $key1 => $value1) 
+        {
+            $cm = Tbl_credit_memo::where("cm_id",$value1->credit_memo_id)->first();
+            if($cm)
+            {
+              $data["_invoices_unpaid"][$key1]->inv_overall_price = $value1->inv_overall_price - $cm->cm_amount;  
+            }
+            $data["_invoices_unpaid"][$key1]->inv_balance = ReceivePayment::getBalance($this->user_info->shop_id, $value1->inv_id, $data["_invoices_unpaid"][$key1]->inv_overall_price);
+
+        }
+         foreach ($data["_invoices_paid"] as $key2 => $value2) 
+        {
+            $cm = Tbl_credit_memo::where("cm_id",$value2->credit_memo_id)->first();
+            if($cm)
+            {
+              $data["_invoices_paid"][$key2]->inv_overall_price = $value2->inv_overall_price - $cm->cm_amount;  
+            }
+            $data["_invoices_paid"][$key2]->inv_balance = ReceivePayment::getBalance($this->user_info->shop_id, $value2->inv_id, $data["_invoices_paid"][$key2]->inv_overall_price);
+
+        }
+
 
         $data['check_user'] = Purchasing_inventory_system::check();
 

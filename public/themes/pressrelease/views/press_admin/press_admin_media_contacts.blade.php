@@ -36,7 +36,7 @@
                     <table  class="table table-bordered" style="background-color: #FFFFFF;" id="showHere_table">
                         <tr>
                             <th style="text-align: center;">Contact Name</th>
-                            <th style="text-align: center;">Contact Name</th>
+                            <th style="text-align: center;">Company</th>
                             <th style="text-align: center;">Country</th>
                             <th style="text-align: center;">Action</th>
                         </tr>
@@ -51,7 +51,7 @@
                 <form method="post" action="/pressadmin/pressreleases_addrecipient">
                     {{csrf_field()}}
                     <div class="title">Contact Name: *</div>
-                    <input type="text" id="contact_name" name="contact_name" class="form-control" required>
+                    <input type="text" id="name" name="name" class="form-control" required>
 
                     <div class="title">Position: *</div>
                     <input type="text"  id="position" name="position" class="form-control" required>

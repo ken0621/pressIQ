@@ -64,11 +64,20 @@ class TransactionPurchaseOrderController extends Member
         $insert['transaction_refnumber']    = $request->transaction_refnumber;
         $insert['vendor_id']                = $request->vendor_id;
         $insert['vendor_address']           = $request->vendor_address;
+        $insert['vendor_email']             = $request->vendor_email;
         $insert['vendor_terms']             = $request->vendor_terms;
         $insert['transaction_date']         = $request->transaction_date;
         $insert['transaction_duedate']      = $request->transaction_duedate;
         $insert['vendor_message']           = $request->vendor_message;
         $insert['vendor_memo']              = $request->vendor_memo;
+        $insert['vendor_ewt']               = $request->vendor_ewt;
+        $insert['vendor_terms']             = $request->vendor_terms;
+        $insert['vendor_discount']          = $request->vendor_discount;
+        $insert['vendor_discounttype']      = $request->vendor_discounttype;
+        $insert['vendor_tax']               = $request->vendor_tax;
+        $insert['vendor_subtotal']          = $request->vendor_subtotal;
+        $insert['vendor_total']             = $request->vendor_total;
+
 
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
@@ -87,6 +96,7 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_taxable']      = $request->item_taxable[$key];
             }
         }
+        $return = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert,$insert_item)
         die(var_dump($btn_action));
     }
 

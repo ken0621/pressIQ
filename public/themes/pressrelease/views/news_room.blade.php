@@ -1,20 +1,25 @@
 @extends("layout")
 @section("content")
+
 <div class="content">
     <!-- Media Slider -->
 <div class="background-container">
     <div class="container">
-        <div class="border-container">
-            <div class="background-border-container">
+        <div class="border-container" id="show_newsroom">
+
+            <div class="background-border-container" id="show_newsroom">
                 <div class="row clearfix">
                     <div class="col-md-12">
-                        <div class="search-container">
-                            <input type="text" placeholder="Search News"><span><a href="#"><i class="fa fa-search" aria-hidden="true" her></i></span></a>
+                        <div class="search-container"  >
+                            <input type="text" placeholder="Search News" name="search_newsroom" id="search_newsroom">
+                            <span>
+                            <i  type="button"  class="fa fa-search" id="search_newsroom_btn" name="search_newsroom_btn" aria-hidden="true" her></i></span> 
                         </div>
                     </div>
                 </div>
+                
                 @foreach ($pr as $prs)
-                <div class="news-title-container">
+                <div class="news-title-container" >
                     <div class="title"><a href="/newsroom/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
                 </div>  
                 <div class="details-container">
@@ -24,7 +29,11 @@
                     <button onclick="window.location.href='/newsroom/view/{{$prs->pr_id}}'">Read More</button>
                 </div>
                 @endforeach
+                <div class="button-container" >
+                {!! $pr->render() !!}
+                </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -32,6 +41,7 @@
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
+
 @endsection
 
 @section("css")
@@ -39,7 +49,7 @@
 @endsection
 
 @section("script")
-
+<script  src="/assets/js/news_room.js"></script>
 <script type="text/javascript">
 /*$(document).ready(function($) {
 

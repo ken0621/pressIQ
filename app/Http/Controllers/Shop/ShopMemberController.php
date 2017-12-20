@@ -481,6 +481,7 @@ class ShopMemberController extends Shop
             });
         }
     }
+
     public function press_release_save_as_draft(Request $request)
     {   
         $pr_info["pr_headline"]     =$request->pr_headline;

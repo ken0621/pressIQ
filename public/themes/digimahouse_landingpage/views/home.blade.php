@@ -22,24 +22,30 @@
 			</div>
 		</div>
 	</div>
-	<!-- Devider -->
-	<div class="devider">
+	<!-- Divider -->
+	<div class="divider">
 		<div class="container">
 			<div class="row clearfix">
 				<div class="col-md-4">
-					<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/devider-icon1.png">
-					<div class="devider-text-header">Easy Customizable</div>
-					<div class="devider-sub-text-header">Over 20+ Website Templates to choose</div>
+					<div class="div-cont">
+						<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/divider-icon1.png">
+						<div class="divider-text-header">Easy Customizable</div>
+						<div class="divider-sub-text-header">Over 20+ Website Templates to choose</div>
+					</div>
 				</div>
 				<div class="col-md-4">
-					<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/devider-icon2.png">
-					<div class="devider-text-header">Mobile Responsive</div>
-					<div class="devider-sub-text-header">Viewable for any mobile devices</div>
+					<div class="div-cont">
+						<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/divider-icon2.png">
+						<div class="divider-text-header">Mobile Responsive</div>
+						<div class="divider-sub-text-header">Viewable for any mobile devices</div>
+					</div>
 				</div>
 				<div class="col-md-4">
-					<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/devider-icon3.png">
-					<div class="devider-text-header">Quality and Effective</div>
-					<div class="devider-sub-text-header">Trusted and high quality designs</div>
+					<div class="div-cont">
+						<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/divider-icon3.png">
+						<div class="divider-text-header">Quality and Effective</div>
+						<div class="divider-sub-text-header">Trusted and high quality designs</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -47,27 +53,30 @@
 	<!-- top-container -->
 	<div class="top-container">
 		<div class="container">
-			
 			<div class="text-header">We offer a high quality brand</div>
 			<div class="sub-text-header">The way your website looks and responds directly impacts impression.<br>Why not take the best shot?</div>
-
 			<div class="img-with-captions">
 				<div class="row clearfix">
-					<div class="img-container col-md-4">
-						<img width="313" height="313" src="/themes/{{ $shop_theme }}/img/img-functionality.png">
-						<div class="img-caption">Functionality</div>
+					<div class="col-md-4">
+						<div class="img-container">
+							<img width="313" height="313" src="/themes/{{ $shop_theme }}/img/img-functionality.png">
+							<div class="img-caption">Functionality</div>
+						</div>
 					</div>
-					<div class="img-container col-md-4">
-						<img width="313" height="313" src="/themes/{{ $shop_theme }}/img/img-quality.png">
-						<div class="img-caption">Quality</div>
+					<div class="col-md-4">
+						<div class="img-container">
+							<img width="313" height="313" src="/themes/{{ $shop_theme }}/img/img-quality.png">
+							<div class="img-caption">Quality</div>
+						</div>
 					</div>
-					<div class="img-container col-md-4">
-						<img width="313" height="313" src="/themes/{{ $shop_theme }}/img/img-effectivity.png">
-						<div class="img-caption">Effectivity</div>
+					<div class="col-md-4">
+						<div class="img-container">
+							<img width="313" height="313" src="/themes/{{ $shop_theme }}/img/img-effectivity.png">
+							<div class="img-caption">Effectivity</div>
+						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
 	
@@ -92,9 +101,9 @@
 	<!-- MID-CONTAINER-2 -->
 	<div class="mid-container-2" style="background-image: url('/themes/{{ $shop_theme }}/img/mid-container2-bg.png');">
 		<div class="container">
-			
 			<div class="text-header">Select a plan that fits your business</div>
 			<div class="row clearfix">
+
 				<div class="col-md-3">
 					<div class="box">
 						<div class="icon-container">
@@ -117,6 +126,7 @@
 							<div>
 								<span style="padding-top: -10px;"></span>
 							</div>
+
 						</div>
 					</div>
 				</div>
@@ -212,6 +222,7 @@
 						</div>
 					</div>
 				</div>
+
 			</div>
 			<div class="btn-container">
 				<button class="inquire-now">Inquire Now</button>
@@ -229,8 +240,10 @@
 						<div class="sub-text-header">Digima Web Solutions provides us with critical insight into our business which allows us to make fast decision and ultimately become more dynamic and competitive in marketplace.</div>
 					</div>
 				</div>
-				<div class="bottom-img-container col-md-6">
-					<img class="bottom-img" width="388" height="390" src="/themes/{{ $shop_theme }}/img/bottom-container-img1.png">
+				<div class="col-md-6">
+					<div class="bottom-img-container">
+						<img class="bottom-img" src="/themes/{{ $shop_theme }}/img/bottom-container-img1.png">
+					</div>
 				</div>
 			</div>
 			<div class="core-products-offered ">
@@ -334,7 +347,6 @@
 			<div class="clients-logo-container">
 				<div class="text-header-bottom">Our outstanding clients</div>
 
-
 				<section class="autoplay logo-slider">
 					<div>
 						<img src="/themes/{{ $shop_theme }}/img/myphone-logo.png">
@@ -359,6 +371,7 @@
 			</div>
 		</div>
 	</div>
+
 	<!-- SCROLL TO TOP -->
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>

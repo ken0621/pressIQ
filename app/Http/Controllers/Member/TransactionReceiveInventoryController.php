@@ -55,7 +55,7 @@ class TransactionReceiveInventoryController extends Member
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
 
         $data['action']     = '/member/transaction/receive_inventory/create-receive-inventory';
-        $data['count_open_purchase_order'] = TransactionReceiveInventory::countTransaction($this->user_info->shop_id);
+        //dd($this->user_info->shop_id);
 
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory', $data);
     }
@@ -92,9 +92,10 @@ class TransactionReceiveInventoryController extends Member
 
         die(var_dump($btn_action));
     }
-    public function getCountTransaction()
+    public function getCountTransaction(Request $request)
     {
-        return TransactionReceiveInventory::countTransaction();
+        $vendor_id = $request->vendor_id;
+        return TransactionReceiveInventory::countTransaction($this->user_info->shop_id, $vendor_id);
     }
     public function getLoadTransaction()
     {

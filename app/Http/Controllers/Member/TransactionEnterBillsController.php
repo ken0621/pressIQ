@@ -58,7 +58,6 @@ class TransactionEnterBillsController extends Member
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['action']     = '/member/transactio/create-enter-bills';
-        $data['count_receive_inventory']   = TransactionEnterBills::countTransaction($this->user_info->shop_id);
         
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills', $data);
     }
@@ -94,6 +93,11 @@ class TransactionEnterBillsController extends Member
             }
         }
         die(var_dump($btn_action));
+    }
+    public function getCountTransaction(Request $request)
+    {
+        $vendor_id = $request->vendor_id;
+        return TransactionEnterBills::countTransaction($this->user_info->shop_id, $vendor_id);
     }
     public function getLoadTransaction()
     {

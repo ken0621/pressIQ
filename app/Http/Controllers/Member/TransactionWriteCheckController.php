@@ -28,6 +28,7 @@ use App\Globals\Warehouse;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 
+use App\Globals\TransactionWriteCheck;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_bill;
@@ -96,4 +97,14 @@ class TransactionWriteCheckController extends Member
             die(var_dump($btn_action));
         }
     }
+    public function getCountTransaction(Request $request)
+    {
+        $vendor_id = $request->vendor_id;
+        return TransactionWriteCheck::countTransaction($this->user_info->shop_id, $vendor_id);
+    }
+    public function getLoadTransaction()
+    {
+        dd('Wail Langs!');
+    }
+
 }

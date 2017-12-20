@@ -1,4 +1,3 @@
-
 <?php
 namespace App\Globals;
 
@@ -16,6 +15,6 @@ class TransactionReceiveInventory
 {
 	public static function countTransaction($shop_id)
 	{
-		return tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_is_billes',0)->count();
+		return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_is_billed',0)->count();
 	}
 }

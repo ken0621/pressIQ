@@ -67,6 +67,10 @@
                                             <label>Reference Number</label>
                                             <input type="text" class="form-control" name="transaction_refnumber" value="RI20171225-0001">
                                         </div>
+                                        <div class="col-sm-5 text-right"></div>
+                                        <div class="col-sm-3 text-right">
+                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/receive_inventory/load-transaction"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">{{$count_open_purchase_order}}</span> Open Transaction</a></h4>
+                                        </div>
                                     </div>
                                 </div>
                                 <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">

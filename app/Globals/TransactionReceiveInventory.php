@@ -44,28 +44,8 @@ class TransactionReceiveInventory
             /*$receive_inventory_id = Tbl_bill::insertGetId($ins);*/
             $receive_inventory_id = 0;
 
-            /* Transaction Journal */
 
-
-            $entry = null;
-            if($ins['inventory_only'] == 0)
-            {
-                /* Transaction Journal */
-                $entry["reference_module"]  = "bill";
-                $entry["reference_id"]      = $receive_inventory_id;
-                $entry["name_id"]           = $ins['bill_vendor_id'];
-                $entry["total"]             = collect($insert_item)->sum('item_amount');
-                $entry["vatable"]           = '';
-                $entry["discount"]          = '';
-                $entry["ewt"]               = '';            
-            }
-            $transaction_bill = "bill";
-            if($ins['inventory_only'] != 0)
-            {
-                $transaction_bill = "receive_inventory";
-            }
-
-            $return = Self::insertLine($receive_inventory_id, $insert_item, $entry);
+            $return = Self::insertLine($receive_inventory_id, $insert_item);
         }
         else
         {
@@ -74,7 +54,7 @@ class TransactionReceiveInventory
         return $return;
 	}
 
-    public static function insertLine($receive_inventory_id, $insert_item, $entry)
+    public static function insertLine($receive_inventory_id, $insert_item)
     {
         $itemline = null;
         foreach ($insert_item as $key => $value) 
@@ -91,7 +71,9 @@ class TransactionReceiveInventory
         if(count($itemline) > 0)
         {
             // Tbl_customer_invoice_line::insert($itemline);
-            $return = AccountingTransaction::entry_data($entry, $insert_item);
+
+            // SA enter Bill nalang ang ENTRY :)
+            // $return = AccountingTransaction::entry_data($entry, $insert_item);
             //die(var_dump($return));
         }
 

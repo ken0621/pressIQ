@@ -5,7 +5,6 @@ namespace App\Globals;
 use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_shop;
 use Carbon\Carbon;
-use Validator;
 use DB;
 
 /**
@@ -23,6 +22,9 @@ class TransactionPurchaseOrder
 
 	public static function postInsert($shop_id, $insert, $insert_item)
 	{
+        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        if(!$val)
+        {
             $ins['po_shop_id']         = $shop_id;
             $ins['transaction_refnum'] = $insert['transaction_refnumber'];
             $ins['po_vendor_id']       = $insert['vendor_id'];
@@ -61,7 +63,14 @@ class TransactionPurchaseOrder
 
             $ins['po_subtotal_price'] = $subtotal_price;
             $ins['po_overall_price']  = $overall_price;
-		
-        return $ins;
+
+            /* INSERT PO HERE */
+            /*$purchase_order_id = Tbl_purchase_order::insertGetId($ins);*/
+		}
+        else
+        {
+            $return = $val;
+        }  
+        return $return;
 	}
 }

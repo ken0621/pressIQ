@@ -81,18 +81,30 @@ class TransactionReceiveInventoryController extends Member
         {
             if($value)
             {
-                $insert_item[$key]['item_id'] = $value;
-                $insert_item[$key]['item_servicedate'] = $request->item_servicedate[$key];
+                $insert_item[$key]['item_id']          = $value;
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
-                $insert_item[$key]['item_um'] = $request->item_um[$key];
-                $insert_item[$key]['item_qty'] = str_replace(',', '', $request->item_qty[$key]);
-                $insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
-                $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_um']          = $request->item_um[$key];
+                $insert_item[$key]['item_qty']         = str_replace(',', '', $request->item_qty[$key]);
+                $insert_item[$key]['item_rate']        = str_replace(',', '', $request->item_rate[$key]);
+                $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_discount']    = 0;
+
             }
         }
-        $validate = AccountingTransaction::vendorValidation($insert, $insert_item);
-        $return = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
-        //die(var_dump($validate));
+        
+        $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
+
+        if(is_numeric($validate))
+        {
+
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $validate;
+        }
+
+        return $return;
     }
     public function getCountTransaction(Request $request)
     {

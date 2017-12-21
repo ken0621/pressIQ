@@ -98,8 +98,7 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_taxable']      = $request->item_taxable[$key];
             }
         }
-        $return = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
-        $validate = AccountingTransaction::vendorValidation($insert, $insert_item);
+        $validate = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
         if(is_numeric($validate))
         {

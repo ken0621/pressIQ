@@ -40,7 +40,7 @@ class TransactionSalesOrderController extends Member
 	{
 		$btn_action = $request->button_action;
 
-		$insert['transaction_refnumber'] = $request->transaction_refnumber;
+		$insert['transaction_refnum'] 	 = $request->transaction_refnumber;
 		$insert['customer_id'] 			 = $request->customer_id;
 		$insert['customer_email']        = $request->customer_email;
 		$insert['customer_address']      = $request->customer_address;

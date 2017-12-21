@@ -13,6 +13,8 @@ use App\Globals\Customer;
 use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
 use App\Globals\TransactionSalesInvoice;
+use App\Globals\TransactionSalesOrder;
+use App\Globals\TransactionEstimateQuotation;
 
 use Session;
 use Carbon\Carbon;
@@ -116,7 +118,9 @@ class TransactionSalesInvoiceController extends Member
 	}
 	public function getLoadTransaction(Request $request)
 	{
-		return view("member.accounting_transaction.customer.sales_invoice.load_transaction");
+		$data['_eq'] = TransactionEstimateQuotation::getOpenEQ($this->user_info->shop_id, $request->c);
+		$data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
+		return view("member.accounting_transaction.customer.sales_invoice.load_transaction", $data);
 	}
 	public function getPrint(Request $request)
 	{

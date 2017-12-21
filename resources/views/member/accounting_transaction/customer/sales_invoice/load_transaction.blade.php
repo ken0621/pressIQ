@@ -10,6 +10,7 @@
                     <h4> <i class="fa fa-caret-down"></i> Estimate and Quotation</h4>
                 </div>
                 <div class="col-md-12">
+                    @if(count($_eq) > 0)
                     <table class="table table-condensed table-bordered">
                         <thead>
                             <tr>
@@ -19,15 +20,18 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($_eq as $eq)
                             <tr>
-                                <td class="text-center">
-                                    <input type="checkbox" name="">
-                                </td>
-                                <td class="text-center">EQ20171214-0001</td>
-                                <td class="text-center">PHP 1,000.00</td>
+                                <td class="text-center"><input type="checkbox" name=""></td>
+                                <td class="text-center">{{$eq->transaction_refnum != "" ? $eq->transaction_refnum : $eq->est_id}}</td>
+                                <td class="text-center">{{currency('PHP',$eq->est_overall_price)}}</td>
                             </tr>
+                            @endforeach
                         </tbody>                        
                     </table>
+                    @else
+                    <label class="text-center form-control">No Transaction</label>
+                    @endif
                 </div>
             </div>
             <div class="form-group">
@@ -35,6 +39,7 @@
                     <h4> <i class="fa fa-caret-down"></i> Sales Order</h4>
                 </div> 
                 <div class="col-md-12">
+                    @if(count($_so) > 0)
                     <table class="table table-condensed table-bordered">
                         <thead>
                             <tr>
@@ -44,15 +49,18 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($_so as $so)
                             <tr>
-                                <td class="text-center">
-                                    <input type="checkbox" name="">
-                                </td>
-                                <td class="text-center">SO20171214-0001</td>
-                                <td class="text-center">PHP 1,000.00</td>
+                                <td class="text-center"><input type="checkbox" name=""></td>
+                                <td class="text-center">{{$eq->transaction_refnum != "" ? $eq->transaction_refnum : $eq->est_id}}</td>
+                                <td class="text-center">{{currency('PHP',$eq->est_overall_price)}}</td>
                             </tr>
+                            @endforeach
                         </tbody>                        
                     </table>
+                    @else
+                    <label class="text-center form-control">No Transaction</label>
+                    @endif
                 </div>
             </div>
         </div>

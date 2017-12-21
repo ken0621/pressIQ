@@ -2,6 +2,8 @@
 namespace App\Globals;
 
 use App\Models\Tbl_customer_estimate;
+use App\Models\Tbl_customer_invoice;
+use App\Models\Tbl_customer_invoice_line;
 use Carbon\Carbon;
 use DB;
 use App\Globals\AccountingTransaction;
@@ -25,7 +27,7 @@ class TransactionSalesInvoice
 			$return  = null; 
 			$ins['inv_shop_id']                  = $shop_id;  
 			$ins['inv_customer_id']              = $insert['customer_id'];  
-			$ins['transaction_refnumber'] 		 = $insert['transaction_refnumber'];   
+			$ins['transaction_refnum']	 		 = $insert['transaction_refnum'];   
 	        $ins['inv_customer_email']           = $insert['customer_email'];
 	        $ins['inv_customer_billing_address'] = $insert['customer_address'];
 	        $ins['inv_terms_id']                 = $insert['customer_terms'];
@@ -58,6 +60,22 @@ class TransactionSalesInvoice
 	        $ins['inv_subtotal_price']           = $subtotal_price;
 	        $ins['inv_overall_price']            = $overall_price;
 
+
+	        /* INSERT INVOICE HERE */
+	        // $invoice_id = Tbl_customer_invoice::insertGetId($ins);
+	        $invoice_id = 0;
+
+	        /* Transaction Journal */
+	        $entry["reference_module"]  = 'invoice';
+	        $entry["reference_id"]      = $invoice_id;
+	        $entry["name_id"]           = $insert['customer_id'];
+	        $entry["total"]             = $overall_price;
+	        $entry["vatable"]           = $tax;
+	        $entry["discount"]          = $discount;
+	        $entry["ewt"]               = $ewt;
+
+	        $return = Self::insertline($invoice_id, $insert_item, $entry);
+
 		}
 		else
 		{
@@ -66,8 +84,41 @@ class TransactionSalesInvoice
 
         return $return; 
 	}
-	public static function insertline($id, $insert_item)
+	public static function insertline($invoice_id, $insert_item, $entry)
 	{
+		$itemline = null;
+		foreach ($insert_item as $key => $value) 
+		{	
+	        /* DISCOUNT PER LINE */
+	        $discount       = $value['item_discount'];
+	        $discount_type  = 'fixed';
+	        if(strpos($discount, '%'))
+            {
+            	$discount       = substr($discount, 0, strpos($discount, '%')) / 100;
+                $discount_type  = 'percent';
+            }
 
+			$itemline[$key]['invline_inv_id'] 			= $invoice_id;
+			$itemline[$key]['invline_service_date'] 	= $value['item_servicedate'];
+			$itemline[$key]['invline_item_id'] 			= $value['item_id'];
+			$itemline[$key]['invline_description'] 		= $value['item_description'];
+			$itemline[$key]['invline_um'] 				= $value['item_um'];
+			$itemline[$key]['invline_qty'] 				= $value['item_qty'];
+			$itemline[$key]['invline_rate'] 			= $value['item_rate'];
+			$itemline[$key]['invline_discount'] 		= $discount;
+			$itemline[$key]['invline_discount_type'] 	= $discount_type;
+			$itemline[$key]['invline_discount_remark'] 	= $value['item_remarks'];
+			$itemline[$key]['taxable'] 					= $value['item_taxable'];
+			$itemline[$key]['invline_amount'] 			= $value['item_amount'];
+			$itemline[$key]['date_created'] 			= Carbon::now();
+		}
+		if(count($itemline) > 0)
+		{
+			// Tbl_customer_invoice_line::insert($itemline);
+		}
+
+		$return = AccountingTransaction::entry_data($entry, $insert_item);
+
+		return $return;
 	}
 }

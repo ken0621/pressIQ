@@ -75,7 +75,6 @@ class TransactionSalesInvoice
 	        $entry["ewt"]               = $ewt;
 
 	        $return = Self::insertline($invoice_id, $insert_item, $entry);
-
 		}
 		else
 		{
@@ -115,9 +114,8 @@ class TransactionSalesInvoice
 		if(count($itemline) > 0)
 		{
 			// Tbl_customer_invoice_line::insert($itemline);
+			$return = AccountingTransaction::entry_data($entry, $insert_item);
 		}
-
-		$return = AccountingTransaction::entry_data($entry, $insert_item);
 
 		return $return;
 	}

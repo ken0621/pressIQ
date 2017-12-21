@@ -4,6 +4,8 @@ use App\Models\Tbl_acctg_transaction;
 use App\Models\Tbl_acctg_transaction_list;
 use App\Models\Tbl_acctg_transaction_item;
 use Carbon\Carbon;
+
+use Validator;
 use DB;
 
 /**
@@ -72,7 +74,7 @@ class AccountingTransaction
 	}
 	public static function check_transaction($shop_id, $transaction_name, $transaction_id)
 	{
-		$check = Tbl_acctg_transaction_list::where("transaction_ref_name", $transaction_name)-
+		$check = Tbl_acctg_transaction_list::where("transaction_ref_name", $transaction_name)
 											->where("transaction_ref_id", $transaction_id)->first();
 		
 		$return = null;
@@ -85,5 +87,32 @@ class AccountingTransaction
 	public static function updateTransaction($shop_id, $acctg_trans_id, $trans_item = array())
 	{
 		
+	}
+	public static function vendorValidation($insert, $insert_item)
+	{
+		$return = null;
+        if(count($insert_item) <= 0)
+        {
+            $return .= "<li style=`list-style:none`>Please Select Item.</li><br>";
+        }
+        if(!$insert['vendor_id'])
+        {
+            $return .= "<li style=`list-style:none`>Please Select Vendor.</li><br>";          
+        }
+
+		$rules['transaction_refnumber'] = 'required';
+        $rules['po_vendor_email']    	= 'email';
+
+        $validator = Validator::make($insert, $rules);
+
+        if($validator->fails())
+        {
+            $status = 'error';
+            foreach ($validator->messages()->all('<li style=`list-style:none`>:message</li>') as $key => $message)
+            {
+                $return .= $message;
+            }
+        }
+        return $return;
 	}
 }

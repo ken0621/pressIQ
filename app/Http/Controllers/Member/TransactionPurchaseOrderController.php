@@ -14,6 +14,8 @@ use App\Globals\Utilities;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\TransactionPurchaseOrder;
 
+use App\Globals\AccountingTransaction;
+
 use App\Models\Tbl_customer;
 use App\Models\Tbl_warehousea;
 use App\Models\Tbl_customer_invoice;
@@ -96,11 +98,19 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_taxable']      = $request->item_taxable[$key];
             }
         }
-       
-        $return = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert,$insert_item);
-        $validate = TransactionPurchaseOrder::validation($this->user_info->shop_id, $insert);
-        //die(var_dump($return));
-        //dd($return);
+        $return = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
+        $validate = AccountingTransaction::vendorValidation($insert, $insert_item);
+
+        if(is_numeric($validate))
+        {
+
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $validate;
+        }
+        return json_encode($return);
     }
 
     public function getLoadTransaction()

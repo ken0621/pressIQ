@@ -17,4 +17,8 @@ class TransactionPurchaseRequisition
 	{
 		return Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_status","accepted")->count();
 	}
+	public static function postInsert()
+	{
+		
+	}
 }

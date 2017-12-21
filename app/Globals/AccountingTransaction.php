@@ -4,8 +4,9 @@ use App\Models\Tbl_acctg_transaction;
 use App\Models\Tbl_acctg_transaction_list;
 use App\Models\Tbl_acctg_transaction_item;
 use Carbon\Carbon;
-use DB;
+
 use Validator;
+use DB;
 use App\Globals\Accounting;
 /**
  * 
@@ -87,14 +88,40 @@ class AccountingTransaction
 	{
 		
 	}
+	public static function vendorValidation($insert, $insert_item)
+	{
+		$return = null;
+        if(count($insert_item) <= 0)
+        {
+            $return .= "<li style=`list-style:none`>Please Select Item.</li><br>";
+        }
+        if(!$insert['vendor_id'])
+        {
+            $return .= "<li style=`list-style:none`>Please Select Vendor.</li><br>";          
+        }
+
+		$rules['transaction_refnumber'] = 'required';
+        $rules['vendor_email']    	= 'email';
+
+        $validator = Validator::make($insert, $rules);
+        if($validator->fails())
+        {
+            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+            {
+                $return .= $message;
+            }
+        }
+        return $return;
+	}
 	public static function customer_validation($insert, $insert_item)
 	{
 		$return = null;
         if(count($insert_item) <= 0)
         {
-        	$return .= '<li style="list-style:none">Please select item.</li>';
+            $return .= "<li style=`list-style:none`>Please Select Item.</li><br>";
         }
-        if(!$insert['customer_id'])
+
+		if(!$insert['customer_id'])
         {
         	$return .= '<li style="list-style:none">Please select customer.</li>';        	
         }
@@ -110,7 +137,6 @@ class AccountingTransaction
                 $return .= $message;
             }
         }
-
         return $return;
 	}
 

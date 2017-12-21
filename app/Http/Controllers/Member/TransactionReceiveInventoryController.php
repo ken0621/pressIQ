@@ -15,6 +15,7 @@ use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_terms;
 
+use App\Globals\AccountingTransaction;
 use App\Globals\TransactionReceiveInventory;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Vendor;
@@ -66,11 +67,14 @@ class TransactionReceiveInventoryController extends Member
         $insert['transaction_refnumber']    = $request->transaction_refnumber;
         $insert['vendor_id']                = $request->vendor_id;
         $insert['vendor_address']           = $request->vendor_address;
+        $insert['vendor_email']             = $request->vendor_email;
         $insert['vendor_terms']             = $request->vendor_terms;
         $insert['transaction_date']         = $request->transaction_date;
         $insert['transaction_duedate']      = $request->transaction_duedate;
-        /*$insert['vendor_message']           = $request->vendor_message;*/
         $insert['vendor_memo']              = $request->vendor_memo;
+        $insert['vendor_total']             = $request->vendor_total;
+
+
 
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
@@ -83,14 +87,12 @@ class TransactionReceiveInventoryController extends Member
                 $insert_item[$key]['item_um'] = $request->item_um[$key];
                 $insert_item[$key]['item_qty'] = str_replace(',', '', $request->item_qty[$key]);
                 $insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
-                /*$insert_item[$key]['item_discount'] = str_replace(',', '', $request->item_discount[$key]);
-                $insert_item[$key]['item_remarks'] = $request->item_remarks[$key];*/
                 $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
-                /*$insert_item[$key]['item_taxable'] = $request->item_taxable[$key];*/
             }
         }
-
-        die(var_dump($btn_action));
+        $validate = AccountingTransaction::vendorValidation($insert, $insert_item);
+        $return = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
+        //die(var_dump($validate));
     }
     public function getCountTransaction(Request $request)
     {

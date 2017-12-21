@@ -45,10 +45,6 @@
                                 <label>Reference Number</label>
                                 <input type="text" class="form-control" name="transaction_refnumber" value="PO20171225-0001">
                             </div>
-                            <div class="col-sm-5 text-right"></div>
-                            <div class="col-sm-3 text-right">
-                                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_order/load-transaction"><i class="fa fa-handshake-o"></i> {{$count_so}} Open Transaction</a></h4>
-                            </div>
                         </div>
                     </div>
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
@@ -60,6 +56,9 @@
                             </div>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$po->po_vendor_email or ''}}"/>
+                            </div>
+                            <div class="col-sm-4 text-right">
+                                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_order/load-transaction"><i class="fa fa-handshake-o"></i> {{$count_so}} Open Transaction</a></h4>
                             </div>
                         </div>
                     </div>

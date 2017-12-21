@@ -5,6 +5,7 @@ use App\Models\Tbl_acctg_transaction_list;
 use App\Models\Tbl_acctg_transaction_item;
 use Carbon\Carbon;
 use DB;
+use Validator;
 
 /**
  * 
@@ -85,5 +86,28 @@ class AccountingTransaction
 	public static function updateTransaction($shop_id, $acctg_trans_id, $trans_item = array())
 	{
 		
+	}
+	public static function customer_validation($insert, $insert_item)
+	{
+
+		$return = null;
+        if(count($insert_item) <= 0)
+        {
+        	$return .= '<li style="list-style:none">Please Select item.</li>';
+        }
+
+        $rules['customer_id'] = 'required';
+        $rules['customer_email'] = 'email';
+
+        $validator = Validator::make($insert, $rules);
+        if($validator->fails())
+        {
+            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+            {
+                $return .= $message;
+            }
+        }
+
+        return $return;
 	}
 }

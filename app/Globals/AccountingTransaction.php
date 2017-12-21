@@ -6,7 +6,7 @@ use App\Models\Tbl_acctg_transaction_item;
 use Carbon\Carbon;
 use DB;
 use Validator;
-
+use App\Globals\Accounting;
 /**
  * 
  *

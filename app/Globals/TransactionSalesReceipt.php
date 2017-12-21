@@ -67,8 +67,8 @@ class TransactionSalesReceipt
             $ins['inv_is_paid']                  = 1;
 
 
-	        /* INSERT INVOICE HERE */
-	        // $invoice_id = Tbl_customer_invoice::insertGetId($ins);
+	        /* INSERT SAlES RECEIPT HERE */
+	        // $sales_receipt_id = Tbl_customer_invoice::insertGetId($ins);
 	        $sales_receipt_id = 0;
 
 	        /* Transaction Journal */
@@ -89,7 +89,7 @@ class TransactionSalesReceipt
 
         return $return; 
 	}
-	public static function insertline($invoice_id, $insert_item, $entry)
+	public static function insertline($sales_receipt_id, $insert_item, $entry)
 	{
 		$itemline = null;
 		foreach ($insert_item as $key => $value) 
@@ -103,7 +103,7 @@ class TransactionSalesReceipt
                 $discount_type  = 'percent';
             }
 
-			$itemline[$key]['invline_inv_id'] 			= $invoice_id;
+			$itemline[$key]['invline_inv_id'] 			= $sales_receipt_id;
 			$itemline[$key]['invline_service_date'] 	= $value['item_servicedate'];
 			$itemline[$key]['invline_item_id'] 			= $value['item_id'];
 			$itemline[$key]['invline_description'] 		= $value['item_description'];

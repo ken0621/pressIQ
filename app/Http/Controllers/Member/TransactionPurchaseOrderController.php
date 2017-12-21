@@ -96,12 +96,15 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_taxable']      = $request->item_taxable[$key];
             }
         }
-        $return = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert,$insert_item)
-        die(var_dump($btn_action));
+       
+        $return = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert,$insert_item);
+        $validate = TransactionPurchaseOrder::validation($this->user_info->shop_id, $insert);
+        //die(var_dump($return));
+        //dd($return);
     }
 
     public function getLoadTransaction()
     {
-        dd('Wail Langs!');
+        dd('Wait Langs!');
     }
 }

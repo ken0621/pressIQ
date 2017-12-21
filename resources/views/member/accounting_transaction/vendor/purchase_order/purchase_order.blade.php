@@ -19,10 +19,10 @@
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu  dropdown-menu-custom">
-                          <li><a class="select-action" code="sclose">Save & Close</a></li>
-                          <li><a class="select-action" code="sedit">Save & Edit</a></li>
-                          <li><a class="select-action" code="sprint">Save & Print</a></li>
-                          <li><a class="select-action" code="snew">Save & New</a></li>
+                            <li><a class="select-action" code="sclose">Save & Close</a></li>
+                            <li><a class="select-action" code="sedit">Save & Edit</a></li>
+                            <li><a class="select-action" code="sprint">Save & Print</a></li>
+                            <li><a class="select-action" code="snew">Save & New</a></li>
                         </ul>
                     </div>
                 </div>
@@ -53,10 +53,13 @@
                     </div>
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <select class="form-control droplist-vendor input-sm pull-left" name="vendor_id" required>
                                     @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($po->po_vendor_id) ? $po->po_vendor_id : (isset($v_id) ? $v_id : '')])
                                 </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$po->po_vendor_email or ''}}"/>
                             </div>
                         </div>
                     </div>
@@ -67,7 +70,7 @@
                         </div>
                         <div class="col-sm-2">  
                             <label>Terms</label>
-                            <select class="form-control input-sm droplist-terms" name="vendor_terms">
+                                <select class="form-control input-sm droplist-terms" name="vendor_terms">
                                     @include("member.load_ajax_data.load_terms")
                                 </select>
                         </div>

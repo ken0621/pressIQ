@@ -152,7 +152,7 @@
    </div>
 </div>
 
-  <!-- Preview Popup -->
+<!-- Preview Popup -->
   <div class="modal fade" id="previewPopup" role="dialog">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">

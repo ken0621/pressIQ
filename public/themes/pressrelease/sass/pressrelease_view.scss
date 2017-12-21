@@ -8,6 +8,14 @@
 		background-color: #fff;
 		min-height: 820px;
 		padding: 40px;
+		@media screen and (max-width: 425px)
+		{
+		   padding: 25px;
+		}
+		@media screen and (max-width: 320px)
+		{
+		   padding: 20px;
+		}
 		.title-container
 		{
 			a
@@ -36,6 +44,14 @@
 			font-size: 17px;
 			text-align: justify;
 			text-indent: 30px;
+			@media screen and (max-width: 425px)
+			{
+			   font-size: 15px;
+			}
+			@media screen and (max-width: 320px)
+			{
+			   font-size: 13px;
+			}
 		}
 		.border
 		{
@@ -57,7 +73,10 @@
 		background-color: #ededed;
 		min-height: 820px;
 		padding: 40px;
-
+		@media screen and (max-width: 425px)
+		{
+		   padding: 25px;
+		}
 		.header-container
 		{
 			font-size: 18px;

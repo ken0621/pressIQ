@@ -120,6 +120,7 @@ class TransactionSalesInvoiceController extends Member
 	{
 		$data['_eq'] = TransactionEstimateQuotation::getOpenEQ($this->user_info->shop_id, $request->c);
 		$data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
+		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
 		return view("member.accounting_transaction.customer.sales_invoice.load_transaction", $data);
 	}
 	public function getPrint(Request $request)

@@ -76,7 +76,26 @@ class TransactionSalesInvoiceController extends Member
 		$validate = TransactionSalesInvoice::postInsert($this->user_info->shop_id, $insert, $insert_item);
 		if(is_numeric($validate))
 		{
-			
+			$return['status'] = 'success';
+			$return['status_message'] = 'Success creating invoice.';
+			$return['call_function'] = 'success_invoice';
+
+			if($btn_action == 'sclose')
+			{
+				$return['status_redirect'] = '/member/transaction/sales_invoice';
+			}
+			elseif($btn_action == 'sedit')
+			{
+				$return['status_redirect'] = '/member/transaction/sales_invoice/create?id='.$validate;
+			}
+			elseif($btn_action == 'sprint')
+			{
+				$return['status_redirect'] = '/member/transaction/sales_invoice/print?id='.$validate;
+			}
+			elseif($btn_action == 'snew')
+			{
+				$return['status_redirect'] = '/member/transaction/sales_invoice/create';
+			}		
 		}
 		else
 		{

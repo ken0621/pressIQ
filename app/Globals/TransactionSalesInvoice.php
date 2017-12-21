@@ -75,6 +75,7 @@ class TransactionSalesInvoice
 	        $entry["ewt"]               = $ewt;
 
 	        $return = Self::insertline($invoice_id, $insert_item, $entry);
+	        $return = $invoice_id;
 		}
 		else
 		{
@@ -86,6 +87,7 @@ class TransactionSalesInvoice
 	public static function insertline($invoice_id, $insert_item, $entry)
 	{
 		$itemline = null;
+		$return = null;
 		foreach ($insert_item as $key => $value) 
 		{	
 	        /* DISCOUNT PER LINE */

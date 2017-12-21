@@ -16,19 +16,35 @@
 
               <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST" style="">
                 {{csrf_field()}}
-                @if(session()->has("pr_edit"))
-                @foreach($edit as $edits)
                 <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
-                  <input type="text" name="pr_headline" class="form-control" autofocus value="{{$edits->pr_headline}}">
+                    @if(session()->has("pr_edit"))
+                      @foreach($edit as $edits)
+                        <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus value="{{$edits->pr_headline}}">
+                      @endforeach
+                    @else
+                      <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus>
+                    @endif
                   <div class="title">Content:</div>
-                  <textarea name="pr_content" id="tinymce">{!!$edits->pr_content!!}</textarea>
+                    @if(session()->has("pr_edit"))
+                      @foreach($edit as $edits)
+                        <textarea name="pr_content" id="pr_content">{!!$edits->pr_content!!}</textarea>
+                      @endforeach
+                    @else
+                      <textarea name="pr_content" id="pr_content"></textarea>
+                    @endif  
                   <div class="title">Boilerplate:</div>
-                  <textarea name="pr_boiler_content" id="tinymce">{!!$edits->pr_boiler_content!!}</textarea>
+                    @if(session()->has("pr_edit"))
+                      @foreach($edit as $edits)
+                        <textarea name="pr_boiler_content" id="pr_boiler_content">{!!$edits->pr_boiler_content!!}</textarea>
+                      @endforeach
+                    @else
+                      <textarea name="pr_boiler_content" id="pr_boiler_content"></textarea>
+                    @endif
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                  <span class="preview-button"><button onclick="tinyMCE.activeEditor.execCommand('mcePreview');">Preview</button></span>
+                  <span class="preview-button"><button onclick="preview()">Preview</button></span>
                   </div>
                 </div>
 
@@ -64,85 +80,36 @@
                     </select>
 
                     <div class="title">Send To:</div>
-                    <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
+                      @if(session()->has("pr_edit"))
+                        @foreach($edit as $edits)
+                          <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
+                        @endforeach
+                      @else
+                        <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
+                      @endif
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
                       {{-- POPUP CHOOSE RECIPIENT --}}
 
-                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
+                    @if(session()->has("pr_edit"))
+                      @foreach($edit as $edits)
+                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
+                      @endforeach
+                    @else
+                      <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
+                    @endif
                     <div class="button-container"></div>
                 </div>
-                @endforeach
-
-                @else
-                <div id="create_release" class="tabcontent create-release-container">
-                  <div class="title-container">New Release</div>
-                  <div class="title">Headline:</div>
-                  <input type="text" name="pr_headline" class="form-control" id="pr_headline"  onclick="showMessage()" autofocus>
-                  <div class="title">Content:</div>
-                  <textarea name="pr_content" id="tinymce"></textarea>
-                  <div class="title">Boilerplate:</div>
-                  <textarea name="pr_boiler_content" id="tinymce"></textarea>
-                  <div class="button-container">
-                  <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft">Save as draft</button></span>
-                  <span class="preview-button"><button type="button" data-toggle="modal" data-target="#previewPopup" 
-                  >Preview</button></span>
-                  </div>
-                </div>
-
-                <div id="choose_recipient" class="tabcontent choose-recipient-container">
-                    <div class="title-container">Choose Recipient</div>
-
-                    <div class="title">Country:</div>
-                    <select data-placeholder="--Choose a country--" multiple class="chosen-select" id="choose_country" name="choose_country[]">
-                         @foreach($_country as $country_name)
-                         <option value="{{$country_name->country}}">{{$country_name->country}}</option>
-                         @endforeach
-                    </select>
-
-                    <div class="title">Industry Type:</div>
-                    <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]">
-                          @foreach($_industry_type as $industry)
-                        <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
-                          @endforeach
-                    </select>
-
-                    <div class="title">Media Type:</div>
-                    <select data-placeholder="--Choose a media type--" multiple class="chosen-select" id="media_type" name="media_type[]">
-                          @foreach($_media_type as $media)
-                        <option value="{{$media->media_type}}">{{$media->media_type}}</option>
-                          @endforeach
-                    </select>
-
-                    <div class="title">Title of Journalist:</div>
-                    <select data-placeholder="--Choose a title of journalist--" multiple class="chosen-select" id="title_of_journalist" name="title_of_journalist[]">
-                          @foreach($_title_of_journalist as $title)
-                        <option value="{{$title->title_of_journalist}}">{{$title->title_of_journalist}}</option>
-                          @endforeach
-                    </select>
-
-                    <div class="title">Send To:</div>
-                    <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
-                    
-                    {{-- POPUP CHOOSE RECIPIENT --}}
-                    <span class="choose-button"><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span>
-                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
-
-                    {{-- POPUP CHOOSE RECIPIENT --}}
-                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
-                    <div class="button-container"></div>
-                </div>
-                @endif
-
                 <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">Send Release</div>
                   <div class="title">Publisher:</div>
                   <div class="content">{{session('user_first_name')}} {{session('user_last_name')}}</div>
                   <div class="title">Title:</div>
-                  <div class="content" id = "display_message"></div>
+                  <div class="content" id="headline_pr"></div>
                   <div class="title">Send To:</div>
-                  <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
+                  <span class="result-container">
+                  <span id="results_number_sendto" style="font-size:18px"></span></span>
 
 
                   <div class="button-container">
@@ -163,10 +130,16 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
+          <h4 class="modal-title">Preview</h4>
         </div>
         <div class="modal-body">
-          <p>This is a large modal.</p>
+          <div id="preview_headline">
+          </div>
+          <div id="preview_content">
+          </div>
+          <div><p>About the Publisher</p></div>
+          <div id="preview_boiler_content">
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -296,10 +269,11 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
 </script>
 
 <script type="text/JavaScript">
-    function showMessage(){
-        var pr_headline = document.getElementById("pr_headline").value;
-        display_message.innerHTML= pr_headline;
-    }
+    $('#pr_headline').on("input", function() {
+      var dInput = this.value;
+      console.log(dInput);
+      $('#headline_pr').text(dInput);
+    });
 </script>
 
 <script type="text/javascript">
@@ -308,5 +282,15 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     var data = $('.recipient_form').serialize();
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
 });
+  function preview()
+  {
+    var headline = document.getElementById('pr_headline').value;
+    var content = tinymce.get('pr_content').getContent();
+    var boiler_content = tinymce.get('pr_boiler_content').getContent();
+    document.getElementById('preview_headline').innerHTML =headline;
+    document.getElementById('preview_content').innerHTML =content;
+    document.getElementById('preview_boiler_content').innerHTML =boiler_content;
+    $('#previewPopup').modal('show'); 
+  }
 </script>
 @endsection

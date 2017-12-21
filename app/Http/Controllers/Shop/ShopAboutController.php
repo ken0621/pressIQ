@@ -177,6 +177,12 @@ class ShopAboutController extends Shop
         return view("terms_and_conditions", $data);
     }
 
+    public function return_policy()
+    {
+        $data["page"] = "Return Policy";
+        return view("return_policy", $data);
+    }
+
     public function products()
     {
         $data["page"] = "products";

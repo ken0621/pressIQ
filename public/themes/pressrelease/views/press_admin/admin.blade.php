@@ -9,7 +9,7 @@
 					<ul class="nav nav-tabs">
 					   <li class="{{ Request::segment(2) == "dashboard" ? "active" : "" }}"><a href="/pressadmin/dashboard">Dashboard</a></li>
 					   <li class="{{ Request::segment(2) == "mediacontacts" ? "active" : "" }}"><a href="/pressadmin/mediacontacts">Media Contacts</a></li><!-- Add link -->
-					   <li class="{{ Request::segment(2) == "pressreleases" ? "active" : "" }}"><a href="/pressadmin/pressreleases">Press Releases</a></li><!-- add link -->
+					  <!--  <li class="{{ Request::segment(2) == "pressreleases" ? "active" : "" }}"><a href="/pressadmin/pressreleases">Press Releases</a></li> --><!-- add link -->
 					   <li class="{{ Request::segment(2) == "email" ? "active" : "" }}"><a href="/pressadmin/email">Email</a></li><!-- add link -->
 					</ul>
 

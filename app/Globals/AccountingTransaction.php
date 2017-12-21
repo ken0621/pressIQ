@@ -118,7 +118,7 @@ class AccountingTransaction
 		$return = null;
         if(count($insert_item) <= 0)
         {
-            $return .= "<li style=`list-style:none`>Please Select Item.</li><br>";
+            $return .= '<li style="list-style:none">Please Select Item.</li>';
         }
 
 		if(!$insert['customer_id'])

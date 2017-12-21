@@ -349,12 +349,9 @@ function receive_inventory()
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("purchase-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-qty").val(1).change();
-		console.log($this.find("option:selected").attr("item-type"));		
 
-		$parent.find(".txt-qty").attr("disabled",true);
 		if($this.find("option:selected").attr("has-um"))
 		{
-			$parent.find(".txt-qty").removeAttr("disabled");
 			$.ajax(
 			{
 				url: '/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"),

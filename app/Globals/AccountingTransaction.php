@@ -101,12 +101,12 @@ class AccountingTransaction
         }
 
 		$rules['transaction_refnumber'] = 'required';
-        $rules['vendor_email']    	= 'email';
+        $rules['vendor_email']    		= 'email';
 
         $validator = Validator::make($insert, $rules);
         if($validator->fails())
         {
-            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+            foreach ($validator->messages()->all('<li style="list-style:none">:message</li><br>') as $keys => $message)
             {
                 $return .= $message;
             }

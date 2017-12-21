@@ -12,6 +12,7 @@ use App\Globals\Item;
 use App\Globals\Customer;
 use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
+use App\Globals\TransactionCreditMemo;
 
 use Session;
 use Carbon\Carbon;
@@ -61,6 +62,18 @@ class TransactionCreditMemoController extends Member
 				$insert_item[$key]['item_taxable'] = $request->item_taxable[$key];
 			}
 		}
-		die(var_dump($btn_action));
+		$return = null;
+		$validate = TransactionCreditMemo::postInsert($this->user_info->shop_id, $insert, $insert_item);
+		if(is_numeric($validate))
+		{
+			
+		}
+		else
+		{
+			$return['status'] = 'error';
+			$return['status_message'] = $validate;
+		}
+
+		return json_encode($return);
 	}
 }

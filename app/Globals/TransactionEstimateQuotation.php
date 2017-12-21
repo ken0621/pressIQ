@@ -57,7 +57,7 @@ class TransactionEstimateQuotation
 
 
 	        /* INSERT INVOICE HERE */
-	        $estimate_id = Tbl_customer_estimate::insertGetId($ins);
+	        // $estimate_id = Tbl_customer_estimate::insertGetId($ins);
 	        $estimate_id = 0;
 
 	        $return = Self::insertline($estimate_id, $insert_item);

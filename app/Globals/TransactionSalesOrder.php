@@ -58,7 +58,7 @@ class TransactionSalesOrder
             $ins['est_status']					 = 'accepted';   
 
 	        /* INSERT SALES ORDER HERE */
-	        $sales_order_id = Tbl_customer_estimate::insertGetId($ins);
+	        // $sales_order_id = Tbl_customer_estimate::insertGetId($ins);
 	        $sales_order_id = 0;
 
 	        $return = Self::insertline($sales_order_id, $insert_item);

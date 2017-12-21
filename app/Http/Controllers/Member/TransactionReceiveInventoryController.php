@@ -15,6 +15,7 @@ use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_terms;
 
+use App\Globals\AccountingTransaction;
 use App\Globals\TransactionReceiveInventory;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Vendor;
@@ -89,8 +90,9 @@ class TransactionReceiveInventoryController extends Member
                 $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
             }
         }
-         $return = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
-        die(var_dump($btn_action));
+        $validate = AccountingTransaction::vendorValidation($insert, $insert_item);
+        $return = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
+        //die(var_dump($validate));
     }
     public function getCountTransaction(Request $request)
     {

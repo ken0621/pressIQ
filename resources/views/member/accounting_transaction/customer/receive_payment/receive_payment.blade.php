@@ -52,7 +52,9 @@
                                     @include("member.load_ajax_data.load_customer", ['customer_id' => isset($rcvpayment) ? $rcvpayment->rp_customer_id : (isset($c_id) ? $c_id : '')])
                                 </select>
                             </div>
-                            <div class="col-sm-4"></div>                            
+                            <div class="col-sm-4">
+                                    <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$inv->inv_customer_email or ''}}"/>
+                            </div>                          
                             <!-- <div class="col-sm-4">
                                 <button class="btn btn-custom-white btn-sm" data-placement="bottom" data-html="true" id="example" data-content="<form><br><input type='text' class='form-control input-sm' ><br><a style='cursor:pointer' class='pull-left' onclick='$(&quot;#example&quot;).popover(&quot;hide&quot;);'>Cancel</a><a style='cursor:pointer' class='pull-right'>Find</a><br></form>" data-toggle="popover">Find by invoice no.</button>
                             </div> -->

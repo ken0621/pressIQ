@@ -41,13 +41,15 @@ class TransactionReceivePaymentController extends Member
 	{
 		$btn_action = $request->button_action;
 
-		$insert['transaction_refnumber'] 		= $request->transaction_refnumber;
+		$insert['transaction_refnum']	 		= $request->transaction_refnumber;
 		$insert['customer_id'] 			 		= $request->customer_id;
 		$insert['customer_email']        		= $request->customer_email;
 		$insert['transaction_payment_method']   = $request->transaction_payment_method;
 		$insert['transaction_ref_no']     		= $request->transaction_ref_no;
 		$insert['rp_ar_account']  				= $request->rp_ar_account;
 		$insert['customer_memo']         	    = $request->customer_memo;
+		$insert['transaction_date']       	    = date("Y-m-d", strtotime($request->transaction_date));
+		$insert['rp_total_amount']				= $request->rp_total_amount;
 
 		$txn_line = Request::input('line_is_checked');
         foreach($txn_line as $key=>$txn)

@@ -26,7 +26,7 @@ class TransactionSalesInvoiceController extends Member
 		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice_list',$data);
 	}
 
-	public function getCreate()
+	public function getCreate(Request $request)
 	{
 		$data['page'] = "Create Sales Invoice";		
         $data["_customer"]  = Customer::getAllCustomer();
@@ -34,6 +34,10 @@ class TransactionSalesInvoiceController extends Member
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["_terms"]     = Customer::getTerms($this->user_info->shop_id,0);
         $data['action']		= "/member/transaction/sales_invoice/create-sales-invoice";
+        if($request->id)
+        {
+        	
+        }
 
 		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice',$data);
 	} 
@@ -111,6 +115,10 @@ class TransactionSalesInvoiceController extends Member
 		return TransactionSalesInvoice::CountTransaction($this->user_info->shop_id, $customer_id);
 	}
 	public function getLoadTransaction(Request $request)
+	{
+		return view("member.accounting_transaction.customer.sales_invoice.load_transaction");
+	}
+	public function getPrint(Request $request)
 	{
 		dd("Under Maintenance");
 	}

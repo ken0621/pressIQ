@@ -90,6 +90,11 @@ class AccountingTransaction
 	}
 	public static function vendorValidation($insert, $insert_item)
 	{
+		$return = null;
+        if(count($insert_item) <= 0)
+        {
+            $return .= "<li style=`list-style:none`>Please Select Item.</li><br>";
+        }
         if(!$insert['vendor_id'])
         {
             $return .= "<li style=`list-style:none`>Please Select Vendor.</li><br>";          

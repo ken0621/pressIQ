@@ -479,7 +479,7 @@
               </div>
               @else
               <div class="form-group text-center">
-              <span>You cannot change password when you were singned up with Google or Facebook</span>
+              <span>You cannot change password of this account. It was singned up with Google or Facebook</span>
               </div>
               @endif
             </div>

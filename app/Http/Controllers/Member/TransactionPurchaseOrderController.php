@@ -102,7 +102,10 @@ class TransactionPurchaseOrderController extends Member
 
         if(is_numeric($validate))
         {
-            
+            $return['status'] = 'success';
+            $return['status_message'] = 'Success creating purchase order.';
+            $return['call_function'] = 'success_purchase_order';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('purchase_order', $validate ,$btn_action);
         }
         else
         {

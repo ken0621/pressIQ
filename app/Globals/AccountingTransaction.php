@@ -187,7 +187,7 @@ class AccountingTransaction
         $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
         return $inv_journal;
 	}
-	public static function get_redirect($transaction_type, $btn_action = 'sclose')
+	public static function get_redirect($transaction_type,$transaction_id, $btn_action = 'sclose')
 	{
 		$return = null;
 		if($btn_action == 'sclose')
@@ -196,11 +196,11 @@ class AccountingTransaction
 		}
 		elseif($btn_action == 'sedit')
 		{
-			$return = '/member/transaction/'.$transaction_type.'/create?id='.$validate;
+			$return = '/member/transaction/'.$transaction_type.'/create?id='.$transaction_id;
 		}
 		elseif($btn_action == 'sprint')
 		{
-			$return = '/member/transaction/'.$transaction_type.'/print?id='.$validate;
+			$return = '/member/transaction/'.$transaction_type.'/print?id='.$transaction_id;
 		}
 		elseif($btn_action == 'snew')
 		{

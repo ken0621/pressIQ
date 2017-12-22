@@ -67,7 +67,7 @@ class TransactionPurchaseOrder
             $ins['po_overall_price']  = $overall_price;
 
             /* INSERT PO IN DATABASE */
-            //$purchase_order_id = Tbl_purchase_order::insertGetId($ins);
+            $purchase_order_id = Tbl_purchase_order::insertGetId($ins);
 
             $return = Self::insertline($purchase_order_id, $insert_item);
 		}
@@ -110,7 +110,7 @@ class TransactionPurchaseOrder
         if(count($itemline) > 0)
         {
             /*INSERTING ITEMS TO DATABASE*/
-            //$return = Tbl_purchase_order_line::insert($itemline);
+            $return = Tbl_purchase_order_line::insert($itemline);
         }
 
         return $return;

@@ -474,3 +474,11 @@ function success_item(data)
 	});
 }
 
+function success_purchase_order(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
+}

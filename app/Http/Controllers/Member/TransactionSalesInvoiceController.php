@@ -87,7 +87,7 @@ class TransactionSalesInvoiceController extends Member
 			$return['status'] = 'success';
 			$return['status_message'] = 'Success creating invoice.';
 			$return['call_function'] = 'success_invoice';
-			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_invoice', $btn_action);
+			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_invoice', $validate ,$btn_action);
 		}
 		else
 		{

@@ -93,7 +93,7 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_qty']          = str_replace(',', '', $request->item_qty[$key]);
                 $insert_item[$key]['item_rate']         = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_discount']     = str_replace(',', '', $request->item_discount[$key]);
-                $insert_item[$key]['item_remarks']      = $request->item_remarks[$key];
+                $insert_item[$key]['item_remark']      = $request->item_remark[$key];
                 $insert_item[$key]['item_amount']       = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_taxable']      = $request->item_taxable[$key];
             }
@@ -102,7 +102,10 @@ class TransactionPurchaseOrderController extends Member
 
         if(is_numeric($validate))
         {
-
+            $return['status'] = 'success';
+            $return['status_message'] = 'Success creating purchase order.';
+            $return['call_function'] = 'success_purchase_order';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('purchase_order', $validate ,$btn_action);
         }
         else
         {

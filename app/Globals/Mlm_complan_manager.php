@@ -678,7 +678,14 @@ class Mlm_complan_manager
                 $arry_log['wallet_log_details'] = $log;
                 $arry_log['wallet_log_amount'] = $direct_points_given;
                 $arry_log['wallet_log_plan'] = "DIRECT";
-                $arry_log['wallet_log_status'] = "n_ready";   
+                if($slot_info->shop_id == 5)
+                {
+                   $arry_log['wallet_log_status'] = "released"; 
+                }
+                else
+                {
+                   $arry_log['wallet_log_status'] = "n_ready";   
+                }
                 $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('DIRECT', $slot_info->shop_id); 
                 Mlm_slot_log::slot_array($arry_log);
 

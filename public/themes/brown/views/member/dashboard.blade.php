@@ -166,7 +166,7 @@
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>EZ Enrollment Bonus</span><span class="value">{{ $wallet->display_complan_ez_referral_bonus }}</span></div>
+							<div class="name"><span>EZ Enrollment Bonus</span><span class="value">{{ isset($wallet->display_complan_ez_referral_bonus) ? $wallet->display_complan_ez_referral_bonus : "0" }}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>

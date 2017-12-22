@@ -269,7 +269,7 @@
                 </div>
               </div>
             </div>
-          </div>a
+          </div>
           <div id="payment-and-billing" class="tab-pane fade">
             <br>
             <div class="form-horizontal">
@@ -451,6 +451,7 @@
           <div id="mlm" class="tab-pane fade">
             <br>
             <div class="form-horizontal">
+              @if($customer->signup_with == 'member_register')
               <div class="form-group">
                 <div class="col-md-12">
                   <div class="col-md-12">
@@ -476,6 +477,11 @@
                   </div>
                 </div>
               </div>
+              @else
+              <div class="form-group text-center">
+              <span>You cannot change password when you were singned up with Google or Facebook</span>
+              </div>
+              @endif
             </div>
           </div>
   

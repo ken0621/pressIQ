@@ -13,6 +13,7 @@ use App\Globals\Customer;
 use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
 use App\Globals\TransactionEstimateQuotation;
+use App\Globals\AccountingTransaction;
 
 use Session;
 use Carbon\Carbon;
@@ -69,7 +70,10 @@ class TransactionEstimateQuotationController extends Member
 		$validate = TransactionEstimateQuotation::postInsert($this->user_info->shop_id, $insert, $insert_item);
 		if(is_numeric($validate))
 		{
-			
+			$return['status'] = 'success';
+			$return['status_message'] = 'Success creating estimate and quotation.';
+			$return['call_function'] = 'success_estimate_quotation';
+			$return['status_redirect'] = AccountingTransaction::get_redirect('estimate_quotation', $validate ,$btn_action);
 		}
 		else
 		{

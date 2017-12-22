@@ -247,3 +247,13 @@ function submit_done(data)
         data.element.modal("hide");
     }
 }
+function submit_selected_image_done(data) 
+{ 
+    var image_path = data.image_data[0].image_path;
+
+    if (data.akey == 1) 
+    {
+        $('input[name="item_img"]').val(image_path);
+        $('.image-put').attr("src", image_path);
+    }
+}

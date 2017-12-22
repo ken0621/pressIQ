@@ -23,6 +23,7 @@ use App\Globals\Reward;
 use App\Globals\MLM2;
 use App\Globals\Mlm_complan_manager_repurchase;
 use App\Globals\Columns;
+use App\Globals\Warehouse2;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_brown_rank;
 use App\Models\Tbl_membership_code;
@@ -40,6 +41,11 @@ class MlmDeveloperController extends Member
 
     public function myTest()
     {
+        // DB::table("tbl_testing_logs")->insert(["logs"=>"try"]);
+        Mlm_complan_manager_cd::graduate_check(Tbl_mlm_slot::where('slot_id', 65834)->membership()->first());
+        dd(3214);
+        Warehouse2::check_item_ez_program(5,64,3497);
+        dd(123);
         dd(Tbl_mlm_slot::where('slot_id', 65834)->membership()->first());
         $data =  $plan_settings = Tbl_mlm_plan::where('shop_id', $this->user_info->shop_id)
             ->where('marketing_plan_enable', 1)

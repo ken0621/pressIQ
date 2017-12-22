@@ -136,7 +136,7 @@ class Mlm_complan_manager_cd
 		$plan_settings = Tbl_mlm_plan::where('shop_id', $slot_info->shop_id)
         ->where('marketing_plan_enable', 1)
         ->where('marketing_plan_trigger', 'Slot Creation')
-        ->where('marketing_plan_code', 'DIRECT')
+        ->where('marketing_plan_code',"!=", 'DIRECT')
         ->get();
 
         // Distribute Earning

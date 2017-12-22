@@ -55,7 +55,7 @@
                 <!--<a class="holder">GET THE APP</a>-->
                 <a href="/about" class="holder">COMPANY</a>
                 @if($customer)
-                <span class="ez">EZ</span><span class="ps">PS</span>
+                <span class="ez" style="display: none">EZ</span><span class="ps" style="display: none">PS</span>
                 <div style="display: inline-block; vertical-align: middle;" class="dropdown">
                     <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false" style="text-transform: uppercase; color: #fff;">{{ $customer->first_name }} {{ $customer->last_name }} <span class="caret"></span></a>
                     <ul class="dropdown-menu dropdown-menu-right profile-menu" style="margin-top: -1px;">
@@ -221,7 +221,7 @@
                     </div>
                 </div>
                 <div class="right">
-                    <span class="ez">EZ</span><span class="ps">PS</span>
+                    <span class="ez" style="display: none">EZ</span><span class="ps" style="display: none">PS</span>
                     <div class="dropdown hidden">
                         <a href="#" class="notif-holders dropdown-toggle" data-toggle="dropdown">
                             <div class="brown-icon-bell-o" style="font-size: 20px"></div> <span class="badge">500</span>

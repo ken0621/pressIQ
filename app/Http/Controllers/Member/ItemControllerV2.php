@@ -109,6 +109,7 @@ class ItemControllerV2 extends Member
 		$insert['item_sku'] 				   = Request::input('item_sku');
 		$insert['item_barcode'] 			   = Request::input('item_barcode');
 		$insert['item_category_id']			   = Request::input('item_category');
+		$insert['item_img']				 	   = Request::input('item_img')  == null ? '' : Request::input('item_img');
 		$insert['item_manufacturer_id'] 	   = Request::input('item_manufacturer_id')  == null ? '' : Request::input('item_manufacturer_id');
 		$insert['item_price'] 				   = Request::input('item_price');
 		$insert['item_income_account_id'] 	   = Request::input('item_income_account_id');

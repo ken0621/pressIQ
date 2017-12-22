@@ -125,17 +125,17 @@ function purchase_order()
 			}
 
 			/* CHECK THE DISCOUNT */
-			if(discount.indexOf('%') >= 0)
+			/*if(discount.indexOf('%') >= 0)
 			{
 				discount_amount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100);
 				discount_amount = (rate * qty) * discount_amount;
-			}
+			}*/
 			
-			/*if(discount.indexOf('%') >= 0)
+			if(discount.indexOf('%') >= 0)
 			{
 				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
 				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * action_return_to_number(rate);
-			}*/
+			}
 
 			else if(discount == "" || discount == null)
 			{

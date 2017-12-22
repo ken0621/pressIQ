@@ -108,7 +108,7 @@
                                             @foreach($_poline as $poline)
                                                 <tr class="tr-draggable">
                                                     <td class="invoice-number-td text-right">1</td>
-                                                    <td><input type="text" class="for-datepicker" name="item_service_date[]" value="{{$poline->poline_service_date}}" /></td>
+                                                    <td><input type="text" class="for-datepicker" name="item_servicedate[]" value="{{$poline->poline_service_date}}" /></td>
                                                     <td>
                                                         <select class="form-control select-item droplist-item input-sm pull-left {{$poline->poline_item_id}}" name="item_id[]" required>
                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $poline->poline_item_id])
@@ -141,7 +141,7 @@
                                         @else                                
                                             <tr class="tr-draggable">
                                                 <td class="invoice-number-td text-right">1</td>
-                                                <td><input type="text" class="for-datepicker" name="item_service_date[]"/></td>
+                                                <td><input type="text" class="for-datepicker" name="item_servicedate[]"/></td>
                                                 <td>
                                                     <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
@@ -167,7 +167,7 @@
                                                 
                                             <tr class="tr-draggable">
                                                 <td class="invoice-number-td text-right">2</td>
-                                                <td><input type="text" class="datepicker" name="item_service_date[]"/></td>
+                                                <td><input type="text" class="datepicker" name="item_servicedate[]"/></td>
                                                 <td>
                                                     <select class="22222 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
@@ -239,7 +239,7 @@
                                 <div class="col-md-7 text-right digima-table-label">
                                     <div class="row">
                                         <div class="col-sm-6 col-sm-offset-4  padding-lr-1">
-                                            <select class="form-control input-sm compute discount_selection" name="vendor_type">  
+                                            <select class="form-control input-sm compute discount_selection" name="vendor_discounttype">  
                                                 <option value="percent" {{isset($po) ? $po->po_discount_type == 'percent' ? 'selected' : '' : ''}}>Discount percentage</option>
                                                 <option value="value" {{isset($po) ? $po->po_discount_type == 'value' ? 'selected' : '' : ''}}>Discount value</option>
                                             </select>
@@ -291,7 +291,7 @@
     <table class="div-item-row-script hide">
         <tr class="tr-draggable">
             <td class="invoice-number-td text-right">2</td>
-            <td><input type="text" class="for-datepicker"  name="item_service_date[]"/></td>
+            <td><input type="text" class="for-datepicker"  name="item_servicedate[]"/></td>
             <td>
                 <select class="form-control select-item input-sm pull-left" name="item_id[]">
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])

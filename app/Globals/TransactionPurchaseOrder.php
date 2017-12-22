@@ -3,6 +3,8 @@ namespace App\Globals;
 
 
 use App\Models\Tbl_customer_estimate;
+use App\Models\Tbl_purchase_order;
+use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_shop;
 use Carbon\Carbon;
 use DB;
@@ -38,7 +40,7 @@ class TransactionPurchaseOrder
             $ins['ewt']                = $insert['vendor_ewt'];
             $ins['po_terms_id']        = $insert['vendor_terms'];
             $ins['po_discount_value']  = $insert['vendor_discount'];
-            $ins['po_discount_type']   = $insert['vendor_discounttype'];
+            $ins['po_discount_type'] = $insert['vendor_discounttype'];
             $ins['taxable']            = $insert['vendor_tax'];
             $ins['date_created']       = Carbon::now();
 
@@ -64,8 +66,10 @@ class TransactionPurchaseOrder
             $ins['po_subtotal_price'] = $subtotal_price;
             $ins['po_overall_price']  = $overall_price;
 
-            /* INSERT PO HERE */
-            /*$purchase_order_id = Tbl_purchase_order::insertGetId($ins);*/
+            /* INSERT PO IN DATABASE */
+            //$purchase_order_id = Tbl_purchase_order::insertGetId($ins);
+
+            $return = Self::insertline($purchase_order_id, $insert_item);
 		}
         else
         {
@@ -73,4 +77,42 @@ class TransactionPurchaseOrder
         }  
         return $return;
 	}
+
+    public static function insertLine($purchase_order_id, $insert_item)
+    {
+        $itemline = null;
+        $return = null;
+        foreach ($insert_item as $key => $value) 
+        {   
+            /* DISCOUNT PER LINE */
+            $discount       = $value['item_discount'];
+            $discount_type  = 'fixed';
+            if(strpos($discount, '%'))
+            {
+                $discount       = substr($discount, 0, strpos($discount, '%')) / 100;
+                $discount_type  = 'percent';
+            } 
+            /*FROM DATABASE*/                        /*FROM CONTROLLER*/
+            $itemline[$key]['poline_po_id']          = $purchase_order_id;
+            $itemline[$key]['poline_service_date']   = $value['item_servicedate']; 
+            $itemline[$key]['poline_item_id']        = $value['item_id'];
+            $itemline[$key]['poline_description']    = $value['item_description'];
+            $itemline[$key]['poline_um']             = $value['item_um'];
+            $itemline[$key]['poline_orig_qty']       = $value['item_qty'];
+            $itemline[$key]['poline_rate']           = $value['item_rate'];
+            $itemline[$key]['poline_discount']       = $value['item_discount']; 
+            $itemline[$key]['poline_discount_remark'] = $value['item_remark'];  
+            $itemline[$key]['poline_amount']         = $value['item_amount'];   
+            $itemline[$key]['taxable']               = $value['item_taxable']; 
+            $itemline[$key]['date_created']          = Carbon::now();
+
+        }
+        if(count($itemline) > 0)
+        {
+            /*INSERTING ITEMS TO DATABASE*/
+            //$return = Tbl_purchase_order_line::insert($itemline);
+        }
+
+        return $return;
+    }
 }

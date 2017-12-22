@@ -5,6 +5,9 @@
             <th class="text-center" width="200px">Activation</th>
             <th class="text-center" width="200px">Membership</th>
             <th class="text-center" width="250px">Membership Kit</th>
+            @if($ez_program == "EZ")
+                <th class="text-center" width="250px">Amount needed to pay</th>
+            @endif
             <th class="text-center"></th>
             <th class="text-center"></th>
             <th class="text-center"></th>
@@ -19,6 +22,9 @@
             <td class="text-center">{{$item->mlm_activation}}</td>
             <td class="text-center">{{$item->membership_name}}</td>
             <td class="text-center">{{$item->item_name}}</td>
+            @if($ez_program == "EZ")
+                <td class="text-center">{{$item->apply_ez_program_balance}}</td>
+            @endif
             @if($item->item_in_use == 'unused')
                 @if($item->record_consume_ref_name == 'reserved')
                 <td class="text-center">{{ucwords($item->first_name.' '.$item->middle_name.' '.$item->last_name)}} {{$item->record_consume_ref_id != 0 ? ' - ' : ''}} <a size="md" class="popup" link="/member/mlm/code2/change_status?action=cancel_reservation&item_id={{$item->item_id}}&record_id={{$item->record_log_id}}">Cancel Reservation</a></td>

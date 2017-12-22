@@ -41,7 +41,7 @@ class MLM_CodeControllerV2 extends Member
     public function membership_code_table(Request $request)
     {   
         $data['_assembled_item_kit'] = Item::get_assembled_kit(0, $request->item_kit_id, $request->item_membership_id, $request->search_keyword, $request->status,10);
-
+        $data["ez_program"]          = $request->item_membership_id;
         foreach ($data['_assembled_item_kit'] as $key => $value) 
         {
             $data['_assembled_item_kit'][$key]->used_by = null;
@@ -65,9 +65,10 @@ class MLM_CodeControllerV2 extends Member
         {
             $item_id            = $request->item_id;
             $quantity           = ($request->quantity <= 0 ? 1 : $request->quantity);
-            
-            $return_assemble = Item::assemble_membership_kit($this->user_info->shop_id, $this->current_warehouse->warehouse_id, $item_id, $quantity);
 
+
+            $return_assemble = Item::assemble_membership_kit($this->user_info->shop_id, $this->current_warehouse->warehouse_id, $item_id, $quantity);
+            
             if(!$return_assemble)
             {
                 $response["status"] = "success";
@@ -84,6 +85,7 @@ class MLM_CodeControllerV2 extends Member
         }
         else
         {
+            $data["check_shop_id"] = $this->user_info->shop_id;
             $data["page"] = "Membership Code Assemble";
             Item::get_filter_type(5);
             $data["_item_kit"] = Item::get($this->user_info->shop_id);
@@ -121,6 +123,7 @@ class MLM_CodeControllerV2 extends Member
         $data["kit_quantity_limit"] = Item::bundle_count($item_id, $warehouse_id);
         $data["membership"] = MLM2::membership_info($this->user_info->shop_id, $item_info->membership_id);
         $data["_item"] = $_new_item;
+        $data["hidden_price"] = $item_info->item_price;
 
         return view("member.mlm_code_v2.membership_code_assemble_table", $data);
     }

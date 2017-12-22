@@ -58,6 +58,8 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_brown_ez_program;
+
 use App\Models\Tbl_press_release_recipient;
 use App\Tbl_pressiq_press_releases;
 
@@ -67,6 +69,7 @@ use App\Globals\Item;
 use App\Globals\Mlm_tree;
 use Jenssegers\Agent\Agent;
 use App\Globals\Mlm_slot_log;
+use App\Globals\Mlm_complan_manager;
 use Validator;
 use Google_Client; 
 use Google_Service_Drive;
@@ -205,6 +208,12 @@ class ShopMemberController extends Shop
     {
         $data = [];
         return Self::load_view_for_members('member.products', $data);
+    }
+    public function getBuyCredits()
+    {
+        $data["_item"] = Tbl_item::where("shop_id",$this->shop_info->shop_id)->where("archived",0)->where("ez_program_credit",1)->get();
+        
+        return Self::load_view_for_members('member.buycredits',$data);
     }
     public function getCertificate()
     {
@@ -3371,7 +3380,29 @@ class ShopMemberController extends Shop
 
             if($return)
             {
-                $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
+                if($shop_id == 5)
+                {
+                  $slot_stats = "PS";
+                  
+                  $check_code_for_ez = Tbl_warehouse_inventory_record_log::where("mlm_pin",$data["pin"])->where("mlm_activation",$data["activation"])->where("record_shop_id",$shop_id)->first();
+                  if($check_code_for_ez)
+                  {
+                     $ez_code = Tbl_item::where("shop_id",$shop_id)->where("item_id",$check_code_for_ez->record_item_id)->first();
+                     if($ez_code)
+                     {
+                        if($ez_code->apply_ez_program == 1)
+                        {
+                          $slot_stats = "EZ";
+                        }
+                     }
+                  }
+                  
+                  $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no,$slot_stats);
+                }
+                else
+                {
+                  $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
+                }
 
                 if(is_numeric($create_slot))
                 {
@@ -3380,6 +3411,41 @@ class ShopMemberController extends Shop
 
                     $setting = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
                     $slot_id = $create_slot;
+
+
+                    if($shop_id == 5)
+                    {
+                        $check_code_for_ez = Tbl_warehouse_inventory_record_log::where("mlm_pin",$data["pin"])->where("mlm_activation",$data["activation"])->where("record_shop_id",$shop_id)->first();
+                        if($check_code_for_ez)
+                        {
+                            $ez_code = Tbl_item::where("shop_id",$shop_id)->where("item_id",$check_code_for_ez->record_item_id)->first();
+                            if($ez_code)
+                            {
+                                if($ez_code->apply_ez_program == 1)
+                                {           
+                                    $ez_slot_info  = Tbl_mlm_slot::where("slot_id",$slot_id)->first();
+
+
+                                    $update_ez_slot["slot_status"] = "EZ";
+                                    Tbl_mlm_slot::where("slot_id",$ez_slot_info->slot_id)->where("shop_id",$ez_slot_info->shop_id)->update($update_ez_slot);
+                                    $ez_slot_info  = Tbl_mlm_slot::where("slot_id",$slot_id)->membership()->membership_points()->customer()->first();
+                                    Mlm_complan_manager::direct($ez_slot_info);
+
+                                    // set income to negative
+                                    $log                                    = "Congratulations! Your EZ Program Slot " . $ez_slot_info->slot_no . " has been created. " ;
+                                    $ez_arry_log['wallet_log_slot']         = $ez_slot_info->slot_id;
+                                    $ez_arry_log['shop_id']                 = $ez_slot_info->shop_id;
+                                    $ez_arry_log['wallet_log_slot_sponsor'] = $ez_slot_info->slot_id;
+                                    $ez_arry_log['wallet_log_details']      = $log;
+                                    $ez_arry_log['wallet_log_amount']       = ($ez_code->apply_ez_program_balance * -1);
+                                    $ez_arry_log['wallet_log_plan']         = "EZ";
+                                    $ez_arry_log['wallet_log_status']       = "released";   
+                                    $ez_arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                                    Mlm_slot_log::slot_array($ez_arry_log);
+                                }
+                            }
+                        }
+                    }
 
                     if($setting->plan_settings_placement_required == 0)
                     {

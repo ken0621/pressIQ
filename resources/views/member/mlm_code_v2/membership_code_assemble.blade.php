@@ -23,9 +23,31 @@
                         </div>
                     </div>
                     <div class="form-group">
-                    	<div class="col-md-12 assembly-table-container-projection">
+                        <div class="col-md-12 assembly-table-container-projection">
                         </div>
                     </div>
+<!--                     @if($check_shop_id == 5)
+                    <div style="border-bottom:1px solid #e5e5e5;"></div>
+                        <div class="form-group">
+                        	<div class="col-md-12" style="margin-top:25px;">
+                                <div class="col-md-12" style="margin-bottom: 10px;">
+                                    <label for="ez_program">Use for Ez Program</label>
+                                    <input type="checkbox" id="ez_program" value="yes" name="ez_program">
+                                </div>
+                                <div class="col-md-12 ez_program_input">
+                                    <div class="col-md-6">
+                                         <label for="paid_price">Paid Price</label>
+                                         <input type="text" id="paid_price" class="form-control" name="paid_price" readonly>
+                                         <input type="hidden" id="paid_price_no_change" class="form-control" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                         <label for="cd_price">Remaining Balance</label>
+                                         <input type="text" id="cd_price" name="cd_price" class="form-control" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif -->
                 </div>
             </div>
     	</div>
@@ -35,4 +57,8 @@
     	<button class="btn btn-primary btn-custom-primary assemble-code-submit" type="submit"><i class="fa fa-qrcode"></i> Assemble Code</button>
     </div>
     <script type="text/javascript" src="/assets/member/js/membership_code/membership_code_assemble.js"></script>
+
+    @if($check_shop_id == 5)
+    <script type="text/javascript" src="/assets/member/js/membership_code/brown_ez.js"></script>
+    @endif
 </form>

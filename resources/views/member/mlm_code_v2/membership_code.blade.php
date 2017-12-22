@@ -35,6 +35,9 @@
                 @foreach($_membership as $membership)
                     <option value="{{ $membership->membership_id }}">{{ $membership->membership_name }}</option>
                 @endforeach
+                @if($user_info->shop_id)
+                <option value="EZ">EZ Program</option>
+                @endif
             </select>
         </div>
         <div class="col-md-3" style="padding: 10px">

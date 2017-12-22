@@ -19,6 +19,7 @@
 @include('member.mlm_plan.notes.direct')
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <div class="tab-content">
+        <input type="hidden" class="check_shop_id" value="{{$shop_id}}">
         <div id="all-orders" class="tab-pane fade in active">
             <div class="table-responsive">
                 <table class="table table-condensed">
@@ -29,6 +30,9 @@
                             <th>DIRECT SPONSOR BONUS</th>
                             <th>DIRECT INCOME LIMIT</th>
                             <th>GC INCOME</th>
+                            @if($shop_id == 5)   
+                            <th>DIRECT EZ BONUS</th>
+                            @endif
                             <th></th>
                         </tr>
                     </thead>
@@ -44,6 +48,7 @@
                                                 <input type='hidden' class='form-control membership_points_direct_container' name='membership_points_direct' value=''>
                                                 <input type='hidden' class='form-control membership_direct_income_limit_container' name='membership_direct_income_limit' value=''>
                                                 <input type='hidden' class='form-control membership_points_direct_gc_container' name='membership_points_direct_gc' value=''>
+                                                <input type='hidden' class='form-control membership_points_direct_ez_bonus_container' name='membership_points_direct_ez_bonus' value=''>
                                             </form>
                                             <td>
                                                 <span class="membership_points_direct{{$mem->membership_id}}">{{$mem->membership_points_direct == "" ? 0 : $mem->membership_points_direct }}</span>
@@ -53,10 +58,19 @@
                                             </td>                                            
                                             <td>
                                                 <span class="membership_points_direct_gc{{$mem->membership_id}}">{{$mem->membership_points_direct_gc == "" ? 0 : $mem->membership_points_direct_gc }}</span>
-                                            </td>
+                                            </td>    
+                                            @if($shop_id == 5)                                      
+                                                <td>
+                                                    <span class="membership_points_direct_ez_bonus{{$mem->membership_id}}">{{$mem->membership_points_direct_ez_bonus == "" ? 0 : $mem->membership_points_direct_ez_bonus }}</span>
+                                                </td>
+                                            @endif
                                         <td>
                                             <span class="membership_points_direct_edit{{$mem->membership_id}}">
-                                                <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('{{$mem->membership_id}}','{{$mem->membership_points_direct}}', '{{$mem->membership_direct_income_limit}}','{{$mem->membership_points_direct_gc}}')">Edit</a>
+                                                @if($shop_id == 5)
+                                                    <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('{{$mem->membership_id}}','{{$mem->membership_points_direct}}', '{{$mem->membership_direct_income_limit}}','{{$mem->membership_points_direct_gc}}','{{$mem->membership_points_direct_ez_bonus}}')">Edit</a>
+                                                @else
+                                                    <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('{{$mem->membership_id}}','{{$mem->membership_points_direct}}', '{{$mem->membership_direct_income_limit}}','{{$mem->membership_points_direct_gc}}')">Edit</a>
+                                                @endif
                                             </span>
                                         </td>
                                     </tr>
@@ -77,6 +91,7 @@
 
 @section('script')
 <script type="text/javascript">
+var check_shop_id = $(".check_shop_id").val();    
 function save_direct_points_membership(membershipid)
 {
     var directpoints      = $('.membership_points_directinput' + membershipid).val();
@@ -85,6 +100,14 @@ function save_direct_points_membership(membershipid)
     $(".membership_points_direct_container").val(directpoints);
     $(".membership_direct_income_limit_container").val(directlimitpoints);
     $(".membership_points_direct_gc_container").val(directpointsgc);
+
+    if(check_shop_id == 5)
+    {  
+        var directpointsezbonus   = $('.membership_points_direct_ez_bonusinput' + membershipid).val();
+        // alert(directpointsezbonus);
+        $(".membership_points_direct_ez_bonus_container").val(directpointsezbonus);
+    }
+
 
     console.log($('#form' + membershipid));
     $('#form' + membershipid).submit();
@@ -99,6 +122,11 @@ function cancel(membershipid)
     directlimitpoints = parseInt(directlimitpoints);
     directpointsgc = parseInt(directpointsgc);
 
+    if(check_shop_id == 5)
+    {   
+        var directpointsezbonus = $('.membership_points_direct_ez_bonusinput' + membershipid).val();
+    }
+
     console.log(Number.isInteger(directpoints));
     console.log(Number.isInteger(directlimitpoints));
 
@@ -108,19 +136,32 @@ function cancel(membershipid)
         console.log(directlimitpoints);
         $('.membership_points_direct' + membershipid).html(directpoints);
         $('.membership_points_direct_limit' + membershipid).html(directlimitpoints);
-        $('.membership_points_direct_gcinput' + membershipid).html(directpointsgc);
-        
-        var edit = '<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('+membershipid+', '+directpoints+','+directlimitpoints+','+directpointsgc+')">Edit</a>';
+        $('.membership_points_direct_gc' + membershipid).html(directpointsgc);
+        if(check_shop_id == 5)
+        {  
+          $('.membership_points_direct_ez_bonus' + membershipid).html(directpointsezbonus);
+          var edit = '<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('+membershipid+', '+directpoints+','+directlimitpoints+','+directpointsgc+','+directpointsezbonus+')">Edit</a>';
+        }
+        else
+        {
+            var edit = '<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('+membershipid+', '+directpoints+','+directlimitpoints+','+directpointsgc+')">Edit</a>';
+        }
         $('.membership_points_direct_edit' + membershipid).html(edit)
     }
 }
-function edit_direct_points(membershipid,directpoints,income_limit,gc)
+function edit_direct_points(membershipid,directpoints,income_limit,gc,ez_bonus = 0)
 {
     $('.membership_points_direct' + membershipid).html("<input type='number' class='form-control membership_points_directinput"+ membershipid +"' name='membership_points_direct' value='"+directpoints+"'>");
     $('.membership_points_direct_limit' + membershipid).html("<input type='number' class='form-control membership_points_direct_limitinput"+ membershipid +"' name='membership_direct_income_limit' value='"+income_limit+"'>");
     $('.membership_points_direct_gc' + membershipid).html("<input type='number' class='form-control membership_points_direct_gcinput"+ membershipid +"' name='membership_points_direct_gc' value='"+gc+"'>");
+    
+    if(check_shop_id == 5)
+    {  
+        $('.membership_points_direct_ez_bonus' + membershipid).html("<input type='number' class='form-control membership_points_direct_ez_bonusinput"+ membershipid +"' name='membership_points_direct_ez_bonus' value='"+ez_bonus+"'>");
+    }
 
     $('.membership_points_direct_edit' + membershipid).html('<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="#" onClick="save_direct_points_membership(' + membershipid +')">Save</a>');
+    
 }
 </script>
 @endsection

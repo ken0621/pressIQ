@@ -104,7 +104,10 @@ class Mlm_complan_manager_repurchasev2
         $slot_id = $slot_info->slot_id;
         $current_sponsor_level = $slot_info->sponsor_tree_level;
         $current_rank_id = $slot_info->brown_rank_id;
-
+        if($current_rank_id == null)
+        {
+            $current_rank_id = 1;
+        }
         $brown_current_rank = Tbl_brown_rank::where("rank_id", $current_rank_id)->first();
 
         if($trigger_reason == "Builder Reward")
@@ -122,6 +125,11 @@ class Mlm_complan_manager_repurchasev2
         {
             /* OVERRIDING */
             $trigger_rank_id = $trigger_info->brown_rank_id;
+            if($trigger_rank_id == null)
+            {
+                $trigger_rank_id = 1;
+            }
+            
             $trigger_current_rank = Tbl_brown_rank::where("rank_id", $trigger_rank_id)->first();
 
             if($trigger_reason == "Builder Reward")

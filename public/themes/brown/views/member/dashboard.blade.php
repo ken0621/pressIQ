@@ -162,7 +162,11 @@
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Direct Referral Bonus</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
+							<div class="name"><span>Direct Enrollment Bonus</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>EZ Enrollment Bonus</span><span class="value">{{ $wallet->display_complan_ez_referral_bonus }}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>

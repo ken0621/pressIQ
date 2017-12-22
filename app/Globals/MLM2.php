@@ -684,6 +684,7 @@ class MLM2
 		});
 
 		$query->where("wallet_log_amount", "<", 0);	
+		$query->where("wallet_log_plan", "!=", "EZ");	
 
 		if($limit == 0)
 		{
@@ -853,6 +854,12 @@ class MLM2
 		$insert["slot_placement"]		= 0;
 		$insert["slot_position"]		= "";
 		$insert["distributed"]			= 0;
+		
+		if($slot_type == "EZ")
+		{
+			$insert["slot_wallet_all"]		= -99999;	
+			$insert["slot_wallet_current"]	= -99999;	
+		}
 
 		$rules["shop_id"] 				= ["required","exists:tbl_shop"];
 		$rules["slot_owner"] 			= ["required","exists:tbl_customer,customer_id"];

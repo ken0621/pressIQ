@@ -321,13 +321,16 @@ class Item
         Tbl_item::where('item_id',$item_id)->update($insert);
         Tbl_item_bundle::where('bundle_bundle_id',$item_id)->delete();
 
-        foreach ($_item as $key => $value) 
+        if(count($_item) > 0)
         {
-            $ins_item['bundle_bundle_id'] = $item_id;
-            $ins_item['bundle_item_id'] = $value['item_id'];
-            $ins_item['bundle_qty'] = $value['quantity'];
+            foreach ($_item as $key => $value) 
+            {
+                $ins_item['bundle_bundle_id'] = $item_id;
+                $ins_item['bundle_item_id'] = $value['item_id'];
+                $ins_item['bundle_qty'] = $value['quantity'];
 
-            Tbl_item_bundle::insert($ins_item);
+                Tbl_item_bundle::insert($ins_item);
+            }
         }
 
         $return['item_id']       = $item_id;
@@ -1720,8 +1723,25 @@ class Item
         }
         if($item_membership_id)
         {
-            $query->where('tbl_item.membership_id',$item_membership_id);
+            if($item_membership_id == "EZ" && $shop_id == 5)
+            {
+                $query->where("apply_ez_program",1);
+            }
+            else
+            {
+                $query->where('tbl_item.membership_id',$item_membership_id);
+            }
         }
+        else
+        {   
+            if($shop_id == 5)
+            {
+                $query->leftJoin("tbl_brown_ez_program","tbl_brown_ez_program.record_program_log_id","=","tbl_warehouse_inventory_record_log.record_log_id");
+                $query->where("record_program_log_id","=",null);
+            }
+        }
+
+
         if($search_keyword)
         {
             // $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");

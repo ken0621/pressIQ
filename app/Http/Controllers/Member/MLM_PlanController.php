@@ -988,7 +988,8 @@ class MLM_PlanController extends Member
             $validate['membership_points_direct'] = Request::input("membership_points_direct");
             $validate['membership_direct_income_limit'] = Request::input("membership_direct_income_limit");
             $validate['membership_points_direct_gc'] = Request::input("membership_points_direct_gc");
-            
+            $validate['membership_points_direct_ez_bonus'] = Request::input("membership_points_direct_ez_bonus") ? Request::input("membership_points_direct_ez_bonus") : 0;
+
             $rules['membership_id']   = "required";
             $rules['membership_points_direct']    = "required";
             $rules['membership_direct_income_limit']    = "required";
@@ -1005,6 +1006,7 @@ class MLM_PlanController extends Member
                     $insert['membership_points_direct'] = $validate['membership_points_direct'];
                     $insert['membership_direct_income_limit'] = $validate['membership_direct_income_limit'];
                     $insert['membership_points_direct_gc'] = $validate['membership_points_direct_gc'];
+                    $insert['membership_points_direct_ez_bonus'] = $validate['membership_points_direct_ez_bonus'];
                     Tbl_membership_points::insert($insert);
                 }
                 else
@@ -1012,6 +1014,7 @@ class MLM_PlanController extends Member
                     $update['membership_points_direct'] = $validate['membership_points_direct'];
                     $update['membership_direct_income_limit'] = $validate['membership_direct_income_limit'];
                     $update['membership_points_direct_gc'] = $validate['membership_points_direct_gc'];
+                    $update['membership_points_direct_ez_bonus'] = $validate['membership_points_direct_ez_bonus'];
                     Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
                 }
             }
@@ -1288,7 +1291,8 @@ class MLM_PlanController extends Member
 	{
 	    $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
 	    // dd($data);
-	    $data['basic_settings'] = MLM_PlanController::basic_settings('DIRECT');
+        $data['basic_settings'] = MLM_PlanController::basic_settings('DIRECT');
+	    $data['shop_id']        = $shop_id;
 	    return view('member.mlm_plan.configure.direct', $data);
 	}
 	public static function indirect($shop_id)

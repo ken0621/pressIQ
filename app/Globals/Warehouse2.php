@@ -23,7 +23,14 @@ use App\Models\Tbl_price_level_item;
 use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_settings;
+
+
+use App\Models\Tbl_brown_ez_program;
+use App\Models\Tbl_transaction_list;
+use App\Models\Tbl_transaction;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_membership;
+
 
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
@@ -31,6 +38,8 @@ use App\Globals\Warehouse;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Tablet_global;
 use App\Globals\Currency;
+use App\Globals\Mlm_slot_log;
+use App\Globals\Mlm_complan_manager;
 use Session;
 use DB;
 use Carbon\carbon;
@@ -464,6 +473,7 @@ class Warehouse2
                 {
                     $insert[$ctr_qty]['record_serial_number'] = $serial[$ctr_qty];
                 }
+
                 Tbl_warehouse_inventory_record_log::insert($insert[$ctr_qty]);
             }
 
@@ -690,6 +700,12 @@ class Warehouse2
             }
             Warehouse2::insert_item_history($id);
             Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
+            
+            
+            if($shop_id == 5)
+            {
+                Warehouse2::check_item_ez_program($shop_id,$item_id,$consume["id"]);
+            }
         }
 
         if(!$inventory_history)
@@ -709,9 +725,47 @@ class Warehouse2
         }
 
         Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
-
+        
         return $return;
     }
+    public static function check_item_ez_program($shop_id,$item_id,$transaction_list_id)
+    {
+        $check_item_ez = Tbl_item::where("item_id",$item_id)->where("shop_id",$shop_id)->first();
+        if($check_item_ez)
+        {
+            $trans_list = Tbl_transaction_list::where("transaction_list_id",$transaction_list_id)->first();
+            if($trans_list && $check_item_ez->ez_program_credit == 1)
+            {
+              $trans_data = Tbl_transaction::where("transaction_id",$trans_list->transaction_id)->first();
+              if($trans_data)
+              {
+                  if($trans_data->transaction_reference_table == "tbl_customer")
+                  {
+                      $get_custo = Tbl_customer::where("customer_id",$trans_data->transaction_reference_id)->first();
+                      if($get_custo)
+                      {
+                          $mlm_slot = Tbl_mlm_slot::where("slot_owner",$get_custo->customer_id)->first();
+                          if($mlm_slot)
+                          {
+                                $amount_given                        = $check_item_ez->item_price;
+                                $log                                 = "Purchased a ".number_format($check_item_ez->item_price,2)." credits";
+                                $arry_log['wallet_log_slot']         = $mlm_slot->slot_id;
+                                $arry_log['shop_id']                 = $mlm_slot->shop_id;
+                                $arry_log['wallet_log_slot_sponsor'] = $mlm_slot->slot_id;
+                                $arry_log['wallet_log_details']      = $log;
+                                $arry_log['wallet_log_amount']       = $amount_given;
+                                $arry_log['wallet_log_plan']         = "CREDITS_PAID";
+                                $arry_log['wallet_log_status']       = "released";   
+                                $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('CREDITS_PAID', $mlm_slot->shop_id); 
+                                Mlm_slot_log::slot_array($arry_log);
+                          }
+                      }
+                  }
+              }
+            }
+        }
+    }
+    
     public static function sold_kit($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $sold = array())
     {
         $ctr_inventory = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)

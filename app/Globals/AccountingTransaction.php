@@ -187,7 +187,7 @@ class AccountingTransaction
         $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
         return $inv_journal;
 	}
-	public static function get_redirect($transaction_type,$transaction_id, $btn_action = 'sclose')
+	public static function get_redirect($transaction_type, $transaction_id, $btn_action = 'sclose')
 	{
 		$return = null;
 		if($btn_action == 'sclose')

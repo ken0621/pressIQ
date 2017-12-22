@@ -16,6 +16,8 @@ use App\Globals\TransactionSalesInvoice;
 use App\Globals\TransactionSalesOrder;
 use App\Globals\TransactionEstimateQuotation;
 
+use App\Globals\AccountingTransaction;
+
 use Session;
 use Carbon\Carbon;
 use App\Globals\Pdf_global;
@@ -85,23 +87,7 @@ class TransactionSalesInvoiceController extends Member
 			$return['status'] = 'success';
 			$return['status_message'] = 'Success creating invoice.';
 			$return['call_function'] = 'success_invoice';
-
-			if($btn_action == 'sclose')
-			{
-				$return['status_redirect'] = '/member/transaction/sales_invoice';
-			}
-			elseif($btn_action == 'sedit')
-			{
-				$return['status_redirect'] = '/member/transaction/sales_invoice/create?id='.$validate;
-			}
-			elseif($btn_action == 'sprint')
-			{
-				$return['status_redirect'] = '/member/transaction/sales_invoice/print?id='.$validate;
-			}
-			elseif($btn_action == 'snew')
-			{
-				$return['status_redirect'] = '/member/transaction/sales_invoice/create';
-			}		
+			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_invoice', $btn_action);
 		}
 		else
 		{

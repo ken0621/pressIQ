@@ -187,4 +187,26 @@ class AccountingTransaction
         $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
         return $inv_journal;
 	}
+	public static function get_redirect($transaction_type, $btn_action = 'sclose')
+	{
+		$return = null;
+		if($btn_action == 'sclose')
+		{
+			$return = '/member/transaction/'.$transaction_type;
+		}
+		elseif($btn_action == 'sedit')
+		{
+			$return = '/member/transaction/'.$transaction_type.'/create?id='.$validate;
+		}
+		elseif($btn_action == 'sprint')
+		{
+			$return = '/member/transaction/'.$transaction_type.'/print?id='.$validate;
+		}
+		elseif($btn_action == 'snew')
+		{
+			$return = '/member/transaction/'.$transaction_type.'/create';
+		}	
+
+		return $return;	
+	}
 }

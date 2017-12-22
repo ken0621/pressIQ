@@ -78,7 +78,7 @@ class Customer
 	}
 	public static function check_account($shop_id, $email, $password = '')
 	{
-		$check_account =  Tbl_customer::where("shop_id", $shop_id)->where("email", $email)->first();
+		$check_account =  Tbl_customer::where("shop_id", $shop_id)->where("email", $email)->where("signup_with")->first();
 		//dd(Crypt::decrypt($check_account->password));
 		if($check_account)
 		{

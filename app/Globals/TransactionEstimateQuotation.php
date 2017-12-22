@@ -65,6 +65,13 @@ class TransactionEstimateQuotation
 	        $estimate_id = 0;
 
 	        $return = Self::insertline($estimate_id, $insert_item);
+
+			/* INSERT TRANSACTION HERE */
+			$acctg['transaction_ref_name'] = "estimate_quotation";
+			$acctg['transaction_ref_id'] = $estimate_id;
+			$acctg['transaction_list_number'] = $ins['transaction_refnum'];
+			$acctg['transaction_date'] = $ins['est_date'];
+			AccountingTransaction::postTransaction($shop_id, $acctg, $insert_item);
 		}
 		else
 		{

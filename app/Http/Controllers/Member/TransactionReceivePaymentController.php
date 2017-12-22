@@ -70,7 +70,10 @@ class TransactionReceivePaymentController extends Member
 		$validate = TransactionReceivePayment::postInsert($this->user_info->shop_id, $insert, $insert_item);
 		if(is_numeric($validate))
 		{
-			
+			$return['status'] = 'success';
+			$return['status_message'] = 'Success receive payment.';
+			$return['call_function'] = 'success_receive_payment';
+			$return['status_redirect'] = AccountingTransaction::get_redirect('receive_payment', $validate ,$btn_action);
 		}
 		else
 		{

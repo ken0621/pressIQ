@@ -53,6 +53,7 @@ class TransactionReceivePayment
 	        $entry_data[0]['entry_amount']  = $insert["rp_total_amount"];
 
    	        $entry_journal = Accounting::postJournalEntry($entry, $entry_data);
+   	        $return = $val;
 
 		}
 		else
@@ -78,7 +79,7 @@ class TransactionReceivePayment
 		$return = null;
 		if(count($insert_line) > 0)
 		{			
-			$return = 1;
+			$return = $rcvpayment_id;
             Tbl_receive_payment_line::insert($insert_line);
 		}
 		return $return;

@@ -40,7 +40,7 @@ class TransactionSalesInvoiceController extends Member
         $data['action']		= "/member/transaction/sales_invoice/create-sales-invoice";
         if($request->id)
         {
-        	
+        	$data['action']		= "/member/transaction/sales_invoice/update-sales-invoice";
         }
 
 		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice',$data);

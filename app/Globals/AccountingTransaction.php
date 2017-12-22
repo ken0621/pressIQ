@@ -50,23 +50,31 @@ class AccountingTransaction
 
 		Self::insertItemline($acctg_trans_id, $trans_item);
 	}
+	public static function postTransaction($shop_id, $transaction_data, $transaction_item)
+	{
+		$check = Self::check_transaction($shop_id, $transaction_data['transaction_ref_name'], $transaction_data['transaction_ref_id']);
+		if(!$check)
+		{
+			Self::insertTransaction($shop_id, $transaction_data, $transaction_item);
+		}
+	}
 	public static function insertItemline($acctg_trans_id, $trans_item)
 	{
 		if(count($trans_item) > 0)
 		{
 			foreach ($trans_item as $key => $value)
 			{
-				$ins['acctg_transaction_id'] = $acctg_trans_id;
-				$ins['itemline_item_id'] = $value['itemline_item_id'];
-				$ins['itemline_item_um'] = $value['itemline_item_um'];
-				$ins['itemline_item_description'] = $value['itemline_item_description'];
-				$ins['itemline_item_qty'] = $value['itemline_item_qty'];
-				$ins['itemline_item_rate'] = $value['itemline_item_rate'];
-				$ins['itemline_item_taxable'] = $value['itemline_item_taxable'];
-				$ins['itemline_item_discount'] = $value['itemline_item_discount'];
-				$ins['itemline_item_discount_type'] = $value['itemline_item_discount_type'];
-				$ins['itemline_item_discount_remarks'] = $value['itemline_item_discount_remarks'];
-				$ins['itemline_item_amount'] = $value['itemline_item_amount'];
+				$ins['acctg_transaction_id'] 		  	= $acctg_trans_id;
+				$ins['itemline_item_id'] 			  	= isset($value['item_id']) ? $value['item_id'] : '';
+				$ins['itemline_item_um'] 			  	= isset($value['item_um']) ? $value['item_um'] : '';
+				$ins['itemline_item_description']     	= isset($value['item_description']) ? $value['item_description'] : '';
+				$ins['itemline_item_qty'] 			  	= isset($value['item_qty']) ? $value['item_qty'] : '';
+				$ins['itemline_item_rate'] 			  	= isset($value['item_rate']) ? $value['item_rate'] : '';
+				$ins['itemline_item_taxable'] 		  	= isset($value['item_taxable']) ? $value['item_taxable'] : '';
+				$ins['itemline_item_discount'] 		  	= isset($value['item_discount']) ? $value['item_discount'] : '';
+				$ins['itemline_item_discount_type'] 	= isset($value['item_discount_type']) ? $value['item_discount_type'] : '';
+				$ins['itemline_item_discount_remarks'] 	= isset($value['item_discount_remarks']) ? $value['item_discount_remarks'] : '';
+				$ins['itemline_item_amount'] 			= isset($value['item_amount']) ? $value['item_amount'] : '';
 
 				Tbl_acctg_transaction_item::insert($ins);
 			}
@@ -74,7 +82,7 @@ class AccountingTransaction
 	}
 	public static function check_transaction($shop_id, $transaction_name, $transaction_id)
 	{
-		$check = Tbl_acctg_transaction_list::where("transaction_ref_name", $transaction_name)
+		$check = Tbl_acctg_transaction_list::acctgTransaction()->where("shop_id", $shop_id)->where("transaction_ref_name", $transaction_name)
 											->where("transaction_ref_id", $transaction_id)->first();
 		
 		$return = null;

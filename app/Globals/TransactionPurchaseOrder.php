@@ -5,6 +5,7 @@ namespace App\Globals;
 use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
+use App\Models\Tbl_requisition_slip;
 use App\Models\Tbl_shop;
 use Carbon\Carbon;
 use DB;
@@ -19,10 +20,14 @@ class TransactionPurchaseOrder
 {
 	public static function countTransaction($shop_id)
 	{
-		return Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_status","accepted")->count();
-	}
+		$count_so = Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->count();
+        $count_pr = Tbl_requisition_slip::where('shop_id',$shop_id)->where("requisition_slip_status","open")->count();
+        
+        $return = $count_so + $count_pr;
+        return $return;
+    }
 
-	public static function postInsert($shop_id, $insert, $insert_item)
+    public static function postInsert($shop_id, $insert, $insert_item)
 	{
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);
         if(!$val)
@@ -40,7 +45,7 @@ class TransactionPurchaseOrder
             $ins['ewt']                = $insert['vendor_ewt'];
             $ins['po_terms_id']        = $insert['vendor_terms'];
             $ins['po_discount_value']  = $insert['vendor_discount'];
-            $ins['po_discount_type'] = $insert['vendor_discounttype'];
+            $ins['po_discount_type']   = $insert['vendor_discounttype'];
             $ins['taxable']            = $insert['vendor_tax'];
             $ins['date_created']       = Carbon::now();
 
@@ -68,8 +73,8 @@ class TransactionPurchaseOrder
 
             /* INSERT PO IN DATABASE */
             $purchase_order_id = Tbl_purchase_order::insertGetId($ins);
-
-            $return = Self::insertline($purchase_order_id, $insert_item);
+            $return = $purchase_order_id;
+            //$return = Self::insertline($purchase_order_id, $insert_item);
 		}
         else
         {
@@ -80,8 +85,9 @@ class TransactionPurchaseOrder
 
     public static function insertLine($purchase_order_id, $insert_item)
     {
-        $itemline = null;
         $return = null;
+
+        $itemline = null;
         foreach ($insert_item as $key => $value) 
         {   
             /* DISCOUNT PER LINE */
@@ -101,7 +107,7 @@ class TransactionPurchaseOrder
             $itemline[$key]['poline_orig_qty']       = $value['item_qty'];
             $itemline[$key]['poline_rate']           = $value['item_rate'];
             $itemline[$key]['poline_discount']       = $value['item_discount']; 
-            $itemline[$key]['poline_discount_remark'] = $value['item_remark'];  
+            $itemline[$key]['poline_discount_remark']= $value['item_remark'];  
             $itemline[$key]['poline_amount']         = $value['item_amount'];   
             $itemline[$key]['taxable']               = $value['item_taxable']; 
             $itemline[$key]['date_created']          = Carbon::now();
@@ -111,6 +117,7 @@ class TransactionPurchaseOrder
         {
             /*INSERTING ITEMS TO DATABASE*/
             $return = Tbl_purchase_order_line::insert($itemline);
+            
         }
 
         return $return;

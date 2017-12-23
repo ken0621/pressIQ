@@ -53,6 +53,7 @@ class CreditMemoController extends Member
 
         $data["cm_data"] = Tbl_credit_memo::where("cm_id",$cm_id)->first();
         $data["c_id"] = Tbl_credit_memo::where("cm_id",$cm_id)->value("cm_customer_id");
+        $data['_nocredits'] = true;
 
         if($cm_type == "invoice")
         {

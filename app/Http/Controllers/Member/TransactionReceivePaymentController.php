@@ -91,6 +91,7 @@ class TransactionReceivePaymentController extends Member
 	}
 	public function getLoadCredit(Request $request)
 	{
-		dd("Under Maintenance");
+		$data['_cm'] = TransactionCreditMemo::loadAvailableCredit($this->user_info->shop_id, $request->c);
+		return view("member.accounting_transaction.customer.receive_payment.receive_payment",$data);
 	}
 }

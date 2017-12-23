@@ -44,7 +44,7 @@
                     @endif
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                  <span class="preview-button"><button onclick="preview()">Preview</button></span>
+                  <span class="preview-button"><button id="prev_btn">Preview</button></span>
                   </div>
                 </div>
 
@@ -89,16 +89,17 @@
                       @endif
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                    <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
+                    <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span>
+                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
                       {{-- POPUP CHOOSE RECIPIENT --}}
 
-                    @if(session()->has("pr_edit"))
-                      @foreach($edit as $edits)
-                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
-                      @endforeach
-                    @else
-                      <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
-                    @endif
+                      @if(session()->has("pr_edit"))
+                        @foreach($edit as $edits)
+                          <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
+                        @endforeach
+                      @else
+                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
+                      @endif
                     <div class="button-container"></div>
                 </div>
                 <div id="send_release" class="tabcontent send-release-container">
@@ -108,8 +109,7 @@
                   <div class="title">Title:</div>
                   <div class="content" id="headline_pr"></div>
                   <div class="title">Send To:</div>
-                  <span class="result-container">
-                  <span id="results_number_sendto" style="font-size:18px"></span></span>
+                  <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
 
 
                   <div class="button-container">
@@ -211,6 +211,19 @@
 <script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
 
 <script>
+  $('#prev_btn').click(function()
+  {
+    alert("123");
+    var headline = document.getElementById('pr_headline').value;
+    var content = tinymce.get('pr_content').getContent();
+    var boiler_content = tinymce.get('pr_boiler_content').getContent();
+    document.getElementById('preview_headline').innerHTML =headline;
+    document.getElementById('preview_content').innerHTML =content;
+    document.getElementById('preview_boiler_content').innerHTML =boiler_content;
+    $('#previewPopup').modal('show'); 
+  }
+</script>
+<script>
 tinymce.init({ 
 selector:'textarea', 
 branding: false,
@@ -282,15 +295,7 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     var data = $('.recipient_form').serialize();
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
 });
-  function preview()
-  {
-    var headline = document.getElementById('pr_headline').value;
-    var content = tinymce.get('pr_content').getContent();
-    var boiler_content = tinymce.get('pr_boiler_content').getContent();
-    document.getElementById('preview_headline').innerHTML =headline;
-    document.getElementById('preview_content').innerHTML =content;
-    document.getElementById('preview_boiler_content').innerHTML =boiler_content;
-    $('#previewPopup').modal('show'); 
-  }
-</script>
+  </script>
+
+
 @endsection

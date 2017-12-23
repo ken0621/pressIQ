@@ -20,7 +20,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($cm as $cm)
+                            @foreach($_cm as $cm)
                             <tr>
                                 <td class="text-center"><input type="checkbox" name=""></td>
                                 <td class="text-center">{{$cm->transaction_refnum != "" ? $cm->transaction_refnum : $cm->cm_id}}</td>

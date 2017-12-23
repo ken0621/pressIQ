@@ -121,7 +121,7 @@ class Customer
 		$customer = Self::get_info($shop_id, $customer_id);
 		if($customer)
 		{
-			$name = $customer->company != "" ? $customer->company : ucwords($customer->first_name.' '.$customer->middle_name.' '.$customer->middle_name);
+			$name = $customer->company != "" ? $customer->company : ucwords($customer->first_name.' '.$customer->middle_name.' '.$customer->last_name);
 		}
 		return $name;
 	}

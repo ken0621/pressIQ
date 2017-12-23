@@ -15,6 +15,7 @@ use App\Globals\Accounting;
 use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
 use App\Globals\TransactionReceivePayment;
+use App\Globals\TransactionCreditMemo;
 
 use Session;
 use Carbon\Carbon;
@@ -92,6 +93,7 @@ class TransactionReceivePaymentController extends Member
 	public function getLoadCredit(Request $request)
 	{
 		$data['_cm'] = TransactionCreditMemo::loadAvailableCredit($this->user_info->shop_id, $request->c);
-		return view("member.accounting_transaction.customer.receive_payment.receive_payment",$data);
+		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
+		return view("member.accounting_transaction.customer.receive_payment.load_transaction",$data);
 	}
 }

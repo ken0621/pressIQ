@@ -107,6 +107,7 @@ class PayrollAdminDashboard extends Member
 		}
 
 		Tbl_payroll_approver_employee::insert($insert);
+
 		$response["response_status"] 	= "success";
 		$response['call_function'] 		= 'success_saving_import';
 
@@ -135,8 +136,6 @@ class PayrollAdminDashboard extends Member
 
 	public function modal_delete_approver($approver_id)
 	{
-		
-
 		if (Request::isMethod('post')) 
 		{
 			$response['response_status']  	= 'success';
@@ -158,7 +157,6 @@ class PayrollAdminDashboard extends Member
 
 			return view('member.modal.confirm', $data);
 		}
-		// 
 	}
 
 	public function create_approver_tag_employee()
@@ -251,9 +249,10 @@ class PayrollAdminDashboard extends Member
 				$_approver_group_by_level[$key] = array();
 				foreach($approver_group as $key2 => $approver_by_level)
 				{
-					array_push($_approver_group_by_level[$key], $approver_by_level['payroll_approver_employee_id']) ;
+					array_push($_approver_group_by_level[$key], $approver_by_level['payroll_approver_employee_id']);
 				}
 			}
+
 			$data['_approver_group_by_level'] = $_approver_group_by_level;
 		}
 		

@@ -1,7 +1,7 @@
 <?php
 namespace App\Globals;
 
-use App\Models\Tbl_purchase_order;
+use App\Models\Tbl_debit_memo;
 use Carbon\Carbon;
 use DB;
 
@@ -13,8 +13,9 @@ use DB;
 
 class TransactionDebitMemo
 {
-	public static function countTransaction($shop_id)
-	{
-		// return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_is_billed',0)->count();
-	}
+	public static function getOpenDM($shop_id, $vendor_id)
+    {
+        return Tbl_debit_memo::where('db_shop_id',$shop_id)->where('db_vendor_id', $vendor_id)->get();
+    }
+
 }

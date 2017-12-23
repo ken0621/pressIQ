@@ -133,7 +133,7 @@ function receive_inventory()
 				success : function(data)
 				{
 					$(".open-transaction").slideDown();
-					$(".popup-link-open-transaction").attr('link','/member/transaction/receive_inventory/load-transaction?v='+$vendor_id);
+					$(".popup-link-open-transaction").attr('link','/member/transaction/receive_inventory/load-transaction?vendor='+$vendor_id);
 					$(".count-open-transaction").html(data);
 				}
 			});

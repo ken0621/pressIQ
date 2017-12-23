@@ -35,35 +35,6 @@
                     <label class="text-center form-control">No Transaction</label>
                     @endif
                 </div>
-                <div class="col-md-12">
-                    <h4> <i class="fa fa-caret-down"></i> Purchase Requisition</h4>
-                </div> 
-                <div class="col-md-12">
-                    @if(count($_pr) > 0)
-                    <table class="table table-condensed table-bordered">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th class="text-center">Reference Number</th>
-                                <th class="text-center">Vendor Name</th>
-                                <th class="text-center">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($_pr as $pr)
-                            <tr>
-                                <td class="text-center"><input type="checkbox" name=""></td>
-                                <td class="text-center">{{$pr->transaction_refnum != "" ? $pr->transaction_refnum : $pr->requisition_slip_id}}</td>
-                                <td class="text-center">{{$pr->vendor_company}}</td>
-                                <td class="text-right">{{currency('PHP',$pr->rs_item_amount)}}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>                        
-                    </table>
-                    @else
-                    <label class="text-center form-control">No Transaction</label>
-                    @endif
-                </div>
             </div>
         </div>
 	</div>

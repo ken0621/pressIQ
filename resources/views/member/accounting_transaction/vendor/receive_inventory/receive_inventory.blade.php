@@ -80,7 +80,7 @@
                                             <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$bill->bill_vendor_email or ''}}"/>
                                         </div>
                                         <div class="col-sm-4 text-right open-transaction" style="display: none;">
-                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/receive_inventory/load-transaction?vendor="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
+                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/receive_inventory/load-transaction?vendor_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
                                         </div>
                                     </div>
                                 </div>

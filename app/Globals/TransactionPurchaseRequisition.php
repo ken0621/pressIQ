@@ -3,6 +3,7 @@ namespace App\Globals;
 
 use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_requisition_slip;
+use App\Models\Tbl_requisition_slip_item;
 use Carbon\Carbon;
 use DB;
 
@@ -20,7 +21,7 @@ class TransactionPurchaseRequisition
 	}
 	public static function getAllOpenPR($shop_id)
 	{
-		return Tbl_requisition_slip::where('shop_id',$shop_id)->where("requisition_slip_status","open")->get();
+		return Tbl_requisition_slip_item::PRInfo('shop_id',$shop_id)->where("requisition_slip_status","open")->get();
 	}
 	public static function postInsert()
 	{

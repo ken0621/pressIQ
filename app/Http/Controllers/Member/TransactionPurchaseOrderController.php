@@ -44,6 +44,7 @@ class TransactionPurchaseOrderController extends Member
     public function getIndex()
     {
         $data['page'] = 'Purchase Order';
+        $data['_pr'] = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order_list', $data);
 
     }
@@ -125,8 +126,7 @@ class TransactionPurchaseOrderController extends Member
     {
         $data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
         $data['_pr'] = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
-        //dd($data['_pr']);
-        /*$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);*/
+
         return view('member.accounting_transaction.vendor.purchase_order.load_transaction', $data);
     }
 }

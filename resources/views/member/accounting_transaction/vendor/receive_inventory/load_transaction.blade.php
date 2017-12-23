@@ -10,23 +10,21 @@
                     <h4> <i class="fa fa-caret-down"></i> Sales Order</h4>
                 </div> 
                 <div class="col-md-12">
-                    @if(count($_so) > 0)
+                    @if(count($_po) > 0)
                     <table class="table table-condensed table-bordered">
                         <thead>
                             <tr>
                                 <th></th>
                                 <th class="text-center">Reference Number</th>
-                                <th class="text-center">Customer Name</th>
                                 <th class="text-center">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($_so as $so)
+                            @foreach($_po as $po)
                             <tr>
                                 <td class="text-center"><input type="checkbox" name=""></td>
-                                <td class="text-center">{{$so->transaction_refnum != "" ? $so->transaction_refnum : $so->est_id}}</td>
-                                <td class="text-center">{{$so->title_name.' '.$so->first_name.' '.$so->middle_name.' '.$so->last_name}}</td>
-                                <td class="text-right">{{currency('PHP',$so->est_overall_price)}}</td>
+                                <td class="text-center">{{$po->transaction_refnum != "" ? $po->transaction_refnum : $po->po_id}}</td>
+                                <td class="text-right">{{currency('PHP',$po->po_overall_price)}}</td>
                             </tr>
                             @endforeach
                         </tbody>                        
@@ -35,27 +33,27 @@
                     <label class="text-center form-control">No Transaction</label>
                     @endif
                 </div>
+            </div>
+            <div class="form-group">
                 <div class="col-md-12">
-                    <h4> <i class="fa fa-caret-down"></i> Purchase Requisition</h4>
+                    <h4> <i class="fa fa-caret-down"></i> Debit Memo</h4>
                 </div> 
                 <div class="col-md-12">
-                    @if(count($_pr) > 0)
+                    @if(count($_dm) > 0)
                     <table class="table table-condensed table-bordered">
                         <thead>
                             <tr>
                                 <th></th>
                                 <th class="text-center">Reference Number</th>
-                                <th class="text-center">Vendor Name</th>
                                 <th class="text-center">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($_pr as $pr)
+                            @foreach($_dm as $dm)
                             <tr>
                                 <td class="text-center"><input type="checkbox" name=""></td>
-                                <td class="text-center">{{$pr->transaction_refnum != "" ? $pr->transaction_refnum : $pr->requisition_slip_id}}</td>
-                                <td class="text-center">{{$pr->vendor_company}}</td>
-                                <td class="text-right">{{currency('PHP',$pr->rs_item_amount)}}</td>
+                                <td class="text-center">{{$dm->transaction_refnum != "" ? $dm->transaction_refnum : $dm->db_id}}</td>
+                                <td class="text-right">{{currency('PHP',$dm->db_amount)}}</td>
                             </tr>
                             @endforeach
                         </tbody>                        

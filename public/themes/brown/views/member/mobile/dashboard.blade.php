@@ -198,11 +198,12 @@
                         @if(!$mlm_member)
                            @if(isset($check_unused_code))
                            <div class="congrats-holder">
-                              <div class="title">CONGRATULATIONS!</div>
+                              {{-- <div class="title">CONGRATULATIONS!</div>
                                  <div class="img">
                                  <img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
                               </div>
-                              <div class="desc">You are one step away from your membership!</div>
+                              <div class="desc">You are one step away from your membership!</div> --}}
+                                 <img style="max-width: 100%; padding-bottom: 10px; margin: auto;" src="/themes/{{ $shop_theme }}/assets/mobile/img/hand_shake.jpg">
                                  <div class="btn-container">
                                  <button id="btn-notification" class="btn-verify-notification btn-congratulation btn-notification" type="button">Continue</button>
                               </div>
@@ -244,6 +245,14 @@
                                     </td>
                                  </tr>
                               </table>
+                           </div>
+                           <div class="summary-holder" style="padding-top: 7.5px; padding-left: 7.5px; padding-right: 7.5px;">
+                              <!-- DASHBOARD ADS -->
+                              <div class="row no-gutter">
+                                 <div class="col-33" style="padding-right: 3px;"><div class="d-ad-container"><img width="100%" src="/themes/{{ $shop_theme }}/img/d-ad1.jpg"></div></div>
+                                 <div class="col-33" style="padding-left: 2px !important; padding-right: 2px !important;"><div class="d-ad-container"><img width="100%" src="/themes/{{ $shop_theme }}/img/d-ad2.jpg"></div></div>
+                                 <div class="col-33" style="padding-left: 3px;"><div class="d-ad-container"><img width="100%" src="/themes/{{ $shop_theme }}/img/d-ad3.jpg"></div></div>
+                              </div>
                            </div>
                            <div class="summary-holder">
                               <div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
@@ -382,6 +391,12 @@
                                  </div>
                               </div>
                            </div>
+                           {{-- <div class="summary-holder">
+                              <div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s)</div>
+                              <div class="body" style="text-align: center;">
+                                 <button style="color: #fff; background-color: #402A21; padding: 12px 40px 12px 40px; border: 2px solid #402A21; border-radius: 2px;" class="btn-enter-a-code">Buy a Kit</button>    
+                              </div>
+                           </div> --}}
                         @endif
                      </div>
                   </div>

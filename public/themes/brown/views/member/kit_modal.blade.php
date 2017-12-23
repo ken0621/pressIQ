@@ -12,9 +12,9 @@
 				<div class="col-md-4">
 					<div class="kit-parent-holder">
 						<div class="kit-holder match-height">
-							<div class="product-title">{{ $kit->item_name }}</div>
+							{{-- <div class="product-title">{{ $kit->item_name }}</div> --}}
 							<div class="product-img-container">
-								<div class="product-hover">
+								{{-- <div class="product-hover">
 									<div class="kit-small">
 										<img src="{{ $kit->item_img }}">
 									</div>
@@ -23,11 +23,11 @@
 											{!! $kit->item_sales_information ? $kit->item_sales_information : $kit->item_purchasing_information !!}
 										</p>
 									</div>
-								</div>
+								</div> --}}
 								<img src="{{ $kit->item_img }}">
 							</div>
-							<div class="product-price">P {{ number_format($kit->item_price, 2) }}</div>
-							<button class="btn btn-custom product-add-cart" {{$kit->inventory_count == 0 ? 'disabled' : 'item-id='.$kit->item_id}} quantity="1">ENROLL NOW</button>
+							{{-- <div class="product-price">P {{ number_format($kit->item_price, 2) }}</div> --}}
+							<button style="border-radius: 0;" class="btn btn-custom product-add-cart" {{$kit->inventory_count == 0 ? 'disabled' : 'item-id='.$kit->item_id}} quantity="1">ENROLL NOW</button>
 						</div>
 					</div>
 				</div>

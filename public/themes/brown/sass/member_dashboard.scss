@@ -793,3 +793,47 @@ $text-dark: #404040;
 		}
 	}
 }
+
+.d-ad-holder
+{
+	padding-bottom: 15px;
+
+	.d-ad-container
+	{
+		img 
+		{
+			width: 100%;
+		}
+
+		&:first-child
+		{
+			padding-right: 5px;
+		}
+		&:nth-child(2)
+		{
+			padding-right: 2.5px;
+			padding-left: 2.5px;
+		}
+		&:last-child
+		{
+			padding-left: 5px;
+		}
+
+		@media screen and (max-width: 425px)
+		{
+			&:first-child
+			{
+				padding-right: 3px;
+			}
+			&:nth-child(2)
+			{
+				padding-right: 1.5px;
+				padding-left: 1.5px;
+			}
+			&:last-child
+			{
+				padding-left: 3px;
+			}
+		}
+	}
+}

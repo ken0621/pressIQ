@@ -26,11 +26,12 @@
 		                <!--</div>-->
 		                <div class="modal-body">
 		                	<div class="congrats-holder">
-			                	<div class="title">CONGRATULATIONS!</div>
+			                	{{-- <div class="title">CONGRATULATIONS!</div>
 			                    <div class="img">
 			                    	<img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
 			                    </div>
-			                    <div class="desc">You are one step away from your membership!</div>
+			                    <div class="desc">You are one step away from your membership!</div> --}}
+			                    <img style="max-width: 550px; padding-bottom: 10px;" src="/themes/{{ $shop_theme }}/assets/mobile/img/hand_shake.jpg">
 			                    <div class="btn-container">
 			                        <button id="btn-notification" class="btn-verify-notification btn-congratulation btn-notification" type="button">Continue</button>
 			                    </div>
@@ -84,6 +85,12 @@
 	</div>
 @else
 	<div class="dashboard" style="overflow: hidden;">
+		<!-- DASHBOARD ADS -->
+		<div class="row-no-padding clearfix d-ad-holder">
+			<div class="col-md-4 col-sm-4 col-xs-4"><div class="d-ad-container"><img src="/themes/{{ $shop_theme }}/img/d-ad1.jpg"></div></div>
+			<div class="col-md-4 col-sm-4 col-xs-4"><div class="d-ad-container"><img src="/themes/{{ $shop_theme }}/img/d-ad2.jpg"></div></div>
+			<div class="col-md-4 col-sm-4 col-xs-4"><div class="d-ad-container"><img src="/themes/{{ $shop_theme }}/img/d-ad3.jpg"></div></div>
+		</div>
 		<!-- WALLET SUMMARY -->
 		<div class="row clearfix">
 			<div class="col-md-3">

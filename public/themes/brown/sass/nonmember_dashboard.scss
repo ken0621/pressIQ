@@ -900,15 +900,15 @@ $text-dark: #272c2f;
 
 			.kit-parent-holder
 			{
-				&:hover{
-					cursor: pointer;
+				// &:hover{
+				// 	cursor: pointer;
 
-					.product-hover
-					{
-						opacity: 1 !important;
-						@include transition(0.3s);
-					}
-				}
+				// 	.product-hover
+				// 	{
+				// 		opacity: 1 !important;
+				// 		@include transition(0.3s);
+				// 	}
+				// }
 				.kit-holder
 				{
 					padding: 10px;

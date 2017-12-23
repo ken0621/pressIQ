@@ -238,8 +238,6 @@ class Customer_ReceivePaymentController extends Member
     }
     public function apply_credit_submit()
     {
-        die(var_dump(Request::input()));
-        
-        
+        die(var_dump(Request::input()));        
     }
 }

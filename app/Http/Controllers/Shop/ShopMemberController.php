@@ -104,6 +104,7 @@ class ShopMemberController extends Shop
         
         $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
         $data["item_kit"]    = Item::get_all_assembled_kit($this->shop_info->shop_id);
+        $data["item_kit2"] = Item::get_all_assembled_kit_v2($this->shop_info->shop_id);
         if(Self::$customer_info)
         {
             $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);

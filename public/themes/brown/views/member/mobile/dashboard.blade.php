@@ -223,7 +223,7 @@
                                           <div class="text-header2">Enroll now and become one of us!</div>
                                        </div>
                                        <div class="btn-container">
-                                          <button class="product-add-cart btn-buy-a-kit" type="button" onClick="location.href='/cartv2/buy_kit_mobile/{{ $item_kit_id }}'">Enroll Now</button><br>
+                                          <button class="product-add-cart btn-buy-a-kit" type="button" onclick="location.href='/cartv2/buy_kit_mobile/{{ $item_kit_id }}'">Enroll Now</button><br>
                                           <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
                                           <button class="btn-enter-a-code">Enter a Code</button>
                                        </div>
@@ -391,12 +391,28 @@
                                  </div>
                               </div>
                            </div>
-                           {{-- <div class="summary-holder">
-                              <div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s)</div>
+                           <div class="summary-holder">
+                              <div class="title"><i class="align-icon brown-icon-star"></i> Repurchase</div>
                               <div class="body" style="text-align: center;">
-                                 <button style="color: #fff; background-color: #402A21; padding: 12px 40px 12px 40px; border: 2px solid #402A21; border-radius: 2px;" class="btn-enter-a-code">Buy a Kit</button>    
+                                 <button data-popup=".popup-item-kit" class="open-popup" style="color: #fff; background-color: #402A21; padding: 12px 40px 12px 40px; border: 2px solid #402A21; border-radius: 2px;" class="btn-enter-a-code">Buy a Kit</button>    
                               </div>
-                           </div> --}}
+                           </div>
+                           <div class="popup popup-item-kit">
+                               <div class="content-block" style="margin-top: 0;">
+                                   <div style="clear: both;">
+                                       <h2 style="float: left;">BROWN&PROUD KITS</h2>
+                                       <a style="float: right; color: red; font-weight: 700; font-size: 20px; display: block; margin-top: 10px; text-align: right;" href="#" class="close-popup">X</a>
+                                   </div>
+                                   <div class="row" style="clear: both;">
+                                      @foreach($item_kit2 as $kit)
+                                      <div class="col-50" style="margin-bottom: 10px;">
+                                         <img style="object-fit: contain; height: 135px; width: 100%;" src="{{ $kit->item_img }}">
+                                         <button onclick="location.href='/cartv2/buy_kit_mobile/{{ $kit->item_id }}'" type="button" style=" border: 0; width: 100%; background-color: #ed573a; color: #fff; text-align: center; padding: 10px 0; font-weight: 500;">ENROLL NOW</button>
+                                      </div>
+                                      @endforeach
+                                   </div>
+                               </div>
+                           </div>
                         @endif
                      </div>
                   </div>

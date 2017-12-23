@@ -46,6 +46,7 @@ function receive_payment()
 		    	var customer_id = $(this).val();
 		    	$('.salesrep_id').val($(this).find('option:selected').attr('salesrep_id'));
 		    	$('.salesrep').val($(this).find('option:selected').attr('salesrep'));
+		    	$('.popup-link-credit').attr('link','/member/customer/receive_payment/apply_credit?customer_id='+customer_id);
 		    	var check = $(".for-tablet-only").html();
 		    	if(check == null || check == "")
 		    	{

@@ -722,7 +722,8 @@ Route::get('/member/customer/receive_payment','Member\Customer_ReceivePaymentCon
 Route::get('/member/customer/load_rp/{id}','Member\Customer_ReceivePaymentController@load_customer_rp');
 Route::post('/member/customer/receive_payment/add','Member\Customer_ReceivePaymentController@add_receive_payment');
 Route::post('/member/customer/receive_payment/update/{id}','Member\Customer_ReceivePaymentController@update_receive_payment');
-
+Route::get('/member/customer/receive_payment/apply_credit','Member\Customer_ReceivePaymentController@apply_credit');
+Route::any('/member/customer/receive_payment/apply_credit_submit','Member\Customer_ReceivePaymentController@apply_credit_submit');
 
 /* CUSTOMER CREDIT MEMO*/
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');

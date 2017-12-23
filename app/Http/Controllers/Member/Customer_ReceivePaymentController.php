@@ -225,4 +225,21 @@ class Customer_ReceivePaymentController extends Member
 
         return json_encode($json);
     }
+    public function apply_credit()
+    {
+        $customer_id = Request::input('customer_id');
+        $return = null;
+        $data['page'] = 'All Credits';
+        $data['customer_id'] = $customer_id;
+        $data['customer_data'] = Customer::get_info($this->user_info->shop_id, $customer_id);
+        $data['_credits'] = CreditMemo::get_all_available_credit($this->user_info->shop_id, $customer_id);
+
+        return view('member.receive_payment.load_all_credit',$data);
+    }
+    public function apply_credit_submit()
+    {
+        die(var_dump(Request::input()));
+        
+        
+    }
 }

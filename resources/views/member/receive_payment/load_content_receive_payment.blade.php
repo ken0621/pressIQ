@@ -23,6 +23,9 @@
             <!-- <div class="col-sm-4">
                 <button class="btn btn-custom-white btn-sm" data-placement="bottom" data-html="true" id="example" data-content="<form><br><input type='text' class='form-control input-sm' ><br><a style='cursor:pointer' class='pull-left' onclick='$(&quot;#example&quot;).popover(&quot;hide&quot;);'>Cancel</a><a style='cursor:pointer' class='pull-right'>Find</a><br></form>" data-toggle="popover">Find by invoice no.</button>
             </div> -->
+            <div class="pull-right col-sm-6 text-right">
+                <h4><a class="popup popup-link-credit" size="md" link="/member/customer/receive_payment/apply_credit"><i class="fa fa-address-card"></i> Apply Available Credits</a></h4>
+            </div>
         </div>
         <div class="pull-right col-sm-6 text-right">
             <h4><a class="popup popup-link-credit" size="md" link="/member/customer/receive_payment/apply_credit"><i class="fa fa-address-card"></i> Apply Available Credits</a></h4>
@@ -106,6 +109,15 @@
                 <div class="col-md-5 text-right digima-table-value red">
                     <input type="hidden" name="amount_to_credit" class="amount-to-credit" />
                     <span class="amount-credit">PHP 0.00</span>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-md-7 text-right digima-table-label">
+                    Credits Applied
+                </div>
+                <div class="col-md-5 text-right digima-table-value total">
+                    <input type="hidden" name="rp_total_amount" class="amount-to-apply" />
+                    <span class="amount-apply">PHP 0.00</span>
                 </div>
             </div> 
         </div>

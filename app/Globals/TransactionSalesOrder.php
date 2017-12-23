@@ -22,6 +22,10 @@ class TransactionSalesOrder
 	{
 		return Tbl_customer_estimate::where("is_sales_order",0)->where("est_status","accepted")->where("est_shop_id", $shop_id)->where("est_customer_id",$customer_id)->count();
 	}
+	public static function getAllOpenSO($shop_id)
+    {
+        return Tbl_customer_estimate::Customer()->where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->get();
+    }
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);

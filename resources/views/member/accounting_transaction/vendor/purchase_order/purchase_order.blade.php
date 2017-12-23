@@ -58,7 +58,7 @@
                                 <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$po->po_vendor_email or ''}}"/>
                             </div>
                             <div class="col-sm-4 text-right">
-                                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_order/load-transaction"><i class="fa fa-handshake-o"></i> {{$count_so}} Open Transaction</a></h4>
+                                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_order/load-transaction"><i class="fa fa-handshake-o"></i> {{$count_transaction}} Open Transaction</a></h4>
                             </div>
                         </div>
                     </div>

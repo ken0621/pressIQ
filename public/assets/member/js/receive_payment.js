@@ -273,3 +273,7 @@ function submit_done(data)
     	}
 	}
 }
+function success_apply_credit(data)
+{
+    alert(123);
+} 

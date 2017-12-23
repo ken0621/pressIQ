@@ -118,7 +118,26 @@
                     <input type="hidden" name="credit_total_amount" class="amount-to-apply"/>
                     <span class="credit-amount">PHP 0.00</span>
                 </div>
-            </div> 
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right digima-table-label"></div>
+                <div class="col-md-8 text-right">
+                    <li class="payment-li" style="list-style: none;">
+                        <div class="form-group">
+                            <div class="col-sm-1">
+                               <a href="javascript:" class="remove-credit" credit-id=""> <i class="fa fa-times-circle" style="color:red"></i></a> 
+                            </div>
+                            <div class="col-sm-4">
+                                CM122317-0001
+                            </div>
+                            <div class="col-sm-7 text-right">
+                                PHP 200.00
+                            </div>
+                            <input type="hidden" value="" class="compute-payment-amount" name="payment_amount[]">
+                        </div>
+                    </li>
+                </div>
+            </div>
         </div>
     </div>
     

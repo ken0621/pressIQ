@@ -406,7 +406,7 @@
                                    <div class="row" style="clear: both;">
                                       @foreach($item_kit2 as $kit)
                                       <div class="col-50" style="margin-bottom: 10px;">
-                                         <img style="object-fit: contain; height: 135px; width: 100%;" src="{{ $kit->item_img }}">
+                                         <img style="object-fit: contain; width: 100%;" src="{{ $kit->item_img }}">
                                          <button onclick="location.href='/cartv2/buy_kit_mobile/{{ $kit->item_id }}'" type="button" style=" border: 0; width: 100%; background-color: #ed573a; color: #fff; text-align: center; padding: 10px 0; font-weight: 500;">ENROLL NOW</button>
                                       </div>
                                       @endforeach

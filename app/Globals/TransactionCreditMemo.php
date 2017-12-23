@@ -14,6 +14,10 @@ use App\Globals\AccountingTransaction;
 
 class TransactionCreditMemo
 {
+	public static function loadAvailableCredit($shop_id, $customer_id)
+	{
+		return Tbl_credit_memo::where("cm_shop_id", $shop_id)->where("cm_customer_id", $customer_id)->where("cm_type",1)->where("cm_used_ref_name","retain_credit")->get();
+	}
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);

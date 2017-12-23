@@ -13,6 +13,7 @@ use App\Globals\Customer;
 use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
 use App\Globals\TransactionSalesOrder;
+use App\Globals\TransactionEstimateQuotation;
 
 use Session;
 use Carbon\Carbon;
@@ -78,5 +79,21 @@ class TransactionSalesOrderController extends Member
 		}
 
 		return json_encode($return);
+	}
+	public function getCountTransaction(Request $request)
+	{
+		$customer_id = $request->customer_id;
+		return TransactionSalesOrder::CountTransaction($this->user_info->shop_id, $customer_id);
+	}
+
+	public function getLoadTransaction(Request $request)
+	{
+		$data['_eq'] = TransactionEstimateQuotation::getOpenEQ($this->user_info->shop_id, $request->c);
+		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
+		return view("member.accounting_transaction.customer.sales_order.load_transaction", $data);
+	}
+	public function getPrint(Request $request)
+	{
+		dd("Under Maintenance");
 	}
 }

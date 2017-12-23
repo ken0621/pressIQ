@@ -13,6 +13,8 @@ use App\Globals\Customer;
 use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
 use App\Globals\TransactionSalesReceipt;
+use App\Globals\TransactionEstimateQuotation;
+use App\Globals\TransactionSalesOrder;
 
 use Session;
 use Carbon\Carbon;
@@ -91,6 +93,9 @@ class TransactionSalesReceiptController extends Member
 	}
 	public function getLoadTransaction(Request $request)
 	{
-		dd("Under Maintenance");
+		$data['_eq'] = TransactionEstimateQuotation::getOpenEQ($this->user_info->shop_id, $request->c);
+		$data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
+		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
+		return view("member.accounting_transaction.customer.sales_receipt.load_transaction", $data);
 	}
 }

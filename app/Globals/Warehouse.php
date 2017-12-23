@@ -1068,10 +1068,10 @@ class Warehouse
  
             $data['inventory_slip_id'] = $inventory_slip_id;
 
-            if(count($_itemv2) > 0)
-            {
-                Warehouse2::refill_bulk($_v2_shop_id, $_v2_warehouse_id, $_v2_reference_name, $_v2_reference_id, $_v2_remarks, $_itemv2, false);
-            }
+            // if(count($_itemv2) > 0)
+            // {
+            //     Warehouse2::refill_bulk($_v2_shop_id, $_v2_warehouse_id, $_v2_reference_name, $_v2_reference_id, $_v2_remarks, $_itemv2, false);
+            // }
 
             $slip_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id);
             AuditTrail::record_logs("Refill","warehouse_inventory",$inventory_slip_id,"",serialize($slip_data));
@@ -1194,18 +1194,18 @@ class Warehouse
                 $data['status'] = 'success';
                 $data['inventory_slip_id'] = $inventory_slip_id;     
 
-                if(count($_itemv2) > 0)
-                {
-                    $val = Warehouse2::consume_bulk($_v2_shop_id, $_v2_warehouse_id, $_v2_reference_name, $_v2_reference_id, $_v2_remarks, $_itemv2, $allow_out_of_stock, false);
-                    // if(!is_numeric($val))
-                    // {
-                    //     $val = Warehouse2::refill_bulk($_v2_shop_id, $_v2_warehouse_id, $_v2_reference_name, $_v2_reference_id, $_v2_remarks, $_itemv2, false);
-                    //     if(is_numeric($val))
-                    //     {
-                    //         $val = Warehouse2::consume_bulk($_v2_shop_id, $_v2_warehouse_id, $_v2_reference_name, $_v2_reference_id, $_v2_remarks, $_itemv2, false);
-                    //     }
-                    // } 
-                }
+                // if(count($_itemv2) > 0)
+                // {
+                //     $val = Warehouse2::consume_bulk($_v2_shop_id, $_v2_warehouse_id, $_v2_reference_name, $_v2_reference_id, $_v2_remarks, $_itemv2, $allow_out_of_stock, false);
+                //     // if(!is_numeric($val))
+                //     // {
+                //     //     $val = Warehouse2::refill_bulk($_v2_shop_id, $_v2_warehouse_id, $_v2_reference_name, $_v2_reference_id, $_v2_remarks, $_itemv2, false);
+                //     //     if(is_numeric($val))
+                //     //     {
+                //     //         $val = Warehouse2::consume_bulk($_v2_shop_id, $_v2_warehouse_id, $_v2_reference_name, $_v2_reference_id, $_v2_remarks, $_itemv2, false);
+                //     //     }
+                //     // } 
+                // }
 
                 $slip_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id);
                 AuditTrail::record_logs("Consume","warehouse_inventory",$inventory_slip_id,"",serialize($slip_data));           

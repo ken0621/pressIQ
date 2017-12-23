@@ -39,7 +39,6 @@ class Customer_ReceivePaymentController extends Member
 
     public function index()
     {    
-
         $data["c_id"] = Request::input("customer_id");
         $data["_customer"]      = Customer::getAllCustomer();
         $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
@@ -47,6 +46,7 @@ class Customer_ReceivePaymentController extends Member
         $data['action']         = "/member/customer/receive_payment/add";
         $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"]);
         $data['comm_calculator'] = CommissionCalculator::check_settings($this->user_info->shop_id);
+        Session::forget("applied_credits");
 
         $id = Request::input('id');
         if($id)
@@ -238,6 +238,22 @@ class Customer_ReceivePaymentController extends Member
     }
     public function apply_credit_submit()
     {
-        die(var_dump(Request::input()));        
+        $_credit = Request::input("apply_credit");
+
+        $_apply_credit = Session::get('applied_credits');
+
+        if(count($_credit) > 0)
+        {
+            foreach ($_credit as $key => $value) 
+            {
+                $_apply_credit[$key] = $value;
+            }
+            Session::put('applied_credits', $_apply_credit);   
+        }
+
+        $return['status'] = "success";
+        $return['call_function'] = "success_apply_credit";
+
+        return json_encode($return);
     }
 }

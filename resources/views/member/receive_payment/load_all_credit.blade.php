@@ -81,6 +81,10 @@
                 }
             });
             $('.total-apply-credit').html('PHP '+total_apply_credit.toFixed(2));
-        }       
+        }
+        function success_apply_credit(data)
+        {
+
+        }     
     })
 </script>

@@ -94,7 +94,10 @@ class TransactionReceiveInventoryController extends Member
 
         if(is_numeric($validate))
         {
-
+            $return['status'] = 'success';
+            $return['status_message'] = 'Success creating receive inventory.';
+            $return['call_function'] = 'success_receive_inventory';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('receive_inventory', $validate ,$btn_action);
         }
         else
         {
@@ -107,13 +110,13 @@ class TransactionReceiveInventoryController extends Member
     public function getCountTransaction(Request $request)
     {
         $vendor_id = $request->vendor_id;
-        return TransactionReceiveInventory::countTransaction($this->user_info->shop_id, $vendor_id);
+        return TransactionDebitMemo::countTransaction($this->user_info->shop_id, $vendor_id);
     }
     public function getLoadTransaction(Request $request)
     {
         $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
         $data['_dm'] = TransactionDebitMemo::getOpenDM($this->user_info->shop_id, $request->vendor);
-      
+        $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
         return view('member.accounting_transaction.vendor.receive_inventory.load_transaction', $data);
     }
     

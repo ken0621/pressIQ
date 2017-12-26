@@ -13,6 +13,8 @@ use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_user;
 use App\Models\Tbl_debit_memo_replace_line;
+
+use App\Globals\TransactionPurchaseOrder;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Customer;
@@ -77,4 +79,18 @@ class TransactionDebitMemoController extends Member
         }
         die(var_dump($btn_action));
     }
+
+    public function getCountTransaction(Request $request)
+    {
+        $vendor_id = $request->vendor_id;
+        return TransactionPurchaseOrder::countTransaction($this->user_info->shop_id, $vendor_id);
+    }
+
+    public function getLoadTransaction(Request $request)
+    {
+        $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
+        $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
+        return view('member.accounting_transaction.vendor.debit_memo.load_transaction', $data); 
+    }
+
 }

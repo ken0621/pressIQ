@@ -2,6 +2,7 @@
 namespace App\Globals;
 
 use App\Models\Tbl_purchase_order;
+use App\Models\Tbl_debit_memo;
 use Carbon\Carbon;
 use DB;
 
@@ -15,13 +16,12 @@ class TransactionReceiveInventory
 {
 	public static function countTransaction($shop_id, $vendor_id)
 	{
-		// $count_po = Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed','!=', '0')->count();
-  //       $count_receive_inventory = Tbl_debit_memo::where('db_shop_id',$shop_id)->count();
+		$debit_memo   = Tbl_debit_memo::where('db_shop_id',$shop_id)->where('db_vendor_id', $vendor_id)->count();
+        $purchase_order = Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', '!=', '0')->count();
 
-  //       $count = $count_po + $count_receive_inventory;
-  //       dd($count_receive_inventory);
-  //       return $count;
-        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed','!=', '0')->count();
+        $count = $debit_memo + $purchase_order;
+        //die(var_dump($count));
+        return $count;
 	}
     
 	public static function postInsert($shop_id, $insert, $insert_item)
@@ -42,7 +42,7 @@ class TransactionReceiveInventory
             $ins['date_created']		  = Carbon::now();
             $ins['inventory_only']		  = 1;
 
-             /* TOTAL */
+            /* TOTAL */
             $total = collect($insert_item)->sum('item_amount');
 
             $ins['bill_total_amount'] = $total;
@@ -95,8 +95,8 @@ class TransactionReceiveInventory
         }
         if(count($itemline) > 0)
         {
-            Tbl_customer_invoice_line::insert($itemline);
-            $return = AccountingTransaction::entry_data($entry, $insert_item);
+            //Tbl_bill_item_line::insert($itemline);
+            //$return = AccountingTransaction::entry_data($entry, $insert_item);
         }
 
         return $return;

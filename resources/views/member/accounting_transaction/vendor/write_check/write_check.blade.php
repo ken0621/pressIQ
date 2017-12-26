@@ -80,18 +80,14 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-4">
                                             <label>Reference Number</label>
-                                            <input type="text" class="form-control" name="transaction_refnumber" value="WC20171225-0001">
-                                        </div>
-                                        <div class="col-sm-5 text-right"></div>
-                                        <div class="col-sm-3 text-right open-transaction" style="display: none;">
-                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/write_check/load-transaction"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
+                                            <input type="text" class="form-control" name="transaction_refnumber" value="CV20171225-0001">
                                         </div>
                                     </div>
                                 </div>
                                 <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                                     <div class="row clearfix">
-                                        <div class="col-sm-3">
-                                            <select class="form-control drop-down-name input-sm pull-left" name="wc_reference_id">
+                                        <div class="col-sm-4">
+                                            <select class="form-control drop-down-name input-sm pull-left" name="vendor_id">
                                                 @include("member.load_ajax_data.load_name", ['name_id'=> isset($wc->wc_reference_id) ? $wc->wc_reference_id : '', 'ref_name'=>isset($wc->wc_reference_name) ? $wc->wc_reference_name : ''])
                                                 <option class="hidden" value="" />
                                             </select>
@@ -99,6 +95,9 @@
                                         </div>
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control input-sm customer-email" name="wc_customer_vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$wc->wc_customer_vendor_email or ''}}"/>
+                                        </div>
+                                        <div class="col-sm-4 text-right open-transaction" style="display: none;">
+                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/write_check/load-transaction?vendor_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -254,7 +253,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <label>Memo</label>
-                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" ></textarea>
+                                        <textarea class="form-control input-sm textarea-expand" name="wc_memo" ></textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">

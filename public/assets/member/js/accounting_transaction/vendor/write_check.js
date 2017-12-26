@@ -142,7 +142,7 @@ function write_check()
 				success : function(data)
 				{
 					$(".open-transaction").slideDown();
-					$(".popup-link-open-transaction").attr('link','/member/transaction/write_check/load-transaction?v='+$vendor_id);
+					$(".popup-link-open-transaction").attr('link','/member/transaction/write_check/load-transaction?vendor='+$vendor_id);
 					$(".count-open-transaction").html(data);
 				}
 			});
@@ -564,6 +564,15 @@ function success_item(data)
 
 		data.element.modal("hide");
 	});
+}
+
+function success_write_check(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
 }
 
 function add_po_to_bill(po_id)

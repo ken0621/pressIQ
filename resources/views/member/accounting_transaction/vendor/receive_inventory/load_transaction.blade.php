@@ -1,6 +1,6 @@
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal">×</button>
-	<h4 class="modal-title">Open Transaction</h4>
+	<h4 class="modal-title">Open Transaction - {{ $vendor->vendor_company }}</h4>
 </div>
 <div class="modal-body">
 	<div class="row">

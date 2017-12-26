@@ -20,11 +20,13 @@ class TransactionPurchaseOrder
 {
 	public static function countTransaction($shop_id)
 	{
-		$count_so = Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->count();
-        $count_pr = Tbl_requisition_slip::where('shop_id',$shop_id)->where("requisition_slip_status","open")->count();
+        return Tbl_requisition_slip::where('shop_id',$shop_id)->where("requisition_slip_status","open")->count();
         
-        $return = $count_so + $count_pr;
-        return $return;
+    }
+
+    public static function getClosePO($shop_id, $vendor_id)
+    {
+        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed',0)->get();
     }
 
     public static function getOpenPO($shop_id, $vendor_id)

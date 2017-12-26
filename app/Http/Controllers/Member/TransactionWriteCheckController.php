@@ -27,6 +27,8 @@ use App\Globals\Item;
 use App\Globals\Warehouse;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\TransactionPurchaseOrder;
+use App\Globals\AccountingTransaction;
 
 use App\Globals\TransactionWriteCheck;
 use App\Models\Tbl_purchase_order;
@@ -67,7 +69,8 @@ class TransactionWriteCheckController extends Member
     {
         $btn_action = $request->button_action;
 
-        $insert['wc_reference_id']         = $request->wc_reference_id;
+        $insert['transaction_refnumber']   = $request->transaction_refnumber;
+        $insert['vendor_id']               = $request->vendor_id;
         $insert['wc_reference_name']       = $request->wc_reference_name;
         $insert['wc_customer_vendor_email']= $request->wc_customer_vendor_email;
         $insert['wc_mailing_address']      = $request->wc_mailing_address;
@@ -85,16 +88,32 @@ class TransactionWriteCheckController extends Member
             
                 /*$insert_item[$key]['itemline_ref_id']       = $value;
                 $insert_item[$key]['itemline_ref_name']     = $request->itemline_ref_name[$key];*/
-
                 $insert_item[$key]['item_id']           = $value;
                 $insert_item[$key]['item_description']  = $request->item_description[$key];
                 $insert_item[$key]['item_um']           = $request->item_um[$key];
                 $insert_item[$key]['item_qty']          = str_replace(',', '', $request->item_qty[$key]);
                 $insert_item[$key]['item_rate']         = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_amount']       = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_discount']     = 0;
             }
 
-            die(var_dump($btn_action));
+            $validate = TransactionWriteCheck::postInsert($this->user_info->shop_id, $insert, $insert_item);
+            
+            $return = null;
+            if(is_numeric($validate))
+            {
+                $return['status'] = 'success';
+                $return['status_message'] = 'Success creating write check.';
+                $return['call_function'] = 'success_write_check';
+                $return['status_redirect'] = AccountingTransaction::get_redirect('write_check', $validate ,$btn_action);
+            }
+            else
+            {
+                $return['status'] = 'error';
+                $return['status_message'] = $validate;
+            }
+            //die(var_dump($return));
+            return $return;
         }
     }
     public function getCountTransaction(Request $request)
@@ -102,9 +121,12 @@ class TransactionWriteCheckController extends Member
         $vendor_id = $request->vendor_id;
         return TransactionWriteCheck::countTransaction($this->user_info->shop_id, $vendor_id);
     }
-    public function getLoadTransaction()
+    public function getLoadTransaction(Request $request)
     {
-        dd('Wail Langs!');
+        $data['_po']    = TransactionPurchaseOrder::getClosePO($this->user_info->shop_id, $request->vendor);
+        $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
+
+        return view('member.accounting_transaction.vendor.write_check.load_transaction', $data);
     }
 
 }

@@ -13,6 +13,10 @@ use App\Globals\Customer;
 use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
 use App\Globals\TransactionSalesInvoice;
+use App\Globals\TransactionSalesOrder;
+use App\Globals\TransactionEstimateQuotation;
+
+use App\Globals\AccountingTransaction;
 
 use Session;
 use Carbon\Carbon;
@@ -26,7 +30,7 @@ class TransactionSalesInvoiceController extends Member
 		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice_list',$data);
 	}
 
-	public function getCreate()
+	public function getCreate(Request $request)
 	{
 		$data['page'] = "Create Sales Invoice";		
         $data["_customer"]  = Customer::getAllCustomer();
@@ -34,6 +38,10 @@ class TransactionSalesInvoiceController extends Member
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["_terms"]     = Customer::getTerms($this->user_info->shop_id,0);
         $data['action']		= "/member/transaction/sales_invoice/create-sales-invoice";
+        if($request->id)
+        {
+        	$data['action']		= "/member/transaction/sales_invoice/update-sales-invoice";
+        }
 
 		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice',$data);
 	} 
@@ -41,12 +49,12 @@ class TransactionSalesInvoiceController extends Member
 	{
 		$btn_action = $request->button_action;
 
-		$insert['transaction_refnumber'] = $request->transaction_refnumber;
+		$insert['transaction_refnum'] 	 = $request->transaction_refnumber;
 		$insert['customer_id'] 			 = $request->customer_id;
 		$insert['customer_email']        = $request->customer_email;
 		$insert['customer_address']      = $request->customer_address;
-		$insert['transaction_date']      = $request->transaction_date;
-		$insert['transaction_duedate']   = $request->transaction_duedate;
+		$insert['transaction_date']      = date("Y-m-d", strtotime($request->transaction_date));
+		$insert['transaction_duedate']   = date("Y-m-d", strtotime($request->transaction_duedate));
 		$insert['customer_message']      = $request->customer_message;
 		$insert['customer_memo']         = $request->customer_memo;
 		$insert['customer_ewt']          = $request->customer_ewt;
@@ -60,19 +68,34 @@ class TransactionSalesInvoiceController extends Member
 		{
 			if($value)
 			{
-				$insert_item[$key]['item_id'] = $value;
-				$insert_item[$key]['item_servicedate'] = $request->item_servicedate[$key];
-				$insert_item[$key]['item_description'] = $request->item_description[$key];
-				$insert_item[$key]['item_um'] = $request->item_um[$key];
-				$insert_item[$key]['item_qty'] = str_replace(',', '', $request->item_qty[$key]);
-				$insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
-				$insert_item[$key]['item_discount'] = str_replace(',', '', $request->item_discount[$key]);
-				$insert_item[$key]['item_remarks'] = $request->item_remarks[$key];
-				$insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
-				$insert_item[$key]['item_taxable'] = $request->item_taxable[$key];
+				$insert_item[$key]['item_id'] 		   	= $value;
+				$insert_item[$key]['item_servicedate'] 	= date("Y-m-d", strtotime($request->item_servicedate[$key]));
+				$insert_item[$key]['item_description'] 	= $request->item_description[$key];
+				$insert_item[$key]['item_um'] 			= $request->item_um[$key];
+				$insert_item[$key]['item_qty'] 			= str_replace(',', '', $request->item_qty[$key]);
+				$insert_item[$key]['item_rate'] 		= str_replace(',', '', $request->item_rate[$key]);
+				$insert_item[$key]['item_discount'] 	= str_replace(',', '', $request->item_discount[$key]);
+				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
+				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
+				$insert_item[$key]['item_taxable'] 		= $request->item_taxable[$key];
 			}
 		}
-		die(var_dump($btn_action));
+		$return = null;
+		$validate = TransactionSalesInvoice::postInsert($this->user_info->shop_id, $insert, $insert_item);
+		if(is_numeric($validate))
+		{
+			$return['status'] = 'success';
+			$return['status_message'] = 'Success creating invoice.';
+			$return['call_function'] = 'success_invoice';
+			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_invoice', $validate ,$btn_action);
+		}
+		else
+		{
+			$return['status'] = 'error';
+			$return['status_message'] = $validate;
+		}
+
+		return json_encode($return);
 	}
 	public function getCountTransaction(Request $request)
 	{
@@ -80,6 +103,13 @@ class TransactionSalesInvoiceController extends Member
 		return TransactionSalesInvoice::CountTransaction($this->user_info->shop_id, $customer_id);
 	}
 	public function getLoadTransaction(Request $request)
+	{
+		$data['_eq'] = TransactionEstimateQuotation::getOpenEQ($this->user_info->shop_id, $request->c);
+		$data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
+		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
+		return view("member.accounting_transaction.customer.sales_invoice.load_transaction", $data);
+	}
+	public function getPrint(Request $request)
 	{
 		dd("Under Maintenance");
 	}

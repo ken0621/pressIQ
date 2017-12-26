@@ -5,4 +5,4 @@
 	@if(sizeOf($_vendor)-1 == $key)
 		<option class="hidden" value="" />
 	@endif
-@endforeach
+@endforeach 

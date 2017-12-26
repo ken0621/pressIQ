@@ -20,12 +20,13 @@
                 </div>
                 @endif
             @endif
+            <div class="col-sm-5"></div>
             <!-- <div class="col-sm-4">
                 <button class="btn btn-custom-white btn-sm" data-placement="bottom" data-html="true" id="example" data-content="<form><br><input type='text' class='form-control input-sm' ><br><a style='cursor:pointer' class='pull-left' onclick='$(&quot;#example&quot;).popover(&quot;hide&quot;);'>Cancel</a><a style='cursor:pointer' class='pull-right'>Find</a><br></form>" data-toggle="popover">Find by invoice no.</button>
             </div> -->
             @if(!isset($_nocredits))
-            <div class="pull-right col-sm-6 text-right">
-                <h4><a class="popup popup-link-credit" size="md" link="/member/customer/receive_payment/apply_credit"><i class="fa fa-address-card"></i> Apply Available Credits</a></h4>
+            <div class="col-sm-4 text-right open-transaction" style="display: none;">
+                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/receive_payment/load-credit"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Available Credits</a></h4>
             </div>
             @endif
         </div>
@@ -121,25 +122,11 @@
             </div>
             <div class="row">
                 <div class="col-md-4 text-right digima-table-label"></div>
-                <div class="col-md-8 text-right">
-                    <li class="payment-li" style="list-style: none;">
-                        <div class="form-group">
-                            <div class="col-sm-1">
-                               <a href="javascript:" class="remove-credit" credit-id=""> <i class="fa fa-times-circle" style="color:red"></i></a> 
-                            </div>
-                            <div class="col-sm-4">
-                                CM122317-0001
-                            </div>
-                            <div class="col-sm-7 text-right">
-                                PHP 200.00
-                            </div>
-                            <input type="hidden" value="" class="compute-payment-amount" name="payment_amount[]">
-                        </div>
-                    </li>
+                <div class="col-md-8 text-right load-applied-credits">
+                   @include("member.receive_payment.load_credits")
                 </div>
             </div>
         </div>
-    </div>
-    
+    </div>    
     <!-- END CONTENT -->
 </div>

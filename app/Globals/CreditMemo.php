@@ -33,6 +33,15 @@ class CreditMemo
         }
         return $cm_amount;
 	}
+	public static function get_info($cm_id = 0)
+	{	
+		$return = null;
+		if($cm_id)
+		{
+			$return = Tbl_credit_memo::where("cm_id", $cm_id)->first();
+		}
+		return $return;
+	}
     public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');

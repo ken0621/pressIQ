@@ -46,7 +46,8 @@ class Customer_ReceivePaymentController extends Member
         $data['action']         = "/member/customer/receive_payment/add";
         $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"]);
         $data['comm_calculator'] = CommissionCalculator::check_settings($this->user_info->shop_id);
-        Session::forget("applied_credits");
+        // Session::forget("applied_credits");
+        $data['_apply_credit'] = Session::get("applied_credits");
 
         $id = Request::input('id');
         if($id)
@@ -255,5 +256,35 @@ class Customer_ReceivePaymentController extends Member
         $return['call_function'] = "success_apply_credit";
 
         return json_encode($return);
+    }
+    public function remove_apply_credit()
+    {
+        $_apply_credit = Session::get('applied_credits');
+        $cm_id = Request::input('cm_id');
+        foreach ($_apply_credit as $key => $value) 
+        {
+            if($key == $cm_id)
+            {
+                unset($_apply_credit[$key]);
+            }
+        }
+        Session::put('applied_credits',$_apply_credit);        
+    }
+    public function load_apply_credit()
+    {
+        $credit = Session::get('applied_credits');
+        $_credits = null;
+        foreach ($credit as $key => $value) 
+        {
+            $cm_data = CreditMemo::get_info($key);
+            if($cm_data)
+            {
+                $_credits[$key]['ref_number'] = $cm_data->transaction_refnum != "" ? $cm_data->transaction_refnum : $cm_data->cm_id;
+                $_credits[$key]['cm_id'] = $key;
+                $_credits[$key]['cm_amount'] = $value;                
+            }
+        }
+        $data['_applied_credit'] = $_credits;
+        return view("member.receive_payment.load_credits",$data);
     }
 }

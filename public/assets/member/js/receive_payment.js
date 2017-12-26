@@ -19,6 +19,8 @@ function receive_payment()
 		event_button_action_click();
 
 		action_initialize_load();
+		action_remove_apply_credit();
+		event_compute_apply_credit();
 	}
 
 	this.action_initialize_load = function()
@@ -46,7 +48,7 @@ function receive_payment()
 		    	var customer_id = $(this).val();
 		    	$('.salesrep_id').val($(this).find('option:selected').attr('salesrep_id'));
 		    	$('.salesrep').val($(this).find('option:selected').attr('salesrep'));
-		    	$('.popup-link-credit').attr('link','/member/customer/receive_payment/apply_credit?customer_id='+customer_id);
+		    	// $('.popup-link-credit').attr('link','/member/customer/receive_payment/apply_credit?customer_id='+customer_id);
 		    	var check = $(".for-tablet-only").html();
 		    	if(check == null || check == "")
 		    	{
@@ -62,6 +64,8 @@ function receive_payment()
 			    		action_compute_maximum_amount();
 			    	})		    		
 	    		}
+
+	    		action_load_open_transaction(customer_id);
 		    }
 		});
 
@@ -81,7 +85,27 @@ function receive_payment()
 		    placeholder : 'Account'
 		});
 	}
-
+	function action_load_open_transaction($customer_id)
+	{
+		if($customer_id)
+		{
+			$.ajax({
+				url : '/member/transaction/receive_payment/count-transaction',
+				type : 'get',
+				data : {customer_id : $customer_id},
+				success : function(data)
+				{
+					$(".open-transaction").slideDown();
+					$(".popup-link-open-transaction").attr('link','/member/customer/receive_payment/apply_credit?customer_id='+$customer_id);
+					$(".count-open-transaction").html(data);
+				}
+			});
+		}
+		else
+		{
+			$(".open-transaction").slideUp();
+		}
+	}
 	/* CHECK BOX FOR LINE ITEM */
 	function event_line_check_change()
 	{
@@ -233,7 +257,40 @@ function receive_payment()
 			$(".button-action").val($(this).attr("data-action"));
 		})
 	}
-
+	function event_compute_apply_credit()
+	{
+		var total_amount_to_credit = 0;
+		$('.compute-applied-credit').each(function(a, b)
+		{
+			total_amount_to_credit += parseFloat($(this).val());
+		});
+		$('.amount-to-apply').val(total_amount_to_credit);
+		$('.credit-amount').html('PHP ' + formatMoney_2(total_amount_to_credit));
+	}
+	this.event_compute_apply_credit = function()
+	{
+		event_compute_apply_credit();
+	}
+	function action_remove_apply_credit()
+	{
+		$('body').on("click",'.remove-credit', function()
+		{
+			$cm_id = $(this).attr("credit-id");
+			$.ajax({
+				url : '/member/customer/receive_payment/remove_apply_credit',
+				type : 'get',
+				data : {cm_id : $cm_id},
+				success : function()
+				{
+					$(".load-applied-credits").load("/member/customer/receive_payment/load_apply_credit", function()
+					{
+						console.log("success");
+						event_compute_apply_credit();
+					});
+				}
+			});
+		});
+	}
 }
 
 function submit_done(data)
@@ -275,5 +332,12 @@ function submit_done(data)
 }
 function success_apply_credit(data)
 {
-    alert(123);
+    if(data.status == "success")
+    {
+    	$(".load-applied-credits").load("/member/customer/receive_payment/load_apply_credit", function()
+		{
+			receive_payment.event_compute_apply_credit();
+		});
+		data.element.modal("toggle");
+    }
 } 

@@ -46,8 +46,8 @@ class Customer_ReceivePaymentController extends Member
         $data['action']         = "/member/customer/receive_payment/add";
         $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"]);
         $data['comm_calculator'] = CommissionCalculator::check_settings($this->user_info->shop_id);
-        // Session::forget("applied_credits");
-        $data['_apply_credit'] = Session::get("applied_credits");
+        Session::forget("applied_credits");
+        $data['_apply_credit'] = null;
 
         $id = Request::input('id');
         if($id)
@@ -62,6 +62,7 @@ class Customer_ReceivePaymentController extends Member
 
     public function load_customer_rp($customer_id)
     {
+        Session::put("applied_credits",null);
         $data["_invoice"] = Invoice::getAllInvoiceByCustomer($customer_id);
         return view('member.receive_payment.load_receive_payment_items', $data);
     }
@@ -235,7 +236,7 @@ class Customer_ReceivePaymentController extends Member
         $data['customer_data'] = Customer::get_info($this->user_info->shop_id, $customer_id);
         $data['_credits'] = CreditMemo::get_all_available_credit($this->user_info->shop_id, $customer_id);
         $data['_applied'] = Session::get("applied_credits");
-        
+
         return view('member.receive_payment.load_all_credit',$data);
     }
     public function apply_credit_submit()
@@ -275,15 +276,18 @@ class Customer_ReceivePaymentController extends Member
     {
         $credit = Session::get('applied_credits');
         $_credits = null;
-        foreach ($credit as $key => $value) 
+        if(count($credit) > 0)
         {
-            $cm_data = CreditMemo::get_info($key);
-            if($cm_data)
+            foreach ($credit as $key => $value) 
             {
-                $_credits[$key]['ref_number'] = $cm_data->transaction_refnum != "" ? $cm_data->transaction_refnum : $cm_data->cm_id;
-                $_credits[$key]['cm_id'] = $key;
-                $_credits[$key]['cm_amount'] = $value;                
-            }
+                $cm_data = CreditMemo::get_info($key);
+                if($cm_data)
+                {
+                    $_credits[$key]['ref_number'] = $cm_data->transaction_refnum != "" ? $cm_data->transaction_refnum : $cm_data->cm_id;
+                    $_credits[$key]['cm_id'] = $key;
+                    $_credits[$key]['cm_amount'] = $value;                
+                }
+            }   
         }
         $data['_applied_credit'] = $_credits;
         return view("member.receive_payment.load_credits",$data);

@@ -55,6 +55,11 @@ function receive_payment()
 			    	$(".tbody-item").load("/member/customer/load_rp/"+ (customer_id != '' ? customer_id : 0), function()
 			    	{
 			    		action_compute_maximum_amount();
+	    				action_load_open_transaction(customer_id);
+			    		$(".load-applied-credits").load("/member/customer/receive_payment/load_apply_credit", function()
+						{
+							event_compute_apply_credit();
+						});
 			    	})		    		
 		    	}
 		    	else
@@ -64,8 +69,6 @@ function receive_payment()
 			    		action_compute_maximum_amount();
 			    	})		    		
 	    		}
-
-	    		action_load_open_transaction(customer_id);
 		    }
 		});
 

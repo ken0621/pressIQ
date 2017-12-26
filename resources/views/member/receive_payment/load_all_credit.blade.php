@@ -25,7 +25,9 @@
                         <tbody>
                         @foreach($_credits as $credit)
                         <tr class="{{$total_credit+= $credit->cm_amount}} tr-credit">
-                            <td class="text-center"><input type="checkbox" class="td-credit" value="{{$credit->cm_amount}}" name="apply_credit[{{$credit->cm_id}}]" data-content="{{$credit->cm_amount}}"></td>
+                            <td class="text-center">
+                                <input type="checkbox" class="td-credit" value="{{$credit->cm_amount}}" name="apply_credit[{{$credit->cm_id}}]" data-content="{{$credit->cm_amount}}"  {{isset($_applied[$credit->cm_id]) ? 'checked' : ''}}>
+                            </td>
                             <td>{{$credit->cm_id}}</td>
                             <td class="text-center">{{currency('PHP',$credit->cm_amount)}}</td>
                         </tr>
@@ -70,6 +72,7 @@
             $(this).prop('checked', this.checked); 
             compute_credit();        
         });
+        compute_credit();
         function compute_credit()
         {
             var total_apply_credit = 0;

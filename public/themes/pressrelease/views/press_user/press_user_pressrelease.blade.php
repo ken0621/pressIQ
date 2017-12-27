@@ -65,7 +65,7 @@
                         <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
                           @endforeach
                     </select>
-
+                    
                     <div class="title">Media Type:</div>
                     <select data-placeholder="--Choose a media type--" multiple class="chosen-select" id="media_type" name="media_type[]">
                           @foreach($_media_type as $media)
@@ -90,7 +90,7 @@
                       @endif
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                    <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
+                    <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container" id="results_number"></span>
                       {{-- POPUP CHOOSE RECIPIENT --}}
 
                     @if(session()->has("pr_edit"))
@@ -110,7 +110,7 @@
                   <div class="title">Title:</div>
                   <div class="content" id="headline_pr"></div>
                   <div class="title">Send To:</div>
-                  <span class="result-container">
+                  <span class="result-container" id="results_number">
                   <span id="results_number_sendto" style="font-size:18px"></span></span>
 
 

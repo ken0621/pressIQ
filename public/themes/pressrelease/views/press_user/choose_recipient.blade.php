@@ -22,14 +22,14 @@
             </div>
             <div class="col-md-12">
                <form action="/pressuser/pressrelease/recipient/done" method="POST" >
-                  <div class="left-container" id="recipient_table" name="recipient_table">
+                  <div class="left-container"">
                      <table  class="display table table-bordered" style="background-color: #FFFFFF;" id="showHere_table">
-                        <thead>
+                        <thead style="background-color: white;">
                            <tr>
-                              <th>ACTION</th>
-                              <th>COMPANY</th>
-                              <th>RECIPIENT</th>
-                              <th>POSITION</th>   
+                              <th style="text-align: center;width: 5%"">ACTION</th>
+                              <th style="text-align: center;width: 25%">COMPANY</th>
+                              <th style="text-align: center;width: 25%">RECIPIENT</th>
+                              <th style="text-align: center;width: 25%">POSITION</th>   
                               <th style="display:none;">Email</th>   
                            </tr>
                         </thead> 

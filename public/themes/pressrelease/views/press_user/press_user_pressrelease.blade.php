@@ -16,7 +16,6 @@
 
               <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST" style="">
                 {{csrf_field()}}
-
                 <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
@@ -49,7 +48,7 @@
                         <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
                           @endforeach
                     </select>
-                    
+
                     <div class="title">Media Type:</div>
                     <select data-placeholder="--Choose a media type--" multiple class="chosen-select" id="media_type" name="media_type[]">
                           @foreach($_media_type as $media)
@@ -89,7 +88,7 @@
                 <div id="choose_recipient" class="tabcontent choose-recipient-container">
                     <div class="title-container">Choose Recipient</div>
 
-                   <div class="title">Country:</div>
+                    <div class="title">Country:</div>
                     <select data-placeholder="--Choose a country--" multiple class="chosen-select" id="choose_country" name="choose_country[]">
                          @foreach($_country as $country_name)
                          <option value="{{$country_name->country}}">{{$country_name->country}}</option>
@@ -99,7 +98,7 @@
                     <div class="title">Industry Type:</div>
                     <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]">
                           @foreach($_industry_type as $industry)
-                          <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
+                        <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
                           @endforeach
                     </select>
 
@@ -121,7 +120,6 @@
                           <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
-
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
                     <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
                       {{-- POPUP CHOOSE RECIPIENT --}}
@@ -131,7 +129,6 @@
                       @endif
                     <div class="button-container"></div>
                 </div>
-
                 <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">Send Release</div>
                   <div class="title">Publisher:</div>
@@ -139,14 +136,14 @@
                   <div class="title">Title:</div>
                   <div class="content" id="headline_pr"></div>
                   <div class="title">Send To:</div>
-                  <span class="result-container" style="font-size:15px">
-                  <span id="results_number_sendto" style="font-size:15px"></span></span>
+                  <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
+
 
                   <div class="button-container">
                     <button type="submit" formaction="/pressuser/pressrelease/pr">Send</button>
                   </div>
-                </div>
 
+                </div>
               </form>
             </div>
          </div>
@@ -211,9 +208,9 @@
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_user_pressrelease.css">
+<!-- <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script> -->
 @endsection
 @section("script")
-
 <script>
    function openCity(evt, cityName) 
    {
@@ -231,7 +228,7 @@
    }
    
    // Get the element with id="defaultOpen" and click on it
-   document.getElementById("defaultOpen").onclick();
+   document.getElementById("defaultOpen").click();
    
    $(".chosen-select").chosen({disable_search_threshold: 10});
 </script>
@@ -326,4 +323,6 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
 });
   </script>
+
+
 @endsection

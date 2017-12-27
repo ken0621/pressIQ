@@ -274,7 +274,8 @@ class CustomerController extends Member
 	    return view('member.modal.editcustomer',$data);
 	}
 	
-	public function updatecustomer(){
+	public function updatecustomer()
+    {
 	    $shop_id = $this->checkuser('user_shop');
         $customer_id = Request::input('customer_id');
         $update['first_name'] = Request::input('first_name');
@@ -852,7 +853,8 @@ class CustomerController extends Member
         }
         // end luke
 
-        if($email != ''){
+        if($email != '')
+        {
             $count = Tbl_customer::where('shop_id',$shop_id)->where('email', $email)
             ->where('customer_id', '!=', $client_id)
             ->count();

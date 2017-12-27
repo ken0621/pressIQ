@@ -89,7 +89,7 @@
                 <div id="choose_recipient" class="tabcontent choose-recipient-container">
                     <div class="title-container">Choose Recipient</div>
 
-                    <div class="title">Country:</div>
+                   <div class="title">Country:</div>
                     <select data-placeholder="--Choose a country--" multiple class="chosen-select" id="choose_country" name="choose_country[]">
                          @foreach($_country as $country_name)
                          <option value="{{$country_name->country}}">{{$country_name->country}}</option>
@@ -99,7 +99,7 @@
                     <div class="title">Industry Type:</div>
                     <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]">
                           @foreach($_industry_type as $industry)
-                        <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
+                          <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
                           @endforeach
                     </select>
 
@@ -139,17 +139,14 @@
                   <div class="title">Title:</div>
                   <div class="content" id="headline_pr"></div>
                   <div class="title">Send To:</div>
-
                   <span class="result-container" style="font-size:15px">
                   <span id="results_number_sendto" style="font-size:15px"></span></span>
-
-
 
                   <div class="button-container">
                     <button type="submit" formaction="/pressuser/pressrelease/pr">Send</button>
                   </div>
-
                 </div>
+
               </form>
             </div>
          </div>
@@ -329,6 +326,4 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
 });
   </script>
-
-
 @endsection

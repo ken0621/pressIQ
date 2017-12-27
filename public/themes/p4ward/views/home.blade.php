@@ -85,7 +85,7 @@
                             <div class="percent-container">100% Organic</div>
                             <div class="product-title-container">Don Organics Coffee Scrub</div>
                             <div class="product-image"><img src="/themes/{{ $shop_theme }}/img/wrapper3-image1.png"></div>
-                            <div class="button-container"><a href="#">See Benefits</a></div>
+                            <div class="button-container"><a href="/product">See Benefits</a></div>
                         </div>
                     </div>
                     <div class="col-md-6">

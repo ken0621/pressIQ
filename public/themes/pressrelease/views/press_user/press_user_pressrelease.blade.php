@@ -16,19 +16,19 @@
 
               <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST" style="">
                 {{csrf_field()}}
-                @if(session()->has("pr_edit"))
-                @foreach($edit as $edits)
                 <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
-                  <input type="text" name="pr_headline" class="form-control" autofocus value="{{$edits->pr_headline}}">
+                    @if(session()->has("pr_edit"))
+                      @foreach($edit as $edits)
+                        <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus value="{{$edits->pr_headline}}">
                   <div class="title">Content:</div>
-                  <textarea name="pr_content" id="tinymce">{!!$edits->pr_content!!}</textarea>
+                        <textarea name="pr_content" id="pr_content">{!!$edits->pr_content!!}</textarea>
                   <div class="title">Boilerplate:</div>
-                  <textarea name="pr_boiler_content" id="tinymce">{!!$edits->pr_boiler_content!!}</textarea>
+                        <textarea name="pr_boiler_content" id="pr_boiler_content">{!!$edits->pr_boiler_content!!}</textarea>
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                  <span class="preview-button"><button onclick="tinyMCE.activeEditor.execCommand('mcePreview');">Preview</button></span>
+                  <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
                   </div>
                 </div>
 
@@ -64,30 +64,24 @@
                     </select>
 
                     <div class="title">Send To:</div>
-                    <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
+                          <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                    <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span><span class="result-container">2154 results found</span>
+                    <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
+                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
                       {{-- POPUP CHOOSE RECIPIENT --}}
 
-                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
-                    <div class="button-container"></div>
-                </div>
-                @endforeach
-
-                @else
-                <div id="create_release" class="tabcontent create-release-container">
-                  <div class="title-container">New Release</div>
-                  <div class="title">Headline:</div>
-                  <input type="text" name="pr_headline" class="form-control" autofocus>
+                          <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
+                        @endforeach
+                      @else
+                        <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus>
                   <div class="title">Content:</div>
-                  <textarea name="pr_content" id="tinymce"></textarea>
+                        <textarea name="pr_content" id="pr_content"></textarea>
                   <div class="title">Boilerplate:</div>
-                  <textarea name="pr_boiler_content" id="tinymce"></textarea>
+                        <textarea name="pr_boiler_content" id="pr_boiler_content"></textarea>
                   <div class="button-container">
-                  <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft">Save as draft</button></span>
-                  <span class="preview-button"><button type="button" data-toggle="modal" data-target="#previewPopup" 
-                  >Preview</button></span>
+                  <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
+                  <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
                   </div>
                 </div>
 
@@ -123,27 +117,32 @@
                     </select>
 
                     <div class="title">Send To:</div>
-                    <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
+                          <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                    <span class="choose-button" readon><a href="javascript:" class="pop_recipient_btn">Choose Recipient</a></span>
-                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px">0</span></span>
+                    <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
+                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
+                      {{-- POPUP CHOOSE RECIPIENT --}}
 
-                    {{-- POPUP CHOOSE RECIPIENT --}}
-                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
+                          <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
+                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
+                      @endif
                     <div class="button-container"></div>
                 </div>
-                @endif
-
                 <div id="send_release" class="tabcontent send-release-container">
                   <div class="title-container">Send Release</div>
                   <div class="title">Publisher:</div>
-                  <div class="content">Digima Web Solution</div>
+                  <div class="content">{{session('user_first_name')}} {{session('user_last_name')}}</div>
                   <div class="title">Title:</div>
-                  <div class="content">Press Release</div>
+                  <div class="content" id="headline_pr"></div>
+                  <div class="title">Send To:</div>
+                  <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
+
+
                   <div class="button-container">
                     <button type="submit" formaction="/pressuser/pressrelease/pr">Send</button>
                   </div>
+
                 </div>
               </form>
             </div>
@@ -152,16 +151,24 @@
    </div>
 </div>
 
-<!-- Preview Popup -->
+
+  <!-- Preview Popup -->
+<div class="popup-preview">
   <div class="modal fade" id="previewPopup" role="dialog">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
+          <h4 class="modal-title">Preview</h4>
         </div>
         <div class="modal-body">
-          <p>This is a large modal.</p>
+          <div id="preview_headline">
+          </div>
+          <div id="preview_content">
+          </div>
+          <div class="about-title">About the Publisher</div>
+          <div id="preview_boiler_content">
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -169,12 +176,12 @@
       </div>
     </div>
   </div>
+</div>  
 
 <style>
    .modal-content
    {
    width: 900px;
-   position: fixed;
    left: 50%;
    top: 50%;
    transform: translate(-50%);
@@ -233,6 +240,19 @@
 <script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
 
 <script>
+  $('#prev_btn').click(function()
+  {
+    //alert("123");
+    var headline = document.getElementById('pr_headline').value;
+    var content = tinymce.get('pr_content').getContent();
+    var boiler_content = tinymce.get('pr_boiler_content').getContent();
+    document.getElementById('preview_headline').innerHTML =headline;
+    document.getElementById('preview_content').innerHTML =content;
+    document.getElementById('preview_boiler_content').innerHTML =boiler_content;
+    $('#previewPopup').modal('show'); 
+  });
+</script>
+<script>
 tinymce.init({ 
 selector:'textarea', 
 branding: false,
@@ -290,11 +310,21 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
    });
 </script>
 
+<script type="text/JavaScript">
+    $('#pr_headline').on("input", function() {
+      var dInput = this.value;
+      console.log(dInput);
+      $('#headline_pr').text(dInput);
+    });
+</script>
+
 <script type="text/javascript">
-  $('.pop_recipient_btn').click(function()
+  $('#pop_recipient_btn').click(function()
   {
     var data = $('.recipient_form').serialize();
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
 });
-</script>
+  </script>
+
+
 @endsection

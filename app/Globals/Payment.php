@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Models\Tbl_category;
 use App\Models\Tbl_user;
 use App\Models\Tbl_online_pymnt_method;
+use App\Models\Tbl_payment_method;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_online_pymnt_api;
 use App\Models\Tbl_item;
@@ -704,5 +705,9 @@ class Payment
       }
 
       return $return;
+   }
+   public static function get_payment_method($shop_id, $archived = 0)
+   {
+    return Tbl_payment_method::where("archived",$archived)->where("shop_id", $shop_id)->get();
    }
 }

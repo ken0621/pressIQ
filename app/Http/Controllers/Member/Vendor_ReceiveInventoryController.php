@@ -16,6 +16,7 @@ use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_terms;
 
+use App\Globals\Purchasing_inventory_system;
 use App\Globals\Vendor;
 use App\Globals\ItemSerial;
 use App\Globals\AuditTrail;
@@ -77,6 +78,7 @@ class Vendor_ReceiveInventoryController extends Member
         { 
             // dd(Session::get("po_item"));
             Session::forget("po_item");
+            $data['pis']        = Purchasing_inventory_system::check();
             $data["_vendor"]    = Vendor::getAllVendor('active');
             $data['_item']      = Item::get_all_category_item();
             $data['_account']   = Accounting::getAllAccount();
@@ -133,7 +135,7 @@ class Vendor_ReceiveInventoryController extends Member
         $button_action = Request::input('button_action');
 
         $serial_number = Request::input("serial_number");
-
+        
         $vendor_info                         = [];
         $vendor_info['bill_vendor_id']       = Request::input('bill_vendor_id');
         $vendor_info['bill_vendor_email']    = Request::input('bill_vendor_email');

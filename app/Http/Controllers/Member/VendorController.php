@@ -241,6 +241,7 @@ class VendorController extends Member
         $json["status"]     = "success";
         $json["type"]       = "vendor";
         $json["vendor_id"]  = $vendor_id;
+        $json["call_function"]  = "success_vendor";
 
         $vendor_data = Tbl_vendor::info()->where("vendor_id",$vendor_id)->first()->toArray();
         AuditTrail::record_logs("Added","vendor",$vendor_id,"",serialize($vendor_data));

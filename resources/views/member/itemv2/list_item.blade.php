@@ -68,7 +68,6 @@
 @endsection
 
 @section('css')
-<link rel="stylesheet" type="text/css" href="/assets/member/css/item_add_v2.css">
 <style type="text/css">
     .wrapper.extended.scrollable
     {

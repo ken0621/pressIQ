@@ -21,14 +21,17 @@
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
         
         @include("frontend.ghead")
-       
+         
         <!-- OTHER CSS -->
         @yield("css")
+        
         <style type="text/css">
+
         .content
         {
             background-color: transparent;
         }
+
         .navbar.sticky
         {
             position: fixed;
@@ -37,8 +40,11 @@
             right: 0;
             z-index: 100;
         }
+
         </style>
+
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        
     </head>
 
     <body>
@@ -276,7 +282,7 @@
                             </div>
 
                             <div class="image-logo-mob">
-                                <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></a>                      
+                                <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></a>
                             </div>
                         </div>
                         <div class="col-md-9">

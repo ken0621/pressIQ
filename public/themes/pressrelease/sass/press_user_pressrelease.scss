@@ -158,9 +158,9 @@
 						}
 						.preview-button
 						{
-							button
+							a
 							{
-								padding: 10px 30px;
+								padding: 15px 40px;
 								background-color: #316df9;
 								color: #fff;
 								font-size: 15px;
@@ -337,3 +337,51 @@
 	}
 }
 
+.popup-preview
+{
+	.modal-content
+	{
+		min-height: 500px;
+		.modal-body
+		{
+			#preview_headline
+			{
+				text-align: center;
+				font-size: 35px; 
+				color: #cd3d35;
+				font-weight: 700;
+				font-family: 'PT Serif';
+				padding-bottom: 15px;
+			}
+			#preview_content
+			{
+				color: #404040;
+				font-size: 18px;
+				font-family: 'PT Sans';
+				text-align: justify;
+				border-bottom: 1px solid #ededed;
+				padding-bottom: 20px;
+			}
+			.about-title
+			{
+				font-size: 23px; 
+				color: #404040;
+				font-weight: 700;
+				font-family: 'PT Serif';
+				padding: 20px 0px;
+			}
+			#preview_boiler_content
+			{
+				color: #404040;
+				font-size: 18px;
+				font-family: 'PT Sans';
+				text-align: justify;
+				padding-bottom: 20px;
+			}
+		}
+		.modal-footer
+		{
+
+		}
+	}
+}

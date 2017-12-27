@@ -965,6 +965,12 @@ class Seed_manual
             $insert[12]['other']  = "Y/m/d";
             $insert[12]['separator'] = "-";
 
+            $insert[13]['shop_id']   = $shop_id; 
+            $insert[13]['key']       = "sales_receipt";  
+            $insert[13]['prefix']    = "SR"; 
+            $insert[13]['other']  = "Y/m/d";
+            $insert[13]['separator'] = "-";
+
             DB::table('tbl_transaction_ref_number')->insert($insert);
 
         }

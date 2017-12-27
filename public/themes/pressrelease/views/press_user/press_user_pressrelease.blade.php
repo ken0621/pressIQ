@@ -251,6 +251,7 @@
     $('#previewPopup').modal('show'); 
   });
 </script>
+
 <script>
 tinymce.init({ 
 selector:'textarea', 

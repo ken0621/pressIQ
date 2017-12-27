@@ -28,7 +28,7 @@
                         <textarea name="pr_boiler_content" id="pr_boiler_content">{!!$edits->pr_boiler_content!!}</textarea>
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                  <span class="preview-button"><a id="prev_btn">Preview</a></span>
+                  <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
                   </div>
                 </div>
 
@@ -81,7 +81,7 @@
                         <textarea name="pr_boiler_content" id="pr_boiler_content"></textarea>
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                  <span class="preview-button"><a id="prev_btn">Preview</a></span>
+                  <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
                   </div>
                 </div>
 
@@ -152,6 +152,7 @@
 </div>
 
   <!-- Preview Popup -->
+<div class="popup-preview">
   <div class="modal fade" id="previewPopup" role="dialog">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -164,7 +165,7 @@
           </div>
           <div id="preview_content">
           </div>
-          <div><p>About the Publisher</p></div>
+          <div class="about-title">About the Publisher</div>
           <div id="preview_boiler_content">
           </div>
         </div>
@@ -174,12 +175,12 @@
       </div>
     </div>
   </div>
+</div>  
 
 <style>
    .modal-content
    {
    width: 900px;
-   position: fixed;
    left: 50%;
    top: 50%;
    transform: translate(-50%);

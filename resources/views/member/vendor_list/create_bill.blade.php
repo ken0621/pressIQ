@@ -192,7 +192,7 @@
                                                             </td>
                                                             <td>
                                                                 @if($pis)
-                                                                    <label class="textarea-expand txt-desc" name="itemline_description[]">{{$item->itemline_description}}</label>
+                                                                    <textarea class="textarea-expand txt-desc" readonly="true" name="itemline_description[]">{{$item->itemline_description}}</textarea>
                                                                 @else
                                                                     <textarea class="textarea-expand txt-desc" name="itemline_description[]">{{$item->itemline_description}}</textarea>
                                                                 @endif
@@ -237,7 +237,7 @@
                                                         </td>
                                                         <td>
                                                             @if($pis)
-                                                                <label class="textarea-expand txt-desc" name="itemline_description[]"></label>
+                                                                <<textarea class="textarea-expand txt-desc" readonly="true" name="itemline_description[]"></textarea>
                                                             @else
                                                                 <textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea>
                                                             @endif
@@ -305,7 +305,7 @@
             </td>
             <td>
                 @if($pis)
-                    <label class="textarea-expand txt-desc" name="itemline_description[]"></label>
+                    <textarea class="textarea-expand txt-desc" readonly="true" name="itemline_description[]"></textarea>
                 @else
                     <textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea>
                 @endif

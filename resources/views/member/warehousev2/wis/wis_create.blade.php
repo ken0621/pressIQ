@@ -40,16 +40,18 @@
     <div class="panel-body form-horizontal">
         <div class="form-group">
             <div class="col-md-4">
+                <label>WIS Number</label>
+                <input type="text" name="wis_number" value='{{$transaction_ref_number}}' class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-4">
                 <label>Warehouse Destination</label>
                 <select required class="form-control select-warehouse" name="destination_warehouse_id">
                     @foreach($_warehouse as $warehouse)
                         <option warehouse-address="{{$warehouse->warehouse_address}}" value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
                     @endforeach
                 </select>
-            </div>
-            <div class="col-md-4">
-                <label>WIS Number</label>
-                <input type="text" name="wis_number" value='{{$transaction_ref_number}}' class="form-control">
             </div>
             <div class="col-md-6">
                 <label>Ship to</label>
@@ -69,10 +71,10 @@
                 <div class="load-item-table-pos-s"></div>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group draggable-container">
             <div class="col-md-12">
                 <div class="table">
-                    <table class="digima-table table table-bordered table-condensed pos-table">
+                    <table class="digima-table">
                         <thead>
                             <tr>
                                 <th class="text-left" >ITEM SKU</th>

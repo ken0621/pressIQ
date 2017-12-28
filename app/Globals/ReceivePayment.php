@@ -42,4 +42,15 @@ class ReceivePayment
     {
     	
     }
+    public static function getBalance($shop_id, $invoice_id, $invoice_over_all_amount = 0)
+    {
+        $details = Tbl_receive_payment::rpline()->where('rp_shop_id', $shop_id)->where("rpline_reference_name","invoice")->where("rpline_reference_id",$invoice_id)->first();
+        $amount_paid = 0;
+        $balance = $invoice_over_all_amount;
+        if($details)
+        {
+            $balance = $invoice_over_all_amount - $details->rpline_amount;
+        }
+        return $balance;
+    }
 }

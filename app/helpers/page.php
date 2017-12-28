@@ -1213,6 +1213,16 @@ function page_list($pis = 0)
             $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
+             /* -- WAREHOUSE - INVENTORY ADJUSTMENT */
+            $code = "warehouse-inventory-adjustment";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Inventory Adjustment";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/warehouse/inventory_adjustment";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','adjust'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+
     /* -- ITEM => INVENTORY LOGS  */
     $code = "item-inventory-log";
     $nav[$page]['submenu'][$code]['label'] = "Inventory Logs";
@@ -1314,10 +1324,88 @@ function page_list($pis = 0)
     $code = "vendor-import-list";
     $nav[$page]['submenu'][$code]['label'] = "Import";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . "/vendors" . "/import/vendor";
+    $nav[$page]['submenu'][$code]['url'] = $path . "vendors" . "/import/vendor";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+
+    /* -- VENDORS => VENDOR TRANSACTIO V2  */
+    $segment = "vendor-transaction-v2";
+    $nav[$page]['submenu'][$segment]['name']   = "Vendor Transaction V2";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+         /* -- VENDOR => PURCHASE ORDER V2 */
+        $code = "vendor-purchase-request-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Purchase Requisition";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/purchase_requisition";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+         /* -- VENDOR => PURCHASE ORDER V2 */
+        $code = "vendor-purchase-order-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Purchase Order";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/purchase_order";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+         /* -- VENDOR => RECEIVE INVENTORY V2 */
+        $code = "vendor-receive-inventory-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Receive Inventory";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/receive_inventory";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+         /* -- VENDOR => RECEIVE INVENTORY WITH BILL V2 */
+        $code = "vendor-enter-bills-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Enter Bills";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/enter_bills";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+         /* -- VENDOR => PAY BILLS V2 */
+        $code = "vendor-pay-bills-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Pay Bills";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/pay_bills";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+         /* -- VENDOR => WRITE CHECK V2 */
+        $code = "vendor-write-check-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Write Check";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/write_check";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+         /* -- VENDOR => DEBIT MEMO V2 */
+        $code = "vendor-debit-memo-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Debit Memo";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/debit_memo";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+         /* -- VENDOR => IMPORT V2 */
+        $code = "vendor-bad-order-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Bad Order";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/bad_order";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
     /* CUSTOMERS */
     $page = "customer";  
@@ -1406,6 +1494,72 @@ function page_list($pis = 0)
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+
+        $segment = "customer-accounting-transaction";
+        $nav[$page]['submenu'][$segment]['name']   = "Customer Transaction v2";
+        $nav[$page]['submenu'][$segment]['segment']= $segment;
+        $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+            $code = "customer-estimate-v2";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Estimate and Quotation";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path ."transaction" . "/estimate_quotation";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+            $code = "customer-sales-order-v2";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Sales Order";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path ."transaction" . "/sales_order";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+            $code = "customer-invoice-v2";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Sales Invoice";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path ."transaction" . "/sales_invoice";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+
+            $code = "customer-sales-receipt-v2";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Sales Receipt";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path ."transaction" . "/sales_receipt";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+
+            $code = "customer-receive-payment-v2";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Receive Payment";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path ."transaction" . "/receive_payment";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+
+            $code = "customer-credit-memo-v2";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Credit Memo";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path ."transaction" . "/credit_memo";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+
+            $code = "customer-wis-v2";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Warehouse Issuance Slip";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = "/member/customer/wis/create"; //$path ."transaction" . "/wis"
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
 
 
     $page = "merchant";  

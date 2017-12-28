@@ -51,14 +51,16 @@ $(document).ready(function(){
 	    	name_array[ctr] = name;
 	    	email_array[ctr] = email;
 	    	ctr++; 
-
   		});
+	   		$('#results_number').text(ctr+"  Chosen Recipients");
+	   		$('#results_number_sendto').text(ctr+"  Chosen Recipients");
 	    	$('#recipient_name').val(name_array);
 	    	$('#recipient_email').val(email_array);
 	    	$("#global_modal").modal('hide');
     	
     });
 });
+
 
 
 

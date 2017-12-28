@@ -85,17 +85,17 @@
                                 <label>Billing Address</label>
                                 <textarea class="form-control input-sm textarea-expand" name="inv_customer_billing_address" placeholder="">{{$inv->inv_customer_billing_address or ''}}</textarea>
                             </div>
-                            <div class="col-sm-2">  
+                            <div class="col-sm-2 hidden">  
                                 <label>Terms</label>
                                 <select class="form-control input-sm droplist-terms" name="inv_terms_id">
                                     @include("member.load_ajax_data.load_terms")
                                 </select>
                             </div>
                             <div class="col-sm-2">
-                                <label>Invoice Date</label>
+                                <label>Date</label>
                                 <input type="text" class="datepicker form-control input-sm" name="inv_date" value="{{$inv->inv_date or date('m/d/y')}}"/>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-2 hidden">
                                 <label>Due Date</label>
                                 <input type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{$inv->inv_due_date or date('m/d/y')}}" />
                             </div>
@@ -146,7 +146,7 @@
                                                         </td>
                                                         <td>
                                                             @if($pis)
-                                                                <label class="textarea-expand txt-desc" name="invline_description[]" value="{{$invline->invline_service_date}}"></label>
+                                                                <textarea class="textarea-expand txt-desc" name="invline_description[]" readonly="true">{{$invline->invline_service_date}}</textarea>
                                                             @else
                                                                 <textarea class="textarea-expand txt-desc" name="invline_description[]" value="{{$invline->invline_service_date}}"></textarea>
                                                             @endif
@@ -191,7 +191,7 @@
                                                     </td>
                                                     <td>
                                                         @if($pis)
-                                                            <label class="textarea-expand txt-desc" name="invline_description[]"></label>
+                                                            <textarea class="textarea-expand txt-desc" name="invline_description[]" readonly="true"></textarea>
                                                         @else
                                                             <textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea>
                                                         @endif
@@ -369,9 +369,9 @@
                                                                 </td>
                                                                 <td>
                                                                     @if($pis)
-                                                                        <label class="textarea-expand txt-desc" name="cmline_description[]" value="{{$cmline->cmline_service_date}}"></label>
+                                                                        <textarea class="textarea-expand txt-desc" name="cmline_description[]" readonly="true" >{{$cmline->cmline_service_date}}</textarea>
                                                                     @else
-                                                                        <textarea class="textarea-expand txt-desc" name="cmline_description[]" value="{{$cmline->cmline_service_date}}"></textarea>
+                                                                        <textarea class="textarea-expand txt-desc" name="cmline_description[]">{{$cmline->cmline_service_date}}</textarea>
                                                                     @endif
                                                                 </td>
                                                                 <td>
@@ -408,7 +408,7 @@
                                                             </td>
                                                             <td>
                                                                 @if($pis)
-                                                                    <label class="textarea-expand txt-desc" name="cmline_description[]"></label>
+                                                                    <textarea class="textarea-expand txt-desc" readonly="true" name="cmline_description[]"></textarea>
                                                                 @else   
                                                                     <textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea>
                                                                 @endif
@@ -514,7 +514,7 @@
             </td>
             <td>
                 @if($pis)
-                    <label class="textarea-expand txt-desc" name="invline_description[]"></label>
+                    <textarea class="textarea-expand txt-desc" readonly="true" name="invline_description[]"></textarea>
                 @else
                     <textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea>
                 @endif
@@ -547,7 +547,7 @@
             </td>
             <td>
                 @if($pis)
-                    <label class="textarea-expand txt-desc" name="cmline_description[]"></label>
+                    <textarea class="textarea-expand txt-desc" readonly="true" name="cmline_description[]"></textarea>
                 @else
                     <textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea>
                 @endif

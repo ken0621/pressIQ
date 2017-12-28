@@ -39,7 +39,6 @@ class ProductOrderController2 extends Member
         $dummy              = Transaction::get_transaction_date();
         $active_tab         = request("_active_tab");
         $keyword            = request("keyword");
-
         $paginate=5; // default pagination
 
         // unity pagination

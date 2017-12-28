@@ -21,14 +21,17 @@
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
         
         @include("frontend.ghead")
-       
+         
         <!-- OTHER CSS -->
         @yield("css")
+        
         <style type="text/css">
+
         .content
         {
             background-color: transparent;
         }
+
         .navbar.sticky
         {
             position: fixed;
@@ -37,8 +40,11 @@
             right: 0;
             z-index: 100;
         }
+
         </style>
+
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        
     </head>
 
     <body>
@@ -72,8 +78,14 @@
                         </div>
                     </div>
                 </a>
+
                 <div class="space1"></div>
-                <span>BROWSE</span>
+                <div class="row-no-padding clearfix">
+                    <div class="col-xs-12">
+                        <div class="divider"><span>BROWSE</span></div>
+                    </div>
+                </div>
+
                 <ul class="links">
                     {{-- @if($customer_info) --}}
                     <li><a href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
@@ -96,7 +108,7 @@
                         @endif
                     <li> <a href="/promos"><i class="fa fa-percent" aria-hidden="true"></i> PROMOS</a></li>
                     <li class="company-mobile-dropdown">
-                        <a href="javascript:"><i class="fa fa-building-o" aria-hidden="true"></i> COMPANY <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a>
+                        <a href="javascript:"><i class="fa fa-info-circle" aria-hidden="true"></i> COMPANY <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a>
                     </li>
                         <ul class="company-mobile-dropdown-list">
                             <li><a href="/history"><i class="fa fa-history" aria-hidden="true"></i> Our History</a></li>
@@ -108,7 +120,12 @@
                 </ul>
                 
                 <div class="space2"></div>
-                <span>MEMBER'S AREA</span>
+                <div class="row-no-padding clearfix">
+                    <div class="col-xs-12">
+                        <div class="divider"><span>MEMBER'S AREA</span></div>
+                    </div>
+                </div>
+
                 <ul class="links">
                     <li> <a href="/members"><i class="fa brown-icon-dashboard" aria-hidden="true"></i> Dashboard</a></li>
                     <li> <a href="/members/profile"><i class="fa brown-icon-profile" aria-hidden="true"></i> Profile</a></li>
@@ -118,7 +135,7 @@
                     <li> <a href="/members/report-points"><i class="fa fa-bar-chart" aria-hidden="true"></i> Reports (Points)</a></li>
                     <li> <a href="/members/wallet-encashment"><i class="fa brown-icon-wallet" aria-hidden="true"></i> Wallet Encashment</a></li>
                         @if($customer)
-                            <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></li>
+                            <li class="user-logout"> <a href="/members/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout{{-- &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i> --}}</a></li>
                         @endif
                     @else
                     @endif
@@ -126,7 +143,11 @@
                 @else
                     <div class="space1"></div>
                     <div class="space1"></div>
-                    <span>BROWSE</span>
+                    <div class="row-no-padding clearfix">
+                        <div class="col-xs-12">
+                            <div class="divider"><span>BROWSE</span></div>
+                        </div>
+                    </div>
                     <ul class="links">
                         {{-- @if($customer_info) --}}
                         <li> <a href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
@@ -134,7 +155,7 @@
                         <li><a href="/members" id="home">MY ACCOUNT</a></li>
                         @endif --}}
                         <li class="product-mobile-dropdown">
-                            <a href="javascript:"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS</a>
+                            <a href="javascript:"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a>
                         </li>
                             @if(count($_categories) > 0)
                                 <ul class="product-mobile-dropdown-list">
@@ -149,7 +170,7 @@
                             @endif
                         <li> <a href="/promos"><i class="fa fa-percent" aria-hidden="true"></i> PROMOS</a></li>
                         <li class="company-mobile-dropdown"> 
-                            <a href="javascript:"><i class="fa fa-building-o" aria-hidden="true"></i> COMPANY</a> 
+                            <a href="javascript:"><i class="fa fa-info-circle" aria-hidden="true"></i> COMPANY <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a> 
                         </li>
                             <ul class="company-mobile-dropdown-list">
                                 <li><a href="/history"><i class="fa fa-history" aria-hidden="true"></i> Our History</a></li>
@@ -164,7 +185,7 @@
             </nav>
         </div>
 
-        {{-- BLUR IN MOBILE VIEW --}}
+        {{-- BLURED WHEN SIDENAV WAS CLICKED --}}
         <div class="blur-me">
 
             <div class="loader hide">
@@ -261,7 +282,7 @@
                             </div>
 
                             <div class="image-logo-mob">
-                                <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></a>                      
+                                <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></a>
                             </div>
                         </div>
                         <div class="col-md-9">

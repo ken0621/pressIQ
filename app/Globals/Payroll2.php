@@ -3412,12 +3412,12 @@ class Payroll2
 
 		$hour = $extime1[0] - $extime2[0];
 		$min  = 0;
-
+		
 		if(isset($extime1[1]) && isset($extime2[1]))
 		{
 			$min = $extime1[1] - $extime2[1];
 		}
-
+		
 		return Payroll::return_time($hour, $min);
 	}
 
@@ -3429,7 +3429,7 @@ class Payroll2
 		if (($extime1[0] %2)==1) 
 		{
 			$hour = (int)($extime1[0] /2) ;
-			$min+=30;
+			$min += 30;
 		}
 		else
 		{

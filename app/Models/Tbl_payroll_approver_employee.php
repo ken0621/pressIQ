@@ -33,4 +33,19 @@ class Tbl_payroll_approver_employee extends Model
 
     	return $query;
     }
+
+    public function scopeGetApproverInfoByType($query, $employee_id = 0, $approver_type = '')
+    {
+        if ($employee_id != 0) 
+        {
+            $query->where('payroll_employee_id', $employee_id);
+        }
+
+        if ($approver_type != '') 
+        {
+            $query->where('payroll_approver_employee_type', $approver_type);
+        }
+
+        return $query;
+    }
 }

@@ -47,7 +47,7 @@
         <div class="row">
  			    <div class="col-md-6">
  			    	<small>Type of Leave</small>
-					<select class="form-control user-error" id="payroll_leave_type_id" required name="payroll_leave_name" aria-invalid="true">
+					<select class="form-control user-error" id="payroll_leave_type_id" name="payroll_leave_name" aria-invalid="true">
 						<option value="">Select Leave Type</option>
 						<option value="Sick Leave">Sick Leave</option>
 						<option value="Vacation Leave">Vacation Leave</option>
@@ -60,7 +60,7 @@
 
 		  		<div class="col-md-6">
 			  		<small>Date Filed</small>
-			      	<input class="form-control" type="date" class="form-control" name="date_filed" required>
+			      	<input class="form-control" type="date" class="form-control" name="date_filed">
 				</div>
         </div>
 
@@ -77,7 +77,7 @@
 
 		  		 <div class="col-md-6">
 					<small>Reliever</small>
-					<select class="form-control" required>
+					<select class="form-control">
 						<option value="">Select Employee</option>
 					</select>
 		  		</div>
@@ -96,7 +96,7 @@
 
 		  		 <div class="col-md-6">
 					<small>Approver</small>
-					<select class="form-control" required>
+					<select class="form-control">
 						<option value="">Select Employee</option>
 					</select>
 		  		</div>
@@ -105,12 +105,12 @@
         <div class="row">
 		  		<div class="col-md-6">
 			  		<small>Schedule Date Start</small>
-			      	<input class="form-control" type="date" class="form-control" required>
+			      	<input class="form-control" type="date" class="form-control">
 				</div>
 
 		  		<div class="col-md-6">
 			  		<small>Schedule Date End</small>
-			      	<input class="form-control" type="date" class="form-control" required>
+			      	<input class="form-control" type="date" class="form-control">
 				</div>
         </div>
 

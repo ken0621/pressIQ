@@ -378,7 +378,18 @@ class EmployeeController extends PayrollMember
     //leave
     public function save_leave()
     {
-
+    	$insert['payroll_employee_id_reliever']	= 0;
+    	$insert['payroll_employee_id_reliever']	= 0;
+    	$insert['payroll_employee_id_reliever'] = 0;
+    	$insert['payroll_employee_id_reliever'] = 0;
+    	$insert['payroll_employee_id_reliever'] = 0;
+    	$insert['payroll_employee_id_reliever'] = 0;
+    	$insert['payroll_employee_id_reliever'] = 0;
+    	$insert['payroll_employee_id_reliever'] = 0;
+    	$insert['payroll_employee_id_reliever'] = 0;
+    	$insert['payroll_employee_id_reliever'] = 0;
+    	$insert['payroll_employee_id_reliever'] = 0;
+    	Tbl_payroll_leave_schedulev3::insert($insert);
     	
     }
     

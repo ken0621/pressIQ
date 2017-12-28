@@ -139,4 +139,4 @@
     </div>
 </form>
 {{-- <script type="text/javascript" src="/assets/js/ajax_offline.js"></script> --}}
-<script type="text/javascript" src="/assets/js/payroll_register_report.js"></script>
+

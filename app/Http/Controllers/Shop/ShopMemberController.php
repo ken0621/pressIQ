@@ -298,7 +298,6 @@ class ShopMemberController extends Shop
         foreach ($pr as $data) {
         
         $pr_info["pr_headline"]     =$data->pr_headline;
-        $pr_info["pr_subheading"]   =$data->pr_subheading;
         $pr_info["pr_content"]      =$data->pr_content;
         $pr_info["pr_from"]         =$data->pr_from;
         $pr_info["pr_to"]           =$data->pr_to;
@@ -383,7 +382,7 @@ class ShopMemberController extends Shop
     
     public function send_pr()
     {
-
+        
         $pr_info["pr_headline"]     =request('pr_headline');
         $pr_info["pr_content"]      =request('pr_content');
         $pr_info["pr_boiler_content"]=request('pr_boiler_content');
@@ -406,7 +405,7 @@ class ShopMemberController extends Shop
             return Redirect::to("/pressuser/pressrelease")->with('message', $validator->errors()->first())->withInput();
         }
         else
-        {                      
+        {    
             $this->send($pr_info);
 
             if( count(Mail::failures()) > 0 ) 
@@ -423,6 +422,7 @@ class ShopMemberController extends Shop
             }
             else 
             {
+
                 Session::flash('message', "Release Successfully Sent!");
 
                 if(Session::has('pr_edit'))
@@ -441,15 +441,17 @@ class ShopMemberController extends Shop
                             'pr_sender_name'  =>session('user_first_name').' '.session('user_last_name'),
                             'pr_receiver_name'=>request('pr_receiver_name')
                             ]);
+                    Session::forget('pr_edit');
+                    return Redirect::to("/pressuser/mypressrelease");
+
                 }
                 else
                 {
-                    $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info); 
+                    $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
+                    return Redirect::to("/pressuser/mypressrelease");
+ 
                 }
-                $data["page"] = "Press Release - My Press Release";
-                Session::forget('pr_edit');
-                return Redirect::to("/pressuser/mypressrelease");
-
+                
             }
             $data["page"] = "Press Release - Press Release";
             return view("press_user.press_user_pressrelease", $data);

@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Member\PayrollEmployee;
+
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_payroll_period;
@@ -42,10 +43,29 @@ class EmployeeController extends PayrollMember
 		return $this->employee_info;
 	}
 
+	public function employee_id()
+	{
+		return $this->employee_info->payroll_employee_id;
+	}
+
 	public function employee_shop_id()
 	{
 		return $this->employee_info->shop_id;
 	}
+
+	public static function approver_access($employee_id)
+	{
+		$data['approver_rfp'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','rfp')->first();
+		$data['approver_ot'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','rfp')->first();
+		$data['approver_leave'] = Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','rfp')->first();
+		$data['approver_ob'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','ob')->first();
+		
+		if ($data['approver_rfp'] != null || $data['approver_ot'] != null || $data['approver_leave'] != null || $data['approver_ob'] != null) 
+		{
+			echo view('member.payroll2.employee_dashboard.authorized_access_menu', $data);
+		}
+	} 
+
 	public function employee()
 	{
 		$data['page']	= 'Dashboard';

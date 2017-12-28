@@ -3,6 +3,7 @@
 Route::any('/employee_login', 'Login\EmployeeLoginController@employee_login');
 Route::any('/employee_logout', 'Login\EmployeeLoginController@employee_logout');
 
+Route::any('authorized_access', 'Member\PayrollEmployee\EmployeeController@authorized_access');
 Route::any('employee', 'Member\PayrollEmployee\EmployeeController@employee');
 
 Route::any('employee_profile', 'Member\PayrollEmployee\EmployeeController@employee_profile');

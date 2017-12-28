@@ -181,10 +181,9 @@
   </div>
 </div>  
 
-<style>
+<!-- <style>
    .modal-content
    {
-   width: 900px;
    left: 50%;
    top: 50%;
    transform: translate(-50%);
@@ -209,7 +208,7 @@
    {
    padding:10px 10px 10px 10px;  
    }
-</style>
+</style> -->
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_user_pressrelease.css">

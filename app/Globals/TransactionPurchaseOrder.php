@@ -21,17 +21,25 @@ class TransactionPurchaseOrder
 	public static function countTransaction($shop_id)
 	{
         return Tbl_requisition_slip::where('shop_id',$shop_id)->where("requisition_slip_status","open")->count();
-        
+    }
+    public static function countOpenPOTransaction($shop_id, $vendor_id)
+    {
+        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', 0)->count();
+    }
+
+    public static function getAllPO($shop_id)
+    {
+        return Tbl_purchase_order::Vendor()->where('po_shop_id',$shop_id)->get();
     }
 
     public static function getClosePO($shop_id, $vendor_id)
     {
-        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed',0)->get();
+        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed','!=', '0')->get();
     }
 
     public static function getOpenPO($shop_id, $vendor_id)
     {
-        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', '!=', '0')->get();
+        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', 0)->get();
     }
 
     public static function postInsert($shop_id, $insert, $insert_item)

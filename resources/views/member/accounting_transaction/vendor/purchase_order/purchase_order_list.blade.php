@@ -40,7 +40,7 @@
         </div>
     </div>
     <div class="tab-content codes_container" style="min-height: 300px;">
-        <div id="all" class="tab-pane fade in active">
+        <div id="open" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="clearfix">
                 <div class="col-md-12">
@@ -49,24 +49,25 @@
                             <thead>
                                 <tr>
                                     <th>VENDORNAME</th>
-                                    <th class="text-center">REFERENCE NUMBER</th>
-                                    <th class="text-center">DATE</th>
-                                    <th class="text-center" width="120px">TOTAL PRICE</th>
-                                    <th class="text-center" width="100px"></th>
+                                    <th class="text-center" width="250px">PO NUMBER</th>
+                                    <th class="text-center" width="300px">DATE</th>
+                                    <th class="text-center" width="300px">TOTAL PRICE</th>
+
+                                    <th class="text-center" width="150px"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if(count($_pr)>0)
-                                    @foreach($_pr as $pr)
+                                @if(count($_po)>0)
+                                    @foreach($_po as $po)
                                     <tr>
-                                        <td>{{ $pr->vendor_company }}<br>
-                                            <small>{{ $pr->vendor_title_name.' '.$pr->vendor_first_name.' '.$pr->vendor_middle_name.' '.$pr->vendor_last_name.' '.$pr->vendor_suffix_name }}/small>
+                                        <td>{{ $po->vendor_company }}<br>
+                                            <small>{{ $po->vendor_title_name.' '.$po->vendor_first_name.' '.$po->vendor_middle_name.' '.$po->vendor_last_name.' '.$po->vendor_suffix_name }}</small>
                                         </td>
-                                        <td class="text-center">{{ $pr->transaction_refnum == ''? $pr->requisition_slip_id : $pr->transaction_refnum}}</td>
-                                        <td class="text-center">{{ date('m-d-Y', strtotime($pr->requisition_slip_date_created)) }}</td>
-                                        <td class="text-center">{{ currency('PHP',$pr->rs_item_amount) }}</td>
+                                        <td class="text-center">{{ $po->transaction_refnum == ''? $po->po_id : $po->transaction_refnum}}</td>
+                                        <td class="text-center">{{ date('m-d-Y', strtotime($po->date_created)) }}</td>
+                                        <td class="text-center">{{ currency('PHP',$po->po_overall_price) }}</td>
                                         <td class="text-center">
-                                            <div class="btn-group">
+                                            <div class="btn-group text-center">
                                               <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 Action <span class="caret"></span>
                                               </button>

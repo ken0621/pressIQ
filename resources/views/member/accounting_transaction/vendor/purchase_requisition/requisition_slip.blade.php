@@ -38,5 +38,5 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="/assets/member/js/accounting/vendor/requisition_slip.js"></script>
+<script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/requisition_slip.js"></script>
 @endsection

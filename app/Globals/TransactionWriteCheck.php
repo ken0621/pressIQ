@@ -3,6 +3,8 @@ namespace App\Globals;
 
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_write_check;
+use App\Models\Tbl_vendor;
+use App\Models\Tbl_customer;
 use Carbon\Carbon;
 use DB;
 
@@ -17,6 +19,31 @@ class TransactionWriteCheck
 	public static function countTransaction($shop_id, $vendor_id)
 	{
 		return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_is_billed',0)->where('po_vendor_id', $vendor_id)->count();
+	}
+
+	public static function getAllWC($shop_id)
+	{
+		$data["_wc"] = Tbl_write_check::where("wc_shop_id", $shop_id)->get();
+        
+        foreach ($data["_wc"] as $key => $value) 
+        {
+            $v_data = Tbl_vendor::where("vendor_id",$value->wc_reference_id)->first();
+
+            $name = isset($v_data) ? ($v_data->vendor_company != "" ? $v_data->vendor_company : $v_data->vendor_first_name." ".$v_data->vendor_last_name) : "";
+            
+            if($value->wc_reference_name == "customer")
+            {
+            	//dd($value->wc_reference_name);
+                $c_data = Tbl_customer::where("customer_id",$value->wc_reference_id)->first();
+                
+                $name = isset($c_data) ? ($c_data->company != "" ? $c_data->company : $v_data->first_name." ".$c_data->last_name) : "";
+            }
+
+            $data["_wc"][$key]->name = $name;
+            //dd($data);
+        }
+		
+		return $data;
 	}
 
 	public static function postInsert($shop_id, $insert, $insert_item)
@@ -40,7 +67,7 @@ class TransactionWriteCheck
 	        $ins['wc_total_amount'] = $ins['wc_cash_account'] = $total;
 
 	        /*INSERT CV HERE*/
-	        //$write_check_id = Tbl_write_check::insertGetId($ins);
+	        $write_check_id = Tbl_write_check::insertGetId($ins);
 	        $write_check_id = 0;
 
 	        /* Transaction Journal */

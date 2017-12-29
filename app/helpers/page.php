@@ -1399,13 +1399,13 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
          /* -- VENDOR => IMPORT V2 */
-        $code = "vendor-bad-order-v2";
+        /*$code = "vendor-bad-order-v2";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Bad Order";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/bad_order";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";*/
 
     /* CUSTOMERS */
     $page = "customer";  

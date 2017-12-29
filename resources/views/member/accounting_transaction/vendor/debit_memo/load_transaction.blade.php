@@ -23,7 +23,7 @@
                             @foreach($_po as $po)
                             <tr>
                                 <td class="text-center"><input type="checkbox" name=""></td>
-                                <td class="text-center">{{$po->transaction_refnum != "" ? $po->transaction_refnum : $po->wc_id}}</td>
+                                <td class="text-center">{{$po->transaction_refnum != "" ? $po->transaction_refnum : $po->po_id}}</td>
                                 <td class="text-right">{{currency('PHP',$po->po_overall_price)}}</td>
                             </tr>
                             @endforeach

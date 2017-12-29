@@ -56,26 +56,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Vendor 1<br>
-                                        <small>Contact Person</small>
-                                    </td>
-                                    <td class="text-center">PO20171213-0001</td>
-                                    <td class="text-center">2017-12-14</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center">
-                                        <div class="btn-group">
-                                          <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Action <span class="caret"></span>
-                                          </button>
-                                          <ul class="dropdown-menu dropdown-menu-custom">
-                                            <li>
-                                                <a link="" class="popup" size="lg">Print</a>
-                                            </li>
-                                          </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @if(count($_wc)>0)
+                                    @foreach($_wc as $wc)
+                                    <tr>
+                                        <td>{{ $wc->wc_id }}<br>
+                                            <small>Contact Person</small>
+                                        </td>
+                                        <td class="text-center">PO20171213-0001</td>
+                                        <td class="text-center">2017-12-14</td>
+                                        <td class="text-center">1,500.00</td>
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                              <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Action <span class="caret"></span>
+                                              </button>
+                                              <ul class="dropdown-menu dropdown-menu-custom">
+                                                <li>
+                                                    <a link="" class="popup" size="lg">Print</a>
+                                                </li>
+                                              </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                @else
+                                    <tr>NO TRANSACTION</tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>

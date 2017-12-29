@@ -498,3 +498,12 @@ function success_item(data)
 	});
 }
 
+
+function success_debit_memo(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
+}

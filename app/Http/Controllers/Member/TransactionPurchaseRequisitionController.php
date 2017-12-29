@@ -33,6 +33,7 @@ class TransactionPurchaseRequisitionController extends Member
 	{
 		$data['page'] = 'Purchase Requisition';
 		$data['_list'] = RequisitionSlip::get($this->user_info->shop_id);
+		//dd($data['_vendor']);
 		return view('member.accounting_transaction.vendor.purchase_requisition.requisition_slip', $data);
 	}
 	public function getLoadRsTable(Request $request)

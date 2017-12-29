@@ -44,7 +44,8 @@ class TransactionPurchaseOrderController extends Member
     public function getIndex()
     {
         $data['page'] = 'Purchase Order';
-        $data['_pr'] = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
+        $data['_po'] = TransactionPurchaseOrder::getAllPO($this->user_info->shop_id);
+        //dd($data['_po']);
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order_list', $data);
 
     }

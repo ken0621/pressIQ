@@ -16,6 +16,11 @@
 
               <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST" style="">
                 {{csrf_field()}}
+                @if (session('message'))
+    <div class="alert alert-success">
+        {{ session('message') }}
+    </div>
+@endif
                 <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
                   <div class="title">Headline:</div>
@@ -125,7 +130,6 @@
                       {{-- POPUP CHOOSE RECIPIENT --}}
 
                           <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
-                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                       @endif
                     <div class="button-container"></div>
                 </div>
@@ -178,10 +182,9 @@
   </div>
 </div>  
 
-<style>
+<!-- <style>
    .modal-content
    {
-   width: 900px;
    left: 50%;
    top: 50%;
    transform: translate(-50%);
@@ -206,7 +209,7 @@
    {
    padding:10px 10px 10px 10px;  
    }
-</style>
+</style> -->
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_user_pressrelease.css">

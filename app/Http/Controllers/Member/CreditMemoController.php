@@ -86,6 +86,10 @@ class CreditMemoController extends Member
 
             return view("member.receive_payment.modal_receive_payment",$data);
         }
+        else if($cm_type == "refund")
+        {
+            dd("Under Maintenance");
+        }
         else if($cm_type == "invoice_tablet")
         {
             $data["_customer"]      = Tbl_customer::where("customer_id",$data["c_id"])->first();
@@ -288,6 +292,7 @@ class CreditMemoController extends Member
         {
             if($ctr_items != 0)
             {
+                $customer_info['cm_used_ref_name'] = $use_credit;
                 $cm_id = CreditMemo::postCM($customer_info, $item_info);
                 
                 if(count($item_returns) > 0)
@@ -306,9 +311,23 @@ class CreditMemoController extends Member
                 }
 
                 $data["status"] = "success";
-                $data["id"] = $cm_id;
-                $data['call_function'] = "success_credit_memo";
-                $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
+                $data["id"] = $cm_id;       
+                if($use_credit == "retain")
+                {
+                    $data['call_function'] = "success_credit_memo";
+                    $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
+                }
+                elseif($use_credit == "refund")
+                {
+                    $data['call_function'] = "success_credit_memo_refund";
+                    $data['redirect_to'] = "/member/customer/credit_memo/update_action?type=refund&cm_id=".$cm_id;
+
+                }
+                elseif($use_credit == "apply")
+                {
+                    $data['call_function'] = "success_credit_memo_apply";
+                    $data['redirect_to'] = "/member/customer/credit_memo/update_action?type=invoice&cm_id=".$cm_id;
+                }
             }
             else
             {

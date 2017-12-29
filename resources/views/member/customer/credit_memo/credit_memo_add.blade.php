@@ -129,9 +129,11 @@
                                                         <input type="hidden" class="cmline_taxable" name="cmline_taxable[]" value="" >
                                                         <input type="checkbox" name="" class="taxable-check" >
                                                     </td> -->
+                                                    @if(isset($serial)) 
                                                     <td>
                                                         <textarea name="serial_number[]">{{$cmline->serial_number}}</textarea>
                                                     </td>
+                                                    @endif
                                                     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                 </tr>
                                             @endforeach

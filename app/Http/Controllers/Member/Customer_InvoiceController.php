@@ -791,9 +791,14 @@ class Customer_InvoiceController extends Member
         $data["invoice_id"] = $invoice_id;
 
         $data["transaction_type"] = "INVOICE";
-        if(Tbl_customer_invoice::where("inv_id",$invoice_id)->value("is_sales_receipt") != 0)
+        $invoice_data = Tbl_customer_invoice::where("inv_id",$invoice_id)->first();
+        if($invoice_data)
         {
-            $data["transaction_type"] = "Sales Receipt";            
+            if($invoice_data->is_sales_receipt != 0)
+            {
+                $data["transaction_type"] = "Sales Receipt";
+            }
+            $data['new_inv_id'] = $invoice_data->new_inv_id;
         }
 
         // $data["invoice_id"] = "INVOICE";

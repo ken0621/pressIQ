@@ -12,6 +12,8 @@ use App\Globals\Pdf_global;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\CustomerWIS;
+use App\Globals\TransactionSalesOrder;
+use App\Globals\TransactionEstimateQuotation;
 use App\Globals\Customer;
 use App\Globals\WarehouseTransfer;
 use App\Http\Controllers\Controller;
@@ -65,7 +67,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         
         //dd($this->user_info->shop_id);
         $ins_wis['cust_wis_shop_id']                = $shop_id;
-        $ins_wis['cust_wis_number']                 = $request->cust_wis_number;
+        $ins_wis['transaction_refnum']                 = $request->cust_wis_number;
         $ins_wis['cust_wis_from_warehouse']         = Warehouse2::get_current_warehouse($shop_id);
         $ins_wis['cust_wis_remarks']                = $remarks;
         $ins_wis['destination_customer_id']         = $request->customer_id;
@@ -75,18 +77,28 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $ins_wis['created_at']                      = Carbon::now();
 
         $_item = null;
+        $insert_item = null;
         foreach ($items as $key => $value) 
         {
             if($value)
             {
+                $insert_item[$key]['item_id'] = $value;
+                $insert_item[$key]['item_description'] = $request->item_description[$key];
+                $insert_item[$key]['item_qty'] = $request->item_qty[$key];
+                $insert_item[$key]['item_um'] = $request->item_um[$key];
+                $insert_item[$key]['item_rate'] = $request->item_rate[$key];
+                $insert_item[$key]['item_amount'] = $request->item_amount[$key];
+                $insert_item[$key]['item_discount'] = 0;
+
                 $_item[$key] = null;
                 $_item[$key]['item_id'] = $value;
-                $_item[$key]['quantity'] = $request->item_quantity[$key];
-                $_item[$key]['remarks'] = $request->cust_wis_remarks[$key];
+                $_item[$key]['quantity'] = $request->item_qty[$key] * UnitMeasurement::um_qty($insert_item[$key]['item_um']);
+                $_item[$key]['remarks'] = $request->item_description[$key];
+
             }
         }
 
-        $val = CustomerWIS::customer_create_wis($shop_id, $remarks,$ins_wis , $_item);
+        $val = CustomerWIS::customer_create_wis($shop_id, $remarks, $ins_wis, $_item, $insert_item);
         $data = null;
         if(is_numeric($val))
         {
@@ -152,6 +164,12 @@ class CustomerWarehouseIssuanceSlipController extends Member
     }
     public function getLoadTransaction(Request $request)
     {
-        dd("Under Maintenance");
+        $data['page'] = "Open Transaction";
+
+        $data['_eq'] = TransactionEstimateQuotation::getOpenEQ($this->user_info->shop_id, $request->c);
+        $data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
+        $data['_si'] = null;
+        $data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
+        return view('member.warehousev2.customer_wis.load_transaction', $data);
     }
 }

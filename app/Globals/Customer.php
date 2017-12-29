@@ -115,6 +115,16 @@ class Customer
 	{
 		return Tbl_customer::where("customer_id", $customer_id)->where("shop_id", $shop_id)->first();
 	}
+	public static function get_name($shop_id, $customer_id)
+	{
+		$name = "No Customer Found";
+		$customer = Self::get_info($shop_id, $customer_id);
+		if($customer)
+		{
+			$name = $customer->company != "" ? $customer->company : ucwords($customer->first_name.' '.$customer->middle_name.' '.$customer->last_name);
+		}
+		return $name;
+	}
 	public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');

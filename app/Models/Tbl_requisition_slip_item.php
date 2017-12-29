@@ -17,4 +17,11 @@ class Tbl_requisition_slip_item extends Model
     {
     	return $query->leftjoin('tbl_item','rs_item_id','=','item_id');    	
     }
+    public static function scopePRInfo($query)
+    {
+        $query->join('tbl_requisition_slip', 'tbl_requisition_slip.requisition_slip_id', '=', 'tbl_requisition_slip_item.rs_id')
+              ->join('tbl_vendor', 'tbl_vendor.vendor_id', '=', 'tbl_requisition_slip_item.rs_vendor_id');
+
+        return $query;
+    }
 }

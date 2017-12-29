@@ -313,7 +313,8 @@ class MLM_CodeControllerV2 extends Member
     {
         $data['action'] = '';
         $data['shop_name']  = $this->user_info->shop_key; 
-        $data['head_title']  = 'Membership Code Report'; 
+        $code_type = $request->code_type;
+        $data['head_title']  = ucwords(str_replace('_', ' ', $request->code_type)).' Report'; 
         $date['start']  = $request->from;
         $date['end']    = $request->to;
         $period         = $request->report_period ? $request->report_period : 'all';
@@ -322,7 +323,6 @@ class MLM_CodeControllerV2 extends Member
         $data["to"] = Report::checkDatePeriod($period,$date)['end_date'];
         $data["_warehouse"] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
 
-        $code_type = $request->code_type;
         $data['codes'] = Warehouse2::get_codes($request->warehouse_id, $data["from"], $data["to"], $request->transaction_type, $code_type);
 
         $data['warehouse_data'] = Warehouse2::get_info($request->warehouse_id);

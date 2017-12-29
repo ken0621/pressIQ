@@ -26,6 +26,12 @@ class Tbl_warehouse_inventory_record_log extends Model
     {
         return $query->leftjoin('tbl_customer','tbl_mlm_slot.slot_owner','=','tbl_customer.customer_id');
     }
+    public function scopeCustomerinfo_data($query)
+    {
+        return $query->leftjoin('tbl_transaction_list','record_consume_ref_id','=','transaction_list_id')
+                     ->leftjoin('tbl_transaction','tbl_transaction_list.transaction_id','=','tbl_transaction.transaction_id')
+                     ->leftjoin('tbl_customer','tbl_customer.customer_id','=','tbl_transaction.transaction_reference_id');
+    }
     public function scopeReserved_customer($query)
     {
         return $query->leftjoin('tbl_customer','record_consume_ref_id','=','customer_id');

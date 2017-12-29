@@ -40,6 +40,13 @@
                     <option value="offline">Offline Transaction</option>
                 </select>
             </div>
+
+            <div class="col-md-3" style="padding: 5px">
+                <select class="form-control input-sm" name="code_type">
+                    <option value="membership_code">Membership Code</option>
+                    <option value="product_code">Product Code</option>
+                </select>
+            </div>
         </div>
         </form>
     </div>

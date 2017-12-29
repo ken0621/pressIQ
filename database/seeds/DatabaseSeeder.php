@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         $this->call(tbl_sms_default_key::class);
         $this->call(tbl_online_pymnt_gateway::class);
         $this->call(tbl_locale::class);
+        $this->call(tbl_press_release_recipients::class);
         
         Model::reguard();
     }

@@ -9,6 +9,7 @@ use App\Models\Tbl_cart;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo_line;
+use App\Models\Tbl_credit_memo_applied_payment;
 use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_user;
 use App\Globals\Accounting;
@@ -23,6 +24,36 @@ use Carbon\Carbon;
 
 class CreditMemo
 {
+	public static function update_cm_data($rp_credits)
+	{
+		$cm_rp = null;
+		foreach ($rp_credits as $key => $value) 
+		{
+			$cm_rp[$key]['cm_id'] = $value['credit_reference_id'];
+			$cm_rp[$key]['applied_ref_name'] = "receive_payment";
+			$cm_rp[$key]['applied_ref_id'] = $value['rp_id'];
+			$cm_rp[$key]['applied_amount'] = $value['credit_amount'];
+			$cm_rp[$key]['created_at'] = $value['date_created'];
+		}
+		if(count($cm_rp) > 0)
+		{
+			Tbl_credit_memo_applied_payment::insert($cm_rp);
+
+			foreach ($cm_rp as $key => $value) 
+			{
+				$get_cm = Tbl_credit_memo::where("cm_id", $value['cm_id'])->first();
+				if($get_cm)
+				{
+					$sum_cm = Tbl_credit_memo_applied_payment::where('cm_id', $value['cm_id'])->sum('applied_amount');
+					if($get_cm->cm_amount == $sum_cm)
+					{
+						$up['cm_status'] = 1;
+						Tbl_credit_memo::where('cm_id',$value['cm_id'])->update($up);
+					}
+				}
+			}
+		}
+	}
 	public static function cm_amount($inv_id)
 	{
 		$inv_data = Tbl_customer_invoice::c_m()->where("inv_id",$inv_id)->first();
@@ -173,6 +204,6 @@ class CreditMemo
 	}
 	public static function get_all_available_credit($shop_id, $customer_id = '')
 	{
-		return Tbl_credit_memo::where('cm_shop_id',$shop_id)->where('cm_customer_id',$customer_id)->where('cm_used_ref_name', 'retain_credit')->get();
+		return Tbl_credit_memo::where('cm_shop_id',$shop_id)->where('cm_customer_id',$customer_id)->where('cm_used_ref_name', 'retain_credit')->where('cm_status',0)->get();
 	}
 }

@@ -13,6 +13,8 @@ use App\Globals\CommissionCalculator;
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
+use App\Models\Tbl_receive_payment_credit;
+use App\Models\Tbl_credit_memo_applied_payment;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_user;
 
@@ -54,6 +56,18 @@ class Customer_ReceivePaymentController extends Member
         {
             $data["rcvpayment"]         = Tbl_receive_payment::where("rp_id", $id)->first();
             $data["_rcvpayment_line"]   = Tbl_receive_payment_line::where("rpline_rp_id", $id)->get();
+            $_rcvpayment_credit = Tbl_receive_payment_credit::where("rp_id", $id)->get();
+            $data['_rcvpayment_credit'] = null;
+            foreach ($_rcvpayment_credit as $key => $value) 
+            {
+                $cm_data = CreditMemo::get_info($value->credit_reference_id);
+                if($cm_data)
+                {
+                    $data['_rcvpayment_credit'][$key]['ref_number'] = $cm_data->transaction_refnum != "" ? $cm_data->transaction_refnum : $cm_data->cm_id;
+                    $data['_rcvpayment_credit'][$key]['cm_id'] = $value->credit_reference_id;
+                    $data['_rcvpayment_credit'][$key]['cm_amount'] = $value->credit_amount;                
+                }
+            }
             $data["_invoice"]           = Invoice::getAllInvoiceByCustomerWithRcvPymnt($data["rcvpayment"]->rp_customer_id, $data["rcvpayment"]->rp_id);
             $data['action']             = "/member/customer/receive_payment/update/".$data["rcvpayment"]->rp_id;
         }
@@ -82,12 +96,12 @@ class Customer_ReceivePaymentController extends Member
         $insert["rp_memo"]              = Request::input('rp_memo');
         $insert["date_created"]         = Carbon::now();
 
-        if($cm_id != '')
-        {
-            $insert_credit["credit_reference_name"]        = "credit_memo";
-            $insert_credit["credit_reference_id"]          = $cm_id;
-            $insert_credit["credit_amount"]                = $insert["rp_total_amount"];
-        }
+        // if($cm_id != '')
+        // {
+        //     $insert_credit["credit_reference_name"]        = "credit_memo";
+        //     $insert_credit["credit_reference_id"]          = $cm_id;
+        //     $insert_credit["credit_amount"]                = $insert["rp_total_amount"];
+        // }
 
         $rcvpayment_id  = Tbl_receive_payment::insertGetId($insert);
 
@@ -121,6 +135,31 @@ class Customer_ReceivePaymentController extends Member
                 }
             }
         }
+
+        $cm_id = Request::input('rp_cm_id');
+        $cm_amount = Request::input('rp_cm_amount');
+        $date_created = Carbon::now();
+        $rp_credits = null;
+        if(count($cm_id) > 0)
+        {
+            foreach ($cm_id as $key => $value) 
+            {
+                if($value)
+                {
+                    $rp_credits[$key]['rp_id'] = $rcvpayment_id;
+                    $rp_credits[$key]['credit_reference_name'] = "credit_memo";
+                    $rp_credits[$key]['credit_reference_id'] = $value;
+                    $rp_credits[$key]['credit_amount'] = $cm_amount[$key];
+                    $rp_credits[$key]['date_created'] = $date_created;   
+                }
+            }
+        }
+        if(count($rp_credits) > 0)
+        {
+            Tbl_receive_payment_credit::insert($rp_credits);
+            CreditMemo::update_cm_data($rp_credits);
+        }
+
         /* Transaction Journal */
         $entry["reference_module"]      = "receive-payment";
         $entry["reference_id"]          = $rcvpayment_id;
@@ -152,7 +191,6 @@ class Customer_ReceivePaymentController extends Member
         }
         else
         {
-            ReceivePayment::updateCM($cm_id,$rcvpayment_id);
             $json["redirect"]    = "/member/customer/credit_memo/list";
         }
 
@@ -197,6 +235,32 @@ class Customer_ReceivePaymentController extends Member
             {
                 Invoice::updateAmountApplied(Request::input('rpline_txn_id')[$key]);
             }
+        }
+
+        $cm_id = Request::input('rp_cm_id');
+        $cm_amount = Request::input('rp_cm_amount');
+        $date_created = Carbon::now();
+        $rp_credits = null;
+        if(count($cm_id) > 0)
+        {
+            foreach ($cm_id as $key => $value) 
+            {
+                if($value)
+                {
+                    $rp_credits[$key]['rp_id'] = $rcvpayment_id;
+                    $rp_credits[$key]['credit_reference_name'] = "credit_memo";
+                    $rp_credits[$key]['credit_reference_id'] = $value;
+                    $rp_credits[$key]['credit_amount'] = $cm_amount[$key];
+                    $rp_credits[$key]['date_created'] = $date_created;   
+                }
+            }
+        }
+        if(count($rp_credits) > 0)
+        {
+            Tbl_receive_payment_credit::where("credit_reference_name","credit_memo")->where('rp_id', $rcvpayment_id)->delete();
+            Tbl_receive_payment_credit::insert($rp_credits);
+            Tbl_credit_memo_applied_payment::where("applied_ref_name","receive_payment")->where('applied_ref_id', $rcvpayment_id)->delete();
+            CreditMemo::update_cm_data($rp_credits);
         }
 
         /* Transaction Journal */

@@ -2,6 +2,8 @@ var receive_payment = new receive_payment();
 var maximum_payment = 0;
 var is_amount_receive_modified = false;
 
+var amount_due = 0;
+var amount_credit = 0;
 function receive_payment()
 {
 	init();
@@ -21,6 +23,8 @@ function receive_payment()
 		action_initialize_load();
 		action_remove_apply_credit();
 		event_compute_apply_credit();
+		action_update_apply_amount();
+		action_update_credit_amount();
 	}
 
 	this.action_initialize_load = function()
@@ -173,7 +177,10 @@ function receive_payment()
 	function action_update_apply_amount($amount)
 	{
 		$(".amount-to-apply").val($amount);
+		amount_due = $amount;
 		$(".amount-apply").html("PHP "+formatMoney($amount))
+
+		compute_total();
 	}
 
 	function action_update_credit_amount($amount)
@@ -269,10 +276,22 @@ function receive_payment()
 		});
 		$('.credit-amount-to-apply').val(total_amount_to_credit);
 		$('.credit-amount').html('PHP ' + formatMoney_2(total_amount_to_credit));
+
+		amount_credit = total_amount_to_credit;
+		compute_total();
+	}
+	function compute_total()
+	{		
+		$(".applied-total-amount").val(amount_due - amount_credit);
+		$('.applied-amount').html('PHP ' + formatMoney_2(amount_due - amount_credit));
 	}
 	this.event_compute_apply_credit = function()
 	{
 		event_compute_apply_credit();
+	}
+	this.compute_total = function()
+	{
+		compute_total();
 	}
 	function action_remove_apply_credit()
 	{
@@ -328,6 +347,7 @@ function submit_done(data)
     		$(".rcvpymnt-container").load(data.url+" .rcvpymnt-container .rcvpymnt-load-data", function()
 			{
 				receive_payment.action_initialize_load();
+				receive_payment.event_compute_apply_credit();
 				toastr.success(data.message);
 			});
     	}

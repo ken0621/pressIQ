@@ -113,7 +113,7 @@ class Customer_InvoiceController extends Member
             $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
             if($cm)
             {
-              $data["_invoices"][$key]->inv_overall_price = $value->inv_overall_price - $cm->cm_amount;  
+              $data["_invoices"][$key]->inv_overall_price = $value->inv_overall_price;  
             }
             $data["_invoices"][$key]->inv_balance = ReceivePayment::getBalance($this->user_info->shop_id, $value->inv_id, $data["_invoices"][$key]->inv_overall_price);
         }
@@ -122,17 +122,17 @@ class Customer_InvoiceController extends Member
             $cm = Tbl_credit_memo::where("cm_id",$value1->credit_memo_id)->first();
             if($cm)
             {
-              $data["_invoices_unpaid"][$key1]->inv_overall_price = $value1->inv_overall_price - $cm->cm_amount;  
+              $data["_invoices_unpaid"][$key1]->inv_overall_price = $value1->inv_overall_price;  
             }
             $data["_invoices_unpaid"][$key1]->inv_balance = ReceivePayment::getBalance($this->user_info->shop_id, $value1->inv_id, $data["_invoices_unpaid"][$key1]->inv_overall_price);
 
         }
-         foreach ($data["_invoices_paid"] as $key2 => $value2) 
+        foreach ($data["_invoices_paid"] as $key2 => $value2) 
         {
             $cm = Tbl_credit_memo::where("cm_id",$value2->credit_memo_id)->first();
             if($cm)
             {
-              $data["_invoices_paid"][$key2]->inv_overall_price = $value2->inv_overall_price - $cm->cm_amount;  
+              $data["_invoices_paid"][$key2]->inv_overall_price = $value2->inv_overall_price;  
             }
             $data["_invoices_paid"][$key2]->inv_balance = ReceivePayment::getBalance($this->user_info->shop_id, $value2->inv_id, $data["_invoices_paid"][$key2]->inv_overall_price);
 

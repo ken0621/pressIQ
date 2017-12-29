@@ -123,17 +123,17 @@
             <div class="row">
                 <div class="col-md-4 text-right digima-table-label"></div>
                 <div class="col-md-8 text-right load-applied-credits">
-                   @include("member.receive_payment.load_credits")
+                   @include("member.receive_payment.load_credits",['_applied_credit' => isset($_rcvpayment_credit) ? $_rcvpayment_credit : null ])
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-7 text-right digima-table-label">
-                    Applied
+                    <h3> Applied </h3>
                 </div>
                 <div class="col-md-5 text-right digima-table-value total">
                     <input type="hidden" name="applied_total_amount" class="applied-total-amount"/>
-                    <span class="applied-amount">PHP 0.00</span>
+                    <h3> <span class="applied-amount">PHP 0.00</span></h3>
                 </div>
             </div>
         </div>

@@ -57,7 +57,7 @@
                             <div class="col-sm-4">
                                 <div class="pull-right">
                                     <select class="form-control" name="use_credit">
-                                      <option value="retain">Retain as Available Credit</option>
+                                      <option value="retain_credit">Retain as Available Credit</option>
                                       <option value="refund">Give a Refund</option>
                                       <option value="apply">Apply to an Invoice</option>
                                     </select>
@@ -219,15 +219,16 @@
                                 <div class="col-md-5 text-right digima-table-value">
                                     <input type="hidden" name="subtotal_price" class="subtotal-amount-input" />
                                     PHP&nbsp;<span class="sub-total">0.00</span>
+                                    <input type="hidden" name="overall_price" class="total-amount-input" />
+                                    <span class="hidden total-amount">0.00</span>
                                 </div>
                             </div> 
                             <div class="row">
                                 <div class="col-md-7 text-right digima-table-label">
-                                    Remaining Total
+                                    Remaining Credit
                                 </div>
                                 <div class="col-md-5 text-right digima-table-value total">
-                                    <input type="hidden" name="overall_price" class="total-amount-input" />
-                                    PHP&nbsp;<span class="total-amount">0.00</span>
+                                    <span class="applied-amount">{{currency('PHP',($cm->cm_amount - $total_applied_credit))}}</span>
                                 </div>
                             </div>
                           

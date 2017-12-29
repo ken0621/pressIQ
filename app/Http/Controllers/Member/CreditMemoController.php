@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_credit_memo_line;
+use App\Models\Tbl_credit_memo_applied_payment;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_payment_method;
@@ -84,6 +85,11 @@ class CreditMemoController extends Member
             // }
             }
 
+            $cm_data = CreditMemo::get_info($cm_id);
+            $data['_rcvpayment_credit'][0]['ref_number'] =  $cm_data->transaction_refnum != "" ? $cm_data->transaction_refnum : $cm_data->cm_id;
+            $data['_rcvpayment_credit'][0]['cm_id'] = $cm_id; 
+            $data['_rcvpayment_credit'][0]['cm_amount'] = $cm_amount;
+
             return view("member.receive_payment.modal_receive_payment",$data);
         }
         else if($cm_type == "refund")
@@ -149,8 +155,10 @@ class CreditMemoController extends Member
         $id = Request::input('id');
         if($id)
         {
-            $data["cm"]            = Tbl_credit_memo::where("cm_id", $id)->first();
-            $data["_cmline"]       = Tbl_credit_memo_line::um()->where("cmline_cm_id", $id)->get();
+            $data["cm"]                    = Tbl_credit_memo::where("cm_id", $id)->first();
+            $data["_cmline"]               = Tbl_credit_memo_line::um()->where("cmline_cm_id", $id)->get();
+            $data["total_applied_credit"]       = Tbl_credit_memo_applied_payment::where("cm_id", $id)->sum("applied_amount");
+
             foreach ($data["_cmline"] as $key => $value) 
             {
                 $data["_cmline"][$key]->serial_number = ItemSerial::get_serial_credited($value->cmline_item_id,"credit_memo-".$id);
@@ -293,6 +301,7 @@ class CreditMemoController extends Member
             if($ctr_items != 0)
             {
                 $customer_info['cm_used_ref_name'] = $use_credit;
+                $customer_info["cm_type"] = 1;
                 $cm_id = CreditMemo::postCM($customer_info, $item_info);
                 
                 if(count($item_returns) > 0)

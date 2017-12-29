@@ -47,9 +47,9 @@ class RequisitionSlip
 	public static function create($shop_id, $user_id, $input)
 	{
 		$validate = null;
-		$insert['shop_id'] = $shop_id;
-		$insert['user_id'] = $user_id;
-		$insert['requisition_slip_number'] = $input->requisition_slip_number;
+		$insert['shop_id']                  = $shop_id;
+		$insert['user_id']                  = $user_id;
+		$insert['requisition_slip_number']  = $input->requisition_slip_number;
 		$insert['requisition_slip_remarks'] = $input->requisition_slip_remarks;
 		$insert['requisition_slip_date_created'] = Carbon::now();
 
@@ -92,14 +92,14 @@ class RequisitionSlip
             {
                 if($value)
                 {
-                    $_item[$key]['rs_id'] = $rs_id;
-                    $_item[$key]['rs_item_id'] = $value;
+                    $_item[$key]['rs_id']               = $rs_id;
+                    $_item[$key]['rs_item_id']          = $value;
                     $_item[$key]['rs_item_description'] = $input->rs_item_description[$key];
-                    $_item[$key]['rs_item_um'] = $input->rs_item_um[$key];
-                    $_item[$key]['rs_item_qty'] = $input->rs_item_qty[$key];
-                    $_item[$key]['rs_item_rate'] = $input->rs_item_rate[$key];
-                    $_item[$key]['rs_item_amount'] = $input->rs_item_amount[$key];
-                    $_item[$key]['rs_vendor_id'] = $input->rs_vendor_id[$key];
+                    $_item[$key]['rs_item_um']          = $input->rs_item_um[$key];
+                    $_item[$key]['rs_item_qty']         = $input->rs_item_qty[$key];
+                    $_item[$key]['rs_item_rate']        = $input->rs_item_rate[$key];
+                    $_item[$key]['rs_item_amount']      = $input->rs_item_amount[$key];
+                    $_item[$key]['rs_vendor_id']        = $input->rs_vendor_id[$key];
                 }
             }
             if(count($_item) > 0)

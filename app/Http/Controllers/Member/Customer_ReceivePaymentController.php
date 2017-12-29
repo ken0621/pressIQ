@@ -84,8 +84,9 @@ class Customer_ReceivePaymentController extends Member
 
         if($cm_id != '')
         {
-            $insert["rp_ref_name"]        = "credit_memo";
-            $insert["rp_ref_id"]          = $cm_id;
+            $insert_credit["credit_reference_name"]        = "credit_memo";
+            $insert_credit["credit_reference_id"]          = $cm_id;
+            $insert_credit["credit_amount"]                = $insert["rp_total_amount"];
         }
 
         $rcvpayment_id  = Tbl_receive_payment::insertGetId($insert);

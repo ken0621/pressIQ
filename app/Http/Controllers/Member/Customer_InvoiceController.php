@@ -421,7 +421,7 @@ class Customer_InvoiceController extends Member
 
                 if (isset($data["status"]) && isset($data["status_message"]) && $data["status_message"] > 0) 
                 {
-                    $json["status"]         = "error-invoice";
+                    $json["status"]         = "error";
                     $json["status_message"] = $data["status_message"];
 
                     $json["redirect"]       = "/member/customer/invoice?id=" . $inv_id;
@@ -759,7 +759,7 @@ class Customer_InvoiceController extends Member
                 }
                 elseif($json["status"] == "error" && count($json["status_message"]) > 0)
                 {
-                    $json["status"]         = "error-invoice";
+                    $json["status"]         = "error";
                     $json["invoice_id"]     = $inv_id;
                     $json["redirect"]       = "/member/customer/invoice?id=" . $inv_id;
 
@@ -855,7 +855,7 @@ class Customer_InvoiceController extends Member
             
             if ($stock_validation["status"] == "error") 
             {
-                $json["status"]         = "error-invoice";
+                $json["status"]         = "error";
                 $json["status_message"] = $stock_validation["status_message"];
                 $json["redirect"]       = "/member/customer/invoice";
 

@@ -267,7 +267,7 @@ function receive_payment()
 		{
 			total_amount_to_credit += parseFloat($(this).val());
 		});
-		$('.amount-to-apply').val(total_amount_to_credit);
+		$('.credit-amount-to-apply').val(total_amount_to_credit);
 		$('.credit-amount').html('PHP ' + formatMoney_2(total_amount_to_credit));
 	}
 	this.event_compute_apply_credit = function()

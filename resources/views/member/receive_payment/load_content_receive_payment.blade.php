@@ -95,7 +95,7 @@
         <div class="col-sm-6">
             <div class="row">
                 <div class="col-md-7 text-right digima-table-label">
-                    Amount to Apply
+                    Amount Due
                 </div>
                 <div class="col-md-5 text-right digima-table-value total">
                     <input type="hidden" name="rp_total_amount" class="amount-to-apply" />
@@ -113,10 +113,10 @@
             </div> 
             <div class="row">
                 <div class="col-md-7 text-right digima-table-label">
-                    Applied Credits
+                    Credits Applied
                 </div>
                 <div class="col-md-5 text-right digima-table-value total">
-                    <input type="hidden" name="credit_total_amount" class="amount-to-apply"/>
+                    <input type="hidden" name="credit_total_amount" class="credit-amount-to-apply"/>
                     <span class="credit-amount">PHP 0.00</span>
                 </div>
             </div>
@@ -124,6 +124,16 @@
                 <div class="col-md-4 text-right digima-table-label"></div>
                 <div class="col-md-8 text-right load-applied-credits">
                    @include("member.receive_payment.load_credits")
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-7 text-right digima-table-label">
+                    Applied
+                </div>
+                <div class="col-md-5 text-right digima-table-value total">
+                    <input type="hidden" name="applied_total_amount" class="applied-total-amount"/>
+                    <span class="applied-amount">PHP 0.00</span>
                 </div>
             </div>
         </div>

@@ -51,7 +51,6 @@ button:hover{
 
 .content{
 	background-color: transparent;
-	padding-top: 5px;
 }
 
 /* HEADER */
@@ -96,6 +95,7 @@ button:hover{
 	position: relative;
 	background-color: #fff;
 	font-family: 'Ubuntu', sans-serif;
+	border-bottom: 1px solid #ededed;
 	@media screen and (max-width: 900px)
 	{
 		padding-bottom: 12px;
@@ -320,7 +320,7 @@ button:hover{
 		p 
 		{
 			color: rgba(255,255,255, 0.5);
-			font-size: 16px;
+			font-size: 14px;
 		}
 		.button-container
 		{

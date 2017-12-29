@@ -83,13 +83,14 @@ body{
 		background-color: #0466af;
 		padding: 10px 20px;
 		text-align: center;
-		width: 110px;
+		width: 120px;
 		a
 		{
 			text-decoration: none;
 			color: #fff;
 		}
 	}
+
 	.right-container
 	{
 		background-color: #0466af;
@@ -348,7 +349,7 @@ body{
 
 .wrapper-6
 {
-	padding: 30px 0px 40px 0px;
+	padding: 30px 0px 50px 0px;
 	background-color: #0466af;
 	.title-container
 	{
@@ -375,50 +376,61 @@ body{
 			}
 		}
 	}
-	.feedback-container
+	.holder
 	{
-		margin: 50px 0px 100px 0px;
-		background-color: #fff;
-		.top-container
+		padding:  15px 5px; 
+		margin: auto 5px;
+		height: 500px;
+		.says-container
 		{
-			padding: 10px;
-			text-align: left;
-			border-bottom: 1px solid #d4d4d4;
-			.image-holder
-			{
-				text-align: center;
-			}
-			.name
-			{
-				font-family: 'Open+Sans', sans-serif;
-				font-weight: 700;
-				font-size: 18px;
-				color: #000;
-				padding: 7px 0px 0px 0px;
-			}
-			.date
-			{
-				font-family: 'Open+Sans', sans-serif;
-				font-size: 15px;
-				color: #0466af;
-			}
+			padding: 0px 50px;
 		}
-		.bottom-container
+		.feedback-container
 		{
-			
-			.description
+			margin: 50px 0px 100px 0px;
+			background-color: #fff;
+
+			.top-container
 			{
-				font-family: 'Open+Sans', sans-serif;
-				font-size: 17px;
-				color: #4e4e4e;
-				padding: 20px 25px 10px 25px;
+				padding: 10px;
 				text-align: left;
-				min-height: 250px;
+				border-bottom: 1px solid #d4d4d4;
+				.image-holder
+				{
+					text-align: center;
+				}
+				.name
+				{
+					font-family: 'Open+Sans', sans-serif;
+					font-weight: 700;
+					font-size: 18px;
+					color: #000;
+					padding: 7px 0px 0px 0px;
+				}
+				.date
+				{
+					font-family: 'Open+Sans', sans-serif;
+					font-size: 15px;
+					color: #0466af;
+				}
 			}
-			.star
+			.bottom-container
 			{
-				text-align: left;
-				padding: 0px 25px;
+				
+				.description
+				{
+					font-family: 'Open+Sans', sans-serif;
+					font-size: 17px;
+					color: #4e4e4e;
+					padding: 20px 25px;
+					text-align: left;
+					min-height: 270px;
+				}
+				.star
+				{
+					text-align: left;
+					padding: 0px 25px 10px 25px;
+				}
 			}
 		}
 	}
@@ -469,6 +481,10 @@ body{
 			font-size: 15px;
 			padding: 10px 40px;
 			text-decoration: none;
+		}
+		a:hover
+		{
+			opacity: 0.9;
 		}
 	}
 	.icon

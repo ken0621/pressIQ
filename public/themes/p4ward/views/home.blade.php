@@ -12,7 +12,7 @@
     <div id="aboutus" class="wrapper-1">
         <div class="container">
             <div class="row clearfix">
-                <div class="col-md-8">
+                <div class="wow fadeInLeft col-md-8">
                     <!-- History of P4ward -->
                     <div class="title-container">
                         <span class="icon-container"><img src="/themes/{{ $shop_theme }}/img/p4ward-icon-blue.png"></span><span class="title-blue">Our </span><span class="title-orange">History</span>
@@ -23,9 +23,9 @@
                         <p>The nearest hospital he can be rushed to was a big private hospital. He will stay in the ICU for almost 2 weeks and will stay in the hospital for the next 3 months until he will fully recover.</p>
                         <p>During the first 3 days in the ICU, his bill already reached 6 digits just for the hospital and medicine bills alone. That bill was already bigger than our entire family’s savings combined and with the rate of his medical expenses, it’ll reach 7 figures within the next few days.</p>
                     </div>
-                    <div class="button-container"><a href="#">Read More</a></div>
+                    <div class="button-container"><a href="#">Read More &raquo;</a></div>
                 </div>
-                <div class="col-md-4">
+                <div class="wow fadeInRight col-md-4">
                     <div class="right-container">
                         <!-- Purpose of P4ward -->
                         <div class="title-container">
@@ -51,15 +51,15 @@
     <!-- Why P4ward -->
     <div class="wrapper-2">
         <div class="container">
-            <div class="title-container">
+            <div class="wow fadeInDown title-container">
                 <span class="icon-container"><img src="/themes/{{ $shop_theme }}/img/p4ward-icon-white.png"></span><span class="title-white">Why </span><span class="title-orange">P4ward</span>
             </div>
             <div class="bottom-container">
                 <di class="row clearfix">
-                    <div class="col-md-5">
+                    <div class="wow fadeInLeft col-md-5">
                         <div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/wrapper2-image.jpg"></div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="wow fadeInRight col-md-7">
                         <div class="title">Why Join P4ward</div>
                         <div class="details-container">
                             <p>Our goal is not just to help you succeed but to make you significant to others. It’s a bigger
@@ -77,11 +77,11 @@
     <!-- Product of P4ward -->
     <div id="product" class="wrapper-3">
         <div class="container">
-            <div class="title-container">
+            <div class="wow fadeInDown title-container">
                 <span class="icon-container"><img src="/themes/{{ $shop_theme }}/img/p4ward-icon-blue.png"></span><span class="title-blue">Our </span><span class="title-orange">Products</span>
                 <div class="row clearfix">
                     <div class="col-md-6">
-                        <div class="product-container">
+                        <div class="wow fadeInLeft product-container" data-wow-delay=".6s">
                             <div class="percent-container">100% Organic</div>
                             <div class="product-title-container">Don Organics Coffee Scrub</div>
                             <div class="product-image"><img src="/themes/{{ $shop_theme }}/img/wrapper3-image1.png"></div>
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="product-container">
+                        <div class="wow fadeInRight product-container" data-wow-delay=".6s">
                             <div class="percent-container">100% Organic</div>
                             <div class="product-title-container">Don Organics Red Rice Scrub</div>
                             <div class="product-image"><img src="/themes/{{ $shop_theme }}/img/wrapper3-image2.png"></div>
@@ -105,21 +105,21 @@
     <div class="wrapper-4" style="background-image: url('/themes/{{ $shop_theme }}/img/wrapper4-banner.jpg')">
         <div class="row clearfix">
             <div class="col-md-4">
-                <div class="benefits-container">
+                <div class="wow fadeInLeft benefits-container">
                     <div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/wrapper4-image1.png"></div>
                     <div class="title-container">100 % Ogranic</div>
                     <div class="details-container">Organically produced ingredients. Processed without the use of any chemicals.</div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="benefits-container">
+                <div class="wow fadeInDown benefits-container">
                     <div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/wrapper4-image2.png"></div>
                     <div class="title-container">Rich Source of Antioxidants</div>
                     <div class="details-container">Choosing organic food can lead to increased intake of nutritionally desirable antioxidants.</div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="benefits-container">
+                <div class="wow fadeInRight benefits-container">
                     <div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/wrapper4-image3.png"></div><div class="title-container">2x More Caffeine</div>
                     <div class="details-container">Don Organics Robusta coffee scrub caffeine content twice as potent as other coffee scrub.</div>
                 </div>
@@ -132,8 +132,8 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-7">
-                    <div class="title-container">What makes Don Organics Different from Other Coffee Scrubs?</div>
-                    <div class="details-container">
+                    <div class="wow fadeInLeft title-container">What makes Don Organics Different from Other Coffee Scrubs?</div>
+                    <div class="wow fadeInLeft details-container">
                         <p>One of the important factors of a coffee scrub is its caffeine content.</p>
                         <p>Some coffee scrubs will only use brewed coffee grounds which has less benefits to the skin due to the depletion of caffeine. Others use Arabica coffee beans, which almost all coffee that you drink are made of.</p>
                         <p>The higher the caffeine content of the scrub, the more it is beneficial to the skin.</p>
@@ -142,7 +142,7 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/wrapper5-image.jpg"></div>
+                    <div class="wow fadeInRight image-holder"><img src="/themes/{{ $shop_theme }}/img/wrapper5-image.jpg"></div>
                 </div>
             </div>
         </div>
@@ -151,10 +151,12 @@
     <!-- Testimonials of P4ward -->
     <div id="testimonials" class="wrapper-6">
         <div class="container">
-            <div class="title-container">
+            <div class="wow fadeInDown title-container">
                 <span class="icon-container"><img src="/themes/{{ $shop_theme }}/img/p4ward-icon-white.png"></span><span class="title-white">What </span><span class="title-orange">They </span><span class="title-orange">Say</span>
-                <div class="row clearfix">
-                    <div class="col-md-4">
+            </div>
+            <div class="says-container">
+                <div>
+                    <div class="holder">
                         <div class="feedback-container match-height">
                             <div class="top-container">
                                 <div class="row-no-padding clearfix">
@@ -175,7 +177,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                </div>
+                <div>
+                    <div class="holder">
                         <div class="feedback-container match-height">
                             <div class="top-container">
                                 <div class="row-no-padding clearfix">
@@ -196,7 +200,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                </div>
+                <div>
+                    <div class="holder">
                         <div class="feedback-container match-height">
                             <div class="top-container">
                                 <div class="row-no-padding clearfix">
@@ -213,6 +219,29 @@
                             </div>
                             <div class="bottom-container">
                                 <div class="description">Makes my skin soft and smooth after using it. It's a bit messy to use but rinses easily with (a lot of) water.</div>
+                                <div class="star"><img src="/themes/{{ $shop_theme }}/img/wrapper6-star.png"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="holder">
+                        <div class="feedback-container match-height">
+                            <div class="top-container">
+                                <div class="row-no-padding clearfix">
+                                    <div class="col-md-3">
+                                        <div class="image-holder">
+                                            <img src="/themes/{{ $shop_theme }}/img/wrapper6-image1.png">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="name">Mumai Vitangcol Nidea</div>
+                                        <div class="date">January 10</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bottom-container">
+                                <div class="description">Another must haves! I rarely use skin essentials but this one's on top of my list now! You can use it on your face and body and see/feel the result right after using it. One of the best products I've used and I just love that freshly brewed coffee smell. Two thumbs up!</div>
                                 <div class="star"><img src="/themes/{{ $shop_theme }}/img/wrapper6-star.png"></div>
                             </div>
                         </div>
@@ -330,4 +359,8 @@
 
     });
 </script>
+
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
+
+
 @endsection

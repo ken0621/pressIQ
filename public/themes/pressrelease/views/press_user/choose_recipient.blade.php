@@ -26,10 +26,12 @@
                      <table  class="display table table-bordered" style="background-color: #FFFFFF;" id="showHere_table">
                         <thead style="background-color: white;">
                            <tr>
+
                               <th style="text-align: center;width: 5%"">ACTION</th>
                               <th style="text-align: center;width: 25%">COMPANY</th>
                               <th style="text-align: center;width: 25%">RECIPIENT</th>
                               <th style="text-align: center;width: 25%">POSITION</th>   
+
                               <th style="display:none;">Email</th>   
                            </tr>
                         </thead> 

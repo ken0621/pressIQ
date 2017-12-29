@@ -33,7 +33,7 @@
                         <textarea name="pr_boiler_content" id="pr_boiler_content">{!!$edits->pr_boiler_content!!}</textarea>
                   <div class="button-container">
                   <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                  <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
+                  <span class="preview-button"><a href="javascript:" id="prev_btn">Preview</a></span>
                   </div>
                 </div>
 
@@ -128,8 +128,8 @@
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
                     <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
                       {{-- POPUP CHOOSE RECIPIENT --}}
+                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
 
-                          <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                       @endif
                     <div class="button-container"></div>
                 </div>
@@ -158,7 +158,7 @@
 
   <!-- Preview Popup -->
 <div class="popup-preview">
-  <div class="modal fade" id="previewPopup" role="dialog">
+  <div class="modal" id="previewPopup" name="previewPopup" role="dialog">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -255,6 +255,7 @@
     $('#previewPopup').modal('show'); 
   });
 </script>
+
 <script>
 tinymce.init({ 
 selector:'textarea', 
@@ -321,7 +322,7 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     });
 </script>
 
-<script type="text/javascript">
+<script>
   $('#pop_recipient_btn').click(function()
   {
     var data = $('.recipient_form').serialize();

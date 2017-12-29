@@ -383,7 +383,7 @@ class ShopMemberController extends Shop
     
     public function send_pr()
     {
-        
+
         $pr_info["pr_headline"]     =request('pr_headline');
         $pr_info["pr_content"]      =request('pr_content');
         $pr_info["pr_boiler_content"]=request('pr_boiler_content');

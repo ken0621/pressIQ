@@ -80,6 +80,10 @@
 					-webkit-box-orient: vertical;
 					overflow: hidden;
 					text-overflow: ellipsis;
+					@media screen and (max-width: 320px)
+					{
+					   font-size: 15px;
+					}
 				}
 			}
 			.button-container

@@ -167,6 +167,8 @@ class CreditMemoController extends Member
     }
     public function create_submit()
     {
+        $use_credit = Request::input("use_credit");
+
         $customer_info[] = null;
         $customer_info["cm_customer_id"] = Request::input("cm_customer_id");
         $customer_info["cm_customer_email"] = Request::input("cm_customer_email");
@@ -303,8 +305,9 @@ class CreditMemoController extends Member
                     }
                 }
 
-                $data["status"] = "success-credit-memo-action";
+                $data["status"] = "success";
                 $data["id"] = $cm_id;
+                $data['call_function'] = "success_credit_memo";
                 $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
             }
             else

@@ -54,6 +54,15 @@
                             <div class="col-sm-4">
                                 <input type="text" class="form-control input-sm customer-email" name="cm_customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$cm->cm_customer_email or ''}}"/>
                             </div>
+                            <div class="col-sm-4">
+                                <div class="pull-right">
+                                    <select class="form-control" name="use_credit">
+                                      <option value="retain">Retain as Available Credit</option>
+                                      <option value="refund">Give a Refund</option>
+                                      <option value="apply">Apply to an Invoice</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     

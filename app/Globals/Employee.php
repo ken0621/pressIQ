@@ -21,10 +21,10 @@ class Employee
 	{
 		return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
 	}
+
 	public static function getPosition()
 	{
-		$shop = Employee::getShopId();
-
+		$shop 	= Employee::getShopId();
 		$result = Tbl_position::where("archived",0)->where("position_shop_id",$shop)->get();
 		
 		return $result;

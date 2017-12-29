@@ -601,7 +601,6 @@ class Transaction
         }
         
         $data->transaction(); //join table transaction
-        $data->orderBy("transaction_number");
         
         if(isset($transaction_type))
         {
@@ -620,6 +619,14 @@ class Transaction
                     $data->where('transaction_type', $transaction_type)->where('order_status','!=','reject');
                 }
             }
+        }
+        if($shop_id == 1)
+        {
+            $data->orderBy('transaction_date_created','DESC');
+        }
+        else
+        {
+            $data->orderBy("transaction_number");
         }
         
         if(session('get_transaction_filter_customer_id'))

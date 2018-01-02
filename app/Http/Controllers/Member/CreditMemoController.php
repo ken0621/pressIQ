@@ -324,7 +324,7 @@ class CreditMemoController extends Member
                 if($use_credit == "retain_credit")
                 {
                     $data['call_function'] = "success_credit_memo";
-                    $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
+                    $data["redirect_to"] = "/member/customer/credit_memo/list";
                 }
                 elseif($use_credit == "refund")
                 {

@@ -88,7 +88,7 @@
 			<div class="content-container"><p>{!!$pr_content!!}</p></div>
 			<div class="border"></div>
 			<div class="title-about-container">About {{$pr_sender_name}}</div>
-			<div class="content-container"><p>{!!$pr_boiler_content!!}</p></div>
+			<div class="content-container">{!!$pr_boiler_content!!}</div>
 		</div>
 	</div>
 </body>

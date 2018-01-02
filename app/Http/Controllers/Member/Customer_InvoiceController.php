@@ -113,7 +113,7 @@ class Customer_InvoiceController extends Member
             $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
             if($cm)
             {
-              $data["_invoices"][$key]->inv_overall_price = $value->inv_overall_price - $cm->cm_amount;  
+              $data["_invoices"][$key]->inv_overall_price = $value->inv_overall_price;  
             }
             $data["_invoices"][$key]->inv_balance = ReceivePayment::getBalance($this->user_info->shop_id, $value->inv_id, $data["_invoices"][$key]->inv_overall_price);
         }
@@ -122,17 +122,17 @@ class Customer_InvoiceController extends Member
             $cm = Tbl_credit_memo::where("cm_id",$value1->credit_memo_id)->first();
             if($cm)
             {
-              $data["_invoices_unpaid"][$key1]->inv_overall_price = $value1->inv_overall_price - $cm->cm_amount;  
+              $data["_invoices_unpaid"][$key1]->inv_overall_price = $value1->inv_overall_price;  
             }
             $data["_invoices_unpaid"][$key1]->inv_balance = ReceivePayment::getBalance($this->user_info->shop_id, $value1->inv_id, $data["_invoices_unpaid"][$key1]->inv_overall_price);
 
         }
-         foreach ($data["_invoices_paid"] as $key2 => $value2) 
+        foreach ($data["_invoices_paid"] as $key2 => $value2) 
         {
             $cm = Tbl_credit_memo::where("cm_id",$value2->credit_memo_id)->first();
             if($cm)
             {
-              $data["_invoices_paid"][$key2]->inv_overall_price = $value2->inv_overall_price - $cm->cm_amount;  
+              $data["_invoices_paid"][$key2]->inv_overall_price = $value2->inv_overall_price;  
             }
             $data["_invoices_paid"][$key2]->inv_balance = ReceivePayment::getBalance($this->user_info->shop_id, $value2->inv_id, $data["_invoices_paid"][$key2]->inv_overall_price);
 
@@ -421,7 +421,7 @@ class Customer_InvoiceController extends Member
 
                 if (isset($data["status"]) && isset($data["status_message"]) && $data["status_message"] > 0) 
                 {
-                    $json["status"]         = "error-invoice";
+                    $json["status"]         = "error";
                     $json["status_message"] = $data["status_message"];
 
                     $json["redirect"]       = "/member/customer/invoice?id=" . $inv_id;
@@ -759,7 +759,7 @@ class Customer_InvoiceController extends Member
                 }
                 elseif($json["status"] == "error" && count($json["status_message"]) > 0)
                 {
-                    $json["status"]         = "error-invoice";
+                    $json["status"]         = "error";
                     $json["invoice_id"]     = $inv_id;
                     $json["redirect"]       = "/member/customer/invoice?id=" . $inv_id;
 
@@ -791,9 +791,14 @@ class Customer_InvoiceController extends Member
         $data["invoice_id"] = $invoice_id;
 
         $data["transaction_type"] = "INVOICE";
-        if(Tbl_customer_invoice::where("inv_id",$invoice_id)->value("is_sales_receipt") != 0)
+        $invoice_data = Tbl_customer_invoice::where("inv_id",$invoice_id)->first();
+        if($invoice_data)
         {
-            $data["transaction_type"] = "Sales Receipt";            
+            if($invoice_data->is_sales_receipt != 0)
+            {
+                $data["transaction_type"] = "Sales Receipt";
+            }
+            $data['new_inv_id'] = $invoice_data->new_inv_id;
         }
 
         // $data["invoice_id"] = "INVOICE";
@@ -850,7 +855,7 @@ class Customer_InvoiceController extends Member
             
             if ($stock_validation["status"] == "error") 
             {
-                $json["status"]         = "error-invoice";
+                $json["status"]         = "error";
                 $json["status_message"] = $stock_validation["status_message"];
                 $json["redirect"]       = "/member/customer/invoice";
 

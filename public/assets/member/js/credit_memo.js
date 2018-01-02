@@ -498,7 +498,30 @@ function submit_done_item(data)
     });
     data.element.modal("hide");
 }
-
+function success_credit_memo(data)
+{
+	if(data.status == "success")
+	{
+		toastr.success("Success");
+        location.href = data.redirect_to;
+    }
+}
+function success_credit_memo_refund(data)
+{
+	if(data.status == "success")
+	{
+		toastr.success("Success");
+        action_load_link_to_modal(data.redirect_to,'lg');
+    }
+}
+function success_credit_memo_apply(data)
+{
+	if(data.status == "success")
+	{
+		toastr.success("Success");
+        action_load_link_to_modal(data.redirect_to,'lg');
+    }
+}
 function submit_done(data)
 {
 	if(data.status == "success-credit-memo")

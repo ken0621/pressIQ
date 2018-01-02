@@ -228,7 +228,7 @@
                                     Remaining Credit
                                 </div>
                                 <div class="col-md-5 text-right digima-table-value total">
-                                    <span class="applied-amount">{{currency('PHP',($cm->cm_amount - $total_applied_credit))}}</span>
+                                    <span class="applied-amount">{{currency('PHP',isset($total_applied_credit) ? $total_applied_credit : 0 )}}</span>
                                 </div>
                             </div>
                           

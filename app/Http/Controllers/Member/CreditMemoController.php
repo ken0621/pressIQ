@@ -152,13 +152,13 @@ class CreditMemoController extends Member
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["action"]     = "/member/customer/credit_memo/create_submit";
 
+        $data["total_applied_credit"] = 0;
         $id = Request::input('id');
         if($id)
         {
             $data["cm"]                    = Tbl_credit_memo::where("cm_id", $id)->first();
             $data["_cmline"]               = Tbl_credit_memo_line::um()->where("cmline_cm_id", $id)->get();
-            $data["total_applied_credit"]       = Tbl_credit_memo_applied_payment::where("cm_id", $id)->sum("applied_amount");
-
+            $data["total_applied_credit"]  = $data["cm"]->cm_amount - Tbl_credit_memo_applied_payment::where("cm_id", $id)->sum("applied_amount");
             foreach ($data["_cmline"] as $key => $value) 
             {
                 $data["_cmline"][$key]->serial_number = ItemSerial::get_serial_credited($value->cmline_item_id,"credit_memo-".$id);
@@ -321,7 +321,7 @@ class CreditMemoController extends Member
 
                 $data["status"] = "success";
                 $data["id"] = $cm_id;       
-                if($use_credit == "retain")
+                if($use_credit == "retain_credit")
                 {
                     $data['call_function'] = "success_credit_memo";
                     $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;

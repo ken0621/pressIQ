@@ -13,6 +13,7 @@ use App\Globals\Customer;
 use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
 use App\Globals\TransactionCreditMemo;
+use App\Globals\AccountingTransaction;
 
 use Session;
 use Carbon\Carbon;
@@ -46,9 +47,10 @@ class TransactionCreditMemoController extends Member
 		$insert['transaction_date']      = $request->transaction_date;
 		$insert['customer_message']      = $request->customer_message;
 		$insert['customer_memo']         = $request->customer_memo;
+        $insert['cm_used_ref_name'] 	 = $request->use_credit;
 
 		$insert_item = null;
-		foreach ($request->item_id as $key => $value) 
+		foreach ($request->item_id as $key => $value)
 		{
 			if($value)
 			{
@@ -66,7 +68,10 @@ class TransactionCreditMemoController extends Member
 		$validate = TransactionCreditMemo::postInsert($this->user_info->shop_id, $insert, $insert_item);
 		if(is_numeric($validate))
 		{
-			
+			$return['status'] = 'success';
+			$return['status_message'] = 'Success creating credit memo.';
+			$return['call_function'] = 'success_credit_memo';
+			$return['status_redirect'] = AccountingTransaction::get_redirect('credit_memo', $validate ,$btn_action);	
 		}
 		else
 		{

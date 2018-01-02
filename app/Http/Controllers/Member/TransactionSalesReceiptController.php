@@ -74,8 +74,11 @@ class TransactionSalesReceiptController extends Member
 		$return = null;
 		$validate = TransactionSalesReceipt::postInsert($this->user_info->shop_id, $insert, $insert_item);
 		if(is_numeric($validate))
-		{
-			
+		{			
+			$return['status'] = 'success';
+			$return['status_message'] = 'Success creating sales receipt.';
+			$return['call_function'] = 'success_sales_receipt';
+			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_receipt', $validate ,$btn_action);
 		}
 		else
 		{

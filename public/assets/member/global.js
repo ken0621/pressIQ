@@ -68,7 +68,6 @@ function global()
             type:"post",
             success: function(data)
             {
-
                 data.element = modal;
 				if(data.response_status == "error")
 				{

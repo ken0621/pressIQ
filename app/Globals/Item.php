@@ -321,13 +321,16 @@ class Item
         Tbl_item::where('item_id',$item_id)->update($insert);
         Tbl_item_bundle::where('bundle_bundle_id',$item_id)->delete();
 
-        foreach ($_item as $key => $value) 
+        if(count($_item) > 0)
         {
-            $ins_item['bundle_bundle_id'] = $item_id;
-            $ins_item['bundle_item_id'] = $value['item_id'];
-            $ins_item['bundle_qty'] = $value['quantity'];
+            foreach ($_item as $key => $value) 
+            {
+                $ins_item['bundle_bundle_id'] = $item_id;
+                $ins_item['bundle_item_id'] = $value['item_id'];
+                $ins_item['bundle_qty'] = $value['quantity'];
 
-            Tbl_item_bundle::insert($ins_item);
+                Tbl_item_bundle::insert($ins_item);
+            }
         }
 
         $return['item_id']       = $item_id;
@@ -1639,7 +1642,13 @@ class Item
         
         if($search_keyword)
         {
-            $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
+            // $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
+            $query->where(function($q) use ($search_keyword)
+            {
+                $q->orWhere("mlm_pin", "LIKE", "%$search_keyword%");
+                $q->orWhere("mlm_activation", "LIKE", "%$search_keyword%");
+                $q->orWhere("item_name", "LIKE", "%$search_keyword%");
+            });
         }
         if($status == 'reserved')
         {
@@ -1718,7 +1727,13 @@ class Item
         }
         if($search_keyword)
         {
-            $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
+            // $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
+            $query->where(function($q) use ($search_keyword)
+            {
+                $q->orWhere("mlm_pin", "LIKE", "%$search_keyword%");
+                $q->orWhere("mlm_activation", "LIKE", "%$search_keyword%");
+                $q->orWhere("item_name", "LIKE", "%$search_keyword%");
+            });
         }
 
         if($status == 'reserved')

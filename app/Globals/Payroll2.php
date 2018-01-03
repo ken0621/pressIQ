@@ -1447,7 +1447,7 @@ class Payroll2
      * @author (Kim Briel Oraya)
      *
      */
-	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0, $use_leave = false , $compute_type = "daily" ,$testing = false)
+	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late = "per_shift", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0, $use_leave = false , $compute_type = "daily" ,$testing = false)
 	{
 
 		$leave_fill_undertime	= 1;
@@ -1796,7 +1796,7 @@ class Payroll2
 					}
 
 					//fill late with leave hours
-					if ($leave_fill_late==1) 
+					if ($leave_fill_late == 1) 
 					{
 						$late_minutes = Payroll2::convert_time_in_minutes($late_hours);
 						$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
@@ -1823,7 +1823,7 @@ class Payroll2
 					}
 
 					//excess leave hour if not use
-					if (($leave_fill_undertime==0)&&($leave_fill_late==0)) 
+					if (($leave_fill_undertime==0) && ($leave_fill_late==0)) 
 					{
 						$excess_leave_hours=$leave;
 					}
@@ -3412,12 +3412,12 @@ class Payroll2
 
 		$hour = $extime1[0] - $extime2[0];
 		$min  = 0;
-
+		
 		if(isset($extime1[1]) && isset($extime2[1]))
 		{
 			$min = $extime1[1] - $extime2[1];
 		}
-
+		
 		return Payroll::return_time($hour, $min);
 	}
 
@@ -3429,7 +3429,7 @@ class Payroll2
 		if (($extime1[0] %2)==1) 
 		{
 			$hour = (int)($extime1[0] /2) ;
-			$min+=30;
+			$min += 30;
 		}
 		else
 		{
@@ -5015,6 +5015,7 @@ class Payroll2
 
 				else if($allowance->payroll_allowance_type == 'pro_rated')
 				{
+
 					$actual_gross_pay = 0;
 					$standard_gross_pay = 0;
 					$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
@@ -5116,10 +5117,10 @@ class Payroll2
 						$count++;
 					}
 
-					// dd($data);
+					// dd($d);
 					// dd($a);
-
-					$standard_gross_pay+=$actual_gross_pay;
+					// dd($actual_gross_pay ." / " . $standard_gross_pay ." * " . $allowance_amount);
+					$standard_gross_pay += $actual_gross_pay;
 					$val["amount"] = @($actual_gross_pay/$standard_gross_pay) * $allowance_amount;
 
 					// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);

@@ -63,6 +63,19 @@
 	font-size: 20px;
 	font-family: 'PT Sans';
 }
+.border
+{
+	border-bottom: 1px solid #ededed;
+	padding: 15px 0px;
+}
+.title-about-container
+{
+	padding: 40px 0px 15px 0px;
+	font-size: 25px;
+	color: #404040;
+	font-family: 'PT Sans';
+	font-weight: 700;
+}
 </style>
 
 </head>
@@ -73,7 +86,9 @@
 			<div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">{{$pr_sender_name}}</span></div>
 			<div class="date-container">{{$pr_date_sent}}</div>
 			<div class="content-container"><p>{!!$pr_content!!}</p></div>
-			<div class="content-container"><p>{!!$pr_boiler_content!!}</p></div>
+			<div class="border"></div>
+			<div class="title-about-container">About {{$pr_sender_name}}</div>
+			<div class="content-container">{!!$pr_boiler_content!!}</div>
 		</div>
 	</div>
 </body>

@@ -31,7 +31,17 @@ function customer_wis_create()
 		action_initialize_select();
 		action_lastclick_row();
 		event_remove_tr();
+		event_compute_class_change();
 
+	}
+
+	function action_reassign_number()
+	{
+		var num = 1;
+		$(".invoice-number-td").each(function(){
+			$(this).html(num);
+			num++;
+		});
 	}
 	function event_remove_tr()
 	{		
@@ -46,6 +56,19 @@ function customer_wis_create()
 	}
 	function action_initialize_select()
 	{
+		$('.droplist-customer').globalDropList(
+		{
+			width : "100%",
+    		placeholder : "Select Customer...",
+			link : "/member/customer/modalcreatecustomer",
+			onChangeValue: function()
+			{
+				$(".customer-email").val($(this).find("option:selected").attr("email"));
+				$(".customer-billing-address").val($(this).find("option:selected").attr("billing-address"));
+				action_load_open_transaction($(this).val());		
+			}
+		});
+
 		$('.droplist-item').globalDropList({
 			link : "/member/item/add",
             width : "100%",
@@ -81,12 +104,176 @@ function customer_wis_create()
             	}
             }
         });
+         $('.droplist-um').globalDropList(
+    	{
+    		hasPopup: "false",
+    		width : "100%",
+    		placeholder : "um..",
+    		onChangeValue: function()
+    		{
+    			action_load_unit_measurement($(this));
+    		}
+
+    	});
+        $('.droplist-um:not(.has-value)').globalDropList("disabled");
+
+        $(".draggable .tr-draggable:last td select.select-um").globalDropList(
+        {
+        	hasPopup: "false",
+    		width : "100%",
+    		placeholder : "um..",
+    		onChangeValue: function()
+    		{  
+    			action_load_unit_measurement($(this));
+    		}
+
+        }).globalDropList('disabled');
+	}
+
+	function action_load_unit_measurement($this)
+	{
+		$parent = $this.closest(".tr-draggable");
+		$item   = $this.closest(".tr-draggable").find(".select-item");
+
+		$um_qty = parseFloat($this.find("option:selected").attr("qty") || 1);
+		$sales  = parseFloat($item.find("option:selected").attr("price"));
+		$qty    = parseFloat($parent.find(".txt-qty").val());
+
+		$parent.find(".txt-rate").val($um_qty * $sales * $qty).change();
+
+    	action_compute();
+	}
+
+	function event_compute_class_change()
+	{
+		$(document).on("change",".compute", function()
+		{
+			action_compute();
+		});
+	}
+	function action_load_open_transaction($customer_id)
+	{
+		if($customer_id)
+		{
+			$.ajax({
+				url : '/member/customer/wis/count-transaction',
+				type : 'get',
+				data : {customer_id : $customer_id},
+				success : function(data)
+				{
+					$(".open-transaction").slideDown();
+					$(".popup-link-open-transaction").attr('link','/member/customer/wis/load-transaction?c='+$customer_id);
+					$(".count-open-transaction").html(data);
+				}
+			});
+		}
+		else
+		{
+			$(".open-transaction").slideUp();
+		}
 	}
 	function action_load_item_info($this)
 	{
+		// $parent = $this.closest(".tr-draggable");
+		// $parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
+		// $parent.find(".txt-remaining-qty").html($this.find("option:selected").attr("inventory-count") + " pc(s)").change();
+
 		$parent = $this.closest(".tr-draggable");
-		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
-		$parent.find(".txt-remaining-qty").html($this.find("option:selected").attr("inventory-count") + " pc(s)").change();
+		$parent.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
+		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
+		$parent.find(".txt-qty").val(1).change();
+		if($this.find("option:selected").attr("has-um"))
+		{
+			$parent.find(".txt-qty").attr("disabled",true);
+			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
+			{
+				$parent.find(".txt-qty").removeAttr("disabled");
+				$(this).globalDropList("reload").globalDropList("enabled");
+				$(this).val($(this).find("option:first").val()).change();
+			})
+		}
+		else
+		{
+			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+		}
+    	action_compute();
+	}
+	function action_compute()
+	{
+
+		var subtotal = 0;
+		var total_taxable = 0;
+
+
+		$(".tr-draggable").each(function()
+		{
+			/* GET ALL DATA */
+			var qty               = $(this).find(".txt-qty").val();
+			var rate              = $(this).find(".txt-rate").val();
+			var amount            = $(this).find(".txt-amount");
+
+			if(!qty)
+			{
+				qty = 1;
+			}
+
+			/* RETURN TO NUMBER IF THERE IS COMMA */
+			qty 		= action_return_to_number(qty);
+			rate 		= action_return_to_number(rate);
+			var total_per_tr = (qty * rate).toFixed(2);
+
+			/* action_compute SUB TOTAL PER LINE */
+			subtotal += parseFloat(total_per_tr);
+
+
+			var amount_val = amount.val();
+
+			if(amount_val != '' && amount_val != null && total_per_tr == '') //IF QUANTITY, RATE IS [NOT EMPTY]
+			{
+				var sub = parseFloat(action_return_to_number(amount_val));
+				if(isNaN(sub))
+				{
+					sub = 0;
+				}
+				subtotal += sub;
+				total_per_tr = sub;
+				amount.val(action_add_comma(sub));
+			}
+			else //IF QUANTITY, RATE IS [EMPTY]
+			{
+				amount.val(action_add_comma(total_per_tr));
+			}
+
+			$(this).find(".txt-rate").val(action_add_comma(rate.toFixed(2)));
+		});
+
+		/* action_compute TOTAL */
+		var total = 0;
+		total     = subtotal;
+		
+		$(".total-amount").html(action_add_comma(total.toFixed(2)));
+		$(".total-amount-input").val(total.toFixed(2));
+	}
+	function action_add_comma(number)
+	{
+		number += '';
+		if(number == ''){
+			return '';
+		}
+
+		else{
+			return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+	}
+	function action_return_to_number(number = '')
+	{
+		number += '';
+		number = number.replace(/,/g, "");
+		if(number == "" || number == null || isNaN(number)){
+			number = 0;
+		}
+		
+		return parseFloat(number);
 	}
 	function action_lastclick_row()
 	{
@@ -98,6 +285,7 @@ function customer_wis_create()
 	{
 		$("tbody.draggable").append(global_tr_html);
 		action_initialize_select();
+		action_reassign_number();
 	}
 	function event_submit_form()
 	{
@@ -380,9 +568,7 @@ function success_create_customer_wis(data)
 	if(data.status == 'success')
 	{
 		toastr.success('Success');
-		setInterval(function()
-		{
-			location.href = '/member/customer/wis';
-		},2000);
+		location.href = '/member/customer/wis';
+		
 	}
 }

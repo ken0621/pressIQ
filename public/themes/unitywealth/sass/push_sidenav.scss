@@ -67,7 +67,6 @@ $bold: 700;
         
         .profile-img 
         {
-            border-radius: 100%;
             overflow: hidden;
             text-align: center;
             margin: auto;
@@ -75,6 +74,8 @@ $bold: 700;
 
             img 
             {
+                border-radius: 100%;
+                border: 1px solid #fff;
                 width: 100%;
             }
         }
@@ -99,13 +100,13 @@ $bold: 700;
             {
                 color: #fff;
                 font-weight: $regular;
-                font-size: 18px;
+                font-size: 16px;
             }
             .subtext
             {
                 color: rgba(255,255,255,0.5);
                 font-weight: $light;
-                font-size: 15px;
+                font-size: 14px;
             }
         }
     }
@@ -153,7 +154,7 @@ $bold: 700;
             position: relative;
             display: block; /* drops the nav vertically*/
             color: #f1f1f1;
-            font-size: 16px;
+            font-size: 14px;
             text-decoration: none;
             //line-height: 80%;
             //padding: 5px;

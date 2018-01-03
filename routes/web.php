@@ -499,6 +499,10 @@ AdvancedRoute::controller('/member/item/warehouse/rr', 'Member\WarehouseReceivin
 AdvancedRoute::controller('/member/customer/wis', 'Member\CustomerWarehouseIssuanceSlipController');
 /* End */
 
+/* INVENTORY ADJUSTMENT */
+AdvancedRoute::controller('/member/item/warehouse/inventory_adjustment', 'Member\WarehouseInventoryAdjustmentController');
+/* End */
+
 /* START PIS ARCY*/
 Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
 
@@ -718,7 +722,10 @@ Route::get('/member/customer/receive_payment','Member\Customer_ReceivePaymentCon
 Route::get('/member/customer/load_rp/{id}','Member\Customer_ReceivePaymentController@load_customer_rp');
 Route::post('/member/customer/receive_payment/add','Member\Customer_ReceivePaymentController@add_receive_payment');
 Route::post('/member/customer/receive_payment/update/{id}','Member\Customer_ReceivePaymentController@update_receive_payment');
-
+Route::get('/member/customer/receive_payment/apply_credit','Member\Customer_ReceivePaymentController@apply_credit');
+Route::any('/member/customer/receive_payment/apply_credit_submit','Member\Customer_ReceivePaymentController@apply_credit_submit');
+Route::any('/member/customer/receive_payment/load_apply_credit','Member\Customer_ReceivePaymentController@load_apply_credit');
+Route::any('/member/customer/receive_payment/remove_apply_credit','Member\Customer_ReceivePaymentController@remove_apply_credit');
 
 /* CUSTOMER CREDIT MEMO*/
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
@@ -1213,6 +1220,7 @@ include_once('routes_config/routes_item.php');
 /* Members Area */
 include_once('routes_config/routes_members_area.php');
 
+include_once('routes_config/routes_transaction.php');
 
 /*PAYROLL EMPLOYEE*/
 include_once('routes_config/routes_payroll_employee.php');

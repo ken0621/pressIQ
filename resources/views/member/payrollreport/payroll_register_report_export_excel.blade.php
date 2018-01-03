@@ -38,7 +38,7 @@ body{
 
 
 
-<table >
+<table>
   
   <tr>
       <th id="title">{{$company->payroll_company_name}}</th>

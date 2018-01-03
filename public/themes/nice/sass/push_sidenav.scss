@@ -42,15 +42,10 @@ $bold: 700;
     span
     {
         font-family: $display-text;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: $semi-bold;
         color: #fff;
         padding-left: 22px;
-
-        @media screen and (max-width: 768px)
-        {
-            font-size: 15px;
-        }
     }
 
     .profile-img-container
@@ -72,7 +67,7 @@ $bold: 700;
 
         .profile-img 
         {
-            border-radius: 100%;
+            // border-radius: 100%;
             overflow: hidden;
             text-align: center;
             margin: auto;
@@ -81,6 +76,8 @@ $bold: 700;
             img 
             {
                 width: 100%;
+                border: 1px solid #f1f1f1;
+                border-radius: 100%;
             }
         }
         
@@ -104,14 +101,14 @@ $bold: 700;
             {
                 color: #fff;
                 font-weight: $regular;
-                font-size: 18px;
+                font-size: 16px;
             }
 
             .subtext
             {
                 color: rgba(255,255,255,0.5);
                 font-weight: $light;
-                font-size: 15px;
+                font-size: 14px;
             }
         }
     }

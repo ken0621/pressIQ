@@ -595,14 +595,12 @@ class Transaction
     public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0)
     {
         $data = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id);
-        
         if($transaction_id != 0)
         {
             $data = Tbl_transaction_list::where('tbl_transaction_list.transaction_id',$transaction_id)->where('tbl_transaction_list.shop_id',$shop_id);
         }
         
         $data->transaction(); //join table transaction
-        $data->orderBy("transaction_number");
         
         if(isset($transaction_type))
         {
@@ -622,6 +620,14 @@ class Transaction
                 }
             }
         }
+        if($shop_id == 1)
+        {
+            $data->orderBy('transaction_date_created','DESC');
+        }
+        else
+        {
+            $data->orderBy("transaction_number");
+        }
         
         if(session('get_transaction_filter_customer_id'))
         {
@@ -629,15 +635,24 @@ class Transaction
             $data->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
             session()->forget('get_transaction_filter_customer_id');
         }
-        
-        if(isset($search_keyword))
+
+        if(session('get_transaction_customer_details_v2'))
         {
-            $data->where('transaction_number', "LIKE", "%" . $search_keyword . "%");
-            $data->orWhere('first_name', "LIKE", "%" . $search_keyword . "%");
-            $data->orWhere('last_name', "LIKE", "%" . $search_keyword . "%");
-            $data->orWhere('email', "LIKE", "%" . $search_keyword . "%");
+            $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
+            $data->leftJoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id');
+            $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
         }
-        
+
+        if($search_keyword)
+        {
+            $data->where(function($q) use ($search_keyword)
+            {
+                $q->orwhere('transaction_number', "LIKE", "%" . $search_keyword . "%");
+                $q->orWhere('first_name', "LIKE", "%" . $search_keyword . "%");
+                $q->orWhere('last_name', "LIKE", "%" . $search_keyword . "%");
+                $q->orWhere('email', "LIKE", "%" . $search_keyword . "%");
+            });
+        }
         if(session('get_transaction_customer_details'))
         {
             $data->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
@@ -645,24 +660,14 @@ class Transaction
             $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
             $data->groupBy("tbl_customer.customer_id");
         }
-
-        if(session('get_transaction_customer_details_v2'))
-        {
-            $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
-            $data->leftJoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id');
-            $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
-            $data->groupBy("tbl_transaction_list.transaction_list_id");
-        }
-
         if($paginate)
         {
             $data = $data->paginate($paginate);
         }
         else
         {
-            $data = $data->get();
+            $data = $data->groupBy("tbl_transaction_list.transaction_list_id")->get();
         }
-        
         foreach($data as $key => $value)
         {
             $data[$key]->customer_name = Transaction::getCustomerNameTransaction($value->transaction_id);

@@ -174,7 +174,13 @@
                                                                     @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $item->itemline_item_id])
                                                                 </select>
                                                             </td>
-                                                            <td><textarea class="textarea-expand txt-desc" name="itemline_description[]">{{$item->itemline_description}}</textarea></td>
+                                                            <td>
+                                                            @if($pis)
+                                                                <textarea class="textarea-expand txt-desc" readonly="true" name="itemline_description[]">{{$item->itemline_description}}</textarea>
+                                                            @else
+                                                                <textarea class="textarea-expand txt-desc" name="itemline_description[]">{{$item->itemline_description}}</textarea>
+                                                            @endif
+                                                            </td>
                                                             <td>
                                                                 <select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" />
                                                                     @if($item->itemline_um)
@@ -196,7 +202,6 @@
                                                         </tr>
                                                         @endforeach
                                                     @endif
-
                                                 <tbody class="draggable tbody-item po-tbl">
                                                     @include("member.load_ajax_data.load_po_session_item")  
                                                     <tr class="tr-draggable">
@@ -213,7 +218,13 @@
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
                                                         </td>
-                                                        <td><textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea></td>
+                                                        <td> 
+                                                        @if($pis)
+                                                        <textarea class="textarea-expand txt-desc" name="itemline_description[]" readonly="true"></textarea>
+                                                        @else
+                                                        <textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea>
+                                                        @endif
+                                                        </td>
                                                         <td><select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
@@ -270,7 +281,13 @@
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                 </select>
             </td>
-            <td><textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea></td>
+            <td>
+                @if($pis)
+                <textarea class="textarea-expand txt-desc" name="itemline_description[]" readonly="true"></textarea>
+                @else
+                <textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea>
+                @endif
+            </td>
             <td><select class="2222 select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
             <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>

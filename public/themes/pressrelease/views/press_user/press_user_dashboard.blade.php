@@ -8,10 +8,9 @@
                 <div class="col-md-6">
                     <div class="title-container">RECENT RELEASES</div>
                 </div>
-                <div class="col-md-6">
+                <div class="pull-right">
                     <div class="button-container">
-                        <span class="create-button pull-right" ><a href="/pressuser/pressrelease">Create a Press Release</a>
-                      
+                        <span class="create-button" ><a href="/pressuser/pressrelease">Create a Press Release</a>
                     </div>
                 </div>
             </div>

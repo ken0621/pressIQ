@@ -350,15 +350,12 @@ class Accounting
 					case "sales-order": // NON-POSTING
 						break;
 					case "mlm-product-repurchase":
+						break;
 					case "product-order":
+						break;
 					case "sales-receipt":
-					case "invoice":
-						/* INCOME ACCOUNT */
-						$line_data["entry_amount"]	= $entry_line["entry_amount"];
-						$line_data["entry_type"] 	= Accounting::normalBalance($account_income);
-						$line_data["account_id"]	= $account_income;
-						Accounting::insertJournalLine($line_data);
-
+						break;
+					case "warehouse-issuance-slip":
 						if($item->item_type_id == 1) // INVENTORY TYPE
 						{
 							/* EXPENSE ACCOUNT */
@@ -373,6 +370,28 @@ class Accounting
 							$line_data["account_id"] 	= $account_asset;
 							Accounting::insertJournalLine($line_data);
 						}
+						break;
+					case "invoice":
+						/* INCOME ACCOUNT */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::normalBalance($account_income);
+						$line_data["account_id"]	= $account_income;
+						Accounting::insertJournalLine($line_data);
+
+						// if($item->item_type_id == 1) // INVENTORY TYPE
+						// {
+						// 	/* EXPENSE ACCOUNT */
+						// 	$line_data["entry_amount"]	= $item->item_cost;
+						// 	$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
+						// 	$line_data["account_id"] 	= $account_expense;
+						// 	Accounting::insertJournalLine($line_data);
+
+						// 	/* ASSET ACCOUNT */
+						// 	$line_data["entry_amount"]	= $item->item_cost;
+						// 	$line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
+						// 	$line_data["account_id"] 	= $account_asset;
+						// 	Accounting::insertJournalLine($line_data);
+						// }
 
 						if($entry_line["discount"] > 0)
 						{
@@ -400,6 +419,7 @@ class Accounting
 					case "purchase-order": // NON-POSTING
 						break;
 					case "write-check":
+						break;
 					case "bill":
 						if($item->item_type_id == 1) // INVENTORY TYPE
 						{
@@ -435,7 +455,6 @@ class Accounting
 							$line_data["account_id"] 	= $account_expense;
 							Accounting::insertJournalLine($line_data);
 						}
-						break;
 						break;
 					case "credit-memo":
 						/* INCOME ACCOUNT */
@@ -602,6 +621,7 @@ class Accounting
 		{
 			case 'estimate':
 			case 'sales-order':
+			case 'warehouse-issuance-slip':
 			case 'invoice':
 				$data["main_account"]		= 'receivable';
 				$data["name"] 				= 'customer';

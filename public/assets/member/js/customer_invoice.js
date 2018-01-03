@@ -717,17 +717,19 @@ function customer_invoice()
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
 
-		$parent.find(".txt-rate").attr("readonly",false);
-		$parent.find(".txt-discount").attr("disabled",false);
-		if($this.find("option:selected").attr("item-type") == 4)
-		{
-			$parent.find(".txt-rate").attr("readonly",true);
-			$parent.find(".txt-discount").attr("disabled","disabled");
-		}
+		// $parent.find(".txt-rate").attr("readonly",false);
+		// $parent.find(".txt-discount").attr("disabled",false);
+		// if($this.find("option:selected").attr("item-type") == 4)
+		// {
+		// 	$parent.find(".txt-rate").attr("readonly",true);
+		// 	$parent.find(".txt-discount").attr("disabled","disabled");
+		// }
 		if($this.find("option:selected").attr("has-um") != '')
-		{			
+		{
+			$parent.find(".txt-qty").attr("disabled",true);
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
+				$parent.find(".txt-qty").removeAttr("disabled");
 				$(this).globalDropList("reload").globalDropList("enabled");
 				$(this).val($(this).find("option:first").val()).change();
 			})
@@ -744,8 +746,10 @@ function customer_invoice()
 		$parent_cm.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent_cm.find(".txt-qty").val(1).change();
 
+		$parent.find(".txt-qty").attr("disabled",true);
 		if($this.find("option:selected").attr("has-um") != '')
 		{		
+			$parent.find(".txt-qty").removeAttr("disabled");
 			$parent_cm.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$(this).globalDropList("reload").globalDropList("enabled");

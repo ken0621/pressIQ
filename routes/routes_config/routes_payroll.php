@@ -5,8 +5,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	//audit_trail_transaction
 	Route::any('/employee_list/modal_view_all_transaction/{id}/{uid}','Member\PayrollController@modal_view_all_transaction');
 	//audit_trail_transaction
-
 	Route::any('/payroll_api','Member\PayrollApiController@index');
+
 	// /reports/payroll_ledger
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
 	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
@@ -220,7 +220,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/sss_table_list/sss_table_save_default',"Member\PayrollController@sss_table_save_default");
 	/* SSS TABLE END */
 
-
 	/* PHILHEALTH TABLE START */
 	Route::any('/philhealth_table_list',"Member\PayrollController@philhealth_table_list");
 	Route::any('/philhealth_table_list/philhealth_table_save',"Member\PayrollController@philhealth_table_save");
@@ -401,15 +400,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/leave/v2/reload_leave_employeev2',"Member\PayrollController@reload_leave_employeev2");
 
-	
 	Route::any('/leave/v2/modal_save_leave_temp_v2',"Member\PayrollController@modal_save_leave_temp_v2");
-
 	//scheduling leave
-	Route::any('/leave_schedule/v2/save_schedule_leave_tagv2','Member\PayrollController@save_schedule_leave_tagv2')
-	;
+	Route::any('/leave_schedule/v2/save_schedule_leave_tagv2','Member\PayrollController@save_schedule_leave_tagv2');
 
 	Route::any('/leave_schedule/v2/leave_schedule_tag_employeev2/{leave_temp_id}','Member\PayrollController@leave_schedule_tag_employeev2');
-	
 
 	Route::any('/leave_schedule/v2/session_tag_leavev2','Member\PayrollController@session_tag_leavev2');
 
@@ -435,7 +430,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/leave/v2/archived_leave_tempv2',
 		"Member\PayrollController@archived_leave_tempv2");
-	
 	//end schedule
 
 	//reporting leave
@@ -714,4 +708,24 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/*START payroll approve database manipulation*/
 	Route::any('/payroll_time_keeping_approve_manipulation/time_breakdown/{period_company_id}/{employee_id}','Member\PayrollTimeKeepingApproveManipulation@time_breakdown');
 	/*END payroll approve database manipulation*/
+
+	/*START Admin dashboard*/
+	Route::any('/payroll_admin_dashboard/employee_approver','Member\PayrollAdminDashboard@employee_approver');
+	Route::any('/payroll_admin_dashboard/create_approver','Member\PayrollAdminDashboard@create_approver');
+	Route::any('/payroll_admin_dashboard/create_approver_table','Member\PayrollAdminDashboard@create_approver_table');
+	Route::any('/payroll_admin_dashboard/save_approver','Member\PayrollAdminDashboard@save_approver');
+	Route::any('/payroll_admin_dashboard/edit_approver/{approver_id}','Member\PayrollAdminDashboard@modal_edit_approver');
+	Route::any('/payroll_admin_dashboard/save_edit_approver','Member\PayrollAdminDashboard@save_edit_approver');
+	Route::any('/payroll_admin_dashboard/delete_approver/{approver_id}','Member\PayrollAdminDashboard@modal_delete_approver');
+	
+	Route::any('/payroll_admin_dashboard/group_approver','Member\PayrollAdminDashboard@group_approver');
+	Route::any('/payroll_admin_dashboard/modal_create_group_approver','Member\PayrollAdminDashboard@modal_create_group_approver');
+	Route::any('/payroll_admin_dashboard/get_employee_approver_by_level','Member\PayrollAdminDashboard@get_employee_approver_by_level');
+	Route::any('/payroll_admin_dashboard/save_approver_group','Member\PayrollAdminDashboard@save_approver_group');
+	Route::any('/payroll_admin_dashboard/modal_edit_group_approver/{approver_group_id}','Member\PayrollAdminDashboard@modal_edit_group_approver');
+	Route::any('payroll_admin_dashboard/save_edit_group_approver','Member\PayrollAdminDashboard@save_edit_group_approver');
+	Route::any('payroll_admin_dashboard/modal_archive_group_approver/{approver_group_id}','Member\PayrollAdminDashboard@modal_archive_group_approver');
+	
+	
+	/*END Admin dashboard*/
 });

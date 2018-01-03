@@ -20,9 +20,9 @@ class tbl_online_pymnt_gateway extends Seeder
             (5, 'Other', 'other'),
             (6, 'IPay88', 'ipay88'),
             (7, 'E-wallet', 'e_wallet'),   
-            (8, 'Cash on delivery', 'cashondelivery')   
-            (9, 'Manual1', 'manual1')
-            (9, 'Manual2', 'manual2')
+            (8, 'Cash on delivery', 'cashondelivery'),
+            (9, 'Manual1', 'manual1'),
+            (10, 'Manual2', 'manual2')
             ";
 
         DB::statement($statement);

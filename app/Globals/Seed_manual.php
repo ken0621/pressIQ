@@ -890,80 +890,98 @@ class Seed_manual
             $insert[0]['shop_id']   = $shop_id; 
             $insert[0]['key']       = "purchase_order";  
             $insert[0]['prefix']    = "PO"; 
-            $insert[0]['other']  = "Y/m/d"; 
+            $insert[0]['other']     = "Y/m/d"; 
             $insert[0]['separator'] = "-"; 
 
             $insert[1]['shop_id']   = $shop_id; 
             $insert[1]['key']       = "sales_invoice";  
             $insert[1]['prefix']    = "SI"; 
-            $insert[1]['other']  = "Y/m/d";
+            $insert[1]['other']     = "Y/m/d";
             $insert[1]['separator'] = "-";
 
             $insert[2]['shop_id']   = $shop_id; 
-            $insert[2]['key']       = "warehouse_issuance_slip";  
-            $insert[2]['prefix']    = "WIS"; 
-            $insert[2]['other']  = "Y/m/d";
+            $insert[2]['key']       = "customer_warehouse_issuance_slip";
+            $insert[2]['prefix']    = "WC"; 
+            $insert[2]['other']     = "Y/m/d";
             $insert[2]['separator'] = "-";
 
             $insert[3]['shop_id']   = $shop_id; 
-            $insert[3]['key']       = "sales_order";  
+            $insert[3]['key']       = "sales_order";
             $insert[3]['prefix']    = "SO"; 
-            $insert[3]['other']  = "Y/m/d";
+            $insert[3]['other']     = "Y/m/d";
             $insert[3]['separator'] = "-";
 
             $insert[4]['shop_id']   = $shop_id; 
             $insert[4]['key']       = "receiving_report";  
             $insert[4]['prefix']    = "RR"; 
-            $insert[4]['other']  = "Y/m/d"; 
+            $insert[4]['other']     = "Y/m/d"; 
             $insert[4]['separator'] = "-"; 
 
             $insert[5]['shop_id']   = $shop_id; 
             $insert[5]['key']       = "purchase_requisition";  
             $insert[5]['prefix']    = "PR"; 
-            $insert[5]['other']  = "Y/m/d";
+            $insert[5]['other']     = "Y/m/d";
             $insert[5]['separator'] = "-";
 
             $insert[6]['shop_id']   = $shop_id; 
             $insert[6]['key']       = "received_payment";  
             $insert[6]['prefix']    = "RP"; 
-            $insert[6]['other']  = "Y/m/d";
+            $insert[6]['other']     = "Y/m/d";
             $insert[6]['separator'] = "-";
 
             $insert[7]['shop_id']   = $shop_id; 
             $insert[7]['key']       = "received_inventory";  
             $insert[7]['prefix']    = "RI"; 
-            $insert[7]['other']  = "Y/m/d";
+            $insert[7]['other']     = "Y/m/d";
             $insert[7]['separator'] = "-";
 
             $insert[8]['shop_id']   = $shop_id; 
             $insert[8]['key']       = "credit_memo";  
             $insert[8]['prefix']    = "CM"; 
-            $insert[8]['other']  = "Y/m/d"; 
+            $insert[8]['other']     = "Y/m/d"; 
             $insert[8]['separator'] = "-"; 
 
             $insert[9]['shop_id']   = $shop_id; 
             $insert[9]['key']       = "estimate_and_quotation";  
             $insert[9]['prefix']    = "EQ"; 
-            $insert[9]['other']  = "Y/m/d";
+            $insert[9]['other']     = "Y/m/d";
             $insert[9]['separator'] = "-";
 
             $insert[10]['shop_id']   = $shop_id; 
             $insert[10]['key']       = "enter_bills";  
             $insert[10]['prefix']    = "EB"; 
-            $insert[10]['other']  = "Y/m/d";
+            $insert[10]['other']     = "Y/m/d";
             $insert[10]['separator'] = "-";
 
             $insert[11]['shop_id']   = $shop_id; 
             $insert[11]['key']       = "pay_bill";  
             $insert[11]['prefix']    = "PB"; 
-            $insert[11]['other']  = "Y/m/d";
+            $insert[11]['other']     = "Y/m/d";
             $insert[11]['separator'] = "-";
 
             $insert[12]['shop_id']   = $shop_id; 
             $insert[12]['key']       = "write_check";  
-            $insert[12]['prefix']    = "WC"; 
-            $insert[12]['other']  = "Y/m/d";
+            $insert[12]['prefix']    = "CV"; 
+            $insert[12]['other']     = "Y/m/d";
             $insert[12]['separator'] = "-";
+
+            $insert[13]['shop_id']   = $shop_id; 
+            $insert[13]['key']       = "sales_receipt";  
+            $insert[13]['prefix']    = "SR"; 
+            $insert[13]['other']     = "Y/m/d";
+            $insert[13]['separator'] = "-";
+
+            $insert[14]['shop_id']   = $shop_id; 
+            $insert[14]['key']       = "warehouse_transfer";  
+            $insert[14]['prefix']    = "WT"; 
+            $insert[14]['other']     = "Y/m/d";
+            $insert[14]['separator'] = "-";
+
+            $insert[15]['shop_id']   = $shop_id; 
+            $insert[15]['key']       = "inventory_adjustment";  
+            $insert[15]['prefix']    = "ADJ";
+            $insert[15]['other']     = "Y/m/d";
+            $insert[15]['separator'] = "-";
 
             DB::table('tbl_transaction_ref_number')->insert($insert);
 

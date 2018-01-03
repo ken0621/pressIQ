@@ -2,14 +2,6 @@
 
 namespace App\Http\Controllers\Member;
 use Illuminate\Http\Request;
-
-use App\Models\Tbl_warehouse;
-use App\Models\Tbl_user_warehouse_access;
-use App\Models\Tbl_item;
-use App\Models\Tbl_sub_warehouse;
-use App\Models\Tbl_warehouse_inventory;
-use App\Models\Tbl_settings;
-use App\Models\Tbl_customer_wis;
 use Redirect;
 
 use App\Globals\Warehouse2;
@@ -20,6 +12,9 @@ use App\Globals\Pdf_global;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\CustomerWIS;
+use App\Globals\TransactionSalesOrder;
+use App\Globals\TransactionEstimateQuotation;
+use App\Globals\Customer;
 use App\Globals\WarehouseTransfer;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -59,7 +54,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
     {
         $data['page'] = 'CREATE - CUSTOMER WIS';
         $data['_item']  = Item::get_all_category_item([1,5]);
-        $data['_customer'] = CustomerWIS::get_customer($this->user_info->shop_id);
+        $data["_customer"]  = Customer::getAllCustomer();
 
         return view('member.warehousev2.customer_wis.customer_wis_create',$data);
     }
@@ -72,7 +67,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         
         //dd($this->user_info->shop_id);
         $ins_wis['cust_wis_shop_id']                = $shop_id;
-        $ins_wis['cust_wis_number']                 = $request->cust_wis_number;
+        $ins_wis['transaction_refnum']                 = $request->cust_wis_number;
         $ins_wis['cust_wis_from_warehouse']         = Warehouse2::get_current_warehouse($shop_id);
         $ins_wis['cust_wis_remarks']                = $remarks;
         $ins_wis['destination_customer_id']         = $request->customer_id;
@@ -82,24 +77,33 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $ins_wis['created_at']                      = Carbon::now();
 
         $_item = null;
+        $insert_item = null;
         foreach ($items as $key => $value) 
         {
             if($value)
             {
+                $insert_item[$key]['item_id'] = $value;
+                $insert_item[$key]['item_description'] = $request->item_description[$key];
+                $insert_item[$key]['item_qty'] = $request->item_qty[$key];
+                $insert_item[$key]['item_um'] = $request->item_um[$key];
+                $insert_item[$key]['item_rate'] = $request->item_rate[$key];
+                $insert_item[$key]['item_amount'] = $request->item_amount[$key];
+                $insert_item[$key]['item_discount'] = 0;
+
                 $_item[$key] = null;
                 $_item[$key]['item_id'] = $value;
-                $_item[$key]['quantity'] = $request->item_quantity[$key];
-                $_item[$key]['remarks'] = $request->cust_wis_remarks[$key];
+                $_item[$key]['quantity'] = $request->item_qty[$key] * UnitMeasurement::um_qty($insert_item[$key]['item_um']);
+                $_item[$key]['remarks'] = $request->item_description[$key];
+
             }
         }
 
-        $val = CustomerWIS::customer_create_wis($shop_id, $remarks,$ins_wis , $_item);
+        $val = CustomerWIS::customer_create_wis($shop_id, $remarks, $ins_wis, $_item, $insert_item);
         $data = null;
         if(is_numeric($val))
         {
             $data['status'] = 'success';
-            $data['call_function'] = 'success_create_customer_wis';
-            
+            $data['call_function'] = 'success_create_customer_wis';            
         }
         else
         {
@@ -153,99 +157,19 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $pdf = view('member.warehousev2.customer_wis.customer_wis_print', $data);
         return Pdf_global::show_pdf($pdf,null,$data['wis']->cust_wis_number);
     }
-
-    /*public function getReceiveItems(Request $request, $cust_wis_id)
+    public function getCountTransaction(Request $request)
     {
-        $check = CustomerWIS::get_customer_wis_data($cust_wis_id);
-        if($check)
-        {
-            Session::put('cust_wis_id',$cust_wis_id);
-            return redirect('/member/customer/wis/receive-inventory');
-        }
+        $customer_id = $request->customer_id;
+        return CustomerWIS::countTransaction($this->user_info->shop_id, $customer_id);
     }
-
-    public function getReceiveInventory()
+    public function getLoadTransaction(Request $request)
     {
-        $check = CustomerWIS::get_customer_wis_data((Session::get('cust_wis_id')));
-        if($check)
-        {
-            $cust_wis_id = Session::get('cust_wis_id');
+        $data['page'] = "Open Transaction";
 
-            $data['customer_wis'] = CustomerWIS::get_customer_wis_data($cust_wis_id);
-            $data['cust_wis_item'] = CustomerWIS::get_customer_wis_item($cust_wis_id);
-
-            //dd($data);
-            return view('member.warehousev2.customer_wis.customer_wis_receive',$data);
-        }
-        else
-        {
-            return redirect('/member/customer/wis');
-        }
+        $data['_eq'] = TransactionEstimateQuotation::getOpenEQ($this->user_info->shop_id, $request->c);
+        $data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
+        $data['_si'] = null;
+        $data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
+        return view('member.warehousev2.customer_wis.load_transaction', $data);
     }
-
-    public function postReceiveInventorySubmit(Request $request)
-    {
-
-        $shop_id = $this->user_info->shop_id;
-        $ins_rr['rr_shop_id'] = $shop_id;
-        $ins_rr['rr_number'] = $request->rr_number;
-        $ins_rr['cust_wis_id'] = Session::get('cust_wis_id');
-        $ins_rr['warehouse_id'] = Warehouse2::get_current_warehouse($shop_id);
-        $ins_rr['rr_remarks'] = $request->rr_remarks;
-        $ins_rr['created_at'] = Carbon::now();
-
-        $wis_data = CustomerWIS::get_customer_wis_data((Session::get('cust_wis_id')));
-
-        $_item = $request->rr_item_quantity;
-
-        $return = null;
-
-        $items = null;
-        foreach ($_item as $key => $value) 
-        {
-            if($value)
-            {
-                if($request->wis_item_quantity[$key] < $value)
-                {
-                    $return .= "The ITEM no ".$key." is not enough to transfer <br>";
-                }
-
-                $items[$key]['item_id'] = $key;
-                $items[$key]['quantity'] = $value;
-                $items[$key]['remarks'] = 'Transfer item no. '.$key.' from WIS -('.$wis_data->wis_number.')';                
-            }
-        }
-
-        $data = null;
-        if(count($items) > 0)
-        {
-            if(!$return)
-            {
-                $val = CustomerWIS::receive_item($shop_id, $ins_rr['cust_wis_id'], $ins_rr, $items);
-                if(!$val)
-                {
-                    $data['status'] = 'success';
-                    $data['call_function'] = 'success_rr';                
-                }
-                else
-                {
-                    $data['status'] = 'error';
-                    $data['status_message'] = $val;
-                }
-            }
-            else
-            {
-                $data['status'] = 'error';
-                $data['status_message'] = $return;
-            }
-        }
-        else
-        {
-            $data['status'] = 'error';
-            $data['status_message'] = "You don't have any items to receive.";
-        }
-
-        return json_encode($data);
-
-    }*/
 }

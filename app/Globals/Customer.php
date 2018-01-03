@@ -10,6 +10,7 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_mlm_slot_points_log;
+use App\Models\Tbl_terms;
 use App\Globals\Tablet_global;
 use App\Globals\Mlm_plan;
 use App\Globals\CommissionCalculator;
@@ -41,6 +42,10 @@ class Customer
 		//dd($info);
 		Tbl_customer::insert($info);
 		return true;	
+	}
+	public static function getTerms($shop_id, $archived = 0)
+	{
+		return Tbl_terms::where("archived", $archived)->where("terms_shop_id", $shop_id)->get();
 	}
 	public static function scan_customer($shop_id, $id = 0)
 	{
@@ -109,6 +114,16 @@ class Customer
 	public static function get_info($shop_id, $customer_id)
 	{
 		return Tbl_customer::where("customer_id", $customer_id)->where("shop_id", $shop_id)->first();
+	}
+	public static function get_name($shop_id, $customer_id)
+	{
+		$name = "No Customer Found";
+		$customer = Self::get_info($shop_id, $customer_id);
+		if($customer)
+		{
+			$name = $customer->company != "" ? $customer->company : ucwords($customer->first_name.' '.$customer->middle_name.' '.$customer->last_name);
+		}
+		return $name;
 	}
 	public static function getShopId()
     {

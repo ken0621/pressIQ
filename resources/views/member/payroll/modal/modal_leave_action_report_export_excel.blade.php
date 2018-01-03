@@ -1,35 +1,33 @@
-    <h4 class="modal-title"><b>Monthly Leave - {{$month_today_string}}</b> <i><br> Used - Leave Records<br>SL/VL / Summary of all Leave Types<br></i></h4>
+	    <h4 class="modal-title"><b>Leave Action Report </b> <i><br> Leave Action Report </i></h4>
 
     <div class="modal-body clearfix">
                 <div class="table-responsive">
                     <table class="table table-bordered table-condensed">
                         <thead>
                             <tr>
-                                <th class="text-center wa">Leave Name</th> 
+                                <th class="text-center wa">Leave Name</th>
                                 <th class="text-center wa">Employee Code</th>
                                 <th class="text-center empname">Employee Name</th>
-                                <th class="text-center wa">Date of Leave</th>
                                 <th class="text-center wa">Leave Credits</th>
-                                <th class="text-center wa">Number of Hours</th>
-                                <th class="text-center wa">Remaining Leave</th>
-                                <th class="text-center wa">Payment Indicator</th>
+                                <th class="text-center wa">Leave Hours Remaining</th>
+                                <th class="text-center wa">Leave Hours Accumulated</th>
+                                <th class="text-center wa">Cash Converted</th>
+                                <th class="text-center wa">Date</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if(isset($leave_report))
-                            @foreach($leave_report as $leave_data)
-                                @foreach($leave_data as $leave)
+                            @foreach($leave_report as $leave)
                             <tr>
                                 <td class="text-center">{{ $leave->payroll_leave_temp_name }}</td>
                                 <td class="text-center">{{ $leave->payroll_employee_id }}</td>
                                 <td class="text-center">{{ $leave->payroll_employee_display_name }}</td>
-                                <td class="text-center">{{ $leave->payroll_schedule_leave }}</td>
                                 <td class="text-center">{{ $leave->payroll_leave_temp_hours }}</td>
-                                <td class="text-center">{{ $leave->total_leave_consume }}</td>
-                                <td class="text-center">{{ $leave->remaining_leave }}</td>
-                                <td class="text-center">{{ $leave->payroll_leave_temp_with_pay == '1' ? 'P' : 'NP'}}</td>
+                                <td class="text-center">{{ $leave->payroll_leave_hours_remaining }}</td>
+                                <td class="text-center">{{ $leave->payroll_leave_hours_accumulated }}</td>
+                                <td class="text-center">{{ $leave->payroll_leave_cash_converted }}</td>
+                                <td class="text-center">{{ $leave->payroll_report_date_created }}</td>
                             </tr>
-                                 @endforeach
                             @endforeach
                             @endif
                         </tbody>

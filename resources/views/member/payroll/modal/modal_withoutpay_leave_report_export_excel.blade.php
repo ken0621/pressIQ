@@ -1,18 +1,16 @@
-    <h4 class="modal-title"><b>Monthly Leave - {{$month_today_string}}</b> <i><br> Used - Leave Records<br>SL/VL / Summary of all Leave Types<br></i></h4>
+	    <h4 class="modal-title"><b>Without Pay - Leave Records </b> <i><br> Without Pay - Leave Records </i></h4>
 
-    <div class="modal-body clearfix">
+<div class="modal-body clearfix">
                 <div class="table-responsive">
                     <table class="table table-bordered table-condensed">
                         <thead>
                             <tr>
-                                <th class="text-center wa">Leave Name</th> 
+                                <th class="text-center wa">Leave Name</th>
                                 <th class="text-center wa">Employee Code</th>
                                 <th class="text-center empname">Employee Name</th>
-                                <th class="text-center wa">Date of Leave</th>
-                                <th class="text-center wa">Leave Credits</th>
-                                <th class="text-center wa">Number of Hours</th>
+                                <th class="text-center wa">Leave Credits</th> 
+                                <th class="text-center wa">Used Leave without Pay</th>
                                 <th class="text-center wa">Remaining Leave</th>
-                                <th class="text-center wa">Payment Indicator</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -23,11 +21,9 @@
                                 <td class="text-center">{{ $leave->payroll_leave_temp_name }}</td>
                                 <td class="text-center">{{ $leave->payroll_employee_id }}</td>
                                 <td class="text-center">{{ $leave->payroll_employee_display_name }}</td>
-                                <td class="text-center">{{ $leave->payroll_schedule_leave }}</td>
                                 <td class="text-center">{{ $leave->payroll_leave_temp_hours }}</td>
                                 <td class="text-center">{{ $leave->total_leave_consume }}</td>
                                 <td class="text-center">{{ $leave->remaining_leave }}</td>
-                                <td class="text-center">{{ $leave->payroll_leave_temp_with_pay == '1' ? 'P' : 'NP'}}</td>
                             </tr>
                                  @endforeach
                             @endforeach

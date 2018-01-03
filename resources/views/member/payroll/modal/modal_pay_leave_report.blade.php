@@ -2,7 +2,7 @@
 	<input type="hidden" class="_token" value="{{ csrf_token() }}" />
     <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h4 class="modal-title">Remaining Leave Records {{-- {{$month_today_string}} --}}</h4>
+		<h4 class="modal-title">Pay Leave Records {{-- {{$month_today_string}} --}}</h4>
 	</div>
     <div class="panel panel-default panel-block panel-title-block">
         <div class="panel-body form-horizontal">
@@ -35,7 +35,7 @@
                                 <th class="text-center">Employee Code</th>
                                 <th class="text-center">Employee Name</th>
                                 <th class="text-center">Leave Credits</th>
-                                <th class="text-center">Used Leave</th>
+                                <th class="text-center">Used Leave with Pay</th>
                                 <th class="text-center">Remaining Leave</th>
                             </tr>
                         </thead>
@@ -60,7 +60,7 @@
 	</div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-        &nbsp;<a href="/member/payroll/leave/v2/remaining_leave_report_excel"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
+        &nbsp;<a href="/member/payroll/leave/v2/pay_leave_report_excel"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
     </div>
     </div>
 </form>

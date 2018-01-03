@@ -2,7 +2,7 @@
 	<input type="hidden" class="_token" value="{{ csrf_token() }}" />
     <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h4 class="modal-title">Remaining Leave Records {{-- {{$month_today_string}} --}}</h4>
+		<h4 class="modal-title">Leave Action Report {{-- {{$month_today_string}} --}}</h4>
 	</div>
     <div class="panel panel-default panel-block panel-title-block">
         <div class="panel-body form-horizontal">
@@ -32,26 +32,28 @@
                         <thead>
                             <tr>
                                 <th class="text-center">Leave Name</th>
-                                <th class="text-center">Employee Code</th>
+                                <th class="text-center" width="30">Employee Code</th>
                                 <th class="text-center">Employee Name</th>
-                                <th class="text-center">Leave Credits</th>
-                                <th class="text-center">Used Leave</th>
-                                <th class="text-center">Remaining Leave</th>
+                                <th class="text-center" width="10">Leave Credits</th>
+                                <th class="text-center" width="10">Leave Hours Remaining</th>
+                                <th class="text-center" width="10">Leave Hours Accumulated</th>
+                                <th class="text-center" width="10">Cash Converted</th>
+                                <th class="text-center">Date</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if(isset($leave_report))
-                 			@foreach($leave_report as $leave_data)
-                                @foreach($leave_data as $leave)
+                 			@foreach($leave_report as $leave)
                         	<tr>
                                 <td class="text-center">{{ $leave->payroll_leave_temp_name }}</td>
                         		<td class="text-center">{{ $leave->payroll_employee_id }}</td>
                         		<td class="text-center">{{ $leave->payroll_employee_display_name }}</td>
-                        		<td class="text-center">{{ $leave->payroll_leave_temp_hours }}</td>
-                        		<td class="text-center">{{ $leave->total_leave_consume }}</td>
-                        		<td class="text-center">{{ $leave->remaining_leave }}</td>
+                                <td class="text-center">{{ $leave->payroll_leave_temp_hours }}</td>
+                        		<td class="text-center">{{ $leave->payroll_leave_hours_remaining }}</td>
+                        		<td class="text-center">{{ $leave->payroll_leave_hours_accumulated }}</td>
+                        		<td class="text-center">{{ $leave->payroll_leave_cash_converted }}</td>
+                                <td class="text-center">{{ $leave->payroll_report_date_created }}</td>
                         	</tr>
-                                 @endforeach
                         	@endforeach
                             @endif
                         </tbody>
@@ -60,7 +62,7 @@
 	</div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-        &nbsp;<a href="/member/payroll/leave/v2/remaining_leave_report_excel"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
+        &nbsp;<a href="/member/payroll/leave/v2/leave_action_report_excel"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
     </div>
     </div>
 </form>

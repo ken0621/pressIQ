@@ -26,19 +26,6 @@
             </select>
         </div>
     </div>
-    
-    <div class="tab-content codes_container">
-        <div id="all" class="tab-pane fade in active">
-            <div class="form-group order-tags"></div>
-            <div class="clearfix">
-                <div class="col-md-12">
-                    <div class="table-responsive load-table-employee-list">
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 </div>
 <script type="text/javascript" src="/assets/member/js/payroll/payroll_timekeeping.js?version=10"></script>

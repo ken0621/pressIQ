@@ -110,7 +110,7 @@ class TransactionReceiveInventoryController extends Member
     public function getCountTransaction(Request $request)
     {
         $vendor_id = $request->vendor_id;
-        return TransactionDebitMemo::countTransaction($this->user_info->shop_id, $vendor_id);
+        return TransactionReceiveInventory::countTransaction($this->user_info->shop_id, $vendor_id);
     }
     public function getLoadTransaction(Request $request)
     {

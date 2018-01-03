@@ -52,7 +52,7 @@ class TransactionEnterBills
                 /* Transaction Journal */
                 $entry["reference_module"]  = "bill";
                 $entry["reference_id"]      = $receive_inventory_id;
-                $entry["name_id"]           = $ins['bill_vendor_id'];
+                $entry["name_id"]           = $insert['vendor_id'];
                 $entry["total"]             = collect($insert_item)->sum('item_amount');
                 $entry["vatable"]           = '';
                 $entry["discount"]          = '';

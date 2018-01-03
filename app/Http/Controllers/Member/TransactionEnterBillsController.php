@@ -14,7 +14,6 @@ use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_terms;
 
-use App\Globals\TransactionEnterBills;
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
@@ -27,6 +26,8 @@ use App\Globals\Utilities;
 use App\Globals\Pdf_global;
 use App\Globals\ItemSerial;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\TransactionEnterBills;
+use App\Globals\TransactionPurchaseOrder;
 
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
@@ -108,9 +109,11 @@ class TransactionEnterBillsController extends Member
         $vendor_id = $request->vendor_id;
         return TransactionEnterBills::countTransaction($this->user_info->shop_id, $vendor_id);
     }
-    public function getLoadTransaction()
+    public function getLoadTransaction(Request $request)
     {
-        dd('Wail Langs!');
+        $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
+        $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
+        return view('member.accounting_transaction.vendor.enter_bills.load_transaction', $data);
     }
     
 }

@@ -84,12 +84,11 @@ class Vendor_CheckController extends Member
             if($value->wc_reference_name == "customer")
             {
                 $c_data = Tbl_customer::where("customer_id",$value->wc_reference_id)->first();
-                $name = isset($c_data) ? ($c_data->company != "" ? $c_data->company : $v_data->first_name." ".$c_data->last_name) : "";
+                $name = isset($c_data) ? ($c_data->company != "" ? $c_data->company : $c_data->first_name." ".$c_data->last_name) : "";
             }
 
             $data["_check"][$key]->name = $name;
         }
-
 
         return view("member.vendor.check.check_list",$data);
     }

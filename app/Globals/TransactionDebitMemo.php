@@ -3,6 +3,8 @@ namespace App\Globals;
 
 use App\Models\Tbl_debit_memo;
 use App\Models\Tbl_debit_memo_line;
+use App\Models\Tbl_customer_estimate;
+use App\Models\Tbl_requisition_slip_item;
 
 use App\Globals\AccountingTransaction;
 
@@ -27,10 +29,10 @@ class TransactionDebitMemo
         return Tbl_debit_memo::Vendor()->where('db_shop_id',$shop_id)->get();
     }
 
-    public static function countTransaction()
+    public static function countTransaction($shop_id)
     {
     	$count_so = Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->count();
-        $count_pr = Tbl_requisition_slip::where('shop_id',$shop_id)->where("requisition_slip_status","open")->count();
+        $count_pr = Tbl_requisition_slip_item::PRInfo('shop_id',$shop_id)->where("requisition_slip_status","open")->count();
         
         $return = $count_so + $count_pr;
         return $return;

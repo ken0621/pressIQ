@@ -116,7 +116,7 @@ function purchase_order()
 				success : function(data)
 				{
 					$(".open-transaction").slideDown();
-					$(".popup-link-open-transaction").attr('link','/member/transaction/enter_bills/load-transaction?v='+$vendor_id);
+					$(".popup-link-open-transaction").attr('link','/member/transaction/enter_bills/load-transaction?vendor='+$vendor_id);
 					$(".count-open-transaction").html(data);
 				}
 			});

@@ -16,6 +16,7 @@ use App\Globals\TransactionPurchaseOrder;
 use App\Globals\TransactionPurchaseRequisition;
 use App\Globals\AccountingTransaction;
 use App\Globals\TransactionSalesOrder;
+use App\Globals\TransactionDebitMemo;
 
 use App\Models\Tbl_customer;
 use App\Models\Tbl_warehousea;
@@ -61,7 +62,7 @@ class TransactionPurchaseOrderController extends Member
 
         $data['action']     = "/member/transaction/purchase_order/create-purchase-order";
 
-        $data['count_transaction'] = TransactionPurchaseOrder::countTransaction($shop_id);
+        $data['count_transaction'] = TransactionDebitMemo::countTransaction($shop_id);
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order', $data);
     }
 
@@ -127,7 +128,7 @@ class TransactionPurchaseOrderController extends Member
     {
         $data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
         $data['_pr'] = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
-
+        //dd($data['_pr']);
         return view('member.accounting_transaction.vendor.purchase_order.load_transaction', $data);
     }
 }

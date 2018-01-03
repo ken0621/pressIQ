@@ -18,12 +18,4 @@ class Tbl_write_check extends Model
     {
         return $query->leftjoin('tbl_customer', 'tbl_write_check.wc_reference_id', '=', 'tbl_customer.customer_id');
     }
-    public function scopegetVendor($query)
-    {
-        return $query->join('tbl_vendor', 'tbl_write_check.wc_reference_id', '=', 'tbl_vendor.vendor_id');
-    }
-    public function scopegetCustomer($query)
-    {
-        return $query->join('tbl_customer', 'tbl_write_check.wc_reference_id', '=', 'tbl_customer.customer_id');
-    }
 }

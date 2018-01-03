@@ -78,13 +78,14 @@ class TransactionDebitMemoController extends Member
             }
         }
 
+        $validate = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
+
         $return = null;
-        $validate = TransactionDebitMemo::postInsert($this->user_info->shop_id, $insert, $insert_item);
-        if(is_numeric($validate))
+        if($validate)
         {
             $return['status'] = 'success';
-            $return['status_message'] = 'Success creating debit memo.';
-            $return['call_function'] = 'success_debit_memo';
+            $return['status_message'] = 'Success creating purchase order.';
+            $return['call_function'] = 'success_purchase_order';
             $return['status_redirect'] = AccountingTransaction::get_redirect('debit_memo', $validate ,$btn_action);
         }
         else
@@ -92,8 +93,9 @@ class TransactionDebitMemoController extends Member
             $return['status'] = 'error';
             $return['status_message'] = $validate;
         }
-
         return json_encode($return);
+
+
     }
 
     public function getCountTransaction(Request $request)

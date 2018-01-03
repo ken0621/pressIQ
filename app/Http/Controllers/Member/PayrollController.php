@@ -127,6 +127,7 @@ class PayrollController extends Member
           }
 
      }
+     
      //audit_trail_view_all
      public function modal_view_all_transaction($id,$uid)
      {

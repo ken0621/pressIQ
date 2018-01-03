@@ -18,6 +18,7 @@ use App\Models\Tbl_payroll_shift_time;
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_leave_schedulev3;
 
+
 use App\Globals\Payroll2;
 use App\Globals\Payroll;
 use App\Globals\Utilities;
@@ -44,7 +45,7 @@ class EmployeeController extends PayrollMember
 	public function employee()
 	{
 		$data['page']	= 'Dashboard';
-		
+					 				  		
 		return view('member.payroll2.employee_dashboard.employee',$data);
 	}
 	public function company_details()
@@ -417,6 +418,10 @@ class EmployeeController extends PayrollMember
 	{
 		$data['page']		= 'Employee Leave Application';
         $data["company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
+
+	      $emp = Tbl_payroll_employee_contract::employeefilter($company = 0, $department = 0, $jobtitle = 0, date('Y-m-d'), Self::shop_id())->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->groupBy('tbl_payroll_employee_basic.payroll_employee_id')->get();
+
+
     	return view('member.payroll2.employee_dashboard.employee_leave_application',$data);
     }
     public function create_employee_leave()

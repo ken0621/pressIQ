@@ -20,20 +20,20 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-6">
     <div class="tab-content">
-    <form class="global-submit" method="post" action="/member/merchant/commission-report">
     {!! csrf_field() !!}
         <div id="all-orders" class="tab-pane fade in active">
-            <div class="panel-heading">
-            <center>Commission Settings</center>
-            <div class="col-md-12">
-                <label>Commission Percentage</label>
-                <input type="number" min="0" value="{{$percentage}}" class="form-control commission-percentage" name="merchant_commission_percentage">
-                <hr>
-                <button class="btn btn-primary pull-right">Save</button>
-            </div>
-            </div>
-        </div>
-    </form>    
+            <form method="post">
+                <div class="panel-heading">
+                <center>Commission Settings</center>
+                <div class="col-md-12">
+                    <label>Commission Percentage</label>
+                    <input type="number" min="0" value="{{$percentage}}" class="form-control commission-percentage" name="merchant_commission_percentage">
+                    <hr>
+                    <button onclick="return false" class="btn btn-primary popup pull-right" size='md' link="/member/merchant/commission-report-pass">Save</button>
+                </div>
+                </div>
+            </form>
+        </div>   
     </div>
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-12"  style="margin-bottom: -10px;">

@@ -177,7 +177,7 @@ function receive_payment()
 	function action_update_apply_amount($amount)
 	{
 		$(".amount-to-apply").val($amount);
-		amount_due = $amount;
+		amount_due = formatFloat($amount);
 		$(".amount-apply").html("PHP "+formatMoney($amount))
 
 		compute_total();
@@ -237,7 +237,7 @@ function receive_payment()
 		var return_number = $this;
 		if($this)
 		{
-			return_number = Number($this.toString().replace("",","));
+			return_number = Number($this.toString().replace(",",""));
 		} 
 		return return_number;
 	}

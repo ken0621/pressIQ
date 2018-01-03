@@ -234,8 +234,7 @@ function receive_payment()
 
 	function formatFloat($this)
 	{
-		// Number($this.toString().replace(/[^0-9\.]+/g,""));
-		return Number($this);
+		return Number($this.toString().replace(/[^0-9\.]+/g,""));
 	}
 
 	function formatMoney_2($this)

@@ -65,10 +65,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @if($_invoices_paid)
+                    @if(count($_invoices_paid) > 0)
                         @foreach($_invoices_paid as $invoice)
                             <tr>
-                                <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
+                                <td>
+                                    {{$invoice->company}} <br>
+                                    <small> {{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</small>
+                                </td>
                                 <td>{{$invoice->new_inv_id}}</td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
                                 <td>{{currency("PHP",$invoice->inv_balance)}}</td>
@@ -94,6 +97,8 @@
                                 </td>
                             </tr>
                         @endforeach
+                    @else
+                        <tr><td colspan="6" class="text-center">NO PROCESS YET</td></tr>
                     @endif
                     </tbody>
                 </table>
@@ -114,10 +119,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @if($_invoices_unpaid)
+                    @if(count($_invoices_unpaid) > 0)
                         @foreach($_invoices_unpaid as $invoice)
                             <tr>
-                                <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
+                                <td>
+                                    {{$invoice->company}} <br>
+                                    <small> {{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</small>
+                                </td>
                                 <td>{{$invoice->new_inv_id}}</td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
                                 <td>{{currency("PHP",$invoice->inv_balance)}}</td>
@@ -143,6 +151,8 @@
                                 </td>
                             </tr>
                         @endforeach
+                    @else
+                        <tr><td colspan="6" class="text-center">NO PROCESS YET</td></tr>
                     @endif
                     </tbody>
                 </table>
@@ -163,10 +173,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @if($_invoices)
+                    @if(count($_invoices) > 0)
                         @foreach($_invoices as $invoice)
                             <tr>
-                                <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
+                                <td>
+                                    {{$invoice->company}} <br>
+                                    <small> {{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</small>
+                                </td>
                                 <td>{{$invoice->new_inv_id}}</td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
                                 <td>{{currency("PHP",$invoice->inv_balance)}}</td>
@@ -192,6 +205,8 @@
                                 </td>
                             </tr>
                         @endforeach
+                    @else
+                        <tr><td colspan="6" class="text-center">NO PROCESS YET</td></tr>
                     @endif
                     </tbody>
                 </table>
@@ -234,7 +249,9 @@
                         @foreach($_invoices_paid as $invoice)
                             <tr>
                                 <td>{{$invoice->new_inv_id}}</td>
-                                <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
+                                <td>{{$invoice->company}} <br>
+                                    <small> {{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</small>
+                                </td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
                                 <td>
                                     @if($invoice->inv_is_paid == 0)
@@ -281,7 +298,10 @@
                         @foreach($_invoices_unpaid as $invoice)
                             <tr>
                                 <td>{{$invoice->new_inv_id}}</td>
-                                <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
+                                <td>
+                                    {{$invoice->company}} <br>
+                                    <small> {{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</small>
+                                </td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
                                 <td>
                                     @if($invoice->inv_is_paid == 0)
@@ -328,7 +348,10 @@
                         @foreach($_invoices as $invoice)
                             <tr>
                                 <td>{{$invoice->new_inv_id}}</td>
-                                <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
+                                <td>
+                                    {{$invoice->company}} <br>
+                                    <small> {{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</small>
+                                </td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
                                 <td>
                                     @if($invoice->inv_is_paid == 0)

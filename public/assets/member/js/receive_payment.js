@@ -288,7 +288,7 @@ function receive_payment()
 	function compute_total()
 	{		
 		$(".applied-total-amount").val(parseFloat(amount_due) - parseFloat(amount_credit));
-		$('.applied-amount').html('PHP ' + formatMoney_2(parseFloat(amount_due) - parseFloat(amount_credit));
+		$('.applied-amount').html('PHP ' + formatMoney_2(parseFloat(amount_due) - parseFloat(amount_credit)));
 		console.log(parseFloat(amount_due) - parseFloat(amount_credit));
 	}
 	this.event_compute_apply_credit = function()

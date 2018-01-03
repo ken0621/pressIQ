@@ -237,7 +237,7 @@ function receive_payment()
 		var return_number = $this;
 		if($this)
 		{
-			return_number = Number($this.toString().replace(/[^0-9\.]+/g,""));
+			return_number = Number($this.toString().replace("",","));
 		} 
 		return return_number;
 	}

@@ -11,7 +11,8 @@
                 List of Sold Property
             </small>
             </h1>
-            <div class="dropdown pull-right">
+            <div class="dropdown pull-right">            
+                <a class="btn btn-def-white btn-custom-white" href="/member/cashier/commission_calculator/import"><i class="fa fa-check"></i> Import Transaction</a>
                 <button class="btn btn-primary popup" size="lg" link="/member/cashier/commission_calculator/create"><i class="fa fa-star"></i> Calculate Commission</button>
             </div>
         </div>

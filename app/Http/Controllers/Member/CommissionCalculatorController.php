@@ -70,4 +70,19 @@ class CommissionCalculatorController extends Member
         $data['_item'] = Item::get_all_category_item([2]);
         return view('member.load_ajax_data.load_item_category',$data);
     }
+    public function getImport(Request $request)
+    {
+        return view('member.cashier.commission_calculator.import_transaction');        
+    }
+
+    /* Do not Remove */
+    public function postImportUrl()
+    {
+
+    }
+    public function postImportReadFile(Request $request)
+    {
+        die(var_dump($request->value));
+
+    }
 }

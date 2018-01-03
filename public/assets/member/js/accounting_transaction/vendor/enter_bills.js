@@ -334,7 +334,7 @@ function purchase_order()
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("purchase-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-qty").val(1).change();
-		console.log($this.find("option:selected").attr("item-type"));
+		//console.log($this.find("option:selected").attr("item-type"));
 		
 
 		if($this.find("option:selected").attr("has-um"))
@@ -518,6 +518,15 @@ function success_item(data)
 
 		data.element.modal("hide");
 	});
+}
+
+function success_enter_bills(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
 }
 
 function add_po_to_bill(po_id)

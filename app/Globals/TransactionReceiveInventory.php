@@ -27,7 +27,6 @@ class TransactionReceiveInventory
     
 	public static function postInsert($shop_id, $insert, $insert_item)
 	{
-
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);
         if(!$val)
         {
@@ -50,7 +49,6 @@ class TransactionReceiveInventory
 
             /*INSERT RI HERE*/
             $receive_inventory_id = Tbl_receive_inventory::insertGetId($ins);
-            $receive_inventory_id = 0;
 
             /* Transaction Journal */
             $entry["reference_module"]  = "receive-inventory";

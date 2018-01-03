@@ -92,6 +92,7 @@ class TransactionReceiveInventoryController extends Member
         
         $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
+        $return = null;
         if(is_numeric($validate))
         {
             $return['status'] = 'success';
@@ -105,7 +106,7 @@ class TransactionReceiveInventoryController extends Member
             $return['status_message'] = $validate;
         }
 
-        return $return;
+        return json_encode($return);
     }
     public function getCountTransaction(Request $request)
     {

@@ -7,15 +7,6 @@
 
     <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
 
-    <div class="drawer drawer-default">
-        <div class="drawer-brand">Purchase Order</div>
-        <nav class="drawer-nav">
-            <div class="clearfix purchase-order-container">
-                @include('member.load_ajax_data.load_purchase_order')
-            </div>   
-        </nav>
-    </div>
-
 <!--<div class="panel panel-default panel-block panel-title-block purchase-order hidden">
         <div class="panel-heading">
              <div class="form-group">
@@ -335,11 +326,10 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
 
 <script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/enter_bills.js"></script>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 
     $("#acct-a").click(function()
     {
@@ -356,7 +346,7 @@ $(document).ready(function() {
     desktopEvent:'click'
   });
 });
-</script>
+</script> -->
 
 @endsection
 

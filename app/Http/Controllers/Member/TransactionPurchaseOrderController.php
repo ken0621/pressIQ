@@ -109,7 +109,7 @@ class TransactionPurchaseOrderController extends Member
         $validate = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
         $return = null;
-        if($validate)
+        if(is_numeric($validate))
         {
             $return['status'] = 'success';
             $return['status_message'] = 'Success creating purchase order.';

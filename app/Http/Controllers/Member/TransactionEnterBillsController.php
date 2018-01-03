@@ -58,7 +58,7 @@ class TransactionEnterBillsController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
-        $data['action']     = '/member/transactio/create-enter-bills';
+        $data['action']     = '/member/transaction/enter_bills/create-enter-bills';
         
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills', $data);
     }
@@ -92,9 +92,13 @@ class TransactionEnterBillsController extends Member
 
         $validate = TransactionEnterBills::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
-        if(is_numeric($validate))
+        $return = null;
+        if($validate)
         {
-
+            $return['status'] = 'success';
+            $return['status_message'] = 'Success creating bills.';
+            $return['call_function'] = 'success_enter_bills';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('enter_bills', $validate ,$btn_action);
         }
         else
         {
@@ -102,7 +106,7 @@ class TransactionEnterBillsController extends Member
             $return['status_message'] = $validate;
         }
 
-        return $return;
+        return json_encode($return);
     }
     public function getCountTransaction(Request $request)
     {

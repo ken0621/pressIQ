@@ -41,6 +41,7 @@ class TransactionDebitMemo
     public static function postInsert($shop_id, $insert, $insert_item)
     {
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        //die(var_dump($val));
         if(!$val)
         {
             $ins['db_shop_id']          = $shop_id;
@@ -55,8 +56,7 @@ class TransactionDebitMemo
             $total = collect($insert_item)->sum('item_amount');
             $ins['db_amount'] = $total;
 
-            /* INSERT DM IN DATABASE */
-            $dm_id = Tbl_debit_memo::insertGetId($ins);
+            
 
             /* Transaction Journal */
             $entry["reference_module"]  = "debit-memo";
@@ -67,8 +67,10 @@ class TransactionDebitMemo
             $entry["discount"]          = '';
             $entry["ewt"]               = '';
 
-            $return = Self::insertLine($dm_id, $insert_item, $entry);
+            /* INSERT DM IN DATABASE */
+            $dm_id = Tbl_debit_memo::insertGetId($ins);
             $return = $dm_id;
+            //$return = Self::insertLine($dm_id, $insert_item, $entry);
         }
         else
         {
@@ -95,7 +97,7 @@ class TransactionDebitMemo
         }
         if(count($itemline) > 0)
         {
-            Tbl_debit_memo_line::insert($itemline);
+            //Tbl_debit_memo_line::insert($itemline);
             $return = AccountingTransaction::entry_data($entry, $insert_item);
         }
 

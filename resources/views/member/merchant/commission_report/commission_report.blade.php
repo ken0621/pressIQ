@@ -74,7 +74,6 @@
 </div>
 @endsection
 <script type="text/javascript" src="/assets/themes/js/jquery.min.js?v=1"></script>
-<script type="text/javascript" src="/assets/js/commission_report.js?v=9"></script>
 <script type="text/javascript">
     function success(data)
     {

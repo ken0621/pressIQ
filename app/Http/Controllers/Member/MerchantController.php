@@ -624,6 +624,7 @@ class MerchantController extends Member
 
 		$data['totalcommission'] = $total*($commission/100);
 		// dd($data['table']);
+		// dd($warehouse_id);
 		return view('member.merchant.commission_report.commission_report_table',$data);
 	}
 

@@ -12,7 +12,7 @@
     <input type="hidden" name="" class="google_app_id" value="{{$google_app_id or ''}}">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" href="/themes/{{ $shop_theme }}/img/icon-logo.png" type="image/png" />
 
     <!-- FONTS -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">

@@ -66,7 +66,7 @@ class Tbl_warehouse extends Model
     }
     public function scopeselect_info($query, $shop_id = 0, $archived = 0)
     {
-        $query->selectRaw('*, tbl_warehouse.warehouse_id as warehouse_id, sum(tbl_warehouse_inventory.inventory_count) as total_qty')
+        $query->selectRaw('*, tbl_warehouse.warehouse_id as warehouse_id')
                     ->where("tbl_warehouse.archived",$archived)
                     ->where("tbl_warehouse.warehouse_shop_id", $shop_id);
         return $query;

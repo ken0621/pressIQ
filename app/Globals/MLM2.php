@@ -26,6 +26,8 @@ use App\Globals\Mlm_complan_manager_cd;
 use App\Globals\Mlm_compute;
 use App\Globals\Warehouse2;
 use App\Globals\Mlm_slot_log;
+use App\Models\Tbl_mlm_point_log_setting;
+
 
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
@@ -352,17 +354,58 @@ class MLM2
 
 			foreach($_slot_wallet as $slot_wallet)
 			{
-				$wallet_plan = strtolower("complan_" .$slot_wallet->wallet_log_plan);
-
-				if(!isset($return["_wallet"]->$wallet_plan))
+				if($slot_wallet->wallet_log_plan == "DIRECT_PASS_UP")
 				{
-					$return["_wallet"]->$wallet_plan = $slot_wallet->wallet_log_amount;
+					$proceed_passup_direct = 0;
+					$check_level_tree = Tbl_tree_sponsor::where("sponsor_tree_child_id",$slot_wallet->wallet_log_slot_sponsor)->where("sponsor_tree_parent_id",$slot->slot_id)->first();
+					if($check_level_tree)
+					{
+						if($check_level_tree->sponsor_tree_level == 1)
+						{
+							$proceed_passup_direct = 1;
+						}
+					}
+
+					if($proceed_passup_direct == 1)
+					{
+						$wallet_plan = strtolower("complan_DIRECT");
+
+						if(!isset($return["_wallet"]->$wallet_plan))
+						{
+							$return["_wallet"]->$wallet_plan = $slot_wallet->wallet_log_amount;
+						}
+						else
+						{
+							$return["_wallet"]->$wallet_plan += $slot_wallet->wallet_log_amount;
+						}	
+					}
+					else
+					{
+						$wallet_plan = strtolower("complan_" .$slot_wallet->wallet_log_plan);
+
+						if(!isset($return["_wallet"]->$wallet_plan))
+						{
+							$return["_wallet"]->$wallet_plan = $slot_wallet->wallet_log_amount;
+						}
+						else
+						{
+							$return["_wallet"]->$wallet_plan += $slot_wallet->wallet_log_amount;
+						}	
+					}
 				}
 				else
 				{
-					$return["_wallet"]->$wallet_plan += $slot_wallet->wallet_log_amount;
+					$wallet_plan = strtolower("complan_" .$slot_wallet->wallet_log_plan);
+
+					if(!isset($return["_wallet"]->$wallet_plan))
+					{
+						$return["_wallet"]->$wallet_plan = $slot_wallet->wallet_log_amount;
+					}
+					else
+					{
+						$return["_wallet"]->$wallet_plan += $slot_wallet->wallet_log_amount;
+					}	
 				}
-				
 			}
 
 			$_slot_points = Tbl_mlm_slot_points_log::where("points_log_slot", $slot->slot_id)->get();
@@ -437,7 +480,7 @@ class MLM2
 
 		return $string;
 	}
-	public static function customer_direct($shop_id, $customer_id, $limit = 10)
+	public static function customer_direct($shop_id, $customer_id, $limit = 10,$paginate = 0)
 	{
 		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
 
@@ -451,9 +494,19 @@ class MLM2
 			}
 		});
 
-		$query->limit($limit);
-
-		$_direct = $query->orderBy("slot_id", "desc")->get();
+		if($limit!=0)
+		{
+			$query->limit($limit);
+		}
+		if($paginate!=0)
+		{
+			$_direct = $query->orderBy("slot_id", "desc")->paginate($paginate);
+		}
+		else
+		{
+			$_direct = $query->orderBy("slot_id", "desc")->get();
+		}
+		
 
 		foreach($_direct as $key => $direct)
 		{
@@ -522,7 +575,14 @@ class MLM2
 		
 		if($sort_by != "0")
 		{
-			$query = $query->where("points_log_type",$sort_by);
+			if($sort_by == 'RPV')
+			{
+				$query = $query->whereIn("points_log_type",array('RPV','RGPV'));
+			}
+			else
+			{
+				$query = $query->where("points_log_type",$sort_by);
+			}
 		}
 
 		if($limit == 0)
@@ -544,7 +604,7 @@ class MLM2
 			$_reward[$key]->log_amount = number_format($reward->points_log_points,2);
 			$_reward[$key]->time_ago = time_ago($reward->points_log_date_claimed);
 			$_reward[$key]->display_date = date("F d, Y", strtotime($reward->points_log_date_claimed));
-			$_reward[$key]->log = Self::customer_rewards_points_contructor($reward);
+			$_reward[$key]->log = Self::customer_rewards_points_contructorV2($reward);
 			$_reward[$key]->slot_no = $reward_slot->slot_no;
 			$_reward[$key]->points_log_type = $reward->points_log_type;
 		}
@@ -563,6 +623,40 @@ class MLM2
 		{
 			return "---";
 		}
+	}
+	public static function customer_rewards_points_contructorV2($reward)
+	{
+		$from_slot = Tbl_mlm_slot::where("slot_id",$reward->points_log_Sponsor)->first();
+		$query = Tbl_mlm_point_log_setting::where("point_log_setting_type",$reward->points_log_type)->first();
+		$message="No Details";
+		if(count($query)>0)
+		{
+			$message="";
+			$template = $query->point_log_notification;
+			$notif = explode('/', $template);
+			foreach ($notif as $t)
+			{
+				if($t == '_slot_no')
+				{
+					$message.=$reward->slot_no;
+				}
+				else if($t == '_sponsor_slot_no')
+				{
+					$message.=$from_slot->slot_no;
+				}
+				else if($t == '_amount')
+				{
+					$message.=$reward->log_amount;
+				}
+				else
+				{
+					$message.=$t;
+				}
+			}
+		}
+		
+
+		return $message;
 	}
 	public static function customer_total_payout($customer_id)
 	{

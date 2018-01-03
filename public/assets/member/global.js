@@ -19,7 +19,7 @@ function global()
         add_event_global_submit();
         add_event_global_onclose_popup();
         add_event_overlay_fix();
-        select_current_warehouse();
+        // select_current_warehouse();
         add_event_global_submit_for_page();
 
         action_global_search();
@@ -68,7 +68,6 @@ function global()
             type:"post",
             success: function(data)
             {
-
                 data.element = modal;
 				if(data.response_status == "error")
 				{
@@ -257,8 +256,11 @@ function global()
             return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
         }
     }
-}
+    function load_select_warehouse()
+    {        
 
+    }
+}
 function error_popup(title, message)
 {
     $(".modal-title").text(title);
@@ -383,29 +385,28 @@ function add_event_overlay_fix()
     });
 }
 
-function select_current_warehouse()
+function select_current_warehouse($this)
 {
-    $(".warehouse_loader_container").on("change",".select_current_warehouse",function()
-    {
-        $.ajax({
-            url:"/member/change_warehouse",
-            dataType:"json",
-            data: {_token: $(".token").val(), change_warehouse: $(this).val()},
-            type:"post",
-            success: function(data)
+    console.log($this.val());
+    $.ajax({
+        url:"/member/change_warehouse",
+        dataType:"json",
+        data: {_token: $(".token").val(), change_warehouse: $this.val()},
+        type:"post",
+        success: function(data)
+        {
+            if(data.response == "success")
             {
-                if(data.response == "success")
-                {
-                    // $('.select_current_warehouse').load(document.URL +  ' .select_current_warehouse');
-                    $('.warehouse-access-name').load(document.URL +  ' .warehouse-access-name');
-                }
-            },
-            error: function()
-            {
-                
+                // $('.select_current_warehouse').load(document.URL +  ' .select_current_warehouse');
+                $('.warehouse-access-name').load(document.URL +  ' .warehouse-access-name');
+                commission_report.action_change_warehouse();
             }
-        })
-    });
+        },
+        error: function()
+        {
+            
+        }
+    })
 }
 
 // Other Functions

@@ -42,6 +42,7 @@ class SalesAgentController extends Member
 		if(is_numeric($id))
 		{
 			$return['status'] = 'success';
+			$return['id'] = $id;
 			$return['call_function'] = 'success_agent';
 		}
 		else
@@ -51,6 +52,11 @@ class SalesAgentController extends Member
 		}
 
 		return json_encode($return);
+	}
+	public function getLoadAgent(Request $request)
+	{		
+        $data['_agent'] = SalesAgent::get_list($this->user_info->shop_id);
+        return view('member.cashier.sales_agent.load_sales_agent',$data);
 	}
 	public function getViewTransaction(Request $request, $agent_id = 0)
 	{

@@ -23,7 +23,6 @@
 	<div class="wallet-encashment-content">
 		<div class="title">
 			Encashment History
-
 		</div>
 		<div class="table-holder table-responsive">
 			<table class="table table-striped">

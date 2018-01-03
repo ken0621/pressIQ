@@ -99,6 +99,61 @@ class Mlm_slot_log
 			}
 		}	
 	}
+	public static function slot_array_with_return($arry_log)
+	{
+		$returned_id = null;
+		//n_ready if not ready
+		$check_if_fs = Mlm_slot_log::check_if_fs($arry_log['wallet_log_slot']);
+		$check_if_fs = 1;
+		if($check_if_fs == 1)
+		{
+			$check_if_fs_sponsor = Mlm_slot_log::check_if_fs($arry_log['wallet_log_slot_sponsor']);
+			$check_if_fs_sponsor = 1;
+			if($check_if_fs_sponsor == 1)
+			{
+				$insert['shop_id'] = $arry_log['shop_id'];
+				$insert['wallet_log_slot'] = $arry_log['wallet_log_slot']; 
+				$insert['wallet_log_slot_sponsor'] = $arry_log['wallet_log_slot_sponsor']; 
+				$insert['wallet_log_date_created'] = Carbon::now(); 
+				$insert['wallet_log_details'] = $arry_log['wallet_log_details']; 
+				$insert['wallet_log_amount'] = $arry_log['wallet_log_amount']; 
+				$insert['wallet_log_plan'] = $arry_log['wallet_log_plan']; 
+				$insert['wallet_log_status'] = $arry_log['wallet_log_status']; 
+				$insert['wallet_log_claimbale_on'] = $arry_log['wallet_log_claimbale_on']; 
+
+				if(isset($arry_log['encashment_process']))
+				{
+					$insert['encashment_process'] = $arry_log['encashment_process'];
+				}
+				if(isset($arry_log['encashment_process_taxed']))
+				{
+					$insert['encashment_process_taxed'] = $arry_log['encashment_process_taxed'];
+				}
+				if(isset($arry_log['wallet_log_membership_filter']))
+				{
+					$insert['wallet_log_membership_filter'] = $arry_log['wallet_log_membership_filter'];
+				}
+				if(isset($arry_log['wallet_log_matrix_triangle']))
+				{
+					$insert['wallet_log_matrix_triangle'] = $arry_log['wallet_log_matrix_triangle'];
+				}
+
+				$wallet_log_id = Tbl_mlm_slot_wallet_log::insertGetId($insert);
+				// $wallet_log_data = AuditTrail::get_table_data("tbl_mlm_slot_wallet_log","wallet_log_id",$wallet_log_id);
+				// AuditTrail::record_logs("Added","mlm_wallet_log_slot",$wallet_log_id,"",serialize($wallet_log_data));
+				$returned_id = $wallet_log_id;
+				$slot_wallet_all = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $arry_log['wallet_log_slot'])->sum('wallet_log_amount');
+				$slot_wallet_current = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $arry_log['wallet_log_slot'])
+				->where('wallet_log_status', 'released')
+				->sum('wallet_log_amount');
+				$update['slot_wallet_all'] = $slot_wallet_all;
+				$update['slot_wallet_current'] = $slot_wallet_current;
+				Tbl_mlm_slot::where('slot_id', $arry_log['wallet_log_slot'])->update($update);
+			}
+		}	
+
+		return $returned_id;
+	}
 	public static function check_if_fs($slot_id)
 	{
 		$slot = Tbl_mlm_slot::where('slot_id', $slot_id)->first();

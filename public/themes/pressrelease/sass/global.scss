@@ -11,6 +11,7 @@ body
 	font-family: 'Lato', sans-serif;
 	background-color: #f7f7f7;
 }
+
 .row-no-padding 
 {
 	> div
@@ -51,7 +52,6 @@ button:hover{
 
 .content{
 	background-color: transparent;
-	padding-top: 5px;
 }
 
 /* HEADER */
@@ -97,10 +97,12 @@ button:hover{
 		}
 	}
 }
-.header-container{
+.header-container
+{
 	padding: 10px 0px;
 	position: relative;
 	background-color: #fff;
+	border-bottom: 1px solid #ededed;
 	@media screen and (max-width: 900px)
 	{
 		padding-bottom: 12px;
@@ -126,34 +128,45 @@ button:hover{
 		padding-bottom: 12px;
 	}
 
+	.menu-mobile-nav
+	{
+		display: none;
+		padding: 10px 0px 0px 0px;
+		margin-top: 10px;
+		text-align: center;
+		// background-color: #f3f3f3;
+		.border-container
+		{
+			border: 0.5px solid #ededed;
+			text-align: center;
+			margin: 10px 5px;
+
+		}
+		@media screen and (max-width: 800px)
+		{
+			span
+			{
+				display: block;
+				a
+				{
+					color: #585858;
+					font-weight: 700;
+					text-decoration: none;
+					font-size: 15px;
+				}
+			}
+		}
+	}
+
 	nav
 	{
 		a.active
 		{
 			color: #76b83f;
 		}
-	}
-	
-	.search-container
-	{
-		float: right;
-		padding-top: 13px;
-		vertical-align: middle;
-		input
+		a:hover
 		{
-			font-size: 15px;
-			vertical-align: middle;
-			border: 1px solid #e1e1e1;
-			padding: 6px;
-			vertical-align: middle;
-		}
-		i
-		{
-			color: #fff;
-			background-color: #c51f33;
-			font-size: 25px;
-			vertical-align: middle;
-			padding: 5px;
+			border-bottom: 2px solid #c51f33;
 		}
 	}
 }
@@ -295,7 +308,7 @@ button:hover{
 
 .menu-nav
 {
-	display: none;
+	// display: none;
 
 	@media screen and (max-width: 991px)
 	{
@@ -358,6 +371,15 @@ button:hover{
 	{
 		// background-color: #2b5fd9;
 		padding: 35px 0px 55px 0px;
+		@media screen and (max-width: 768px)
+		{
+			padding: 15px 0px 30px 0px;
+		}
+		@media screen and (max-width: 425px)
+		{
+			padding: 15px 0px 30px 0px;
+			text-align: center;
+		}
 		p 
 		{
 			font-size: 11px;
@@ -369,6 +391,29 @@ button:hover{
 			color: rgba(255,255,255, 0.5);
 		}
 
+		.footer-follow-container
+		{
+			padding-left: 110px !important;
+			@media screen and (max-width: 768px)
+			{
+				padding-left: 0px !important;
+			}
+			.footer-follow-title
+			{
+				font-family: "Lato", sans-serif;
+				font-size: 15px !important;
+				font-weight: 300;
+				color: #ffffff;
+				margin-bottom: 25px;
+
+				@media screen and (max-width: 768px)
+				{
+					margin-bottom: 5px;
+					margin-top: 20px;
+				}
+			}
+		}
+
 		.footer-title-container
 		{
 			.footer-title
@@ -378,11 +423,21 @@ button:hover{
 				font-weight: 300;
 				color: #ffffff;
 				margin-bottom: 25px;
+
+				@media screen and (max-width: 768px)
+				{
+					margin-bottom: 5px;
+					margin-top: 20px;
+				}
 			}
 		}
 
 		.email-textbox-container
 		{
+			@media screen and (max-width: 425px)
+			{
+				margin: auto;
+			}
 			width: 80%;
 			position: relative;
 			::-webkit-input-placeholder { /* Chrome */
@@ -404,7 +459,7 @@ button:hover{
 				width: 100%;
 				background-color: #122f72;
 				border: 1px solid rgba(255,255,255,0.5);
-				padding: 5px 5px 5px 20px;
+				padding: 5px 30px 5px 20px;
 				color: rgba(255,255,255,0.5);
 			}
 			i
@@ -463,6 +518,14 @@ button:hover{
 	    font-family: "Raleway Regular", sans-serif;
 		font-size: 12px;
 	    padding: 12px 0px 12px 0px;
+	    @media screen and (max-width: 425px)
+	    {
+	    	font-size: 10px;
+	    }
+	    @media screen and (max-width: 375px)
+	    {
+	    	font-size: 8px;
+	    }
 	}
 	.ftr-title-2
 	{
@@ -471,6 +534,18 @@ button:hover{
 	    font-family: "Raleway Regular", sans-serif;
 		font-size: 12px;
 		padding: 12px 0px 12px 0px;
+		@media screen and (max-width: 425px)
+		{
+			font-size: 10px;
+		}
+		@media screen and (max-width: 375px)
+	    {
+	    	font-size: 8px;
+	    }
+    	@media screen and (max-width: 320px)
+        {
+        	font-size: 6px;
+        }
 	}
 }
 

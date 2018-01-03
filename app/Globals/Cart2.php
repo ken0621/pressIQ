@@ -9,6 +9,7 @@ use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Models\Tbl_cart_item_pincode;	
 use App\Models\Tbl_cart_payment;	
+use App\Models\Tbl_mlm_slot;
 use Session;
 use Carbon\Carbon;
 use App\Globals\Currency;
@@ -280,12 +281,12 @@ class Cart2
 	public static function clear_item()
 	{
 	}
-	public static function get_cart_info()
+	public static function get_cart_info($customer_id = null)
 	{
-		$cart_key = Self::get_cart_key();
-		$total = 0;
+		$cart_key    = Self::get_cart_key();
+		$total       = 0;
 		$grand_total = 0;
-		$_cart = null;
+		$_cart       = null;
 		
 		if($cart_key)
 		{
@@ -331,6 +332,17 @@ class Cart2
 					$_cart[$key]->item_name 			= $item_info->item_name;
 					$_cart[$key]->item_sku 				= $item_info->item_sku;
 					$_cart[$key]->item_price 			= $item_info->item_price;
+
+					if ($customer_id) 
+		            {
+		            	$price_level = Tbl_mlm_slot::priceLevel($item_info->item_id)->where("tbl_mlm_slot.slot_owner", $customer_id)->first();
+
+		            	if ($price_level) 
+		            	{
+		            		$_cart[$key]->item_price = $price_level->custom_price;
+		            	}
+		            }
+		            
 					$_cart[$key]->discount 				= 0;
 					$_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
 					$_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->item_price);

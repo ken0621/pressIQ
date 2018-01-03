@@ -19,6 +19,11 @@ class Tbl_mlm_slot extends Model
     {
         $query->leftJoin("tbl_mlm_slot_bank", "tbl_mlm_slot_bank.slot_id", "=", "tbl_mlm_slot.slot_id");
     }
+    public function scopeAirline($query)
+    {
+        $query->leftJoin("tbl_tour_wallet_slot", "tbl_tour_wallet_slot.slot_id", "=", "tbl_mlm_slot.slot_id");
+        $query->leftJoin("tbl_tour_wallet", "tbl_tour_wallet.tour_wallet_id", "=", "tbl_tour_wallet_slot.tour_wallet_id");
+    }
     public function scopeVmoney($query)
     {
         $query->leftJoin("tbl_vmoney_settings", "tbl_vmoney_settings.slot_id", "=", "tbl_mlm_slot.slot_id");
@@ -86,6 +91,15 @@ class Tbl_mlm_slot extends Model
     public function scopeInfo($query)
     {
         $query->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
+        return $query;
+    }
+    public function scopePriceLevel($query, $item_id)
+    {
+        $query->leftJoin('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership')
+              ->leftJoin('tbl_price_level', 'tbl_price_level.price_level_id', '=', 'tbl_membership.membership_price_level')
+              ->leftJoin('tbl_price_level_item', 'tbl_price_level_item.price_level_id', '=', 'tbl_price_level.price_level_id')
+              ->leftJoin('tbl_item', 'tbl_item.item_id', '=', 'tbl_price_level_item.item_id')
+              ->where("tbl_price_level_item.item_id", $item_id);
         return $query;
     }
 }

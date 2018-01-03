@@ -35,48 +35,51 @@ class MLM_StairstepController extends Member
 
     public function stairstep_view()
     {
-    	$shop_id 		  = $this->getShopId();
-		$data["_history"] = Tbl_stairstep_distribute::where("tbl_stairstep_distribute.shop_id",$shop_id)
-													->leftJoin("tbl_stairstep_distribute_slot","tbl_stairstep_distribute_slot.stairstep_distribute_id","=","tbl_stairstep_distribute.stairstep_distribute_id")
-								  				    ->leftJoin("tbl_mlm_slot","tbl_mlm_slot.slot_id","=","tbl_stairstep_distribute_slot.slot_id")
-											        ->leftJoin("tbl_customer","tbl_customer.customer_id","=","tbl_mlm_slot.slot_owner")  
-    								  				->groupBy("tbl_stairstep_distribute_slot.stairstep_distribute_id")
-    								  				->select("tbl_stairstep_distribute.*",DB::raw("COUNT('tbl_stairstep_distribute_slot.slot_id') as total_processed_slot"))
-													->get();		
+        $keyword = Request::input('search');
+        $shop_id          = $this->getShopId();
+        $data["_history"] = Tbl_stairstep_distribute::where("tbl_stairstep_distribute.shop_id",$shop_id)
+                                                    ->leftJoin("tbl_stairstep_distribute_slot","tbl_stairstep_distribute_slot.stairstep_distribute_id","=","tbl_stairstep_distribute.stairstep_distribute_id")
+                                                    ->leftJoin("tbl_mlm_slot","tbl_mlm_slot.slot_id","=","tbl_stairstep_distribute_slot.slot_id")
+                                                    ->leftJoin("tbl_customer","tbl_customer.customer_id","=","tbl_mlm_slot.slot_owner")  
+                                                    ->groupBy("tbl_stairstep_distribute_slot.stairstep_distribute_id")
+                                                    ->select("tbl_stairstep_distribute.*",DB::raw("COUNT('tbl_stairstep_distribute_slot.slot_id') as total_processed_slot"))
+                                                    ->where('slot_no','LIKE','%'.$keyword.'%')
+                                                    ->paginate(10);     
 
-    	$start  = Request::input("start");
-    	$end    = Request::input("end");
-    		
-    	if(!$start)	
-    	{
-    		$start = $this->get_start_date();
-    	}
+        $start  = Request::input("start");
+        $end    = Request::input("end");
+            
+        if(!$start) 
+        {
+            $start = $this->get_start_date();
+        }
 
-    	if(!$end)
-    	{
-    		$end   = $this->get_end_date($start);
-    	}
-
-    	$data["_slot"]    = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id",$shop_id)
-    								  	->customer()
-    								  	->leftjoin("tbl_mlm_stairstep_settings","tbl_mlm_stairstep_settings.stairstep_id","=","tbl_mlm_slot.stairstep_rank")
-    								  	->leftJoin("tbl_mlm_slot_points_log","tbl_mlm_slot_points_log.points_log_slot","=","tbl_mlm_slot.slot_id")
-    								  	->select("*",DB::raw("SUM( ( CASE WHEN points_log_type = 'SGPV' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS stairstep_points")
-    								  				,DB::raw("SUM( ( CASE WHEN points_log_type = 'SPV' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS personal_stairstep")
+        if(!$end)
+        {
+            $end   = $this->get_end_date($start);
+        }
+        $data["_slot"]    = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id",$shop_id)
+                                        ->customer()
+                                        ->leftjoin("tbl_mlm_stairstep_settings","tbl_mlm_stairstep_settings.stairstep_id","=","tbl_mlm_slot.stairstep_rank")
+                                        ->leftJoin("tbl_mlm_slot_points_log","tbl_mlm_slot_points_log.points_log_slot","=","tbl_mlm_slot.slot_id")
+                                        ->select("*",DB::raw("SUM( ( CASE WHEN points_log_type = 'SGPV' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS stairstep_points")
+                                                    ,DB::raw("SUM( ( CASE WHEN points_log_type = 'SPV' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS personal_stairstep")
                                                     ,DB::raw("SUM( ( CASE WHEN points_log_type = 'SRB' AND points_log_date_claimed >= '".Carbon::parse($start)->format("Y-m-d 00:00:00")."' AND points_log_date_claimed <= '".Carbon::parse($end)->format("Y-m-d 23:59:59")."' THEN points_log_points ELSE 0 END ) ) AS stairstep_rebates_bonus"))
-    								  	->groupBy("slot_id")
-								  	  	->get();
-    								  	// ->where("points_log_date_claimed",">=",Carbon::parse($start)->format("Y-m-d 00:00:00"))
-    								  	// ->where("points_log_date_claimed","<=",Carbon::parse($end)->format("Y-m-d 23:59:59"))
+                                        ->groupBy("slot_id")
+                                        ->where('slot_no','LIKE','%'.$keyword.'%')
+                                        ->paginate(10);
+                                        // ->where("points_log_date_claimed",">=",Carbon::parse($start)->format("Y-m-d 00:00:00"))
+                                        // ->where("points_log_date_claimed","<=",Carbon::parse($end)->format("Y-m-d 23:59:59"))
 
 
-	
+        // dd($data['_slot']);
+    
 
-		
-    	$data["start"] = $start;
-    	$data["end"]   = $end;
-    	// dd($start,$end);
-    	return view("member.mlm_stairstep.stairstep_distribution",$data);
+        
+        $data["start"] = $start;
+        $data["end"]   = $end;
+        // dd($start,$end);
+        return view("member.mlm_stairstep.stairstep_distribution",$data);
     }
 
     public function distribution_submit()

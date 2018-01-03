@@ -51,9 +51,9 @@
                                         <tr>
                                             <th class="text-center">Warehouse Name</th>
                                             @if($pis == null)
-                                            <th class="text-center">Total Holding Items</th>
+                                          <!--   <th class="text-center">Total Holding Items</th>
                                             <th>Total Selling Price</th>
-                                            <th>Total Cost Price</th>
+                                            <th>Total Cost Price</th> -->
                                             @endif
                                             <th class="text-center">Action</th>
                                         </tr>
@@ -66,9 +66,9 @@
                                             <td class="text-center">{{$warehouse->warehouse_name}}</td>
 
                                             @if($pis == null)
-                                            <td class="text-center">{{number_format($warehouse->total_qty)}} item(s)</td>
+                                            <!-- <td class="text-center">{{number_format($warehouse->total_qty)}} item(s)</td>
                                             <td>{{currency("PHP",$warehouse->total_selling_price)}}</td>
-                                            <td>{{currency("PHP",$warehouse->total_cost_price)}}</td>
+                                            <td>{{currency("PHP",$warehouse->total_cost_price)}}</td> -->
                                             @endif
                                             <td class="text-center">
                                                 <div class="btn-group">

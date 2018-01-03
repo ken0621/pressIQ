@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
@@ -8,14 +10,6 @@ $text-dark: #272c2f;
 body
 {
 	background-color: #ededed;
-}
-
-@mixin transition($transition)
-{
-	  -webkit-transition: all $transition ease-in-out;
-	  -moz-transition: all $transition ease-in-out;
-	  -o-transition: all $transition ease-in-out;
-	  transition: all $transition ease-in-out;
 }
 
 .register
@@ -309,7 +303,7 @@ body
 							color: #BE9340 !important;
 						}
 					}
-					.btn-brown 
+					.btn-custom
 					{
 						@include transition(0.2s);
 						background-color: #D4B044;
@@ -390,25 +384,29 @@ body
 				margin-left: 0;
 			}
 		}
+
 		.btn-semi
 		{
 			@include transition(0.2s);
-			background-color: #BE9340;
+			background-color: rgba(212,176,68,0.8);
 
-			&:hover
-			{
-				background-color: #f34e4e;
-			}
+			// &:hover
+			// {
+			// 	background-color: #f34e4e;
+			// }
+
 		}
+
 		.btn-pure
 		{
 			@include transition(0.2s);
 			background-color: #D4B044;
 
-			&:hover
-			{
-				background-color: #BE9340;
-			}
+			// &:hover
+			// {
+			// 	background-color: #BE9340;
+			// }
+			
 		}
 	}
 }

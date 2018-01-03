@@ -46,7 +46,8 @@
     cursor: pointer;
     }
     </style>
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/assets/member/css/global.css?version=1">
+    <link rel="stylesheet" type="text/css" href="/assets/member/css/item_add_v2.css">
     @yield('css')
     <script>
     (function () {
@@ -166,16 +167,12 @@
                         <!-- <i class="icon-envelope-alt"></i> -->
                         <span>Choose a warehouse</span>
                         <a href="javascript:;" class="close-user-menu"><i class="icon-remove"></i></a>
-                        <select class="form-control select_current_warehouse">
-                            @foreach($warehouse_list as $solo_warehouse)
-                            @if($current_warehouse)
-                            <option value="{{$solo_warehouse->warehouse_id}}" {{$current_warehouse->warehouse_id == $solo_warehouse->warehouse_id ? "selected" : ""}}>{{$solo_warehouse->warehouse_name}}</option>
-                            @else
-                            <option value="{{$solo_warehouse->warehouse_id}}"> {{$solo_warehouse->warehouse_name}}</option>
-                            @endif
-                            @endforeach
-                        </select>
-                        <div class="col-md-12" style="min-height:25px;"></div>
+                        
+                        <div class="col-md-12" style="margin-top: 20px">
+                            <select class="form-control select_current_warehouse">
+                                @include('member.warehousev2.load_warehouse_v2_select',['_warehouse' => $_warehouse_list_shortcut])
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -419,6 +416,7 @@
         50% { opacity: 0; }
         }
         </style>
+        <script type="text/javascript" src="/assets/js/commission_report.js?v=9"></script>
         <script type="text/javascript" src="/assets/member/global.js?version=6.3"></script>
         <!-- Testing only -->
         <script type="text/javascript" src="/assets/member/settings/settings_global.js"></script>
@@ -437,6 +435,7 @@
         <script type="text/javascript" src='/assets/member/js/image_gallery.js'></script>
         <script type="text/javascript" src='/assets/custom_plugin/myDropList/js/myDropList.js'></script>
         <script type="text/javascript" src="/assets/member/js/prompt_serial_number.js"></script>
+        <script type="text/javascript" src="/assets/member/js/accounting_transaction.js"></script>
         <script type="text/javascript" src='/assets/member/js/match-height.js'></script>
         <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
         <script type="text/javascript" src="/assets/mlm/pace.min.js"></script>
@@ -450,15 +449,24 @@
         });
         $('.select_current_warehouse').click(function(event)
         {
-        event.stopPropagation();
+            event.stopPropagation();
         });
+        $('.select_current_warehouse').globalDropList({
+            hasPopup : 'false',
+            width : '250px', 
+            onChangeValue : function()
+            {
+                select_current_warehouse($(this));
+            }
+        })
         function show_currency()
         {
-        $('.change_currency').each(function(){
-        var amount = $(this).html();
-        var currency_change = formatPHP(amount);
-        $(this).html(currency_change);
-        });
+            $('.change_currency').each(function()
+            {
+                var amount = $(this).html();
+                var currency_change = formatPHP(amount);
+                $(this).html(currency_change);
+            });
         }
         show_currency();
         function formatPHP(num) {

@@ -49,16 +49,16 @@
           </span>
         </div>
       </div>
-<!--       <div class="col-md-3 pull-right">
+      <div class="col-md-3 pull-right">
         <div class="input-group stylish-input-group pull-right">
-          <input type="text" class="form-control pull-right"  placeholder="Search" >
+          <input type="text" class="form-control pull-right" value="{{ Request::input('search') }}" name="search" placeholder="Search" >
           <span class="input-group-addon">
             <button type="submit">
               <i class="fa fa-search" aria-hidden="true"></i>
             </button>  
           </span>
         </div>
-      </div> -->
+      </div>
     </form>
   </div>
   <br>        
@@ -90,6 +90,11 @@
     @endforeach
     </tbody>
   </table>
+  <div class="clearfix">
+    <div class="pull-right">
+    {!! $_slot->render() !!}
+    </div>
+  </div>
 </div>
 </div>
 </div>
@@ -293,6 +298,28 @@
       $(".modal-loader").addClass("hidden");
       $(".submit_btn_distribute").removeAttr("disabled");
     });
+  });
+  $('.search').on('keydown',function()
+  {
+    var keyCode = e.keyCode || e.which;
+    if (keyCode === 13) 
+    { 
+
+      // e.preventDefault();
+      // return false;
+
+      var link = '/member/mlm/stairstep/distribution?search='+$('.search').val();
+      window.location.href= link;
+      console.log(link);
+      // $('.body_distribute').load(link,function()
+      // {
+      //   console.log("search = "+$('.search').val());
+      // });
+    }
+    else
+    {
+      console.log(keyCode);
+    }
   });
 </script>
 @endsection

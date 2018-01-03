@@ -93,22 +93,31 @@ class TransactionController extends Member
         return $pdf;
     }
     public function view_receipt(Request $request, $transaction_list_id)
-    {        
+    {       
         $data['shop_key']            = strtoupper($this->user_info->shop_key);
         $data['shop_address']        = ucwords($this->user_info->shop_street_address.' '.$this->user_info->shop_city.', '.$this->user_info->shop_zip);
-
-        $data['list'] = Tbl_transaction_list::salesperson()->transaction()->where('transaction_list_id',$transaction_list_id)->first();
-        $data['_item'] = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
-        $data['customer_name'] = Transaction::getCustomerNameTransaction($data['list']->transaction_id);
+        $data['list']                = Tbl_transaction_list::salesperson()->transaction()->where('transaction_list_id',$transaction_list_id)->first();
+        $data['_item']               = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
+        $data['customer_name']       = Transaction::getCustomerNameTransaction($data['list']->transaction_id);
         $data['transaction_details'] = unserialize($data["list"]->transaction_details);
         $data['customer_info']       = Transaction::getCustomerInfoTransaction($data['list']->transaction_id);
         $data['customer_address']    = Transaction::getCustomerAddressTransaction($data['list']->transaction_id);
         $data['_payment_list']       = Transaction::get_payment($data['list']->transaction_id);
+        $data['_codes']              = Transaction::get_transaction_item_code($transaction_list_id, $this->user_info->shop_id);
 
-        $data['_codes']    = Transaction::get_transaction_item_code($transaction_list_id, $this->user_info->shop_id);
-        // return view("member.transaction.all_shop_receipt_pdf", $data);
-        $html = view("member.transaction.all_shop_receipt_pdf", $data);
-        $pdf = Pdf_global::show_pdfv2($html);
-        return $pdf;
+        if ($this->user_info->shop_theme == "3xcell") 
+        {
+            // return view("member.transaction.receipt.3xcell", $data);
+            $html = view("member.transaction.receipt.3xcell", $data);
+            $pdf = Pdf_global::show_pdfv2($html);
+            return $pdf;
+        }
+        else
+        {
+            // return view("member.transaction.all_shop_receipt_pdf", $data);
+            $html = view("member.transaction.all_shop_receipt_pdf", $data);
+            $pdf = Pdf_global::show_pdfv2($html);
+            return $pdf;
+        }
     }
 }

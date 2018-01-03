@@ -51,14 +51,14 @@
                         <div class="dropdown">
                           <a class="">BUSINESS PRESENTATION</a>
                           <div class="dropdown-content">
-                            <a href="https://drive.google.com/open?id=0B_zVgtlTtv89dU1Ub2toMXBLc2M">MILLIONAIRE SYSTEM</a>
+                            <a href="https://drive.google.com/file/d/1Q4Tr0k5kpKalUzV-vODb6mU_tNyPMQmD">MILLIONAIRE SYSTEM</a>
                             <a href="https://drive.google.com/open?id=0B_zVgtlTtv89ZzlKSnI3ckpxd1k">PRIVILEGE CARD PRESENTATION</a>
-                            <a href="https://drive.google.com/open?id=0B_zVgtlTtv89RDVSZ2QteUwzaVE">TRADITIONAL BUSINESS PRESENTATION</a>
+                            <a href="https://drive.google.com/file/d/1gxsG3wL8emRvzxhG4Rriwz9FgnB7D84o">FRANCHISE BUSINESS PRESENTATION</a>
                           </div>
                         </div>
                     </div>
                     @else
-                    <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
+                    <div class="holder"><a href="https://drive.google.com/file/d/1gxsG3wL8emRvzxhG4Rriwz9FgnB7D84o">BUSINESS PRESENTATION</a></div>
                     @endif
                     <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 
@@ -247,7 +247,7 @@
                             <a href="/contact"><li>CONTACT US</li></a>
                         </ul>
                     <div class="space2"></div>
-                    <span>MEMBERS AREA</span>
+                    <span>MEMBER'S AREA</span>
                     <ul class="links">
                         <a href="/members"><li class="{{ Request::segment(1) == "members" ? "active" : "" }}" >DASHBOARD</li></a> 
                         <a href="/members/profile"><li>PROFILE</li></a>
@@ -356,7 +356,8 @@
                         <div class="img-footer">
                             <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech.jpg">
                         </div>
-                        <p>PHILTECH, INC. “We provide Business” Is a subsidiary company of ZENAR TELECOMS, INC. with highly experienced both in retail and distribution of technology industry for almost 20years. PHILTE... <a style="color: #fff" href="/about">See more</a></p>
+                        <p>PHILTECH, INC. “Business and Benefits”
+offers New Franchise Business Model and New Rewards System using New Generation of Advanced Technology. PHILTECH, INC. is a pioneer...<a style="color: #fff" href="/about">See more</a></p>
                     </div> 
                     <div class="col-md-2 col-sm-6 match-height">
                         <div class="btm-title">INFORMATION</div>
@@ -371,6 +372,7 @@
                             <li class="{{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">Legalities</a></li>
                             <li><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">Business Presentation</a></li>
                             <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
+                            <li><a href="/return_policy" >Return Policy</a></li>
                         </ul>
                     </div>
                     <div class="col-md-2 col-sm-6 match-height">

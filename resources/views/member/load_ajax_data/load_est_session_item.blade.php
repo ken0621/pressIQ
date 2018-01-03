@@ -18,7 +18,12 @@
         <option class="hidden" value="" />
         </select>
     </td>
-    <td><textarea class="textarea-expand txt-desc" name="invline_description[]">{{$items['estline_description']}}</textarea></td>
+    <td>
+    @if($pis)
+        <textarea class="textarea-expand txt-desc" readonly="true" name="invline_description[]" value=""></textarea>
+    @else
+        <textarea class="textarea-expand txt-desc" name="invline_description[]">{{$items['estline_description']}}</textarea></td>
+    @endif
     <td>
         <select class="2222 droplist-um select-um" name="invline_um[]">
         @if($items['estline_um'])
@@ -45,7 +50,7 @@
 <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
 <td><input type="text" class="for-datepicker" name="invline_service_date[]"/></td>
-@include("member.load_ajax_data.load_td_serial_number");
+@include("member.load_ajax_data.load_td_serial_number")
 <td class="invoice-number-td text-right">
     1
 </td>
@@ -57,7 +62,13 @@
     <option class="hidden" value="" />
 </select>
 </td>
-<td><textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea></td>
+<td>
+@if($pis)
+    <textarea class="textarea-expand txt-desc" readonly="true" name="invline_description[]"></textarea>
+@else
+    <textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea>
+@endif
+</td>
 <td><select class="2222 droplist-um select-um" name="invline_um[]"><option class="hidden" value="" /></select></td>
 <td><input class="text-center number-input txt-qty compute" type="text" name="invline_qty[]"/></td>
 <td><input class="text-right number-input txt-rate compute" type="text" name="invline_rate[]"/></td>

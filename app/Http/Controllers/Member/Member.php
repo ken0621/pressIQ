@@ -12,6 +12,8 @@ use App\Globals\Seed_manual;
 use App\Globals\Utilities;
 use App\Globals\Payroll;
 use App\Globals\Settings;
+use App\Globals\Warehouse2;
+use App\Globals\Purchasing_inventory_system;
 
 use Crypt;
 use Redirect;
@@ -118,18 +120,25 @@ class Member extends Controller
 						}
 
 						$this->current_warehouse = $current_warehouse;
-						if($is_dev == 1)
+						// if($is_dev == 1)
+						// {
+						// 	$warehouse_list  = Tbl_warehouse::inventory()->orderBy("main_warehouse","ASC")->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->where('tbl_warehouse.archived',0)->get(); 
+						// }
+						// else
+						// {
+						// 	$warehouse_list  = Tbl_warehouse::inventory()->join("tbl_user_warehouse_access","tbl_user_warehouse_access.warehouse_id","=","tbl_warehouse.warehouse_id")->where("tbl_user_warehouse_access.user_id",$user_info->user_id)->where('tbl_warehouse.archived',0)->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get(); 
+						// }
+						$warehouse_list = null;
+						if(isset($this->current_warehouse->warehouse_id))
 						{
-							$warehouse_list  = Tbl_warehouse::inventory()->orderBy("main_warehouse","ASC")->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->where('tbl_warehouse.archived',0)->get(); 
-						}
-						else
-						{
-							$warehouse_list  = Tbl_warehouse::inventory()->join("tbl_user_warehouse_access","tbl_user_warehouse_access.warehouse_id","=","tbl_warehouse.warehouse_id")->where("tbl_user_warehouse_access.user_id",$user_info->user_id)->where('tbl_warehouse.archived',0)->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get(); 
+							$warehouse_list = Warehouse2::load_all_warehouse_select($this->user_info->shop_id, $this->user_info->user_id, 0,$this->current_warehouse->warehouse_id);
 						}
 
 						View::share('user_info', $user_info);
 						View::share('current_warehouse', $current_warehouse);
-						View::share('warehouse_list', $warehouse_list);
+						View::share('_warehouse_list_shortcut', $warehouse_list);
+						//View::share('_for_pis_only', Purchasing_inventory_system::check());
+
 
 						/* CHECK IF SHOP STATUS IS INITIAL - REDIRECT TO INITIAL PAGE */
 						if($user_info->shop_status == "initial" && Request::segment(2) != "setup")
@@ -190,6 +199,10 @@ class Member extends Controller
 			
 			Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);
 			// dd($this->user_info);
+			
+			/*TRANSACTION REFERENCE NUMBER*/
+			Seed_manual::put_transaction_reference_number($this->user_info->shop_id);
+			//dd($this->user_info->shop_id);
 
 			return $next($request);
 		});

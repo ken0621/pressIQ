@@ -369,20 +369,23 @@ function debit_memo(){
 	function action_load_item_info($this)
 	{
 		$parent = $this.closest(".tr-draggable");
-		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
+		$parent.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-qty").val(1).change();
 		
-		$parent.find(".txt-rate").attr("readonly",false);
-		$parent.find(".txt-discount").attr("disabled",false);
-		if($this.find("option:selected").attr("item-type") == 4)
-		{
-			$parent.find(".txt-rate").attr("readonly",true);
-			$parent.find(".txt-discount").attr("disabled","disabled");
-		}
+		// $parent.find(".txt-rate").attr("readonly",false);
+		// $parent.find(".txt-discount").attr("disabled",false);
+		// if($this.find("option:selected").attr("item-type") == 4)
+		// {
+		// 	$parent.find(".txt-rate").attr("readonly",true);
+		// 	$parent.find(".txt-discount").attr("disabled","disabled");
+		// }
+
+		$parent.find(".txt-qty").attr("disabled",true);
 
 		if($this.find("option:selected").attr("has-um") != '')
-		{			
+		{
+			$parent.find(".txt-qty").removeAttr("disabled");	
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$(this).globalDropList("reload").globalDropList("enabled");

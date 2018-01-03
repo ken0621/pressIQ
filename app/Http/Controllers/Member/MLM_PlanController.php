@@ -1318,7 +1318,8 @@ class MLM_PlanController extends Member
 	    $data['response_status'] = "successd";
 	    $validate['indirect_seting_value'] = Request::input('amount_indirect');
 	    $validate['indirect_seting_level'] = Request::input('level_indirect');
-	    $validate['indirect_seting_percent'] =Request::input('percentage_indirect');
+        $validate['indirect_seting_percent'] =Request::input('percentage_indirect');
+	    $validate['additional_points'] =Request::input('additional_points');
 	    $rules['indirect_seting_value'] = 'required';
 	    $rules['indirect_seting_level'] = 'required';
 	    $rules['indirect_seting_percent'] ='required';
@@ -1335,7 +1336,8 @@ class MLM_PlanController extends Member
         	    {
         	        $insert['indirect_seting_level'] = $validate['indirect_seting_level'][$key];
         	        $insert['indirect_seting_value'] = $validate['indirect_seting_value'][$key];
-        	        $insert['indirect_seting_percent'] = $validate['indirect_seting_percent'][$key];
+                    $insert['indirect_seting_percent'] = $validate['indirect_seting_percent'][$key];
+        	        $insert['additional_points'] = $validate['additional_points'][$key];
         	        $insert['indirect_setting_archive'] = 0;
         	        $insert['membership_id'] = $membership_id;
         	        Tbl_mlm_indirect_setting::insert($insert);
@@ -1350,7 +1352,8 @@ class MLM_PlanController extends Member
     				$update = null;
     				$update['indirect_seting_level'] = $validate['indirect_seting_level'][$key];
         	        $update['indirect_seting_value'] =	$validate['indirect_seting_value'][$key];
-        	        $update['indirect_seting_percent'] = $validate['indirect_seting_percent'][$key];
+                    $update['indirect_seting_percent'] = $validate['indirect_seting_percent'][$key];
+        	        $update['additional_points'] = $validate['additional_points'][$key];
     	    		$update['indirect_setting_archive'] = 0;
     	    		$update['membership_id'] = $membership_id;
     	    		Tbl_mlm_indirect_setting::where('indirect_seting_id', $value->indirect_seting_id)->update($update);
@@ -1367,7 +1370,8 @@ class MLM_PlanController extends Member
 	    				$update = null;
 	    				$update['indirect_seting_level'] = $validate['indirect_seting_level'][$key];
         	        	$update['indirect_seting_value'] =	$validate['indirect_seting_value'][$key];
-        	        	$update['indirect_seting_percent'] = $validate['indirect_seting_percent'][$key];
+                        $update['indirect_seting_percent'] = $validate['indirect_seting_percent'][$key];
+        	        	$update['additional_points'] = $validate['additional_points'][$key];
     	    			$update['indirect_setting_archive'] = 0;
     	    			$update['membership_id'] = $membership_id;
     	    			Tbl_mlm_indirect_setting::where('indirect_seting_id', $value->indirect_seting_id)->update($update);
@@ -1380,7 +1384,8 @@ class MLM_PlanController extends Member
 	    			{
 	    				$insert['indirect_seting_level'] = $validate['indirect_seting_level'][$key]; 
 		    	    	$insert['indirect_seting_value'] = $validate['indirect_seting_value'][$key];
-		    	    	$insert['indirect_seting_percent'] = $validate['indirect_seting_percent'][$key];
+                        $insert['indirect_seting_percent'] = $validate['indirect_seting_percent'][$key];
+		    	    	$insert['additional_points'] = $validate['additional_points'][$key];
 		    	    	$insert['indirect_setting_archive'] = 0;
 		    	    	$insert['membership_id'] = $membership_id;
 		    	    	Tbl_mlm_indirect_setting::insert($insert);
@@ -1398,7 +1403,8 @@ class MLM_PlanController extends Member
 	    				$update = null;
 	    				$update['indirect_seting_level'] = $validate['indirect_seting_level'][$key]; 
     	    			$update['indirect_seting_value'] = $validate['indirect_seting_value'][$key];
-    	    			$update['indirect_seting_percent'] = $validate['indirect_seting_percent'][$key];
+                        $update['indirect_seting_percent'] = $validate['indirect_seting_percent'][$key];
+    	    			$update['additional_points'] = $validate['additional_points'][$key];
     	    			$update['indirect_setting_archive'] = 0;
     	    			$update['membership_id'] = $membership_id;
     	    			Tbl_mlm_indirect_setting::where('indirect_seting_id', $value->indirect_seting_id)->update($update);

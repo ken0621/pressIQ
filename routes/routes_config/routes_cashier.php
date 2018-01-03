@@ -13,6 +13,7 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::any('/pos/load_payment','Member\CashierController@load_payment');
 	Route::any('/pos/remove_payment','Member\CashierController@remove_payment');
 	Route::any('/pos/load_warehouse','Member\CashierController@load_warehouse');
+	Route::get('/pos/get_current_gc','Member\CashierController@get_current_gc');
 
 	/* CUSTOMER */
 	Route::any('/pos/search_customer','Member\CashierController@pos_search_customer');

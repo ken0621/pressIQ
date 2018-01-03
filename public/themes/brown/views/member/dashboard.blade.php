@@ -47,7 +47,7 @@
 			        	<!-- <video controls=""> -->
 							<div class="embed-responsive embed-responsive-16by9 animated zoomInDown" style="margin-top: 25px;">
 							  <!-- <div class="overlay"></div> -->
-					        	<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/BGYP2umEcSQ?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=DglLgQYkQX4&mute=0"></iframe>
+					        	<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/I7kIfi2RlcE?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=DglLgQYkQX4&mute=0"></iframe>
 							</div>
 						<!-- </video> -->
 			        </div>
@@ -304,6 +304,9 @@
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
 					</div>
+					{{-- <div class="load-direct-referrals-here">
+												
+					</div> --}}
 					@if(count($_direct) > 0)
 						@foreach($_direct as $direct)
 						<div class="holder">
@@ -319,15 +322,14 @@
 							</div>
 							<div class="action pull-right">
 								@if($direct->distributed == 1)
-									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
+									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-brown"><i class="fa fa-star"></i> VIEW INFO</button>
 								@else
-									<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+									<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-custom-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 								@endif
 							</div>
 						</div>
 						@endforeach
 					@else
-
 						<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
 					@endif
 				</div>
@@ -420,6 +422,41 @@
 @section("member_script")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.2"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
+
+{{-- <script>
+	$(window).on('hashchange', function() {
+	    if (window.location.hash) {
+	        var page = window.location.hash.replace('#', '');
+	        if (page == Number.NaN || page <= 0) {
+	            return false;
+	        } else {
+	            getPosts(page);
+	        }
+	    }
+	});
+	$(document).ready(function() {
+		getPosts(1);
+	    $(document).on('click', '.pagination a', function (e) {
+	        getPosts($(this).attr('href').split('page=')[1]);
+	        e.preventDefault();
+	    });
+	});
+	function getPosts(page) {
+	    $.ajax(
+	    {
+	        url : '/members/direct-referrals?page=' + page,
+	        type: 'get',
+	    }).done(function (data) 
+	    {
+	        $('.load-direct-referrals-here').html(data);
+	        location.hash = page;
+	    }).fail(function () 
+	    {
+	        alert('Posts could not be loaded.');
+	    });
+	}
+</script> --}}
+
 <script>
 $(document).ready(function()
 {
@@ -501,7 +538,7 @@ input:-webkit-autofill
   .popup-verify-placement .modal-content {
     background-color: #eee; }
     .popup-verify-placement .modal-content .modal-header {
-      background-color: #693d28;
+      background-color: #402A21;
       border-top-left-radius: 3px;
       border-top-right-radius: 3px; }
       .popup-verify-placement .modal-content .modal-header .close {
@@ -523,7 +560,7 @@ input:-webkit-autofill
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #693d28;
+        border: 1px solid #402A21;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -534,14 +571,14 @@ input:-webkit-autofill
         margin: 10px 0px;
         padding: 10px; }
       .popup-verify-placement .modal-content .modal-body .labeld {
-        color: #693d28;
+        color: #402A21;
         text-align: center;
         text-transform: uppercase; }
       .popup-verify-placement .modal-content .modal-body select {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #693d28;
+        border: 1px solid #402A21;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -554,10 +591,10 @@ input:-webkit-autofill
         text-transform: uppercase;
         padding-bottom: 20px; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement {
-          color: #693d28;
+          color: #402A21;
           background-color: #fff;
           padding: 10px 40px;
-          border: 2px solid #693d28;
+          border: 2px solid #402A21;
           border-radius: 2px;
           opacity: 0.9;
           -webkit-transition: all 0.2s ease-in-out;
@@ -569,7 +606,7 @@ input:-webkit-autofill
           text-transform: uppercase; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement:hover {
           color: #fff;
-          background-color: #693d28;
+          background-color: #402A21;
           opacity: 1.0; }
 </style>
 @endsection

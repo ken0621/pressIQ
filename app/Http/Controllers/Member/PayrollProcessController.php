@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use PDF2;
 
 use App\Globals\AuditTrail;
+use App\Globals\Payroll2;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
@@ -17,6 +18,8 @@ use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_time_keeping_approved_performance;
+use App\Models\Tbl_payroll_journal_tag;
+
 
 class PayrollProcessController extends Member
 {
@@ -48,11 +51,17 @@ class PayrollProcessController extends Member
 				case 'approve':
 					$step = "approved";
 				break;
+
 				default:
 					$step = "generated";
 				break;
 			}
 
+			// if ($data["step"] == "post") 
+			// {
+			// 	Payroll2::insert_journal_entry_per_period($period_company_id ,$this->user_info->shop_id);
+			// }
+			
 			$update["payroll_period_status"] = $step;
 			$update["payroll_period_total_basic"] = $total_basic;
 			$update["payroll_period_total_gross"] = $total_gross;

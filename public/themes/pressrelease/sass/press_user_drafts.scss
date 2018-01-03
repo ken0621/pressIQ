@@ -1,0 +1,72 @@
+.background-container
+{
+	padding: 30px 0px;
+	min-height: 820px;
+	@media screen and (max-width: 425px)
+	{
+	   min-height: 765px;
+	}
+
+	.pressview
+	{
+		.drafts-holder-container
+		{
+			background-color: #eeeeee;
+			min-height: 700px;
+			padding: 30px 5px;
+			table
+			{
+				font-family: arial, sans-serif;
+				border-collapse: collapse;
+				width: 100%;
+				@media screen and (max-width: 425px)
+				{
+				   font-size: 11px;
+				}
+				@media screen and (max-width: 375px)
+				{
+				   font-size: 8px;
+				}
+			}
+
+			th
+			{
+				border: 1px solid #dddddd;
+				text-align: center;
+				padding: 8px;
+			}
+			td
+			{
+				border: 1px solid #dddddd;
+				text-align: center;
+				padding: 10px;
+				max-width: 0px;
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+			    white-space: nowrap;
+			}
+
+			a
+			{
+				background-color: #316df9;
+				color: #fff;
+				font-size: 12px;
+				padding: 10px;
+				text-decoration: none;
+				@media screen and (max-width: 425px)
+				{
+				   font-size: 9px;
+				   padding: 3px;
+				}
+				@media screen and (max-width: 375px)
+				{
+				   font-size: 7px;
+				}
+				@media screen and (max-width: 320px)
+				{
+				   font-size: 4px;
+				}
+			}
+		}
+	}
+}

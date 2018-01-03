@@ -32,12 +32,12 @@
 
 @section("css")
 <!-- LIGHTBOX -->
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/lightbox/css/lightbox.css">
+{{-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/lightbox/css/lightbox.css"> --}}
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/legalities.css">
 @endsection
 
 @section("js")
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/lightbox/js/lightbox.js"></script>
+{{-- <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/lightbox/js/lightbox.js"></script> --}}
 <script type="text/javascript">
 /*LIGHTBOX*/
 lightbox.option({

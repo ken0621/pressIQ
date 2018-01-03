@@ -1,6 +1,6 @@
 {
 "version": 3,
-"mappings": "AAAA,qBACA,CACC,OAAO,CAAE,QAAQ,CACjB,UAAU,CAAE,KAAK",
+"mappings": "AAAA,qBACA,CACC,OAAO,CAAE,QAAQ,CACjB,UAAU,CAAE,KAAK,CACjB,oCACA,CACE,uBACA,CACC,SAAS,CAAE,IAAI,EAGlB,oCACA,CACE,uBACA,CACC,SAAS,CAAE,IAAI,EAGlB,oCACA,CACE,uBACA,CACC,SAAS,CAAE,GAAG",
 "sources": ["../sass/member.scss"],
 "names": [],
 "file": "member.css"

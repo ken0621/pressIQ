@@ -16,28 +16,32 @@
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> 
         <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet"> 
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet">  
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet"> 
+        <link rel="stylesheet" href="/assets/external/chosen/chosen/chosen.css" media="screen"/>
 
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member.css">
+        {{-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css"> --}}
 
         @include("frontend.ghead")
 
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
-        .content
-        {
-            background-color: transparent;
-        }
-        .navbar.sticky
-        {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-        }
+            .content
+            {
+                background-color: transparent;
+            }
+            .navbar.sticky
+            {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+            }
         </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
@@ -66,7 +70,7 @@
             </div>
             <div class="right-container">
                 @if(session()->has('user_email'))
-                <span class="smoth-scroll" style="cursor: pointer; text-transform: capitalize;" onClick="location.href='/pressuser/dashboard'">{{ session('user_first_name')}}</span>
+                <span class="smoth-scroll" style="cursor: pointer; text-transform: capitalize;" onClick="location.href='/pressuser/dashboard'">{{ session('user_first_name')}}  {{ session('user_last_name')}}</span>
                 <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/logout'">
                     <div class="subhead-btn">Log out</div>
                 </span>
@@ -94,29 +98,34 @@
                         <span></span>
                         <span></span>
                     </div>
+                    <div class="menu-mobile-nav">
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#home">Home</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/newsroom">News Room</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/about">About</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/contact">Contact Us</a></span>
+                    </div>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-10">
                 <!-- NAVIGATION -->
                     <nav class="navirino">
                         <ul>
                             @if(Request::segment(1)=="members")
                                 <li><a class="smoth-scroll" href="/#home">Home</a></li>
-                                <li><a class="smoth-scroll" href="/#aboutus">Releases</a></li>
-                                <li><a class="smoth-scroll" href="/#whytojoin">About</a></li>
-                                <li><a class="smoth-scroll" href="/#packages">Contact Us</a></li>
+                                <li><a class="smoth-scroll" href="/newsroom">News Room</a></li>
+                                <li><a class="smoth-scroll" href="/about">About</a></li>
+                                <li><a class="smoth-scroll" href="/contact">Contact Us</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="/#home">Home</a></li>
-                                <li><a class="smoth-scroll" href="/#aboutus">Releases</a></li>
-                                <li><a class="smoth-scroll" href="/#whytojoin">About</a></li>
-                                <li><a class="smoth-scroll" href="/#packages">Contact Us</a></li>
+                                <li><a class="smoth-scroll" href="/newsroom">News Room</a></li>
+                                <li><a class="smoth-scroll" href="/about">About</a></li>
+                                <li><a class="smoth-scroll" href="/contact">Contact Us</a></li>
                             @endif
                         </ul>
                     </nav>
-                </div>
-                <div class="col-md-5">
-                    <div class="search-container">
-                        <input type="text" placeholder="Search News"><span><i class="fa fa-search" aria-hidden="true"></i></span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -136,9 +145,10 @@
                         <div class="footer-title-container">
                             <p class="footer-title">INFORMATION</p>
                         </div>
-                        <a href="/"><p>HOME</p></a>
-                        <a href="/#aboutus"><p>ABOUT US</p></a>
-                        <a href="/#whytojoin"><p>CONTACT US</p></a>
+                        <a href="/#home"><p>HOME</p></a>
+                        <a href="/newsroom"><p>NEWS ROOM</p></a>
+                        <a href="/about"><p>ABOUT US</p></a>
+                        <a href="/contact"><p>CONTACT US</p></a>
                     </div>
                     <div class="col-md-4">
                         <div class="footer-title-container">
@@ -154,13 +164,13 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-md-4" style="padding-left: 150px !important;">
-                        <div class="footer-title-container">
-                            <p class="footer-title">FOLLOW US ON</p>
+                    <div class="col-md-4">
+                        <div class="footer-follow-container">
+                            <p class="footer-follow-title">FOLLOW US ON</p>
+                            <span><i class="fa fa-facebook-square" aria-hidden="true"></i></span>
+                            <span><i class="fa fa-twitter-square" aria-hidden="true"></i></span>
+                            <span><i class="fa fa-pinterest-square" aria-hidden="true"></i></span>
                         </div>
-                        <span><i class="fa fa-facebook-square" aria-hidden="true"></i></span>
-                        <span><i class="fa fa-twitter-square" aria-hidden="true"></i></span>
-                        <span><i class="fa fa-pinterest-square" aria-hidden="true"></i></span>
                     </div>
                 </div>
             </div>
@@ -176,6 +186,7 @@
     @include("frontend.gfoot")
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+    <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script>
     
     <!-- HEADER FIXED -->
     <script type="text/javascript">

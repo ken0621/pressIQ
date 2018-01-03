@@ -202,6 +202,7 @@ function non_member()
 			$(".input-verify-sponsor").val($(this).attr("company_head_id"));
 	    });
 	}
+
 	function action_verify_placement()
 	{
 		var form_data 			 = {};
@@ -247,6 +248,7 @@ function non_member()
 		});
 
 	}
+	
 	function add_event_process_slot_placement()
 	{
 		$("body").on("click", ".process-slot-placement", function()

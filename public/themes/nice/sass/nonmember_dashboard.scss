@@ -11,7 +11,6 @@ $text-dark: #272c2f;
 /* Dashboard Top */
 .dashboard-top
 {
-
 	.img-container
 	{
 		img
@@ -351,12 +350,6 @@ $text-dark: #272c2f;
 .popup-proceed1
 {
 	font-family: $content-text;
-	
-	.modal-sm
-	{  
-		width: 100%;
-		max-width: 400px;
-	}
 
 	.modal-content
 	{
@@ -364,8 +357,6 @@ $text-dark: #272c2f;
 		.modal-header
 		{
 			background-color: #02295E;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
 
 			.close
 			{
@@ -442,44 +433,14 @@ $text-dark: #272c2f;
 /* Proceed 2 */
 .popup-proceed2
 {
-	background-color: #fff;
 	font-family: $content-text;
 	
-	.modal-sm
-	{  
-		width: 100%;
-		max-width: 350px;
-	}
-
 	.modal-content
 	{
-		background-color: #fff;
-		.modal-header
-		{
-			background-color: #02295E;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
-
-			.close
-			{
-				color: #FFF;
-			}
-
-			.modal-title
-			{
-				font-weight: $semi-bold;
-				color: #FFF;
-				font-size: 15px;
-			}
-		}
-
 		.modal-body
 		{
-			
-
 			font-weight: $semi-bold;
 			margin: 0px 20px 0px 20px;
-
 
 			.message
 			{
@@ -514,6 +475,7 @@ $text-dark: #272c2f;
 				margin: 10px 0px;
 				padding: 10px;
 			}
+
 			.labeld
 			{
 				color: $text-dark;
@@ -542,23 +504,19 @@ $text-dark: #272c2f;
 				text-transform: uppercase;
 				padding-bottom: 20px;
 
-
 				.btn-proceed-2
 				{
+					@include transition(0.2s);
 					color: #fff;
 					background-color: #02295E;
 					padding: 10px 40px;
 					border-radius: 2px;
 					border: 0px !important;
-
-				  	-webkit-transition: all 0.2s ease-in-out;
-				  	-moz-transition: all 0.2s ease-in-out;
-				  	-o-transition: all 0.2s ease-in-out;
-				  	transition: all 0.2s ease-in-out;
 				  	width: 100%;
 				  	margin-top: 20px;
 				  	text-transform: uppercase;
 				}
+
 				.btn-proceed-2:hover
 				{
 					opacity: 0.9;
@@ -576,8 +534,6 @@ $text-dark: #272c2f;
 		.modal-header
 		{
 			background-color: #ed5639;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
 
 			.close
 			{

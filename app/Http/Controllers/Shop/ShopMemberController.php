@@ -30,8 +30,11 @@ use App\Globals\Mail_global;
 use App\Globals\Transaction;
 use App\Globals\Warehouse2;
 use App\Globals\Ecom_Product;
+use App\Globals\Abs\AbsMain;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_image;
+use App\Models\Tbl_mlm_slot_points_log;
 //mark
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_mlm_slot_wallet_log_refill;
@@ -56,8 +59,8 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
-
 use App\Models\Tbl_press_release_recipient;
+use App\Tbl_pressiq_press_releases;
 
 use App\Globals\Currency;
 use App\Globals\Cart2;
@@ -92,7 +95,6 @@ class ShopMemberController extends Shop
 {
     public function getIndex()
     {
-        
         $data["page"] = "Dashboard";
         $data["mode"] = session("get_success_mode");
         $data["zero_currency"] = Currency::format(0);
@@ -109,7 +111,7 @@ class ShopMemberController extends Shop
             $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
             $data["_slot"]              = $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
             $data['allow_multiple_slot'] = Self::$customer_info->allow_multiple_slot;
             $data['mlm_pin'] = '';
             $data['mlm_activation'] = '';            
@@ -169,7 +171,20 @@ class ShopMemberController extends Shop
             }
         }
 
-        return view("member.dashboard", $data);
+        // for shift only
+        if($this->shop_info->shop_id == 54)
+        {
+            $slot_id = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id);
+            $data['reward_point_redemption'] = Tbl_mlm_slot_points_log::Slot()->where('tbl_mlm_slot.slot_owner',Self::$customer_info->customer_id)->where("points_log_complan","PURCHASE_GC")->sum('points_log_points');
+        }
+        // dd($slot_id." ; ".$data['reward_point_redemption']);
+
+        return Self::load_view_for_members("member.dashboard", $data);
+    }
+    public function getDirectReferrals()
+    {
+        $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
+        return view('member.newest_direct_referrals',$data);
     }
     public function getKit()
     {
@@ -214,15 +229,16 @@ class ShopMemberController extends Shop
         Session::forget('user_email');
         Session::forget('user_first_name');
         Session::forget('user_last_name');
-        Session::forget('user_level');
-
+        Session::forget('pr_user_level');
+        Session::forget('pr_user_id');
+       
         return Redirect::to("/");
     }
     public function pressuser()
     {
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
                 $data["page"] = "Press Release";
@@ -238,33 +254,19 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }   
     }
-    public function pressuser_view()
-    {
-        if(Session::exists('user_email'))
-        {
-           $level=session('user_level');
-           if($level!="1")
-           {
-                $data["page"] = "Press Release - View";
-                return view("press_user.pressrelease_view", $data);
-           }
-           else
-           {
-                return Redirect::to("/pressadmin/pressreleases");
-           }
-        }
-        else
-        {
-            return Redirect::to("/"); 
-        }
-    }
+
+
      public function pressuser_dashboard()
     {
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
+                $data['pr']     = DB::table('tbl_pressiq_press_releases')
+                                    ->where('pr_from', session('user_email'))
+                                    ->orderByRaw('pr_date_sent DESC')
+                                    ->get();
                 $data["page"] = "Press Release - Dashboard";
                 return view("press_user.press_user_dashboard", $data);
            }
@@ -278,38 +280,95 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
     }
-     public function pressuser_pressrelease()
+    public function pressuser_delete_draft($pid)
     {
-        $data['add_recipient']   = Tbl_press_release_recipient::get();
+        Tbl_pressiq_press_releases::where('pr_id',$pid)->delete();
+        Session::flash('delete', "Draft Already Deleted!");
+        return  redirect::back();
+    } 
+    public function pressuser_send_draft($pid)
+    {
+        $date=Carbon::now();
+        DB::table('tbl_pressiq_press_releases')
+            ->where('pr_id', $pid)
+            ->update(['pr_status' => "sent", 'pr_date_sent' => $date]);
+
+        $pr=DB::table('tbl_pressiq_press_releases')
+                ->where('pr_id',$pid)
+                ->get();
+        foreach ($pr as $data) {
+        
+        $pr_info["pr_headline"]     =$data->pr_headline;
+        $pr_info["pr_content"]      =$data->pr_content;
+        $pr_info["pr_from"]         =$data->pr_from;
+        $pr_info["pr_to"]           =$data->pr_to;
+        $pr_info["pr_status"]       =$data->pr_status;
+        $pr_info["pr_date_sent"]    =$data->pr_date_sent;
+        $pr_info["pr_sender_name"]  =$data->pr_sender_name;
+        $pr_info["pr_receiver_name"]=$data->pr_receiver_name;
+
+        $this->send($pr_info);
+        if( count(Mail::failures()) > 0 ) 
+            {
+
+               Session::flash('message', "Error in sending the release!");
+               foreach(Mail::failures as $email_address) 
+                {
+                   echo " - $email_address <br />";
+                }
+
+            }
+            else 
+            {
+                return Redirect::to("/pressuser/mypressrelease");
+            }
+        }
+
+    }
+    public function pressuser_edit_draft($pid)
+    {
+        Session::put('pr_edit',$pid);
+        // $data['pr_edit']     = DB::table('tbl_pressiq_press_releases')
+        //                     ->where('pr_id',session('pr_edit'))
+        //                     ->orderByRaw('pr_date_sent DESC')
+        //                     ->get();
+        // $data['add_recipient']   = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))->paginate(10);
+        // $data['country']   = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))
+        //                     ->distinct()
+        //                     ->get(['country']);
+        // $data['drafts']     = DB::table('tbl_pressiq_press_releases')
+        //                     ->where('pr_from', session('user_email'))
+        //                     ->where('pr_status','draft')
+        //                     ->orderByRaw('pr_date_sent DESC')
+        //                     ->get();
+
+        return Redirect::to("/pressuser/pressrelease");
+        // return view("press_user.press_user_pressrelease", $data);
+    }
+    public function pressuser_pressrelease()
+    {
+        $data['_country']              = Tbl_press_release_recipient::distinct()->get(['country']);
+        $data['_industry_type']        = Tbl_press_release_recipient::distinct()->get(['industry_type']);
+        $data['_title_of_journalist']  = Tbl_press_release_recipient::distinct()->get(['title_of_journalist']);
+        $data['_media_type']           = Tbl_press_release_recipient::distinct()->get(['media_type']);
+
+        $data['drafts']     = DB::table('tbl_pressiq_press_releases')
+                            ->where('pr_from', session('user_email'))
+                            ->where('pr_status','draft')
+                            ->orderByRaw('pr_date_sent DESC')
+                            ->get();
+
+        $data['edit']     = DB::table('tbl_pressiq_press_releases')
+                            ->where('pr_id',session('pr_edit'))
+                            ->get();
+        
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
-           {
-                if (request()->isMethod("post"))
-                {
-                    $pr_info["pr_headline"]     =request('pr_headline');
-                    $pr_info["pr_subheading"]   =request('pr_subheading');
-                    $pr_info["pr_content"]      =request('pr_content');
-                    $pr_info["pr_from"]         =session('user_email');
-                    $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
-                    $pr_info["pr_to"]           =request('pr_to');
-                    $pr_info["pr_date_sent"]    =Carbon::now();
-                    
-                    Mail::send('emails.press_email', $pr_info, function($message) use ($pr_info)
-                    {
-                        $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
-                        $message->to($pr_info["pr_to"]);
-                    });
-                    $data["page"] = "Press Release - Press Release";
-                    return view("press_user.press_user_pressrelease", $data);
-                }
-                else
-                {
-                    $data["page"] = "Press Release - Press Release";
-                     
-                    return view("press_user.press_user_pressrelease", $data);
-                }
+           { 
+                $data["page"] = "Press Release - Press Release";
+                return view("press_user.press_user_pressrelease", $data);
            }
            else
            {
@@ -320,17 +379,216 @@ class ShopMemberController extends Shop
         {
             return Redirect::to("/"); 
         }
+    }
+    
+    public function send_pr()
+    {
 
+        $pr_info["pr_headline"]     =request('pr_headline');
+        $pr_info["pr_content"]      =request('pr_content');
+        $pr_info["pr_boiler_content"]=request('pr_boiler_content');
+        $pr_info["pr_from"]         =session('user_email');
+        $pr_info["pr_to"]           =request('pr_to');
+        $pr_info["pr_status"]       ="sent";
+        $pr_info["pr_date_sent"]    =Carbon::now();
+        $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
+        $pr_info["pr_receiver_name"]=request('pr_receiver_name');
+        
+        $pr_rules["pr_headline"]   =['required'];
+        $pr_rules["pr_content"]    =['required'];
+        $pr_rules["pr_boiler_content"] =['required'];
+        $pr_rules["pr_to"]         =['required'];
+        
+        $validator = Validator::make($pr_info, $pr_rules);
+
+        if ($validator->fails()) 
+        {
+            return Redirect::to("/pressuser/pressrelease")->with('message', $validator->errors()->first())->withInput();
+        }
+        else
+        {    
+            $this->send($pr_info);
+
+            if( count(Mail::failures()) > 0 ) 
+                {
+
+               Session::flash('message', "Error in sending the release!");
+
+               foreach(Mail::failures as $email_address) 
+                {
+                   echo " - $email_address <br />";
+                }
+                return Redirect::back()->with('message');
+
+            }
+            else 
+            {
+
+                Session::flash('message', "Release Successfully Sent!");
+
+                if(Session::has('pr_edit'))
+                {
+                    $date=Carbon::now();
+                    DB::table('tbl_pressiq_press_releases')
+                        ->where('pr_id', session('pr_edit'))
+                        ->update([
+                            'pr_headline'     =>request('pr_headline'),
+                            'pr_content'      =>request('pr_content'),
+                            'pr_boiler_content'=>request('pr_boiler_content'),
+                            'pr_from'         =>session('user_email'),
+                            'pr_to'           =>request('pr_to'),
+                            'pr_status'       =>"sent",
+                            'pr_date_sent'    =>$date,
+                            'pr_sender_name'  =>session('user_first_name').' '.session('user_last_name'),
+                            'pr_receiver_name'=>request('pr_receiver_name')
+                            ]);
+                    Session::forget('pr_edit');
+                    return Redirect::to("/pressuser/mypressrelease");
+
+                }
+                else
+                {
+                    $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
+                    return Redirect::to("/pressuser/mypressrelease");
+ 
+                }
+                
+            }
+            $data["page"] = "Press Release - Press Release";
+            return view("press_user.press_user_pressrelease", $data);
+        }
+    }
+    public function pressuser_pressrelease_recipient_search(Request $request)
+    {  
+     
+      $search_key = $request->search_key;
+      $data['_recipient'] = Tbl_press_release_recipient::where('name','like','%'.$search_key.'%')
+                            ->Orwhere('company_name','like','%'.$search_key.'%')
+                            ->Orwhere('position','like','%'.$search_key.'%')
+                            ->get();
+      return view("press_user.search_recipient", $data);
+      
+    }
+
+
+    public function send($pr_info)
+    {
+        $to=explode(",", $pr_info['pr_to']);
+
+        foreach ($to as $pr_info['to']) 
+        {
+            Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
+            {
+                $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
+                $message->to($pr_info["to"]);
+            });
+        }
+    }
+
+    public function press_release_save_as_draft(Request $request)
+    {   
+        $pr_info["pr_headline"]     =$request->pr_headline;
+        $pr_info["pr_content"]      =$request->pr_content;
+        $pr_info["pr_from"]         =session('user_email');
+        $pr_info["pr_to"]           =$request->pr_to;
+        $pr_info["pr_status"]       ="draft";
+        $pr_info["pr_date_sent"]    =Carbon::now();
+        $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
+        $pr_info["pr_receiver_name"]=request('pr_receiver_name');
+
+        $pr_rules["pr_headline"]   =['required'];
+        $pr_rules["pr_content"]    =['required'];
+        $pr_rules["pr_to"]         =['required'];
+        
+        $validator = Validator::make($pr_info, $pr_rules);
+
+        if ($validator->fails()) 
+        {
+            return Redirect::to("/pressuser/pressrelease")->with('message', $validator->errors()->first())->withInput();
+        }
+        else
+        {
+            $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info); 
+            $data["page"] = "Press Release - My Press Release";
+            Session::forget('pr_edit');
+            return redirect::to("/pressuser/drafts");
+        }
     }
     public function pressuser_my_pressrelease()
     {
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
+                $pr = DB::table('tbl_pressiq_press_releases')
+                    ->where('pr_from', session('user_email'))
+                    ->where('pr_status','sent')
+                    ->orderByRaw('pr_date_sent DESC')
+                    ->get();
                 $data["page"] = "Press Release - My Press Release";
-                return view("press_user.press_user_my_pressrelease", $data);
+                $data["pr"]=$pr;
+                return view("press_user.press_user_my_pressrelease",$data);
+           }
+           else
+           {
+                return Redirect::to("/pressadmin/pressreleases");
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
+    }
+    
+    public function press_user_drafts()
+    {
+        if(Session::exists('user_email'))
+        {
+           $level=session('pr_user_level');
+           if($level!="1")
+           {
+                $data['drafts']     = DB::table('tbl_pressiq_press_releases')
+                                    ->where('pr_from', session('user_email'))
+                                    ->where('pr_status','draft')
+                                    ->orderByRaw('pr_date_sent DESC')
+                                    ->get();
+                $data["page"] = "Drafts";
+                return view("press_user.press_user_drafts", $data);
+            }
+            else
+           {
+                return Redirect::to("/pressadmin/pressreleases");
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
+    }
+    public function pressuser_view($pid)
+    {
+        if(Session::exists('user_email'))
+        {
+           $level=session('pr_user_level');
+           if($level!="1")
+           {
+                $pr = DB::table('tbl_pressiq_press_releases')
+                    ->where('pr_id', $pid)
+                    ->where('pr_from', session('user_email'))
+                    ->get();
+                $data["page"] = "Press Release - View";
+                $data["pr"]=$pr;
+
+                $pr = DB::table('tbl_pressiq_press_releases')
+                    ->where('pr_id','!=', $pid)
+                    ->where('pr_from', session('user_email'))
+                    ->orderByRaw('pr_date_sent DESC')
+                    ->get();
+                $data["page"] = "Press Release - View";
+                $data["opr"]=$pr;
+
+                return view("press_user.pressrelease_view", $data);
            }
            else
            {
@@ -346,7 +604,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
                 return Redirect::to("/pressuser");
@@ -366,7 +624,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
                 return Redirect::to("/pressuser/dashboard");
@@ -384,6 +642,27 @@ class ShopMemberController extends Shop
     }
     public function pressadmin_media_contacts()
     {
+
+        $data['_media_contacts'] = Tbl_press_release_recipient::get();
+
+        if(Session::exists('user_email'))
+        {
+           $level=session('pr_user_level');
+           if($level!="1")
+           {
+                return Redirect::to("/pressuser/mypressrelease");
+           }
+           else
+           {
+                $data["page"] = "Press Release - Press Release";
+                return view("press_admin.press_admin_media_contacts", $data);
+           }
+        }
+
+        else
+        {   
+            return Redirect::to("/"); 
+        }
         // if (request()->isMethod("post"))
         // { 
         //     $value["contact_name"]          =request('contact_name');
@@ -428,7 +707,7 @@ class ShopMemberController extends Shop
     {
         if(Session::exists('user_email'))
         {
-           $level=session('user_level');
+           $level=session('pr_user_level');
            if($level!="1")
            {
                 return Redirect::to("/pressuser/mypressrelease");
@@ -445,17 +724,56 @@ class ShopMemberController extends Shop
         }
     }
 
-    public function pressadmin_pressrelease_addrecipient(Request $request)
+    public function pressadmin_email()
+    {   
+
+        $data['_email'] = Tbl_pressiq_press_releases::paginate(5);
+
+
+        if(Session::exists('user_email'))
+        {
+           $level=session('pr_user_level');
+           if($level!="1")
+           {
+                return Redirect::to("/pressuser/mypressrelease");
+           }
+           else
+           {
+                $data["page"] = "Press Release - Press Release";
+                return view("press_admin.press_admin_email", $data);
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
+    }
+
+    public function email_delete($id)
     {
-      $data["name"]                      = $request->name;
-      $data["country"]                   = $request->country;
-      $data["research_email_address"]    = $request->research_email_address;
-      $data["website"]                   = $request->website;
-      $data["description"]               = $request->description;
-      Tbl_press_release_recipient::insert($data); 
-      Session::flash('message', "Recipient Successfully Added!");
+      Tbl_pressiq_press_releases::where('pr_id',$id)->delete();
+      Session::flash('delete_email', "Email Already Deleted!");
       return  redirect::back();
     }
+
+    public function pressadmin_pressrelease_addrecipient(Request $request)
+    {
+
+      $data["name"]                      = $request->name;
+      $data["position"]                  = $request->position;
+      $data["company_name"]              = $request->company_name;
+      $data["country"]                   = $request->country;
+      $data["research_email_address"]    = $request->contact_email;
+      $data["website"]                   = $request->contact_website;
+      $data["media_type"]                = $request->media_type;
+      $data["industry_type"]             = $request->industry_type;
+      $data["title_of_journalist"]       = $request->title_journalist;
+      $data["description"]               = $request->description;
+      Tbl_press_release_recipient::insert($data); 
+      Session::flash('success_merchant', 'Recipient Successfully Added!');
+      return  redirect::back();
+    }
+
     public function pressreleases_deleterecipient($id)
     {
       Tbl_press_release_recipient::where('recipient_id',$id)->delete();
@@ -469,6 +787,165 @@ class ShopMemberController extends Shop
 
     }
 
+    public function pressuser_choose_recipient(Request $request)
+    {
+        $filter["country"]             = $request->choose_country;
+        $filter["industry_type"]       = $request->industry_type;
+        $filter["media_type"]          = $request->media_type;
+        $filter["title_of_journalist"] = $request->title_of_journalist;
+
+        
+        if($filter["country"]=="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="")
+        {
+            dd("Select a filter data");
+        }
+        if ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="")
+        {
+            //dd($request->choose_country);
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('country', $filter["country"])
+                                 ->get();
+        }
+        elseif ($filter["country"]!="" && $filter["industry_type"]!="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="") 
+        {   
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('country', $filter["country"])
+                                ->whereIn('industry_type', $filter["industry_type"])
+                                 ->get();
+        }
+        elseif ($filter["country"]!="" && $filter["industry_type"]!="" && $filter["media_type"]!="" && $filter["title_of_journalist"]=="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('country', $filter["country"])
+                                ->whereIn('industry_type', $filter["industry_type"])
+                                ->whereIn('media_type', $filter["media_type"])
+                                 ->get();
+        }
+        elseif ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]!="" && $filter["title_of_journalist"]=="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('country', $filter["country"])
+                                ->whereIn('media_type', $filter["media_type"])
+                                ->get();
+        }
+        elseif ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["title_of_journalist"]!="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('country', $filter["country"])
+                                ->whereIn('title_of_journalist', $filter["title_of_journalist"])
+                                ->get();
+        }
+        elseif ($filter["country"]=="" && $filter["industry_type"]!="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('industry_type', $filter["industry_type"])
+                                 ->get();
+        }
+        elseif ($filter["country"]=="" && $filter["industry_type"]!="" && $filter["media_type"]!="" && $filter["title_of_journalist"]=="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('industry_type', $filter["industry_type"])
+                                ->whereIn('media_type', $filter["media_type"])
+                                 ->get();
+        }
+        elseif ($filter["country"]=="" && $filter["industry_type"]!="" && $filter["media_type"]=="" && $filter["title_of_journalist"]!="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('industry_type', $filter["industry_type"])
+                                ->whereIn('title_of_journalist', $filter["title_of_journalist"])
+                                ->get();
+        }
+        elseif ($filter["country"]=="" && $filter["industry_type"]!="" && $filter["media_type"]!="" && $filter["title_of_journalist"]!="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('industry_type', $filter["industry_type"])
+                                ->whereIn('media_type', $filter["media_type"])
+                                ->whereIn('title_of_journalist', $filter["title_of_journalist"])
+                                 ->get();
+        }
+        elseif ($filter["country"]=="" && $filter["industry_type"]=="" && $filter["media_type"]!="" && $filter["title_of_journalist"]=="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('media_type', $filter["media_type"])
+                                 ->get();
+        }
+        elseif ($filter["country"]=="" && $filter["industry_type"]=="" && $filter["media_type"]!="" && $filter["title_of_journalist"]!="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('media_type', $filter["media_type"])
+                                ->whereIn('title_of_journalist', $filter["title_of_journalist"])
+                                ->get();
+        }
+        elseif ($filter["country"]=="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["title_of_journalist"]!="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('title_of_journalist', $filter["title_of_journalist"])
+                                ->get();
+        }
+
+        else
+        {
+        $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('country', $filter["country"])
+                                ->whereIn('industry_type', $filter["industry_type"])
+                                ->whereIn('media_type', $filter["media_type"])
+                                ->whereIn('title_of_journalist', $filter["title_of_journalist"])
+                                ->get();
+        }
+
+
+        $data['total_query'] = $data['_recipient']->count();
+        
+        return view("press_user.choose_recipient", $data);
+    }
+
+    
+    public function pressreleases_image_upload()
+    {
+        $shop_id    = $this->shop_info->shop_id;
+        $shop_key   = $this->shop_info->shop_key;
+
+        /* SAVE THE IMAGE IN THE FOLDER */
+        $file               = Input::file('file');
+        $extension          = $file->getClientOriginalExtension();
+        $filename           = str_random(15).".".$extension;
+        $destinationPath    = 'uploads/'.$shop_key."-".$shop_id;
+
+        $image_path = Storage::putFile($destinationPath, Input::file('file'));
+
+        if ($image_path) 
+        {
+            $upload_success = true;
+        }
+        else
+        {
+            $upload_success = false;
+        }
+
+        $insert_image["image_path"]         = "/" . $image_path; 
+        $insert_image["image_shop"]         = $this->shop_info->shop_id;
+        $insert_image["image_reason"]       = "product";
+        $insert_image["image_reason_id"]    = 0;
+        $insert_image["image_date_created"] = Carbon::now();
+        $insert_image["image_key"]          = uniqid();
+        $image_id = Tbl_image::insertGetId($insert_image);
+
+        if( $upload_success ) 
+        {
+           return json_encode(array('location' => "/" . $image_path));
+        } 
+        else 
+        {
+           return Response::json('error', 400);
+        }
+    }
+
+    public function thank_you()
+    {
+        
+        $data["page"] = "Thank You";
+        return view("press_user.thank_you", $data);
+    }
     /*Press Release*/
 
 
@@ -948,7 +1425,7 @@ class ShopMemberController extends Shop
     public function getPayoutSetting()
     {
         $data["page"] = "Payout";
-        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->coinsph()->money_remittance()->bank()->vmoney()->get();
+        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->coinsph()->money_remittance()->bank()->vmoney()->airline()->get();
         $data["_method"] = unserialize($this->shop_info->shop_payout_method);
 
         $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
@@ -958,12 +1435,35 @@ class ShopMemberController extends Shop
     public function postPayoutSetting()
     {
         $shop_id = $this->shop_info->shop_id;
+        $customer = Self::$customer_info;
 
         /* UPDATE CUSTOMER PAYOUT METHOD */
         $update_customer["customer_payout_method"] = request("customer_payout_method");
         $update_customer["tin_number"] = request("tin_number");
         Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
 
+        $json["status"] = "success";
+        $json["message"] = "";
+
+        /* UPDATE  METHOD */
+        foreach(request("airline") as $key => $value)
+        {
+            $slot_info = Tbl_mlm_slot::where("slot_no", $value)->where("shop_id", $this->shop_info->shop_id)->first();
+
+            if ($slot_info) 
+            {
+                if ($customer) 
+                {
+                    $airline_result = AbsMain::update_info($customer->customer_id, $slot_info->slot_id, request("tour_wallet_account_id")[$key], $this->shop_info->shop_id); 
+                    
+                    if ($airline_result["status"] != 1) 
+                    {
+                        $json["status"] = "error";
+                        $json["message"] = "Your Airline Ticketing Account ID is incorrect.";
+                    }
+                }
+            }
+        }
 
         /* UPDATE VMONEY METHOD */
         foreach(request("vmoney") as $key => $value)
@@ -988,7 +1488,6 @@ class ShopMemberController extends Shop
             }
         }
 
-
         /* UPDATE EON METHOD */
         foreach(request("eon_slot_code") as $key => $eon_slot_no)
         {
@@ -996,7 +1495,6 @@ class ShopMemberController extends Shop
             $update_mlm_slot["slot_eon_card_no"] = request("eon_card_no")[$key];
             Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $eon_slot_no)->update($update_mlm_slot);
         }
-
 
         /* UPDATE BANK DETAILS */
         foreach(request("bank_slot_no") as $key => $bank_slot_no)
@@ -1078,7 +1576,7 @@ class ShopMemberController extends Shop
         }
 
 
-        echo json_encode("success");
+        echo json_encode($json);
     }
 
     public function getPayoutSettingSuccess()
@@ -1842,7 +2340,7 @@ class ShopMemberController extends Shop
 
         $data["_rewards_points"]    = MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by);
 
-        
+        // return MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by)->first();
         
         return (Self::load_view_for_members("member.report_points", $data));
     }
@@ -2275,7 +2773,7 @@ class ShopMemberController extends Shop
         $shop_id            = $this->shop_info->shop_id;
         $data["_payment"]   = $_payment = Payment::get_list($shop_id);
         $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
-        $data["cart"]       = Cart2::get_cart_info();
+        $data["cart"]       = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
         
         if(!Self::$customer_info)
         {
@@ -2294,7 +2792,7 @@ class ShopMemberController extends Shop
     {
         $shop_id  = $this->shop_info->shop_id;
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
-        $cart = Cart2::get_cart_info();
+        $cart = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
         $validate = null;
         if($cart)
         {   
@@ -2334,18 +2832,27 @@ class ShopMemberController extends Shop
 
 
             
-            $method                                             = request('method');
+
+            $method = request('method');
+            $method_id = 0;
+            if($shop_id == 55)
+            {
+                $method                                             = "manual1";
+                $method_id                                          = request('method');            
+            }
+
             $transaction_new["transaction_reference_table"]     = "tbl_customer";
             $transaction_new["transaction_reference_id"]        = Self::$customer_info->customer_id;
             $transaction_type                                   = "ORDER";
             $transaction_date                                   = Carbon::now();
             
             Transaction::create_set_method($method);
+            Transaction::create_set_method_id($method_id);
             $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
 
             if(is_numeric($transaction_list_id))
             {
-                $method_id  = request('method_id');
+                $method_id  = $method_id;
                 $success    = "/members?success=1"; //redirect if payment success
                 $failed     = "/members?failed=1"; //redirect if payment failed
                 $error      = Payment::payment_redirect($shop_id, $method, $transaction_list_id, $success, $failed, false, $method_id);
@@ -2981,28 +3488,35 @@ class ShopMemberController extends Shop
 
     public function load_view_for_members($view, $data, $memberonly = true)
     {
-        $agent = new Agent();
-
-        if($agent->isMobile())
+        if ($this->shop_theme == "brown") 
         {
-            if (strpos($view, 'member2.') !== false)
+            $agent = new Agent();
+
+            if($agent->isMobile())
             {
-                $new_view = str_replace("member2.", "member2.mobile.", $view);
+                if (strpos($view, 'member2.') !== false)
+                {
+                    $new_view = str_replace("member2.", "member2.mobile.", $view);
+                }
+                else
+                {
+                    $new_view = str_replace("member.", "member.mobile.", $view);
+                }
+
+                if(view()->exists($new_view))
+                {
+                    $view = $new_view;
+                }
+            }
+
+            if ($memberonly) 
+            {
+                return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
             }
             else
             {
-                $new_view = str_replace("member.", "member.mobile.", $view);
+                return view($view, $data);
             }
-
-            if(view()->exists($new_view))
-            {
-                $view = $new_view;
-            }
-        }
-
-        if ($memberonly) 
-        {
-            return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
         }
         else
         {
@@ -3022,9 +3536,9 @@ class ShopMemberController extends Shop
 
         $shop_id = $this->shop_info->shop_id;
 
-        $check = Item::check_product_code($shop_id, $mlm_pin, $mlm_activation);
+        $check = Item::check_unused_product_code($shop_id, $mlm_pin, $mlm_activation);
         $return = [];
-        if($check == true)
+        if($check)
         {
             $return['status'] = 'success';
             $return['mlm_pin'] = $mlm_pin;

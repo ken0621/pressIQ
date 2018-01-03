@@ -11,6 +11,7 @@ use App\Models\Tbl_unit_measurement_type;
 use App\Models\Tbl_item;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_um;
+use App\Globals\Purchasing_inventory_system;
 use App\Globals\UnitMeasurement;
 use App\Globals\AuditTrail;
 use App\Globals\Utilities;

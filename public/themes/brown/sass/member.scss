@@ -1,7 +1,38 @@
+@import "../../../assets/front/sass/mixin";
+
+
+.modal-header
+{
+	background-color: #402A21 !important;
+	color: #fff;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	.close
+	{
+		color: #fff;
+	}
+}
+
+
+.popup-verify-placement
+{
+	.modal-header
+	{
+		border-top-left-radius: 0 !important;
+	 	border-top-right-radius: 0 !important;
+	}
+
+}
+
 .member
 {
 	background-image: url("/themes/brown/img/bg.jpg");
 	background-size: cover;
+
 	.members
 	{
 		background-color: #fff;
@@ -194,9 +225,11 @@
 									text-decoration: none;
 									border-color: #402A21;
 									
-									.icon {
+									.icon 
+									{
 										color: #fff;
 									}
+
 									img
 									{
 										-webkit-filter: brightness(2);
@@ -330,6 +363,7 @@
 									.nav-holder
 									{
 										background-color: #613922;
+
 										.icon
 										{
 											img

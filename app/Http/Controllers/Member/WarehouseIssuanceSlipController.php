@@ -9,6 +9,7 @@ use App\Globals\Cart2;
 use App\Globals\WarehouseTransfer;
 use App\Globals\Warehouse2;
 use App\Globals\Item;
+use App\Globals\Transaction;
 use App\Models\Tbl_warehouse_issuance_report;
 
 use Session;
@@ -23,7 +24,7 @@ class WarehouseIssuanceSlipController extends Member
         $data['status'] = isset($request->status) ? $request->status : 'pending';
         $current_warehouse = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         $data['_wis'] = WarehouseTransfer::get_all_wis($this->user_info->shop_id, $data['status'], $current_warehouse);
-
+        
     	return view('member.warehousev2.wis.wis_list',$data);
     }
     public function getLoadWisTable(Request $request)
@@ -31,14 +32,33 @@ class WarehouseIssuanceSlipController extends Member
         $current_warehouse = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         $data['status'] = isset($request->status) ? $request->status : 'pending';
         $data['_wis'] = WarehouseTransfer::get_all_wis($this->user_info->shop_id, $data['status'], $current_warehouse);
-
+        
         return view('member.warehousev2.wis.load_wis_table',$data);
     }
     public function getCreate()
     {
-    	$data['page'] = 'CREATE - WIS';
+    	$data['page'] = 'WIS';
         $data['_item']  = Item::get_all_category_item([1,5]);
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
+
+        
+        $ref_key = 'warehouse_issuance_slip';
+        
+        $ref_number = Transaction::get_transaction_reference_number($this->user_info->shop_id,$ref_key)->get();
+        
+        foreach ($ref_number as $key => $value) 
+        {
+            $ref_number[$key]->prefix = $value->prefix;
+            $ref_number[$key]->separator = $value->separator;
+        }
+
+        $prefix = $value->prefix;
+        $separator = $value->separator;
+        $other = date('Y-m-d');
+        $ref_other = str_replace('-','',$other);
+        
+        $data['transaction_ref_number'] = $prefix.$ref_other.$separator;
+       
     	return view('member.warehousev2.wis.wis_create',$data);
     }
     public function getTableItem()

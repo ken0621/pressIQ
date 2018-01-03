@@ -12,8 +12,7 @@
                         <th class="text-center">RECEIVER CODE</th>
                         @endif
                         @if($status == 'received')
-                        <th class="tex
-                        t-center">TOTAL RECEIVED INVENTORY</th>
+                        <th class="text-center">TOTAL RECEIVED INVENTORY</th>
                         <th class="text-center">TOTAL REMAINING INVENTORY</th>
                         @endif
                         @if($status == 'pending' || $status == 'confirm')

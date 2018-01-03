@@ -252,7 +252,7 @@ class MemberSlotGenealogy
                 return  '<li class="width-reference">'.$str_slot.
                                     '<div id="info">
                                         <div id="photo">
-                                            <img src="/assets/slot_genealogy/member/img/default-image.jpg" alt="" />
+                                            <img src="'. (isset($slot_info->profile) ? $slot_info->profile : "/assets/slot_genealogy/member/img/default-image.jpg") .'" alt="" />
                                         </div>
                                         <div id="cont">
                                             <div><b>' . strtoupper($slot_info->first_name) . ' ' . strtoupper($slot_info->last_name) . '</b></div> 
@@ -271,7 +271,7 @@ class MemberSlotGenealogy
                 return  '<li class="width-reference">'.$str_slot.
                                     '<div id="info">
                                         <div id="photo">
-                                            <img src="/assets/slot_genealogy/member/img/default-image.jpg">
+                                            <img src="'. (isset($slot_info->profile) ? $slot_info->profile : "/assets/slot_genealogy/member/img/default-image.jpg") .'">
                                         </div>
                                         <div id="cont">
                                             <div><b>' . strtoupper($slot_info->first_name) . ' ' . strtoupper($slot_info->last_name) . '</b></div> 
@@ -348,7 +348,7 @@ class MemberSlotGenealogy
                 return  '<li class="width-reference">'.$str_slot.
                                     '<div id="info">
                                         <div id="photo">
-                                            <img src="/assets/slot_genealogy/member/img/default-image.jpg" alt="" />
+                                            <img src="'. (isset($slot_info->profile) ? $slot_info->profile : "/assets/slot_genealogy/member/img/default-image.jpg") .'" alt="" />
                                         </div>
                                         <div id="cont">
                                             <div><b>' . strtoupper($slot_info->first_name) . ' ' . strtoupper($slot_info->last_name) . '</b></div> 
@@ -368,7 +368,7 @@ class MemberSlotGenealogy
                 return  '<li class="width-reference">'.$str_slot.
                                     '<div id="info">
                                         <div id="photo">
-                                            <img src="/assets/slot_genealogy/member/img/default-image.jpg">
+                                            <img src="'. (isset($slot_info->profile) ? $slot_info->profile : "/assets/slot_genealogy/member/img/default-image.jpg") .'">
                                         </div>
                                         <div id="cont">
                                             <div><b>' . strtoupper($slot_info->first_name) . ' ' . strtoupper($slot_info->last_name) . '</b></div> 

@@ -94,7 +94,13 @@
                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $dbline->dbline_item_id])
                                                         </select>
                                                     </td>
-                                                    <td><textarea class="textarea-expand txt-desc" name="dbline_description[]">{{$dbline->dbline_description}}</textarea></td>
+                                                    <td>
+                                                        @if($pis)
+                                                            <label class="textarea-expand txt-desc" name="dbline_description[]">{{$dbline->dbline_description}}</label>
+                                                        @else
+                                                            <textarea class="textarea-expand txt-desc" name="dbline_description[]">{{$dbline->dbline_description}}</textarea>
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         <select class="1111 droplist-um select-um {{isset($dbline->multi_id) ? 'has-value' : ''}}" name="dbline_um[]">
                                                             @if($dbline->dbline_um)
@@ -132,7 +138,13 @@
                                                         <option class="hidden" value="" />
                                                     </select>
                                                 </td>
-                                                <td><textarea class="textarea-expand txt-desc" name="dbline_description[]"></textarea></td>
+                                                <td>
+                                                    @if($pis)
+                                                        <label class="textarea-expand txt-desc" name="dbline_description[]"></label>
+                                                    @else
+                                                        <textarea class="textarea-expand txt-desc" name="dbline_description[]"></textarea>
+                                                    @endif
+                                                </td>
                                                 <td><select class="2222 droplist-um select-um" name="dbline_um[]"><option class="hidden" value="" /></select></td>
                                                 <td><input class="text-center number-input txt-qty compute" type="text" name="dbline_qty[]"/></td>
                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="dbline_rate[]"/></td>
@@ -156,7 +168,13 @@
                                                         <option class="hidden" value="" />
                                                     </select>
                                                 </td>
-                                                <td><textarea class="textarea-expand txt-desc" name="dbline_description[]"></textarea></td>
+                                                <td>
+                                                    @if($pis)
+                                                        <label class="textarea-expand txt-desc" name="dbline_description[]"></label>
+                                                    @else
+                                                        <textarea class="textarea-expand txt-desc" name="dbline_description[]"></textarea>
+                                                    @endif
+                                                </td>
                                                 <td><select class="3333 droplist-um select-um" name="dbline_um[]"><option class="hidden" value="" /></select></td>
                                                 <td><input class="text-center number-input txt-qty compute" type="text" name="dbline_qty[]"/></td>
                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="dbline_rate[]"/></td>

@@ -1,271 +1,334 @@
 @extends("press_user.member")
 @section("pressview")
-
+<script  src="/assets/js/ajax_offline.js"></script>
+<script  src="/assets/js/press_realease.js"></script>
 <div class="background-container">
-    <div class="pressview">
-    <div class="dashboard-container">
-        <div class="press-release-container">
-          <div class="tab"  style="border-style: none;">
-            <button class="tablinks" onclick="openCity(event, 'create_pr')" id="defaultOpen">Create Press Release</button>
-            <button class="tablinks" onclick="openCity(event, 'manage_pr')">Manage Press Release</button>
-            <button class="tablinks" onclick="openCity(event, 'add_recipient')">Add Recipient</button>
-          </div>
-                                    
+   <div class="pressview">
+      <div class="dashboard-container">
+         <div class="press-release-container">
+            <div class="tab"  style="border-style: none;">
+               <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Create New Release</button>
+               <button class="tablinks" onclick="openCity(event, 'choose_recipient')" id="">Choose Recipients</button>
+               <button class="tablinks" onclick="openCity(event, 'send_release')" id="">Send Release</button>
+            </div>
+
             <div class="press-release-content">
 
-                <div id="create_pr" class="tabcontent create-pr-container">
-                      @if (Session::has('message'))
-                      <div class="alert alert-success">
-                         <center>{{ Session::get('message') }}</center>
-                      </div>
-                      @endif 
-                     @if (Session::has('delete'))
-                      <div class="alert alert-danger ">
-                         <center>{{ Session::get('delete') }}</center>
-                      </div>
-                      @endif
-                 
-                    <form method="post">
-                        {{csrf_field()}}
-                        <div class="title-container">PRESS RELEASE</div>
-                        <div class="title">Send To:</div>
-                        <input type="text" class="form-control" name="pr_to"><span class="choose-button"><a data-toggle="modal" data-target="#recipient-modal" href="#">Choose Recipient</a></span>
-                        <div class="title">Headline:</div>
-                        <input type="text" name="pr_headline" class="form-control">
-                        <div class="title">Subheading:</div>
-                        <input type="text" name="pr_subheading" class="form-control">
-                        <div class="title">Content:</div>
-                        <textarea name="pr_content"></textarea>
-                        <div class="button-container">
-                            <span class="save-button"><a href="/sendrelease">Save as draft</a></span>
-                            <span class="send-button"><button type="submit"><a>Send</a></button></span>
-                        </div>
-                    </form>
-
-                </div>
-
-                <div id="manage_pr" class="tabcontent manage-pr-container">
-                    <div class="manage-holder-container">
-                        <table>
-                            <tr>    
-                                <th>Press Release Title</th>
-                                <th>Publish Date</th>
-                                <th>Status</th>
-                                <th>Send</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                            <tr>
-                                <td>Sample 1</td>
-                                <td>15/11/2017</td>
-                                <td>Draft</td>
-                                <td><a href="#">Send</a></td>
-                                <td><a href="#">Edit</a></td>
-                                <td><a href="#">Delete</a></td>
-                            </tr>
-                            <tr>
-                                <td>Sample 2</td>
-                                <td>16/11/2017</td>
-                                <td>Draft</td>
-                                <td><a href="#">Send</a></td>
-                                <td><a href="#">Edit</a></td>
-                                <td><a href="#">Delete</a></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <div id="add_recipient" class="tabcontent create-pr-container">
-                    <div class="manage-holder-container">
-
-                    <div role="tabpanel" class="tab-pane fade active in" id="">
-                     <form class="form-horizontal" method="post" action="/pressadmin/pressreleases_addrecipient">
-                        {{csrf_field()}}
-                        
-                        <div class="title">Contact Name:</div>
-                        <input type="text" class="form-control" id="name" name="name"> </input><br>
-
-                        <div class="title">Email:</div>
-                        <input type="text" class="form-control"  id="research_email_address" name="research_email_address"></input><br>
-
-                        <div class="title">Website:</div>
-                        <input type="text" class="form-control" id="website" name="website"> </input><br>
-
-                        <div class="title">Description:</div>
-                        <input type="text" class="form-control" id="description" name="description"> </input><br>
-
-                        <div class="title">Country:</div>
-                        <select type="text" class="form-control" name="country" placeholder="select Country">
-                            <option value="">--Select Country--</option>
-                            <option value="Philippines">Philippines</option>
-                            <option value="USA">USA</option>
-                            <option value="China">China</option>
-                            <option value="Korea">Korea</option>
-                        </select><br>
-
-                        <div class="button-container-add">
-                            <button type="submit" class="" id="btn_save" name="btn_save" style="background-color: #316df9;">Add Recipients</button>
-                        </div>  
-
-                     </form>
-                    </div>
-                    <div style="overflow-x:auto;">
-                     <table id="example" class="display table table-bordered"                                                      style="background-color: #FFFFFF;width: 100%; empty-cells: 0;">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center;">Contact Name</th>
-                                        <th style="text-align: center;">Country</th>
-                                        <th style="text-align: center;">Email</th>
-                                        <th style="text-align: center;">Website</th>
-                                        <th style="text-align: center;">Description</th>
-                                        <th style="text-align: center;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($add_recipient as $addrecipients)
-                                    <tr>
-                                        <td style="text-align: center;">{{$addrecipients->name}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->country}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->research_email_address}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->website}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->description}}</td>
-                                        <td bgcolor="transparent" style="text-align: center;">
-                                        <a href="/pressadmin/pressreleases_deleterecipient/{{$addrecipients->recipient_id}}" style="background-color: transparent; color: transparent;" ><button type="submit" class="btn btn-danger center" id="delete_recipients" name="delete_recipients"> Delete</button>
-
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-        </div>
+              <form class="recipient_form" onsubmit="add_event_global_submit()" action="/pressuser/choose_recipient" method="POST" style="">
+                {{csrf_field()}}
+                @if (session('message'))
+    <div class="alert alert-success">
+        {{ session('message') }}
     </div>
+@endif
+                <div id="create_release" class="tabcontent create-release-container">
+                  <div class="title-container">New Release</div>
+                  <div class="title">Headline:</div>
+                    @if(session()->has("pr_edit"))
+                      @foreach($edit as $edits)
+                        <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus value="{{$edits->pr_headline}}">
+                  <div class="title">Content:</div>
+                        <textarea name="pr_content" id="pr_content">{!!$edits->pr_content!!}</textarea>
+                  <div class="title">Boilerplate:</div>
+                        <textarea name="pr_boiler_content" id="pr_boiler_content">{!!$edits->pr_boiler_content!!}</textarea>
+                  <div class="button-container">
+                  <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
+                  <span class="preview-button"><a href="javascript:" id="prev_btn">Preview</a></span>
+                  </div>
+                </div>
+
+                <div id="choose_recipient" class="tabcontent choose-recipient-container">
+                    <div class="title-container">Choose Recipient</div>
+
+                    <div class="title">Country:</div>
+                    <select data-placeholder="--Choose a country--" multiple class="chosen-select" id="choose_country" name="choose_country[]">
+                         @foreach($_country as $country_name)
+                         <option value="{{$country_name->country}}">{{$country_name->country}}</option>
+                         @endforeach
+                    </select>
+
+                    <div class="title">Industry Type:</div>
+                    <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]">
+                          @foreach($_industry_type as $industry)
+                        <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
+                          @endforeach
+                    </select>
+
+                    <div class="title">Media Type:</div>
+                    <select data-placeholder="--Choose a media type--" multiple class="chosen-select" id="media_type" name="media_type[]">
+                          @foreach($_media_type as $media)
+                        <option value="{{$media->media_type}}">{{$media->media_type}}</option>
+                          @endforeach
+                    </select>
+
+                    <div class="title">Title of Journalist:</div>
+                    <select data-placeholder="--Choose a title of journalist--" multiple class="chosen-select" id="title_of_journalist" name="title_of_journalist[]">
+                          @foreach($_title_of_journalist as $title)
+                        <option value="{{$title->title_of_journalist}}">{{$title->title_of_journalist}}</option>
+                          @endforeach
+                    </select>
+
+                    <div class="title">Send To:</div>
+                          <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
+                    
+                    {{-- POPUP CHOOSE RECIPIENT --}}
+                    <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
+                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
+                      {{-- POPUP CHOOSE RECIPIENT --}}
+
+                          <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
+                        @endforeach
+                      @else
+                        <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus>
+                  <div class="title">Content:</div>
+                        <textarea name="pr_content" id="pr_content"></textarea>
+                  <div class="title">Boilerplate:</div>
+                        <textarea name="pr_boiler_content" id="pr_boiler_content"></textarea>
+                  <div class="button-container">
+                  <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
+                  <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
+                  </div>
+                </div>
+
+                <div id="choose_recipient" class="tabcontent choose-recipient-container">
+                    <div class="title-container">Choose Recipient</div>
+
+                    <div class="title">Country:</div>
+                    <select data-placeholder="--Choose a country--" multiple class="chosen-select" id="choose_country" name="choose_country[]">
+                         @foreach($_country as $country_name)
+                         <option value="{{$country_name->country}}">{{$country_name->country}}</option>
+                         @endforeach
+                    </select>
+
+                    <div class="title">Industry Type:</div>
+                    <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]">
+                          @foreach($_industry_type as $industry)
+                        <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
+                          @endforeach
+                    </select>
+
+                    <div class="title">Media Type:</div>
+                    <select data-placeholder="--Choose a media type--" multiple class="chosen-select" id="media_type" name="media_type[]">
+                          @foreach($_media_type as $media)
+                        <option value="{{$media->media_type}}">{{$media->media_type}}</option>
+                          @endforeach
+                    </select>
+
+                    <div class="title">Title of Journalist:</div>
+                    <select data-placeholder="--Choose a title of journalist--" multiple class="chosen-select" id="title_of_journalist" name="title_of_journalist[]">
+                          @foreach($_title_of_journalist as $title)
+                        <option value="{{$title->title_of_journalist}}">{{$title->title_of_journalist}}</option>
+                          @endforeach
+                    </select>
+
+                    <div class="title">Send To:</div>
+                          <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
+                    
+                    {{-- POPUP CHOOSE RECIPIENT --}}
+                    <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
+                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
+                      {{-- POPUP CHOOSE RECIPIENT --}}
+                        <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
+
+                      @endif
+                    <div class="button-container"></div>
+                </div>
+                <div id="send_release" class="tabcontent send-release-container">
+                  <div class="title-container">Send Release</div>
+                  <div class="title">Publisher:</div>
+                  <div class="content">{{session('user_first_name')}} {{session('user_last_name')}}</div>
+                  <div class="title">Title:</div>
+                  <div class="content" id="headline_pr"></div>
+                  <div class="title">Send To:</div>
+                  <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
+
+
+                  <div class="button-container">
+                    <button type="submit" formaction="/pressuser/pressrelease/pr">Send</button>
+                  </div>
+
+                </div>
+              </form>
+            </div>
+         </div>
+      </div>
+   </div>
 </div>
 
-<div class="popup-choose">
-<!-- Modal -->
-  <div class="modal fade" id="recipient-modal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
+
+  <!-- Preview Popup -->
+<div class="popup-preview">
+  <div class="modal" id="previewPopup" name="previewPopup" role="dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <div class="title-container">RECIPIENT</div>
+          <h4 class="modal-title">Preview</h4>
         </div>
         <div class="modal-body">
-          <div class="row clearfix">
-            <div class="col-md-3">
-                <div class="title-container">Choose Country</div>
-                <div class="right-container">
-                    <input type="checkbox">Philippines<br>
-                    <input type="checkbox">Hongkong<br>
-                    <input type="checkbox">China<br>
-                    <input type="checkbox">Korea<br>
-                    <input type="checkbox">Malaysia<br>
-                    <input type="checkbox">USA
-                </div>
-            </div>
-            <div class="col-md-9">
-                <div class="left-container">
-                   <div style="overflow-x:auto;">  
-                   <table id="example" class="display table table-bordered" style="background-color: #FFFFFF;width: 100%; cellspacing: 0;">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center;">Name</th>
-                                        <th style="text-align: center;">Email</th>
-                                        <th style="text-align: center;">Website</th>
-                                        <th style="text-align: center;">Description</th>   
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($add_recipient as $addrecipients)
-                                    <tr>
-                                        <td style="text-align: center;"><a href="">{{$addrecipients->name}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->research_email_address}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->website}}</td>
-                                        <td style="text-align: center;">{{$addrecipients->description}}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+          <div id="preview_headline">
+          </div>
+          <div id="preview_content">
+          </div>
+          <div class="about-title">About the Publisher</div>
+          <div id="preview_boiler_content">
           </div>
         </div>
         <div class="modal-footer">
-          <div class="button-container">
-            <a data-dismiss="modal" href="#">Continue</a>
-          </div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
-      
     </div>
   </div>
-</div>
+</div>  
 
-<style>
-.modal-content
-{
-  width: 800px;
-
-}
-.button-container-add
-{
+<!-- <style>
+   .modal-content
+   {
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%);
+   }
+   .button-container-add
+   {
    margin-bottom:20px;
    background-color: #316df9;
    width: 150px;
-}
-.form-control
-{
-   
-    width: 450px;
-
-}
-
-.form-text
+   }
+   .form-control
+   {
+   width: 450px;
+   }
+   .form-text
    {
    text-align: center;
    width:350px;
    padding:10px 10px 10px 10px;
    }
-
-</style>
-
-
+   .left-container
+   {
+   padding:10px 10px 10px 10px;  
+   }
+</style> -->
 @endsection
-
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_user_pressrelease.css">
 <!-- <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script> -->
 @endsection
-
 @section("script")
-
 <script>
-function openCity(evt, cityName) 
-{
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(cityName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
+   function openCity(evt, cityName) 
+   {
+       var i, tabcontent, tablinks;
+       tabcontent = document.getElementsByClassName("tabcontent");
+       for (i = 0; i < tabcontent.length; i++) {
+           tabcontent[i].style.display = "none";
+       }
+       tablinks = document.getElementsByClassName("tablinks");
+       for (i = 0; i < tablinks.length; i++) {
+           tablinks[i].className = tablinks[i].className.replace(" active", "");
+       }
+       document.getElementById(cityName).style.display = "block";
+       evt.currentTarget.className += " active";
+   }
+   
+   // Get the element with id="defaultOpen" and click on it
+   document.getElementById("defaultOpen").click();
+   
+   $(".chosen-select").chosen({disable_search_threshold: 10});
 </script>
 
-<script>tinymce.init({ selector:'textarea' });</script>
+<script src="/email_assets/tinymce/js/tinymce/tinymce.min.js"></script>
+<script src="/email_assets/tinymce/js/tinymce/tinymce.js"></script>
+<script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
+
+<script>
+  $('#prev_btn').click(function()
+  {
+    //alert("123");
+    var headline = document.getElementById('pr_headline').value;
+    var content = tinymce.get('pr_content').getContent();
+    var boiler_content = tinymce.get('pr_boiler_content').getContent();
+    document.getElementById('preview_headline').innerHTML =headline;
+    document.getElementById('preview_content').innerHTML =content;
+    document.getElementById('preview_boiler_content').innerHTML =boiler_content;
+    $('#previewPopup').modal('show'); 
+  });
+</script>
+
+<script>
+tinymce.init({ 
+selector:'textarea', 
+branding: false,
+image_description: false,
+image_title: true,
+height: 500,
+plugins: ["autolink lists image charmap print preview anchor","visualblocks code","insertdatetime table contextmenu paste imagetools", "wordcount"],
+toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image | preview',
+   
+     // we override default upload handler to simulate successful upload
+     images_upload_handler: function (blobInfo, success, failure) 
+     {
+       var xhr, formData;
+       xhr = new XMLHttpRequest();
+       xhr.withCredentials = false;
+       xhr.open('POST', '/pressuser/image_upload');
+       xhr.onload = function() {
+         var json;
+   
+         if (xhr.status != 200) {
+           failure('HTTP Error: ' + xhr.status);
+           return;
+         }
+         json = JSON.parse(xhr.responseText);
+   
+         if (!json || typeof json.location != 'string') {
+           failure('Invalid JSON: ' + xhr.responseText);
+           return;
+         }
+         success(json.location);
+       };
+       formData = new FormData();
+   
+       if( typeof(blobInfo.blob().name) !== undefined )
+           fileName = blobInfo.blob().name;
+       else
+           fileName = blobInfo.filename();
+       formData.append('file', blobInfo.blob(), fileName);
+       formData.append('_token', "{{ csrf_token() }}");
+   
+       // formData.append('file', blobInfo.blob(), fileName(blobInfo));
+       xhr.send(formData);
+   
+       // setTimeout(function() 
+       // {
+       //   // no matter what you upload, we will turn it into TinyMCE logo (smiley)
+       //   success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
+       // }, 2000);
+     },
+   
+     // init_instance_callback: function (ed) 
+     // {
+     //   ed.execCommand('mceImage');
+     // }
+   });
+</script>
+
+<script type="text/JavaScript">
+    $('#pr_headline').on("input", function() {
+      var dInput = this.value;
+      console.log(dInput);
+      $('#headline_pr').text(dInput);
+    });
+</script>
+
+<script>
+  $('#pop_recipient_btn').click(function()
+  {
+    var data = $('.recipient_form').serialize();
+    action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
+});
+  </script>
+
 
 @endsection

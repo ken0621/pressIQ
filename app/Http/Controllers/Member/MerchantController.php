@@ -22,6 +22,9 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_merchant_markup;
 use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_merchant_commission;
+use App\Models\Tbl_merchant_commission_report_setting;
+use App\Models\Tbl_warehouse_receiving_report;
+use App\Models\Tbl_warehouse_inventory_record_log;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -544,6 +547,85 @@ class MerchantController extends Member
 
 
 		return $collectable;														
+	}
+
+	public function commission_report()
+	{
+		$data['page'] = "Commission Report";
+		$id = $this->current_warehouse->warehouse_id;
+		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$id)->first();
+		if(count($q)>0)
+		{
+			$data['percentage'] = $q->merchant_commission_percentage;
+		}
+		else
+		{
+			$data['percentage'] = 0;
+		}
+
+		Tbl_warehouse_receiving_report::where('warehouse_id',$id)->get();
+
+
+		return view('member.merchant.commission_report.commission_report',$data);
+	}
+	public function submit_report_setting()
+	{
+		$warehouse_id = $this->current_warehouse->warehouse_id;
+		$data['merchant_commission_warehouse_id'] = $warehouse_id;
+		$data['merchant_commission_warehouse_name'] = $this->current_warehouse->warehouse_name;
+		$data['merchant_commission_shop_id'] = $this->current_warehouse->warehouse_shop_id;
+		$data['merchant_commission_percentage'] = Request('merchant_commission_percentage');
+
+		$count = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->get();
+
+		if(count($count)>0)
+		{
+			Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->update($data);
+		}
+		else
+		{
+			Tbl_merchant_commission_report_setting::insert($data);
+		}
+
+		$response['call_function']='success';
+		return json_encode($response);
+
+	}
+	public function get_percentage()
+	{
+		$id = request('warehouse_id');
+		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$id)->first();
+		if(count($q)>0)
+		{
+			return $q->merchant_commission_percentage;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	public function table()
+	{
+		$warehouse_id = $this->current_warehouse->warehouse_id;
+		$data['page'] = 'Commission Report Table';
+		$data['table'] = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('record_source_ref_name','rr')->where('item_in_use','used')->paginate(10);
+		$total = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('item_in_use','used')->sum('item_price');
+		
+		$commission = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id);
+		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->first();
+		if(count($q)>0)
+		{
+			$commission = $q->merchant_commission_percentage;
+		}
+		else
+		{
+			$commission = 0;
+		}
+
+		$data['totalcommission'] = $total*($commission/100);
+		// dd($data['table']);
+		// dd($warehouse_id);
+		return view('member.merchant.commission_report.commission_report_table',$data);
 	}
 
 }	

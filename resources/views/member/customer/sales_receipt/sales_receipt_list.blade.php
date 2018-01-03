@@ -49,10 +49,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @if($_invoices)
+                    @if(count($_invoices) > 0)
                         @foreach($_invoices as $invoice)
                             <tr>
-                                <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
+                                <td>
+                                    {{$invoice->company}} <br>
+                                    <small> {{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</small>
+                                </td>
                                 <td>{{$invoice->inv_id}}</td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
                                 <td>
@@ -77,6 +80,8 @@
                                 </td>
                             </tr>
                         @endforeach
+                    @else
+                        <tr><td colspan="5" class="text-center">NO PROCESS YET</td></tr>
                     @endif
                     </tbody>
                 </table>
@@ -105,7 +110,10 @@
                         @foreach($_invoices as $invoice)
                             <tr>
                                 <td>{{$invoice->inv_id}}</td>
-                                <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
+                                <td>
+                                    {{$invoice->company}} <br>
+                                    <small> {{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</small>
+                                </td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
                                 <td>
                                     @if($invoice->inv_is_paid == 0)

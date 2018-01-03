@@ -1,4 +1,4 @@
-$content-text: 'Open Sans', sans-serif;
+$content-text: 'Lato', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
@@ -27,6 +27,11 @@ $text-dark: #272c2f;
 	{
 		color: #fff;
 		opacity: 0.8;
+	}
+
+	@media screen and (max-width: 424px)
+	{
+		margin-top: 5px;
 	}
 }
 

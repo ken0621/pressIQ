@@ -39,13 +39,18 @@ $text-dark: #272c2f;
 		{
 			//mixin
 			@include transition(0.2s);
-
 			font-weight: bold;
 			font-size: 14px;
 			text-decoration: none;
 			margin-top: 3px;
 			text-transform: uppercase;
 			opacity: 0;
+			float: right;
+
+			@media screen and (max-width: 500px)
+			{
+				float: none;
+			}
 		}
 
 		&:hover
@@ -139,7 +144,7 @@ $text-dark: #272c2f;
 				letter-spacing: 0.5px;
 				font-weight: bold;
 				font-family: $content-text;
-				color: #019771;
+				color: #0095DA;
 
 				span
 				{

@@ -107,6 +107,7 @@
 <script type="text/javascript">
 	$(document).ready(function()
 	{
+		$("input").attr("required", true);
 		$(".payment-proof").change(function()
 		{
 			// $(".upload-proof-of-payment").submit();
@@ -124,4 +125,9 @@
         	$('.to-click').trigger('click');
         });
 	});
+</script>
+<script type="text/javascript">
+	@if(Session::get("response")=='error')
+	toastr.error("You already send a proof");
+	@endif
 </script>

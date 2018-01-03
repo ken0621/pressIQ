@@ -30,7 +30,8 @@
                             <span class="downline parent parent-reference PS" x="{{ $slot->slot_id }}">   
                                 <div id="info">
                                     <div id="photo">
-                                        <img src="/assets/slot_genealogy/member/img/default-image.jpg">
+                                        {{-- <img src="/assets/slot_genealogy/member/img/default-image.jpg"> --}}
+                                        <img style="border-radius: 100%;" src="{{ $profile_image }}">
                                     </div>
                                     <div id="cont">
                                         <div>{{ strtoupper($slot->first_name) }}</div>
@@ -82,14 +83,12 @@
         // }
         $(document).ready(function()
         {  
-
             $("li").show();   
             half = $(window).width() * 2500;
             g_width = $(".width-reference").width();
             $margin_left = ($(window).width() - $(".width-reference").width()) / 2;
             $(".tree-container").css("padding-left",half  + $margin_left);
             $(".overscroll").height($(document).height());
-            
             
             $parent_position = $(".parent").position();
             $window_size = $(window).width();
@@ -113,8 +112,6 @@
                     }
                 });
             }); 
-            
-            
         })
         
         var genealogy_loader = new genealogy_loader();

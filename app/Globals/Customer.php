@@ -10,6 +10,7 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_mlm_slot_points_log;
+use App\Models\Tbl_terms;
 use App\Globals\Tablet_global;
 use App\Globals\Mlm_plan;
 use App\Globals\CommissionCalculator;
@@ -41,6 +42,10 @@ class Customer
 		//dd($info);
 		Tbl_customer::insert($info);
 		return true;	
+	}
+	public static function getTerms($shop_id, $archived = 0)
+	{
+		return Tbl_terms::where("archived", $archived)->where("terms_shop_id", $shop_id)->get();
 	}
 	public static function scan_customer($shop_id, $id = 0)
 	{
@@ -110,6 +115,16 @@ class Customer
 	{
 		return Tbl_customer::where("customer_id", $customer_id)->where("shop_id", $shop_id)->first();
 	}
+	public static function get_name($shop_id, $customer_id)
+	{
+		$name = "No Customer Found";
+		$customer = Self::get_info($shop_id, $customer_id);
+		if($customer)
+		{
+			$name = $customer->company != "" ? $customer->company : ucwords($customer->first_name.' '.$customer->middle_name.' '.$customer->last_name);
+		}
+		return $name;
+	}
 	public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
@@ -135,6 +150,13 @@ class Customer
 		$data['total_gc'] = Tbl_mlm_slot::mlm_points()->where("slot_owner",$customer_id)->where("points_log_type","GC")->sum("points_log_points");
 		return $data;
 	}	
+	public static function get_current_slot_gc()
+	{
+		$slot_no = request('slot_no');
+		$current_slot_gc = Tbl_mlm_slot::mlm_points()->where("slot_no",$slot_no)->where("points_log_type","GC")->sum("points_log_points");
+		// dd($current_slot_gc);
+		return currency('',$current_slot_gc);
+	}
 
 	public static function get_points_wallet_per_slot($slot_id = 0)
 	{
@@ -178,28 +200,21 @@ class Customer
 		if($query->count() <= 0)
 		{
 			$return = Tbl_customer::where('shop_id', $shop_id);
-			$return->where('tbl_customer.first_name','LIKE', "%" . $keyword . "%");
-		}
-		$query2 = $return;
-		if($query2->count() <= 0)
-		{	
-			$return = Tbl_customer::where('shop_id', $shop_id);
-			$return->where('tbl_customer.last_name','LIKE', "%" . $keyword . "%");
-		}
-		$query1 = $return;
-		if($query1->count() <= 0)
-		{
-			$return = Tbl_customer::where('shop_id', $shop_id);
-			$return->where('tbl_customer.middle_name','LIKE', "%" . $keyword . "%");
+
+			$return->where(function($q) use ($search_keyword)
+            {
+                $q->orWhere("tbl_customer.first_name", "LIKE", "%$keyword%");
+                $q->orWhere("tbl_customer.last_name", "LIKE", "%$keyword%");
+                $q->orWhere("tbl_customer.middle_name", "LIKE", "%$keyword%");
+            });
 		}
 		if($paginate != 0)
 		{
-			$return = $return->groupBy('tbl_customer.customer_id')->paginate($paginate);
-
+			$return = $return->groupBy('tbl_customer.customer_id')->orderBy("tbl_customer.company",'ASC')->paginate($paginate);
 		}
 		else
 		{
-			$return = $return->groupBy('tbl_customer.customer_id')->get();
+			$return = $return->groupBy('tbl_customer.customer_id')->orderBy("tbl_customer.company",'ASC')->get();
 		}
 
 		return $return;

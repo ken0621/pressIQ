@@ -19,6 +19,8 @@ var ndp = 0;
 var tcp_string = '';
 var tcp = 0;
 
+var selected_customer='';
+
 function create_commission_calculator()
 {
 	init();
@@ -37,16 +39,33 @@ function create_commission_calculator()
 		action_load_datepicker();
 		event_compute_all();
 		event_change_tcp();
+		action_load_date();
+
 	}
 	function action_load_datepicker()
 	{
 		$('.datepicker').datepicker();
 	}
+	function action_load_date()
+	{		
+		var start_date 		= $(".datepicker[name='date']").val().split('/');
+		var payment_term = 1;
+		var year = start_date[2];
+		var day = start_date[1];
+		var month = start_date[0];
+		var new_due_date = add_months(year, month, day, payment_term);
+    	$(".datepicker[name='due_date']").val(new_due_date);
+	}
 	function action_initialize_select()
 	{
 		$('.select-customer').globalDropList({
-			hasPopup : 'false',
+			hasPopup : 'true',
+			link : '/member/customer/modalcreatecustomer',
 			width : '100%',
+			onCreateNew : function()
+            {
+            	selected_customer = $(this);
+            },
 			onChangeValue : function()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
@@ -54,34 +73,47 @@ function create_commission_calculator()
 		});
 		$('.select-term').globalDropList({
 			hasPopup : 'false',
+			link: '/member/maintenance/terms/terms',
 			width : '100%',
 			onChangeValue : function()
 			{
 				payment_term = $(this).val();
+				var start_date 		= $(".datepicker[name='date']").val().split('/');
+				var year = start_date[2];
+				var day = start_date[1];
+				var month = start_date[0];
+				var new_due_date = add_months(year, month, day, payment_term);
+            	$(".datepicker[name='due_date']").val(new_due_date);
 				event_compute_commission();
 			}
 		});
 		$('.select-property').globalDropList({
-			hasPopup : 'false',
+			hasPopup : 'true',
+			link : "/member/item/v2/add",
 			width : '100%',
+			link_size : 'lg',
 			onChangeValue : function()
 			{
 				if($(this).val() != '')
 				{
 					$(".sales-price").val(number_format($(this).find("option:selected").attr("price")));
 					tsp = parseFloat($(this).find("option:selected").attr("price"));
+					//dd(tsp);
 					event_compute_commission();
 				}
 				else
 				{
-					$(".sales-price").val('');	
+					$(".sales-price").val('');
 					tsp = 0;
+					event_compute_commission();
 				}
 			}
 		});
 		$('.select-agent').globalDropList({
-			hasPopup : 'false',
+			hasPopup : 'true',
+			link : '/member/cashier/sales_agent/add',
 			width : '100%',
+			link_size : 'md',
 			onChangeValue : function()
 			{
 				if($(this).val())
@@ -91,6 +123,18 @@ function create_commission_calculator()
 				}
 			}
 		});
+	}
+
+	/* AFTER ADDING AN  ITEM */
+	function submit_done_item(data)
+	{
+	    selected_customer.load("/member/customer/load_customer", function()
+	    {
+	        $(this).globalDropList("reload");
+			$(this).val(data.customer_id).change();
+			toastr.success("Success");
+	    });
+	    data.element.modal("hide");
 	}
 	function number_format(number, tofixed = true)
 	{
@@ -122,21 +166,34 @@ function create_commission_calculator()
 	}
 	function event_change_tcp()
 	{
-		$('.change-tcp').unbind('keyup');
-		$('.change-tcp').bind('keyup', function()
+		$('.change-tcp').unbind('change');
+		$('.change-tcp').bind('change', function()
 		{
-			tcp_string = $(this).val();
-			/*Commission Percent*/
-			var tcp_percent = parseFloat(tcp_string.substring(0, tcp_string.indexOf('%')));
-			$('.ndp-commission').val((100 - tcp_percent)+'%');
-			ndp_string = (100 - tcp_percent)+'%';
+			// tcp_string = $(this).val();
+			// if(tcp_string.indexOf('%') > 0)
+			// {
+			// 	/*Commission Percent*/
+			// 	var tcp_percent = parseFloat(tcp_string.substring(0, tcp_string.indexOf('%')));
+			// 	$('.ndp-commission').val((100 - tcp_percent + '%'));
+			// 	ndp_string = (100 - tcp_percent + '%');
+			// 	$('.ndp-commission').val(ndp_string);
+			// }
+			// else
+			// {
+			// 	/*Commission Percent*/
+			// 	var tcp_percent = parseFloat(tcp_string);
+			// 	$('.ndp-commission').val((100 - tcp_percent));
+			// 	ndp_string = (100 - tcp_percent);
+			// 	$('.ndp-commission').val(ndp_string);
+			// }
 
-			event_compute_commission();
+			// event_compute_commission();
 		});
 	}
 	function event_compute_commission()
 	{
-		dp_string = $('.downpayment').val();
+		dp_string = $('.downpayment').val();		
+
 		downpayment = 0;
 		discount = parseFloat(($('.discount').val()).replace(',',''));
 		if(discount == '')
@@ -147,7 +204,18 @@ function create_commission_calculator()
 		{
 			downpayment = (parseFloat(dp_string.substring(0, dp_string.indexOf('%'))) / 100);
 		}
+		if(dp_string > 0)
+		{
+			downpayment = (parseFloat(dp_string.substring(0, dp_string)) / 100);
+		}
 
+		tsp_string = $('.sales-price').val();	
+		/*tsp = parseFloat(($('.sales-price').val()).replace(',',''));*/
+		if(tsp_string > 0)
+		{
+			tsp = (parseFloat(tsp_string));
+		}
+		
 		var amount_downpayment = tsp * downpayment;
 		$('.amount-downpayment').val(number_format(amount_downpayment));
 		var amount_net_downpayment = amount_downpayment - discount;
@@ -160,6 +228,10 @@ function create_commission_calculator()
 		{
 			misc = (parseFloat(misc_string.substring(0, misc_string.indexOf('%'))) / 100);
 		}
+		else
+		{
+			misc = parseFloat(misc_string/100);
+		}
 		var amount_misc = tsp * misc;
 		$('.amount-misc').html('P '+ number_format(amount_misc));
 		var amount_loanable = tsp - amount_downpayment;
@@ -171,16 +243,30 @@ function create_commission_calculator()
 		
 		tcp_string = $('.tcp-commission').val();
 		ndp_string = $('.ndp-commission').val();
-		/*Commission Percent*/
-		var ndp_percent = parseFloat(ndp_string.substring(0, ndp_string.indexOf('%')));
-		$('.tcp-commission').val((100 - ndp_percent)+'%');
-		tcp_string = (100 - ndp_percent)+'%';
+		if(ndp_string.indexOf('%') > 0)
+		{
+			/*Commission Percent*/
+			var ndp_percent = parseFloat(ndp_string.substring(0, ndp_string.indexOf('%')));
+			$('.tcp-commission').val((100 - ndp_percent)+'%');
+			tcp_string = (100 - ndp_percent)+'%';			
+		}
+		else
+		{
+			/*Commission Percent*/
+			var ndp_percent = parseFloat(ndp_string);
+			$('.tcp-commission').val((100 - ndp_percent));
+			tcp_string = String(100 - ndp_percent);
+		}
 
 
 		tcp = 0;
 		if(tcp_string.indexOf('%') > 0)
 		{
 			tcp = (parseFloat(tcp_string.substring(0, tcp_string.indexOf('%'))) / 100);
+		}
+		else
+		{
+			tcp = parseFloat(tcp_string/100);
 		}
 		var amount_tcp1 = amount_tc * tcp;
 		$('.amount-tcp1').html('P '+number_format(amount_tcp1));
@@ -189,6 +275,10 @@ function create_commission_calculator()
 		if(ndp_string.indexOf('%') > 0)
 		{
 			ndp = (parseFloat(ndp_string.substring(0, ndp_string.indexOf('%'))) / 100);
+		}
+		else
+		{
+			ndp = parseFloat(ndp_string/100);
 		}
 		var amount_ndp = amount_tc * ndp;
 		$('.amount-ndp').html('P '+number_format(amount_ndp));
@@ -266,14 +356,48 @@ function create_commission_calculator()
             x1 = x1.replace(rgx, '$1' + ',' + '$2');
         return x1 + x2;
     }
-
+	function add_months($year, $months, $day, $add_months)
+	{
+		var start_date = new Date($year, $months, $day);
+		var new_date_string = start_date.setMonth(parseInt(start_date.getMonth() + parseInt($add_months-1)));
+		var dt = new Date(new_date_string);
+		var real_date = parseInt(dt.getMonth() + 1)+'/'+dt.getDate()+'/'+dt.getFullYear();
+		return real_date;
+	}
 
 }
 function success_commission(data)
 {
 	toastr.success('Success');
-	setInterval(function()
-	{
-		location.reload();
-	},2000);
+	location.reload();
 }
+
+/* AFTER ADDING A CUSTOMER */
+function success_update_customer(data)
+{
+    $(".select-customer").load("/member/customer/load_customer", function()
+    {                
+         data.element.modal("hide");
+         $(".select-customer").globalDropList("reload");
+         $(".select-customer").val(data.id).change();          
+    });
+}
+function success_agent(data)
+{
+    $(".select-agent").load("/member/cashier/sales_agent/load-agent", function()
+    {                
+         data.element.modal("hide");
+         $(".select-agent").globalDropList("reload");
+         $(".select-agent").val(data.id).change();      
+    });
+}
+function success_item(data)
+{
+    $(".select-property").load("/member/cashier/commission_calculator/load-item", function()
+    {
+    	data.element.modal("hide");
+        $(".select-property").globalDropList("reload");
+		$(".select-property").val(data.item_id).change();
+    });
+}
+

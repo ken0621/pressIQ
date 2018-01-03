@@ -274,7 +274,7 @@ class Settings
             }
             
     	}
-    	if($check_domain != null)
+    	if(isset($check_domain) && $check_domain != null)
     	{
     		$shop_id = $check_domain->shop_id;
     	}

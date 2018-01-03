@@ -29,6 +29,10 @@
                                     @foreach($_method as $method)
                                     <li><a href="/member/ecommerce/product_order2/export?method={{ $method->gateway_code_name }}" target="_blank">{{ $method->gateway_name }}</a></li>
                                     @endforeach
+                                    @if($shop_id == 55)
+                                    <li><a href="/member/ecommerce/product_order2/exportpayin?method_id=35" target="_blank">Palawan Express Payments</a></li>
+                                    <li><a href="/member/ecommerce/product_order2/exportpayin?method_id=36" target="_blank">Cebuana Payments</a></li>
+                                    @endif
                                 </ul>
                             @else
                                 <ul class="dropdown-menu">
@@ -43,6 +47,16 @@
         </div>
     </div>
     <div class="panel panel-default panel-block panel-title-block panel-gray"  style="margin-bottom: -10px;">
+        <div class="col-md-8" style="padding: 10px">
+            
+        </div>
+        
+        <div class="col-md-4" style="padding: 10px">
+            <div class="input-group">
+                <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control search-name" placeholder="Search by ref no. / name / email" name="keyword" aria-describedby="basic-addon1">
+            </div>
+        </div>
         <ul class="nav nav-tabs">
             <li class="active change-tab pending-tab cursor-pointer" mode="paid"><a class="cursor-pointer"><i class="fa fa-check"></i> Paid</a></li>
             <li class="change-tab pending-tab cursor-pointer" mode="unconfirmed"><a class="cursor-pointer"><i class="fa fa-money"></i> Unconfirmed Payment</a></li>
@@ -85,4 +99,28 @@
 </form>
 
 <script type="text/javascript" src="/assets/member/js/global_table.js"></script>
+<script type="text/javascript">
+    var x = null;
+    $(document).ready(function()
+    {
+        $('.search-name').on('keydown',function(e)
+        {
+            var keyCode = e.keyCode || e.which;
+            if(keyCode!=13)
+            {
+                clearTimeout(x);
+                
+                setTimeout(function()
+                {
+                    global_table.action_load_table();
+                },1000);
+            }
+            else
+            {
+                e.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
 @endsection

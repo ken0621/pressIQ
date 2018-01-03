@@ -21,7 +21,9 @@ use App\Models\Tbl_inventory_serial_number;
 use App\Models\Tbl_price_level;
 use App\Models\Tbl_price_level_item;
 use App\Models\Tbl_sub_warehouse;
+use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_settings;
+use App\Models\Tbl_customer;
 
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
@@ -583,6 +585,7 @@ class Warehouse2
             }
 
             Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+
         }
 
         return $validate;
@@ -591,7 +594,6 @@ class Warehouse2
     {
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
-
 
         $serial_qty = count($serial);
         if($serial_qty != 0)
@@ -627,7 +629,6 @@ class Warehouse2
         {
             $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
         }
-
         return $return;
     }
     public static function consume_update($ref_name, $ref_id, $item_id, $quantity)
@@ -806,11 +807,22 @@ class Warehouse2
         $val = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
                                                  ->where('mlm_activation',$mlm_activation)
                                                  ->where('mlm_pin',$mlm_pin)
-                                                 ->where('record_inventory_status',0)
+                                                 ->where('item_in_use', 'unused')
                                                  ->first();
         if($val)
         {
-            Warehouse2::consume_record_log($shop_id, $val->record_warehouse_id, $val->record_item_id,$val->record_log_id, 1, $remarks, $consume,null, $code_used);
+            if($val->record_inventory_status == 1)
+            {
+                $update['record_log_date_updated']   = Carbon::now();
+                $update['item_in_use']               = $code_used;
+               
+                Warehouse2::insert_item_history($val->record_log_id);
+                Tbl_warehouse_inventory_record_log::where('record_log_id',$val->record_log_id)->update($update);
+            }
+            else
+            {
+                Warehouse2::consume_record_log($shop_id, $val->record_warehouse_id, $val->record_item_id,$val->record_log_id, 1, $remarks, $consume,null, $code_used);
+            }
             $return = $val->record_item_id;
         }
         else
@@ -1008,9 +1020,9 @@ class Warehouse2
 
         return $_item;       
     }
-    public static function get_codes($warehouse_id, $start_date, $end_date, $transaction_type = '')
+    public static function get_codes($warehouse_id, $start_date, $end_date, $transaction_type = '', $code_type = 'membership_code')
     {
-        $data = Tbl_warehouse_inventory_record_log::warehouse()->item()->slotinfo()->customerinfo()->where("item_in_use",'used')->where("record_inventory_status",1)->where('record_warehouse_id',$warehouse_id)->whereBetween('record_log_date_updated',[$start_date, $end_date]);
+        $data = Tbl_warehouse_inventory_record_log::warehouse()->item()->slotinfo()->where("item_in_use",'used')->where("record_inventory_status",1)->where('record_warehouse_id',$warehouse_id)->whereBetween('record_log_date_updated',[$start_date, $end_date]);
 
         if($transaction_type != '')
         {
@@ -1023,7 +1035,73 @@ class Warehouse2
                 $data = $data->where('record_consume_ref_name','!=', 'transaction_list');
             }
         }
+        if($code_type == 'product_code')
+        {
+            $data = $data->where("item_type_id", '!=', 5);
+            if($transaction_type != 'offline')
+            {
+                $data = $data->customerinfo_data();
+            }
+        }
+        else
+        {
+            $data = $data->customerinfo();
+        }
 
         return $data->get();
+    }
+    public static function load_warehouse_list($shop_id, $user_id, $parent = 0, $margin_left = 0)
+    {
+        $warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('warehouse_parent_id', $parent)->get();
+
+        $return = null;
+        
+        foreach ($warehouse as $key => $value) 
+        {
+            $check_if_owned = Tbl_user_warehouse_access::where("user_id",$user_id)->where("warehouse_id",$value->warehouse_id)->first();
+            if($check_if_owned)
+            {
+
+                $data['tr_class'] = 'tr-sub-'.$value->warehouse_parent_id.' tr-parent-'.$parent.' ';
+                $data['warehouse'] = $value;
+                $data['margin_left'] = 'style="margin-left:'.$margin_left.'px"';
+
+                $return .= view('member.warehousev2.warehouse_list_tr',$data)->render();
+
+                $count = Tbl_warehouse::where("warehouse_parent_id", $value->warehouse_id)->count();
+                if($count != 0)
+                {
+                    $return .= Self::load_warehouse_list($shop_id, $user_id, $value->warehouse_id, $margin_left + 30);
+                }                
+            }
+
+        }
+        return $return;
+    }
+    public static function load_all_warehouse_select($shop_id, $user_id, $parent = 0, $warehouse_id_selected = 0, $excluded_warehouse = 0)
+    {
+        $return = null;
+        $warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('warehouse_parent_id', $parent);
+        if($excluded_warehouse)
+        {
+            $warehouse = $warehouse->where('warehouse_id', '!=', $excluded_warehouse);
+        }
+        $warehouse = $warehouse->get();
+        foreach ($warehouse as $key => $value) 
+        {
+            $check_if_owned = Tbl_user_warehouse_access::where("user_id",$user_id)->where("warehouse_id",$value->warehouse_id)->first();
+            if($check_if_owned)
+            {
+                $data['warehouse'] = $value;
+                $data['warehouse_id'] = $warehouse_id_selected;
+                $return .= view('member.warehousev2.load_warehouse_v2',$data)->render();
+                $count = Tbl_warehouse::where("warehouse_parent_id", $value->warehouse_id)->count();
+                if($count != 0)
+                {
+                    $return .= Self::load_all_warehouse_select($shop_id, $user_id, $value->warehouse_id, $warehouse_id_selected);
+                } 
+            }
+        }
+        return $return;
     }
 }

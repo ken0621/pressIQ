@@ -17,6 +17,7 @@ use App\Models\Tbl_warehouse_receiving_report_item;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_cart_payment;
+use App\Models\Tbl_transaction_ref_number;
 
 use App\Models\Tbl_cart_item_pincode;
 use App\Models\Tbl_transaction;
@@ -99,6 +100,11 @@ class Transaction
         $store["create_set_method"] = $method;
         session($store);
     }
+    public static function create_set_method_id($method)
+    {
+        $store['create_set_method_id'] = $method;
+        session($store);
+    }
     public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null)
     {
         $transaction_sales_person = isset($transaction_id["transaction_sales_person"]) ? $transaction_id["transaction_sales_person"] : null;
@@ -123,7 +129,9 @@ class Transaction
                 if(session('create_set_method'))
                 {
                     $insert_transaction["payment_method"] = session("create_set_method");
+                    $insert_transaction["method_id"]      = session("create_set_method_id");
                     session()->forget('create_set_method');
+                    session()->forget('create_set_method_id');
                 }
 
                 $transaction_id = Tbl_transaction::insertGetId($insert_transaction);
@@ -587,14 +595,12 @@ class Transaction
     public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0)
     {
         $data = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id);
-        
         if($transaction_id != 0)
         {
             $data = Tbl_transaction_list::where('tbl_transaction_list.transaction_id',$transaction_id)->where('tbl_transaction_list.shop_id',$shop_id);
         }
         
         $data->transaction(); //join table transaction
-        $data->orderBy("transaction_number");
         
         if(isset($transaction_type))
         {
@@ -614,6 +620,14 @@ class Transaction
                 }
             }
         }
+        if($shop_id == 1)
+        {
+            $data->orderBy('transaction_date_created','DESC');
+        }
+        else
+        {
+            $data->orderBy("transaction_number");
+        }
         
         if(session('get_transaction_filter_customer_id'))
         {
@@ -621,12 +635,24 @@ class Transaction
             $data->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
             session()->forget('get_transaction_filter_customer_id');
         }
-        
-        if(isset($search_keyword))
+
+        if(session('get_transaction_customer_details_v2'))
         {
-            $data->where('transaction_number', "LIKE", "%" . $search_keyword . "%");
+            $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
+            $data->leftJoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id');
+            $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
         }
-        
+
+        if($search_keyword)
+        {
+            $data->where(function($q) use ($search_keyword)
+            {
+                $q->orwhere('transaction_number', "LIKE", "%" . $search_keyword . "%");
+                $q->orWhere('first_name', "LIKE", "%" . $search_keyword . "%");
+                $q->orWhere('last_name', "LIKE", "%" . $search_keyword . "%");
+                $q->orWhere('email', "LIKE", "%" . $search_keyword . "%");
+            });
+        }
         if(session('get_transaction_customer_details'))
         {
             $data->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
@@ -634,24 +660,14 @@ class Transaction
             $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
             $data->groupBy("tbl_customer.customer_id");
         }
-
-        if(session('get_transaction_customer_details_v2'))
-        {
-            $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
-            $data->leftJoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id');
-            $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
-            $data->groupBy("tbl_transaction_list.transaction_list_id");
-        }
-
         if($paginate)
         {
             $data = $data->paginate($paginate);
         }
         else
         {
-            $data = $data->get();
+            $data = $data->groupBy("tbl_transaction_list.transaction_list_id")->get();
         }
-        
         foreach($data as $key => $value)
         {
             $data[$key]->customer_name = Transaction::getCustomerNameTransaction($value->transaction_id);
@@ -728,6 +744,24 @@ class Transaction
         session()->forget('get_transaction_date');
         session()->forget('get_transaction_payment_method');
         session()->forget('get_transaction_slot_id');
+
+        //patrick
+        $emails = array();
+        if($transaction_type == 'proof')
+        {
+            foreach ($data as $key => $value) 
+            {
+                if(in_array($value->email, $emails))
+                {
+                    unset($data[$key]);                
+                }
+                else
+                {
+                    array_push($emails, $value->email);
+                }
+            }
+        }
+        
         return $data;
     }
     public static function get_all_transaction_type()
@@ -941,34 +975,39 @@ class Transaction
         $transaction_info = Tbl_transaction_list::transaction()->where('transaction_list_id', $transaction_list_id)->first();
         $transaction_date = Carbon::now();
 
-        $ins_wallet['shop_id'] = $shop_id;
-        $wallet_log_slot = $slot_id;
-        $wallet_log_slot_sponsor = $slot_id;
-        $wallet_log_claimbale_on = $transaction_date;
-        $wallet_log_details = 'Thank you for purchasing. '.$cart_wallet_amount.' is deducted to your wallet';
-        $wallet_log_amount = $cart_wallet_amount * -1;
-        $wallet_log_plan = 'REPURCHASE';
-        $wallet_log_status = 'released';
-        $wallet_log_remarks = 'Wallet Purchase on POS - '.$transaction_info->transaction_number;
-        
-        if($slot_id)
-        {
-            Mlm_slot_log::slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on, $wallet_log_remarks);
+        if($cart_wallet_amount != 0)
+        {        
+            $ins_wallet['shop_id'] = $shop_id;
+            $wallet_log_slot = $slot_id;
+            $wallet_log_slot_sponsor = $slot_id;
+            $wallet_log_claimbale_on = $transaction_date;
+            $wallet_log_details = 'Thank you for purchasing. '.$cart_wallet_amount.' is deducted to your wallet';
+            $wallet_log_amount = $cart_wallet_amount * -1;
+            $wallet_log_plan = 'REPURCHASE';
+            $wallet_log_status = 'released';
+            $wallet_log_remarks = 'Wallet Purchase on POS - '.$transaction_info->transaction_number;
+            
+            if($slot_id)
+            {
+                Mlm_slot_log::slot($wallet_log_slot, $wallet_log_slot_sponsor, $wallet_log_details, $wallet_log_amount, $wallet_log_plan, $wallet_log_status,   $wallet_log_claimbale_on, $wallet_log_remarks);
+            }
         }
-
-        $ins_gc['points_log_complan'] = 'PURCHASE_GC';
-        $ins_gc['points_log_level'] = 0;
-        $ins_gc['points_log_slot'] = $slot_id;
-        $ins_gc['points_log_Sponsor'] = $slot_id;
-        $ins_gc['points_log_date_claimed'] = $transaction_date;
-        $ins_gc['points_log_converted_date'] = $transaction_date;
-        $ins_gc['points_log_type'] = 'GC';
-        $ins_gc['points_log_from'] = 'GC Purchase on POS - '.$transaction_info->transaction_number;
-        $ins_gc['points_log_points'] = $cart_gc_amount * -1;
-        
-        if($slot_id)
+        if($cart_gc_amount != 0)
         {
-            Mlm_slot_log::point_slot($ins_gc);
+            $ins_gc['points_log_complan'] = 'PURCHASE_GC';
+            $ins_gc['points_log_level'] = 0;
+            $ins_gc['points_log_slot'] = $slot_id;
+            $ins_gc['points_log_Sponsor'] = $slot_id;
+            $ins_gc['points_log_date_claimed'] = $transaction_date;
+            $ins_gc['points_log_converted_date'] = $transaction_date;
+            $ins_gc['points_log_type'] = 'GC';
+            $ins_gc['points_log_from'] = 'GC Purchase on POS - '.$transaction_info->transaction_number;
+            $ins_gc['points_log_points'] = $cart_gc_amount * -1;
+            
+            if($slot_id)
+            {
+                Mlm_slot_log::point_slot($ins_gc);
+            }
         }
 
         $get_all_payment = Cart2::cart_payment_list($shop_id);
@@ -994,4 +1033,11 @@ class Transaction
     {
         return Tbl_transaction_payment::where('transaction_id',$transaction_id)->get();
     }    
+    public static function get_transaction_reference_number($shop_id,$key)
+    {
+
+        $data = Tbl_transaction_ref_number::where('shop_id',$shop_id)->where('key',$key);
+        
+        return $data;
+    }
 }

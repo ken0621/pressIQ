@@ -61,7 +61,7 @@ class WarehouseReceivingReportController extends Member
 
             $data['wis'] = WarehouseTransfer::get_wis_data($wis_id);
             $data['wis_item'] = WarehouseTransfer::get_wis_item($wis_id);
-
+            
             return view('member.warehousev2.rr.rr_receive_inventory',$data);
         }
         else

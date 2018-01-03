@@ -38,7 +38,7 @@ class ProductOrderController2 extends Member
         $dummy              = Transaction::get_transaction_customer_details_v2();
         $dummy              = Transaction::get_transaction_date();
         $active_tab         = request("_active_tab");
-
+        $keyword            = request("keyword");
         $paginate=5; // default pagination
 
         // unity pagination
@@ -49,23 +49,23 @@ class ProductOrderController2 extends Member
 
         if($active_tab == "paid")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt','',$paginate);
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate);
         }
         elseif($active_tab == "unconfirmed")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof','',$paginate);
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof',$keyword,$paginate);
         }
         elseif($active_tab == "pending")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order','',$paginate);
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order',$keyword,$paginate);
         }
         elseif($active_tab == "reject")
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'reject','',$paginate);
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'reject',$keyword,$paginate);
         }
         else
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt','',$paginate);
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate);
         }
 
         foreach($data["_raw_table"] as $key => $raw_table)
@@ -99,7 +99,7 @@ class ProductOrderController2 extends Member
         $default[]          = ["CONTACT","phone_number", true];
         $default[]          = ["ACTIONS","action", true];
         $data["_table"]     = Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "Order List V2", $data["_raw_table"], $default);
-
+        // dd($data['_table']);
         return view('member.global_table', $data);
     }
     public function proof()
@@ -231,6 +231,79 @@ class ProductOrderController2 extends Member
             $excel->sheet('Order', function($sheet) use ($data)
             {
                 $sheet->loadView('member.product_order2.payment.export', $data);
+            });
+        })
+        ->download('xls');
+    }
+    public function exportpayin()
+    {
+       
+        $id = request("method_id");
+        $query = Tbl_online_pymnt_method::where('method_id',$id)->first();
+        $method_name = "";
+        if(count($query)>0)
+        {
+            $method_name = $query->method_name;
+        }
+        $data['method'] = $method_name;
+        $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'order', '', 0);
+        foreach ($data["_transaction"] as $key => $value) 
+        {
+            $transaction = Transaction::getCustomerTransaction($value->transaction_id);
+            if ($transaction) 
+            {
+                if ($transaction->method_id != $id) 
+                {
+                    unset($data["_transaction"][$key]);
+                }
+            }
+        }
+
+        // details
+        $date = array();
+        $refnum = array();
+        $sendername = array();
+        $amount = array();
+        foreach ($data["_transaction"] as $key => $value)
+        {
+            $detail = $value->payment_details;
+            if (is_serialized($detail)) 
+            {
+                $detail               = unserialize($detail);
+            }
+            else
+            {
+                $detail               = [];
+            }
+
+            foreach ($detail as $key => $val)
+            {
+                switch ($key) {
+                    case 'date_and_time':
+                        $date[$value->transaction_id] = $val;
+                        break;
+                    case 'reference_number':
+                        $refnum[$value->transaction_id] = $val;
+                        break;
+                    case 'sender_name':
+                        $sendername[$value->transaction_id] = $val;
+                        break;
+                    case 'amount':
+                        $amount[$value->transaction_id] = $val;
+                        break;
+                }
+            }
+        }
+        $data['date'] = $date;
+        $data['refnum'] = $refnum;
+        $data['sendername'] = $sendername;
+        $data['amount'] = $amount;
+        $data['x'] = 0;
+        Excel::create('Order Report', function($excel) use ($data)
+        {
+            $excel->sheet('Order', function($sheet) use ($data)
+            {
+                $sheet->loadView('member.product_order2.payment.exportpayin', $data);
             });
         })
         ->download('xls');

@@ -213,6 +213,7 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
 	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
 	Route::get('product_order2/export','Member\ProductOrderController2@export');
+	Route::get('product_order2/exportpayin','Member\ProductOrderController2@exportpayin');
 
 	Route::get('product_order2/settings','Member\ProductOrderController2@settings');
 	Route::post('product_order2/settings','Member\ProductOrderController2@settings_submit');
@@ -478,6 +479,9 @@ AdvancedRoute::controller("/member/item/warehouse/v2/refill","Member\WarehouseRe
 Route::any('/member/item/inventory_log','Member\InventoryLogController@index');
 /*END INVENTORY LOG*/
 
+/* REPORT - STOCK LEDGER*/
+AdvancedRoute::controller('/member/accounting/stock_ledger', 'Member\ReportStockLedgerController');
+/* End */
 
 /* WAREHOUSE V2*/
 AdvancedRoute::controller('/member/item/v2/warehouse', 'Member\WarehouseControllerV2');
@@ -491,7 +495,13 @@ AdvancedRoute::controller('/member/item/warehouse/wis', 'Member\WarehouseIssuanc
 AdvancedRoute::controller('/member/item/warehouse/rr', 'Member\WarehouseReceivingReportController');
 /* End */
 
+/* WIS TO CUSTOMER */
+AdvancedRoute::controller('/member/customer/wis', 'Member\CustomerWarehouseIssuanceSlipController');
+/* End */
 
+/* INVENTORY ADJUSTMENT */
+AdvancedRoute::controller('/member/item/warehouse/inventory_adjustment', 'Member\WarehouseInventoryAdjustmentController');
+/* End */
 
 /* START PIS ARCY*/
 Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
@@ -712,7 +722,10 @@ Route::get('/member/customer/receive_payment','Member\Customer_ReceivePaymentCon
 Route::get('/member/customer/load_rp/{id}','Member\Customer_ReceivePaymentController@load_customer_rp');
 Route::post('/member/customer/receive_payment/add','Member\Customer_ReceivePaymentController@add_receive_payment');
 Route::post('/member/customer/receive_payment/update/{id}','Member\Customer_ReceivePaymentController@update_receive_payment');
-
+Route::get('/member/customer/receive_payment/apply_credit','Member\Customer_ReceivePaymentController@apply_credit');
+Route::any('/member/customer/receive_payment/apply_credit_submit','Member\Customer_ReceivePaymentController@apply_credit_submit');
+Route::any('/member/customer/receive_payment/load_apply_credit','Member\Customer_ReceivePaymentController@load_apply_credit');
+Route::any('/member/customer/receive_payment/remove_apply_credit','Member\Customer_ReceivePaymentController@remove_apply_credit');
 
 /* CUSTOMER CREDIT MEMO*/
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
@@ -1038,6 +1051,14 @@ Route::any('/member/merchant/commission/request', 'Member\MerchantController@com
 Route::any('/member/merchant/commission/request/range/verfiy', 'Member\MerchantController@commission_range_verify');
 Route::any('/member/merchant/commission/request/submit', 'Member\MerchantController@commission_request_submit');
 /* End */
+
+// Merchant Commission Report
+Route::get('/member/merchant/commission-report', 'Member\MerchantController@commission_report');
+Route::get('/member/merchant/commission-report/getpercentage','Member\MerchantController@get_percentage');
+Route::post('/member/merchant/commission-report','Member\MerchantController@submit_report_setting');
+Route::get('/member/merchant/commission_report/table', 'Member\MerchantController@table');
+// end
+
 /*  / Merchant - Ewallet*/
 Route::any('/member/merchant/ewallet', 'Member\MerchantewalletController@index');
 Route::any('/member/merchant/ewallet/list', 'Member\MerchantewalletController@payable_list');
@@ -1199,6 +1220,7 @@ include_once('routes_config/routes_item.php');
 /* Members Area */
 include_once('routes_config/routes_members_area.php');
 
+include_once('routes_config/routes_transaction.php');
 
 /*PAYROLL EMPLOYEE*/
 include_once('routes_config/routes_payroll_employee.php');

@@ -10,7 +10,7 @@
                 <span class="page-title">Warehouse Issuance Slip</span>
             </h1>
             <div class="text-right">
-                <a class="btn btn-primary panel-buttons" href="/member/item/warehouse/wis/create">Create</a>
+                <a class="btn btn-primary panel-buttons" href="/member/item/warehouse/wis/create}">Create</a>
             </div>
         </div>
     </div>

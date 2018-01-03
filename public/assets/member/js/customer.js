@@ -655,9 +655,6 @@ function submit_modal(){
 	            if(res['message'] == 'success')
 	            {
 	            	toastr.success("New customer inserted");
-	                location.reload();
-	                $(".btn-save-modallarge").html('Save');
-	                $("#global_modal").modal("hide");
 	                if (typeof submit_done_customer == 'function')
 		            {
 		            	// console.log("meron");

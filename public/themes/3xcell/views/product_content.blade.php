@@ -27,7 +27,11 @@
 							</div>
 						</div>
 						<div class="product-price">
-							{{ get_product_first_price($product) }}
+							@if(isset($product["variant"][0]["price_level"]) && $product["variant"][0]["price_level"])
+								₱ {{ number_format($product["variant"][0]["price_level"], 2) }}
+							@else
+								{{ get_product_first_price($product) }}
+							@endif
 							<div style="margin-top: 15px; font-size: 18px;">
 								@if($mlm_member)
 									@foreach($product["variant"][0]["pv"] as $key => $value)
@@ -42,11 +46,11 @@
 												@elseif($key == "STAIRSTEP_GROUP")
 													<span class="pv-label">GROUP VOLUME:</span> --}}
 												@if($key == "STAIRSTEP")
-													<span class="pv-label">PERSONAL PV</span>
+													<span class="pv-label"></span>
 												@else
-													<span class="pv-label">{{ str_replace("_", " ", $key) }}:</span>
+													<span class="pv-label">{{ str_replace("_", " ", $key) }}</span>
 												@endif
-												<span class="pv-details">P {{ number_format($value, 2) }}</span>
+												<span class="pv-details">{{ number_format($value, 2) }} PV</span>
 											</div>
 										@endif
 									@endforeach
@@ -85,7 +89,7 @@
 					<!-- PER ITEM -->
 					@foreach(limit_foreach($_related, 4) as $related)
 					<div class="col-md-3">
-						<div class="per-item" style="cursor: pointer;" onClick="location.href='/product/view/{{ $related['eprod_id'] }}'">
+						<div class="per-item" style="cursor: pointer;" onClick="location.href='/product/view2/{{ $related['eprod_id'] }}'">
 							<div class="image-container">
 								<img src="{{ get_product_first_image($related) }}">
 							</div>

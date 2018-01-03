@@ -25,9 +25,9 @@
 				</div>
 				@if($mlm == 1)
 				<div class="profile-lead">
-<!-- 					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
-	<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
-</a> -->
+					<!-- <a data-toggle="modal" data-target="#leads_modal" href="javascript:">
+						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
+					</a> -->
 					<!-- Modal -->
 					<div id="leads_modal" class="modal fade leads-modal" role="dialog">
 					   <div class="modal-dialog">
@@ -171,32 +171,32 @@
 					   </form>
 				   </div>
 				   <!-- CONTACT INFO -->
-				   <!-- <div id="contact_info" class="tab-pane fade">
+				   {{--  <div id="contact_info" class="tab-pane fade">
 				   		<div class="contact_info_success_message hidden">
-				   							<div class="alert alert-success">
-				   							  <strong>Success!</strong> Sponsor Rule has been successfully updated.
-				   							</div>
+   							<div class="alert alert-success">
+   							  <strong>Success!</strong> Sponsor Rule has been successfully updated.
+   							</div>
 				   		</div>
 				   		<form method="post" class="reward-configuration-form">
 				   			{{ csrf_field() }}
-				   					   		<div class="row clearfix">
-				   					   			<div class="col-md-12">
-				   					   				<div class="form-group">
-				   							   			<label>New Sponsor Rule</label>
-				   							   			<select name="downline_rule" class="form-control">
-				   							   				<option value="auto" {{ $customer->downline_rule == "auto" ? "selected" : "" }}>AUTO PLACEMENT</option>
-				   							   				<option value="manual" {{ $customer->downline_rule == "manual" ? "selected" : "" }}>MANUAL PLACEMENT</option>
-				   							   			</select>
-				   							   		</div>
-				   					   			</div>
-				   						   		<div class="col-md-12">
-				   						   			<div class="form-group btn-holder">
-				   							   			<button type="submit" class="submit-button btn btn-unity-primary"><i class="fa fa-pencil"></i> Update</button>
-				   							   		</div>
-				   						   		</div>
-				   					   		</div>
+   					   		<div class="row clearfix">
+   					   			<div class="col-md-12">
+   					   				<div class="form-group">
+   							   			<label>New Sponsor Rule</label>
+   							   			<select name="downline_rule" class="form-control">
+   							   				<option value="auto" {{ $customer->downline_rule == "auto" ? "selected" : "" }}>AUTO PLACEMENT</option>
+   							   				<option value="manual" {{ $customer->downline_rule == "manual" ? "selected" : "" }}>MANUAL PLACEMENT</option>
+   							   			</select>
+   							   		</div>
+   					   			</div>
+   						   		<div class="col-md-12">
+   						   			<div class="form-group btn-holder">
+   							   			<button type="submit" class="submit-button btn btn-unity-primary"><i class="fa fa-pencil"></i> Update</button>
+   							   		</div>
+   						   		</div>
+   					   		</div>
 				   		</form>
-				   </div> -->
+				   </div>  --}}
 					<div id="profile_picture" class="tab-pane fade">
 						<div class="profile_picture_success_message hidden">
 							<div class="alert alert-success">

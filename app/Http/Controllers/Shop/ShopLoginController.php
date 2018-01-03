@@ -55,9 +55,10 @@ class ShopLoginController extends Shop
                             Session::put('user_email', $user_data->user_email);
                             Session::put('user_first_name',$user_data->user_first_name);
                             Session::put('user_last_name',$user_data->user_last_name);
-                            Session::put('user_level',$user_data->user_level);
+                            Session::put('pr_user_level',$user_data->user_level);
+                            Session::put('pr_user_id',$user_data->user_id);
                             
-                            $level=session('user_level');
+                            $level=session('pr_user_level');
                            if($level!="1")
                            {
                                 return Redirect::to("/pressuser/dashboard");
@@ -88,6 +89,14 @@ class ShopLoginController extends Shop
         }
     }
 
+      public function thank_you()
+    {
+        
+        $data["page"] = "Thank You";
+        return view("press_user.thank_you", $data);
+    }
+
+    
     public function submit()
     {
     	$email = Request::input('email');

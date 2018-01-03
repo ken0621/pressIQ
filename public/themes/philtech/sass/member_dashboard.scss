@@ -7,6 +7,33 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
+.w2hpx
+{
+	@media screen and (max-width: 500px)
+	{
+		width: 200px;
+	}
+}
+
+@media screen and (max-width: 800px)
+{
+	.holder
+	{
+		.mob-center
+		{
+			text-align: center;
+			
+			.text
+			{
+				.pull-left
+				{
+					float: none !important;
+				}
+			}
+		}
+	}
+}
+
 .dashboard
 {
 	font-family: $content-text;
@@ -48,6 +75,12 @@ $text-dark: #272c2f;
 				margin-top: 3px;
 				text-transform: uppercase;
 				opacity: 0;
+				float: right;
+
+				@media screen and (max-width: 500px)
+				{
+					float: none;
+				}
 			}
 
 			&:hover
@@ -330,6 +363,11 @@ $text-dark: #272c2f;
 					color: #85939e;
 					font-size: 16px;
 					opacity: 0.5;
+				}
+
+				@media screen and (max-width: 800px)
+				{
+					display: block;
 				}
 			}
 			.action

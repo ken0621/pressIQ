@@ -88,3 +88,16 @@
 </div>
 </div>
 @endsection
+@section('script')
+<script type="text/javascript">
+    
+    function success_agent(data)
+    {
+        if(data.status == 'success')
+        {
+            toastr.success("Success");
+            location.reload();
+        }
+    }
+</script>
+@endsection

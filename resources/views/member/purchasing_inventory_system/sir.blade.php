@@ -60,7 +60,7 @@
                                     <th>SIR Created</th>
                                     <th>Truck Plate No</th>
                                     <th>Sales Agent</th>
-                                    <th>Total Item</th>
+                                    {{-- <th>Total Item</th> --}}
                                     <th>Total Amount</th>
                                     <th>Action</th>
                                 </tr>
@@ -73,7 +73,7 @@
                                             <td>{{date('F d, Y', strtotime($sir->sir_created))}}</td>
                                             <td>{{$sir->plate_number}}</td>
                                             <td>{{$sir->first_name}} {{$sir->middle_name}} {{$sir->last_name}}</td>
-                                            <td>{{$sir->total_item}}</td>
+                                            {{-- <td>{{$sir->total_item}}</td> --}}
                                             <td>{{currency("PHP",$sir->total_amount)}}</td>
                                             <td class="text-center">
                                                 <div class="btn-group">

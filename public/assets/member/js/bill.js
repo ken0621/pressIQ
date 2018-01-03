@@ -389,6 +389,7 @@ function bill()
 			onChangeValue: function()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
+				$('textarea[name="bill_mailing_address"]').val($(this).find("option:selected").attr("billing-address"));
 				load_purchase_order_vendor($(this).find("option:selected").attr("value"));
 
 			}
@@ -489,7 +490,7 @@ function bill()
 	function action_load_item_info($this)
 	{
 		$parent = $this.closest(".tr-draggable");
-		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
+		$parent.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-qty").val(1).change();
 

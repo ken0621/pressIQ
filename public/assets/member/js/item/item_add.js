@@ -188,15 +188,6 @@ function remove_item(id)
 		}
 	});
 }
-function success_item(data)
-{
-	if(data.status == 'success')
-	{
-        toastr.success(data.message);
-        data.element.modal("hide");
-        item_list.action_load_table();
-	}
-}
 function success_choose_item(data)
 {
 	if(data.status == 'success')
@@ -230,5 +221,15 @@ function submit_done(data)
              $(".select-manufacturer").val(data.id).change();              
         });
         data.element.modal("hide");
+    }
+}
+function submit_selected_image_done(data) 
+{ 
+    var image_path = data.image_data[0].image_path;
+
+    if (data.akey == 1) 
+    {
+        $('input[name="item_img"]').val(image_path);
+        $('.image-put').attr("src", image_path);
     }
 }

@@ -16,6 +16,7 @@ use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_terms;
 
+use App\Globals\Purchasing_inventory_system;
 use App\Globals\Vendor;
 use App\Globals\ItemSerial;
 use App\Globals\AuditTrail;
@@ -48,16 +49,21 @@ class Vendor_ReceiveInventoryController extends Member
         { 
             $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderby("bill_id","DESC")->where("inventory_only",1)->get();
 
+            
             foreach ($data["_bill_list"] as $key => $value) 
             {
                $price = 0;
                $item = Tbl_bill_item_line::where("itemline_bill_id",$value->bill_id)->get();
+
                foreach ($item as $key_item => $value_item) 
-               {
+               {             
                     $price += (UnitMeasurement::um_qty($value_item->itemline_um) * $value_item->itemline_qty) * $value_item->itemline_rate;
                }
+
                $data["_bill_list"][$key]->bill_price = $price;
+
             }
+
             return view("member.receive_inventory.receive_inventory_list",$data);
         }
         else
@@ -72,6 +78,7 @@ class Vendor_ReceiveInventoryController extends Member
         { 
             // dd(Session::get("po_item"));
             Session::forget("po_item");
+            $data['pis']        = Purchasing_inventory_system::check();
             $data["_vendor"]    = Vendor::getAllVendor('active');
             $data['_item']      = Item::get_all_category_item();
             $data['_account']   = Accounting::getAllAccount();
@@ -79,15 +86,18 @@ class Vendor_ReceiveInventoryController extends Member
             $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
             $data['action']     = "/member/vendor/receive_inventory/add";
             $data['vendor_id']     = Request::input("vendor_id");
+            $data['pis']        = Purchasing_inventory_system::check();
             
             $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_billed",0)->get();
-
+            //die(var_dump($data));
+            //dd($data["_po"]);
             $id = Request::input("id");
             if($id)
             {
                $data["bill"] = Tbl_bill::where("bill_id",$id)->first();
                $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["bill"]->bill_vendor_id)->where("po_is_billed",0)->get();
                $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
+               //dd($data["_bill_item_line"]);
                foreach ($data["_bill_item_line"] as $key => $value) 
                {
                     $data["_bill_item_line"][$key]->serial_number = ItemSerial::get_serial("receive_inventory",$id,$value->itemline_item_id);
@@ -96,6 +106,7 @@ class Vendor_ReceiveInventoryController extends Member
                $data['_account']   = Accounting::getAllAccount();
                $data['action']     = "/member/vendor/receive_inventory/update";
             }
+            
 
             $data["serial"] = ItemSerial::check_setting();
             
@@ -124,7 +135,7 @@ class Vendor_ReceiveInventoryController extends Member
         $button_action = Request::input('button_action');
 
         $serial_number = Request::input("serial_number");
-
+        
         $vendor_info                         = [];
         $vendor_info['bill_vendor_id']       = Request::input('bill_vendor_id');
         $vendor_info['bill_vendor_email']    = Request::input('bill_vendor_email');

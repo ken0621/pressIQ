@@ -5,30 +5,6 @@
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 @if(!$mlm_member)
 	<div class="dashboard">
-	    <!-- TOP DASHBOARD-->
-		<!-- 	    <div class="dashboard-top">
-		    <div class="row clearfix">
-		        <div class="col-md-8">
-		            <div class="img-container">
-		                <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
-		            </div>
-		        </div>
-		        <div class="col-md-12">
-		            <div class="join-container">
-		                <div class="btn btn-text">
-		                    <div class="text-header1">Become a member now!</div>
-		                    <div class="text-header2">Enroll now and become one of us!</div>
-		                </div>
-		                <div class="btn-container">
-		                    <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
-		                    <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-		                    <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-		</div> -->
-
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
 	            <div class="col-md-12">
@@ -48,182 +24,130 @@
 	            </div>
 	        </div>
 	    </div>
-
-	    <!-- BOTTOM DASHBOARD -->
-	    <!-- <div class="dashboard-bottom">
-	        <div class="text-header">Profile Information</div>
-	        <div class="row clearfix">
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic1 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Personal Information</div>
-	                        </div>
-	                        
-	                    </div>
-	                    <div class="personal-info-container">
-	                        <div><label>Name </label><span>{{$customer->first_name}} {{$customer->middle_name}} {{$customer->last_name}}</span></div>
-	                        <div><label>Email </label><span>{{$customer->email}}</span></div>
-	                        <div><label>Birthday </label><span>{{$customer->birthday}}</span></div>
-	                        <div><label>Contact </label><span>{{$customer->contact}}</span></div>
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic2 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-shipping.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Default Shipping Address</div>
-	                        </div>
-	                    </div>
-	                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae similique nulla amet illum labore nostrum sapiente fugiat, pariatur ipsa distinctio.</p>
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic3 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-billing.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Default Billing Address</div>
-	                        </div>
-	                    </div>
-	                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos quibusdam nesciunt, dolor culpa architecto enim ratione error ipsum, animi sunt.</p>
-	                </div>
-	            </div>
-	        </div>
-	    </div> -->
 	</div>
 @else
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right btn-enter-a-code">Create New Slot</a></div>
-				<div class="sub-container">
-					<div class="table-holder">
-						<div class="chart-legend">
-							<div class="holder">
-								<div class="color" style="background-color: #019771"></div>
-								<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
-							</div>
-							<div class="holder">
-								<div class="color" style="background-color: #8E5EA2"></div>
-								<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
-							</div>
-							<div class="chart-holder">
-								<canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="400" height="400"></canvas>
-							</div>
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
-							</div>
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-md-6">
-				<div class="title">Reward Summary</div>
-				<div class="sub-container">
-					<div class="chart-legend">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Advertisement Bonus</span> {{ $wallet->display_complan_advertisement_bonus }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Direct</span> {{ $wallet->display_complan_direct }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Leadership Advertisement Bonus</span> {{ $wallet->display_complan_leadership_advertisement_bonus }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Rebates Bonus</span> {{ $wallet->display_complan_stairstep }}</div>
-						</div>
-					</div>
-
-				</div>
-
-				<div class="title">Reward Points</div>
-				<div class="sub-container">
-					<div class="chart-legend" style="max-height: auto;">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_leadership_advertisement_bonus}}</span></div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Advertisement GC</span><span class="value">{{ $points->display_advertisement_bonus}}</span></div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Rank PV</span><span class="value">{{ $points->display_rank_pv }}</span></div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Rebates Points</span><span class="value">{{ $points->display_stairstep_gpv }}</span></div>
-						</div>
-					</div>
-				</div>
-				<div class="title">Enter Product Code</div>
-				<div class="sub-container">
-					<div class="chart-legend text-center">
-						<button class="btn btn-shift-use-pcode" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row clearfix">
-			<div class="col-md-6">
-				<div class="title">Newest Direct Referrals</div>
-				<div class="sub-container border-holder">
-					<div class="clearfix wow hidden">
-						<div class="badge right">6 New Members</div>
-					</div>
-					@if(count($_direct) > 0)
-						@foreach($_direct as $direct)
-						<div class="holder">
-							<div class="color">
-								<img src="{{ $direct->profile_image }}">
-							</div>	
-							<div class="text">
-								<div class="pull-left">
-									<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
-									<div class="email">{{ $direct->slot_no }}</div>
-									<div class="date">{{ $direct->time_ago }}</div>
+				<div class="square-container">
+					<div class="title">Wallet Summary <a href="javascript:" class="title-button btn-enter-a-code"><div>Create New Slot</div></a></div>
+					<div class="sub-container">
+						<div class="table-holder">
+							<div class="chart-legend">
+								<div class="holder">
+									<div class="color" style="background-color: #0D91E3"></div>
+									<div class="name"><span>Current Wallet</span> <div class="name w2hpx">{{ $wallet->display_current_wallet }}</div></div>
+								</div>
+								<div class="holder">
+									<div class="color" style="background-color: #8E5EA2"></div>
+									<div class="name"><span>Total Pay-out</span> <div class="name w2hpx">{{ $wallet->display_total_payout }}</div></div>
+								</div>
+								<div class="chart-holder">
+									<canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="400" height="400"></canvas>
+								</div>
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>Current Slot(s)</span> <div class="name w2hpx">{{ $customer_summary["display_slot_count"] }}</div></div>
+								</div>
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>Total Reward</span> <div class="name w2hpx">{{ $wallet->display_total_earnings }}</div></div>
 								</div>
 							</div>
-							<div class="action pull-right">
-								@if($direct->distributed == 1)
-									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-shift-view-info"><i class="fa fa-star"></i> VIEW INFO</button>
-								@else
-									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
-								@endif
-							</div>
 						</div>
-						@endforeach
-					@else
-
-						<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
-					@endif
+					</div>
 				</div>
 			</div>
+
 			<div class="col-md-6">
-				<div class="match-height">
-					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
+
+				<div class="square-container">
+					<div class="title">Reward Summary</div>
+					<div class="sub-container">
+						<div class="chart-legend">
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Advertisement Bonus</span> <div class="name w2hpx">{{ $wallet->display_complan_advertisement_bonus }}</div></div>
+							</div>
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Direct</span> <div class="name w2hpx">{{ $wallet->display_complan_direct }}</div></div>
+							</div>
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Leadership Advertisement Bonus</span> <div class="name w2hpx">{{ $wallet->display_complan_leadership_advertisement_bonus }}</div></div>
+							</div>
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Rebates Bonus</span> <div class="name w2hpx">{{ $wallet->display_complan_stairstep }}</div></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="square-container">
+					<div class="title">Reward Points</div>
+					<div class="sub-container">
+						<div class="chart-legend" style="max-height: auto;">
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>5th Pair GC</span> <div class="name w2hpx">{{ $points->display_leadership_advertisement_bonus}}</div></div>
+							</div>
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Advertisement GC</span> <div class="name w2hpx">{{ $points->display_advertisement_bonus}}</div></div>
+							</div>
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Rank PV</span> <div class="name w2hpx">{{ $points->display_rank_pv }}</div></div>
+							</div>
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Rebates Points</span> <div class="name w2hpx">{{ $points->display_stairstep_gpv }}</div></div>
+							</div>
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Reward Points Redemption</span> <div class="name">{{ currency('',$reward_point_redemption) }} POINT(S)</div></div>
+							</div>
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Remaining Reward Points</span> <div class="name">{{ currency('',$points->leadership_advertisement_bonus+$points->advertisement_bonus+$reward_point_redemption) }} POINT(S)</div></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="square-container">
+					<div class="title">Enter Product Code</div>
+					<div class="sub-container">
+						<div class="chart-legend text-center">
+							<button class="btn btn-shift-use-pcode" onclick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="row clearfix">
+			<div class="col-md-6">
+					
+				<div class="square-container">
+					<div class="title">Newest Direct Referrals</div>
+					<div class="sub-container border-holder">
+						<div class="clearfix wow hidden">
+							<div class="badge right">6 New Members</div>
+						</div>
+						<div class="load-direct-referrals-here">
+							
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-md-6">
+				<div class="square-container">
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button" onclick="location.href='/members/report'"><div>View All Rewards</div></a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)
@@ -252,7 +176,6 @@
 				</div>
 			</div>
 		</div>
-
 
 	    <!-- Success -->
 	    <div class="popup-success">
@@ -376,6 +299,41 @@
 @section("member_script")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
+
+<script>
+$(window).on('hashchange', function() {
+    if (window.location.hash) {
+        var page = window.location.hash.replace('#', '');
+        if (page == Number.NaN || page <= 0) {
+            return false;
+        } else {
+            getPosts(page);
+        }
+    }
+});
+$(document).ready(function() {
+	getPosts(1);
+    $(document).on('click', '.pagination a', function (e) {
+        getPosts($(this).attr('href').split('page=')[1]);
+        e.preventDefault();
+    });
+});
+function getPosts(page) {
+    $.ajax(
+    {
+        url : '/members/direct-referrals?page=' + page,
+        type: 'get',
+    }).done(function (data) 
+    {
+        $('.load-direct-referrals-here').html(data);
+        location.hash = page;
+    }).fail(function () 
+    {
+        alert('Posts could not be loaded.');
+    });
+}
+</script>
+
 <script>
 
 $(document).ready(function()
@@ -428,12 +386,10 @@ $(document).ready(function()
 	      }
 	    }
 	});
-
 });
 
+
 // And for a doughnut chart
-
-
 $(document).ready(function()
 {
 	if($("._mode").val() == "success")
@@ -441,13 +397,20 @@ $(document).ready(function()
 		$("#success-modal").modal("show");
 	}
 
+	// $(".place_slot_btn").click(function()
+	// {
+	// 	$(".message-return-slot-placement-verify").empty();
+	// 	$(".chosen_slot_id").val($(this).attr("place_slot_id"));
+	// 	$("#slot-placement-modal").modal("show");
+	// });
 
-	$(".place_slot_btn").click(function()
+	$("body").on('click','.place_slot_btn',function()
 	{
 		$(".message-return-slot-placement-verify").empty();
 		$(".chosen_slot_id").val($(this).attr("place_slot_id"));
 		$("#slot-placement-modal").modal("show");
 	});
+
 });
 
 </script>

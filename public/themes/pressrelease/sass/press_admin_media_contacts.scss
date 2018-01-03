@@ -121,23 +121,6 @@
                     vertical-align: middle
                 }
 
-                span
-                {
-                    display: inline-block;
-                    vertical-align: middle;
-                    padding-left: 10px;
-                    a
-                    {
-                        background-color: #316df9;
-                        color: #fff;
-                        font-size: 13px;
-                        padding: 8px 8px;
-                        text-decoration: none;
-                        display: inline-block;
-                        vertical-align: middle
-                    }
-                }
-
                 textarea
                 {
                     color: #404040;
@@ -153,19 +136,15 @@
                 .button-container
                 {
                     padding-top: 30px;
-                    .add-button
+                    button
                     {
-                        padding-right: 20px;
-                        a
-                        {
-                            background-color: #316df9;
-                            color: #fff;
-                            font-size: 15px;
-                            text-decoration: none;
-                            padding: 10px 20px;
-                        }
-                    }
-                    
+                        background-color: #316df9;
+                        color: #fff;
+                        font-size: 15px;
+                        text-decoration: none;
+                        padding: 10px 20px;
+                        width: 16%;
+                    }                    
                 }
             }
         }

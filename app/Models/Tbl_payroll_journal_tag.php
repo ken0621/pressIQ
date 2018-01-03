@@ -33,7 +33,7 @@ class Tbl_payroll_journal_tag extends Model
 	{
 		return $query->leftjoin("tbl_payroll_journal_tag_employee AS emp","emp.payroll_journal_tag_id","=","tbl_payroll_journal_tag.payroll_journal_tag_id")->where("emp.payroll_employee_id", $employee_id);
 	}
-
+	
 	public function scopeAccount($query)
 	{
 		return $query->leftjoin("tbl_chart_of_account AS account","account.account_id","=","tbl_payroll_journal_tag.account_id")

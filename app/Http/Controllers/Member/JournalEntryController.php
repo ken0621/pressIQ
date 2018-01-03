@@ -201,6 +201,7 @@ class JournalEntryController extends Member
 		if($total_debit == $total_credit)
 		{
 			$account_type_string = '';
+			$account_type_id = 0; 
 			foreach(Request::input("jline_account_id") as $key=>$account_id)
 			{
 				if($account_id)

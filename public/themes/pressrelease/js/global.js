@@ -17,8 +17,27 @@ function global()
 			action_slick();
 			ready_load_ecom_cart();
 			ready_load_mini_ecom_cart();
+			event_toggle_nav();
 		});
 	}
+
+	function event_toggle_nav()
+    {
+        $(".menu-nav").bind("click", function()
+        {
+            action_toggle_nav();
+        });
+    }
+
+    function action_toggle_nav()
+    {
+        $(".menu-nav").unbind("click");
+        $(".menu-mobile-nav").slideToggle(400, function()
+        {
+            event_toggle_nav();
+        });
+    }
+
 	function event_show_cart()
 	{
 		$('html').click(function() 

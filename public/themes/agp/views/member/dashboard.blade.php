@@ -9,25 +9,6 @@
 
 @if(!$mlm_member)
 	<div class="dashboard">
-	    <!-- TOP DASHBOARD-->
-	    <!-- <div class="dashboard-top" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-dash.png')">
-	        <div class="row clearfix">
-	            <div class="col-md-4">
-	                <div class="join-container">
-	                    <div class="btn btn-text">
-	                        <div class="text-header1">Not yet a Member?</div>
-	                        <div class="text-header2">Join Us Now!</div>
-	                    </div>
-	                    <div class="btn-container">
-	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
-	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-	                        <a href="#" id="btn-enter-a-code"><button onclick="action_load_link_to_modal('/members/enter-code')" class="btn-enter-a-code">Enter a Code</button></a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div> -->
-
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
 	            <div class="col-md-12">
@@ -48,46 +29,52 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right" onclick="action_load_link_to_modal('members/enter-code')">Create New Slot</a></div>
-				<div class="sub-container">
-					<div class="table-holder">
-						<div class="chart-legend">
-							<div class="holder">
-								<div class="color" style="background-color: #019771"></div>
-								<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
-							</div>
-							<div class="holder">
-								<div class="color" style="background-color: #8E5EA2"></div>
-								<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
-							</div>
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
-							</div>
-							<div class="holder">
-								<div class="color"></div>
-								<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
+
+				<div class="square-container">
+					<div class="title">Wallet Summary <a href="javascript:" class="title-button" onclick="action_load_link_to_modal('members/enter-code')"><div>Create New Slot</div></a></div>
+					<div class="sub-container">
+						<div class="table-holder">
+							<div class="chart-legend">
+								<div class="holder">
+									<div class="color" style="background-color: #019771"></div>
+									<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
+								</div>
+								<div class="holder">
+									<div class="color" style="background-color: #8E5EA2"></div>
+									<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
+								</div>
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
+								</div>
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="title">Wallet Per Slot</div>
-				<div class="sub-container">
-					<div class="table-holder">
-						<div class="chart-legend">
-							@foreach($_slot as $slot)
-							<div class="holder">
-								<div class="color" style="background-color: #019771"></div>
-								<div class="name"><span>{{ $slot->slot_no }}</span> {{ $slot->display_current_wallet }}</div>
+				<div class="square-container">
+					<div class="title">Wallet Per Slot</div>
+					<div class="sub-container">
+						<div class="table-holder">
+							<div class="chart-legend">
+								@foreach($_slot as $slot)
+								<div class="holder">
+									<div class="color" style="background-color: #019771"></div>
+									<div class="name"><span>{{ $slot->slot_no }}</span> {{ $slot->display_current_wallet }}</div>
+								</div>
+								@endforeach
 							</div>
-							@endforeach
 						</div>
 					</div>
 				</div>
 
-				<div class="title">Replicated Link</div>
-				<div class="sub-container">
+				<div class="square-container">
+					<div class="title">Replicated Link</div>
+					<div class="sub-container">
 						@foreach($_slot as $slot)
 						<div class="holder">
 							<div class="row clearfix">
@@ -98,110 +85,127 @@
 							</div>
 						</div>
 						@endforeach
+					</div>
+				</div>
+
+				<div class="square-container">
+					<div class="title">Cash Reward Summary</div>
+					<div class="sub-container">
+						<div class="chart-legend">
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Binary Pairing</span><span class="value">{{ isset($wallet->display_complan_binary) ? $wallet->display_complan_binary : 'PHP 0.00' }}</span></div>
+							</div>
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Direct Referral</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
 			<div class="col-md-6">
-				<div class="title">Cash Reward Summary</div>
-				<div class="sub-container">
-					<div class="chart-legend">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Binary Pairing</span><span class="value">{{ isset($wallet->display_complan_binary) ? $wallet->display_complan_binary : 'PHP 0.00' }}</span></div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Direct Referral</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
-						</div>
-					</div>
-				</div>
 
+				<div class="square-container">
+					<div class="title">Reward Points</div>
+					<div class="sub-container">
+						<div class="chart-legend" style="max-height: auto;">
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
+							</div>
+						</div>
+						<div class="chart-legend" style="max-height: auto;">
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Direct GC</span><span class="value">{{ $points->display_direct }}</span></div>
+							</div>
+						</div>
+						<div class="chart-legend" style="max-height: auto;">
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>Maintenance GC</span><span class="value">{{ $points->display_maintenance }}</span></div>
+							</div>
+						</div>
+					</div>
+				</div>	
 
-				<div class="title">Reward Points</div>
-				<div class="sub-container">
-					<div class="chart-legend" style="max-height: auto;">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>5th Pair GC</span><span class="value">{{ $points->display_binary }}</span></div>
-						</div>
+				<div class="square-container">
+					<div class="title">Binary Points</div>
+					<div class="sub-container">
+	                    <div class="table-responsive">
+	                        <table style="margin-top: 5px;" class="table table-condensed">
+	                            <thead style="text-transform: uppercase">
+	                                <tr>
+	                                    <th class="text-center">SLOT</th>
+	                                    <th class="text-center">POINT (LEFT)</th>
+	                                    <th class="text-center">POINT (RIGHT)</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+	                            	@foreach($_slot as $slot)
+	                                <tr>
+	                                    <td class="text-center">{{ $slot->slot_no }}</td>
+	                                    <td class="text-center">{{ number_format($slot->slot_binary_left, 2) }}</td>
+	                                    <td class="text-center">{{ number_format($slot->slot_binary_right, 2) }}</td>
+	                                </tr>
+	                                @endforeach
+	                            </tbody>
+	                        </table>
+	                    </div>
 					</div>
-					<div class="chart-legend" style="max-height: auto;">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Direct GC</span><span class="value">{{ $points->display_direct }}</span></div>
-						</div>
-					</div>
-					<div class="chart-legend" style="max-height: auto;">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Maintenance GC</span><span class="value">{{ $points->display_maintenance }}</span></div>
-						</div>
-					</div>
-				</div>
-
-				<div class="title">Binary Points</div>
-				<div class="sub-container">
-                    <div class="table-responsive">
-                        <table style="margin-top: 5px;" class="table table-condensed">
-                            <thead style="text-transform: uppercase">
-                                <tr>
-                                    <th class="text-center">SLOT</th>
-                                    <th class="text-center">POINT (LEFT)</th>
-                                    <th class="text-center">POINT (RIGHT)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            	@foreach($_slot as $slot)
-                                <tr>
-                                    <td class="text-center">{{ $slot->slot_no }}</td>
-                                    <td class="text-center">{{ number_format($slot->slot_binary_left, 2) }}</td>
-                                    <td class="text-center">{{ number_format($slot->slot_binary_right, 2) }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
 				</div>
 			</div>
 		</div>
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Newest Direct Referrals  <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/direct'">View All Direct</a></div>
-				<div class="sub-container border-holder">
-					<div class="clearfix wow hidden">
-						<div class="badge right">6 New Members</div>
-					</div>
-					@if(count($_direct) > 0)
-						@foreach($_direct as $direct)
-						<div class="holder">
-							<div class="color">
-								<img src="{{ $direct->profile_image }}">
-							</div>	
-							<div class="text">
-								<div class="pull-left">
-									<div style="max-width: 250px;" class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
-									<div class="email">{{ $direct->slot_no }}</div>
-									<div class="date">{{ $direct->time_ago }}</div>
+				<div class="square-container">
+					<div class="title">Newest Direct Referrals  <a href="javascript:" class="title-button" onclick="location.href='/members/direct'"><div>View All Direct</div></a></div>
+					<div class="sub-container border-holder">
+						<div class="clearfix wow hidden">
+							<div class="badge right">6 New Members</div>
+						</div>
+						{{-- <div class="load-direct-referrals-here">
+													
+						</div> --}}
+						@if(count($_direct) > 0)
+							@foreach($_direct as $direct)
+							<div class="holder">
+								<div class="row clearfix">
+									<div class="col-md-8">
+										<div class="color">
+											<img src="{{ $direct->profile_image }}">
+										</div>
+										<div class="text">
+											<div class="pull-left">
+												<div style="max-width: 250px;" class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+												<div class="email">{{ $direct->slot_no }}</div>
+												<div class="date">{{ $direct->time_ago }}</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="action" style="text-align: center;">
+											@if($direct->distributed == 1)
+												<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
+											@else
+												<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+											@endif
+										</div>
+									</div>
 								</div>
 							</div>
-							<div class="action pull-right">
-								@if($direct->distributed == 1)
-									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
-								@else
-									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
-								@endif
-							</div>
-						</div>
-						@endforeach
-					@else
-
-						<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
-					@endif
+							@endforeach
+						@else
+							<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
+						@endif
+					</div>
 				</div>
 			</div>
 			<div class="col-md-6">
-				<div class="match-height">
-					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right" onclick="location.href='/members/report'">View All Rewards</a></div>
+				<div class="square-container">
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button" onclick="location.href='/members/report'"><div>View All Rewards</div></a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)
@@ -231,7 +235,6 @@
 			</div>
 		</div>
 
-
 	    <!-- Success -->
 	    <div class="popup-success">
 	        <div id="success-modal" class="modal success-modal fade">
@@ -253,8 +256,42 @@
 @section("member_script")
 <script type="text/javascript" src="/assets/member/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
-<script>
 
+{{-- <script>
+	$(window).on('hashchange', function() {
+	    if (window.location.hash) {
+	        var page = window.location.hash.replace('#', '');
+	        if (page == Number.NaN || page <= 0) {
+	            return false;
+	        } else {
+	            getPosts(page);
+	        }
+	    }
+	});
+	$(document).ready(function() {
+		getPosts(1);
+	    $(document).on('click', '.pagination a', function (e) {
+	        getPosts($(this).attr('href').split('page=')[1]);
+	        e.preventDefault();
+	    });
+	});
+	function getPosts(page) {
+	    $.ajax(
+	    {
+	        url : '/members/direct-referrals?page=' + page,
+	        type: 'get',
+	    }).done(function (data) 
+	    {
+	        $('.load-direct-referrals-here').html(data);
+	        location.hash = page;
+	    }).fail(function () 
+	    {
+	        alert('Posts could not be loaded.');
+	    });
+	}
+</script> --}}
+
+<script>
 $(document).ready(function()
 {
 	$wallet = $(".chart-income").attr("wallet");

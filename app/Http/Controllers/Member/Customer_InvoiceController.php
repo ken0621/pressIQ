@@ -13,6 +13,7 @@ use App\Globals\Transaction;
 use App\Globals\Customer;
 use App\Globals\Estimate;
 use App\Globals\ItemSerial;
+use App\Globals\ReceivePayment;
 
 use App\Models\Tbl_customer;
 use App\Models\Tbl_item_bundle;
@@ -50,8 +51,9 @@ class Customer_InvoiceController extends Member
 
         $data["page"]       = "Customer Invoice";
         $data["pis"]        = Purchasing_inventory_system::check();
+        //dd($data["pis"]);
         $data["_customer"]  = Customer::getAllCustomer();
-        $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
+        $data["_terms"]     = Customer::getTerms($this->user_info->shop_id,0);
 
         $data['_item']      = Item::get_all_category_item();
         $data['_cm_item']   = Item::get_returnable_item();
@@ -108,12 +110,36 @@ class Customer_InvoiceController extends Member
 
         foreach ($data["_invoices"] as $key => $value) 
         {
+            $orig_price = $value->inv_overall_price;
             $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
-            if($cm != null)
+            if($cm)
             {
-              $data["_invoices"][$key]->inv_overall_price = $value->inv_overall_price - $cm->cm_amount;  
+              $data["_invoices"][$key]->inv_overall_price = $value->inv_overall_price - $cm->cm_amount;
             }
+            $data["_invoices"][$key]->inv_balance = ReceivePayment::getBalance($this->user_info->shop_id, $value->inv_id, $orig_price);
         }
+        foreach ($data["_invoices_unpaid"] as $key1 => $value1) 
+        {
+            $orig_price = $value1->inv_overall_price;
+            $cm = Tbl_credit_memo::where("cm_id",$value1->credit_memo_id)->first();
+            if($cm)
+            {
+              $data["_invoices_unpaid"][$key1]->inv_overall_price = $value1->inv_overall_price - $cm->cm_amount;
+            }
+            $data["_invoices_unpaid"][$key1]->inv_balance = ReceivePayment::getBalance($this->user_info->shop_id, $value1->inv_id, $orig_price);
+
+        }
+        foreach ($data["_invoices_paid"] as $key2 => $value2) 
+        {
+            $orig_price = $value2->inv_overall_price;
+            $cm = Tbl_credit_memo::where("cm_id",$value2->credit_memo_id)->first();
+            if($cm)
+            {
+              $data["_invoices_paid"][$key2]->inv_overall_price = $value2->inv_overall_price - $cm->cm_amount;
+            }
+            $data["_invoices_paid"][$key2]->inv_balance = ReceivePayment::getBalance($this->user_info->shop_id, $value2->inv_id, $orig_price);
+        }
+
 
         $data['check_user'] = Purchasing_inventory_system::check();
 
@@ -397,7 +423,7 @@ class Customer_InvoiceController extends Member
 
                 if (isset($data["status"]) && isset($data["status_message"]) && $data["status_message"] > 0) 
                 {
-                    $json["status"]         = "error-invoice";
+                    $json["status"]         = "error";
                     $json["status_message"] = $data["status_message"];
 
                     $json["redirect"]       = "/member/customer/invoice?id=" . $inv_id;
@@ -735,7 +761,7 @@ class Customer_InvoiceController extends Member
                 }
                 elseif($json["status"] == "error" && count($json["status_message"]) > 0)
                 {
-                    $json["status"]         = "error-invoice";
+                    $json["status"]         = "error";
                     $json["invoice_id"]     = $inv_id;
                     $json["redirect"]       = "/member/customer/invoice?id=" . $inv_id;
 
@@ -767,9 +793,14 @@ class Customer_InvoiceController extends Member
         $data["invoice_id"] = $invoice_id;
 
         $data["transaction_type"] = "INVOICE";
-        if(Tbl_customer_invoice::where("inv_id",$invoice_id)->value("is_sales_receipt") != 0)
+        $invoice_data = Tbl_customer_invoice::where("inv_id",$invoice_id)->first();
+        if($invoice_data)
         {
-            $data["transaction_type"] = "Sales Receipt";            
+            if($invoice_data->is_sales_receipt != 0)
+            {
+                $data["transaction_type"] = "Sales Receipt";
+            }
+            $data['new_inv_id'] = $invoice_data->new_inv_id;
         }
 
         // $data["invoice_id"] = "INVOICE";
@@ -826,7 +857,7 @@ class Customer_InvoiceController extends Member
             
             if ($stock_validation["status"] == "error") 
             {
-                $json["status"]         = "error-invoice";
+                $json["status"]         = "error";
                 $json["status_message"] = $stock_validation["status_message"];
                 $json["redirect"]       = "/member/customer/invoice";
 

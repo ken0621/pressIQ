@@ -135,7 +135,7 @@
 										<select name="method" required="required" class="method-id-change">
 											<option value="" hidden>Select Payment Method</option>
 											@foreach($_payment as $payment)
-												<option value="{{ $payment->link_reference_name }}" method-id="{{ $payment->method_id }}">{{ $payment->method_name }}</option>
+												<option link-ref-name="{{ $payment->link_reference_name }}" method-id="{{$payment->method_id}}" value="{{ $payment->method_id }}">{{ $payment->method_name }}</option>
 											@endforeach
 										</select>	
 										<input type="hidden" name="method_id" class="method-id-input">

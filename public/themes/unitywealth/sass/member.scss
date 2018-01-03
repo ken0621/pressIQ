@@ -479,6 +479,12 @@
 	}
 }
 
+.modal-content
+{
+	border: 0 !important;
+	border-radius: 0 !important;
+}
+
 .btn-custom-white
 {
 	background-color: #fd6060;
@@ -528,5 +534,10 @@
 	{
 		color: #fff;
 		opacity: 0.8;
+	}
+
+	@media screen and (max-width: 425px)
+	{
+		margin-top: 10px;
 	}
 }

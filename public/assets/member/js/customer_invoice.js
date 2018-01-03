@@ -279,12 +279,12 @@ function customer_invoice()
 		$(".tr-draggable").each(function()
 		{
 			/* GET ALL DATA */
-			var qty 	= $(this).find(".txt-qty").val();
-			var rate 	= $(this).find(".txt-rate").val();
-			var discount= $(this).find(".txt-discount").val().toString();
+			var qty               = $(this).find(".txt-qty").val();
+			var rate              = $(this).find(".txt-rate").val();
+			var discount          = $(this).find(".txt-discount").val().toString();
 			var multiple_discount = discount.split("/");
-			var amount 	= $(this).find(".txt-amount");
-			var taxable = $(this).find(".taxable-check");
+			var amount            = $(this).find(".txt-amount");
+			var taxable           = $(this).find(".taxable-check");
 
 			/* CHECK IF QUANTITY IS EMPTY */
 			if(qty == "" || qty == null)
@@ -294,24 +294,53 @@ function customer_invoice()
 
 			/* CHECK THE DISCOUNT */
 	
-
+			//dd(multiple_discount);
 			/*for(discount = 0; discount < multiple_discount.length; discount++)
 			{	
 				alert(multiple_discount[discount]); //split
 			}*/
-			if(discount.indexOf('%') >= 0)
+			if (discount.indexOf('/') >= 0)
 			{
-				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
-				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
-			}
-			else if(discount == "" || discount == null)
-				
-			{
-				discount = 0;
+				var split_discount = discount.split('/');
+				var main_rate      = rate * qty;
+
+				$.each(split_discount, function(index, val) 
+				{
+					console.log(val + " - Discount");
+
+					if(val.indexOf('%') >= 0)
+					{
+						console.log(parseFloat(main_rate) + " - " + ((100-parseFloat(val.replace("%", ""))) / 100));
+						main_rate = parseFloat(main_rate) * ((100-parseFloat(val.replace("%", ""))) / 100);
+						console.log(main_rate);
+					}
+					else if(val == "" || val == null)	
+					{
+						main_rate -= 0;
+					}
+					else
+					{
+						main_rate -= parseFloat(val);
+					}
+				});
+
+				discount = (rate * qty) - main_rate;
 			}
 			else
 			{
-				discount = parseFloat(discount);
+				if(discount.indexOf('%') >= 0)
+				{
+					$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
+					discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
+				}
+				else if(discount == "" || discount == null)	
+				{
+					discount = 0;
+				}
+				else
+				{
+					discount = parseFloat(discount);
+				}
 			}
 
 			/* RETURN TO NUMBER IF THERE IS COMMA */
@@ -571,6 +600,7 @@ function customer_invoice()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
 				$(".customer-billing-address").val($(this).find("option:selected").attr("billing-address"));
+				$('textarea[name="inv_customer_billing_address"]').val($(this).find("option:selected").attr("billing-address"));
 				load_all_estimate($(this).val());
 			}
 		});
@@ -618,7 +648,7 @@ function customer_invoice()
     		placeholder : "Terms...",
             onChangeValue: function()
             {
-            	var start_date 		= $(".datepicker[name='inv_date']").val();
+            	var start_date 		= $(".datepicker[name='date']").val();
             	var days 			= $(this).find("option:selected").attr("days");
             	var new_due_date 	= AddDaysToDate(start_date, days, "/");
             	$(".datepicker[name='inv_due_date']").val(new_due_date);
@@ -683,21 +713,23 @@ function customer_invoice()
 	function action_load_item_info($this)
 	{
 		$parent = $this.closest(".tr-draggable");
-		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
+		$parent.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
 
-		$parent.find(".txt-rate").attr("readonly",false);
-		$parent.find(".txt-discount").attr("disabled",false);
-		if($this.find("option:selected").attr("item-type") == 4)
-		{
-			$parent.find(".txt-rate").attr("readonly",true);
-			$parent.find(".txt-discount").attr("disabled","disabled");
-		}
+		// $parent.find(".txt-rate").attr("readonly",false);
+		// $parent.find(".txt-discount").attr("disabled",false);
+		// if($this.find("option:selected").attr("item-type") == 4)
+		// {
+		// 	$parent.find(".txt-rate").attr("readonly",true);
+		// 	$parent.find(".txt-discount").attr("disabled","disabled");
+		// }
 		if($this.find("option:selected").attr("has-um") != '')
-		{			
+		{
+			$parent.find(".txt-qty").attr("disabled",true);
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
+				$parent.find(".txt-qty").removeAttr("disabled");
 				$(this).globalDropList("reload").globalDropList("enabled");
 				$(this).val($(this).find("option:first").val()).change();
 			})
@@ -710,12 +742,14 @@ function customer_invoice()
 	function action_load_item_info_cm($this)
 	{
 		$parent_cm = $this.closest(".tr-cm-draggable");
-		$parent_cm.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
+		$parent_cm.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
 		$parent_cm.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent_cm.find(".txt-qty").val(1).change();
 
+		$parent.find(".txt-qty").attr("disabled",true);
 		if($this.find("option:selected").attr("has-um") != '')
 		{		
+			$parent.find(".txt-qty").removeAttr("disabled");
 			$parent_cm.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$(this).globalDropList("reload").globalDropList("enabled");

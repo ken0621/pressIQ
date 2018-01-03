@@ -41,16 +41,18 @@
                 </select>
             </div>
             <div class="col-md-3" style="padding: 10px">
+                @if(!$pis)
                 <select class="form-control" onChange="filter_customer_slot(this)">
                     <option value="all" {{Request::input('filter_slot') == 'all' ? 'selected' : ''}}>All V.I.P.s</option>
                     <option value="w_slot" {{Request::input('filter_slot') == 'w_slot' ? 'selected' : ''}}>Active V.I.P.s</option>
                     <option value="w_o_slot" {{Request::input('filter_slot') == 'w_o_slot' ? 'selected' : ''}}>Inactive V.I.P.s</option>
                 </select>
+                @endif
             </div>
             <div class="col-md-4 col-md-offset-5" style="padding: 10px">
                 <div class="input-group">
                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                    <input type="text" class="form-control customer-search" data-value="1" placeholder="Search by Customer Name" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control customer-search" data-value="1" placeholder="Search by Customer Name press Enter" aria-describedby="basic-addon1">
                 </div>
             </div>  
         </div>
@@ -67,6 +69,8 @@
                     </tr>
                 </thead>
                 <tbody>
+
+                @if(count($_customer) > 0)
                     @foreach($_customer as $customer)
                         <tr class="cursor-pointer" id="tr-customer-{{$customer->customer_id1}}" style="color: {{$customer->approved == 1? '#000' : '#ff3333' }};">
                              <td class="text-left">
@@ -107,8 +111,9 @@
                                     <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id1}}">Create Invoice</a></li>
                                     <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
                                     <!-- <li><a href="/member/customer/transaction_list">Transaction List</a></li> -->
-                                    <li><a href="/member/customer/estimate">Create Estimate</li>
                                     @if(!$pis)
+                                    <li><a href="/member/customer/estimate">Create Estimate</li>
+                                   
                                         <li><a class="popup" link="/member/customer/viewlead/{{$customer->customer_id}}" size="md" data-toggle="modal">View Lead</li>   
                                     @endif
                                     <li><a href="/member/customer/details/{{$customer->customer_id1}}">View Customer Details</a></li>
@@ -119,6 +124,9 @@
                             </td>
                         </tr>
                     @endforeach
+                @else
+                    <tr><td  colspan="5" class="text-center"> NO CUSTOMER </td></tr>
+                @endif
                 </tbody>
             </table>
             <div class="padding-10 text-center">
@@ -145,6 +153,17 @@
         if(data.message == "success")
         {
             console.log(121212);
+        }
+    }
+    function success_update_customer(data)
+    {
+        if(data.message == 'success')
+        {
+            toastr.success('Success');
+            setInterval(function()
+            {
+                location.href = '/member/customer/list';
+            },2000);
         }
     }
 </script>

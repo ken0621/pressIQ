@@ -12,8 +12,7 @@ yarn-error.log
 .env
 /public/upload/*
 /public/uploads/*
+!/public/uploads/.htaccess
 /config/snappy.php
 /config/debugbar.php
-composer.lock
-composer.lock
 composer.lock

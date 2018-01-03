@@ -1,6 +1,15 @@
 @extends("press_admin.admin")
 @section("pressview")
-
+<style >
+.table 
+{
+   width: 100%;
+   display:block;
+   height: 500px;
+   overflow-y: scroll;
+   text-align: center;
+}
+</style>
 <div class="background-container">
     <div class="pressview">
         <div class="dashboard-container">
@@ -11,56 +20,84 @@
           </div>
                                     
             <div class="press-release-content">
-                <div id="press_media" class="tabcontent press-media-container">
-                    <div class="press-holder-container">
-                        <table>
-                            <tr>
-                                <th>Contact Name</th>
-                                <th>Country</th>
-                                <th>Email</th>
-                                <th>Website</th>
-                                <th>Description</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                            @foreach($contacts as $contact)
-                            <tr>
-                                <td>{{$contact->contact_name}}</td>
-                                <td>{{$contact->country}}</td>
-                                <td>{{$contact->contact_email}}</td>
-                                <td>{{$contact->contact_website}}</td>
-                                <td>{{$contact->contact_description}}</td>
-                                <td><a href="#">Edit</a></td>
-                                <td><a href="#">Delete</a></td>
-                            </tr>
-                            @endforeach
-                        </table>
-                    </div>
+            <div id="press_media" class="tabcontent press-media-container">
+                 @if (Session::has('success_merchant'))
+                  <div class="alert alert-success">
+                     <center>{{ Session::get('success_merchant') }}</center>
+                  </div>
+                  @endif 
+                  @if (Session::has('delete'))
+                  <div class="alert alert-danger">
+                     <center>{{ Session::get('delete') }}</center>
+                  </div>
+                  @endif    
+                <div class="col-md-12">
+                     
+                  <div class="left-container" id="press_table" name="press_table">
+                    <table  class="table table-bordered" style="background-color: #FFFFFF;" id="showHere_table">
+                        <tr>
+                            <th style="text-align: center;">Contact Name</th>
+                            <th style="text-align: center;">Company</th>
+                            <th style="text-align: center;">Country</th>
+                            <th style="text-align: center;">Action</th>
+                        </tr>
+                         @foreach($_media_contacts as $_media)
+                           <tr>
+                              <td style="text-align: center;">{{$_media->name}}</td>
+                              <td style="text-align: center;">{{$_media->company_name}}</td>
+                              <td style="text-align: center;">{{$_media->country}}</td>
+                              <td style="text-align: center;">
+                                <a href="/pressadmin/pressreleases_deleterecipient/{{$_media->recipient_id }}"><button type="button"  class="btn btn-danger center">
+                                <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button>
+                              </td>
+                           </tr>
+                           @endforeach
+                        
+                    </table>
+                  </div>
                 </div>
+            </div>
 
-                <div id="add_media" class="tabcontent add-media-container">
-                    <form method="post">
-                        {{csrf_field()}}
-                        @if(session()->has('message'))
-                            <span class="member" style="color: red;">
-                                 <strong>Error!</strong> {{ session('message') }}<br>
-                            </span>
-                        @endif
-                        <div class="title">Contact Name: *</div>
-                        <input type="text" name="contact_name" class="form-control">
-                        <div class="title">Country: *</div>
-                        <input type="text" name="country" class="form-control">
-                        <div class="title">Email: *</div>
-                        <input type="email" name="contact_email" class="form-control">
-                        <div class="title">Website: *</div>
-                        <input type="text" name="contact_website" class="form-control">
-                        <div class="title">Description: *</div>
-                        <textarea name="contact_description"></textarea>
-                        <div class="button-container">
-                            <button class="add-button" type="submit">Add Contacts</button>
-                        </div>
-                    </form>
-                </div>
+            <div id="add_media" class="tabcontent add-media-container">
+                
+                <form method="post" action="/pressadmin/pressreleases_addrecipient">
+                    {{csrf_field()}}
+                    <div class="title">Contact Name: *</div>
+                    <input type="text" id="name" name="name" class="form-control" required>
+
+                    <div class="title">Position: *</div>
+                    <input type="text"  id="position" name="position" class="form-control" required>
+
+                    <div class="title">Company Name: *</div>
+                    <input type="text" id="company_name" name="company_name" class="form-control" required>
+
+
+                    <div class="title">Country: *</div>
+                    <input type="text" id="country" name="country" class="form-control" required>
+
+                    <div class="title">Email: *</div>
+                    <input type="email" id="contact_email" name="contact_email" class="form-control" required>
+
+                    <div class="title">Website: *</div>
+                    <input type="text"  id="contact_website" name="contact_website" class="form-control" required>
+
+                    <div class="title">Media Type: *</div>
+                    <input type="text" id="media_type" name="media_type" class="form-control" required>
+
+                    <div class="title">Industry Type: *</div>
+                    <input type="text" id="industry_type" name="industry_type" class="form-control" required>
+
+                    <div class="title">Title Journalist: *</div>
+                    <input type="text" id="title_journalist" name="title_journalist" class="form-control" required>
+
+
+                    <div class="title">Description: *</div>
+                    <textarea id="description" name="description"></textarea>
+                    <div class="button-container">
+                        <button type="submit" id="submit_button" name="submit_button">Add Contacts</button>
+                    </div>
+                </form>
+            </div>
             </div>
         </div>
     </div>
@@ -94,5 +131,5 @@ function openCity(evt, cityName)
 document.getElementById("defaultOpen").click();
 </script>
 
-
 @endsection
+

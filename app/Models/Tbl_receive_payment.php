@@ -13,4 +13,8 @@ class Tbl_receive_payment extends Model
     {
     	return $query->join("tbl_customer","tbl_customer.customer_id","=","tbl_receive_payment.rp_customer_id");
     }
+    public static function scopeRpline($query)
+    {
+    	return $query->leftjoin("tbl_receive_payment_line","rpline_rp_id","=","rp_id");    	
+    }
 }

@@ -50,6 +50,8 @@
     </div>
 
   </div>
+  <!-- SCROLL TO TOP -->
+  <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>

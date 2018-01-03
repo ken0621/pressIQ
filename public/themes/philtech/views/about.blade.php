@@ -8,20 +8,22 @@
 			<div class="row clearfix">
 				<div class="col-md-8">
 					<div class="greet">GREETINGS!</div>
-					<div class="welcome">WELCOME to the FINANCIAL SUCCESS OPPORTUNITY!</div>
-					<div class="text">This is a very unique business model that would make all of us realize and achieve our DREAMS. My greatest vision and passion has been to help more people to be truly successful in their lives holistically, thus the PhilTECH company was founded.
+					<div class="welcome">WELCOME to the FRANCHISE BUSINESS OPPORTUNITY!</div>
+					<p>
+						This is a very unique business model that would make all of us realize and achieve our DREAMS. My greatest vision and passion have been to help more Filipinos to own an affordable and profitable BUSINESS and be truly successful holistically in their lives, thus the PhilTECH company was founded.<br><br> 
 
-	For me, SUCCESS is not just about FINANCIAL FREEDOM, but also about the TOTAL LIFE TRANSFORMATION: FINANCIALLY, EMOTIONALLY AND SPIRITUALLY. TO MENTOR, MOTIVATE and INSPIRE OTHER PEOPLE regardless of age, gender, socio-economic status and educational background.
+						For me, SUCCESS is not just about FINANCIAL FREEDOM, it is also about the TOTAL LIFE TRANSFORMATION: FINANCIALLY, EMOTIONALLY AND SPIRITUALLY. To MENTOR, MOTIVATE and INSPIRE other people regardless of age, gender, socio-economic status and educational background. <br><br>
 
-	PhilTECH INC. was established to provide the right avenue to empowering all of us CONSUMERS by breaking the cycle of our lives, have equal opportunity for both business owners and consumers, earn while spending our hard earn money and most of all to transform all ordinary consumers to become successful entrepreneurs. PhilTECH is soaring at its highest potential to leverage to all FILIPINOS anywhere in the world in achieving their ultimate goals and dreams to be financially independent earned through perseverance, honesty and strong belief in one’s self and reason to live a happy and successful life.
+						PhilTECH, INC. has been established to provide the right vehicle to ride on to earn limitless passive income and to become MILLIONAIRE in the future. PhilTECH, INC. is soaring at its highest potential to offer the FRANCHISE BUSINESS PACKAGES to all FILIPINOS anywhere in the world. It is one of my dreams that many people will be successful for the rest of their lives. <br><br>
 
-	Again, I would like to WELCOME YOU ALL and BE SUCCESSFUL for the rest of your life.
+						Again, I would like to welcome you all to this Life-Changing- Opportunity!<br><br>
 
-	ARNOLD A. ARBILLERA
-	President &amp; CEO</div>
+						ARNOLD A. ARBILLERA<br>
+						President &amp; CEO
+					</p>
 				</div>
 				<div class="col-md-4">
-					<img style="width: 100%;" src="/themes/{{ $shop_theme }}/img/greeting.png">
+					<img style="width: 250px;" src="/themes/{{ $shop_theme }}/img/greeting.jpg">
 				</div>
 			</div>
 		</div>
@@ -83,6 +85,8 @@
 			<img class="img-responsive" style="margin: auto;" src="/themes/{{ $shop_theme }}/img/core-values.jpg">
 		</div>
 	</div>
+	<!-- SCROLL TO TOP -->
+	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
 @endsection
 

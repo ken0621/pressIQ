@@ -23,8 +23,11 @@
                         <div class='col-md-4'>
                         <label for='level_indirect[]'>Level</label><input type='hidden' class='form-control' value='{{$value->indirect_seting_level}}' name='level_indirect[]'><input type='number' class='form-control' value='{{$value->indirect_seting_level}}' name='level_indirect[]' disabled='disabled'>
                         </div>
-                        <div class='col-md-4'>
+                        <div class='col-md-2'>
                         <label for='amount_indirect[]'>Amount</label><input type='number' class='form-control' value='{{$value->indirect_seting_value}}' name='amount_indirect[]'>
+                        </div>
+                        <div class='col-md-2'>
+                        <label for='additional_points[]'>Additional Points</label><input type='number' class='form-control' value='{{$value->additional_points}}' name='additional_points[]'>
                         </div>
                         <div class='col-md-4'>
                         <label for='percentage_indirect[]'>Type</label>
@@ -82,8 +85,11 @@
                 html_to_append += "<div class='col-md-4'>";
                 html_to_append += "<label for='level_indirect[]'>Level</label><input type='number' class='form-control' value='"+i+"' name='level_indirect[]' readonly>";
                 html_to_append += "</div>";
-                html_to_append += "<div class='col-md-4'>";
+                html_to_append += "<div class='col-md-2'>";
                 html_to_append += "<label for='amount_indirect[]'>Amount</label><input type='number' class='form-control' value='0' name='amount_indirect[]'>";
+                html_to_append += "</div>";
+                html_to_append += "<div class='col-md-2'>";
+                html_to_append += "<label for='additional_points[]'>Amount</label><input type='number' class='form-control' value='0' name='additional_points[]'>";
                 html_to_append += "</div>";
                 html_to_append += "<div class='col-md-4'>";
                 html_to_append += "<label for='percentage_indirect[]'>Type</label><select class='form-control' name='percentage_indirect[]'><option value='0'>Fixed Amount</option><option value='1'>Percentage</option></select>";

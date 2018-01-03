@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_credit_memo_line;
+use App\Models\Tbl_credit_memo_applied_payment;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_payment_method;
@@ -39,10 +40,10 @@ class CreditMemoController extends Member
     public function choose_type()
     {
         $data["cm_id"] = Request::input("cm_id");
-        if(Purchasing_inventory_system::check() != 0)
-        {
-             $data["for_tablet"] = "true";
-        }
+        // if(Purchasing_inventory_system::check() != 0)
+        // {
+        //      $data["for_tablet"] = "false";
+        // }
 
         return view("member.customer.credit_memo.cm_type",$data);
     }
@@ -53,6 +54,7 @@ class CreditMemoController extends Member
 
         $data["cm_data"] = Tbl_credit_memo::where("cm_id",$cm_id)->first();
         $data["c_id"] = Tbl_credit_memo::where("cm_id",$cm_id)->value("cm_customer_id");
+        $data['_nocredits'] = true;
 
         if($cm_type == "invoice")
         {
@@ -83,9 +85,18 @@ class CreditMemoController extends Member
             // }
             }
 
+            $cm_data = CreditMemo::get_info($cm_id);
+            $data['_rcvpayment_credit'][0]['ref_number'] =  $cm_data->transaction_refnum != "" ? $cm_data->transaction_refnum : $cm_data->cm_id;
+            $data['_rcvpayment_credit'][0]['cm_id'] = $cm_id; 
+            $data['_rcvpayment_credit'][0]['cm_amount'] = $cm_amount;
+
             return view("member.receive_payment.modal_receive_payment",$data);
         }
-        if($cm_type == "invoice_tablet")
+        else if($cm_type == "refund")
+        {
+            dd("Under Maintenance");
+        }
+        else if($cm_type == "invoice_tablet")
         {
             $data["_customer"]      = Tbl_customer::where("customer_id",$data["c_id"])->first();
             $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
@@ -103,7 +114,7 @@ class CreditMemoController extends Member
             }
             return view("member.receive_payment.modal_receive_payment",$data);
         }
-        if($cm_type == "others")
+        else if($cm_type == "others")
         {
             $up["cm_type"] = 1;
             $up["cm_used_ref_name"] = "others";
@@ -112,7 +123,8 @@ class CreditMemoController extends Member
 
             return Redirect::to("/member/customer/credit_memo/list");
         }
-        if($cm_type == "others_tablet")
+
+        else if($cm_type == "others_tablet")
         {
             $up["cm_type"] = 1;
             $up["cm_used_ref_name"] = "others";
@@ -120,6 +132,15 @@ class CreditMemoController extends Member
             Tbl_credit_memo::where("cm_id",$cm_id)->update($up);
 
             return Redirect::to("/tablet/credit_memo");
+        }
+        else
+        {
+            $up["cm_type"] = 1;
+            $up["cm_used_ref_name"] = $cm_type;
+
+            Tbl_credit_memo::where("cm_id",$cm_id)->update($up);
+
+            return Redirect::to("/member/customer/credit_memo/list");            
         }
     }
     public function index()
@@ -131,11 +152,13 @@ class CreditMemoController extends Member
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["action"]     = "/member/customer/credit_memo/create_submit";
 
+        $data["total_applied_credit"] = 0;
         $id = Request::input('id');
         if($id)
         {
-            $data["cm"]            = Tbl_credit_memo::where("cm_id", $id)->first();
-            $data["_cmline"]       = Tbl_credit_memo_line::um()->where("cmline_cm_id", $id)->get();
+            $data["cm"]                    = Tbl_credit_memo::where("cm_id", $id)->first();
+            $data["_cmline"]               = Tbl_credit_memo_line::um()->where("cmline_cm_id", $id)->get();
+            $data["total_applied_credit"]  = $data["cm"]->cm_amount - Tbl_credit_memo_applied_payment::where("cm_id", $id)->sum("applied_amount");
             foreach ($data["_cmline"] as $key => $value) 
             {
                 $data["_cmline"][$key]->serial_number = ItemSerial::get_serial_credited($value->cmline_item_id,"credit_memo-".$id);
@@ -156,6 +179,8 @@ class CreditMemoController extends Member
     }
     public function create_submit()
     {
+        $use_credit = Request::input("use_credit");
+
         $customer_info[] = null;
         $customer_info["cm_customer_id"] = Request::input("cm_customer_id");
         $customer_info["cm_customer_email"] = Request::input("cm_customer_email");
@@ -275,6 +300,8 @@ class CreditMemoController extends Member
         {
             if($ctr_items != 0)
             {
+                $customer_info['cm_used_ref_name'] = $use_credit;
+                $customer_info["cm_type"] = 1;
                 $cm_id = CreditMemo::postCM($customer_info, $item_info);
                 
                 if(count($item_returns) > 0)
@@ -292,9 +319,24 @@ class CreditMemoController extends Member
                     }
                 }
 
-                $data["status"] = "success-credit-memo-action";
-                $data["id"] = $cm_id;
-                $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
+                $data["status"] = "success";
+                $data["id"] = $cm_id;       
+                if($use_credit == "retain_credit")
+                {
+                    $data['call_function'] = "success_credit_memo";
+                    $data["redirect_to"] = "/member/customer/credit_memo/list";
+                }
+                elseif($use_credit == "refund")
+                {
+                    $data['call_function'] = "success_credit_memo_refund";
+                    $data['redirect_to'] = "/member/customer/credit_memo/update_action?type=refund&cm_id=".$cm_id;
+
+                }
+                elseif($use_credit == "apply")
+                {
+                    $data['call_function'] = "success_credit_memo_apply";
+                    $data['redirect_to'] = "/member/customer/credit_memo/update_action?type=invoice&cm_id=".$cm_id;
+                }
             }
             else
             {

@@ -34,7 +34,8 @@
                             @endif 
                                 <div id="info">
                                     <div id="photo">
-                                        <img src="/assets/slot_genealogy/member/img/default-image.jpg">
+                                        {{-- <img src="/assets/slot_genealogy/member/img/default-image.jpg"> --}}
+                                        <img style="border-radius: 100%;" src="{{ $profile_image }}">
                                     </div>
                                     <div id="cont">
                                         <div>{{ strtoupper($slot->first_name) }}</div>

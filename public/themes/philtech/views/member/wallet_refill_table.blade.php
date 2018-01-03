@@ -49,4 +49,3 @@
     </tbody>
 </table>
 <!-- <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/wallet_refill.js"></script> -->
-

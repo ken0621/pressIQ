@@ -7,19 +7,19 @@
 			<tbody>
 				<tr>
 					<td class="c1" style="background-color: #fcfcfc;">
-						<div class="register-side" >
-							<div class="text-center" style="margin: 200px 0px;">IMAGE HERE</div>
+						<div class="register-side">
+							<img src="/themes/{{ $shop_theme }}/img/login-img.jpg">
 						</div>
 					</td>
 					<td class="c2">
 						<div class="register-form">
 							<div class="text-right social-button">
-								<a href="{{$fb_login_url or '#'}}" class="holder fb">
+								<!-- <a href="{{$fb_login_url or '#'}}" class="holder fb">
 									<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
-								</a>
-								<a href="javascript:" class="holder gp g-signin2" data-onsuccess="onSignIn">
+								</a> -->
+								<!-- <a href="javascript:" class="holder gp g-signin2" data-onsuccess="onSignIn">
 									<div class="name "><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
-								</a>
+								</a> -->
 							</div>
 
 							@if (session("error"))
@@ -55,7 +55,7 @@
 								<div class="form-group">
 									<div class="choice">
 										<div class="holder">
-											<button class="btn btn-brown">Login</button>
+											<button class="btn btn-custom">Login</button>
 										</div>
 										<div class="holder"><span class="or">OR</span></div>
 										<div class="holder"><a class="login-href" href="/members/register">Create an Account</a></div>

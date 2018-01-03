@@ -3,17 +3,12 @@
 <div class="background-container">
     <div class="pressview">
         <div class="my-press-release-container">
-        	<div class="title-container"><a href="/pressuser/mypressrelease/pressrelease/view">Press Release 1</a></div>
-        	<div class="date-container">November 25, 2017</div>
-        	<div class="details-container">Lorem ipsum dolor sit amet, consectetur adipisicing elit. sed do eiusmod tempor incididunt ut labore</div>
+            @foreach ($pr as $prs)
+        	<div class="title-container"><a href="/pressuser/mypressrelease/pressrelease/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
+        	<div class="date-container">{{$prs->pr_date_sent}}</div>
+        	<div class="details-container"><p>{!!$prs->pr_content!!}<p></div>
         	<div class="border"></div>
-        	<div class="title-container"><a data-toggle="tab" href="#">Press Release 2</a></div>
-        	<div class="date-container">November 25, 2017</div>
-        	<div class="details-container">Lorem ipsum dolor sit amet, consectetur adipisicing elit. sed do eiusmod tempor incididunt ut labore</div>
-        	<div class="border"></div>
-        	<div class="title-container"><a data-toggle="tab" href="#">Press Release 3</a></div>
-        	<div class="date-container">November 25, 2017</div>
-        	<div class="details-container">Lorem ipsum dolor sit amet, consectetur adipisicing elit. sed do eiusmod tempor incididunt ut labore</div>
+            @endforeach
         </div>
     </div>
 </div>

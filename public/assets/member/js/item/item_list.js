@@ -192,3 +192,13 @@ function success_refill(data)
         item_list.action_load_table();
 	}
 }
+
+function success_item(data)
+{
+	if(data.status == 'success')
+	{
+        toastr.success(data.message);
+        data.element.modal("hide");
+        item_list.action_load_table();
+	}
+}

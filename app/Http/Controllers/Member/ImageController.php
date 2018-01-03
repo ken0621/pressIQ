@@ -14,6 +14,7 @@ use Crypt;
 use Session;
 use Response;
 use Input;
+use Storage;
 
 class ImageController extends Member
 {
@@ -34,15 +35,24 @@ class ImageController extends Member
 		$filename 			= str_random(15).".".$extension;
 		$destinationPath 	= 'uploads/'.$shop_key."-".$shop_id;
 
-		if(!File::exists($destinationPath)) 
-		{
-			$create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
-		}
-
-		$upload_success    = Input::file('file')->move($destinationPath, $filename);
-
+		// if(!File::exists($destinationPath)) 
+		// {
+		// 	$create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+		// }
+		// $upload_success    = Input::file('file')->move($destinationPath, $filename);
 		/* SAVE THE IMAGE PATH IN THE DATABASE */
-		$image_path = $destinationPath."/".$filename;
+		// $image_path = $destinationPath."/".$filename;
+
+		$image_path = Storage::putFile($destinationPath, Input::file('file'));
+
+		if ($image_path) 
+		{
+			$upload_success = true;
+		}
+		else
+		{
+			$upload_success = false;
+		}
 
 		$insert_image["image_path"] 		= "/" . $image_path; 
 		$insert_image["image_shop"] 		= $this->user_info->shop_id;
@@ -64,17 +74,32 @@ class ImageController extends Member
 
 	public function load_media_library()
 	{
-		$data['_image'] = Tbl_image::where("image_shop", $this->user_info->shop_id)->get();
+		// $data['_image'] = Tbl_image::where("image_shop", $this->user_info->shop_id)->get();
 		$get_only_exist = [];
-		foreach ($data['_image'] as $key => $value) 
+		$remote_server = Storage::files('/uploads/' . $this->user_info->shop_key . '-' . $this->user_info->shop_id);
+		// foreach ($data['_image'] as $key => $value) 
+		// {
+		// 	if(File::exists(public_path().$value->image_path))
+		// 	{
+		// 		$get_only_exist[$key] = $value;
+		// 	}
+		// 	elseif(Storage::disk('ftp')->exists($value->image_path))
+		// 	{
+		// 		$get_only_exist[$key] = $value;
+		// 	}
+		// }
+		foreach ($remote_server as $key => $value) 
 		{
-			if(File::exists(public_path().$value->image_path))
-			{
-				$get_only_exist[$key] = $value;
-			}
-			
+			$image = Tbl_image::where("image_path", '/' . $value)->first();
+			$get_only_exist[$key] = $image;
 		}
 		$data['_image'] = $get_only_exist;
+
+		usort($data['_image'], function($a, $b) 
+		{
+		    return $b['image_date_created'] <=> $a['image_date_created'];
+		});
+
 		return view('member.modal.load_media_library', $data);
 	}
 }

@@ -31,6 +31,9 @@ function commission_report()
     }
     function action_change_warehouse()
     {
+    	var loc = window.location.href;
+    	console.log('location: '+loc);
+
         var currentWarehouse = $('.select_current_warehouse').val();
         $('.commission-percentage').attr('disabled',true);
         $.ajax(

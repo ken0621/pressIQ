@@ -238,8 +238,11 @@ class ShopMemberController extends Shop
         Session::forget('user_email');
         Session::forget('user_first_name');
         Session::forget('user_last_name');
+        Session::forget('user_company_name');
+        Session::forget('user_company_image');
         Session::forget('pr_user_level');
         Session::forget('pr_user_id');
+
        
         return Redirect::to("/");
     }
@@ -354,8 +357,10 @@ class ShopMemberController extends Shop
         return Redirect::to("/pressuser/pressrelease");
         // return view("press_user.press_user_pressrelease", $data);
     }
+
     public function pressuser_pressrelease()
     {
+        // $data['_user']                 = Tbl_pressiq_user::where('user_id',session('user_id'))->first();
         $data['_country']              = Tbl_press_release_recipient::distinct()->get(['country']);
         $data['_industry_type']        = Tbl_press_release_recipient::distinct()->get(['industry_type']);
         $data['_title_of_journalist']  = Tbl_press_release_recipient::distinct()->get(['title_of_journalist']);
@@ -642,8 +647,7 @@ class ShopMemberController extends Shop
 
     public function press_user_manage_user()
     {
-        $data['_user'] = Tbl_pressiq_user::where('user_id',session('pr_user_id'))->get();
-
+      
         $data["page"] = "Manage User";
         return view("press_user.press_user_manage_user", $data);
     }

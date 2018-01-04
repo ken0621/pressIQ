@@ -177,7 +177,7 @@ function receive_payment()
 	function action_update_apply_amount($amount)
 	{
 		$(".amount-to-apply").val($amount);
-		amount_due = $amount;
+		amount_due = formatFloat($amount);
 		$(".amount-apply").html("PHP "+formatMoney($amount))
 
 		compute_total();
@@ -234,7 +234,12 @@ function receive_payment()
 
 	function formatFloat($this)
 	{
-		return Number($this.toString().replace(/[^0-9\.]+/g,""));
+		var return_number = $this;
+		if($this)
+		{
+			return_number = Number($this.toString().replace(",",""));
+		} 
+		return return_number;
 	}
 
 	function formatMoney_2($this)
@@ -282,8 +287,9 @@ function receive_payment()
 	}
 	function compute_total()
 	{		
-		$(".applied-total-amount").val(amount_due - amount_credit);
-		$('.applied-amount').html('PHP ' + formatMoney_2(amount_due - amount_credit));
+		$(".applied-total-amount").val(parseFloat(amount_due) - parseFloat(amount_credit));
+		$('.applied-amount').html('PHP ' + formatMoney_2(parseFloat(amount_due) - parseFloat(amount_credit)));
+		console.log(parseFloat(amount_due) - parseFloat(amount_credit));
 	}
 	this.event_compute_apply_credit = function()
 	{

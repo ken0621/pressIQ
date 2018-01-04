@@ -89,6 +89,13 @@
                             <th>Account</th>
                             <th>Rep</th>
                             <th>Amount</th>
+                            <th>Total Selling Price</th>
+                            <th>Downpayment</th>
+                            <th>Discount</th>
+                            <th>Montly Amort</th>
+                            <th>Miscellaneous Fee</th>
+                            <th>NDP Commission</th>
+                            <th>TCP Commission</th>
                     </thead>
                     <tbody>
                     </tbody>

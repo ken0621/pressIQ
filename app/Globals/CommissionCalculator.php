@@ -35,6 +35,108 @@ class CommissionCalculator
 		/* Loop FOR INSERTING INVOICE */
 		$loop_for = Self::get_computation($shop_id, $commission_id)['month_amort']; 
 		/** NDP */ 
+		// for ($i = 0; $i < $loop_for ; $i++) 
+		// { 
+        $customer_info['customer_id']       = $comm['customer_id'];
+        $customer_info['customer_email']    = $comm['customer_email'];
+
+        $invoice_info['invoice_date']       = $comm['date'];
+        $invoice_info['invoice_due']        = $comm['due_date'];
+        $invoice_info['new_inv_id']			= $commission_id.'00'.($i + 1);
+        $invoice_info['billing_address']	= Item::get_item_details($comm_item['item_id'])->item_name;
+		$invoice_info['invoice_terms_id']	= 0;
+
+        $invoice_other_info['invoice_msg']  = "";
+        $invoice_other_info['invoice_memo'] = "";
+
+        $item_info[0]['item_service_date']  = "";
+        $item_info[0]['item_id']            = $comm_item['item_id'];
+        $item_info[0]['item_description']   = Item::get_item_details($comm_item['item_id'])->item_sales_information;
+        $item_info[0]['discount']   		= 0;
+        $item_info[0]['discount_remark']	= "";
+        $item_info[0]['um']			   		= "";
+        $item_info[0]['taxable']	   		= 0;
+        $item_info[0]['ref_name']	   		= "";
+        $item_info[0]['ref_id']	   			= 0;
+        $item_info[0]['quantity']           = 1;
+        $item_info[0]['rate']               = round(Self::get_computation($shop_id, $commission_id)['amount_tcp'],5);
+        $item_info[0]['amount']             = round(Self::get_computation($shop_id, $commission_id)['amount_tcp'],5);
+
+        $total_info['ewt']                  = 0;
+        $total_info['total_discount_type']  = 0;
+        $total_info['total_discount_value'] = 0;
+        $total_info['taxable']              = 0;
+
+        $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+		// }
+		// $tcp = $loop_for + 1;
+		// /** TCP */
+		// $customer_info['customer_id']       = $comm['customer_id'];
+  //       $customer_info['customer_email']    = $comm['customer_email'];
+
+  //       $invoice_info['invoice_date']       = $comm['date'];
+  //       $invoice_info['invoice_due']        = $comm['due_date'];
+  //       $invoice_info['new_inv_id']			= $commission_id.'00'.($tcp);
+  //       $invoice_info['billing_address']	= Item::get_item_details($comm_item['item_id'])->item_name;
+		// $invoice_info['invoice_terms_id']	= 0;
+
+  //       $invoice_other_info['invoice_msg']  = "";
+  //       $invoice_other_info['invoice_memo'] = "";
+
+  //       $item_info[0]['item_service_date']  = "";
+  //       $item_info[0]['item_id']            = $comm_item['item_id'];
+  //       $item_info[0]['item_description']   = Item::get_item_details($comm_item['item_id'])->item_sales_information;
+  //       $item_info[0]['discount']   		= 0;
+  //       $item_info[0]['discount_remark']	= "";
+  //       $item_info[0]['um']			   		= "";
+  //       $item_info[0]['taxable']	   		= 0;
+  //       $item_info[0]['ref_name']	   		= "";
+  //       $item_info[0]['ref_id']	   			= 0;
+  //       $item_info[0]['quantity']           = 1;
+  //       $item_info[0]['rate']               = round(Self::get_computation($shop_id, $commission_id)['amount_loanable'],5);
+  //       $item_info[0]['amount']             = round(Self::get_computation($shop_id, $commission_id)['amount_loanable'],5);
+
+  //       $total_info['ewt']                  = 0;
+  //       $total_info['total_discount_type']  = 0;
+  //       $total_info['total_discount_value'] = 0;
+  //       $total_info['taxable']              = 0;
+
+  //       $tcp_invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+
+        $ins['invoice_id'] = $invoice_id;
+		$ins['commission_id'] = $commission_id;
+		$ins['commission_amount'] = round(Self::get_computation($shop_id, $commission_id)['amount_tcp_comm'],5);
+		$ins['commission_type'] = 'TCPC';
+
+		Tbl_commission_invoice::insert($ins);
+
+		for($i = 0; $i < $loop_for ; $i++) 
+		{ 
+			$ins['invoice_id'] = $invoice_id;
+			$ins['commission_id'] = $commission_id;
+			$ins['commission_amount'] = round(Self::get_computation($shop_id, $commission_id)['amount_monthly_commission'],5);
+			$ins['payment_amount'] = round(Self::get_computation($shop_id, $commission_id)['amount_monthly_amort'],5);
+			$ins['commission_type'] = 'NDPC';
+			Tbl_commission_invoice::insert($ins);
+		}
+
+		// die(var_dump($comm_item_id));
+		return "success";
+		
+	}
+	public static function create_backup($shop_id, $comm, $comm_item)
+	{
+		$comm['shop_id'] = $shop_id;
+		$commission_id = Tbl_commission::insertGetId($comm);
+
+		$comm_item['commission_id'] = $commission_id;
+		$comm_item_id = Tbl_commission_item::insertGetId($comm_item);
+
+		$invoice_id = null;
+
+		/* Loop FOR INSERTING INVOICE */
+		$loop_for = Self::get_computation($shop_id, $commission_id)['month_amort']; 
+		/** NDP */ 
 		for ($i = 0; $i < $loop_for ; $i++) 
 		{ 
 	        $customer_info['customer_id']       = $comm['customer_id'];

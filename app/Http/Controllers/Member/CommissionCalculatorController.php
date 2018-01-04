@@ -92,15 +92,22 @@ class CommissionCalculatorController extends Member
         $json = null;
         if($ctr != $data_length)
         {
-            $data['name']                   = isset($value["Name"])                 ? $value["Name"] : '';
-            $data['type']                   = isset($value["Type"])                 ? $value["Type"] : '';
+            $data['name']         = isset($value["Name"])                    ? $value["Name"] : '';
+            $data['type']         = isset($value["Type"])                    ? $value["Type"] : '';
 
+            $data['date']         = isset($value["Date"])                    ? $value["Date"] : '';
+            $data['num']          = isset($value["Num"])                     ? $value["Num"] : '';
+            $data['account']      = isset($value["Account"])                 ? $value["Account"] : '';
+            $data['rep']          = isset($value["Rep"])                     ? $value["Rep"] : '';
+            $data['amount']       = isset($value["Amount"])                  ? $value["Amount"] : '';
 
-            $data['date']                   = isset($value["Date"])                 ? $value["Date"] : '';
-            $data['num']                    = isset($value["Num"])                  ? $value["Num"] : '';
-            $data['account']                = isset($value["Account"])              ? $value["Account"] : '';
-            $data['rep']                    = isset($value["Rep"])                  ? $value["Rep"] : '';
-            $data['amount']                 = isset($value["Amount"])               ? $value["Amount"] : '';
+            $data['tsp']          = isset($value["Total Selling Price"])     ? $value["Total Selling Price"] : '';
+            $data['downpayment']  = isset($value["Downpayment"])             ? $value["Downpayment"] : '';
+            $data['discount']     = isset($value["Discount"])                ? $value["Discount"] : '';
+            $data['mon_amort']    = isset($value["Monthly Amort"])           ? $value["Monthly Amort"] : '';
+            $data['misc_fee']     = isset($value["Miscellaneous Fee"])       ? $value["Miscellaneous Fee"] : '';
+            $data['ndp']          = isset($value["NDP Commission"])          ? $value["NDP Commission"] : '';
+            $data['tcp']          = isset($value["TCP Commission"])          ? $value["TCP Commission"] : '';
 
             $json["status"]     = null;
             $json["message"]    = null;
@@ -134,6 +141,13 @@ class CommissionCalculatorController extends Member
             $json["tr_data"]   .= "<td nowrap>".$data['account']."</td>";
             $json["tr_data"]   .= "<td nowrap>".$data['rep']."</td>";
             $json["tr_data"]   .= "<td nowrap>".$data['amount']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['tsp']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['downpayment']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['discount']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['mon_amort']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['misc_fee']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['ndp']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['tcp']."</td>";
             $json["tr_data"]   .= "</tr>";
 
             $json["value_data"] = $value;

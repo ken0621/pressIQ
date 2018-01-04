@@ -3,6 +3,7 @@ namespace App\Globals;
 
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_bill;
+use App\Globals\AccountingTransaction;
 use Carbon\Carbon;
 use DB;
 
@@ -40,7 +41,7 @@ class TransactionEnterBills
             $total = collect($insert_item)->sum('item_amount');
 
             $ins['bill_total_amount'] = $total;
-
+            
             /*INSERT RI HERE*/
             $enter_bills_id = Tbl_bill::insertGetId($ins);
             

@@ -56,7 +56,8 @@ class TransactionDebitMemo
             $total = collect($insert_item)->sum('item_amount');
             $ins['db_amount'] = $total;
 
-            
+            /* INSERT DM IN DATABASE */
+            $dm_id = Tbl_debit_memo::insertGetId($ins);
 
             /* Transaction Journal */
             $entry["reference_module"]  = "debit-memo";
@@ -66,11 +67,9 @@ class TransactionDebitMemo
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
             $entry["ewt"]               = '';
-
-            /* INSERT DM IN DATABASE */
-            $dm_id = Tbl_debit_memo::insertGetId($ins);
+            
+            $return = Self::insertLine($dm_id, $insert_item, $entry);
             $return = $dm_id;
-            //$return = Self::insertLine($dm_id, $insert_item, $entry);
         }
         else
         {

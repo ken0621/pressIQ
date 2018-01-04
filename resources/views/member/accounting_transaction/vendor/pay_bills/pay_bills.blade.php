@@ -15,7 +15,7 @@
                 </h1>
                 <div class="dropdown pull-right">
                     <div>
-                        <a class="btn btn-custom-white" href="/member/transaction/estimate_quotation">Cancel</a>
+                        <a class="btn btn-custom-white" href="/member/transaction/pay_bills">Cancel</a>
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu  dropdown-menu-custom">
@@ -61,7 +61,7 @@
                     </div>
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <select class="drop-down-vendor" name="vendor_id" required>
                                     @include("member.load_ajax_data.load_vendor", ['vendor_id' => isset($paybill) ? $paybill->paybill_vendor_id : (isset($v_id) ? $v_id : '')])
                                 </select>
@@ -120,7 +120,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="tbody-item">
-                                        @include('member.pay_bill.load_pay_bill_items')
+                                        @include('member.accounting_transaction.vendor.pay_bills.load_pay_bills')
                                     </tbody>
                                 </table>
                             </div>

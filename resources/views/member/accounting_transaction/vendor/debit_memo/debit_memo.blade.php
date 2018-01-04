@@ -2,7 +2,7 @@
 @section('content')
 <form class="global-submit" role="form" action="{{ $action or ''}}" method="post" >
     <input type="hidden" name="_token" value="{{csrf_token()}}">
-    <input type="hidden" class="button_action" name="button_action" value="">
+    <input type="hidden" class="button-action" name="button_action" value="">
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
             <div>

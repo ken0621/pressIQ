@@ -33,12 +33,14 @@ class TransactionPurchaseRequisitionController extends Member
 	{
 		$data['page'] = 'Purchase Requisition';
 		$data['_list'] = RequisitionSlip::get($this->user_info->shop_id);
-		//dd($data['_vendor']);
+		$data['_pr']   = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
+		//dd($data['_pr']);//dd($data['_list']);
 		return view('member.accounting_transaction.vendor.purchase_requisition.requisition_slip', $data);
 	}
 	public function getLoadRsTable(Request $request)
 	{
 		$data['_list'] = RequisitionSlip::get($this->user_info->shop_id, $request->status);
+
 		return view('member.accounting_transaction.vendor.purchase_requisition.requisition_slip_table', $data);		
 	}
 	public function getCreate()

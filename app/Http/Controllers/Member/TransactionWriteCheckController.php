@@ -72,7 +72,7 @@ class TransactionWriteCheckController extends Member
         $btn_action = $request->button_action;
 
         $insert['transaction_refnumber']   = $request->transaction_refnumber;
-        $insert['vendor_id']               = $request->vendor_id;
+        $insert['vendor_id']               = $request->wc_id;
         $insert['wc_reference_name']       = $request->wc_reference_name;
         $insert['wc_customer_vendor_email']= $request->wc_customer_vendor_email;
         $insert['wc_mailing_address']      = $request->wc_mailing_address;

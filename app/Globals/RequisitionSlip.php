@@ -53,6 +53,7 @@ class RequisitionSlip
 		$insert['requisition_slip_remarks'] = $input->requisition_slip_remarks;
 		$insert['requisition_slip_date_created'] = Carbon::now();
 
+
 	    $rule["requisition_slip_number"] = "required";
         $rule["requisition_slip_remarks"] = "required";
 
@@ -74,6 +75,11 @@ class RequisitionSlip
                 if($input->rs_item_qty[$key1] <= 0)
                 {
                     $validate .= 'The quantity of <b>'.Item::info($value)->item_name.'</b> is less than zero.';
+                }
+
+                if($input->rs_vendor_id[$key1] =="" )
+                {
+                    $validate .= 'Please select vendor.';
                 }
             }
         }

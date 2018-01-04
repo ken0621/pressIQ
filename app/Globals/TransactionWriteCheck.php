@@ -5,6 +5,7 @@ use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_write_check;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_customer;
+use App\Globals\AccountingTransaction;
 use Carbon\Carbon;
 use DB;
 
@@ -18,7 +19,7 @@ class TransactionWriteCheck
 {
 	public static function countTransaction($shop_id, $vendor_id)
 	{
-		return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_is_billed',0)->where('po_vendor_id', $vendor_id)->count();
+		return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed','!=', '0')->count();
 	}
 
 	public static function getAllWC($shop_id)
@@ -64,23 +65,23 @@ class TransactionWriteCheck
 
 	        /*TOTAL*/
 	        $total = collect($insert_item)->sum('item_amount');
-	        $ins['wc_total_amount'] = $ins['wc_cash_account'] = $total;
-
+	        $ins['wc_total_amount'] = $total;
+	       
 	        /*INSERT CV HERE*/
 	        $write_check_id = Tbl_write_check::insertGetId($ins);
-	        $write_check_id = 0;
 
 	        /* Transaction Journal */
 	        $entry["reference_module"]  = "write-check";
 	        $entry["reference_id"]      = $write_check_id;
-	        $entry["name_id"]           = $ins['wc_reference_id'];
-	        $entry["name_reference"]    = $ins['wc_reference_name'];
+	        $entry["name_id"]           = $insert['vendor_id'];
+	        $entry["name_reference"]    = $insert['wc_reference_name'];
 	        $entry["total"]             = collect($insert_item)->sum('itemline_amount');
 	        $entry["vatable"]           = '';
 	        $entry["discount"]          = '';
 	        $entry["ewt"]               = '';
 
 	        $return = Self::insertLine($write_check_id, $insert_item, $entry);
+	        $return = $write_check_id;
 		}
 		else
 		{

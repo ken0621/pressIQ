@@ -43,7 +43,7 @@ function pay_bills()
 		    onChangeValue: function()
 		    {
 		    	var vendor_id = $(this).val();
-		    	$(".tbody-item").load("/member/vendor/load_pb/"+ (vendor_id != '' ? vendor_id : 0), function()
+		    	$(".tbody-item").load("/member/transaction/pay_bills/load-vendor-pay-bill/"+ (vendor_id != '' ? vendor_id : 0), function()
 		    	{
 		    		action_compute_maximum_amount();
 		    	})
@@ -144,7 +144,7 @@ function pay_bills()
 	{
 		$(document).on("change",".amount-payment", function(e)
 		{
-			console.log($(".amount-payment").length);
+			//console.log($(".amount-payment").length);
 			$(this).val(formatFloat($(this).val()) == 0 ? '' : formatMoney($(this).val()));
 
 			!is_amount_receive_modified ? $(".amount-received").val(action_total_amount_apply()).change() : $(".amount-received").change();
@@ -237,5 +237,13 @@ function submit_done(data)
 				toastr.success(data.message);
 			});
     	}
+	}
+}
+function success_pay_bills(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
 	}
 }

@@ -49,9 +49,9 @@
                             <thead>
                                 <tr>
                                     <th>VENDORNAME</th>
-                                    <th class="text-center" width="250px">PO NUMBER</th>
-                                    <th class="text-center" width="300px">DATE</th>
-                                    <th class="text-center" width="300px">TOTAL PRICE</th>
+                                    <th class="text-center" width="400px">PO NUMBER</th>
+                                    <th class="text-center" width="400px">DATE</th>
+                                    <th class="text-center" width="400px">TOTAL PRICE</th>
 
                                     <th class="text-center" width="150px"></th>
                                 </tr>

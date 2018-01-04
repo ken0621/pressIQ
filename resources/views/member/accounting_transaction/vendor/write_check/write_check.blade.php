@@ -87,7 +87,7 @@
                                 <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                                     <div class="row clearfix">
                                         <div class="col-sm-4">
-                                            <select class="form-control drop-down-name input-sm pull-left" name="vendor_id">
+                                            <select class="form-control drop-down-name input-sm pull-left" name="wc_id">
                                                 @include("member.load_ajax_data.load_name", ['name_id'=> isset($wc->wc_reference_id) ? $wc->wc_reference_id : '', 'ref_name'=>isset($wc->wc_reference_name) ? $wc->wc_reference_name : ''])
                                                 <option class="hidden" value="" />
                                             </select>

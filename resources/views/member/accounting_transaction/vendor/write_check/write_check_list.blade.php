@@ -48,11 +48,12 @@
                         <table class="table table-bordered table-striped table-condensed">
                             <thead>
                                 <tr>
-                                    <th>NAME</th>
-                                    <th class="text-center">REFERENCE NUMBER</th>
-                                    <th class="text-center">TRANSACTION DATE</th>
-                                    <th class="text-center" width="120px">TOTAL PRICE</th>
-                                    <th class="text-center" width="100px"></th>
+                                   <th>NAME</th>
+                                    <th class="text-center" width="400px">WC NUMBER</th>
+                                    <th class="text-center" width="400px">DATE</th>
+                                    <th class="text-center" width="400px">TOTAL PRICE</th>
+
+                                    <th class="text-center" width="150px"></th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -53,7 +53,7 @@ class TransactionDebitMemoController extends Member
     public function postCreateDebitMemo(Request $request)
     {
         $btn_action  = $request->button_action;
-        
+
         $insert['transaction_refnumber']    = $request->transaction_refnumber;
         $insert['vendor_id']                = $request->vendor_id;
         $insert['vendor_email']             = $request->vendor_email;
@@ -77,8 +77,8 @@ class TransactionDebitMemoController extends Member
             }
         }
 
+        
         $validate = TransactionDebitMemo::postInsert($this->user_info->shop_id, $insert, $insert_item);
-
         $return = null;
         if(is_numeric($validate))
         {

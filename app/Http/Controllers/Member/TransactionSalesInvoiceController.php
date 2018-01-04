@@ -33,6 +33,7 @@ class TransactionSalesInvoiceController extends Member
 	public function getCreate(Request $request)
 	{
 		$data['page'] = "Create Sales Invoice";		
+        $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'sales_invoice');
         $data["_customer"]  = Customer::getAllCustomer();
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();

@@ -3,6 +3,10 @@ namespace App\Globals;
 use App\Models\Tbl_acctg_transaction;
 use App\Models\Tbl_acctg_transaction_list;
 use App\Models\Tbl_acctg_transaction_item;
+use App\Models\Tbl_transaction_ref_number;
+
+use App\Models\Tbl_customer_invoice;
+
 use Carbon\Carbon;
 
 use Validator;
@@ -216,5 +220,41 @@ class AccountingTransaction
 		}	
 
 		return $return;	
+	}
+	public static function get_ref_num($shop_id, $transaction_type)
+	{
+		$return = null;
+		if($transaction_type)
+		{
+			$get = Tbl_transaction_ref_number::where('shop_id', $shop_id)->where('key', $transaction_type)->first();
+			if($get)
+			{
+				$date = explode('/', $get->other);
+				if(isset($date[2]))
+				{
+					$datetoday = date($date[0]).date($date[1]).date($date[2]);
+					$ctr = sprintf("%'.05d", Self::get_count_last_transaction($shop_id, $transaction_type, $get->separator));
+					$return = $get->prefix.$datetoday.$get->separator.$ctr;
+				} 
+			}
+		}
+		return $return;
+	}
+	public static function get_count_last_transaction($shop_id, $transaction_type, $separator)
+	{
+		$return = 1;
+		if($transaction_type == 'sales_invoice')
+		{
+			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->orderBy('inv_id','DESC')->first();
+			if($get)
+			{
+				$number = explode("'".$separator."'", $get->transaction_refnum);
+				if(isset($number[1]))
+				{
+					$return = $number[1] + 1;
+				}
+			}
+		}
+		return $return;
 	}
 }

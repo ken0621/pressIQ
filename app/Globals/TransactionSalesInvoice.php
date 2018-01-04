@@ -19,6 +19,21 @@ class TransactionSalesInvoice
 	{
 		return Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_customer_id",$customer_id)->where("est_status","accepted")->count();
 	}
+	public static function get($shop_id, $paginate = 10)
+	{
+		$data = Tbl_customer_invoice::where('inv_shop_id', $shop_id);
+
+		if($paginate)
+		{
+			$data->paginate($paginate);
+		}
+		else
+		{
+			$data->get();
+		}
+
+		return $data;
+	}
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);

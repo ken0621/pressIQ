@@ -27,6 +27,7 @@ class TransactionSalesInvoiceController extends Member
   	public function getIndex()
 	{
 		$data['page'] = "Sales Invoice";
+		$data['_sales_invoice'] = ;
 		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice_list',$data);
 	}
 

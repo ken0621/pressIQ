@@ -27,12 +27,14 @@ class TransactionSalesInvoiceController extends Member
   	public function getIndex()
 	{
 		$data['page'] = "Sales Invoice";
+		$data['_sales_invoice'] = ;
 		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice_list',$data);
 	}
 
 	public function getCreate(Request $request)
 	{
 		$data['page'] = "Create Sales Invoice";		
+        $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'sales_invoice');
         $data["_customer"]  = Customer::getAllCustomer();
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
@@ -52,7 +54,7 @@ class TransactionSalesInvoiceController extends Member
 		$insert['transaction_refnum'] 	 = $request->transaction_refnumber;
 		$insert['customer_id'] 			 = $request->customer_id;
 		$insert['customer_email']        = $request->customer_email;
-		$insert['customer_address']      = $request->customer_address;
+		$insert['customer_address']      = $request->customer_billing_address;
 		$insert['transaction_date']      = date("Y-m-d", strtotime($request->transaction_date));
 		$insert['transaction_duedate']   = date("Y-m-d", strtotime($request->transaction_duedate));
 		$insert['customer_message']      = $request->customer_message;

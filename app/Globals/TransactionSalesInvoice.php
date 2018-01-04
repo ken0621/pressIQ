@@ -19,6 +19,21 @@ class TransactionSalesInvoice
 	{
 		return Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_customer_id",$customer_id)->where("est_status","accepted")->count();
 	}
+	public static function get($shop_id, $paginate = 10)
+	{
+		$data = Tbl_customer_invoice::where('inv_shop_id', $shop_id);
+
+		if($paginate)
+		{
+			$data->paginate($paginate);
+		}
+		else
+		{
+			$data->get();
+		}
+
+		return $data;
+	}
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);
@@ -62,8 +77,8 @@ class TransactionSalesInvoice
 
 
 	        /* INSERT INVOICE HERE */
-	        // $invoice_id = Tbl_customer_invoice::insertGetId($ins);
-	        $invoice_id = 0;
+	        $invoice_id = Tbl_customer_invoice::insertGetId($ins);
+	        // $invoice_id = 0;
 
 	        /* Transaction Journal */
 	        $entry["reference_module"]  = 'invoice';
@@ -115,7 +130,7 @@ class TransactionSalesInvoice
 		}
 		if(count($itemline) > 0)
 		{
-			// Tbl_customer_invoice_line::insert($itemline);
+			Tbl_customer_invoice_line::insert($itemline);
 			$return = AccountingTransaction::entry_data($entry, $insert_item);
 		}
 

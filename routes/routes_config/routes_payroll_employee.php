@@ -39,7 +39,13 @@ Route::any('authorized_access_official_business', 'Member\PayrollEmployee\Employ
 Route::any('authorized_access_approver', 'Member\PayrollEmployee\EmployeeController@authorized_access_approver');
 
 /*Start Request for Payment*/
-Route::any('/request_for_payment', 'Member\PayrollEmployee\RequestForPaymentController@index');
+Route::any('/request_for_payment', 'Member\PayrollEmployee\RequestForPaymentController@request_for_payment');
+Route::any('/request_for_payment_table', 'Member\PayrollEmployee\RequestForPaymentController@request_for_payment_table');
+Route::any('/modal_rfp_application', 'Member\PayrollEmployee\RequestForPaymentController@modal_rfp_application');
+Route::any('/modal_rfp_save', 'Member\PayrollEmployee\RequestForPaymentController@modal_rfp_save');
+Route::any('/modal_rfp_save', 'Member\PayrollEmployee\RequestForPaymentController@modal_rfp_save');
+Route::any('/rfp_application_view/{id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_view');
+Route::any('/rfp_application_cancel/{id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_cancel');
 /*End Request for Payment*/
 
 Route::any('employee_official_business_management', 'Member\PayrollEmployee\EmployeeController@employee_official_business_management');

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tbl_payroll_approver_group extends Model
 {
     protected $table = 'tbl_payroll_approver_group';
-	protected $primaryKey = "payroll_approver_group_id";
+	  protected $primaryKey = "payroll_approver_group_id";
     public $timestamps = false;
 
     public function scopeEmployeeApproverInfo($query, $shop_id = 0, $approver_group_id = 0,  $approver_group_type = '')

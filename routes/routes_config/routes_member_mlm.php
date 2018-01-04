@@ -56,6 +56,10 @@ Route::post('/member/mlm/claim_voucher/check_claim', 'Member\MLM_ClaimVoucher@ch
 Route::post('/member/mlm/claim_voucher/check_claim/process', 'Member\MLM_ClaimVoucher@process'); //ERWIN
 Route::post('/member/mlm/claim_voucher/check_claim/void', 'Member\MLM_ClaimVoucher@void'); //ERWIN
 
+Route::get('/member/mlm/item_redeemable_points', 'Member\MLM_ItemRedeemablePointsController@index'); //ERWIN
+Route::get('/member/mlm/item_redeemable_points_table', 'Member\MLM_ItemRedeemablePointsController@get_table'); //ERWIN
+Route::get('/member/mlm/item_redeemable_points/submit', 'Member\MLM_ItemRedeemablePointsController@submitpoints'); //ERWIN
+
 /* Start MLM Slot */
 Route::any('/member/mlm/slot', 'Member\MLM_SlotController@index'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/slot/login', 'Member\MLM_SlotController@force_login'); //GUILLERMO TABLIGAN

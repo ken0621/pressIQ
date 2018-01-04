@@ -183,7 +183,7 @@
           </div>
           <div id="preview_content">
           </div>
-          <div class="about-title">About the Publisher</div>
+          <div class="about-title">About the</div>
           <div id="preview_boiler_content">
           </div>
         </div>

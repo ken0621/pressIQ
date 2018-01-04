@@ -416,6 +416,7 @@
         50% { opacity: 0; }
         }
         </style>
+        <script type="text/javascript" src="/assets/js/commission_report.js?v=9"></script>
         <script type="text/javascript" src="/assets/member/global.js?version=6.3"></script>
         <!-- Testing only -->
         <script type="text/javascript" src="/assets/member/settings/settings_global.js"></script>
@@ -455,7 +456,7 @@
             width : '250px', 
             onChangeValue : function()
             {
-                select_current_warehouse($(this));   
+                select_current_warehouse($(this));
             }
         })
         function show_currency()

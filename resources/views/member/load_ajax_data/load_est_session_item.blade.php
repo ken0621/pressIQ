@@ -50,7 +50,7 @@
 <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
 <td><input type="text" class="for-datepicker" name="invline_service_date[]"/></td>
-@include("member.load_ajax_data.load_td_serial_number");
+@include("member.load_ajax_data.load_td_serial_number")
 <td class="invoice-number-td text-right">
     1
 </td>

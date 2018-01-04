@@ -387,6 +387,7 @@ function add_event_overlay_fix()
 
 function select_current_warehouse($this)
 {
+    console.log($this.val());
     $.ajax({
         url:"/member/change_warehouse",
         dataType:"json",
@@ -398,6 +399,7 @@ function select_current_warehouse($this)
             {
                 // $('.select_current_warehouse').load(document.URL +  ' .select_current_warehouse');
                 $('.warehouse-access-name').load(document.URL +  ' .warehouse-access-name');
+                commission_report.action_change_warehouse();
             }
         },
         error: function()

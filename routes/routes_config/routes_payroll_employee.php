@@ -51,3 +51,7 @@ Route::any('updated_layout', 'Member\PayrollEmployee\EmployeeController@updated_
 
 //leave
 Route::any('/leave/save_leave', 'Member\PayrollEmployee\EmployeeController@save_leave');
+Route::any('/leave/ajax_load_leave', 'Member\PayrollEmployee\EmployeeController@ajax_all_load_leave');
+Route::any('/leave/ajax_load_pending_leave', 'Member\PayrollEmployee\EmployeeController@ajax_load_pending_leave');
+Route::any('/leave/ajax_load_approved_leave', 'Member\PayrollEmployee\EmployeeController@ajax_load_approved_leave');
+Route::any('/leave/ajax_load_rejected_leave', 'Member\PayrollEmployee\EmployeeController@ajax_load_rejected_leave');

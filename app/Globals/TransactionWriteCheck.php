@@ -23,9 +23,9 @@ class TransactionWriteCheck
 
 	public static function getAllWC($shop_id)
 	{
-		$data["_wc"] = Tbl_write_check::where("wc_shop_id", $shop_id)->get();
+		$data = Tbl_write_check::where("wc_shop_id", $shop_id)->get();
         
-        foreach ($data["_wc"] as $key => $value) 
+        foreach ($data as $key => $value) 
         {
             $v_data = Tbl_vendor::where("vendor_id",$value->wc_reference_id)->first();
 
@@ -36,10 +36,10 @@ class TransactionWriteCheck
             	//dd($value->wc_reference_name);
                 $c_data = Tbl_customer::where("customer_id",$value->wc_reference_id)->first();
                 
-                $name = isset($c_data) ? ($c_data->company != "" ? $c_data->company : $v_data->first_name." ".$c_data->last_name) : "";
+                $name = isset($c_data) ? ($c_data->company != "" ? $c_data->company : $c_data->first_name." ".$c_data->last_name) : "";
             }
 
-            $data["_wc"][$key]->name = $name;
+            $data[$key]->name = $name;
             //dd($data);
         }
 		

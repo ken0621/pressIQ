@@ -15,7 +15,6 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_debit_memo_replace_line;
 
 use App\Globals\AccountingTransaction;
-
 use App\Globals\TransactionDebitMemo;
 use App\Globals\TransactionPurchaseOrder;
 use App\Globals\Item;
@@ -78,8 +77,9 @@ class TransactionDebitMemoController extends Member
             }
         }
 
-        $return = null;
         $validate = TransactionDebitMemo::postInsert($this->user_info->shop_id, $insert, $insert_item);
+
+        $return = null;
         if(is_numeric($validate))
         {
             $return['status'] = 'success';
@@ -92,7 +92,6 @@ class TransactionDebitMemoController extends Member
             $return['status'] = 'error';
             $return['status_message'] = $validate;
         }
-
         return json_encode($return);
     }
 

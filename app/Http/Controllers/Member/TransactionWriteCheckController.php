@@ -46,7 +46,7 @@ class TransactionWriteCheckController extends Member
     {
         $data['page'] = 'Write Check';
         $data['_wc']  = TransactionWriteCheck::getAllWC($this->user_info->shop_id);
-        //dd($data['_wc']);
+        
         return view('member.accounting_transaction.vendor.write_check.write_check_list', $data);
     }
 

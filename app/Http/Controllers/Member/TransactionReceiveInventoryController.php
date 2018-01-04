@@ -92,6 +92,7 @@ class TransactionReceiveInventoryController extends Member
         
         $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
+        $return = null;
         if(is_numeric($validate))
         {
             $return['status'] = 'success';
@@ -105,12 +106,12 @@ class TransactionReceiveInventoryController extends Member
             $return['status_message'] = $validate;
         }
 
-        return $return;
+        return json_encode($return);
     }
     public function getCountTransaction(Request $request)
     {
         $vendor_id = $request->vendor_id;
-        return TransactionDebitMemo::countTransaction($this->user_info->shop_id, $vendor_id);
+        return TransactionReceiveInventory::countTransaction($this->user_info->shop_id, $vendor_id);
     }
     public function getLoadTransaction(Request $request)
     {

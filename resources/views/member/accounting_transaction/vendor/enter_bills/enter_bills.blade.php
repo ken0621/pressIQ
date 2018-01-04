@@ -5,8 +5,6 @@
     <input type="hidden" class="token" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" class="button-action" name="button_action" value="">
 
-    <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
-
 <div class="drawer-overlay">
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
@@ -76,7 +74,7 @@
                                             <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$bill->bill_vendor_email or ''}}"/>
                                         </div>
                                         <div class="col-sm-4 text-right open-transaction" style="display: none;">
-                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/enter_bills/load-transaction"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
+                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/enter_bills/load-transaction?vendor_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -277,11 +275,10 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
 
 <script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/enter_bills.js"></script>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 
     $("#acct-a").click(function()
     {
@@ -298,7 +295,7 @@ $(document).ready(function() {
     desktopEvent:'click'
   });
 });
-</script>
+</script> -->
 
 @endsection
 

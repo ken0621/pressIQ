@@ -3,6 +3,8 @@ namespace App\Globals;
 
 use App\Models\Tbl_debit_memo;
 use App\Models\Tbl_debit_memo_line;
+use App\Models\Tbl_customer_estimate;
+use App\Models\Tbl_requisition_slip_item;
 
 use App\Globals\AccountingTransaction;
 
@@ -27,10 +29,10 @@ class TransactionDebitMemo
         return Tbl_debit_memo::Vendor()->where('db_shop_id',$shop_id)->get();
     }
 
-    public static function countTransaction()
+    public static function countTransaction($shop_id)
     {
     	$count_so = Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->count();
-        $count_pr = Tbl_requisition_slip::where('shop_id',$shop_id)->where("requisition_slip_status","open")->count();
+        $count_pr = Tbl_requisition_slip_item::PRInfo('shop_id',$shop_id)->where("requisition_slip_status","open")->count();
         
         $return = $count_so + $count_pr;
         return $return;
@@ -39,6 +41,7 @@ class TransactionDebitMemo
     public static function postInsert($shop_id, $insert, $insert_item)
     {
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        //die(var_dump($val));
         if(!$val)
         {
             $ins['db_shop_id']          = $shop_id;
@@ -53,8 +56,7 @@ class TransactionDebitMemo
             $total = collect($insert_item)->sum('item_amount');
             $ins['db_amount'] = $total;
 
-            /* INSERT DM IN DATABASE */
-            $dm_id = Tbl_debit_memo::insertGetId($ins);
+            
 
             /* Transaction Journal */
             $entry["reference_module"]  = "debit-memo";
@@ -65,8 +67,10 @@ class TransactionDebitMemo
             $entry["discount"]          = '';
             $entry["ewt"]               = '';
 
-            $return = Self::insertLine($dm_id, $insert_item, $entry);
+            /* INSERT DM IN DATABASE */
+            $dm_id = Tbl_debit_memo::insertGetId($ins);
             $return = $dm_id;
+            //$return = Self::insertLine($dm_id, $insert_item, $entry);
         }
         else
         {
@@ -93,7 +97,7 @@ class TransactionDebitMemo
         }
         if(count($itemline) > 0)
         {
-            Tbl_debit_memo_line::insert($itemline);
+            //Tbl_debit_memo_line::insert($itemline);
             $return = AccountingTransaction::entry_data($entry, $insert_item);
         }
 

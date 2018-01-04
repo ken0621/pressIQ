@@ -14,7 +14,6 @@ use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_terms;
 
-use App\Globals\TransactionEnterBills;
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
@@ -27,6 +26,8 @@ use App\Globals\Utilities;
 use App\Globals\Pdf_global;
 use App\Globals\ItemSerial;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\TransactionEnterBills;
+use App\Globals\TransactionPurchaseOrder;
 
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
@@ -57,7 +58,7 @@ class TransactionEnterBillsController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
-        $data['action']     = '/member/transactio/create-enter-bills';
+        $data['action']     = '/member/transaction/enter_bills/create-enter-bills';
         
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills', $data);
     }
@@ -91,9 +92,13 @@ class TransactionEnterBillsController extends Member
 
         $validate = TransactionEnterBills::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
+        $return = null;
         if(is_numeric($validate))
         {
-
+            $return['status'] = 'success';
+            $return['status_message'] = 'Success creating bills.';
+            $return['call_function'] = 'success_enter_bills';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('enter_bills', $validate ,$btn_action);
         }
         else
         {
@@ -101,16 +106,18 @@ class TransactionEnterBillsController extends Member
             $return['status_message'] = $validate;
         }
 
-        return $return;
+        return json_encode($return);
     }
     public function getCountTransaction(Request $request)
     {
         $vendor_id = $request->vendor_id;
         return TransactionEnterBills::countTransaction($this->user_info->shop_id, $vendor_id);
     }
-    public function getLoadTransaction()
+    public function getLoadTransaction(Request $request)
     {
-        dd('Wail Langs!');
+        $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
+        $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
+        return view('member.accounting_transaction.vendor.enter_bills.load_transaction', $data);
     }
     
 }

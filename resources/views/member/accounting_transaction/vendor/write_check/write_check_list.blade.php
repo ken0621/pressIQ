@@ -59,12 +59,12 @@
                                 @if(count($_wc)>0)
                                     @foreach($_wc as $wc)
                                     <tr>
-                                        <td>{{ $wc->wc_id }}<br>
-                                            <small>Contact Person</small>
+                                        <td>{{ $wc->name }}<br>
+                                            <small>{{ $wc->name }}</small>
                                         </td>
-                                        <td class="text-center">PO20171213-0001</td>
-                                        <td class="text-center">2017-12-14</td>
-                                        <td class="text-center">1,500.00</td>
+                                        <td class="text-center">{{ $wc->transaction_refnum == "" ? $wc->wc_id : $wc->transaction_refnum }}</td>
+                                        <td class="text-center">{{ date('m-d-Y', strtotime($wc->date_created)) }}</td>
+                                        <td class="text-center">{{ currency('PHP', $wc->wc_total_amount) }}</td>
                                         <td class="text-center">
                                             <div class="btn-group">
                                               <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

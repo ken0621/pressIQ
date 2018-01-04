@@ -402,7 +402,21 @@ function select_current_warehouse($this)
             {
                 // $('.select_current_warehouse').load(document.URL +  ' .select_current_warehouse');
                 $('.warehouse-access-name').load(document.URL +  ' .warehouse-access-name');
-                commission_report.action_change_warehouse();
+
+                //patrick
+                var loc = window.location.href;
+                var data = loc.split('/');
+                if(data.length == 6)
+                {
+                    var com = data[data.length-1];
+                    var commission = com.split('#')[0];
+                    console.log(commission);
+                    if(commission == 'commission-report')
+                    {
+                        commission_report.action_change_warehouse();
+                    }
+                }
+                //end
             }
         },
         error: function()

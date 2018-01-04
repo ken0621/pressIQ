@@ -60,7 +60,6 @@
       </div>
    </div>
 </div>
-
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/choose_recipient.css">
 
 <script  src="/assets/js/choose_recipient_release.js"></script>

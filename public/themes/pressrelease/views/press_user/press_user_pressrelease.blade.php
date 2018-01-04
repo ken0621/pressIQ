@@ -86,11 +86,9 @@
                   <div class="title">Boilerplate:</div>
                         <textarea name="pr_boiler_content" id="pr_boiler_content"></textarea>
                   <div class="button-container">
-                  <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                  <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
-
-                  <span class="preview-button"><button type="button" id="btnNext" onclick="buttonNext(event, 'choose_recipient')"><a>Continue</a></button></span>
-                  
+                    <span class="button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
+                    <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
+                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'choose_recipient')"><a>Continue</a></button></span>
                   </div>
                 </div>
 
@@ -132,11 +130,9 @@
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
-
-                    <span class="preview-button"><button type="button" formaction=""><a>Continue to Send</a></button></span>
-
-                    
                     {{-- POPUP CHOOSE RECIPIENT --}}
+                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue To Send</a></button></span>
+
                       <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                       @endif
                     <div class="button-container"></div>
@@ -152,9 +148,7 @@
                   <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
                   <div class="button-container">
                     <button type="submit" formaction="/pressuser/pressrelease/pr">Send</button>
-                  </div>
-                  <div class="button-container">
-                    <button type="button" formaction="">View Summary</button>
+                    <button type="button" class="tablinks" onclick="openCity(event, 'summary')">View Summary</button>
                   </div>
                 </div>
 
@@ -178,14 +172,13 @@
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Preview</h4>
         </div>
+           
         <div class="modal-body">
-          <div id="preview_headline">
-          </div>
-          <div id="preview_content">
-          </div>
-          <div class="about-title">About the</div>
-          <div id="preview_boiler_content">
-          </div>
+          <img class="pull-right" src="{{session('user_company_image')}}" alt="" style="min-width: 150px;min-height: 150px;max-height: 150px;max-width: 150px;">
+          <div id="preview_headline"></div>
+          <div id="preview_content" class="background-container"></div>
+          <div class="about-title">About {{session('user_company_name')}}</div>
+          <div id="preview_boiler_content"></div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -195,38 +188,9 @@
   </div>
 </div>  
 
-<!-- <style>
-   .modal-content
-   {
-   left: 50%;
-   top: 50%;
-   transform: translate(-50%);
-   }
-   .button-container-add
-   {
-   margin-bottom:20px;
-   background-color: #316df9;
-   width: 150px;
-   }
-   .form-control
-   {
-   width: 450px;
-   }
-   .form-text
-   {
-   text-align: center;
-   width:350px;
-   padding:10px 10px 10px 10px;
-   }
-   .left-container
-   {
-   padding:10px 10px 10px 10px;  
-   }
-</style> -->
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_user_pressrelease.css">
-<!-- <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script> -->
 @endsection
 @section("script")
 <script>
@@ -276,8 +240,10 @@ branding: false,
 image_description: false,
 image_title: true,
 height: 500,
-plugins: ["autolink lists image charmap print preview anchor","visualblocks code","insertdatetime table contextmenu paste imagetools", "wordcount"],
-toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image | preview',
+default_link_target: "_blank",
+media_live_embeds: true,
+plugins: ["autolink lists image charmap print preview anchor","visualblocks code","insertdatetime table contextmenu paste imagetools", "wordcount", "media"],
+toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist |  image media | preview',
    
      // we override default upload handler to simulate successful upload
      images_upload_handler: function (blobInfo, success, failure) 

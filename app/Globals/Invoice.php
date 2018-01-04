@@ -12,6 +12,7 @@ use App\Models\Tbl_credit_memo;
 use App\Globals\AuditTrail;
 use App\Globals\Tablet_global;
 use App\Globals\CreditMemo;
+use App\Globals\Purchasing_inventory_system;
 use DB;
 use Log;
 use Request;
@@ -106,7 +107,7 @@ class Invoice
         $ewt = $subtotal_price*convertToNumber($total_info['ewt']);
 
         /* OVERALL TOTAL */
-        $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
+        $overall_price  = Purchasing_inventory_system::check() ? round((convertToNumber($subtotal_price) - $ewt - $discount + $tax),2) : convertToNumber($subtotal_price) - $ewt - $discount + $tax;
 
         $shop_id = Invoice::getShopId();
         if($for_tablet == true)

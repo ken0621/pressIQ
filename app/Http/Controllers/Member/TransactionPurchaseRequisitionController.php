@@ -16,6 +16,8 @@ use App\Globals\CustomerWIS;
 use App\Globals\WarehouseTransfer;
 use App\Globals\TransactionPurchaseRequisition;
 
+use App\Globals\TransactionSalesOrder;
+
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Session;
@@ -66,6 +68,8 @@ class TransactionPurchaseRequisitionController extends Member
 	}
 	public function getLoadTransaction()
 	{
-		dd('Wait Langs!');
+		$data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
+
+		return view('member.accounting_transaction.vendor.purchase_requisition.load_transaction', $data);
 	}
 }

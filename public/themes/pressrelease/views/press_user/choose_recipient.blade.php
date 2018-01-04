@@ -3,7 +3,8 @@
    <div class="modal-content" id="recipient-modal" name="recipient-modal">
       <div class="modal-header">
          <button type="button" class="close" data-dismiss="modal">&times;</button>
-         <div class="title-container">Found Result</div>
+         <div class="title-container"> Found Results:  <span class="result-container" style="font-weight:bold;font-size:18px">{{$total_query}}</span>
+         </div>
       </div>
       <div class="modal-body">
          <div class="row pull-right">
@@ -18,18 +19,18 @@
                <button  type="button" name="search_button" id="search_button" class="btn btn-success" >Search</button>
             </div>
             <div class="" style="padding:10px 10px 10px 10px;">
-               <label style="font-size:18px">Results Found :  </label> <span class="result-container" style="font-weight:bold;font-size:18px">  {{$total_query}}</span>
+               <label style="font-size:18px">Chosen Recipients: </label> <span class="result-container" style="font-weight:bold;font-size:18px" id="Chosen_total">0</span>
             </div>
             <div class="col-md-12">
-               <form action="/pressuser/pressrelease/recipient/done" method="POST" >
-                  <div class="left-container" id="recipient_table" name="recipient_table">
+               <form action="/pressuser/pressrelease/recipient/done" method="POST" id="choose_recipient_form">
+                  <div class="left-container"">
                      <table  class="display table table-bordered" style="background-color: #FFFFFF;" id="showHere_table">
-                        <thead>
+                        <thead style="background-color: white;">
                            <tr>
-                              <th>ACTION</th>
-                              <th>COMPANY</th>
-                              <th>RECIPIENT</th>
-                              <th>POSITION</th>   
+                              <th style="text-align: center;width: 5%"">ACTION</th>
+                              <th style="text-align: center;width: 25%">COMPANY</th>
+                              <th style="text-align: center;width: 25%">RECIPIENT</th>
+                              <th style="text-align: center;width: 25%">POSITION</th>   
                               <th style="display:none;">Email</th>   
                            </tr>
                         </thead> 
@@ -55,12 +56,10 @@
             </div>
          </div>
       </div>
-      <div class="modal-footer">
-         
+      <div class="modal-footer">      
       </div>
    </div>
 </div>
-
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/choose_recipient.css">
 
 <script  src="/assets/js/choose_recipient_release.js"></script>

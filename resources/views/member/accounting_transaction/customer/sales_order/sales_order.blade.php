@@ -55,6 +55,9 @@
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$est->est_customer_email or ''}}"/>
                                 </div>
+                                <div class="col-sm-4 text-right open-transaction" style="display: none;">
+                                    <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/sales_invoice/load_transaction?customer_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
+                                </div>
                             </div>
                         </div>                          
                         <div class="row clearfix">

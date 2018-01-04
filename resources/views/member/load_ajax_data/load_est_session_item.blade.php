@@ -10,7 +10,6 @@
     @endif
     <td class="invoice-number-td text-right">
         1
-
     </td>
     <td>
         <select class="1111 form-control select-item droplist-item input-sm pull-left" name="invline_item_id[]" >
@@ -19,7 +18,7 @@
         </select>
     </td>
     <td>
-    @if($pis)
+    @if(isset($pis))
         <textarea class="textarea-expand txt-desc" readonly="true" name="invline_description[]" value=""></textarea>
     @else
         <textarea class="textarea-expand txt-desc" name="invline_description[]">{{$items['estline_description']}}</textarea></td>
@@ -50,7 +49,7 @@
 <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
 <td><input type="text" class="for-datepicker" name="invline_service_date[]"/></td>
-@include("member.load_ajax_data.load_td_serial_number");
+@include("member.load_ajax_data.load_td_serial_number")
 <td class="invoice-number-td text-right">
     1
 </td>
@@ -63,7 +62,7 @@
 </select>
 </td>
 <td>
-@if($pis)
+@if(isset($pis))
     <textarea class="textarea-expand txt-desc" readonly="true" name="invline_description[]"></textarea>
 @else
     <textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea>

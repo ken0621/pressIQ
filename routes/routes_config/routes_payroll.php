@@ -220,7 +220,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/sss_table_list/sss_table_save_default',"Member\PayrollController@sss_table_save_default");
 	/* SSS TABLE END */
 
-
 	/* PHILHEALTH TABLE START */
 	Route::any('/philhealth_table_list',"Member\PayrollController@philhealth_table_list");
 	Route::any('/philhealth_table_list/philhealth_table_save',"Member\PayrollController@philhealth_table_save");
@@ -726,7 +725,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_admin_dashboard/modal_edit_group_approver/{approver_group_id}','Member\PayrollAdminDashboard@modal_edit_group_approver');
 	Route::any('payroll_admin_dashboard/save_edit_group_approver','Member\PayrollAdminDashboard@save_edit_group_approver');
 	Route::any('payroll_admin_dashboard/modal_archive_group_approver/{approver_group_id}','Member\PayrollAdminDashboard@modal_archive_group_approver');
-	
-	
 	/*END Admin dashboard*/
+	
 });

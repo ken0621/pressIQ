@@ -15,6 +15,9 @@ use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_terms;
 
+use App\Globals\TransactionDebitMemo;
+use App\Globals\TransactionPurchaseOrder;
+use App\Globals\AccountingTransaction;
 use App\Globals\TransactionReceiveInventory;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Vendor;
@@ -55,7 +58,6 @@ class TransactionReceiveInventoryController extends Member
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
 
         $data['action']     = '/member/transaction/receive_inventory/create-receive-inventory';
-        $data['count_open_purchase_order'] = TransactionReceiveInventory::countTransaction($this->user_info->shop_id);
 
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory', $data);
     }
@@ -66,39 +68,53 @@ class TransactionReceiveInventoryController extends Member
         $insert['transaction_refnumber']    = $request->transaction_refnumber;
         $insert['vendor_id']                = $request->vendor_id;
         $insert['vendor_address']           = $request->vendor_address;
+        $insert['vendor_email']             = $request->vendor_email;
         $insert['vendor_terms']             = $request->vendor_terms;
         $insert['transaction_date']         = $request->transaction_date;
         $insert['transaction_duedate']      = $request->transaction_duedate;
-        /*$insert['vendor_message']           = $request->vendor_message;*/
         $insert['vendor_memo']              = $request->vendor_memo;
+        $insert['vendor_total']             = $request->vendor_total;
 
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
         {
             if($value)
             {
-                $insert_item[$key]['item_id'] = $value;
-                $insert_item[$key]['item_servicedate'] = $request->item_servicedate[$key];
+                $insert_item[$key]['item_id']          = $value;
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
-                $insert_item[$key]['item_um'] = $request->item_um[$key];
-                $insert_item[$key]['item_qty'] = str_replace(',', '', $request->item_qty[$key]);
-                $insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
-                /*$insert_item[$key]['item_discount'] = str_replace(',', '', $request->item_discount[$key]);
-                $insert_item[$key]['item_remarks'] = $request->item_remarks[$key];*/
-                $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
-                /*$insert_item[$key]['item_taxable'] = $request->item_taxable[$key];*/
+                $insert_item[$key]['item_um']          = $request->item_um[$key];
+                $insert_item[$key]['item_qty']         = str_replace(',', '', $request->item_qty[$key]);
+                $insert_item[$key]['item_rate']        = str_replace(',', '', $request->item_rate[$key]);
+                $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_discount']    = 0;
             }
         }
+        
+        $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
-        die(var_dump($btn_action));
+        if(is_numeric($validate))
+        {
+
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $validate;
+        }
+
+        return $return;
     }
-    public function getCountTransaction()
+    public function getCountTransaction(Request $request)
     {
-        return TransactionReceiveInventory::countTransaction();
+        $vendor_id = $request->vendor_id;
+        return TransactionReceiveInventory::countTransaction($this->user_info->shop_id, $vendor_id);
     }
-    public function getLoadTransaction()
+    public function getLoadTransaction(Request $request)
     {
-        dd('Wait Langs!');
+        $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
+        $data['_dm'] = TransactionDebitMemo::getOpenDM($this->user_info->shop_id, $request->vendor);
+      
+        return view('member.accounting_transaction.vendor.receive_inventory.load_transaction', $data);
     }
     
 }

@@ -321,13 +321,16 @@ class Item
         Tbl_item::where('item_id',$item_id)->update($insert);
         Tbl_item_bundle::where('bundle_bundle_id',$item_id)->delete();
 
-        foreach ($_item as $key => $value) 
+        if(count($_item) > 0)
         {
-            $ins_item['bundle_bundle_id'] = $item_id;
-            $ins_item['bundle_item_id'] = $value['item_id'];
-            $ins_item['bundle_qty'] = $value['quantity'];
+            foreach ($_item as $key => $value) 
+            {
+                $ins_item['bundle_bundle_id'] = $item_id;
+                $ins_item['bundle_item_id'] = $value['item_id'];
+                $ins_item['bundle_qty'] = $value['quantity'];
 
-            Tbl_item_bundle::insert($ins_item);
+                Tbl_item_bundle::insert($ins_item);
+            }
         }
 
         $return['item_id']       = $item_id;

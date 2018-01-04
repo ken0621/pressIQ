@@ -7,14 +7,14 @@
 
     <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
 
-    <div class="drawer drawer-default">
+    <!-- <div class="drawer drawer-default">
         <div class="drawer-brand">Add to Check</div>
         <nav class="drawer-nav">
             <div class="clearfix purchase-order-and-bill-container">
                 @include('member.vendor.check.load_po_bill')
             </div>   
         </nav>
-    </div>
+    </div> -->
 
 <!--<div class="panel panel-default panel-block panel-title-block purchase-order hidden">
         <div class="panel-heading">
@@ -81,6 +81,10 @@
                                         <div class="col-sm-4">
                                             <label>Reference Number</label>
                                             <input type="text" class="form-control" name="transaction_refnumber" value="WC20171225-0001">
+                                        </div>
+                                        <div class="col-sm-5 text-right"></div>
+                                        <div class="col-sm-3 text-right open-transaction" style="display: none;">
+                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/write_check/load-transaction"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
                                         </div>
                                     </div>
                                 </div>

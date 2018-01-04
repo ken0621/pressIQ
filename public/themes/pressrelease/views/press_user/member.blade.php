@@ -14,6 +14,7 @@
 						   <li class="{{ Request::segment(2) == "pressrelease" ? "active" : "" }}"><a href="/pressuser/pressrelease">Press Release</a></li><!-- Add link -->
 						   <li class="{{ Request::segment(2) == "mypressrelease" ? "active" : "" }}"><a href="/pressuser/mypressrelease">My Press Releases</a></li><!-- add link -->
 						   <li class="{{ Request::segment(2) == "drafts" ? "active" : "" }}"><a href="/pressuser/drafts">Drafts</a></li><!-- add link -->
+						    <li class="{{ Request::segment(2) == "Manage_user" ? "active" : "" }}"><a href="/pressuser/manage_user">Manage User</a></li><!-- add link -->
 						</ul>
 						<div class="tab-content">
 							@yield("pressview")

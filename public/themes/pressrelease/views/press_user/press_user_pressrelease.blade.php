@@ -195,38 +195,9 @@
   </div>
 </div>  
 
-<!-- <style>
-   .modal-content
-   {
-   left: 50%;
-   top: 50%;
-   transform: translate(-50%);
-   }
-   .button-container-add
-   {
-   margin-bottom:20px;
-   background-color: #316df9;
-   width: 150px;
-   }
-   .form-control
-   {
-   width: 450px;
-   }
-   .form-text
-   {
-   text-align: center;
-   width:350px;
-   padding:10px 10px 10px 10px;
-   }
-   .left-container
-   {
-   padding:10px 10px 10px 10px;  
-   }
-</style> -->
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_user_pressrelease.css">
-<!-- <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script> -->
 @endsection
 @section("script")
 <script>

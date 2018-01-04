@@ -61,6 +61,7 @@ use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Models\Tbl_press_release_recipient;
 use App\Tbl_pressiq_press_releases;
+use App\Tbl_pressiq_user;
 
 use App\Globals\Currency;
 use App\Globals\Cart2;
@@ -600,6 +601,45 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
     }
+
+    public function press_release_analytics()
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://mandrillapp.com/api/1.0/users/info.json?key=cKQiemfNNB-5xm98HhcNzw",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+            ) ,
+        ));
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        if ($err)
+        {
+            echo "cURL Error #:" . $err;
+        }
+        else
+        {
+            dd(json_decode($response));
+        }
+    }
+
+    public function press_user_manage_user()
+    {
+        $data['_user'] = Tbl_pressiq_user::where('user_id',session('pr_user_id'))->get();
+
+        $data["page"] = "Manage User";
+        return view("press_user.press_user_manage_user", $data);
+    }
+
      public function pressadmin()
     {
         if(Session::exists('user_email'))

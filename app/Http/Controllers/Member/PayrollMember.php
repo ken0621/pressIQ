@@ -40,6 +40,7 @@ class PayrollMember extends Controller
 				$employee_password	= session('employee_password');
 				$employee_info	= Tbl_payroll_employee_basic::where('payroll_employee_email',$employee_email)->where('payroll_employee_tin',$employee_password)->first();
 				$this->employee_info = $employee_info;
+				View::share('employee_id', $employee_info->payroll_employee_id);
 			}
 
 			//dd($employee_info);

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 	<head>
 	    <meta charset="utf-8">
@@ -218,26 +219,8 @@
 						<span class="nav-link-text">RFP</span>
 					</a>
 				</li>
-				<li class="nav-item" data-toggle="tooltip" data-placement="right" title="Authorized Access">
-					<a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
-						<i class="fa fa-fw fa-user-secret"></i>
-						<span class="nav-link-text">Approver Access</span>
-					</a>
-					<ul class="sidenav-second-level collapse" id="collapseComponents">
-						<li>
-							<a class="nav-link" href="authorized_access_leave">Leave</a>
-						</li>
-						<li>
-							<a class="nav-link" href="authorized_access_over_time">Overtime</a>
-						</li>
-						<li>
-							<a class="nav-link" href="authorized_access_official_business">OB</a>
-						</li>
-						<li>
-							<a class="nav-link" href="authorized_access_approver">Approver</a>
-						</li>
-					</ul>
-				</li>
+				{{ (new App\Http\Controllers\Member\PayrollEmployee\EmployeeController)->approver_access($employee_id) }}
+				
 			</ul>
 			<ul class="navbar-nav sidenav-toggler">
 				<li class="nav-item">

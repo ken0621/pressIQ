@@ -35,7 +35,7 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 
 use App\Models\Tbl_image;
-use App\Models\Tbl_mlm_slot_points_log;
+// use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_item_redeemable_report;
 
 //mark
@@ -63,14 +63,13 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
-<<<<<<< HEAD
+
 use App\Models\Tbl_press_release_recipient;
 use App\Tbl_pressiq_press_releases;
 
-=======
 use App\Models\Tbl_item_redeemable_points;
 use App\Models\Tbl_item_redeemable_request;
->>>>>>> mod_pat_redeem_points
+
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;

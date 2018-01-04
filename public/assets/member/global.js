@@ -29,6 +29,7 @@ function global()
 
         $('[data-toggle="tooltip"]').tooltip({container: 'body'}); 
     }
+    
     function add_event_global_popup()
     {
         $(document).on("click",".popup", function(e)
@@ -46,6 +47,7 @@ function global()
             action_load_link_to_modal(load_link, size);
         });
     }
+
     function add_event_global_submit()
     {
         $(document).on("submit", ".global-submit", function(e)
@@ -58,6 +60,7 @@ function global()
             e.preventDefault();
         })
     }
+
     function action_global_submit(link, data, modal)
     {
         $(".modal-loader").removeClass("hidden");

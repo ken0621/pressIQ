@@ -62,8 +62,8 @@ class TransactionSalesInvoice
 
 
 	        /* INSERT INVOICE HERE */
-	        // $invoice_id = Tbl_customer_invoice::insertGetId($ins);
-	        $invoice_id = 0;
+	        $invoice_id = Tbl_customer_invoice::insertGetId($ins);
+	        // $invoice_id = 0;
 
 	        /* Transaction Journal */
 	        $entry["reference_module"]  = 'invoice';
@@ -115,7 +115,7 @@ class TransactionSalesInvoice
 		}
 		if(count($itemline) > 0)
 		{
-			// Tbl_customer_invoice_line::insert($itemline);
+			Tbl_customer_invoice_line::insert($itemline);
 			$return = AccountingTransaction::entry_data($entry, $insert_item);
 		}
 

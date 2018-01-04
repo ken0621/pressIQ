@@ -16,6 +16,8 @@ use App\Globals\TransactionSalesReceipt;
 use App\Globals\TransactionEstimateQuotation;
 use App\Globals\TransactionSalesOrder;
 
+use App\Globals\AccountingTransaction;
+
 use Session;
 use Carbon\Carbon;
 use App\Globals\Pdf_global;
@@ -31,6 +33,7 @@ class TransactionSalesReceiptController extends Member
 	public function getCreate()
 	{
 		$data['page'] = "Create Sales Receipt";		
+        $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'sales_receipt');
         $data["_customer"]  = Customer::getAllCustomer();
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();

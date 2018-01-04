@@ -219,7 +219,7 @@
                                     <div class="col-md-7 text-right digima-table-label">
                                         <div class="row">
                                             <div class="col-sm-4 col-sm-offset-8  padding-lr-1">
-                                                <select class="form-control input-sm tax_selection compute" name="customer_taxcustomer_tax">  
+                                                <select class="form-control input-sm tax_selection compute" name="customer_tax">  
                                                     <option value="0" {{isset($inv) ? $inv->taxable == 0 ? 'selected' : '' : ''}}>No Tax</option>
                                                     <option value="1" {{isset($inv) ? $inv->taxable == 1 ? 'selected' : '' : ''}}>Vat (12%)</option>
                                                 </select>

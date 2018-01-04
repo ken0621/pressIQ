@@ -53,7 +53,7 @@ class TransactionSalesInvoiceController extends Member
 		$insert['transaction_refnum'] 	 = $request->transaction_refnumber;
 		$insert['customer_id'] 			 = $request->customer_id;
 		$insert['customer_email']        = $request->customer_email;
-		$insert['customer_address']      = $request->customer_address;
+		$insert['customer_address']      = $request->customer_billing_address;
 		$insert['transaction_date']      = date("Y-m-d", strtotime($request->transaction_date));
 		$insert['transaction_duedate']   = date("Y-m-d", strtotime($request->transaction_duedate));
 		$insert['customer_message']      = $request->customer_message;

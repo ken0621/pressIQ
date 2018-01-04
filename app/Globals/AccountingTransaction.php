@@ -233,7 +233,7 @@ class AccountingTransaction
 				if(isset($date[2]))
 				{
 					$datetoday = date($date[0]).date($date[1]).date($date[2]);
-					$ctr = sprintf("%'.05d", Self::get_count_last_transaction($shop_id, $transaction_type, $get->separator));
+					$ctr = sprintf("%'.04d", Self::get_count_last_transaction($shop_id, $transaction_type, $get->separator));
 					$return = $get->prefix.$datetoday.$get->separator.$ctr;
 				} 
 			}
@@ -245,14 +245,19 @@ class AccountingTransaction
 		$return = 1;
 		if($transaction_type == 'sales_invoice')
 		{
-			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->orderBy('inv_id','DESC')->first();
-			if($get)
+			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('is_sales_receipt',0)->orderBy('inv_id','DESC')->first();
+		}
+		if($transaction_type == 'sales_receipt')
+		{
+			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('is_sales_receipt',1)->orderBy('inv_id','DESC')->first();
+		}
+
+		if($get)
+		{
+			$number = explode("$separator", $get->transaction_refnum);
+			if(isset($number[1]))
 			{
-				$number = explode("'".$separator."'", $get->transaction_refnum);
-				if(isset($number[1]))
-				{
-					$return = $number[1] + 1;
-				}
+				$return = $number[1] + 1;
 			}
 		}
 		return $return;

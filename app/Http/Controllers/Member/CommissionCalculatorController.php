@@ -9,8 +9,9 @@ use App\Globals\Customer;
 use App\Globals\Item;
 use App\Globals\SalesAgent;
 use App\Globals\CommissionCalculator;
-
+use Session;
 use Carbon\Carbon;
+use Excel;
 class CommissionCalculatorController extends Member
 {
     /**
@@ -82,7 +83,114 @@ class CommissionCalculatorController extends Member
     }
     public function postImportReadFile(Request $request)
     {
-        die(var_dump($request->value));
+        Session::forget("import_item_error");
+        $value     = $request->value;
 
+        $ctr            = $request->ctr;
+        $data_length    = $request->data_length;
+        $error_data     = $request->error_data;
+        $json = null;
+        if($ctr != $data_length)
+        {
+            $data['name']                   = isset($value["Name"])                 ? $value["Name"] : '';
+            $data['type']                   = isset($value["Type"])                 ? $value["Type"] : '';
+
+
+            $data['date']                   = isset($value["Date"])                 ? $value["Date"] : '';
+            $data['num']                    = isset($value["Num"])                  ? $value["Num"] : '';
+            $data['account']                = isset($value["Account"])              ? $value["Account"] : '';
+            $data['rep']                    = isset($value["Rep"])                  ? $value["Rep"] : '';
+            $data['amount']                 = isset($value["Amount"])               ? $value["Amount"] : '';
+
+            $json["status"]     = null;
+            $json["message"]    = null;
+            if($data['name'])
+            {
+                Session::put('customer_name', $data['name']);
+                $json["status"]     = "success";
+                $json["message"]    = "Success put";
+            }
+            if($data['type'])
+            {
+
+            }
+            if(strpos($data['name'],'Total')  !== false)
+            {
+                Session::forget('customer_name');
+                $json["status"]     = "success";
+                $json["message"]    = "Success Forget";
+            }
+
+            $status_color       = $json["status"] == 'success' ? 'green' : 'red';
+            $json["tr_data"]    = "<tr>";
+            $json["tr_data"]   .= "<td class='$status_color'>".$json["status"]."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$json["message"]."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['name']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['type']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['date']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['num']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['account']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['rep']."</td>";
+            $json["tr_data"]   .= "<td nowrap>".$data['amount']."</td>";
+            $json["tr_data"]   .= "</tr>";
+
+            $json["value_data"] = $value;
+            $length             = sizeOf($json["value_data"]);
+
+            foreach($json["value_data"] as $key=>$value)
+            {
+                $json["value_data"]['Error Description'] = $json["message"];
+            }
+        }
+        else /* DETERMINE IF LAST IN CSV */
+        {
+            Session::put("import_item_error", $error_data);
+            $json["status"] = "end";
+        }
+
+        return json_encode($json);
+    }
+    public function getExportError(Request $request)
+    {
+        $_value = Session::get("import_item_error");
+
+        if($_value)
+        {
+            Excel::create("ImportTransactionError", function($excel) use($_value)
+            {
+                // Set the title
+                $excel->setTitle('Digimahouse');
+
+                // Chain the setters
+                $excel->setCreator('DigimaWebSolutions')
+                      ->setCompany('DigimaWebSolutions');
+
+                $excel->sheet('Template', function($sheet) use($_value) {
+                    $header = [
+                                'Name',
+                                'Type',
+                                'Date',
+                                'Num',
+                                'Account',
+                                'Rep',
+                                'Amount',
+                                'Error_Description'
+                                ];
+                    $sheet->freezeFirstRow();
+                    $sheet->row(1, $header);
+                    foreach($_value as $key=>$value)
+                    {
+                        $sheet->row($key+2, $value);
+                    }
+
+                });
+
+
+            })->download('csv');
+        }
+        else
+        {
+            return Redirect::back();
+        }
     }
 }

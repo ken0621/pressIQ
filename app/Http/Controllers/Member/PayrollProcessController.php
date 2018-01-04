@@ -57,10 +57,10 @@ class PayrollProcessController extends Member
 				break;
 			}
 
-			// if ($data["step"] == "post") 
-			// {
-			// 	Payroll2::insert_journal_entry_per_period($period_company_id ,$this->user_info->shop_id);
-			// }
+			if ($data["step"] == "post") 
+			{
+				Payroll2::insert_journal_entry_per_period($period_company_id ,$this->user_info->shop_id);
+			}
 			
 			$update["payroll_period_status"] = $step;
 			$update["payroll_period_total_basic"] = $total_basic;

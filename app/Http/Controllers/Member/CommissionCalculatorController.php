@@ -112,6 +112,8 @@ class CommissionCalculatorController extends Member
             }
             if($data['type'])
             {
+                /* check */
+                
 
             }
             if(strpos($data['name'],'Total')  !== false)

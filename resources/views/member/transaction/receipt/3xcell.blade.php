@@ -27,7 +27,7 @@
 						</div>
 						<h1>3XCELL-E SALES & MARKETING INC.</h1>
 						<p>
-							Unit 202 2nd Floor Vicars Bldg. #31 Visayas Ave.Brgy. Vasra Quezon City<br>
+							Unit 202 Vicar's Bldg. #31 Visayas Avenue, Brgy. Vasra Quezon City<br>
 							Telephone No.(02)518-8637
 						</p>
 					</div>
@@ -36,7 +36,7 @@
 							<p><span>AR NO.</span><span style="color: #00ac47;">{{ $list->transaction_number }}</span></p>
 						</div>
 					</div>
-					<div class="h-container" style="font-weight: 700; font-size: 18px;">ACKNOWLEDGEMENT RECIEPT</div>
+					<div class="h-container" style="font-weight: 700; font-size: 18px;">ACKNOWLEDGEMENT RECEIPT</div>
 					<div class="h-container row clearfix">
 						<div class="col-xs-8"></div>
 						<div class="col-xs-4">

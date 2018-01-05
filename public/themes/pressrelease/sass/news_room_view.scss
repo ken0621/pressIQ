@@ -4,7 +4,7 @@
 	{
 		border-radius: 5px;
 		background-color: #fff;
-		padding: 40px;
+		padding: 10px;
 		min-height: 700px;
 		@media screen and (max-width: 425px)
 		{
@@ -105,6 +105,18 @@
 			@media screen and (max-width: 375px)
 			{
 			   font-size: 20px;
+			}
+		}
+		.logo-container
+		{
+			padding: 20px;
+			.logo-holder
+			{
+				width: 100%;
+				img
+				{
+					max-width: 260px;
+				}
 			}
 		}
 	}

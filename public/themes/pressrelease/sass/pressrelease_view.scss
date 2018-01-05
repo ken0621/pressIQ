@@ -72,7 +72,7 @@
 	{
 		background-color: #ededed;
 		min-height: 820px;
-		padding: 40px;
+		padding: 20px;
 		@media screen and (max-width: 425px)
 		{
 		   padding: 25px;
@@ -83,7 +83,8 @@
 			font-weight: 700;
 			text-decoration: none;
 			color: #404040;
-			padding-bottom: 20px;
+			padding-bottom: 10px;
+			padding-top: 20px;
 			background-color: #ededed;
 		}
 		.title-container
@@ -109,6 +110,17 @@
 		{
 			border: 1px solid #ccc;
 			margin: 10px 0px;
+		}
+		.logo-container
+		{
+			.logo-holder
+			{
+				width: 100%;
+				img
+				{
+					max-width: 260px;
+				}
+			}
 		}
 	}
 }

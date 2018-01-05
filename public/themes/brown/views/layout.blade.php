@@ -53,7 +53,7 @@
         <div class="header-top">
             <div class="container">
                 <!--<a class="holder">GET THE APP</a>-->
-                <a href="/about" class="holder">COMPANY</a>
+                {{-- <a href="/about" class="holder">COMPANY</a> --}}
                 @if($customer)
                 <div style="display: inline-block; vertical-align: middle;" class="dropdown">
                     <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false" style="text-transform: uppercase; color: #fff;">{{ $customer->first_name }} {{ $customer->last_name }} <span class="caret"></span></a>

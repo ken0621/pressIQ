@@ -201,7 +201,7 @@ class Customer
 		{
 			$return = Tbl_customer::where('shop_id', $shop_id);
 
-			$return->where(function($q) use ($search_keyword)
+			$return->where(function($q) use ($keyword)
             {
                 $q->orWhere("tbl_customer.first_name", "LIKE", "%$keyword%");
                 $q->orWhere("tbl_customer.last_name", "LIKE", "%$keyword%");

@@ -29,6 +29,7 @@ function global()
 
         $('[data-toggle="tooltip"]').tooltip({container: 'body'}); 
     }
+    
     function add_event_global_popup()
     {
         $(document).on("click",".popup", function(e)
@@ -46,6 +47,7 @@ function global()
             action_load_link_to_modal(load_link, size);
         });
     }
+
     function add_event_global_submit()
     {
         $(document).on("submit", ".global-submit", function(e)
@@ -58,6 +60,7 @@ function global()
             e.preventDefault();
         })
     }
+
     function action_global_submit(link, data, modal)
     {
         $(".modal-loader").removeClass("hidden");
@@ -399,7 +402,21 @@ function select_current_warehouse($this)
             {
                 // $('.select_current_warehouse').load(document.URL +  ' .select_current_warehouse');
                 $('.warehouse-access-name').load(document.URL +  ' .warehouse-access-name');
-                commission_report.action_change_warehouse();
+
+                //patrick
+                var loc = window.location.href;
+                var data = loc.split('/');
+                if(data.length == 6)
+                {
+                    var com = data[data.length-1];
+                    var commission = com.split('#')[0];
+                    console.log(commission);
+                    if(commission == 'commission-report')
+                    {
+                        commission_report.action_change_warehouse();
+                    }
+                }
+                //end
             }
         },
         error: function()

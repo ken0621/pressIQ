@@ -28,7 +28,8 @@ class PayrollAdminDashboard extends Member
 
 	public function shop_id($return = 'shop_id')
 	{
-	     switch ($return) {
+	     switch ($return) 
+	     {
 	          case 'shop_id':
 	               return $shop_id = $this->user_info->user_shop;
 	               break;
@@ -45,9 +46,9 @@ class PayrollAdminDashboard extends Member
 
 	public function employee_approver()
 	{
-		$data['overtime_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','overtime')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
-		$data['rfp_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','rfp')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
-		$data['leave_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','leave')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
+		$data['overtime_approver'] 	= Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','overtime')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
+		$data['rfp_approver'] 		= Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','rfp')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
+		$data['leave_approver'] 	= Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','leave')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
 		
 		return view('member.payroll2.employees_approver', $data);
 	}

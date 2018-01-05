@@ -125,6 +125,7 @@ class AccountingTransaction
         }
         return $return;
 	}
+	
 	public static function customer_validation($insert, $insert_item)
 	{
 		$return = null;

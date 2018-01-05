@@ -74,44 +74,44 @@ class TransactionPayBillsController extends Member
         $insert["paybill_payment_method"]    = $request->paybill_payment_method;
         $insert["paybill_memo"]              = $request->vendor_memo;
 
-            
         $insert_item = null;
         $ctr_bill = 0;
-        foreach($request->line_is_checked as $key => $value)
-        {
-            if($value)
-            {
-                $ctr_bill++;
-            }
 
-            //die(var_dump($value));
-            $insert_item[$key]["line_is_checked"]         = $request->line_is_checked[$key];
-            $insert_item[$key]["pbline_reference_name"]   = $request->pbline_txn_type[$key];
-            $insert_item[$key]["pbline_reference_id"]     = $request->pbline_bill_id[$key];
-            $insert_item[$key]["item_amount"]             = str_replace(',', '',$request->pbline_amount[$key]);
-            $insert_item[$key]["item_discount"]           = 0;
-            $insert_item[$key]["item_id"]                 = 0;
-            $insert_item[$key]["item_qty"]                = 0;
-            $insert_item[$key]["item_description"]        = 0;
+        // foreach($request->pbline_id as $key => $value)
+        // {
+        //     if($value)
+        //     {
+        //         $ctr_bill++;
+        //     }
+
+        //     $insert_item[$key]["line_is_checked"]         = $request->line_is_checked[$key];
+        //     $insert_item[$key]["pbline_reference_name"]   = $request->pbline_txn_type[$key];
+        //     $insert_item[$key]["pbline_reference_id"]     = $request->pbline_bill_id[$key];
+        //     $insert_item[$key]["item_amount"]             = str_replace(',', '',$request->pbline_amount[$key]);
+        //     $insert_item[$key]["item_discount"]           = 0;
+        //     $insert_item[$key]["item_id"]                 = 0;
+        //     $insert_item[$key]["item_qty"]                = 0;
+        //     $insert_item[$key]["item_description"]        = 0;
             
-            $validate = TransactionPayBills::postInsert($this->user_info->shop_id, $insert, $insert_item);
-            
-            //die(var_dump($validate));
-           /* $return = null;
-            if(is_numeric($validate))
-            {
-                $return['status'] = 'success';
-                $return['status_message'] = 'Success creating pay Bills.';
-                $return['call_function'] = 'success_pay_bills';
-                $return['status_redirect'] = AccountingTransaction::get_redirect('pay_bills', $validate ,$btn_action);
-            }
-            else
-            {
-                $return['status'] = 'error';
-                $return['status_message'] = $validate;
-            }*/
-            
-            return $validate;
+        // }
+
+        $validate = TransactionPayBills::postInsert($this->user_info->shop_id, $insert, $insert_item);
+
+        $return = null;
+        if(is_numeric($validate))
+        {
+            $return['status'] = 'success';
+            $return['status_message'] = 'Success creating pay Bills.';
+            $return['call_function'] = 'success_pay_bills';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('pay_bills', $validate ,$btn_action);
         }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $validate;
+        }
+        
+        return json_encode($return);
+
     }
 }

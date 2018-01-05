@@ -7,6 +7,7 @@ use App\Models\Tbl_pay_bill;
 use App\Globals\AccountingTransaction;
 use Carbon\Carbon;
 
+use Validator;
 use DB;
 
 /**
@@ -19,6 +20,9 @@ class TransactionPayBills
 {
 	public static function postInsert($shop_id, $insert, $insert_item)
 	{
+		$val = Self::payBillsValidation($insert, $insert_item);
+		if(!$val)
+		{
 			$ins["paybill_shop_id"]			  = $shop_id;
 			$ins["paybill_vendor_id"]         = $insert['vendor_id'];
 			$ins["transaction_refnum"]        = $insert['transaction_refnumber'];
@@ -33,7 +37,7 @@ class TransactionPayBills
 	        $ins['paybill_total_amount'] = $total;
 
 
-	        /*INSERT CV HERE*/
+	        /*INSERT PB HERE*/
 	        $pay_bill_id = Tbl_pay_bill::insertGetId($ins);
 	               
 	        /* Transaction Journal */
@@ -47,9 +51,46 @@ class TransactionPayBills
 	        $entry["discount"]          = '';
 	        $entry["ewt"]               = '';
 
-	        $return = Self::insertLine($pay_bill_id, $insert_item, $entry);
+	        //$return = Self::insertLine($pay_bill_id, $insert_item, $entry);
 	        $return = $pay_bill_id;
+		}
+		else
+		{
+			$return = $val;
+		}
+
+		return $return;
 	}
+	public static function payBillsValidation($insert, $insert_item)
+	{
+		$return = null;
+        if(count($insert_item) <= 0)
+        {
+            $return .= '<li style="list-style:none">Please Select Item.</li>';
+        }
+        if(!$insert['vendor_id'])
+        {
+            $return .= '<li style="list-style:none">Please Select Vendor.</li>';          
+        }
+        if(!$insert['paybill_ap_id'])
+        {
+            $return .= '<li style="list-style:none">Please Select Payment Account.</li>';          
+        }
+
+		$rules['transaction_refnumber'] = 'required';
+        $rules['vendor_id'] = 'required';
+		//die(var_dump($return));
+        $validator = Validator::make($insert, $rules);
+        if($validator->fails())
+        {
+            foreach ($validator->messages()->all('<li style="list-style:none">:message</li><br>') as $keys => $message)
+            {
+                $return .= $message;
+            }
+        }
+        return $return;
+	}
+
 	public static function insertLine($pay_bill_id, $insert_item, $entry)
     {
         $itemline = null;

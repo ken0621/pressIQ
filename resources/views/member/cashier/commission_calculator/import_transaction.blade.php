@@ -19,7 +19,7 @@
 
     <div class="form-group">
         <div class="col-md-6">
-            <h4><span class="counter">0</span> Transaction Added</h4>
+            <!-- <h4><span >0</span> Transaction Added</h4> -->
             <div class="progress">
                 <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
             </div>

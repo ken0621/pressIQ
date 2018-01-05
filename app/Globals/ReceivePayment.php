@@ -65,6 +65,7 @@ class ReceivePayment
     {
         $insert["rp_shop_id"]           = $shop_id;
         $insert["rp_customer_id"]       = $insert_data['customer_id'];
+        $insert["transaction_refnum"]       = $insert_data['transaction_refnum'];
         $insert["rp_ar_account"]        = 0;
         $insert["rp_date"]              = $insert_data['date'];
         $insert["rp_total_amount"]      = $insert_data['total_payment_amount'];
@@ -88,13 +89,11 @@ class ReceivePayment
                 if($insert_line["rpline_reference_name"] == 'invoice')
                 {
                     $ret = Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
-                    if($ret == 1)
+
+                    $check = CommissionCalculator::check_settings($shop_id);
+                    if($check == 1)
                     {
-                        $check = CommissionCalculator::check_settings($this->user_info->shop_id);
-                        if($check == 1)
-                        {
-                            CommissionCalculator::update_commission($insert_line["rpline_reference_id"], $rcvpayment_id);
-                        }
+                        CommissionCalculator::update_commission($insert_line["rpline_reference_id"], $rcvpayment_id);
                     }
                 }
             }

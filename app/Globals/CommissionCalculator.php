@@ -1,6 +1,7 @@
 <?php
 namespace App\Globals;
 use App\Models\Tbl_shop;
+use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_commission;
 use App\Models\Tbl_commission_item;
 use App\Models\Tbl_commission_invoice;
@@ -24,6 +25,9 @@ class CommissionCalculator
 {
 	public static function create($shop_id, $comm, $comm_item)
 	{
+		$refnum = $comm['refnum'];
+
+		unset($comm['refnum']);
 		$comm['shop_id'] = $shop_id;
 		$commission_id = Tbl_commission::insertGetId($comm);
 
@@ -43,7 +47,7 @@ class CommissionCalculator
         $invoice_info['invoice_date']       = $comm['date'];
         $invoice_info['invoice_due']        = $comm['due_date'];
         $invoice_info['new_inv_id']			= $commission_id.'001';
-        $invoice_info['transaction_refnum']	= isset($comm['refnum']) ? $comm['refnum'] : '';
+        $invoice_info['transaction_refnum']	= isset($refnum) ? $refnum : '';
         $invoice_info['billing_address']	= Item::get_item_details($comm_item['item_id'])->item_name;
 		$invoice_info['invoice_terms_id']	= 0;
 
@@ -109,7 +113,6 @@ class CommissionCalculator
 		$ins['commission_amount'] = round(Self::get_computation($shop_id, $commission_id)['amount_tcp_comm'],5);
 		$ins['payment_amount'] = round(Self::get_computation($shop_id, $commission_id)['amount_loanable'],5);
 		$ins['commission_type'] = 'TCPC';
-
 		Tbl_commission_invoice::insert($ins);
 
 		for($i = 0; $i < $loop_for ; $i++) 
@@ -290,7 +293,7 @@ class CommissionCalculator
 
 	public static function per_commission_invoices($commission_id)
 	{
-		return Tbl_commission::invoice()->where('tbl_commission.commission_id',$commission_id)->groupBy('comm_inv_id')->orderBy('new_inv_id')->get();
+		return Tbl_commission::invoice()->where('tbl_commission.commission_id',$commission_id)->groupBy('comm_inv_id')->orderBy('comm_inv_id', 'DESC')->get();
 	}
 	public static function get_actual_computation($tsp, $downpayment, $disc, $monthly_amort, $misc, $ndp_comm, $tcp_comm, $comm_percent)
 	{
@@ -320,7 +323,7 @@ class CommissionCalculator
 		$return['amount_dp'] = ($downpayment/100) * $tsp;
 		$return['amount_discount'] = $disc;
 		$return['amount_net_dp'] = $return['amount_dp'] - $return['amount_discount'];
-		$return['month_amort'] = $comm_item_data->monthly_amort;
+		$return['month_amort'] = $monthly_amort;
 		$return['amount_monthly_amort'] = $return['amount_net_dp'] / $monthly_amort;
 		$return['amount_loanable'] = $tsp - $return['amount_dp'];
 
@@ -401,19 +404,29 @@ class CommissionCalculator
 	public static function update_commission($invoice_id, $rcvpyment_id)
 	{
 		$check = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
-		if($check)
+
+		$get_invoice_data = Tbl_customer_invoice::where('inv_id', $invoice_id)->first();
+		$get_payment_data = Tbl_receive_payment::where('rp_id', $rcvpyment_id)->first();
+
+		if($check && $get_payment_data)
 		{
-			/*UPDATE COMMISSION HERE*/
-			$update['payment_ref_name'] = 'receive_payment';
-			$update['payment_ref_id'] = $rcvpyment_id;
-			$update['invoice_is_paid'] = 1;
-			$update['is_released'] = 1;	
-			if(strtolower($check->commission_type) == 'tcpc')
-			{
-				$update['is_released'] = Self::check_ndp_paid_all($check->commission_id);			
+			$test = floor($get_payment_data->rp_total_amount / $check->payment_amount);
+
+			for ($i = 0; $i < $test; $i++) 
+			{ 
+				$check = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
+				/*UPDATE COMMISSION HERE*/
+				$update['payment_ref_name'] = 'receive_payment';
+				$update['payment_ref_id'] = $rcvpyment_id;
+				$update['invoice_is_paid'] = 1;
+				$update['is_released'] = 1;	
+				if(strtolower($check->commission_type) == 'tcpc')
+				{
+					$update['is_released'] = Self::check_ndp_paid_all($check->commission_id);			
+				}
+				Tbl_commission_invoice::where('comm_inv_id',$check->comm_inv_id)->update($update);
+				Self::update_tcp($check->commission_id);
 			}
-			Tbl_commission_invoice::where('invoice_id',$invoice_id)->update($update);
-			Self::update_tcp($check->commission_id);
 		}
 	}
 	public static function check_ndp_paid_all($commission_id)

@@ -15,6 +15,7 @@ use App\Globals\AccountingTransaction;
 use Session;
 use Carbon\Carbon;
 use Excel;
+use Redirect;
 class CommissionCalculatorController extends Member
 {
     /**
@@ -120,148 +121,175 @@ class CommissionCalculatorController extends Member
                 $json["status"]     = "success";
                 $json["message"]    = "Success";
             }
-           if($data['type'])
+            if($data['type'])
             {
-                /* check */ 
-                if(strtolower($data['type']) == 'invoice')
-                {
-                    $check_inv = Invoice::check_inv($this->user_info->shop_id, $data['num']);
-                    $error_message = null;
-
-                    if(!$check_inv)
+                if($data['num'])
+                {                    
+                    /* check */ 
+                    if(strtolower($data['type']) == 'invoice')
                     {
-                        $coa = explode('·', $data['account']);
-                        $account_id = 0;
-                        if(isset($coa[1]))
-                        {
-                            $account_id = AccountingTransaction::check_coa_exist($this->user_info->shop_id, str_replace(' ', '',$coa[0]), str_replace(' ', '',$coa[1]));
-                        }
-                        else
-                        {
-                            $error_message = "Account Unknown";
-                        }
+                        
+                        $total_comm = $data["ndp"] + $data['tcp'];
+                        if($total_comm == 100)
+                        {                   
+                            $check_inv = Invoice::check_inv($this->user_info->shop_id, $data['num']);
+                            $error_message = null;
 
-                        $item_customer = explode(',', Session::get('customer_name'));
-                        $customer_id = 0;
-                        $item_id = 0;
-                        if(isset($item_customer[1]))
-                        {
-                            $ins['customer_first_name'] = $item_customer[1];
-                            $ins['customer_company'] = $item_customer[1];
-                            $customer_id = Customer::createCustomer($this->user_info->shop_id, $ins);
-
-                            $ins_item['item_name'] = $item_customer[0];
-                            $ins_item['item_sku'] = $item_customer[0];
-                            $ins_item['item_price'] = $data['tsp'];
-                            $ins_item['item_cost'] = $data['tsp'];
-                            $ins_item['item_quantity'] = 0;
-                            $item_id = Item::create($this->user_info->shop_id, 2, $ins_item);
-                        }
-                        else
-                        {
-                            $error_message = "Customer not Found";
-                        }
-
-                        $sales_rep = SalesAgent::get_info($this->user_info->shop_id, $data['rep']);
-                        $comm_data = null;
-                        if($sales_rep)
-                        {
-                            $comm_data = CommissionCalculator::get_actual_computation($data['tsp'], $data['downpayment'], $data['discount'], $data['mon_amort'], $data['misc_fee'], $data['ndp'], $data['tcp'], $sales_rep->commission_percent);
-
-                            if($comm_data['amount_tcp'] != $data['amount'])
+                            if(!$check_inv)
                             {
-                                $error_message = "The total contract price is not equal on the Amount";
+                                $coa = explode('·', $data['account']);
+                                $account_id = 0;
+                                if(isset($coa[1]))
+                                {
+                                    $account_id = AccountingTransaction::check_coa_exist($this->user_info->shop_id, str_replace(' ', '',$coa[0]), str_replace(' ', '',$coa[1]));
+                                }
+                                else
+                                {
+                                    $error_message = "Account Unknown";
+                                }
+                                if(!$error_message)
+                                {
+                                    $item_customer = explode(',', Session::get('customer_name'));
+                                    $customer_id = 0;
+                                    $item_id = 0;
+                                    if(isset($item_customer[1]))
+                                    {
+                                        $ins['customer_first_name'] = $item_customer[1];
+                                        $ins['customer_company'] = $item_customer[1];
+                                        $customer_id = Customer::createCustomer($this->user_info->shop_id, $ins);
+
+                                        $ins_item['item_name'] = $item_customer[0];
+                                        $ins_item['item_sku'] = $item_customer[0];
+                                        $ins_item['item_price'] = $data['tsp'];
+                                        $ins_item['item_cost'] = $data['tsp'];
+                                        $ins_item['item_quantity'] = 0;
+                                        $item_id = Item::create($this->user_info->shop_id, 2, $ins_item)["item_id"];
+                                    }
+                                    else
+                                    {
+                                        $error_message = "Customer not Found";
+                                    }  
+                                }
+                                $agent_id = 0;
+                                if(!$error_message)
+                                {
+                                    $sales_rep = SalesAgent::get_info($this->user_info->shop_id, $data['rep']);
+                                    $comm_data = null;
+                                    if($sales_rep)
+                                    {
+                                        $comm_data = CommissionCalculator::get_actual_computation($data['tsp'], $data['downpayment'], $data['discount'], $data['mon_amort'], $data['misc_fee'], $data['ndp'], $data['tcp'], $sales_rep->commission_percent);
+
+                                        if($comm_data['amount_tcp'] != $data['amount'])
+                                        {
+                                            $error_message = "The total contract price is not equal on the Amount";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        $error_message = "Sales Rep not Found";
+                                    }
+                                    $agent_id = $sales_rep->employee_id;
+                                }
+                                              
+                                if(!$error_message && $comm_data)
+                                {                            
+                                    /* ============================================= */
+                                    $comm['customer_id'] = $customer_id;
+                                    $comm['customer_email'] = "";
+                                    $comm['agent_id'] = $agent_id;
+                                    $comm['refnum'] = $data['num'];
+                                    $comm['date'] = datepicker_input($data['date']);
+                                    $comm['due_date'] = "";
+                                    $comm['total_selling_price'] = str_replace(',', '', $data['tsp']);
+                                    $comm['total_contract_price'] = $comm_data['amount_tcp'];
+                                    $comm['total_commission'] = $comm_data['amount_tc'];
+                                    $comm['loanable_amount'] = $comm_data['amount_loanable'];
+                                    $comm['date_created'] = Carbon::now();
+
+                                    $comm_item['item_id'] = $item_id;
+                                    $comm_item['downpayment_percent'] = str_replace('%', '', $data['downpayment']);
+                                    $comm_item['discount'] = str_replace(',', '',$data['discount']);
+                                    $comm_item['monthly_amort'] = $data['mon_amort'];
+                                    $comm_item['misceleneous_fee_percent'] = str_replace('%', '', $data['misc_fee']);
+                                    $comm_item['ndp_commission'] = str_replace('%', '', $data['ndp']);
+                                    $comm_item['tcp_commission'] = str_replace('%', '', $data['tcp']);
+
+                                    $return = CommissionCalculator::create($this->user_info->shop_id, $comm, $comm_item);
+                                    Session::put('invoice_id', $return);
+                                    Session::put('customer_id', $customer_id);
+
+                                    $json["status"]     = "success";
+                                    $json["message"]    = "Success";
+                                }
+                                else
+                                {
+                                    $json["status"]     = "error";
+                                    $json["message"]    = $error_message;
+                                }
                             }
+                            else
+                            {
+                                Session::put('invoice_id', $check_inv->inv_id);
+                                Session::put('customer_id', $check_inv->inv_customer_id);
+                                $json["status"]     = "success";
+                                $json["message"]    = "Success";
+                            }
+                            
                         }
                         else
                         {
-                            $error_message = "Sales Rep not Found";
+                            $json["status"]     = "error";
+                            $json["message"]    = "The commission is not equal to 100%";
                         }
-                                      
-                        if(!$error_message && $comm_data)
-                        {                            
-                            /* ============================================= */
-                            $comm['customer_id'] = $customer_id;
-                            $comm['customer_email'] = "";
-                            $comm['agent_id'] = $sales_rep;
-                            $comm['refnum'] = $data['num'];
-                            $comm['date'] = datepicker_input($data['date']);
-                            $comm['due_date'] = "";
-                            $comm['total_selling_price'] = str_replace(',', '', $data['tsp']);
-                            $comm['total_contract_price'] = $comm_data['amount_tcp'];
-                            $comm['total_commission'] = $comm_data['amount_tcp'];
-                            $comm['loanable_amount'] = $comm_data['amount_tcp'];
-                            $comm['date_created'] = Carbon::now();
+                    }
+                    
+                    if(strtolower($data['type']) == 'payment')
+                    {
+                        $customer_id = Session::get("customer_id");
+                        $invoice_id = Session::get('invoice_id');
+                        $check_rp = ReceivePayment::check_rp($this->user_info->shop_id, $data['num']);
+                        if(!$check_rp && $customer_id && $invoice_id)
+                        {
+                            $insert_data['customer_id'] = $customer_id;
+                            $insert_data['date'] = $data['date'];
+                            $insert_data['total_payment_amount'] = str_replace("-", '', $data['amount']);
+                            $insert_data['memo'] = "Payment Imported";
+                            $insert_data['transaction_refnum'] = $data['num'];
 
-                            $comm_item['item_id'] = $request->item_id;
-                            $comm_item['downpayment_percent'] = str_replace('%', '', $data['downpayment']);
-                            $comm_item['discount'] = str_replace(',', '',$data['discount']);
-                            $comm_item['monthly_amort'] = $data['mon_amort'];
-                            $comm_item['misceleneous_fee_percent'] = str_replace('%', '', $data['misc_fee']);
-                            $comm_item['ndp_commission'] = str_replace('%', '', $comm_data['amount_ndp_comm']);
-                            $comm_item['tcp_commission'] = str_replace('%', '', $comm_data['amount_tcp_comm']);
+                            $insert_item[0]['ref_name'] = "invoice";
+                            $insert_item[0]['ref_id'] = $invoice_id;
+                            $insert_item[0]['payment_amount'] = str_replace("-", '', $data['amount']);
 
-                            $return = CommissionCalculator::create($this->user_info->shop_id, $comm, $comm_item);
-                            Session::put('invoice_id', $return);
-                            Session::put('customer_id', $customer_id);
+                            $return = ReceivePayment::insert_payment($this->user_info->shop_id, $insert_data, $insert_item);
 
                             $json["status"]     = "success";
                             $json["message"]    = "Success";
                         }
                         else
                         {
+                            if($check_rp)
+                            {
+                                $error_message = "Payment already exist based on Reference Number.";
+                            }
+                            if(!$customer_id)
+                            {
+                                $error_message = "Customer not found";
+                            }
+                            if(!$invoice_id)
+                            {
+                                $error_message = "Invoice not found";
+                            }
+
                             $json["status"]     = "error";
-                            $json["message"]    = $error_message;
+                            $json["message"]    = $error_message;                        
                         }
                     }
-                    else
-                    {
-                        Session::put('invoice_id', $check_inv->inv_id);
-                        Session::put('customer_id', $check_inv->inv_customer_id);
-                    }
                 }
-                
-                if(strtolower($data['type']) == 'payment')
+                else
                 {
-                    $customer_id = Session::get("customer_id");
-                    $invoice_id = Session::get('invoice_id');
-                    $check_rp = ReceivePayment::check_rp($this->user_info->shop_id, $data['num']);
-                    if(!$check_rp && $customer_id && $invoice_id)
-                    {
-                        $insert_data['customer_id'] = $customer_id;
-                        $insert_data['date'] = $data['date'];
-                        $insert_data['total_payment_amount'] = str_replace("-", '', $data['amount']);
-                        $insert_data['memo'] = "Payment Imported";
-                        $insert_data['transaction_refnum'] = $data['num'];
-
-                        $insert_item[0]['ref_name'] = "invoice";
-                        $insert_item[0]['ref_id'] = $invoice_id;
-                        $insert_item[0]['payment_amount'] = str_replace("-", '', $data['amount']);
-
-                        $return = ReceivePayment::insert_payment($this->user_info->shop_id, $insert_data, $insert_item);
-
-                        $json["status"]     = "success";
-                        $json["message"]    = "Success";
-                    }
-                    else
-                    {
-                        if(!$customer_id)
-                        {
-                            $error_message = "Customer not found";
-                        }
-                        if(!$invoice_id)
-                        {
-                            $error_message = "Invoice not found";
-                        }
-                        if($check_rp)
-                        {
-                            $error_message = "Payment already exist based on Reference Number."
-                        }
-
-                        $json["status"]     = "error";
-                        $json["message"]    = $error_message;                        
-                    }
-                }
+                    $json["status"]     = "success";
+                    $json["message"]    = "Reference number is required";                    
+                } 
 
             }
             if(strpos($data['name'],'Total')  !== false)

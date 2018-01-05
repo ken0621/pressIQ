@@ -295,67 +295,15 @@ class ShopMemberController extends Shop
     public function pressuser_delete_draft($pid)
     {
         Tbl_pressiq_press_releases::where('pr_id',$pid)->delete();
+        Session::forget('pr_edit');
         Session::flash('delete', "Draft Already Deleted!");
         return  redirect::back();
     } 
-    public function pressuser_send_draft($pid)
-    {
-        $date=Carbon::now();
-        DB::table('tbl_pressiq_press_releases')
-            ->where('pr_id', $pid)
-            ->update(['pr_status' => "sent", 'pr_date_sent' => $date]);
 
-        $pr=DB::table('tbl_pressiq_press_releases')
-                ->where('pr_id',$pid)
-                ->get();
-        foreach ($pr as $data) {
-        
-        $pr_info["pr_headline"]     =$data->pr_headline;
-        $pr_info["pr_content"]      =$data->pr_content;
-        $pr_info["pr_from"]         =$data->pr_from;
-        $pr_info["pr_to"]           =$data->pr_to;
-        $pr_info["pr_status"]       =$data->pr_status;
-        $pr_info["pr_date_sent"]    =$data->pr_date_sent;
-        $pr_info["pr_sender_name"]  =$data->pr_sender_name;
-        $pr_info["pr_receiver_name"]=$data->pr_receiver_name;
-
-        $this->send($pr_info);
-        if( count(Mail::failures()) > 0 ) 
-            {
-
-               Session::flash('message', "Error in sending the release!");
-               foreach(Mail::failures as $email_address) 
-                {
-                   echo " - $email_address <br />";
-                }
-
-            }
-            else 
-            {
-                return Redirect::to("/pressuser/mypressrelease");
-            }
-        }
-
-    }
     public function pressuser_edit_draft($pid)
     {
         Session::put('pr_edit',$pid);
-        // $data['pr_edit']     = DB::table('tbl_pressiq_press_releases')
-        //                     ->where('pr_id',session('pr_edit'))
-        //                     ->orderByRaw('pr_date_sent DESC')
-        //                     ->get();
-        // $data['add_recipient']   = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))->paginate(10);
-        // $data['country']   = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))
-        //                     ->distinct()
-        //                     ->get(['country']);
-        // $data['drafts']     = DB::table('tbl_pressiq_press_releases')
-        //                     ->where('pr_from', session('user_email'))
-        //                     ->where('pr_status','draft')
-        //                     ->orderByRaw('pr_date_sent DESC')
-        //                     ->get();
-
         return Redirect::to("/pressuser/pressrelease");
-        // return view("press_user.press_user_pressrelease", $data);
     }
 
     public function pressuser_pressrelease()
@@ -509,23 +457,11 @@ class ShopMemberController extends Shop
         $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
         $pr_info["pr_receiver_name"]=request('pr_receiver_name');
 
-        $pr_rules["pr_headline"]   =['required'];
-        $pr_rules["pr_content"]    =['required'];
-        $pr_rules["pr_to"]         =['required'];
         
-        $validator = Validator::make($pr_info, $pr_rules);
-
-        if ($validator->fails()) 
-        {
-            return Redirect::to("/pressuser/pressrelease")->with('message', $validator->errors()->first())->withInput();
-        }
-        else
-        {
-            $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info); 
-            $data["page"] = "Press Release - My Press Release";
-            Session::forget('pr_edit');
-            return redirect::to("/pressuser/drafts");
-        }
+        $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info); 
+        $data["page"] = "Press Release - My Press Release";
+        Session::forget('pr_edit');
+        return redirect::to("/pressuser/drafts");
     }
     public function pressuser_my_pressrelease()
     {
@@ -561,11 +497,11 @@ class ShopMemberController extends Shop
            $level=session('pr_user_level');
            if($level!="1")
            {
-                $data['drafts']     = DB::table('tbl_pressiq_press_releases')
-                                    ->where('pr_from', session('user_email'))
-                                    ->where('pr_status','draft')
-                                    ->orderByRaw('pr_date_sent DESC')
-                                    ->get();
+                $data['drafts'] = DB::table('tbl_pressiq_press_releases')
+                                ->where('pr_from', session('user_email'))
+                                ->where('pr_status','draft')
+                                ->orderByRaw('pr_date_sent DESC')
+                                ->get();
                 $data["page"] = "Drafts";
                 return view("press_user.press_user_drafts", $data);
             }
@@ -695,6 +631,9 @@ class ShopMemberController extends Shop
     {
 
         $data['_media_contacts'] = Tbl_press_release_recipient::get();
+        $data['edit']     = DB::table('tbl_press_release_recipients')
+                            ->where('recipient_id',session('r_edit'))
+                            ->get();
 
         if(Session::exists('user_email'))
         {
@@ -809,7 +748,7 @@ class ShopMemberController extends Shop
 
     public function pressadmin_pressrelease_addrecipient(Request $request)
     {
-
+        
       $data["name"]                      = $request->name;
       $data["position"]                  = $request->position;
       $data["company_name"]              = $request->company_name;
@@ -820,8 +759,32 @@ class ShopMemberController extends Shop
       $data["industry_type"]             = $request->industry_type;
       $data["title_of_journalist"]       = $request->title_journalist;
       $data["description"]               = $request->description;
-      Tbl_press_release_recipient::insert($data); 
-      Session::flash('success_merchant', 'Recipient Successfully Added!');
+
+        if(session::has('r_edit'))
+        {
+            DB::table('tbl_press_release_recipients')
+                        ->where('recipient_id', session('r_edit'))
+                        ->update([
+                            'name'                  =>$data["name"],
+                            'position'              =>$data["position"],
+                            'company_name'          =>$data["company_name"],
+                            'country'               =>$data["country"],
+                            'research_email_address'=>$data["research_email_address"],
+                            'website'               =>$data["website"],
+                            'media_type'            =>$data["media_type"],
+                            'industry_type'         =>$data["industry_type"],
+                            'title_of_journalist'   =>$data["title_of_journalist"],
+                            'description'           =>$data["description"]
+                            ]);
+                    Session::forget('r_edit');
+                    Session::flash('success_merchant', 'Recipient Successfully Updated!');
+        }
+        else
+        {
+            Tbl_press_release_recipient::insert($data);
+            Session::flash('success_merchant', 'Recipient Successfully Added!');
+        }
+
       return  redirect::back();
     }
 
@@ -831,11 +794,10 @@ class ShopMemberController extends Shop
       Session::flash('delete', "Recipient Already Deleted!");
       return  redirect::back();
     }
-
-    public function pressreleases_send_recipient(Request $request)
+    public function pressreleases_edit_recipient($id)
     {
-        dd('Hello World!');
-
+        Session::put('r_edit',$id);
+        return Redirect::to("/pressadmin/mediacontacts");
     }
 
     public function pressuser_choose_recipient(Request $request)

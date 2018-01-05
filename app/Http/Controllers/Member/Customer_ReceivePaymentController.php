@@ -9,6 +9,7 @@ use App\Globals\Invoice;
 use App\Globals\CreditMemo;
 use App\Globals\ReceivePayment;
 use App\Globals\CommissionCalculator;
+use App\Globals\Purchasing_inventory_system;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;

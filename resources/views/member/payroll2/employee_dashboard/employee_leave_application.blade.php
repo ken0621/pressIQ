@@ -1,15 +1,12 @@
 <link rel="stylesheet" type="text/css" href="/assets/member/payroll/css/timesheet.css">
-<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
-<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 
-<!-- Change action, name, some links and functions-->
 <form class="global-submit" role="form" action="/leave/save_leave" method="POST">
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
-      <a href="/employee">Dashboard</a>
+      <a href="/employee">Dashboard </a>
     </li>
     <input type="hidden" name="_token" value="{{csrf_token()}}">
-    <li class="breadcrumb-item active">{{ $page }}</li>
+   <li class="breadcrumb-item active">&nbsp/&nbsp{{ $page }}</li>
 </ol>
 	<div class="modal-body form-horizontal">
 
@@ -99,8 +96,8 @@
 
 	</div>
 	<div class="modal-footer">
-		<button type="button"  class="btn btn-primary btn-md" data-dismiss="modal">Cancel</button>
-		<button type="submit"  class="btn btn-primary btn-md">Submit</button>
+		<button type="button" class="btn btn-primary btn-md" data-dismiss="modal">Cancel</button>
+		<button type="submit" class="btn btn-primary btn-md">Submit</button>
 	</div>
 </form>
 <script>

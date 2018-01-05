@@ -30,7 +30,7 @@ use Carbon\Carbon;
 use Crypt;
 use Session;
 use DB;
-use App\Http\Controllers\Member\PayrollMember;
+use App\Http\Controllers\Member\PayrollMember;	
 
 
 use PDF2;
@@ -425,10 +425,8 @@ class EmployeeController extends PayrollMember
             Tbl_payroll_leave_schedulev3::insert($insert);
         }
 
-
-
 	     $return['status']             = 'success';
-	     $return['function_name']      = 'payrollconfiguration.reload';
+	     $return['function_name']      = 'employee_leave_management.ajax_all_load_leave';
 	     return json_encode($return);
     	
     }

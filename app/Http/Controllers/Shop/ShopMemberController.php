@@ -355,7 +355,10 @@ class ShopMemberController extends Shop
         $pr_info["pr_date_sent"]    =Carbon::now();
         $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
         $pr_info["pr_receiver_name"]=request('pr_receiver_name');
+        $pr_info["pr_co_name"]      =session('user_company_name');
+        $pr_info["pr_co_img"]       =session('user_company_image');
         
+        //dd(session('user_company_image'));
         $pr_rules["pr_headline"]   =['required'];
         $pr_rules["pr_content"]    =['required'];
         $pr_rules["pr_boiler_content"] =['required'];
@@ -456,6 +459,8 @@ class ShopMemberController extends Shop
         $pr_info["pr_date_sent"]    =Carbon::now();
         $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
         $pr_info["pr_receiver_name"]=request('pr_receiver_name');
+        $pr_info["pr_co_name"]      =session('user_company_name');
+        $pr_info["pr_co_img"]       =session('user_company_image');
 
         
         $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info); 

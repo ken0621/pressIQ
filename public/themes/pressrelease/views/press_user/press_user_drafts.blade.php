@@ -9,7 +9,6 @@
                     <th>Press Release Title</th>
                     <th>Recipient</th>
                     <th>Status</th>
-                    <th>Send</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -18,7 +17,6 @@
                     <td>{{$draft->pr_headline}}</td>
                     <td>{{$draft->pr_receiver_name}}</td>
                     <td>Draft</td>
-                    <td><a href="/pressuser/pressrelease/send_draft/{{$draft->pr_id}}">Send</a></td>
                     <td><a href="/pressuser/pressrelease/edit_draft/{{$draft->pr_id}}">Edit</a></td>
                     <td><a href="/pressuser/pressrelease/delete_draft/{{$draft->pr_id}}">Delete</a></td>
                 </tr>

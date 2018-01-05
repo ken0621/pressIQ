@@ -180,16 +180,16 @@
         </div>
            
         <div class="modal-body">
-           
-              <img class="pull-right" src="{{session('user_company_image')}}" alt="" style="min-width: 150px;min-height: 150px;max-height: 150px;max-width: 150px;">
-           
-          <div id="preview_headline">
+          <img class="pull-right" src="{{session('user_company_image')}}" alt="" style="min-width: 150px;min-height: 150px;max-height: 150px;max-width: 150px;">
+          <div id="preview_headline"></div>
+          <div id="preview_content" class="background-container"></div>
+          <div class="about-title">
+            <div>Media Release. Publised: 
+            <input type="datetime"  value="<?php echo date("Y-m-d\ H:i:s",time()); ?>"/ style="border: none;" readonly>
+            </div>
+            <div>{{session('user_company_name')}}</div>
           </div>
-          <div id="preview_content" class="background-container">
-          </div>
-          <div class="about-title">About {{session('user_company_name')}}</div>
-          <div id="preview_boiler_content">
-          </div>
+          <div id="preview_boiler_content"></div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

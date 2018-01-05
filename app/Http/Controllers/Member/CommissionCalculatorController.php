@@ -118,7 +118,7 @@ class CommissionCalculatorController extends Member
             {
                 Session::put('customer_name', $data['name']);
                 $json["status"]     = "success";
-                $json["message"]    = "Success put";
+                $json["message"]    = "Success";
             }
            if($data['type'])
             {
@@ -225,12 +225,14 @@ class CommissionCalculatorController extends Member
                 {
                     $customer_id = Session::get("customer_id");
                     $invoice_id = Session::get('invoice_id');
-                    if($customer_id && $invoice_id)
+                    $check_rp = ReceivePayment::check_rp($this->user_info->shop_id, $data['num']);
+                    if(!$check_rp && $customer_id && $invoice_id)
                     {
                         $insert_data['customer_id'] = $customer_id;
                         $insert_data['date'] = $data['date'];
                         $insert_data['total_payment_amount'] = str_replace("-", '', $data['amount']);
                         $insert_data['memo'] = "Payment Imported";
+                        $insert_data['transaction_refnum'] = $data['num'];
 
                         $insert_item[0]['ref_name'] = "invoice";
                         $insert_item[0]['ref_id'] = $invoice_id;
@@ -251,6 +253,10 @@ class CommissionCalculatorController extends Member
                         {
                             $error_message = "Invoice not found";
                         }
+                        if($check_rp)
+                        {
+                            $error_message = "Payment already exist based on Reference Number."
+                        }
 
                         $json["status"]     = "error";
                         $json["message"]    = $error_message;                        
@@ -264,7 +270,7 @@ class CommissionCalculatorController extends Member
                 Session::forget("customer_id");
                 Session::forget("invoice_id");
                 $json["status"]     = "success";
-                $json["message"]    = "Success Forget";
+                $json["message"]    = "Success";
             }
 
             $status_color       = $json["status"] == 'success' ? 'green' : 'red';
@@ -327,6 +333,13 @@ class CommissionCalculatorController extends Member
                                 'Account',
                                 'Rep',
                                 'Amount',
+                                'Total Selling Price',
+                                'Downpayment',
+                                'Discount',
+                                'Monthly Amort',
+                                'Miscellaneous Fee',
+                                'NDP Commission',
+                                'TCP Commission',
                                 'Error_Description'
                                 ];
                     $sheet->freezeFirstRow();

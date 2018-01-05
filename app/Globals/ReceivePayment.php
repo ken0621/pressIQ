@@ -57,6 +57,10 @@ class ReceivePayment
         }
         return $balance;
     }
+    public static function check_rp($shop_id, $transaction_refnum)
+    {
+        return Tbl_receive_payment::where('rp_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+    }
     public static function insert_payment($shop_id, $insert_data, $insert_item)
     {
         $insert["rp_shop_id"]           = $shop_id;

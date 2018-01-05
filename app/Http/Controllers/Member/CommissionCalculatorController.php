@@ -101,15 +101,15 @@ class CommissionCalculatorController extends Member
             $data['num']          = isset($value["Num"])                     ? $value["Num"] : '';
             $data['account']      = isset($value["Account"])                 ? $value["Account"] : '';
             $data['rep']          = isset($value["Rep"])                     ? $value["Rep"] : '';
-            $data['amount']       = isset($value["Amount"])                  ? $value["Amount"] : '';
+            $data['amount']       = isset($value["Amount"])                  ? $value["Amount"] : 0;
 
-            $data['tsp']          = isset($value["Total Selling Price"])     ? $value["Total Selling Price"] : '';
-            $data['downpayment']  = isset($value["Downpayment"])             ? $value["Downpayment"] : '';
-            $data['discount']     = isset($value["Discount"])                ? $value["Discount"] : '';
-            $data['mon_amort']    = isset($value["Monthly Amort"])           ? $value["Monthly Amort"] : '';
-            $data['misc_fee']     = isset($value["Miscellaneous Fee"])       ? $value["Miscellaneous Fee"] : '';
-            $data['ndp']          = isset($value["NDP Commission"])          ? $value["NDP Commission"] : '';
-            $data['tcp']          = isset($value["TCP Commission"])          ? $value["TCP Commission"] : '';
+            $data['tsp']          = isset($value["Total Selling Price"])     ? $value["Total Selling Price"] : 0;
+            $data['downpayment']  = isset($value["Downpayment"])             ? str_replace('%', '',$value["Downpayment"] : 0);
+            $data['discount']     = isset($value["Discount"])                ? $value["Discount"] : 0;
+            $data['mon_amort']    = isset($value["Monthly Amort"])           ? $value["Monthly Amort"] : 0;
+            $data['misc_fee']     = isset($value["Miscellaneous Fee"])       ? str_replace('%', '',$value["Miscellaneous Fee"] : 0);
+            $data['ndp']          = isset($value["NDP Commission"])          ? str_replace('%', '',$value["NDP Commission"] : 0);
+            $data['tcp']          = isset($value["TCP Commission"])          ? str_replace('%', '',$value["TCP Commission"] : 0);
 
             $json["status"]     = null;
             $json["message"]    = null;
@@ -121,63 +121,107 @@ class CommissionCalculatorController extends Member
             }
            if($data['type'])
             {
-                $coa = explode('·', $data['account']);
-                $account_id = 0;
-                if(isset($coa[1]))
-                {
-                    $account_id = AccountingTransaction::check_coa_exist($this->user_info->shop_id, str_replace(' ', '',$coa[0]), str_replace(' ', '',$coa[1]));
-                }
-
-                $item_customer = explode(',', Session::get('customer_name'));
-                $customer_id = 0;
-                $item_id = 0;
-                if(isset($item_customer[1]))
-                {
-                    $ins['customer_first_name'] = $item_customer[1];
-                    $ins['customer_company'] = $item_customer[1];
-                    $customer_id = Customer::createCustomer($this->user_info->shop_id, $ins);
-
-                    $ins_item['item_name'] = $item_customer[0];
-                    $ins_item['item_sku'] = $item_customer[0];
-                    $ins_item['item_price'] = $data['tsp'];
-                    $ins_item['item_cost'] = $data['tsp'];
-                    $item_id = Item::create($this->user_info->shop_id, 2, $ins_item);
-                }
-
-                $sales_rep = SalesAgent::get_info($this->user_info->shop_id, $data['rep']);
-
                 /* check */ 
                 if(strtolower($data['type']) == 'invoice')
                 {
                     $check_inv = Invoice::check_inv($this->user_info->shop_id, $data['num']);
+                    $error_message = null;
+
                     if(!$check_inv)
-                    {                        
-                        /* ============================================= */
-                        $comm['customer_id'] = $request->customer_id;
-                        $comm['customer_email'] = $request->customer_email;
-                        $comm['agent_id'] = $request->agent_id;
-                        $comm['date'] = datepicker_input($request->date);
-                        $comm['due_date'] = datepicker_input($request->due_date);
-                        $comm['total_selling_price'] = str_replace(',', '', $request->total_selling_price);
-                        $comm['total_contract_price'] = $request->total_contract_price;
-                        $comm['total_commission'] = $request->total_commission;
-                        $comm['loanable_amount'] = $request->loanable_amount;
-                        $comm['date_created'] = Carbon::now();
+                    {
+                        $coa = explode('·', $data['account']);
+                        $account_id = 0;
+                        if(isset($coa[1]))
+                        {
+                            $account_id = AccountingTransaction::check_coa_exist($this->user_info->shop_id, str_replace(' ', '',$coa[0]), str_replace(' ', '',$coa[1]));
+                        }
+                        else
+                        {
+                            $error_message = "Account Unknown";
+                        }
 
-                        $comm_item['item_id'] = $request->item_id;
-                        $comm_item['downpayment_percent'] = str_replace('%', '', $request->downpayment_percent);
-                        $comm_item['discount'] = str_replace(',', '',$request->discount);
-                        $comm_item['monthly_amort'] = $request->monthly_amort;
-                        $comm_item['misceleneous_fee_percent'] = str_replace('%', '', $request->misceleneous_fee_percent);
-                        $comm_item['ndp_commission'] = str_replace('%', '', $request->ndp_commission);
-                        $comm_item['tcp_commission'] = str_replace('%', '', $request->tcp_commission);
+                        $item_customer = explode(',', Session::get('customer_name'));
+                        $customer_id = 0;
+                        $item_id = 0;
+                        if(isset($item_customer[1]))
+                        {
+                            $ins['customer_first_name'] = $item_customer[1];
+                            $ins['customer_company'] = $item_customer[1];
+                            $customer_id = Customer::createCustomer($this->user_info->shop_id, $ins);
 
-                        $return = CommissionCalculator::create($shop_id, $comm, $comm_item);
+                            $ins_item['item_name'] = $item_customer[0];
+                            $ins_item['item_sku'] = $item_customer[0];
+                            $ins_item['item_price'] = $data['tsp'];
+                            $ins_item['item_cost'] = $data['tsp'];
+                            $item_id = Item::create($this->user_info->shop_id, 2, $ins_item);
+                        }
+                        else
+                        {
+                            $error_message = "Customer not Found";
+                        }
+
+                        $sales_rep = SalesAgent::get_info($this->user_info->shop_id, $data['rep']);
+                        $comm_data = null;
+                        if($sales_rep)
+                        {
+                            $comm_data = CommissionCalculator::get_actual_computation($data['tsp'], $data['downpayment'], $data['discount'], $data['mon_amort'], $data['misc_fee'], $data['ndp'], $data['tcp'], $sales_rep->commission_percent);
+
+                            if($comm_data['amount_tcp'] != $data['amount'])
+                            {
+                                $error_message = "The total contract price is not equal on the Amount";
+                            }
+                        }
+                        else
+                        {
+                            $error_message = "Sales Rep not Found";
+                        }
+                                      
+                        if(!$error_message && $comm_data)
+                        {                            
+                            /* ============================================= */
+                            $comm['customer_id'] = $customer_id;
+                            $comm['customer_email'] = "";
+                            $comm['agent_id'] = $sales_rep;
+                            $comm['refnum'] = $data['num'];
+                            $comm['date'] = datepicker_input($data['date']);
+                            $comm['due_date'] = "";
+                            $comm['total_selling_price'] = str_replace(',', '', $data['tsp']);
+                            $comm['total_contract_price'] = $comm_data['amount_tcp'];
+                            $comm['total_commission'] = $comm_data['amount_tcp'];
+                            $comm['loanable_amount'] = $comm_data['amount_tcp'];
+                            $comm['date_created'] = Carbon::now();
+
+                            $comm_item['item_id'] = $request->item_id;
+                            $comm_item['downpayment_percent'] = str_replace('%', '', $data['downpayment']);
+                            $comm_item['discount'] = str_replace(',', '',$data['discount']);
+                            $comm_item['monthly_amort'] = $data['mon_amort'];
+                            $comm_item['misceleneous_fee_percent'] = str_replace('%', '', $data['misc_fee']);
+                            $comm_item['ndp_commission'] = str_replace('%', '', $comm_data['amount_ndp_comm']);
+                            $comm_item['tcp_commission'] = str_replace('%', '', $comm_data['amount_tcp_comm']);
+
+                            $return = CommissionCalculator::create($this->user_info->shop_id, $comm, $comm_item);
+                            Session::put('invoice_id', $return);
+                            Session::put('customer_id', $customer_id);
+
+                            $json["status"]     = "success";
+                            $json["message"]    = "Success";
+                        }
+                        else
+                        {
+                            $json["status"]     = "error";
+                            $json["message"]    = $error_message;
+                        }
                     }
                     else
                     {
                         Session::put('invoice_id', $check_inv->inv_id);
+                        Session::put('customer_id', $check_inv->inv_id);
                     }
+                }
+                
+                if(strtolower($data['type']) == 'payment')
+                {
+
                 }
 
             }

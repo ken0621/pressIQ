@@ -123,7 +123,7 @@ class CommissionCalculator
 		}
 
 		// die(var_dump($comm_item_id));
-		return "success";
+		return $invoice_id;
 		
 	}
 	public static function create_backup($shop_id, $comm, $comm_item)
@@ -291,6 +291,51 @@ class CommissionCalculator
 	public static function per_commission_invoices($commission_id)
 	{
 		return Tbl_commission::invoice()->where('tbl_commission.commission_id',$commission_id)->groupBy('comm_inv_id')->orderBy('new_inv_id')->get();
+	}
+	public static function get_actual_computation($tsp, $downpayment, $disc, $monthly_amort, $misc, $ndp_comm, $tcp_comm, $comm_percent)
+	{
+		$return['amount_tsp'] = 0;
+		$return['percent_dp'] = 0;
+		$return['amount_dp'] = 0;
+		$return['amount_net_dp'] = 0;
+		$return['amount_discount'] = 0;
+		$return['month_amort'] = 0;
+		$return['amount_monthly_amort'] = 0;
+		$return['percent_misc'] = 0;
+		$return['amount_misc'] = 0;
+		$return['amount_loanable'] = 0;
+		$return['amount_tcp'] = 0;
+		$return['amount_tc'] = 0;
+		$return['percent_ndp_comm'] = 0;
+		$return['percent_tcp_comm'] = 0;
+		$return['amount_ndp_comm'] = 0;
+		$return['amount_tcp_comm'] = 0;
+		$return['amount_monthly_commission'] = 0;
+
+		$return['amount_tsp'] = $tsp; 
+		$return['amount_tcp'] = ($tsp * $misc/100) + $tsp;
+		$return['amount_tc'] = ((($tsp - $disc)/1.12) * ($comm_percent/100)); 
+
+		$return['percent_dp'] = $downpayment;
+		$return['amount_dp'] = ($downpayment/100) * $tsp;
+		$return['amount_discount'] = $disc;
+		$return['amount_net_dp'] = $return['amount_dp'] - $return['amount_discount'];
+		$return['month_amort'] = $comm_item_data->monthly_amort;
+		$return['amount_monthly_amort'] = $return['amount_net_dp'] / $monthly_amort;
+		$return['amount_loanable'] = $tsp - $return['amount_dp'];
+
+		$return['percent_misc'] = $misc;
+		$return['amount_misc'] = ($misc/100) * $return['amount_tsp'];
+
+		$return['percent_ndp_comm'] = $ndp_comm;
+		$return['percent_tcp_comm'] = $tcp_comm;
+
+		$return['amount_ndp_comm'] = ($return['percent_ndp_comm']/100) * $return['amount_tc'];
+		$return['amount_tcp_comm'] = ($return['percent_tcp_comm']/100) * $return['amount_tc'];
+
+		$return['amount_monthly_commission'] = $return['amount_ndp_comm'] / $return['month_amort'];
+
+		return $return;
 	}
 	public static function get_computation($shop_id, $commission_id)
 	{

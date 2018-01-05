@@ -8,15 +8,17 @@
 				<div class="date-container">{{$prs->pr_date_sent}}</div>
 				<div class="details-container"><p>{!!$prs->pr_content!!}</p></div>
 				<div class="border"></div>
-				<div class="title-about-container"><p>About {{$prs->pr_sender_name}}</p></div>
-				<div class="details-container"><p>{!!$prs->pr_boiler_content!!}</p></div>
+				<div class="title-about-container"><p>About {{$prs->pr_co_name}}</p></div>
+				<div class="details-container">{!!$prs->pr_boiler_content!!}</div>
 				@endforeach
 			</div>
 		</div>
 		<div class="col-md-3">
 			<div class="press-others-holder">
 			    <div class="logo-holder">
-			        <img src="/themes/{{ $shop_theme }}/img/logo-release.jpg">
+			    	@foreach ($pr as $prs)
+			        <img src="{{$prs->pr_co_img}}">
+			        @endforeach
 			    </div>
 				<div class="header-container">Other Releases: </div>
 				@foreach($opr as $prs)

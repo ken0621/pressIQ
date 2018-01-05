@@ -142,6 +142,8 @@
                   <div class="title-container">Send Release</div>
                   <div class="title">Publisher:</div>
                   <div class="content">{{session('user_first_name')}} {{session('user_last_name')}}</div>
+                  <div class="title">Company:</div>
+                  <div class="content">{{session('user_company_name')}}</div>
                   <div class="title">Title:</div>
                   <div class="content" id="headline_pr"></div>
                   <div class="title">Send To:</div>
@@ -185,6 +187,11 @@
           </div>
           <div id="preview_boiler_content"></div>
         </div>
+        <div class="" >
+          &nbsp; <a href="https://twitter.com/share" class="twitter-share-button" data-url="" data-size="large">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+          <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fmvm.dev&width=74&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId" width="74" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+        </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>

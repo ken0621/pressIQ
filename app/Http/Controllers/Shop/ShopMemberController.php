@@ -437,7 +437,6 @@ class ShopMemberController extends Shop
             }
             else 
             {
-
                 Session::flash('message', "Release Successfully Sent!");
 
                 if(Session::has('pr_edit'))

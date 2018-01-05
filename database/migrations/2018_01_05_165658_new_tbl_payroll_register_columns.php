@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblPayrollRegisterColumns extends Migration
+class NewTblPayrollRegisterColumns extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class UpdateTblPayrollRegisterColumns extends Migration
     public function up()
     {
         //
-                    Schema::table('tbl_payroll_register_columns', function (Blueprint $table) {
+        Schema::create('tbl_payroll_register_columns', function (Blueprint $table) {
+                   $table->increments('payroll_register_columns_id');
                    $table->tinyInteger('name');
                    $table->tinyInteger('gross_basic_pay');
                    $table->tinyInteger('absent');
@@ -33,7 +34,6 @@ class UpdateTblPayrollRegisterColumns extends Migration
                    $table->tinyInteger('commision');
                    $table->tinyInteger('incentives');
                    $table->tinyInteger('additions');
-                   $table->tinyInteger('13th_month_and_other');
                    $table->tinyInteger('de_minimis_benefit');
                    $table->tinyInteger('others');
                    $table->tinyInteger('gross_pay');
@@ -53,7 +53,10 @@ class UpdateTblPayrollRegisterColumns extends Migration
                    $table->tinyInteger('sss_ec');
                    $table->tinyInteger('hdmf_er');
                    $table->tinyInteger('phic_er');
+                   $table->tinyInteger('month_13_and_other');
+                   $table->tinyInteger('rendered_days');
 
+                   
         });
     }
 

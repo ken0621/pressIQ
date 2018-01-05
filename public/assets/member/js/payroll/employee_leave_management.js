@@ -35,11 +35,20 @@ function employee_leave_management()
 			{
 				result = JSON.parse(result);
 				var html = "";
-				$(result).each(function(index, emp)
-				{			
-					 html += tbl_tag(emp);
-				});
-				$(".tbl-tag").html(html);
+				
+				if(result.length > 0)
+				{
+					$(result).each(function(index, emp)
+					{			
+						 html += tbl_tag(emp);
+					});
+					$(".tbl-tag").html(html);
+				}
+				else
+				{
+				 	html += tbl_tag_2();
+					$(".tbl-tag").html(html);
+				}
 			},
 			error 	: 	function(err)
 			{
@@ -63,11 +72,20 @@ function employee_leave_management()
 				{
 					result = JSON.parse(result);
 					var html = "";
-					$(result).each(function(index, emp)
-					{			
-						 html += tbl_tag(emp);
-					});
-					$(".tbl-tag").html(html);
+					
+					if(result.length > 0)
+					{
+						$(result).each(function(index, emp)
+						{			
+							 html += tbl_tag(emp);
+						});
+						$(".tbl-tag").html(html);
+					}
+					else
+					{
+					 	html += tbl_tag_2();
+						$(".tbl-tag").html(html);
+					}
 				},
 				error 	: 	function(err)
 				{
@@ -92,11 +110,21 @@ function employee_leave_management()
 				{
 					result = JSON.parse(result);
 					var html = "";
-					$(result).each(function(index, emp)
-					{			
-						 html += tbl_tag(emp);
-					});
-					$(".tbl-tag").html(html);
+					
+					if(result.length > 0)
+					{
+						$(result).each(function(index, emp)
+						{			
+							 html += tbl_tag(emp);
+						});
+						$(".tbl-tag").html(html);
+					}
+					else
+					{
+					 	html += tbl_tag_2();
+						$(".tbl-tag").html(html);
+					}
+
 				},
 				error 	: 	function(err)
 				{
@@ -121,11 +149,22 @@ function employee_leave_management()
 				{
 					result = JSON.parse(result);
 					var html = "";
-					$(result).each(function(index, emp)
-					{			
-						 html += tbl_tag(emp);
-					});
-					$(".tbl-tag").html(html);
+
+					if(result.length > 0)
+					{
+						$(result).each(function(index, emp)
+						{			
+							 html += tbl_tag(emp);
+						});
+						$(".tbl-tag").html(html);
+					}
+					else
+					{
+					 	html += tbl_tag_2();
+						$(".tbl-tag").html(html);
+					}
+		
+			
 				},
 				error 	: 	function(err)
 				{
@@ -158,6 +197,15 @@ function employee_leave_management()
 		html += '</tr>';
 
 		return html;
+	}
+
+	function tbl_tag_2()
+	{
+			var html = '<tr class="text-center">';
+			html += '<td colspan="7"><h2 style="margin: 50px; text-align: center;">No Data</h2></td>';
+			html += '</tr>';
+
+			return html;
 	}
 
 	function misc(str){

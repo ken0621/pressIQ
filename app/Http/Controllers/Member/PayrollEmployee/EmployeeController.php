@@ -196,7 +196,7 @@ class EmployeeController extends PayrollMember
 		$status = Request::input('status');
 		$data['_overtime_request'] = Tbl_payroll_request_overtime::where('payroll_employee_id', $this->employee_info->payroll_employee_id)->where('payroll_request_overtime_status', $status)->get();
 		
-		return view('member.payroll2.employee_dashboard.employee_overtime_management_table',$data);
+	return view('member.payroll2.employee_dashboard.employee_overtime_management_table',$data);
 	}
 
 	public function employee_overtime_application()

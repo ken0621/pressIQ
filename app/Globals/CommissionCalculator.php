@@ -400,7 +400,7 @@ class CommissionCalculator
 	}
 	public static function update_commission($invoice_id, $rcvpyment_id)
 	{
-		$check = Tbl_commission_invoice::where('invoice_id',$invoice_id)->first();
+		$check = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
 		if($check)
 		{
 			/*UPDATE COMMISSION HERE*/

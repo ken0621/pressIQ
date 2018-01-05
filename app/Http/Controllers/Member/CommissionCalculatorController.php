@@ -10,6 +10,7 @@ use App\Globals\Item;
 use App\Globals\Invoice;
 use App\Globals\SalesAgent;
 use App\Globals\CommissionCalculator;
+use App\Globals\ReceivePayment;
 use App\Globals\AccountingTransaction;
 use Session;
 use Carbon\Carbon;
@@ -104,12 +105,12 @@ class CommissionCalculatorController extends Member
             $data['amount']       = isset($value["Amount"])                  ? $value["Amount"] : 0;
 
             $data['tsp']          = isset($value["Total Selling Price"])     ? $value["Total Selling Price"] : 0;
-            $data['downpayment']  = isset($value["Downpayment"])             ? str_replace('%', '',$value["Downpayment"] : 0);
+            $data['downpayment']  = isset($value["Downpayment"])             ? str_replace('%', '',$value["Downpayment"])  : 0;
             $data['discount']     = isset($value["Discount"])                ? $value["Discount"] : 0;
             $data['mon_amort']    = isset($value["Monthly Amort"])           ? $value["Monthly Amort"] : 0;
-            $data['misc_fee']     = isset($value["Miscellaneous Fee"])       ? str_replace('%', '',$value["Miscellaneous Fee"] : 0);
-            $data['ndp']          = isset($value["NDP Commission"])          ? str_replace('%', '',$value["NDP Commission"] : 0);
-            $data['tcp']          = isset($value["TCP Commission"])          ? str_replace('%', '',$value["TCP Commission"] : 0);
+            $data['misc_fee']     = isset($value["Miscellaneous Fee"])       ? str_replace('%', '',$value["Miscellaneous Fee"]) : 0;
+            $data['ndp']          = isset($value["NDP Commission"])          ? str_replace('%', '',$value["NDP Commission"]) : 0;
+            $data['tcp']          = isset($value["TCP Commission"])          ? str_replace('%', '',$value["TCP Commission"]) : 0;
 
             $json["status"]     = null;
             $json["message"]    = null;
@@ -153,6 +154,7 @@ class CommissionCalculatorController extends Member
                             $ins_item['item_sku'] = $item_customer[0];
                             $ins_item['item_price'] = $data['tsp'];
                             $ins_item['item_cost'] = $data['tsp'];
+                            $ins_item['item_quantity'] = 0;
                             $item_id = Item::create($this->user_info->shop_id, 2, $ins_item);
                         }
                         else
@@ -215,19 +217,52 @@ class CommissionCalculatorController extends Member
                     else
                     {
                         Session::put('invoice_id', $check_inv->inv_id);
-                        Session::put('customer_id', $check_inv->inv_id);
+                        Session::put('customer_id', $check_inv->inv_customer_id);
                     }
                 }
                 
                 if(strtolower($data['type']) == 'payment')
                 {
+                    $customer_id = Session::get("customer_id");
+                    $invoice_id = Session::get('invoice_id');
+                    if($customer_id && $invoice_id)
+                    {
+                        $insert_data['customer_id'] = $customer_id;
+                        $insert_data['date'] = $data['date'];
+                        $insert_data['total_payment_amount'] = str_replace("-", '', $data['amount']);
+                        $insert_data['memo'] = "Payment Imported";
 
+                        $insert_item[0]['ref_name'] = "invoice";
+                        $insert_item[0]['ref_id'] = $invoice_id;
+                        $insert_item[0]['payment_amount'] = str_replace("-", '', $data['amount']);
+
+                        $return = ReceivePayment::insert_payment($this->user_info->shop_id, $insert_data, $insert_item);
+
+                        $json["status"]     = "success";
+                        $json["message"]    = "Success";
+                    }
+                    else
+                    {
+                        if(!$customer_id)
+                        {
+                            $error_message = "Customer not found";
+                        }
+                        if(!$invoice_id)
+                        {
+                            $error_message = "Invoice not found";
+                        }
+
+                        $json["status"]     = "error";
+                        $json["message"]    = $error_message;                        
+                    }
                 }
 
             }
             if(strpos($data['name'],'Total')  !== false)
             {
                 Session::forget('customer_name');
+                Session::forget("customer_id");
+                Session::forget("invoice_id");
                 $json["status"]     = "success";
                 $json["message"]    = "Success Forget";
             }

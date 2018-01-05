@@ -70,7 +70,7 @@ class ReceivePayment
 
         $rcvpayment_id  = Tbl_receive_payment::insertGetId($insert);
 
-        foreach($insert_item as $key=> $value)
+        foreach($insert_item as $key => $value)
         {
             if($value)
             {
@@ -95,16 +95,6 @@ class ReceivePayment
                 }
             }
         }
-        /* Transaction Journal */
-        $entry["reference_module"]      = "receive-payment";
-        $entry["reference_id"]          = $rcvpayment_id;
-        $entry["name_id"]               = $insert["rp_customer_id"];
-        $entry["total"]                 = $insert["rp_total_amount"];
-        $entry_data[0]['account_id']    = $insert["rp_ar_account"];
-        $entry_data[0]['vatable']       = 0;
-        $entry_data[0]['discount']      = 0;
-        $entry_data[0]['entry_amount']  = $insert["rp_total_amount"];
-        $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
 
         return $rcvpayment_id;
     }

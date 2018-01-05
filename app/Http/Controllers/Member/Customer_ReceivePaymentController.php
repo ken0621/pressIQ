@@ -9,6 +9,7 @@ use App\Globals\Invoice;
 use App\Globals\CreditMemo;
 use App\Globals\ReceivePayment;
 use App\Globals\CommissionCalculator;
+use App\Globals\Purchasing_inventory_system;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
@@ -135,6 +136,8 @@ class Customer_ReceivePaymentController extends Member
                 }
             }
         }
+        $up['rp_total_amount'] = Purchasing_inventory_system::check() ? round($insert["rp_total_amount"] + $cm_amt,2) : $insert["rp_total_amount"] + $cm_amt;
+        Tbl_receive_payment::where("rp_id",$rcvpayment_id)->update($up);
 
         $cm_id = Request::input('rp_cm_id');
         $cm_amount = Request::input('rp_cm_amount');

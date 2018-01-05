@@ -43,6 +43,7 @@ class CommissionCalculator
         $invoice_info['invoice_date']       = $comm['date'];
         $invoice_info['invoice_due']        = $comm['due_date'];
         $invoice_info['new_inv_id']			= $commission_id.'001';
+        $invoice_info['transaction_refnum']	= isset($comm['refnum']) ? $comm['refnum'] : '';
         $invoice_info['billing_address']	= Item::get_item_details($comm_item['item_id'])->item_name;
 		$invoice_info['invoice_terms_id']	= 0;
 

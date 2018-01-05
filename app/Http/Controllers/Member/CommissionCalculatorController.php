@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 
 use App\Globals\Customer;
 use App\Globals\Item;
+use App\Globals\Invoice;
 use App\Globals\SalesAgent;
 use App\Globals\CommissionCalculator;
+use App\Globals\AccountingTransaction;
 use Session;
 use Carbon\Carbon;
 use Excel;
@@ -117,10 +119,66 @@ class CommissionCalculatorController extends Member
                 $json["status"]     = "success";
                 $json["message"]    = "Success put";
             }
-            if($data['type'])
+           if($data['type'])
             {
-                /* check */
-                
+                $coa = explode('·', $data['account']);
+                $account_id = 0;
+                if(isset($coa[1]))
+                {
+                    $account_id = AccountingTransaction::check_coa_exist($this->user_info->shop_id, str_replace(' ', '',$coa[0]), str_replace(' ', '',$coa[1]));
+                }
+
+                $item_customer = explode(',', Session::get('customer_name'));
+                $customer_id = 0;
+                $item_id = 0;
+                if(isset($item_customer[1]))
+                {
+                    $ins['customer_first_name'] = $item_customer[1];
+                    $ins['customer_company'] = $item_customer[1];
+                    $customer_id = Customer::createCustomer($this->user_info->shop_id, $ins);
+
+                    $ins_item['item_name'] = $item_customer[0];
+                    $ins_item['item_sku'] = $item_customer[0];
+                    $ins_item['item_price'] = $data['tsp'];
+                    $ins_item['item_cost'] = $data['tsp'];
+                    $item_id = Item::create($this->user_info->shop_id, 2, $ins_item);
+                }
+
+                $sales_rep = SalesAgent::get_info($this->user_info->shop_id, $data['rep']);
+
+                /* check */ 
+                if(strtolower($data['type']) == 'invoice')
+                {
+                    $check_inv = Invoice::check_inv($this->user_info->shop_id, $data['num']);
+                    if(!$check_inv)
+                    {                        
+                        /* ============================================= */
+                        $comm['customer_id'] = $request->customer_id;
+                        $comm['customer_email'] = $request->customer_email;
+                        $comm['agent_id'] = $request->agent_id;
+                        $comm['date'] = datepicker_input($request->date);
+                        $comm['due_date'] = datepicker_input($request->due_date);
+                        $comm['total_selling_price'] = str_replace(',', '', $request->total_selling_price);
+                        $comm['total_contract_price'] = $request->total_contract_price;
+                        $comm['total_commission'] = $request->total_commission;
+                        $comm['loanable_amount'] = $request->loanable_amount;
+                        $comm['date_created'] = Carbon::now();
+
+                        $comm_item['item_id'] = $request->item_id;
+                        $comm_item['downpayment_percent'] = str_replace('%', '', $request->downpayment_percent);
+                        $comm_item['discount'] = str_replace(',', '',$request->discount);
+                        $comm_item['monthly_amort'] = $request->monthly_amort;
+                        $comm_item['misceleneous_fee_percent'] = str_replace('%', '', $request->misceleneous_fee_percent);
+                        $comm_item['ndp_commission'] = str_replace('%', '', $request->ndp_commission);
+                        $comm_item['tcp_commission'] = str_replace('%', '', $request->tcp_commission);
+
+                        $return = CommissionCalculator::create($shop_id, $comm, $comm_item);
+                    }
+                    else
+                    {
+                        Session::put('invoice_id', $check_inv->inv_id);
+                    }
+                }
 
             }
             if(strpos($data['name'],'Total')  !== false)

@@ -28,7 +28,8 @@ class PayrollAdminDashboard extends Member
 
 	public function shop_id($return = 'shop_id')
 	{
-	     switch ($return) {
+	     switch ($return) 
+	     {
 	          case 'shop_id':
 	               return $shop_id = $this->user_info->user_shop;
 	               break;
@@ -45,9 +46,9 @@ class PayrollAdminDashboard extends Member
 
 	public function employee_approver()
 	{
-		$data['overtime_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','overtime')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
-		$data['rfp_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','rfp')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
-		$data['leave_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','leave')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
+		$data['overtime_approver'] 	= Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','overtime')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
+		$data['rfp_approver'] 		= Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','rfp')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
+		$data['leave_approver'] 	= Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','leave')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
 		
 		return view('member.payroll2.employees_approver', $data);
 	}
@@ -107,6 +108,7 @@ class PayrollAdminDashboard extends Member
 		}
 
 		Tbl_payroll_approver_employee::insert($insert);
+
 		$response["response_status"] 	= "success";
 		$response['call_function'] 		= 'success_saving_import';
 
@@ -135,8 +137,6 @@ class PayrollAdminDashboard extends Member
 
 	public function modal_delete_approver($approver_id)
 	{
-		
-
 		if (Request::isMethod('post')) 
 		{
 			$response['response_status']  	= 'success';
@@ -158,7 +158,6 @@ class PayrollAdminDashboard extends Member
 
 			return view('member.modal.confirm', $data);
 		}
-		// 
 	}
 
 	public function create_approver_tag_employee()
@@ -251,9 +250,10 @@ class PayrollAdminDashboard extends Member
 				$_approver_group_by_level[$key] = array();
 				foreach($approver_group as $key2 => $approver_by_level)
 				{
-					array_push($_approver_group_by_level[$key], $approver_by_level['payroll_approver_employee_id']) ;
+					array_push($_approver_group_by_level[$key], $approver_by_level['payroll_approver_employee_id']);
 				}
 			}
+
 			$data['_approver_group_by_level'] = $_approver_group_by_level;
 		}
 		

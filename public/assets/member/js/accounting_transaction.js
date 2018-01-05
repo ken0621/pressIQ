@@ -15,6 +15,10 @@ $('.new.droplist-terms').globalDropList(
     	var days 			= $(this).find("option:selected").attr("days");
     	var new_due_date 	= AddDaysToDate2(start_date, days, "/");
     	$(".datepicker[name='transaction_duedate']").val(new_due_date);
+        if(!days)
+        {
+            $(".datepicker[name='transaction_duedate']").val(start_date);
+        }
     }
 });
 function AddDaysToDate2(sDate, iAddDays, sSeperator) 
@@ -28,5 +32,5 @@ function AddDaysToDate2(sDate, iAddDays, sSeperator)
 function LPad2(sValue, iPadBy) 
 {
     sValue = sValue.toString();
-    return sValue.length < iPadBy ? LPad("0" + sValue, iPadBy) : sValue;
+    return sValue.length < iPadBy ? LPad2("0" + sValue, iPadBy) : sValue;
 }

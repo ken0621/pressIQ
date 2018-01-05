@@ -20,12 +20,15 @@
                 </div>
                 @endif
             @endif
+            <div class="col-sm-5"></div>
             <!-- <div class="col-sm-4">
                 <button class="btn btn-custom-white btn-sm" data-placement="bottom" data-html="true" id="example" data-content="<form><br><input type='text' class='form-control input-sm' ><br><a style='cursor:pointer' class='pull-left' onclick='$(&quot;#example&quot;).popover(&quot;hide&quot;);'>Cancel</a><a style='cursor:pointer' class='pull-right'>Find</a><br></form>" data-toggle="popover">Find by invoice no.</button>
             </div> -->
-        </div>
-        <div class="pull-right col-sm-6 text-right">
-            <h4><a class="popup popup-link-credit" size="md" link="/member/customer/receive_payment/apply_credit"><i class="fa fa-address-card"></i> Apply Available Credits</a></h4>
+            @if(!isset($_nocredits))
+            <div class="col-sm-4 text-right open-transaction" style="display: none;">
+                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/receive_payment/load-credit"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Available Credits</a></h4>
+            </div>
+            @endif
         </div>
     </div>
                     
@@ -92,7 +95,7 @@
         <div class="col-sm-6">
             <div class="row">
                 <div class="col-md-7 text-right digima-table-label">
-                    Amount to Apply
+                    Amount Due
                 </div>
                 <div class="col-md-5 text-right digima-table-value total">
                     <input type="hidden" name="rp_total_amount" class="amount-to-apply" />
@@ -108,8 +111,32 @@
                     <span class="amount-credit">PHP 0.00</span>
                 </div>
             </div> 
+            <div class="row">
+                <div class="col-md-7 text-right digima-table-label">
+                    Credits Applied
+                </div>
+                <div class="col-md-5 text-right digima-table-value total">
+                    <input type="hidden" name="credit_total_amount" class="credit-amount-to-apply"/>
+                    <span class="credit-amount">PHP 0.00</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right digima-table-label"></div>
+                <div class="col-md-8 text-right load-applied-credits">
+                   @include("member.receive_payment.load_credits",['_applied_credit' => isset($_rcvpayment_credit) ? $_rcvpayment_credit : null ])
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-7 text-right digima-table-label">
+                    <h3> Applied </h3>
+                </div>
+                <div class="col-md-5 text-right digima-table-value total">
+                    <input type="hidden" name="applied_total_amount" class="applied-total-amount"/>
+                    <h3> <span class="applied-amount">PHP 0.00</span></h3>
+                </div>
+            </div>
         </div>
-    </div>
-    
+    </div>    
     <!-- END CONTENT -->
 </div>

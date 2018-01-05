@@ -1,10 +1,14 @@
 <?php
 namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Crypt;
 use Redirect;
-use Request;
 use View;
+use Input;
+use File;
+use Image;
 use Session;
 use Validator;
 use Carbon\Carbon;
@@ -17,7 +21,7 @@ class ShopRegisterController extends Shop
         $data["page"] = "register";
         return view("register", $data);
     }
-    public function press_signup()
+    public function press_signup(Request $request)
     {
         if(Session::exists('user_email'))
         {
@@ -36,6 +40,8 @@ class ShopRegisterController extends Shop
                 $value["password"] = request('user_password');
                 $value["password_confirmation"] = request("user_password_confirmation");
                 $rules["password"] = ['required','min:5','confirmed'];
+                $value["user_company_name"] = request("user_company_name");
+                $rules["user_company_name"] = ['required'];
                 $validator = Validator::make($value, $rules);
 
                 if ($validator->fails()) 
@@ -44,12 +50,24 @@ class ShopRegisterController extends Shop
                 }
                 else
                 {
+                    $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
+                    $path ="";
+                    if($request->hasFile('user_company_image'))
+                    {
+                        $path = Storage::putFile('user_company_image', $request->file('user_company_image'));
+                    }
+
                     $insert_user["user_level"]="2";
                     $insert_user["user_first_name"]=$value["user_first_name"];
                     $insert_user["user_last_name"]=$value["user_last_name"];
                     $insert_user["user_email"]=$value["user_email"];
                     $insert_user["user_password"]=Crypt::encrypt(request('user_password'));
                     $insert_user["user_date_created"]=Carbon::now();
+                    $insert_user["user_company_name"]=$value["user_company_name"];
+                    if($path!="")
+                    {
+                        $insert_user["user_company_image"]=$path_prefix.$path;
+                    }
                     $user_id = tbl_pressiq_user::insertGetId($insert_user);  
                     return Redirect::to("/thank_you");   
                 }       

@@ -27,16 +27,16 @@
             </div>
             @else
             <div class="form-group">
-                <!-- <div class="col-md-12 col-xs-12">
-                    <a class="btn btn-custom-blue form-control popup" size="lg" link="/member/customer/credit_memo/update_action?type=retain&cm_id={{$cm_id or ''}}">Retains as Available Credit</a>
-                </div> -->
+                <div class="col-md-12 col-xs-12">
+                    <a class="btn btn-custom-blue form-control" href="/member/customer/credit_memo/update_action?type=retain_credit&cm_id={{$cm_id or ''}}">Retains as Available Credit</a>
+                </div>
             </div>
             <br>
             <br>
             <div class="form-group">
-                <!-- <div class="col-md-12 col-xs-12">
-                    <a class="btn btn-success form-control popup" size="lg" link="/member/customer/credit_memo/update_action?type=refund&cm_id={{$cm_id or ''}}">Give a Refund</a>
-                </div> -->
+                <div class="col-md-12 col-xs-12">
+                    <a class="btn btn-success form-control" href="/member/customer/credit_memo/update_action?type=refund&cm_id={{$cm_id or ''}}">Give a Refund</a>
+                </div>
             </div>
             <br>
             <br>

@@ -26,6 +26,12 @@ class Tbl_warehouse_inventory_record_log extends Model
     {
         return $query->leftjoin('tbl_customer','tbl_mlm_slot.slot_owner','=','tbl_customer.customer_id');
     }
+    public function scopeCustomerinfo_data($query)
+    {
+        return $query->leftjoin('tbl_transaction_list','record_consume_ref_id','=','transaction_list_id')
+                     ->leftjoin('tbl_transaction','tbl_transaction_list.transaction_id','=','tbl_transaction.transaction_id')
+                     ->leftjoin('tbl_customer','tbl_customer.customer_id','=','tbl_transaction.transaction_reference_id');
+    }
     public function scopeReserved_customer($query)
     {
         return $query->leftjoin('tbl_customer','record_consume_ref_id','=','customer_id');
@@ -47,9 +53,8 @@ class Tbl_warehouse_inventory_record_log extends Model
     }
     public function scopeReceivingReport($query)
     {
-        $query->join('tbl_warehouse_receiving_report','record_source_ref_id','=','rr_id')
-        ->join('tbl_item','tbl_warehouse_inventory_record_log.record_item_id','=','tbl_item.item_id')
-        ->join('tbl_merchant_commission_report_setting','tbl_warehouse_inventory_record_log.record_warehouse_id','=','tbl_merchant_commission_report_setting.merchant_commission_warehouse_id')
-        ->where('record_source_ref_name','rr');
+        $query->leftjoin('tbl_warehouse_receiving_report','record_source_ref_id','=','rr_id')
+        ->leftjoin('tbl_item','tbl_warehouse_inventory_record_log.record_item_id','=','tbl_item.item_id')
+        ->leftjoin('tbl_merchant_commission_report_setting','tbl_warehouse_inventory_record_log.record_warehouse_id','=','tbl_merchant_commission_report_setting.merchant_commission_warehouse_id');
     }
 }

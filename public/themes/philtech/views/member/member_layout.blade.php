@@ -68,8 +68,17 @@
 						<li class="{{ Request::segment(2) == "lead-list" ? "active" : "" }}">
 							<a href="/members/lead-list"><div class="nav-holder"><div class="icon brown-icon-heart"></div> <span>Lead List</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "redeemable" ? "active" : "" }}">
-							<a href="/members/redeemable"><div class="nav-holder"><div class="icon fa fa-gift"></div> <span>Redeemable</span></div></a>
+						
+						<li class="{{ Request::segment(2) == "redeemable" || Request::segment(2) == "redeemable" || Request::segment(2) == "redeem-history" ? "active" : "" }}">
+							<a href="javascript:"><div class="nav-holder"><div class="icon fa fa-gift"></div> <span>Redeeamble</span></div></a>
+							<ul>
+								<li>
+									<a href="/members/redeemable"><div class="nav-holder"><span>Redeemable Items</span></div></a>
+								</li>
+								<li>
+									<a href="/members/redeem-history"><div class="nav-holder"> &nbsp;&nbsp;<span>Redeem History</span></div></a>
+								</li>
+							</ul>
 						</li>
 						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" || Request::segment(2) == "wallet-transfer" || Request::segment(2) == "wallet-refill" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>

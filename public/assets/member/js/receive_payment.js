@@ -2,6 +2,8 @@ var receive_payment = new receive_payment();
 var maximum_payment = 0;
 var is_amount_receive_modified = false;
 
+var amount_due = 0;
+var amount_credit = 0;
 function receive_payment()
 {
 	init();
@@ -19,6 +21,10 @@ function receive_payment()
 		event_button_action_click();
 
 		action_initialize_load();
+		action_remove_apply_credit();
+		event_compute_apply_credit();
+		action_update_apply_amount();
+		action_update_credit_amount();
 	}
 
 	this.action_initialize_load = function()
@@ -46,12 +52,18 @@ function receive_payment()
 		    	var customer_id = $(this).val();
 		    	$('.salesrep_id').val($(this).find('option:selected').attr('salesrep_id'));
 		    	$('.salesrep').val($(this).find('option:selected').attr('salesrep'));
+		    	// $('.popup-link-credit').attr('link','/member/customer/receive_payment/apply_credit?customer_id='+customer_id);
 		    	var check = $(".for-tablet-only").html();
 		    	if(check == null || check == "")
 		    	{
 			    	$(".tbody-item").load("/member/customer/load_rp/"+ (customer_id != '' ? customer_id : 0), function()
 			    	{
 			    		action_compute_maximum_amount();
+	    				action_load_open_transaction(customer_id);
+			    		$(".load-applied-credits").load("/member/customer/receive_payment/load_apply_credit", function()
+						{
+							event_compute_apply_credit();
+						});
 			    	})		    		
 		    	}
 		    	else
@@ -80,7 +92,27 @@ function receive_payment()
 		    placeholder : 'Account'
 		});
 	}
-
+	function action_load_open_transaction($customer_id)
+	{
+		if($customer_id)
+		{
+			$.ajax({
+				url : '/member/transaction/receive_payment/count-transaction',
+				type : 'get',
+				data : {customer_id : $customer_id},
+				success : function(data)
+				{
+					$(".open-transaction").slideDown();
+					$(".popup-link-open-transaction").attr('link','/member/customer/receive_payment/apply_credit?customer_id='+$customer_id);
+					$(".count-open-transaction").html(data);
+				}
+			});
+		}
+		else
+		{
+			$(".open-transaction").slideUp();
+		}
+	}
 	/* CHECK BOX FOR LINE ITEM */
 	function event_line_check_change()
 	{
@@ -145,13 +177,16 @@ function receive_payment()
 	function action_update_apply_amount($amount)
 	{
 		$(".amount-to-apply").val($amount);
-		$(".amount-apply").html("PHP "+formatMoney_2($amount))
+		amount_due = formatFloat($amount);
+		$(".amount-apply").html("PHP "+formatMoney($amount))
+
+		compute_total();
 	}
 
 	function action_update_credit_amount($amount)
 	{
 		$(".amount-to-credit").val($amount);
-		$(".amount-credit").html("PHP "+formatMoney_2($amount))
+		$(".amount-credit").html("PHP "+formatMoney($amount))
 	}
 
 	function event_payment_amount_change()
@@ -199,7 +234,12 @@ function receive_payment()
 
 	function formatFloat($this)
 	{
-		return Number($this.toString().replace(/[^0-9\.]+/g,""));
+		var return_number = $this;
+		if($this)
+		{
+			return_number = Number($this.toString().replace(",",""));
+		} 
+		return return_number;
 	}
 
 	function formatMoney_2($this)
@@ -216,7 +256,7 @@ function receive_payment()
 	function formatMoney($this)
 	{
 		var n = formatFloat($this), 
-	    c = isNaN(c = Math.abs(c)) ? 5 : c, 
+	    c = isNaN(c = Math.abs(c)) ? 2 : c, 
 	    d = d == undefined ? "." : d, 
 	    t = t == undefined ? "," : t, 
 	    s = n < 0 ? "-" : "", 
@@ -232,7 +272,53 @@ function receive_payment()
 			$(".button-action").val($(this).attr("data-action"));
 		})
 	}
+	function event_compute_apply_credit()
+	{
+		var total_amount_to_credit = 0;
+		$('.compute-applied-credit').each(function(a, b)
+		{
+			total_amount_to_credit += parseFloat($(this).val());
+		});
+		$('.credit-amount-to-apply').val(total_amount_to_credit);
+		$('.credit-amount').html('PHP ' + formatMoney_2(total_amount_to_credit));
 
+		amount_credit = total_amount_to_credit;
+		compute_total();
+	}
+	function compute_total()
+	{		
+		$(".applied-total-amount").val(parseFloat(amount_due) - parseFloat(amount_credit));
+		$('.applied-amount').html('PHP ' + formatMoney_2(parseFloat(amount_due) - parseFloat(amount_credit)));
+		console.log(parseFloat(amount_due) - parseFloat(amount_credit));
+	}
+	this.event_compute_apply_credit = function()
+	{
+		event_compute_apply_credit();
+	}
+	this.compute_total = function()
+	{
+		compute_total();
+	}
+	function action_remove_apply_credit()
+	{
+		$('body').on("click",'.remove-credit', function()
+		{
+			$cm_id = $(this).attr("credit-id");
+			$.ajax({
+				url : '/member/customer/receive_payment/remove_apply_credit',
+				type : 'get',
+				data : {cm_id : $cm_id},
+				success : function()
+				{
+					$(".load-applied-credits").load("/member/customer/receive_payment/load_apply_credit", function()
+					{
+						console.log("success");
+						event_compute_apply_credit();
+					});
+				}
+			});
+		});
+	}
 }
 
 function submit_done(data)
@@ -267,8 +353,20 @@ function submit_done(data)
     		$(".rcvpymnt-container").load(data.url+" .rcvpymnt-container .rcvpymnt-load-data", function()
 			{
 				receive_payment.action_initialize_load();
+				receive_payment.event_compute_apply_credit();
 				toastr.success(data.message);
 			});
     	}
 	}
 }
+function success_apply_credit(data)
+{
+    if(data.status == "success")
+    {
+    	$(".load-applied-credits").load("/member/customer/receive_payment/load_apply_credit", function()
+		{
+			receive_payment.event_compute_apply_credit();
+		});
+		data.element.modal("toggle");
+    }
+} 

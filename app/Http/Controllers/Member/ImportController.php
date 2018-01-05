@@ -1248,6 +1248,7 @@ class ImportController extends Member
 			$open_balance		= isset($value["Opening Balance"])		? $value["Opening Balance"] : '' ;
 			$balance_date		= isset($value["Balance As of"])		? $value["Balance As of"] : '' ;
 
+			//die(var_dump($value));
 			/* Validation */
 			$duplicate_account	= Tbl_chart_of_account::where("account_shop_id", $this->getShopId())->where("account_name", $account_name)->first();
 			$duplicate_acc_no	= Tbl_chart_of_account::where("account_shop_id", $this->getShopId())->where("account_number", $account_number)->first();

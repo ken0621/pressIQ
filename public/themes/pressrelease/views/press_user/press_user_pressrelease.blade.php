@@ -177,7 +177,6 @@
         </div>
            
         <div class="modal-body">
-
           <div class="row-no-padding clearfix">
             <div class="col-md-9">
               <div id="preview_headline"></div>

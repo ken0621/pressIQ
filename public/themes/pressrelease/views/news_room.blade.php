@@ -26,7 +26,7 @@
                     <p>{!!$prs->pr_content!!}</p>
                 </div>
                 <div class="button-container">
-                    <button onclick="window.location.href='/newsroom/view/{{$prs->pr_id}}'">Read More</button>
+                    <button onclick="window.location.href='/newsroom/view/{{$prs->pr_id}}'">Read More &raquo;</button>
                 </div>
                 @endforeach
                 <div class="button-container" >

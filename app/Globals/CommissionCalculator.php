@@ -412,6 +412,7 @@ class CommissionCalculator
 		{
 			$test = floor($get_payment_data->rp_total_amount / $check->payment_amount);
 
+			/*KULANG PA TO*/
 			for ($i = 0; $i < $test; $i++) 
 			{ 
 				$check = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();

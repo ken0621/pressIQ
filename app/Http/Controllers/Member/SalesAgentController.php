@@ -115,7 +115,7 @@ class SalesAgentController extends Member
 		})->download('csv');
 	}
 
-	public function postAgentReadFile(Request $request, $position_id)
+	public function postAgentReadFile(Request $request)
 	{
 		Session::forget("import_coa_error");
 
@@ -126,6 +126,7 @@ class SalesAgentController extends Member
 		$data_length 	= $request->data_length;
 		$error_data 	= $request->error_data;
 
+		//die(var_dump($ctr));
 		if($ctr != $data_length)
 		{
 			$agent_code		= isset($value["Agent Code"])			? $value["Agent Code"] : '' ;
@@ -136,38 +137,53 @@ class SalesAgentController extends Member
 			$position		= isset($value["Position"])				? $value["Position"] : '' ;
 			$com_percent	= isset($value["Commission Percent"])	? $value["Commission Percent"] : '' ;
 
-			
-  			$insertposition['position_shop_id']   = $this->user_info->shop_id;
-            $insertposition['position_code'] 	  = $position_code;
-            $insertposition['position_name'] 	  = $position;
-            $insertposition['archived'] 		  = 0;
-            $insertposition['commission_percent'] = $com_percent;
-            $insertposition['position_created']   = Carbon::now();
 
-            die(var_dump($insertposition));
-			
-			$position_id = Tbl_position::insertGetId($insertposition);
-			//die(var_dump($value));
-			/*$insertagent['shop_id'] 		= $this->user_info->shop_id;
-            $insertagent['agent_code'] 		= $agent_code;
-            $insertagent['first_name'] 		= $first_name;
-            $insertagent['middle_name'] 	= $middle_name;
-            $insertagent['last_name'] 		= $last_name;
-            $insertagent['position_id'] 	= $position_id;
-            $insertagent['date_created'] 	= Carbon::now();			
+			$position_id = null;
+			if(!isset($position))
+			{
+				$position_id = Tbl_position::where("position_shop_id", $this->user_info->shop_id)->where("position_id", $position_code)->first();
+			}
 
-            $agent_id = Tbl_employee::insertGetId($insertagent);*/
-           
-            //$position_id 	= Tbl_position::where('position_id', $position_id);
+			$json = null;
+			if(!$duplicate_position)
+			{
+				$insert_position['position_shop_id']   = $this->user_info->shop_id;
+            	$insert_position['position_code'] 	   = $position_code;
+            	$insert_position['position_name'] 	   = $position;
+            	$insert_position['archived'] 		   = 0;
+            	$insert_position['commission_percent'] = $com_percent;
+            	$insert_position['position_created']   = Carbon::now();
 
+            	$insert_agent['shop_id']   			= $this->user_info->shop_id;
+	            $insert_agent['agent_code'] 		= $agent_code;
+	        	$insert_agent['first_name'] 		= $first_name;
+	        	$insert_agent['middle_name'] 		= $middle_name;
+	        	$insert_agent['last_name'] 			= $last_name;
+	        	$insert_agent['date_created'] 		= Carbon::now();
 
-			
-			
+	        	$rules["position_name"] = 'required';
+
+				$validator = Validator::make($insert_position, $rules);
+				if ($validator->fails())
+				{
+					$json["status"] 	= "error";
+					$json["message"]  	= $validator->errors()->first();
+				}
+				else
+				{
+					$position_id = Tbl_position::insertGetId($insert_position);  
+		            $insert_agent['position_id'] = $position_id;
+		            Tbl_employee::insert($insert_agent);
+
+		            $json["status"]		= "success";
+					$json["message"]	= "Success";
+					$json["item_id"]	= $position_id;
+				}
+		        
+			}
 		}
-		else
-		{
-			Session::put("import_coa_error", $error_data);
-		}
+		//die(var_dump($position_id));
+		return $json;
 	}
 
 	/* Do not Remove */

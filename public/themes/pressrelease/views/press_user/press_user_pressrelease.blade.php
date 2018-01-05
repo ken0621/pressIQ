@@ -88,7 +88,7 @@
                   <div class="button-container">
                     <span class="button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
                     <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
-                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'choose_recipient')"><a>Continue</a></button></span>
+                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'choose_recipient')"><a>Continue &raquo;</a></button></span>
                   </div>
                 </div>
 
@@ -131,7 +131,7 @@
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue To Send</a></button></span>
+                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue To Send &raquo;</a></button></span>
 
                       <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                       @endif
@@ -147,7 +147,7 @@
                   <div class="title">Send To:</div>
                   <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
                   <div class="button-container">
-                    <button type="submit" formaction="/pressuser/pressrelease/pr">Send</button>
+                    <button type="submit" formaction="/pressuser/pressrelease/pr">Send &raquo;</button>
                     <button type="button" class="tablinks" onclick="openCity(event, 'summary')">View Summary</button>
                   </div>
                 </div>
@@ -174,12 +174,25 @@
         </div>
            
         <div class="modal-body">
-          <img class="pull-right" src="{{session('user_company_image')}}" alt="" style="min-width: 150px;min-height: 150px;max-height: 150px;max-width: 150px;">
-          <div id="preview_headline"></div>
-          <div id="preview_content" class="background-container"></div>
+          <div class="row-no-padding clearfix">
+            <div class="col-md-9">
+              <div id="preview_headline"></div>
+            </div>
+            <div class="col-md-3">
+              <div class="logo-holder">
+                <img src="{{session('user_company_image')}}">
+              </div>
+            </div>
+          </div>
+
+          <div id="preview_content">
+            
+          </div>
           <div class="about-title">About {{session('user_company_name')}}</div>
           <div id="preview_boiler_content"></div>
+
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
@@ -242,8 +255,8 @@ image_title: true,
 height: 500,
 default_link_target: "_blank",
 media_live_embeds: true,
-plugins: ["autolink lists image charmap print preview anchor","visualblocks code","insertdatetime table contextmenu paste imagetools", "wordcount", "media"],
-toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist |  image media | preview',
+plugins: ["autolink lists image charmap print preview anchor","visualblocks code","insertdatetime table contextmenu paste imagetools", "wordcount", "media", "link"],
+toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist |  image media link | preview',
    
      // we override default upload handler to simulate successful upload
      images_upload_handler: function (blobInfo, success, failure) 

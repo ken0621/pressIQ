@@ -8,21 +8,28 @@
     		<div class="border-background-container">
                 <div class="row-no-padding clearfix">
                     <div class="col-md-9">
-                        @foreach ($pr as $prs)
-                        <div class="heading-container">{{$prs->pr_headline}}</div>
-                        <div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">{{$prs->pr_sender_name}}</span></div>
-                        <div class="date-container">{{$prs->pr_date_sent}}</div>
-                        <div class="content-container">{!!$prs->pr_content!!}</div>
-                        <div class="border"></div>
-                        <div class="title-about-container">About {{$prs->pr_sender_name}}</div>
-                        <div class="content-container">{!!$prs->pr_boiler_content!!}</div>
-                        @endforeach
+                        <div class="left-container">
+                            @foreach ($pr as $prs)
+                            <div class="heading-container">{{$prs->pr_headline}}</div>
+                            <div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">{{$prs->pr_sender_name}}</span></div>
+                            <div class="date-container">{{$prs->pr_date_sent}}</div>
+                            <div class="content-container">{!!$prs->pr_content!!}</div>
+                            <div class="border"></div>
+                            <div class="title-about-container">About {{$prs->pr_sender_name}}</div>
+                            <div class="content-container">{!!$prs->pr_boiler_content!!}</div>
+                            @endforeach
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="logo-container">
-                            <div class="logo-holder">
-                                <img src="/themes/{{ $shop_theme }}/img/logo-release.png">
+                        <div class="right-container">
+                            <div class="company-name-container">
+                                <div class="company-name">Press Release</div>
                             </div>
+                            <div class="logo-holder">
+                                <img src="/themes/{{ $shop_theme }}/img/logo-release.jpg">
+                            </div>
+                        </div>
+                            
                         </div>
                     </div>
                 </div>

@@ -18,19 +18,21 @@
                     </div>
                 </div>
                 
-                @foreach ($pr as $prs)
-                <div class="news-title-container" >
-                    <div class="title"><a href="/newsroom/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
-                </div>  
-                <div class="details-container">
-                    <p>{!!$prs->pr_content!!}</p>
-                </div>
-                <div class="button-container">
-                    <button onclick="window.location.href='/newsroom/view/{{$prs->pr_id}}'">Read More &raquo;</button>
-                </div>
-                @endforeach
-                <div class="button-container" >
-                {!! $pr->render() !!}
+                <div class="main-container">
+                    @foreach ($pr as $prs)
+                    <div class="news-title-container" >
+                        <div class="title"><a href="/newsroom/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
+                    </div>  
+                    <div class="details-container">
+                        <p>{!!$prs->pr_content!!}</p>
+                    </div>
+                    <div class="button-container">
+                        <button onclick="window.location.href='/newsroom/view/{{$prs->pr_id}}'">Read More &raquo;</button>
+                    </div>
+                    @endforeach
+                    <div class="button-container" style="border-bottom: none;" >
+                    {!! $pr->render() !!}
+                    </div>
                 </div>
             </div>
 

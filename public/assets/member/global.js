@@ -414,6 +414,7 @@ function select_current_warehouse($this)
                     if(commission == 'commission-report')
                     {
                         commission_report.action_change_warehouse();
+                        console.log('commission report table loading');
                     }
                 }
                 //end

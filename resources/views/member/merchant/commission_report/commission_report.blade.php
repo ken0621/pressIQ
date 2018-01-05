@@ -63,7 +63,7 @@
             <div class="form-group order-tags"></div>
             <div class="clearfix">
                 <div class="col-md-12">
-                    <div class="table-responsive load-table-here">
+                    <div class="table-responsive load-commission-table-here">
                         
                     </div>
                 </div>
@@ -72,6 +72,9 @@
     </div>
 </div>
 </div>
+@endsection
+@section('script')
+<script type="text/javascript" src="/assets/js/commission_report.js?v=10"></script>
 @endsection
 <script type="text/javascript" src="/assets/themes/js/jquery.min.js?v=1"></script>
 <script type="text/javascript">

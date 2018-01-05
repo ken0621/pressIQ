@@ -101,6 +101,12 @@
 	</div>
 </form>
 <script>
+		function reload(data)
+		{
+			data.element.modal("hide");
+			location.reload();
+		}
+	
 		$(".time-entry").timeEntry('destroy');
 		$(".time-entry-24").timeEntry('destroy');
 		$(".time-entry.time-in").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});

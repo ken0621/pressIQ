@@ -55,6 +55,8 @@ class ShopLoginController extends Shop
                             Session::put('user_email', $user_data->user_email);
                             Session::put('user_first_name',$user_data->user_first_name);
                             Session::put('user_last_name',$user_data->user_last_name);
+                            Session::put('user_company_name',$user_data->user_company_name);
+                            Session::put('user_company_image',$user_data->user_company_image);
                             Session::put('pr_user_level',$user_data->user_level);
                             Session::put('pr_user_id',$user_data->user_id);
                             

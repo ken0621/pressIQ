@@ -29,7 +29,7 @@ use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_shift_time;
 use App\Models\Tbl_payroll_adjustment;
-use App\Models\Tbl_payroll_period;
+use App\Models\Tbl_payroll_period;		
 use App\Globals\Payroll2;
 use App\Globals\Payroll;
 use App\Globals\PayrollLeave;

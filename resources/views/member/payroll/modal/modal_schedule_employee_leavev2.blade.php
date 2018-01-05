@@ -4,6 +4,7 @@
 		<h4 class="modal-title">Tag Employee</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
 		<input type="hidden" name="leave_id" class="leave_id" value="{{$leave_temp_id}}">
+		<input type="hidden" name="payroll_leave_temp_with_pay" class="payroll_leave_temp_with_pay" value="{{$payroll_leave_temp_with_pay}}">
 	</div>
 	<div class="modal-body form-horizontal">
 		<div class="form-group">

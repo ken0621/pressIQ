@@ -917,7 +917,8 @@ $text-dark: #272c2f;
 					.product-title
 					{
 						text-align: center;
-						height: 50px;
+						// height: 50px;
+						font-size: 15px;
 					}
 
 					.product-img-container
@@ -957,8 +958,15 @@ $text-dark: #272c2f;
 							{
 								
 							}
-
 						}
+					}
+
+					.kit-category
+					{
+						color: #585858;
+						text-align: center;
+						font-size: 13px;
+						font-weight: 500;
 					}
 
 					.btn-custom

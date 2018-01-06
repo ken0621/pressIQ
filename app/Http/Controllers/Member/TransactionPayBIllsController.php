@@ -58,7 +58,7 @@ class TransactionPayBillsController extends Member
     public function getLoadVendorPayBill($vendor_id)
     {
         $data["_bill"] = Billing::getAllBillByVendor($vendor_id);
-        
+        //dd($data["_bill"]);
         return view('member.accounting_transaction.vendor.pay_bills.load_pay_bills', $data);
     }
 
@@ -77,40 +77,47 @@ class TransactionPayBillsController extends Member
         $insert_item = null;
         $ctr_bill = 0;
 
-        // foreach($request->pbline_id as $key => $value)
-        // {
-        //     if($value)
-        //     {
-        //         $ctr_bill++;
-        //     }
-
-        //     $insert_item[$key]["line_is_checked"]         = $request->line_is_checked[$key];
-        //     $insert_item[$key]["pbline_reference_name"]   = $request->pbline_txn_type[$key];
-        //     $insert_item[$key]["pbline_reference_id"]     = $request->pbline_bill_id[$key];
-        //     $insert_item[$key]["item_amount"]             = str_replace(',', '',$request->pbline_amount[$key]);
-        //     $insert_item[$key]["item_discount"]           = 0;
-        //     $insert_item[$key]["item_id"]                 = 0;
-        //     $insert_item[$key]["item_qty"]                = 0;
-        //     $insert_item[$key]["item_description"]        = 0;
-            
-        // }
-
-        $validate = TransactionPayBills::postInsert($this->user_info->shop_id, $insert, $insert_item);
-
-        $return = null;
-        if(is_numeric($validate))
+        foreach($request->line_is_checked as $key => $value)
         {
-            $return['status'] = 'success';
-            $return['status_message'] = 'Success creating pay Bills.';
-            $return['call_function'] = 'success_pay_bills';
-            $return['status_redirect'] = AccountingTransaction::get_redirect('pay_bills', $validate ,$btn_action);
+            if($value)
+            {
+                $ctr_bill++;
+            }
+            
+            $insert_item[$key]["line_is_checked"]         = $request->line_is_checked[$key];
+            $insert_item[$key]["pbline_reference_name"]   = $request->pbline_txn_type[$key];
+            $insert_item[$key]["pbline_reference_id"]     = $request->pbline_bill_id[$key];
+            $insert_item[$key]["item_amount"]             = str_replace(',', '',$request->pbline_amount[$key]);
+            $insert_item[$key]["item_discount"]           = 0;
+            $insert_item[$key]["item_id"]                 = 0;
+            $insert_item[$key]["item_qty"]                = 0;
+            $insert_item[$key]["item_description"]        = 0;    
+        }
+        
+        if($ctr_bill != 0)
+        {
+            $validate = TransactionPayBills::postInsert($this->user_info->shop_id, $insert, $insert_item);
+
+            $return = null;
+            if(is_numeric($validate))
+            {
+                
+                $return['status'] = 'success';
+                $return['status_message'] = 'Success creating pay Bills.';
+                $return['call_function'] = 'success_pay_bills';
+                $return['status_redirect'] = AccountingTransaction::get_redirect('pay_bills', $validate ,$btn_action);
+            }
+            else
+            {
+                $return['status'] = 'error';
+                $return['status_message'] = $validate;
+            }
         }
         else
         {
             $return['status'] = 'error';
-            $return['status_message'] = $validate;
+            $return['status_message'] = 'Please Select Item';
         }
-        
         return json_encode($return);
 
     }

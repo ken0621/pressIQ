@@ -4417,7 +4417,8 @@ class Payroll2
 		/* PHILHEALTH COMPUTATION */	
 		if($philhealth_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
 		{
-			$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_declared);
+			// $philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_declared);
+			$philhealth_contribution = Payroll2::philhealth_contribution_update_2018($philhealth_declared);
 			$philhealth_description = payroll_currency($philhealth_declared) . " declared PHILHEALTH Salary";
 
 			if($philhealth_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
@@ -7815,7 +7816,7 @@ class Payroll2
 	{
 		$data['ee'] = 0;
 		$data['er'] = 0;
-
+		
 		if ($rate <= 10000) 
 		{
 			$data['ee'] = 137.50;

@@ -68,6 +68,7 @@ class RequestForPaymentController extends PayrollMember
 		$status = Request::input('status');
 		$data['_payment_request'] = Tbl_payroll_request_payment::where('payroll_employee_id', $this->employee_info->payroll_employee_id)->where('payroll_request_payment_status', $status)->get();
 		
+
 		return view('member.payroll2.employee_dashboard.request_for_payment_table',$data);
 	}
 
@@ -142,5 +143,24 @@ class RequestForPaymentController extends PayrollMember
 			
 			return view('member.payroll2.employee_dashboard.modal.modal_confirm',$data);
 		}
+	}
+
+
+	public function authorized_access_request_for_refund()
+	{
+		return view('member.payroll2.employee_dashboard.authorized_access_request_for_refund');
+	}
+
+	public function authorized_access_request_for_refund_table()
+	{
+		$status = Request::input('status');
+		$data['employee_approver_info']	= Tbl_payroll_approver_employee::GetApproverInfoByType($this->employee_info->payroll_employee_id, 'rfp')->first();
+		
+		$level_approver 		= $data['employee_approver_info']['payroll_approver_employee_level'];
+		$approver_employee_id 	= $data['employee_approver_info']['payroll_approver_employee_id'];
+		
+		$data['_payment_request']  = Tbl_payroll_request_payment::GetAllRequest($approver_employee_id, $level_approver, $status)->get();
+
+		return view('member.payroll2.employee_dashboard.authorized_access_request_for_refund_table', $data);
 	}
 }

@@ -218,7 +218,7 @@ class EmployeeController extends PayrollMember
 	{
 		$data['page']	= 'Overtime Application';
 		$data['_group_approver'] = Tbl_payroll_approver_group::where('tbl_payroll_approver_group.shop_id', Self::employee_shop_id())->where('payroll_approver_group_type','overtime')->where('archived', 0)->get();
-			
+		
 		return view('member.payroll2.employee_dashboard.employee_overtime_application',$data);
 	}
 

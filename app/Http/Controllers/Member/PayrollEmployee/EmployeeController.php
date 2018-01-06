@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Member\PayrollEmployee;
+
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_payroll_period;
@@ -42,10 +43,29 @@ class EmployeeController extends PayrollMember
 		return $this->employee_info;
 	}
 
+	public function employee_id()
+	{
+		return $this->employee_info->payroll_employee_id;
+	}
+
 	public function employee_shop_id()
 	{
 		return $this->employee_info->shop_id;
 	}
+
+	public static function approver_access($employee_id)
+	{
+		$data['approver_rfp'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','rfp')->first();
+		$data['approver_ot'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','rfp')->first();
+		$data['approver_leave'] = Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','rfp')->first();
+		$data['approver_ob'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','ob')->first();
+		
+		if ($data['approver_rfp'] != null || $data['approver_ot'] != null || $data['approver_leave'] != null || $data['approver_ob'] != null) 
+		{
+			echo view('member.payroll2.employee_dashboard.authorized_access_menu', $data);
+		}
+	} 
+
 	public function employee()
 	{
 		$data['page']	= 'Dashboard';
@@ -197,7 +217,7 @@ class EmployeeController extends PayrollMember
 	public function employee_overtime_application()
 	{
 		$data['page']	= 'Overtime Application';
-		$data['_group_approver'] = Tbl_payroll_approver_group::where('tbl_payroll_approver_group.shop_id', Self::employee_shop_id())->where('archived', 0)->get();
+		$data['_group_approver'] = Tbl_payroll_approver_group::where('tbl_payroll_approver_group.shop_id', Self::employee_shop_id())->where('payroll_approver_group_type','overtime')->where('archived', 0)->get();
 			
 		return view('member.payroll2.employee_dashboard.employee_overtime_application',$data);
 	}
@@ -232,7 +252,7 @@ class EmployeeController extends PayrollMember
 		$data['request_info'] = Tbl_payroll_request_overtime::where('payroll_request_overtime_id',$request_id)->EmployeeInfo()->first();
 		$data['approver_group_info'] = Tbl_payroll_approver_group::where('payroll_approver_group_id',$data['request_info']['payroll_approver_group_id'])->first();
 		$data['page'] = 'View Overtime Request';
-		$data['_group_approver'] = Self::get_group_approver_grouped_by_level($data['request_info']['payroll_approver_group_id'], 'overtime');
+		$data['_group_approver'] = Self::get_group_approver_grouped_by_level(Self::employee_shop_id(),$data['request_info']['payroll_approver_group_id'], 'overtime');
 		
 		return view('member.payroll2.employee_dashboard.modal.modal_view_overtime_request',$data);
 	}
@@ -283,7 +303,7 @@ class EmployeeController extends PayrollMember
 	{
 		$data['request_info'] = Tbl_payroll_request_overtime::where('payroll_request_overtime_id',$request_id)->EmployeeInfo()->first();
 		$data['page'] = 'View Overtime Request';
-		$data['_group_approver'] = Self::get_group_approver_grouped_by_level($data['request_info']['payroll_approver_group_id'],'overtime');
+		$data['_group_approver'] = Self::get_group_approver_grouped_by_level(Self::employee_shop_id(),$data['request_info']['payroll_approver_group_id'],'overtime');
 		$data['approver_group_info'] = tbl_payroll_approver_group::where('payroll_approver_group_id',$data['request_info']['payroll_approver_group_id'])->first();
 
 		return view('member.payroll2.employee_dashboard.modal.modal_view_overtime_request',$data);
@@ -533,9 +553,9 @@ class EmployeeController extends PayrollMember
     	return view('member.payroll2.employee_dashboard.updated_layout',$data);
     }
 
-    public function get_group_approver_grouped_by_level($approver_group_id, $approver_group_type)
+    public static function get_group_approver_grouped_by_level($shop_id , $approver_group_id, $approver_group_type)
 	{
-		$_approver_group = collect(Tbl_payroll_approver_group::EmployeeApproverInfo(Self::employee_shop_id(), $approver_group_id, $approver_group_type)->get())->groupBy('payroll_approver_group_level');
+		$_approver_group = collect(Tbl_payroll_approver_group::EmployeeApproverInfo($shop_id, $approver_group_id, $approver_group_type)->get())->groupBy('payroll_approver_group_level');
 
 		return $_approver_group;
 	}
@@ -545,9 +565,8 @@ class EmployeeController extends PayrollMember
 	{
 		$approver_group_id = Request::get('approver_group_id');
 		$approver_group_type = Request::get('approver_group_type');
-		$_approver_group = EmployeeController::get_group_approver_grouped_by_level($approver_group_id, $approver_group_type);
+		$_approver_group = EmployeeController::get_group_approver_grouped_by_level(Self::employee_shop_id(), $approver_group_id, $approver_group_type);
 
 		return json_encode($_approver_group);
 	}
 }
-

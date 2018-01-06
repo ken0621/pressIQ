@@ -12,6 +12,7 @@ use App\Models\Tbl_credit_memo;
 use App\Globals\AuditTrail;
 use App\Globals\Tablet_global;
 use App\Globals\CreditMemo;
+use App\Globals\Purchasing_inventory_system;
 use DB;
 use Log;
 use Request;
@@ -106,7 +107,7 @@ class Invoice
         $ewt = $subtotal_price*convertToNumber($total_info['ewt']);
 
         /* OVERALL TOTAL */
-        $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
+        $overall_price  = Purchasing_inventory_system::check() ? round((convertToNumber($subtotal_price) - $ewt - $discount + $tax),2) : convertToNumber($subtotal_price) - $ewt - $discount + $tax;
 
         $shop_id = Invoice::getShopId();
         if($for_tablet == true)
@@ -117,6 +118,7 @@ class Invoice
         $insert['inv_shop_id']                  = $shop_id;  
 		$insert['inv_customer_id']              = $customer_info['customer_id'];        
         $insert['inv_customer_email']           = $customer_info['customer_email'];
+        $insert['transaction_refnum']           = isset($invoice_info['transaction_refnum']) ? $invoice_info['transaction_refnum'] : "";
         $insert['new_inv_id']                   = $invoice_info['new_inv_id'];
         $insert['inv_customer_billing_address'] = $invoice_info['billing_address'];
         $insert['inv_terms_id']                 = $invoice_info['invoice_terms_id'];
@@ -487,5 +489,8 @@ class Invoice
 
         return $data;
     }
-  
+    public static function check_inv($shop_id, $transaction_refnum)
+    {
+        return Tbl_customer_invoice::where("inv_shop_id", $shop_id)->where("transaction_refnum", $transaction_refnum)->first();
+    }  
 }

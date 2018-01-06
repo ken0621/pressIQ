@@ -15,7 +15,7 @@
 			    			<div class="title-container">Sign Up below, it's easy</div>
 			    			<div class="description">Press IQ makes it easier for you to create, manage, and distribute your press release</div>
 			    			<div class="border"></div>
-			    			<form method="post">
+			    			<form method="post" enctype="multipart/form-data">
 			    				{{csrf_field()}}
 			    			@if(session()->has('message'))
 							<div class="details">
@@ -39,6 +39,13 @@
 			    			<div class="register-form">
 			    				<input type="password" name="user_password_confirmation" id="user_password_confirmation" placeholder="Confirm Password">
 			    			</div>
+			    			<div class="register-form">
+			    				<input type="text" name="user_company_name" id="user_company_name" placeholder="Company">
+			    			</div>
+			    			<div class="register-form">
+			    				<input type="file" name="user_company_image" id="user_company_image">
+
+			    			</div>
 
 			    			<div class="button-container">
 			    			    <button type="submit" href="">REGISTER NOW</button>
@@ -54,6 +61,7 @@
 </div>
 @endsection
 
+<script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/sign_up.css">
 @endsection

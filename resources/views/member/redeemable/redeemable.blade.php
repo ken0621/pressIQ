@@ -60,5 +60,5 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="/assets/member/js/item/redeemable.js?v=2"></script>
+<script type="text/javascript" src="/assets/member/js/item/redeemable.js?v=3"></script>
 @endsection

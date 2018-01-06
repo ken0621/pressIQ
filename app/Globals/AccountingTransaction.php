@@ -6,7 +6,7 @@ use App\Models\Tbl_acctg_transaction_item;
 use App\Models\Tbl_transaction_ref_number;
 
 use App\Models\Tbl_customer_invoice;
-
+use App\Models\Tbl_chart_of_account;
 use Carbon\Carbon;
 
 use Validator;
@@ -20,6 +20,28 @@ use App\Globals\Accounting;
 
 class AccountingTransaction
 {
+
+	public static function check_coa_exist($shop_id, $account_number, $account_name)
+	{
+		$check = Tbl_chart_of_account::where("account_shop_id", $shop_id)->where("account_name", $account_name)->first();
+		$return = null;
+		if($check)
+		{
+			$up['account_number'] = $account_number;
+			Tbl_chart_of_account::where("account_shop_id", $shop_id)->where("account_name", $account_name)->update($up);
+			$return = $check->account_id;
+		}
+		else
+		{
+			$ins['account_shop_id'] = $shop_id;
+			$ins['account_name'] = $account_name;
+			$ins['account_number'] = $account_number;
+			$ins['account_code'] = 'accounting-receivable';
+			$ins['account_type_id'] = 2;
+			$return = Tbl_chart_of_account::insertGetId($ins);
+		}
+		return $return;
+	}
 	/**
 	  * @param  
 		$trans_data = [

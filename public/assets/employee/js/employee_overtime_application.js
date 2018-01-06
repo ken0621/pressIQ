@@ -64,7 +64,8 @@ function employee_overtime_application()
 	}
 }
 
-function reload_overtime_management()
+function reload_overtime_management(data)
 {
+	data.element.modal("hide");
     window.location.href = '/employee_overtime_management';
 }

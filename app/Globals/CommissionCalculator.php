@@ -57,18 +57,18 @@ class CommissionCalculator
         $item_info[0]['item_service_date']  = "";
         $item_info[0]['item_id']            = $comm_item['item_id'];
         $item_info[0]['item_description']   = Item::get_item_details($comm_item['item_id'])->item_sales_information;
-        $item_info[0]['discount']   		= 0;
-        $item_info[0]['discount_remark']	= "";
+        $item_info[0]['discount']   		= $comm_item['downpayment_percent']."%";
+        $item_info[0]['discount_remark']	= "Downpayment";
         $item_info[0]['um']			   		= "";
         $item_info[0]['taxable']	   		= 0;
         $item_info[0]['ref_name']	   		= "";
         $item_info[0]['ref_id']	   			= 0;
         $item_info[0]['quantity']           = 1;
-        $item_info[0]['rate']               = round(Self::get_computation($shop_id, $commission_id)['amount_tcp'],5);
-        $item_info[0]['amount']             = round(Self::get_computation($shop_id, $commission_id)['amount_tcp'],5);
+        $item_info[0]['rate']               = round(Self::get_computation($shop_id, $commission_id)['amount_tsp'],5);
+        $item_info[0]['amount']             = round(Self::get_computation($shop_id, $commission_id)['amount_tsp'],5);
 
         $total_info['ewt']                  = 0;
-        $total_info['total_discount_type']  = 'fixed';
+        $total_info['total_discount_type']  = 'value';
         $total_info['total_discount_value'] = $comm_item['discount'];
         $total_info['taxable']              = 0;
 

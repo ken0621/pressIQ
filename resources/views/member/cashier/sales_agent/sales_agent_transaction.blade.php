@@ -32,7 +32,7 @@
                                 </tr>
                             @endforeach
                         @else
-                        <tr><td colspan="7" class="text-center">NO AGENT YET</td></tr>
+                        <tr><td colspan="7" class="text-center">NO TRANSACTION YET</td></tr>
                         @endif
                     </tbody>
                     <tfoot>

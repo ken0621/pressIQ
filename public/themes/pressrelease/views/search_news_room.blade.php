@@ -1,5 +1,4 @@
 
-
     <div class="background-border-container" >
         <div class="row clearfix">
             <div class="col-md-12">
@@ -23,3 +22,6 @@
         </div>
         @endforeach
     </div>
+
+  
+

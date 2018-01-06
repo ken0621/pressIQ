@@ -33,8 +33,9 @@
                   <div class="title">Boilerplate:</div>
                         <textarea name="pr_boiler_content" id="pr_boiler_content">{!!$edits->pr_boiler_content!!}</textarea>
                   <div class="button-container">
-                  <span class="save-button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
-                  <span class="preview-button"><a href="javascript:" id="prev_btn">Preview</a></span>
+                    <span class="button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
+                    <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
+                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'choose_recipient')"><a>Continue &raquo;</a></button></span>
                   </div>
                 </div>
 

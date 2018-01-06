@@ -1,31 +1,3 @@
-<form class="global-submit form-horizontal" role="form" action="{link_submit_here}" method="post">
-	<input type="hidden" class="_token" value="{{ csrf_token() }}" />
-    <div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h4 class="modal-title">Remaining Leave Records {{-- {{$month_today_string}} --}}</h4>
-	</div>
-    <div class="panel panel-default panel-block panel-title-block">
-        <div class="panel-body form-horizontal">
-            <div class="form-group">
-                <div class="col-md-3">
-       {{--              <select class="form-control filter-by-month-leave" name="month">
-                        <option value="0">Month</option>
-                        @foreach($months as $key=>$month)
-                            @if($key == $month_today)
-                            <option value="{{$key}}" selected>{{$month}}</option>
-                            @else
-                            <option value="{{$key}}">{{$month}}</option>
-                            @endif
-                        @endforeach
-                    </select> --}}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="text-center" id="spinningLoader" style="display:none;">
-                <img src="/assets/images/loader.gif">
-    </div>
-    <div class="load-filter-data">
 	<div class="modal-body clearfix">
                 <div class="table-responsive">
                     <table class="table table-bordered table-condensed">
@@ -35,12 +7,12 @@
                                 <th class="text-center">Employee Code</th>
                                 <th class="text-center">Employee Name</th>
                                 <th class="text-center">Leave Credits</th>
-                                <th class="text-center">Used Leave</th>
+                                <th class="text-center">Used Leave without Pay</th>
                                 <th class="text-center">Remaining Leave</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if(isset($leave_report))
+{{--                             @if(isset($leave_report))
                  			@foreach($leave_report as $leave_data)
                                 @foreach($leave_data as $leave)
                         	<tr>
@@ -53,7 +25,7 @@
                         	</tr>
                                  @endforeach
                         	@endforeach
-                            @endif
+                            @endif --}}
                         </tbody>
                     </table>
                 </div>
@@ -62,13 +34,3 @@
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
         &nbsp;<a href="/member/payroll/leave/v2/remaining_leave_report_excel"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
     </div>
-    </div>
-</form>
-
-<style type="text/css">
-    #global_modal .modal-dialog
-    {
-        width: 85% !important;
-    }
-</style>
-<script type="text/javascript" src="/assets/member/js/payroll/modal_create_leave_tempv2.js"></script>

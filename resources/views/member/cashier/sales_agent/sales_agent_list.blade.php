@@ -12,6 +12,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
+                <button onclick="location.href='/member/cashier/sales_agent/import'" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Import Agent</button>
                 <button onclick="action_load_link_to_modal('/member/cashier/sales_agent/add','md')" class="btn btn-primary"><i class="fa fa-star"></i> Add Agent</button>
             </div>
         </div>

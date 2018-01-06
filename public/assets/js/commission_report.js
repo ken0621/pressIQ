@@ -51,7 +51,7 @@ function commission_report()
     }
     function action_table_loader()
 	{
-		$(".load-table-here").html('<div style="padding: 100px; text-align: center; font-size: 20px;"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>');
+		$(".load-commission-table-here").html('<div style="padding: 100px; text-align: center; font-size: 20px;"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>');
 	}
 	function action_load_table()
 	{
@@ -64,7 +64,7 @@ function commission_report()
 			type: "get",
 			success: function(data)
 			{
-				$('.load-table-here').html(data);
+				$('.load-commission-table-here').html(data);
 			}
 		});
 	}

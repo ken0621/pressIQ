@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Drop13MonthPayrollRegisterColumn extends Migration
+class UpdateTblCommissionInvoice010314435 extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class Drop13MonthPayrollRegisterColumn extends Migration
      */
     public function up()
     {
-        //
-                          Schema::table('tbl_payroll_register_columns', function (Blueprint $table)
-            {
-
-                $table->dropColumn(['13th_month_and_other']);
-            });
+        Schema::table('tbl_commission_invoice', function (Blueprint $table) {
+            $table->double("payment_amount")->after("payment_ref_id");
+        });
     }
 
     /**
@@ -28,6 +25,8 @@ class Drop13MonthPayrollRegisterColumn extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('tbl_commission_invoice', function (Blueprint $table) {
+            //
+        });
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnPayrollRegister1345 extends Migration
+class UpdateTblEmployee010520181128AM extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class AddColumnPayrollRegister1345 extends Migration
      */
     public function up()
     {
-        //
-                    Schema::table('tbl_payroll_register_columns', function (Blueprint $table) {
-            //  
-                             $table->tinyInteger('month_13_and_other');
+        Schema::table('tbl_employee', function (Blueprint $table) {
+            $table->string("agent_code")->after('warehouse_id');
+        });
+        Schema::table('tbl_position', function (Blueprint $table) {
+            $table->string("agent_code")->after('position_id');
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnSampleLeaveNameEmployeeId extends Migration
+class UpdateTblPosition010518214PM extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class AddColumnSampleLeaveNameEmployeeId extends Migration
      */
     public function up()
     {
-        //
-           Schema::table('tbl_payroll_register_columns', function (Blueprint $table) {
-            //
-                   $table->string('payroll_leave_temp_name',100);
-                   $table->decimal('payroll_leave_temp_hours', 4, 2);
+        Schema::table('tbl_position', function (Blueprint $table) {
+            $table->dropColumn("agent_code");
         });
     }
 
@@ -28,6 +25,8 @@ class AddColumnSampleLeaveNameEmployeeId extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('tbl_position', function (Blueprint $table) {
+            //
+        });
     }
 }

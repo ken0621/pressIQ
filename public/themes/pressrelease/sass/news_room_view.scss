@@ -137,6 +137,34 @@
 					font-family: 'PT Serif';
 				}
 			}
+			.header
+			{
+				font-size: 20px;
+				text-align: center;
+				padding: 30px 0px 10px 0px;
+				font-family: 'Lato';
+			}
+			.release-container
+			{
+				border-bottom: 1px solid #ededed;
+				padding: 20px 5px;
+				.title
+				{
+					font-weight: 700;
+					font-size: 16px;
+					font-family: 'Lato';
+				}
+				.date-container
+				{
+					margin-top: 5px;
+					color: rgba(0,0,0,0.5);
+					font-weight: 700;
+					span
+					{
+						margin-right: 8px;
+					}
+				}
+			}
 		}
 	}
 }

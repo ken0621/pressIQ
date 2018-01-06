@@ -10,6 +10,7 @@ use App\Globals\Item;
 use App\Globals\Invoice;
 use App\Globals\SalesAgent;
 use App\Globals\CommissionCalculator;
+use App\Globals\Accounting;
 use App\Globals\ReceivePayment;
 use App\Globals\AccountingTransaction;
 use Session;
@@ -251,10 +252,11 @@ class CommissionCalculatorController extends Member
                         if(!$check_rp && $customer_id && $invoice_id)
                         {
                             $insert_data['customer_id'] = $customer_id;
-                            $insert_data['date'] = $data['date'];
+                            $insert_data['date'] = datepicker_input($data['date']);
                             $insert_data['total_payment_amount'] = str_replace("-", '', $data['amount']);
                             $insert_data['memo'] = "Payment Imported";
                             $insert_data['transaction_refnum'] = $data['num'];
+                            $insert_data['ar_account'] = Accounting::get_default_coa("accounting-cash-in-bank");
 
                             $insert_item[0]['ref_name'] = "invoice";
                             $insert_item[0]['ref_id'] = $invoice_id;

@@ -66,7 +66,7 @@ class ReceivePayment
         $insert["rp_shop_id"]           = $shop_id;
         $insert["rp_customer_id"]       = $insert_data['customer_id'];
         $insert["transaction_refnum"]       = $insert_data['transaction_refnum'];
-        $insert["rp_ar_account"]        = 0;
+        $insert["rp_ar_account"]        = $insert_data['ar_account'];
         $insert["rp_date"]              = $insert_data['date'];
         $insert["rp_total_amount"]      = $insert_data['total_payment_amount'];
         $insert["rp_payment_method"]    = "";
@@ -98,6 +98,17 @@ class ReceivePayment
                 }
             }
         }
+
+        /* Transaction Journal */
+        $entry["reference_module"]      = "receive-payment";
+        $entry["reference_id"]          = $rcvpayment_id;
+        $entry["name_id"]               = $insert["rp_customer_id"];
+        $entry["total"]                 = $insert["rp_total_amount"];
+        $entry_data[0]['account_id']    = $insert["rp_ar_account"];
+        $entry_data[0]['vatable']       = 0;
+        $entry_data[0]['discount']      = 0;
+        $entry_data[0]['entry_amount']  = $insert["rp_total_amount"];
+        $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
 
         return $rcvpayment_id;
     }

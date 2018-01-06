@@ -163,4 +163,14 @@ class RequestForPaymentController extends PayrollMember
 
 		return view('member.payroll2.employee_dashboard.authorized_access_request_for_refund_table', $data);
 	}
+
+	public function rfp_application_approve()
+	{
+
+	}
+
+	public function rfp_application_reject()
+	{
+		
+	}
 }

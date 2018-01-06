@@ -25,8 +25,8 @@
                    <span class="caret"></span></button>
                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu-drop-down">
                      <li style="padding-left: 10px;" role="presentation" class="popup" link='/rfp_application_view/{{ $payment_request->payroll_request_payment_id }}' size='lg'><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-search" aria-hidden="true"></i> &nbsp; View</a></li>
-                     <li style="padding-left: 10px;" role="presentation"><a role="menuitem" class="popup" link="/authorized_access_over_time/approve_overtime_request/{{$payment_request->payroll_request_payment_id}}" size="sm" href="#"><i class="fa fa-check" aria-hidden="true"></i> &nbsp; Approve</a></li>
-                     <li style="padding-left: 10px;" role="presentation"><a role="menuitem" class="popup" link="/authorized_access_over_time/reject_overtime_request/{{$payment_request->payroll_request_payment_id}}" size="sm" href="#"><i class="fa fa-ban" aria-hidden="true"></i> &nbsp; Reject</a></li>
+                     <li style="padding-left: 10px;" role="presentation"><a role="menuitem" class="popup" link="/rfp_application_approve/{{$payment_request->payroll_request_payment_id}}" size="sm" href="#"><i class="fa fa-check" aria-hidden="true"></i> &nbsp; Approve</a></li>
+                     <li style="padding-left: 10px;" role="presentation"><a role="menuitem" class="popup" link="/rfp_application_reject/{{$payment_request->payroll_request_payment_id}}" size="sm" href="#"><i class="fa fa-ban" aria-hidden="true"></i> &nbsp; Reject</a></li>
                    </ul>
                  </div>
              </td>

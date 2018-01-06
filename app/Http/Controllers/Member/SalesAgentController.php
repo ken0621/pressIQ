@@ -138,14 +138,14 @@ class SalesAgentController extends Member
 			$com_percent	= isset($value["Commission Percent"])	? $value["Commission Percent"] : '' ;
 
 
-			$position_id = null;
+			$position_name = null;
 			if(!isset($position))
 			{
-				$position_id = Tbl_position::where("position_shop_id", $this->user_info->shop_id)->where("position_id", $position_code)->first();
+				$position_name = Tbl_position::where("position_shop_id", $this->user_info->shop_id)->where("position_name", $position_name)->first();
 			}
 
 			$json = null;
-			if(!$duplicate_position)
+			if(!$position_name)
 			{
 				$insert_position['position_shop_id']   = $this->user_info->shop_id;
             	$insert_position['position_code'] 	   = $position_code;

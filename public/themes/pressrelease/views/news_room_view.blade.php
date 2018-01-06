@@ -29,6 +29,23 @@
                             <div class="logo-holder">
                                 <img src="{{$prs->pr_co_img}}">
                             </div>
+                            <div class="header">Latest releases of industry</div>
+                            <div class="release-container">
+                                <div class="title"><a href="#">5 IMPORTANT THINGS TO LOOK IN A PLAY AREA FOR YOUR KIDS</a></div>
+                                <div class="date-container"><span><i class="fa fa-clock-o" aria-hidden="true"></i></span><span>28.12.2017 10:28</span></div>
+                            </div>
+                            <div class="release-container">
+                                <div class="title"><a href="#">SnapPop Update Lets You Attach Your Christmas Singing To Stamps</a></div>
+                                <div class="date-container"><span><i class="fa fa-clock-o" aria-hidden="true"></i></span><span>22.12.2017 11:16</span></div>
+                            </div>
+                            <div class="release-container">
+                                <div class="title"><a href="#">Sail To Taiwan - The Ultimate Blue-Water Experience</a></div>
+                                <div class="date-container"><span><i class="fa fa-clock-o" aria-hidden="true"></i></span><span>07.12.2017 15:49</span></div>
+                            </div>
+                            <div class="release-container">
+                                <div class="title"><a href="#">Liana Technologies ranked on the Deloitte Technology Fast 50 Finland list for the eighth year in a row</a></div>
+                                <div class="date-container"><span><i class="fa fa-clock-o" aria-hidden="true"></i></span><span>04.12.2017 07:00</span></div>
+                            </div>
                         </div>  
                     </div>
                 @endforeach    

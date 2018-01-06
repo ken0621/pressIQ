@@ -410,9 +410,38 @@ class CommissionCalculator
 
 		if($check && $get_payment_data)
 		{
-			$test = floor($get_payment_data->rp_total_amount / $check->payment_amount);
+			$all = Tbl_commission_invoice::where("commission_id", $check->commission_id)->get();
+			$rp = null;
+			$rp_amount = 0;
+			$total_paid = 0;
+			foreach ($all as $key => $value) 
+			{
+				if($value->invoice_is_paid != 0)
+				{
+					$total_paid += $value->payment_amount;
+				}
+				if($value->payment_ref_id != 0)
+				{
+					$rp[$value->payment_ref_id] = Tbl_receive_payment::where("rp_id", $value->payment_ref_id)->value("rp_total_amount");
+				}
+			}
+			if(count($rp) > 0)
+			{
+				foreach ($rp as $key1 => $value1) 
+				{
+					$rp_amount += $value1;
+				}
+			}
+			
+			$additional = 0;
+			if($rp_amount > $total_paid)
+			{
+				$additional = $rp_amount - $total_paid;
+			}
 
-			for ($i = 0; $i < $test; $i++) 
+			$ctr = floor(($get_payment_data->rp_total_amount + $additional) / $check->payment_amount);
+
+			for ($i = 0; $i < $ctr; $i++) 
 			{ 
 				$check = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
 				/*UPDATE COMMISSION HERE*/

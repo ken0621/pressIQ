@@ -18,7 +18,7 @@
 			    <div class="logo-holder">
 			        <img src="/themes/{{ $shop_theme }}/img/logo-release.jpg">
 			    </div>
-				<div class="header-container">Other Releases: </div>
+				<div class="header">Other Releases:</div>
 				@foreach($opr as $prs)
 				<div class="title-container"><a href="/pressuser/mypressrelease/pressrelease/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
 				<div class="date-container">{{$prs->pr_date_sent}}</div>

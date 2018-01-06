@@ -26,7 +26,7 @@
                                 <div class="company-name">Press Release</div>
                             </div>
                             <div class="logo-holder">
-                                <img src="/themes/{{ $shop_theme }}/img/logo-release.jpg">
+                                <img src="/themes/{{ $shop_theme }}/img/header-logo.png">
                             </div>
                         </div>
                             

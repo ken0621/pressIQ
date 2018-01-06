@@ -118,6 +118,7 @@ class Invoice
         $insert['inv_shop_id']                  = $shop_id;  
 		$insert['inv_customer_id']              = $customer_info['customer_id'];        
         $insert['inv_customer_email']           = $customer_info['customer_email'];
+        $insert['transaction_refnum']           = isset($invoice_info['transaction_refnum']) ? $invoice_info['transaction_refnum'] : "";
         $insert['new_inv_id']                   = $invoice_info['new_inv_id'];
         $insert['inv_customer_billing_address'] = $invoice_info['billing_address'];
         $insert['inv_terms_id']                 = $invoice_info['invoice_terms_id'];
@@ -488,5 +489,8 @@ class Invoice
 
         return $data;
     }
-  
+    public static function check_inv($shop_id, $transaction_refnum)
+    {
+        return Tbl_customer_invoice::where("inv_shop_id", $shop_id)->where("transaction_refnum", $transaction_refnum)->first();
+    }  
 }

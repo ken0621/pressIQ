@@ -3,25 +3,10 @@
 		<div class="col-md-12">
 			<h4>Leave<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_create_leave_tempv2"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Create Leave</a>
 
-			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_create_leave_type" style="margin-right:20px;">Create Leave Type</a>
-
 			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave_schedule/v2/modal_leave_scheduling" style="margin-right:20px;">Leave Scheduling</a>
 
 
 			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_leave_history" style="margin-right:20px;">Leave Schedule History</a>
-			</h4>
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-md-12">
-			<h4><a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_monthly_leave_report" size="lg">Monthly Leave Report</a>
-
-			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_remaining_leave_report" style="margin-right:20px;">Remaining Leave Report</a>
-
-			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_paid_leave_report" style="margin-right:20px;">Paid Leave Report</a>
-
-
-			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_without_paid_leave_report" style="margin-right:20px;">Without Pay Leave</a>
 			</h4>
 		</div>
 	</div>

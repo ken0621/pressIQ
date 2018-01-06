@@ -12,7 +12,7 @@
 
 			<div class="col-md-6">
 				<small>Leave Name</small>
-				<select class="form-control select-leave" name="leave_reason" required>
+				<select class="form-control select-leave" name="leave_reason" id="leavetempid" required>
 					<option value="">Select Leave</option>
 					@foreach($_leave_name as $leave)
 					<option value="{{$leave->payroll_leave_temp_id}}">{{$leave->payroll_leave_temp_name}}</option>
@@ -38,12 +38,12 @@
 				<div class="form-control padding-b-37">
 					<div class="col-md-6">
 						<div class="radio">
-							<label><input type="radio" class="payroll_leave_temp_with_pay" name="payroll_leave_temp_with_pay" value="1" checked >Yes</label>
+							<label><input type="radio" class="payroll_leave_temp_with_pays" id="pay" name="payroll_leave_temp_with_pays" value="1" checked >Yes</label>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="radio">
-							<label><input type="radio" class="payroll_leave_temp_with_pay" name="payroll_leave_temp_with_pay" value="0" >No</label>
+							<label><input type="radio" class="payroll_leave_temp_with_pays" id="pays" name="payroll_leave_temp_with_pays" value="0" >No</label>
 						</div>
 					</div>					
 				</div>		
@@ -61,7 +61,7 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>&nbsp;</small>
-				<button class="btn btn-custom-primary btn-block popup employee-tag" type="button" link="/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/0">Tag Employee</button>
+				<button class="btn btn-custom-primary btn-block popup employee-tag" type="button" link="/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/0/0">Tag Employee</button>
 			</div>
 		</div>
 		<div class="form-group">
@@ -96,9 +96,23 @@
 	$(".select-leave").unbind("change");
 	$(".select-leave").bind("change", function()
 	{
-		var link = "/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/" + $(this).val();
+		if($('#pay').is(':checked'))
+	    {
+	    	var leave_pay_value = $('#pay').val();
+	    }
+	    else
+	    {
+	    	var leave_pay_value = $('#pays').val();
+	    }
+
+		var link = "/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/" + $(this).val() +"/" + leave_pay_value;
 		 $(".employee-tag").attr('link',link);
 	});
+
+	   $('input[type=radio][name=payroll_leave_temp_with_pays]').change(function() {
+		var link = "/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/" + $(".select-leave").val() +"/" + $(this).val();
+		 $(".employee-tag").attr('link',link);
+    });
 
 	$(".single_date_only").unbind("change");
 	$(".single_date_only").bind("change",function()
@@ -114,6 +128,7 @@
 			$(".payroll_schedule_leave_end").attr("required",true);
 		}
 	});
+
 
 	/* CALL A FUNCTION BY NAME */
 	function executeFunctionByName(functionName, context /*, args */) {

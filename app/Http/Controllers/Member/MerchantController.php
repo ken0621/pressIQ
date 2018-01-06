@@ -50,6 +50,7 @@ use DateTime;
 use Illuminate\Http\Request as Request2;
 use Image;
 use File;
+use Excel;
 use App\Globals\Merchant;
 class MerchantController extends Member
 {
@@ -640,6 +641,36 @@ class MerchantController extends Member
 		// dd($data['table']);
 		// dd($warehouse_id);
 		return view('member.merchant.commission_report.commission_report_table',$data);
+	}
+	public function export()
+	{
+		$warehouse_id = $this->current_warehouse->warehouse_id;
+		
+		$data['table'] = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('record_source_ref_name','rr')->where('item_in_use','used')->paginate(10);
+		$total = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('item_in_use','used')->sum('item_price');
+		
+		$commission = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id);
+		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->first();
+		if(count($q)>0)
+		{
+			$commission = $q->merchant_commission_percentage;
+		}
+		else
+		{
+			$commission = 0;
+		}
+
+		$data['totalcommission'] = $total*($commission/100);
+		$data['warehouse_name'] = $this->current_warehouse->warehouse_name;
+
+		Excel::create('Commission Report', function($excel) use ($data)
+        {
+            $excel->sheet('Commission', function($sheet) use ($data)
+            {
+                $sheet->loadView('member.merchant.commission_report.export', $data);
+            });
+        })
+        ->download('xls');
 	}
 
 }	

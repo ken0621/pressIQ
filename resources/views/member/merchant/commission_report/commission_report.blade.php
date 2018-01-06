@@ -11,10 +11,10 @@
             Insert Description Here
             </small>
             </h1>
-            <!-- <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</button>
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-star"></i> Primary Command</button>
-            </div> -->
+            <div class="dropdown pull-right">
+                <button onclick="window.open('/member/merchant/commission_report/export')" class="btn btn-def-white btn-custom-white"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                <button class="btn btn-primary"><i class="fa fa-upload"></i> Import File</button>
+            </div>
         </div>
     </div>
 </div>

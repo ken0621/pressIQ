@@ -19,20 +19,54 @@ class TransactionSalesInvoice
 	{
 		return Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_customer_id",$customer_id)->where("est_status","accepted")->count();
 	}
-	public static function get($shop_id, $paginate = 10)
+	public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
 	{
-		$data = Tbl_customer_invoice::where('inv_shop_id', $shop_id);
+		$data = Tbl_customer_invoice::customer()->where('inv_shop_id', $shop_id)->where('is_sales_receipt',0);
 
+		if($search_keyword)
+		{
+			$data->where(function($q) use ($search_keyword)
+            {
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("new_inv_id", "LIKE", "%$search_keyword%");
+                $q->orWhere("company", "LIKE", "%$search_keyword%");
+                $q->orWhere("first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("last_name", "LIKE", "%$search_keyword%");
+            });
+		}
+
+		if($status != 'all')
+		{
+			$tab = 0;
+			if($status == 'open')
+			{
+				$tab = 0;
+			}
+			if($status == 'closed')
+			{
+				$tab = 1;
+			}
+			$data->where('inv_is_paid',$tab);
+		}
 		if($paginate)
 		{
-			$data->paginate($paginate);
+			$data = $data->paginate($paginate);
 		}
 		else
 		{
-			$data->get();
+			$data = $data->get();
 		}
 
 		return $data;
+	}
+	public static function info($shop_id, $invoice_id)
+	{
+		return Tbl_customer_invoice::customer()->where("inv_shop_id", $shop_id)->where("inv_id", $invoice_id)->first();
+	}
+	public static function info_item($invoice_id)
+	{
+		return Tbl_customer_invoice_line::um()->where("invline_inv_id", $invoice_id)->get();		
 	}
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{

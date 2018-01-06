@@ -27,8 +27,14 @@ class TransactionSalesReceiptController extends Member
   	public function getIndex()
 	{
 		$data['page'] = "Sales Receipt";
+		$data['_sales_receipt'] = TransactionSalesReceipt::get($this->user_info->shop_id, 10);
 		return view('member.accounting_transaction.customer.sales_receipt.sales_receipt_list',$data);
-	} 
+	} 	
+	public function getLoadSalesReceipt(Request $request)
+	{
+		$data['_sales_receipt'] = TransactionSalesReceipt::get($this->user_info->shop_id, 10, $request->search_keyword);
+		return view('member.accounting_transaction.customer.sales_receipt.sales_receipt_table',$data);		
+	}
 
 	public function getCreate()
 	{

@@ -11,6 +11,7 @@ use App\Globals\CommissionCalculator;
 use App\Globals\SalesAgent;
 
 use App\Models\Tbl_employee;
+use App\Models\Tbl_position;
 use Carbon\Carbon;
 use Validator;
 use Session;
@@ -116,53 +117,53 @@ class SalesAgentController extends Member
 
 	public function postAgentReadFile(Request $request)
 	{
-		Session::forget("import_agent_error");
+		Session::forget("import_coa_error");
 
 		$value     = $request->value;
 		$input     = $request->input;
 
-		//die(var_dump($value));
 		$ctr 	   		= $request->ctr;
 		$data_length 	= $request->data_length;
 		$error_data 	= $request->error_data;
 
+		//die(var_dump($ctr));
 		if($ctr != $data_length)
 		{
-			$agent_code			= isset($value["Agent Code"])			? $value["Agent Code"] : '' ;
-			$first_name			= isset($value["First Name"])			? $value["First Name"] : '' ;
-			$middle_name		= isset($value["Middle Name"])			? $value["Middle Name"] : '' ;
-			$last_name			= isset($value["Last Name"])			? $value["Last Name"] : '' ;
-			$position_code		= isset($value["Position Code"])		? $value["Position Code"] : '' ;
-			$position			= isset($value["Position"])				? $value["Position"] : '' ;
-			$commission_percent	= isset($value["Commission Percent"])	? $value["Commission Percent"] : '' ;
+			$agent_code		= isset($value["Agent Code"])			? $value["Agent Code"] : '' ;
+			$first_name		= isset($value["First Name"])			? $value["First Name"] : '' ;
+			$middle_name	= isset($value["Middle Name"])			? $value["Middle Name"] : '' ;
+			$last_name		= isset($value["Last Name"])			? $value["Last Name"] : '' ;
+			$position_code	= isset($value["Position Code"])		? $value["Position Code"] : '' ;
+			$position		= isset($value["Position"])				? $value["Position"] : '' ;
+			$com_percent	= isset($value["Commission Percent"])	? $value["Commission Percent"] : '' ;
 
-			//die(var_dump($value));
 
-			/* Validation */
-			/*$duplicate_agent = null;
-			$duplicate_position = null;
-			if($first_name && $middle_name && $last_name)
+			$position_name = null;
+			if(!isset($position))
 			{
-				$duplicate_agent	= Tbl_employee::where("shop_id", $this->user_info->shop_id)->where("first_name", $first_name)->where("middle_name", $middle_name)->where("last_name", $last_name)->first();
+				$position_name = Tbl_position::where("position_shop_id", $this->user_info->shop_id)->where("position_name", $position_name)->first();
 			}
-			
-			if(!$duplicate_agent)
+
+			$json = null;
+			if(!$position_name)
 			{
-				$insertagent['shop_id'] 	 = $this->user_info->shop_id;
-	            $insertagent['agent_code'] 	 = $agent_code;
-	            $insertagent['first_name'] 	 = $first_name;
-	            $insertagent['middle_name']  = $middle_name;
-	            $insertagent['last_name'] 	 = $last_name;
-	            $insertagent['created_date'] = Carbon::now();
+				$insert_position['position_shop_id']   = $this->user_info->shop_id;
+            	$insert_position['position_code'] 	   = $position_code;
+            	$insert_position['position_name'] 	   = $position;
+            	$insert_position['archived'] 		   = 0;
+            	$insert_position['commission_percent'] = $com_percent;
+            	$insert_position['position_created']   = Carbon::now();
 
-	            $insertposition['position_code'] 	  = $position_code;
-	            $insertposition['position_name'] 	  = $position;
-	            $insertposition['commission_percent'] = $commission_percent;
+            	$insert_agent['shop_id']   			= $this->user_info->shop_id;
+	            $insert_agent['agent_code'] 		= $agent_code;
+	        	$insert_agent['first_name'] 		= $first_name;
+	        	$insert_agent['middle_name'] 		= $middle_name;
+	        	$insert_agent['last_name'] 			= $last_name;
+	        	$insert_agent['date_created'] 		= Carbon::now();
 
-	            $rules["first_name"] = 'required';
-	            $rules["last_name"]  = 'required';
+	        	$rules["position_name"] = 'required';
 
-				$validator = Validator::make($insertagent, $rules);
+				$validator = Validator::make($insert_position, $rules);
 				if ($validator->fails())
 				{
 					$json["status"] 	= "error";
@@ -170,50 +171,19 @@ class SalesAgentController extends Member
 				}
 				else
 				{
-					$agent_id = Tbl_employee::insertGetId($insertagent);
-		            
-		            $insertInfo['ven_info_vendor_id'] = $vendor_id;
-		            Tbl_vendor_other_info::insert($insertInfo);
-
+					$position_id = Tbl_position::insertGetId($insert_position);  
+		            $insert_agent['position_id'] = $position_id;
+		            Tbl_employee::insert($insert_agent);
 
 		            $json["status"]		= "success";
 					$json["message"]	= "Success";
-					$json["item_id"]	= $vendor_id;
-	        	}
-			}
-			else
-			{
-				$json["status"]		= "error";
-				$json["message"]	= "Duplicate Agent name";
-			}*/
-
-			$status_color 		= $json["status"] == 'success' ? 'green' : 'red';
-			$json["tr_data"]	= "<tr>";
-			$json["tr_data"]   .= "<td class='$status_color'>".$json["status"]."</td>";
-			$json["tr_data"]   .= "<td nowrap>".$json["message"]."</td>";
-			$json["tr_data"]   .= "<td nowrap>".$agent_code."</td>";
-			$json["tr_data"]   .= "<td nowrap>".$first_name."</td>";
-			$json["tr_data"]   .= "<td nowrap>".$middle_name."</td>";
-			$json["tr_data"]   .= "<td nowrap>".$last_name."</td>";
-			$json["tr_data"]   .= "<td nowrap>".$position_code."</td>";
-			$json["tr_data"]   .= "<td nowrap>".$commission_percent."</td>";
-			$json["tr_data"]   .= "</tr>";
-
-			$json["value_data"] = $value;
-			$length 			= sizeOf($json["value_data"]);
-
-			foreach($json["value_data"] as $key=>$value)
-			{
-				$json["value_data"]['Error Description'] = $json["message"];
+					$json["item_id"]	= $position_id;
+				}
+		        
 			}
 		}
-		else /* DETERMINE IF LAST IN CSV */
-		{
-			Session::put("import_agent_error", $error_data);
-			$json["status"] = "end";
-		}
-
-        return json_encode($json);
+		//die(var_dump($position_id));
+		return $json;
 	}
 
 	/* Do not Remove */

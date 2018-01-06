@@ -5,10 +5,6 @@
 		<button type="button" class="close" data-dismiss="modal" style="margin-right: 15px;">&times;
 		</button>
 	
-	<ul class="nav nav-tabs">
-	  <li class="active"><a data-toggle="tab" href="#active-leave_temp"><i class="fa fa-star"></i>&nbsp;Active</a></li>
-	  <li><a data-toggle="tab" href="#archived-leave_temp"><i class="fa fa-trash-o"></i>&nbsp;Archived</a></li>
-	</ul>
 	<div class="tab-content padding-top-10">
 		  <div id="active-leave_temp" class="tab-pane fade in active">
 		  	

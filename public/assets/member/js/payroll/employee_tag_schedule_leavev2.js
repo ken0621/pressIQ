@@ -1,4 +1,4 @@
-var employee_tag_schedule_leave = new employee_tag_schedule_leave();
+	var employee_tag_schedule_leave = new employee_tag_schedule_leave();
 
 function employee_tag_schedule_leave()
 {
@@ -76,12 +76,15 @@ function employee_tag_schedule_leave()
 		var department 	= $(".change-filter-department").val();
 		var jobtitle 	= $(".change-filter-job-title").val();
 		var leave_id 	= $(".leave_id").val();
+		var payroll_leave_pay_value = $(".payroll_leave_temp_with_pay").val();
+
 
 		var formdata 	= {
 			company:company,
 			department:department,
 			jobtitle:jobtitle,
 			leave_id:leave_id,
+			payroll_leave_pay_value:payroll_leave_pay_value,
 			_token:misc('_token')
 		};
 
@@ -117,10 +120,20 @@ function employee_tag_schedule_leave()
 
 	function str_list(data)
 	{
-		var html = '<li class="list-group-item padding-3-10">';
-	  	html 	+= '<div class="checkbox">'
-	  	html 	+= '<label><input type="checkbox" name="employee_tag[]" class="check-tag" value="'+data.payroll_leave_employee_id_2+'">'+ data.payroll_employee_title_name + ' ' +data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name +'</label>';
-	  	html 	+= '</div></li>';
+		if(typeof(data.payroll_leave_employee_id_3) === 'undefined')
+		{
+				var html = '<li class="list-group-item padding-3-10">';
+			  	html 	+= '<div class="checkbox">'
+			  	html 	+= '<label><input type="checkbox" name="employee_tag[]" class="check-tag" value="'+data.payroll_leave_employee_id_2+'">'+ data.payroll_employee_title_name + ' ' +data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name +'</label>';
+			  	html 	+= '</div></li>';
+		}
+		else
+		{
+					var html = '<li class="list-group-item padding-3-10">';
+				  	html 	+= '<div class="checkbox">'
+				  	html 	+= '<label><input type="checkbox" name="employee_tags[]" class="check-tag" value="'+data.payroll_employee_id+'">'+ data.payroll_employee_title_name + ' ' +data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name +'</label>';
+				  	html 	+= '</div></li>';
+		}
 	  	return html;
 	  
 	}	
@@ -132,12 +145,24 @@ function employee_tag_schedule_leave()
 
 
 	this.load_tagged_employee = function()
-	{
+	{	
+		
+		var leavetempid = $('#leavetempid').val();
+	    if($('#pay').is(':checked'))
+	    {
+	    	var leave_pay_value = $('#pay').val();
+	    }
+	    else
+	    {
+	    	var leave_pay_value = $('#pays').val();
+	    }
 		var action = "/member/payroll/leave_schedule/v2/get_session_leave_tagv2";
 		var method = "POST";
 		var target = ".table-employee-tag";
 		var formdata = {
-			_token:misc('_token')
+			_token:misc('_token'),
+			leavetempid:leavetempid,
+			leave_pay_value:leave_pay_value
 		};
 		var function_name = "modal_create_deduction.remove_tag";
 		$(target).html('<tr><td colspan="5">'+misc('loader') + '</td></tr>');
@@ -149,7 +174,7 @@ function employee_tag_schedule_leave()
 			{
 				var html = '';
 				result = JSON.parse(result);
-
+				console.log(result.new_record);
 				$(result.new_record).each(function(index, data){
 
 					$(data).each(function(index,data2){

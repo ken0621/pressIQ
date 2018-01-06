@@ -8,7 +8,7 @@ use DB;
 class Tbl_merchant_commission_report_setting extends Model
 {
    	protected $table = 'tbl_merchant_commission_report_setting';
-	protected $primaryKey = "merchant_commission_report_id";
+	protected $primaryKey = "merchant_report_id";
     public $timestamps = false;
 
 }

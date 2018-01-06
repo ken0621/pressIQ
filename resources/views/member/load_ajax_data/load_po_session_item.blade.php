@@ -1,17 +1,18 @@
 @if(count(Session::get('po_item')) > 0)
     @foreach(Session::get('po_item') as $items)
     <tr class="trcount tr-draggable tr-id-{{$items['poline_po_id']}}">
-        <td class="invoice-number-td text-right">1</td>
         <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i>
             <input type="hidden" class="poline_id" name="itemline_ref_name[]" value="purchase_order">
             <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]" value="{{$items['poline_po_id']}}">
         </td>
+        <td class="invoice-number-td text-right">1</td>
+        <td>
             <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
                 @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $items['poline_item_id']])
             </select>
         </td>
         <td>
-            @if($pis)
+            @if(isset($pis))
                 <textarea class="textarea-expand txt-desc" name="itemline_description[]" readonly="true">{{$items['poline_description']}}</textarea>
             @else
                 <textarea class="textarea-expand txt-desc" name="itemline_description[]">{{$items['poline_description']}}</textarea>
@@ -50,7 +51,7 @@
         </select>
     </td>
     <td>
-        @if($pis)
+        @if(isset($pis))
             <textarea class="textarea-expand txt-desc" readonly="true" name="itemline_description[]"></textarea>
         @else
             <textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea>

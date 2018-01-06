@@ -8,6 +8,10 @@ function commission_report()
 	{
 		action_load_table();
 	}
+	this.action_change_warehouse = function()
+	{
+		action_change_warehouse();
+	}
 
 	function init()
 	{
@@ -23,13 +27,13 @@ function commission_report()
 	}
 	function event_change_warehouse()
     {
-        $('.select_current_warehouse').change(function()
-        {
-            action_change_warehouse();
-        });
+    	action_change_warehouse();
     }
     function action_change_warehouse()
     {
+    	var loc = window.location.href;
+    	console.log('location: '+loc);
+
         var currentWarehouse = $('.select_current_warehouse').val();
         $('.commission-percentage').attr('disabled',true);
         $.ajax(
@@ -47,7 +51,7 @@ function commission_report()
     }
     function action_table_loader()
 	{
-		$(".load-table-here").html('<div style="padding: 100px; text-align: center; font-size: 20px;"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>');
+		$(".load-commission-table-here").html('<div style="padding: 100px; text-align: center; font-size: 20px;"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>');
 	}
 	function action_load_table()
 	{
@@ -60,7 +64,7 @@ function commission_report()
 			type: "get",
 			success: function(data)
 			{
-				$('.load-table-here').html(data);
+				$('.load-commission-table-here').html(data);
 			}
 		});
 	}

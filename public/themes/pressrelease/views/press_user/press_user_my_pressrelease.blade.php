@@ -10,6 +10,9 @@
         	<div class="border"></div>
             @endforeach
         </div>
+        <div class="my-press-release-container-container" style="border-bottom: none;" >
+            {!! $pr->render() !!}
+        </div>
     </div>
 </div>
 @endsection

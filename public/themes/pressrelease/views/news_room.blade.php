@@ -21,10 +21,14 @@
                 <div class="main-container">
                     @foreach ($pr as $prs)
                     <div class="news-title-container" >
-                        <div class="title"><a href="/newsroom/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
+                        <div class="title">
+                            <a href="/newsroom/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a>
+                        </div>
                     </div>  
                     <div class="details-container">
+                        <a href="/newsroom/view/{{$prs->pr_id}}">
                         <p>{!!$prs->pr_content!!}</p>
+                        </a>
                     </div>
                     <div class="button-container">
                         <button onclick="window.location.href='/newsroom/view/{{$prs->pr_id}}'">Read More &raquo;</button>

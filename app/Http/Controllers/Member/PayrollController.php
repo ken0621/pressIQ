@@ -12,6 +12,7 @@ use DB;
 use Response;
 use PDF;
 use stdClass;
+use Input;
 
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_rdo;
@@ -720,11 +721,11 @@ class PayrollController extends Member
 
      public function import_201_template()
      {
-          $file = Request::file('file');
+          $file = Input::file('file');
           // die(var_dump(Request::all()));
           $_data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
           $first = $_data[0]; 
-         die(var_dump($_data));
+          
           /* check index exist */
           
           if(isset($first['company']) && isset($first['first_name']) && isset($first['department']) && isset($first['start_date']))

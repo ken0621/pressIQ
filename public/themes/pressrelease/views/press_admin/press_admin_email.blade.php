@@ -23,7 +23,7 @@
                         <td style="text-align: center;">{!!$email->pr_content!!}</td>
                          <td style="text-align: center;">{!!$email->pr_boiler_content!!}</td>
                         <td  style="text-align: center;align-items: row" align="center">
-                            <a href=""><button type="button"  class="btn btn-warning center">
+                            <a href="/pressadmin/email_edit/{{$email->pr_id}}"><button type="button"  class="btn btn-warning center">
                             <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
 
                             <a href="/pressadmin/email_delete/{{$email->pr_id}}"><button type="button"  class="btn btn-danger center">

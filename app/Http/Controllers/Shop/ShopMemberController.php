@@ -233,6 +233,12 @@ class ShopMemberController extends Shop
     }
 
     /*--------------------------------------------------------------------------Press Release*/
+    // public function press_email()
+    // {
+    //     $data["pr"]='$pr';
+    //     $data["page"] = "Email";
+    //     return view("emails.press_email", $data);
+    // }
     public function logout()
     {
         Session::flush();

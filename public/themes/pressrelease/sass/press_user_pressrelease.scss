@@ -340,11 +340,12 @@
 {
 	.modal-content
 	{
+		height: 595px;
 		.modal-body
 		{
 			overflow: hidden;
 			overflow-y: scroll;
-			height: 480px;
+			height: 525px;
 			#preview_headline
 			{
 				text-align: center;
@@ -394,7 +395,7 @@
 		}
 		.modal-footer
 		{
-
+			padding: 15px 0px 0px 0px;
 		}
 	}
 }

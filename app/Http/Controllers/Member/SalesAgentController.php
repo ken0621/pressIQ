@@ -11,8 +11,10 @@ use App\Globals\CommissionCalculator;
 use App\Globals\SalesAgent;
 
 use App\Models\Tbl_employee;
+use App\Models\Tbl_position;
 use Carbon\Carbon;
 use Validator;
+use Redirect;
 use Session;
 use Excel;
 use URL;
@@ -121,72 +123,89 @@ class SalesAgentController extends Member
 		$value     = $request->value;
 		$input     = $request->input;
 
-		//die(var_dump($value));
 		$ctr 	   		= $request->ctr;
 		$data_length 	= $request->data_length;
 		$error_data 	= $request->error_data;
 
+		//die(var_dump($ctr));
 		if($ctr != $data_length)
 		{
-			$agent_code			= isset($value["Agent Code"])			? $value["Agent Code"] : '' ;
-			$first_name			= isset($value["First Name"])			? $value["First Name"] : '' ;
-			$middle_name		= isset($value["Middle Name"])			? $value["Middle Name"] : '' ;
-			$last_name			= isset($value["Last Name"])			? $value["Last Name"] : '' ;
-			$position_code		= isset($value["Position Code"])		? $value["Position Code"] : '' ;
-			$position			= isset($value["Position"])				? $value["Position"] : '' ;
+			$agent_code		= isset($value["Agent Code"])			? $value["Agent Code"] : '' ;
+			$first_name		= isset($value["First Name"])			? $value["First Name"] : '' ;
+			$middle_name	= isset($value["Middle Name"])			? $value["Middle Name"] : '' ;
+			$last_name		= isset($value["Last Name"])			? $value["Last Name"] : '' ;
+			$position_code	= isset($value["Position Code"])		? $value["Position Code"] : '' ;
+			$position		= isset($value["Position"])				? $value["Position"] : '' ;
 			$commission_percent	= isset($value["Commission Percent"])	? $value["Commission Percent"] : '' ;
 
-			//die(var_dump($value));
-
-			/* Validation */
-			/*$duplicate_agent = null;
-			$duplicate_position = null;
+			$check_agent_code = null;
+			if($agent_code)
+			{
+				$check_agent_code = Tbl_employee::where('shop_id', $this->user_info->shop_id)->where('agent_code', $agent_code)->first();
+			}
+			$check_agent = null;
 			if($first_name && $middle_name && $last_name)
 			{
-				$duplicate_agent	= Tbl_employee::where("shop_id", $this->user_info->shop_id)->where("first_name", $first_name)->where("middle_name", $middle_name)->where("last_name", $last_name)->first();
+				$check_agent = Tbl_employee::where('shop_id', $this->user_info->shop_id)->where('first_name', $first_name)->where('middle_name', $middle_name)->where('last_name', $last_name)->first();
 			}
-			
-			if(!$duplicate_agent)
+			if(!$check_agent_code)
 			{
-				$insertagent['shop_id'] 	 = $this->user_info->shop_id;
-	            $insertagent['agent_code'] 	 = $agent_code;
-	            $insertagent['first_name'] 	 = $first_name;
-	            $insertagent['middle_name']  = $middle_name;
-	            $insertagent['last_name'] 	 = $last_name;
-	            $insertagent['created_date'] = Carbon::now();
-
-	            $insertposition['position_code'] 	  = $position_code;
-	            $insertposition['position_name'] 	  = $position;
-	            $insertposition['commission_percent'] = $commission_percent;
-
-	            $rules["first_name"] = 'required';
-	            $rules["last_name"]  = 'required';
-
-				$validator = Validator::make($insertagent, $rules);
-				if ($validator->fails())
+				if(!$check_agent)
 				{
-					$json["status"] 	= "error";
-					$json["message"]  	= $validator->errors()->first();
+					if(isset($position))
+					{
+						$insert_position['position_shop_id']   = $this->user_info->shop_id;
+		            	$insert_position['position_code'] 	   = $position_code;
+		            	$insert_position['position_name'] 	   = $position;
+		            	$insert_position['archived'] 		   = 0;
+		            	$insert_position['commission_percent'] = $commission_percent;
+		            	$insert_position['position_created']   = Carbon::now();
+
+		            	$insert_agent['shop_id']   			= $this->user_info->shop_id;
+			            $insert_agent['agent_code'] 		= $agent_code;
+			        	$insert_agent['first_name'] 		= $first_name;
+			        	$insert_agent['middle_name'] 		= $middle_name;
+			        	$insert_agent['last_name'] 			= $last_name;
+			        	$insert_agent['date_created'] 		= Carbon::now();
+
+			        	$rules["commission_percent"] = 'required';
+			        	
+						$validator = Validator::make($insert_position, $rules);
+						if ($validator->fails())
+						{
+							$json["status"] 	= "error";
+							$json["message"]  	= $validator->errors()->first();
+						}
+						else
+						{
+							$position_id = Tbl_position::insertGetId($insert_position);  
+				            $insert_agent['position_id'] = $position_id;
+				            Tbl_employee::insert($insert_agent);
+
+				            $json["status"]		= "success";
+							$json["message"]	= "Success";
+							$json["item_id"]	= $position_id;
+						}
+					}
+					else
+					{
+						$json["status"]		= "error";
+						$json["message"]	= "Please input position.";
+					}
 				}
 				else
 				{
-					$agent_id = Tbl_employee::insertGetId($insertagent);
-		            
-		            $insertInfo['ven_info_vendor_id'] = $vendor_id;
-		            Tbl_vendor_other_info::insert($insertInfo);
-
-
-		            $json["status"]		= "success";
-					$json["message"]	= "Success";
-					$json["item_id"]	= $vendor_id;
-	        	}
+					$json["status"]		= "error";
+					$json["message"]	= "Agent name already exist.";
+				}
 			}
 			else
-			{
-				$json["status"]		= "error";
-				$json["message"]	= "Duplicate Agent name";
-			}*/
-
+	        {
+	        	$json["status"]		= "error";
+				$json["message"]	= "Agent Code already exist.";
+			}
+				
+		    //die(var_dump($json));
 			$status_color 		= $json["status"] == 'success' ? 'green' : 'red';
 			$json["tr_data"]	= "<tr>";
 			$json["tr_data"]   .= "<td class='$status_color'>".$json["status"]."</td>";
@@ -196,6 +215,7 @@ class SalesAgentController extends Member
 			$json["tr_data"]   .= "<td nowrap>".$middle_name."</td>";
 			$json["tr_data"]   .= "<td nowrap>".$last_name."</td>";
 			$json["tr_data"]   .= "<td nowrap>".$position_code."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$position."</td>";
 			$json["tr_data"]   .= "<td nowrap>".$commission_percent."</td>";
 			$json["tr_data"]   .= "</tr>";
 
@@ -212,8 +232,52 @@ class SalesAgentController extends Member
 			Session::put("import_agent_error", $error_data);
 			$json["status"] = "end";
 		}
+		
+		return json_encode($json);
+	}
 
-        return json_encode($json);
+	public function getAgentExportError()
+	{
+		$_value = Session::get("import_agent_error");
+
+		if($_value)
+		{
+			Excel::create("AgentImportError", function($excel) use($_value)
+			{
+				// Set the title
+			    $excel->setTitle('Digimahouse');
+
+			    // Chain the setters
+			    $excel->setCreator('DigimaWebSolutions')
+			          ->setCompany('DigimaWebSolutions');
+
+			    $excel->sheet('Template', function($sheet) use($_value) {
+			    	$header = [
+			    				'Agent Code',
+	                        	'First Name',
+	                        	'Middle Name',
+	                        	'Last Name',
+	                        	'Position Code',
+	                        	'Position',
+	                        	'Commission Percent',
+			    				'Error_Description'
+			    				];
+			    	$sheet->freezeFirstRow();
+			        $sheet->row(1, $header);
+			        foreach($_value as $key=>$value)
+			        {
+			        	$sheet->row($key+2, $value);
+			        }
+
+			    });
+
+
+			})->download('csv');
+		}
+		else
+		{
+			return Redirect::back();
+		}
 	}
 
 	/* Do not Remove */

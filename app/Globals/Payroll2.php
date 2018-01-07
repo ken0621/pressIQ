@@ -987,7 +987,7 @@ class Payroll2
 		{
 			$_timesheet_record_db = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->get();
 			$_timesheet_record = Payroll2::timesheet_process_in_out_record($_timesheet_record_db);
-			// dd($_timesheet_record);
+			
 		}
 		else
 		{
@@ -4417,7 +4417,8 @@ class Payroll2
 		/* PHILHEALTH COMPUTATION */	
 		if($philhealth_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
 		{
-			$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_declared);
+			// $philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_declared);
+			$philhealth_contribution = Payroll2::philhealth_contribution_update_2018($philhealth_declared);
 			$philhealth_description = payroll_currency($philhealth_declared) . " declared PHILHEALTH Salary";
 
 			if($philhealth_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
@@ -4492,7 +4493,8 @@ class Payroll2
 				if(code_to_word($period_count) == "1st Period")
 				{
 					$philhealth_description .= "<br> 1st Period of the Month. No need to refer to previous cutoff.";
-					$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+					// $philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+					$philhealth_contribution = Payroll2::philhealth_contribution_update_2018($philhealth_reference_amount);
 				}
 				else
 				{
@@ -4530,7 +4532,8 @@ class Payroll2
 						$philhealth_description .= "<br> Using previous cutoff as reference, previous PHILHEALTH Salary used is " . payroll_currency($last_cutoff->phihealth_salary) . " (" . payroll_currency($total_previous_cutoff_philhealth_ee) . ")";
 						$philhealth_reference_amount = $philhealth_reference_amount + $last_cutoff->phihealth_salary;
 						$philhealth_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($philhealth_reference_amount);
-						$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+						// $philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+						$philhealth_contribution = Payroll2::philhealth_contribution_update_2018($philhealth_reference_amount);
 						$philhealth_description .= "<br> New PHILHEALTH Bracket falls to " . payroll_currency($philhealth_contribution["ee"]);
 						$philhealth_description .= "<br> NEW BRACKET (" . payroll_currency($philhealth_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($total_previous_cutoff_philhealth_ee) . ")";
 						$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $total_previous_cutoff_philhealth_ee;
@@ -4569,7 +4572,7 @@ class Payroll2
 							}
 						}
 
-						$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $sss_reference_amount);
+						$philhealth_contribution = Payroll2::philhealth_contribution_update_2018($sss_reference_amount);
 					}
 				}
 				else
@@ -7808,4 +7811,30 @@ class Payroll2
 		return $_chart_of_account_insert;
 	}
 
+
+	public static function philhealth_contribution_update_2018($rate)
+	{
+		$data['ee'] = 0;
+		$data['er'] = 0;
+		
+		if ($rate <= 10000) 
+		{
+			$data['ee'] = 137.50;
+			$data['er'] = 137.50;
+		}
+		else if($rate > 10000 && $rate < 40000)
+		{
+			$philhealth_contri = $rate * 0.0275;
+
+			$data['ee'] = @($philhealth_contri/2);
+			$data['er'] = @($philhealth_contri/2);
+		}
+		else if($rate >= 40000)
+		{
+			$data['ee'] = 550.00;
+			$data['er'] = 550.00;
+		}
+
+		return $data;
+	}
 }

@@ -17,6 +17,7 @@
 
                                 <div class="border"></div>
                                 <div class="title-about-container">About {{$prs->pr_co_name}}</div>
+                                <div class="title-about-container">{{$prs->pr_type}}</div>
                                 <div class="content-container">{!!$prs->pr_boiler_content!!}</div>
                             </div>
                         </div>

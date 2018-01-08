@@ -119,6 +119,7 @@
 			<div class="content-container"><p>{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_content); !!}</p></div>
 			<div class="border"></div>
 			<div class="title-about-container">About {{$pr_co_name}}</div>
+			<div class="title-about-container">{{$pr_type}}</div>
 			<div class="content-container">{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_boiler_content); !!}</div>
 		</div>
 	</div>

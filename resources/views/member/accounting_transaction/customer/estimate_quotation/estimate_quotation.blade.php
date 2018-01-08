@@ -55,7 +55,7 @@
                                     <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$est->customer_email or ''}}"/>
                                 </div>
                             </div>
-                        </div>                          
+                        </div>
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Billing Address</label>

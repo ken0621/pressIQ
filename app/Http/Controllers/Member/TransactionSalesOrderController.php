@@ -25,7 +25,12 @@ class TransactionSalesOrderController extends Member
 	{
 		$data['page'] = "Sales Order";
 		return view('member.accounting_transaction.customer.sales_order.sales_order_list',$data);
-	} 
+	} 	
+	public function getLoadSalesOrder(Request $request)
+	{
+		$data['_sales_order'] = TransactionSalesOrder::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
+		return view('member.accounting_transaction.customer.sales_order.sales_order_table',$data);		
+	}
 
 	public function getCreate()
 	{

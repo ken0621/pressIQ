@@ -1,5 +1,6 @@
 var eq_list = new eq_list();
 var load_table_data = {};
+load_table_data.tab_type = 'pending';
 
 function eq_list()
 {
@@ -18,6 +19,7 @@ function eq_list()
 		action_load_table();
 		add_event_pagination();
 		event_load_search();
+		action_click_tab();
 	}
 	function event_load_search()
 	{
@@ -25,6 +27,17 @@ function eq_list()
 		$('.search-keyword').bind("change", function(e)
 		{
 			action_filter_search(e.currentTarget);
+		});
+	}	
+	function action_click_tab()
+	{
+		$("body").on("click", ".change-tab", function(e)
+		{
+			$('.change-tab').removeClass("active");
+			$('.'+$(e.currentTarget).attr("mode")+'-tab').addClass('active');
+			load_table_data.tab_type = $(e.currentTarget).attr("mode");
+		    load_table_data.page = 1;
+		    action_load_table();
 		});
 	}
 	function action_filter_search(self)

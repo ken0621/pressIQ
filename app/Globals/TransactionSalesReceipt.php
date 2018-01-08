@@ -67,9 +67,7 @@ class TransactionSalesReceipt
 			$ins['transaction_refnum']	 		 = $insert['transaction_refnum'];   
 	        $ins['inv_customer_email']           = $insert['customer_email'];
 	        $ins['inv_customer_billing_address'] = $insert['customer_address'];
-	        $ins['inv_terms_id']                 = $insert['customer_terms'];
 	        $ins['inv_date']                     = date("Y-m-d", strtotime($insert['transaction_date']));
-	        $ins['inv_due_date']                 = date("Y-m-d", strtotime($insert['transaction_duedate']));
 	        $ins['ewt']                          = $insert['customer_ewt'];
 	        $ins['inv_discount_type']            = $insert['customer_discounttype'];
 	        $ins['inv_discount_value']           = $insert['customer_discount'];
@@ -104,8 +102,7 @@ class TransactionSalesReceipt
 
 
 	        /* INSERT SAlES RECEIPT HERE */
-	        // $sales_receipt_id = Tbl_customer_invoice::insertGetId($ins);
-	        $sales_receipt_id = 0;
+	        $sales_receipt_id = Tbl_customer_invoice::insertGetId($ins);
 
 	        /* Transaction Journal */
 	        $entry["reference_module"]  = 'sales-receipt';
@@ -116,7 +113,7 @@ class TransactionSalesReceipt
 	        $entry["discount"]          = $discount;
 	        $entry["ewt"]               = $ewt;
 
-	        $return = Self::insertline($invoice_id, $insert_item, $entry);
+	        $return = Self::insertline($sales_receipt_id, $insert_item, $entry);
 		}
 		else
 		{
@@ -155,7 +152,7 @@ class TransactionSalesReceipt
 		}
 		if(count($itemline) > 0)
 		{
-			// Tbl_customer_invoice_line::insert($itemline);
+			Tbl_customer_invoice_line::insert($itemline);
 			$return = AccountingTransaction::entry_data($entry, $insert_item);
 		}
 

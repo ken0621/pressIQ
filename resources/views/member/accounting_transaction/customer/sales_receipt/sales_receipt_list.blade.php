@@ -33,7 +33,7 @@
         <div class="col-md-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search-employee-name" placeholder="Search ..." aria-describedby="basic-addon1">
+                <input type="text" class="form-control search-employee-name search-keyword" placeholder="Search ..." aria-describedby="basic-addon1">
             </div>
         </div>
     </div>
@@ -43,7 +43,7 @@
             <div class="clearfix">
                 <div class="col-md-12">
                     <div class="table-responsive load-item-table">
-                        @include('member.accounting_transaction.customer.sales_receipt.sales_receipt_table')
+                      <div class="text-center">LOADING TRANSACTION...</div>
                     </div>
                 </div>
             </div>

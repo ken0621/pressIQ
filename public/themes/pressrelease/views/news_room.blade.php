@@ -26,11 +26,7 @@
                         </div>
                     </div>  
                     <div class="details-container">
-<<<<<<< HEAD
                         <a href="/newsroom/view/{{$prs->pr_id}}" style="color: black;text-decoration:none;">
-=======
-                        <a href="/newsroom/view/{{$prs->pr_id}}">
->>>>>>> mod_brl_press_function
                         <p>{!!$prs->pr_content!!}</p>
                         </a>
                     </div>

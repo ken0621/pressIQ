@@ -3,8 +3,8 @@
 $content-text: 'Lato', sans-serif;
 $light: 300;
 $regular: 400;
-$semi-bold: 600;
 $bold: 700;
+$black: 900;
 $text-light: #777;
 $text-dark: #272c2f;
 
@@ -30,7 +30,7 @@ $text-dark: #272c2f;
 
 		span
 		{
-			font-weight: $bold;
+			font-weight: $black;
 		}
 	}
 
@@ -57,7 +57,7 @@ $text-dark: #272c2f;
 
 			.text-header1
 			{
-				font-weight: $regular;
+				font-weight: $bold;
 				font-size: 24px;
 				color: #fff;
 				word-break: break-all;
@@ -101,7 +101,7 @@ $text-dark: #272c2f;
 
 			.or
 			{
-				font-weight: $regular;
+				font-weight: $bold;
 				font-size: 13px;
 				color: #fff;
 				padding: 20px;
@@ -115,7 +115,7 @@ $text-dark: #272c2f;
 			.btn-enter-a-code
 			{
 				@include transition(0.2s);
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				color: #fff;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
@@ -176,7 +176,7 @@ $text-dark: #272c2f;
 
 	.text-header
 	{
-		font-weight: $bold;
+		font-weight: $black;
 		font-size: 17px;
 		color: $text-dark;
 		padding-top: 10px;
@@ -199,7 +199,7 @@ $text-dark: #272c2f;
 			{
 				text-align: center;
 				padding-top: 10px;
-				font-weight: $bold;
+				font-weight: $black;
 				font-size: 17px;
 				color: $text-dark;
 			}
@@ -215,7 +215,7 @@ $text-dark: #272c2f;
 			{
 				font-size: 15px;
 				color: $text-dark;
-				font-weight: $regular;
+				font-weight: $bold;
 			}
 
 			span
@@ -324,7 +324,7 @@ $text-dark: #272c2f;
 	{
 		text-align: center;
 		font-family: $content-text;
-		font-weight: $semi-bold;
+		font-weight: $bold;
 		font-size: 13px;
 
 		.btn-verify
@@ -365,7 +365,7 @@ $text-dark: #272c2f;
 
 			.modal-title
 			{
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				color: #FFF;
 				font-size: 15px;
 			}
@@ -373,7 +373,7 @@ $text-dark: #272c2f;
 
 		.modal-body
 		{
-			font-weight: $regular;
+			font-weight: $bold;
 			margin: 0px 20px 0px 20px;
 
 			.warning
@@ -395,7 +395,7 @@ $text-dark: #272c2f;
 				}
 				.values
 				{
-					font-weight: $regular;
+					font-weight: $bold;
 					color: $text-dark;
 				}
 			}
@@ -412,7 +412,7 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $bold;
+				font-weight: $black;
 				font-size: 13px;
 				padding-bottom: 20px;
 				margin-top: 20px;
@@ -439,7 +439,7 @@ $text-dark: #272c2f;
 	{
 		.modal-body
 		{
-			font-weight: $semi-bold;
+			font-weight: $bold;
 			margin: 0px 20px 0px 20px;
 
 			.message
@@ -449,7 +449,7 @@ $text-dark: #272c2f;
 				color: #f02432;
 				letter-spacing: 0.5px;
 				font-size: 14px;
-				font-weight: $bold !important;
+				font-weight: $black !important;
 				text-transform: uppercase;
 			}
 
@@ -457,7 +457,7 @@ $text-dark: #272c2f;
 			{
 				width: 100%;
 				font-size: 15px;
-				font-weight: $regular !important;
+				font-weight: $bold !important;
 				color: $text-light !important;
 				letter-spacing: 0.5px;
 				border: none;
@@ -499,7 +499,7 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				font-size: 14px;
 				text-transform: uppercase;
 				padding-bottom: 20px;
@@ -559,7 +559,7 @@ $text-dark: #272c2f;
 
 			.text-caption
 			{	
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				color: #344049;
 				padding-top: 5px;
 				font-size: 13px;
@@ -571,7 +571,7 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				font-size: 14px;
 				padding-bottom: 20px;
 

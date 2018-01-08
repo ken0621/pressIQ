@@ -12,7 +12,7 @@ $bold: 700;
 
 .pushmenu
 { 
-    /*this is the nav*/
+     /*this is the nav*/
      // background: #02295E;
      background-color: rgba(4,102,175,0.7);
      text-align: left;
@@ -23,7 +23,7 @@ $bold: 700;
      position: fixed;
      overflow-y: auto;
 
-     @media screen and (max-width: 320px)
+    @media screen and (max-width: 320px)
     {
         width: 250px;
     }
@@ -51,7 +51,7 @@ $bold: 700;
     {
         padding: 20px;
         text-align: center;
-        border-bottom: 1px solid rgba(255,255,255,0.2);
+        // border-bottom: 1px solid rgba(255,255,255,0.2);
 
         // .profile-img 
         // {

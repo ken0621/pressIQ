@@ -1,5 +1,10 @@
 @import "../../../assets/front/sass/mixin";
 
+.modal-title
+{
+	font-weight: 700;
+}
+
 .modal-header
 {
 	background-color: #0466AF;
@@ -9,7 +14,7 @@
 	{
 		color: #fff;
 	}
-
+	
 	.close
 	{
 		color: #fff;
@@ -55,6 +60,7 @@
 		color: #fff;
 	}
 }
+
 .btn-custom-primary
 {
 	background-color: #0466AF;
@@ -75,6 +81,7 @@
 .member
 {
 	background-color: #ededed;
+
 	.members
 	{
 		background-color: #fff;
@@ -129,7 +136,7 @@
 					{
 						font-size: 13px;
 						color: #344049;
-						font-weight: 600;
+						font-weight: 700;
 					}
 					.fa
 					{

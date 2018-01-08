@@ -127,16 +127,16 @@
                         @endif
                     </div> --}}
                     <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span><span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
-                    <!-- @else
+                    {{-- @else
                     <div class="left-container">
                         <span><i class="fa fa-heart-o" aria-hidden="true"></i></span>
                         <span>BECOME A MEMBER</span>
-                    </div> -->
+                    </div> --}}
                     <div class="right-container">
                         <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span>
                         <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span>
                     </div>
-                    <!-- @endif -->
+                    {{--  @endif  --}}
                 </div>
             </div>
 

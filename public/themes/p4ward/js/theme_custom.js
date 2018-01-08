@@ -3,26 +3,28 @@ var theme_custom = new theme_custom()
 function theme_custom()
 {
     init();
+
     function init()
-    {
-        document_ready();
-    }
-    function document_ready()
     {
         $(document).ready(function()
         {
-            header_fixed();
-            mobile_sidenav();
-            scroll_up();
-            // navirino_toggle_click();
-            change_slide();
-
-            /*EXIT SIDE NAV TOGGLE*/
-            // $('.nav-ext').click(function()
-            // {
-            //     $('#overlay').click();
-            // });
+            document_ready();
         });
+    }
+
+    function document_ready()
+    {
+        header_fixed();
+        mobile_sidenav();
+        scroll_up();
+        // navirino_toggle_click();
+        change_slide();
+
+        /*EXIT SIDE NAV TOGGLE*/
+        // $('.nav-ext').click(function()
+        // {
+        //     $('#overlay').click();
+        // });
     }
 
     function header_fixed()

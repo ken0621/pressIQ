@@ -106,7 +106,7 @@
                     @endforeach
                       @else
                   <div class="title">Type:</div>
-                   <select name="pr_type" id="pr_type">
+                   <select name="pr_type" id="pr_type" class="form-control">
                      <option>--Select option--</option>
                      <option value="Media Release">Media Release</option>
                      <option value="Press Release">Press Release</option>

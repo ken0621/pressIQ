@@ -70,16 +70,19 @@
                           @endforeach
                     </select>
 
-                    <div class="title">Send To:</div>
-                          <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
+                    <div class="title">Send To:
+                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
+                    </div>
+                     
+                    <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
-                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
-                      {{-- POPUP CHOOSE RECIPIENT --}}
 
-                          <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
-                        @endforeach
+                    {{-- POPUP CHOOSE RECIPIENT --}}
+                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue To Send &raquo;</a></button></span>
+                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
+                    @endforeach
                       @else
                         <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus>
                   <div class="title">Release Text Body:</div>
@@ -133,7 +136,6 @@
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue To Send &raquo;</a></button></span>
-
                       <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                       @endif
                     <div class="button-container"></div>

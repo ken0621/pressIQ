@@ -7,7 +7,7 @@
             <table>
                 <tr>    
                     <th>Press Release Title</th>
-                    <th>Recipient</th>
+                    <th>Date</th>
                     <th>Status</th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -15,7 +15,7 @@
                 @foreach($drafts as $draft)
                 <tr>
                     <td>{{$draft->pr_headline}}</td>
-                    <td>{{$draft->pr_receiver_name}}</td>
+                    <td>{{$draft->pr_date_sent}}</td>
                     <td>Draft</td>
                     <td><a href="/pressuser/pressrelease/edit_draft/{{$draft->pr_id}}">Edit</a></td>
                     <td><a href="/pressuser/pressrelease/delete_draft/{{$draft->pr_id}}">Delete</a></td>

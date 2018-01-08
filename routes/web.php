@@ -1059,6 +1059,8 @@ Route::post('/member/merchant/commission-report-pass','Member\MerchantController
 Route::get('/member/merchant/commission-report-pass','Member\MerchantController@password');
 Route::get('/member/merchant/commission_report/table', 'Member\MerchantController@table');
 Route::any('/member/merchant/commission_report/export','Member\MerchantController@export');
+Route::get('/member/merchant/commission_report/import','Member\MerchantController@import');
+Route::post('/member/merchant/commission_report/import','Member\MerchantController@import_submit');
 // end
 
 /*  / Merchant - Ewallet*/

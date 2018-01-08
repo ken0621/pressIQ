@@ -39,7 +39,8 @@ use App\Globals\Utilities;
 
 use Crypt;
 use Redirect;
-use Request;
+// use Request;
+use Illuminate\Http\Request;
 use View;
 use Session;
 use DB;
@@ -671,6 +672,26 @@ class MerchantController extends Member
             });
         })
         ->download('xls');
+	}
+	public function import()
+	{
+		$data['page'] = 'Import Excel File';
+		return view('member.merchant.commission_report.import',$data);
+	}
+	public function import_submit(Request $request)
+	{
+		
+		if($request->hasFile('excel_file'))
+		{
+			$response = 'success';
+		}
+		else
+		{
+			$response = 'error';
+		}
+		
+		
+		return Redirect::back()->with("response",$response);
 	}
 
 }	

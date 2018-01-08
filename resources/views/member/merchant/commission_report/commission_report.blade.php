@@ -13,7 +13,7 @@
             </h1>
             <div class="dropdown pull-right">
                 <button onclick="window.open('/member/merchant/commission_report/export')" class="btn btn-def-white btn-custom-white"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
-                <button class="btn btn-primary"><i class="fa fa-upload"></i> Import File</button>
+                <button onclick="action_load_link_to_modal('/member/merchant/commission_report/import', 'md')" class="btn btn-primary"><i class="fa fa-upload"></i> Import File</button>
             </div>
         </div>
     </div>
@@ -75,6 +75,13 @@
 @endsection
 @section('script')
 <script type="text/javascript" src="/assets/js/commission_report.js?v=10"></script>
+<script type="text/javascript">
+    @if(Session::get("response")=='success')
+    toastr.success("Importation Complete");
+    @elseif(Session::get("response")=='error')
+    toastr.error("Please select a file");
+    @endif
+</script>
 @endsection
 <script type="text/javascript" src="/assets/themes/js/jquery.min.js?v=1"></script>
 <script type="text/javascript">
@@ -84,3 +91,4 @@
         commission_report.action_load_table();
     }
 </script>
+

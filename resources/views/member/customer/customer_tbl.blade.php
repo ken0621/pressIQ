@@ -1,4 +1,4 @@
-<table style="table-layout: fixed;" class="table table-hover table-condensed table-bordered table-sale-month">
+<table style="table-layout: fixed;" class="table table-condensed table-bordered table-sale-month">
     <thead>
         <tr>
             <th class="text-left">Company Name</th>

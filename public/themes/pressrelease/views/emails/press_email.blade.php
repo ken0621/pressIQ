@@ -114,12 +114,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name"{{$pr_sender_name}}</span></div>
+			<div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">{{$pr_sender_name}}</span></div>
 			<div class="date-container">{{$pr_date_sent}}</div>
 			<div class="content-container"><p>{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_content); !!}</p></div>
 			<div class="border"></div>
-			<div class="title-about-container">About {{$pr_sender_name}}</div>
-			<div class="content-container">{!!$pr_boiler_content!!}</div>
+			<div class="title-about-container">About {{$pr_co_name}}</div>
+			<div class="content-container">{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_boiler_content); !!}</div>
 		</div>
 	</div>
 </body>

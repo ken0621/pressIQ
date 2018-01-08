@@ -359,7 +359,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_co_img"]       =session('user_company_image');
         
         //dd(session('user_company_image'));
-        $pr_rules["pr_type"]       =['pr_type'];
+        $pr_rules["pr_type"]       =['required'];
         $pr_rules["pr_headline"]   =['required'];
         $pr_rules["pr_content"]    =['required'];
         $pr_rules["pr_boiler_content"] =['required'];

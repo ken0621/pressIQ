@@ -14,13 +14,21 @@ Route::any('update_employee_profile', 'Member\PayrollEmployee\EmployeeController
 Route::any('employee_leave_management', 'Member\PayrollEmployee\LeaveController@employee_leave_management');
 Route::any('employee_leave_application', 'Member\PayrollEmployee\LeaveController@employee_leave_application');
 Route::any('employee_summary_of_leave', 'Member\PayrollEmployee\LeaveController@employee_summary_of_leave');
-Route::any('authorized_access_leave', ' Member\PayrollEmployee\LeaveController@authorized_access_leave');
 Route::any('create_employee_leave', 'Member\PayrollEmployee\LeaveController@create_employee_leave');
 Route::any('/leave/save_leave', 'Member\PayrollEmployee\LeaveController@save_leave');
-Route::any('/leave/ajax_load_leave', 'Member\PayrollEmployee\LeaveController@ajax_all_load_leave');
+
 Route::any('/leave/ajax_load_pending_leave', 'Member\PayrollEmployee\LeaveController@ajax_load_pending_leave');
 Route::any('/leave/ajax_load_approved_leave', 'Member\PayrollEmployee\LeaveController@ajax_load_approved_leave');
 Route::any('/leave/ajax_load_rejected_leave', 'Member\PayrollEmployee\LeaveController@ajax_load_rejected_leave');
+Route::any('/leave/ajax_load_canceled_leave', 'Member\PayrollEmployee\LeaveController@ajax_load_canceled_leave');
+
+Route::any('employee_request_leave_view/{request_id}', 'Member\PayrollEmployee\LeaveController@employee_request_leave_view');
+Route::any('employee_request_leave_cancel/{request_id}', 'Member\PayrollEmployee\LeaveController@employee_request_leave_cancel');
+
+Route::any('authorized_access_leave', 'Member\PayrollEmployee\LeaveController@authorized_access_leave');
+Route::any('authorized_access_leave/view_leave_request/{request_id}', 'Member\PayrollEmployee\LeaveController@view_leave_request');
+Route::any('authorized_access_leave/approve_leave_request/{request_id}', 'Member\PayrollEmployee\LeaveController@approve_leave_request');
+Route::any('authorized_access_leave/reject_leave_request/{request_id}', 'Member\PayrollEmployee\LeaveController@reject_leave_request');
 /*END LEAVE MANAGEMENT*/
 
 Route::any('employee_official_business', 'Member\PayrollEmployee\EmployeeController@employee_official_business');

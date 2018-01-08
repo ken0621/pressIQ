@@ -22,9 +22,12 @@ class Tbl_payroll_request_leave extends Model
     {
 	  $query->join('tbl_payroll_approver_group', 'tbl_payroll_approver_group.payroll_approver_group_id', '=', 'tbl_payroll_request_leave.payroll_approver_group_id')
 		  	->join('tbl_payroll_approver_group_employee','tbl_payroll_approver_group_employee.payroll_approver_group_id','=','tbl_payroll_approver_group.payroll_approver_group_id')
-          	->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_request_leave.payroll_employee_id');
-		
-		
+          	->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_request_leave.payroll_employee_id')
+            ->leftjoin('tbl_payroll_employee_basic as basic_reliever','basic_reliever.payroll_employee_id', '=','tbl_payroll_request_leave.payroll_request_leave_id_reliever')
+            ->select('tbl_payroll_approver_group.*','tbl_payroll_approver_group_employee.*','tbl_payroll_employee_basic.*','tbl_payroll_request_leave.*','basic_reliever.payroll_employee_display_name as reliever_name');
+
+	
+  		
       if ($approver_employee_id != 0) 
       {
           $query->where('tbl_payroll_approver_group_employee.payroll_approver_employee_id', $approver_employee_id);

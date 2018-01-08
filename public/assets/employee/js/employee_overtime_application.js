@@ -14,6 +14,7 @@ function employee_overtime_application()
 		$(document).ready(function() 
 		{
 			action_select_group_approver();
+			action_select_group_approver_leave()
 		});
 	}
 
@@ -43,6 +44,34 @@ function employee_overtime_application()
 			});
 		});
 	}
+
+	function action_select_group_approver_leave()
+	{
+	
+		var target = $('.approver_group_list_leave');
+
+		$('.approver_group_leave').unbind('change');
+		$('.approver_group_leave').bind('change', function()
+		{
+			data.approver_group_id = $('.approver_group_leave').val();
+			data._token = $('#_token').val();
+			data.approver_group_type = 'leave';
+			
+			$.ajax(
+			{
+				url: '/get_group_approver_list',
+				type: 'post',
+				data: data,
+				success : function(data)
+				{
+					data = JSON.parse(data);
+					var html = list_employee_group_by_level(data);
+					target.html(html);
+				}
+			});
+		});
+	}
+
 
 	function list_employee_group_by_level(data)
 	{

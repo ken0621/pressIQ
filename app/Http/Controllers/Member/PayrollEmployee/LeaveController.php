@@ -66,8 +66,16 @@ class LeaveController extends PayrollMember
 
 	public function authorized_access_leave()
 	{
-		$data['page']					= 'Authorized Access Leave';
-		$data["_leave_name"] 			= Tbl_payroll_leave_temp::where("shop_id", Self::employee_shop_id())->get();
+		$data['page']  = 'Authorized Access Leave';
+		$data['employee_approver_info']	= Tbl_payroll_approver_employee::GetApproverInfoByType(Self::employee_id(), 'leave')->first();
+		
+		$level_approver 		= $data['employee_approver_info']['payroll_approver_employee_level'];
+		$approver_employee_id 	= $data['employee_approver_info']['payroll_approver_employee_id'];
+
+		$data['_request_pending']  = Tbl_payroll_request_leave::GetAllRequest($approver_employee_id, $level_approver, 'pending')->paginate(15);
+		$data['_request_approved'] = Tbl_payroll_request_leave::GetAllRequest($approver_employee_id, $level_approver, 'approved')->paginate(15);
+		$data['_request_rejected'] = Tbl_payroll_request_leave::GetAllRequest($approver_employee_id, $level_approver, 'rejected')->paginate(15);
+		$data['_request_canceled'] = Tbl_payroll_request_leave::GetAllRequest($approver_employee_id, $level_approver, 'canceled')->paginate(15);
 		
 		return view('member.payroll2.employee_dashboard.authorized_access_leave',$data);
 	}
@@ -80,9 +88,9 @@ class LeaveController extends PayrollMember
 		$data['page']		= 'Employee Leave Application';
         $data["company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
 
-	      $data["employees_info"] = Tbl_payroll_employee_contract::employeefilter($company = 0, $department = 0, $jobtitle = 0, date('Y-m-d'), $shop_id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->groupBy('tbl_payroll_employee_basic.payroll_employee_id')->get();
+	    $data["employees_info"] = Tbl_payroll_employee_contract::employeefilter($company = 0, $department = 0, $jobtitle = 0, date('Y-m-d'), $shop_id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->groupBy('tbl_payroll_employee_basic.payroll_employee_id')->get();
 
-	      $data['_group_approver'] = Tbl_payroll_approver_group::where('tbl_payroll_approver_group.shop_id', Self::employee_shop_id())->where('payroll_approver_group_type','leave')->where('archived', 0)->get();
+	   	$data['_group_approver'] = Tbl_payroll_approver_group::where('tbl_payroll_approver_group.shop_id', Self::employee_shop_id())->where('payroll_approver_group_type','leave')->where('archived', 0)->get();
 	      
     	return view('member.payroll2.employee_dashboard.employee_leave_application',$data);
     }
@@ -97,24 +105,6 @@ class LeaveController extends PayrollMember
 	{
 		$data['page']			= 'Leave Management';
 	  	return view('member.payroll2.employee_dashboard.employee_leave_management',$data);
-	}
-
-	public function ajax_all_load_leave()
-	{
-
-		 // $emp = Tbl_payroll_leave_schedulev3::select('tbl_payroll_leave_schedulev3.*','basicreliever.payroll_employee_display_name as payroll_employee_display_name_reliever','basicapprover.payroll_employee_display_name as payroll_employee_display_name_approver','tbl_payroll_leave_schedulev3.payroll_employee_id')
-			// ->leftjoin('tbl_payroll_employee_basic AS basicreliever', 'basicreliever.payroll_employee_id', '=', 'tbl_payroll_leave_schedulev3.payroll_employee_id_reliever')
-   //  		->leftjoin('tbl_payroll_employee_basic AS basicapprover', 'basicapprover.payroll_employee_id', '=', 'tbl_payroll_leave_schedulev3.payroll_employee_id_approver')
-   //  		->where('tbl_payroll_leave_schedulev3.payroll_employee_id',Self::employee_id())
-   // 			 ->get();
-
-
-		 $emp = Tbl_payroll_request_leave::select('tbl_payroll_request_leave.*','tbl_payroll_employee_basic.payroll_employee_display_name')
-		 		->leftjoin('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id', '=','tbl_payroll_request_leave.payroll_request_leave_id_reliever')
-		 		->where('tbl_payroll_request_leave.payroll_employee_id',Self::employee_id())
-				->get();
-
-		 return json_encode($emp);
 	}
 
 	public function ajax_load_pending_leave()
@@ -149,6 +139,16 @@ class LeaveController extends PayrollMember
 		 return json_encode($emp);
 	}
 
+	public function ajax_load_canceled_leave()
+	{
+		 $emp = Tbl_payroll_request_leave::select('tbl_payroll_request_leave.*','tbl_payroll_employee_basic.payroll_employee_display_name')
+		 		->leftjoin('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id', '=','tbl_payroll_request_leave.payroll_request_leave_id_reliever')
+		 		->where('tbl_payroll_request_leave.payroll_employee_id',Self::employee_id())
+		 		->where('tbl_payroll_request_leave.payroll_request_leave_status','canceled')->get();
+
+		 return json_encode($emp);
+	}
+
 	public function save_leave()
     {
 
@@ -164,7 +164,7 @@ class LeaveController extends PayrollMember
 			 $temp['payroll_request_leave_remark']			=	"Used ".Request::input('payroll_request_leave_total_hours')." hours in ".Request::input('payroll_request_leave_type');
 			 $temp['payroll_request_leave_status']			=	'pending';
 			 $temp['payroll_request_leave_status_level'] 	=    1;
-			 $temp['payroll_leave_name']					=	Request::input('payroll_request_leave_type');
+			 $temp['payroll_request_leave_type']					=	Request::input('payroll_request_leave_type');
 
 			 array_push($insert, $temp);
 		}
@@ -184,7 +184,7 @@ class LeaveController extends PayrollMember
 					 $temp['payroll_request_leave_remark']			=	"Used ".Request::input('payroll_request_leave_total_hours')." hours in ".Request::input('payroll_request_leave_type');
 					 $temp['payroll_request_leave_status']			=	'pending';
 					 $temp['payroll_request_leave_status_level'] 	=    1;
-					 $temp['payroll_leave_name']					=	Request::input('payroll_request_leave_type');
+					 $temp['payroll_request_leave_type']					=	Request::input('payroll_request_leave_type');
 
 					 array_push($insert, $temp);
      				 $payroll_request_leave_date = Carbon::parse($payroll_request_leave_date)->addDay()->format("Y-m-d");
@@ -201,7 +201,124 @@ class LeaveController extends PayrollMember
 		return $response;
     	
     }
+	
+	public function employee_request_leave_view($request_id)
+	{
+		$data['request_info'] = Tbl_payroll_request_leave::where('payroll_request_leave_id',$request_id)->EmployeeInfo()->first();
+		$data['approver_group_info'] = Tbl_payroll_approver_group::where('payroll_approver_group_id',$data['request_info']['payroll_approver_group_id'])->first();
+		$data['page'] = 'View Leave Request';
+		$data['_group_approver'] = Self::get_group_approver_grouped_by_level(Self::employee_shop_id(),$data['request_info']['payroll_approver_group_id'], 'leave');	
 
+		$data['reliever'] = Tbl_payroll_employee_basic::select('*')->where('payroll_employee_id',$data['request_info']['payroll_request_leave_id_reliever'])->get();
 
+		return view('member.payroll2.employee_dashboard.modal.modal_view_leave_request',$data);
+	}
+
+	public function employee_request_leave_cancel($request_id)
+	{
+		if (Request::method() == 'POST') 
+		{
+			$update['payroll_request_leave_status'] = "canceled";
+			Tbl_payroll_request_leave::where('payroll_request_leave_id',$request_id)->update($update);
+			
+			$response['status'] = 'success';
+			$response['call_function'] = 'reload';
+
+			return $response;
+		}
+		else
+		{
+			
+			$data['id'] 	 = $request_id;
+			$data['action']  = 'employee_request_leave_cancel/'.$request_id;
+			$data['message'] = 'Warning: you cannot restore canceled request, Do you really want to cancel this request?';
+			$data['btn']	 = '<label><button type="submit" class="btn btn-custom-white">Confirm</label>';
+			
+			return view('member.payroll2.employee_dashboard.modal.modal_confirm',$data);
+		}
+		
+	}
+
+	public function view_leave_request($request_id)
+	{
+		$data['request_info'] = Tbl_payroll_request_leave::where('payroll_request_leave_id',$request_id)->EmployeeInfo()->first();
+		$data['approver_group_info'] = Tbl_payroll_approver_group::where('payroll_approver_group_id',$data['request_info']['payroll_approver_group_id'])->first();
+		$data['page'] = 'View Leave Request';
+		$data['_group_approver'] = Self::get_group_approver_grouped_by_level(Self::employee_shop_id(),$data['request_info']['payroll_approver_group_id'], 'leave');	
+
+		$data['reliever'] = Tbl_payroll_employee_basic::select('*')->where('payroll_employee_id',$data['request_info']['payroll_request_leave_id_reliever'])->get();
+
+		return view('member.payroll2.employee_dashboard.modal.modal_view_leave_request',$data);
+	}
+
+	public function approve_leave_request($request_id)
+	{
+		if (Request::method() == 'POST') 
+		{
+			$request_info = Tbl_payroll_request_leave::where('payroll_request_leave_id',$request_id)->EmployeeInfo()->first();
+			
+			$_approver_group = collect(Tbl_payroll_approver_group::where('tbl_payroll_approver_group.payroll_approver_group_id', $request_info['payroll_approver_group_id'])
+										->EmployeeApproverInfo()->get())
+										->groupBy('payroll_approver_group_level');
+			
+			$count_approvers = count($_approver_group);
+			
+			/*check if approve or go to next level of approval*/
+			if($count_approvers == $request_info['payroll_request_leave_status_level'])
+			{
+				$update['payroll_request_leave_status'] = "approved";
+				Tbl_payroll_request_leave::where('payroll_request_leave_id',$request_id)->update($update);
+			}
+			else
+			{
+				$update['payroll_request_leave_status_level'] = $request_info['payroll_request_leave_status_level'] + 1;
+				Tbl_payroll_request_leave::where('payroll_request_leave_id',$request_id)->update($update);
+			}
+			$response['status'] = 'success';
+			$response['call_function'] = 'reload';
+
+			return $response;
+		}
+		else
+		{
+			$data['id'] 	 = $request_id;
+			$data['action']  = '/authorized_access_leave/approve_leave_request/'.$request_id;
+			$data['message'] = 'Do you really want to approve this request?';
+			$data['btn']	 = '<label><button type="submit" class="btn btn-custom-white">Confirm</label>';
+			
+			return view('member.payroll2.employee_dashboard.modal.modal_confirm',$data);
+		}
+	}
+
+	public function reject_leave_request($request_id)
+	{
+		if (Request::method() == 'POST') 
+		{
+			$update['payroll_request_leave_status'] = "rejected";
+			Tbl_payroll_request_leave::where('payroll_request_leave_id',$request_id)->update($update);
+			
+			$response['status'] = 'success';
+			$response['call_function'] = 'reload';
+
+			return $response;
+		}
+		else
+		{
+			$data['id'] 	 = $request_id;
+			$data['action']  = '/authorized_access_leave/reject_leave_request/'.$request_id;
+			$data['message'] = 'Do you really want to reject this request?';
+			$data['btn']	 = '<label><button type="submit" class="btn btn-custom-white">Confirm</label>';
+			
+			return view('member.payroll2.employee_dashboard.modal.modal_confirm',$data);
+		}
+
+	}
+
+	public static function get_group_approver_grouped_by_level($shop_id , $approver_group_id, $approver_group_type)
+	{
+		$_approver_group = collect(Tbl_payroll_approver_group::EmployeeApproverInfo($shop_id, $approver_group_id, $approver_group_type)->get())->groupBy('payroll_approver_group_level');
+
+		return $_approver_group;
+	}
 
 }

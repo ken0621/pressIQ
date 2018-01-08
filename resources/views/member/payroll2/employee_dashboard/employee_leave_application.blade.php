@@ -44,9 +44,9 @@
 					<small>Reliever</small>
 					<select class="form-control" name="payroll_request_leave_id_reliever" required>
 						<option value="">Select Employee</option>
-			{{-- 			@foreach($employees_info as $employee)
+						@foreach($employees_info as $employee)
 							<option value="{{$employee->payroll_employee_id}}">{{$employee->payroll_employee_first_name}} {{$employee->payroll_employee_middle_name}} {{$employee->payroll_employee_last_name}}</option> 
-						@endforeach --}}
+						@endforeach
 
 					</select>
 		  		</div>
@@ -88,10 +88,11 @@
 				</div>
         </div>
         <br>
-       	<div class="row">
+
+	    <div class="row">
 	    	<div class="col-sm-12">
 	    		<small for="approver_group">Select Group Approver</small>
-		    	<select class="form-control approver_group" id="approver_group" name="approver_group" required>
+		    	<select class="form-control approver_group_leave" id="approver_group" name="approver_group" required>
 		    		<option value=""> Select Group Approver </option>
 		    		@foreach($_group_approver as $group_approver)
 		    		<option value="{{ $group_approver->payroll_approver_group_id }}"> {{ $group_approver->payroll_approver_group_name }} </option>
@@ -99,12 +100,12 @@
 		    	</select>
 	    	</div>
 	    </div> 
-
+	    
 	    <div class="row">
-	    	<div class="col-sm-12 approver_group_list">
+	    	<div class="col-sm-12 approver_group_list_leave">
 	    		
 	    	</div>
-	    </div>   
+	    </div>    
 
 	</div>
 	<div class="modal-footer">

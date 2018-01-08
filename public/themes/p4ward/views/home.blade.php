@@ -318,28 +318,7 @@
 @endsection
 
 @section("script")
-<script type="text/javascript">
-/*$(document).ready(function($) {
 
-        //START MISSION AND VISION
-        $(".title-vision").click(function()
-        {
-            $("#vision").removeClass("hide");
-            $("#mission").addClass("hide");
-            $(".title-vision").addClass("highlighted");
-            $(".title-mission").removeClass("highlighted");
-            
-        });
-        $(".title-mission").click(function()
-        {
-            $("#vision").addClass("hide");
-            $("#mission").removeClass("hide");
-            $(".title-mission").addClass("highlighted");
-            $(".title-vision").removeClass("highlighted");
-        });
-        //END MISSION ANF VISION
-});*/
-</script>
 <script type="text/javascript">
     $(document).ready(function()
     {

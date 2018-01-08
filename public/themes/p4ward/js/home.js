@@ -20,7 +20,8 @@ function home()
 	
 	function action_says_carousel()
 	{
-		$('.says-container').slick({
+		$('.says-container').slick(
+		{
 			infinite: true,
 			slidesToShow: 3,
 			slidesToScroll: 1,

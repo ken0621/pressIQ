@@ -343,7 +343,15 @@ $bold: 700;
 
 @media screen and (max-width: 375px)
 {
+    #nav_list .fa 
+    {
+        font-size: 25px;
+    }
 
+    .image-logo-holder 
+    {
+        margin-top: -40px;
+    }
 }
 
 @media screen and (max-width: 320px)

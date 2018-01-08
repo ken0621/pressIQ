@@ -1,9 +1,8 @@
 @import "../../../assets/front/sass/mixin";
 
-$display-text: 'Open Sans', sans-serif;
+$display-text: 'Lato', sans-serif;
 $light: 300;
 $regular: 400;
-$semi-bold: 600;
 $bold: 700;
 
 .blur-me
@@ -11,11 +10,11 @@ $bold: 700;
     @include transition(0.3s);
 }
 
-.pushmenu 
+.pushmenu
 { 
     /*this is the nav*/
      // background: #02295E;
-     background-color: rgba(2,41,94,0.6);
+     background-color: rgba(4,102,175,0.7);
      text-align: left;
      width: 300px;
      height: 100%;
@@ -43,7 +42,7 @@ $bold: 700;
     {
         font-family: $display-text;
         font-size: 16px;
-        font-weight: $semi-bold;
+        font-weight: $bold;
         color: #fff;
         padding-left: 22px;
     }
@@ -279,7 +278,7 @@ $bold: 700;
             //width: 33px;
             //text-indent: -99999em;
 
-            display: block;
+            display: block !important;
             width: 50px;
             padding: 7.5px 12px 7.5px 12px;
             margin-right: auto;
@@ -288,7 +287,7 @@ $bold: 700;
             .fa
             {
                 display: block;
-                color: #02295E;
+                color: #0466AF;
                 font-size: 30px;
             }
 
@@ -318,17 +317,18 @@ $bold: 700;
     .image-logo-holder
     {
         margin: auto;
+        margin-top: -45px;
     }
 
-    #nav_list .fa 
-    {
-        margin-top: 20px;
-    }
+    // #nav_list .fa 
+    // {
+    //     margin-top: 20px;
+    // }
 
-    .image-logo-holder img 
-    {
-        margin-top: -70px;
-    }
+    // .image-logo-holder img 
+    // {
+    //     margin-top: -70px;
+    // }
 }
 
 @media screen and (max-width: 414px)

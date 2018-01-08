@@ -14,7 +14,7 @@ function theme_custom()
             header_fixed();
             mobile_sidenav();
             scroll_up();
-            navirino_toggle_click();
+            // navirino_toggle_click();
             change_slide();
 
             /*EXIT SIDE NAV TOGGLE*/
@@ -86,14 +86,14 @@ function theme_custom()
         });
     }
 
-    function navirino_toggle_click()
-    {
-        // NAVIRINO CLICK TOGGLE
-        $(".menu-nav").click(function()
-        {
-            $(".navirino").toggle("slow");
-        });
-    }
+    // function navirino_toggle_click()
+    // {
+    //     // NAVIRINO CLICK TOGGLE
+    //     $(".menu-nav").click(function()
+    //     {
+    //         $(".navirino").toggle("slow");
+    //     });
+    // }
 
     function change_slide()
     {

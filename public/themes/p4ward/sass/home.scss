@@ -1,18 +1,19 @@
 $display-text: 'Lato', sans-serif;
-$content-text: 'PT Sans', sans-serif;
+$content-text: 'Ubuntu', sans-serif;
 $light: 300;
 $regular: 400;
-$medium: 500;
 $bold: 700;
 $text-light: #555;
 $text-dark: #1c1c1c;
 
-body{
+body
+{
 	background-color: transparent;
 	color: $text-light;
 	font-family: $display-text;
 
 }
+
 /* SLIDER */
 .slider-wrapper 
 {
@@ -84,6 +85,8 @@ body{
 		padding: 10px 20px;
 		text-align: center;
 		width: 120px;
+		margin-bottom: 50px;
+
 		a
 		{
 			text-decoration: none;
@@ -184,11 +187,14 @@ body{
 		.image-holder
 		{
 			width: 100%;
+			margin-bottom: 20px;
+
 			img
 			{
 				width: 100%;
 			}
 		}
+
 		.title
 		{
 			font-size: 25px;
@@ -254,10 +260,26 @@ body{
 			font-style: italic;
 			font-size: 30px;
 			padding: 0px 90px;
+
+			@media screen and (max-width: 500px)
+			{
+				font-size: 25px;
+			}
 		}
 		.product-image
 		{
 			padding: 30px 0px;
+			
+			@media screen and (max-width: 500px)
+			{
+				width: 90%;
+				margin: auto;
+
+				img
+				{
+					width: 100%;
+				}
+			}
 		}
 		.button-container
 		{
@@ -295,6 +317,12 @@ body{
 		.image-holder
 		{
 			text-align: center;
+
+			@media screen and (max-width: 500px)
+			{
+				margin-top: 20px;
+			}
+
 		}
 		.title-container
 		{
@@ -343,6 +371,12 @@ body{
 	{
 		padding: 20px 0px 0px 0px;
 		text-align: center;
+		width: 100%;
+
+		img
+		{
+			width: 100%;
+		}
 	}
 	
 }

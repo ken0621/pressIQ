@@ -140,11 +140,21 @@
                          <div class="footer-title-container">
                             <p class="footer-title">NAVIGATION</p>
                         </div>
-                        <div class="nav-list"><a href="#">HOME</a></div>
-                        <div class="nav-list"><a href="#">ABOUT US</a></div>
-                        <div class="nav-list"><a href="#">PRODUCT</a></div>
-                        <div class="nav-list"><a href="#">TESTIMONIALS</a></div>
-                        <div class="nav-list"><a href="#">CONTACT</a></div>
+
+                        @if(Request::segment(1)=="members")
+                            <div class="nav-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                            <div class="nav-list"><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></div>
+                            <div class="nav-list"><a class="smoth-scroll" href="/#product">PRODUCT</a></div>
+                            <div class="nav-list"><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></div>
+                            <div class="nav-list"><a class="smoth-scroll" href="/#contactus">CONTACT</a></div>
+                        @else
+                            <div class="nav-list"><a class="smoth-scroll" href="#home">HOME</a></div>
+                            <div class="nav-list"><a class="smoth-scroll" href="#aboutus">ABOUT US</a></div>
+                            <div class="nav-list"><a class="smoth-scroll" href="#product">PRODUCT</a></div>
+                            <div class="nav-list"><a class="smoth-scroll" href="#testimonials">TESTIMONIALS</a></div>
+                            <div class="nav-list"><a class="smoth-scroll" href="#contactus">CONTACT</a></div>
+                        @endif
+
                     </div>
                     <div class="col-md-4">
                         <div class="footer-title-container">

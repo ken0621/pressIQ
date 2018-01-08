@@ -11,7 +11,7 @@
 	        <div class="row clearfix">
 	            <div class="col-md-12">
 	            	<div class="title">NON-MEMBER | <span>DASHBOARD</span> </div>
-	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-bg.png');">
+	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-bg.jpg');">
 	                    <div class="btn btn-text">
 	                        <div class="text-header1">Join Us Now!</div>
 	                        <div class="text-header2">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aenean commodo ligula eget dolor.</div>

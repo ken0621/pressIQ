@@ -156,7 +156,7 @@
             </div>
             <div class="says-container">
                 <div>
-                    <div class="holder">
+                    <div class="holder wow fadeInDown" data-wow-delay=".2s">
                         <div class="feedback-container match-height">
                             <div class="top-container">
                                 <div class="row-no-padding clearfix">
@@ -179,7 +179,7 @@
                     </div>
                 </div>
                 <div>
-                    <div class="holder">
+                    <div class="holder wow fadeInDown" data-wow-delay=".3s">
                         <div class="feedback-container match-height">
                             <div class="top-container">
                                 <div class="row-no-padding clearfix">
@@ -202,7 +202,7 @@
                     </div>
                 </div>
                 <div>
-                    <div class="holder">
+                    <div class="holder wow fadeInDown" data-wow-delay=".4s">
                         <div class="feedback-container match-height">
                             <div class="top-container">
                                 <div class="row-no-padding clearfix">
@@ -225,7 +225,7 @@
                     </div>
                 </div>
                 <div>
-                    <div class="holder">
+                    <div class="holder wow fadeInDown" data-wow-delay=".5s">
                         <div class="feedback-container match-height">
                             <div class="top-container">
                                 <div class="row-no-padding clearfix">

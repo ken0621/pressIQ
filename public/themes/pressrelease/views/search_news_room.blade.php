@@ -16,7 +16,7 @@
             <div class="title"><a href="/newsroom/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
         </div>  
         <div class="details-container">
-            <a href="/newsroom/view/{{$prs->pr_id}}">
+            <a href="/newsroom/view/{{$prs->pr_id}}" style="color: black;text-decoration:none;">
             <p>{!!$prs->pr_content!!}</p>
             </a>
         </div>

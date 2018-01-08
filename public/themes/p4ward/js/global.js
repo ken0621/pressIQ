@@ -40,6 +40,7 @@ function global()
 	{
 		$(".shopping-cart-container .container-cart").removeClass("show");
 	}
+	
 	function action_match_height()
 	{
 		$(".match-height").matchHeight();

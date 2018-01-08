@@ -3,6 +3,7 @@ var home = new home();
 function home()
 {
 	init();
+
 	function init()
 	{
 		$(document).ready(function()
@@ -10,11 +11,13 @@ function home()
 			document_ready();
 		});
 	}
+
 	function document_ready()
 	{
 		action_says_carousel();
 		action_product_image_carousel();
 	}
+	
 	function action_says_carousel()
 	{
 		$('.says-container').slick({

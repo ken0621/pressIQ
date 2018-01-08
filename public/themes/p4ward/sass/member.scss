@@ -1,6 +1,7 @@
 .member
 {
 	background-color: #ededed;
+	
 	.members
 	{
 		background-color: #fff;
@@ -67,7 +68,7 @@
 
 		.sidebar
 		{
-			background-color: #02295E;
+			background-color: #0466AF;
 			width: 300px;
 			position: absolute;
 			left: 0;
@@ -152,7 +153,7 @@
 					{
 						display: block;
 						position: relative;
-						background-color: #02295E;
+						background-color: #0466AF;
 						a
 						{
 							display: block;
@@ -272,7 +273,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #02295E;
+										background-color: #0466AF;
 										span, &:before
 										{
 											opacity: 0.5;
@@ -301,7 +302,7 @@
 			&.small
 			{
 				width: 80px;
-				background-color: #02295E;
+				background-color: #0466AF;
 				.shadow
 				{
 					display: none;

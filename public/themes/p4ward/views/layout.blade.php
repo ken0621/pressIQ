@@ -58,9 +58,9 @@
                 <span>Call us 028995519</span>
             </div>
             <div class="right-container">
-                <span><a href="#">REGISTER</a></span>
+                <span><a href="/members">MY ACCOUNT</a></span>
                 <span>|</i></span>
-                <span><a href="#">LOGIN</a></i></span>
+                <span><a href="/members/logout">LOGOUT</a></i></span>
             </div>
             @else
             <div class="left-container">
@@ -70,9 +70,9 @@
                 <span>Call us 028995519</span>
             </div>
             <div class="right-container">
-                <span><a href="#">REGISTER</a></span>
+                <span><a href="/members/register">REGISTER</a></span>
                 <span>|</i></span>
-                <span><a href="#">LOGIN</a></i></span>
+                <span><a href="/members/login">LOGIN</a></i></span>
             </div>
             @endif
         </div>
@@ -83,8 +83,6 @@
                 <div class="col-md-2">
 
                     <div id="nav_list" style="display: none;"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
-
-
 
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/">
@@ -102,13 +100,13 @@
                     <nav class="navirino">
                         <ul>
                             @if(Request::segment(1)=="members")
-                                <li><a class="smoth-scroll" href="/">HOME</a></li>
-                                <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#product">PRODUCT</a></li>
-                                <li><a class="smoth-scroll" href="#testimonials">TESTIMONIALS</a></li>
-                                <li><a class="smoth-scroll" href="#contactus">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                                <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
+                                <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
+                                <li><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></li>
+                                <li><a class="smoth-scroll" href="/#contactus">CONTACT</a></li>
                             @else
-                                <li><a class="smoth-scroll" href="/">HOME</a></li>
+                                <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
                                 <li><a class="smoth-scroll" href="#product">PRODUCT</a></li>
                                 <li><a class="smoth-scroll" href="#testimonials">TESTIMONIALS</a></li>
@@ -119,7 +117,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
     
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
@@ -170,23 +168,6 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     
-    <!-- HEADER FIXED -->
-    <script type="text/javascript">
-        $window = $(window);
-        $window.scroll(function() {
-          $scroll_position = $window.scrollTop();
-            if ($scroll_position > 100) { 
-                $('.header-container').addClass('header-fixed');
-
-                header_height = $('.your-header').innerHeight();
-                $('body').css('padding-top' , header_height);
-            } else {
-                $('.header-container').removeClass('header-fixed');
-                $('body').css('padding-top' , '0');
-            }
-         });
-    </script>
-
     <!-- FB WIDGET -->
     <div id="fb-root"></div>
 

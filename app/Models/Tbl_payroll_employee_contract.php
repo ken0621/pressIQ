@@ -26,6 +26,19 @@ class Tbl_payroll_employee_contract extends Model
 		$query->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id');
 	}
 
+	public function scopeGroup13thmonthBasis($query, $employee_id = 0)
+	{
+		$query->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
+		->join('tbl_payroll_13th_month_basis','tbl_payroll_13th_month_basis.payroll_group_id', '=', 'tbl_payroll_group.payroll_group_id');
+
+		if($employee_id != 0)
+		{
+			$query->where('tbl_payroll_employee_contract.payroll_employee_id', $employee_id);
+		}
+
+		return $query;
+	}
+
 	public function scopeselemployee($query, $payroll_employee_id = 0, $date = '0000-00-00')
 	{
 		if($date == '0000-00-00')

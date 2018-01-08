@@ -10,15 +10,15 @@
                 @foreach ($pr as $prs)    
                     <div class="col-md-9">
                         <div class="left-container">
-                            
                             <div class="heading-container">{{$prs->pr_headline}}</div>
                             <div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">{{$prs->pr_sender_name}}</span></div>
                             <div class="date-container">{{$prs->pr_date_sent}}</div>
-                            <div class="content-container">{!!$prs->pr_content!!}</div>
+
+                            <div class="content-container">{!! str_replace('../', '/', $prs->pr_content); !!}</div>
+
                             <div class="border"></div>
                             <div class="title-about-container">About {{$prs->pr_co_name}}</div>
                             <div class="content-container">{!!$prs->pr_boiler_content!!}</div>
-                            
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -30,22 +30,15 @@
                                 <img src="{{$prs->pr_co_img}}">
                             </div>
                             <div class="header">Latest releases of industry</div>
-                            <div class="release-container">
-                                <div class="title"><a href="#">5 IMPORTANT THINGS TO LOOK IN A PLAY AREA FOR YOUR KIDS</a></div>
-                                <div class="date-container"><span><i class="fa fa-clock-o" aria-hidden="true"></i></span><span>28.12.2017 10:28</span></div>
-                            </div>
-                            <div class="release-container">
-                                <div class="title"><a href="#">SnapPop Update Lets You Attach Your Christmas Singing To Stamps</a></div>
-                                <div class="date-container"><span><i class="fa fa-clock-o" aria-hidden="true"></i></span><span>22.12.2017 11:16</span></div>
-                            </div>
-                            <div class="release-container">
-                                <div class="title"><a href="#">Sail To Taiwan - The Ultimate Blue-Water Experience</a></div>
-                                <div class="date-container"><span><i class="fa fa-clock-o" aria-hidden="true"></i></span><span>07.12.2017 15:49</span></div>
-                            </div>
-                            <div class="release-container">
-                                <div class="title"><a href="#">Liana Technologies ranked on the Deloitte Technology Fast 50 Finland list for the eighth year in a row</a></div>
-                                <div class="date-container"><span><i class="fa fa-clock-o" aria-hidden="true"></i></span><span>04.12.2017 07:00</span></div>
-                            </div>
+                                @foreach($pr_newsroom as $pr_view)
+                                <div class="release-container">
+                                    <div class="title"><a href="/newsroom/view/{{$pr_view->pr_id}}">{{$pr_view->pr_headline}}</a></div>
+                                    <div class="date-container"><span><i class="fa fa-clock-o" aria-hidden="true"></i></span><span>{{$pr_view->pr_date_sent}}</span></div>
+                                </div>
+                                @endforeach
+                        </div>
+                        <div class="right-container" style="display: none;" >
+                            {!! $pr_newsroom->render() !!}
                         </div>  
                     </div>
                 @endforeach    

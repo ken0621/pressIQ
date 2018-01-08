@@ -49,8 +49,9 @@
 
 <script type="text/javascript" src="/assets/js/modal_payroll_group_approver.js"></script>
 <script type="text/javascript">
-  function reload_page()
+  function reload_page(data)
   {
+    data.element.modal("hide");
     window.location.href = "/member/payroll/payroll_admin_dashboard/group_approver";
   }
 </script>

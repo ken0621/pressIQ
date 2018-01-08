@@ -27,6 +27,7 @@ use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_period;
+use App\Models\Tbl_payroll_13th_month_basis;
 
 use App\Globals\PayrollLeave;
 
@@ -674,11 +675,11 @@ class Payroll2
 
 		if($return->time_compute_mode == "flexi")
 		{
-			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, $return->shift_break_hours, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $use_leave, $testing = false, $leavepay);
+			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, $return->shift_break_hours, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $use_leave, $compute_type, $leavepay, $testing = false);
 		}
 		else
 		{
-			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours, $use_leave, false, $leavepay);
+			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours, $use_leave, $compute_type, $leavepay, false);
 
 		}
 		
@@ -1458,7 +1459,7 @@ class Payroll2
      * @author (Kim Briel Oraya)
      *
      */
-	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0, $use_leave = false ,$testing = false, $leavepay=0)
+	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime = "per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_late = 0, $leave_fill_undertime = 0, $target_hours = 0, $use_leave = false , $compute_type , $leavepay = 0, $testing = false)
 	{
 
 		$leave_fill_undertime	= 1;
@@ -1874,6 +1875,7 @@ class Payroll2
 		if ($is_holiday=="special") 
 		{
 			$special_holiday_hours = $regular_hours;
+			
 			if ($compute_type == "monthly") 
 			{
 				$is_absent = false;
@@ -1950,7 +1952,7 @@ class Payroll2
      */
 
 
-	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours=0, $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $use_leave = false, $testing = false,$leavepay=0)
+	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours=0, $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $use_leave = false, $compute_type , $leavepay = 0, $testing = false)
 
 	{
 
@@ -3855,6 +3857,67 @@ class Payroll2
 		return $return;
 	}
 
+	public static function cutoff_compute_13th_month_pay($employee_id, $data)
+	{
+		extract($data);
+		$group = Tbl_payroll_employee_contract::Group()->where('tbl_payroll_employee_contract.payroll_employee_id', $employee_id)->first();
+		$payroll_13th_month_basis = Tbl_payroll_13th_month_basis::where('payroll_group_id',$group['payroll_group_id'])->first();
+		$payroll_13th_month_pay = 0;
+
+		if ($payroll_13th_month_basis != null) 
+		{
+			if ($payroll_13th_month_basis['payroll_group_13month_basis'] == "Net Basic Pay") 
+			{
+				$payroll_13th_month_pay += $cutoff_breakdown->basic_pay_total;
+			}
+			else if($payroll_13th_month_basis['payroll_group_13month_basis'] == "Gross Basic Pay")
+			{
+				$payroll_13th_month_pay += $cutoff_breakdown->gross_basic_pay;
+			}
+			foreach ($cutoff_breakdown->_breakdown as $key => $breakdown) 
+			{
+				if ($breakdown['label'] == 'COLA' && $payroll_13th_month_basis["payroll_group_13th_month_addition_cola"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'late' && $payroll_13th_month_basis["payroll_group_13th_month_addition_late"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'undertime' && $payroll_13th_month_basis["payroll_group_13th_month_addition_undertime"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'absent' && $payroll_13th_month_basis["payroll_group_13th_month_addition_absent"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'Special Holiday' && $payroll_13th_month_basis["payroll_group_13th_month_addition_special_holiday"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'Legal Holiday' && $payroll_13th_month_basis["payroll_group_13th_month_addition_regular_holiday"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'Legal Holiday' && $payroll_13th_month_basis["payroll_group_13th_month_addition_regular_holiday"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'allowance' && $payroll_13th_month_basis["payroll_group_13th_month_addition_allowance"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'allowance_de_minimis' && $payroll_13th_month_basis["payroll_group_13th_month_addition_de_minimis_benefit"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+			}
+		}
+		
+		return $payroll_13th_month_pay;
+	}
+
 	public static function cutoff_breakdown_compute_time($return, $data)
 	{
 		$show_time_breakdown = array('target_hours','time_spent', 'undertime', 'overtime','late','night_differential','leave_hours');
@@ -4417,7 +4480,8 @@ class Payroll2
 		/* PHILHEALTH COMPUTATION */	
 		if($philhealth_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
 		{
-			$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_declared);
+			// $philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_declared);
+			$philhealth_contribution = Payroll2::philhealth_contribution_update_2018($philhealth_declared);
 			$philhealth_description = payroll_currency($philhealth_declared) . " declared PHILHEALTH Salary";
 
 			if($philhealth_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
@@ -7815,7 +7879,7 @@ class Payroll2
 	{
 		$data['ee'] = 0;
 		$data['er'] = 0;
-
+		
 		if ($rate <= 10000) 
 		{
 			$data['ee'] = 137.50;

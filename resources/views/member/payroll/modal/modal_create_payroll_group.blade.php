@@ -58,26 +58,6 @@
 								</div>
 							</div>
 							<div class="col-md-4">
-								<small>13 Month Basis</small>
-								<div class="panel-default panel">
-									<div class="panel-body">
-										<label>Compute 13 Month</label>
-										<div class="radio">
-											<label><input type="radio" name="payroll_group_13month_basis" value="Periodically">Periodically</label>
-										</div>
-										<div class="radio">
-											<label><input type="radio" name="payroll_group_13month_basis" value="Custom Period" checked>Custom Period</label>
-										</div>
-										<div class="radio">
-											<label><input type="radio" name="payroll_group_13month_basis" value="Do not compute">Do not compute</label>
-										</div>
-									</div>
-								</div>
-							</div>
-
-						</div>
-						<div class="form-group">
-							<div class="col-md-4">
 								<small>Display Rate</small>
 								<div class="panel panel-default">
 									<div class="panel-body">
@@ -90,6 +70,8 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div class="form-group">
 							<div class="col-md-4">
 								<small>COLA Basis</small>
 								<div class="panel-default panel">
@@ -109,6 +91,46 @@
 										</div>
 									</div>
 								</div>
+							</div>
+							<div class="col-md-4">
+								<small>13 Month Basis</small>
+								<div class="panel-default panel">
+									<div class="panel-body">
+										<label>Compute 13 Month</label>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_13month_basis" value="Gross Basic Pay">Gross Basic Pay</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_13month_basis" value="Net Basic Pay" checked>Net Basic Pay</label>
+										</div>
+										<label>additions (+)</label>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_allowance" name="payroll_group_13th_month_addition[]">Allowance</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_de_minimis_benefit" name="payroll_group_13th_month_addition[]">De Minimis Benefit</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_special_holiday" name="payroll_group_13th_month_addition[]">Special Holiday</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_regular_holiday" name="payroll_group_13th_month_addition[]">Regular Holiday</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_cola" name="payroll_group_13th_month_addition[]">COLA</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_late" name="payroll_group_13th_month_addition[]">Late</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_undertime" name="payroll_group_13th_month_addition[]">Undertime</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_absent" name="payroll_group_13th_month_addition[]">Absent</label>
+										</div>
+									</div>
+								</div>
+
 							</div>
 						</div>
 					</div>

@@ -725,7 +725,6 @@ class ShopMemberController extends Shop
 
         $data['_email'] = Tbl_pressiq_press_releases::paginate(5);
 
-
         if(Session::exists('user_email'))
         {
            $level=session('pr_user_level');
@@ -846,7 +845,7 @@ class ShopMemberController extends Shop
     public function pressreleases_edit_recipient($id)
     {
         Session::put('r_edit',$id);
-        return Redirect::to("/pressadmin/mediacontacts");
+        return Redirect::back();
     }
 
     public function pressuser_choose_recipient(Request $request)

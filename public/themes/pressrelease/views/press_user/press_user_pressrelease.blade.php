@@ -192,16 +192,9 @@
           <div id="preview_content"></div>
           <div class="about-title">
             <div>About {{session('user_company_name')}}
-              <input type="datetime"  value="<?php echo date("Y-m-d\ H:i:s",time()); ?>"/ style="border: none;" readonly></div>
-             <div>
-               <select  style="border: none;">
-                 <option>--Select option--</option>
-                 <option>Media Release</option>
-                 <option>Press Release</option>
-                 <option>Invitation</option>
-               </select> 
+              <input type="datetime"  value="<?php echo date("m-d-Y\ H:i:s",time()); ?>"/ style="border: none;" readonly>
+            </div>
              
-             </div>
           </div>
           <div id="preview_boiler_content"></div>
             <div>

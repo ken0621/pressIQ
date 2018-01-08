@@ -13,14 +13,12 @@
                 <tr>
                     <th>Email From</th>
                     <th>Header</th>
-                    <th>Content</th>
                     <th>Boilerplate</th>
                     <th>Action</th>
                     @foreach($_email as $email)
                     <tr>
                         <td style="text-align: center;">{{$email->pr_from}}</td>
                         <td style="text-align: center;">{{$email->pr_headline}}</td>
-                        <td style="text-align: center;">{!!$email->pr_content!!}</td>
                          <td style="text-align: center;">{!!$email->pr_boiler_content!!}</td>
                         <td  style="text-align: center;align-items: row" align="center">
                             <a href="/pressadmin/email_edit/{{$email->pr_id}}"><button type="button"  class="btn btn-warning center">

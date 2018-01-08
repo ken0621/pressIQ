@@ -11,7 +11,7 @@
                 </small>
             </h1>
             <a href="/member/cashier/sales_agent/agent-template" class="btn btn-custom-white pull-right">Download Agent Template</a>
-            <a href="/member/vendors/import/vendor-export-error" class="btn btn-custom-white pull-right import-error hidden"></a>
+            <a href="/member/cashier/sales_agent/agent-export-error" class="btn btn-custom-white pull-right import-error hidden"></a>
         </div>
     </div>
 </div>

@@ -57,19 +57,19 @@ class CommissionCalculator
         $item_info[0]['item_service_date']  = "";
         $item_info[0]['item_id']            = $comm_item['item_id'];
         $item_info[0]['item_description']   = Item::get_item_details($comm_item['item_id'])->item_sales_information;
-        $item_info[0]['discount']   		= 0;
-        $item_info[0]['discount_remark']	= "";
+        $item_info[0]['discount']   		= $comm_item['downpayment_percent']."%";
+        $item_info[0]['discount_remark']	= "Downpayment";
         $item_info[0]['um']			   		= "";
         $item_info[0]['taxable']	   		= 0;
         $item_info[0]['ref_name']	   		= "";
         $item_info[0]['ref_id']	   			= 0;
         $item_info[0]['quantity']           = 1;
-        $item_info[0]['rate']               = round(Self::get_computation($shop_id, $commission_id)['amount_tcp'],5);
-        $item_info[0]['amount']             = round(Self::get_computation($shop_id, $commission_id)['amount_tcp'],5);
+        $item_info[0]['rate']               = round(Self::get_computation($shop_id, $commission_id)['amount_tsp'],5);
+        $item_info[0]['amount']             = round(Self::get_computation($shop_id, $commission_id)['amount_tsp'],5);
 
         $total_info['ewt']                  = 0;
-        $total_info['total_discount_type']  = 0;
-        $total_info['total_discount_value'] = 0;
+        $total_info['total_discount_type']  = 'value';
+        $total_info['total_discount_value'] = $comm_item['discount'];
         $total_info['taxable']              = 0;
 
         $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
@@ -77,36 +77,36 @@ class CommissionCalculator
 		// $tcp = $loop_for + 1;
 		// /** TCP */
 		// $customer_info['customer_id']       = $comm['customer_id'];
-  //       $customer_info['customer_email']    = $comm['customer_email'];
+		  //       $customer_info['customer_email']    = $comm['customer_email'];
 
-  //       $invoice_info['invoice_date']       = $comm['date'];
-  //       $invoice_info['invoice_due']        = $comm['due_date'];
-  //       $invoice_info['new_inv_id']			= $commission_id.'00'.($tcp);
-  //       $invoice_info['billing_address']	= Item::get_item_details($comm_item['item_id'])->item_name;
-		// $invoice_info['invoice_terms_id']	= 0;
+		  //       $invoice_info['invoice_date']       = $comm['date'];
+		  //       $invoice_info['invoice_due']        = $comm['due_date'];
+		  //       $invoice_info['new_inv_id']			= $commission_id.'00'.($tcp);
+		  //       $invoice_info['billing_address']	= Item::get_item_details($comm_item['item_id'])->item_name;
+				// $invoice_info['invoice_terms_id']	= 0;
 
-  //       $invoice_other_info['invoice_msg']  = "";
-  //       $invoice_other_info['invoice_memo'] = "";
+		  //       $invoice_other_info['invoice_msg']  = "";
+		  //       $invoice_other_info['invoice_memo'] = "";
 
-  //       $item_info[0]['item_service_date']  = "";
-  //       $item_info[0]['item_id']            = $comm_item['item_id'];
-  //       $item_info[0]['item_description']   = Item::get_item_details($comm_item['item_id'])->item_sales_information;
-  //       $item_info[0]['discount']   		= 0;
-  //       $item_info[0]['discount_remark']	= "";
-  //       $item_info[0]['um']			   		= "";
-  //       $item_info[0]['taxable']	   		= 0;
-  //       $item_info[0]['ref_name']	   		= "";
-  //       $item_info[0]['ref_id']	   			= 0;
-  //       $item_info[0]['quantity']           = 1;
-  //       $item_info[0]['rate']               = round(Self::get_computation($shop_id, $commission_id)['amount_loanable'],5);
-  //       $item_info[0]['amount']             = round(Self::get_computation($shop_id, $commission_id)['amount_loanable'],5);
+		  //       $item_info[0]['item_service_date']  = "";
+		  //       $item_info[0]['item_id']            = $comm_item['item_id'];
+		  //       $item_info[0]['item_description']   = Item::get_item_details($comm_item['item_id'])->item_sales_information;
+		  //       $item_info[0]['discount']   		= 0;
+		  //       $item_info[0]['discount_remark']	= "";
+		  //       $item_info[0]['um']			   		= "";
+		  //       $item_info[0]['taxable']	   		= 0;
+		  //       $item_info[0]['ref_name']	   		= "";
+		  //       $item_info[0]['ref_id']	   			= 0;
+		  //       $item_info[0]['quantity']           = 1;
+		  //       $item_info[0]['rate']               = round(Self::get_computation($shop_id, $commission_id)['amount_loanable'],5);
+		  //       $item_info[0]['amount']             = round(Self::get_computation($shop_id, $commission_id)['amount_loanable'],5);
 
-  //       $total_info['ewt']                  = 0;
-  //       $total_info['total_discount_type']  = 0;
-  //       $total_info['total_discount_value'] = 0;
-  //       $total_info['taxable']              = 0;
+		  //       $total_info['ewt']                  = 0;
+		  //       $total_info['total_discount_type']  = 0;
+		  //       $total_info['total_discount_value'] = 0;
+		  //       $total_info['taxable']              = 0;
 
-  //       $tcp_invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+		  //       $tcp_invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
 
         $ins['invoice_id'] = $invoice_id;
 		$ins['commission_id'] = $commission_id;
@@ -410,9 +410,38 @@ class CommissionCalculator
 
 		if($check && $get_payment_data)
 		{
-			$test = floor($get_payment_data->rp_total_amount / $check->payment_amount);
+			$all = Tbl_commission_invoice::where("commission_id", $check->commission_id)->get();
+			$rp = null;
+			$rp_amount = 0;
+			$total_paid = 0;
+			foreach ($all as $key => $value) 
+			{
+				if($value->invoice_is_paid != 0)
+				{
+					$total_paid += $value->payment_amount;
+				}
+				if($value->payment_ref_id != 0)
+				{
+					$rp[$value->payment_ref_id] = Tbl_receive_payment::where("rp_id", $value->payment_ref_id)->value("rp_total_amount");
+				}
+			}
+			if(count($rp) > 0)
+			{
+				foreach ($rp as $key1 => $value1) 
+				{
+					$rp_amount += $value1;
+				}
+			}
+			
+			$additional = 0;
+			if($rp_amount > $total_paid)
+			{
+				$additional = $rp_amount - $total_paid;
+			}
 
-			for ($i = 0; $i < $test; $i++) 
+			$ctr = floor(($get_payment_data->rp_total_amount + $additional) / $check->payment_amount);
+
+			for ($i = 0; $i < $ctr; $i++) 
 			{ 
 				$check = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
 				/*UPDATE COMMISSION HERE*/

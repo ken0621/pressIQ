@@ -6,6 +6,9 @@ use Crypt;
 use Redirect;
 use View;
 use DB;
+use Input;
+use File;
+use Image;
 use App\Models\Tbl_press_release_recipient;
 use App\Tbl_pressiq_press_releases;
 
@@ -31,6 +34,13 @@ class ShopNewsRoomController extends Shop
 
         $data["pr"]=$pr;
         $data["page"] = "News Room";
+
+        $pr = DB::table('tbl_pressiq_press_releases')
+                ->where('pr_status', "sent")
+                ->orderByRaw('pr_date_sent DESC')
+                ->paginate(6);
+        $data["page"] = "Press Release - View";
+        $data["pr_newsroom"]=$pr;
         return view("news_room_view", $data);
     }
 

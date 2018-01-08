@@ -20,7 +20,7 @@
 			.heading-container
 			{
 				color: #cd3d35;
-				font-size: 60px;
+				font-size: 30px;
 				text-align: center;
 				font-weight: 700;
 				font-family: 'PT Serif';
@@ -77,12 +77,11 @@
 			}
 			.content-container
 			{
-				padding-top: 15px;
 				padding-bottom: 10px;
 				text-align: justify;
 				font-weight: 400;
 				color: #404040;
-				font-size: 20px;
+				font-size: 15px;
 				font-family: 'PT Sans';
 				@media screen and (max-width: 425px)
 				{
@@ -96,12 +95,11 @@
 			.border
 			{
 				border-bottom: 1px solid #ededed;
-				padding: 15px 0px;
 			}
 			.title-about-container
 			{
-				padding: 40px 0px 15px 0px;
-				font-size: 25px;
+				padding: 20px 0px 15px 0px;
+				font-size: 20px;
 				color: #404040;
 				font-family: 'PT Sans';
 				font-weight: 700;
@@ -135,6 +133,34 @@
 				.company-name
 				{
 					font-family: 'PT Serif';
+				}
+			}
+			.header
+			{
+				font-size: 20px;
+				text-align: center;
+				padding: 30px 0px 10px 0px;
+				font-family: 'Lato';
+			}
+			.release-container
+			{
+				border-bottom: 1px solid #ededed;
+				padding: 20px 5px;
+				.title
+				{
+					font-weight: 700;
+					font-size: 15px;
+					font-family: 'Lato';
+				}
+				.date-container
+				{
+					margin-top: 5px;
+					color: rgba(0,0,0,0.5);
+					font-weight: 700;
+					span
+					{
+						margin-right: 8px;
+					}
 				}
 			}
 		}

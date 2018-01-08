@@ -858,7 +858,7 @@ class PayrollTimeSheet2Controller extends Member
 			$_timesheet[$from] = Payroll2::timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);
 			$_timesheet[$from]->record = Payroll2::timesheet_process_in_out($timesheet_db);
 			$_timesheet[$from]->branch_source_company_id 	= 0;
-		
+			
 			if ($_timesheet[$from]->record != null) 
 			{
 				foreach ($_timesheet[$from]->record as $key => $rec) 

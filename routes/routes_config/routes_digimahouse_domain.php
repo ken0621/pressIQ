@@ -96,10 +96,11 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressadmin/pressreleases_edit_recipient/{id}', 'Shop\ShopMemberController@pressreleases_edit_recipient');//PRESS RELEASE
 	Route::get('/newsroom',			'Shop\ShopNewsRoomController@index');//PRESS RELEASE
 	Route::any('/newsroom/search',	'Shop\ShopNewsRoomController@newsroom_search');//PRESS RELEASE
+	Route::get('/newsroom/view/{pid}','Shop\ShopNewsRoomController@news_room_view');//PRESS RELEASE
 
 	Route::get('/pressuser/choose_recipient', 'Shop\ShopMemberController@pressuser_choose_recipient');
 	// Route::get('/pressrelease/view','Shop\ShopMemberController@press_email');//PRESS RELEASE
-	Route::get('/newsroom/view/{pid}','Shop\ShopNewsRoomController@news_room_view');//PRESS RELEASE
+
 	
 	
 	Route::get('/blog', 'Shop\ShopBlogController@index');

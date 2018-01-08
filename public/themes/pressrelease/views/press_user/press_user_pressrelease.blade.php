@@ -70,16 +70,19 @@
                           @endforeach
                     </select>
 
-                    <div class="title">Send To:</div>
-                          <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
+                    <div class="title">Send To:
+                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
+                    </div>
+                     
+                    <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
-                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
-                      {{-- POPUP CHOOSE RECIPIENT --}}
 
-                          <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
-                        @endforeach
+                    {{-- POPUP CHOOSE RECIPIENT --}}
+                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue To Send &raquo;</a></button></span>
+                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
+                    @endforeach
                       @else
                         <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus>
                   <div class="title">Release Text Body:</div>
@@ -133,7 +136,6 @@
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue To Send &raquo;</a></button></span>
-
                       <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                       @endif
                     <div class="button-container"></div>
@@ -189,21 +191,26 @@
           </div>
           <div id="preview_content"></div>
           <div class="about-title">
-            <div>Media Release. Publised: 
-            <input type="datetime"  value="<?php echo date("Y-m-d\ H:i:s",time()); ?>"/ style="border: none;" readonly>
-            </div>
-            <div>{{session('user_company_name')}}</div>
+            <div>About {{session('user_company_name')}}
+              <input type="datetime"  value="<?php echo date("Y-m-d\ H:i:s",time()); ?>"/ style="border: none;" readonly></div>
+             <div>
+               <select  style="border: none;">
+                 <option>--Select option--</option>
+                 <option>Media Release</option>
+                 <option>Press Release</option>
+                 <option>Invitation</option>
+               </select> 
+             
+             </div>
           </div>
           <div id="preview_boiler_content"></div>
-          <div>
-            &nbsp; <a href="https://twitter.com/share" class="twitter-share-button" data-url="" data-size="large">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-            <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fmvm.dev&width=74&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId" width="74" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+            <div>
+              &nbsp; <a href="https://twitter.com/share" class="twitter-share-button" data-url="" data-size="large">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Ffacebook/oliverbryan19.com&width=74&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId" width="74" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
-        </div>
-        
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
       </div>
     </div>
   </div>

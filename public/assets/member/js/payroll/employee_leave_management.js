@@ -186,14 +186,15 @@ function employee_leave_management()
 
 	function tbl_tag(data)
 	{
+
 		var html = '<tr class="text-center">';
-		html += '<td>'+data.payroll_leave_name+'</td>';
-		html += '<td>'+data.leave_hours+'</td>';
-		html += '<td>'+data.date_filed+'</td>';
-		html += '<td>'+data.payroll_schedule_leave+'</td>';
-		html += '<td>'+data.payroll_employee_display_name_approver+'</td>';
-		html += '<td>'+data.payroll_employee_display_name_reliever+'</td>';
-		html += '<td>'+data.status+'</td>';
+		html += '<td>'+data.payroll_request_leave_date_filed+'</td>';
+		html += '<td>'+data.payroll_request_leave_type+'</td>';
+		html += '<td>'+data.payroll_request_leave_date+'</td>';
+		html += '<td>'+data.payroll_request_leave_total_hours+'</td>';
+		html += '<td>'+data.payroll_employee_display_name+'</td>';
+		html += '<td>'+data.payroll_request_leave_status+'</td>';
+		html += '<td>'+payroll_request_leave_status_level+'</td>';
 		html += '</tr>';
 
 		return html;

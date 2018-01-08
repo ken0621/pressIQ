@@ -31,13 +31,13 @@
                   <table class="table table-bordered" style="font-size:12px;">
             <thead>
               <tr>
+                <th style="text-align: center;">Date Request</th>
                 <th style="text-align: center;">Leave Type</th>
+                <th style="text-align: center;">Leave Date</th>
                 <th style="text-align: center;">Leave Hours</th>
-                <th style="text-align: center;">Date Filed</th>
-                <th style="text-align: center;">Schedule Leave</th>
-                <th style="text-align: center;">Approver</th>
                 <th style="text-align: center;">Reliever</th>
                 <th style="text-align: center;">Status</th>
+                <th style="text-align: center;">Status Level</th>
               </tr>
             </thead>
             <tbody class="tbl-tag">

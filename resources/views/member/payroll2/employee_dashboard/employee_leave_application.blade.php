@@ -13,7 +13,7 @@
         <div class="row">
  			    <div class="col-md-6">
  			    	<small>Type of Leave</small>
-					<select class="form-control user-error" name="leave_type" aria-invalid="true" required>
+					<select class="form-control user-error" name="payroll_request_leave_type" aria-invalid="true" required>
 						<option value="">Select Leave Type</option>
 						<option value="SL">Sick Leave</option>
 						<option value="VL">Vacation Leave</option>
@@ -25,7 +25,7 @@
 
 		  		<div class="col-md-6">
 			  		<small>Date Filed</small>
-			      	<input class="form-control" type="date" class="form-control" name="date_filed" required>
+			      	<input class="form-control" type="date" class="form-control" name="payroll_request_leave_date_filed" required>
 				</div>
         </div>
 
@@ -42,11 +42,11 @@
 
 		  		 <div class="col-md-6">
 					<small>Reliever</small>
-					<select class="form-control" name="payroll_employee_id_reliever" required>
+					<select class="form-control" name="payroll_request_leave_id_reliever" required>
 						<option value="">Select Employee</option>
-						@foreach($employees_info as $employee)
+			{{-- 			@foreach($employees_info as $employee)
 							<option value="{{$employee->payroll_employee_id}}">{{$employee->payroll_employee_first_name}} {{$employee->payroll_employee_middle_name}} {{$employee->payroll_employee_last_name}}</option> 
-						@endforeach
+						@endforeach --}}
 
 					</select>
 		  		</div>
@@ -60,17 +60,11 @@
 
 		  		 <div class="col-md-3">
 					<small>Hours</small>
-				   	<input class="text-center form-control break time-entry time-target time-entry-24 is-timeEntry" type="text" name="leave_hours" placeholder="00:00" style="width: 80px;">
+				   	<input class="text-center form-control break time-entry time-target time-entry-24 is-timeEntry" type="text" name="payroll_request_leave_total_hours" placeholder="00:00" style="width: 80px;">
 		  		</div>
 
 		  		 <div class="col-md-6">
-					<small>Approver</small>
-					<select class="form-control" name="payroll_employee_id_approver" required>
-						<option value="">Select Employee</option>
-							@foreach($employees_info as $employee)
-								<option value="{{$employee->payroll_employee_id}}">{{$employee->payroll_employee_first_name}} {{$employee->payroll_employee_middle_name}} {{$employee->payroll_employee_last_name}}</option> 
-							@endforeach
-					</select>
+		
 		  		</div>
         </div>
 
@@ -85,14 +79,32 @@
         <div class="row">
 		  		<div class="col-md-6">
 			  		<small>Schedule Date Start</small>
-			      	<input class="form-control" type="date" class="form-control" name="payroll_schedule_leave" required>
+			      	<input class="form-control" type="date" class="form-control" name="payroll_request_leave_date" required>
 				</div>
 
 		  		<div class="col-md-6">
 			  		<small>Schedule Date End</small>
-			      	<input class="form-control payroll_schedule_leave_end" type="date" class="form-control" name="payroll_schedule_leave_end" disabled="">
+			      	<input class="form-control payroll_schedule_leave_end" type="date" class="form-control" name="payroll_request_leave_date_end" disabled="">
 				</div>
         </div>
+        <br>
+       	<div class="row">
+	    	<div class="col-sm-12">
+	    		<small for="approver_group">Select Group Approver</small>
+		    	<select class="form-control approver_group" id="approver_group" name="approver_group" required>
+		    		<option value=""> Select Group Approver </option>
+		    		@foreach($_group_approver as $group_approver)
+		    		<option value="{{ $group_approver->payroll_approver_group_id }}"> {{ $group_approver->payroll_approver_group_name }} </option>
+		    		@endforeach
+		    	</select>
+	    	</div>
+	    </div> 
+
+	    <div class="row">
+	    	<div class="col-sm-12 approver_group_list">
+	    		
+	    	</div>
+	    </div>   
 
 	</div>
 	<div class="modal-footer">
@@ -128,3 +140,4 @@
 			}
 		});
 </script>
+<script type="text/javascript" src="/assets/employee/js/employee_overtime_application.js"></script>

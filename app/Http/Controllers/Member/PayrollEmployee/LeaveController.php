@@ -24,7 +24,7 @@ use App\Models\Tbl_payroll_request_overtime;
 use App\Models\Tbl_payroll_approver_employee;
 use App\Models\Tbl_payroll_request_payment;
 use App\Models\Tbl_payroll_request_payment_sub;
-use App\Models\Tbl_payroll_leave_schedulev3;
+use App\Models\Tbl_payroll_request_leave;
 use App\Globals\Payroll2;
 use App\Globals\Payroll;
 use App\Globals\Utilities;
@@ -81,6 +81,8 @@ class LeaveController extends PayrollMember
         $data["company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
 
 	      $data["employees_info"] = Tbl_payroll_employee_contract::employeefilter($company = 0, $department = 0, $jobtitle = 0, date('Y-m-d'), $shop_id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->groupBy('tbl_payroll_employee_basic.payroll_employee_id')->get();
+
+	      $data['_group_approver'] = Tbl_payroll_approver_group::where('tbl_payroll_approver_group.shop_id', Self::employee_shop_id())->where('payroll_approver_group_type','leave')->where('archived', 0)->get();
 	      
     	return view('member.payroll2.employee_dashboard.employee_leave_application',$data);
     }
@@ -100,95 +102,97 @@ class LeaveController extends PayrollMember
 	public function ajax_all_load_leave()
 	{
 
-		 $emp = Tbl_payroll_leave_schedulev3::select('tbl_payroll_leave_schedulev3.*','basicreliever.payroll_employee_display_name as payroll_employee_display_name_reliever','basicapprover.payroll_employee_display_name as payroll_employee_display_name_approver','tbl_payroll_leave_schedulev3.payroll_employee_id')
-			->leftjoin('tbl_payroll_employee_basic AS basicreliever', 'basicreliever.payroll_employee_id', '=', 'tbl_payroll_leave_schedulev3.payroll_employee_id_reliever')
-    		->leftjoin('tbl_payroll_employee_basic AS basicapprover', 'basicapprover.payroll_employee_id', '=', 'tbl_payroll_leave_schedulev3.payroll_employee_id_approver')
-    		->where('tbl_payroll_leave_schedulev3.payroll_employee_id',Self::employee_id())
-   			 ->get();
+		 // $emp = Tbl_payroll_leave_schedulev3::select('tbl_payroll_leave_schedulev3.*','basicreliever.payroll_employee_display_name as payroll_employee_display_name_reliever','basicapprover.payroll_employee_display_name as payroll_employee_display_name_approver','tbl_payroll_leave_schedulev3.payroll_employee_id')
+			// ->leftjoin('tbl_payroll_employee_basic AS basicreliever', 'basicreliever.payroll_employee_id', '=', 'tbl_payroll_leave_schedulev3.payroll_employee_id_reliever')
+   //  		->leftjoin('tbl_payroll_employee_basic AS basicapprover', 'basicapprover.payroll_employee_id', '=', 'tbl_payroll_leave_schedulev3.payroll_employee_id_approver')
+   //  		->where('tbl_payroll_leave_schedulev3.payroll_employee_id',Self::employee_id())
+   // 			 ->get();
+
+
+		 $emp = Tbl_payroll_request_leave::select('tbl_payroll_request_leave.*','tbl_payroll_employee_basic.payroll_employee_display_name')
+		 		->leftjoin('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id', '=','tbl_payroll_request_leave.payroll_request_leave_id_reliever')
+		 		->where('tbl_payroll_request_leave.payroll_employee_id',Self::employee_id())
+				->get();
 
 		 return json_encode($emp);
 	}
 
 	public function ajax_load_pending_leave()
 	{
-		 $emp = Tbl_payroll_leave_schedulev3::select('tbl_payroll_leave_schedulev3.*','basicreliever.payroll_employee_display_name as payroll_employee_display_name_reliever','basicapprover.payroll_employee_display_name as payroll_employee_display_name_approver','tbl_payroll_leave_schedulev3.payroll_employee_id')
-			->leftjoin('tbl_payroll_employee_basic AS basicreliever', 'basicreliever.payroll_employee_id', '=', 'tbl_payroll_leave_schedulev3.payroll_employee_id_reliever')
-    		->leftjoin('tbl_payroll_employee_basic AS basicapprover', 'basicapprover.payroll_employee_id', '=', 'tbl_payroll_leave_schedulev3.payroll_employee_id_approver')
-    		->where('tbl_payroll_leave_schedulev3.payroll_employee_id',Self::employee_id())
-    		->where('tbl_payroll_leave_schedulev3.status',"Pending")
-   			 ->get();
+
+		$emp = Tbl_payroll_request_leave::select('tbl_payroll_request_leave.*','tbl_payroll_employee_basic.payroll_employee_display_name')
+		 		->leftjoin('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id', '=','tbl_payroll_request_leave.payroll_request_leave_id_reliever')
+		 		->where('tbl_payroll_request_leave.payroll_employee_id',Self::employee_id())
+		 		->where('tbl_payroll_request_leave.payroll_request_leave_status','pending')->get();
 
 		 return json_encode($emp);
 	}
 
 	public function ajax_load_approved_leave()
 	{
-		  $emp = Tbl_payroll_leave_schedulev3::select('tbl_payroll_leave_schedulev3.*','basicreliever.payroll_employee_display_name as payroll_employee_display_name_reliever','basicapprover.payroll_employee_display_name as payroll_employee_display_name_approver','tbl_payroll_leave_schedulev3.payroll_employee_id')
-			->leftjoin('tbl_payroll_employee_basic AS basicreliever', 'basicreliever.payroll_employee_id', '=', 'tbl_payroll_leave_schedulev3.payroll_employee_id_reliever')
-    		->leftjoin('tbl_payroll_employee_basic AS basicapprover', 'basicapprover.payroll_employee_id', '=', 'tbl_payroll_leave_schedulev3.payroll_employee_id_approver')
-    		->where('tbl_payroll_leave_schedulev3.payroll_employee_id',Self::employee_id())
-    		->where('tbl_payroll_leave_schedulev3.status',"Approved")
-   			 ->get();
+
+		 $emp = Tbl_payroll_request_leave::select('tbl_payroll_request_leave.*','tbl_payroll_employee_basic.payroll_employee_display_name')
+		 		->leftjoin('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id', '=','tbl_payroll_request_leave.payroll_request_leave_id_reliever')
+		 		->where('tbl_payroll_request_leave.payroll_employee_id',Self::employee_id())
+		 		->where('tbl_payroll_request_leave.payroll_request_leave_status','approved')->get();
 
 		 return json_encode($emp);
 	}
 
 	public function ajax_load_rejected_leave()
 	{
-		  $emp = Tbl_payroll_leave_schedulev3::select('tbl_payroll_leave_schedulev3.*','basicreliever.payroll_employee_display_name as payroll_employee_display_name_reliever','basicapprover.payroll_employee_display_name as payroll_employee_display_name_approver','tbl_payroll_leave_schedulev3.payroll_employee_id')
-			->leftjoin('tbl_payroll_employee_basic AS basicreliever', 'basicreliever.payroll_employee_id', '=', 'tbl_payroll_leave_schedulev3.payroll_employee_id_reliever')
-    		->leftjoin('tbl_payroll_employee_basic AS basicapprover', 'basicapprover.payroll_employee_id', '=', 'tbl_payroll_leave_schedulev3.payroll_employee_id_approver')
-    		->where('tbl_payroll_leave_schedulev3.payroll_employee_id',Self::employee_id())
-    		->where('tbl_payroll_leave_schedulev3.status',"Rejected")
-   			 ->get();	
+		 $emp = Tbl_payroll_request_leave::select('tbl_payroll_request_leave.*','tbl_payroll_employee_basic.payroll_employee_display_name')
+		 		->leftjoin('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id', '=','tbl_payroll_request_leave.payroll_request_leave_id_reliever')
+		 		->where('tbl_payroll_request_leave.payroll_employee_id',Self::employee_id())
+		 		->where('tbl_payroll_request_leave.payroll_request_leave_status','rejected')->get();
 
 		 return json_encode($emp);
 	}
 
 	public function save_leave()
     {
+
     	$insert = array();
     	if(Request::has('single_date_only'))
         {
-	    	 $temp['payroll_employee_id_reliever']		    =	Request::input('payroll_employee_id_reliever');
-			 $temp['payroll_employee_id_approver']		    =	Request::input('payroll_employee_id_approver');
+        	 $temp['payroll_approver_group_id'] 			= Request::input('approver_group');
+	    	 $temp['payroll_request_leave_id_reliever']		=	Request::input('payroll_request_leave_id_reliever');
 			 $temp['payroll_employee_id']					= 	Self::employee_id();
-			 $temp['payroll_schedule_leave']				=	Request::input('payroll_schedule_leave');
-			 $temp['date_filed']							=	Request::input('date_filed');
-			 $temp['shop_id']								=	Self::employee_shop_id();
-			 $temp['leave_hours']							=	Request::input('leave_hours');
-			 $temp['consume']								=	Payroll::time_float(Request::input('leave_hours'));
-			 $temp['remarks']								=	"Used ".Request::input('leave_hours')." hours in ".Request::input('leave_type');
-			 $temp['status']								=	"Pending";
-			 $temp['payroll_leave_name']					=	Request::input('leave_type');
+			 $temp['payroll_request_leave_date']			=	Request::input('payroll_request_leave_date');
+			 $temp['payroll_request_leave_date_filed']		=	Request::input('payroll_request_leave_date_filed');
+			 $temp['payroll_request_leave_total_hours']		=	Request::input('payroll_request_leave_total_hours');
+			 $temp['payroll_request_leave_remark']			=	"Used ".Request::input('payroll_request_leave_total_hours')." hours in ".Request::input('payroll_request_leave_type');
+			 $temp['payroll_request_leave_status']			=	'pending';
+			 $temp['payroll_request_leave_status_level'] 	=    1;
+			 $temp['payroll_leave_name']					=	Request::input('payroll_request_leave_type');
 
 			 array_push($insert, $temp);
 		}
 		else
 		{
-			  $end = datepicker_input(Request::input('payroll_schedule_leave_end'));
-              $payroll_schedule_leave = datepicker_input(Request::input('payroll_schedule_leave'));
-			   while($payroll_schedule_leave <= $end)
-               {
-               		 $temp['payroll_employee_id_reliever']		    =	Request::input('payroll_employee_id_reliever');
-					 $temp['payroll_employee_id_approver']		    =	Request::input('payroll_employee_id_approver');
-					 $temp['payroll_employee_id']					= 	Self::employee_id();
-					 $temp['payroll_schedule_leave']				=	$payroll_schedule_leave;
-					 $temp['date_filed']							=	Request::input('date_filed');
-					 $temp['shop_id']								=	Self::employee_shop_id();
-					 $temp['leave_hours']							=	Request::input('leave_hours');
-					 $temp['consume']								=	Payroll::time_float(Request::input('leave_hours'));
-					 $temp['remarks']								=	"Used ".Request::input('leave_hours')." hours in ".Request::input('leave_type');
-					 $temp['status']								=	"Pending";
-					 $temp['payroll_leave_name']					=	Request::input('leave_type');
+			  $end = datepicker_input(Request::input('payroll_request_leave_date_end'));
+              $payroll_request_leave_date = datepicker_input(Request::input('payroll_request_leave_date'));
 
-     				 array_push($insert, $temp);
-     				 $payroll_schedule_leave = Carbon::parse($payroll_schedule_leave)->addDay()->format("Y-m-d");
+			   while($payroll_request_leave_date <= $end)
+               {
+               	   	 $temp['payroll_approver_group_id'] 			= Request::input('approver_group');
+               		 $temp['payroll_request_leave_id_reliever']		=	Request::input('payroll_request_leave_id_reliever');
+					 $temp['payroll_employee_id']					= 	Self::employee_id();
+					 $temp['payroll_request_leave_date']			=	$payroll_request_leave_date;
+					 $temp['payroll_request_leave_date_filed']		=	Request::input('payroll_request_leave_date_filed');
+					 $temp['payroll_request_leave_total_hours']		=	Request::input('payroll_request_leave_total_hours');
+					 $temp['payroll_request_leave_remark']			=	"Used ".Request::input('payroll_request_leave_total_hours')." hours in ".Request::input('payroll_request_leave_type');
+					 $temp['payroll_request_leave_status']			=	'pending';
+					 $temp['payroll_request_leave_status_level'] 	=    1;
+					 $temp['payroll_leave_name']					=	Request::input('payroll_request_leave_type');
+
+					 array_push($insert, $temp);
+     				 $payroll_request_leave_date = Carbon::parse($payroll_request_leave_date)->addDay()->format("Y-m-d");
                }
 		}
 		if(!empty($insert)) 
         {  
-            Tbl_payroll_leave_schedulev3::insert($insert);
+           	Tbl_payroll_request_leave::insert($insert);
         }
 
 	   	$response['call_function'] = 'reload';

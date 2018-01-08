@@ -25,7 +25,6 @@
                         </div>
                     </div>  
                     <div class="details-container">
-                        <a href="/newsroom/view/{{$prs->pr_id}}" style="color: black;text-decoration:none;">
                         <p>{!!$prs->pr_content!!}</p>
                     </div>
                     <div class="button-container">

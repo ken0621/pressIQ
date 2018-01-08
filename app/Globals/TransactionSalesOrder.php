@@ -36,6 +36,7 @@ class TransactionSalesOrder
 			$data->where(function($q) use ($search_keyword)
             {
                 $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("est_id", "LIKE", "%$search_keyword%");
                 $q->orWhere("company", "LIKE", "%$search_keyword%");
                 $q->orWhere("first_name", "LIKE", "%$search_keyword%");
                 $q->orWhere("middle_name", "LIKE", "%$search_keyword%");

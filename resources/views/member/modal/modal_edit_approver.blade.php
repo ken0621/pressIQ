@@ -39,6 +39,6 @@
   function reload_page(data)
   {
   	data.element.modal("hide");
-    window.location.href = "/member/payroll/payroll_admin_dashboard/group_approver";
+    window.location.href = "/member/payroll/payroll_admin_dashboard/employee_approver";
   }
 </script>

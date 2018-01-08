@@ -35,4 +35,11 @@ class Tbl_payroll_request_payment extends Model
 
           return $query;
         }
+
+        public function scopeEmployeeInfo($query)
+        {
+          $query->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_request_payment.payroll_employee_id');
+
+          return $query;
+        }
 }

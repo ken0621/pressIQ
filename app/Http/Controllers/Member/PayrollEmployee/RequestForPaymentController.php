@@ -164,13 +164,66 @@ class RequestForPaymentController extends PayrollMember
 		return view('member.payroll2.employee_dashboard.authorized_access_request_for_refund_table', $data);
 	}
 
-	public function rfp_application_approve()
+	public function rfp_application_approve($request_id)
 	{
+		if (Request::method() == 'POST') 
+		{
+			$request_info = Tbl_payroll_request_payment::where('payroll_request_payment_id',$request_id)->EmployeeInfo()->first();
+			
+			$_approver_group = collect(Tbl_payroll_approver_group::where('tbl_payroll_approver_group.payroll_approver_group_id', $request_info['payroll_approver_group_id'])
+										->EmployeeApproverInfo()->get())
+										->groupBy('payroll_approver_group_level');
+			
+			$count_approvers = count($_approver_group);
+			
+			/*check if approve or go to next level of approval*/
+			if($count_approvers == $request_info['payroll_request_payment_status_level'])
+			{
+				$update['payroll_request_payment_status'] = "approved";
+				Tbl_payroll_request_payment::where('payroll_request_payment_id',$request_id)->update($update);
+			}
+			else
+			{
+				$update['payroll_request_payment_status_level'] = $request_info['payroll_request_payment_status_level'] + 1;
+				Tbl_payroll_request_payment::where('payroll_request_payment_id',$request_id)->update($update);
+			}
 
+			$response['status'] = 'success';
+			$response['call_function'] = 'reload';
+
+			return $response;
+		}
+		else
+		{
+			$data['id'] 	 = $request_id;
+			$data['action']  = "rfp_application_approve/".$request_id;
+			$data['message'] = 'Do you really want to approve this request?';
+			$data['btn']	 = '<label><button type="submit" class="btn btn-custom-white">Confirm</label>';
+			
+			return view('member.payroll2.employee_dashboard.modal.modal_confirm',$data);
+		}
 	}
 
-	public function rfp_application_reject()
+	public function rfp_application_reject($request_id)
 	{
-		
+		if (Request::method() == 'POST') 
+		{
+			$update['payroll_request_overtime_status'] = "rejected";
+			Tbl_payroll_request_overtime::where('payroll_request_overtime_id',$request_id)->update($update);
+			
+			$response['status'] = 'success';
+			$response['call_function'] = 'reload';
+
+			return $response;
+		}
+		else
+		{
+			$data['id'] 	 = $request_id;
+			$data['action']  = 'rfp_application_reject/'.$request_id;
+			$data['message'] = 'Do you really want to reject this request?';
+			$data['btn']	 = '<label><button type="submit" class="btn btn-custom-white">Confirm</label>';
+			
+			return view('member.payroll2.employee_dashboard.modal.modal_confirm',$data);
+		}
 	}
 }

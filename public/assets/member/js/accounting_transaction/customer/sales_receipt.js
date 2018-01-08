@@ -353,3 +353,13 @@ function success_item(data)
     });
     data.element.modal("hide");
 }
+
+function success_sales_receipt(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
+}
+

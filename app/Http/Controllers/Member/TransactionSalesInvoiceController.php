@@ -27,7 +27,6 @@ class TransactionSalesInvoiceController extends Member
   	public function getIndex()
 	{
 		$data['page'] = "Sales Invoice";
-		$data['_sales_invoice'] = TransactionSalesInvoice::get($this->user_info->shop_id, 10);
 		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice_list',$data);
 	}
 	public function getLoadSalesInvoice(Request $request)

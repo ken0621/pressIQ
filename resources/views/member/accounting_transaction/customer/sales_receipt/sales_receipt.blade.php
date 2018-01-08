@@ -112,7 +112,7 @@
                                                 <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center">
-                                                    <input type="hidden" class="item_taxable" name="invline_taxable[]" value="" >
+                                                    <input type="hidden" class="item_taxable"  name="item_taxable[] value="" >
                                                     <input type="checkbox" name="" class="taxable-check compute" value="checked">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
@@ -138,7 +138,7 @@
                                                 <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center">
-                                                    <input type="hidden" class="item_taxable" name="invline_taxable[]" value="" >
+                                                    <input type="hidden" class="item_taxable" name="item_taxable[]" value="" >
                                                     <input type="checkbox" name="" class="taxable-check compute" value="checked">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
@@ -175,7 +175,7 @@
                                             </div>
                                             <div class="col-sm-3  padding-lr-1">
                                                 <!-- <input class="form-control input-sm text-right ewt_value number-input" type="text" name="ewt"> -->
-                                                <select class="form-control input-sm ewt-value compute" name="ewt">  
+                                                <select class="form-control input-sm ewt-value compute" name="customer_ewt">  
                                                     <option value="0" {{isset($inv) ? $inv->ewt == 0 ? 'selected' : '' : ''}}></option>
                                                     <option value="0.01" {{isset($inv) ? $inv->ewt == 0.01 ? 'selected' : '' : ''}}>1%</option>
                                                     <option value="0.02" {{isset($inv) ? $inv->ewt == 0.02 ? 'selected' : '' : ''}}>2%</option>
@@ -191,13 +191,13 @@
                                     <div class="col-md-7 text-right digima-table-label">
                                         <div class="row">
                                             <div class="col-sm-6 col-sm-offset-4  padding-lr-1">
-                                                <select class="form-control input-sm compute discount_selection" name="inv_discount_type">  
+                                                <select class="form-control input-sm compute discount_selection" name="customer_discounttype">  
                                                     <option value="percent" {{isset($inv) ? $inv->inv_discount_type == 'percent' ? 'selected' : '' : ''}}>Discount percentage</option>
                                                     <option value="value" {{isset($inv) ? $inv->inv_discount_type == 'value' ? 'selected' : '' : ''}}>Discount value</option>
                                                 </select>
                                             </div>
                                             <div class="col-sm-2  padding-lr-1">
-                                                <input class="form-control input-sm text-right number-input discount_txt compute" type="text" name="inv_discount_value" value="{{$inv->inv_discount_value or ''}}">
+                                                <input class="form-control input-sm text-right number-input discount_txt compute" type="text" name="customer_discount" value="{{$inv->inv_discount_value or ''}}">
                                             </div>
                                         </div>
                                     </div>
@@ -209,7 +209,7 @@
                                     <div class="col-md-7 text-right digima-table-label">
                                         <div class="row">
                                             <div class="col-sm-4 col-sm-offset-8  padding-lr-1">
-                                                <select class="form-control input-sm tax_selection compute" name="taxable">  
+                                                <select class="form-control input-sm tax_selection compute" name="customer_tax">  
                                                     <option value="0" {{isset($inv) ? $inv->taxable == 0 ? 'selected' : '' : ''}}>No Tax</option>
                                                     <option value="1" {{isset($inv) ? $inv->taxable == 1 ? 'selected' : '' : ''}}>Vat (12%)</option>
                                                 </select>

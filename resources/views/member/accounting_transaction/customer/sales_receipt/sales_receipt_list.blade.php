@@ -43,7 +43,7 @@
             <div class="clearfix">
                 <div class="col-md-12">
                     <div class="table-responsive load-item-table">
-                        @include('member.accounting_transaction.customer.sales_receipt.sales_receipt_table')
+                      <div class="text-center">LOADING TRANSACTION...</div>
                     </div>
                 </div>
             </div>

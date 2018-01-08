@@ -1,9 +1,12 @@
 <?php
 namespace App\Globals;
 
+
+use App\Models\Tbl_receive_inventory_line;
+use App\Models\Tbl_receive_inventory;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_debit_memo;
-use App\Models\Tbl_receive_inventory;
+
 use Carbon\Carbon;
 use DB;
 
@@ -51,15 +54,15 @@ class TransactionReceiveInventory
             $receive_inventory_id = Tbl_receive_inventory::insertGetId($ins);
 
             /* Transaction Journal */
-            $entry["reference_module"]  = "receive-inventory";
+            /*$entry["reference_module"]  = "receive-inventory";
             $entry["reference_id"]      = $receive_inventory_id;
             $entry["name_id"]           = $insert['vendor_id'];
             $entry["total"]             = collect($insert_item)->sum('itemline_amount');
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
-            $entry["ewt"]               = '';
+            $entry["ewt"]               = '';*/
 
-            $return = Self::insertLine($receive_inventory_id, $insert_item, $entry);
+            $return = Self::insertLine($receive_inventory_id, $insert_item);
             $return = $receive_inventory_id;
         }
         else
@@ -69,24 +72,30 @@ class TransactionReceiveInventory
         return $return;
 	}
 
-    public static function insertLine($receive_inventory_id, $insert_item, $entry)
+    public static function insertLine($receive_inventory_id, $insert_item)
     {
         $itemline = null;
         foreach ($insert_item as $key => $value) 
         {   
-            $itemline[$key]['itemline_bill_id']      = $receive_inventory_id;
-            $itemline[$key]['itemline_item_id']      = $value['item_id'];
-            $itemline[$key]['itemline_description']  = $value['item_description'];
-            $itemline[$key]['itemline_um']           = $value['item_um'];
-            $itemline[$key]['itemline_qty']          = $value['item_qty'];
-            $itemline[$key]['itemline_rate']         = $value['item_rate'];
-            $itemline[$key]['itemline_amount']       = $value['item_amount'];
+            $itemline[$key]['riline_ri_id']     = $receive_inventory_id;
+            $itemline[$key]['riline_item_id']      = $value['item_id'];
+            //$itemline[$key]['riline_ref_name']      = $value['reference_name'];
+            //$itemline[$key]['riline_ref_id']        = $value['reference_id'];
+            $itemline[$key]['riline_description']  = $value['item_description'];
+            $itemline[$key]['riline_um']           = $value['item_um'];
+            $itemline[$key]['riline_qty']          = $value['item_qty'];
+            $itemline[$key]['riline_rate']     = $value['item_rate'];
+            $itemline[$key]['riline_amount']       = $value['item_amount'];
 
+            //$bill_id = $itemline[$key]['riline_ref_id'];
         }
         if(count($itemline) > 0)
         {
-            //Tbl_bill_item_line::insert($itemline);
-            $return = AccountingTransaction::entry_data($entry, $insert_item);
+            $return = Tbl_receive_inventory_line::insert($itemline);
+            
+            Tbl_bill::where('bill_id', $bill_id);
+
+            //$return = AccountingTransaction::entry_data($entry, $insert_item);
         }
 
         return $return;

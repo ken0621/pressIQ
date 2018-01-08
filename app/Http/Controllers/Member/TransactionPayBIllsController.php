@@ -30,13 +30,11 @@ use App\Globals\AuditTrail;
 
 class TransactionPayBillsController extends Member
 {
-	public function getShopId()
-    {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
-    }
     public function getIndex()
     {
         $data['page'] = 'Pay Bills';
+        $data['_pb']  = Tbl_pay_bill::vendor()->where("paybill_shop_id",$this->user_info->shop_id)->get();
+        //dd($data['_pb'][0]);
         return view('member.accounting_transaction.vendor.pay_bills.pay_bills_list', $data);
     }
 
@@ -48,7 +46,7 @@ class TransactionPayBillsController extends Member
         $data["bill_id"]        = $request->bill_id;
         $data["_vendor"]        = Vendor::getAllVendor('active');
         $data['_account']       = Accounting::getAllAccount('all',null,['Bank']);
-        $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
+        $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->user_info->shop_id)->get();
 
         $data['action']     = "/member/transaction/pay_bills/create-pay-bills";
 

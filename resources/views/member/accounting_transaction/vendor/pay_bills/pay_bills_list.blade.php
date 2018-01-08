@@ -48,21 +48,22 @@
                         <table class="table table-bordered table-striped table-condensed">
                             <thead>
                                 <tr>
-                                    <th>NAME</th>
-                                    <th class="text-center">REFERENCE NUMBER</th>
-                                    <th class="text-center">TRANSACTION DATE</th>
-                                    <th class="text-center" width="120px">TOTAL PRICE</th>
-                                    <th class="text-center" width="100px"></th>
+                                    <th>VENDORNAME</th>
+                                    <th class="text-center" width="400px">PO NUMBER</th>
+                                    <th class="text-center" width="400px">DATE</th>
+                                    <th class="text-center" width="400px">TOTAL PRICE</th>
+                                    <th class="text-center" width="150px"></th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($_pb as $pb)
                                 <tr>
-                                    <td>Vendor 1<br>
-                                        <small>Contact Person</small>
+                                    <td>{{ $pb->vendor_company }}<br>
+                                        <small>{{ $pb->vendor_title_name.' '.$pb->vendor_first_name.' '.$pb->vendor_middle_name.' '.$pb->vendor_last_name.' '.$pb->vendor_suffix_name }}</small>
                                     </td>
-                                    <td class="text-center">PO20171213-0001</td>
-                                    <td class="text-center">2017-12-14</td>
-                                    <td class="text-center">1,500.00</td>
+                                    <td class="text-center">{{ $pb->transaction_refnum ==''? $pb->paybill_id : $pb->transaction_refnum}}</td>
+                                    <td class="text-center">{{ date('m-d-Y',strtotime($pb->paybill_date_created))}}</td>
+                                    <td class="text-center">{{ currency('PHP', ($pb->paybill_total_amount))}}</td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                           <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -76,6 +77,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

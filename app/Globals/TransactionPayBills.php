@@ -45,7 +45,7 @@ class TransactionPayBills
 	        $entry["reference_module"]  = "pay-bill";
 	        $entry["reference_id"]      = $pay_bill_id;
 	        $entry["name_id"]           = $insert['vendor_id'];
-	        $entry["total"]             = collect($insert_item)->sum('item_amount');
+	        $entry["total"]             = collect($insert_item)->sum('itemline_amount');
 	        $entry["vatable"]           = '';
 	        $entry["discount"]          = '';
 	        $entry["ewt"]               = '';
@@ -73,7 +73,6 @@ class TransactionPayBills
         }
 
 		$rules['transaction_refnumber'] = 'required';
-        $rules['vendor_id'] = 'required';
 
         $validator = Validator::make($insert, $rules);
         if($validator->fails())
@@ -88,9 +87,7 @@ class TransactionPayBills
 
 	public static function insertLine($shop_id, $pay_bill_id, $insert_item, $entry)
     {
-    	$pb_shop_id = Tbl_pay_bill_line::PBInfo()->where('paybill_shop_id', $shop_id)->get();
-    	die(var_dump($pb_shop_id));
-        
+
         $itemline = null;
         foreach ($insert_item as $key => $value) 
         {   
@@ -101,33 +98,38 @@ class TransactionPayBills
 	            $itemline[$key]["pbline_reference_id"]     = $value['pbline_reference_id'];
 	            $itemline[$key]["pbline_amount"]           = $value['item_amount'];
 
-	            $pay_bill_amount = $itemline[$key]["pbline_amount"];
-	        	$bill_id 		 = $itemline[$key]["pbline_reference_id"];
-	        	
-	        	$check_bill_amount = Tbl_bill::where('bill_id',$bill_id)->value('bill_total_amount');// shop_id
+	            Tbl_pay_bill_line::insert($itemline);
 
-	        	if($pay_bill_amount == $check_bill_amount)
+	        	$bill_id 		 = $itemline[$key]["pbline_reference_id"];
+
+	        	$pb_shop_id = Tbl_pay_bill_line::PBInfo()->where('paybill_shop_id', $shop_id)->first();
+	        	
+	        	$payment_applied = Tbl_bill::appliedPayment($shop_id)->where("bill_id",$bill_id)->value("amount_applied");
+				
+	        	$update['bill_applied_payment'] = $payment_applied;
+	     
+	        	Tbl_bill::where('bill_id', $bill_id)->update($update);
+
+	        	$check_bill_amount = Tbl_bill::where('bill_id',$bill_id)->value('bill_total_amount');
+	        	$check_applied_payment = Tbl_bill::where('bill_id',$bill_id)->value('bill_applied_payment');
+	        	
+
+	        	if($check_applied_payment == $check_bill_amount)
 	        	{
 	        		$update['bill_is_paid'] = 1;
 	        	}
 	        	else
 	        	{
 	        		$update['bill_is_paid'] = 0;
-	        		
 	        	} 	
 
-	        	$payment_applied = Tbl_bill::appliedPayment($pb_shop_id)->where("bill_id",$bill_id)->value("amount_applied");
-
-	        	$update['bill_applied_payment'] = $pay_bill_amount;
-	        		
 	        	Tbl_bill::where('bill_id', $bill_id)->update($update);
         	}
-        	
         }
         
         if(count($itemline) > 0)
         {
-            Tbl_pay_bill_line::insert($itemline);
+            
             $return = AccountingTransaction::entry_data($entry, $insert_item);
         }
 

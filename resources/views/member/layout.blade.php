@@ -455,7 +455,7 @@
             width : '250px', 
             onChangeValue : function()
             {
-                select_current_warehouse($(this));   
+                select_current_warehouse($(this));
             }
         })
         function show_currency()

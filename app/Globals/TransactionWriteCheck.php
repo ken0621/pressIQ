@@ -13,8 +13,8 @@ use DB;
 
 class TransactionWriteCheck
 {
-	public static function countTransaction($shop_id)
+	public static function countTransaction($shop_id, $vendor_id)
 	{
-		// return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_is_billed',0)->count();
+		return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed',0)->count();
 	}
 }

@@ -13,6 +13,9 @@ use App\Globals\Pdf_global;
 use App\Globals\Utilities;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\TransactionPurchaseOrder;
+use App\Globals\TransactionPurchaseRequisition;
+use App\Globals\AccountingTransaction;
+use App\Globals\TransactionSalesOrder;
 
 use App\Models\Tbl_customer;
 use App\Models\Tbl_warehousea;
@@ -41,9 +44,11 @@ class TransactionPurchaseOrderController extends Member
     public function getIndex()
     {
         $data['page'] = 'Purchase Order';
+        $data['_pr'] = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order_list', $data);
 
     }
+
     public function getCreate()
     {
         $shop_id = $this->user_info->shop_id;
@@ -54,44 +59,74 @@ class TransactionPurchaseOrderController extends Member
         $data['_um']        = UnitMeasurement::load_um_multi();
 
         $data['action']     = "/member/transaction/purchase_order/create-purchase-order";
-        $data['count_so']   = TransactionPurchaseOrder::countTransaction($this->user_info->shop_id);
+
+        $data['count_transaction'] = TransactionPurchaseOrder::countTransaction($shop_id);
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order', $data);
     }
+
     public function postCreatePurchaseOrder(Request $request)
     {
         $btn_action  = $request->button_action;
 
-        $insert['transaction_refnumber']    = $request->transaction_refnumber;
-        $insert['vendor_id']                = $request->vendor_id;
-        $insert['vendor_address']           = $request->vendor_address;
-        $insert['vendor_terms']             = $request->vendor_terms;
-        $insert['transaction_date']         = $request->transaction_date;
-        $insert['transaction_duedate']      = $request->transaction_duedate;
-        $insert['vendor_message']           = $request->vendor_message;
-        $insert['vendor_memo']              = $request->vendor_memo;
+        $insert['transaction_refnumber'] = $request->transaction_refnumber;
+        $insert['vendor_id']             = $request->vendor_id;
+        $insert['vendor_address']        = $request->vendor_address;
+        $insert['vendor_email']          = $request->vendor_email;
+        $insert['vendor_terms']          = $request->vendor_terms;
+        $insert['transaction_date']      = $request->transaction_date;
+        $insert['transaction_duedate']   = $request->transaction_duedate;
+        $insert['vendor_message']        = $request->vendor_message;
+        $insert['vendor_memo']           = $request->vendor_memo;
+        $insert['vendor_ewt']            = $request->vendor_ewt;
+        $insert['vendor_terms']          = $request->vendor_terms;
+        $insert['vendor_discount']       = $request->vendor_discount;
+        $insert['vendor_discounttype']   = $request->vendor_discounttype;
+        $insert['vendor_tax']            = $request->vendor_tax;
+        $insert['vendor_subtotal']       = $request->vendor_subtotal;
+        $insert['vendor_total']          = $request->vendor_total;
 
+        //die(var_dump($insert));
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
         {
             if($value)
             {
-                $insert_item[$key]['item_id']           = $value;
-                $insert_item[$key]['item_servicedate']  = $request->item_servicedate[$key];
-                $insert_item[$key]['item_description']  = $request->item_description[$key];
-                $insert_item[$key]['item_um']           = $request->item_um[$key];
-                $insert_item[$key]['item_qty']          = str_replace(',', '', $request->item_qty[$key]);
-                $insert_item[$key]['item_rate']         = str_replace(',', '', $request->item_rate[$key]);
-                $insert_item[$key]['item_discount']     = str_replace(',', '', $request->item_discount[$key]);
-                $insert_item[$key]['item_remarks']      = $request->item_remarks[$key];
-                $insert_item[$key]['item_amount']       = str_replace(',', '', $request->item_amount[$key]);
-                $insert_item[$key]['item_taxable']      = $request->item_taxable[$key];
+                $insert_item[$key]['item_id']          = $value;
+                $insert_item[$key]['item_servicedate'] = $request->item_servicedate[$key];
+                $insert_item[$key]['item_description'] = $request->item_description[$key];
+                $insert_item[$key]['item_um']          = $request->item_um[$key];
+                $insert_item[$key]['item_qty']         = str_replace(',', '', $request->item_qty[$key]);
+                $insert_item[$key]['item_rate']        = str_replace(',', '', $request->item_rate[$key]);
+                $insert_item[$key]['item_discount']    = str_replace(',', '', $request->item_discount[$key]);
+                $insert_item[$key]['item_remark']      = $request->item_remark[$key];
+                $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
             }
         }
-        die(var_dump($btn_action));
+
+        $validate = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
+
+        $return = null;
+        if($validate)
+        {
+            $return['status'] = 'success';
+            $return['status_message'] = 'Success creating purchase order.';
+            $return['call_function'] = 'success_purchase_order';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('purchase_order', $validate ,$btn_action);
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $validate;
+        }
+        return json_encode($return);
     }
 
-    public function getLoadTransaction()
+    public function getLoadTransaction(Request $request)
     {
-        dd('Wail Langs!');
+        $data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
+        $data['_pr'] = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
+
+        return view('member.accounting_transaction.vendor.purchase_order.load_transaction', $data);
     }
 }

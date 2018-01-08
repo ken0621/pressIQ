@@ -1,10 +1,11 @@
 
 $(document).ready(function () 
-{
+{ 
 	$(document).on('click',"#select_all",function()
 	{	
-		  $('input[name=checkbox]').prop('checked', true);
-		
+		var $checkboxes = $('#choose_recipient_form td input[name=checkbox]').prop('checked', true);
+        var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+        $('#Chosen_total').text(countCheckedCheckboxes);
 	});
 });	
 
@@ -12,10 +13,21 @@ $(document).ready(function ()
 {
 	$(document).on('click',"#unselect_all",function()
 	{	
-		  $('input[name=checkbox]').prop('checked', false);
-		
+		var $checkboxes = $('#choose_recipient_form td input[name=checkbox]').prop('checked', false);
+		var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+        $('#Chosen_total').text(countCheckedCheckboxes);
 	});
 });	
+
+$(document).ready(function()
+{
+    var $checkboxes = $('#choose_recipient_form td input[type="checkbox"]'); 
+    $checkboxes.change(function()
+    {
+        var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+        $('#Chosen_total').text(countCheckedCheckboxes);
+    });
+});
 
 $(document).ready(function(){
 	$(document).on('click','#search_button',function()
@@ -32,7 +44,7 @@ $(document).ready(function(){
 		}).done(function(data)
 			{		
 				$('#showHere_table').html(data);
-			});
+		});
     });
 });
 

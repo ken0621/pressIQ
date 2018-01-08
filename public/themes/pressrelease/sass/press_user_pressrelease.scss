@@ -140,12 +140,11 @@
 						{
 						   text-align: center;
 						}
-						.save-button
+						.button
 						{
-							padding-right: 20px;
 							button
 							{
-								padding: 10px 30px;
+								padding: 9px 30px;
 								background-color: #316df9;
 								color: #fff;
 								font-size: 15px;
@@ -158,9 +157,9 @@
 						}
 						.preview-button
 						{
-							button
+							a
 							{
-								padding: 10px 30px;
+								padding: 15px 40px;
 								background-color: #316df9;
 								color: #fff;
 								font-size: 15px;
@@ -242,13 +241,12 @@
 					{
 						display: inline-block;
 						vertical-align: middle;
-						padding-left: 10px;
 						a
 						{
 							background-color: #316df9;
 							color: #fff;
 							font-size: 13px;
-							padding: 8px 8px;
+							padding: 12px 15px;
 							text-decoration: none;
 							display: inline-block;
 							vertical-align: middle;
@@ -257,7 +255,6 @@
 							   font-size: 10px;
 							}
 						}
-
 					}
 					.result-container
 					{
@@ -319,11 +316,13 @@
 						padding-top: 30px;
 						button
 						{
+							display: inline-block;
 							background-color: #316df9;
 							color: #fff;
 							font-size: 15px;
 							text-decoration: none;
-							padding: 10px 20px;
+							padding: 15px 20px;
+							margin-right: 15px;
 							width: 150px;
 							@media screen and (max-width: 425px)
 							{
@@ -337,3 +336,66 @@
 	}
 }
 
+.popup-preview
+{
+	.modal-content
+	{
+		height: 595px;
+		.modal-body
+		{
+			overflow: hidden;
+			overflow-y: scroll;
+			height: 525px;
+			#preview_headline
+			{
+				text-align: center;
+				font-size: 35px; 
+				color: #cd3d35;
+				font-weight: 700;
+				font-family: 'PT Serif';
+				padding-bottom: 15px;
+			}
+			#preview_content
+			{
+				color: #404040;
+				font-size: 18px;
+				font-family: 'PT Sans';
+				text-align: justify;
+				border-bottom: 1px solid #ededed;
+				padding: 20px 0px;
+			}
+			.about-title
+			{
+				font-size: 23px; 
+				color: #404040;
+				font-weight: 700;
+				font-family: 'PT Serif';
+				padding: 20px 0px;
+			}
+			#preview_boiler_content
+			{
+				color: #404040;
+				font-size: 18px;
+				font-family: 'PT Sans';
+				text-align: justify;
+				padding-bottom: 20px;
+			}
+			.logo-holder
+			{
+				text-align: center;
+				box-shadow: 0px 12px 25px -15px rgba(0,0,0,0.2);
+				padding: 15px 20px;
+				border: 1px solid #ededed;
+				width: 100%;
+				img
+				{
+					max-width: 100%;
+				}
+			}
+		}
+		.modal-footer
+		{
+			padding: 15px 0px 0px 0px;
+		}
+	}
+}

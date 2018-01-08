@@ -388,6 +388,7 @@ function select_current_warehouse()
 {
     $(".warehouse_loader_container").on("change",".select_current_warehouse",function()
     {
+        console.log($(this).val());
         $.ajax({
             url:"/member/change_warehouse",
             dataType:"json",
@@ -398,7 +399,8 @@ function select_current_warehouse()
                 if(data.response == "success")
                 {
                     // $('.select_current_warehouse').load(document.URL +  ' .select_current_warehouse');
-                    $('.warehouse-access-name').load(document.URL +  ' .warehouse-access-name');
+                    $('.warehouse-access-name').load(document.URL +  ' .warehouse-access-name'); 
+                    commission_report.action_change_warehouse();
                 }
             },
             error: function()

@@ -41,6 +41,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 	Route::any('/reports/payroll_register_report_period/export_excel/{period_company_id}/{payroll_company_id}','Member\PayrollReportController@payroll_register_report_export_excel');
 	Route::any('/reports/payroll_register_report_period/export_excel_filter/{id}/{uid}','Member\PayrollReportController@payroll_register_report_export_excel_filter');
+
+	Route::any('/reports/modal_filter_register_columns/{period_company_id}','Member\PayrollReportController@modal_filter_register_columns');
+	Route::any('/reports/save_payroll_register_selected_columns','Member\PayrollReportController@save_payroll_register_selected_columns');
 	/*END PAYROLL REGISTER REPORT*/
 
 	/*START PAYROLL BRANCH TAGGING REPORT*/
@@ -219,7 +222,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* saving default data for developer */
 	Route::any('/sss_table_list/sss_table_save_default',"Member\PayrollController@sss_table_save_default");
 	/* SSS TABLE END */
-
 
 	/* PHILHEALTH TABLE START */
 	Route::any('/philhealth_table_list',"Member\PayrollController@philhealth_table_list");
@@ -405,8 +407,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	//scheduling leave
 	Route::any('/leave_schedule/v2/save_schedule_leave_tagv2','Member\PayrollController@save_schedule_leave_tagv2');
 
-	Route::any('/leave_schedule/v2/leave_schedule_tag_employeev2/{leave_temp_id}','Member\PayrollController@leave_schedule_tag_employeev2');
-
+	Route::any('/leave_schedule/v2/leave_schedule_tag_employeev2/{leave_temp_id}/{leave_pay}','Member\PayrollController@leave_schedule_tag_employeev2');
+	
 	Route::any('/leave_schedule/v2/session_tag_leavev2','Member\PayrollController@session_tag_leavev2');
 
 	Route::any('/leave_schedule/v2/ajax_schedule_leave_tag_employeev2','Member\PayrollController@ajax_schedule_leave_tag_employeev2');	
@@ -431,9 +433,17 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/leave/v2/archived_leave_tempv2',
 		"Member\PayrollController@archived_leave_tempv2");
+
+	Route::any('/leave/v2/archived_leave_history',
+		"Member\PayrollController@archived_leave_history");
+	
+
 	//end schedule
 
 	//reporting leave
+	Route::any('/reports/leavev2_reports',
+		"Member\PayrollController@leavev2_reports");
+
 	Route::any('/leave/v2/modal_monthly_leave_report',
 		"Member\PayrollController@modal_monthly_leave_report");
 
@@ -445,6 +455,31 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/leave/v2/modal_remaining_leave_report',
 		"Member\PayrollController@modal_remaining_leave_report");
+
+	Route::any('/leave/v2/remaining_leave_report_excel',
+		"Member\PayrollController@remaining_leave_report_excel");
+
+
+	Route::any('/leave/v2/modal_pay_leave_report',
+		"Member\PayrollController@modal_pay_leave_report");
+
+	Route::any('/leave/v2/pay_leave_report_excel',
+		"Member\PayrollController@pay_leave_report_excel");
+
+	Route::any('/leave/v2/modal_withoutpay_leave_report',
+		"Member\PayrollController@modal_withoutpay_leave_report");
+
+	Route::any('/leave/v2/withoutpay_leave_report_excel',
+		"Member\PayrollController@withoutpay_leave_report_excel");
+
+	Route::any('/leave/v2/modal_leave_action_report',
+		"Member\PayrollController@modal_leave_action_report");
+
+	Route::any('/leave/v2/leave_action_report_excel',
+		"Member\PayrollController@leave_action_report_excel");
+
+	Route::any('/leave/v2/leave_action_report_excel',
+			"Member\PayrollController@leave_action_report_excel");
 	//end reporting
 
 	Route::any('/leave/v2/modal_view_leave_employee/{payroll_leave_temp_id}/',"Member\PayrollController@modal_view_leave_employee");
@@ -726,7 +761,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_admin_dashboard/modal_edit_group_approver/{approver_group_id}','Member\PayrollAdminDashboard@modal_edit_group_approver');
 	Route::any('payroll_admin_dashboard/save_edit_group_approver','Member\PayrollAdminDashboard@save_edit_group_approver');
 	Route::any('payroll_admin_dashboard/modal_archive_group_approver/{approver_group_id}','Member\PayrollAdminDashboard@modal_archive_group_approver');
-	
-	
 	/*END Admin dashboard*/
+	
 });

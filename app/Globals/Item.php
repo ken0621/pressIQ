@@ -16,6 +16,7 @@ use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\Accounting;
 use App\Globals\Tablet_global;
 use App\Globals\Currency;
 use App\Models\Tbl_price_level;
@@ -130,6 +131,19 @@ class Item
         $rules['item_name'] = 'required';
         $rules['item_sku'] = 'required';
         $rules['item_price'] = 'required';
+
+        if(!isset($insert['item_expense_account_id']))
+        {
+            $insert['item_expense_account_id'] = Accounting::get_default_coa("accounting-expense");
+        }
+        if(!isset($insert['item_income_account_id']))
+        {
+            $insert['item_income_account_id'] = Accounting::get_default_coa("accounting-sales");
+        }
+        if(!isset($insert['item_asset_account_id']))
+        {
+            $insert['item_asset_account_id'] = Accounting::get_default_coa("accounting-inventory-asset");
+        }
 
         if($item_type <= 2)
         {
@@ -321,13 +335,16 @@ class Item
         Tbl_item::where('item_id',$item_id)->update($insert);
         Tbl_item_bundle::where('bundle_bundle_id',$item_id)->delete();
 
-        foreach ($_item as $key => $value) 
+        if(count($_item) > 0)
         {
-            $ins_item['bundle_bundle_id'] = $item_id;
-            $ins_item['bundle_item_id'] = $value['item_id'];
-            $ins_item['bundle_qty'] = $value['quantity'];
+            foreach ($_item as $key => $value) 
+            {
+                $ins_item['bundle_bundle_id'] = $item_id;
+                $ins_item['bundle_item_id'] = $value['item_id'];
+                $ins_item['bundle_qty'] = $value['quantity'];
 
-            Tbl_item_bundle::insert($ins_item);
+                Tbl_item_bundle::insert($ins_item);
+            }
         }
 
         $return['item_id']       = $item_id;

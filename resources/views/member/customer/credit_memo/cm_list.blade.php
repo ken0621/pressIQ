@@ -47,33 +47,38 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if($_cm)
-                        @foreach($_cm as $cm)
-                            @if($cm->credit_memo_id == 0)
-                            <tr>
-                                <td>{{$cm->cm_id}}</td>
-                                <td>{{$cm->title_name." ".$cm->first_name." ".$cm->middle_name." ".$cm->last_name." ".$cm->suffix_name}}</td>
-                                <td>{{currency("PHP",$cm->cm_amount)}}</td>
-                                <td class="text-center">
-                                    <div class="btn-group">
-                                      <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Action <span class="caret"></span>
-                                      </button>
-                                      <ul class="dropdown-menu dropdown-menu-custom">
-                                          <!-- <li ><a class="popup" link="/member/customer/view_cm/{{$cm->cm_id}}" size="lg">View CM</a></li> -->
-                                        @if($cm->cm_used_ref_name == "others")
-                                          <li ><a class="popup" link="/member/customer/credit_memo/update_action?type=invoice&cm_id={{$cm->cm_id}}" size="lg">Apply to Invoice</a></li>
-                                        @endif
-                                        @if($cm->manual_cm_id == null)
-                                          <li ><a href="/member/customer/credit_memo?id={{$cm->cm_id}}">Edit CM</a></li>
-                                        @endif
-                                      </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endif
-                        @endforeach
-                    @endif
+                        @if(count($_cm) > 0)
+                            @foreach($_cm as $cm)
+                                @if($cm->credit_memo_id == 0)
+                                <tr>
+                                    <td>{{$cm->cm_id}}</td>
+                                    <td>
+                                        {{$cm->company}} <br>
+                                        <small> {{$cm->title_name." ".$cm->first_name." ".$cm->middle_name." ".$cm->last_name." ".$cm->suffix_name}}</small>
+                                    </td>
+                                    <td>{{currency("PHP",$cm->cm_amount)}}</td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                          <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Action <span class="caret"></span>
+                                          </button>
+                                          <ul class="dropdown-menu dropdown-menu-custom">
+                                              <!-- <li ><a class="popup" link="/member/customer/view_cm/{{$cm->cm_id}}" size="lg">View CM</a></li> -->
+                                            @if($cm->cm_used_ref_name == "others")
+                                              <li ><a class="popup" link="/member/customer/credit_memo/update_action?type=invoice&cm_id={{$cm->cm_id}}" size="lg">Apply to Invoice</a></li>
+                                            @endif
+                                            @if($cm->manual_cm_id == null)
+                                              <li ><a href="/member/customer/credit_memo?id={{$cm->cm_id}}">Edit CM</a></li>
+                                            @endif
+                                          </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endif
+                            @endforeach
+                        @else
+                            <tr><td colspan="4" class="text-center">NO PROCESS YET</td></tr>
+                        @endif
                     </tbody>
                 </table>
             </div>

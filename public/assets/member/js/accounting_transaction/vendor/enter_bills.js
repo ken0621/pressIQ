@@ -30,6 +30,7 @@ function purchase_order()
 			{
 				$(".vendor-email").val($(this).find("option:selected").attr("email"));
 				$('textarea[name="vendor_address"]').val($(this).find("option:selected").attr("billing-address"));
+				action_load_open_transaction($(this).val());
 			}
 		});
 
@@ -102,6 +103,28 @@ function purchase_order()
     		}
 
         }).globalDropList('disabled');
+	}
+
+	function action_load_open_transaction($vendor_id)
+	{
+		if($vendor_id)
+		{
+			$.ajax({
+				url : '/member/transaction/enter_bills/count-transaction',
+				type : 'get',
+				data : {vendor_id : $vendor_id},
+				success : function(data)
+				{
+					$(".open-transaction").slideDown();
+					$(".popup-link-open-transaction").attr('link','/member/transaction/enter_bills/load-transaction?v='+$vendor_id);
+					$(".count-open-transaction").html(data);
+				}
+			});
+		}
+		else
+		{
+			$(".open-transaction").slideUp();
+		}
 	}
 
 	function action_compute()

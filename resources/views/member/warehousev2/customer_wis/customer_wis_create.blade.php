@@ -46,7 +46,7 @@
                  <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)"/>
             </div>
             <div class="col-sm-4 text-right open-transaction" style="display: none;">
-                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/sales_invoice/load_transaction?customer_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
+                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/customer/wis/load-transaction?customer_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
             </div>
         </div>
         <div class="form-group">
@@ -92,9 +92,9 @@
                                         <option class="hidden" value="" />
                                     </select>
                                 </td>
-                                <td><textarea class="form-control txt-desc" name="item_remarks[]"></textarea></td>
+                                <td><textarea class="form-control txt-desc" name="item_description[]"></textarea></td>
                                 <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_quantity[]"/></td>
+                                <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_qty[]"/></td>
                                 <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]"/></td>
                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>

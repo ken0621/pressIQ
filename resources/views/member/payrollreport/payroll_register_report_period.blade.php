@@ -34,6 +34,7 @@
 				<div class="labas_mo_dito table-responsive " id="show_me_something">
 					<div>
 						<button style="margin-bottom: 20px;" type="button" class="btn btn-success pull-right btn-export-excel"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button>
+						<button style="margin-right:  20px;" type="button" onclick="action_load_link_to_modal('/member/payroll/reports/modal_filter_register_columns/{{$period_company_id}}', 'sm')" class="btn btn-def-white btn-custom-white pull-right"><i class="fa fa-cog" aria-hidden="true"></i> &nbsp;COLUMNS</button>
 					</div>
 					<div class="payroll_register_report_table">
 						

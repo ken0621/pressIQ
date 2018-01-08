@@ -29,7 +29,7 @@ use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_shift_time;
 use App\Models\Tbl_payroll_adjustment;
-use App\Models\Tbl_payroll_period;
+use App\Models\Tbl_payroll_period;		
 use App\Globals\Payroll2;
 use App\Globals\Payroll;
 use App\Globals\PayrollLeave;
@@ -858,7 +858,7 @@ class PayrollTimeSheet2Controller extends Member
 			$_timesheet[$from] = Payroll2::timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);
 			$_timesheet[$from]->record = Payroll2::timesheet_process_in_out($timesheet_db);
 			$_timesheet[$from]->branch_source_company_id 	= 0;
-		
+			
 			if ($_timesheet[$from]->record != null) 
 			{
 				foreach ($_timesheet[$from]->record as $key => $rec) 

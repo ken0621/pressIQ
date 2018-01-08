@@ -26,11 +26,6 @@
                     <td>{{$prs->pr_date_sent}}</td>
                     <td>{{$prs->pr_status}}</td>
                 </tr>
-                <tr>
-                    <td>{{$prs->pr_headline}}</td>
-                    <td>{{$prs->pr_date_sent}}</td>
-                    <td>{{$prs->pr_status}}</td>
-                </tr>
                 @endforeach
             </table>
         </div>

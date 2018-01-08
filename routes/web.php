@@ -722,7 +722,10 @@ Route::get('/member/customer/receive_payment','Member\Customer_ReceivePaymentCon
 Route::get('/member/customer/load_rp/{id}','Member\Customer_ReceivePaymentController@load_customer_rp');
 Route::post('/member/customer/receive_payment/add','Member\Customer_ReceivePaymentController@add_receive_payment');
 Route::post('/member/customer/receive_payment/update/{id}','Member\Customer_ReceivePaymentController@update_receive_payment');
-
+Route::get('/member/customer/receive_payment/apply_credit','Member\Customer_ReceivePaymentController@apply_credit');
+Route::any('/member/customer/receive_payment/apply_credit_submit','Member\Customer_ReceivePaymentController@apply_credit_submit');
+Route::any('/member/customer/receive_payment/load_apply_credit','Member\Customer_ReceivePaymentController@load_apply_credit');
+Route::any('/member/customer/receive_payment/remove_apply_credit','Member\Customer_ReceivePaymentController@remove_apply_credit');
 
 /* CUSTOMER CREDIT MEMO*/
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
@@ -1052,7 +1055,8 @@ Route::any('/member/merchant/commission/request/submit', 'Member\MerchantControl
 // Merchant Commission Report
 Route::get('/member/merchant/commission-report', 'Member\MerchantController@commission_report');
 Route::get('/member/merchant/commission-report/getpercentage','Member\MerchantController@get_percentage');
-Route::post('/member/merchant/commission-report','Member\MerchantController@submit_report_setting');
+Route::post('/member/merchant/commission-report-pass','Member\MerchantController@submit_report_setting');
+Route::get('/member/merchant/commission-report-pass','Member\MerchantController@password');
 Route::get('/member/merchant/commission_report/table', 'Member\MerchantController@table');
 // end
 

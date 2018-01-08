@@ -24,7 +24,7 @@
                                     <td class="text-center">{{$key+1}}</td>
                                     <td class="text-center">Invoice # {{$invoices->new_inv_id}} ({{$invoices->commission_type}})</td>
                                     <td class="text-center">{{date('m/d/Y',strtotime($invoices->inv_date))}}</td>
-                                    <td class="text-center {{$total_inv_amount += $invoices->inv_overall_price }}">{{currency('P ',$invoices->inv_overall_price,2)}}</td>
+                                    <td class="text-center {{$total_inv_amount += $invoices->payment_amount }}">{{currency('P ',$invoices->payment_amount,2)}}</td>
                                     <td class="text-center {{$total_comm_amount += $invoices->commission_amount}}">{{currency('P ',$invoices->commission_amount,2)}}</td>
                                     <td class="text-center">
                                         <a href="javascript:">

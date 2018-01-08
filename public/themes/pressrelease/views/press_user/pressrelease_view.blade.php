@@ -6,22 +6,30 @@
 				@foreach ($pr as $prs)
 				<div class="title-container"><a href="/pressuser/mypressrelease">{{$prs->pr_headline}}</a></div>
 				<div class="date-container">{{$prs->pr_date_sent}}</div>
-				<div class="details-container"><p>{!!$prs->pr_content!!}</p></div>
+				<div class="details-container"><p>{!! str_replace('../', '/', $prs->pr_content); !!}</p></div>
 				<div class="border"></div>
-				<div class="title-about-container"><p>About {{$prs->pr_sender_name}}</p></div>
-				<div class="details-container"><p>{!!$prs->pr_boiler_content!!}</p></div>
+				<div class="title-about-container"><p>About {{$prs->pr_co_name}}</p></div>
+				<div class="details-container">{!!$prs->pr_boiler_content!!}</div>
 				@endforeach
 			</div>
 		</div>
 		<div class="col-md-3">
 			<div class="press-others-holder">
-				<div class="header-container">Other Releases: </div>
-				@foreach($opr as $prs)
-				<div class="title-container"><a href="/pressuser/mypressrelease/pressrelease/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
-				<div class="date-container">{{$prs->pr_date_sent}}</div>
-				<div class="border"></div>
-				@endforeach
+			    <div class="logo-holder">
+			    	@foreach ($pr as $prs)
+			        <img src="{{$prs->pr_co_img}}">
+			        @endforeach
+			    </div>
+				<div class="header">Other Releases:</div>
+					@foreach($opr as $prs)
+					<div class="title-container"><a href="/pressuser/mypressrelease/pressrelease/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
+					<div class="date-container">{{$prs->pr_date_sent}}</div>
+					<div class="border"></div>
+					@endforeach
 			</div>
+			<div class="press-others-holder" style="display: none;" >
+            	{!! $pr->render() !!}
+         	</div>
 		</div>
 	</div>
 @endsection

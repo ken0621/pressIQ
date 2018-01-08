@@ -82,21 +82,20 @@
                                             <label>Reference Number</label>
                                             <input type="text" class="form-control" name="transaction_refnumber" value="EB20171225-0001">
                                         </div>
-                                        <div class="col-sm-5 text-right"></div>
-                                        <div class="col-sm-3 text-right">
-                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/enter_bills/load-transaction"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">{{$count_receive_inventory}}</span> Open Transaction</a></h4>
-                                        </div>
                                     </div>
                                 </div>
                                 <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                                     <div class="row clearfix">
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-4">
                                             <select class="form-control droplist-vendor input-sm pull-left" name="vendor_id">
                                                  @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')])
                                             </select>
                                         </div>
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$bill->bill_vendor_email or ''}}"/>
+                                        </div>
+                                        <div class="col-sm-4 text-right open-transaction" style="display: none;">
+                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/enter_bills/load-transaction"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
                                         </div>
                                     </div>
                                 </div>

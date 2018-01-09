@@ -687,8 +687,8 @@ class Accounting
 			case 'purchase-order':
 			case 'bill':
 			case 'write-check':
-				$data["main_account"]		= 'payable';
-				$data["name"] 				= 'vendor';
+				$data["main_account"]		= 'cash-r';
+				$data["name"] 				= '';
 				$data["newNormalJournal"] 	= 'normalBalance';
 				$data["newContraJournal"] 	= 'contraAccount';
 				return $data;

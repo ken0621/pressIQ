@@ -25,6 +25,7 @@ use App\Models\Tbl_payroll_leave_schedule;
 use App\Models\Tbl_payroll_employee_salary;
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_holiday_company;
+use App\Models\Tbl_payroll_holiday_employee;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_shift_time;
@@ -668,7 +669,8 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		$day_type	= 'not_holiday';
 		$company_id	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_company_id');
-		$holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
+		// $holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
+		$holiday	= Tbl_payroll_holiday_employee::getholidayv2($employee_id, $date)->first();
 		
 		if($holiday != null)
 		{

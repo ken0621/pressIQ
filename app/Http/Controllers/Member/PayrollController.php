@@ -5060,22 +5060,24 @@ class PayrollController extends Member
           $insert['pagibig_reference']            = Request::input('pagibig_reference');
          
           $group_id = Tbl_payroll_group::insertGetId($insert);
-
-
+          
           $insert_13th_month = array();
 
           $payroll_group_13th_month_addition    = Request::input('payroll_group_13th_month_addition');
           $insert_13th_month                    = array("payroll_group_13th_month_addition_allowance" => 0, "payroll_group_13th_month_addition_special_holiday" => 0, "payroll_group_13th_month_addition_regular_holiday" => 0, "payroll_group_13th_month_addition_cola" => 0, "payroll_group_13th_month_addition_late" => 0, "payroll_group_13th_month_addition_undertime" => 0, "payroll_group_13th_month_addition_absent" => 0);
-          
-          foreach ($payroll_group_13th_month_addition as $key => $value) 
+          if ($payroll_group_13th_month_addition != null) 
           {
-               $insert_13th_month[$value] = 1;
+               foreach ($payroll_group_13th_month_addition as $key => $value) 
+               {
+                    $insert_13th_month[$value] = 1;
+               }
           }
+          
 
           $insert_13th_month['payroll_group_13month_basis']  = Request::input('payroll_group_13month_basis');
           $insert_13th_month['payroll_group_id']             =  $group_id;
 
-          Tbl_payroll_13th_month_basis::insert($insert_13th_month);
+          // Tbl_payroll_13th_month_basis::insert($insert_13th_month);
 
           $insert_rate = array();
 
@@ -5092,7 +5094,7 @@ class PayrollController extends Member
                array_push($insert_rate, $temp);
           }
           
-          // dd($insert_rate);
+          
           /* INSERT PAYROLL OVERTIME NIGHT DIFFERENTIALS REST DAY HOLIDAY */
           Tbl_payroll_overtime_rate::insert($insert_rate);
 
@@ -5215,7 +5217,8 @@ class PayrollController extends Member
           $data['_day']            = Payroll::restday_checked($id); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
           $data['_shift_code']     = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
-          // dd($data['group']);
+          
+         // dd($data['group']);
           return view('member.payroll.modal.modal_edit_payroll_group',$data);
      }
 
@@ -5340,10 +5343,12 @@ class PayrollController extends Member
 
           $payroll_group_13th_month_addition    = Request::input('payroll_group_13th_month_addition');
           $insert_13th_month                    = array("payroll_group_13th_month_addition_allowance" => 0, "payroll_group_13th_month_addition_special_holiday" => 0, "payroll_group_13th_month_addition_regular_holiday" => 0, "payroll_group_13th_month_addition_cola" => 0, "payroll_group_13th_month_addition_late" => 0, "payroll_group_13th_month_addition_undertime" => 0, "payroll_group_13th_month_addition_absent" => 0);
-          
-          foreach ($payroll_group_13th_month_addition as $key => $value) 
+          if ($payroll_group_13th_month_addition != null) 
           {
-               $insert_13th_month[$value] = 1;
+               foreach ($payroll_group_13th_month_addition as $key => $value) 
+               {
+                    $insert_13th_month[$value] = 1;
+               }
           }
 
           $insert_13th_month['payroll_group_13month_basis']  = Request::input('payroll_group_13month_basis');

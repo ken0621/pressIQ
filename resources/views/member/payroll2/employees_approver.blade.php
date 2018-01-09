@@ -18,8 +18,9 @@
 <div class="panel panel-default panel-block panel-title-block load-data">
    
       <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#leave-approver"><i class="fa fa-calendar" aria-hidden="true" style="font-size: 19px; vertical-align: middle;"></i>    Leave Approver</a></li>
-        <li><a data-toggle="tab" href="#ot-approver"><i class="fa fa-clock-o" aria-hidden="true" style="font-size: 23px; vertical-align: middle;"></i>    Over Time Approver</a></li>
+        <li  class="active"><a data-toggle="tab" href="#ot-approver"><i class="fa fa-clock-o" aria-hidden="true" style="font-size: 23px; vertical-align: middle;"></i>    Over Time Approver</a></li>
+        <li><a data-toggle="tab" href="#leave-approver"><i class="fa fa-calendar" aria-hidden="true" style="font-size: 19px; vertical-align: middle;"></i>    Leave Approver</a></li>
+        
         <li><a data-toggle="tab" href="#rfp-approver"><i class="fa fa-money" aria-hidden="true" style="font-size: 23px; vertical-align: middle;"></i>    RFP Approver</a></li>
       </ul>
 

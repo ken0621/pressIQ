@@ -56,8 +56,8 @@ class EmployeeController extends PayrollMember
 	public static function approver_access($employee_id)
 	{
 		$data['approver_rfp'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','rfp')->first();
-		$data['approver_ot'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','rfp')->first();
-		$data['approver_leave'] = Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','rfp')->first();
+		$data['approver_ot'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','overtime')->first();
+		$data['approver_leave'] = Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','leave')->first();
 		$data['approver_ob'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','ob')->first();
 		
 		if ($data['approver_rfp'] != null || $data['approver_ot'] != null || $data['approver_leave'] != null || $data['approver_ob'] != null) 
@@ -218,7 +218,7 @@ class EmployeeController extends PayrollMember
 	{
 		$data['page']	= 'Overtime Application';
 		$data['_group_approver'] = Tbl_payroll_approver_group::where('tbl_payroll_approver_group.shop_id', Self::employee_shop_id())->where('payroll_approver_group_type','overtime')->where('archived', 0)->get();
-			
+		
 		return view('member.payroll2.employee_dashboard.employee_overtime_application',$data);
 	}
 

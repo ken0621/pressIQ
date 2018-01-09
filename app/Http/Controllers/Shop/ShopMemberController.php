@@ -345,13 +345,13 @@ class ShopMemberController extends Shop
     
     public function send_pr()
     {
-
+        $pr_info["pr_type"]         =request('pr_type');
         $pr_info["pr_headline"]     =request('pr_headline');
         $pr_info["pr_content"]      =request('pr_content');
         $pr_info["pr_boiler_content"]=request('pr_boiler_content');
         $pr_info["pr_from"]         =session('user_email');
         $pr_info["pr_to"]           =request('pr_to');
-        $pr_info["pr_status"]       ="Sent";
+        $pr_info["pr_status"]       ="sent";
         $pr_info["pr_date_sent"]    =Carbon::now();
         $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
         $pr_info["pr_receiver_name"]=request('pr_receiver_name');
@@ -359,6 +359,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_co_img"]       =session('user_company_image');
         
         //dd(session('user_company_image'));
+        $pr_rules["pr_type"]       =['required'];
         $pr_rules["pr_headline"]   =['required'];
         $pr_rules["pr_content"]    =['required'];
         $pr_rules["pr_boiler_content"] =['required'];
@@ -396,6 +397,7 @@ class ShopMemberController extends Shop
                     DB::table('tbl_pressiq_press_releases')
                         ->where('pr_id', session('pr_edit'))
                         ->update([
+                            'pr_type'         =>request('pr_type'),
                             'pr_headline'     =>request('pr_headline'),
                             'pr_content'      =>request('pr_content'),
                             'pr_boiler_content'=>request('pr_boiler_content'),
@@ -404,7 +406,11 @@ class ShopMemberController extends Shop
                             'pr_status'       =>"sent",
                             'pr_date_sent'    =>$date,
                             'pr_sender_name'  =>session('user_first_name').' '.session('user_last_name'),
-                            'pr_receiver_name'=>request('pr_receiver_name')
+                            'pr_receiver_name'=>request('pr_receiver_name'),
+                            'pr_co_name'      =>session('user_company_name'),
+                            'pr_co_img'       =>session('user_company_image'),
+
+
                             ]);
                     Session::forget('pr_edit');
                     return Redirect::to("/pressuser/mypressrelease");
@@ -450,23 +456,48 @@ class ShopMemberController extends Shop
     }
 
     public function press_release_save_as_draft(Request $request)
-    {   
+    {  
+        $pr_info["pr_type"]         =$request->pr_type; 
         $pr_info["pr_headline"]     =$request->pr_headline;
         $pr_info["pr_content"]      =$request->pr_content;
         $pr_info["pr_boiler_content"]=$request->pr_boiler_content;
         $pr_info["pr_from"]         =session('user_email');
         $pr_info["pr_to"]           =$request->pr_to;
-        $pr_info["pr_status"]       ="Draft";
+        $pr_info["pr_status"]       ="draft";
         $pr_info["pr_date_sent"]    =Carbon::now();
         $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
         $pr_info["pr_receiver_name"]=request('pr_receiver_name');
         $pr_info["pr_co_name"]      =session('user_company_name');
         $pr_info["pr_co_img"]       =session('user_company_image');
+        $pr_info["pr_type"]         =$request->pr_type;
 
-        
-        $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info); 
+        if(Session::has('pr_edit'))
+        {
+            $date=Carbon::now();
+            DB::table('tbl_pressiq_press_releases')
+                ->where('pr_id', session('pr_edit'))
+                ->update([
+                    'pr_type'         =>request('pr_type'),
+                    'pr_headline'     =>request('pr_headline'),
+                    'pr_content'      =>request('pr_content'),
+                    'pr_boiler_content'=>request('pr_boiler_content'),
+                    'pr_from'         =>session('user_email'),
+                    'pr_to'           =>request('pr_to'),
+                    'pr_status'       =>"draft",
+                    'pr_date_sent'    =>$date,
+                    'pr_sender_name'  =>session('user_first_name').' '.session('user_last_name'),
+                    'pr_receiver_name'=>request('pr_receiver_name'),
+                    'pr_co_name'      =>session('user_company_name'),
+                    'pr_co_img'       =>session('user_company_image'),
+                    ]);
+            Session::forget('pr_edit');
+        }
+        else
+        {
+            $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
+        }
+         
         $data["page"] = "Press Release - My Press Release";
-        Session::forget('pr_edit');
         return redirect::to("/pressuser/drafts");
     }
     public function pressuser_my_pressrelease()
@@ -725,7 +756,6 @@ class ShopMemberController extends Shop
 
         $data['_email'] = Tbl_pressiq_press_releases::paginate(5);
 
-
         if(Session::exists('user_email'))
         {
            $level=session('pr_user_level');
@@ -846,7 +876,7 @@ class ShopMemberController extends Shop
     public function pressreleases_edit_recipient($id)
     {
         Session::put('r_edit',$id);
-        return Redirect::to("/pressadmin/mediacontacts");
+        return Redirect::back();
     }
 
     public function pressuser_choose_recipient(Request $request)

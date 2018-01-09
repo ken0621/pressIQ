@@ -6,7 +6,7 @@ use App\Models\Tbl_receive_inventory_line;
 use App\Models\Tbl_receive_inventory;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_debit_memo;
-
+use App\Models\Tbl_bill;
 use Carbon\Carbon;
 use DB;
 
@@ -53,6 +53,9 @@ class TransactionReceiveInventory
             /*INSERT RI HERE*/
             $receive_inventory_id = Tbl_receive_inventory::insertGetId($ins);
 
+            /*INSERT ENTER BILL HERE*/
+            $bill = TransactionEnterBills::postInsert($receive_inventory_id, $shop_id, $insert, $insert_item);
+
             /* Transaction Journal */
             /*$entry["reference_module"]  = "receive-inventory";
             $entry["reference_id"]      = $receive_inventory_id;
@@ -62,7 +65,7 @@ class TransactionReceiveInventory
             $entry["discount"]          = '';
             $entry["ewt"]               = '';*/
 
-            $return = Self::insertLine($receive_inventory_id, $insert_item);
+            $return = Self::insertLine($shop_id, $receive_inventory_id, $insert_item);
             $return = $receive_inventory_id;
         }
         else
@@ -72,30 +75,26 @@ class TransactionReceiveInventory
         return $return;
 	}
 
-    public static function insertLine($receive_inventory_id, $insert_item)
+    public static function insertLine($shop_id, $receive_inventory_id, $insert_item)
     {
         $itemline = null;
         foreach ($insert_item as $key => $value) 
         {   
-            $itemline[$key]['riline_ri_id']     = $receive_inventory_id;
+            $itemline[$key]['riline_ri_id']        = $receive_inventory_id;
             $itemline[$key]['riline_item_id']      = $value['item_id'];
             //$itemline[$key]['riline_ref_name']      = $value['reference_name'];
             //$itemline[$key]['riline_ref_id']        = $value['reference_id'];
             $itemline[$key]['riline_description']  = $value['item_description'];
             $itemline[$key]['riline_um']           = $value['item_um'];
             $itemline[$key]['riline_qty']          = $value['item_qty'];
-            $itemline[$key]['riline_rate']     = $value['item_rate'];
+            $itemline[$key]['riline_rate']         = $value['item_rate'];
             $itemline[$key]['riline_amount']       = $value['item_amount'];
 
-            //$bill_id = $itemline[$key]['riline_ref_id'];
         }
         if(count($itemline) > 0)
         {
-            $return = Tbl_receive_inventory_line::insert($itemline);
-            
-            Tbl_bill::where('bill_id', $bill_id);
-
-            //$return = AccountingTransaction::entry_data($entry, $insert_item);
+            $return = Tbl_receive_inventory_line::insert($itemline);   
+            Tbl_bill::where('bill_shop_id', $shop_id)->where('bill_ri_id', $receive_inventory_id)->first();
         }
 
         return $return;

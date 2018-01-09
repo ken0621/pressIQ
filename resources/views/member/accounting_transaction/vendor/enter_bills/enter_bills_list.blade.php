@@ -48,7 +48,7 @@
                         <table class="table table-bordered table-striped table-condensed">
                             <thead>
                                 <tr>
-                                    <th>NAME</th>
+                                    <th>VENDOR NAME</th>
                                     <th class="text-center">REFERENCE NUMBER</th>
                                     <th class="text-center">TRANSACTION DATE</th>
                                     <th class="text-center" width="120px">TOTAL PRICE</th>
@@ -56,26 +56,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Vendor 1<br>
-                                        <small>Contact Person</small>
-                                    </td>
-                                    <td class="text-center">PO20171213-0001</td>
-                                    <td class="text-center">2017-12-14</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center">
-                                        <div class="btn-group">
-                                          <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Action <span class="caret"></span>
-                                          </button>
-                                          <ul class="dropdown-menu dropdown-menu-custom">
-                                            <li>
-                                                <a link="" class="popup" size="lg">Print</a>
-                                            </li>
-                                          </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @if(count($_eb) > 0)
+                                    @foreach($_eb as $eb)
+                                    <tr>
+                                        <td>{{ $eb->vendor_company }}<br>
+                                            <small>{{ $eb->vendor_title_name.' '.$eb->vendor_first_name.' '.$eb->vendor_middle_name.' '.$eb->vendor_last_name.' '.$eb->vendor_suffix_name}}</small>
+                                        </td>
+                                        <td class="text-center">{{ $eb->transaction_refnum == ''? $eb->bill_id : $eb->transaction_refnum}}</td>
+                                        <td class="text-center">{{ date('m-d-Y', strtotime($eb->date_created))}}</td>
+                                        <td class="text-center">{{ currency('PHP', $eb->bill_total_amount) }}</td>
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                              <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Action <span class="caret"></span>
+                                              </button>
+                                              <ul class="dropdown-menu dropdown-menu-custom">
+                                                <li>
+                                                    <a link="" class="popup" size="lg">Print</a>
+                                                </li>
+                                              </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                @else
+                                    <tr>NO TRANSACTION</tr>
+                                @endif   
                             </tbody>
                         </table>
                     </div>

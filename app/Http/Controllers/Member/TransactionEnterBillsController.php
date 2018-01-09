@@ -45,6 +45,8 @@ class TransactionEnterBillsController extends Member
     public function getIndex()
     {
         $data['page'] = 'Bills';
+        $data['_eb']  = Tbl_bill::vendor()->where('bill_shop_id', $this->user_info->shop_id)->get();
+        //dd($data['_eb']);
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills_list', $data);
     }
 
@@ -76,8 +78,7 @@ class TransactionEnterBillsController extends Member
         $insert['transaction_date']         = $request->transaction_date;
         $insert['transaction_duedate']      = $request->transaction_duedate;
         $insert['vendor_memo']              = $request->vendor_memo;
-
-        //die(var_dump($insert));
+        $insert['bill_ri_id']               = null;
 
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
@@ -94,14 +95,14 @@ class TransactionEnterBillsController extends Member
                 $insert_item[$key]['item_discount']    = 0;
             }
         }
-        $validate = TransactionEnterBills::postInsert($this->user_info->shop_id, $insert, $insert_item);
+        $validate = TransactionEnterBills::postInsert(null, $this->user_info->shop_id, $insert, $insert_item);
 
         $return = null;
         if(is_numeric($validate))
         {
-            $return['status'] = 'success';
-            $return['status_message'] = 'Success creating bills.';
-            $return['call_function'] = 'success_enter_bills';
+            $return['status']          = 'success';
+            $return['status_message']  = 'Success creating bills.';
+            $return['call_function']   = 'success_enter_bills';
             $return['status_redirect'] = AccountingTransaction::get_redirect('enter_bills', $validate ,$btn_action);
         }
         else

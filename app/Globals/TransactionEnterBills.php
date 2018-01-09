@@ -2,6 +2,7 @@
 namespace App\Globals;
 
 use App\Models\Tbl_purchase_order;
+use App\Models\Tbl_bill_item_line;
 use App\Models\Tbl_bill;
 use App\Globals\AccountingTransaction;
 use Carbon\Carbon;
@@ -19,13 +20,14 @@ class TransactionEnterBills
 	{
 		return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed',0)->count();
 	}
-	public static function postInsert($shop_id, $insert, $insert_item)
+	public static function postInsert($ri_id, $shop_id, $insert, $insert_item)
 	{
     	$val = AccountingTransaction::vendorValidation($insert, $insert_item);
         //die(var_dump($val));
         if(!$val)
         {
     		$ins['bill_shop_id']          = $shop_id;
+            $ins['bill_ri_id']            = $ri_id;
     		$ins['transaction_refnum']    = $insert['transaction_refnumber'];
             $ins['bill_vendor_id']        = $insert['vendor_id'];
             $ins['bill_mailing_address']  = $insert['vendor_address'];
@@ -81,7 +83,7 @@ class TransactionEnterBills
         }
         if(count($itemline) > 0)
         {
-            //Tbl_customer_invoice_line::insert($itemline);
+            Tbl_bill_item_line::insert($itemline);
             $return = AccountingTransaction::entry_data($entry, $insert_item);
             //die(var_dump($return));
         }

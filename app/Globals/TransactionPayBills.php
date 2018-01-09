@@ -100,7 +100,7 @@ class TransactionPayBills
 
 	            Tbl_pay_bill_line::insert($itemline);
 
-	        	$bill_id 		 = $itemline[$key]["pbline_reference_id"];
+	        	$bill_id = $itemline[$key]["pbline_reference_id"];
 
 	        	$pb_shop_id = Tbl_pay_bill_line::PBInfo()->where('paybill_shop_id', $shop_id)->first();
 	        	

@@ -35,6 +35,7 @@ use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_bill;
 use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_bill_item_line;
+use App\Models\Tbl_receive_inventory;
 use Carbon\Carbon;
 use Session;
 class TransactionReceiveInventoryController extends Member
@@ -42,6 +43,8 @@ class TransactionReceiveInventoryController extends Member
     public function getIndex()
     {
         $data['page'] = 'Receive Inventory';
+        $data['_ri']  = Tbl_receive_inventory::vendor()->where('ri_shop_id', $this->user_info->shop_id)->get();
+        //dd($data['_ri']);
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory_list', $data);
     }
 
@@ -81,6 +84,8 @@ class TransactionReceiveInventoryController extends Member
             if($value)
             {
                 $insert_item[$key]['item_id']          = $value;
+                // $insert_item[$key]['reference_name']   = $request->item_description[$key];
+                // $insert_item[$key]['reference_id']     = $request->item_um[$key];
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
                 $insert_item[$key]['item_um']          = $request->item_um[$key];
                 $insert_item[$key]['item_qty']         = str_replace(',', '', $request->item_qty[$key]);

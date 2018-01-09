@@ -142,7 +142,7 @@ class CommissionCalculatorController extends Member
                                 $account_id = 0;
                                 if($data['account'])
                                 {
-                                    $account_id = AccountingTransaction::check_coa_exist($this->user_info->shop_id, str_replace(' ', '',$data['account']), str_replace(' ', '',$data['account']));
+                                    $account_id = AccountingTransaction::check_coa_exist($this->user_info->shop_id, 0000000, $data['account']);
                                 }
                                 else
                                 {

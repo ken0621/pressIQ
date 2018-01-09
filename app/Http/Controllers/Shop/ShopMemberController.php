@@ -63,6 +63,8 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_tour_wallet_slot;
+use App\Models\Tbl_tour_wallet;
 
 use App\Models\Tbl_press_release_recipient;
 use App\Tbl_pressiq_press_releases;
@@ -1311,6 +1313,17 @@ class ShopMemberController extends Shop
                 }
             }
 
+            // Method Airline Wallet
+            if ($method == "airline") 
+            {
+                $tour_wallet = Tbl_tour_wallet_slot::where("slot_id", $slot->slot_id)->value("tour_wallet_account_id");
+
+                if (!$tour_wallet || $tour_wallet == "" ) 
+                {
+                    $return .= "<div>Please set your Airline Wallet Account ID for <b>" . $slot->slot_no . "</b> in payout settings.</div>";
+                }
+            }
+
             $request_amount = $request_wallet[$key];
 
             if ($request_amount != 0) 
@@ -1416,7 +1429,7 @@ class ShopMemberController extends Shop
                         $remarks    = "Request by Customer";
                         $other      = 0;
                         $date       = date("m/d/Y");
-                        $status = "PENDING";
+                        $status     = "PENDING";
 
                         /* V-MONEY */
                         if ($method == "vmoney") 
@@ -1490,6 +1503,99 @@ class ShopMemberController extends Shop
                                 {
                                     dd($e->getMessage());
                                 }
+                            }
+                        }
+                        elseif($method == "airline")
+                        {
+                            $wallet_amount = $take_home;
+
+                            $tour = Tbl_tour_wallet_slot::where('slot_id', $slot_id)
+                                                        ->leftJoin('tbl_tour_wallet', 'tbl_tour_wallet.tour_wallet_id', '=', 'tbl_tour_wallet_slot.tour_wallet_id')
+                                                        ->first();
+
+                            $host = Tbl_tour_wallet::where('tour_wallet_shop', $this->shop_info->shop_id)
+                                                   ->where('tour_wallet_main', 1)
+                                                   ->first();
+                            
+                            $base_uri = $this->shop_info->shop_wallet_tours_uri;
+
+                            $airline_result            = AbsMain::transfer_wallet($base_uri, $host->tour_Wallet_a_account_id, $host->tour_wallet_a_username, $host->tour_wallet_a_base_password, $tour->tour_Wallet_a_account_id, $wallet_amount);
+                            $airline_result['message'] = 'Wallet Transfer Success';
+
+                            if($airline_result['status'] == 1)
+                            {
+                                $wallet_nega                              = $wallet_amount * (-1);
+
+                                $log['shop_id']                           = $this->shop_info->shop_id;
+                                $log['wallet_log_slot']                   = $slot_id;
+                                $log['wallet_log_slot_sponsor']           = $slot_id;
+                                $log['wallet_log_details']                = 'You have transferred ' . $wallet_amount . ' To your tours wallet. ' . $wallet_amount . ' is deducted to your wallet.' ;
+                                $log['wallet_log_amount']                 = $wallet_nega;
+                                $log['wallet_log_plan']                   = 'TOURS_WALLET';
+                                $log['wallet_log_status']                 = 'released';
+                                $log['wallet_log_claimbale_on']           = Carbon::now();
+
+                                $insert['tour_wallet_logs_wallet_amount'] = $wallet_amount;
+                                $insert['tour_wallet_logs_date']          = Carbon::now(); 
+                                $insert['tour_wallet_logs_tour_id']       = $tour->tour_wallet_id; 
+                                $insert['tour_wallet_logs_account_id']    = $tour->tour_Wallet_a_account_id;
+                                $insert['tour_wallet_logs_customer_id']   = Self::$customer_info->customer_id;
+                                $insert['tour_wallet_logs_accepted']      = 1;
+                                $insert['tour_wallet_logs_points']        = 0;
+
+                                // Get Balance
+                                $host_update = AbsMain::get_balance($base_uri, $host->tour_Wallet_a_account_id, $host->tour_wallet_a_username, $host->tour_wallet_a_base_password);
+                                
+                                if($host_update['status'] == 1)
+                                {
+                                    $update['tour_wallet_a_current_balance'] = $host_update['result'];
+
+                                    Tbl_tour_wallet::where('tour_wallet_shop', $this->shop_info->shop_id)
+                                                   ->where('tour_wallet_main', 1)
+                                                   ->update($update);
+                                }
+
+                                $update['tour_wallet_a_current_balance'] = $tour->tour_wallet_a_current_balance + $wallet_amount;
+                                
+                                Tbl_tour_wallet::where('tour_wallet_customer_id', Self::$customer_info->customer_id)
+                                               ->where('tour_wallet_main', 0)
+                                               ->update($update);
+
+                                Mlm_slot_log::slot_array($log);
+
+                                $tour_wallet_convertion = $host->tour_wallet_convertion;
+
+                                if($tour_wallet_convertion != 0)
+                                {
+                                    $points                            = ($wallet_amount/100) * $tour_wallet_convertion;
+                                    $insert['tour_wallet_logs_points'] = $points;
+                                    $l                                 = "You have earned " . $points . " Repurchase Points. From  tours wallet."; 
+                                    $log['shop_id']                    = $this->shop_info->shop_id;
+                                    $log['wallet_log_slot']            = $slot_id;
+                                    $log['wallet_log_slot_sponsor']    = $slot_id;
+                                    $log['wallet_log_details']         = $l ;
+                                    $log['wallet_log_amount']          = 0;
+                                    $log['wallet_log_plan']            = 'TOURS_WALLET_POINTS';
+                                    $log['wallet_log_status']          = 'released';
+                                    $log['wallet_log_claimbale_on']    = Carbon::now();
+
+                                    Mlm_slot_log::slot_array($log);
+
+                                    $array['points_log_complan']        = "REPURCHASE_POINTS";
+                                    $array['points_log_level']          = 0;
+                                    $array['points_log_slot']           = $slot_id;
+                                    $array['points_log_Sponsor']        = $slot_id;
+                                    $array['points_log_date_claimed']   = Carbon::now();
+                                    $array['points_log_converted']      = 0;
+                                    $array['points_log_converted_date'] = Carbon::now();
+                                    $array['points_log_type']           = 'PV';
+                                    $array['points_log_from']           = 'Wallet Tours';
+                                    $array['points_log_points']         = $points;
+
+                                    Mlm_slot_log::slot_log_points_array($array);
+                                }
+
+                                DB::table('tbl_tour_wallet_logs')->insert($insert);
                             }
                         }
                         else

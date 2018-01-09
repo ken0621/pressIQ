@@ -296,10 +296,10 @@ function action_submit_payout_details(form_data)
 		success: function(data)
 		{
 			$(".update-payout-button").prop("disabled", false);
+			$(".loader-payout").hide();
 
 			if (data.status == "success") 
 			{
-				$(".loader-payout").hide();
 				$("#global_modal").modal("hide");
 				setTimeout(function()
 				{

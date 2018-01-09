@@ -643,24 +643,36 @@ class Payroll2
 		//$return->leave = $leave = $this->timesheet_get_leave_hours($employee_id, $date, $_shift_raw);
 
 		/*START leave function*/
-		// $leave_data_all = PayrollLeave::employee_leave_data($employee_id);
+		$leave_data_all = PayrollLeave::employee_leave_data($employee_id);
   		// $leave_cap_data = PayrollLeave::employee_leave_capacity($employee_id);
-        $leave_date_data = PayrollLeave::employee_leave_date_datav2($employee_id,$date);
+        
         $use_leave = false;
-
+        
         $leave = "00:00:00";
         $data_this = PayrollLeave::employee_leave_capacity_consume_remainingv2($employee_id)->get();
         $leavepay = 0;
-
-        if (count($leave_date_data) > 0) 
+        
+        if ($leave_data_all) 
         {
-        	// $used_leave_data = PayrollLeave::employee_leave_consumed($leave_date_data["payroll_leave_employee_id"]);
-        	// $remaining_leave_data = PayrollLeave::employee_leave_remaining($employee_id, $leave_data_all["payroll_leave_employee_id"]);
-
-        	$use_leave = true;
-        	$leave=$leave_date_data["leave_hours"];
-        	$leavepay=$leave_date_data["payroll_leave_temp_with_pay"];
+        	$use_leave 	= true;
+        	$leave 		= $leave_data_all["leave_hours"];
+        	$leavepay 	= 1;
         }
+        else
+        {
+        	$leave_date_data = PayrollLeave::employee_leave_date_datav2($employee_id,$date);
+        	
+        	if (count($leave_date_data) > 0) 
+        	{
+        		// $used_leave_data = PayrollLeave::employee_leave_consumed($leave_date_data["payroll_leave_employee_id"]);
+        		// $remaining_leave_data = PayrollLeave::employee_leave_remaining($employee_id, $leave_data_all["payroll_leave_employee_id"]);
+
+        		$use_leave = true;
+        		$leave=$leave_date_data["leave_hours"];
+        		$leavepay=$leave_date_data["payroll_leave_temp_with_pay"];
+        	}
+        }
+        
 
     	$return->use_leave = $use_leave;             
 		$return->leave = $leave;
@@ -924,6 +936,7 @@ class Payroll2
 		// $day_type["holiday_name"]	= '';
 		$company_id	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_company_id');
 		$holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
+
 		if($holiday != null)
 		{
 			$day_type = strtolower($holiday->payroll_holiday_category);

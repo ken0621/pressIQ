@@ -14,6 +14,7 @@ use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
 use App\Globals\TransactionSalesOrder;
 use App\Globals\TransactionEstimateQuotation;
+use App\Globals\AccountingTransaction;
 
 use Session;
 use Carbon\Carbon;
@@ -37,6 +38,7 @@ class TransactionSalesOrderController extends Member
 		$data['page'] = "Create Sales Order";		
         $data["_customer"]  = Customer::getAllCustomer();
         $data['_item']      = Item::get_all_category_item();
+        $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'sales_order');
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['action']		= "/member/transaction/sales_order/create-sales-order";
 

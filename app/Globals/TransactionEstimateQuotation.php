@@ -62,13 +62,8 @@ class TransactionEstimateQuotation
 			$ins['transaction_refnum']	 		 = $insert['transaction_refnum'];   
 	        $ins['est_customer_email']           = $insert['customer_email'];
 	        $ins['est_customer_billing_address'] = $insert['customer_address'];
-	        $ins['est_terms_id']                 = $insert['customer_terms'];
 	        $ins['est_date']                     = date("Y-m-d", strtotime($insert['transaction_date']));
-	        $ins['est_due_date']                 = date("Y-m-d", strtotime($insert['transaction_duedate']));
-	        $ins['ewt']                          = $insert['customer_ewt'];
-	        $ins['est_discount_type']            = $insert['customer_discounttype'];
-	        $ins['est_discount_value']           = $insert['customer_discount'];
-	        $ins['taxable']                      = $insert['customer_tax'];
+	        $ins['est_exp_date']                 = date("Y-m-d", strtotime($insert['transaction_duedate']));
 	        $ins['est_message']                  = $insert['customer_message'];
 	        $ins['est_memo']                     = $insert['customer_memo'];
 	        $ins['date_created']                 = Carbon::now();
@@ -76,35 +71,24 @@ class TransactionEstimateQuotation
 	        /* SUBTOTAL */
 	        $subtotal_price = collect($insert_item)->sum('item_amount');
 
-	        /* DISCOUNT */
-	        $discount = $insert['customer_discount'];
-	        if($insert['customer_discounttype'] == 'percent') $discount = (convertToNumber($insert['customer_discount']) / 100) * $subtotal_price;
-
-	        /* TAX */
-	        $tax = (collect($insert_item)->where('item_taxable', '1')->sum('item_amount')) * 0.12;
-
-	        /* EWT */
-	        $ewt = $subtotal_price*convertToNumber($insert['customer_ewt']);
-
 	        /* OVERALL TOTAL */
-	        $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
+	        $overall_price  = convertToNumber($subtotal_price);
 
 	        $ins['est_subtotal_price']           = $subtotal_price;
 	        $ins['est_overall_price']            = $overall_price;
 
 
 	        /* INSERT INVOICE HERE */
-	        // $estimate_id = Tbl_customer_estimate::insertGetId($ins);
-	        $estimate_id = 0;
+	        $estimate_id = Tbl_customer_estimate::insertGetId($ins);
 
 	        $return = Self::insertline($estimate_id, $insert_item);
 
-			/* INSERT TRANSACTION HERE */
-			$acctg['transaction_ref_name'] = "estimate_quotation";
-			$acctg['transaction_ref_id'] = $estimate_id;
-			$acctg['transaction_list_number'] = $ins['transaction_refnum'];
-			$acctg['transaction_date'] = $ins['est_date'];
-			AccountingTransaction::postTransaction($shop_id, $acctg, $insert_item);
+			// /* INSERT TRANSACTION HERE */
+			// $acctg['transaction_ref_name'] = "estimate_quotation";
+			// $acctg['transaction_ref_id'] = $estimate_id;
+			// $acctg['transaction_list_number'] = $ins['transaction_refnum'];
+			// $acctg['transaction_date'] = $ins['est_date'];
+			// AccountingTransaction::postTransaction($shop_id, $acctg, $insert_item);
 		}
 		else
 		{
@@ -143,7 +127,8 @@ class TransactionEstimateQuotation
 		}
 		if(count($itemline) > 0)
 		{
-			// Tbl_customer_estimate_line::insert($itemline);
+			Tbl_customer_estimate_line::insert($itemline);
+			$return = 1;
 		}
 
 		return $return;

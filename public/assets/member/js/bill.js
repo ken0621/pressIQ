@@ -22,6 +22,7 @@ function bill()
 		action_compute();
 		action_date_picker();
 		action_reassign_number();
+		action_acct_reassign_number();
 		event_button_action_click();
 	}
 
@@ -191,7 +192,11 @@ function bill()
 	{
 		var subtotal = 0;
 		var total_taxable = 0;
-
+		var acct_amount = 0;
+		$(".acct-amount").each(function()
+		{
+			acct_amount += parseFloat(action_return_to_number($(this).val()));
+		});
 		$(".tr-draggable").each(function()
 		{
 			/* GET ALL DATA */
@@ -302,12 +307,13 @@ function bill()
 		}
 		total += tax;
 
+
 		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));
 		$(".subtotal-amount-input").val(action_add_comma(subtotal.toFixed(2)));
 		$(".ewt-total").html(action_add_comma(ewt_value.toFixed(2)));
 		$(".discount-total").html(action_add_comma(discount_total.toFixed(2)));
 		$(".tax-total").html(action_add_comma(tax.toFixed(2)));
-		$(".total-amount").html(action_add_comma(subtotal.toFixed(2)));
+		$(".total-amount").html(action_add_comma((subtotal + acct_amount).toFixed(2)));
 		$(".total-amount-input").val(subtotal.toFixed(2));
 
 	}
@@ -500,7 +506,11 @@ function bill()
 		    link 		: '/member/accounting/chart_of_account/popup/add',
 		    link_size 	: 'md',
 		    width 		: "100%",
-		    placeholder : 'Account'
+		    placeholder : 'Account',
+            onChangeValue : function()
+            {
+            	action_load_coa_info($(this));
+            }
 		});
 	}
 

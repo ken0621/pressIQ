@@ -735,6 +735,9 @@ class ShopMemberController extends Shop
         // dd(session("edit_user"));
         $data['_user'] = Tbl_pressiq_user::where('user_level',2)->get();
         $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
+        $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
+        $data['_admin_edit'] = Tbl_pressiq_user::where('user_id',session('edit_admin'))->get();
+        
         
 
         if(Session::exists('user_email'))
@@ -766,13 +769,32 @@ class ShopMemberController extends Shop
                             'user_company_name'   =>request('company_name')
                             ]);
         Session::forget('edit_user');
-        return Redirect::to("/pressadmin/manage_user");
+        return redirect()->back();
+    }
+    public function pressadmin_manage_admin_edit()
+    {
+        DB::table('tbl_pressiq_user')
+                        ->where('user_id', session('edit_admin'))
+                        ->update([
+                            'user_first_name'     =>request('first_name'),
+                            'user_last_name'      =>request('last_name'),
+                            'user_email'          =>request('email'),
+                            'user_company_name'   =>request('company_name')
+                            ]);
+        Session::forget('edit_admin');
+        return redirect()->back();
     }
     public function edit_user($id)
     {
         Session::put('edit_user',$id);
-        $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
-        return view("press_admin.press_admin_user_edit", $data);
+        
+        return redirect()->back();
+    }
+    public function edit_admin($id)
+    {
+        Session::put('edit_admin',$id);
+        
+        return redirect()->back();
     }
 
     public function pressadmin_email()

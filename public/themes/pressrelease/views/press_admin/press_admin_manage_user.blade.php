@@ -74,36 +74,57 @@
                            <td>{{$_admin_account->user_last_name}}</td>
                            <td>{{$_admin_account->user_email}}</td>
                            <td>
-                            <a href=""><button type="button"  class="">
+                            <a href="/pressadmin/manage_user/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="">
                             <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
-                            <a href=""><button type="button"  class="">
+
+                            <a href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="">
                             <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button>
                            </td>
                         </tr>
                         @endforeach
                      
                   </table>
-                <label>ADD ADMIN ACCOUNT</label>
-                  <form method="post" action="">
+                @if(session()->has("u_edit"))
+                   @foreach($_edit as $_admin_edit)
+                    <form method="post" >
+                      {{csrf_field()}}
+                      <div class="title">First Name: *</div>
+                      <input type="text" id="user_first_name" name="user_first_name" value="{{$_admin_edit->user_first_name}}" class="form-control" required>
+
+                      <div class="title">Last Name: *</div>
+                      <input type="text"  id="user_last_name" name="user_last_name" value="{{$_admin_edit->user_last_name}}" class="form-control" required>
+
+                      <div class="title">Username: *</div>
+                      <input type="email" id="user_email" name="user_email" class="form-control" value="{{$_admin_edit->user_email}}" required>
+
+                      <div class="title">Password: *</div>
+                      <input type="Password" id="user_password" name="user_password" class="form-control" value="{{$_admin_edit->user_password}} required>
+
+                      <div class="button-container">
+                          <button type="submit" id="admin_submit_button" name="admin_submit_button" formaction="/pressadmin/manage_user/add_admin">Submit</button>
+                      </div>
+                  </form>
+                  @endforeach
+                 @else
+                  <form method="post"  >
                     {{csrf_field()}}
-                    <div class="title">First Name: *</div>
-                    <input type="text" id="" name="" class="form-control" required>
+                    <div class="title">First Name: </div>
+                    <input type="text" id="user_first_name" name="user_first_name" class="form-control" required>
 
-                    <div class="title">Last Name: *</div>
-                    <input type="text"  id="" name="" class="form-control" required>
+                    <div class="title">Last Name: </div>
+                    <input type="text"  id="user_last_name" name="user_last_name" class="form-control" required>
 
-                    <div class="title">Username: *</div>
-                    <input type="text" id="" name="" class="form-control" required>
+                    <div class="title">Username: </div>
+                    <input type="email" id="user_email" name="user_email" class="form-control" required>
 
+                    <div class="title">Password: </div>
+                    <input type="Password" id="user_password" name="user_password" class="form-control" required>
 
-                    <div class="title">Password: *</div>
-                    <input type="Password" id="" name="" class="form-control" required>
-
-                
                     <div class="button-container">
-                        <button type="submit" id="submit_button" name="submit_button">Submit</button>
+                        <button type="submit" id="admin_submit_button" name="admin_submit_button" formaction="/pressadmin/manage_user/add_admin">Submit</button>
                     </div>
                 </form>
+                  @endif
             </div>
         </div>
     </div>

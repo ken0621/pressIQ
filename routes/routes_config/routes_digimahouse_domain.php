@@ -84,9 +84,12 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/pressadmin/dashboard', 'Shop\ShopMemberController@pressadmin_dashboard'); //PRESS RELEASE
 	Route::get('/pressadmin/mediacontacts', 'Shop\ShopMemberController@pressadmin_media_contacts'); //PRESS RELEASE
 	Route::get('/pressadmin/manage_user', 'Shop\ShopMemberController@manage_user'); //PRESS RELEASE
+	Route::any('/pressadmin/manage_user/add_admin', 'Shop\ShopMemberController@manage_user_add_admin'); //PRESS RELEASE
+	Route::any('/pressadmin/manage_user/edit_admin/{id}', 'Shop\ShopMemberController@manage_user_edit_admin'); //PRESS RELEASE
+	Route::any('/pressadmin/manage_user/delete_admin/{id}', 'Shop\ShopMemberController@manage_user_delete_admin'); //PRESS RELEASE
 	Route::get('/pressadmin/email',				'Shop\ShopMemberController@pressadmin_email'); //PRESS RELEASE
 	Route::any('/pressadmin/email_save','Shop\ShopMemberController@pressadmin_email_save'); //PRESS RELEASE
-	Route::get('/pressadmin/email_edit/{id}','Shop\ShopMemberController@pressadmin_email_edit'); //PRESS RELEASE
+	Route::any('/pressadmin/email_edit/{id}','Shop\ShopMemberController@pressadmin_email_edit'); //PRESS RELEASE
 	Route::get('/pressadmin/email_delete/{id}', 'Shop\ShopMemberController@email_delete'); //PRESS RELEASE
 	Route::get('/pressuser/analytics', 'Shop\ShopMemberController@press_release_analytics');
 

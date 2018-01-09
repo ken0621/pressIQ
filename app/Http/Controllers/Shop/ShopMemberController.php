@@ -735,6 +735,9 @@ class ShopMemberController extends Shop
         $data['_user'] = Tbl_pressiq_user::where('user_level',2)->get();
         $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
 
+        $data['_edit'] = Tbl_pressiq_user::where('user_id',session('u_edit'))->get();
+        
+
         if(Session::exists('user_email'))
         {
            $level=session('pr_user_level');
@@ -753,7 +756,46 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
     }
+    public function manage_user_add_admin(Request $request)
+    {
+      $data["user_first_name"]                 = $request->user_first_name;
+      $data["user_last_name"]                  = $request->user_last_name;
+      $data["user_email"]                      = $request->user_email;
+      $data["user_password"]                   = Crypt::encrypt(request('user_password'));
+      $data["user_level"]                      = "1";
+        if(session::has('u_edit'))
+        {
+            DB::table('tbl_pressiq_user')
+                        ->where('user_id', session('u_edit'))
+                        ->update([
+                            'user_first_name'             =>$data["user_first_name"],
+                            'user_last_name'              =>$data["user_last_name"],
+                            'user_email'                  =>$data["user_email"],
+                            'user_password'               =>Crypt::encrypt(request('user_password'))
+                            ]);
+            Session::flash('success_merchant', 'Recipient Successfully Updated!');
+        }
+        else
+        {
+            Tbl_pressiq_user::insert($data);
+            Session::flash('success_merchant', 'Recipient Successfully Added!');
+        }
+      return  redirect::back();
+    }
 
+    public function manage_user_edit_admin($id)
+    {
+       Session::put('u_edit',$id);
+       return redirect::back();
+    }
+
+    public function manage_user_delete_admin($id)
+    {
+      Tbl_pressiq_user::where('user_id',$id)->delete();
+      Session::flash('delete', "Recipient Already Deleted!");
+      return  redirect::back();
+    }
+   
     public function pressadmin_email()
     {   
 

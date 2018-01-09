@@ -353,7 +353,7 @@
                             {{-- <span style="font-size: 13px; letter-spacing: 0.5px;">Pinoy app download:</span>
                             <div style="padding-bottom: 10px;"></div> --}}
                             <div class="col-md-6 col-sm-6 col-xs-6">
-                                <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/download-app.png">
+                                <a href="https://drive.google.com/open?id=1QgE-QPjtb4pLFYDX2PRGHB_wMFA91tRf" target="_blank"><img class="img-responsive" src="/themes/{{ $shop_theme }}/img/download-app.png"></a>
                             </div>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <a href="https://drive.google.com/open?id=1raTanxiFVrqhqHtizL9RUq7fWi-786OZ" target="_blank"><img style="margin-left: -12px;" class="img-responsive" src="/themes/{{ $shop_theme }}/img/download-app2.png"></a>

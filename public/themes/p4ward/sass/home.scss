@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $display-text: 'Lato', sans-serif;
 $content-text: 'Ubuntu', sans-serif;
 $light: 300;
@@ -81,16 +83,22 @@ body
 	.button-container
 	{
 		font-family: 'Ubuntu', sans-serif;
-		background-color: #0466af;
-		padding: 10px 20px;
-		text-align: center;
-		width: 120px;
 		margin-bottom: 50px;
 
 		a
 		{
+			@include transition(0.3s);
+			background-color: #0466af;
+			padding: 10px 20px;
+			text-align: center;
+			width: 120px;
 			text-decoration: none;
 			color: #fff;
+
+			&:hover
+			{
+				opacity: 0.8;
+			}
 		}
 	}
 
@@ -283,26 +291,31 @@ body
 		}
 		.button-container
 		{
-			border: 2px solid #0466af;
-			padding: 10px 40px;
-			width: 180px;
-			font-size: 15px;
 			margin: auto;
-			a
-			{
-				color: #0466af;
-				text-decoration: none;
-			}
-		}
-		.button-container:hover
-		{
-			background-color: #0466af;
-			a
-			{
-				color: #fff;
-			}
-		}
 
+			a
+			{
+				text-decoration: none;
+			
+				button
+				{
+					@include transition(0.3s);
+					border: 2px solid #0466af;
+					padding: 10px 40px;
+					width: 180px;
+					font-size: 15px;
+					background-color: inherit;
+
+					&:hover
+					{
+						background-color: #0466af;
+						cursor: pointer;
+						color: #fff;
+					}
+				}
+
+			}
+		}
 	}
 }
 
@@ -311,6 +324,7 @@ body
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	padding: 140px 50px;
+
 	.benefits-container
 	{
 		padding: 0px 15px;
@@ -429,24 +443,57 @@ body
 				padding: 10px;
 				text-align: left;
 				border-bottom: 1px solid #d4d4d4;
-				.image-holder
+				
+				.left
 				{
-					text-align: center;
+					.image-holder
+					{
+						text-align: center;
+						width: 60%;
+						margin: auto;
+
+						img
+						{
+							width: 100%;
+							border-radius: 100%;
+						}
+
+						@media screen and (max-width: 800px)
+						{
+							width: 15%;
+							margin: 0;
+						}
+					}
+
+					@media screen and (max-width: 800px)
+					{
+						margin-left: 15px;
+					}
 				}
-				.name
+
+				.right
 				{
-					font-family: 'Open+Sans', sans-serif;
-					font-weight: 700;
-					font-size: 18px;
-					color: #000;
-					padding: 7px 0px 0px 0px;
+					.name
+					{
+						font-family: 'Open+Sans', sans-serif;
+						font-weight: 700;
+						font-size: 18px;
+						color: #000;
+						padding: 7px 0px 0px 0px;
+					}
+					.date
+					{
+						font-family: 'Open+Sans', sans-serif;
+						font-size: 15px;
+						color: #0466af;
+					}
+
+					@media screen and (max-width: 800px)
+					{
+						margin: -50px 0 0 80px;
+					}
 				}
-				.date
-				{
-					font-family: 'Open+Sans', sans-serif;
-					font-size: 15px;
-					color: #0466af;
-				}
+
 			}
 			.bottom-container
 			{
@@ -466,6 +513,55 @@ body
 					padding: 0px 25px 10px 25px;
 				}
 			}
+		}
+	}
+}
+
+.wrapper-x
+{
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	padding: 50px 0px;
+	text-align: center;
+
+	.wrapper-x-title
+	{
+		color: #fff;
+		font-family: 'Cantarell', sans-serif;
+		font-style: italic;
+		font-size: 25px;
+
+	}
+
+	.btn-container
+	{
+		padding: 30px 0 0 0;
+
+		margin: auto;
+
+		a
+		{
+			text-decoration: none;
+		
+			button
+			{
+				@include transition(0.3s);
+				border: 2px solid #F4AC00;
+				padding: 10px 40px;
+				width: 180px;
+				font-size: 15px;
+				background-color: inherit;
+				color: #F4AC00;
+
+				&:hover
+				{
+					border: 2px solid #0466AF;
+					background-color: #0466AF;
+					cursor: pointer;
+					color: #fff;
+				}
+			}
+
 		}
 	}
 }
@@ -507,20 +603,24 @@ body
 	{
 		padding: 20px 0px;
 		text-align: left;
-		width: 180px;
+
 		a
 		{
+			@include transition(0.3s);
 			background-color: #0466af;
+			width: 180px;
 			color: #fff;
 			font-size: 15px;
 			padding: 10px 40px;
 			text-decoration: none;
-		}
-		a:hover
-		{
-			opacity: 0.9;
+
+			&:hover
+			{
+				opacity: 0.8;
+			}
 		}
 	}
+
 	.icon
 	{
 		vertical-align: middle;

@@ -32,20 +32,25 @@ function theme_custom()
         $window = $(window);
         $window.scroll(function() 
         {
+
           $scroll_position = $window.scrollTop();
-            if ($scroll_position > 32.2167) { 
+
+            if ($scroll_position > 32.2167) 
+            { 
                 $('.header-container').addClass('header-fixed');
                 $('.subheader-container').addClass('header-fixed');
 
                 header_height = $('.your-header').innerHeight();
                 $('body').css('padding-top' , header_height);
-            } 
-            else 
+            }
+
+            else
             {
                 $('body').css('padding-top' , '0');
                 $('.header-container').removeClass('header-fixed');
                 $('.subheader-container').removeClass('header-fixed');
             }
+
          });
     }
 
@@ -55,10 +60,12 @@ function theme_custom()
         $menuLeft = $('.pushmenu-left');
         $nav_list = $('#nav_list');
 
-        $nav_list.click(function() {
+        $nav_list.click(function() 
+        {
             $(this).toggleClass('active');
             // $('.pushmenu-push').toggleClass('pushmenu-push-toright');
             $menuLeft.toggleClass('pushmenu-open');
+
         });
     }
 
@@ -108,7 +115,8 @@ function theme_custom()
 
         $('#gotoright').unbind("click")
         
-        $('#gotoright').bind("click", function(){
+        $('#gotoright').bind("click", function()
+        {
             // Go to the previous slide
             $('.slider3').diyslider("move", "forth");
         });

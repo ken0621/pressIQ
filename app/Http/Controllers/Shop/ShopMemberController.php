@@ -2382,7 +2382,6 @@ class ShopMemberController extends Shop
                     $insert["amount"]       = -1 * $redeemable_item->redeemable_points;
                     $insert["shop_id"]      = $this->shop_info->shop_id;
                     $insert["slot_id"]      = $slot_info->slot_id;
-                    $insert['slot_owner']   = Self::$customer_info->customer_id;
                     $insert["date_created"] = Carbon::now();
                     Tbl_item_redeemable_points::insert($insert);
 
@@ -2394,6 +2393,7 @@ class ShopMemberController extends Shop
                     // you redeem <item> for <cost>. Please wait for admin's approval.
                     $insert_report['log'] = 'You redeemed '.$redeemable_item->item_name.' for '.currency("",$redeemable_item->redeemable_points)." POINTS. Please wait for admin's approval.";
                     $insert_report['date_created'] = Carbon::now();
+                    $insert_report['slot_owner'] = Self::$customer_info->customer_id;
                     Tbl_item_redeemable_report::insert($insert_report);
                     Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->increment('number_of_redeem');
 
@@ -2435,7 +2435,8 @@ class ShopMemberController extends Shop
     {
         $sort_by = 0;
         $data['page'] = "Redeem History";
-        $data['redeem_history'] = Tbl_item_redeemable_report::where('slot_owner',Self::$customer_info->customer_id)->paginate(10);
+        $data['redeem_history'] = Tbl_item_redeemable_report::Slot()->where('tbl_item_redeemable_report.slot_owner',Self::$customer_info->customer_id)->paginate(10);
+        // dd($data['redeem_history']);
         return (Self::load_view_for_members("member.redeem_history",$data));
     }
     public function getCodevault()

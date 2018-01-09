@@ -48,7 +48,7 @@
 				@foreach($redeem_history as $history)
 				<tr>
 					<td class="text-left">{{ $history->date_created }}</td>
-					<td class="text-left">{{ $history-> }}</td>
+					<td class="text-left">{{ $history->slot_no }}</td>
 					<td class="text-left"><b>{{ $history->log }}</b></td>
 					<td class="text-center"> {{ $history->log_type }} </td>
 				</tr>

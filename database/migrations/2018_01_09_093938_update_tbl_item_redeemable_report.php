@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblItemRedeemablePoints0108180546pm extends Migration
+class UpdateTblItemRedeemableReport extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class UpdateTblItemRedeemablePoints0108180546pm extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_item_redeemable_points', function (Blueprint $table) {
+        Schema::table('tbl_item_redeemable_report', function (Blueprint $table) {
             $table->integer('slot_owner');
         });
     }
@@ -25,7 +25,7 @@ class UpdateTblItemRedeemablePoints0108180546pm extends Migration
      */
     public function down()
     {
-        Schema::table('tbl_item_redeemable_points', function (Blueprint $table) {
+        Schema::table('tbl_item_redeemable_report', function (Blueprint $table) {
             //
         });
     }

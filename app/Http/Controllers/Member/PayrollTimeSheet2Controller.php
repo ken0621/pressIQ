@@ -668,7 +668,8 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		$day_type	= 'not_holiday';
 		$company_id	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_company_id');
-		$holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
+		// $holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
+		$holiday	= Tbl_payroll_holiday_company::getholidayv2($employee_id, $date)->first();
 		
 		if($holiday != null)
 		{

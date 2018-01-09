@@ -732,8 +732,10 @@ class ShopMemberController extends Shop
     }
     public function manage_user()
     {
+        // dd(session("edit_user"));
         $data['_user'] = Tbl_pressiq_user::where('user_level',2)->get();
         $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
+        
 
         if(Session::exists('user_email'))
         {
@@ -752,6 +754,25 @@ class ShopMemberController extends Shop
         {
             return Redirect::to("/"); 
         }
+    }
+    public function pressadmin_manage_user_edit()
+    {
+        DB::table('tbl_pressiq_user')
+                        ->where('user_id', session('edit_user'))
+                        ->update([
+                            'user_first_name'     =>request('first_name'),
+                            'user_last_name'      =>request('last_name'),
+                            'user_email'          =>request('email'),
+                            'user_company_name'   =>request('company_name')
+                            ]);
+        Session::forget('edit_user');
+        return Redirect::to("/pressadmin/manage_user");
+    }
+    public function edit_user($id)
+    {
+        Session::put('edit_user',$id);
+        $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
+        return view("press_admin.press_admin_user_edit", $data);
     }
 
     public function pressadmin_email()
@@ -805,17 +826,12 @@ class ShopMemberController extends Shop
     }
     public function pressadmin_email_save(Request $request)
     {   
-        $pr_info["pr_headline"]     =$request->pr_headline;
-        $pr_info["pr_content"]      =$request->pr_content;
-        $pr_info["pr_boiler_content"]=$request->pr_boiler_content;
-
-        
         DB::table('tbl_pressiq_press_releases')
                         ->where('pr_id', session('e_edit'))
                         ->update([
                             'pr_headline'     =>request('pr_headline'),
                             'pr_content'      =>request('pr_content'),
-                            'pr_boiler_content'=>request('pr_boiler_content'),
+                            'pr_boiler_content'=>request('pr_boiler_content')
                             ]);
         Session::forget('e_edit');
         return redirect::to("/pressadmin/email");

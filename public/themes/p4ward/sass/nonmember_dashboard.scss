@@ -114,18 +114,19 @@ $text-dark: #272c2f;
 		
 			.btn-enter-a-code
 			{
-				@include transition(0.2s);
+				@include transition(0.3s);
 				font-weight: $bold;
-				color: #fff;
+				color: #F4AC00;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
-				border: 2px solid #fff;
+				border: 2px solid #F4AC00;
 				border-radius: 2px;
 				//margin-bottom: 65px;
 
 				&:hover
 				{
 					background-color: #F4AC00;
+					border: 2px solid #fff;
 					color: #fff;
 				}
 			}

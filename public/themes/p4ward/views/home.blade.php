@@ -292,7 +292,7 @@
     </div>
 
     <!-- Network Marketing PDF link-->
-    <div class="wrapper-x" style="background-image: url('/themes/{{ $shop_theme }}/img/pdf-img-bg.jpg')">
+    <div class="wrapper-x" style="background-image: url('/themes/{{ $shop_theme }}/img/pdf-img-bg2.jpg')">
         <div class="container">
             <div class="wrapper-x-title wow fadeInDown" data-wow-delay = ".2s">Network Marketing Without Recruitment</div>
 
@@ -372,6 +372,7 @@
 @section("script")
 
 <script type="text/javascript">
+
     $(document).ready(function()
     {
         $('.single-item').slick
@@ -389,9 +390,9 @@
         });
 
     });
+    
 </script>
 
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
-
 
 @endsection

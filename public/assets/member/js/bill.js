@@ -314,7 +314,7 @@ function bill()
 		$(".discount-total").html(action_add_comma(discount_total.toFixed(2)));
 		$(".tax-total").html(action_add_comma(tax.toFixed(2)));
 		$(".total-amount").html(action_add_comma((subtotal + acct_amount).toFixed(2)));
-		$(".total-amount-input").val(subtotal.toFixed(2));
+		$(".total-amount-input").val((subtotal + acct_amount).toFixed(2));
 
 	}
 

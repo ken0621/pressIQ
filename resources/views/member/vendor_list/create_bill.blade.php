@@ -103,7 +103,7 @@
                                     </div>
                                 </div>
                                 
-                               <div class="row clearfix">
+                                <div class="row clearfix">
                                     <div class="title">
                                         <h3><a id="acct-a"> <i class="fa fa-caret-down"></i>  Account Details </a></h3>
                                     </div>
@@ -121,7 +121,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody class="draggable tbody-acct">
-                                                    @if(count($_bill_account_line) > 0)
+                                                    @if(isset($_bill_account_line))
                                                         @foreach($_bill_account_line as $accline)
                                                         <tr class="tr-draggable">
                                                             <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>

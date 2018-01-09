@@ -419,6 +419,33 @@ class Accounting
 					case "purchase-order": // NON-POSTING
 						break;
 					case "write-check":
+						if(isset($item->item_type_id)) // INVENTORY TYPE
+						{
+							if($item->item_type_id == 1)
+							{
+								/* ASSET ACCOUNT */
+								$line_data["entry_amount"]	= $entry_line["entry_amount"];
+								$line_data["entry_type"] 	= Accounting::normalBalance($account_asset);
+								$line_data["account_id"] 	= $account_asset;
+								Accounting::insertJournalLine($line_data);								
+							}
+							else
+							{
+								/* EXPENSE ACCOUNT */
+								$line_data["entry_amount"]	= $entry_line["entry_amount"];
+								$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
+								$line_data["account_id"] 	= $account_expense;
+								Accounting::insertJournalLine($line_data);
+							}
+						}
+						else
+						{
+							/* EXPENSE ACCOUNT */
+							$line_data["entry_amount"]	= $entry_line["entry_amount"];
+							$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
+							$line_data["account_id"] 	= $account->account_id;
+							Accounting::insertJournalLine($line_data);							
+						}
 						break;
 					case "bill":
 						if(isset($item->item_type_id)) // INVENTORY TYPE

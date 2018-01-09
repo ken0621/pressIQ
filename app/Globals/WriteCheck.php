@@ -12,6 +12,7 @@ use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_write_check_line;
+use App\Models\Tbl_write_check_account_line;
 use App\Models\Tbl_write_check;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_pay_bill;
@@ -32,7 +33,7 @@ class WriteCheck
     {
     	return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
-	 public static function postWriteCheck($customer_vendor_info, $wc_info, $wc_other_info, $item_info, $total_info)
+	 public static function postWriteCheck($customer_vendor_info, $wc_info, $wc_other_info, $item_info, $total_info, $account_info = array())
     {
     	$insert['wc_shop_id']             = WriteCheck::getShopId();    
     	$insert['wc_cash_account']		  = 0;    
@@ -44,9 +45,9 @@ class WriteCheck
         $insert['wc_payment_date']        = $wc_info['wc_payment_date'];
 
         $insert['wc_memo']                = $wc_other_info['wc_memo'];
-        $insert['wc_total_amount']        = collect($item_info)->sum('itemline_amount');
+        $insert['wc_total_amount']        = collect($item_info)->sum('itemline_amount') + collect($account_info)->sum('account_amount');
         $insert['wc_is_paid']             = 1;
-        $insert['wc_applied_payment']     = collect($item_info)->sum('itemline_amount');
+        $insert['wc_applied_payment']     = collect($item_info)->sum('itemline_amount') + collect($account_info)->sum('account_amount');
         $insert['date_created']           = Carbon::now();
         
         $wc_id = Tbl_write_check::insertGetId($insert);
@@ -56,7 +57,7 @@ class WriteCheck
         $entry["reference_id"]      = $wc_id;
         $entry["name_id"]           = $customer_vendor_info['wc_reference_id'];
         $entry["name_reference"]    = $customer_vendor_info['wc_reference_name'];
-        $entry["total"]             = collect($item_info)->sum('itemline_amount');
+        $entry["total"]             = $insert['wc_total_amount'];
         $entry["vatable"]           = '';
         $entry["discount"]          = '';
         $entry["ewt"]               = '';
@@ -65,7 +66,7 @@ class WriteCheck
         $wc_data = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
         AuditTrail::record_logs("Added","write_check",$wc_id,"",serialize($wc_data));
 
-        WriteCheck::insert_wc_line($wc_id, $item_info, $entry);
+        WriteCheck::insert_wc_line($wc_id, $item_info, $entry, $account_info);
 
         return $wc_id;
 
@@ -193,7 +194,7 @@ class WriteCheck
 
         }
     }
-    public static function updateWriteCheck($wc_id, $customer_vendor_info, $wc_info, $wc_other_info, $item_info, $total_info)
+    public static function updateWriteCheck($wc_id, $customer_vendor_info, $wc_info, $wc_other_info, $item_info, $total_info, $account_info = array())
     {
         $old = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
 
@@ -204,7 +205,7 @@ class WriteCheck
         $update['wc_mailing_address']         = $customer_vendor_info['wc_mailing_address'];
         $update['wc_payment_date']            = $wc_info['wc_payment_date'];
         $update['wc_memo']                    = $wc_other_info['wc_memo'];
-        $update['wc_total_amount']            = collect($item_info)->sum('itemline_amount');
+        $update['wc_total_amount']            = collect($item_info)->sum('itemline_amount') + collect($account_info->sum('account_amount'));
 
         Tbl_write_check::where("wc_id", $wc_id)->update($update);
 
@@ -213,13 +214,14 @@ class WriteCheck
         $entry["reference_id"]      = $wc_id;
         $entry["name_id"]           = $customer_vendor_info['wc_reference_id'];
         $entry["name_reference"]    = $customer_vendor_info['wc_reference_name'];
-        $entry["total"]             = collect($item_info)->sum('itemline_amount');
+        $entry["total"]             = $update['wc_total_amount'];
         $entry["vatable"]           = '';
         $entry["discount"]          = '';
         $entry["ewt"]               = '';
 
         Tbl_write_check_line::where("wcline_wc_id", $wc_id)->delete();
-        WriteCheck::insert_wc_line($wc_id, $item_info);
+        Tbl_write_check_account_line::where("accline_wc_id", $wc_id)->delete();
+        WriteCheck::insert_wc_line($wc_id, $item_info, $account_info);
 
         
         $new = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
@@ -245,8 +247,26 @@ class WriteCheck
         }
 
     }
-    public static function insert_wc_line($wc_id, $item_info, $entry)
+    public static function insert_wc_line($wc_id, $item_info, $entry, $account_info = array())
     {
+        foreach ($account_info as $key_acct => $value) 
+        {
+            if($value['account_id'])
+            {
+                $insert_acc['accline_wc_id'] = $wc_id;
+                $insert_acc['accline_coa_id'] = $value['account_id'];
+                $insert_acc['accline_description'] = $value['account_desc'];
+                $insert_acc['accline_amount'] = $value['account_amount'];
+
+                Tbl_write_check_account_line::insert($insert_acc);
+
+                $entry_data['a'.$key_acct]['account_id'] = $value['account_id'];
+                $entry_data['a'.$key_acct]['vatable'] = 0;
+                $entry_data['a'.$key_acct]['discount'] = 0;
+                $entry_data['a'.$key_acct]['entry_amount'] = $value['account_amount'];
+                $entry_data['a'.$key_acct]['entry_description'] = $value['account_desc'];
+            }
+        }
     	foreach($item_info as $key => $item_line)
         {
             if($item_line)

@@ -736,9 +736,7 @@ class ShopMemberController extends Shop
         $data['_user'] = Tbl_pressiq_user::where('user_level',2)->get();
         $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
         
-
-        $data['_edit'] = Tbl_pressiq_user::where('user_id',session('u_edit'))
-                        ->get();
+        $data['_edit'] = Tbl_pressiq_user::where('user_id',session('u_edit'))->get();
         
 
         if(Session::exists('user_email'))

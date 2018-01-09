@@ -37,10 +37,7 @@
                             </tr>
                             @endforeach
                       </table>
-                      
-
             </div>
-
             <div id="admin_account" class="tabcontent add-media-container">
                 <label>ADMIN ACCOUNT</label>
                   <table  class="table table-bordered" id="showHere_table">

@@ -35,7 +35,7 @@
         <div class="col-md-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search-employee-name" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
+                <input type="text" class="form-control search-keyword" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
             </div>
         </div>
     </div>
@@ -44,47 +44,8 @@
             <div class="form-group order-tags"></div>
             <div class="clearfix">
                 <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-condensed">
-                            <thead>
-                                <tr>
-                                    <th>VENDORNAME</th>
-                                    <th class="text-center" width="400px">PO NUMBER</th>
-                                    <th class="text-center" width="400px">DATE</th>
-                                    <th class="text-center" width="400px">TOTAL PRICE</th>
-
-                                    <th class="text-center" width="150px"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if(count($_po)>0)
-                                    @foreach($_po as $po)
-                                    <tr>
-                                        <td>{{ $po->vendor_company }}<br>
-                                            <small>{{ $po->vendor_title_name.' '.$po->vendor_first_name.' '.$po->vendor_middle_name.' '.$po->vendor_last_name.' '.$po->vendor_suffix_name }}</small>
-                                        </td>
-                                        <td class="text-center">{{ $po->transaction_refnum == ''? $po->po_id : $po->transaction_refnum}}</td>
-                                        <td class="text-center">{{ date('m-d-Y', strtotime($po->date_created)) }}</td>
-                                        <td class="text-center">{{ currency('PHP',$po->po_overall_price) }}</td>
-                                        <td class="text-center">
-                                            <div class="btn-group text-center">
-                                              <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Action <span class="caret"></span>
-                                              </button>
-                                              <ul class="dropdown-menu dropdown-menu-custom">
-                                                <li>
-                                                    <a link="" class="popup" size="lg">Print</a>
-                                                </li>
-                                              </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                @else
-                                <tr>'No Transaction'</tr>
-                                @endif
-                            </tbody>
-                        </table>
+                    <div class="table-responsive load-item-table">
+                        <div class="text-center">LOADING TRANSACTION...</div>
                     </div>
                 </div>
             </div>
@@ -92,4 +53,8 @@
     </div>
 </div>
 </div>
+@endsection
+
+@section('script')
+<script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/po.js"></script>
 @endsection

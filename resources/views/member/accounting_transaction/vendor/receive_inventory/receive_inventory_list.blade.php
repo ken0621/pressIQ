@@ -19,9 +19,9 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray "  style="margin-bottom: -10px;">
     <ul class="nav nav-tabs">
-        <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Open</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-times"></i> Close</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-trash"></i> All</a></li>
+        <!-- <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Open</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-times"></i> Close</a></li> -->
+        <li class="cursor-pointer change-tab all-tab" mode="all"><a class="cursor-pointer"><i class="fa fa-list"></i> All</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">

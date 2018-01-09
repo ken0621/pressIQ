@@ -28,9 +28,9 @@
                                <td>{{$_user_account->user_email}}</td>
                                 <td>{{$_user_account->user_company_name}}</td>
                                <td>
-                                <a href="/pressadmin/edit_user/{{$_user_account->user_id}}'"><button type="button"  class="">
+                                <a href="/pressadmin/edit_user/{{$_user_account->user_id}}'"><button type="button"  class="btn btn-warning center">
                                 <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
-                                <a href=""><button type="button"  class="">
+                                <a href=""><button type="button"  class="btn btn-success center">
                                 <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Force Login</button>
                                 
                                </td>
@@ -54,10 +54,10 @@
                            <td>{{$_admin_account->user_last_name}}</td>
                            <td>{{$_admin_account->user_email}}</td>
                            <td>
-                            <a href="/pressadmin/manage_user/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="">
+                            <a href="/pressadmin/manage_user/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-warning center">
                             <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
 
-                            <a href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="">
+                            <a href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-danger center">
                             <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button>
                            </td>
                         </tr>
@@ -112,7 +112,7 @@
 
 @endsection
 
-@section("css")
+@section("css") 
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_admin_manage_user.css">
 @endsection
 

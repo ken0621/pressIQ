@@ -44,7 +44,7 @@
                     <center>Import Excel File</center>
                     <div class="col-md-12">
                         <label>Excel File</label>
-                        <input id="basic-input" type="file"  class="form-control" name="excel_file" required="">
+                        <input id="basic-input" type="file"  class="form-control" name="excel_file">
                         <hr>
                         <button onclick="return false" class="btn btn-primary popup pull-right" size='md' link="/member/merchant/commission-report-pass"><i class="fa fa-upload"></i> Import File</button>
                     </div>

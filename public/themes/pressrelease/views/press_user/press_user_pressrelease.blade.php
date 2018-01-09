@@ -27,7 +27,7 @@
                     @if(session()->has("pr_edit"))
                       @foreach($edit as $edits)
                   <div class="title">Type:</div>
-                   <select name="pr_type" id="pr_type">
+                   <select name="pr_type" id="pr_type" style="width: 80% !important;">
                      <option>--Select option--</option>
                      @if($edits->pr_type=="Media Release")
                      <option selected value="Media Release">Media Release</option>
@@ -106,7 +106,7 @@
                     @endforeach
                       @else
                   <div class="title">Type:</div>
-                   <select name="pr_type" id="pr_type" class="form-control">
+                   <select name="pr_type" id="pr_type" class="form-control" style="width: 80% !important;">
                      <option>--Select option--</option>
                      <option value="Media Release">Media Release</option>
                      <option value="Press Release">Press Release</option>

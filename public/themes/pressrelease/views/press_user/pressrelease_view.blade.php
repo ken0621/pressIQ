@@ -9,7 +9,7 @@
 				<div class="details-container"><p>{!! str_replace('../', '/', $prs->pr_content); !!}</p></div>
 				<div class="border"></div>
 				<div class="title-about-container"><p>About {{$prs->pr_co_name}}</p></div>
-				<div class="details-container">{!!$prs->pr_boiler_content!!}</div>
+				<div class="details-container">{!! str_replace('../', '/', $prs->pr_boiler_content); !!}</div>
 				@endforeach
 			</div>
 		</div>

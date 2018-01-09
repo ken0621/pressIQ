@@ -73,7 +73,18 @@ function submit_done(data)
         $("#global_modal").modal("toggle");
     }
 }
+function success_vendor(data)
+{
+    if(data.status == 'success')
+    {
+        toastr.success("success");
+        location.reload();
+        // $(".load-vendor-data").load("/member/vendor/list .load-vendor");
+        // load_vendor_data();
+        $("#global_modal").modal("toggle");
+    }
 
+}
 function load_vendor_data()
 {
     $.ajax(

@@ -379,13 +379,12 @@ function credit_memo(){
 		// 	$parent.find(".txt-rate").attr("readonly",true);
 		// 	$parent.find(".txt-discount").attr("disabled","disabled");
 		// }
-
-		$parent.find(".txt-qty").attr("disabled",true);
 		if($this.find("option:selected").attr("has-um") != '')
 		{		
-			$parent.find(".txt-qty").removeAttr("disabled");	
+			$parent.find(".txt-qty").attr("disabled",true);
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
+			$parent.find(".txt-qty").removeAttr("disabled");	
 				$(this).globalDropList("reload").globalDropList("enabled");
 				$(this).val($(this).find("option:first").val()).change();
 			})

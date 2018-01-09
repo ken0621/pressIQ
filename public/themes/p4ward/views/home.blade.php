@@ -294,9 +294,9 @@
     <!-- Network Marketing PDF link-->
     <div class="wrapper-x" style="background-image: url('/themes/{{ $shop_theme }}/img/pdf-img-bg.jpg')">
         <div class="container">
-            <div class="wrapper-x-title">Network Marketing Without Recruitment</div>
+            <div class="wrapper-x-title wow fadeInDown" data-wow-delay = ".2s">Network Marketing Without Recruitment</div>
 
-            <div class="btn-container">
+            <div class="btn-container wow fadeInDown" data-wow-delay = ".4s">
                 <a href="https://drive.google.com/file/d/0B9TqTDu5OK_3V0NFUlRTRUhFVm1PYzZob091RmhaanlpTFkw/view" target="_blank"><button>Read More &raquo;</button></a>
             </div>
 

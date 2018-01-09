@@ -350,7 +350,10 @@
                         <div class="desc">Subscribe to brown&proud Newsletter</div>
                         <input class="form-control" type="form-control" name="" placeholder="Your Email Address">
                         <div class="app">
-                            <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/download-app.png">
+                            {{-- <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/download-app.png"> --}}
+                            <span style="font-size: 13px; letter-spacing: 0.5px;">Pinoy app download:</span>
+                            <div style="padding-bottom: 10px;"></div>
+                            <a href="https://drive.google.com/open?id=1raTanxiFVrqhqHtizL9RUq7fWi-786OZ" target="_blank"><img class="img-responsive" src="/themes/{{ $shop_theme }}/img/download-app2.png"></a>
                         </div>
                     </div>
                 </div>

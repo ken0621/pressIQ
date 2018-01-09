@@ -44,8 +44,8 @@
 	<!-- INTRODUCING BROWN -->
 	<div class="wrapper-2">
 		<div class="container">
-			<div class="title-container wow fadeInLeft"><span class="text-1">BROWN</span>&nbsp;<span class="text-2">PRODUCTS</span></div>
-			<div class="single-slide">
+			<div class="title-container wow fadeInDown"><span class="text-1">BROWN</span>&nbsp;<span class="text-2">PRODUCTS</span></div>
+			<div class="single-slide wow fadeInLeft">
 				<div class="per-slide-container row clearfix">
 					<div class="col-md-6">
 						<div class="bp-container">
@@ -150,7 +150,7 @@
 				@if(count($_event) > 0)
 				@foreach($_event as $event)
 				<div class="col-md-6 col-xs-12">
-					<div class="per-event row clearfix">
+					<div class="per-event row clearfix wow fadeInRight">
 						<div class="col-md-4">
 							<div class="event-img-container wow fadeInUp" data-wow-delay="0.2s">
 								<a href="javascript:" class="popup" size="lg" link="/events/view_details?id={{$event->event_id}}"><img src="{{$event->event_thumbnail_image}}"></a>
@@ -171,7 +171,7 @@
 				</div>
 				@endforeach
 				@else
-				<p class="no-event">Events are coming soon! See you there...</p>
+				<p class="no-event" style="padding-left: 10px;">Events are coming soon! See you there...</p>
 				@endif
 			</div>
 		</div>

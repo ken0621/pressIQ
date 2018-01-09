@@ -734,8 +734,12 @@ class ShopMemberController extends Shop
     }
     public function manage_user()
     {
+        // dd(session("edit_user"));
         $data['_user'] = Tbl_pressiq_user::where('user_level',2)->get();
         $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
+        
+        $data['_edit'] = Tbl_pressiq_user::where('user_id',session('u_edit'))->get();
+        
 
         if(Session::exists('user_email'))
         {
@@ -756,6 +760,66 @@ class ShopMemberController extends Shop
         }
     }
 
+    public function manage_user_add_admin(Request $request)
+    {
+      $data["user_first_name"]                 = $request->user_first_name;
+      $data["user_last_name"]                  = $request->user_last_name;
+      $data["user_email"]                      = $request->user_email;
+      $data["user_password"]                   = Crypt::encrypt(request('user_password'));
+      $data["user_level"]                      = "1";
+        if(session::has('u_edit'))
+        {
+            DB::table('tbl_pressiq_user')
+                        ->where('user_id', session('u_edit'))
+                        ->update([
+                            'user_first_name'             =>$data["user_first_name"],
+                            'user_last_name'              =>$data["user_last_name"],
+                            'user_email'                  =>$data["user_email"],
+                            'user_password'               =>Crypt::encrypt(request('user_password'))
+                            ]);
+            Session::flash('success_merchant', 'Recipient Successfully Updated!');
+        }
+        else
+        {
+            Tbl_pressiq_user::insert($data);
+            Session::flash('success_merchant', 'Recipient Successfully Added!');
+        }
+      return  redirect::back();
+    }
+
+    public function manage_user_edit_admin($id)
+    {
+       Session::put('u_edit',$id);
+       return redirect::back();
+   }
+
+    public function pressadmin_manage_user_edit()
+    {
+        DB::table('tbl_pressiq_user')
+                        ->where('user_id', session('edit_user'))
+                        ->update([
+                            'user_first_name'     =>request('first_name'),
+                            'user_last_name'      =>request('last_name'),
+                            'user_email'          =>request('email'),
+                            'user_company_name'   =>request('company_name')
+                            ]);
+        Session::forget('edit_user');
+        return Redirect::to("/pressadmin/manage_user");
+    }
+    public function edit_user($id)
+    {
+        Session::put('edit_user',$id);
+        $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
+        return view("press_admin.press_admin_user_edit", $data);
+    }
+
+    public function manage_user_delete_admin($id)
+    {
+      Tbl_pressiq_user::where('user_id',$id)->delete();
+      Session::flash('delete', "Recipient Already Deleted!");
+      return  redirect::back();
+    }
+   
     public function pressadmin_email()
     {   
 
@@ -807,17 +871,12 @@ class ShopMemberController extends Shop
     }
     public function pressadmin_email_save(Request $request)
     {   
-        $pr_info["pr_headline"]     =$request->pr_headline;
-        $pr_info["pr_content"]      =$request->pr_content;
-        $pr_info["pr_boiler_content"]=$request->pr_boiler_content;
-
-        
         DB::table('tbl_pressiq_press_releases')
                         ->where('pr_id', session('e_edit'))
                         ->update([
                             'pr_headline'     =>request('pr_headline'),
                             'pr_content'      =>request('pr_content'),
-                            'pr_boiler_content'=>request('pr_boiler_content'),
+                            'pr_boiler_content'=>request('pr_boiler_content')
                             ]);
         Session::forget('e_edit');
         return redirect::to("/pressadmin/email");

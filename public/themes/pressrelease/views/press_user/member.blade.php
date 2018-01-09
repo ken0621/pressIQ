@@ -6,7 +6,7 @@
 
 	<div class="background-container" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner.jpg')">
 		<div class="container">
-    		<div class="row clearfix row-no-padding">
+    		{{-- <div class="row clearfix row-no-padding">
     			<div class="col-md-12">
     				<div class="press-member">
 						<ul class="nav nav-tabs">
@@ -20,7 +20,18 @@
 						</div>
     				</div>
     			</div>
+    		</div> --}}
+    		<div id='cssmenu'>
+	    		<ul>
+	    		   <li class="{{ Request::segment(2) == "dashboard" ? "active" : "" }}"><a href="/pressuser/dashboard">Dashboard</a></li>
+				   <li class="{{ Request::segment(2) == "pressrelease" ? "active" : "" }}"><a href="/pressuser/pressrelease">Press Release</a></li><!-- Add link -->
+				   <li class="{{ Request::segment(2) == "mypressrelease" ? "active" : "" }}"><a href="/pressuser/mypressrelease">My Press Releases</a></li><!-- add link -->
+				   <li class="{{ Request::segment(2) == "drafts" ? "active" : "" }}"><a href="/pressuser/drafts">Drafts</a></li><!-- add link -->
+				</ul>
     		</div>
+    		<div class="tab-content">
+				@yield("pressview")
+			</div>
 		</div>
 	</div>
 </div>
@@ -34,7 +45,11 @@
 @section("script")
 
 <script type="text/javascript">
-
+	( function( $ ) {
+	$( document ).ready(function() {
+	$('#cssmenu').prepend('<div id="bg-one"></div><div id="bg-two"></div><div id="bg-three"></div><div id="bg-four"></div>');
+	});
+	} )( jQuery );
 </script>
 
 @endsection

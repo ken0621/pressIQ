@@ -21,27 +21,34 @@
 				{
 				   padding: 20px 0px;
 				}
-
 				input
 				{
-					font-size: 15px;
-					vertical-align: middle;
-					border: 1px solid #e1e1e1;
-					padding: 10px;
-					vertical-align: middle;
-					min-width: 50%;
-					@media screen and (max-width: 425px)
-					{
-					   min-width: 86%;
-					}
+				    padding: 10px;
+				    font-size: 15px;
+				    border: 1px solid #ededed;
+				    float: left;
+				    width: 160px;
+				    background: #f1f1f1;
+				    vertical-align: middle;
+				    -webkit-transition: width 0.4s ease-in-out;
+				    transition: width 0.4s ease-in-out;
 				}
-				i
+				input:focus
 				{
-					color: #fff;
-					background-color: #c51f33;
-					font-size: 32px;
-					vertical-align: middle;
-					padding: 5px;
+					width: 50%;
+				}
+				button 
+				{
+				    float: left;
+				    width: 10%;
+				    padding: 10px;
+				    background-color: #c51f33;
+				    color: white;
+				    font-size: 15px;
+				    border: 1px solid #e1e1e1;
+				    border-left: none;
+				    cursor: pointer;
+				    vertical-align: middle;
 				}
 			}
 			.main-container

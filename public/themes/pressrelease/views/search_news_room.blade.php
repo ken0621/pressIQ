@@ -4,8 +4,7 @@
         <div class="col-md-12">
             <div class="search-container"  >
                 <input type="text" placeholder="Search News" name="search_newsroom" id="search_newsroom">
-                <span>
-                <i  type="button"  class="fa fa-search" id="search_newsroom_btn" name="search_newsroom_btn" aria-hidden="true" her></i></span> 
+                <button type="button" id="search_newsroom_btn" name="search_newsroom_btn" aria-hidden="true" her><i class="fa fa-search"></i></button>
             </div>
         </div>
     </div>

@@ -28,6 +28,35 @@ class TransactionReceiveInventory
         return $count;
 	}
     
+    public static function get($shop_id, $paginate = null, $search_keyword = null)
+    {
+        $data = Tbl_receive_inventory::vendor()->where('ri_shop_id', $shop_id);
+
+        if($search_keyword)
+        {
+            $data->where(function($q) use ($search_keyword)
+            {   
+                $q->orWhere("vendor_company", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_last_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("ri_id", "LIKE", "%$search_keyword%");
+                $q->orWhere("ri_total_amount", "LIKE", "%$search_keyword%");
+            });
+        }
+
+        if($paginate)
+        {
+            $data = $data->paginate($paginate);
+        }
+        else
+        {
+            $data = $data->get();
+        }
+
+        return $data;
+    }
 	public static function postInsert($shop_id, $insert, $insert_item)
 	{
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);

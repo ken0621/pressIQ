@@ -45,11 +45,13 @@ class TransactionWriteCheckController extends Member
     public function getIndex()
     {
         $data['page'] = 'Write Check';
-        $data['_wc']  = TransactionWriteCheck::getAllWC($this->user_info->shop_id);
-        
         return view('member.accounting_transaction.vendor.write_check.write_check_list', $data);
     }
-
+    public function getLoadWriteCheck(Request $request)
+    {
+        $data['_write_check']  = TransactionWriteCheck::get($this->user_info->shop_id, 10, $request->search_keyword);
+        return view('member.accounting_transaction.vendor.write_check.write_check_table', $data);
+    }
     public function getCreate()
     {
         $data['page'] = 'Create Write Check';

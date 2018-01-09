@@ -19,9 +19,9 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray "  style="margin-bottom: -10px;">
     <ul class="nav nav-tabs">
-        <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Open</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-times"></i> Close</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-trash"></i> All</a></li>
+        <li class="active change-tab cursor-pointer open-tab" mode="open"><a class="cursor-pointer"><i class="fa fa-folder-open-o"></i> Open</a></li>
+        <li class="cursor-pointer change-tab closed-tab" mode="closed"><a class="cursor-pointer"><i class="fa fa-folder-o"></i> Close</a></li>
+        <li class="cursor-pointer change-tab all-tab" mode="all"><a class="cursor-pointer"><i class="fa fa-list"></i> All</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">
@@ -35,7 +35,7 @@
         <div class="col-md-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search-employee-name" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
+                <input type="text" class="form-control search-keyword" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
             </div>
         </div>
     </div>
@@ -44,46 +44,8 @@
             <div class="form-group order-tags"></div>
             <div class="clearfix">
                 <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-condensed">
-                            <thead>
-                                <tr>
-                                    <th>VENDORNAME</th>
-                                    <th class="text-center" width="250px">DM NUMBER</th>
-                                    <th class="text-center" width="300px">DATE</th>
-                                    <th class="text-center" width="300px">TOTAL PRICE</th>
-                                    <th class="text-center" width="150px"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if(count($_dm) > 0)
-                                    @foreach($_dm as $dm)
-                                    <tr>
-                                        <td>{{ $dm->vendor_company }}<br>
-                                            <small>{{ $dm->vendor_title_name.' '.$dm->vendor_first_name.' '.$dm->vendor_middle_name.' '.$dm->vendor_last_name.' '.$dm->vendor_suffix_name }}</small>
-                                        </td>
-                                        <td class="text-center">{{ $dm->transaction_refnum == ''? $dm->db_id : $dm->transaction_refnum }}</td>
-                                        <td class="text-center">{{ date('m-d-Y', strtotime($dm->date_created)) }}</td>
-                                        <td class="text-center">{{ currency('PHP',$dm->db_amount) }}</td>
-                                        <td class="text-center">
-                                            <div class="btn-group">
-                                              <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Action <span class="caret"></span>
-                                              </button>
-                                              <ul class="dropdown-menu dropdown-menu-custom">
-                                                <li>
-                                                    <a link="" class="popup" size="lg">Print</a>
-                                                </li>
-                                              </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                @else
-                                    <tr>NO TRANSACTION</tr>
-                                @endif
-                            </tbody>
-                        </table>
+                    <div class="table-responsive load-item-table">
+                        <div class="text-center">LOADING TRANSACTION...</div>
                     </div>
                 </div>
             </div>
@@ -91,4 +53,8 @@
     </div>
 </div>
 </div>
+@endsection
+
+@section('script')
+<script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/dm_list.js"></script>
 @endsection

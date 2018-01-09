@@ -2,18 +2,6 @@
 namespace App\Http\Controllers\Member;
 use Illuminate\Http\Request;
 
-use App\Models\Tbl_customer;
-use App\Models\Tbl_credit_memo;
-use App\Models\Tbl_credit_memo_line;
-use App\Models\Tbl_debit_memo;
-use App\Models\Tbl_item;
-use App\Models\Tbl_item_bundle;
-use App\Models\Tbl_debit_memo_line;
-use App\Models\Tbl_warehouse_inventory;
-use App\Models\Tbl_unit_measurement_multi;
-use App\Models\Tbl_user;
-use App\Models\Tbl_debit_memo_replace_line;
-
 use App\Globals\AccountingTransaction;
 use App\Globals\TransactionDebitMemo;
 use App\Globals\TransactionPurchaseOrder;
@@ -29,14 +17,18 @@ use App\Globals\Purchasing_inventory_system;
 use App\Globals\ItemSerial;
 use App\Http\Controllers\Controller;
 
+
 class TransactionDebitMemoController extends Member
 {
     public function getIndex()
     {
         $data['page'] = 'Debit Memo';
-        $data['_dm']  = TransactionDebitMemo::getAllDM($this->user_info->shop_id);
-        //dd($data['_dm']);
         return view('member.accounting_transaction.vendor.debit_memo.debit_memo_list', $data);
+    }
+    public function getLoadDebitMemo(Request $request)
+    {
+        $data['_debit_memo']  = TransactionDebitMemo::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
+        return view('member.accounting_transaction.vendor.debit_memo.debit_memo_table', $data);
     }
     public function getCreate()
     {

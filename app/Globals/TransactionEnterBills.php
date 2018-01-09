@@ -20,6 +20,50 @@ class TransactionEnterBills
 	{
 		return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed',0)->count();
 	}
+    public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
+    {
+        $data = Tbl_bill::vendor()->where('bill_shop_id', $shop_id);
+       
+        if($search_keyword)
+        {
+            $data->where(function($q) use ($search_keyword)
+            {   
+                $q->orWhere("vendor_company", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_last_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("bill_id", "LIKE", "%$search_keyword%");
+                $q->orWhere("bill_total_amount", "LIKE", "%$search_keyword%");
+            });
+        }
+
+        if($status != 'all')
+        {
+            $tab = 0;
+            
+            if($status == 'open')
+            {
+                $tab = 0;
+            }
+            if($status == 'closed')
+            {
+                $tab = 1;
+            }
+            $data->where('bill_is_paid',$tab);
+
+        }
+        if($paginate)
+        {
+            $data = $data->paginate($paginate);
+        }
+        else
+        {
+            $data = $data->get();
+        }
+
+        return $data;
+    }
 	public static function postInsert($ri_id, $shop_id, $insert, $insert_item)
 	{
     	$val = AccountingTransaction::vendorValidation($insert, $insert_item);

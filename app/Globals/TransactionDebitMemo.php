@@ -24,9 +24,47 @@ class TransactionDebitMemo
         return Tbl_debit_memo::where('db_shop_id',$shop_id)->where('db_vendor_id', $vendor_id)->get();
     }
 
-    public static function getAllDM($shop_id)
+    public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
     {
-        return Tbl_debit_memo::Vendor()->where('db_shop_id',$shop_id)->get();
+        $data = Tbl_debit_memo::Vendor()->where('db_shop_id',$shop_id);
+
+        if($search_keyword)
+        {
+            $data->where(function($q) use ($search_keyword)
+            {   
+                $q->orWhere("vendor_company", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_last_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("db_id", "LIKE", "%$search_keyword%");
+                $q->orWhere("db_amount", "LIKE", "%$search_keyword%");
+            });
+        }
+        if($status != 'all')
+        {
+            $tab = 0;
+            if($status == 'open')
+            {
+                $tab = 0;
+            }
+            if($status == 'closed')
+            {
+                $tab = 1;
+            }
+            $data->where('db_memo_status',$tab);
+        }
+
+        if($paginate)
+        {
+            $data = $data->paginate($paginate);
+        }
+        else
+        {
+            $data = $data->get();
+        }
+
+        return $data;
     }
 
     public static function countTransaction($shop_id)
@@ -41,7 +79,6 @@ class TransactionDebitMemo
     public static function postInsert($shop_id, $insert, $insert_item)
     {
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);
-        //die(var_dump($val));
         if(!$val)
         {
             $ins['db_shop_id']          = $shop_id;
@@ -75,7 +112,6 @@ class TransactionDebitMemo
         {
             $return = $val;
         }  
-        //die(var_dump($return));
         return $return;
 
     }

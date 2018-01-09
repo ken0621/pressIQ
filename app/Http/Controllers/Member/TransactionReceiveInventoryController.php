@@ -43,9 +43,14 @@ class TransactionReceiveInventoryController extends Member
     public function getIndex()
     {
         $data['page'] = 'Receive Inventory';
-        $data['_ri']  = Tbl_receive_inventory::vendor()->where('ri_shop_id', $this->user_info->shop_id)->get();
-        //dd($data['_ri']);
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory_list', $data);
+    }
+
+    public function getLoadReceiveInventory(Request $request)
+    {
+        $data['_receive_inventory'] = TransactionReceiveInventory::get($this->user_info->shop_id, 10, $request->search_keyword);
+        //dd($data['_receive_inventory']);
+        return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory_table', $data);
     }
 
     public function getCreate()

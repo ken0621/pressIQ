@@ -31,6 +31,7 @@ class TransactionReceivePaymentController extends Member
 	public function getLoadReceivePayment(Request $request)
 	{
 		$data['_receive_payment'] = TransactionEstimateQuotation::get($this->user_info->shop_id, 10, $request->search_keyword);
+		//dd($data['_receive_payment']);
 		return view('member.accounting_transaction.customer.receive_payment.receive_payment_table',$data);		
 	}
 	public function getCreate() 

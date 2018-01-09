@@ -45,11 +45,13 @@ class TransactionEnterBillsController extends Member
     public function getIndex()
     {
         $data['page'] = 'Bills';
-        $data['_eb']  = Tbl_bill::vendor()->where('bill_shop_id', $this->user_info->shop_id)->get();
-        //dd($data['_eb']);
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills_list', $data);
     }
-
+    public function getLoadEnterBills(Request $request)
+    {
+        $data['_enter_bills'] = TransactionEnterBills::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
+        return view('member.accounting_transaction.vendor.enter_bills.enter_bills_table', $data);
+    }
     public function getCreate()
     {
         $data['page'] = 'Create Bills';

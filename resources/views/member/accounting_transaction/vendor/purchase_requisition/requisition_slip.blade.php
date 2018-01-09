@@ -6,9 +6,9 @@
         <div>
             <i class="fa fa-file-o"></i>
             <h1>
-            <span class="page-title">Purchase Requisition</span>
+            <span class="page-title">{{$page or ''}}</span>
             <small>
-            Purchase Request
+            Insert Description Here
             </small>
             </h1>
             <div class="dropdown pull-right">

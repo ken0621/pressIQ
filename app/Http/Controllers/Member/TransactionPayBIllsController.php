@@ -33,11 +33,14 @@ class TransactionPayBillsController extends Member
     public function getIndex()
     {
         $data['page'] = 'Pay Bills';
-        $data['_pb']  = Tbl_pay_bill::vendor()->where("paybill_shop_id",$this->user_info->shop_id)->get();
-        //dd($data['_pb'][0]);
         return view('member.accounting_transaction.vendor.pay_bills.pay_bills_list', $data);
     }
-
+    public function getLoadPayBills(Request $request)
+    {
+        $data['_pay_bills'] = TransactionPayBills::get($this->user_info->shop_id, 10, $request->search_keyword);
+        //dd($data['_pay_bills']);
+        return view('member.accounting_transaction.vendor.pay_bills.pay_bills_table', $data);
+    }
     public function getCreate(Request $request)
     {
         $data['page'] = 'Create Pay Bills';

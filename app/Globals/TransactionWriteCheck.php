@@ -21,7 +21,40 @@ class TransactionWriteCheck
 	{
 		return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed','!=', '0')->count();
 	}
+	public static function get($shop_id, $paginate = null, $search_keyword = null)
+	{
+		$data = Tbl_write_check::vendor()->customer()->where('wc_shop_id', $shop_id);
+		
+		if($search_keyword)
+        {
+            $data->where(function($q) use ($search_keyword)
+            {   
+                $q->orWhere("vendor_company", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_last_name", "LIKE", "%$search_keyword%");
 
+                $q->orWhere("company", "LIKE", "%$search_keyword%");
+                $q->orWhere("first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("last_name", "LIKE", "%$search_keyword%");
+
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("wc_id", "LIKE", "%$search_keyword%");
+                $q->orWhere("wc_total_amount", "LIKE", "%$search_keyword%");
+            });
+        }
+        if($paginate)
+        {
+            $data = $data->paginate($paginate);
+        }
+        else
+        {
+            $data = $data->get();
+        }
+
+        return $data;
+	}
 	public static function getAllWC($shop_id)
 	{
 		$data = Tbl_write_check::where("wc_shop_id", $shop_id)->get();

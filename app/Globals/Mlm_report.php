@@ -1382,6 +1382,11 @@ class Mlm_report
         {
             return $data;
         }
+        // $data['view'] = 'Payout';
+        // if(Request::input('pdf') == 'true')
+        // {
+        //     return $data;
+        // }
         return view('member.mlm_report.report.payout', $data);
     }
 }

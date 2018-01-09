@@ -13,14 +13,14 @@
             </h1>
             <div class="dropdown pull-right">
                 <button onclick="window.open('/member/merchant/commission_report/export')" class="btn btn-def-white btn-custom-white"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
-                <button onclick="action_load_link_to_modal('/member/merchant/commission_report/import', 'md')" class="btn btn-primary"><i class="fa fa-upload"></i> Import File</button>
+                <!-- <button onclick="action_load_link_to_modal('/member/merchant/commission_report/import', 'md')" class="btn btn-primary"><i class="fa fa-upload"></i> Import File</button> -->
             </div>
         </div>
     </div>
 </div>
+    {!! csrf_field() !!}
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-6">
     <div class="tab-content">
-    {!! csrf_field() !!}
         <div id="all-orders" class="tab-pane fade in active">
             <form method="post">
                 <div class="panel-heading">
@@ -29,8 +29,25 @@
                     <label>Commission Percentage</label>
                     <input type="number" min="0" value="{{$percentage}}" class="form-control commission-percentage" name="merchant_commission_percentage">
                     <hr>
-                    <button onclick="return false" class="btn btn-primary popup pull-right" size='md' link="/member/merchant/commission-report-pass">Save</button>
+                    <button onclick="return false" class="btn btn-primary popup pull-right" size='md' link="/member/merchant/commission-report-pass"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>
+                </div>
+            </form>
+        </div>   
+    </div>
+</div>
+<div class="panel panel-default panel-block panel-title-block panel-gray col-md-6">
+    <div class="tab-content">
+        <div id="all-orders" class="tab-pane fade in active">
+            <form method="post">
+                <div class="panel-heading">
+                    <center>Import Excel File</center>
+                    <div class="col-md-12">
+                        <label>Excel File</label>
+                        <input id="basic-input" type="file"  class="form-control" name="excel_file" required="">
+                        <hr>
+                        <button onclick="return false" class="btn btn-primary popup pull-right" size='md' link="/member/merchant/commission-report-pass"><i class="fa fa-upload"></i> Import File</button>
+                    </div>
                 </div>
             </form>
         </div>   

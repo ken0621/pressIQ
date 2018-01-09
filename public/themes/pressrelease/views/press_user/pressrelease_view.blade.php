@@ -23,9 +23,10 @@
 				<div class="header">Other Releases:</div>
 					@foreach($opr as $prs)
 					<div class="title-container"><a href="/pressuser/mypressrelease/pressrelease/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
-					<div class="date-container">{{$prs->pr_date_sent}}</div>
+					<div class="date-container"><span><i class="fa fa-clock-o" aria-hidden="true"></i></span><span>{{$prs->pr_date_sent}}</span></div>
 					<div class="border"></div>
 					@endforeach
+					
 			</div>
 			<div class="press-others-holder" style="display: none;" >
             	{!! $pr->render() !!}

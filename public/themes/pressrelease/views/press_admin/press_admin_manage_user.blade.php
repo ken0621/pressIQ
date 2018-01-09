@@ -17,7 +17,7 @@
                          <tr>
                              <th style="width: 20%;">First Name</th>
                              <th style="width: 20%;">Last Name</th>
-                             <th style="width: 20%;">Username</th>
+                             <th style="width: 20%;">Email</th>
                               <th style="width: 20%;">Company Name</th>
                               <th style="width: 20%;">Action</th>
                          </tr>
@@ -28,6 +28,8 @@
                                <td>{{$_user_account->user_email}}</td>
                                 <td>{{$_user_account->user_company_name}}</td>
                                <td>
+                                <a href="/pressadmin/edit_user/{{$_user_account->user_id}}'"><button type="button"  class="">
+                                <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
                                 <a href=""><button type="button"  class="">
                                 <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Force Login</button>
                                 
@@ -35,27 +37,8 @@
                             </tr>
                             @endforeach
                       </table>
-                    <label>UPDATE USER ACCOUNT</label>
-                      <form method="post" action="">
-                        {{csrf_field()}}
-                        <div class="title">First Name: *</div>
-                        <input type="text" id="name" name="name" class="form-control" required>
+                      
 
-                        <div class="title">Last Name: *</div>
-                        <input type="text"  id="position" name="position" class="form-control" required>
-
-                        <div class="title">Username: *</div>
-                        <input type="text" id="company_name" name="company_name" class="form-control" required>
-
-
-                        <div class="title">Company Name: *</div>
-                        <input type="text" id="country" name="country" class="form-control" required>
-
-                    
-                        <div class="button-container">
-                            <button type="submit" id="submit_button" name="submit_button">Submit</button>
-                        </div>
-                    </form>
             </div>
 
             <div id="admin_account" class="tabcontent add-media-container">
@@ -65,7 +48,7 @@
                          <th style="width: 20%;">First Name</th>
                          <th style="width: 20%;">Last Name</th>
                          <th style="width: 20%;">Username</th>
-                          <th style="width: 20%;">Action</th>
+                         <th style="width: 20%;">Action</th>
                          
                      </tr>
                       @foreach($_admin as $_admin_account)

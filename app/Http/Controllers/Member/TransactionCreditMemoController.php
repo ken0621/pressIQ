@@ -26,10 +26,16 @@ class TransactionCreditMemoController extends Member
 		$data['page'] = "Credit Memo";
 		return view('member.accounting_transaction.customer.credit_memo.credit_memo_list',$data);
 	}
+	public function getLoadCreditMemo(Request $request)
+	{
+		$data['_credit_memo'] = TransactionCreditMemo::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
+		return view('member.accounting_transaction.customer.credit_memo.credit_memo_table',$data);		
+	}
 	public function getCreate()
 	{
 		$data['page'] = "Create Credit Memo";		
         $data["_customer"]  = Customer::getAllCustomer();
+        $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'credit_memo');
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['action']		= "/member/transaction/credit_memo/create-credit-memo";

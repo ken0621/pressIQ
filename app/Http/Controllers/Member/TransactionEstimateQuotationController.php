@@ -35,6 +35,7 @@ class TransactionEstimateQuotationController extends Member
 	{
 		$data['page'] = "Create Estimate and Quotation";		
         $data["_customer"]  = Customer::getAllCustomer();
+        $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'estimate_quotation');
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['action']		= "/member/transaction/estimate_quotation/create-estimate-quotation";

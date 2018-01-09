@@ -5,6 +5,8 @@ use App\Models\Tbl_acctg_transaction_list;
 use App\Models\Tbl_acctg_transaction_item;
 use App\Models\Tbl_transaction_ref_number;
 use App\Models\Tbl_customer_invoice;
+use App\Models\Tbl_credit_memo;
+use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_chart_of_account;
 
 
@@ -180,7 +182,7 @@ class AccountingTransaction
 		foreach ($insert_item as $key => $value) 
 		{
 			/* DISCOUNT PER LINE */
-	        $discount       = $value['item_discount'];
+	        $discount       = isset($value['item_discount']) ? $value['item_discount'] : 0;
 	        $discount_type  = 'fixed';
 	        if(strpos($discount, '%'))
             {
@@ -273,6 +275,18 @@ class AccountingTransaction
 		if($transaction_type == 'sales_receipt')
 		{
 			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('is_sales_receipt',1)->orderBy('inv_id','DESC')->first();
+		}
+		if($transaction_type == 'credit_memo')
+		{
+			$get = Tbl_credit_memo::where('cm_shop_id', $shop_id)->orderBy('cm_id','DESC')->first();
+		}
+		if($transaction_type == 'estimate_quotation')
+		{
+			$get = Tbl_customer_estimate::where('est_shop_id', $shop_id)->where('is_sales_order',0)->orderBy('est_id','DESC')->first();
+		}
+		if($transaction_type == 'sales_order')
+		{
+			$get = Tbl_customer_estimate::where('est_shop_id', $shop_id)->where('is_sales_order',1)->orderBy('est_id','DESC')->first();
 		}
 
 		if($get)

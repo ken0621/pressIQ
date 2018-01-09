@@ -351,7 +351,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_boiler_content"]=request('pr_boiler_content');
         $pr_info["pr_from"]         =session('user_email');
         $pr_info["pr_to"]           =request('pr_to');
-        $pr_info["pr_status"]       ="sent";
+        $pr_info["pr_status"]       ="Sent";
         $pr_info["pr_date_sent"]    =Carbon::now();
         $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
         $pr_info["pr_receiver_name"]=request('pr_receiver_name');
@@ -463,7 +463,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_boiler_content"]=$request->pr_boiler_content;
         $pr_info["pr_from"]         =session('user_email');
         $pr_info["pr_to"]           =$request->pr_to;
-        $pr_info["pr_status"]       ="draft";
+        $pr_info["pr_status"]       ="Draft";
         $pr_info["pr_date_sent"]    =Carbon::now();
         $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
         $pr_info["pr_receiver_name"]=request('pr_receiver_name');
@@ -730,8 +730,11 @@ class ShopMemberController extends Shop
         //     return view("press_admin.press_admin_media_contacts",$data);
         // }
     }
-    public function pressadmin_pressreleases()
+    public function manage_user()
     {
+        $data['_user'] = Tbl_pressiq_user::where('user_level',2)->get();
+        $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
+
         if(Session::exists('user_email'))
         {
            $level=session('pr_user_level');
@@ -742,7 +745,7 @@ class ShopMemberController extends Shop
            else
            {
                 $data["page"] = "Press Release - Press Release";
-                return view("press_admin.press_admin_pressrelease", $data);
+                return view("press_admin.press_admin_manage_user", $data);
            }
         }
         else

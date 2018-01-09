@@ -153,7 +153,7 @@ class PayrollHolidayController extends Member
 
      public function modal_save_holiday()
      {
-          die(var_dump(Request::all()));
+          
           $insert['shop_id']                 = Self::shop_id();
           $insert['payroll_holiday_name']    = Request::input('payroll_holiday_name');
           $insert['payroll_holiday_date']    = date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));

@@ -1,5 +1,5 @@
 
-    <table class="table table-hover table-condensed table-bordered">
+    <table class="table table-condensed table-bordered">
         <thead>
             <tr>
                 <th class="text-left">Company Name</th>

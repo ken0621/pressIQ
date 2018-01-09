@@ -24,8 +24,13 @@
 			table
 			{
 				font-family: arial, sans-serif;
-				border-collapse: collapse;
-				width: 100%;
+                border-collapse: collapse;
+                width: 100%;
+                display:block;
+                height: 600px;
+                overflow-y: scroll;
+                text-align: center;
+                background-color: #fff;
 			}
 
 			th
@@ -39,6 +44,16 @@
 				border: 1px solid #dddddd;
 				text-align: center;
 				padding: 10px;
+				max-width: 213px;
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+			    white-space: nowrap;
+			}
+			button
+			{
+			    display: inline-block;
+			    vertical-align: middle;
+			    width: 75px;
 			}
 		}
 	}

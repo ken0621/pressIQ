@@ -24,9 +24,30 @@
         
                 <div id="create_release" class="tabcontent create-release-container">
                   <div class="title-container">New Release</div>
-                  <div class="title">Title:</div>
                     @if(session()->has("pr_edit"))
                       @foreach($edit as $edits)
+                  <div class="title">Type:</div>
+                   <select name="pr_type" id="pr_type" style="width: 80% !important;">
+                     <option>--Select option--</option>
+                     @if($edits->pr_type=="Media Release")
+                     <option selected value="Media Release">Media Release</option>
+                     <option value="Press Release">Press Release</option>
+                     <option value="Invitation">Invitation</option>
+                     @elseif($edits->pr_type=="Press Release")
+                     <option value="Media Release">Media Release</option>
+                     <option selected value="Press Release">Press Release</option>
+                     <option value="Invitation">Invitation</option>
+                     @elseif($edits->pr_type=="Invitation")
+                     <option value="Media Release">Media Release</option>
+                     <option value="Press Release">Press Release</option>
+                     <option selected value="Invitation">Invitation</option>
+                     @else
+                     <option value="Media Release">Media Release</option>
+                     <option value="Press Release">Press Release</option>
+                     <option value="Invitation">Invitation</option>
+                     @endif
+                   </select> 
+                  <div class="title">Title:</div>
                         <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus value="{{$edits->pr_headline}}">
                   <div class="title">Release Text Body:</div>
                         <textarea name="pr_content" id="pr_content">{!!$edits->pr_content!!}</textarea>
@@ -70,17 +91,28 @@
                           @endforeach
                     </select>
 
-                    <div class="title">Send To:</div>
-                          <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
+                    <div class="title">Send To:
+                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
+                    </div>
+                     
+                    <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
-                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
-                      {{-- POPUP CHOOSE RECIPIENT --}}
 
-                          <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
-                        @endforeach
+                    {{-- POPUP CHOOSE RECIPIENT --}}
+                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue To Send &raquo;</a></button></span>
+                    <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
+                    @endforeach
                       @else
+                  <div class="title">Type:</div>
+                   <select name="pr_type" id="pr_type" class="form-control" style="width: 80% !important;">
+                     <option>--Select option--</option>
+                     <option value="Media Release">Media Release</option>
+                     <option value="Press Release">Press Release</option>
+                     <option value="Invitation">Invitation</option>
+                   </select> 
+                  <div class="title">Title:</div>
                         <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus>
                   <div class="title">Release Text Body:</div>
                         <textarea name="pr_content" id="pr_content"></textarea>
@@ -133,7 +165,6 @@
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue To Send &raquo;</a></button></span>
-
                       <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                       @endif
                     <div class="button-container"></div>
@@ -191,15 +222,7 @@
           <div class="about-title">
             <div>About {{session('user_company_name')}}
               <input type="datetime"  value="<?php echo date("Y-m-d\ H:i:s",time()); ?>"/ style="border: none;" readonly></div>
-             <div>
-               <select  style="border: none;">
-                 <option>--Select option--</option>
-                 <option>Media Release</option>
-                 <option>Press Release</option>
-                 <option>Invitation</option>
-               </select> 
-             
-             </div>
+              <div id="preview_type"></div>
           </div>
           <div id="preview_boiler_content"></div>
             <div>
@@ -250,10 +273,12 @@
   {
     //alert("123");
     var headline = document.getElementById('pr_headline').value;
+    var type = document.getElementById('pr_type').value;
     var content = tinymce.get('pr_content').getContent();
     var boiler_content = tinymce.get('pr_boiler_content').getContent();
     document.getElementById('preview_headline').innerHTML =headline;
     document.getElementById('preview_content').innerHTML =content;
+    document.getElementById('preview_type').innerHTML =type;
     document.getElementById('preview_boiler_content').innerHTML =boiler_content;
     $('#previewPopup').modal('show'); 
   });

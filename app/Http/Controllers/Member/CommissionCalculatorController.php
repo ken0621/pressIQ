@@ -180,10 +180,10 @@ class CommissionCalculatorController extends Member
                                     {
                                         $comm_data = CommissionCalculator::get_actual_computation($data['tsp'], $data['downpayment'], $data['discount'], $data['mon_amort'], $data['misc_fee'], $data['ndp'], $data['tcp'], $sales_rep->commission_percent);
 
-                                        // if($comm_data['amount_tcp'] != $data['amount'])
-                                        // {
-                                        //     $error_message = "The total contract price is not equal on the Amount";
-                                        // }
+                                        if($comm_data['amount_tcp'] != $data['amount'])
+                                        {
+                                            $error_message = "The total contract price is not equal on the Amount";
+                                        }
                                         $agent_id = $sales_rep->employee_id;
                                     }
                                     else

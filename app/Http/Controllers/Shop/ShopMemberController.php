@@ -180,6 +180,14 @@ class ShopMemberController extends Shop
                     return Self::load_view_for_members('member.privilage_card_holder_dashboard',$data);
                 }                   
             }
+            //total points
+            $slots = Tbl_mlm_slot::where('slot_owner',Self::$customer_info->customer_id)->get();
+            $total_points = 0;
+            foreach($slots as $s)
+            {
+                $total_points += $this->redeem_points_sum($s->slot_id);
+            }
+            $data['total_points'] = currency("",$total_points)." POINT(S)";
         }
 
         // for shift only

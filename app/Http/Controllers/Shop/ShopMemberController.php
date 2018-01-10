@@ -423,12 +423,14 @@ class ShopMemberController extends Shop
 
                             ]);
                     Session::forget('pr_edit');
+                     Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
 
                 }
                 else
                 {
                     $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
+                     Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
  
                 }

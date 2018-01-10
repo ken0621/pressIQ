@@ -72,7 +72,7 @@ class TransactionPurchaseOrderController extends Member
         {
             $data["po"]            = Tbl_purchase_order::where("po_id", $id)->first();
             $data["_poline"]       = Tbl_purchase_order_line::um()->where("poline_po_id", $id)->get();
-            //$data["action"]        = "/member/transaction/purchase_order/update-purchase-order";
+            $data["action"]        = "/member/transaction/purchase_order/update-purchase-order";
         }
         
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order', $data);
@@ -139,6 +139,7 @@ class TransactionPurchaseOrderController extends Member
     public function postUpdatePurchaseOrder(Request $request)
     {
         $po_id  = $request->po_id;
+        $btn_action  = $request->button_action;
 
         $insert['transaction_refnumber'] = $request->transaction_refnumber;
         $insert['vendor_id']             = $request->vendor_id;
@@ -158,6 +159,7 @@ class TransactionPurchaseOrderController extends Member
         $insert['vendor_total']          = $request->vendor_total;
 
         //die(var_dump($insert));
+
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
         {
@@ -175,9 +177,8 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
             }
         }
-        die(var_dump($po_id));
 
-        $validate = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
+        $validate = TransactionPurchaseOrder::postUpdate($po_id, $this->user_info->shop_id, $insert, $insert_item);
 
         $return = null;
         if(is_numeric($validate))

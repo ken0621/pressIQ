@@ -200,11 +200,11 @@
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Message Displayed on P.O</label>
-                            <textarea class="form-control input-sm textarea-expand" name="vendor_message" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="vendor_message" placeholder="">{{ isset($po->po_message) ? $po->po_message : ''}}</textarea>
                         </div>
                         <div class="col-sm-3">
                             <label>Statement Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="vendor_memo" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="vendor_memo" placeholder="">{{ isset($po->po_memo) ? $po->po_memo : ''}}</textarea>
                         </div>
                         <div class="col-sm-6">
                             <div class="row">

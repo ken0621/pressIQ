@@ -100,6 +100,7 @@ class TransactionPurchaseOrder
             $ins['taxable']            = $insert['vendor_tax'];
             $ins['date_created']       = Carbon::now();
 
+
              /* SUBTOTAL */
             $subtotal_price = collect($insert_item)->sum('item_amount'); 
 
@@ -115,11 +116,13 @@ class TransactionPurchaseOrder
 
             /* EWT */
             $ewt = $subtotal_price * convertToNumber($insert['vendor_ewt']);
-            dd($ewt);
-
+            
             /* OVERALL TOTAL */
             $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
+            //die(var_dump($overall_price));
 
+            $ins['ewt']               = $ewt;
+            //die(var_dump($ins['ewt']));
             $ins['po_subtotal_price'] = $subtotal_price;
             $ins['po_overall_price']  = $overall_price;
 
@@ -176,27 +179,31 @@ class TransactionPurchaseOrder
 
         return $return;
     }
-    public static function postUpdate($shop_id, $insert, $insert_item)
+    public static function postUpdate($po_id, $shop_id, $insert, $insert_item)
     {
+        $old = Tbl_purchase_order::where("po_id", $po_id);
+
+        //die(var_dump($po_id));
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);
         if(!$val)
         {
-            $ins['po_shop_id']         = $shop_id;
-            $ins['transaction_refnum'] = $insert['transaction_refnumber'];
-            $ins['po_vendor_id']       = $insert['vendor_id'];
-            $ins['po_billing_address'] = $insert['vendor_address'];
-            $ins['po_vendor_email']    = $insert['vendor_email'];
-            $ins['po_terms_id']        = $insert['vendor_terms'];
-            $ins['po_date']            = date("Y-m-d", strtotime($insert['transaction_date']));
-            $ins['po_due_date']        = date("Y-m-d", strtotime($insert['transaction_duedate']));
-            $ins['po_message']         = $insert['vendor_message'];
-            $ins['po_memo']            = $insert['vendor_memo'];
-            $ins['ewt']                = $insert['vendor_ewt'];
-            $ins['po_terms_id']        = $insert['vendor_terms'];
-            $ins['po_discount_value']  = $insert['vendor_discount'];
-            $ins['po_discount_type']   = $insert['vendor_discounttype'];
-            $ins['taxable']            = $insert['vendor_tax'];
-            $ins['date_created']       = Carbon::now();
+            $update['po_shop_id']         = $shop_id;
+            $update['transaction_refnum'] = $insert['transaction_refnumber'];
+            $update['po_vendor_id']       = $insert['vendor_id'];
+            $update['po_billing_address'] = $insert['vendor_address'];
+            $update['po_vendor_email']    = $insert['vendor_email'];
+            $update['po_terms_id']        = $insert['vendor_terms'];
+            $update['po_date']            = date("Y-m-d", strtotime($insert['transaction_date']));
+            $update['po_due_date']        = date("Y-m-d", strtotime($insert['transaction_duedate']));
+            $update['po_message']         = $insert['vendor_message'];
+            $update['po_memo']            = $insert['vendor_memo'];
+            $update['ewt']                = $insert['vendor_ewt'];
+            $update['po_terms_id']        = $insert['vendor_terms'];
+            $update['po_discount_value']  = $insert['vendor_discount'];
+            $update['po_discount_type']   = $insert['vendor_discounttype'];
+            $update['taxable']            = $insert['vendor_tax'];
+            $update['date_created']       = Carbon::now();
+
 
              /* SUBTOTAL */
             $subtotal_price = collect($insert_item)->sum('item_amount'); 
@@ -213,22 +220,29 @@ class TransactionPurchaseOrder
 
             /* EWT */
             $ewt = $subtotal_price * convertToNumber($insert['vendor_ewt']);
-
+            
             /* OVERALL TOTAL */
             $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
 
-            $ins['po_subtotal_price'] = $subtotal_price;
-            $ins['po_overall_price']  = $overall_price;
+            $update['ewt']               = $ewt;
+            $update['po_subtotal_price'] = $subtotal_price;
+            $update['po_overall_price']  = $overall_price;
 
-            /* INSERT PO IN DATABASE */
-            $purchase_order_id = Tbl_purchase_order::insertGetId($ins);
-            $return = $purchase_order_id;
+            /*UPDATE PO IN DATABASE */
+            $return = Tbl_purchase_order::where("po_id", $po_id)->update($update);
+            //die(var_dump($po_id));
+        
             //$return = Self::insertline($purchase_order_id, $insert_item);
+            //$return = $purchase_order_id;
+            Tbl_purchase_order_line::where("poline_po_id", $po_id)->delete();
+            Self::insertLine($po_id, $insert_item);
         }
         else
         {
             $return = $val;
         }  
+        //die(var_dump($return));
         return $return;
     }
+
 }

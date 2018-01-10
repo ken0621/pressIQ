@@ -778,31 +778,10 @@ class ShopMemberController extends Shop
       $data["user_email"]                      = $request->user_email;
       $data["user_password"]                   = Crypt::encrypt(request('user_password'));
       $data["user_level"]                      = "1";
-        if(session::has('u_edit'))
-        {
-            DB::table('tbl_pressiq_user')
-                        ->where('user_id', session('u_edit'))
-                        ->update([
-                            'user_first_name'             =>$data["user_first_name"],
-                            'user_last_name'              =>$data["user_last_name"],
-                            'user_email'                  =>$data["user_email"],
-                            'user_password'               =>Crypt::encrypt(request('user_password'))
-                            ]);
-            Session::flash('success_merchant', 'Recipient Successfully Updated!');
-        }
-        else
-        {
-            Tbl_pressiq_user::insert($data);
-            Session::flash('success_merchant', 'Recipient Successfully Added!');
-        }
+      Tbl_pressiq_user::insert($data);
+      Session::flash('success_admin', 'New Admin Successfully Added!');
       return  redirect::back();
     }
-
-    public function manage_user_edit_admin($id)
-    {
-       Session::put('u_edit',$id);
-       return redirect::back();
-   }
 
     public function pressadmin_manage_user_edit()
     {
@@ -817,6 +796,29 @@ class ShopMemberController extends Shop
         Session::forget('edit_user');
         return redirect()->back();
     }
+
+    public function pressadmin_manage_force_login($id)
+    {
+
+        session::flush();
+        $_user_data = DB::table('tbl_pressiq_user')->where('user_id',$id)->get();
+        
+        foreach ($_user_data as $user_data) {
+            # code...
+        }
+        Session::put('user_email', $user_data->user_email);
+        Session::put('user_first_name',$user_data->user_first_name);
+        Session::put('user_last_name',$user_data->user_last_name);
+        Session::put('user_company_name',$user_data->user_company_name);
+        Session::put('user_company_image',$user_data->user_company_image);
+        Session::put('pr_user_level',$user_data->user_level);
+        Session::put('pr_user_id',$user_data->user_id);
+
+
+        return Redirect::to("/signin"); 
+
+    }
+
     public function pressadmin_manage_admin_edit()
     {
         DB::table('tbl_pressiq_user')
@@ -828,6 +830,7 @@ class ShopMemberController extends Shop
                             'user_company_name'   =>request('company_name')
                             ]);
         Session::forget('edit_admin');
+         Session::flash('success_admin', 'Admin Successfully Updated!');
         return redirect()->back();
     }
     public function edit_user($id)
@@ -846,7 +849,7 @@ class ShopMemberController extends Shop
     public function manage_user_delete_admin($id)
     {
       Tbl_pressiq_user::where('user_id',$id)->delete();
-      Session::flash('delete', "Recipient Already Deleted!");
+      Session::flash('delete_admin', "Admin Already Deleted!");
       return  redirect::back();
     }
    

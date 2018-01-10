@@ -641,21 +641,21 @@ class Payroll2
 
 		$return->is_holiday = $is_holiday = Payroll2::timesheet_get_is_holiday($employee_id, $date);
 		//$return->leave = $leave = $this->timesheet_get_leave_hours($employee_id, $date, $_shift_raw);
-
+		
 		/*START leave function*/
-		$leave_data_all = PayrollLeave::employee_leave_data($employee_id);
+		// $leave_data_all = PayrollLeave::employee_leave_data($employee_id);
   		// $leave_cap_data = PayrollLeave::employee_leave_capacity($employee_id);
-        
+        $leave_info_v1 =  Tbl_payroll_leave_schedule::getemployeeleavedatedata($employee_id, $date)->first();
         $use_leave = false;
         
         $leave = "00:00:00";
         $data_this = PayrollLeave::employee_leave_capacity_consume_remainingv2($employee_id)->get();
         $leavepay = 0;
-        
-        if ($leave_data_all) 
+        // dd($leave_info_v1);
+        if ($leave_info_v1) 
         {
         	$use_leave 	= true;
-        	$leave 		= $leave_data_all["leave_hours"];
+        	$leave 		= $leave_info_v1["leave_hours"];
         	$leavepay 	= 1;
         }
         else

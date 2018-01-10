@@ -184,12 +184,12 @@ class CommissionCalculatorController extends Member
                                         {
                                             $error_message = "The total contract price is not equal on the Amount";
                                         }
+                                        $agent_id = $sales_rep->employee_id;
                                     }
                                     else
                                     {
                                         $error_message = "Sales Rep not Found";
                                     }
-                                    $agent_id = $sales_rep->employee_id;
                                 }
                                               
                                 if(!$error_message && $comm_data)

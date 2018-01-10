@@ -5,7 +5,10 @@
 		<button type="button" class="close" data-dismiss="modal">×</button>
 		<h4 class="modal-title">PAYOUT DETAILS</h4>
 	</div>
-	<div class="modal-body clearfix">
+	<div class="modal-body clearfix" style="position: relative;">
+		<div class="loader-payout" style="display: none; top: 50%; z-index: 1; transform: translateY(-50%);position: absolute; left: 0; right: 0; text-align: center; background-color: rgba(255,255,255,0.5);">
+    		<img src="/assets/member/img/91.gif">
+    	</div>
 		<div class="row">
 	        <div class="clearfix modal-body"> 
 	            <div class="col-md-6">
@@ -275,6 +278,7 @@ function event_payout_submit()
 {
 	$(".form-payout-submit").submit(function(e)
 	{
+		$(".loader-payout").show();
 		$(".update-payout-button").prop("disabled", true);
 		action_submit_payout_details($(e.currentTarget).serialize());
 		return false;
@@ -292,6 +296,7 @@ function action_submit_payout_details(form_data)
 		success: function(data)
 		{
 			$(".update-payout-button").prop("disabled", false);
+			$(".loader-payout").hide();
 
 			if (data.status == "success") 
 			{

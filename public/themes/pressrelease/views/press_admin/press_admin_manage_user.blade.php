@@ -82,8 +82,8 @@
                            <td>{{$_admin_account->user_last_name}}</td>
                            <td>{{$_admin_account->user_email}}</td>
                            <td>
-                            <a href="/pressadmin/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="">
 
+                            <a href="/pressadmin/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="">
                             <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
 
                             <a href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="">
@@ -138,7 +138,6 @@
                     </div>
                 </form>
                 @endif
-
             </div>
         </div>
     </div>

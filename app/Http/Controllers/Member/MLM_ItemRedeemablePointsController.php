@@ -53,7 +53,7 @@ class MLM_ItemRedeemablePointsController extends Member
 														  ->join("tbl_customer","tbl_customer.customer_id","=","tbl_mlm_slot.slot_owner")
 														  ->where("status",request("activetab"))
 														  ->get();
-
+		// dd($data['_redeemable']);
         return view("member.redeemable.redeemable_request_table", $data);
 	}
 

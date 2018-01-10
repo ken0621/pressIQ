@@ -4,13 +4,22 @@
     <div class="pressview">
         <div class="dashboard-container">
         <div class="media-container">
+           @if (Session::has('success_admin'))
+              <div class="alert alert-success">
+                 <center>{{ Session::get('success_admin') }}</center>
+              </div>
+            @endif  
+            @if (Session::has('delete_admin'))
+              <div class="alert alert-danger">
+                 <center>{{ Session::get('delete_admin') }}</center>
+              </div>
+            @endif    
           <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'user_account')" id="defaultOpen">Users Account</button>
             <button class="tablinks" onclick="openCity(event, 'admin_account')" >Admin Account</button>
-          </div>
-                                    
-            <div class="press-release-content">
+          </div>    
 
+        <div class="press-release-content">
             <div id="user_account" class="tabcontent press-media-container">
               @if(session::has('edit_user'))
                @foreach($_user_edit as $_user_edits)
@@ -58,7 +67,6 @@
                           <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
                           <a href=""><button type="button"  class="">
                           <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Force Login</button>
-                          
                          </td>
                       </tr>
                       @endforeach
@@ -88,7 +96,6 @@
                            </td>
                         </tr>
                         @endforeach
-                     
                   </table>
                 @if(session::has('edit_admin'))
                  @foreach($_admin_edit as $_admin_edits)

@@ -770,23 +770,8 @@ class ShopMemberController extends Shop
       $data["user_email"]                      = $request->user_email;
       $data["user_password"]                   = Crypt::encrypt(request('user_password'));
       $data["user_level"]                      = "1";
-        if(session::has('u_edit'))
-        {
-            DB::table('tbl_pressiq_user')
-                        ->where('user_id', session('u_edit'))
-                        ->update([
-                            'user_first_name'             =>$data["user_first_name"],
-                            'user_last_name'              =>$data["user_last_name"],
-                            'user_email'                  =>$data["user_email"],
-                            'user_password'               =>Crypt::encrypt(request('user_password'))
-                            ]);
-            Session::flash('success_merchant', 'Recipient Successfully Updated!');
-        }
-        else
-        {
-            Tbl_pressiq_user::insert($data);
-            Session::flash('success_merchant', 'Recipient Successfully Added!');
-        }
+      Tbl_pressiq_user::insert($data);
+      Session::flash('success_admin', 'New Admin Successfully Added!');
       return  redirect::back();
     }
 
@@ -820,6 +805,7 @@ class ShopMemberController extends Shop
                             'user_company_name'   =>request('company_name')
                             ]);
         Session::forget('edit_admin');
+         Session::flash('success_admin', 'Admin Successfully Updated!');
         return redirect()->back();
     }
     public function edit_user($id)
@@ -838,7 +824,7 @@ class ShopMemberController extends Shop
     public function manage_user_delete_admin($id)
     {
       Tbl_pressiq_user::where('user_id',$id)->delete();
-      Session::flash('delete', "Recipient Already Deleted!");
+      Session::flash('delete_admin', "Admin Already Deleted!");
       return  redirect::back();
     }
    

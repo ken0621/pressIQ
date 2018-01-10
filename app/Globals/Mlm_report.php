@@ -1432,4 +1432,22 @@ class Mlm_report
         // }
         return view('member.mlm_report.report.commission_payable', $data);
     }
+    public static function payin($shop_id,$filters)
+    {
+        $query                  = Tbl_mlm_slot::membership()->customer()->where('tbl_mlm_slot.shop_id',$shop_id);
+        
+        $query->where('slot_created_date', '>=', $filters['from'])
+              ->where('slot_created_date', '<=', $filters['to']);
+
+        $data['payin']          = $query->get();
+        $data['total_payin']    = currency('Php',$query->sum('membership_price'));
+
+        $data['page'] = "payin";
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+
+        return view('member.mlm_report.report.payin',$data);
+    }
 }

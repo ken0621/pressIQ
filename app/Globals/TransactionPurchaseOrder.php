@@ -115,6 +115,7 @@ class TransactionPurchaseOrder
 
             /* EWT */
             $ewt = $subtotal_price * convertToNumber($insert['vendor_ewt']);
+            dd($ewt);
 
             /* OVERALL TOTAL */
             $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;

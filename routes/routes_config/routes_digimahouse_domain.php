@@ -89,6 +89,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/pressadmin/email',				'Shop\ShopMemberController@pressadmin_email'); //PRESS RELEASE
 	Route::get('/pressadmin/edit_user/{id}','Shop\ShopMemberController@edit_user'); //PRESS RELEASE
 	Route::any('/pressadmin/manage_user_edit','Shop\ShopMemberController@pressadmin_manage_user_edit'); //PRESS RELEASE
+	Route::any('/pressadmin/manage_force_login/{id}','Shop\ShopMemberController@pressadmin_manage_force_login'); //PRESS RELEASE
 	Route::get('/pressadmin/edit_admin/{id}','Shop\ShopMemberController@edit_admin'); //PRESS RELEASE
 	Route::any('/pressadmin/manage_admin_edit','Shop\ShopMemberController@pressadmin_manage_admin_edit'); //PRESS RELEASE
 	Route::any('/pressadmin/email_save','Shop\ShopMemberController@pressadmin_email_save'); //PRESS RELEASE

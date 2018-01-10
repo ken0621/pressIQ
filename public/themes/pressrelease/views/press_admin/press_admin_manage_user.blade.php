@@ -56,7 +56,7 @@
                          <td>
                           <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"><button type="button"  class="">
                           <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
-                          <a href=""><button type="button"  class="">
+                          <a href="/pressadmin/manage_force_login/{{$_user_account->user_id}}"><button type="button"  class="">
                           <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Force Login</button>
                           
                          </td>

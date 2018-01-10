@@ -159,8 +159,8 @@ class MLM_ReportController extends Member
         $data['report_list_d']['warehouse_consiladated']['from'] = Carbon::now();
         $data['report_list_d']['warehouse_consiladated']['to'] = Carbon::now();
         $data['report_list_d']['warehouse_consiladated']['count'] = 0;
-
-        $data['report_list']['payout'] = 'Payout Report';
+        // --------------------------------------------------------------------------------- patrick
+        $data['report_list']['payout'] = 'Payout Report (Processed)';
         $data['report_list_d']['payout']['from'] = $from;
         $data['report_list_d']['payout']['to'] = $to;
         $data['report_list_d']['payout']['count'] = $count;

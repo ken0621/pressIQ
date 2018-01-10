@@ -12,33 +12,61 @@
             <div class="press-release-content">
 
             <div id="user_account" class="tabcontent press-media-container">
-                    <label>USER ACCOUNT</label>
-                      <table  class="table table-bordered" id="showHere_table">
-                         <tr>
-                             <th style="width: 20%;">First Name</th>
-                             <th style="width: 20%;">Last Name</th>
-                             <th style="width: 20%;">Email</th>
-                              <th style="width: 20%;">Company Name</th>
-                              <th style="width: 20%;">Action</th>
-                         </tr>
-                          @foreach($_user as $_user_account)
-                            <tr>
-                               <td> <a href="">{{$_user_account->user_first_name}}</td>
-                               <td>{{$_user_account->user_last_name}}</td>
-                               <td>{{$_user_account->user_email}}</td>
-                                <td>{{$_user_account->user_company_name}}</td>
-                               <td>
-                                <a href="/pressadmin/edit_user/{{$_user_account->user_id}}'"><button type="button"  class="">
-                                <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
-                                <a href=""><button type="button"  class="">
-                                <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Force Login</button>
-                                
-                               </td>
-                            </tr>
-                            @endforeach
-                      </table>
+              @if(session::has('edit_user'))
+               @foreach($_user_edit as $_user_edits)
+                <label>UPDATE USER ACCOUNT</label>
+                  <form method="post" action="">
+                    {{csrf_field()}}
+                    <div class="title">First Name:</div>
+                  <input type="text" id="first_name" name="first_name" class="form-control" value="{{$_user_edits->user_first_name}}" autofocus>
+
+                    <div class="title">Last Name:</div>
+                    <input type="text"  id="last_name" name="last_name" class="form-control" value="{{$_user_edits->user_last_name}}">
+
+                    <div class="title">Email:</div>
+                    <input type="text" id="email" name="email" class="form-control" value="{{$_user_edits->user_email}}">
+
+
+                    <div class="title">Company Name:</div>
+                    <input type="text" id="company_name" name="company_name" class="form-control" value="{{$_user_edits->user_company_name}}">
+
+
+                    <div class="button-container">
+                        <button type="submit" id="submit_button" name="submit_button" formaction="/pressadmin/manage_user_edit">Submit</button>
+                    </div>
+                </form>
+               @endforeach
+              @endif
+
+              <label>USER ACCOUNT</label>
+                <table  class="table table-bordered" id="showHere_table">
+                   <tr>
+                       <th style="width: 20%;">First Name</th>
+                       <th style="width: 20%;">Last Name</th>
+                       <th style="width: 20%;">Email</th>
+                        <th style="width: 20%;">Company Name</th>
+                        <th style="width: 20%;">Action</th>
+                   </tr>
+                    @foreach($_user as $_user_account)
+                      <tr>
+                         <td> <a href="">{{$_user_account->user_first_name}}</td>
+                         <td>{{$_user_account->user_last_name}}</td>
+                         <td>{{$_user_account->user_email}}</td>
+                         <td>{{$_user_account->user_company_name}}</td>
+                         <td>
+                          <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"><button type="button"  class="">
+                          <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
+                          <a href=""><button type="button"  class="">
+                          <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Force Login</button>
+                          
+                         </td>
+                      </tr>
+                      @endforeach
+                </table>
             </div>
             <div id="admin_account" class="tabcontent add-media-container">
+              
+
                 <label>ADMIN ACCOUNT</label>
                   <table  class="table table-bordered" id="showHere_table">
                      <tr>
@@ -54,7 +82,8 @@
                            <td>{{$_admin_account->user_last_name}}</td>
                            <td>{{$_admin_account->user_email}}</td>
                            <td>
-                            <a href="/pressadmin/manage_user/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="">
+
+                            <a href="/pressadmin/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="">
                             <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
 
                             <a href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="">
@@ -64,29 +93,34 @@
                         @endforeach
                      
                   </table>
-                @if(session()->has("u_edit"))
-                   @foreach($_edit as $_admin_edit)
-                    <form method="post" >
+
+                @if(session::has('edit_admin'))
+                 @foreach($_admin_edit as $_admin_edits)
+                  <label>UPDATE USER ACCOUNT</label>
+                    <form method="post" action="">
                       {{csrf_field()}}
-                      <div class="title">First Name: *</div>
-                      <input type="text" id="user_first_name" name="user_first_name" value="{{$_admin_edit->user_first_name}}" class="form-control" required>
+                      <div class="title">First Name:</div>
+                    <input type="text" id="first_name" name="first_name" class="form-control" value="{{$_admin_edits->user_first_name}}" autofocus>
 
-                      <div class="title">Last Name: *</div>
-                      <input type="text"  id="user_last_name" name="user_last_name" value="{{$_admin_edit->user_last_name}}" class="form-control" required>
+                      <div class="title">Last Name:</div>
+                      <input type="text"  id="last_name" name="last_name" class="form-control" value="{{$_admin_edits->user_last_name}}">
 
-                      <div class="title">Username: *</div>
-                      <input type="email" id="user_email" name="user_email" class="form-control" value="{{$_admin_edit->user_email}}" required>
+                      <div class="title">Email:</div>
+                      <input type="text" id="email" name="email" class="form-control" value="{{$_admin_edits->user_email}}">
 
-                      <div class="title">Password: *</div>
-                      <input type="Password" id="user_password" name="user_password" class="form-control" value="{{$_admin_edit->user_password}} required>
+
+                      <div class="title">Password:</div>
+                      <input type="text" id="company_name" name="company_name" class="form-control" value="{{$_admin_edits->user_company_name}}">
+
 
                       <div class="button-container">
-                          <button type="submit" id="admin_submit_button" name="admin_submit_button" formaction="/pressadmin/manage_user/add_admin">Submit</button>
+                          <button type="submit" id="submit_button" name="submit_button" formaction="/pressadmin/manage_admin_edit">Submit</button>
                       </div>
                   </form>
-                  @endforeach
-                 @else
-                  <form method="post"  >
+                 @endforeach
+                @else
+                <label>ADD ADMIN ACCOUNT</label>
+                  <form method="post" action="">
                     {{csrf_field()}}
                     <div class="title">First Name: </div>
                     <input type="text" id="user_first_name" name="user_first_name" class="form-control" required>
@@ -104,11 +138,13 @@
                         <button type="submit" id="admin_submit_button" name="admin_submit_button" formaction="/pressadmin/manage_user/add_admin">Submit</button>
                     </div>
                 </form>
-                  @endif
+                @endif
             </div>
         </div>
     </div>
-</div>
+</div>  
+
+
 
 @endsection
 
@@ -117,6 +153,14 @@
 @endsection
 
 @section("script")
+
+
+<script>
+  $('#edit').click(function()
+  {
+    //alert("123");
+    $('#previewPopup').modal('show');
+</script>
 
 <script>
 function openCity(evt, cityName) 

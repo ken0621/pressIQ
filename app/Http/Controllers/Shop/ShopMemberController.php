@@ -63,6 +63,8 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_tour_wallet_slot;
+use App\Models\Tbl_tour_wallet;
 
 use App\Models\Tbl_press_release_recipient;
 use App\Tbl_pressiq_press_releases;
@@ -735,6 +737,9 @@ class ShopMemberController extends Shop
         // dd(session("edit_user"));
         $data['_user'] = Tbl_pressiq_user::where('user_level',2)->get();
         $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
+        $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
+        $data['_admin_edit'] = Tbl_pressiq_user::where('user_id',session('edit_admin'))->get();
+        
         
         $data['_edit'] = Tbl_pressiq_user::where('user_id',session('u_edit'))->get();
         
@@ -802,13 +807,32 @@ class ShopMemberController extends Shop
                             'user_company_name'   =>request('company_name')
                             ]);
         Session::forget('edit_user');
-        return Redirect::to("/pressadmin/manage_user");
+        return redirect()->back();
+    }
+    public function pressadmin_manage_admin_edit()
+    {
+        DB::table('tbl_pressiq_user')
+                        ->where('user_id', session('edit_admin'))
+                        ->update([
+                            'user_first_name'     =>request('first_name'),
+                            'user_last_name'      =>request('last_name'),
+                            'user_email'          =>request('email'),
+                            'user_company_name'   =>request('company_name')
+                            ]);
+        Session::forget('edit_admin');
+        return redirect()->back();
     }
     public function edit_user($id)
     {
         Session::put('edit_user',$id);
-        $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
-        return view("press_admin.press_admin_user_edit", $data);
+        
+        return redirect()->back();
+    }
+    public function edit_admin($id)
+    {
+        Session::put('edit_admin',$id);
+        
+        return redirect()->back();
     }
 
     public function manage_user_delete_admin($id)
@@ -1370,6 +1394,17 @@ class ShopMemberController extends Shop
                 }
             }
 
+            // Method Airline Wallet
+            if ($method == "airline") 
+            {
+                $tour_wallet = Tbl_tour_wallet_slot::where("slot_id", $slot->slot_id)->value("tour_wallet_account_id");
+
+                if (!$tour_wallet || $tour_wallet == "" ) 
+                {
+                    $return .= "<div>Please set your Airline Wallet Account ID for <b>" . $slot->slot_no . "</b> in payout settings.</div>";
+                }
+            }
+
             $request_amount = $request_wallet[$key];
 
             if ($request_amount != 0) 
@@ -1475,7 +1510,7 @@ class ShopMemberController extends Shop
                         $remarks    = "Request by Customer";
                         $other      = 0;
                         $date       = date("m/d/Y");
-                        $status = "PENDING";
+                        $status     = "PENDING";
 
                         /* V-MONEY */
                         if ($method == "vmoney") 
@@ -1549,6 +1584,99 @@ class ShopMemberController extends Shop
                                 {
                                     dd($e->getMessage());
                                 }
+                            }
+                        }
+                        elseif($method == "airline")
+                        {
+                            $wallet_amount = $take_home;
+
+                            $tour = Tbl_tour_wallet_slot::where('slot_id', $slot_id)
+                                                        ->leftJoin('tbl_tour_wallet', 'tbl_tour_wallet.tour_wallet_id', '=', 'tbl_tour_wallet_slot.tour_wallet_id')
+                                                        ->first();
+
+                            $host = Tbl_tour_wallet::where('tour_wallet_shop', $this->shop_info->shop_id)
+                                                   ->where('tour_wallet_main', 1)
+                                                   ->first();
+                            
+                            $base_uri = $this->shop_info->shop_wallet_tours_uri;
+
+                            $airline_result            = AbsMain::transfer_wallet($base_uri, $host->tour_Wallet_a_account_id, $host->tour_wallet_a_username, $host->tour_wallet_a_base_password, $tour->tour_Wallet_a_account_id, $wallet_amount);
+                            $airline_result['message'] = 'Wallet Transfer Success';
+
+                            if($airline_result['status'] == 1)
+                            {
+                                $wallet_nega                              = $wallet_amount * (-1);
+
+                                $log['shop_id']                           = $this->shop_info->shop_id;
+                                $log['wallet_log_slot']                   = $slot_id;
+                                $log['wallet_log_slot_sponsor']           = $slot_id;
+                                $log['wallet_log_details']                = 'You have transferred ' . $wallet_amount . ' To your tours wallet. ' . $wallet_amount . ' is deducted to your wallet.' ;
+                                $log['wallet_log_amount']                 = $wallet_nega;
+                                $log['wallet_log_plan']                   = 'TOURS_WALLET';
+                                $log['wallet_log_status']                 = 'released';
+                                $log['wallet_log_claimbale_on']           = Carbon::now();
+
+                                $insert['tour_wallet_logs_wallet_amount'] = $wallet_amount;
+                                $insert['tour_wallet_logs_date']          = Carbon::now(); 
+                                $insert['tour_wallet_logs_tour_id']       = $tour->tour_wallet_id; 
+                                $insert['tour_wallet_logs_account_id']    = $tour->tour_Wallet_a_account_id;
+                                $insert['tour_wallet_logs_customer_id']   = Self::$customer_info->customer_id;
+                                $insert['tour_wallet_logs_accepted']      = 1;
+                                $insert['tour_wallet_logs_points']        = 0;
+
+                                // Get Balance
+                                $host_update = AbsMain::get_balance($base_uri, $host->tour_Wallet_a_account_id, $host->tour_wallet_a_username, $host->tour_wallet_a_base_password);
+                                
+                                if($host_update['status'] == 1)
+                                {
+                                    $update['tour_wallet_a_current_balance'] = $host_update['result'];
+
+                                    Tbl_tour_wallet::where('tour_wallet_shop', $this->shop_info->shop_id)
+                                                   ->where('tour_wallet_main', 1)
+                                                   ->update($update);
+                                }
+
+                                $update['tour_wallet_a_current_balance'] = $tour->tour_wallet_a_current_balance + $wallet_amount;
+                                
+                                Tbl_tour_wallet::where('tour_wallet_customer_id', Self::$customer_info->customer_id)
+                                               ->where('tour_wallet_main', 0)
+                                               ->update($update);
+
+                                Mlm_slot_log::slot_array($log);
+
+                                $tour_wallet_convertion = $host->tour_wallet_convertion;
+
+                                if($tour_wallet_convertion != 0)
+                                {
+                                    $points                            = ($wallet_amount/100) * $tour_wallet_convertion;
+                                    $insert['tour_wallet_logs_points'] = $points;
+                                    $l                                 = "You have earned " . $points . " Repurchase Points. From  tours wallet."; 
+                                    $log['shop_id']                    = $this->shop_info->shop_id;
+                                    $log['wallet_log_slot']            = $slot_id;
+                                    $log['wallet_log_slot_sponsor']    = $slot_id;
+                                    $log['wallet_log_details']         = $l ;
+                                    $log['wallet_log_amount']          = 0;
+                                    $log['wallet_log_plan']            = 'TOURS_WALLET_POINTS';
+                                    $log['wallet_log_status']          = 'released';
+                                    $log['wallet_log_claimbale_on']    = Carbon::now();
+
+                                    Mlm_slot_log::slot_array($log);
+
+                                    $array['points_log_complan']        = "REPURCHASE_POINTS";
+                                    $array['points_log_level']          = 0;
+                                    $array['points_log_slot']           = $slot_id;
+                                    $array['points_log_Sponsor']        = $slot_id;
+                                    $array['points_log_date_claimed']   = Carbon::now();
+                                    $array['points_log_converted']      = 0;
+                                    $array['points_log_converted_date'] = Carbon::now();
+                                    $array['points_log_type']           = 'PV';
+                                    $array['points_log_from']           = 'Wallet Tours';
+                                    $array['points_log_points']         = $points;
+
+                                    Mlm_slot_log::slot_log_points_array($array);
+                                }
+
+                                DB::table('tbl_tour_wallet_logs')->insert($insert);
                             }
                         }
                         else
@@ -2442,14 +2570,24 @@ class ShopMemberController extends Shop
         $sort_by = 0;
         $data['page'] = "Redeemable";
         $data['_redeemable'] = Tbl_item_redeemable::where("archived",0)->whereColumn("quantity",">","number_of_redeem")->get();
+
         $slot_info           = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+        $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+
         $data["_points"]     = $this->redeem_points_sum($slot_info->slot_id);
         // dd($data);
         return (Self::load_view_for_members("member.redeemable",$data));
     }
+    public function getSlotPoints()
+    {
+        $slot = request('slot_no');
+        $slot_info           = Tbl_mlm_slot::where("slot_no", $slot)->membership()->first();
+        return  currency('',$this->redeem_points_sum($slot_info->slot_id));
+    }
     public function postRedeemItem(Request $request)
     {
-        $slot_info          = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+
+        $slot_info          = Tbl_mlm_slot::where("slot_no", $request->slot_no)->membership()->first();
         $item_redeemable_id = $request->item_id;
         $redeemable_item    = Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->first();
         if($redeemable_item)
@@ -2475,6 +2613,7 @@ class ShopMemberController extends Shop
                     // you redeem <item> for <cost>. Please wait for admin's approval.
                     $insert_report['log'] = 'You redeemed '.$redeemable_item->item_name.' for '.currency("",$redeemable_item->redeemable_points)." POINTS. Please wait for admin's approval.";
                     $insert_report['date_created'] = Carbon::now();
+                    $insert_report['slot_owner'] = Self::$customer_info->customer_id;
                     Tbl_item_redeemable_report::insert($insert_report);
                     Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->increment('number_of_redeem');
 
@@ -2516,8 +2655,8 @@ class ShopMemberController extends Shop
     {
         $sort_by = 0;
         $data['page'] = "Redeem History";
-        $slot_info = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
-        $data['redeem_history'] = Tbl_item_redeemable_report::where('slot_id',$slot_info->slot_id)->paginate(10);
+        $data['redeem_history'] = Tbl_item_redeemable_report::Slot()->where('tbl_item_redeemable_report.slot_owner',Self::$customer_info->customer_id)->paginate(10);
+        // dd($data['redeem_history']);
         return (Self::load_view_for_members("member.redeem_history",$data));
     }
     public function getCodevault()

@@ -140,9 +140,9 @@ class CommissionCalculatorController extends Member
                             {
                                 $coa = explode('·', $data['account']);
                                 $account_id = 0;
-                                if(isset($coa[1]))
+                                if($data['account'])
                                 {
-                                    $account_id = AccountingTransaction::check_coa_exist($this->user_info->shop_id, str_replace(' ', '',$coa[0]), str_replace(' ', '',$coa[1]));
+                                    $account_id = AccountingTransaction::check_coa_exist($this->user_info->shop_id, 0000000, $data['account']);
                                 }
                                 else
                                 {
@@ -184,12 +184,12 @@ class CommissionCalculatorController extends Member
                                         {
                                             $error_message = "The total contract price is not equal on the Amount";
                                         }
+                                        $agent_id = $sales_rep->employee_id;
                                     }
                                     else
                                     {
                                         $error_message = "Sales Rep not Found";
                                     }
-                                    $agent_id = $sales_rep->employee_id;
                                 }
                                               
                                 if(!$error_message && $comm_data)

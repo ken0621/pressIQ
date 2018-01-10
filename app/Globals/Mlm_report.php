@@ -1344,4 +1344,16 @@ class Mlm_report
         return view('member.mlm_report.report.inventory_consilidated', $data);
 
     }
+    public static function payout($shop_id, $filters)
+    {
+        $shop_id        = $this->user_info->shop_id;
+        $query          = Tbl_mlm_slot_wallet_log::where("tbl_mlm_slot_wallet_log.shop_id", $shop_id)->slot()->customer();
+
+        $query->where("wallet_log_payout_status",'done');
+        /* PAYOUT IMPORTATION QUERIES */
+        $query->where("wallet_log_amount", "<", 0);
+        $query->orderBy("wallet_log_date_created", "desc");
+        $data['table'] = $query;
+        return view('member.mlm_report.report.payout', $data);
+    }
 }

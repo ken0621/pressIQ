@@ -212,15 +212,19 @@ class AbsMain
             }
 
             /* Tour Wallet Slot */
-            $tour_wallet_slot = Tbl_tour_wallet_slot::find($tour_wallet_id, $slot_id)->first();
-            dd($tour_wallet_slot);
+            $tour_wallet_slot = Tbl_tour_wallet_slot::where("tour_wallet_id", $tour_wallet_id)
+                                                    ->where("slot_id", $slot_id)
+                                                    ->first();
+
             $update["tour_wallet_id"]         = $tour_wallet_id;
             $update["slot_id"]                = $slot_id;
             $update["tour_wallet_account_id"] = $tour_wallet_account_id;
             
             if ($tour_wallet_slot) 
             {
-               Tbl_tour_wallet_slot::find($tour_wallet_id, $slot_id)->update($update);
+               Tbl_tour_wallet_slot::where("tour_wallet_id", $tour_wallet_id)
+                                   ->where("slot_id", $slot_id)
+                                   ->update($update);
             }
             else
             {

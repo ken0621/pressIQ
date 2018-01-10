@@ -95,7 +95,6 @@
                     @if($customer)
                         <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
                     @endif
-                @else
                 @endif
             </ul>
             @else

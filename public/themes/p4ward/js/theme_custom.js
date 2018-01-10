@@ -30,7 +30,7 @@ function theme_custom()
     function header_fixed()
     {
         $window = $(window);
-        $window.scroll(function() 
+        $window.scroll(function()
         {
 
           $scroll_position = $window.scrollTop();

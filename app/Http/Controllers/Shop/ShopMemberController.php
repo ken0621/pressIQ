@@ -180,6 +180,14 @@ class ShopMemberController extends Shop
                     return Self::load_view_for_members('member.privilage_card_holder_dashboard',$data);
                 }                   
             }
+            //total points
+            $slots = Tbl_mlm_slot::where('slot_owner',Self::$customer_info->customer_id)->get();
+            $total_points = 0;
+            foreach($slots as $s)
+            {
+                $total_points += $this->redeem_points_sum($s->slot_id);
+            }
+            $data['total_points'] = currency("",$total_points)." POINT(S)";
         }
 
         // for shift only
@@ -775,12 +783,6 @@ class ShopMemberController extends Shop
       return  redirect::back();
     }
 
-    public function manage_user_edit_admin($id)
-    {
-       Session::put('u_edit',$id);
-       return redirect::back();
-   }
-
     public function pressadmin_manage_user_edit()
     {
         DB::table('tbl_pressiq_user')
@@ -794,6 +796,29 @@ class ShopMemberController extends Shop
         Session::forget('edit_user');
         return redirect()->back();
     }
+
+    public function pressadmin_manage_force_login($id)
+    {
+
+        session::flush();
+        $_user_data = DB::table('tbl_pressiq_user')->where('user_id',$id)->get();
+        
+        foreach ($_user_data as $user_data) {
+            # code...
+        }
+        Session::put('user_email', $user_data->user_email);
+        Session::put('user_first_name',$user_data->user_first_name);
+        Session::put('user_last_name',$user_data->user_last_name);
+        Session::put('user_company_name',$user_data->user_company_name);
+        Session::put('user_company_image',$user_data->user_company_image);
+        Session::put('pr_user_level',$user_data->user_level);
+        Session::put('pr_user_id',$user_data->user_id);
+
+
+        return Redirect::to("/signin"); 
+
+    }
+
     public function pressadmin_manage_admin_edit()
     {
         DB::table('tbl_pressiq_user')
@@ -2258,6 +2283,7 @@ class ShopMemberController extends Shop
         // $validate['customer_city'] = 'required';
         // $validate['customer_zipcode'] = 'required';
         $validate['customer_street'] = 'required';
+        $validate['contact'] = 'required';
 
         $validator = Validator::make($form, $validate);
         

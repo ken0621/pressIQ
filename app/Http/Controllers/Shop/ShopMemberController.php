@@ -423,6 +423,7 @@ class ShopMemberController extends Shop
 
                             ]);
                     Session::forget('pr_edit');
+                     Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
 
                 }

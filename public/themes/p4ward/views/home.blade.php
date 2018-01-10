@@ -299,7 +299,6 @@
             <div class="btn-container wow fadeInDown" data-wow-delay = ".4s">
                 <a href="https://drive.google.com/file/d/0B9TqTDu5OK_3V0NFUlRTRUhFVm1PYzZob091RmhaanlpTFkw/view" target="_blank"><button>Read More &raquo;</button></a>
             </div>
-
         </div>
     </div>
 

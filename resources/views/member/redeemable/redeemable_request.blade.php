@@ -13,7 +13,7 @@
             </h1>
             <div class="dropdown pull-right">
                 <!-- <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</button> -->
-                <button onclick="action_load_link_to_modal('/member/item/redeemable/add', 'lg')" class="btn btn-primary"><i class="fa fa-plus"></i> Add Redeemable</button>
+                <!-- <button onclick="action_load_link_to_modal('/member/item/redeemable/add', 'lg')" class="btn btn-primary"><i class="fa fa-plus"></i> Add Redeemable</button> -->
             </div>
         </div>
     </div>

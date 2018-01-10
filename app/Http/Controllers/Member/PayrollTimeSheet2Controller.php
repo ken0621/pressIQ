@@ -612,7 +612,7 @@ class PayrollTimeSheet2Controller extends Member
         $use_leave = false;
         $leave = "00:00:00";
         $data_this = PayrollLeave::employee_leave_capacity_consume_remaining($employee_id)->get();
-
+        
         if (count($leave_date_data)>0) 
         {
         	// $used_leave_data = PayrollLeave::employee_leave_consumed($leave_date_data["payroll_leave_employee_id"]);

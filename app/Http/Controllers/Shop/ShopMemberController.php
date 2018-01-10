@@ -798,12 +798,6 @@ class ShopMemberController extends Shop
       return  redirect::back();
     }
 
-    public function manage_user_edit_admin($id)
-    {
-       Session::put('u_edit',$id);
-       return redirect::back();
-   }
-
     public function pressadmin_manage_user_edit()
     {
         DB::table('tbl_pressiq_user')
@@ -817,6 +811,29 @@ class ShopMemberController extends Shop
         Session::forget('edit_user');
         return redirect()->back();
     }
+
+    public function pressadmin_manage_force_login($id)
+    {
+
+        session::flush();
+        $_user_data = DB::table('tbl_pressiq_user')->where('user_id',$id)->get();
+        
+        foreach ($_user_data as $user_data) {
+            # code...
+        }
+        Session::put('user_email', $user_data->user_email);
+        Session::put('user_first_name',$user_data->user_first_name);
+        Session::put('user_last_name',$user_data->user_last_name);
+        Session::put('user_company_name',$user_data->user_company_name);
+        Session::put('user_company_image',$user_data->user_company_image);
+        Session::put('pr_user_level',$user_data->user_level);
+        Session::put('pr_user_id',$user_data->user_id);
+
+
+        return Redirect::to("/signin"); 
+
+    }
+
     public function pressadmin_manage_admin_edit()
     {
         DB::table('tbl_pressiq_user')

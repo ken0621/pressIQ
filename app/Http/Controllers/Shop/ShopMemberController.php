@@ -2570,14 +2570,24 @@ class ShopMemberController extends Shop
         $sort_by = 0;
         $data['page'] = "Redeemable";
         $data['_redeemable'] = Tbl_item_redeemable::where("archived",0)->whereColumn("quantity",">","number_of_redeem")->get();
+
         $slot_info           = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+        $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+
         $data["_points"]     = $this->redeem_points_sum($slot_info->slot_id);
         // dd($data);
         return (Self::load_view_for_members("member.redeemable",$data));
     }
+    public function getSlotPoints()
+    {
+        $slot = request('slot_no');
+        $slot_info           = Tbl_mlm_slot::where("slot_no", $slot)->membership()->first();
+        return  currency('',$this->redeem_points_sum($slot_info->slot_id));
+    }
     public function postRedeemItem(Request $request)
     {
-        $slot_info          = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+
+        $slot_info          = Tbl_mlm_slot::where("slot_no", $request->slot_no)->membership()->first();
         $item_redeemable_id = $request->item_id;
         $redeemable_item    = Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->first();
         if($redeemable_item)
@@ -2603,6 +2613,7 @@ class ShopMemberController extends Shop
                     // you redeem <item> for <cost>. Please wait for admin's approval.
                     $insert_report['log'] = 'You redeemed '.$redeemable_item->item_name.' for '.currency("",$redeemable_item->redeemable_points)." POINTS. Please wait for admin's approval.";
                     $insert_report['date_created'] = Carbon::now();
+                    $insert_report['slot_owner'] = Self::$customer_info->customer_id;
                     Tbl_item_redeemable_report::insert($insert_report);
                     Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->increment('number_of_redeem');
 
@@ -2644,8 +2655,8 @@ class ShopMemberController extends Shop
     {
         $sort_by = 0;
         $data['page'] = "Redeem History";
-        $slot_info = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
-        $data['redeem_history'] = Tbl_item_redeemable_report::where('slot_id',$slot_info->slot_id)->paginate(10);
+        $data['redeem_history'] = Tbl_item_redeemable_report::Slot()->where('tbl_item_redeemable_report.slot_owner',Self::$customer_info->customer_id)->paginate(10);
+        // dd($data['redeem_history']);
         return (Self::load_view_for_members("member.redeem_history",$data));
     }
     public function getCodevault()

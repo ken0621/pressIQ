@@ -4,13 +4,22 @@
     <div class="pressview">
         <div class="dashboard-container">
         <div class="media-container">
+           @if (Session::has('success_admin'))
+              <div class="alert alert-success">
+                 <center>{{ Session::get('success_admin') }}</center>
+              </div>
+            @endif  
+            @if (Session::has('delete_admin'))
+              <div class="alert alert-danger">
+                 <center>{{ Session::get('delete_admin') }}</center>
+              </div>
+            @endif    
           <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'user_account')" id="defaultOpen">Users Account</button>
             <button class="tablinks" onclick="openCity(event, 'admin_account')" >Admin Account</button>
-          </div>
-                                    
-            <div class="press-release-content">
+          </div>    
 
+        <div class="press-release-content">
             <div id="user_account" class="tabcontent press-media-container">
               @if(session::has('edit_user'))
                @foreach($_user_edit as $_user_edits)
@@ -56,17 +65,14 @@
                          <td>
                           <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"><button type="button"  class="">
                           <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
-                          <a href=""><button type="button"  class="">
+                          <a href="/pressadmin/manage_force_login/{{$_user_account->user_id}}"><button type="button"  class="">
                           <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Force Login</button>
-                          
                          </td>
                       </tr>
                       @endforeach
                 </table>
             </div>
             <div id="admin_account" class="tabcontent add-media-container">
-              
-
                 <label>ADMIN ACCOUNT</label>
                   <table  class="table table-bordered" id="showHere_table">
                      <tr>
@@ -82,18 +88,15 @@
                            <td>{{$_admin_account->user_last_name}}</td>
                            <td>{{$_admin_account->user_email}}</td>
                            <td>
-
-                            <a href="/pressadmin/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="">
+                            <a href="/pressadmin/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-warning center">
                             <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
 
-                            <a href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="">
+                            <a href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-danger center">
                             <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button>
                            </td>
                         </tr>
                         @endforeach
-                     
                   </table>
-
                 @if(session::has('edit_admin'))
                  @foreach($_admin_edit as $_admin_edits)
                   <label>UPDATE USER ACCOUNT</label>
@@ -148,7 +151,7 @@
 
 @endsection
 
-@section("css")
+@section("css") 
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_admin_manage_user.css">
 @endsection
 

@@ -557,6 +557,14 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
+        $code = "mlm-item-redeemable";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Item Redeemable Points";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/item_redeemable_points";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
     /* REWARD CONFIG */
     $segment = "submenu-mlm-codes";
     $nav[$page]['submenu'][$segment]['name']   = "Reward Codes";
@@ -835,7 +843,7 @@ function page_list($pis = 0)
     $nav[$page]['submenu'][$code]['label'] = "Payroll Configuration";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_configuration";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','Branch_Location','Department','Job_Title','Holiday','Holiday_v2','Holiday_Default','Holiday Employee','Allowances','Allowances V2','Deductions','Deductions V2','Leave','Payroll_Group', 'Shift_Template','Journal_Tags','Payslip','Tax_Period','Tax_Table','SSS_Table','Philhealth_Table','Pagibig/HDMF'];
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','Branch_Location','Department','Job_Title','Holiday','Holiday v2','Holiday_Default','Holiday Employee','Allowances','Allowances V2','Deductions','Deductions V2','Leave','Leave V2','Payroll_Group', 'Shift_Template','Journal_Tags','Payslip','Tax_Period','Tax_Table','SSS_Table','Philhealth_Table','Pagibig/HDMF'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
     
@@ -856,7 +864,6 @@ function page_list($pis = 0)
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
 
     // /* PAYROLL REGISTER */
     // $code = "payroll-register";
@@ -972,6 +979,15 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Kimbriel Oraya";
+        
+         /* -- REPORT => PRODUCTS  */
+        $code = "leave-reports";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Leave Reports";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/leavev2_reports";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "John Kenneth de Lara";
 
         /* -- REPORT => PRODUCTS  */
         $code = "Employee-Summary-Report";
@@ -1592,13 +1608,13 @@ function page_list($pis = 0)
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Everyone</span>";
 
-    // $code = "merchant-commission-report";
-    // $nav[$page]['submenu'][$code]['label'] = "Commission Report";
-    // $nav[$page]['submenu'][$code]['code'] = $code;
-    // $nav[$page]['submenu'][$code]['url'] = $path . "merchant" . "/commission-report";
-    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    // $nav[$page]['submenu'][$code]['status'] = "on progress";
-    // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Patrick Manarang</span>";
+    $code = "merchant-commission-report";
+    $nav[$page]['submenu'][$code]['label'] = "Commission Report";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . "merchant" . "/commission-report";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "on progress";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Patrick Manarang</span>";
 
     $code = "merchant-ewallet";
     $nav[$page]['submenu'][$code]['label'] = "E-Wallet";

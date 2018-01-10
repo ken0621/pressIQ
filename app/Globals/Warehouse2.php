@@ -1020,9 +1020,9 @@ class Warehouse2
 
         return $_item;       
     }
-    public static function get_codes($warehouse_id, $start_date, $end_date, $transaction_type = '')
+    public static function get_codes($warehouse_id, $start_date, $end_date, $transaction_type = '', $code_type = 'membership_code')
     {
-        $data = Tbl_warehouse_inventory_record_log::warehouse()->item()->slotinfo()->customerinfo()->where("item_in_use",'used')->where("record_inventory_status",1)->where('record_warehouse_id',$warehouse_id)->whereBetween('record_log_date_updated',[$start_date, $end_date]);
+        $data = Tbl_warehouse_inventory_record_log::warehouse()->item()->slotinfo()->where("item_in_use",'used')->where("record_inventory_status",1)->where('record_warehouse_id',$warehouse_id)->whereBetween('record_log_date_updated',[$start_date, $end_date]);
 
         if($transaction_type != '')
         {
@@ -1034,6 +1034,18 @@ class Warehouse2
             {
                 $data = $data->where('record_consume_ref_name','!=', 'transaction_list');
             }
+        }
+        if($code_type == 'product_code')
+        {
+            $data = $data->where("item_type_id", '!=', 5);
+            if($transaction_type != 'offline')
+            {
+                $data = $data->customerinfo_data();
+            }
+        }
+        else
+        {
+            $data = $data->customerinfo();
         }
 
         return $data->get();

@@ -19,10 +19,10 @@
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu  dropdown-menu-custom">
-                          <li><a class="select-action" code="sclose">Save & Close</a></li>
-                          <li><a class="select-action" code="sedit">Save & Edit</a></li>
-                          <li><a class="select-action" code="sprint">Save & Print</a></li>
-                          <li><a class="select-action" code="snew">Save & New</a></li>
+                            <li><a class="select-action" code="sclose">Save & Close</a></li>
+                            <li><a class="select-action" code="sedit">Save & Edit</a></li>
+                            <li><a class="select-action" code="sprint">Save & Print</a></li>
+                            <li><a class="select-action" code="snew">Save & New</a></li>
                         </ul>
                     </div>
                 </div>
@@ -45,18 +45,20 @@
                                 <label>Reference Number</label>
                                 <input type="text" class="form-control" name="transaction_refnumber" value="PO20171225-0001">
                             </div>
-                            <div class="col-sm-5 text-right"></div>
-                            <div class="col-sm-3 text-right">
-                                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_order/load-transaction"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">{{$count_so}}</span> Open Transaction</a></h4>
-                            </div>
                         </div>
                     </div>
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <select class="form-control droplist-vendor input-sm pull-left" name="vendor_id" required>
                                     @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($po->po_vendor_id) ? $po->po_vendor_id : (isset($v_id) ? $v_id : '')])
                                 </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$po->po_vendor_email or ''}}"/>
+                            </div>
+                            <div class="col-sm-4 text-right">
+                                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_order/load-transaction"><i class="fa fa-handshake-o"></i> {{$count_transaction}} Open Transaction</a></h4>
                             </div>
                         </div>
                     </div>
@@ -67,7 +69,7 @@
                         </div>
                         <div class="col-sm-2">  
                             <label>Terms</label>
-                            <select class="form-control input-sm droplist-terms" name="vendor_terms">
+                                <select class="form-control input-sm droplist-terms" name="vendor_terms">
                                     @include("member.load_ajax_data.load_terms")
                                 </select>
                         </div>
@@ -106,7 +108,7 @@
                                             @foreach($_poline as $poline)
                                                 <tr class="tr-draggable">
                                                     <td class="invoice-number-td text-right">1</td>
-                                                    <td><input type="text" class="for-datepicker" name="item_service_date[]" value="{{$poline->poline_service_date}}" /></td>
+                                                    <td><input type="text" class="for-datepicker" name="item_servicedate[]" value="{{$poline->poline_service_date}}" /></td>
                                                     <td>
                                                         <select class="form-control select-item droplist-item input-sm pull-left {{$poline->poline_item_id}}" name="item_id[]" required>
                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $poline->poline_item_id])
@@ -139,7 +141,7 @@
                                         @else                                
                                             <tr class="tr-draggable">
                                                 <td class="invoice-number-td text-right">1</td>
-                                                <td><input type="text" class="for-datepicker" name="item_service_date[]"/></td>
+                                                <td><input type="text" class="for-datepicker" name="item_servicedate[]"/></td>
                                                 <td>
                                                     <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
@@ -165,7 +167,7 @@
                                                 
                                             <tr class="tr-draggable">
                                                 <td class="invoice-number-td text-right">2</td>
-                                                <td><input type="text" class="datepicker" name="item_service_date[]"/></td>
+                                                <td><input type="text" class="datepicker" name="item_servicedate[]"/></td>
                                                 <td>
                                                     <select class="22222 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
@@ -237,7 +239,7 @@
                                 <div class="col-md-7 text-right digima-table-label">
                                     <div class="row">
                                         <div class="col-sm-6 col-sm-offset-4  padding-lr-1">
-                                            <select class="form-control input-sm compute discount_selection" name="vendor_type">  
+                                            <select class="form-control input-sm compute discount_selection" name="vendor_discounttype">  
                                                 <option value="percent" {{isset($po) ? $po->po_discount_type == 'percent' ? 'selected' : '' : ''}}>Discount percentage</option>
                                                 <option value="value" {{isset($po) ? $po->po_discount_type == 'value' ? 'selected' : '' : ''}}>Discount value</option>
                                             </select>
@@ -289,7 +291,7 @@
     <table class="div-item-row-script hide">
         <tr class="tr-draggable">
             <td class="invoice-number-td text-right">2</td>
-            <td><input type="text" class="for-datepicker"  name="item_service_date[]"/></td>
+            <td><input type="text" class="for-datepicker"  name="item_servicedate[]"/></td>
             <td>
                 <select class="form-control select-item input-sm pull-left" name="item_id[]">
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])

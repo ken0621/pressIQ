@@ -12,6 +12,8 @@ use App\Globals\Item;
 use App\Globals\Customer;
 use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
+use App\Globals\TransactionSalesOrder;
+use App\Globals\TransactionEstimateQuotation;
 
 use Session;
 use Carbon\Carbon;
@@ -39,7 +41,7 @@ class TransactionSalesOrderController extends Member
 	{
 		$btn_action = $request->button_action;
 
-		$insert['transaction_refnumber'] = $request->transaction_refnumber;
+		$insert['transaction_refnum'] 	 = $request->transaction_refnumber;
 		$insert['customer_id'] 			 = $request->customer_id;
 		$insert['customer_email']        = $request->customer_email;
 		$insert['customer_address']      = $request->customer_address;
@@ -64,6 +66,34 @@ class TransactionSalesOrderController extends Member
 				$insert_item[$key]['item_taxable'] = $request->item_taxable[$key];
 			}
 		}
-		die(var_dump($btn_action));
+		$return = null;
+		$validate = TransactionSalesOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
+		if(is_numeric($validate))
+		{
+			
+		}
+		else
+		{
+			$return['status'] = 'error';
+			$return['status_message'] = $validate;
+		}
+
+		return json_encode($return);
+	}
+	public function getCountTransaction(Request $request)
+	{
+		$customer_id = $request->customer_id;
+		return TransactionSalesOrder::CountTransaction($this->user_info->shop_id, $customer_id);
+	}
+
+	public function getLoadTransaction(Request $request)
+	{
+		$data['_eq'] = TransactionEstimateQuotation::getOpenEQ($this->user_info->shop_id, $request->c);
+		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
+		return view("member.accounting_transaction.customer.sales_order.load_transaction", $data);
+	}
+	public function getPrint(Request $request)
+	{
+		dd("Under Maintenance");
 	}
 }

@@ -69,6 +69,9 @@ class Vendor
 		Tbl_vendor_other_info::insert($ins_info);
 	}
 
-	// public static function 
+	public static function getVendor($shop_id)
+	{
+		return Tbl_vendor::where('vendor_shop_id', $shop_id)->first();
+	}
 
 }

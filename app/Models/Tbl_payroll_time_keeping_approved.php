@@ -23,6 +23,7 @@ class Tbl_payroll_time_keeping_approved extends Model
 		$insert["gross_pay"] 					= $cutoff_breakdown->gross_pay_total;
 		$insert["net_pay"] 						= $cutoff_breakdown->net_pay_total;
 		$insert["taxable_salary"] 				= $cutoff_breakdown->taxable_salary_total;
+		$insert["period_13th_month_pay"]		= $compute_cutoff["payroll_13th_month_pay"];
 		$insert["sss_salary"] 					= $cutoff_breakdown->sss_contribution["salary"];
 		$insert["sss_ee"] 						= $cutoff_breakdown->sss_contribution["ee"];
 		$insert["sss_er"] 						= $cutoff_breakdown->sss_contribution["er"];

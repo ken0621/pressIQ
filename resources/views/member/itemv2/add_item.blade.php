@@ -84,18 +84,32 @@
                 <!-- BASIC INFORMATION -->
                 <h4 class="section-title first">Basic Information</h4>
                 <div class="form-group">
-                    <div class="col-md-6">
-                        <label for="basic-input">Item Description</label>
-                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_description', 'item_name') }}" class="form-control item-description" name="item_description" placeholder="">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label for="basic-input">Item Description</label>
+                                <input id="basic-input" value="{{ get_request_old($item_info, 'item_description', 'item_name') }}" class="form-control item-description" name="item_description" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <label for="basic-input">Item Code / SKU</label>
+                                    <input id="basic-input" value="{{ get_request_old($item_info, 'item_sku') }}" class="form-control auto-generate-code" name="item_sku" placeholder="">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="basic-input">Barcode</label>
+                                    <input id="basic-input" value="{{ get_request_old($item_info, 'item_barcode') }}" class="form-control auto-generate-code" name="item_barcode" placeholder="">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="basic-input">Item Code / SKU</label>
-                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_sku') }}" class="form-control auto-generate-code" name="item_sku" placeholder="">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="basic-input">Barcode</label>
-                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_barcode') }}" class="form-control auto-generate-code" name="item_barcode" placeholder="">
-                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="form-group">
+                            <input type="hidden" name="item_img" class="image-value" key="1">
+                            <img src="{{ get_request_old($item_info, 'item_img') != '' ? get_request_old($item_info, 'item_img') : '/assets/front/img/default.jpg' }}" class="image-gallery image-put image-gallery-single" key="1" style="height: 150px;width: 100%;object-fit: contain">
+                        </div>
+                    </div>                    
                 </div>
                 <div class="form-group">
                     <div class="col-md-6">
@@ -218,18 +232,32 @@
         <div class="clearfix modal-body modallarge-body-layout"> 
             <div class="form-horizontal">
                 <div class="form-group">
-                    <div class="col-md-6">
-                        <label for="basic-input">Item Name</label>
-                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_description', 'item_name') }}" class="form-control item-description" name="item_description" placeholder="">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                               <label for="basic-input">Item Name</label>
+                                <input id="basic-input" value="{{ get_request_old($item_info, 'item_description', 'item_name') }}" class="form-control item-description" name="item_description" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <label for="basic-input">Item Code / SKU</label>
+                                    <input id="basic-input" value="{{ get_request_old($item_info, 'item_sku') }}" class="form-control auto-generate-code" name="item_sku" placeholder="">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="basic-input">Barcode</label>
+                                    <input id="basic-input" value="{{ get_request_old($item_info, 'item_barcode') }}" class="form-control auto-generate-code" name="item_barcode" placeholder="">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="basic-input">Item Code / SKU</label>
-                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_sku') }}" class="form-control auto-generate-code" name="item_sku" placeholder="">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="basic-input">Barcode</label>
-                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_barcode') }}" class="form-control auto-generate-code" name="item_barcode" placeholder="">
-                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="form-group">
+                            <input type="hidden" name="item_img" class="image-value" key="1">
+                            <img src="{{ get_request_old($item_info, 'item_img') != '' ? get_request_old($item_info, 'item_img') : '/assets/front/img/default.jpg' }}" class="image-gallery image-put image-gallery-single" key="1" style="height: 150px;width: 100%;object-fit: contain">
+                        </div>
+                    </div>                     
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">

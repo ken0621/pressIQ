@@ -61,6 +61,7 @@ body{
     <td rowspan="2">LATE</td>
     <td rowspan="2">UNDERTIME</td>
     <td rowspan="2">BASIC PAY</td>
+    <td rowspan="2">RENDERED DAYS</td>
     <td rowspan="2">COLA</td>
     <td rowspan="2">OVER TIME PAY</td>
     <td rowspan="2">NIGHT DIFFERENTIAL PAY</td>
@@ -130,7 +131,9 @@ body{
     <td class="text-center" >({{ number_format($employee->undertime,2) }}) <br> ({{$employee->time_undertime}} hours)</td>
     
     <td class="text-center" >{{ number_format($employee->net_basic_pay,2) }} <br> ({{$employee->time_spent}} hours)</td>
-    
+        
+    <td class="text-center" >{{ number_format($employee->rendered_days,2) }} <br> ({{$employee->time_spent}} hours)</td>
+
     <td class="text-center" >{{ number_format($employee->cola,2) }}</td>
     <td class="text-center" >{{ number_format($employee->overtime,2) }} <br> ({{$employee->time_overtime}} hours)</td>
     <td class="text-center" >{{ number_format($employee->nightdiff,2) }} <br> ({{$employee->time_night_differential}} hours)</td>
@@ -185,7 +188,7 @@ body{
     <td class="text-center" ><b>({{ number_format($undertime_total, 2) }})</b></td>
 
     <td class="text-center" ><b>{{ number_format($total_basic, 2) }}</b></td>
-
+    <td class="text-center" ><b>{{ number_format($rendered_days_total, 2) }}</b></td>
     <td class="text-center" ><b>{{ number_format($cola_total, 2) }}</b></td>
     <td class="text-center" ><b>{{ number_format($overtime_total, 2) }}</b></td>
     <td class="text-center" ><b>{{ number_format($nightdiff_total, 2) }}</b></td>

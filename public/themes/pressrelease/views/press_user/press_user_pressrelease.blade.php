@@ -12,10 +12,10 @@
           @endif
          <div class="press-release-container">
             <div class="tab"  style="border-style: none;">
-             <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Create New Release</button>
-             <button class="tablinks" onclick="openCity(event, 'choose_recipient')" id="">Choose Recipients</button>
-             <button class="tablinks" onclick="openCity(event, 'send_release')" id="">Send Release</button>
-             <button class="tablinks" onclick="openCity(event, 'summary')" id="">Summary</button>
+               <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Create New Release</button>
+               <button class="tablinks" onclick="openCity(event, 'choose_recipient')" id="">Choose Recipients</button>
+               <button class="tablinks" onclick="openCity(event, 'send_release')" id="">Send Release</button>
+               <button class="tablinks" onclick="openCity(event, 'summary')" id="">Summary</button>
             </div>
            
             <div class="press-release-content">

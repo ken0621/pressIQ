@@ -1735,6 +1735,31 @@ class ShopMemberController extends Shop
         $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->coinsph()->money_remittance()->bank()->vmoney()->airline()->get();
         $data["_method"] = unserialize($this->shop_info->shop_payout_method);
 
+        // Philtech
+        if ($this->shop_theme == "philtech") 
+        {
+            foreach ($data["_slot"] as $key => $value) 
+            {
+                $membership_name = DB::table("tbl_membership")->where("membership_id", $value->slot_membership)->value("membership_name");
+                
+                if ($membership_name == "V.I.P Gold") 
+                {
+                    $data["_airline_slot"][$key] = $value;
+                }
+            }
+
+            if (!isset($data["_airline_slot"])) 
+            {
+                foreach ($data["_method"] as $key => $value) 
+                {
+                    if ($value == "airline") 
+                    {
+                        unset($data["_method"][$key]);
+                    }
+                }
+            }
+        }
+
         $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
         $data["tin_number"] = Self::$customer_info->tin_number;
         return view("member2.payout_settings", $data);

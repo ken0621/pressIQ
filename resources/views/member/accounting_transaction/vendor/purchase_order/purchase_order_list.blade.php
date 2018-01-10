@@ -6,7 +6,7 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-            <span class="page-title">{{$page}}</span>
+            <span class="page-title">{{ $page }}</span>
             <small>
             List of {{$page}}
             </small>
@@ -19,9 +19,9 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray "  style="margin-bottom: -10px;">
     <ul class="nav nav-tabs">
-        <li class="active change-tab open-tab cursor-pointer" mode="open"><a class="cursor-pointer"><i class="fa fa-check"></i> Open</a></li>
-        <li class="cursor-pointer change-tab close-tab" mode="close"><a class="cursor-pointer"><i class="fa fa-times"></i> Close</a></li>
-        <li class="cursor-pointer change-tab all-tab" mode="all"><a class="cursor-pointer"><i class="fa fa-trash"></i> All</a></li>
+        <li class="active change-tab cursor-pointer open-tab" mode="open"><a class="cursor-pointer"><i class="fa fa-folder-open-o"></i> Open</a></li>
+        <li class="cursor-pointer change-tab closed-tab" mode="closed"><a class="cursor-pointer"><i class="fa fa-folder-o"></i> Close</a></li>
+        <li class="cursor-pointer change-tab all-tab" mode="all"><a class="cursor-pointer"><i class="fa fa-list"></i> All</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">
@@ -56,5 +56,5 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/po.js"></script>
+<script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/po_list.js"></script>
 @endsection

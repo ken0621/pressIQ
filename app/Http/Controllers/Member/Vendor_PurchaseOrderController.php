@@ -88,6 +88,7 @@ class Vendor_PurchaseOrderController extends Member
             $data["action"]     = "/member/vendor/purchase_order/create_po";
             $data["v_id"]       = Request::input("vendor_id");
             $id = Request::input('id');
+           
 
             if($id)
             {
@@ -95,7 +96,7 @@ class Vendor_PurchaseOrderController extends Member
                 $data["_poline"]       = Tbl_purchase_order_line::um()->where("poline_po_id", $id)->get();
                 $data["action"]         = "/member/vendor/purchase_order/update_po";
             }
-            // dd($data);
+             //dd($data);
 
             return view('member.purchase_order.purchase_order',$data);
         }

@@ -17,10 +17,10 @@
         </div>
     </div>
 </div>
-<div class="panel panel-default panel-block panel-title-block panel-gray "  style="margin-bottom: -10px;">
-    <<ul class="nav nav-tabs">
-        <li class="active change-tab cursor-pointer open-tab" mode="open"><a class="cursor-pointer"><i class="fa fa-folder-open-o"></i> Open</a></li>
-        <li class="cursor-pointer change-tab closed-tab" mode="closed"><a class="cursor-pointer"><i class="fa fa-folder-o"></i> Close</a></li>
+<div class="panel panel-default panel-block panel-title-block panel-gray"  style="margin-bottom: -10px;">
+    <ul class="nav nav-tabs">
+        <!-- <li class="active change-tab cursor-pointer open-tab" mode="open"><a class="cursor-pointer"><i class="fa fa-folder-open-o"></i> Open</a></li>
+        <li class="cursor-pointer change-tab closed-tab" mode="closed"><a class="cursor-pointer"><i class="fa fa-folder-o"></i> Close</a></li> -->
         <li class="cursor-pointer change-tab all-tab" mode="all"><a class="cursor-pointer"><i class="fa fa-list"></i> All</a></li>
     </ul>
     <div class="search-filter-box">
@@ -33,7 +33,7 @@
         <div class="col-md-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search-employee-name" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
+                <input type="text" class="form-control search-keyword" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
             </div>
         </div>
     </div>

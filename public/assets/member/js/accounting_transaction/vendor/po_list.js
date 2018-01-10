@@ -71,7 +71,7 @@ function po_list()
 		}
 		$.ajax(
 		{
-			url:"/member/transaction/receive_inventory/load-receive-inventory",
+			url:"/member/transaction/purchase_order/load-purchase-order",
 			data: load_table_data,
 			type: "get",
 			success: function(data)

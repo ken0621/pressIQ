@@ -16,15 +16,29 @@ use Validator;
 
 class RequisitionSlip
 {
-    public static function get($shop_id, $status = 'open', $pagination = 10)
+    public static function get($shop_id, $status = null, $pagination = null, $search_keyword = null)
     {
-        $data = Tbl_requisition_slip::where('shop_id',$shop_id);
+        $data = Tbl_requisition_slip_item::PRInfo('shop_id',$shop_id);
 
-        if($status)
+        if($search_keyword)
+        {
+            $data->where(function($q) use ($search_keyword)
+            {   
+                $q->orWhere("vendor_company", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_last_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("rs_id", "LIKE", "%$search_keyword%");
+                $q->orWhere("rs_item_amount", "LIKE", "%$search_keyword%");
+            });
+        }
+
+        if($status != 'all')
         {
             $data = $data->where('requisition_slip_status',$status);
         }
-
+        
         if($pagination)
         {
             $data = $data->paginate($pagination);
@@ -33,7 +47,8 @@ class RequisitionSlip
         {
             $data = $data->get();
         }
-        
+        //$data = $data->get();
+        //dd($data);
         return $data;
     }
     public static function get_slip($shop_id, $slip_id)

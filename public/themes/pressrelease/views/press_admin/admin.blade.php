@@ -23,6 +23,7 @@
     		<ul>
     		   <li class="{{ Request::segment(2) == "dashboard" ? "active" : "" }}"><a href="/pressadmin/dashboard">Dashboard</a></li>
 			   <li class="{{ Request::segment(2) == "mediacontacts" ? "active" : "" }}"><a href="/pressadmin/mediacontacts">Media Contacts</a></li>
+			   <li class="{{ Request::segment(2) == "manage_user" ? "active" : "" }}"><a href="/pressadmin/manage_user">Manage User</a></li>
 			   <li class="{{ Request::segment(2) == "email" ? "active" : "" }}"><a href="/pressadmin/email">Email</a></li>
 			</ul>
 		</div>

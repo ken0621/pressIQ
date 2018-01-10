@@ -150,7 +150,7 @@
 				   			   		</div>
 				   			   		<div class="form-group">
 				   			   			<label>Contact</label>
-				   			   			<input type="number" class="form-control" name="contact" value="{{isset($profile->contact) ? $profile->contact : '' }}">
+				   			   			<input type="text" class="form-control" name="contact" value="{{isset($profile->contact) ? $profile->contact : '' }}">
 				   			   		</div>
 					   			</div>
 						   		<div class="col-md-6">

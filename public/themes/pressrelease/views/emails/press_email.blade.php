@@ -96,10 +96,10 @@
 			<div class="heading-container">{{$pr_headline}}</div>
 			<div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">{{$pr_sender_name}}</span></div>
 			<div class="date-container">{{$pr_date_sent}}</div>
-			<div class="content-container"><p>{!!$pr_content!!}</p></div>
+			<div class="content-container"><p>{!! str_replace('../', '/', $pr_content); !!}</p></div>
 			<div class="border"></div>
 			<div class="title-about-container">About {{$pr_sender_name}}</div>
-			<div class="content-container">{!!$pr_boiler_content!!}</div>
+			<div class="content-container">{!! str_replace('../', '/', $pr_boiler_content); !!}</div>
 		</div>
 	</div> --}}
 	<div class="background-container">
@@ -110,19 +110,18 @@
 				</div>
 				<div class="col-xs-3" style="padding-left: 0px; padding-right: 20px;">
 					<div class="logo-holder">
-					  <img src="/themes/{{ $shop_theme }}/img/logo-release.jpg" style="width: 100%;">
+					  <img src="{!!$pr_co_img!!}" style="width: 100%;">
 					</div>
 				</div>
 			</div>
-			<div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name"{{$pr_sender_name}}</span></div>
+			<div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">{{$pr_sender_name}}</span></div>
 			<div class="date-container">{{$pr_date_sent}}</div>
-			<div class="content-container"><p>{!!$pr_content!!}</p></div>
+			<div class="content-container"><p>{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_content); !!}</p></div>
 			<div class="border"></div>
-			<div class="title-about-container">About {{$pr_sender_name}}</div>
-			<div class="content-container">{!!$pr_boiler_content!!}</div>
+			<div class="title-about-container">About {{$pr_co_name}}</div>
+			<div class="title-about-container">{{$pr_type}}</div>
+			<div class="content-container">{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_boiler_content); !!}</div>
 		</div>
 	</div>
 </body>
 </html>
-
-

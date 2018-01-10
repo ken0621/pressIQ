@@ -63,6 +63,8 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_tour_wallet_slot;
+use App\Models\Tbl_tour_wallet;
 
 use App\Models\Tbl_press_release_recipient;
 use App\Tbl_pressiq_press_releases;
@@ -178,6 +180,14 @@ class ShopMemberController extends Shop
                     return Self::load_view_for_members('member.privilage_card_holder_dashboard',$data);
                 }                   
             }
+            //total points
+            $slots = Tbl_mlm_slot::where('slot_owner',Self::$customer_info->customer_id)->get();
+            $total_points = 0;
+            foreach($slots as $s)
+            {
+                $total_points += $this->redeem_points_sum($s->slot_id);
+            }
+            $data['total_points'] = currency("",$total_points)." POINT(S)";
         }
 
         // for shift only
@@ -345,7 +355,7 @@ class ShopMemberController extends Shop
     
     public function send_pr()
     {
-
+        $pr_info["pr_type"]         =request('pr_type');
         $pr_info["pr_headline"]     =request('pr_headline');
         $pr_info["pr_content"]      =request('pr_content');
         $pr_info["pr_boiler_content"]=request('pr_boiler_content');
@@ -359,6 +369,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_co_img"]       =session('user_company_image');
         
         //dd(session('user_company_image'));
+        $pr_rules["pr_type"]       =['required'];
         $pr_rules["pr_headline"]   =['required'];
         $pr_rules["pr_content"]    =['required'];
         $pr_rules["pr_boiler_content"] =['required'];
@@ -396,6 +407,7 @@ class ShopMemberController extends Shop
                     DB::table('tbl_pressiq_press_releases')
                         ->where('pr_id', session('pr_edit'))
                         ->update([
+                            'pr_type'         =>request('pr_type'),
                             'pr_headline'     =>request('pr_headline'),
                             'pr_content'      =>request('pr_content'),
                             'pr_boiler_content'=>request('pr_boiler_content'),
@@ -404,7 +416,11 @@ class ShopMemberController extends Shop
                             'pr_status'       =>"sent",
                             'pr_date_sent'    =>$date,
                             'pr_sender_name'  =>session('user_first_name').' '.session('user_last_name'),
-                            'pr_receiver_name'=>request('pr_receiver_name')
+                            'pr_receiver_name'=>request('pr_receiver_name'),
+                            'pr_co_name'      =>session('user_company_name'),
+                            'pr_co_img'       =>session('user_company_image'),
+
+
                             ]);
                     Session::forget('pr_edit');
                     return Redirect::to("/pressuser/mypressrelease");
@@ -450,7 +466,8 @@ class ShopMemberController extends Shop
     }
 
     public function press_release_save_as_draft(Request $request)
-    {   
+    {  
+        $pr_info["pr_type"]         =$request->pr_type; 
         $pr_info["pr_headline"]     =$request->pr_headline;
         $pr_info["pr_content"]      =$request->pr_content;
         $pr_info["pr_boiler_content"]=$request->pr_boiler_content;
@@ -462,11 +479,35 @@ class ShopMemberController extends Shop
         $pr_info["pr_receiver_name"]=request('pr_receiver_name');
         $pr_info["pr_co_name"]      =session('user_company_name');
         $pr_info["pr_co_img"]       =session('user_company_image');
+        $pr_info["pr_type"]         =$request->pr_type;
 
-        
-        $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info); 
+        if(Session::has('pr_edit'))
+        {
+            $date=Carbon::now();
+            DB::table('tbl_pressiq_press_releases')
+                ->where('pr_id', session('pr_edit'))
+                ->update([
+                    'pr_type'         =>request('pr_type'),
+                    'pr_headline'     =>request('pr_headline'),
+                    'pr_content'      =>request('pr_content'),
+                    'pr_boiler_content'=>request('pr_boiler_content'),
+                    'pr_from'         =>session('user_email'),
+                    'pr_to'           =>request('pr_to'),
+                    'pr_status'       =>"draft",
+                    'pr_date_sent'    =>$date,
+                    'pr_sender_name'  =>session('user_first_name').' '.session('user_last_name'),
+                    'pr_receiver_name'=>request('pr_receiver_name'),
+                    'pr_co_name'      =>session('user_company_name'),
+                    'pr_co_img'       =>session('user_company_image'),
+                    ]);
+            Session::forget('pr_edit');
+        }
+        else
+        {
+            $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
+        }
+         
         $data["page"] = "Press Release - My Press Release";
-        Session::forget('pr_edit');
         return redirect::to("/pressuser/drafts");
     }
     public function pressuser_my_pressrelease()
@@ -699,8 +740,18 @@ class ShopMemberController extends Shop
         //     return view("press_admin.press_admin_media_contacts",$data);
         // }
     }
-    public function pressadmin_pressreleases()
+    public function manage_user()
     {
+        // dd(session("edit_user"));
+        $data['_user'] = Tbl_pressiq_user::where('user_level',2)->get();
+        $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
+        $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
+        $data['_admin_edit'] = Tbl_pressiq_user::where('user_id',session('edit_admin'))->get();
+        
+        
+        $data['_edit'] = Tbl_pressiq_user::where('user_id',session('u_edit'))->get();
+        
+
         if(Session::exists('user_email'))
         {
            $level=session('pr_user_level');
@@ -711,7 +762,7 @@ class ShopMemberController extends Shop
            else
            {
                 $data["page"] = "Press Release - Press Release";
-                return view("press_admin.press_admin_pressrelease", $data);
+                return view("press_admin.press_admin_manage_user", $data);
            }
         }
         else
@@ -720,11 +771,92 @@ class ShopMemberController extends Shop
         }
     }
 
+    public function manage_user_add_admin(Request $request)
+    {
+      $data["user_first_name"]                 = $request->user_first_name;
+      $data["user_last_name"]                  = $request->user_last_name;
+      $data["user_email"]                      = $request->user_email;
+      $data["user_password"]                   = Crypt::encrypt(request('user_password'));
+      $data["user_level"]                      = "1";
+      Tbl_pressiq_user::insert($data);
+      Session::flash('success_admin', 'New Admin Successfully Added!');
+      return  redirect::back();
+    }
+
+    public function pressadmin_manage_user_edit()
+    {
+        DB::table('tbl_pressiq_user')
+                        ->where('user_id', session('edit_user'))
+                        ->update([
+                            'user_first_name'     =>request('first_name'),
+                            'user_last_name'      =>request('last_name'),
+                            'user_email'          =>request('email'),
+                            'user_company_name'   =>request('company_name')
+                            ]);
+        Session::forget('edit_user');
+        return redirect()->back();
+    }
+
+    public function pressadmin_manage_force_login($id)
+    {
+
+        session::flush();
+        $_user_data = DB::table('tbl_pressiq_user')->where('user_id',$id)->get();
+        
+        foreach ($_user_data as $user_data) {
+            # code...
+        }
+        Session::put('user_email', $user_data->user_email);
+        Session::put('user_first_name',$user_data->user_first_name);
+        Session::put('user_last_name',$user_data->user_last_name);
+        Session::put('user_company_name',$user_data->user_company_name);
+        Session::put('user_company_image',$user_data->user_company_image);
+        Session::put('pr_user_level',$user_data->user_level);
+        Session::put('pr_user_id',$user_data->user_id);
+
+
+        return Redirect::to("/signin"); 
+
+    }
+
+    public function pressadmin_manage_admin_edit()
+    {
+        DB::table('tbl_pressiq_user')
+                        ->where('user_id', session('edit_admin'))
+                        ->update([
+                            'user_first_name'     =>request('first_name'),
+                            'user_last_name'      =>request('last_name'),
+                            'user_email'          =>request('email'),
+                            'user_company_name'   =>request('company_name')
+                            ]);
+        Session::forget('edit_admin');
+         Session::flash('success_admin', 'Admin Successfully Updated!');
+        return redirect()->back();
+    }
+    public function edit_user($id)
+    {
+        Session::put('edit_user',$id);
+        
+        return redirect()->back();
+    }
+    public function edit_admin($id)
+    {
+        Session::put('edit_admin',$id);
+        
+        return redirect()->back();
+    }
+
+    public function manage_user_delete_admin($id)
+    {
+      Tbl_pressiq_user::where('user_id',$id)->delete();
+      Session::flash('delete_admin', "Admin Already Deleted!");
+      return  redirect::back();
+    }
+   
     public function pressadmin_email()
     {   
 
         $data['_email'] = Tbl_pressiq_press_releases::paginate(5);
-
 
         if(Session::exists('user_email'))
         {
@@ -772,17 +904,12 @@ class ShopMemberController extends Shop
     }
     public function pressadmin_email_save(Request $request)
     {   
-        $pr_info["pr_headline"]     =$request->pr_headline;
-        $pr_info["pr_content"]      =$request->pr_content;
-        $pr_info["pr_boiler_content"]=$request->pr_boiler_content;
-
-        
         DB::table('tbl_pressiq_press_releases')
                         ->where('pr_id', session('e_edit'))
                         ->update([
                             'pr_headline'     =>request('pr_headline'),
                             'pr_content'      =>request('pr_content'),
-                            'pr_boiler_content'=>request('pr_boiler_content'),
+                            'pr_boiler_content'=>request('pr_boiler_content')
                             ]);
         Session::forget('e_edit');
         return redirect::to("/pressadmin/email");
@@ -846,7 +973,7 @@ class ShopMemberController extends Shop
     public function pressreleases_edit_recipient($id)
     {
         Session::put('r_edit',$id);
-        return Redirect::to("/pressadmin/mediacontacts");
+        return Redirect::back();
     }
 
     public function pressuser_choose_recipient(Request $request)
@@ -1278,6 +1405,17 @@ class ShopMemberController extends Shop
                 }
             }
 
+            // Method Airline Wallet
+            if ($method == "airline") 
+            {
+                $tour_wallet = Tbl_tour_wallet_slot::where("slot_id", $slot->slot_id)->value("tour_wallet_account_id");
+
+                if (!$tour_wallet || $tour_wallet == "" ) 
+                {
+                    $return .= "<div>Please set your Airline Wallet Account ID for <b>" . $slot->slot_no . "</b> in payout settings.</div>";
+                }
+            }
+
             $request_amount = $request_wallet[$key];
 
             if ($request_amount != 0) 
@@ -1383,7 +1521,7 @@ class ShopMemberController extends Shop
                         $remarks    = "Request by Customer";
                         $other      = 0;
                         $date       = date("m/d/Y");
-                        $status = "PENDING";
+                        $status     = "PENDING";
 
                         /* V-MONEY */
                         if ($method == "vmoney") 
@@ -1459,6 +1597,99 @@ class ShopMemberController extends Shop
                                 }
                             }
                         }
+                        elseif($method == "airline")
+                        {
+                            $wallet_amount = $take_home;
+
+                            $tour = Tbl_tour_wallet_slot::where('slot_id', $slot_id)
+                                                        ->leftJoin('tbl_tour_wallet', 'tbl_tour_wallet.tour_wallet_id', '=', 'tbl_tour_wallet_slot.tour_wallet_id')
+                                                        ->first();
+
+                            $host = Tbl_tour_wallet::where('tour_wallet_shop', $this->shop_info->shop_id)
+                                                   ->where('tour_wallet_main', 1)
+                                                   ->first();
+                            
+                            $base_uri = $this->shop_info->shop_wallet_tours_uri;
+
+                            $airline_result            = AbsMain::transfer_wallet($base_uri, $host->tour_Wallet_a_account_id, $host->tour_wallet_a_username, $host->tour_wallet_a_base_password, $tour->tour_Wallet_a_account_id, $wallet_amount);
+                            $airline_result['message'] = 'Wallet Transfer Success';
+
+                            if($airline_result['status'] == 1)
+                            {
+                                $wallet_nega                              = $wallet_amount * (-1);
+
+                                $log['shop_id']                           = $this->shop_info->shop_id;
+                                $log['wallet_log_slot']                   = $slot_id;
+                                $log['wallet_log_slot_sponsor']           = $slot_id;
+                                $log['wallet_log_details']                = 'You have transferred ' . $wallet_amount . ' To your tours wallet. ' . $wallet_amount . ' is deducted to your wallet.' ;
+                                $log['wallet_log_amount']                 = $wallet_nega;
+                                $log['wallet_log_plan']                   = 'TOURS_WALLET';
+                                $log['wallet_log_status']                 = 'released';
+                                $log['wallet_log_claimbale_on']           = Carbon::now();
+
+                                $insert['tour_wallet_logs_wallet_amount'] = $wallet_amount;
+                                $insert['tour_wallet_logs_date']          = Carbon::now(); 
+                                $insert['tour_wallet_logs_tour_id']       = $tour->tour_wallet_id; 
+                                $insert['tour_wallet_logs_account_id']    = $tour->tour_Wallet_a_account_id;
+                                $insert['tour_wallet_logs_customer_id']   = Self::$customer_info->customer_id;
+                                $insert['tour_wallet_logs_accepted']      = 1;
+                                $insert['tour_wallet_logs_points']        = 0;
+
+                                // Get Balance
+                                $host_update = AbsMain::get_balance($base_uri, $host->tour_Wallet_a_account_id, $host->tour_wallet_a_username, $host->tour_wallet_a_base_password);
+                                
+                                if($host_update['status'] == 1)
+                                {
+                                    $update['tour_wallet_a_current_balance'] = $host_update['result'];
+
+                                    Tbl_tour_wallet::where('tour_wallet_shop', $this->shop_info->shop_id)
+                                                   ->where('tour_wallet_main', 1)
+                                                   ->update($update);
+                                }
+
+                                $update['tour_wallet_a_current_balance'] = $tour->tour_wallet_a_current_balance + $wallet_amount;
+                                
+                                Tbl_tour_wallet::where('tour_wallet_customer_id', Self::$customer_info->customer_id)
+                                               ->where('tour_wallet_main', 0)
+                                               ->update($update);
+
+                                Mlm_slot_log::slot_array($log);
+
+                                $tour_wallet_convertion = $host->tour_wallet_convertion;
+
+                                if($tour_wallet_convertion != 0)
+                                {
+                                    $points                            = ($wallet_amount/100) * $tour_wallet_convertion;
+                                    $insert['tour_wallet_logs_points'] = $points;
+                                    $l                                 = "You have earned " . $points . " Repurchase Points. From  tours wallet."; 
+                                    $log['shop_id']                    = $this->shop_info->shop_id;
+                                    $log['wallet_log_slot']            = $slot_id;
+                                    $log['wallet_log_slot_sponsor']    = $slot_id;
+                                    $log['wallet_log_details']         = $l ;
+                                    $log['wallet_log_amount']          = 0;
+                                    $log['wallet_log_plan']            = 'TOURS_WALLET_POINTS';
+                                    $log['wallet_log_status']          = 'released';
+                                    $log['wallet_log_claimbale_on']    = Carbon::now();
+
+                                    Mlm_slot_log::slot_array($log);
+
+                                    $array['points_log_complan']        = "REPURCHASE_POINTS";
+                                    $array['points_log_level']          = 0;
+                                    $array['points_log_slot']           = $slot_id;
+                                    $array['points_log_Sponsor']        = $slot_id;
+                                    $array['points_log_date_claimed']   = Carbon::now();
+                                    $array['points_log_converted']      = 0;
+                                    $array['points_log_converted_date'] = Carbon::now();
+                                    $array['points_log_type']           = 'PV';
+                                    $array['points_log_from']           = 'Wallet Tours';
+                                    $array['points_log_points']         = $points;
+
+                                    Mlm_slot_log::slot_log_points_array($array);
+                                }
+
+                                DB::table('tbl_tour_wallet_logs')->insert($insert);
+                            }
+                        }
                         else
                         {
                             $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
@@ -1489,6 +1720,31 @@ class ShopMemberController extends Shop
         $data["page"] = "Payout";
         $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->coinsph()->money_remittance()->bank()->vmoney()->airline()->get();
         $data["_method"] = unserialize($this->shop_info->shop_payout_method);
+
+        // Philtech
+        if ($this->shop_theme == "philtech") 
+        {
+            foreach ($data["_slot"] as $key => $value) 
+            {
+                $membership_name = DB::table("tbl_membership")->where("membership_id", $value->slot_membership)->value("membership_name");
+                
+                if ($membership_name == "V.I.P Gold") 
+                {
+                    $data["_airline_slot"][$key] = $value;
+                }
+            }
+
+            if (!isset($data["_airline_slot"])) 
+            {
+                foreach ($data["_method"] as $key => $value) 
+                {
+                    if ($value == "airline") 
+                    {
+                        unset($data["_method"][$key]);
+                    }
+                }
+            }
+        }
 
         $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
         $data["tin_number"] = Self::$customer_info->tin_number;
@@ -2052,6 +2308,7 @@ class ShopMemberController extends Shop
         // $validate['customer_city'] = 'required';
         // $validate['customer_zipcode'] = 'required';
         $validate['customer_street'] = 'required';
+        $validate['contact'] = 'required';
 
         $validator = Validator::make($form, $validate);
         
@@ -2350,14 +2607,24 @@ class ShopMemberController extends Shop
         $sort_by = 0;
         $data['page'] = "Redeemable";
         $data['_redeemable'] = Tbl_item_redeemable::where("archived",0)->whereColumn("quantity",">","number_of_redeem")->get();
+
         $slot_info           = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+        $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+
         $data["_points"]     = $this->redeem_points_sum($slot_info->slot_id);
         // dd($data);
         return (Self::load_view_for_members("member.redeemable",$data));
     }
+    public function getSlotPoints()
+    {
+        $slot = request('slot_no');
+        $slot_info           = Tbl_mlm_slot::where("slot_no", $slot)->membership()->first();
+        return  currency('',$this->redeem_points_sum($slot_info->slot_id));
+    }
     public function postRedeemItem(Request $request)
     {
-        $slot_info          = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+
+        $slot_info          = Tbl_mlm_slot::where("slot_no", $request->slot_no)->membership()->first();
         $item_redeemable_id = $request->item_id;
         $redeemable_item    = Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->first();
         if($redeemable_item)
@@ -2383,6 +2650,7 @@ class ShopMemberController extends Shop
                     // you redeem <item> for <cost>. Please wait for admin's approval.
                     $insert_report['log'] = 'You redeemed '.$redeemable_item->item_name.' for '.currency("",$redeemable_item->redeemable_points)." POINTS. Please wait for admin's approval.";
                     $insert_report['date_created'] = Carbon::now();
+                    $insert_report['slot_owner'] = Self::$customer_info->customer_id;
                     Tbl_item_redeemable_report::insert($insert_report);
                     Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->increment('number_of_redeem');
 
@@ -2424,8 +2692,8 @@ class ShopMemberController extends Shop
     {
         $sort_by = 0;
         $data['page'] = "Redeem History";
-        $slot_info = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
-        $data['redeem_history'] = Tbl_item_redeemable_report::where('slot_id',$slot_info->slot_id)->paginate(10);
+        $data['redeem_history'] = Tbl_item_redeemable_report::Slot()->where('tbl_item_redeemable_report.slot_owner',Self::$customer_info->customer_id)->paginate(10);
+        // dd($data['redeem_history']);
         return (Self::load_view_for_members("member.redeem_history",$data));
     }
     public function getCodevault()

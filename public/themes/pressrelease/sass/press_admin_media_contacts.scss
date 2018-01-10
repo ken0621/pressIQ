@@ -64,6 +64,11 @@
                         font-family: arial, sans-serif;
                         border-collapse: collapse;
                         width: 100%;
+                        display:block;
+                        height: 600px;
+                        overflow-y: scroll;
+                        text-align: center;
+                        background-color: #FFFFFF;
                     }
 
                     th
@@ -77,15 +82,13 @@
                         border: 1px solid #dddddd;
                         text-align: center;
                         padding: 10px;
+                        vertical-align: middle;
                     }
-
-                    a
+                    button
                     {
-                        background-color: #316df9;
-                        color: #fff;
-                        font-size: 12px;
-                        padding: 8px 8px;
-                        text-decoration: none;
+                        display: inline-block;
+                        vertical-align: middle;
+                        width: 90px;
                     }
                 }
             }

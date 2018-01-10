@@ -7,7 +7,7 @@
         	<div class="title-container"><a href="/pressuser/mypressrelease/pressrelease/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
         	<div class="date-container">{{$prs->pr_date_sent}}</div>
             <div class="details-container">
-                <a href="/pressuser/mypressrelease/pressrelease/view/{{$prs->pr_id}}">
+                <a href="/pressuser/mypressrelease/pressrelease/view/{{$prs->pr_id}}" style="color: black;text-decoration:none;">
                 {!!$prs->pr_content!!}
                 </a>
             </div>

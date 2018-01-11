@@ -134,7 +134,8 @@ class ShopMemberController extends Shop
 
                 foreach($_slot as $slot)
                 {
-                    if($slot->slot_membership == 4)
+                    // 4 = V.I.P Platinum && 65 = V.I.P Platinum (FS)
+                    if($slot->slot_membership == 4 || $slot->slot_membership == 65)
                     {
                         $data["travel_and_tours"] = true;
                     }

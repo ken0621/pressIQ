@@ -780,6 +780,7 @@ Route::any('/member/vendor/receive_inventory/list','Member\Vendor_ReceiveInvento
 Route::any('/member/vendor/receive_inventory','Member\Vendor_ReceiveInventoryController@receive_inventory');
 Route::any('/member/vendor/receive_inventory/add','Member\Vendor_ReceiveInventoryController@add_receive_inventory');
 Route::any('/member/vendor/receive_inventory/update','Member\Vendor_ReceiveInventoryController@update_receive_inventory');
+Route::any('/member/vendor/receive_inventory/view_pdf/{id}','Member\Vendor_ReceiveInventoryController@ri_pdf');
 
 // VENDOR PAYBILLS
 Route::any('/member/vendor/paybill','Member\Vendor_PayBillController@index');

@@ -129,8 +129,12 @@
                                                     </td>
                                                     <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]" value="{{$poline->poline_orig_qty}}" /></td>
                                                     <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{$poline->poline_rate}}" /></td>
-                                                    <td><input class="text-right txt-discount compute" type="text" name="item_discount[]" value="{{$poline->poline_discount}}" /></td>
-                                                    <td><textarea class="textarea-expand" type="text" name="item_remark[]" value="{{$poline->poline_discount_remark}}"></textarea></td>
+                                                    @if($poline->poline_discounttype == 'fixed')
+                                                        <td><input class="text-right txt-discount compute" type="text" name="item_discount[]" value="{{$poline->poline_discount}}" /></td>
+                                                    @else
+                                                        <td><input class="text-right txt-discount compute" type="text" name="item_discount[]" value="{{$poline->poline_discount * 100}}%" /></td>
+                                                    @endif
+                                                    <td><textarea class="textarea-expand" type="text" name="item_remark[]">{{$poline->poline_discount_remark}}</textarea></td>
                                                     <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$poline->poline_amount}}" /></td>
                                                     <td class="text-center">
                                                         <input type="hidden" class="poline_taxable" name="item_taxable[]" value="{{$poline->taxable}}" >

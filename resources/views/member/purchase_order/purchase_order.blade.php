@@ -14,9 +14,22 @@
                     
                     </small>
                 </h1>
-                <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
-                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save</button>
+                <!-- <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
+                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save and Edit</button>
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
+             --></div>
+            <div class="dropdown pull-right">
+                <div>
+                    <a class="btn btn-custom-white" href="/member/vendor/purchase_order/list">Cancel</a>
+                    <button class="btn btn-custom-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu  dropdown-menu-custom">
+                        <li><a class="select-action" code="save-and-close">Save & Close</a></li>
+                        <li><a class="select-action" code="save-and-edit">Save & Edit</a></li>
+                        <li><a class="select-action" code="save-and-print">Save & Print</a></li>
+                        <li><a class="select-action" code="save-and-new">Save & New</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

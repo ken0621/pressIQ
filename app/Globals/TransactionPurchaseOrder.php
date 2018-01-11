@@ -121,8 +121,6 @@ class TransactionPurchaseOrder
             $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
             //die(var_dump($overall_price));
 
-            //
-            
             $ins['po_subtotal_price'] = $subtotal_price;
             $ins['po_overall_price']  = $overall_price;
 

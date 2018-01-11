@@ -689,8 +689,8 @@ class Accounting
 			case 'write-check':
 				$data["main_account"]		= 'cash-r';
 				$data["name"] 				= '';
-				$data["newNormalJournal"] 	= 'normalBalance';
-				$data["newContraJournal"] 	= 'contraAccount';
+				$data["newNormalJournal"] 	= 'contraAccount';
+				$data["newContraJournal"] 	= 'normalBalance';
 				return $data;
 				break;
 			case 'debit-memo':

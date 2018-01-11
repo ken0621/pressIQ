@@ -12,6 +12,7 @@ use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_customer_invoice_line;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_item;
+use App\Models\Tbl_write_check_account_line;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_user;
 use App\Models\Tbl_bill_po;
@@ -67,6 +68,7 @@ class Vendor_CheckController extends Member
            $data["wc"] = Tbl_write_check::where("wc_id",$id)->first();
            $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["wc"]->wc_vendor_id)->where("po_is_billed",0)->get();
            $data["_wc_item_line"] = Tbl_write_check_line::um()->where("wcline_wc_id",$id)->get();
+           $data["_wc_acct_line"] = Tbl_write_check_account_line::where("accline_wc_id",$id)->get();
            $data['_item']      = Item::get_all_category_item();
            $data['action']     = "/member/vendor/write_check/update";
         }
@@ -83,7 +85,7 @@ class Vendor_CheckController extends Member
             if($value->wc_reference_name == "customer")
             {
                 $c_data = Tbl_customer::where("customer_id",$value->wc_reference_id)->first();
-                $name = isset($c_data) ? ($c_data->company != "" ? $c_data->company : $v_data->first_name." ".$c_data->last_name) : "";
+                $name = isset($c_data) ? ($c_data->company != "" ? $c_data->company : $c_data->first_name." ".$c_data->last_name) : "";
             }
 
             $data["_check"][$key]->name = $name;
@@ -275,7 +277,6 @@ class Vendor_CheckController extends Member
                 $account_info[$key_acct]['account_desc']    = $_accountdesc[$key_acct];
             }
         }
-
 
         $ctr_items = 0;
         $item_refill = [];

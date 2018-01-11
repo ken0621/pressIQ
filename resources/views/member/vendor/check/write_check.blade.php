@@ -112,8 +112,8 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody class="draggable tbody-acct">
-                                                    @if(isset($_bill_account_line))
-                                                        @foreach($_bill_account_line as $accline)
+                                                    @if(isset($_wc_acct_line))
+                                                        @foreach($_wc_acct_line as $accline)
                                                         <tr class="tr-draggable">
                                                             <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
                                                             <td class="acct-number-td text-right">1</td>

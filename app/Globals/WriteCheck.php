@@ -13,6 +13,7 @@ use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_write_check_line;
 use App\Models\Tbl_write_check_account_line;
+use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_write_check;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_pay_bill;
@@ -134,6 +135,17 @@ class WriteCheck
 
                         WriteCheck::insert_bill_wc_line($wc_id, $item_info);
                     }
+
+                    $bill_line_acct = Tbl_bill_account_line::where("accline_bill_id",$value->pbline_reference_id)->get();
+
+                    foreach ($bill_line_acct as $key => $value2)
+                    {
+                        $account_info['accline_coa_id'] = $value2->accline_coa_id;
+                        $account_info['accline_description'] = $value2->accline_description;
+                        $account_info['accline_amount'] = $value2->accline_amount;
+
+                        WriteCheck::insert_bill_wc_acct_line($wc_id, $account_info);
+                    }
                 }
             }
 
@@ -186,6 +198,16 @@ class WriteCheck
 
                         WriteCheck::insert_bill_wc_line($wc_id, $item_info);
                     }
+                    $bill_line_acct = Tbl_bill_account_line::where("accline_bill_id",$value->pbline_reference_id)->get();
+
+                    foreach ($bill_line_acct as $key => $value2)
+                    {
+                        $account_info['accline_coa_id'] = $value2->accline_coa_id;
+                        $account_info['accline_description'] = $value2->accline_description;
+                        $account_info['accline_amount'] = $value2->accline_amount;
+
+                        WriteCheck::insert_bill_wc_acct_line($wc_id, $account_info);
+                    }
                 }
             }
 
@@ -205,7 +227,7 @@ class WriteCheck
         $update['wc_mailing_address']         = $customer_vendor_info['wc_mailing_address'];
         $update['wc_payment_date']            = $wc_info['wc_payment_date'];
         $update['wc_memo']                    = $wc_other_info['wc_memo'];
-        $update['wc_total_amount']            = collect($item_info)->sum('itemline_amount') + collect($account_info->sum('account_amount'));
+        $update['wc_total_amount']            = collect($item_info)->sum('itemline_amount') + collect($account_info)->sum('account_amount');
 
         Tbl_write_check::where("wc_id", $wc_id)->update($update);
 
@@ -221,7 +243,7 @@ class WriteCheck
 
         Tbl_write_check_line::where("wcline_wc_id", $wc_id)->delete();
         Tbl_write_check_account_line::where("accline_wc_id", $wc_id)->delete();
-        WriteCheck::insert_wc_line($wc_id, $item_info, $account_info);
+        WriteCheck::insert_wc_line($wc_id, $item_info, $entry, $account_info);
 
         
         $new = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
@@ -246,6 +268,18 @@ class WriteCheck
             Tbl_write_check_line::insert($insert_line);
         }
 
+    }
+    public static function insert_bill_wc_acct_line($wc_id, $account_info)
+    {
+        if($account_info)
+        {            
+            $insert_acc['accline_wc_id'] = $wc_id;
+            $insert_acc['accline_coa_id'] = $account_info['accline_coa_id'];
+            $insert_acc['accline_description'] = $account_info['accline_description'];
+            $insert_acc['accline_amount'] = $account_info['accline_amount'];
+
+            Tbl_write_check_account_line::insert($insert_acc);
+        }
     }
     public static function insert_wc_line($wc_id, $item_info, $entry, $account_info = array())
     {

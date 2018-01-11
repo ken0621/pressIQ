@@ -434,10 +434,10 @@ class CommissionCalculator
 			}
 			
 			$additional = 0;
-			if($rp_amount > $total_paid)
-			{
-				$additional = $rp_amount - $total_paid;
-			}
+			// if($rp_amount > $total_paid)
+			// {
+				$additional = abs($rp_amount - $total_paid);
+			// }
 
 			$ctr = floor(($get_payment_data->rp_total_amount + $additional) / $check->payment_amount);
 

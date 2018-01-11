@@ -683,6 +683,21 @@ class MerchantController extends Member
 		
 		if($request->hasFile('excel_file'))
 		{
+			$file = $request->file('excel_file');
+			// dd($file);
+			ini_set('memory_limit', '-1');
+			$report = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('pin','activation'));
+			if(isset($report[0]['pin']))
+			{
+				$data = array();
+				foreach ($report as $r) 
+				{
+					$cell['pin']			= $r['pin'];
+					$cell['activation']		= $r['activation'];
+					array_push($data, $cell);
+				}
+				dd($data);
+			}
 			$response = 'success';
 		}
 		else
@@ -690,8 +705,8 @@ class MerchantController extends Member
 			$response = 'error';
 		}
 		
-		
 		return Redirect::back()->with("response",$response);
+		
 	}
 
 }	

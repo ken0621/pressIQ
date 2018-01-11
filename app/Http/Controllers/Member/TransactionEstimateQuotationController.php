@@ -25,11 +25,17 @@ class TransactionEstimateQuotationController extends Member
 	{
 		$data['page'] = "Estimate and Quotation";
 		return view('member.accounting_transaction.customer.estimate_quotation.estimate_quotation_list',$data);
+	}	
+	public function getLoadEstimateQuotation(Request $request)
+	{
+		$data['_estimate_quotation'] = TransactionEstimateQuotation::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
+		return view('member.accounting_transaction.customer.estimate_quotation.estimate_quotation_table',$data);		
 	}
 	public function getCreate()
 	{
 		$data['page'] = "Create Estimate and Quotation";		
         $data["_customer"]  = Customer::getAllCustomer();
+        $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'estimate_quotation');
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['action']		= "/member/transaction/estimate_quotation/create-estimate-quotation";

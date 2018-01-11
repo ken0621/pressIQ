@@ -16,6 +16,8 @@ use App\Globals\TransactionSalesReceipt;
 use App\Globals\TransactionEstimateQuotation;
 use App\Globals\TransactionSalesOrder;
 
+use App\Globals\AccountingTransaction;
+
 use Session;
 use Carbon\Carbon;
 use App\Globals\Pdf_global;
@@ -26,11 +28,17 @@ class TransactionSalesReceiptController extends Member
 	{
 		$data['page'] = "Sales Receipt";
 		return view('member.accounting_transaction.customer.sales_receipt.sales_receipt_list',$data);
-	} 
+	} 	
+	public function getLoadSalesReceipt(Request $request)
+	{
+		$data['_sales_receipt'] = TransactionSalesReceipt::get($this->user_info->shop_id, 10, $request->search_keyword);
+		return view('member.accounting_transaction.customer.sales_receipt.sales_receipt_table',$data);		
+	}
 
 	public function getCreate()
 	{
 		$data['page'] = "Create Sales Receipt";		
+        $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'sales_receipt');
         $data["_customer"]  = Customer::getAllCustomer();
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
@@ -74,8 +82,11 @@ class TransactionSalesReceiptController extends Member
 		$return = null;
 		$validate = TransactionSalesReceipt::postInsert($this->user_info->shop_id, $insert, $insert_item);
 		if(is_numeric($validate))
-		{
-			
+		{			
+			$return['status'] = 'success';
+			$return['status_message'] = 'Success creating sales receipt.';
+			$return['call_function'] = 'success_sales_receipt';
+			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_receipt', $validate ,$btn_action);
 		}
 		else
 		{

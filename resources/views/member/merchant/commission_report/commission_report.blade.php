@@ -13,7 +13,7 @@
             </h1>
             <div class="dropdown pull-right">
                 <button onclick="window.open('/member/merchant/commission_report/export')" class="btn btn-def-white btn-custom-white"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
-                <!-- <button onclick="action_load_link_to_modal('/member/merchant/commission_report/import', 'md')" class="btn btn-primary"><i class="fa fa-upload"></i> Import File</button> -->
+                <button onclick="action_load_link_to_modal('/member/merchant/commission_report/import', 'md')" class="btn btn-primary"><i class="fa fa-upload"></i> Import File</button>
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@
         </div>   
     </div>
 </div>
-<div class="panel panel-default panel-block panel-title-block panel-gray col-md-6">
+<!-- <div class="panel panel-default panel-block panel-title-block panel-gray col-md-6">
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">
             <form method="post">
@@ -52,7 +52,7 @@
             </form>
         </div>   
     </div>
-</div>
+</div> -->
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-12"  style="margin-bottom: -10px;">
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">

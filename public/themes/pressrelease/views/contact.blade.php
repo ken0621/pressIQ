@@ -7,43 +7,50 @@
         <div class="row clearfix">
             <div class="col-md-8">
                 <div class="title-container">Get In Touch With Us</div>
+                <form action="Post"> 
+                    @if (session('message_concern'))
+                        <div class="alert alert-success">
+                            {{ session('message_concern') }}
+                        </div>
+                    @endif
                  <div class="row clearfix">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="First Name*">
+                            <input type="text" class="form-control" placeholder="First Name*" id="contactus_first_name" name="contactus_first_name" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Last Name*">
+                            <input type="text" class="form-control" placeholder="Last Name*" id="contactus_last_name" name="contactus_last_name" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                                <input type="phone" class="form-control" placeholder="Phone Number*">
+                                <input type="phone" class="form-control" placeholder="Phone*" id="contactus_phone_number" name="contactus_phone_number" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <input type="email" class="form-control" placeholder="Email Address*">
+                            <input type="email" class="form-control" placeholder="Email Address*" id="contactus_email" name="contactus_email" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <input type="text area" class="form-control" placeholder="Subject*">
+                            <input type="text area" class="form-control" placeholder="Subject*" id="contactus_subject" name="contactus_subject" required>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <textarea type="text" class="form-control text-message" placeholder="Message*"></textarea>
+                            <textarea type="text" class="form-control text-message" placeholder="Message*" id="contactus_message" name="contactus_message" required></textarea>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="button-container">
-                            <a href="#Read More">SEND</a>
+                           <button type="submit" formaction="/contactus/send">Send</button>
                         </div>
                     </div>
                 </div>
+                </form>
             </div>
             <div class="col-md-4">
             	<div class="background-border">
@@ -71,26 +78,7 @@
 @section("script")
 
 <script type="text/javascript">
-/*$(document).ready(function($) {
 
-        //START MISSION AND VISION
-        $(".title-vision").click(function()
-        {
-            $("#vision").removeClass("hide");
-            $("#mission").addClass("hide");
-            $(".title-vision").addClass("highlighted");
-            $(".title-mission").removeClass("highlighted");
-            
-        });
-        $(".title-mission").click(function()
-        {
-            $("#vision").addClass("hide");
-            $("#mission").removeClass("hide");
-            $(".title-mission").addClass("highlighted");
-            $(".title-vision").removeClass("highlighted");
-        });
-        //END MISSION ANF VISION
-});*/
 </script>
 
 @endsection

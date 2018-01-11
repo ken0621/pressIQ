@@ -136,7 +136,7 @@
                        <div class="title">Username: </div>
                        <input type="email" id="user_email" name="user_email" class="form-control" required>
 
-                       <div class="title">Company: </div>
+                       <div class="title">Password: </div>
                        <input type="Password" id="user_password" name="user_password" class="form-control" required>
 
                        <div class="button-container">

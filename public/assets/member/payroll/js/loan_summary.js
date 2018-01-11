@@ -24,9 +24,10 @@ function loan_summary()
 		$('.select-deduction-type').change(function()
 		{
 			var deduction_type = this.value;
+			var company = $('.select-company-name').val();
 			if (deduction_type!=0) 
 			{
-				load_summary_table(deduction_type);
+				load_summary_table(deduction_type,company);
 			}
 			else
 			{
@@ -57,8 +58,8 @@ function loan_summary()
 		});
 	}
 	
-	function load_summary_table(deduction_type)
+	function load_summary_table(deduction_type,company)
 	{
-		$('.loan-summary-table-load').load('table_loan_summary/'+deduction_type);
+		$('.loan-summary-table-load').load('table_loan_summary/'+deduction_type+'/'+company);
 	}
 }

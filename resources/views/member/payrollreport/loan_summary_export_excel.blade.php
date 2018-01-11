@@ -26,12 +26,11 @@
 					        <td class="text-center" id="loan-{{$comid->payroll_company_id}}">{{ $loan_data->payroll_deduction_amount }}</td>
 					        <td class="text-center" id="payment-{{$comid->payroll_company_id}}">{{ $loan_data->total_payment }}</td>
 					        <td class="text-center" id="balance-{{$comid->payroll_company_id}}">{{ $loan_data->payroll_deduction_amount - $loan_data->total_payment }}</td>
-					        <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/modal_loan_summary_report/{{ $loan_data->payroll_employee_id }}/{{ $loan_data->payroll_deduction_id }}','lg')">SUMMARY</a></td>
 					    </tr>
 					@endif
 			    @endforeach
-			    
-			     @foreach($totals['totals'] as $key => $total)
+
+				@foreach($totals['totals'] as $key => $total)
 			                @if($total['payroll_employee_company_id'] == $comid->payroll_company_id)
 			                  <tr class="total">
 			                    <td class="text-center"><strong>TOTAL</strong></td>
@@ -42,8 +41,10 @@
 			                    <td class="text-center">{{$total['total_remaining_balance']}}</td>
 			                    <td class="text-center"></td>
 			                  </tr>
+			                @else
 			              @endif
-			          @endforeach
+			    @endforeach
+			</tbody>
 			</tbody>
 		</table>
 @endforeach

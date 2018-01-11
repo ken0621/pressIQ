@@ -142,12 +142,12 @@ class MLM2
 		$total = doubleval(str_replace(",","",$amount)) + doubleval(str_replace(",","",$tax)) + doubleval(str_replace(",","",$service)) + doubleval(str_replace(",","",$other));
 		$current_wallet = Self::current_wallet($shop_id, $slot_id, $ignore_pending);
 
-		if(doubleval(round($current_wallet, 0)) < doubleval(round($total, 0)))
-		{
-			return "The current wallet of slot is not enough.";
-		}
-		else
-		{
+		// if(doubleval(round($current_wallet, 0)) < doubleval(round($total, 0)))
+		// {
+		// 	return "The current wallet of slot is not enough.";
+		// }
+		// else
+		// {
 			$insert["shop_id"] 						= $shop_id;
 			$insert["wallet_log_slot"] 				= $slot_id;
 			$insert["wallet_log_details"] 			= $remarks;
@@ -165,7 +165,7 @@ class MLM2
 				Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot_id)->where('shop_id',$shop_id)->where('wallet_log_payout_status','PENDING')->delete();
 			}
 			return Tbl_mlm_slot_wallet_log::insertGetId($insert);
-		}
+		// }
 	}
 	public static function get_sponsor_network($shop_id, $slot_no, $level = null)
 	{

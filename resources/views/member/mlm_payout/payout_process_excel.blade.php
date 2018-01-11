@@ -55,7 +55,7 @@
                     <td>{{ $slot->payout_bank_name }}</td>
                     <td>{{ $slot->bank_account_name }}</td>
                     <td>{{ $slot->bank_account_type }}</td>
-                    <td>{{ str_replace("-", "", $slot->bank_account_number) }}</td>
+                    <td>{{ "'" . str_replace("-", "", $slot->bank_account_number) . "'" }}</td>
                 @endif
                 <td>{{ $slot->real_net }}</td>
                 <td>{{ $slot->real_service }}</td>

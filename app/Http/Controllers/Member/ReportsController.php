@@ -39,6 +39,11 @@ use Excel;
 
 class ReportsController extends Member
 {
+
+    public function account_list_summary()
+    {
+        
+    }
 	public function checkuser($str = '')
     {
         $user_info = Tbl_user::where("user_email", Session('user_email'))->shop()->first();
@@ -643,7 +648,6 @@ class ReportsController extends Member
             return view('member.reports.accounting.item_list', $data);
         }
     }
-
     public function account_list()
     {
         $data['shop_name']  = $this->user_info->shop_key; 

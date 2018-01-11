@@ -161,7 +161,9 @@ function purchase_order(){
 			if(discount.indexOf('%') >= 0)
 			{
 				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
-				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * action_return_to_number(rate);
+				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
+				/*$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
+				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * action_return_to_number(rate);*/
 			}
 			else if(discount == "" || discount == null)
 			{

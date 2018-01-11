@@ -143,60 +143,84 @@ class SalesAgentController extends Member
 			{
 				$check_agent_code = Tbl_employee::where('shop_id', $this->user_info->shop_id)->where('agent_code', $agent_code)->first();
 			}
+
 			$check_agent = null;
 			if($first_name && $middle_name && $last_name)
 			{
 				$check_agent = Tbl_employee::where('shop_id', $this->user_info->shop_id)->where('first_name', $first_name)->where('middle_name', $middle_name)->where('last_name', $last_name)->first();
 			}
+
+			$check_position_code = null;
+			if($position_code)
+			{
+				$check_position_code = Tbl_position::where('position_shop_id', $this->user_info->shop_id)->where('position_code', $position_code)->first();
+			}
+
 			if(!$check_agent_code)
 			{
-				if(!$check_agent)
+				if(isset($agent_code))
 				{
-					if(isset($position))
+					if(!$check_agent)
 					{
-						$insert_position['position_shop_id']   = $this->user_info->shop_id;
-		            	$insert_position['position_code'] 	   = $position_code;
-		            	$insert_position['position_name'] 	   = $position;
-		            	$insert_position['archived'] 		   = 0;
-		            	$insert_position['commission_percent'] = $commission_percent;
-		            	$insert_position['position_created']   = Carbon::now();
-
-		            	$insert_agent['shop_id']   			= $this->user_info->shop_id;
-			            $insert_agent['agent_code'] 		= $agent_code;
-			        	$insert_agent['first_name'] 		= $first_name;
-			        	$insert_agent['middle_name'] 		= $middle_name;
-			        	$insert_agent['last_name'] 			= $last_name;
-			        	$insert_agent['date_created'] 		= Carbon::now();
-
-			        	$rules["commission_percent"] = 'required';
-			        	
-						$validator = Validator::make($insert_position, $rules);
-						if ($validator->fails())
+						if(isset($position))
 						{
-							$json["status"] 	= "error";
-							$json["message"]  	= $validator->errors()->first();
+							if(!$check_position_code)	
+							{
+								$insert_position['position_shop_id']   = $this->user_info->shop_id;
+				            	$insert_position['position_code'] 	   = $position_code;
+				            	$insert_position['position_name'] 	   = $position;
+				            	$insert_position['archived'] 		   = 0;
+				            	$insert_position['commission_percent'] = $commission_percent;
+				            	$insert_position['position_created']   = Carbon::now();
+
+				            	$insert_agent['shop_id']   			= $this->user_info->shop_id;
+					            $insert_agent['agent_code'] 		= $agent_code;
+					        	$insert_agent['first_name'] 		= $first_name;
+					        	$insert_agent['middle_name'] 		= $middle_name;
+					        	$insert_agent['last_name'] 			= $last_name;
+					        	$insert_agent['date_created'] 		= Carbon::now();
+
+					        	$rules["commission_percent"] = 'required';
+					        	
+								$validator = Validator::make($insert_position, $rules);
+								if ($validator->fails())
+								{
+									$json["status"] 	= "error";
+									$json["message"]  	= $validator->errors()->first();
+								}
+								else
+								{
+									$position_id = Tbl_position::insertGetId($insert_position);  
+						            $insert_agent['position_id'] = $position_id;
+						            Tbl_employee::insert($insert_agent);
+
+						            $json["status"]		= "success";
+									$json["message"]	= "Success";
+									$json["item_id"]	= $position_id;
+								}
+							}
+							else
+							{
+								$json["status"]		= "error";
+								$json["message"]	= "Position code already exist.";
+							}
 						}
 						else
 						{
-							$position_id = Tbl_position::insertGetId($insert_position);  
-				            $insert_agent['position_id'] = $position_id;
-				            Tbl_employee::insert($insert_agent);
-
-				            $json["status"]		= "success";
-							$json["message"]	= "Success";
-							$json["item_id"]	= $position_id;
+							$json["status"]		= "error";
+							$json["message"]	= "Please input position.";
 						}
 					}
 					else
 					{
 						$json["status"]		= "error";
-						$json["message"]	= "Please input position.";
+						$json["message"]	= "Agent name already exist.";
 					}
 				}
 				else
 				{
 					$json["status"]		= "error";
-					$json["message"]	= "Agent name already exist.";
+					$json["message"]	= "Please input agent code";
 				}
 			}
 			else

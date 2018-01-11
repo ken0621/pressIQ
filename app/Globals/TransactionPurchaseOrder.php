@@ -111,7 +111,7 @@ class TransactionPurchaseOrder
             $itemline[$key]['poline_um']             = $value['item_um'];
             $itemline[$key]['poline_orig_qty']       = $value['item_qty'];
             $itemline[$key]['poline_rate']           = $value['item_rate'];
-            $itemline[$key]['poline_discount']       = $value['item_discount']; 
+            $itemline[$key]['poline_discount']       = $discount;
             $itemline[$key]['poline_discount_remark']= $value['item_remark'];  
             $itemline[$key]['poline_amount']         = $value['item_amount'];   
             $itemline[$key]['taxable']               = $value['item_taxable']; 

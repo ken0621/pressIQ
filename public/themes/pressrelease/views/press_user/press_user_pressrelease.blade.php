@@ -12,10 +12,10 @@
           @endif
          <div class="press-release-container">
             <div class="tab"  style="border-style: none;">
-             <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Create New Release</button>
-             <button class="tablinks" onclick="openCity(event, 'choose_recipient')" id="">Choose Recipients</button>
-             <button class="tablinks" onclick="openCity(event, 'send_release')" id="">Send Release</button>
-             <button class="tablinks" onclick="openCity(event, 'summary')" id="">Summary</button>
+               <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Create New Release</button>
+               <button class="tablinks" onclick="openCity(event, 'choose_recipient')" id="">Choose Recipients</button>
+               <button class="tablinks" onclick="openCity(event, 'send_release')" id="">Send Release</button>
+               <button class="tablinks" onclick="openCity(event, 'summary')" id="">Summary</button>
             </div>
            
             <div class="press-release-content">
@@ -27,7 +27,7 @@
                     @if(session()->has("pr_edit"))
                       @foreach($edit as $edits)
                   <div class="title">Type:</div>
-                   <select name="pr_type" id="pr_type">
+                   <select name="pr_type" id="pr_type" style="width: 80% !important;">
                      <option>--Select option--</option>
                      @if($edits->pr_type=="Media Release")
                      <option selected value="Media Release">Media Release</option>
@@ -106,7 +106,7 @@
                     @endforeach
                       @else
                   <div class="title">Type:</div>
-                   <select name="pr_type" id="pr_type" class="form-control">
+                   <select name="pr_type" id="pr_type" class="form-control" style="width: 80% !important;">
                      <option>--Select option--</option>
                      <option value="Media Release">Media Release</option>
                      <option value="Press Release">Press Release</option>

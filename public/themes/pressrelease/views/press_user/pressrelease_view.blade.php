@@ -1,6 +1,6 @@
 @extends("press_user.member")
 @section("pressview")
-	<div class="row-no-padding clearfix">
+	<div class="row-no-padding clearfix" style="margin-top: 30px;">
 		<div class="col-md-9">
 			<div class="press-view-holder">
 				@foreach ($pr as $prs)

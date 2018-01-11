@@ -283,72 +283,78 @@ class WriteCheck
     }
     public static function insert_wc_line($wc_id, $item_info, $entry, $account_info = array())
     {
-        foreach ($account_info as $key_acct => $value) 
+        if(count($account_info) > 0)
         {
-            if($value['account_id'])
+            foreach ($account_info as $key_acct => $value) 
             {
-                $insert_acc['accline_wc_id'] = $wc_id;
-                $insert_acc['accline_coa_id'] = $value['account_id'];
-                $insert_acc['accline_description'] = $value['account_desc'];
-                $insert_acc['accline_amount'] = $value['account_amount'];
-
-                Tbl_write_check_account_line::insert($insert_acc);
-
-                $entry_data['a'.$key_acct]['account_id'] = $value['account_id'];
-                $entry_data['a'.$key_acct]['vatable'] = 0;
-                $entry_data['a'.$key_acct]['discount'] = 0;
-                $entry_data['a'.$key_acct]['entry_amount'] = $value['account_amount'];
-                $entry_data['a'.$key_acct]['entry_description'] = $value['account_desc'];
-            }
-        }
-    	foreach($item_info as $key => $item_line)
-        {
-            if($item_line)
-            {
-                $insert_line['wcline_wc_id']         = $wc_id;
-                $insert_line['wcline_item_id']       = $item_line['itemline_item_id'];
-                $insert_line['wcline_ref_name']      = $item_line['itemline_ref_name'] ;
-                $insert_line['wcline_ref_id']        = $item_line['itemline_ref_id'] ;
-                $insert_line['wcline_description']   = $item_line['itemline_description'];
-                $insert_line['wcline_um']            = $item_line['itemline_um'];
-                $insert_line['wcline_qty']           = $item_line['itemline_qty'];
-                $insert_line['wcline_rate']		     = $item_line['itemline_rate'];
-                $insert_line['wcline_amount']        = $item_line['itemline_amount'];
-
-                Tbl_write_check_line::insert($insert_line);
-
-                $item_type = Item::get_item_type($item_line['itemline_item_id']);
-                /* TRANSACTION JOURNAL */  
-                if($item_type != 4)
+                if($value['account_id'])
                 {
-                    $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
-                    $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
-                    $entry_data[$key]['vatable']            = 0;
-                    $entry_data[$key]['discount']           = 0;
-                    $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
-                    $entry_data[$key]['entry_description']  = $item_line['itemline_description'];  
+                    $insert_acc['accline_wc_id'] = $wc_id;
+                    $insert_acc['accline_coa_id'] = $value['account_id'];
+                    $insert_acc['accline_description'] = $value['account_desc'];
+                    $insert_acc['accline_amount'] = $value['account_amount'];
+
+                    Tbl_write_check_account_line::insert($insert_acc);
+
+                    $entry_data['a'.$key_acct]['account_id'] = $value['account_id'];
+                    $entry_data['a'.$key_acct]['vatable'] = 0;
+                    $entry_data['a'.$key_acct]['discount'] = 0;
+                    $entry_data['a'.$key_acct]['entry_amount'] = $value['account_amount'];
+                    $entry_data['a'.$key_acct]['entry_description'] = $value['account_desc'];
                 }
-                else
+            }            
+        }
+        if(count($item_info) > 0)
+        {
+        	foreach($item_info as $key => $item_line)
+            {
+                if($item_line)
                 {
-                    $item_bundle = Item::get_item_in_bundle($item_line['itemline_item_id']);
-                    if(count($item_bundle) > 0)
+                    $insert_line['wcline_wc_id']         = $wc_id;
+                    $insert_line['wcline_item_id']       = $item_line['itemline_item_id'];
+                    $insert_line['wcline_ref_name']      = $item_line['itemline_ref_name'] ;
+                    $insert_line['wcline_ref_id']        = $item_line['itemline_ref_id'] ;
+                    $insert_line['wcline_description']   = $item_line['itemline_description'];
+                    $insert_line['wcline_um']            = $item_line['itemline_um'];
+                    $insert_line['wcline_qty']           = $item_line['itemline_qty'];
+                    $insert_line['wcline_rate']		     = $item_line['itemline_rate'];
+                    $insert_line['wcline_amount']        = $item_line['itemline_amount'];
+
+                    Tbl_write_check_line::insert($insert_line);
+
+                    $item_type = Item::get_item_type($item_line['itemline_item_id']);
+                    /* TRANSACTION JOURNAL */  
+                    if($item_type != 4)
                     {
-                        foreach ($item_bundle as $key_bundle => $value_bundle) 
+                        $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
+                        $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
+                        $entry_data[$key]['vatable']            = 0;
+                        $entry_data[$key]['discount']           = 0;
+                        $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
+                        $entry_data[$key]['entry_description']  = $item_line['itemline_description'];  
+                    }
+                    else
+                    {
+                        $item_bundle = Item::get_item_in_bundle($item_line['itemline_item_id']);
+                        if(count($item_bundle) > 0)
                         {
-                            $item_data = Item::get_item_details($value_bundle->bundle_item_id);
-                            $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
-                            $entry_data['b'.$key.$key_bundle]['entry_qty']          = $item_line['itemline_qty'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
-                            $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
-                            $entry_data['b'.$key.$key_bundle]['discount']           = 0;
-                            $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
-                            $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                            foreach ($item_bundle as $key_bundle => $value_bundle) 
+                            {
+                                $item_data = Item::get_item_details($value_bundle->bundle_item_id);
+                                $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
+                                $entry_data['b'.$key.$key_bundle]['entry_qty']          = $item_line['itemline_qty'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
+                                $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
+                                $entry_data['b'.$key.$key_bundle]['discount']           = 0;
+                                $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
+                                $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                            }
                         }
                     }
                 }
+
+
+                $wc_journal = Accounting::postJournalEntry($entry, $entry_data);  
             }
-
-
-            $wc_journal = Accounting::postJournalEntry($entry, $entry_data);  
         }
 
     }

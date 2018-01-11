@@ -150,11 +150,14 @@ class TransactionPurchaseOrder
             /* DISCOUNT PER LINE */
             $discount       = $value['item_discount'];
             $discount_type  = 'fixed';
+
+
             if(strpos($discount, '%'))
             {
                 $discount       = substr($discount, 0, strpos($discount, '%')) / 100;
                 $discount_type  = 'percent';
             } 
+            
             /*FROM DATABASE*/                        /*FROM CONTROLLER*/
             $itemline[$key]['poline_po_id']          = $purchase_order_id;
             $itemline[$key]['poline_service_date']   = $value['item_servicedate']; 

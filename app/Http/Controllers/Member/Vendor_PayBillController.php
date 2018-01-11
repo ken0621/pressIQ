@@ -129,6 +129,8 @@ class Vendor_PayBillController extends Member
             $pbline_data[$key]["pbline_amount"]           = convertToNumber(Request::input('pbline_amount')[$key]);
 
         }
+        //die(var_dump($ctr_bill));
+        
         if($ctr_bill != 0)
         {
             $paybill_id  = BillPayment::postPaybill($pb_data, $pbline_data);

@@ -3,7 +3,7 @@
 <div class="content">
 <div class="background-container" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner.jpg')">
 	<div class="container">
-		{{-- <div class="row clearfix row-no-padding">
+		<!-- <div class="row clearfix row-no-padding">
 			<div class="col-md-12">
 				<div class="press-member">
 					<ul class="nav nav-tabs">
@@ -18,7 +18,7 @@
 					</div>
 				</div>
 			</div>
-		</div> --}}
+		</div>  -->
 		<div id='cssmenu'>
     		<ul>
     		   <li class="{{ Request::segment(2) == "dashboard" ? "active" : "" }}"><a href="/pressadmin/dashboard">Dashboard</a></li>

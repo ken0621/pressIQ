@@ -21,9 +21,24 @@
             </div> -->
         </div>
     </div>
-    <div class="report-content">
+    <br>
+    <div class="form-group">
         <div class="col-md-12">
-            <h4><b>Remaining Points: <span style="font-weight: 300;">{{currency('',$_points)}} POINT(S)</span></b></h4>             
+            <label for="basic-input">Slot</label>
+            <select name="slot" class="slot-owner">
+                @foreach($slot as $s)
+                <option class="form-control" value="{{$s->slot_no}}">{{$s->slot_no}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <br>
+    <div class="report-content">
+        
+        <div class="col-md-12 points-here">
+            <h4>
+                <b>Remaining Points: <span style="font-weight: 300;">{{currency('',$_points)}} POINT(S)</span></b>
+            </h4>             
         </div>
         <div class="animated fadeInUp holder">
             {{-- <center> --}}
@@ -73,6 +88,7 @@
             <form action="/members/redeem-item" method="post">
                 {{ csrf_field() }}
                 <input type="hidden" name="item_id" value="0" class="hidden_item_redeemable_id">
+                <input type="hidden" name="slot_no" class="hidden-slot-no">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">×</button>
                     <h4 class="modal-title"><i class="fa fa-qrcode"></i> You are about to redeem this item:</h4>
@@ -153,10 +169,19 @@
     toastr.error("no stock available");
     @endif
 </script>
+<script type="text/javascript" src="/themes/philtech/js/redeemable.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 @endsection
 
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/redeemable.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<style type="text/css">
+    select
+    {
+        width: 40%;
+    }
+</style>
 @endsection
 
 

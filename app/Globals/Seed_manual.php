@@ -942,7 +942,7 @@ class Seed_manual
             $insert[8]['separator'] = "-"; 
 
             $insert[9]['shop_id']   = $shop_id; 
-            $insert[9]['key']       = "estimate_and_quotation";  
+            $insert[9]['key']       = "estimate_quotation";  
             $insert[9]['prefix']    = "EQ"; 
             $insert[9]['other']     = "Y/m/d";
             $insert[9]['separator'] = "-";

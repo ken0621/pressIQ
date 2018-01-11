@@ -134,7 +134,8 @@ class ShopMemberController extends Shop
 
                 foreach($_slot as $slot)
                 {
-                    if($slot->slot_membership == 4)
+                    // 4 = V.I.P Platinum && 65 = V.I.P Platinum (FS)
+                    if($slot->slot_membership == 4 || $slot->slot_membership == 65)
                     {
                         $data["travel_and_tours"] = true;
                     }
@@ -180,6 +181,14 @@ class ShopMemberController extends Shop
                     return Self::load_view_for_members('member.privilage_card_holder_dashboard',$data);
                 }                   
             }
+            //total points
+            $slots = Tbl_mlm_slot::where('slot_owner',Self::$customer_info->customer_id)->get();
+            $total_points = 0;
+            foreach($slots as $s)
+            {
+                $total_points += $this->redeem_points_sum($s->slot_id);
+            }
+            $data['total_points'] = currency("",$total_points)." POINT(S)";
         }
 
         // for shift only
@@ -415,12 +424,14 @@ class ShopMemberController extends Shop
 
                             ]);
                     Session::forget('pr_edit');
+                     Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
 
                 }
                 else
                 {
                     $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
+                     Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
  
                 }
@@ -737,6 +748,9 @@ class ShopMemberController extends Shop
         // dd(session("edit_user"));
         $data['_user'] = Tbl_pressiq_user::where('user_level',2)->get();
         $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
+        $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
+        $data['_admin_edit'] = Tbl_pressiq_user::where('user_id',session('edit_admin'))->get();
+        
         
         $data['_edit'] = Tbl_pressiq_user::where('user_id',session('u_edit'))->get();
         
@@ -767,31 +781,10 @@ class ShopMemberController extends Shop
       $data["user_email"]                      = $request->user_email;
       $data["user_password"]                   = Crypt::encrypt(request('user_password'));
       $data["user_level"]                      = "1";
-        if(session::has('u_edit'))
-        {
-            DB::table('tbl_pressiq_user')
-                        ->where('user_id', session('u_edit'))
-                        ->update([
-                            'user_first_name'             =>$data["user_first_name"],
-                            'user_last_name'              =>$data["user_last_name"],
-                            'user_email'                  =>$data["user_email"],
-                            'user_password'               =>Crypt::encrypt(request('user_password'))
-                            ]);
-            Session::flash('success_merchant', 'Recipient Successfully Updated!');
-        }
-        else
-        {
-            Tbl_pressiq_user::insert($data);
-            Session::flash('success_merchant', 'Recipient Successfully Added!');
-        }
+      Tbl_pressiq_user::insert($data);
+      Session::flash('success_admin', 'New Admin Successfully Added!');
       return  redirect::back();
     }
-
-    public function manage_user_edit_admin($id)
-    {
-       Session::put('u_edit',$id);
-       return redirect::back();
-   }
 
     public function pressadmin_manage_user_edit()
     {
@@ -804,19 +797,62 @@ class ShopMemberController extends Shop
                             'user_company_name'   =>request('company_name')
                             ]);
         Session::forget('edit_user');
-        return Redirect::to("/pressadmin/manage_user");
+        return redirect()->back();
+    }
+
+    public function pressadmin_manage_force_login($id)
+    {
+
+        session::flush();
+        $_user_data = DB::table('tbl_pressiq_user')->where('user_id',$id)->get();
+        
+        foreach ($_user_data as $user_data) {
+            # code...
+        }
+        Session::put('user_email', $user_data->user_email);
+        Session::put('user_first_name',$user_data->user_first_name);
+        Session::put('user_last_name',$user_data->user_last_name);
+        Session::put('user_company_name',$user_data->user_company_name);
+        Session::put('user_company_image',$user_data->user_company_image);
+        Session::put('pr_user_level',$user_data->user_level);
+        Session::put('pr_user_id',$user_data->user_id);
+
+
+        return Redirect::to("/signin"); 
+
+    }
+
+    public function pressadmin_manage_admin_edit()
+    {
+        DB::table('tbl_pressiq_user')
+                        ->where('user_id', session('edit_admin'))
+                        ->update([
+                            'user_first_name'     =>request('first_name'),
+                            'user_last_name'      =>request('last_name'),
+                            'user_email'          =>request('email'),
+                            'user_company_name'   =>request('company_name')
+                            ]);
+        Session::forget('edit_admin');
+         Session::flash('success_admin', 'Admin Successfully Updated!');
+        return redirect()->back();
     }
     public function edit_user($id)
     {
         Session::put('edit_user',$id);
-        $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
-        return view("press_admin.press_admin_user_edit", $data);
+        
+        return redirect()->back();
+    }
+    public function edit_admin($id)
+    {
+        Session::put('edit_admin',$id);
+        
+        return redirect()->back();
     }
 
     public function manage_user_delete_admin($id)
     {
       Tbl_pressiq_user::where('user_id',$id)->delete();
-      Session::flash('delete', "Recipient Already Deleted!");
+      Session::flash('delete_admin', "Admin Already Deleted!");
       return  redirect::back();
     }
    
@@ -1688,6 +1724,31 @@ class ShopMemberController extends Shop
         $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->coinsph()->money_remittance()->bank()->vmoney()->airline()->get();
         $data["_method"] = unserialize($this->shop_info->shop_payout_method);
 
+        // Philtech
+        if ($this->shop_theme == "philtech") 
+        {
+            foreach ($data["_slot"] as $key => $value) 
+            {
+                $membership_name = DB::table("tbl_membership")->where("membership_id", $value->slot_membership)->value("membership_name");
+                
+                if ($membership_name == "V.I.P Gold") 
+                {
+                    $data["_airline_slot"][$key] = $value;
+                }
+            }
+
+            if (!isset($data["_airline_slot"])) 
+            {
+                foreach ($data["_method"] as $key => $value) 
+                {
+                    if ($value == "airline") 
+                    {
+                        unset($data["_method"][$key]);
+                    }
+                }
+            }
+        }
+
         $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
         $data["tin_number"] = Self::$customer_info->tin_number;
         return view("member2.payout_settings", $data);
@@ -2250,6 +2311,7 @@ class ShopMemberController extends Shop
         // $validate['customer_city'] = 'required';
         // $validate['customer_zipcode'] = 'required';
         $validate['customer_street'] = 'required';
+        $validate['contact'] = 'required';
 
         $validator = Validator::make($form, $validate);
         
@@ -2548,14 +2610,24 @@ class ShopMemberController extends Shop
         $sort_by = 0;
         $data['page'] = "Redeemable";
         $data['_redeemable'] = Tbl_item_redeemable::where("archived",0)->whereColumn("quantity",">","number_of_redeem")->get();
+
         $slot_info           = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+        $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+
         $data["_points"]     = $this->redeem_points_sum($slot_info->slot_id);
         // dd($data);
         return (Self::load_view_for_members("member.redeemable",$data));
     }
+    public function getSlotPoints()
+    {
+        $slot = request('slot_no');
+        $slot_info           = Tbl_mlm_slot::where("slot_no", $slot)->membership()->first();
+        return  currency('',$this->redeem_points_sum($slot_info->slot_id));
+    }
     public function postRedeemItem(Request $request)
     {
-        $slot_info          = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+
+        $slot_info          = Tbl_mlm_slot::where("slot_no", $request->slot_no)->membership()->first();
         $item_redeemable_id = $request->item_id;
         $redeemable_item    = Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->first();
         if($redeemable_item)
@@ -2581,6 +2653,7 @@ class ShopMemberController extends Shop
                     // you redeem <item> for <cost>. Please wait for admin's approval.
                     $insert_report['log'] = 'You redeemed '.$redeemable_item->item_name.' for '.currency("",$redeemable_item->redeemable_points)." POINTS. Please wait for admin's approval.";
                     $insert_report['date_created'] = Carbon::now();
+                    $insert_report['slot_owner'] = Self::$customer_info->customer_id;
                     Tbl_item_redeemable_report::insert($insert_report);
                     Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->increment('number_of_redeem');
 
@@ -2622,8 +2695,8 @@ class ShopMemberController extends Shop
     {
         $sort_by = 0;
         $data['page'] = "Redeem History";
-        $slot_info = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
-        $data['redeem_history'] = Tbl_item_redeemable_report::where('slot_id',$slot_info->slot_id)->paginate(10);
+        $data['redeem_history'] = Tbl_item_redeemable_report::Slot()->where('tbl_item_redeemable_report.slot_owner',Self::$customer_info->customer_id)->paginate(10);
+        // dd($data['redeem_history']);
         return (Self::load_view_for_members("member.redeem_history",$data));
     }
     public function getCodevault()

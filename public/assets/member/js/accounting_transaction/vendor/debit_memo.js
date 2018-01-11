@@ -29,6 +29,7 @@ function debit_memo()
 			onChangeValue: function()
 			{
 				$(".vendor-email").val($(this).find("option:selected").attr("email"));
+				action_load_open_transaction($(this).val());
 			}
 		});
 /*
@@ -101,6 +102,28 @@ function debit_memo()
     		}
 
         }).globalDropList('disabled');
+	}
+
+	function action_load_open_transaction($vendor_id)
+	{
+		if($vendor_id)
+		{
+			$.ajax({
+				url : '/member/transaction/debit_memo/count-transaction',
+				type : 'get',
+				data : {vendor_id : $vendor_id},
+				success : function(data)
+				{
+					$(".open-transaction").slideDown();
+					$(".popup-link-open-transaction").attr('link','/member/transaction/debit_memo/load-transaction?vendor='+$vendor_id);
+					$(".count-open-transaction").html(data);
+				}
+			});
+		}
+		else
+		{
+			$(".open-transaction").slideUp();
+		}
 	}
 
 	function action_compute()
@@ -319,9 +342,7 @@ function debit_memo()
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("purchase-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-qty").val(1).change();
-		console.log($this.find("option:selected").attr("item-type"));
 		
-
 		if($this.find("option:selected").attr("has-um"))
 		{
 			$.ajax(
@@ -475,3 +496,12 @@ function success_item(data)
 	});
 }
 
+
+function success_debit_memo(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
+}

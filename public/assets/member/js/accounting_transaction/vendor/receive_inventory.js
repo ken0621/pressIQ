@@ -509,6 +509,16 @@ function success_item(data)
 		data.element.modal("hide");
 	});
 }
+
+function success_receive_inventory(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
+}
+
 function add_po_to_receive_inventory(po_id)
 {
 	$(".modal-loader").removeClass("hidden");

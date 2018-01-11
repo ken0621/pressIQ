@@ -26,6 +26,39 @@ class TransactionSalesOrder
     {
         return Tbl_customer_estimate::Customer()->where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->get();
     }
+
+	public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
+	{
+		$data = Tbl_customer_estimate::customer()->where('est_shop_id', $shop_id)->where('is_sales_order',1);
+
+		if($search_keyword)
+		{
+			$data->where(function($q) use ($search_keyword)
+            {
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("est_id", "LIKE", "%$search_keyword%");
+                $q->orWhere("company", "LIKE", "%$search_keyword%");
+                $q->orWhere("first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("last_name", "LIKE", "%$search_keyword%");
+            });
+		}
+
+		if($status != 'all')
+		{
+			$data->where('est_status',$status);
+		}
+		if($paginate)
+		{
+			$data = $data->paginate($paginate);
+		}
+		else
+		{
+			$data = $data->get();
+		}
+
+		return $data;
+	}
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);
@@ -37,13 +70,7 @@ class TransactionSalesOrder
 			$ins['transaction_refnum']	 		 = $insert['transaction_refnum'];   
 	        $ins['est_customer_email']           = $insert['customer_email'];
 	        $ins['est_customer_billing_address'] = $insert['customer_address'];
-	        $ins['est_terms_id']                 = $insert['customer_terms'];
 	        $ins['est_date']                     = date("Y-m-d", strtotime($insert['transaction_date']));
-	        $ins['est_due_date']                 = date("Y-m-d", strtotime($insert['transaction_duedate']));
-	        $ins['ewt']                          = $insert['customer_ewt'];
-	        $ins['est_discount_type']            = $insert['customer_discounttype'];
-	        $ins['est_discount_value']           = $insert['customer_discount'];
-	        $ins['taxable']                      = $insert['customer_tax'];
 	        $ins['est_message']                  = $insert['customer_message'];
 	        $ins['est_memo']                     = $insert['customer_memo'];
 	        $ins['date_created']                 = Carbon::now();
@@ -51,18 +78,8 @@ class TransactionSalesOrder
 	        /* SUBTOTAL */
 	        $subtotal_price = collect($insert_item)->sum('item_amount');
 
-	        /* DISCOUNT */
-	        $discount = $insert['customer_discount'];
-	        if($insert['customer_discounttype'] == 'percent') $discount = (convertToNumber($insert['customer_discount']) / 100) * $subtotal_price;
-
-	        /* TAX */
-	        $tax = (collect($insert_item)->where('item_taxable', '1')->sum('item_amount')) * 0.12;
-
-	        /* EWT */
-	        $ewt = $subtotal_price*convertToNumber($insert['customer_ewt']);
-
 	        /* OVERALL TOTAL */
-	        $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
+	        $overall_price  = convertToNumber($subtotal_price);
 
 	        $ins['est_subtotal_price']           = $subtotal_price;
 	        $ins['est_overall_price']            = $overall_price;
@@ -70,8 +87,8 @@ class TransactionSalesOrder
             $ins['est_status']					 = 'accepted';   
 
 	        /* INSERT SALES ORDER HERE */
-	        // $sales_order_id = Tbl_customer_estimate::insertGetId($ins);
-	        $sales_order_id = 0;
+	        $sales_order_id = Tbl_customer_estimate::insertGetId($ins);
+	        // $sales_order_id = 0;
 
 	        $return = Self::insertline($sales_order_id, $insert_item);
 		}
@@ -97,7 +114,7 @@ class TransactionSalesOrder
                 $discount_type  = 'percent';
             }
 
-			$itemline[$key]['estline_est_id'] 			= $estimate_id;
+			$itemline[$key]['estline_est_id'] 			= $sales_order_id;
 			$itemline[$key]['estline_service_date'] 	= $value['item_servicedate'];
 			$itemline[$key]['estline_item_id'] 			= $value['item_id'];
 			$itemline[$key]['estline_description'] 		= $value['item_description'];
@@ -113,7 +130,8 @@ class TransactionSalesOrder
 		}
 		if(count($itemline) > 0)
 		{
-			// Tbl_customer_estimate_line::insert($itemline);
+			Tbl_customer_estimate_line::insert($itemline);
+			$return = 1;
 		}
 
 		return $return;

@@ -66,7 +66,7 @@
 						<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 							<div class="holder">
 								<div class="color rpv"></div>
-								<div class="name"><span>Rank PV</span> <div class="name rpv-text">{{ $points->display_rank_pv + $points->display_rank_gpv }}</div></div>
+								<div class="name"><span>Rank PV</span> <div class="name rpv-text">{{ number_format($points->rank_pv + $points->rank_gpv,2) }} POINT(S)</div></div>
 							</div>
 							{{-- <div class="holder">
 								<div class="color"></div>

@@ -40,15 +40,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            	@foreach($_slot as $slot)
-                                <tr>
-                                	<input type="hidden" name="airline[]" value="{{ $slot->slot_no }}">
-                                    <td class="text-center" style="vertical-align: middle;">{{ $slot->slot_no }}</td>
-                                    <td class="text-center">
-                                    	<input type="text" class="form-control text-center" name="tour_wallet_account_id[]" value="{{ $slot->tour_wallet_account_id }}">
-                                    </td>
-                                </tr>
-                                @endforeach
+                            	@if(isset($_airline_slot))
+	                            	@foreach($_airline_slot as $slot)
+	                                <tr>
+	                                	<input type="hidden" name="airline[]" value="{{ $slot->slot_no }}">
+	                                    <td class="text-center" style="vertical-align: middle;">{{ $slot->slot_no }}</td>
+	                                    <td class="text-center">
+	                                    	<input type="text" class="form-control text-center" name="tour_wallet_account_id[]" value="{{ $slot->tour_wallet_account_id }}">
+	                                    </td>
+	                                </tr>
+	                                @endforeach
+	                            @else
+	                            	<tr>
+	                            		<td colspan="2" style="text-align: center;">Only VIP Gold Membership</td>
+	                            	</tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>

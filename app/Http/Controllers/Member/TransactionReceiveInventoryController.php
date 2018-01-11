@@ -49,11 +49,10 @@ class TransactionReceiveInventoryController extends Member
     public function getLoadReceiveInventory(Request $request)
     {
         $data['_receive_inventory'] = TransactionReceiveInventory::get($this->user_info->shop_id, 10, $request->search_keyword);
-        //dd($data['_receive_inventory']);
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory_table', $data);
     }
 
-    public function getCreate()
+    public function getCreate(Request $request)
     {
         $data['page'] = 'Create Receive Inventory';
 
@@ -66,6 +65,12 @@ class TransactionReceiveInventoryController extends Member
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
 
         $data['action']     = '/member/transaction/receive_inventory/create-receive-inventory';
+        $receive_id = $request->id;
+        /*if($receive_id)
+        {
+            $data['']
+        }*/
+        //die(var_dump($id));
 
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory', $data);
     }

@@ -52,7 +52,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <select class="form-control droplist-vendor input-sm pull-left" name="vendor_id" required>
-                                    @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($po->po_vendor_id) ? $po->po_vendor_id : (isset($v_id) ? $v_id : '')])
+                                    @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($po->po_vendor_id) ? $po->po_vendor_id : (isset($vendor_id) ? $vendor_id : '')])
                                 </select>
                             </div>
                             <div class="col-sm-4">
@@ -71,7 +71,7 @@
                         <div class="col-sm-2">  
                             <label>Terms</label>
                                 <select class="form-control input-sm droplist-terms" name="vendor_terms">
-                                    @include("member.load_ajax_data.load_terms", ['terms_id' => isset($po->po_terms_id) ? $po->po_terms_id : (isset($t_id) ? $t_id : '')])
+                                    @include("member.load_ajax_data.load_terms", ['terms_id' => isset($po->po_terms_id) ? $po->po_terms_id : (isset($terms_id) ? $terms_id : '')])
                                 </select>
                         </div>
                         <div class="col-sm-2">

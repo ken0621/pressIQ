@@ -65,13 +65,13 @@ class TransactionPurchaseOrderController extends Member
 
         $data['action']     = "/member/transaction/purchase_order/create-purchase-order";
         $data['count_transaction'] = TransactionDebitMemo::countTransaction($shop_id);
-        $data["v_id"]       = $request->vendor_id;
-        $data["t_id"]       = $request->vendor_terms;
-        $id = $request->id;
-        if($id)
+        $data["vendor_id"]       = $request->vendor_id;
+        $data["terms_id"]       = $request->vendor_terms;
+        $po_id = $request->id;
+        if($po_id)
         {
-            $data["po"]            = Tbl_purchase_order::where("po_id", $id)->first();
-            $data["_poline"]       = Tbl_purchase_order_line::um()->where("poline_po_id", $id)->get();
+            $data["po"]            = Tbl_purchase_order::where("po_id", $po_id)->first();
+            $data["_poline"]       = Tbl_purchase_order_line::um()->where("poline_po_id", $po_id)->get();
             $data["action"]        = "/member/transaction/purchase_order/update-purchase-order";
         }
         

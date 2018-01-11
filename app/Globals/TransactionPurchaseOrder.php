@@ -99,8 +99,8 @@ class TransactionPurchaseOrder
             $ins['po_discount_type']   = $insert['vendor_discounttype'];
             $ins['taxable']            = $insert['vendor_tax'];
             $ins['date_created']       = Carbon::now();
-
-
+            
+            //die(var_dump($insert['vendor_ewt']));
              /* SUBTOTAL */
             $subtotal_price = collect($insert_item)->sum('item_amount'); 
 
@@ -121,8 +121,8 @@ class TransactionPurchaseOrder
             $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
             //die(var_dump($overall_price));
 
-            $ins['ewt']               = $ewt;
-            //die(var_dump($ins['ewt']));
+            //
+            
             $ins['po_subtotal_price'] = $subtotal_price;
             $ins['po_overall_price']  = $overall_price;
 
@@ -183,7 +183,6 @@ class TransactionPurchaseOrder
     {
         $old = Tbl_purchase_order::where("po_id", $po_id);
 
-        //die(var_dump($po_id));
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);
         if(!$val)
         {
@@ -203,8 +202,8 @@ class TransactionPurchaseOrder
             $update['po_discount_type']   = $insert['vendor_discounttype'];
             $update['taxable']            = $insert['vendor_tax'];
             $update['date_created']       = Carbon::now();
-
-
+            
+            //die(var_dump($insert['vendor_ewt']));
              /* SUBTOTAL */
             $subtotal_price = collect($insert_item)->sum('item_amount'); 
 
@@ -223,25 +222,26 @@ class TransactionPurchaseOrder
             
             /* OVERALL TOTAL */
             $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
+            //die(var_dump($overall_price));
 
-            $update['ewt']               = $ewt;
+            //
+            
             $update['po_subtotal_price'] = $subtotal_price;
             $update['po_overall_price']  = $overall_price;
 
             /*UPDATE PO IN DATABASE */
-            $return = Tbl_purchase_order::where("po_id", $po_id)->update($update);
-            //die(var_dump($po_id));
+            Tbl_purchase_order::where("po_id", $po_id)->update($update);
         
-            //$return = Self::insertline($purchase_order_id, $insert_item);
-            //$return = $purchase_order_id;
             Tbl_purchase_order_line::where("poline_po_id", $po_id)->delete();
             Self::insertLine($po_id, $insert_item);
+
+            $return = $po_id;
         }
         else
         {
             $return = $val;
         }  
-        //die(var_dump($return));
+
         return $return;
     }
 

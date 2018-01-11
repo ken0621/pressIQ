@@ -76,6 +76,11 @@ class ShopLoginController extends Shop
                             return view("signin",$data);
                         }        
                     }
+                    else
+                {
+                    Session::put('message',"The Email / Password is incorrect");
+                    return view("signin",$data);
+                }
                 }
                 else
                 {
@@ -85,7 +90,7 @@ class ShopLoginController extends Shop
                                  
             }
             else
-            {
+            { 
                 return view("signin",$data);
             }  
         }

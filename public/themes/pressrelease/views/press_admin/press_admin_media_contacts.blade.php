@@ -1,15 +1,5 @@
 @extends("press_admin.admin")
 @section("pressview")
-<style >
-.table 
-{
-   width: 100%;
-   display:block;
-   height: 500px;
-   overflow-y: scroll;
-   text-align: center;
-}
-</style>
 <div class="background-container">
     <div class="pressview">
         <div class="dashboard-container">
@@ -32,31 +22,33 @@
                   </div>
                   @endif    
                 <div class="col-md-12">
-                     
-                  <div class="left-container" id="press_table" name="press_table">
-                    <table  class="table table-bordered" style="background-color: #FFFFFF;" id="showHere_table">
-                        <tr>
-                            <th style="text-align: center;">Contact Name</th>
-                            <th style="text-align: center;">Company</th>
-                            <th style="text-align: center;">Country</th>
-                            <th style="text-align: center;">Action</th>
-                        </tr>
-                         @foreach($_media_contacts as $_media)
-                           <tr>
-                              <td style="text-align: center;">{{$_media->name}}</td>
-                              <td style="text-align: center;">{{$_media->company_name}}</td>
-                              <td style="text-align: center;">{{$_media->country}}</td>
-                              <td style="text-align: center;">
-                                <a href="/pressadmin/pressreleases_edit_recipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-warning center">
-                                <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
-                                <a href="/pressadmin/pressreleases_deleterecipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-danger center">
-                                <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button>
-                              </td>
-                           </tr>
-                           @endforeach
-                        
-                    </table>
-                  </div>
+                 <div class="press-holder-container">
+                   <div class="left-container" id="press_table" name="press_table">
+                     <table  class="table table-bordered" id="showHere_table">
+                         <tr>
+                             <th style="width: 20%;">Contact Name</th>
+                             <th style="width: 20%;">Company</th>
+                             <th style="width: 20%;">Country</th>
+                             <th style="width: 20%;">Action</th>
+                         </tr>
+                          @foreach($_media_contacts as $_media)
+                            <tr>
+                               <td>{{$_media->name}}</td>
+                               <td>{{$_media->company_name}}</td>
+                               <td>{{$_media->country}}</td>
+                               <td>
+                                 <a href="/pressadmin/pressreleases_edit_recipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-warning center">
+                                 <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
+                                 
+                                 <a href="/pressadmin/pressreleases_deleterecipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-danger center">
+                                 <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button>
+                               </td>
+                            </tr>
+                            @endforeach
+                         
+                     </table>
+                   </div>
+                 </div>    
                 </div>
             </div>
 

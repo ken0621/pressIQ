@@ -62,18 +62,21 @@
 								</div>
 							</div>
 							<div class="col-md-4">
-								<small>13 Month Basis</small>
+								<small>COLA Basis</small>
 								<div class="panel-default panel">
 									<div class="panel-body">
-										<label>Compute 13 Month</label>
+										<label>Compute COLA Basis</label>
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_13month_basis" value="Periodically" {{$group->payroll_group_13month_basis == 'Periodically' ? 'checked':''}}>Periodically</label>
+											<label><input type="radio" name="payroll_group_cola_basis" value="Monthly Fixed" {{$group->payroll_group_cola_basis == 'Monthly Fixed' ? 'checked':''}}>Monthly Fixed</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_13month_basis" value="Custom Period" {{$group->payroll_group_13month_basis == 'Custom Period' ? 'checked':''}}>Custom Period</label>
+											<label><input type="radio" name="payroll_group_cola_basis" value="Pro Rated Monthly" {{$group->payroll_group_cola_basis == 'Pro Rated Monthly' ? 'checked':''}}>Pro Rated Monthly</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_13month_basis" value="Do not compute" {{$group->payroll_group_13month_basis == 'Do not compute' ? 'checked':''}}>Do not compute</label>
+											<label><input type="radio" name="payroll_group_cola_basis" value="Daily Fixed" {{$group->payroll_group_cola_basis == 'Daily Fixed' ? 'checked':''}}>Daily Fixed</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_cola_basis" value="Daily Computation" {{$group->payroll_group_cola_basis == 'Daily Computation' ? 'checked':''}}>Daily Computation</label>
 										</div>
 									</div>
 								</div>
@@ -94,22 +97,75 @@
 								</div>
 							</div>
 							<div class="col-md-4">
-								<small>COLA Basis</small>
+								<small>13 Month Basis</small>
 								<div class="panel-default panel">
 									<div class="panel-body">
-										<label>Compute COLA Basis</label>
+										<label>Compute 13 Month</label>
+										@if($payroll_13th_month_basis != null)
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_cola_basis" value="Monthly Fixed" {{$group->payroll_group_cola_basis == 'Monthly Fixed' ? 'checked':''}}>Monthly Fixed</label>
+											<label><input type="radio" name="payroll_group_13month_basis" value="Gross Basic Pay" {{$payroll_13th_month_basis->payroll_group_13month_basis == 'Gross Basic Pay' ? 'checked':''}}>Gross Basic Pay</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_cola_basis" value="Pro Rated Monthly" {{$group->payroll_group_cola_basis == 'Pro Rated Monthly' ? 'checked':''}}>Pro Rated Monthly</label>
+											<label><input type="radio" name="payroll_group_13month_basis" value="Net Basic Pay" {{$payroll_13th_month_basis->payroll_group_13month_basis == 'Net Basic Pay' ? 'checked':''}}>Net Basic Pay</label>
+										</div>
+										<label>additions (+)</label>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_allowance" name="payroll_group_13th_month_addition[]" {{$payroll_13th_month_basis->payroll_group_13th_month_addition_allowance == 1 ? 'checked' : ''}}>Allowance</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_de_minimis_benefit" name="payroll_group_13th_month_addition[]" {{$payroll_13th_month_basis->payroll_group_13th_month_addition_de_minimis_benefit == 1 ? 'checked' : ''}}>De Minimis Benefit</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_special_holiday" name="payroll_group_13th_month_addition[]" {{$payroll_13th_month_basis->payroll_group_13th_month_addition_special_holiday == 1 ? 'checked' : ''}}>Special Holiday</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_regular_holiday" name="payroll_group_13th_month_addition[]" {{$payroll_13th_month_basis->payroll_group_13th_month_addition_regular_holiday == 1 ? 'checked' : ''}}>Regular Holiday</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_cola" name="payroll_group_13th_month_addition[]" {{$payroll_13th_month_basis->payroll_group_13th_month_addition_cola == 1 ? 'checked' : ''}}>COLA</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_late" name="payroll_group_13th_month_addition[]" {{$payroll_13th_month_basis->payroll_group_13th_month_addition_late == 1 ? 'checked' : ''}}>Late</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_undertime" name="payroll_group_13th_month_addition[]" {{$payroll_13th_month_basis->payroll_group_13th_month_addition_undertime == 1 ? 'checked' : ''}}>Undertime</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_absent" name="payroll_group_13th_month_addition[]" {{$payroll_13th_month_basis->payroll_group_13th_month_addition_absent == 1 ? 'checked' : ''}}>Absent</label>
+										</div>
+										@else
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_13month_basis" value="Gross Basic Pay">Gross Basic Pay</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_cola_basis" value="Daily Fixed" {{$group->payroll_group_cola_basis == 'Daily Fixed' ? 'checked':''}}>Daily Fixed</label>
+											<label><input type="radio" name="payroll_group_13month_basis" value="Net Basic Pay" checked>Net Basic Pay</label>
 										</div>
-										<div class="radio">
-											<label><input type="radio" name="payroll_group_cola_basis" value="Daily Computation" {{$group->payroll_group_cola_basis == 'Daily Computation' ? 'checked':''}}>Daily Computation</label>
+										<label>additions (+)</label>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_allowance" name="payroll_group_13th_month_addition[]">Allowance</label>
 										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_de_minimis_benefit" name="payroll_group_13th_month_addition[]">De Minimis Benefit</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_special_holiday" name="payroll_group_13th_month_addition[]">Special Holiday</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_regular_holiday" name="payroll_group_13th_month_addition[]">Regular Holiday</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_cola" name="payroll_group_13th_month_addition[]">COLA</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_late" name="payroll_group_13th_month_addition[]">Late</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_undertime" name="payroll_group_13th_month_addition[]">Undertime</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" value="payroll_group_13th_month_addition_absent" name="payroll_group_13th_month_addition[]">Absent</label>
+										</div>
+										@endif
 									</div>
 								</div>
 							</div>

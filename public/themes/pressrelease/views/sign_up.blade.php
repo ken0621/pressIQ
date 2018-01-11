@@ -44,7 +44,6 @@
 			    			</div>
 			    			<div class="register-form">
 			    				<input type="file" name="user_company_image" id="user_company_image">
-
 			    			</div>
 
 			    			<div class="button-container">
@@ -61,7 +60,6 @@
 </div>
 @endsection
 
-<script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/sign_up.css">
 @endsection

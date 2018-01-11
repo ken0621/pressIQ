@@ -46,6 +46,11 @@ Route::any('/modal_rfp_save', 'Member\PayrollEmployee\RequestForPaymentControlle
 Route::any('/modal_rfp_save', 'Member\PayrollEmployee\RequestForPaymentController@modal_rfp_save');
 Route::any('/rfp_application_view/{id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_view');
 Route::any('/rfp_application_cancel/{id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_cancel');
+
+Route::any('/authorized_access_request_for_refund', 'Member\PayrollEmployee\RequestForPaymentController@authorized_access_request_for_refund');
+Route::any('/authorized_access_request_for_refund_table', 'Member\PayrollEmployee\RequestForPaymentController@authorized_access_request_for_refund_table');
+Route::any('rfp_application_approve/{request_id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_approve');
+Route::any('rfp_application_reject/{request_id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_reject');
 /*End Request for Payment*/
 
 Route::any('employee_official_business_management', 'Member\PayrollEmployee\EmployeeController@employee_official_business_management');

@@ -129,7 +129,7 @@ class PayrollAdminDashboard extends Member
 		$update['payroll_approver_employee_level'] = Request::input('approver_level');
 		Tbl_payroll_approver_employee::where('payroll_approver_employee_id',Request::input('approver_id'))->update($update);
 		$response['response_status']  	= 'success';
-		$response['call_function']		= 'submit_done';
+		$response['call_function']		= 'reload_page';
 		$response['function_name'] 		= 'payroll_employee_approver.reload';
 		
 		return json_encode($response);

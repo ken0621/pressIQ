@@ -194,7 +194,7 @@ class Vendor_PurchaseOrderController extends Member
                 $item_info[$key]['um']                 = Request::input('poline_um')[$key];
                 $item_info[$key]['quantity']           = str_replace(',', "",Request::input('poline_qty')[$key]);
                 $item_info[$key]['rate']               = str_replace(',', "", Request::input('poline_rate')[$key]);
-                $item_info[$key]['discount']           = 0 /*str_replace(",","",Request::input('poline_discount')[$key])*/;
+                $item_info[$key]['discount']           = str_replace(",","",Request::input('poline_discount')[$key]);
                 $item_info[$key]['discount_remark']    = str_replace(",","",Request::input('poline_discount_remark')[$key]);
                 $item_info[$key]['taxable']            = str_replace(",","",Request::input('poline_taxable')[$key]);
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('poline_amount')[$key]);

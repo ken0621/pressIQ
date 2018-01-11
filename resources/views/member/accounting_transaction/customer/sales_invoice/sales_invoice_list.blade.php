@@ -19,9 +19,9 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray "  style="margin-bottom: -10px;">
     <ul class="nav nav-tabs">
-         <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-folder-open-o"></i> Open</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-folder-o"></i> Close</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="all"><a class="cursor-pointer"><i class="fa fa-list"></i> All</a></li>
+        <li class="active change-tab cursor-pointer open-tab" mode="open"><a class="cursor-pointer"><i class="fa fa-folder-open-o"></i> Open</a></li>
+        <li class="cursor-pointer change-tab closed-tab" mode="closed"><a class="cursor-pointer"><i class="fa fa-folder-o"></i> Close</a></li>
+        <li class="cursor-pointer change-tab all-tab" mode="all"><a class="cursor-pointer"><i class="fa fa-list"></i> All</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">
@@ -33,7 +33,7 @@
         <div class="col-md-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search-employee-name" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
+                <input type="text" class="form-control search-keyword" placeholder="Search ..." aria-describedby="basic-addon1">
             </div>
         </div>
     </div>
@@ -42,39 +42,8 @@
             <div class="form-group order-tags"></div>
             <div class="clearfix">
                 <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-condensed">
-                            <thead style="text-transform: uppercase">
-                                <tr>
-                                    <th >NAME</th>
-                                    <th class="text-center">REFERENCE NUMBER</th>
-                                    <th class="text-center">TRANSACTION DATE</th>
-                                    <th class="text-center" width="120px">TOTAL PRICE</th>
-                                    <th class="text-center" width="100px"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        Asiawide Refreshment Corporation <br>
-                                        <small> Juan Dela Cruz </small>
-                                    </td>
-                                    <td class="text-center">SI20171214-00001</td>
-                                    <td class="text-center">December 14, 2017</td>
-                                    <td class="text-center">1,500.00</td>
-                                    <td class="text-center">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Action <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-custom">
-                                                <li><a href="javascript">PRINT</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="table-responsive load-item-table">
+                      <div class="text-center">LOADING TRANSACTION...</div>
                     </div>
                 </div>
             </div>
@@ -82,4 +51,7 @@
     </div>
 </div>
 </div>
+@endsection
+@section('script')
+<script type="text/javascript" src="/assets/member/js/accounting_transaction/customer/si_list.js"></script>
 @endsection

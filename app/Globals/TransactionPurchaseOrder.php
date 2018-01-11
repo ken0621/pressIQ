@@ -20,16 +20,62 @@ class TransactionPurchaseOrder
 {
 	public static function countTransaction($shop_id)
 	{
-		$count_so = Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->count();
-        $count_pr = Tbl_requisition_slip::where('shop_id',$shop_id)->where("requisition_slip_status","open")->count();
-        
-        $return = $count_so + $count_pr;
-        return $return;
+        return Tbl_requisition_slip::where('shop_id',$shop_id)->where("requisition_slip_status","open")->count();
+    }
+    public static function countOpenPOTransaction($shop_id, $vendor_id)
+    {
+        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', 0)->count();
+    }
+    public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
+    {
+        $data = Tbl_purchase_order::Vendor()->where('po_shop_id',$shop_id);
+
+        if($search_keyword)
+        {
+            $data->where(function($q) use ($search_keyword)
+            {   
+                $q->orWhere("vendor_company", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_last_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("po_id", "LIKE", "%$search_keyword%");
+                $q->orWhere("po_overall_price", "LIKE", "%$search_keyword%");
+            });
+        }
+        if($status != 'all')
+        {
+            if($status == 'open')
+            {
+                $data->where('po_is_billed', 0);
+            
+            }
+            if($status == 'closed')
+            {
+                $data->where('po_is_billed',"!=",'0');
+            }            
+        }
+
+        if($paginate)
+        {
+            $data = $data->paginate($paginate);
+        }
+        else
+        {
+            $data = $data->get();
+        }
+
+        return $data;
+    }
+
+    public static function getClosePO($shop_id, $vendor_id)
+    {
+        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed','!=', '0')->get();
     }
 
     public static function getOpenPO($shop_id, $vendor_id)
     {
-        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', '!=', '0')->get();
+        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', 0)->get();
     }
 
     public static function postInsert($shop_id, $insert, $insert_item)
@@ -53,7 +99,8 @@ class TransactionPurchaseOrder
             $ins['po_discount_type']   = $insert['vendor_discounttype'];
             $ins['taxable']            = $insert['vendor_tax'];
             $ins['date_created']       = Carbon::now();
-
+            
+            //die(var_dump($insert['vendor_ewt']));
              /* SUBTOTAL */
             $subtotal_price = collect($insert_item)->sum('item_amount'); 
 
@@ -69,22 +116,27 @@ class TransactionPurchaseOrder
 
             /* EWT */
             $ewt = $subtotal_price * convertToNumber($insert['vendor_ewt']);
-
+            
             /* OVERALL TOTAL */
             $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
+            //die(var_dump($overall_price));
 
+            //
+            
             $ins['po_subtotal_price'] = $subtotal_price;
             $ins['po_overall_price']  = $overall_price;
 
             /* INSERT PO IN DATABASE */
             $purchase_order_id = Tbl_purchase_order::insertGetId($ins);
+        
+            $return = Self::insertline($purchase_order_id, $insert_item);
             $return = $purchase_order_id;
-            //$return = Self::insertline($purchase_order_id, $insert_item);
 		}
         else
         {
             $return = $val;
         }  
+
         return $return;
 	}
 
@@ -98,11 +150,14 @@ class TransactionPurchaseOrder
             /* DISCOUNT PER LINE */
             $discount       = $value['item_discount'];
             $discount_type  = 'fixed';
+
+
             if(strpos($discount, '%'))
             {
                 $discount       = substr($discount, 0, strpos($discount, '%')) / 100;
                 $discount_type  = 'percent';
             } 
+            
             /*FROM DATABASE*/                        /*FROM CONTROLLER*/
             $itemline[$key]['poline_po_id']          = $purchase_order_id;
             $itemline[$key]['poline_service_date']   = $value['item_servicedate']; 
@@ -128,4 +183,70 @@ class TransactionPurchaseOrder
 
         return $return;
     }
+    public static function postUpdate($po_id, $shop_id, $insert, $insert_item)
+    {
+        $old = Tbl_purchase_order::where("po_id", $po_id);
+
+        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        if(!$val)
+        {
+            $update['po_shop_id']         = $shop_id;
+            $update['transaction_refnum'] = $insert['transaction_refnumber'];
+            $update['po_vendor_id']       = $insert['vendor_id'];
+            $update['po_billing_address'] = $insert['vendor_address'];
+            $update['po_vendor_email']    = $insert['vendor_email'];
+            $update['po_terms_id']        = $insert['vendor_terms'];
+            $update['po_date']            = date("Y-m-d", strtotime($insert['transaction_date']));
+            $update['po_due_date']        = date("Y-m-d", strtotime($insert['transaction_duedate']));
+            $update['po_message']         = $insert['vendor_message'];
+            $update['po_memo']            = $insert['vendor_memo'];
+            $update['ewt']                = $insert['vendor_ewt'];
+            $update['po_terms_id']        = $insert['vendor_terms'];
+            $update['po_discount_value']  = $insert['vendor_discount'];
+            $update['po_discount_type']   = $insert['vendor_discounttype'];
+            $update['taxable']            = $insert['vendor_tax'];
+            $update['date_created']       = Carbon::now();
+            
+            //die(var_dump($insert['vendor_ewt']));
+             /* SUBTOTAL */
+            $subtotal_price = collect($insert_item)->sum('item_amount'); 
+
+            /* DISCOUNT */
+            $discount = $insert['vendor_discount'];
+            if($insert['vendor_discounttype'] == 'percent')
+            {
+                $discount = (convertToNumber($insert['vendor_discount']) / 100) * $subtotal_price;
+            }
+
+            /* TAX */
+            $tax = (collect($insert_item)->where('item_taxable', '1')->sum('item_amount')) * 0.12;
+
+            /* EWT */
+            $ewt = $subtotal_price * convertToNumber($insert['vendor_ewt']);
+            
+            /* OVERALL TOTAL */
+            $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
+            //die(var_dump($overall_price));
+
+            //
+            
+            $update['po_subtotal_price'] = $subtotal_price;
+            $update['po_overall_price']  = $overall_price;
+
+            /*UPDATE PO IN DATABASE */
+            Tbl_purchase_order::where("po_id", $po_id)->update($update);
+        
+            Tbl_purchase_order_line::where("poline_po_id", $po_id)->delete();
+            Self::insertLine($po_id, $insert_item);
+
+            $return = $po_id;
+        }
+        else
+        {
+            $return = $val;
+        }  
+
+        return $return;
+    }
+
 }

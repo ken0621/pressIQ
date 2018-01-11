@@ -14,6 +14,7 @@ use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
 use App\Globals\TransactionSalesOrder;
 use App\Globals\TransactionEstimateQuotation;
+use App\Globals\AccountingTransaction;
 
 use Session;
 use Carbon\Carbon;
@@ -25,13 +26,19 @@ class TransactionSalesOrderController extends Member
 	{
 		$data['page'] = "Sales Order";
 		return view('member.accounting_transaction.customer.sales_order.sales_order_list',$data);
-	} 
+	} 	
+	public function getLoadSalesOrder(Request $request)
+	{
+		$data['_sales_order'] = TransactionSalesOrder::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
+		return view('member.accounting_transaction.customer.sales_order.sales_order_table',$data);		
+	}
 
 	public function getCreate()
 	{
 		$data['page'] = "Create Sales Order";		
         $data["_customer"]  = Customer::getAllCustomer();
         $data['_item']      = Item::get_all_category_item();
+        $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'sales_order');
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['action']		= "/member/transaction/sales_order/create-sales-order";
 
@@ -70,7 +77,10 @@ class TransactionSalesOrderController extends Member
 		$validate = TransactionSalesOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
 		if(is_numeric($validate))
 		{
-			
+			$return['status'] = 'success';
+			$return['status_message'] = 'Success creating sales order.';
+			$return['call_function'] = 'success_sales_order';
+			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_order', $validate ,$btn_action);
 		}
 		else
 		{

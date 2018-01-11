@@ -93,7 +93,7 @@ class CreditMemo
 		$insert_cm["cm_memo"] = $customer_info["cm_memo"];
 		$insert_cm["cm_amount"] = $customer_info["cm_amount"];
 		$insert_cm["cm_type"] = isset($customer_info["cm_type"]) ? $customer_info["cm_type"] : 0;
-        $insert_cm["cm_used_ref_name"] = isset($customer_info['cm_used_ref_name']) ? $customer_info['cm_used_ref_name'] : "" ;
+        $insert_cm["cm_used_ref_name"] = isset($customer_info['cm_used_ref_name']) ? $customer_info['cm_used_ref_name'] : "retain_credit" ;
         $insert_cm["cm_used_ref_id"] = isset($customer_info['cm_used_ref_id']) ? $customer_info['cm_used_ref_id'] : 0 ;
 
 		$insert_cm["date_created"] = Carbon::now();

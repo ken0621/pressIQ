@@ -182,18 +182,20 @@ class Vendor_CreateBillController extends Member
         $_accountamount                     = Request::input('account_amount');
         $_accountdesc                       = Request::input('account_desc');
 
+        $ctr_items = 0;
+
         $account_info = null;
         foreach ($_accountline as $key_acct => $value_acct) 
         {
             if($value_acct && $_accountamount[$key_acct] != 0)
             {
+                $ctr_items++;
                 $account_info[$key_acct]['account_id']      = $value_acct;
                 $account_info[$key_acct]['account_amount']  = str_replace(",","",$_accountamount[$key_acct]);
                 $account_info[$key_acct]['account_desc']    = $_accountdesc[$key_acct];
             }
         }
 
-        $ctr_items = 0;
         $item_refill = [];
         $item_serial = [];
         foreach($_itemline as $key => $item_line)
@@ -327,7 +329,7 @@ class Vendor_CreateBillController extends Member
             else
             {
                 $json["status"] = "error";
-                $json["status_message"] = "Please insert Item.";
+                $json["status_message"] = "Please insert Item or Expense Account.";
             }
         }
 
@@ -367,18 +369,19 @@ class Vendor_CreateBillController extends Member
         $_accountamount                     = Request::input('account_amount');
         $_accountdesc                       = Request::input('account_desc');
 
+        $ctr_items = 0;
         $account_info = null;
         foreach ($_accountline as $key_acct => $value_acct) 
         {
             if($value_acct && $_accountamount[$key_acct] != 0)
             {
+                $ctr_items++;
                 $account_info[$key_acct]['account_id']      = $value_acct;
                 $account_info[$key_acct]['account_amount']  = str_replace(",","",$_accountamount[$key_acct]);
                 $account_info[$key_acct]['account_desc']    = $_accountdesc[$key_acct];
             }
         }
 
-        $ctr_items = 0;
         $item_refill = [];
         $item_serial = [];
         foreach($_itemline as $key => $item_line)
@@ -518,7 +521,7 @@ class Vendor_CreateBillController extends Member
             else
             {
                 $json["status"] = "error";
-                $json["status_message"] = "Please insert Item.";            
+                $json["status_message"] = "Please insert Item or Expense Account.";            
             }
         }
 

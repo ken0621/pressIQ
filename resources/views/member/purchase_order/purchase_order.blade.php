@@ -51,7 +51,7 @@
                         <div class="col-sm-2">  
                             <label>Terms</label>
                             <select class="form-control input-sm droplist-terms" name="po_terms_id">
-                                    @include("member.load_ajax_data.load_terms")
+                                    @include("member.load_ajax_data.load_terms", ['terms_id' => isset($po->po_terms_id) ? $po->po_terms_id : (isset($terms) ? $terms : '')])
                                 </select>
                         </div>
                         <div class="col-sm-2">
@@ -117,8 +117,12 @@
                                                     </td>
                                                     <td><input class="text-center number-input txt-qty compute" type="text" name="poline_qty[]" value="{{$poline->poline_qty}}" /></td>
                                                     <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]" value="{{$poline->poline_rate}}" /></td>
+                                                    @if($poline->poline_discounttype == 'fixed')
                                                     <td><input class="text-right txt-discount compute" type="text" name="poline_discount[]" value="{{$poline->poline_discount}}" /></td>
-                                                    <td><textarea class="textarea-expand" type="text" name="poline_discount_remark[]" value="{{$poline->poline_discount_remark}}"></textarea></td>
+                                                    @else
+                                                    <td><input class="text-right txt-discount compute" type="text" name="poline_discount[]" value="{{($poline->poline_discount)*100}}%" /></td>
+                                                    @endif
+                                                    <td><textarea class="textarea-expand" type="text" name="poline_discount_remark[]">{{$poline->poline_discount_remark}}</textarea></td>
                                                     <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]" value="{{$poline->poline_amount}}" /></td>
                                                     <td class="text-center">
                                                         <input type="hidden" class="poline_taxable" name="poline_taxable[]" value="{{$poline->taxable}}" >
@@ -152,7 +156,7 @@
                                                 <td><input class="text-center number-input txt-qty compute" type="text" name="poline_qty[]"/></td>
                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
                                                 <td><input class="text-right txt-discount compute" type="text" name="poline_discount[]"/></td>
-                                                <td><textarea class="textarea-expand" type="text" name="poline_discount_remark[]" ></textarea></td>
+                                                <td><textarea class="textarea-expand" type="text" name="poline_discount_remark[]"></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
                                                 <td class="text-center">
                                                     <input type="hidden" class="poline_taxable" name="poline_taxable[]" value="" >
@@ -182,7 +186,7 @@
                                                 <td><input class="text-center number-input txt-qty compute" type="text" name="poline_qty[]"/></td>
                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
                                                 <td><input class="text-right txt-discount compute" type="text" name="poline_discount[]"/></td>
-                                                <td><input class="text-right number-input" type="text" name="poline_discount_remark[]"/></td>
+                                                <td><textarea class="textarea-expand" type="text" name="poline_discount_remark[]"></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
                                                 <td class="text-center">
                                                     <input type="hidden" class="poline_taxable" name="poline_taxable[]" value="" >
@@ -200,11 +204,11 @@
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Message Displayed on P.O</label>
-                            <textarea class="form-control input-sm textarea-expand" name="po_message" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="po_message" placeholder="">{{isset($po->po_message)? $po->po_message : ''}}</textarea>
                         </div>
                         <div class="col-sm-3">
                             <label>Statement Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="po_memo" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="po_memo" placeholder="">{{isset($po->po_memo)? $po->po_memo : ''}}</textarea>
                         </div>
                         <div class="col-sm-6">
                             <div class="row">
@@ -246,7 +250,7 @@
                                             </select>
                                         </div>
                                         <div class="col-sm-2  padding-lr-1">
-                                            <input class="form-control input-sm text-right number-input discount_txt compute" type="text" name="po_discount_value" value="{{$po->po_discount_value or ''}}">
+                                            <input class="form-control input-sm text-right number-input discount_txt compute" type="text" name="po_discount_value" value="{{isset($po->po_discount_value)? $po->po_discount_value : ''}}">
                                         </div>
                                     </div>
                                 </div>
@@ -312,7 +316,7 @@
             <td><input class="text-center number-input txt-qty compute" type="text" name="poline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
             <td><input class="text-right txt-discount compute" type="text" name="poline_discount[]"/></td>
-            <td><textarea class="textarea-expand" type="text" name="poline_discount_remark[]" ></textarea></td>
+            <td><textarea class="textarea-expand" type="text" name="poline_discount_remark[]"></textarea></td>
             <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
             <td class="text-center">
                 <input type="hidden" class="poline_taxable" name="poline_taxable[]" value="" >

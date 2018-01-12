@@ -20,6 +20,42 @@ class TransactionSalesReceipt
 	{
 		return Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_customer_id",$customer_id)->where("est_status","accepted")->count();
 	}
+	public static function get($shop_id, $paginate = null, $search_keyword = null)
+	{
+		$data = Tbl_customer_invoice::customer()->where('inv_shop_id', $shop_id)->where('inv_is_paid',1)->where('is_sales_receipt',1);
+
+		if($search_keyword)
+		{
+			$data->where(function($q) use ($search_keyword)
+            {
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("new_inv_id", "LIKE", "%$search_keyword%");
+                $q->orWhere("company", "LIKE", "%$search_keyword%");
+                $q->orWhere("first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("last_name", "LIKE", "%$search_keyword%");
+            });
+		}
+
+		if($paginate)
+		{
+			$data = $data->paginate($paginate);
+		}
+		else
+		{
+			$data = $data->get();
+		}
+		
+		return $data;
+	}
+	public static function info($shop_id, $invoice_id)
+	{
+		return Tbl_customer_invoice::customer()->where("inv_shop_id", $shop_id)->where("inv_id", $invoice_id)->first();
+	}
+	public static function info_item($invoice_id)
+	{
+		return Tbl_customer_invoice_line::um()->where("invline_inv_id", $invoice_id)->get();		
+	}
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);
@@ -31,9 +67,7 @@ class TransactionSalesReceipt
 			$ins['transaction_refnum']	 		 = $insert['transaction_refnum'];   
 	        $ins['inv_customer_email']           = $insert['customer_email'];
 	        $ins['inv_customer_billing_address'] = $insert['customer_address'];
-	        $ins['inv_terms_id']                 = $insert['customer_terms'];
 	        $ins['inv_date']                     = date("Y-m-d", strtotime($insert['transaction_date']));
-	        $ins['inv_due_date']                 = date("Y-m-d", strtotime($insert['transaction_duedate']));
 	        $ins['ewt']                          = $insert['customer_ewt'];
 	        $ins['inv_discount_type']            = $insert['customer_discounttype'];
 	        $ins['inv_discount_value']           = $insert['customer_discount'];
@@ -68,8 +102,7 @@ class TransactionSalesReceipt
 
 
 	        /* INSERT SAlES RECEIPT HERE */
-	        // $sales_receipt_id = Tbl_customer_invoice::insertGetId($ins);
-	        $sales_receipt_id = 0;
+	        $sales_receipt_id = Tbl_customer_invoice::insertGetId($ins);
 
 	        /* Transaction Journal */
 	        $entry["reference_module"]  = 'sales-receipt';
@@ -80,7 +113,7 @@ class TransactionSalesReceipt
 	        $entry["discount"]          = $discount;
 	        $entry["ewt"]               = $ewt;
 
-	        $return = Self::insertline($invoice_id, $insert_item, $entry);
+	        $return = Self::insertline($sales_receipt_id, $insert_item, $entry);
 		}
 		else
 		{
@@ -119,7 +152,7 @@ class TransactionSalesReceipt
 		}
 		if(count($itemline) > 0)
 		{
-			// Tbl_customer_invoice_line::insert($itemline);
+			Tbl_customer_invoice_line::insert($itemline);
 			$return = AccountingTransaction::entry_data($entry, $insert_item);
 		}
 

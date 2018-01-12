@@ -14,4 +14,8 @@ class Tbl_purchase_order extends Model
     {
     	return $query->join("tbl_vendor","tbl_vendor.vendor_id","=","tbl_purchase_order.po_vendor_id");
     }
+    public static function scopeTerms($query)
+    {
+    	return $query->join("tbl_terms","tbl_terms.terms_id","=","tbl_purchase_order.po_terms_id");
+    }
 }

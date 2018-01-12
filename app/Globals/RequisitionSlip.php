@@ -16,15 +16,29 @@ use Validator;
 
 class RequisitionSlip
 {
-    public static function get($shop_id, $status = 'open', $pagination = 10)
+    public static function get($shop_id, $status = null, $pagination = null, $search_keyword = null)
     {
-        $data = Tbl_requisition_slip::where('shop_id',$shop_id);
+        $data = Tbl_requisition_slip_item::PRInfo('shop_id',$shop_id);
 
-        if($status)
+        if($search_keyword)
+        {
+            $data->where(function($q) use ($search_keyword)
+            {   
+                $q->orWhere("vendor_company", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("vendor_last_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("rs_id", "LIKE", "%$search_keyword%");
+                $q->orWhere("rs_item_amount", "LIKE", "%$search_keyword%");
+            });
+        }
+
+        if($status != 'all')
         {
             $data = $data->where('requisition_slip_status',$status);
         }
-
+        
         if($pagination)
         {
             $data = $data->paginate($pagination);
@@ -33,7 +47,8 @@ class RequisitionSlip
         {
             $data = $data->get();
         }
-        
+        //$data = $data->get();
+        //dd($data);
         return $data;
     }
     public static function get_slip($shop_id, $slip_id)
@@ -47,11 +62,12 @@ class RequisitionSlip
 	public static function create($shop_id, $user_id, $input)
 	{
 		$validate = null;
-		$insert['shop_id'] = $shop_id;
-		$insert['user_id'] = $user_id;
-		$insert['requisition_slip_number'] = $input->requisition_slip_number;
+		$insert['shop_id']                  = $shop_id;
+		$insert['user_id']                  = $user_id;
+		$insert['requisition_slip_number']  = $input->requisition_slip_number;
 		$insert['requisition_slip_remarks'] = $input->requisition_slip_remarks;
 		$insert['requisition_slip_date_created'] = Carbon::now();
+
 
 	    $rule["requisition_slip_number"] = "required";
         $rule["requisition_slip_remarks"] = "required";
@@ -75,6 +91,11 @@ class RequisitionSlip
                 {
                     $validate .= 'The quantity of <b>'.Item::info($value)->item_name.'</b> is less than zero.';
                 }
+
+                if($input->rs_vendor_id[$key1] =="" )
+                {
+                    $validate .= 'Please select vendor.';
+                }
             }
         }
 
@@ -92,14 +113,14 @@ class RequisitionSlip
             {
                 if($value)
                 {
-                    $_item[$key]['rs_id'] = $rs_id;
-                    $_item[$key]['rs_item_id'] = $value;
+                    $_item[$key]['rs_id']               = $rs_id;
+                    $_item[$key]['rs_item_id']          = $value;
                     $_item[$key]['rs_item_description'] = $input->rs_item_description[$key];
-                    $_item[$key]['rs_item_um'] = $input->rs_item_um[$key];
-                    $_item[$key]['rs_item_qty'] = $input->rs_item_qty[$key];
-                    $_item[$key]['rs_item_rate'] = $input->rs_item_rate[$key];
-                    $_item[$key]['rs_item_amount'] = $input->rs_item_amount[$key];
-                    $_item[$key]['rs_vendor_id'] = $input->rs_vendor_id[$key];
+                    $_item[$key]['rs_item_um']          = $input->rs_item_um[$key];
+                    $_item[$key]['rs_item_qty']         = $input->rs_item_qty[$key];
+                    $_item[$key]['rs_item_rate']        = $input->rs_item_rate[$key];
+                    $_item[$key]['rs_item_amount']      = $input->rs_item_amount[$key];
+                    $_item[$key]['rs_vendor_id']        = $input->rs_vendor_id[$key];
                 }
             }
             if(count($_item) > 0)

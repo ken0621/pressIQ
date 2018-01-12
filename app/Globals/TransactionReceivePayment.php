@@ -22,6 +22,35 @@ class TransactionReceivePayment
 	{
 		return Tbl_credit_memo::where("cm_shop_id", $shop_id)->where("cm_customer_id", $customer_id)->where("cm_type",1)->where("cm_used_ref_name","retain_credit")->where('cm_status',0)->count();
 	}
+
+	public static function get($shop_id, $paginate = null, $search_keyword = null)
+	{
+		$data = Tbl_receive_payment::customer()->where('rp_shop_id', $shop_id);
+
+		if($search_keyword)
+		{
+			$data->where(function($q) use ($search_keyword)
+            {
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("rp_id", "LIKE", "%$search_keyword%");
+                $q->orWhere("company", "LIKE", "%$search_keyword%");
+                $q->orWhere("first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("last_name", "LIKE", "%$search_keyword%");
+            });
+		}
+
+		if($paginate)
+		{
+			$data = $data->paginate($paginate);
+		}
+		else
+		{
+			$data = $data->get();
+		}
+
+		return $data;
+	}
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);

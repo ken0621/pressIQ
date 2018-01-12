@@ -3,9 +3,14 @@ namespace App\Globals;
 use App\Models\Tbl_acctg_transaction;
 use App\Models\Tbl_acctg_transaction_list;
 use App\Models\Tbl_acctg_transaction_item;
+use App\Models\Tbl_transaction_ref_number;
+use App\Models\Tbl_customer_invoice;
+use App\Models\Tbl_credit_memo;
+use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_chart_of_account;
-use Carbon\Carbon;
 
+
+use Carbon\Carbon;
 use Validator;
 use DB;
 use App\Globals\Accounting;
@@ -144,6 +149,7 @@ class AccountingTransaction
         }
         return $return;
 	}
+	
 	public static function customer_validation($insert, $insert_item)
 	{
 		$return = null;
@@ -176,7 +182,7 @@ class AccountingTransaction
 		foreach ($insert_item as $key => $value) 
 		{
 			/* DISCOUNT PER LINE */
-	        $discount       = $value['item_discount'];
+	        $discount       = isset($value['item_discount']) ? $value['item_discount'] : 0;
 	        $discount_type  = 'fixed';
 	        if(strpos($discount, '%'))
             {
@@ -239,5 +245,58 @@ class AccountingTransaction
 		}	
 
 		return $return;	
+	}
+	public static function get_ref_num($shop_id, $transaction_type)
+	{
+		$return = null;
+		if($transaction_type)
+		{
+			$get = Tbl_transaction_ref_number::where('shop_id', $shop_id)->where('key', $transaction_type)->first();
+			if($get)
+			{
+				$date = explode('/', $get->other);
+				if(isset($date[2]))
+				{
+					$datetoday = date($date[0]).date($date[1]).date($date[2]);
+					$ctr = sprintf("%'.04d", Self::get_count_last_transaction($shop_id, $transaction_type, $get->separator));
+					$return = $get->prefix.$datetoday.$get->separator.$ctr;
+				} 
+			}
+		}
+		return $return;
+	}
+	public static function get_count_last_transaction($shop_id, $transaction_type, $separator)
+	{
+		$return = 1;
+		if($transaction_type == 'sales_invoice')
+		{
+			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('is_sales_receipt',0)->orderBy('inv_id','DESC')->first();
+		}
+		if($transaction_type == 'sales_receipt')
+		{
+			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('is_sales_receipt',1)->orderBy('inv_id','DESC')->first();
+		}
+		if($transaction_type == 'credit_memo')
+		{
+			$get = Tbl_credit_memo::where('cm_shop_id', $shop_id)->orderBy('cm_id','DESC')->first();
+		}
+		if($transaction_type == 'estimate_quotation')
+		{
+			$get = Tbl_customer_estimate::where('est_shop_id', $shop_id)->where('is_sales_order',0)->orderBy('est_id','DESC')->first();
+		}
+		if($transaction_type == 'sales_order')
+		{
+			$get = Tbl_customer_estimate::where('est_shop_id', $shop_id)->where('is_sales_order',1)->orderBy('est_id','DESC')->first();
+		}
+
+		if($get)
+		{
+			$number = explode("$separator", $get->transaction_refnum);
+			if(isset($number[1]))
+			{
+				$return = $number[1] + 1;
+			}
+		}
+		return $return;
 	}
 }

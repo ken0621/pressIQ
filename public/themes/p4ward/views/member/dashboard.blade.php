@@ -60,16 +60,20 @@
 				<div class="square-container">
 					<div class="title">Reward Summary</div>
 					<div class="sub-container">
-						{{-- <div class="chart-legend">
+						<div class="chart-legend">
 							<div class="holder">
 								<div class="color bpr"></div>
-								<div class="name"><span>Binary Pairing Reward</span> <div class="name bpr-text">{{ $wallet->display_complan_binary }}</div></div>
+								<div class="name"><span>Binary Pairing Reward</span> 
+									<div class="name bpr-text">
+										{{ isset($wallet->display_complan_binary) ? $wallet->display_complan_binary : 'PHP 0.00' }}
+									</div>
+								</div>
 							</div>
-						</div> --}}
+						</div>
 						<div class="chart-legend">
 							<div class="holder">
 								<div class="color rc"></div>
-								<div class="name"><span>Repurchase Cashback</span> <div class="name rc-text">{{ $wallet->display_complan_repurchase_cashback }}</div></div>
+								<div class="name"><span>Direct Referral Reward</span> <div class="name rc-text">{{ $wallet->display_complan_direct }}</div></div>
 							</div>
 						</div>
 					</div>
@@ -345,17 +349,17 @@ input:-webkit-autofill {
 }
 /* PLACEMENT VERIFIER */
 .popup-verify-placement {
-  background-color: #EEEEEE;
+  /*background-color: #EEEEEE;*/
   font-family: "Arimo", sans-serif; }
   .popup-verify-placement .modal-sm {
     width: 100%;
     max-width: 500px; }
   .popup-verify-placement .modal-content {
-    background-color: #eee; }
+    /*background-color: #eee;*/ }
     .popup-verify-placement .modal-content .modal-header {
       background-color: #0466AF;
-      border-top-left-radius: 3px;
-      border-top-right-radius: 3px; }
+      /*border-top-left-radius: 3px;
+      border-top-right-radius: 3px;*/ }
       .popup-verify-placement .modal-content .modal-header .close {
         color: #FFF; }
       .popup-verify-placement .modal-content .modal-header .modal-title {
@@ -406,8 +410,8 @@ input:-webkit-autofill {
         text-transform: uppercase;
         padding-bottom: 20px; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement {
-          color: #0466AF;
-          background-color: #fff;
+          color: #fff;
+          background-color: #0466AF;
           padding: 10px 40px;
           border: 2px solid #0466AF;
           border-radius: 2px;

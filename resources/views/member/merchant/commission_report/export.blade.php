@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>	
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<style type="text/css">
-	*
-	{
-		font-family: Arial;
-	}
+	
 	table
 	{
 		font-family: Arial;
@@ -31,12 +27,6 @@
 </head>
 <body>
 	<table>
-		<tr>
-			<td class="title" colspan="18">Commission Report</td>
-		</tr>
-		<tr>
-			<td class="sub" colspan="18">{{ $warehouse_name }}</td>
-		</tr>
 		<tr class="head">
 			<th>Pin</th>
             <th>Activation</th>

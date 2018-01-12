@@ -671,7 +671,7 @@ class MerchantController extends Member
                 $sheet->loadView('member.merchant.commission_report.export', $data);
             });
         })
-        ->download('xls');
+        ->export('xls');
 	}
 	public function import()
 	{
@@ -685,7 +685,7 @@ class MerchantController extends Member
 		{
 			$file = $request->file('excel_file');
 			// dd($file);
-			ini_set('memory_limit', '-1');
+			// ini_set('memory_limit', '-1');
 			$report = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('pin','activation'));
 			if(isset($report[0]['pin']))
 			{
@@ -694,7 +694,10 @@ class MerchantController extends Member
 				{
 					$cell['pin']			= $r['pin'];
 					$cell['activation']		= $r['activation'];
-					array_push($data, $cell);
+					if($cell['pin'] != '' && $cell['activation'] != '')
+					{
+						array_push($data, $cell);
+					}
 				}
 				dd($data);
 			}

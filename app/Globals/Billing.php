@@ -350,7 +350,7 @@ class Billing
                 }
             }
         }
-        if($entry != null)
+        if(count($entry_data) > 0)
         {
             $bill_journal = Accounting::postJournalEntry($entry, $entry_data);            
         }

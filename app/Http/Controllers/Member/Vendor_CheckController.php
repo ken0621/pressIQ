@@ -216,7 +216,10 @@ class Vendor_CheckController extends Member
             $warehouse_id       = $this->current_warehouse->warehouse_id;
             $transaction_type   = "write_check";
             $transaction_id     = $wc_id;
-            $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
+            if(count($item_refill) > 0)
+            {
+                $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
+            }
 
             $json["status"]         = "success-write-check";
             if($button_action == "save-and-edit")
@@ -360,7 +363,10 @@ class Vendor_CheckController extends Member
 
             $transaction_id = $wc_id;
             $transaction_type = "write_check";
-            $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
+            if(count($item_refill) > 0)
+            {
+                $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
+            }
 
 
             $json["status"]         = "success-write-check";

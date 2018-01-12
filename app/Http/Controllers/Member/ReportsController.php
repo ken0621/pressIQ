@@ -39,6 +39,30 @@ use Excel;
 
 class ReportsController extends Member
 {
+
+    public function income_statement()
+    {
+        
+    }
+    public function quick_report($account_id = 0)
+    {
+        $period         = Request::input('report_period');
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
+
+        $report_type = Request::input('report_type');
+        $report_field_type = Request::input('report_field_type');
+        $data['report_type'] = $report_type;
+        $shop_id = $this->user_info->shop_id;
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
+
+        $data['_account'] = Accounting::getAccountTransaction(null, $account_id);
+        dd($data['_account']);
+
+    }
 	public function checkuser($str = '')
     {
         $user_info = Tbl_user::where("user_email", Session('user_email'))->shop()->first();
@@ -643,7 +667,6 @@ class ReportsController extends Member
             return view('member.reports.accounting.item_list', $data);
         }
     }
-
     public function account_list()
     {
         $data['shop_name']  = $this->user_info->shop_key; 

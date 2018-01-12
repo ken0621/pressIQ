@@ -36,6 +36,23 @@ class Accounting
 
 		return $shop_id;
 	}
+	public static function getAccountTransaction($filter = 'all', $parent_id = null, $type = null)
+	{	
+		$shop = Accounting::getShopId();	
+		if($parent_id)
+		{
+			$sublevel 	= Tbl_chart_of_account::where("account_parent_id", $parent_id)->value("account_sublevel");
+		}
+		else
+		{
+			$sublevel 	= 0;
+			$parent_id 	= null;
+		}
+
+		$result = Accounting::checkAccount($shop, $parent_id, $sublevel, $filter, null);
+
+		return $result;
+	}
 
 	/**
 	 * Getting all the list of accounts including sub-accounts
@@ -75,7 +92,7 @@ class Accounting
 									->where("account_shop_id", $shop_id)->value("account_id");
 		return $return_id;
 	}
-	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type, $search)
+	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type = null, $search = null)
 	{
 		$query = Tbl_chart_of_account::accountInfo($shop)->balance()->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel)->orderBy("chart_type_id");
 

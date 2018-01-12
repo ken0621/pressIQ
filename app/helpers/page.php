@@ -1479,7 +1479,7 @@ function page_list($pis = 0)
     $code = "customer-receive-payment";
     $nav[$page]['submenu'][$code]['label'] = "Receive Payment";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/receive_payment";
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/receive_payment/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Done";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";

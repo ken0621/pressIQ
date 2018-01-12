@@ -434,7 +434,16 @@ class Customer_InvoiceController extends Member
                 {
                     $json["status"]         = "success-invoice";
 
-                    if($button_action == "save-and-edit")
+                    /*if($button_action == "save-and-edit")
+                    {
+                        $json["redirect"]    = "/member/customer/invoice_list";
+                    }
+                    elseif($button_action == "save-and-new")
+                    {
+                        $json["redirect"]   = '/member/customer/invoice';
+                    }*/
+
+                    if($button_action == "save-and-close")
                     {
                         $json["redirect"]    = "/member/customer/invoice_list";
                     }
@@ -442,6 +451,16 @@ class Customer_InvoiceController extends Member
                     {
                         $json["redirect"]   = '/member/customer/invoice';
                     }
+                    elseif($button_action == "save-and-edit")
+                    {
+                        $json["redirect"]   = '/member/customer/invoice?id='.$inv_id;
+                    }
+                    elseif($button_action == "save-and-print")
+                    {
+                        $json["redirect"]   = '/member/customer/customer_invoice_pdf/'.$inv_id;
+                    }
+
+
 
                     Request::session()->flash('success', 'Invoice Successfully Created');
                 }
@@ -756,6 +775,18 @@ class Customer_InvoiceController extends Member
                     if($button_action == "save-and-new")
                     {
                         $json["redirect"]   = '/member/customer/invoice';
+                    }
+                    if($button_action == "save-and-close")
+                    {
+                        $json["redirect"]    = "/member/customer/invoice_list";
+                    }
+                    elseif($button_action == "save-and-edit")
+                    {
+                        $json["redirect"]   = '/member/customer/invoice?id='.$inv_id;
+                    }
+                    elseif($button_action == "save-and-print")
+                    {
+                        $json["redirect"]   = '/member/customer/customer_invoice_pdf/'.$inv_id;
                     }
                     Request::session()->flash('success', 'Invoice Successfully Updated');
                 }

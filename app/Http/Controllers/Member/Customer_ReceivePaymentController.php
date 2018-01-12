@@ -10,7 +10,8 @@ use App\Globals\CreditMemo;
 use App\Globals\ReceivePayment;
 use App\Globals\CommissionCalculator;
 use App\Globals\Purchasing_inventory_system;
-
+use App\Globals\Pdf_global;
+use App\Models\Tbl_customer_invoice_line;
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
@@ -41,6 +42,13 @@ class Customer_ReceivePaymentController extends Member
     }
 
     public function index()
+    {
+        $data['_receive_payment'] = Tbl_receive_payment::customer()->where('rp_shop_id',Self::getShopId())->get();
+        //dd($data['_receive_payment']);
+        return view("member.receive_payment.receive_payment_list", $data);
+    }
+
+    public function receive_payment()
     {    
         $data["c_id"] = Request::input("customer_id");
         $data["_customer"]      = Customer::getAllCustomer();
@@ -81,7 +89,36 @@ class Customer_ReceivePaymentController extends Member
         $data["_invoice"] = Invoice::getAllInvoiceByCustomer($customer_id);
         return view('member.receive_payment.load_receive_payment_items', $data);
     }
+    public function rp_pdf($rp_id)
+    {
+        $data['receive_payment'] = Tbl_receive_payment::customer()->where("rp_id",$rp_id)->where("rp_shop_id",$this->user_info->shop_id)->first();
+        $get_inv = Tbl_receive_payment_line::invoice()->where('inv_shop_id',$this->user_info->shop_id)->where('rpline_rp_id',$rp_id)->get();
 
+        $inv_id = null;
+        foreach ($get_inv as $key => $value)
+        {
+            $inv_id[$key]['inv_id'] = $value->inv_id;
+
+            //$item = Tbl_customer_invoice::where("inv_id",$inv_id)->get();
+            //dd($item);
+        }
+
+       
+        $data["_invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
+        //dd($data["_invoice_item"]);
+
+        /*foreach($data["invoice_item"] as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->invline_um);
+
+            $total_qty = $value->invline_qty * $qty;
+            $data["invoice_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
+        }*/
+        
+       $pdf = view('member.receive_payment.receive_payment_pdf', $data);
+       return Pdf_global::show_pdf($pdf);
+
+    }
     public function add_receive_payment()
     {
         //for credit memo
@@ -182,9 +219,25 @@ class Customer_ReceivePaymentController extends Member
         $json["status"]         = "success";
         $json["rcvpayment_id"]  = $rcvpayment_id;
         $json["message"]        = "Successfully received payment";
-        $json["redirect"]       = "/member/customer/receive_payment";
+        /*$json["redirect"]       = "/member/customer/receive_payment";*/
 
-
+        if($button_action == "save-and-new")
+        {
+            $json["redirect"]    = "/member/customer/receive_payment";
+        }
+        elseif($button_action == "save-and-edit")
+        {
+            $json["redirect"]    = "/member/customer/receive_payment?id=".$rcvpayment_id;
+        }
+        elseif($button_action == "save-and-print")
+        {
+            $json["redirect"]    = "/member/customer/receive_payment?id=".$rcvpayment_id;
+        }
+        elseif($button_action == "save-and-close")
+        {
+            $json["redirect"]    = "/member/customer/receive_payment/list";
+        }
+        
         if($cm_id == "")
         {
             if($button_action == "save-and-edit")

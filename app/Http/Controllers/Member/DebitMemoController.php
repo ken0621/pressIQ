@@ -126,6 +126,8 @@ class DebitMemoController extends Member
     }
     public function create_submit()
     {
+        $btn_action = Request::input("action_button");
+
         $vendor_info[] = null;
         $vendor_info["db_vendor_id"] = Request::input("db_vendor_id");
         $vendor_info["db_vendor_email"] = Request::input("db_vendor_email");
@@ -308,7 +310,27 @@ class DebitMemoController extends Member
                     }
 
                     $data["status"] = "success-debit-memo";
-                    $data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;        
+                    //dd($data["status"]);
+                    //$data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;
+                    
+
+                    if($btn_action == 'save-and-edit')
+                    {
+                        $data["redirect_to"] = '/member/vendor/debit_memo?id='.$db_id;
+                    } 
+                    elseif($btn_action == 'save-and-close')
+                    {
+                        $data["redirect_to"] = '/member/vendor/debit_memo/list';
+                    }
+                    elseif($btn_action == 'save-and-new')
+                    {
+                        $data["redirect_to"] = '/member/vendor/debit_memo';
+                    }       
+                    elseif($btn_action == 'save-and-print')
+                    {
+                        $data["redirect_to"] = '/member/vendor/debit_memo/db_pdf/'.$db_id;
+                    } 
+
                     if($vendor_info["type"] == 1)
                     {
 
@@ -326,6 +348,7 @@ class DebitMemoController extends Member
     }
     public function update_submit()
     {
+        $btn_action = Request::input('action_button');
         $db_id = Request::input("debit_memo_id");
         $serial_number = Request::input("serial_number");
 
@@ -501,7 +524,24 @@ class DebitMemoController extends Member
                 }
                 
                 $data["status"] = "success-debit-memo";
-                $data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;
+                //$data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;
+                if($btn_action == 'save-and-edit')
+                {
+                    $data["redirect_to"] = '/member/vendor/debit_memo?id='.$db_id;
+                } 
+                elseif($btn_action == 'save-and-close')
+                {
+                    $data["redirect_to"] = '/member/vendor/debit_memo/list';
+                }
+                elseif($btn_action == 'save-and-new')
+                {
+                    $data["redirect_to"] = '/member/vendor/debit_memo';
+                }       
+                elseif($btn_action == 'save-and-print')
+                {
+                    $data["redirect_to"] = '/member/vendor/debit_memo/db_pdf/'.$db_id;
+                } 
+                
             }
             else
             {

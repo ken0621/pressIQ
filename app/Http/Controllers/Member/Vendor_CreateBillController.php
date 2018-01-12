@@ -299,13 +299,29 @@ class Vendor_CreateBillController extends Member
                 $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array',null,$item_serial);
 
                 $json["status"]         = "success-bill";
-                if($button_action == "save-and-edit")
+                /*if($button_action == "save-and-edit")
                 {
                     $json["redirect"]    = "/member/vendor/bill_list";
                 }
                 elseif($button_action == "save-and-new")
                 {
                     $json["redirect"]   = '/member/vendor/create_bill';
+                }*/
+                if($button_action == "save-and-edit")
+                {
+                    $json["redirect"]    = "/member/vendor/create_bill?id=".$bill_id;
+                }
+                elseif($button_action == "save-and-new")
+                {
+                    $json["redirect"]   = '/member/vendor/create_bill';
+                }
+                elseif($button_action == "save-and-print")
+                {
+                    $json["redirect"]   = '/member/vendor/print_bill?id='.$bill_id;
+                }
+                elseif($button_action == "save-and-close")
+                {
+                    $json["redirect"]   = '/member/vendor/bill_list';
                 }
                 Request::session()->flash('success', 'Successfully Created');
             }
@@ -474,13 +490,29 @@ class Vendor_CreateBillController extends Member
                 $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array', $item_serial);
 
                 $json["status"]         = "success-bill";
-                if($button_action == "save-and-edit")
+                /*if($button_action == "save-and-edit")
                 {
                     $json["redirect"]    = "/member/vendor/bill_list";
                 }
                 elseif($button_action == "save-and-new")
                 {
                     $json["redirect"]   = '/member/vendor/create_bill';
+                }*/
+                if($button_action == "save-and-edit")
+                {
+                    $json["redirect"]    = "/member/vendor/create_bill?id=".$bill_id;
+                }
+                elseif($button_action == "save-and-new")
+                {
+                    $json["redirect"]   = '/member/vendor/create_bill';
+                }
+                elseif($button_action == "save-and-print")
+                {
+                    $json["redirect"]   = '/member/vendor/print_bill?id='.$bill_id;
+                }
+                elseif($button_action == "save-and-close")
+                {
+                    $json["redirect"]   = '/member/vendor/bill_list';
                 }
                 Request::session()->flash('success', 'Successfully Created');
             }

@@ -173,6 +173,10 @@ class Customer_SaleOrderController extends Member
             {
                 $data["redirect"] = "/member/customer/sales_order";
             }
+            elseif($button_action == "save-and-print")
+            {
+                $data["redirect"] = "/member/customer/customer_sales_order_view/".$est_id;
+            }
         }
         else
         {
@@ -246,6 +250,10 @@ class Customer_SaleOrderController extends Member
             elseif($button_action == "save-and-new")
             {
                 $data["redirect"] = "/member/customer/sales_order";
+            }
+            elseif($button_action == "save-and-print")
+            {
+                $data["redirect"] = "/member/customer/customer_sales_order_view/".$est_id;
             }
         }
         else

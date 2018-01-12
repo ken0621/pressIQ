@@ -28,6 +28,7 @@ use App\Globals\Item;
 use App\Globals\Warehouse;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\Pdf_global;
 
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
@@ -201,6 +202,14 @@ class Vendor_CheckController extends Member
             $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
 
             $json["status"]         = "success-write-check";
+            /*if($button_action == "save-and-edit")
+            {
+                $json["redirect"]    = "/member/vendor/write_check?id=".$wc_id;
+            }
+            elseif($button_action == "save-and-new")
+            {
+                $json["redirect"]   = '/member/vendor/write_check';
+            }*/
             if($button_action == "save-and-edit")
             {
                 $json["redirect"]    = "/member/vendor/write_check?id=".$wc_id;
@@ -208,6 +217,14 @@ class Vendor_CheckController extends Member
             elseif($button_action == "save-and-new")
             {
                 $json["redirect"]   = '/member/vendor/write_check';
+            }
+            elseif($button_action == "save-and-close")
+            {
+                $json["redirect"]   = '/member/vendor/write_check/list';
+            }
+            elseif($button_action == "save-and-print")
+            {
+                $json["redirect"]   = '/member/vendor/write_check/view_pdf/'.$wc_id;
             }
             Request::session()->flash('success', 'Successfully Created');
         }
@@ -218,6 +235,16 @@ class Vendor_CheckController extends Member
         }
 
         return json_encode($json);
+    }
+
+    public function wc_pdf($wc_id)
+    {
+
+        $data["wc"] = Tbl_write_check::vendor()->customer()->where("wc_id",$wc_id)->first();
+        $data["_wcline"] = Tbl_write_check_line::um()->item()->where("wcline_wc_id",$wc_id)->get();
+       
+        $pdf = view("member.vendor_list.wc_pdf",$data);
+        return Pdf_global::show_pdf($pdf);
     }
 
     public function update_check()
@@ -329,6 +356,15 @@ class Vendor_CheckController extends Member
 
 
             $json["status"]         = "success-write-check";
+            /*if($button_action == "save-and-edit")
+            {
+                $json["redirect"]    = "/member/vendor/write_check?id=".$wc_id;
+            }
+            elseif($button_action == "save-and-new")
+            {
+                $json["redirect"]   = '/member/vendor/write_check';
+            }*/
+
             if($button_action == "save-and-edit")
             {
                 $json["redirect"]    = "/member/vendor/write_check?id=".$wc_id;
@@ -336,6 +372,14 @@ class Vendor_CheckController extends Member
             elseif($button_action == "save-and-new")
             {
                 $json["redirect"]   = '/member/vendor/write_check';
+            }
+            elseif($button_action == "save-and-close")
+            {
+                $json["redirect"]   = '/member/vendor/write_check/list';
+            }
+            elseif($button_action == "save-and-print")
+            {
+                $json["redirect"]   = '/member/vendor/write_check/view_pdf/'.$wc_id;
             }
             Request::session()->flash('success', 'Successfully Created');
         }

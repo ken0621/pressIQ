@@ -102,7 +102,7 @@ class Vendor_PayBillController extends Member
     }
 
     public function add_pay_bill()
-    {
+    { 
         $pb_data["paybill_vendor_id"]         = Request::input('paybill_vendor_id');
         $pb_data["paybill_ap_id"]             = Request::input('paybill_ap_id') != "" ? Request::input('paybill_ap_id') : 0;
         $pb_data["paybill_date"]              = datepicker_input(Request::input('paybill_date'));
@@ -110,7 +110,6 @@ class Vendor_PayBillController extends Member
         $pb_data["paybill_payment_method"]    = Request::input('paybill_payment_method');
         $pb_data["paybill_memo"]              = Request::input('paybill_memo');
         $pb_data["paybill_date_created"]      = Carbon::now();
-
 
         $txn_line = Request::input('line_is_checked');
         $pbline_data = [];
@@ -129,33 +128,54 @@ class Vendor_PayBillController extends Member
             $pbline_data[$key]["pbline_amount"]           = convertToNumber(Request::input('pbline_amount')[$key]);
 
         }
-        //die(var_dump($ctr_bill));
-        
+
         if($ctr_bill != 0)
         {
-            $paybill_id  = BillPayment::postPaybill($pb_data, $pbline_data);
+            /*if(Request::input('paybill_ap_id') != '')
+            {*/
+                $pb_data["paybill_ap_id"] = Request::input('paybill_ap_id');
 
-            $paybill_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
-            AuditTrail::record_logs("Added","bill_payment",$paybill_id,"",serialize($paybill_data));
+                $paybill_id  = BillPayment::postPaybill($pb_data, $pbline_data);
 
-            $button_action = Request::input('button_action');
+                $paybill_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
+                AuditTrail::record_logs("Added","bill_payment",$paybill_id,"",serialize($paybill_data));
 
-            $json["status"]         = "success";
-            $json["rcvpayment_id"]  = $paybill_id;
-            $json["message"]        = "Successfully Pay Bill";
-            $json["redirect"]            = "/member/vendor/paybill";
+                $button_action = Request::input('button_action');
 
-            if($button_action == "save-and-edit")
+                $json["status"]         = "success";
+                $json["rcvpayment_id"]  = $paybill_id;
+                $json["message"]        = "Successfully Pay Bill";
+                //$json["redirect"]       = "/member/vendor/paybill";
+
+                if($button_action == "save-and-close")    
+                {
+                    $json["redirect"]   = "/member/vendor/paybill/list";
+                }
+                elseif($button_action == "save-and-edit")
+                {
+                    $json["redirect"]   = "/member/vendor/paybill?id=".$paybill_id;
+                }
+                elseif($button_action == "save-and-new") 
+                {
+                    $json["redirect"]   = "/member/vendor/paybill";
+                } 
+                elseif($button_action == "save-and-print") 
+                {
+                    $json["redirect"]   = "/member/vendor/print_paybill?id=".$paybill_id;
+                } 
+            /*}
+            else
             {
-                $json["redirect"]    = "/member/vendor/paybill?id=".$paybill_id;
-            }            
+                $json["status"]         = "error";
+                $json["message"]        = "Please Select Account";
+            }  */         
         }
         else
         {
             $json["status"]         = "error";
             $json["message"]        = "Please Select a Bill";
         }
-
+        
         return json_encode($json);
     }
 
@@ -199,12 +219,29 @@ class Vendor_PayBillController extends Member
             $json["status"]         = "success";
             $json["bill_id"]        = $paybill_id;
             $json["message"]        = "Successfully updated Pay Bills";
-            $json["redirect"]            = "/member/vendor/paybill?id=".$paybill_id;
+            /*$json["redirect"]            = "/member/vendor/paybill?id=".$paybill_id;
             
             if($button_action == "save-and-new")
             {
                 $json["redirect"]   = '/member/vendor/paybill';
-            }
+            }*/
+
+            if($button_action == "save-and-close")    
+                {
+                    $json["redirect"]   = "/member/vendor/paybill/list";
+                }
+                elseif($button_action == "save-and-edit")
+                {
+                    $json["redirect"]   = "/member/vendor/paybill?id=".$paybill_id;
+                }
+                elseif($button_action == "save-and-new") 
+                {
+                    $json["redirect"]   = "/member/vendor/paybill";
+                } 
+                elseif($button_action == "save-and-print") 
+                {
+                    $json["redirect"]   = "/member/vendor/print_paybill?id=".$paybill_id;
+                } 
         }
         else
         {

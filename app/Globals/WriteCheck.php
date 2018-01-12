@@ -219,7 +219,7 @@ class WriteCheck
         $entry["ewt"]               = '';
 
         Tbl_write_check_line::where("wcline_wc_id", $wc_id)->delete();
-        WriteCheck::insert_wc_line($wc_id, $item_info);
+        WriteCheck::insert_wc_line($wc_id, $item_info, $entry);
 
         
         $new = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);

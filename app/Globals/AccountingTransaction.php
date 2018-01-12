@@ -305,9 +305,14 @@ class AccountingTransaction
 	{
 		if(count($item_info) > 0)
 		{
+			$item = null;
 			foreach ($item_info as $key => $value) 
 			{
-				
+				$item_type = Item::get_item_type($value['item_id']);
+				if($item_type == 5 || $item_type == 4 || $item_type == 1)
+				{
+
+				}
 			}
 		}
 	}

@@ -4076,7 +4076,7 @@ class PayrollController extends Member
           $insert['shop_id']                                = Self::shop_id();
           $insert['payroll_leave_temp_is_cummulative']      = Request::input('payroll_leave_temp_is_cummulative');
 
-          $leave_temp_count = Tbl_payroll_leave_tempv2::where('payroll_leave_temp_name',Request::input('payroll_leave_temp_name'))->get();
+          $leave_temp_count = Tbl_payroll_leave_tempv2::where('payroll_leave_temp_name',Request::input('payroll_leave_temp_name'))->where('shop_id',Self::shop_id())->get();
 
           if(count($leave_temp_count) == 0)
           {
@@ -4295,22 +4295,21 @@ class PayrollController extends Member
                $empdataremwithoutpay  = Tbl_payroll_leave_schedulev2::getleavewithoutpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
                $empdata               = Tbl_payroll_leave_schedulev2::getviewleavedata($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
 
-          // //                "payroll_leave_temp_name" => "Sick Leave"
-          // // "payroll_employee_id" => 841
-          // // "payroll_leave_date_created" => "2018-01-12"
-          // // "payroll_employee_display_name" => "Carlo Mari Marco Carrasco"
-          // // "payroll_leave_employee_id" => 1
-          // // "payroll_leave_temp_hours" => "60.00"
-          // // "total_leave_consume" => "8.00"
-          // // "remaining_leave" => "52.00"
-          //      if(count($empdataremwithoutpay) == 0)
-          //      {
-          //           $empdataremwithoutpay = $empdataremwithpay;
-          //           // array_search('total_leave_consume', haystack)
-          //           // array_splice($empdataremwithoutpay, offset)
+          //                "payroll_leave_temp_name" => "Sick Leave"
+          // "payroll_employee_id" => 841
+          // "payroll_leave_date_created" => "2018-01-12"
+          // "payroll_employee_display_name" => "Carlo Mari Marco Carrasco"
+          // "payroll_leave_employee_id" => 1
+          // "payroll_leave_temp_hours" => "60.00"
+          // "total_leave_consume" => "8.00"
+          // "remaining_leave" => "52.00"
+               // if(count($empdataremwithoutpay) == 0)
+               // {
+               //     array_merge($empd)
+              
 
 
-          //      }
+               // }
 
                array_push($datas, $empdata); 
                array_push($remwithpay, $empdataremwithpay); 

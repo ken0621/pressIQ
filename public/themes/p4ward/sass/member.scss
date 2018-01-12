@@ -29,14 +29,24 @@
 
 .btn-primary
 {
+	@include transition(0.2s);
 	background-color: #0466AF !important;
 	color: #fff !important;
 	background-image: none !important;
 	border-color: #0466AF !important;
+    box-shadow: none !important;
+    opacity: 0.8;
+
+    &:hover
+    {
+    	opacity: 1;
+    	color: #fff;
+    }
 }
 
 .btn-custom-white
 {
+	@include transition(0.2s);
 	background-color: rgba(255,0,23,0.8) !important;
 	color: #fff;
 	opacity: 0.8;

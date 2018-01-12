@@ -15,8 +15,8 @@
 							<th>Balance</th>
 						</tr>
 					</thead>
-					<tbody>
-						<?php $balance = 0; ?>
+					<tbody class="{{ $balance = 0 }}">
+						@if(count($_journal) > 0)
 						@foreach($_journal as $key=>$entry)
 						<tr>
 							<td>{{dateFormat($entry->je_entry_date)}}</td>
@@ -28,13 +28,16 @@
 							</td>
 							<td>{{$entry->jline_description}}</td>
 							<td>{{$entry->account_name}}</td>
-							<td>{{strToUpper($entry->normal_balance) == strToUpper($entry->jline_type) ? currency('PHP', $entry->jline_amount) : currency('PHP', -$entry->jline_amount)}}</td>
+							<td class="text-right">{{strToUpper($entry->normal_balance) == strToUpper($entry->jline_type) ? currency('PHP', $entry->jline_amount) : currency('PHP', -$entry->jline_amount)}}</td>
 						
-							<td class="{{ $balance += strToUpper($entry->normal_balance) == strToUpper($entry->jline_type) ? $entry->jline_amount : -$entry->jline_amount }}">{{currency('PHP', $balance)}}</td>
+							<td class="text-right {{ $balance += strToUpper($entry->normal_balance) == strToUpper($entry->jline_type) ? $entry->jline_amount : -$entry->jline_amount }}">{{currency('PHP', $balance)}}</td>
 						</tr>
 						@endforeach
+						@else
+						<tr><td colspan="7" class="text-center">NO TRANSACTION</td></tr>
+						@endif
 						<tr>
-							<td>TOTAL</td>
+							<td>TOTAL {{$account->account_name}}</td>
 							<td colspan="5"></td>
 							<td><b>{{currency('PHP', $balance)}}</b></td>
 						</tr>

@@ -27,7 +27,7 @@
 			{
 				var serialize_data = $("form.filter").serialize()
 				var account_id = $("#account_id").val();
-				$(".load-data").load("/member/report/accounting/member/accounting/journal/all-entry-by-account/"+account_id+"?"+serialize_data+"&load_view=true .load-content", function()
+				$(".load-data").load("/member/accounting/journal/all-entry-by-account/"+account_id+"?"+serialize_data+"&load_view=true .load-content", function()
 					{
 						action_collaptible(false);
 					});

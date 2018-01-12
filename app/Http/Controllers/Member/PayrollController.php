@@ -4305,17 +4305,10 @@ class PayrollController extends Member
           // "remaining_leave" => "52.00"
                if(count($empdataremwithoutpay) == 0)
                {
-                    foreach($empdataremwithpay as $rempay)
-                    {
-                         $empdataremwithoutpay['payroll_leave_temp_name'] =$rempay->payroll_leave_temp_name;
-                         $empdataremwithoutpay['payroll_employee_id'] = $rempay->payroll_employee_id;
-                         $empdataremwithoutpay['payroll_leave_date_created'] = $rempay->payroll_leave_date_created;
-                         $empdataremwithoutpay['payroll_employee_display_name'] = $rempay->payroll_employee_display_name;
-                         $empdataremwithoutpay['payroll_leave_employee_id'] = $rempay->payroll_leave_employee_id;
-                         $empdataremwithoutpay['payroll_leave_temp_hours'] = $rempay->payroll_leave_temp_name;
-                         $empdataremwithoutpay['payroll_leave_temp_name'] = $rempay->payroll_leave_temp_name;
-                         $empdataremwithoutpay['total_leave_consume'] = 0;
-                    }
+                    $empdataremwithoutpay = $empdataremwithpay;
+                    // array_search('total_leave_consume', haystack)
+                    // array_splice($empdataremwithoutpay, offset)
+
 
                }
 

@@ -8,15 +8,15 @@
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="caption-container">
-                        <div class="text-1">Getting Started with icoinsshop</div>
-                        <div class="text-2">Where your future digital currencies begin</div>
+                        <div class="text-1 wow fadeInDown" data-wow-delay=".2s">Getting Started with icoinsshop</div>
+                        <div class="text-2 wow fadeInDown" data-wow-delay=".4s">Where your future digital currencies begin</div>
                     </div>
                     <div class="button-container">
-                        <button class="btn-explore">EXPLORE</button>
+                        <button class="btn-explore wow fadeInDown" data-wow-delay=".6s">EXPLORE</button>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card">
+                    <div class="card wow fadeInRight">
                         <div class="card-content">
                             <div class="title">Current Exchange</div>
                             <div class="icon-text-container">
@@ -38,6 +38,124 @@
             </div>
         </div>
     </div>
+
+    <!--ABOUT US-->
+    <section class="wrapper-1">
+        <div class="container unskew">
+            <div class="row clearfix">
+                <div class="col-md-6">
+                    <div class="wrapper-title wow fadeInLeft" data-wow-delay=".2s">
+                        <span><u>Abo</u>ut Us</span>
+                    </div>
+                    <div class="wrapper-details wow fadeInLeft" data-wow-delay=".4s">
+                        icoinsshop is a privately owned marketing company, introducing and educating the people on different ICO’s to start an opportunity for everyone on the future generation of digital currencies.
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="wr1-img-container wow rollIn" data-wow-delay=".8s">
+                        <img src="/themes/{{ $shop_theme }}/img/aboutus-img.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--HOW IT WORKS-->
+    <section class="wrapper-2">
+        <div class="container unskew">
+            <div class="wrapper-title wow fadeInDown" data-wow-delay=".2s">
+                <span>How <u>it W</u>orks</span>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-4">
+                    <div class="img-text-holder wow pulse" data-wow-delay=".4s">
+                        <div class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/account.png">
+                        </div>
+                        <div class="text-holder">
+                            Create Payments
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="img-text-holder wow pulse" data-wow-delay=".6s">
+                        <div class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/pay.png">
+                        </div>
+                        <div class="text-holder">
+                            Make Payments
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="img-text-holder wow pulse" data-wow-delay=".8s">
+                        <div class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/buy.png">
+                        </div>
+                        <div class="text-holder">
+                            Buy Product
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--MISSION AND VISION-->
+    <section class="wrapper-3">
+        <div class="container">
+            <div class="mission-vision-container">
+                <section>
+                    <div class="title">M<u>issio</u>n</div>
+                    <div class="details">To help our clients successfully launch their ICO through market intelligence, creativity and strategic vision, and to build an organization that attracts, develops, and retains outstanding people worldwide as we grow our business.</div>
+                </section>
+                <section>
+                    <div class="title">V<u>isio</u>n</div>
+                    <div class="details">icoinsshop is dedicated in providing our clients with results-oriented advertising, public relations, and total be marketing support to be the top ICO marketing company.</div>
+                </section>
+            </div>
+            <div class="border"></div>
+        </div>
+    </section>
+
+    <!--NEWS-->
+    <section class="wrapper-4">
+        <div class="container">
+            <div class="wrapper-title"><u>New</u>s and Announcement</div>
+            <div class="row clearfix">
+                <div class="col-md-4">
+                    <div class="news-holder">
+                        <div class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/news-img.png">
+                        </div>
+                        <div class="title">Lorem Ipsum</div>
+                        <div class="details">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia non recusandae incidunt impedit, voluptate veniam.</div>
+                    </div>
+                    
+                </div>
+                <div class="col-md-4">
+                    <div class="news-holder">
+                        <div class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/news-img.png">
+                        </div>
+                        <div class="title">Lorem Ipsum</div>
+                        <div class="details">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, maiores voluptas quidem similique expedita, doloribus?</div>
+                    </div>
+                    
+                </div>
+                <div class="col-md-4">
+                    <div class="news-holder">
+                        <div class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/news-img.png">
+                        </div>
+                        <div class="title">Lorem Ipsum</div>
+                        <div class="details">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam, incidunt at delectus et porro ducimus.</div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
     
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>

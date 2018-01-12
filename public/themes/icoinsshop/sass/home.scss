@@ -132,3 +132,176 @@ body
 
 }
 
+// ABOUT US
+.wrapper-1
+{
+	//transform: skewY(4deg);
+	padding: 50px 0 50px 0;
+	background-color: #fff;
+
+	.unskew
+	{
+		//transform: skewY(-4deg);
+
+		.wrapper-title
+		{
+			font-family: $display-text;
+			font-size: 30px;
+			color: #131313;
+			font-weight: 700;
+			color: #0c0c0c;
+
+			span
+			{
+				u
+				{
+					text-decoration-color: #e1890b;
+				}
+			}
+
+		}
+
+		.wrapper-details
+		{
+			font-size: 18px;
+			color: #7e7e7e;
+			padding-top: 10px;
+		}
+
+		.wr1-img-container
+		{
+			vertical-align: middle;
+			text-align: center;
+		}
+	}
+}
+
+// HOW IT WORKS
+.wrapper-2
+{
+	transform: skewY(4deg);
+	padding: 70px 0 80px 0;
+	background-color: #f5f5f5;
+	text-align: center;
+
+	.unskew
+	{
+		transform: skewY(-4deg);
+
+		.wrapper-title
+		{
+			font-family: $content-text;
+			font-size: 30px;
+			font-weight: 700;
+			padding: 0 0 30px 0;
+			color: #0c0c0c;
+
+			span
+			{
+				u
+				{
+					text-decoration-color: #e1890b;
+				}
+			}
+		}
+
+		.img-text-holder
+		{
+			.img-holder
+			{
+				padding-bottom: 15px;
+			}
+
+			.text-holder
+			{
+				font-family: $content-text;
+				font-weight: 400;
+				color: #7e7e7e;
+				font-size: 20px;
+			}
+		}
+	}
+}
+
+//MISSION VISION
+.wrapper-3
+{
+	padding: 50px 0;
+	text-align: center;
+
+	.mission-vision-container
+	{
+
+		section
+		{
+			.title
+			{
+				font-family: $content-text;
+				font-size: 30px;
+				font-weight: 700;
+				padding: 0 0 40px 0;
+				color: #0c0c0c;
+
+				u
+				{
+					text-decoration-color: #e1890b;
+				}
+			}
+
+			.details
+			{
+				color: #7e7e7e;
+				font-size: 18px;
+				padding-bottom: 40px;
+			}
+		}
+	}
+
+	.border
+	{
+		border-bottom: 2px solid #e6e6e6;
+		padding-top: 50px;
+	}
+}
+
+//NEWS
+.wrapper-4
+{
+	padding-bottom: 50px;
+
+	.wrapper-title
+	{
+		font-family: $content-text;
+		font-size: 30px;
+		font-weight: 700;
+		padding: 0 0 30px 0;
+		color: #0c0c0c;
+
+		u
+		{
+			text-decoration-color: #e1890b;
+		}
+	}
+
+	.news-holder
+	{
+		.img-holder
+		{
+			
+		}
+
+		.title
+		{
+			font-size: 25px;
+			color: #0c0c0c;
+			font-weight: 700;
+			padding: 10px 0;
+		}
+
+		.details
+		{
+			font-size: 18px;
+			color: #7e7e7e;
+		}
+	}
+}

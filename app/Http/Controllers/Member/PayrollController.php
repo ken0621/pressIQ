@@ -4288,7 +4288,7 @@ class PayrollController extends Member
                                                             ->get();
           $datas         = array(); 
           $remwithpay    = array();
-          $remwithoutpay = array();                                             
+          $remwithoutpay = array();                                           
           foreach($payroll_employee_id as $key => $emp_id)
           {    
                $empdataremwithpay     = Tbl_payroll_leave_schedulev2::getleavewithpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
@@ -4303,8 +4303,22 @@ class PayrollController extends Member
           // "payroll_leave_temp_hours" => "60.00"
           // "total_leave_consume" => "8.00"
           // "remaining_leave" => "52.00"
-               
-               
+               if(count($empdataremwithoutpay) == 0)
+               {
+                    foreach($empdataremwithpay as $rempay)
+                    {
+                         $empdataremwithoutpay['payroll_leave_temp_name'] =$rempay->payroll_leave_temp_name;
+                         $empdataremwithoutpay['payroll_employee_id'] = $rempay->payroll_employee_id;
+                         $empdataremwithoutpay['payroll_leave_date_created'] = $rempay->payroll_leave_date_created;
+                         $empdataremwithoutpay['payroll_employee_display_name'] = $rempay->payroll_employee_display_name;
+                         $empdataremwithoutpay['payroll_leave_employee_id'] = $rempay->payroll_leave_employee_id;
+                         $empdataremwithoutpay['payroll_leave_temp_hours'] = $rempay->payroll_leave_temp_name;
+                         $empdataremwithoutpay['payroll_leave_temp_name'] = $rempay->payroll_leave_temp_name;
+                         $empdataremwithoutpay['total_leave_consume'] = 0;
+                    }
+
+               }
+
                array_push($datas, $empdata); 
                array_push($remwithpay, $empdataremwithpay); 
                array_push($remwithoutpay, $empdataremwithoutpay); 

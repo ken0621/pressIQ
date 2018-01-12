@@ -2184,6 +2184,8 @@ class ShopMemberController extends Shop
         unset($insert["b_year"]);
         unset($insert["b_day"]);
 
+        // dd($insert["birthday"]);
+
         if(Customer::register($this->shop_info->shop_id, $insert))
         {
             Self::store_login_session($insert["email"], $raw_password);

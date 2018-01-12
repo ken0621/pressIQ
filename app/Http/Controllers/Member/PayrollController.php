@@ -4288,15 +4288,23 @@ class PayrollController extends Member
                                                             ->get();
           $datas         = array(); 
           $remwithpay    = array();
-          $remwithoutpay = array();  
-          $sample        = array(); 
-          $status        = array();                                           
+          $remwithoutpay = array();                                             
           foreach($payroll_employee_id as $key => $emp_id)
           {    
                $empdataremwithpay     = Tbl_payroll_leave_schedulev2::getleavewithpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
                $empdataremwithoutpay  = Tbl_payroll_leave_schedulev2::getleavewithoutpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
                $empdata               = Tbl_payroll_leave_schedulev2::getviewleavedata($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
 
+          //                "payroll_leave_temp_name" => "Sick Leave"
+          // "payroll_employee_id" => 841
+          // "payroll_leave_date_created" => "2018-01-12"
+          // "payroll_employee_display_name" => "Carlo Mari Marco Carrasco"
+          // "payroll_leave_employee_id" => 1
+          // "payroll_leave_temp_hours" => "60.00"
+          // "total_leave_consume" => "8.00"
+          // "remaining_leave" => "52.00"
+               
+               
                array_push($datas, $empdata); 
                array_push($remwithpay, $empdataremwithpay); 
                array_push($remwithoutpay, $empdataremwithoutpay); 
@@ -4306,7 +4314,9 @@ class PayrollController extends Member
           $data['leave_report']    = $datas;
           $data['remwithpay']      = $remwithpay;
           $data['remwithoutpay']   = $remwithoutpay;
-             
+          
+          dd($remwithoutpay);
+
          return view("member.payroll.modal.modal_remaining_leave_report",$data);
      }
 

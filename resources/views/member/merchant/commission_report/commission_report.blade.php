@@ -12,8 +12,8 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="window.open('/member/merchant/commission_report/export')" class="btn btn-def-white btn-custom-red-white"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
-                <button onclick="action_load_link_to_modal('/member/merchant/commission_report/import', 'md')" class="btn btn-custom-white"><i class="fa fa-upload"></i> Import Excel File</button>
+                <button onclick="window.open('/member/merchant/commission_report/export')" class="btn btn-def-white btn-custom-green-white"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                <button onclick="action_load_link_to_modal('/member/merchant/commission_report/import', 'md')" class="btn btn-custom-red-white"><i class="fa fa-upload"></i> Import Excel File</button>
             </div>
         </div>
     </div>

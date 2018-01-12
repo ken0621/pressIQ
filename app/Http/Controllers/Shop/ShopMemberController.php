@@ -453,7 +453,6 @@ class ShopMemberController extends Shop
       
     }
 
-
     public function send($pr_info)
     {
         $to=explode(",", $pr_info['pr_to']);

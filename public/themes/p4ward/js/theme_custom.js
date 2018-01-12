@@ -114,7 +114,7 @@ function theme_custom()
             $('.slider3').diyslider("move", "back");
         });
 
-        $('#gotoright').unbind("click")
+        $('#gotoright').unbind("click");
         
         $('#gotoright').bind("click", function()
         {

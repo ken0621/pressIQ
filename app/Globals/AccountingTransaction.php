@@ -14,6 +14,8 @@ use Carbon\Carbon;
 use Validator;
 use DB;
 use App\Globals\Accounting;
+use App\Globals\Item;
+use App\Globals\Warehouse2;
 /**
  * 
  *
@@ -298,5 +300,13 @@ class AccountingTransaction
 			}
 		}
 		return $return;
+	}
+	public static function refill_inventory($shop_id, $item_info, $ref_name = '', $ref_id = 0)
+	{
+
+	}
+	public static function consume_inventory($shop_id, $item_info, $ref_name = '', $ref_id = 0)
+	{
+
 	}
 }

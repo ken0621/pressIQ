@@ -303,7 +303,13 @@ class AccountingTransaction
 	}
 	public static function refill_inventory($shop_id, $item_info, $ref_name = '', $ref_id = 0)
 	{
-
+		if(count($item_info) > 0)
+		{
+			foreach ($item_info as $key => $value) 
+			{
+				
+			}
+		}
 	}
 	public static function consume_inventory($shop_id, $item_info, $ref_name = '', $ref_id = 0)
 	{

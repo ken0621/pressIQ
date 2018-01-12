@@ -91,7 +91,7 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/js/commission_report.js?v=10"></script>
+<script type="text/javascript" src="/assets/js/commission_report.js?v=11"></script>
 <script type="text/javascript">
     @if(Session::get("response")=='success')
     toastr.success("Importation Complete");

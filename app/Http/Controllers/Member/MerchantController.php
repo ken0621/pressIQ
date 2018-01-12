@@ -699,7 +699,7 @@ class MerchantController extends Member
 						array_push($data, $cell);
 					}
 				}
-				dd($data);
+				// dd($data);
 			}
 			$response = 'success';
 		}

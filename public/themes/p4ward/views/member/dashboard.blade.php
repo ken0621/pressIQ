@@ -63,13 +63,17 @@
 						<div class="chart-legend">
 							<div class="holder">
 								<div class="color bpr"></div>
-								<div class="name"><span>Binary Pairing Reward</span> <div class="name bpr-text">{{ $wallet->display_complan_binary }}</div></div>
+								<div class="name"><span>Binary Pairing Reward</span> 
+									<div class="name bpr-text">
+										{{ isset($wallet->display_complan_binary) ? $wallet->display_complan_binary : 'PHP 0.00' }}
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="chart-legend">
 							<div class="holder">
 								<div class="color rc"></div>
-								<div class="name"><span>Repurchase Cashback</span> <div class="name rc-text">{{ $wallet->display_complan_repurchase_cashback }}</div></div>
+								<div class="name"><span>Direct Referral Reward</span> <div class="name rc-text">{{ $wallet->display_complan_direct }}</div></div>
 							</div>
 						</div>
 					</div>
@@ -91,7 +95,7 @@
 					<div class="title">Enter Product Code</div>
 					<div class="sub-container">
 						<div class="chart-legend text-center">
-							<button class="btn btn-nice-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+							<button class="btn btn-p4w-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 						</div>
 					</div>
 				</div>
@@ -157,7 +161,7 @@
 								<div class="col-md-5">
 									<div class="action" style="text-align: center;">
 										@if($direct->distributed == 1)
-											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-nice-custom"><i class="fa fa-star"></i> VIEW INFO</button>
+											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-p4w-custom"><i class="fa fa-star"></i> VIEW INFO</button>
 										@else
 											<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 										@endif
@@ -210,7 +214,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>Nice Marketing</b></div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>P4ward</b>.</div>
 	                    </div>
 	                </div>
 	            </div>
@@ -345,17 +349,17 @@ input:-webkit-autofill {
 }
 /* PLACEMENT VERIFIER */
 .popup-verify-placement {
-  background-color: #EEEEEE;
+  /*background-color: #EEEEEE;*/
   font-family: "Arimo", sans-serif; }
   .popup-verify-placement .modal-sm {
     width: 100%;
     max-width: 500px; }
   .popup-verify-placement .modal-content {
-    background-color: #eee; }
+    /*background-color: #eee;*/ }
     .popup-verify-placement .modal-content .modal-header {
-      background-color: #693d28;
-      border-top-left-radius: 3px;
-      border-top-right-radius: 3px; }
+      background-color: #0466AF;
+      /*border-top-left-radius: 3px;
+      border-top-right-radius: 3px;*/ }
       .popup-verify-placement .modal-content .modal-header .close {
         color: #FFF; }
       .popup-verify-placement .modal-content .modal-header .modal-title {
@@ -375,7 +379,7 @@ input:-webkit-autofill {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #693d28;
+        border: 1px solid #0466AF;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -386,14 +390,14 @@ input:-webkit-autofill {
         margin: 10px 0px;
         padding: 10px; }
       .popup-verify-placement .modal-content .modal-body .labeld {
-        color: #693d28;
+        color: #0466AF;
         text-align: center;
         text-transform: uppercase; }
       .popup-verify-placement .modal-content .modal-body select {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #693d28;
+        border: 1px solid #0466AF;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -406,10 +410,10 @@ input:-webkit-autofill {
         text-transform: uppercase;
         padding-bottom: 20px; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement {
-          color: #693d28;
-          background-color: #fff;
+          color: #fff;
+          background-color: #0466AF;
           padding: 10px 40px;
-          border: 2px solid #693d28;
+          border: 2px solid #0466AF;
           border-radius: 2px;
           opacity: 0.9;
           -webkit-transition: all 0.2s ease-in-out;
@@ -421,7 +425,7 @@ input:-webkit-autofill {
           text-transform: uppercase; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement:hover {
           color: #fff;
-          background-color: #693d28;
+          background-color: #0466AF;
           opacity: 1.0; }
 
 </style>

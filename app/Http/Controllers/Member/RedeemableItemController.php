@@ -76,7 +76,8 @@ class RedeemableItemController extends Member
     public function table()
     {
         $data["activetab"] = request("activetab");
-        $query = Tbl_item_redeemable::where("archived",request("activetab"));
+        $query = Tbl_item_redeemable::where('shop_id',$this->user_info->shop_id)
+                                    ->where("archived",request("activetab"));
 
         if(request("search")!="")
         {

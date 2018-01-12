@@ -1,9 +1,38 @@
-$content-text: 'Open Sans', sans-serif;
+$content-text: 'Lato', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
+
+.btn-cust-paysett
+{
+	background-color: #0466AF;
+	color: #fff;
+
+	&:hover
+	{
+		color: #fff;
+		opacity: 0.8;
+	}
+}
+
+.btn-cust-reqpay
+{
+	background-color: #F4AC00;
+	color: #fff;
+
+	&:hover
+	{
+		color: #fff;
+		opacity: 0.8;
+	}
+
+	@media screen and (max-width: 424px)
+	{
+		margin-top: 5px;
+	}
+}
 
 .wallet-encashment
 {

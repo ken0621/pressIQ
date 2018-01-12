@@ -3068,7 +3068,7 @@ class Payroll
 				$status_num = $status->$tax_index;
 				// dd($status_num);
 				//dd("((" . $rate . " - " . $tax->$tax_index . ") * (" . $status_num . " / 100" . ")) " . " + " . $exemption_num . ")");
-				dd($tax);
+				
 				$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
 			}
 		}

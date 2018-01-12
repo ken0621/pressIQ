@@ -63,7 +63,11 @@
 						<div class="chart-legend">
 							<div class="holder">
 								<div class="color bpr"></div>
-								<div class="name"><span>Binary Pairing Reward</span> <div class="name bpr-text">{{ $wallet->display_complan_binary }}</div></div>
+								<div class="name"><span>Binary Pairing Reward</span> 
+									<div class="name bpr-text">
+										{{ isset($wallet->display_complan_binary) ? $wallet->display_complan_binary : 'PHP 0.00' }}
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="chart-legend">

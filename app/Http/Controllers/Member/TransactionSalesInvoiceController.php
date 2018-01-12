@@ -29,10 +29,15 @@ class TransactionSalesInvoiceController extends Member
 		$data['page'] = "Sales Invoice";
 		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice_list',$data);
 	}
-
+	public function getLoadSalesInvoice(Request $request)
+	{
+		$data['_sales_invoice'] = TransactionSalesInvoice::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
+		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice_table',$data);		
+	}
 	public function getCreate(Request $request)
 	{
 		$data['page'] = "Create Sales Invoice";		
+        $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'sales_invoice');
         $data["_customer"]  = Customer::getAllCustomer();
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
@@ -41,10 +46,16 @@ class TransactionSalesInvoiceController extends Member
         if($request->id)
         {
         	$data['action']		= "/member/transaction/sales_invoice/update-sales-invoice";
+        	$data['sales_invoice'] = TransactionSalesInvoice::info($this->user_info->shop_id, $request->id);
+        	$data['sales_invoice_item'] = TransactionSalesInvoice::info_item($request->id);
         }
 
 		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice',$data);
-	} 
+	}
+	public function postUpdateSalesInvoice(Request $request)
+	{
+		dd("test");
+	}
 	public function postCreateSalesInvoice(Request $request)
 	{
 		$btn_action = $request->button_action;
@@ -52,7 +63,7 @@ class TransactionSalesInvoiceController extends Member
 		$insert['transaction_refnum'] 	 = $request->transaction_refnumber;
 		$insert['customer_id'] 			 = $request->customer_id;
 		$insert['customer_email']        = $request->customer_email;
-		$insert['customer_address']      = $request->customer_address;
+		$insert['customer_address']      = $request->customer_billing_address;
 		$insert['transaction_date']      = date("Y-m-d", strtotime($request->transaction_date));
 		$insert['transaction_duedate']   = date("Y-m-d", strtotime($request->transaction_duedate));
 		$insert['customer_message']      = $request->customer_message;

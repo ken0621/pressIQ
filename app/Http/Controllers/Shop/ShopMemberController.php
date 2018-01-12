@@ -134,7 +134,8 @@ class ShopMemberController extends Shop
 
                 foreach($_slot as $slot)
                 {
-                    if($slot->slot_membership == 4)
+                    // 4 = V.I.P Platinum && 65 = V.I.P Platinum (FS)
+                    if($slot->slot_membership == 4 || $slot->slot_membership == 65)
                     {
                         $data["travel_and_tours"] = true;
                     }
@@ -432,7 +433,6 @@ class ShopMemberController extends Shop
                     $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
                      Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
- 
                 }
                 
             }
@@ -440,6 +440,7 @@ class ShopMemberController extends Shop
             return view("press_user.press_user_pressrelease", $data);
         }
     }
+
     public function pressuser_pressrelease_recipient_search(Request $request)
     {  
      
@@ -465,6 +466,25 @@ class ShopMemberController extends Shop
                 $message->to($pr_info["to"]);
             });
         }
+    }
+   
+     public function send_contact_us()
+    {
+        $contactus_info["contactus_first_name"]    =request('contactus_first_name');
+        $contactus_info["contactus_last_name"]     =request('contactus_last_name');
+        $contactus_info["contactus_phone_number"]  =request('contactus_phone_number');
+        $contactus_info["contactus_subject"]       =request('contactus_subject');
+        $contactus_info["contactus_message"]       =request('contactus_message');
+        $contactus_info["contactus_email"]         =request('contactus_email');
+        $contactus_info["contactus_to"]            =request('contactus_to');
+       
+        Mail::send('emails.Contact_us',$contactus_info, function($message) use ($contactus_info)
+            {
+                $message->from($contactus_info["contactus_email"]);
+                $message->to("oliverbacsal@gmail.com");
+            });
+        Session::flash('message_concern', 'Message Successfully Sent!');
+        return Redirect::back();
     }
 
     public function press_release_save_as_draft(Request $request)

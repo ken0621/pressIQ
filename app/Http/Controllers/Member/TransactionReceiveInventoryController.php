@@ -35,6 +35,7 @@ use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_bill;
 use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_bill_item_line;
+use App\Models\Tbl_receive_inventory;
 use Carbon\Carbon;
 use Session;
 class TransactionReceiveInventoryController extends Member
@@ -45,7 +46,13 @@ class TransactionReceiveInventoryController extends Member
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory_list', $data);
     }
 
-    public function getCreate()
+    public function getLoadReceiveInventory(Request $request)
+    {
+        $data['_receive_inventory'] = TransactionReceiveInventory::get($this->user_info->shop_id, 10, $request->search_keyword);
+        return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory_table', $data);
+    }
+
+    public function getCreate(Request $request)
     {
         $data['page'] = 'Create Receive Inventory';
 
@@ -58,6 +65,12 @@ class TransactionReceiveInventoryController extends Member
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
 
         $data['action']     = '/member/transaction/receive_inventory/create-receive-inventory';
+        $receive_id = $request->id;
+        /*if($receive_id)
+        {
+            $data['']
+        }*/
+        //die(var_dump($id));
 
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory', $data);
     }
@@ -81,6 +94,8 @@ class TransactionReceiveInventoryController extends Member
             if($value)
             {
                 $insert_item[$key]['item_id']          = $value;
+                // $insert_item[$key]['reference_name']   = $request->item_description[$key];
+                // $insert_item[$key]['reference_id']     = $request->item_um[$key];
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
                 $insert_item[$key]['item_um']          = $request->item_um[$key];
                 $insert_item[$key]['item_qty']         = str_replace(',', '', $request->item_qty[$key]);
@@ -92,9 +107,13 @@ class TransactionReceiveInventoryController extends Member
         
         $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
+        $return = null;
         if(is_numeric($validate))
         {
-
+            $return['status'] = 'success';
+            $return['status_message'] = 'Success creating receive inventory.';
+            $return['call_function'] = 'success_receive_inventory';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('receive_inventory', $validate ,$btn_action);
         }
         else
         {
@@ -102,7 +121,7 @@ class TransactionReceiveInventoryController extends Member
             $return['status_message'] = $validate;
         }
 
-        return $return;
+        return json_encode($return);
     }
     public function getCountTransaction(Request $request)
     {
@@ -113,7 +132,7 @@ class TransactionReceiveInventoryController extends Member
     {
         $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
         $data['_dm'] = TransactionDebitMemo::getOpenDM($this->user_info->shop_id, $request->vendor);
-      
+        $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
         return view('member.accounting_transaction.vendor.receive_inventory.load_transaction', $data);
     }
     

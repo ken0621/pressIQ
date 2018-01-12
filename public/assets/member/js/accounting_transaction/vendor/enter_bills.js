@@ -116,7 +116,7 @@ function purchase_order()
 				success : function(data)
 				{
 					$(".open-transaction").slideDown();
-					$(".popup-link-open-transaction").attr('link','/member/transaction/enter_bills/load-transaction?v='+$vendor_id);
+					$(".popup-link-open-transaction").attr('link','/member/transaction/enter_bills/load-transaction?vendor='+$vendor_id);
 					$(".count-open-transaction").html(data);
 				}
 			});
@@ -331,39 +331,24 @@ function purchase_order()
 	function action_load_item_info($this)
 	{
 		$parent = $this.closest(".tr-draggable");
-		$parent.find(".txt-desc").html($this.find("option:selected").attr("purchase-info")).change();
-		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
+		$parent.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
+		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
-		console.log($this.find("option:selected").attr("item-type"));
-		
-
 		if($this.find("option:selected").attr("has-um"))
 		{
-			$.ajax(
+			$parent.find(".txt-qty").attr("disabled",true);
+			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
-				url: '/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"),
-				method: 'get',
-				success: function(data)
-				{
-					$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
-					{
-						$(this).globalDropList("reload").globalDropList("enabled");
-						console.log($(this).find("option:first").val());
-						$(this).val($(this).find("option:first").val()).change();
-					})
-				},
-				error: function(e)
-				{
-					console.log(e.error());
-				}
+				$parent.find(".txt-qty").removeAttr("disabled");
+				$(this).globalDropList("reload").globalDropList("enabled");
+				$(this).val($(this).find("option:first").val()).change();
 			})
 		}
 		else
 		{
-			$parent.find(".select-um").html('<option class="hidden" qty="1" value=""></option>').globalDropList("reload").globalDropList("disabled");
+			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
-
-		action_compute();
+    	action_compute();
 	}
 
 	//Purpose: Add the specified number of dates to a given date.
@@ -518,6 +503,15 @@ function success_item(data)
 
 		data.element.modal("hide");
 	});
+}
+
+function success_enter_bills(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
 }
 
 function add_po_to_bill(po_id)

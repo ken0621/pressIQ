@@ -41,7 +41,7 @@
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <label>Reference Number</label>
-                                    <input type="text" class="form-control" name="transaction_refnumber" value="SO20171214-0002">
+                                    <input type="text" class="form-control" name="transaction_refnumber" value="{{$transaction_refnum or ''}}">
                                 </div>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
                                                     <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
                                                     <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                     <td class="text-center">
-                                                        <input type="hidden" class="item_taxable" name="estline_taxable[]" value="" >
+                                                        <input type="hidden" class="item_taxable" name="item_taxable[]" value="" >
                                                         <input type="checkbox" name="" class="taxable-check compute" value="checked">
                                                     </td>
                                                     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
@@ -136,7 +136,7 @@
                                                     <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
                                                     <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                     <td class="text-center">
-                                                        <input type="hidden" class="item_taxable" name="estline_taxable[]" value="" >
+                                                        <input type="hidden" class="item_taxable" name="item_taxable[]" value="" >
                                                         <input type="checkbox" name="" class="taxable-check compute" value="checked">
                                                     </td>
                                                     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
@@ -202,7 +202,7 @@
             <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center">
-                <input type="hidden" class="item_taxable" name="estline_taxable[]" value="" >
+                <input type="hidden" class="item_taxable" name="item_taxable[]" value="" >
                 <input type="checkbox" name="" class="taxable-check compute" value="checked">
             </td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>

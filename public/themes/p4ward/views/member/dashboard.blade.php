@@ -60,7 +60,7 @@
 				<div class="square-container">
 					<div class="title">Reward Summary</div>
 					<div class="sub-container">
-						{{-- <div class="chart-legend">
+						<div class="chart-legend">
 							<div class="holder">
 								<div class="color bpr"></div>
 								<div class="name"><span>Binary Pairing Reward</span> 
@@ -69,11 +69,11 @@
 									</div>
 								</div>
 							</div>
-						</div> --}}
+						</div> 
 						<div class="chart-legend">
 							<div class="holder">
 								<div class="color rc"></div>
-								<div class="name"><span>Repurchase Cashback</span> <div class="name rc-text">{{ $wallet->display_complan_repurchase_cashback }}</div></div>
+								<div class="name"><span>Direct Referral Reward</span> <div class="name rc-text">{{ $wallet->display_complan_direct }}</div></div>
 							</div>
 						</div>
 					</div>

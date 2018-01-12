@@ -156,7 +156,7 @@
                                                 <td><input class="text-center number-input txt-qty compute" type="text" name="poline_qty[]"/></td>
                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
                                                 <td><input class="text-right txt-discount compute" type="text" name="poline_discount[]"/></td>
-                                                <td><textarea class="textarea-expand" type="text" name="poline_discount_remark[]" ></textarea></td>
+                                                <td><textarea class="textarea-expand" type="text" name="poline_discount_remark[]"></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
                                                 <td class="text-center">
                                                     <input type="hidden" class="poline_taxable" name="poline_taxable[]" value="" >
@@ -186,7 +186,7 @@
                                                 <td><input class="text-center number-input txt-qty compute" type="text" name="poline_qty[]"/></td>
                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
                                                 <td><input class="text-right txt-discount compute" type="text" name="poline_discount[]"/></td>
-                                                <td><input class="text-right number-input" type="text" name="poline_discount_remark[]"/></td>
+                                                <td><textarea class="textarea-expand" type="text" name="poline_discount_remark[]"></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
                                                 <td class="text-center">
                                                     <input type="hidden" class="poline_taxable" name="poline_taxable[]" value="" >
@@ -316,7 +316,7 @@
             <td><input class="text-center number-input txt-qty compute" type="text" name="poline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
             <td><input class="text-right txt-discount compute" type="text" name="poline_discount[]"/></td>
-            <td><textarea class="textarea-expand" type="text" name="poline_discount_remark[]" ></textarea></td>
+            <td><textarea class="textarea-expand" type="text" name="poline_discount_remark[]"></textarea></td>
             <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
             <td class="text-center">
                 <input type="hidden" class="poline_taxable" name="poline_taxable[]" value="" >

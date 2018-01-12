@@ -1,12 +1,31 @@
 @import "../../../assets/front/sass/mixin";
 
 $content-text: 'Lato', sans-serif;
-$content-text2: 'Raleway', sans-serif;
-$light: 300;
 $regular: 400;
+$semi-bold: 600;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
+
+
+@media screen and (max-width: 800px)
+{
+	.holder
+	{
+		.mob-center
+		{
+			text-align: center;
+			
+			.text
+			{
+				.pull-left
+				{
+					float: none !important;
+				}
+			}
+		}
+	}
+}
 
 .dashboard
 {
@@ -25,7 +44,7 @@ $text-dark: #272c2f;
 
 	.title
 	{
-		font-family: $content-text2;
+		font-family: $content-text;
 		color: $text-dark;
 		font-size: 18px;
 		letter-spacing: 0.5px;
@@ -39,15 +58,18 @@ $text-dark: #272c2f;
 		{
 			//mixin
 			@include transition(0.2s);
-
 			font-weight: bold;
 			font-size: 14px;
 			text-decoration: none;
 			margin-top: 3px;
 			text-transform: uppercase;
+			float: right;
+
+			@media screen and (max-width: 500px)
+			{
+				float: none;
+			}
 		}
-
-
 	}
 
 	.sub-container
@@ -58,6 +80,13 @@ $text-dark: #272c2f;
 		background-color: #fff;
 		margin-bottom: 10px;
 	}
+
+	// .mob-view
+	// {
+	// 	min-height: 392px;
+	// 	max-height: 392px;
+	// 	overflow-y: auto;
+	// }
 
 	.table-holder
 	{
@@ -132,7 +161,7 @@ $text-dark: #272c2f;
 				letter-spacing: 0.5px;
 				font-weight: bold;
 				font-family: $content-text;
-				color: #019771;
+				color: #0466AF;
 
 				span
 				{
@@ -249,6 +278,7 @@ $text-dark: #272c2f;
 			{
 				display: inline-block;
 				vertical-align: top;
+				width: 190px;
 
 				.name
 				{
@@ -266,6 +296,12 @@ $text-dark: #272c2f;
 					color: #85939e;
 					font-size: 16px;
 					opacity: 0.5;
+				}
+
+				@media screen and (max-width: 800px)
+				{
+					display: block;
+					width: auto;
 				}
 			}
 			.action
@@ -348,10 +384,9 @@ $text-dark: #272c2f;
 	{
 		.modal-header
 		{
-			background-color: #02295E;
+			background-color: #0466AF;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
-			
 			.modal-title
 			{
 				color: #FFF;
@@ -394,9 +429,9 @@ $text-dark: #272c2f;
 				.btn-ok
 				{
 					color: #fff;
-					background-color: #02295E;
+					background-color: #0466AF;
 					padding: 12px 60px;
-					border: 2px solid #02295E;
+					border: 2px solid #0466AF;
 					border-radius: 2px;
 				}
 			}

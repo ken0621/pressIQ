@@ -419,23 +419,61 @@ class Accounting
 					case "purchase-order": // NON-POSTING
 						break;
 					case "write-check":
-						break;
-					case "bill":
-						if($item->item_type_id == 1) // INVENTORY TYPE
+						if(isset($item->item_type_id)) // INVENTORY TYPE
 						{
-							/* ASSET ACCOUNT */
-							$line_data["entry_amount"]	= $entry_line["entry_amount"];
-							$line_data["entry_type"] 	= Accounting::normalBalance($account_asset);
-							$line_data["account_id"] 	= $account_asset;
-							Accounting::insertJournalLine($line_data);
+							if($item->item_type_id == 1)
+							{
+								/* ASSET ACCOUNT */
+								$line_data["entry_amount"]	= $entry_line["entry_amount"];
+								$line_data["entry_type"] 	= Accounting::normalBalance($account_asset);
+								$line_data["account_id"] 	= $account_asset;
+								Accounting::insertJournalLine($line_data);								
+							}
+							else
+							{
+								/* EXPENSE ACCOUNT */
+								$line_data["entry_amount"]	= $entry_line["entry_amount"];
+								$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
+								$line_data["account_id"] 	= $account_expense;
+								Accounting::insertJournalLine($line_data);
+							}
 						}
 						else
 						{
 							/* EXPENSE ACCOUNT */
 							$line_data["entry_amount"]	= $entry_line["entry_amount"];
-							$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
-							$line_data["account_id"] 	= $account_expense;
-							Accounting::insertJournalLine($line_data);
+							$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
+							$line_data["account_id"] 	= $account->account_id;
+							Accounting::insertJournalLine($line_data);							
+						}
+						break;
+					case "bill":
+						if(isset($item->item_type_id)) // INVENTORY TYPE
+						{
+							if($item->item_type_id == 1)
+							{
+								/* ASSET ACCOUNT */
+								$line_data["entry_amount"]	= $entry_line["entry_amount"];
+								$line_data["entry_type"] 	= Accounting::normalBalance($account_asset);
+								$line_data["account_id"] 	= $account_asset;
+								Accounting::insertJournalLine($line_data);								
+							}
+							else
+							{
+								/* EXPENSE ACCOUNT */
+								$line_data["entry_amount"]	= $entry_line["entry_amount"];
+								$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
+								$line_data["account_id"] 	= $account_expense;
+								Accounting::insertJournalLine($line_data);
+							}
+						}
+						else
+						{
+							/* EXPENSE ACCOUNT */
+							$line_data["entry_amount"]	= $entry_line["entry_amount"];
+							$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
+							$line_data["account_id"] 	= $account->account_id;
+							Accounting::insertJournalLine($line_data);							
 						}
 						break;
 					case "debit-memo":
@@ -649,10 +687,10 @@ class Accounting
 			case 'purchase-order':
 			case 'bill':
 			case 'write-check':
-				$data["main_account"]		= 'payable';
-				$data["name"] 				= 'vendor';
-				$data["newNormalJournal"] 	= 'normalBalance';
-				$data["newContraJournal"] 	= 'contraAccount';
+				$data["main_account"]		= 'cash-r';
+				$data["name"] 				= '';
+				$data["newNormalJournal"] 	= 'contraAccount';
+				$data["newContraJournal"] 	= 'normalBalance';
 				return $data;
 				break;
 			case 'debit-memo':

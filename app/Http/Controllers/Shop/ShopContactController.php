@@ -101,4 +101,10 @@ class ShopContactController extends Shop
 		$result = $dom->saveXML();
 		echo $result;
     }
+     public function contact_us()
+    {
+        $data["page"] = "Contact Us";
+        return view("press_user.contact", $data);
+    }
+    
 }

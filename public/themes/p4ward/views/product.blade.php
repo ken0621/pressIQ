@@ -13,7 +13,9 @@
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="product-image-holder">
-                        <div class="product-container"><img src="/themes/{{ $shop_theme }}/img/don-organic-image.jpg"></div>
+                        <div class="product-container">
+                            <img src="/themes/{{ $shop_theme }}/img/don-organic-image.jpg">
+                        </div>
                         <div class="benefits-container">
                             <span><img src="/themes/{{ $shop_theme }}/img/don-organic-benefits1.jpg"></span>
                             <span><img src="/themes/{{ $shop_theme }}/img/don-organic-benefits2.jpg"></span>

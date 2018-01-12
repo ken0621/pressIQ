@@ -1,7 +1,7 @@
 <div class="report-container">
 	<div class="panel panel-default panel-block panel-title-block panel-report load-data">
 		<div class="panel-heading load-content">
-			@include('member.reports.report_header');
+			@include('member.reports.report_header')
 			<div class="table-responsive load-data">
 				<table class="table table-striped table-condensed table-hovered">
 					<thead>

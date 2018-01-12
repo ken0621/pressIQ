@@ -351,11 +351,12 @@ class WriteCheck
                         }
                     }
                 }
-
-
-                $wc_journal = Accounting::postJournalEntry($entry, $entry_data);  
             }
         }
 
+        if(count($entry_data) > 0)
+        {
+            $wc_journal = Accounting::postJournalEntry($entry, $entry_data);
+        }
     }
 }

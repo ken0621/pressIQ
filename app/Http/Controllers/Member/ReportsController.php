@@ -40,7 +40,7 @@ use Excel;
 class ReportsController extends Member
 {
 
-    public function account_list_summary()
+    public function income_statement()
     {
         
     }

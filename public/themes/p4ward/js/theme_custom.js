@@ -19,6 +19,7 @@ function theme_custom()
         scroll_up();
         // navirino_toggle_click();
         change_slide();
+        genealogy_mobile_dropdown();
 
         /*EXIT SIDE NAV TOGGLE*/
         // $('.nav-ext').click(function()
@@ -119,6 +120,15 @@ function theme_custom()
         {
             // Go to the previous slide
             $('.slider3').diyslider("move", "forth");
+        });
+    }
+
+    function genealogy_mobile_dropdown()
+    {
+        $(".genealogy-mobile-dropdown").on("click", function (e) 
+        {
+            $(e.currentTarget).siblings(".genealogy-mobile-dropdown-list").slideToggle();
+            $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
         });
     }
 }

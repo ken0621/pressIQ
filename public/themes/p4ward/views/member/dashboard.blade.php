@@ -60,7 +60,7 @@
 				<div class="square-container">
 					<div class="title">Reward Summary</div>
 					<div class="sub-container">
-						{{-- <div class="chart-legend">
+						<div class="chart-legend">
 							<div class="holder">
 								<div class="color bpr"></div>
 								<div class="name"><span>Binary Pairing Reward</span> 
@@ -69,7 +69,7 @@
 									</div>
 								</div>
 							</div>
-						</div> --}}
+						</div>
 						<div class="chart-legend">
 							<div class="holder">
 								<div class="color rc"></div>

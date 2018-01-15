@@ -123,7 +123,7 @@ class CustomerWIS
                     if($ins_customer_item)
                     {
                         Tbl_customer_wis_item::insert($ins_customer_item);
-                        $validate = 1;
+                        $validate = $wis_id;
                     }
                 }                
             }
@@ -140,8 +140,8 @@ class CustomerWIS
             $itemline[$key]['itemline_wis_id']      = $cust_wis_id;
             $itemline[$key]['itemline_item_id']     = $value['item_id'];
             $itemline[$key]['itemline_description'] = $value['item_description'];
-            $itemline[$key]['itemline_um']          = $value['item_qty'];
-            $itemline[$key]['itemline_qty']         = $value['item_um'];
+            $itemline[$key]['itemline_qty']         = $value['item_qty'];
+            $itemline[$key]['itemline_um']          = $value['item_um'];
             $itemline[$key]['itemline_rate']        = $value['item_rate'];
             $itemline[$key]['itemline_amount']      = $value['item_amount'];
         }
@@ -177,6 +177,10 @@ class CustomerWIS
         $return_item = Tbl_warehouse_inventory_record_log::item()->inventory()->where('record_consume_ref_name','customer_wis')->where('record_consume_ref_id',$cust_wis_id)->groupBy('record_item_id')->get();
 
         return $return_item;
+    }
+    public static function get_wis_line($cust_wis_id)
+    {
+        return Tbl_customer_wis_item_line::um()->where("itemline_wis_id", $cust_wis_id)->get();
     }
 
     public static function print_customer_wis_item($wis_id)

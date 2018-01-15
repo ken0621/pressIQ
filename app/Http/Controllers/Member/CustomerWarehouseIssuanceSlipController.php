@@ -17,6 +17,7 @@ use App\Globals\TransactionEstimateQuotation;
 use App\Globals\Customer;
 use App\Globals\WarehouseTransfer;
 use App\Http\Controllers\Controller;
+use App\Models\Tbl_customer_wis_item_line;
 use Carbon\Carbon;
 use Session;
 use App\Globals\Item;
@@ -57,13 +58,16 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $data["_customer"]  = Customer::getAllCustomer();
         $data['action']     = "/member/customer/wis/create-submit";
 
-        //$cust_wis_id = $request->id;
-        //die(var_dump($po_id));
-        /*if($cust_wis_id)
+        $data['c_id'] = $request->customer_id;
+        //die(var_dump($data['c_id']));
+        $cust_wis_id = $request->id;
+        if($cust_wis_id)
         {
-            $data["wis"]  = Tbl_customer_wis::where("cust_wis_id", $cust_wis_id)->first();
-            dd($data["wis"]);
-        }*/
+            $data["wis"]  = CustomerWIS::get_customer_wis_data($cust_wis_id);
+            $data["_wisline"] = CustomerWIS::get_wis_line($cust_wis_id);
+            //$data['action']     = "/member/customer/wis/update-submit";
+            //dd($data);
+        }
 
         return view('member.warehousev2.customer_wis.customer_wis_create',$data);
     }
@@ -111,12 +115,9 @@ class CustomerWarehouseIssuanceSlipController extends Member
 
         $val = CustomerWIS::customer_create_wis($shop_id, $remarks, $ins_wis, $_item, $insert_item);
 
-        //$data['wis'] = Tbl_customer_wis::where('cust_wis_id',$wis_id)->get();
-        //die(var_dump($val));
         $data = null;
         if(is_numeric($val))
         {
-            //die(var_dump($val));
             $data['status'] = 'success';
             $data['call_function'] = 'success_create_customer_wis';
             $data['status_message'] = 'Success';

@@ -48,13 +48,13 @@ class TransactionSalesReceipt
 		
 		return $data;
 	}
-	public static function info($shop_id, $invoice_id)
+	public static function info($shop_id, $sales_receipt_id)
 	{
-		return Tbl_customer_invoice::customer()->where("inv_shop_id", $shop_id)->where("inv_id", $invoice_id)->first();
+		return Tbl_customer_invoice::customer()->where("inv_shop_id", $shop_id)->where("inv_id", $sales_receipt_id)->first();
 	}
-	public static function info_item($invoice_id)
+	public static function info_item($sales_receipt_id)
 	{
-		return Tbl_customer_invoice_line::um()->where("invline_inv_id", $invoice_id)->get();		
+		return Tbl_customer_invoice_line::um()->where("invline_inv_id", $sales_receipt_id)->get();		
 	}
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{

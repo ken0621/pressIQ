@@ -35,7 +35,7 @@ class TransactionSalesReceiptController extends Member
 		return view('member.accounting_transaction.customer.sales_receipt.sales_receipt_table',$data);		
 	}
 
-	public function getCreate()
+	public function getCreate(Request $request)
 	{
 		$data['page'] = "Create Sales Receipt";		
         $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'sales_receipt');
@@ -43,6 +43,12 @@ class TransactionSalesReceiptController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['action']		= "/member/transaction/sales_receipt/create-sales-receipt";
+        if($request->id)
+        {
+        	$data['action']		= "/member/transaction/sales_receipt/update-sales-receipt";
+        	$data['sales_receipt'] = TransactionSalesReceipt::info($this->user_info->shop_id, $request->id);
+        	$data['sales_receipt_item'] = TransactionSalesReceipt::info_item($request->id);
+        }
 
 		return view('member.accounting_transaction.customer.sales_receipt.sales_receipt',$data);
 	} 

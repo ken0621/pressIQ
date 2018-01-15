@@ -188,6 +188,8 @@
 
                 <div id="summary" class="tabcontent send-release-container">
                     <div class="title-container">Summary</div>
+
+                    
                     <div class="content"></div>
                 </div>
 
@@ -227,6 +229,7 @@
           <div id="preview_boiler_content"></div>
             <div>
               &nbsp; <a href="https://twitter.com/share" class="twitter-share-button" data-url="" data-size="large">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              
               <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Ffacebook/oliverbryan19.com&width=74&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId" width="74" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
             </div>
           <div class="modal-footer">
@@ -240,7 +243,7 @@
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_user_pressrelease.css">
-@endsection
+@endsection 
 @section("script")
 <script>
    function openCity(evt, cityName) 

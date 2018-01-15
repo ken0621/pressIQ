@@ -101,6 +101,9 @@
 			<div class="content-container">{!! str_replace('../', '/', $pr_boiler_content); !!}</div>
 		</div>
 	</div> --}}
+	<!--TRACK OPEN -->
+	<img src="http://sample.digimahouse.test/pressrelease/track/open">
+	<!-- TRACK OPEN END -->
 	<div class="background-container">
 		<div class="container">
 			<div class="row">

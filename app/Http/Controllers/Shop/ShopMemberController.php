@@ -461,7 +461,8 @@ class ShopMemberController extends Shop
         {
             Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
             {
-                $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
+                $from_explode = explode("@", $pr_info["pr_from"]);
+                $message->from(isset($from_explode[0]) ? $from_explode[0] . "@press-iq.com" : $pr_info["pr_from"], $pr_info["pr_sender_name"]);
                 $message->to($pr_info["to"]);
             });
         }
@@ -622,7 +623,7 @@ class ShopMemberController extends Shop
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://mandrillapp.com/api/1.0/users/info.json?key=cKQiemfNNB-5xm98HhcNzw",
+            CURLOPT_URL => "https://mandrillapp.com/api/1.0/users/info.json?key=UWTLQzFotM-rRUyOJqlvjw",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -646,6 +647,21 @@ class ShopMemberController extends Shop
         {
             dd(json_decode($response));
         }
+    }
+
+    /* Tracking Press Release */
+    public function press_release_track_open()
+    {
+        dd(header('Content-Type: image/gif'));
+        //THIS RETURNS THE IMAGE
+        header('Content-Type: image/gif');
+        readfile(public_path() . '/email-tracker/tracking.gif');
+
+        //THIS IS THE SCRIPT FOR THE ACTUAL TRACKING
+        // $date = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
+        // $txt = $date.",". $_SERVER['REMOTE_ADDR'];
+        // $myfile = file_put_contents('log.txt', $txt.PHP_EOL , FILE_APPEND);
+        exit; 
     }
 
     public function press_user_manage_user()

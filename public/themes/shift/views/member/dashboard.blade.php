@@ -426,17 +426,17 @@ input:-webkit-autofill {
 
 /* PLACEMENT VERIFIER */
 .popup-verify-placement {
-  background-color: #EEEEEE;
+  /*background-color: #EEEEEE;*/
   font-family: "Arimo", sans-serif; }
   .popup-verify-placement .modal-sm {
     width: 100%;
     max-width: 500px; }
   .popup-verify-placement .modal-content {
-    background-color: #eee; }
+    /*background-color: #eee;*/ }
     .popup-verify-placement .modal-content .modal-header {
-      background-color: #353739;
-      border-top-left-radius: 3px;
-      border-top-right-radius: 3px; }
+      background-color: #191919;
+      /*border-top-left-radius: 3px;
+      border-top-right-radius: 3px; */}
       .popup-verify-placement .modal-content .modal-header .close {
         color: #FFF; }
       .popup-verify-placement .modal-content .modal-header .modal-title {
@@ -456,7 +456,7 @@ input:-webkit-autofill {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #353739;
+        border: 1px solid #191919;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -467,14 +467,14 @@ input:-webkit-autofill {
         margin: 10px 0px;
         padding: 10px; }
       .popup-verify-placement .modal-content .modal-body .labeld {
-        color: #353739;
+        color: #191919;
         text-align: center;
         text-transform: uppercase; }
       .popup-verify-placement .modal-content .modal-body select {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #353739;
+        border: 1px solid #191919;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -487,10 +487,10 @@ input:-webkit-autofill {
         text-transform: uppercase;
         padding-bottom: 20px; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement {
-          color: #353739;
+          color: #191919;
           background-color: #fff;
           padding: 10px 40px;
-          border: 2px solid #353739;
+          border: 2px solid #191919;
           border-radius: 2px;
           opacity: 0.9;
           -webkit-transition: all 0.2s ease-in-out;
@@ -502,7 +502,7 @@ input:-webkit-autofill {
           text-transform: uppercase; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement:hover {
           color: #fff;
-          background-color: #353739;
+          background-color: #191919;
           opacity: 1.0; }
 </style>
 @endsection

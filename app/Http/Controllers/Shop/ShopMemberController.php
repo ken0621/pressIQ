@@ -198,7 +198,7 @@ class ShopMemberController extends Shop
             $data['reward_point_redemption'] = Tbl_mlm_slot_points_log::Slot()->where('tbl_mlm_slot.slot_owner',Self::$customer_info->customer_id)->where("points_log_complan","PURCHASE_GC")->sum('points_log_points');
         }
         // dd($slot_id." ; ".$data['reward_point_redemption']);
-
+        // dd($data['wallet']);
         return Self::load_view_for_members("member.dashboard", $data);
     }
     public function getDirectReferrals()
@@ -433,6 +433,7 @@ class ShopMemberController extends Shop
                     $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
                      Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
+ 
                 }
                 
             }
@@ -440,7 +441,6 @@ class ShopMemberController extends Shop
             return view("press_user.press_user_pressrelease", $data);
         }
     }
-
     public function pressuser_pressrelease_recipient_search(Request $request)
     {  
      
@@ -466,25 +466,6 @@ class ShopMemberController extends Shop
                 $message->to($pr_info["to"]);
             });
         }
-    }
-   
-     public function send_contact_us()
-    {
-        $contactus_info["contactus_first_name"]    =request('contactus_first_name');
-        $contactus_info["contactus_last_name"]     =request('contactus_last_name');
-        $contactus_info["contactus_phone_number"]  =request('contactus_phone_number');
-        $contactus_info["contactus_subject"]       =request('contactus_subject');
-        $contactus_info["contactus_message"]       =request('contactus_message');
-        $contactus_info["contactus_email"]         =request('contactus_email');
-        $contactus_info["contactus_to"]            =request('contactus_to');
-       
-        Mail::send('emails.Contact_us',$contactus_info, function($message) use ($contactus_info)
-            {
-                $message->from($contactus_info["contactus_email"]);
-                $message->to("oliverbacsal@gmail.com");
-            });
-        Session::flash('message_concern', 'Message Successfully Sent!');
-        return Redirect::back();
     }
 
     public function press_release_save_as_draft(Request $request)
@@ -2217,6 +2198,8 @@ class ShopMemberController extends Shop
         unset($insert["b_month"]);
         unset($insert["b_year"]);
         unset($insert["b_day"]);
+
+        // dd($insert["birthday"]);
 
         if(Customer::register($this->shop_info->shop_id, $insert))
         {

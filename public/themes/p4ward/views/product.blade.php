@@ -13,8 +13,10 @@
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="product-image-holder">
-                        <div class="product-container"><img src="/themes/{{ $shop_theme }}/img/don-organic-image.jpg"></div>
-                        <div class="benefits-container">
+                        <div class="product-container slider-for">
+                            <img src="/themes/{{ $shop_theme }}/img/don-organic-image.jpg">
+                        </div>
+                        <div class="benefits-container slider-nav">
                             <span><img src="/themes/{{ $shop_theme }}/img/don-organic-benefits1.jpg"></span>
                             <span><img src="/themes/{{ $shop_theme }}/img/don-organic-benefits2.jpg"></span>
                             <span><img src="/themes/{{ $shop_theme }}/img/don-organic-benefits3.jpg"></span>
@@ -135,6 +137,7 @@
         });
         //END MISSION ANF VISION
 });*/
+
 </script>
 
 

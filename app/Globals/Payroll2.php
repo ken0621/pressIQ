@@ -4497,6 +4497,7 @@ class Payroll2
 			$philhealth_contribution = Payroll2::philhealth_contribution_update_2018($philhealth_declared);
 			$philhealth_description = payroll_currency($philhealth_declared) . " declared PHILHEALTH Salary";
 
+
 			if($philhealth_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
 			{
 				$philhealth_reference_amount = $philhealth_declared;
@@ -7890,23 +7891,25 @@ class Payroll2
 	{
 		$data['ee'] = 0;
 		$data['er'] = 0;
-		
-		if ($rate <= 10000) 
+		if($rate > 0)
 		{
-			$data['ee'] = 137.50;
-			$data['er'] = 137.50;
-		}
-		else if($rate > 10000 && $rate < 40000)
-		{
-			$philhealth_contri = $rate * 0.0275;
+			if ($rate <= 10000) 
+			{
+				$data['ee'] = 137.50;
+				$data['er'] = 137.50;
+			}
+			else if($rate > 10000 && $rate < 40000)
+			{
+				$philhealth_contri = $rate * 0.0275;
 
-			$data['ee'] = @($philhealth_contri/2);
-			$data['er'] = @($philhealth_contri/2);
-		}
-		else if($rate >= 40000)
-		{
-			$data['ee'] = 550.00;
-			$data['er'] = 550.00;
+				$data['ee'] = @($philhealth_contri/2);
+				$data['er'] = @($philhealth_contri/2);
+			}
+			else if($rate >= 40000)
+			{
+				$data['ee'] = 550.00;
+				$data['er'] = 550.00;
+			}
 		}
 
 		return $data;

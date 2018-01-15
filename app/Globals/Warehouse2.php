@@ -373,7 +373,7 @@ class Warehouse2
         }
     }
 
-    public static function refill_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array())
+    public static function refill_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array())
     {
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
@@ -400,7 +400,7 @@ class Warehouse2
                 }
             }
         }
-        if($quantity < 0)
+        if($quantity < 1)
         {
             $return .= "The quantity is less than 1. <br> ";
         }
@@ -425,7 +425,7 @@ class Warehouse2
                 $return .= "The serial number are not equal from the quantity. <br> ";
             }
         }
-        if($quantity < 0)
+        if($quantity < 1)
         {
             $return .= "The quantity is less than 1. <br> ";
         }
@@ -590,7 +590,7 @@ class Warehouse2
 
         return $validate;
     }
-    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array())
+    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array())
     {
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
@@ -616,7 +616,7 @@ class Warehouse2
         { 
             $return .= "The quantity must be a number. <br>";
         }
-        if($quantity < 0)
+        if($quantity < 1)
         {
             $return .= "The quantity is less than 1. <br> ";
         }

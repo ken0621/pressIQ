@@ -306,7 +306,7 @@ class AccountingTransaction
 		$return = null;
 		if(count($item_info) > 0)
 		{
-			$item = null;
+			$_item = null;
 			foreach ($item_info as $key => $value) 
 			{
 				$item_type = Item::get_item_type($value['item_id']);
@@ -333,19 +333,19 @@ class AccountingTransaction
 				}
 			}
 
-			if(count($item) > 0)
+			if(count($_item) > 0)
 			{
 				$return = Warehouse2::refill_bulk($shop_id, $warehouse_id, $ref_name, $ref_id, $remarks, $_item);
 			}
 		}
 		return $return;
 	}
-	public static function inventory_validation($type = 'refill', $shop_id, $warehouse_id, $item_info, $remarks)
+	public static function inventory_validation($type = 'refill', $shop_id, $warehouse_id, $item_info, $remarks = '')
 	{
 		$return = null;
+		$_item = null;
 		if(count($item_info) > 0)
 		{
-			$item = null;
 			foreach ($item_info as $key => $value) 
 			{
 				$item_type = Item::get_item_type($value['item_id']);
@@ -372,19 +372,23 @@ class AccountingTransaction
 				}
 			}
 		}
-		if(count($item) > 0)
+		if(count($_item) > 0)
 		{
-			foreach ($item as $key => $value) 
+			foreach ($_item as $key => $value) 
 			{
 				if($type == 'refill')
 				{
-					$return = Warehouse2::refill_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $remarks['remarks']);
+					$return = Warehouse2::refill_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
 				}
 				if($type == 'consume')
 				{
-					$return = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $remarks['remarks']);
+					$return = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
 				}
 			}
+		}
+		else
+		{
+			$return = "Please select item";
 		}
 
 		return $return;

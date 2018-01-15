@@ -6,6 +6,7 @@ use App\Models\Tbl_credit_memo_line;
 use Carbon\Carbon;
 use DB;
 use App\Globals\AccountingTransaction;
+use App\Globals\Warehouse2;
 /**
  * 
  *
@@ -23,6 +24,11 @@ class TransactionCreditMemo
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);
 		if(!$val)
 		{
+	        /* SUBTOTAL */
+	        $subtotal_price = collect($insert_item)->sum('item_amount');
+	        /* OVERALL TOTAL */
+	        $overall_price  = convertToNumber($subtotal_price); 
+
 			$return  = null; 
 			$ins['cm_shop_id']                  = $shop_id;  
 			$ins['cm_customer_id']              = $insert['customer_id'];  
@@ -32,12 +38,8 @@ class TransactionCreditMemo
 	        $ins['cm_date']                     = date("Y-m-d", strtotime($insert['transaction_date']));
 	        $ins['cm_message']                  = $insert['customer_message'];
 	        $ins['cm_memo']                     = $insert['customer_memo'];
+	        $ins['cm_amount']                   = $overall_price;
 	        $ins['date_created']                = Carbon::now();
-
-	        /* SUBTOTAL */
-	        $subtotal_price = collect($insert_item)->sum('item_amount');
-	        /* OVERALL TOTAL */
-	        $overall_price  = convertToNumber($subtotal_price); 
 
 	        /* INSERT CREDIT MEMO HERE */
 	        $cm_id = Tbl_credit_memo::insertGetId($ins);;
@@ -52,6 +54,9 @@ class TransactionCreditMemo
 	        $entry["ewt"]               = '';
 
 	        $return = Self::insertline($cm_id, $insert_item, $entry);
+
+			$warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+			AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'credit_memo', $cm_id, 'Refill upon creating CREDIT MEMO '.$ins['transaction_refnum']);
 		}
 		else
 		{

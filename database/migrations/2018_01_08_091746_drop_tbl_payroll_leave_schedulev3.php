@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnPayrollRegister134 extends Migration
+class DropTblPayrollLeaveSchedulev3 extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +14,7 @@ class AddColumnPayrollRegister134 extends Migration
     public function up()
     {
         //
-                                 Schema::table('tbl_payroll_leave_report', function (Blueprint $table)
-            {
-
-                $table->dropColumn(['month_13_and_other']);
-            });
+        Schema::drop('tbl_payroll_leave_schedulev3');
     }
 
     /**

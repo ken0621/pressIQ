@@ -16,9 +16,12 @@
 					<option value="">Select Leave Type</option>
 					<option value="Sick Leave">Sick Leave</option>
 					<option value="Vacation Leave">Vacation Leave</option>
+					<option value="Emergency Leave">Emergency Leave</option>
 					<option value="Maternity Leave">Maternity Leave</option>
 					<option value="Paternity Leave">Paternity Leave</option>
 					<option value="Parental Leave">Parental Leave</option>
+					<option value="Leave For Victims of VAWC">Leave For Victims of VAWC</option>
+					<option value="Special Leave For Women">Special Leave For Women</option>
 				</select>
 			</div>
 

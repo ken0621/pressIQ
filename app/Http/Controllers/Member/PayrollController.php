@@ -4079,7 +4079,7 @@ class PayrollController extends Member
           $insert['shop_id']                                = Self::shop_id();
           $insert['payroll_leave_temp_is_cummulative']      = Request::input('payroll_leave_temp_is_cummulative');
 
-          $leave_temp_count = Tbl_payroll_leave_tempv2::where('payroll_leave_temp_name',Request::input('payroll_leave_temp_name'))->get();
+          $leave_temp_count = Tbl_payroll_leave_tempv2::where('payroll_leave_temp_name',Request::input('payroll_leave_temp_name'))->where('shop_id',Self::shop_id())->get();
 
           if(count($leave_temp_count) == 0)
           {
@@ -4289,17 +4289,35 @@ class PayrollController extends Member
                                                             ->whereIn('tbl_payroll_leave_tempv2.payroll_leave_temp_id',$payroll_leave_temp_id)
                                                             ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_is_archived',0) 
                                                             ->get();
-         $datas = array();                                               
+          $datas         = array(); 
+          $remwithpay    = array();
+          $remwithoutpay = array();                                           
           foreach($payroll_employee_id as $key => $emp_id)
-          {
-  
-               $empdata = Tbl_payroll_leave_schedulev2::getviewleavedata($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
-    
-               array_push($datas, $empdata); 
-          }
+          {    
+               $empdataremwithpay     = Tbl_payroll_leave_schedulev2::getleavewithpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+               $empdataremwithoutpay  = Tbl_payroll_leave_schedulev2::getleavewithoutpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+               $empdata               = Tbl_payroll_leave_schedulev2::getviewleavedata($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
 
-               
-         $data['leave_report'] = $datas;
+          //                "payroll_leave_temp_name" => "Sick Leave"
+          // "payroll_employee_id" => 841
+          // "payroll_leave_date_created" => "2018-01-12"
+          // "payroll_employee_display_name" => "Carlo Mari Marco Carrasco"
+          // "payroll_leave_employee_id" => 1
+          // "payroll_leave_temp_hours" => "60.00"
+          // "total_leave_consume" => "8.00"
+          // "remaining_leave" => "52.00"
+               array_push($datas, $empdata); 
+               array_push($remwithpay, $empdataremwithpay); 
+               array_push($remwithoutpay, $empdataremwithoutpay); 
+          }    
+
+          // die(var_dump($remwithoutpay));
+          $data['leave_report']    = $datas;
+          $data['remwithpay']      = $remwithpay;
+          $data['remwithoutpay']   = $remwithoutpay;
+          
+          // dd($remwithoutpay);
+
          return view("member.payroll.modal.modal_remaining_leave_report",$data);
      }
 
@@ -4307,21 +4325,28 @@ class PayrollController extends Member
      {
           $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->get();
 
-          $payroll_employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id','payroll_leave_employee_id')
+          $payroll_employee_id   = Tbl_payroll_leave_employeev2::select('payroll_employee_id','payroll_leave_employee_id')
                                                             ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_employee_v2.payroll_leave_temp_id','=','tbl_payroll_leave_tempv2.payroll_leave_temp_id')
                                                             ->whereIn('tbl_payroll_leave_tempv2.payroll_leave_temp_id',$payroll_leave_temp_id)
                                                             ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_is_archived',0) 
                                                             ->get();
-          $datas = array();                                               
+          $datas         = array(); 
+          $remwithpay    = array();
+          $remwithoutpay = array();                                              
           foreach($payroll_employee_id as $key => $emp_id)
           {    
-  
-               $empdata = Tbl_payroll_leave_schedulev2::getviewleavedata($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
-    
+               $empdataremwithpay     = Tbl_payroll_leave_schedulev2::getleavewithpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+               $empdataremwithoutpay  = Tbl_payroll_leave_schedulev2::getleavewithoutpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+               $empdata               = Tbl_payroll_leave_schedulev2::getviewleavedata($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+
                array_push($datas, $empdata); 
+               array_push($remwithpay, $empdataremwithpay); 
+               array_push($remwithoutpay, $empdataremwithoutpay); 
           }    
       
-          $data['leave_report']       = $datas;
+          $data['leave_report']    = $datas;
+          $data['remwithpay']      = $remwithpay;
+          $data['remwithoutpay']   = $remwithoutpay;
        
           Excel::create("Remaining Leave Report",function($excel) use ($data)
           {
@@ -4336,45 +4361,52 @@ class PayrollController extends Member
      {
           $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->get();
 
-          $payroll_employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id','payroll_leave_employee_id')
+          $payroll_employee_id   = Tbl_payroll_leave_employeev2::select('payroll_employee_id','payroll_leave_employee_id')
                                                             ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_employee_v2.payroll_leave_temp_id','=','tbl_payroll_leave_tempv2.payroll_leave_temp_id')
                                                             ->whereIn('tbl_payroll_leave_tempv2.payroll_leave_temp_id',$payroll_leave_temp_id)
                                                             ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_is_archived',0) 
                                                             ->get();
-         $datas = array();                                               
+          $datas     = array();  
+          $remaining = array();                                              
           foreach($payroll_employee_id as $key => $emp_id)
           {
-  
-               $empdata = Tbl_payroll_leave_schedulev2::getleavewithpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
-    
+               $empdataremaining  = Tbl_payroll_leave_schedulev2::getremainings($emp_id['payroll_employee_id'])->get();
+               $empdata           = Tbl_payroll_leave_schedulev2::getleavewithpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+
                array_push($datas, $empdata); 
+               array_push($remaining, $empdataremaining);
           }
 
                
          $data['leave_report'] = $datas;
+         $data['remainings']   = $remaining;
 
           return view("member.payroll.modal.modal_pay_leave_report",$data);
      }
 
      public function pay_leave_report_excel()
      {
-           $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->get();
-
-          $payroll_employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id','payroll_leave_employee_id')
+          $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->get();
+ 
+          $payroll_employee_id   = Tbl_payroll_leave_employeev2::select('payroll_employee_id','payroll_leave_employee_id')
                                                             ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_employee_v2.payroll_leave_temp_id','=','tbl_payroll_leave_tempv2.payroll_leave_temp_id')
                                                             ->whereIn('tbl_payroll_leave_tempv2.payroll_leave_temp_id',$payroll_leave_temp_id)
                                                             ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_is_archived',0) 
                                                             ->get();
-         $datas = array();                                               
+          $datas     = array();  
+          $remaining = array();                                              
           foreach($payroll_employee_id as $key => $emp_id)
           {
-  
-               $empdata = Tbl_payroll_leave_schedulev2::getleavewithpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
-    
+               $empdataremaining = Tbl_payroll_leave_schedulev2::getremainings($emp_id['payroll_employee_id'])->get();
+               $empdata          = Tbl_payroll_leave_schedulev2::getleavewithpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+
                array_push($datas, $empdata); 
+               array_push($remaining, $empdataremaining);
           }
 
+               
          $data['leave_report'] = $datas;
+         $data['remainings']   = $remaining;
 
           Excel::create("Paid Leave Reports",function($excel) use ($data)
           {
@@ -4389,45 +4421,52 @@ class PayrollController extends Member
      {
           $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->get();
 
-          $payroll_employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id','payroll_leave_employee_id')
+          $payroll_employee_id   = Tbl_payroll_leave_employeev2::select('payroll_employee_id','payroll_leave_employee_id')
                                                             ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_employee_v2.payroll_leave_temp_id','=','tbl_payroll_leave_tempv2.payroll_leave_temp_id')
                                                             ->whereIn('tbl_payroll_leave_tempv2.payroll_leave_temp_id',$payroll_leave_temp_id)
                                                             ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_is_archived',0) 
                                                             ->get();
-         $datas = array();                                               
+          $datas     = array();   
+          $remaining = array();                                        
           foreach($payroll_employee_id as $key => $emp_id)
           {
-  
-               $empdata = Tbl_payroll_leave_schedulev2::getleavewithoutpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
-    
+               $empdataremaining = Tbl_payroll_leave_schedulev2::getremainings($emp_id['payroll_employee_id'])->get();
+               $empdata          = Tbl_payroll_leave_schedulev2::getleavewithoutpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+
                array_push($datas, $empdata); 
+               array_push($remaining, $empdataremaining);
           }
 
                
          $data['leave_report'] = $datas;
+         $data['remainings']   = $remaining;
 
           return view("member.payroll.modal.modal_withoutpay_leave_report",$data);
      }
 
      public function withoutpay_leave_report_excel()
      {
-          $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->get();
+           $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->get();
 
-          $payroll_employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id','payroll_leave_employee_id')
+          $payroll_employee_id    = Tbl_payroll_leave_employeev2::select('payroll_employee_id','payroll_leave_employee_id')
                                                             ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_employee_v2.payroll_leave_temp_id','=','tbl_payroll_leave_tempv2.payroll_leave_temp_id')
                                                             ->whereIn('tbl_payroll_leave_tempv2.payroll_leave_temp_id',$payroll_leave_temp_id)
                                                             ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_is_archived',0) 
                                                             ->get();
-         $datas = array();                                               
+          $datas     = array();   
+          $remaining = array();                                        
           foreach($payroll_employee_id as $key => $emp_id)
           {
-  
-               $empdata = Tbl_payroll_leave_schedulev2::getleavewithoutpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
-    
+               $empdataremaining = Tbl_payroll_leave_schedulev2::getremainings($emp_id['payroll_employee_id'])->get();
+               $empdata          = Tbl_payroll_leave_schedulev2::getleavewithoutpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+
                array_push($datas, $empdata); 
+               array_push($remaining, $empdataremaining);
           }
+
                
          $data['leave_report'] = $datas;
+         $data['remainings']   = $remaining;
 
           Excel::create("Without Paid Leave Reports",function($excel) use ($data)
           {
@@ -4440,7 +4479,7 @@ class PayrollController extends Member
 
      public function modal_leave_action_report()
      {
-          $data['leave_report'] = Tbl_payroll_leave_report::select('*')->get();
+          $data['leave_report'] = Tbl_payroll_leave_report::select('*')->where('shop_id',Self::shop_id())->get();
 
           return view("member.payroll.modal.modal_leave_action_report",$data);
      }
@@ -4542,10 +4581,11 @@ class PayrollController extends Member
           Tbl_payroll_leave_report::insert($insert);
           Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$id)->update($update);
 
-          $return['status']                               = 'success';
-           $return['function_name']                       = 'payrollconfiguration.reload_leavev2_temp';
- 
-          return json_encode($return);
+          
+          $response['call_function'] = 'reload';
+          $response['status'] = 'success';
+
+          return $response;
      }
 
      public function reset_and_accumulate_leave_schedulev2()
@@ -4577,10 +4617,10 @@ class PayrollController extends Member
           Tbl_payroll_leave_employeev2::where('payroll_leave_employee_id',$id)->update($updates);
           Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$id)->update($update);
 
-          $return['status']             = 'success';
-          $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
-
-          return json_encode($return);
+          $response['call_function'] = 'reload';
+          $response['status'] = 'success';
+          
+          return $response;
      }
 
      public function convert_to_cash_leave_schedulev2()
@@ -4607,8 +4647,10 @@ class PayrollController extends Member
           Tbl_payroll_leave_report::insert($insert);
           Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$id)->update($update);
 
-          $return['status']                               = 'success';
-          $return['function_name']                        = 'payrollconfiguration.reload_leavev2_temp';
+          $response['call_function'] = 'reload';
+          $response['status'] = 'success';
+          
+          return $response;
  
           return json_encode($return);
      }
@@ -4618,10 +4660,10 @@ class PayrollController extends Member
           $id = Request::input('id');
           Tbl_payroll_leave_history::where('payroll_leave_employee_id',$id)->delete();
 
-          $return['status']             = 'success';
-          $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
-
-          return json_encode($return);
+          $response['call_function'] = 'reload';
+          $response['status'] = 'success';
+          
+          return $response;
      }
 
      public function archived_leave_tempv2()

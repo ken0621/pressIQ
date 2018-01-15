@@ -65,7 +65,7 @@
 				@if($travel_and_tours)
 				<div class="square-container" style="border: none !important;">
 					<div class="btn-container">
-						<a class="btn btn-lblue" style="width: 100%;" role="button" href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a>
+						<a class="btn btn-lblue" style="width: 100%;" role="button" href="{{$link}}">Travel and Tours</a>
 					</div>
 				</div>
 				@endif

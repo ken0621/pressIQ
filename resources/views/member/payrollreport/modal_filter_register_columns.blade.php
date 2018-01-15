@@ -9,7 +9,7 @@
     </div>
     <div class="modal-body form-horizontal">
         <div class="form-group">
-         @foreach($columns as $column)
+         @foreach($columnn as $column)
                  <div class="checkbox">
                   <label><input type="checkbox" name="name" value="1" {{$column->name == 1 ? 'checked' : 'unchecked'}}>Name</label>
                 </div>

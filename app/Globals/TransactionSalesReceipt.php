@@ -56,6 +56,76 @@ class TransactionSalesReceipt
 	{
 		return Tbl_customer_invoice_line::um()->where("invline_inv_id", $sales_receipt_id)->get();		
 	}
+
+	public static function postUpdate($sales_receipt_id, $shop_id, $insert, $insert_item = array())
+	{
+		$val = AccountingTransaction::customer_validation($insert, $insert_item);
+		if(!$val)
+		{
+			$return  = null; 
+			$ins['inv_shop_id']                  = $shop_id;  
+			$ins['inv_customer_id']              = $insert['customer_id'];  
+			$ins['transaction_refnum']	 		 = $insert['transaction_refnum'];   
+	        $ins['inv_customer_email']           = $insert['customer_email'];
+	        $ins['inv_customer_billing_address'] = $insert['customer_address'];
+	        $ins['inv_date']                     = date("Y-m-d", strtotime($insert['transaction_date']));
+	        $ins['ewt']                          = $insert['customer_ewt'];
+	        $ins['inv_discount_type']            = $insert['customer_discounttype'];
+	        $ins['inv_discount_value']           = $insert['customer_discount'];
+	        $ins['taxable']                      = $insert['customer_tax'];
+	        $ins['inv_message']                  = $insert['customer_message'];
+	        $ins['inv_memo']                     = $insert['customer_memo'];
+	        $ins['date_created']                 = Carbon::now();
+
+	        /* SUBTOTAL */
+	        $subtotal_price = collect($insert_item)->sum('item_amount');
+
+	        /* DISCOUNT */
+	        $discount = $insert['customer_discount'];
+	        if($insert['customer_discounttype'] == 'percent') $discount = (convertToNumber($insert['customer_discount']) / 100) * $subtotal_price;
+
+	        /* TAX */
+	        $tax = (collect($insert_item)->where('item_taxable', '1')->sum('item_amount')) * 0.12;
+
+	        /* EWT */
+	        $ewt = $subtotal_price * convertToNumber($insert['customer_ewt']);
+
+	        /* OVERALL TOTAL */
+	        $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
+
+	        $ins['inv_subtotal_price']           = $subtotal_price;
+	        $ins['inv_overall_price']            = $overall_price;
+
+	        $ins['is_sales_receipt']             = 1;
+            $ins['inv_payment_applied']		     = $overall_price;
+            $ins['inv_is_paid']                  = 1;
+
+
+	        /* INSERT INVOICE HERE */
+	        Tbl_customer_invoice::where('inv_id', $sales_receipt_id)->update($ins);
+	        // $invoice_id = 0;
+
+	       /* Transaction Journal */
+	        $entry["reference_module"]  = 'sales-receipt';
+	        $entry["reference_id"]      = $sales_receipt_id;
+	        $entry["name_id"]           = $insert['customer_id'];
+	        $entry["total"]             = $overall_price;
+	        $entry["vatable"]           = $tax;
+	        $entry["discount"]          = $discount;
+	        $entry["ewt"]               = $ewt;
+
+			Tbl_customer_invoice_line::where("invline_inv_id", $sales_receipt_id)->delete();
+	        $return = Self::insertline($sales_receipt_id, $insert_item, $entry);
+	        $return = $sales_receipt_id;
+		}
+		else
+		{
+			$return = $val;
+		}		
+
+        return $return; 
+	}
+	
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);

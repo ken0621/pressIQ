@@ -109,7 +109,7 @@ class TransactionSalesInvoiceController extends Member
 	{
 		$btn_action = $request->button_action;
 		$invoice_id = $request->invoice_id;
-		
+
 		$insert['transaction_refnum'] 	 = $request->transaction_refnumber;
 		$insert['customer_id'] 			 = $request->customer_id;
 		$insert['customer_email']        = $request->customer_email;

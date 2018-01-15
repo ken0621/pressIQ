@@ -3,7 +3,7 @@
 <form class="global-submit" action="{{$action or ''}}" method="post">
     <div class="panel panel-default panel-block panel-title-block">
         <input type="hidden" class="button-action" name="button_action" value="">
-        <input type="hidden" class="button-action" name="invoice_id" value="{{Request::input('id')}}">
+        <input type="hidden" name="invoice_id" value="{{Request::input('id')}}">
         <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
         <div class="panel-heading">
             <div>

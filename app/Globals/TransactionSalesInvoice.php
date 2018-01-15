@@ -102,7 +102,7 @@ class TransactionSalesInvoice
 	        $tax = (collect($insert_item)->where('item_taxable', '1')->sum('item_amount')) * 0.12;
 
 	        /* EWT */
-	        $ewt = $subtotal_price*convertToNumber($insert['customer_ewt']);
+	        $ewt = $subtotal_price * convertToNumber($insert['customer_ewt']);
 
 	        /* OVERALL TOTAL */
 	        $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;

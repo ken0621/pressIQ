@@ -135,9 +135,17 @@ class ShopMemberController extends Shop
                 foreach($_slot as $slot)
                 {
                     // 4 = V.I.P Platinum && 65 = V.I.P Platinum (FS)
-                    if($slot->slot_membership == 4 || $slot->slot_membership == 65)
+                    if($slot->slot_membership == 4 || $slot->slot_membership == 65 || $slot->slot_membership == 3)
                     {
                         $data["travel_and_tours"] = true;
+                        if($slot->slot_membership == 3) 
+                        {
+                            $data['link'] = '#';
+                        }
+                        else
+                        {
+                            $data['link'] = 'http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx';
+                        }
                     }
                 }
             }
@@ -2349,6 +2357,7 @@ class ShopMemberController extends Shop
             $insert_customer["birthday"]    = $birthday;
             $insert_customer["country_id"]  = $request->country_id;
             $insert_customer["updated_at"]  = Carbon::now();
+            $insert_customer['contact']     = $request->contact;
 
             Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
                         ->shop(Self::$customer_info->shop_id)

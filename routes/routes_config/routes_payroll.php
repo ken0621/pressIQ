@@ -22,10 +22,13 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 	/*START loan summary report*/
 	Route::any('/reports/loan_summary','Member\PayrollReportController@loan_summary');
-	Route::any('/reports/table_loan_summary/{deduction_type}','Member\PayrollReportController@table_loan_summary');
+	Route::any('/reports/table_loan_summary/{deduction_type}/{company}','Member\PayrollReportController@table_loan_summary');
 	Route::any('/reports/modal_loan_summary_report/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@modal_loan_summary');
 	Route::any('/reports/export_loan_summary_report_to_excel/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@export_loan_summary_report_to_excel');
 	Route::any('/reports/table_company_loan_summary','Member\PayrollReportController@table_company_loan_summary');
+
+	Route::any('/reports/loan_summary/loan_summary_report_excel/{company_id}/{deduction_type}','Member\PayrollReportController@loan_summary_report_excel');
+
 	/*END loan summary report*/
 
 	/*START payroll ledger*/

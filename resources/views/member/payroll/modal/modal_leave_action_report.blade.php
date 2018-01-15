@@ -32,7 +32,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center">Leave Name</th>
-                                <th class="text-center" width="30">Employee Code</th>
+                                <th class="text-center" width="30">Employee Number</th>
                                 <th class="text-center">Employee Name</th>
                                 <th class="text-center" width="10">Leave Credits</th>
                                 <th class="text-center" width="10">Leave Hours Remaining</th>

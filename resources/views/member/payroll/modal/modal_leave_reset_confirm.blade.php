@@ -25,3 +25,16 @@
 		</div> 
 	</div>
 </form>
+<script>
+	function reload(data)
+	{
+	    $('.configuration-div').load('/member/payroll/leave/v2', function()
+		{
+				$('.modal-loader').addClass("hidden");
+				$('.modal-content-global .close').trigger("click");
+				data.element.modal("hide");
+		});
+	
+
+	}
+</script>	

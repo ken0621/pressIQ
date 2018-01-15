@@ -138,5 +138,12 @@
         <button class="btn btn-custom-primary btn-submit" type="submit">Save</button>
     </div>
 </form>
+<script>
+         function reload(data)
+        {
+            data.element.modal("hide");
+            location.reload();
+        }
+</script>
 {{-- <script type="text/javascript" src="/assets/js/ajax_offline.js"></script> --}}
 

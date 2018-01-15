@@ -29,7 +29,7 @@
                         Action <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-custom">
-                        <li><a onclick="return confirm('Are you sure you want to UNPROCESS this record ({{ $period->payroll_period_category }} - {{ code_to_word($period->period_count) }} of {{ $period->month_contribution }}  {{ $period->year_contribution }})? ')" href="/member/payroll/unprocess_payroll/{{ $period->payroll_period_company_id }}">Un-process</a> </li>
+                      {{--   <li><a onclick="return confirm('Are you sure you want to UNPROCESS this record ({{ $period->payroll_period_category }} - {{ code_to_word($period->period_count) }} of {{ $period->month_contribution }}  {{ $period->year_contribution }})? ')" href="/member/payroll/unprocess_payroll/{{ $period->payroll_period_company_id }}">Un-process</a> </li> --}}
                         <li><a href="javascript:" class="popup" link="/member/payroll/process_payroll/modal_view_summary/{{ $period->payroll_period_company_id }}" size="lg">View Summary</a> </li>
                         <li><a href="/member/payroll/payroll_approved_view/generate_payslip_v2/{{ $period->payroll_period_company_id }}" target="_blank">View Payslip</a></li>
                         <li><a href="/member/payroll/process_payroll/{{ $period->payroll_period_company_id }}?step=register">Payroll Register</a></li>

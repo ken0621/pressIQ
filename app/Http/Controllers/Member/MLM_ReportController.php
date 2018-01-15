@@ -175,16 +175,6 @@ class MLM_ReportController extends Member
         $data['report_list_d']['payin']['to'] = $to;
         $data['report_list_d']['payin']['count'] = $count;
 
-        //patrick
-        // $data['report_list']['payout'] = 'Payout';
-        // $data['report_list_d']['payout']['from'] = Carbon::now();
-        // $data['report_list_d']['payout']['to'] = Carbon::now();
-        // $data['report_list_d']['payout']['count'] = 0;
-
-        $data['report_list']['payout'] = 'Payout';
-        $data['report_list_d']['payout']['from'] = $from;
-        $data['report_list_d']['payout']['to'] = $to;
-        $data['report_list_d']['payout']['count'] = $count;
 
         foreach($data['report_list_d'] as $key => $value)
         {

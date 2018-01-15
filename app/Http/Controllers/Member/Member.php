@@ -169,6 +169,9 @@ class Member extends Controller
 
 			View::share("frontend_domain", $data["frontend_domain"]);
 
+			/*TRANSACTION REFERENCE NUMBER*/
+			Seed_manual::put_transaction_reference_number($this->user_info->shop_id);
+			//dd($this->user_info->shop_id);
 			/* INSERT TAX PERIOD */
 			Payroll::generate_tax_period($this->user_info->shop_id);
 			/* INSERT DEFAULT CHART OF ACCOUNT */
@@ -200,9 +203,6 @@ class Member extends Controller
 			Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);
 			// dd($this->user_info);
 			
-			/*TRANSACTION REFERENCE NUMBER*/
-			Seed_manual::put_transaction_reference_number($this->user_info->shop_id);
-			//dd($this->user_info->shop_id);
 
 			return $next($request);
 		});

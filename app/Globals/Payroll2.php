@@ -4104,11 +4104,11 @@ class Payroll2
 		$tax_declared = $salary->payroll_employee_salary_taxable;
 		$payroll_period_company_id = $date_query->payroll_period_company_id;
 		$payroll_company_id = $date_query->payroll_company_id;
-
-
+		
+		// dd($tax_reference);
 		if($tax_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
 		{
-			$tax = Payroll::tax_contribution($shop_id, $tax_declared, $employee->payroll_employee_tax_status, "Monthly");	
+			$tax = Payroll::tax_contribution($shop_id, $tax_declared, $employee->payroll_employee_tax_status, $payroll_period_category);	
 			$tax_description = payroll_currency($tax_declared) . " declared TAX Salary (" . $employee->payroll_employee_tax_status . ")";
 
 			if($tax_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
@@ -4273,7 +4273,7 @@ class Payroll2
 		$return->taxable_salary_total = $return->gross_pay_total;
 		$return->_taxable_salary_breakdown = array();
 
-	
+		
 		foreach($return->_breakdown as $breakdown)
 		{
 			if($breakdown["add.taxable_salary"] == true)
@@ -4496,7 +4496,7 @@ class Payroll2
 				}
 			}
 		}
-
+		
 		/* PHILHEALTH COMPUTATION */	
 		if($philhealth_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
 		{
@@ -4595,8 +4595,6 @@ class Payroll2
 					// 	$philhealth_contribution["er"] = $philhealth_contribution["er"] - $last_cutoff->philhealth_er;
 					// 	$last_cutoff->phihealth_salary;
 					// }
-
-
 
 					$last_cutoff 		= Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
 					$_period_approved 	= Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();

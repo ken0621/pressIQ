@@ -91,7 +91,6 @@ class Vendor_CheckController extends Member
             $data["_check"][$key]->name = $name;
         }
 
-
         return view("member.vendor.check.check_list",$data);
     }
 

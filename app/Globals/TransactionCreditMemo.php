@@ -34,15 +34,13 @@ class TransactionCreditMemo
 	        $ins['cm_memo']                     = $insert['customer_memo'];
 	        $ins['date_created']                = Carbon::now();
 
-
 	        /* SUBTOTAL */
 	        $subtotal_price = collect($insert_item)->sum('item_amount');
 	        /* OVERALL TOTAL */
 	        $overall_price  = convertToNumber($subtotal_price); 
 
 	        /* INSERT CREDIT MEMO HERE */
-	        // $cm_id = Tbl_credit_memo::insertGetId($ins);
-	        $cm_id = 0;
+	        $cm_id = Tbl_credit_memo::insertGetId($ins);;
 
 	        /* Transaction Journal */
 	        $entry["reference_module"]  = "credit-memo";
@@ -62,6 +60,47 @@ class TransactionCreditMemo
 
         return $return; 
 	}
+	public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
+	{
+		$data = Tbl_credit_memo::customer()->where('cm_shop_id', $shop_id);
+
+		if($search_keyword)
+		{
+			$data->where(function($q) use ($search_keyword)
+            {
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("cm_id", "LIKE", "%$search_keyword%");
+                $q->orWhere("company", "LIKE", "%$search_keyword%");
+                $q->orWhere("first_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("middle_name", "LIKE", "%$search_keyword%");
+                $q->orWhere("last_name", "LIKE", "%$search_keyword%");
+            });
+		}
+
+		if($status != 'all')
+		{
+			$tab = 0;
+			if($status == 'open')
+			{
+				$tab = 0;
+			}
+			if($status == 'closed')
+			{
+				$tab = 1;
+			}
+			$data->where('cm_status',$tab);
+		}
+		if($paginate)
+		{
+			$data = $data->paginate($paginate);
+		}
+		else
+		{
+			$data = $data->get();
+		}
+
+		return $data;
+	}
 	public static function insertline($cm_id, $insert_item, $entry)
 	{
 		$itemline = null;
@@ -69,7 +108,7 @@ class TransactionCreditMemo
 		foreach ($insert_item as $key => $value) 
 		{	
 			$itemline[$key]['cmline_cm_id'] 			= $cm_id;
-			$itemline[$key]['cmline_service_date'] 		= $value['item_servicedate'];
+			$itemline[$key]['cmline_service_date'] 		= isset($value['item_servicedate']) ? $value['item_servicedate'] : '';
 			$itemline[$key]['cmline_item_id'] 			= $value['item_id'];
 			$itemline[$key]['cmline_description'] 		= $value['item_description'];
 			$itemline[$key]['cmline_um'] 				= $value['item_um'];
@@ -80,7 +119,7 @@ class TransactionCreditMemo
 		}
 		if(count($itemline) > 0)
 		{
-			// Tbl_credit_memo_line::insert($itemline);
+			Tbl_credit_memo_line::insert($itemline);
 			$return = AccountingTransaction::entry_data($entry, $insert_item);
 		}
 

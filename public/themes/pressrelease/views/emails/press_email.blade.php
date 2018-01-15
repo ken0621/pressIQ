@@ -17,11 +17,10 @@
 .container
 {
 	background-color: #f5f5f5;
-	margin: 0px 230px;
+	margin: 0px 130px;
 	padding: 40px 40px;
 	border-radius: 10px;
 	min-height: 640px;
-	width: 800px !important;
 }	
 	
 .heading-container

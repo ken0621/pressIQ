@@ -2783,6 +2783,7 @@ class PayrollController extends Member
           Tbl_payroll_tax_reference::insert($insert);
           $return['status'] = 'success';
           $return['function_name'] = '';
+
           return json_encode($return);
 
      }
@@ -2805,14 +2806,14 @@ class PayrollController extends Member
           foreach($tax_category as $key => $category)
           {
                $insert[$key]['payroll_tax_status_id']  = $payroll_tax_status_id;
-               $insert[$key]['tax_category']                = $category;
+               $insert[$key]['tax_category']           = $category;
                $insert[$key]['tax_first_range']        = $tax_first_range[$key];
                $insert[$key]['tax_second_range']       = $tax_second_range[$key];
                $insert[$key]['tax_third_range']        = $tax_third_range[$key];
                $insert[$key]['tax_fourth_range']       = $tax_fourth_range[$key];
                $insert[$key]['tax_fifth_range']        = $tax_fifth_range[$key];
                $insert[$key]['taxt_sixth_range']       = $taxt_sixth_range[$key];
-               $insert[$key]['tax_seventh_range']           = $tax_seventh_range[$key];
+               $insert[$key]['tax_seventh_range']      = $tax_seventh_range[$key];
           }
           $old_data = serialize($insert);
           AuditTrail::record_logs('EDITED: Payroll Tax Default', 'Payroll Tax Default Table(not found)', "", $old_data,"");

@@ -40,7 +40,7 @@
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <label>Reference Number</label>
-                                    <input type="text" class="form-control" name="transaction_refnumber" value="EQ20171214-0002">
+                                    <input type="text" class="form-control" name="transaction_refnumber" value="{{$transaction_refnum or ''}}">
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                                     <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$est->customer_email or ''}}"/>
                                 </div>
                             </div>
-                        </div>                          
+                        </div>
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Billing Address</label>

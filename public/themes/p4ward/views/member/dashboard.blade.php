@@ -60,12 +60,12 @@
 				<div class="square-container">
 					<div class="title">Reward Summary</div>
 					<div class="sub-container">
-						<div class="chart-legend">
+						{{-- <div class="chart-legend">
 							<div class="holder">
 								<div class="color bpr"></div>
 								<div class="name"><span>Binary Pairing Reward</span> <div class="name bpr-text">{{ $wallet->display_complan_binary }}</div></div>
 							</div>
-						</div>
+						</div> --}}
 						<div class="chart-legend">
 							<div class="holder">
 								<div class="color rc"></div>
@@ -91,7 +91,7 @@
 					<div class="title">Enter Product Code</div>
 					<div class="sub-container">
 						<div class="chart-legend text-center">
-							<button class="btn btn-nice-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+							<button class="btn btn-p4w-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 						</div>
 					</div>
 				</div>
@@ -157,7 +157,7 @@
 								<div class="col-md-5">
 									<div class="action" style="text-align: center;">
 										@if($direct->distributed == 1)
-											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-nice-custom"><i class="fa fa-star"></i> VIEW INFO</button>
+											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-p4w-custom"><i class="fa fa-star"></i> VIEW INFO</button>
 										@else
 											<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 										@endif
@@ -210,7 +210,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>Nice Marketing</b></div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>P4ward</b>.</div>
 	                    </div>
 	                </div>
 	            </div>

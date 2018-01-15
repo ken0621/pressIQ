@@ -124,7 +124,6 @@
                                                             @else
                                                                 <option class="hidden" value="" />
                                                             @endif
-                                                            <option class="hidden" value="" />
                                                         </select>
                                                     </td>
                                                     <td><input class="text-center number-input txt-qty compute" value="{{$si_item->invline_qty}}" type="text" name="item_qty[]"/></td>

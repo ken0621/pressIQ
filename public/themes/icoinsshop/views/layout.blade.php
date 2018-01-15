@@ -63,7 +63,8 @@
                     <div class="row clearfix">
                         <div class="col-md-4">
                             <div class="image-logo-holder">
-                                <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/logo-1.png"></a>
+                                <a class="clearfix logo-1" href="/"><img src="/themes/{{ $shop_theme }}/img/logo-1.png"></a>
+                                <a class="clearfix logo-2" href="/"><img src="/themes/{{ $shop_theme }}/img/logo-2.png"></a>
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -117,16 +118,6 @@
                         </div>
                     </div>
                 </div>
-                <section class="bottom-footer">
-                    <div class="row clearfix">
-                        <div class="col-md-6">
-                            &copy; JCA Wellness International Corp. All Right Reserved
-                        </div>
-                        <div class="col-md-6">
-                            <p>Powered By: DIGIMA WEB SOLUTIONS, Inc.</p>
-                        </div>
-                    </div>
-                </section>
             </div>
         </footer>
 

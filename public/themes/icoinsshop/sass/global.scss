@@ -56,6 +56,7 @@ body
 	width: 100%;
 	z-index: 999;
 	top: 0;
+
 	@include transition(0.4s);
 
 	.nav-holder
@@ -74,6 +75,11 @@ body
 	.image-logo-holder
 	{
 		width: 45%;
+		
+		.logo-2
+		{
+			display: none;
+		}
 
 		img
 		{
@@ -127,13 +133,42 @@ body
 	{
 		&.header-container
 		{
-			background-color: rgba(0,0,0,0.7);
+			background-color: #fff;
 			padding: 3px 0px;
 			position: fixed;
 			width: 100%;
 			z-index: 999;
 			top: 0;
 			
+			.image-logo-holder
+			{
+				.logo-1
+				{
+					display: none;
+					@include transition(0.4s);
+				}
+
+				.logo-2
+				{
+					display: block;
+					@include transition(0.4s);
+				}
+			}
+
+			nav
+			{
+				ul
+				{
+					li
+					{
+						a
+						{
+							color: #000;
+						}
+					}
+				}
+			}
+
 			// .navirino
 			// {
 			// 	margin-top: 15px;
@@ -144,10 +179,6 @@ body
 			// 	}
 			// }
 		}
-		&.subheader-container
-		{
-			margin-bottom: 87px;
-		}
 	}
 }
 
@@ -155,7 +186,7 @@ body
 footer
 {
 	background-color: #262626;
-	
+
 }
 
 /* SCROLL TO TOP */

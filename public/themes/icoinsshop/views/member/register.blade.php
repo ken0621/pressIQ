@@ -30,7 +30,6 @@
     </div>
 </div>
 
-
 @endsection
 @section("script")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/member_register.js"></script>

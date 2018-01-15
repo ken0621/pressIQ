@@ -50,24 +50,35 @@ class CustomerWarehouseIssuanceSlipController extends Member
         return view('member.warehousev2.customer_wis.load_customer_wis_table',$data);
     }
 
-    public function getCreate()
+    public function getCreate(Request $request)
     {
         $data['page'] = 'CREATE - CUSTOMER WIS';
         $data['_item']  = Item::get_all_category_item([1,5]);
         $data["_customer"]  = Customer::getAllCustomer();
+        $data['action']     = "/member/customer/wis/create-submit";
+
+        //$cust_wis_id = $request->id;
+        //die(var_dump($po_id));
+        /*if($cust_wis_id)
+        {
+            $data["wis"]  = Tbl_customer_wis::where("cust_wis_id", $cust_wis_id)->first();
+            dd($data["wis"]);
+        }*/
 
         return view('member.warehousev2.customer_wis.customer_wis_create',$data);
     }
     public function postCreateSubmit(Request $request)
     {
+        $btn_action = $request->button_action;
+        
         $remarks = $request->cust_wis_remarks;
         $items = Session::get('cust_wis_item');
         $items = $request->item_id;
         $shop_id = $this->user_info->shop_id;
+
         
-        //dd($this->user_info->shop_id);
         $ins_wis['cust_wis_shop_id']                = $shop_id;
-        $ins_wis['transaction_refnum']                 = $request->cust_wis_number;
+        $ins_wis['transaction_refnum']              = $request->cust_wis_number;
         $ins_wis['cust_wis_from_warehouse']         = Warehouse2::get_current_warehouse($shop_id);
         $ins_wis['cust_wis_remarks']                = $remarks;
         $ins_wis['destination_customer_id']         = $request->customer_id;
@@ -99,11 +110,34 @@ class CustomerWarehouseIssuanceSlipController extends Member
         }
 
         $val = CustomerWIS::customer_create_wis($shop_id, $remarks, $ins_wis, $_item, $insert_item);
+
+        //$data['wis'] = Tbl_customer_wis::where('cust_wis_id',$wis_id)->get();
+        //die(var_dump($val));
         $data = null;
         if(is_numeric($val))
         {
+            //die(var_dump($val));
             $data['status'] = 'success';
-            $data['call_function'] = 'success_create_customer_wis';            
+            $data['call_function'] = 'success_create_customer_wis';
+            $data['status_message'] = 'Success';
+
+
+            if($btn_action == 'sclose')
+            {
+                $data['redirect_to'] = '/member/customer/wis';
+            }
+            if($btn_action == 'snew')
+            {
+                $data['redirect_to'] = '/member/customer/wis/create';
+            }
+            if($btn_action == 'sedit')
+            {
+                $data['redirect_to'] = '/member/customer/wis/create?id='.$val;
+            }
+            if($btn_action == 'sprint')
+            {
+                $data['redirect_to'] = '/member/customer/wis/create';
+            }
         }
         else
         {

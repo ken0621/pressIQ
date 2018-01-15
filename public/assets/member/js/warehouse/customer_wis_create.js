@@ -32,7 +32,16 @@ function customer_wis_create()
 		action_lastclick_row();
 		event_remove_tr();
 		event_compute_class_change();
+		event_button_action_click();
 
+	}
+
+	function event_button_action_click()
+	{
+		$(document).on("click","button[type='submit']", function()
+		{
+			$(".button-action").val($(this).attr("code"));
+		})
 	}
 
 	function action_reassign_number()
@@ -567,8 +576,9 @@ function success_create_customer_wis(data)
 {
 	if(data.status == 'success')
 	{
-		toastr.success('Success');
-		location.href = '/member/customer/wis';
-		
+		/*toastr.success('Success');
+		location.href = '/member/customer/wis';*/
+		toastr.success("Success");
+       	location.href = data.redirect_to;
 	}
 }

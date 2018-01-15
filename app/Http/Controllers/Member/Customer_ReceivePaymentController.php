@@ -91,32 +91,10 @@ class Customer_ReceivePaymentController extends Member
     }
     public function rp_pdf($rp_id)
     {
-        $data['receive_payment'] = Tbl_receive_payment::customer()->where("rp_id",$rp_id)->where("rp_shop_id",$this->user_info->shop_id)->first();
-        $get_inv = Tbl_receive_payment_line::invoice()->where('inv_shop_id',$this->user_info->shop_id)->where('rpline_rp_id',$rp_id)->get();
-
-        $inv_id = null;
-        foreach ($get_inv as $key => $value)
-        {
-            $inv_id[$key]['inv_id'] = $value->inv_id;
-
-            //$item = Tbl_customer_invoice::where("inv_id",$inv_id)->get();
-            //dd($item);
-        }
-
-       
-        $data["_invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
-        //dd($data["_invoice_item"]);
-
-        /*foreach($data["invoice_item"] as $key => $value) 
-        {
-            $qty = UnitMeasurement::um_qty($value->invline_um);
-
-            $total_qty = $value->invline_qty * $qty;
-            $data["invoice_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
-        }*/
-        
-       $pdf = view('member.receive_payment.receive_payment_pdf', $data);
-       return Pdf_global::show_pdf($pdf);
+        $data['receive_payment'] = Tbl_receive_payment::customer()->where("rp_id",$rp_id)->where("rp_shop_id",$this->user_info->shop_id)->first();       
+        $data["_invoice"] = Tbl_receive_payment_line::invoice()->where('inv_shop_id',$this->user_info->shop_id)->where('rpline_rp_id',$rp_id)->get();
+        $pdf = view('member.receive_payment.receive_payment_pdf', $data);
+        return Pdf_global::show_pdf($pdf);
 
     }
     public function add_receive_payment()
@@ -231,7 +209,7 @@ class Customer_ReceivePaymentController extends Member
         }
         elseif($button_action == "save-and-print")
         {
-            $json["redirect"]    = "/member/customer/receive_payment?id=".$rcvpayment_id;
+            $json["redirect"]    = "/member/customer/receive_payment/view_pdf/".$rcvpayment_id;
         }
         elseif($button_action == "save-and-close")
         {

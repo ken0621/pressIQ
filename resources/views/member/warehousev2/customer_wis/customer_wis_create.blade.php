@@ -1,8 +1,9 @@
 @extends('member.layout')
 @section('content')
 
-<form class="global-submit form-to-submit-add" action="/member/customer/wis/create-submit" method="post">
-        <input type="hidden" class="button-action" name="button_action" value="">
+<form class="global-submit form-to-submit-add" action="{{$action}}" method="post">
+    <input type="hidden" class="button-action" name="button_action" value="">
+    <input type="hidden" name="cust_wis_id" value="{{$wis->cust_wis_id or ''}}" >
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -12,7 +13,7 @@
             </h1>
             <div class="dropdown pull-right">
                 <div>
-                    <a class="btn btn-custom-white" href="/member/transaction/estimate_quotation">Cancel</a>
+                    <a class="btn btn-custom-white" href="/member/customer/wis">Cancel</a>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                     <span class="caret"></span></button>
                     <ul class="dropdown-menu  dropdown-menu-custom">

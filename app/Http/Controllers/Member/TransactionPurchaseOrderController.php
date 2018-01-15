@@ -68,6 +68,7 @@ class TransactionPurchaseOrderController extends Member
         $data["vendor_id"]       = $request->vendor_id;
         $data["terms_id"]       = $request->vendor_terms;
         $po_id = $request->id;
+        //die(var_dump($po_id));
         if($po_id)
         {
             $data["po"]            = Tbl_purchase_order::where("po_id", $po_id)->first();
@@ -117,6 +118,7 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
             }
         }
+        //die(var_dump($insert_item));
 
         $validate = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
@@ -177,7 +179,7 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
             }
         }
-
+       
         $validate = TransactionPurchaseOrder::postUpdate($po_id, $this->user_info->shop_id, $insert, $insert_item);
 
         $return = null;

@@ -114,7 +114,33 @@
                     <div class="col-md-4">
                         <div class="text-header">FOLLOW US ON</div>
                         <div class="holder">
-                            
+                            <div class="social-icons">
+                                <a class="icon" href="javascript:"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                {{-- <span class="space"></span> --}}
+                                <a class="icon" href="javascript:"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                {{-- <span class="space"></span> --}}
+                                <a class="icon" href="javascript:"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="left">
+                                <span><a href="javascript:">Terms & Conditions</a></span>
+                                <span class="space">|</span>
+                                <span><a href="javascript:">API Use Policy</a></span>
+                                <span class="space">|</span>
+                                <span><a href="javascript:">Privacy Policy</a></span>
+                                <span class="space">|</span>
+                                <span><a href="javascript:">Cookies</a></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="right">
+                                <span>Powered by: DIGIMA WEB SOLUTIONS INC.</span>
+                            </div>
                         </div>
                     </div>
                 </div>

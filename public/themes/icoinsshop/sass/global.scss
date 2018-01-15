@@ -188,7 +188,6 @@ footer
 	background-color: #262626;
 	padding: 50px 0;
 
-
 	.text-header
 	{
 		color: #fff;
@@ -220,6 +219,74 @@ footer
 			font-size: 12px;
 			font-weight: 400;
 		}
+
+		.social-icons
+		{
+			padding-top: 10px;
+
+			.icon
+			{
+				@include transition(0.3s);
+				background-color: #313131;
+				padding: 10px;
+				border-radius: 100%;
+				text-decoration: none;
+				color: #838383;
+				font-size: 20px;
+				margin-left: 5px;
+
+				i
+				{
+					width: 7%;
+					text-align: center;
+					// vertical-align: middle;
+				}
+
+				&:first-child
+				{
+					&:hover
+					{
+						background-color: #3b5998;
+
+						.fa
+						{
+							color: #fff;
+						}
+					}
+				}
+
+				&:nth-child(2)
+				{
+					&:hover
+					{
+						background-color: #00aced;
+
+						.fa
+						{
+							color: #fff;
+						}
+					}
+				}
+
+				&:last-child
+				{
+					&:hover
+					{
+						background-color: #cb2027;
+
+						.fa
+						{
+							color: #fff;
+						}
+					}
+				}
+			}
+
+			.space
+			{
+				padding: 0 3px;
+			}
+		}
 	}
 
 	form
@@ -243,6 +310,41 @@ footer
 			margin-top: 6px;
 
 		}
+	}
+
+	.bottom
+	{
+		border-top: 1px solid #838383;
+		margin-top: 15px;
+		padding: 10px 0;
+
+		.left
+		{
+			span
+			{
+				a
+				{
+					text-decoration: none;
+					color: #838383;
+				}
+			}
+
+			.space
+			{
+				padding: 0 10px;
+			}
+		}
+
+		.right
+		{
+			float: right;
+
+			span
+			{
+				color: #838383;
+			}
+		}
+
 	}
 }
 

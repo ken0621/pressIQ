@@ -710,10 +710,15 @@ class Warehouse2
                 $get_prod_log = Tbl_warehouse_inventory_record_log::where("record_log_id",$id)->first();
                 if($get_prod_log)
                 {   
-                    $update_prod_log["item_in_use"] = "used";
-                    $update_prod_log["record_log_date_updated"] = Carbon::now();
-                    Tbl_warehouse_inventory_record_log::where("record_log_id",$id)->update($update_prod_log);
-                    Warehouse2::check_lead_bonus($consume,$get_prod_log->record_item_id);
+                    $type_id_item = Item::get_item_type($item_id);
+                    
+                    if($type_id_item != 5)
+                    {
+                        $update_prod_log["item_in_use"] = "used";
+                        $update_prod_log["record_log_date_updated"] = Carbon::now();
+                        Tbl_warehouse_inventory_record_log::where("record_log_id",$id)->update($update_prod_log);
+                        Warehouse2::check_lead_bonus($consume,$get_prod_log->record_item_id);
+                    }
                 }
             }
         }

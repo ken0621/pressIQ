@@ -41,6 +41,7 @@ class MlmDeveloperController extends Member
 
     public function myTest()
     {
+        dd(321);
         // DB::table("tbl_testing_logs")->insert(["logs"=>"try"]);
         Mlm_complan_manager_cd::graduate_check(Tbl_mlm_slot::where('slot_id', 65834)->membership()->first());
         dd(3214);

@@ -4303,14 +4303,6 @@ class PayrollController extends Member
           // "payroll_leave_temp_hours" => "60.00"
           // "total_leave_consume" => "8.00"
           // "remaining_leave" => "52.00"
-               // if(count($empdataremwithoutpay) == 0)
-               // {
-               //     array_merge($empd)
-              
-
-
-               // }
-
                array_push($datas, $empdata); 
                array_push($remwithpay, $empdataremwithpay); 
                array_push($remwithoutpay, $empdataremwithoutpay); 
@@ -4484,7 +4476,7 @@ class PayrollController extends Member
 
      public function modal_leave_action_report()
      {
-          $data['leave_report'] = Tbl_payroll_leave_report::select('*')->get();
+          $data['leave_report'] = Tbl_payroll_leave_report::select('*')->where('shop_id',Self::shop_id())->get();
 
           return view("member.payroll.modal.modal_leave_action_report",$data);
      }

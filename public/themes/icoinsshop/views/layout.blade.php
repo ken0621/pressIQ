@@ -73,7 +73,7 @@
                                     <li><a href="javascript:">About Us</a></li>
                                     <li><a href="javascript:">Mission & Vision</a></li>
                                     <li><a href="javascript:">Now Releases</a></li>
-                                    <li class="pull-right"><a href="javascript:"><button class="btn-signin">SIGN IN</button></a></li>
+                                    <li class="pull-right"><a href="/member/login"><button class="btn-signin">SIGN IN</button></a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -88,16 +88,49 @@
         </div>
 
         <!-- FOOTER -->
-        <footer id="bottom-footer">
-            
+        <footer>
+            <div class="container">
+                <div class="row clearfix">
+                    <div class="col-md-4">
+                        <div class="text-header">INFORMATION</div>
+                        <div class="holder">
+                            <ul>
+                                <li><a href="javascript:">HOME</a></li>
+                                <li><a href="javascript:">ABOUT US</a></li>
+                                <li><a href="javascript:">CONTACT US</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-header">NEWS LETTER</div>
+                        <div class="holder">
+                            <div class="parag">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus adipisci, architecto qui iusto. A, ea.</div>
+                            <form action="">
+                                <input type="text" placeholder="Enter your email here">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-header">FOLLOW US ON</div>
+                        <div class="holder">
+                            
+                        </div>
+                    </div>
+                </div>
+                <section class="bottom-footer">
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            &copy; JCA Wellness International Corp. All Right Reserved
+                        </div>
+                        <div class="col-md-6">
+                            <p>Powered By: DIGIMA WEB SOLUTIONS, Inc.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </footer>
 
-        <div class="container">
-            {{-- <div class="bottom">
-                <div class="ftr-title">© Iccoinsshop. All Right Reserved</div>
-                <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
-            </div> --}}
-        </div>
+
     </div>
     
     @include("frontend.gfoot")

@@ -8,15 +8,15 @@
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="caption-container">
-                        <div class="text-1 wow fadeInDown" data-wow-delay=".2s">Getting Started with icoinsshop</div>
-                        <div class="text-2 wow fadeInDown" data-wow-delay=".4s">Where your future digital currencies begin</div>
+                        <div class="text-1 wow fadeInDown" data-wow-delay=".2s" data-wow-duration="2s">Getting Started with icoinsshop</div>
+                        <div class="text-2 wow fadeInDown" data-wow-delay=".4s" data-wow-duration="2s">Where your future digital currencies begin</div>
                     </div>
                     <div class="button-container">
-                        <button class="btn-explore wow fadeInDown" data-wow-delay=".6s">EXPLORE</button>
+                        <button class="btn-explore wow fadeInDown" data-wow-delay=".6s" data-wow-duration="2s">EXPLORE</button>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card wow fadeInRight">
+                    <div class="card wow fadeInRight" data-wow-duration="2s">
                         <div class="card-content">
                             <div class="title">Current Exchange</div>
                             <div class="icon-text-container">
@@ -44,15 +44,15 @@
         <div class="container unskew">
             <div class="row clearfix">
                 <div class="col-md-6">
-                    <div class="wrapper-title wow fadeInLeft" data-wow-delay=".2s">
+                    <div class="wrapper-title wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">
                         <span><u>Abo</u>ut Us</span>
                     </div>
-                    <div class="wrapper-details wow fadeInLeft" data-wow-delay=".4s">
+                    <div class="wrapper-details wow fadeInLeft" data-wow-delay=".4s" data-wow-duration="2s">
                         icoinsshop is a privately owned marketing company, introducing and educating the people on different ICO’s to start an opportunity for everyone on the future generation of digital currencies.
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="wr1-img-container wow rollIn" data-wow-delay=".8s">
+                    <div class="wr1-img-container wow rollIn" data-wow-delay=".8s" data-wow-duration="2s">
                         <img src="/themes/{{ $shop_theme }}/img/aboutus-img.png">
                     </div>
                 </div>
@@ -63,12 +63,12 @@
     <!--HOW IT WORKS-->
     <section class="wrapper-2">
         <div class="container unskew">
-            <div class="wrapper-title wow fadeInDown" data-wow-delay=".2s">
+            <div class="wrapper-title wow fadeInDown" data-wow-delay=".2s" data-wow-duration="2s">
                 <span>How <u>it W</u>orks</span>
             </div>
             <div class="row clearfix">
                 <div class="col-md-4">
-                    <div class="img-text-holder wow pulse" data-wow-delay=".4s">
+                    <div class="img-text-holder wow pulse" data-wow-delay=".4s" data-wow-duration="2s">
                         <div class="img-holder">
                             <img src="/themes/{{ $shop_theme }}/img/account.png">
                         </div>
@@ -78,7 +78,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="img-text-holder wow pulse" data-wow-delay=".6s">
+                    <div class="img-text-holder wow pulse" data-wow-delay=".6s" data-wow-duration="2s">
                         <div class="img-holder">
                             <img src="/themes/{{ $shop_theme }}/img/pay.png">
                         </div>
@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="img-text-holder wow pulse" data-wow-delay=".8s">
+                    <div class="img-text-holder wow pulse" data-wow-delay=".8s" data-wow-duration="2s">
                         <div class="img-holder">
                             <img src="/themes/{{ $shop_theme }}/img/buy.png">
                         </div>
@@ -106,12 +106,12 @@
         <div class="container">
             <div class="mission-vision-container">
                 <section>
-                    <div class="title">M<u>issio</u>n</div>
-                    <div class="details">To help our clients successfully launch their ICO through market intelligence, creativity and strategic vision, and to build an organization that attracts, develops, and retains outstanding people worldwide as we grow our business.</div>
+                    <div class="title wow fadeInDown" data-wow-delay=".2s" data-wow-duration="2s">M<u>issio</u>n</div>
+                    <div class="details wow fadeInLeft" data-wow-delay=".4s">To help our clients successfully launch their ICO through market intelligence, creativity and strategic vision, and to build an organization that attracts, develops, and retains outstanding people worldwide as we grow our business.</div>
                 </section>
                 <section>
-                    <div class="title">V<u>isio</u>n</div>
-                    <div class="details">icoinsshop is dedicated in providing our clients with results-oriented advertising, public relations, and total be marketing support to be the top ICO marketing company.</div>
+                    <div class="title wow fadeInDown" data-wow-delay=".6s" data-wow-duration="2s">V<u>isio</u>n</div>
+                    <div class="details wow fadeInRight" data-wow-delay=".8s">icoinsshop is dedicated in providing our clients with results-oriented advertising, public relations, and total be marketing support to be the top ICO marketing company.</div>
                 </section>
             </div>
             <div class="border"></div>

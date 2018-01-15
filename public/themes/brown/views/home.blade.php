@@ -44,8 +44,8 @@
 	<!-- INTRODUCING BROWN -->
 	<div class="wrapper-2">
 		<div class="container">
-			<div class="title-container wow fadeInLeft"><span class="text-1">BROWN</span>&nbsp;<span class="text-2">PRODUCTS</span></div>
-			<div class="single-slide">
+			<div class="title-container wow fadeInDown"><span class="text-1">BROWN</span>&nbsp;<span class="text-2">PRODUCTS</span></div>
+			<div class="single-slide wow fadeInLeft">
 				<div class="per-slide-container row clearfix">
 					<div class="col-md-6">
 						<div class="bp-container">
@@ -121,7 +121,7 @@
 			<div class="title-container wow fadeInLeft"><span class="text-1">UPCOMING</span>&nbsp;<span class="text-2">EVENTS</span></div>	
 			<div class="event-holder row clearfix">
 				<!-- PER EVENT -->
-				<div class="col-md-6 col-xs-12">
+				{{-- <div class="col-md-6 col-xs-12">
 					<div class="per-event row clearfix">
 						@if(count($_event) > 0)
 						@foreach($_event as $event)
@@ -146,7 +146,33 @@
 						<p class="no-event">Events are coming soon! See you there...</p>
 						@endif
 					</div>
+				</div> --}}
+				@if(count($_event) > 0)
+				@foreach($_event as $event)
+				<div class="col-md-6 col-xs-12">
+					<div class="per-event row clearfix wow fadeInRight">
+						<div class="col-md-4">
+							<div class="event-img-container wow fadeInUp" data-wow-delay="0.2s">
+								<a href="javascript:" class="popup" size="lg" link="/events/view_details?id={{$event->event_id}}"><img src="{{$event->event_thumbnail_image}}"></a>
+							</div>
+						</div>
+						<div class="col-md-8">
+							<div class="event-detail-container wow fadeInRight" data-wow-delay="0.3s">
+								<a href="javascript:" class="popup" size="lg" link="/events/view_details?id={{$event->event_id}}"><div class="title max-lines-title">{{strtoupper($event->event_title)}}</div></a>
+								<div class="date"><span><i class="fa fa-calendar-o" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>{{strtoupper(date('F d, Y', strtotime($event->event_date)))}}</span></div>
+								<div class="desc">
+									<div class="max-lines-desc">
+										{!! $event->event_description !!}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
+				@endforeach
+				@else
+				<p class="no-event" style="padding-left: 10px;">Events are coming soon! See you there...</p>
+				@endif
 			</div>
 		</div>
 	</div>

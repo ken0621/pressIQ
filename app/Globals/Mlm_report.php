@@ -1398,29 +1398,30 @@ class Mlm_report
         $query->where("wallet_log_payout_status",'DONE')
               ->where('wallet_log_date_created', '>=', $filters['from'])
               ->where('wallet_log_date_created', '<=', $filters['to'])
+              ->selectRaw('DISTINCT slot_no')
               ->orderBy("wallet_log_date_created", "desc");
 
-        $data["payout"]                 = $query->get();
+        $data["slot_no"]                 = $query->get();
         $data["total_payout"]           = Currency::format($query->sum("wallet_log_amount"));
-        $data["total_request"]          = Currency::format($query->sum("wallet_log_request"));
-        $data["total_tax"]              = Currency::format($query->sum("wallet_log_tax"));
-        $data["total_service"]          = Currency::format($query->sum("wallet_log_service_charge"));
-        $data["total_other"]            = Currency::format($query->sum("wallet_log_other_charge"));
 
+        $amount = array();
+        $name   = array();
 
-        foreach($data["payout"] as $key => $payout)
+        foreach($data["slot_no"] as $slot_no)
         {
-            $data["payout"][$key]                                      = $payout;
-            $reward_slot                                               = Tbl_mlm_slot::where("slot_id", $payout->wallet_log_slot)->first();
-            $data["payout"][$key]->display_wallet_log_amount           = Currency::format($payout->wallet_log_amount * -1);
-            $data["payout"][$key]->time_ago                            = time_ago($payout->wallet_log_date_created);
-            $data["payout"][$key]->display_date                        = date("m/d/Y", strtotime($payout->wallet_log_date_created));
-            $data["payout"][$key]->slot_no                             = $reward_slot->slot_no;
-            $data["payout"][$key]->display_wallet_log_request          = Currency::format($payout->wallet_log_request);
-            $data["payout"][$key]->display_wallet_log_tax              = Currency::format($payout->wallet_log_tax);
-            $data["payout"][$key]->display_wallet_log_service_charge   = Currency::format($payout->wallet_log_service_charge);
-            $data["payout"][$key]->display_wallet_log_other_charge     = Currency::format($payout->wallet_log_other_charge);
+            $query          = Tbl_mlm_slot_wallet_log::where("tbl_mlm_slot_wallet_log.shop_id", $shop_id)->slot()->customer();
+            $query->where("wallet_log_payout_status",'DONE')
+                  ->where('wallet_log_date_created', '>=', $filters['from'])
+                  ->where('wallet_log_date_created', '<=', $filters['to'])
+                  ->where('slot_no',$slot_no->slot_no);
+
+            $amount[$slot_no->slot_no]  = $query->sum('wallet_log_amount');
+            $query = $query->first();
+            $name[$slot_no->slot_no]    = $query->first_name." ".$query->last_name;
+
         }
+        $data['amount'] = $amount;
+        $data['name']   = $name;
         $data['page'] = "commission_payable";
         if(Request::input('pdf') == 'excel')
         {
@@ -1431,6 +1432,7 @@ class Mlm_report
         // {
         //     return $data;
         // }
+
         return view('member.mlm_report.report.commission_payable', $data);
     }
     public static function payin($shop_id,$filters)

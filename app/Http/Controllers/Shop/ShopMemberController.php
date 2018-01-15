@@ -2349,6 +2349,7 @@ class ShopMemberController extends Shop
             $insert_customer["birthday"]    = $birthday;
             $insert_customer["country_id"]  = $request->country_id;
             $insert_customer["updated_at"]  = Carbon::now();
+            $insert_customer['contact']     = $request->contact;
 
             Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
                         ->shop(Self::$customer_info->shop_id)

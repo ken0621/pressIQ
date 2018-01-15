@@ -8,7 +8,7 @@
 		
 		<div class="form-group">
 	        <div class="col-md-12">
-	            <input id="basic-input" type="file"  class="form-control" name="excel_file" required="">
+	            <input id="basic-input" type="file"  class="form-control excel_file" name="excel_file" required="">
 	        </div>
 	    </div>
 
@@ -23,8 +23,12 @@
 	{
 		$('.btn-submit').on('click',function(e)
 		{
-			$(".modal-loader").removeClass("hidden");
-			console.log('submit');
+			if($('.excel_file').val() != '')
+			{
+				$(".modal-loader").removeClass("hidden");
+				console.log('submit');
+			}
+			
 		});
 	});
 </script>

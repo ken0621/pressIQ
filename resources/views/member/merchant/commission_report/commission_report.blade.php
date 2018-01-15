@@ -95,6 +95,8 @@
 <script type="text/javascript">
     @if(Session::get("response")=='success')
     toastr.success("Importation Complete");
+    @elseif(Session::get("response")=='no_data')
+    toastr.error("Importation Failed (No Data Found)");
     @elseif(Session::get("response")=='error')
     toastr.error("Please select a file");
     @endif

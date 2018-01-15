@@ -198,7 +198,7 @@ class ShopMemberController extends Shop
             $data['reward_point_redemption'] = Tbl_mlm_slot_points_log::Slot()->where('tbl_mlm_slot.slot_owner',Self::$customer_info->customer_id)->where("points_log_complan","PURCHASE_GC")->sum('points_log_points');
         }
         // dd($slot_id." ; ".$data['reward_point_redemption']);
-
+        // dd($data['wallet']);
         return Self::load_view_for_members("member.dashboard", $data);
     }
     public function getDirectReferrals()

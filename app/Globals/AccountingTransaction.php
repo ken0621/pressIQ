@@ -303,6 +303,7 @@ class AccountingTransaction
 	}
 	public static function refill_inventory($shop_id, $warehouse_id , $item_info, $ref_name = '', $ref_id = 0, $remarks = '')
 	{
+		$return = null;
 		if(count($item_info) > 0)
 		{
 			$item = null;
@@ -337,9 +338,11 @@ class AccountingTransaction
 				$return = Warehouse2::refill_bulk($shop_id, $warehouse_id, $ref_name, $ref_id, $remarks, $_item);
 			}
 		}
+		return $return;
 	}
 	public static function inventory_validation($type = 'refill', $shop_id, $warehouse_id, $item_info, $remarks)
 	{
+		$return = null;
 		if(count($item_info) > 0)
 		{
 			$item = null;
@@ -371,15 +374,58 @@ class AccountingTransaction
 		}
 		if(count($item) > 0)
 		{
-			if($type == 'refill')
+			foreach ($item as $key => $value) 
 			{
-				
+				if($type == 'refill')
+				{
+					$return = Warehouse2::refill_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $remarks['remarks']);
+				}
+				if($type == 'consume')
+				{
+					$return = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $remarks['remarks']);
+				}
 			}
 		}
 
+		return $return;
 	}
-	public static function consume_inventory($shop_id, $item_info, $ref_name = '', $ref_id = 0)
+	public static function consume_inventory($shop_id, $warehouse_id , $item_info, $ref_name = '', $ref_id = 0, $remarks = '')
 	{
+		$return = null;
+		if(count($item_info) > 0)
+		{
+			$item = null;
+			foreach ($item_info as $key => $value) 
+			{
+				$item_type = Item::get_item_type($value['item_id']);
+				if($item_type == 1)
+				{
+					$qty = $value['item_qty'] * UnitMeasurement::getQty($value['item_um']);
+					$_item[$key]['item_id'] = $value['item_id'];
+			        $_item[$key]['quantity'] = $qty;
+			        $_item[$key]['remarks'] = $value['item_description'];
+				}
+				elseif($item_type == 5 || $item_type == 4)
+				{
+					$bundle_list = Item::get_bundle_list($value['item_id']);
+					if(count($bundle_list) > 0)
+					{
+						foreach ($bundle_list as $key_bundle => $value_bundle) 
+						{
+							$qty = $value['item_qty'] * UnitMeasurement::getQty($value_bundle->bundle_um_id);
+							$_item[$key.'b'.$key_bundle]['item_id'] = $value_bundle->bundle_item_id;
+							$_item[$key.'b'.$key_bundle]['quantity'] = $qty;
+							$_item[$key.'b'.$key_bundle]['remarks'] = $value_bundle->item_sales_information;
+						}
+					}
+				}
+			}
 
+			if(count($item) > 0)
+			{
+				$return = Warehouse2::consume_bulk($shop_id, $warehouse_id, $ref_name, $ref_id, $remarks, $_item);
+			}
+		}
+		return $return;
 	}
 }

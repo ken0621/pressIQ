@@ -67,7 +67,6 @@ class TransactionCreditMemo
 
 	        Tbl_credit_memo_line::where('cmline_cm_id', $cm_id)->delete();
 	        $return = Self::insertline($cm_id, $insert_item, $entry);
-
 			$warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 			/* UPDATE INVENTORY HERE */
 			/* AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'credit_memo', $cm_id, 'Refill upon creating CREDIT MEMO '.$ins['transaction_refnum']); */
@@ -185,6 +184,7 @@ class TransactionCreditMemo
 		{
 			Tbl_credit_memo_line::insert($itemline);
 			$return = AccountingTransaction::entry_data($entry, $insert_item);
+			$return = $cm_id;
 		}
 
 		return $return;

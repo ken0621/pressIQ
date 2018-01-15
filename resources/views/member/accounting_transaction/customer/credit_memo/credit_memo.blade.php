@@ -160,11 +160,11 @@
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Message Displayed on Credit Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder="">{{$credit_memo->cm_message}}</textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder="">{{$credit_memo->cm_message or ''}}</textarea>
                         </div>
                         <div class="col-sm-3">
                             <label>Statement Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder="">{{$credit_memo->cm_memo}}</textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder="">{{$credit_memo->cm_memo or ''}}</textarea>
                         </div>
                         <div class="col-sm-6">
                             <!-- <div class="row">

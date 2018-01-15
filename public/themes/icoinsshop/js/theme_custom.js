@@ -14,7 +14,6 @@ function theme_custom()
 
 	function document_ready()
 	{
-
 		header_fixed();
 		scroll_up();
 		mobile_nav();

@@ -141,7 +141,6 @@
                         <div class="title">Lorem Ipsum</div>
                         <div class="details">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, maiores voluptas quidem similique expedita, doloribus?</div>
                     </div>
-                    
                 </div>
                 <div class="col-md-4">
                     <div class="news-holder">

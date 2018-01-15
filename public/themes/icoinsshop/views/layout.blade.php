@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> --}}
-    <link rel="icon" href="/themes/{{ $shop_theme }}/img/none.png" type="image/png" />
+    <link rel="icon" href="/themes/{{ $shop_theme }}/img/favicon.png" type="image/png"/>
     <!-- GOOGLE FONT -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500" rel="stylesheet">
@@ -107,7 +107,7 @@
                         </div>
                         <form action="">
                             <div class="form-group">
-                                <input type="text" placeholder="Enter your email here"><i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                <input type="text" placeholder="Enter your email here"><a href="javascript:"><i class="fa fa-paper-plane" aria-hidden="true"></i></a>
                             </div>
                         </form>
                     </div>

@@ -95,21 +95,21 @@
                     <div class="col-md-4">
                         <div class="text-header">INFORMATION</div>
                         <div class="holder">
-                            <ul>
-                                <li><a href="javascript:">HOME</a></li>
-                                <li><a href="javascript:">ABOUT US</a></li>
-                                <li><a href="javascript:">CONTACT US</a></li>
-                            </ul>
+                            <div class="link"><a href="javascript:">HOME</a></div>
+                            <div class="link"><a href="javascript:">ABOUT US</a></div>
+                            <div class="link"><a href="javascript:">CONTACT US</a></div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="text-header">NEWS LETTER</div>
                         <div class="holder">
                             <div class="parag">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus adipisci, architecto qui iusto. A, ea.</div>
-                            <form action="">
-                                <input type="text" placeholder="Enter your email here">
-                            </form>
                         </div>
+                        <form action="">
+                            <div class="form-group">
+                                <input type="text" placeholder="Enter your email here"><i class="fa fa-paper-plane" aria-hidden="true"></i>
+                            </div>
+                        </form>
                     </div>
                     <div class="col-md-4">
                         <div class="text-header">FOLLOW US ON</div>
@@ -120,8 +120,6 @@
                 </div>
             </div>
         </footer>
-
-
     </div>
     
     @include("frontend.gfoot")

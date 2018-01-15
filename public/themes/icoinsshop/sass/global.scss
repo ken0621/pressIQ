@@ -186,7 +186,64 @@ body
 footer
 {
 	background-color: #262626;
+	padding: 50px 0;
 
+
+	.text-header
+	{
+		color: #fff;
+		font-size: 15px;
+		font-weight: 400;
+	}
+
+	.holder
+	{
+		padding: 10px 0;
+		font-family: 'Open Sans', sans-serif;
+
+		.link
+		{
+			display: block;
+
+			a
+			{
+				color: #838383;
+				text-decoration: none;
+				font-size: 12px;
+				font-weight: 400;
+			}
+		}
+
+		.parag
+		{
+			color: #838383;
+			font-size: 12px;
+			font-weight: 400;
+		}
+	}
+
+	form
+	{
+		input
+		{
+			background-color: #313131;
+			border: 1px solid #fff;
+			font-size: 12px;
+			padding: 5px 15px;
+			color: #838383;
+			position: relative;
+			width: 60%;
+		}
+
+		.fa
+		{
+			color: #fff;
+			position: absolute;
+			margin-left: -25px;
+			margin-top: 6px;
+
+		}
+	}
 }
 
 /* SCROLL TO TOP */

@@ -6,8 +6,8 @@
 
 @section('content')
 {!! $head !!}
-@include('member.reports.filter.filter1');
-@include('member.reports.output.profit_loss');
+@include('member.reports.filter.filter1')
+@include('member.reports.output.profit_loss')
 @endsection
 
 @section('script')

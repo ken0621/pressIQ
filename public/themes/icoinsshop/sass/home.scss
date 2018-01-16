@@ -8,6 +8,43 @@ body
 	background-color: transparent;
 }
 
+.parallax {
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-perspective: 1px;
+  perspective: 1px;
+}
+
+.parallax__layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: -17px;
+  bottom: 0;
+}
+
+.parallax__layer--base {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.parallax__layer--back {
+  -webkit-transform: translateZ(-1px) scale(2);
+  transform: translateZ(-1px) scale(2);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.absolute-position {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  color: #000;
+}
+
 /* SLIDER */
 .slider-wrapper 
 {
@@ -53,12 +90,12 @@ body
 			padding: 10px 25px;
 			border-bottom: 4px solid #025c37;
 
-			// &:hover
-			// {
-			// 	color: #fff;
-			// 	border: 1px solid #e1890b;
-			// 	background-color: #e1890b;
-			// }
+			&:hover
+			{
+				color: #016f56;
+				background-color: #fff;
+				border-bottom: 4px solid #025c37;
+			}
 		}
 	}
 
@@ -199,6 +236,7 @@ body
 		font-size: 15px;
 		color: #585858;
 		padding: 0 200px;
+		line-height: 2;
 	}
 }
 
@@ -357,20 +395,40 @@ body
 
 					.btn-more-info
 					{
+						@include transition(0.3s);
 						padding: 15px 33px 13px 33px;
 						background-color: #016f56;
 						color: #fff;
 						border: 2px solid #016f56;
 						border-bottom: 4px solid #025c37;
+
+						&:hover
+						{
+							padding: 15px 33px;
+							background-color: inherit;
+							color: #016f56;
+							border: 2px solid #016f56;
+							border-bottom: 2px solid #025c37;
+						}
 					}
 
 					.btn-buy-tokens
 					{
+						@include transition(0.3s);
 						padding: 15px 33px;
 						background-color: inherit;
 						color: #016f56;
 						border: 2px solid #016f56;
 						margin-left: 16px;
+
+						&:hover
+						{
+							padding: 15px 33px 13px 33px;
+							background-color: #016f56;
+							color: #fff;
+							border: 2px solid #016f56;
+							border-bottom: 4px solid #025c37;
+						}
 					}
 				}
 			}

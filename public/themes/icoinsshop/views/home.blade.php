@@ -4,7 +4,7 @@
 
     <!-- Media Slider -->
     <div id="home" class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/cover-photo.jpg')">
-        <div class="container">
+        <div class="container fadeMe">
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="caption-container">
@@ -47,13 +47,30 @@
     <!-- ABOUT US -->
     <section class="wrapper-1" style="background-image: url('/themes/{{ $shop_theme }}/img/networkbg.png')">
         <div class="container">
-            <div class="wrapper-title"><span>About</span> Us</div>
-            <div class="img-holder">
+            <div class="wrapper-title wow fadeIn" data-wow-duration="3s"><span>About</span> Us</div>
+            <div class="img-holder wow fadeInDown" data-wow-delay=".4s" data-wow-duration="2s">
                 <img src="/themes/{{ $shop_theme }}/img/aboutus-img-1.png">
             </div>
-            <div class="wrapper-texts">ICOins Shop is a privately owned marketing company, introducing and educating the people on different ICO’s to start an opportunity for everyone on the future generation of digital currencies.</div>
+            <div class="wrapper-texts wow fadeInDown" data-wow-delay=".6s" data-wow-duration="1s">ICOins Shop is a privately owned marketing company, introducing and educating the people on different ICO’s to start an opportunity for everyone on the future generation of digital currencies.</div>
         </div>
     </section>
+
+    <!-- ABOUT US PARALLAX-->
+{{--     <section class="parallax wrapper-1" >
+        <div class="container">
+            <div class="parallax__layer parallax__layer--back" style="background-image: url('/themes/{{ $shop_theme }}/img/networkbg.png')">
+            </div>
+            <div class="parallax__layer parallax__layer--base">
+                <div class="absolute-position">
+                    <div class="wrapper-title"><span>About</span> Us</div>
+                    <div class="img-holder">
+                        <img src="/themes/{{ $shop_theme }}/img/aboutus-img-1.png">
+                    </div>
+                    <div class="wrapper-texts">ICOins Shop is a privately owned marketing company, introducing and educating the people on different ICO’s to start an opportunity for everyone on the future generation of digital currencies.</div>
+                </div>
+            </div>
+        </div>
+    </section> --}}
 
     <!-- MISSION VISION -->
     <section class="wrapper-2">
@@ -61,18 +78,18 @@
             <div class="container">
                 <div class="row clearfix">
                     <div class="col-md-6">
-                        <div class="img-holder">
+                        <div class="img-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
                             <img src="/themes/{{ $shop_theme }}/img/mission.png">
                         </div>
-                        <div class="title">MISSION</div>
-                        <div class="texts">To help our clients successfully launch their ICO through market intelligence, creativity and strategic vision, and to build an organization that attracts, develops, and retains outstanding people worldwide as we grow our business.</div>
+                        <div class="title wow fadeInDown" data-wow-delay=".3s" data-wow-duration="2s">MISSION</div>
+                        <div class="texts wow fadeInDown" data-wow-delay=".4s" data-wow-duration="2s">To help our clients successfully launch their ICO through market intelligence, creativity and strategic vision, and to build an organization that attracts, develops, and retains outstanding people worldwide as we grow our business.</div>
                     </div>
                     <div class="col-md-6">
-                        <div class="img-holder">
+                        <div class="img-holder wow fadeIn" data-wow-delay=".5s" data-wow-duration="2s">
                             <img src="/themes/{{ $shop_theme }}/img/vision.png">
                         </div>
-                        <div class="title">VISION</div>
-                        <div class="texts">ICOins Shop is dedicated in providing our clients with results-oriented advertising, public relations, and total be marketing support to be the top ICO marketing company.</div>
+                        <div class="title wow fadeInDown" data-wow-delay=".6s" data-wow-duration="2s">VISION</div>
+                        <div class="texts wow fadeInDown" data-wow-delay=".8s" data-wow-duration="2s">ICOins Shop is dedicated in providing our clients with results-oriented advertising, public relations, and total be marketing support to be the top ICO marketing company.</div>
                     </div>
                 </div>
             </div>
@@ -82,17 +99,17 @@
     <!-- HOW IT WORKS -->
     <section class="wrapper-3" style="background-image: url('/themes/{{ $shop_theme }}/img/networkbg.png')">
         <div class="container">
-            <div class="wrapper-title"><span>How</span> It Works</div>
+            <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>How</span> It Works</div>
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="left">
-                        <div class="text-header">How ICOinsshop Works</div>
-                        <div class="text-content">Icoins shop is an e-commerce site for ICO with  marketing program that provides digital currency education and services to help people understand the essence of ICO to digital currency world and teach them how can they make these as an opportunity.</div>
+                        <div class="text-header wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">How ICOinsshop Works</div>
+                        <div class="text-content wow fadeInLeft" data-wow-delay=".4s" data-wow-duration="2s">Icoins shop is an e-commerce site for ICO with  marketing program that provides digital currency education and services to help people understand the essence of ICO to digital currency world and teach them how can they make these as an opportunity.</div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="right">
-                        <div class="img-holder">
+                        <div class="img-holder wow fadeIn" data-wow-delay=".8s" data-wow-duration="2s">
                             <img src="/themes/{{ $shop_theme }}/img/howitworks-img.png">
                         </div>
                     </div>
@@ -104,10 +121,10 @@
     <!-- PRODUCTS -->
     <section class="wrapper-4">
         <div class="container unskew">
-            <div class="wrapper-title"><span>ICO</span> Token Products</div>
+            <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>ICO</span> Token Products</div>
             <div class="row clearfix">
                 <div class="col-md-4">
-                    <div class="product-holder">
+                    <div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
                         <div class="top">
                             <img src="/themes/{{ $shop_theme }}/img/krops.jpg">
                         </div>
@@ -121,7 +138,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="product-holder">
+                    <div class="product-holder wow fadeIn" data-wow-delay=".4s" data-wow-duration="2s">
                         <div class="img-holder">
                             <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
                         </div>
@@ -129,7 +146,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="product-holder">
+                    <div class="product-holder wow fadeIn" data-wow-delay=".6s" data-wow-duration="2s">
                         <div class="img-holder">
                             <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
                         </div>
@@ -143,10 +160,10 @@
     <!-- NEWS AND ANNOUNCEMENTS -->
     <section class="wrapper-5">
         <div class="container">
-            <div class="wrapper-title"><span>News</span> an Announcements</div>
+            <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> an Announcements</div>
             <div class="row clearfix">
                 <div class="col-md-4">
-                    <div class="news-holder">
+                    <div class="news-holder wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">
                         <div class="row-no-padding clearfix">
                             <div class="col-md-6 col-xs-6">
                                 <div class="img-holder">
@@ -163,7 +180,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="news-holder">
+                    <div class="news-holder wow fadeInLeft" data-wow-delay=".4s" data-wow-duration="2s">
                         <div class="row-no-padding clearfix">
                             <div class="col-md-6 col-xs-6">
                                 <div class="img-holder">
@@ -180,7 +197,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="news-holder">
+                    <div class="news-holder wow fadeInLeft" data-wow-delay=".6s" data-wow-duration="2s">
                         <div class="row-no-padding clearfix">
                             <div class="col-md-6 col-xs-6">
                                 <div class="img-holder">
@@ -202,6 +219,7 @@
     
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
+    
 </div>
 @endsection
 
@@ -214,9 +232,9 @@
 $(document).ready(function($) 
 {
     /*TEXT FADEOUT*/
-    // $(window).scroll(function(){
-    //     $(".caption-container, .caption-logo-container").css("opacity", 1 - $(window).scrollTop() / 250);
-    // });
+    $(window).scroll(function(){
+        $(".fadeMe").css("opacity", 1 - $(window).scrollTop() / 250);
+    });
 });
 </script>
 

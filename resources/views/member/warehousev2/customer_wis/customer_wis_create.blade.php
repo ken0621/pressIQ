@@ -60,7 +60,7 @@
             </div>
             <div class="col-md-4">
                 <label>Delivery Date</label>
-                <input type="text" name="delivery_date" class="form-control" value="{{ isset($wis->cust_delivery_date) == ''? '': $wis->cust_delivery_date }}">
+                <input type="text" name="delivery_date" class="form-control" value="{{ isset($wis->cust_delivery_date) == ''? date('m/d/Y') : $wis->cust_delivery_date }}">
             </div>
         </div>
         <div class="form-group hide">

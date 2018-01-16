@@ -15,7 +15,7 @@
                <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Create New Release</button>
                <button class="tablinks" onclick="openCity(event, 'choose_recipient')" id="">Choose Recipients</button>
                <button class="tablinks" onclick="openCity(event, 'send_release')" id="">Send Release</button>
-               <button class="tablinks" onclick="openCity(event, 'summary')" id="">Summary</button>
+               <!-- <button class="tablinks" onclick="openCity(event, 'summary')" id="">Summary</button> -->
             </div>
            
             <div class="press-release-content">
@@ -182,17 +182,8 @@
                   <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
                   <div class="button-container">
                     <button type="submit" formaction="/pressuser/pressrelease/pr">Send &raquo;</button>
-                    <button type="button" class="tablinks" onclick="openCity(event, 'summary')">View Summary</button>
                   </div>
                 </div>
-
-                <div id="summary" class="tabcontent send-release-container">
-                    <div class="title-container">Summary</div>
-
-                    
-                    <div class="content"></div>
-                </div>
-
               </form>
             </div>
          </div>
@@ -238,7 +229,8 @@
       </div>
     </div>
   </div>
-</div>  
+</div>
+
 
 @endsection
 @section("css")

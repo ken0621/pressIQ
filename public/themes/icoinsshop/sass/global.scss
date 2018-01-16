@@ -59,6 +59,12 @@ body
 	z-index: 999;
 	top: 0;
 
+	.active
+	{
+		//color: #ffce00;
+		font-weight: 500;
+	}
+
 	@include transition(0.4s);
 
 	.nav-holder
@@ -76,7 +82,9 @@ body
 	
 	.image-logo-holder
 	{
-		width: 45%;
+		@include transition(0.4s);
+
+		width: 60%;
 		
 		.logo-2
 		{
@@ -92,6 +100,7 @@ body
 	nav
 	{
 		padding: 15px 0 5px 0;
+		margin-left: -50px;
 
 		ul
 		{
@@ -99,7 +108,8 @@ body
 			li
 			{
 				display: inline-block;
-				font-size: 15px;
+				font-size: 13px;
+				font-family: $display-text;
 
 				a
 				{
@@ -142,19 +152,25 @@ body
 			width: 100%;
 			z-index: 999;
 			top: 0;
-			
+
+			.nav-holder
+			{
+				padding: 0 0;
+			}
+
 			.image-logo-holder
 			{
+				@include transition(0.4s);
+				width: 52%;
+
 				.logo-1
 				{
 					display: none;
-					@include transition(0.4s);
 				}
 
 				.logo-2
 				{
 					display: block;
-					@include transition(0.4s);
 				}
 			}
 

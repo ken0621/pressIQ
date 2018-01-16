@@ -12,7 +12,7 @@
 	            <div class="col-md-12">
 	            	<div class="title">NON-MEMBER | <span>DASHBOARD</span> </div>
 	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-bg.jpg');">
-	                    <div class="btn btn-text">
+	                    <div class="caption-container">
 	                        <div class="text-header1">Join Us Now!</div>
 	                        <div class="text-header2">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aenean commodo ligula eget dolor.</div>
 	                    </div>
@@ -214,7 +214,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>P4ward</b>.</div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>Icoinshop</b>.</div>
 	                    </div>
 	                </div>
 	            </div>
@@ -357,7 +357,7 @@ input:-webkit-autofill {
   .popup-verify-placement .modal-content {
     /*background-color: #eee;*/ }
     .popup-verify-placement .modal-content .modal-header {
-      background-color: #0466AF;
+      background-color: #E1890B;
       /*border-top-left-radius: 3px;
       border-top-right-radius: 3px;*/ }
       .popup-verify-placement .modal-content .modal-header .close {
@@ -379,7 +379,7 @@ input:-webkit-autofill {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #0466AF;
+        border: 1px solid #E1890B;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -390,14 +390,14 @@ input:-webkit-autofill {
         margin: 10px 0px;
         padding: 10px; }
       .popup-verify-placement .modal-content .modal-body .labeld {
-        color: #0466AF;
+        color: #E1890B;
         text-align: center;
         text-transform: uppercase; }
       .popup-verify-placement .modal-content .modal-body select {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #0466AF;
+        border: 1px solid #E1890B;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -411,9 +411,9 @@ input:-webkit-autofill {
         padding-bottom: 20px; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement {
           color: #fff;
-          background-color: #0466AF;
+          background-color: #E1890B;
           padding: 10px 40px;
-          border: 2px solid #0466AF;
+          border: 2px solid #E1890B;
           border-radius: 2px;
           opacity: 0.9;
           -webkit-transition: all 0.2s ease-in-out;
@@ -425,7 +425,7 @@ input:-webkit-autofill {
           text-transform: uppercase; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement:hover {
           color: #fff;
-          background-color: #0466AF;
+          background-color: #E1890B;
           opacity: 1.0; }
 
 </style>

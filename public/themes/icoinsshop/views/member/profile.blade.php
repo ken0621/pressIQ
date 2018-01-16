@@ -172,7 +172,7 @@
 						   		</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-p4w-custom" type="submit"><i class="fa fa-pencil"></i> Update</button>
+							   			<button class="btn btn-ico-custom" type="submit"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -199,7 +199,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button type="submit" class="submit-button btn btn-p4w-custom"><i class="fa fa-pencil"></i> Update</button>
+							   			<button type="submit" class="submit-button btn btn-ico-custom"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -263,7 +263,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-p4w-custom" type="submit"><i class="fa fa-pencil"></i>  Update</button>
+							   			<button class="btn btn-ico-custom" type="submit"><i class="fa fa-pencil"></i>  Update</button>
 							   		</div>
 						   		</div>
 					   		</div>

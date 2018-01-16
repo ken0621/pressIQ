@@ -15,7 +15,7 @@
 					    	{!! session("error") !!}
 					    </div>
 					@endif
-
+					
 					@if ($errors->any())
 					    <div class="alert">
 					        <ul>
@@ -40,10 +40,10 @@
 								<input class="form-control input-sm" type="password" name="password" placeholder="Password">
 							</div>
 						</div>
+						<div class="button-container">
+							<button class="btn-login">LOGIN</button>
+						</div>
 					</form>
-					<div class="button-container">
-						<button class="btn-login">LOGIN</button>
-					</div>
 				</div>
 			</div>
 			<div class="create-account">

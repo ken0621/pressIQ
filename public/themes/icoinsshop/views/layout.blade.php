@@ -50,21 +50,27 @@
         <header class="header-container">
             <div class="nav-holder">
                 <div class="container">
-                    <div class="row clearfix">
-                        <div class="col-md-4">
+                    <div class="row-no-padding clearfix">
+                        <div class="col-md-3">
                             <div class="image-logo-holder">
                                 <a class="clearfix logo-1" href="/"><img src="/themes/{{ $shop_theme }}/img/icoins-logo.png"></a>
                                 <a class="clearfix logo-2" href="/"><img src="/themes/{{ $shop_theme }}/img/logo-2.png"></a>
                             </div>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-9">
                             <nav>
                                 <ul>
-                                    <li><a style="padding-left: 0;" href="/">Home</a></li>
-                                    <li><a href="javascript:">About Us</a></li>
-                                    <li><a href="javascript:">Mission & Vision</a></li>
-                                    <li><a href="javascript:">Now Releases</a></li>
-                                    <li class="pull-right"><a href="/member/login"><button class="btn-signin">SIGN IN</button></a></li>
+                                    <li><a style="padding-left: 0;" href="/">HOME</a></li>
+                                    <li><a href="javascript:">ABOUT</a></li>
+                                    <li><a href="javascript:">HOW IT WORKS</a></li>
+                                    <li><a href="javascript:">PRODUCTS</a></li>
+                                    <li><a href="javascript:">NEWS AND ANNOUNCEMENT</a></li>
+                                    @if($customer)
+                                        {{-- <li><a class="{{ Request::segment(1) == 'members' ? 'active' : '' }}" href="/members">MY ACCOUNT</a></li> --}}
+                                        <li class="pull-right"><a href="/members/logout"><button class="btn-signin">LOGOUT</button></a></li>
+                                    @else
+                                        <li class="pull-right"><a href="/members/login"><button class="btn-signin">SIGN IN</button></a></li>
+                                    @endif
                                 </ul>
                             </nav>
                         </div>

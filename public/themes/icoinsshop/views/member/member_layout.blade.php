@@ -82,10 +82,6 @@
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
 
-
-
-
-
 @endsection
 @section("css")
 @yield("member_css")

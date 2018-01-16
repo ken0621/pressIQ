@@ -1,10 +1,7 @@
 @import "../../../assets/front/sass/mixin";
 
-$content-text: 'Lato', sans-serif;
-$light: 300;
-$regular: 400;
-$bold: 700;
-$black: 900;
+$display-text: 'Ubuntu', sans-serif;
+$content-text: 'Open Sans', sans-serif;
 $text-light: #777;
 $text-dark: #272c2f;
 
@@ -23,33 +20,34 @@ $text-dark: #272c2f;
 	.title
 	{
 		color: $text-light;
+		font-family: $display-text;
 		border: none;
 		border-bottom: 1px solid #d7d7d7;
 		font-size: 21px;
 		margin-bottom: 20px;
+		font-weight: 400;
 
 		span
 		{
-			font-weight: $black;
+			font-weight: 500;
+			color: #016F56;
 		}
 	}
 
 	.join-container
 	{
-		font-family: $content-text;
-		//border: 1px solid #dfdfdf;
 		padding: 15px;
 		min-height: 550px;
 		max-height: 550px;
 		background-repeat: no-repeat;
 		background-size: cover;
-
-		.btn-text
+		
+		.caption-container
 		{
 			width: 100%;
 			white-space: normal;
 			cursor: default;
-
+			
 			@media screen and (min-width: 991px)
 			{
 				text-align: left;
@@ -57,7 +55,8 @@ $text-dark: #272c2f;
 
 			.text-header1
 			{
-				font-weight: $bold;
+				font-family: $display-text;
+				font-weight: 500;
 				font-size: 24px;
 				color: #fff;
 				word-break: break-all;
@@ -67,7 +66,9 @@ $text-dark: #272c2f;
 
 			.text-header2
 			{
-				font-weight: $light;
+
+				font-family: $content-text;
+				font-weight: 400;
 				font-size: 14px;
 				text-align: center;
 				color: #fff;
@@ -81,9 +82,7 @@ $text-dark: #272c2f;
     	{
     		text-align: center;
 			padding: 40px 0px 100px 0px;
-			font-family: $content-text;
-			font-weight: $light;
-			font-size: 13px;
+
 		
 			.btn-buy-a-kit
 			{
@@ -101,7 +100,7 @@ $text-dark: #272c2f;
 
 			.or
 			{
-				font-weight: $bold;
+				font-weight: 400;
 				font-size: 13px;
 				color: #fff;
 				padding: 20px;
@@ -115,18 +114,19 @@ $text-dark: #272c2f;
 			.btn-enter-a-code
 			{
 				@include transition(0.3s);
-				font-weight: $bold;
-				color: #F4AC00;
-				background-color: inherit;
+				font-weight: 500;
+				color: #fff;
+				font-size: 15px;
+				background-color: #016F56;
 				padding: 12px 30px 12px 30px;
-				border: 2px solid #F4AC00;
+				border: 2px solid #016F56;
 				border-radius: 2px;
-				//margin-bottom: 65px;
+				font-family: $content-text;
 
 				&:hover
 				{
-					background-color: #F4AC00;
-					border: 2px solid #fff;
+					border: 2px solid #E1890B;
+					background-color: #E1890B;
 					color: #fff;
 				}
 			}
@@ -177,7 +177,7 @@ $text-dark: #272c2f;
 
 	.text-header
 	{
-		font-weight: $black;
+		font-weight: 500;
 		font-size: 17px;
 		color: $text-dark;
 		padding-top: 10px;
@@ -200,7 +200,7 @@ $text-dark: #272c2f;
 			{
 				text-align: center;
 				padding-top: 10px;
-				font-weight: $black;
+				font-weight: 500;
 				font-size: 17px;
 				color: $text-dark;
 			}
@@ -216,7 +216,7 @@ $text-dark: #272c2f;
 			{
 				font-size: 15px;
 				color: $text-dark;
-				font-weight: $bold;
+				font-weight: 400;
 			}
 
 			span
@@ -251,19 +251,6 @@ $text-dark: #272c2f;
 			letter-spacing: 0.2px;
 		}
 
-	}
-
-	.pic1
-	{
-		border-top: 2px solid #63b944 !important;
-	}
-	.pic2
-	{
-		border-top: 2px solid #3e95cd !important;
-	}
-	.pic3
-	{ 
-		border-top: 2px solid #ed5639 !important;
 	}
 }
 
@@ -325,14 +312,14 @@ $text-dark: #272c2f;
 	{
 		text-align: center;
 		font-family: $content-text;
-		font-weight: $bold;
+		font-weight: 400;
 		font-size: 13px;
 
 		.btn-verify
 		{
 			@include transition(0.2s);
 			color: #fff;
-			background-color: #0466AF;
+			background-color: #02295E;
 			padding: 12px 25px;
 			border: none;
 			border-radius: 2px;
@@ -357,7 +344,7 @@ $text-dark: #272c2f;
 		
 		.modal-header
 		{
-			background-color: #0466AF;
+			background-color: #02295E;
 
 			.close
 			{
@@ -366,7 +353,7 @@ $text-dark: #272c2f;
 
 			.modal-title
 			{
-				font-weight: $bold;
+				font-weight: 400;
 				color: #FFF;
 				font-size: 15px;
 			}
@@ -374,7 +361,7 @@ $text-dark: #272c2f;
 
 		.modal-body
 		{
-			font-weight: $bold;
+			font-weight: 400;
 			margin: 0px 20px 0px 20px;
 
 			.warning
@@ -383,7 +370,7 @@ $text-dark: #272c2f;
 				margin-bottom: 27px;
 				font-size: 13px !important;
 				letter-spacing: 0.3px;
-				color: #FF3446 !important;
+				color: #02295E !important;
 			}
 			.value-set
 			{
@@ -396,7 +383,7 @@ $text-dark: #272c2f;
 				}
 				.values
 				{
-					font-weight: $bold;
+					font-weight: 400;
 					color: $text-dark;
 				}
 			}
@@ -413,7 +400,7 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $black;
+				font-weight: 500;
 				font-size: 13px;
 				padding-bottom: 20px;
 				margin-top: 20px;
@@ -421,9 +408,9 @@ $text-dark: #272c2f;
 				.btn-proceed-1
 				{
 					color: #fff;
-					background-color: #0466AF;
+					background-color: #02295E;
 					padding: 12px 40px;
-					border: 2px solid #0466AF;
+					border: 2px solid #02295E;
 					border-radius: 2px;
 				}
 			}
@@ -440,17 +427,17 @@ $text-dark: #272c2f;
 	{
 		.modal-body
 		{
-			font-weight: $bold;
+			font-weight: 400;
 			margin: 0px 20px 0px 20px;
 
 			.message
 			{
 				text-align: center;
 				margin-bottom: 10px;
-				color: #FF3446;
+				color: #f02432;
 				letter-spacing: 0.5px;
 				font-size: 14px;
-				font-weight: $black !important;
+				font-weight: 500 !important;
 				text-transform: uppercase;
 			}
 
@@ -458,7 +445,7 @@ $text-dark: #272c2f;
 			{
 				width: 100%;
 				font-size: 15px;
-				font-weight: $bold !important;
+				font-weight: 400 !important;
 				color: $text-light !important;
 				letter-spacing: 0.5px;
 				border: none;
@@ -489,18 +476,18 @@ $text-dark: #272c2f;
 				width: 100%;
 				font-size: 16px;
 				border: none;
-				border: 1px solid #0466AF;
+				border: 1px solid #02295E;
 				margin: 5px 0px;
 				margin-bottom: 15px;
 				padding: 5px;
 				border-radius: 2px;
 			}
-			
+
 	    	.btn-container
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $bold;
+				font-weight: 400;
 				font-size: 14px;
 				text-transform: uppercase;
 				padding-bottom: 20px;
@@ -509,19 +496,18 @@ $text-dark: #272c2f;
 				{
 					@include transition(0.2s);
 					color: #fff;
-					background-color: #0466AF;
+					background-color: #02295E;
 					padding: 10px 40px;
 					border-radius: 2px;
 					border: 0px !important;
 				  	width: 100%;
 				  	margin-top: 20px;
 				  	text-transform: uppercase;
-				  	opacity: 0.8;
+				}
 
-				  	&:hover
-				  	{
-				  		opacity: 1;
-				  	}
+				.btn-proceed-2:hover
+				{
+					opacity: 0.9;
 				}
 			}
 		}
@@ -535,7 +521,7 @@ $text-dark: #272c2f;
 	{
 		.modal-header
 		{
-			background-color: #FF3446;
+			background-color: #ed5639;
 
 			.close
 			{
@@ -561,7 +547,7 @@ $text-dark: #272c2f;
 
 			.text-caption
 			{	
-				font-weight: $bold;
+				font-weight: 400;
 				color: #344049;
 				padding-top: 5px;
 				font-size: 13px;
@@ -573,7 +559,7 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $bold;
+				font-weight: 400;
 				font-size: 14px;
 				padding-bottom: 20px;
 

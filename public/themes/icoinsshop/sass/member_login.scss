@@ -82,21 +82,22 @@ body
 			.button-container
 			{
 				padding: 40px 0 0 0;
+				
 				.btn-login
 				{
 					@include transition(0.3s);
-					background-color: #062027;
+					background-color: #016F56;
 					color: #fff;
-					border: 1px solid #062027;
+					border: 1px solid #016F56;
 					padding: 15px 50px;
 					border-radius: 4px;
 					width: 100%;
-
+					
 					&:hover
 					{
 						color: #fff;
-						border: 1px solid #e1890b;
-						background-color: #e1890b;
+						border: 1px solid #E1890B;
+						background-color: #E1890B;
 						box-shadow: 3px 3px rgba(0,0,0,0.2);
 					}
 				}
@@ -118,11 +119,11 @@ body
 			a
 			{
 				text-decoration: none;
-				color: #062027;
+				color: #016F56;
 
 				&:hover
 				{
-					color: #e1890b;
+					color: #E1890B;
 				}
 			}
 		}

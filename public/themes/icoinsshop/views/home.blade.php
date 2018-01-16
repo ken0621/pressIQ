@@ -19,7 +19,7 @@
                     <div class="card wow fadeInRight" data-wow-duration="2s">
                         <div class="card-content">
                             <div class="title">
-                                <span><u>Cu</u>rrent Exchange</span>
+                                <span>Current Exchange<div class="underline"></div></span>
                             </div>
                             <div class="card-holder">
                                 <div class="icon-text-container">
@@ -81,14 +81,16 @@
                         <div class="img-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
                             <img src="/themes/{{ $shop_theme }}/img/mission.png">
                         </div>
-                        <div class="title wow fadeInDown" data-wow-delay=".3s" data-wow-duration="2s">MISSION</div>
+                        <div class="title wow fadeInDown" data-wow-delay=".3s" data-wow-duration="2s">MISSION<div class="underline"></div>
+                        </div>
                         <div class="texts wow fadeInDown" data-wow-delay=".4s" data-wow-duration="2s">To help our clients successfully launch their ICO through market intelligence, creativity and strategic vision, and to build an organization that attracts, develops, and retains outstanding people worldwide as we grow our business.</div>
                     </div>
                     <div class="col-md-6">
                         <div class="img-holder wow fadeIn" data-wow-delay=".5s" data-wow-duration="2s">
                             <img src="/themes/{{ $shop_theme }}/img/vision.png">
                         </div>
-                        <div class="title wow fadeInDown" data-wow-delay=".6s" data-wow-duration="2s">VISION</div>
+                        <div class="title wow fadeInDown" data-wow-delay=".6s" data-wow-duration="2s">VISION<div class="underline"></div>
+                        </div>
                         <div class="texts wow fadeInDown" data-wow-delay=".8s" data-wow-duration="2s">ICOins Shop is dedicated in providing our clients with results-oriented advertising, public relations, and total be marketing support to be the top ICO marketing company.</div>
                     </div>
                 </div>
@@ -121,7 +123,7 @@
     <!-- PRODUCTS -->
     <section class="wrapper-4">
         <div class="container unskew">
-            <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>ICO</span> Token Products</div>
+            <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>ICO</span> Token Products <div class="underline"></div></div>
             <div class="row clearfix">
                 <div class="col-md-4">
                     <div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
@@ -160,7 +162,7 @@
     <!-- NEWS AND ANNOUNCEMENTS -->
     <section class="wrapper-5">
         <div class="container">
-            <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> an Announcements</div>
+            <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> an Announcement</div>
             <div class="row clearfix">
                 <div class="col-md-4">
                     <div class="news-holder wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">

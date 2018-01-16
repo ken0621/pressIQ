@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> --}}
-    <link rel="icon" href="/themes/{{ $shop_theme }}/img/none.png" type="image/png" />
+    <link rel="icon" href="/themes/{{ $shop_theme }}/img/favicon.png" type="image/png"/>
     <!-- GOOGLE FONT -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500" rel="stylesheet">
@@ -95,33 +95,57 @@
                     <div class="col-md-4">
                         <div class="text-header">INFORMATION</div>
                         <div class="holder">
-                            <ul>
-                                <li><a href="javascript:">HOME</a></li>
-                                <li><a href="javascript:">ABOUT US</a></li>
-                                <li><a href="javascript:">CONTACT US</a></li>
-                            </ul>
+                            <div class="link"><a href="javascript:">HOME</a></div>
+                            <div class="link"><a href="javascript:">ABOUT US</a></div>
+                            <div class="link"><a href="javascript:">CONTACT US</a></div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="text-header">NEWS LETTER</div>
                         <div class="holder">
                             <div class="parag">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus adipisci, architecto qui iusto. A, ea.</div>
-                            <form action="">
-                                <input type="text" placeholder="Enter your email here">
-                            </form>
                         </div>
+                        <form action="">
+                            <div class="form-group">
+                                <input type="text" placeholder="Enter your email here"><a href="javascript:"><i class="fa fa-paper-plane" aria-hidden="true"></i></a>
+                            </div>
+                        </form>
                     </div>
                     <div class="col-md-4">
                         <div class="text-header">FOLLOW US ON</div>
                         <div class="holder">
-                            
+                            <div class="social-icons">
+                                <a class="icon" href="javascript:"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                {{-- <span class="space"></span> --}}
+                                <a class="icon" href="javascript:"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                {{-- <span class="space"></span> --}}
+                                <a class="icon" href="javascript:"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="left">
+                                <span><a href="javascript:">Terms & Conditions</a></span>
+                                <span class="space">|</span>
+                                <span><a href="javascript:">API Use Policy</a></span>
+                                <span class="space">|</span>
+                                <span><a href="javascript:">Privacy Policy</a></span>
+                                <span class="space">|</span>
+                                <span><a href="javascript:">Cookies</a></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="right">
+                                <span>Powered by: DIGIMA WEB SOLUTIONS INC.</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </footer>
-
-
     </div>
     
     @include("frontend.gfoot")

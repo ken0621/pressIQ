@@ -75,11 +75,11 @@
 }
 .logo-holder
 {
-	text-align: center;
+	margin: auto;
 	box-shadow: 0px 12px 25px -15px rgba(0,0,0,0.2);
 	padding: 15px 20px;
 	border: 1px solid #ededed;
-	width: 100%;
+	width: 75%;
 	background-color: #fff;
 }
 </style>
@@ -92,17 +92,6 @@
 </head>
 <body>
 	{{-- <div class="background-container">
-		<div class="container">
-			<div class="heading-container">{{$pr_headline}}</div>
-			<div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">{{$pr_sender_name}}</span></div>
-			<div class="date-container">{{$pr_date_sent}}</div>
-			<div class="content-container"><p>{!! str_replace('../', '/', $pr_content); !!}</p></div>
-			<div class="border"></div>
-			<div class="title-about-container">About {{$pr_sender_name}}</div>
-			<div class="content-container">{!! str_replace('../', '/', $pr_boiler_content); !!}</div>
-		</div>
-	</div> --}}
-	<div class="background-container">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-9" style="padding-left: 0px; padding-right: 0px;">
@@ -122,6 +111,30 @@
 			<div class="title-about-container">{{$pr_type}}</div>
 			<div class="content-container">{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_boiler_content); !!}</div>
 		</div>
+	</div> --}}
+
+	<div class="background-container">
+		<div class="container">
+			<table width="100%">
+				<tr>
+					<td width="75%">
+						<div class="heading-container">{{$pr_headline}}</div>
+					</td>
+					<td width="25%">
+						<div class="logo-holder"><img src="{!!$pr_co_img!!}" style="width: 100%;"></div>
+					</td>
+				</tr>
+			</table>
+
+			<div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">{{$pr_sender_name}}</span></div>
+			<div class="date-container">{{$pr_date_sent}}</div>
+			<div class="content-container"><p>{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_content); !!}</p></div>
+			<div class="border"></div>
+			<div class="title-about-container">About {{$pr_co_name}}</div>
+			<div class="title-about-container">{{$pr_type}}</div>
+			<div class="content-container">{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_boiler_content); !!}</div>
+		</div>
 	</div>
+
 </body>
 </html>

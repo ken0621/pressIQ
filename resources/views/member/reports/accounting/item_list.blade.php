@@ -2,8 +2,8 @@
 
 @section('content')
 {!! $head !!}
-@include('member.reports.filter.filter1');
-@include('member.reports.output.item_list');
+@include('member.reports.filter.filter1')
+@include('member.reports.output.item_list')
 @endsection
 
 @section('script')

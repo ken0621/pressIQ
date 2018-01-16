@@ -4,6 +4,7 @@ namespace App\Globals;
 use App\Models\Tbl_bill;
 use App\Models\Tbl_bill_po;
 use App\Models\Tbl_bill_item_line;
+use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_pay_bill;
 use App\Models\Tbl_pay_bill_line;
 use App\Models\Tbl_purchase_order;
@@ -110,7 +111,7 @@ class Billing
     }
 
 
-    public static function postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info)
+    public static function postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info, $account_info = array())
     {
     	$insert['bill_shop_id']             = Billing::getShopId();    
     	$insert['bill_ap_account']			= 0;    
@@ -124,7 +125,7 @@ class Billing
         $insert['inventory_only']           = $bill_info['inventory_only'];
 
         $insert['bill_memo']                = $bill_other_info['bill_memo'];
-        $insert['bill_total_amount']        = collect($item_info)->sum('itemline_amount');
+        $insert['bill_total_amount']        = collect($item_info)->sum('itemline_amount') + collect($account_info)->sum('account_amount');
         $insert['bill_payment_method']      = 0;
         $insert['date_created']             = Carbon::now();
         
@@ -138,7 +139,7 @@ class Billing
             $entry["reference_module"]  = "bill";
             $entry["reference_id"]      = $bill_id;
             $entry["name_id"]           = $vendor_info['bill_vendor_id'];
-            $entry["total"]             = collect($item_info)->sum('itemline_amount');
+            $entry["total"]             = $insert['bill_total_amount'];
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
             $entry["ewt"]               = '';            
@@ -149,7 +150,7 @@ class Billing
             $transaction_bill = "receive_inventory";
         }
 
-        Billing::insert_bill_line($bill_id, $item_info, $entry);
+        Billing::insert_bill_line($bill_id, $item_info, $entry, $account_info);
 
         $bill_data = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
         AuditTrail::record_logs("Added",$transaction_bill,$bill_id,"",serialize($bill_data));
@@ -232,7 +233,7 @@ class Billing
             Tbl_purchase_order::where("po_id",$po_id)->update($up_po);
         }
     }
-    public static function updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info)
+    public static function updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info, $account_info = array())
     {
         $old = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
 
@@ -247,7 +248,7 @@ class Billing
         $update['inventory_only']           = $bill_info['inventory_only'];
 
         $update['bill_memo']                = $bill_other_info['bill_memo'];
-        $update['bill_total_amount']        = collect($item_info)->sum('itemline_amount');
+        $update['bill_total_amount']        = collect($item_info)->sum('itemline_amount') + collect($account_info)->sum('account_amount');
         $update['bill_payment_method']      = 0;
 
         Tbl_bill::where("bill_id", $bill_id)->update($update);
@@ -256,7 +257,7 @@ class Billing
         $entry["reference_module"]  = "bill";
         $entry["reference_id"]      = $bill_id;
         $entry["name_id"]           = $vendor_info['bill_vendor_id'];
-        $entry["total"]             = collect($item_info)->sum('itemline_amount');
+        $entry["total"]             = $update['bill_total_amount'];
         $entry["vatable"]           = '';
         $entry["discount"]          = '';
         $entry["ewt"]               = '';
@@ -271,59 +272,85 @@ class Billing
         AuditTrail::record_logs("Edited",$transaction_bill,$bill_id,serialize($old),serialize($new));
 
         Tbl_bill_item_line::where("itemline_bill_id", $bill_id)->delete();
-        Billing::insert_bill_line($bill_id, $item_info, $entry);
+        Tbl_bill_account_line::where("accline_bill_id", $bill_id)->delete();
+        Billing::insert_bill_line($bill_id, $item_info, $entry, $account_info);
 
         return $bill_id;
     }
-    public static function insert_bill_line($bill_id, $item_info, $entry)
+    public static function insert_bill_line($bill_id, $item_info, $entry, $account_info = array())
     {
-        foreach($item_info as $key => $item_line)
+        if(count($account_info) > 0)
         {
-            if($item_line)
+            foreach ($account_info as $key_acct => $value) 
             {
-                $insert_line['itemline_bill_id']       = $bill_id;
-                $insert_line['itemline_item_id']       = $item_line['itemline_item_id'];
-                $insert_line['itemline_ref_name']      = $item_line['itemline_ref_name'] ;
-                $insert_line['itemline_ref_id']        = $item_line['itemline_ref_id'] ;
-                $insert_line['itemline_description']   = $item_line['itemline_description'];
-                $insert_line['itemline_um']            = $item_line['itemline_um'];
-                $insert_line['itemline_qty']           = $item_line['itemline_qty'];
-                $insert_line['itemline_rate']		   = $item_line['itemline_rate'];
-                $insert_line['itemline_amount']        = $item_line['itemline_amount'];
-
-                Tbl_bill_item_line::insert($insert_line);
-
-                $item_type = Item::get_item_type($item_line['itemline_item_id']);
-                /* TRANSACTION JOURNAL */  
-                if($item_type != 4)
-                { 
-                    $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
-                    $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
-                    $entry_data[$key]['vatable']            = 0;
-                    $entry_data[$key]['discount']           = 0;
-                    $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
-                    $entry_data[$key]['entry_description']  = $item_line['itemline_description'];
-                }
-                else
+                if($value['account_id'])
                 {
-                    $item_bundle = Item::get_item_in_bundle($item_line['itemline_item_id']);
-                    if(count($item_bundle) > 0)
+                    $insert_acc['accline_bill_id'] = $bill_id;
+                    $insert_acc['accline_coa_id'] = $value['account_id'];
+                    $insert_acc['accline_description'] = $value['account_desc'];
+                    $insert_acc['accline_amount'] = $value['account_amount'];
+
+                    Tbl_bill_account_line::insert($insert_acc);
+
+                    $entry_data['a'.$key_acct]['account_id'] = $value['account_id'];
+                    $entry_data['a'.$key_acct]['vatable'] = 0;
+                    $entry_data['a'.$key_acct]['discount'] = 0;
+                    $entry_data['a'.$key_acct]['entry_amount'] = $value['account_amount'];
+                    $entry_data['a'.$key_acct]['entry_description'] = $value['account_desc'];
+                }
+            }
+        }
+
+        if(count($item_info) > 0)
+        {
+            foreach($item_info as $key => $item_line)
+            {
+                if($item_line)
+                {
+                    $insert_line['itemline_bill_id']       = $bill_id;
+                    $insert_line['itemline_item_id']       = $item_line['itemline_item_id'];
+                    $insert_line['itemline_ref_name']      = $item_line['itemline_ref_name'] ;
+                    $insert_line['itemline_ref_id']        = $item_line['itemline_ref_id'] ;
+                    $insert_line['itemline_description']   = $item_line['itemline_description'];
+                    $insert_line['itemline_um']            = $item_line['itemline_um'];
+                    $insert_line['itemline_qty']           = $item_line['itemline_qty'];
+                    $insert_line['itemline_rate']		   = $item_line['itemline_rate'];
+                    $insert_line['itemline_amount']        = $item_line['itemline_amount'];
+
+                    Tbl_bill_item_line::insert($insert_line);
+
+                    $item_type = Item::get_item_type($item_line['itemline_item_id']);
+                    /* TRANSACTION JOURNAL */  
+                    if($item_type != 4)
+                    { 
+                        $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
+                        $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
+                        $entry_data[$key]['vatable']            = 0;
+                        $entry_data[$key]['discount']           = 0;
+                        $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
+                        $entry_data[$key]['entry_description']  = $item_line['itemline_description'];
+                    }
+                    else
                     {
-                        foreach ($item_bundle as $key_bundle => $value_bundle) 
+                        $item_bundle = Item::get_item_in_bundle($item_line['itemline_item_id']);
+                        if(count($item_bundle) > 0)
                         {
-                            $item_data = Item::get_item_details($value_bundle->bundle_item_id);
-                            $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
-                            $entry_data['b'.$key.$key_bundle]['entry_qty']          = $item_line['itemline_qty'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
-                            $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
-                            $entry_data['b'.$key.$key_bundle]['discount']           = 0;
-                            $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
-                            $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                            foreach ($item_bundle as $key_bundle => $value_bundle) 
+                            {
+                                $item_data = Item::get_item_details($value_bundle->bundle_item_id);
+                                $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
+                                $entry_data['b'.$key.$key_bundle]['entry_qty']          = $item_line['itemline_qty'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
+                                $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
+                                $entry_data['b'.$key.$key_bundle]['discount']           = 0;
+                                $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
+                                $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                            }
                         }
                     }
                 }
             }
         }
-        if($entry != null)
+        if(count($entry_data) > 0)
         {
             $bill_journal = Accounting::postJournalEntry($entry, $entry_data);            
         }

@@ -19,6 +19,15 @@ function credit_memo(){
 		action_compute();
 		action_date_picker();
 		action_reassign_number();
+		event_button_action_click();
+	}
+
+	function event_button_action_click()
+	{
+		$(document).on("click","button[type='submit']", function()
+		{
+			$(".button-action").val($(this).attr("code"));
+		})
 	}
 
 	function event_remove_tr()

@@ -718,7 +718,8 @@ Route::any('/member/customer/sales_order/update','Member\Customer_SaleOrderContr
 Route::any('/member/customer/customer_sales_order_view/{id}','Member\Customer_SaleOrderController@so_pdf');
 
 /* Customer - Receive Payment */
-Route::get('/member/customer/receive_payment','Member\Customer_ReceivePaymentController@index');
+Route::get('/member/customer/receive_payment/list','Member\Customer_ReceivePaymentController@index');
+Route::get('/member/customer/receive_payment','Member\Customer_ReceivePaymentController@receive_payment');
 Route::get('/member/customer/load_rp/{id}','Member\Customer_ReceivePaymentController@load_customer_rp');
 Route::post('/member/customer/receive_payment/add','Member\Customer_ReceivePaymentController@add_receive_payment');
 Route::post('/member/customer/receive_payment/update/{id}','Member\Customer_ReceivePaymentController@update_receive_payment');
@@ -726,6 +727,7 @@ Route::get('/member/customer/receive_payment/apply_credit','Member\Customer_Rece
 Route::any('/member/customer/receive_payment/apply_credit_submit','Member\Customer_ReceivePaymentController@apply_credit_submit');
 Route::any('/member/customer/receive_payment/load_apply_credit','Member\Customer_ReceivePaymentController@load_apply_credit');
 Route::any('/member/customer/receive_payment/remove_apply_credit','Member\Customer_ReceivePaymentController@remove_apply_credit');
+Route::any('/member/customer/receive_payment/view_pdf/{id}','Member\Customer_ReceivePaymentController@rp_pdf');
 
 /* CUSTOMER CREDIT MEMO*/
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
@@ -736,6 +738,7 @@ Route::any('/member/customer/credit_memo/update',"Member\CreditMemoController@up
 
 Route::any('/member/customer/credit_memo/update_action',"Member\CreditMemoController@update_action");
 Route::any('/member/customer/credit_memo/choose_type','Member\CreditMemoController@choose_type');
+Route::any('/member/customer/credit_memo/view_pdf/{id}','Member\CreditMemoController@cm_pdf');
 
 /* Vendor Debit MEMO*/
 Route::any('/member/vendor/debit_memo','Member\DebitMemoController@index');
@@ -794,6 +797,7 @@ Route::any('/member/vendor/write_check','Member\Vendor_CheckController@write_che
 Route::any('/member/vendor/write_check/list','Member\Vendor_CheckController@check_list');
 Route::any('/member/vendor/write_check/add','Member\Vendor_CheckController@add_check');
 Route::any('/member/vendor/write_check/update','Member\Vendor_CheckController@update_check');
+Route::any('/member/vendor/write_check/view_pdf/{id}','Member\Vendor_CheckController@wc_pdf');
 
 /*Manufacturer*/
 Route::any('/member/item/manufacturer','Member\ManufacturerController@manufacturer_list');
@@ -934,6 +938,9 @@ Route::group(array('prefix' => '/member/report'), function()
 	Route::any('/accounting/vendor_list','Member\ReportsController@vendor_list');
 	Route::any('/accounting/item_list','Member\ReportsController@item_list');
 	Route::any('/accounting/account_list','Member\ReportsController@account_list');
+
+	Route::any('/accounting/income_statement','Member\ReportsController@income_statement');
+	Route::any('/accounting/quick_report','Member\ReportsController@quick_report');
 
 	Route::any('/accounting/date_period','Member\ReportsController@get_date_period_covered');
 });

@@ -17,7 +17,8 @@
                 <!-- <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save and Edit</button>
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
-             --></div>
+             -->
+            </div>
             <div class="dropdown pull-right">
                 <div>
                     <a class="btn btn-custom-white" href="/member/vendor/purchase_order/list">Cancel</a>

@@ -36,6 +36,23 @@ class Accounting
 
 		return $shop_id;
 	}
+	public static function getAccountTransaction($filter = 'all', $parent_id = null, $type = null)
+	{	
+		$shop = Accounting::getShopId();	
+		if($parent_id)
+		{
+			$sublevel 	= Tbl_chart_of_account::where("account_parent_id", $parent_id)->value("account_sublevel");
+		}
+		else
+		{
+			$sublevel 	= 0;
+			$parent_id 	= null;
+		}
+
+		$result = Accounting::checkAccount($shop, $parent_id, $sublevel, $filter, null);
+
+		return $result;
+	}
 
 	/**
 	 * Getting all the list of accounts including sub-accounts
@@ -75,7 +92,7 @@ class Accounting
 									->where("account_shop_id", $shop_id)->value("account_id");
 		return $return_id;
 	}
-	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type, $search)
+	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type = null, $search = null)
 	{
 		$query = Tbl_chart_of_account::accountInfo($shop)->balance()->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel)->orderBy("chart_type_id");
 
@@ -419,23 +436,61 @@ class Accounting
 					case "purchase-order": // NON-POSTING
 						break;
 					case "write-check":
-						break;
-					case "bill":
-						if($item->item_type_id == 1) // INVENTORY TYPE
+						if(isset($item->item_type_id)) // INVENTORY TYPE
 						{
-							/* ASSET ACCOUNT */
-							$line_data["entry_amount"]	= $entry_line["entry_amount"];
-							$line_data["entry_type"] 	= Accounting::normalBalance($account_asset);
-							$line_data["account_id"] 	= $account_asset;
-							Accounting::insertJournalLine($line_data);
+							if($item->item_type_id == 1)
+							{
+								/* ASSET ACCOUNT */
+								$line_data["entry_amount"]	= $entry_line["entry_amount"];
+								$line_data["entry_type"] 	= Accounting::normalBalance($account_asset);
+								$line_data["account_id"] 	= $account_asset;
+								Accounting::insertJournalLine($line_data);								
+							}
+							else
+							{
+								/* EXPENSE ACCOUNT */
+								$line_data["entry_amount"]	= $entry_line["entry_amount"];
+								$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
+								$line_data["account_id"] 	= $account_expense;
+								Accounting::insertJournalLine($line_data);
+							}
 						}
 						else
 						{
 							/* EXPENSE ACCOUNT */
 							$line_data["entry_amount"]	= $entry_line["entry_amount"];
-							$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
-							$line_data["account_id"] 	= $account_expense;
-							Accounting::insertJournalLine($line_data);
+							$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
+							$line_data["account_id"] 	= $account->account_id;
+							Accounting::insertJournalLine($line_data);							
+						}
+						break;
+					case "bill":
+						if(isset($item->item_type_id)) // INVENTORY TYPE
+						{
+							if($item->item_type_id == 1)
+							{
+								/* ASSET ACCOUNT */
+								$line_data["entry_amount"]	= $entry_line["entry_amount"];
+								$line_data["entry_type"] 	= Accounting::normalBalance($account_asset);
+								$line_data["account_id"] 	= $account_asset;
+								Accounting::insertJournalLine($line_data);								
+							}
+							else
+							{
+								/* EXPENSE ACCOUNT */
+								$line_data["entry_amount"]	= $entry_line["entry_amount"];
+								$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
+								$line_data["account_id"] 	= $account_expense;
+								Accounting::insertJournalLine($line_data);
+							}
+						}
+						else
+						{
+							/* EXPENSE ACCOUNT */
+							$line_data["entry_amount"]	= $entry_line["entry_amount"];
+							$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
+							$line_data["account_id"] 	= $account->account_id;
+							Accounting::insertJournalLine($line_data);							
 						}
 						break;
 					case "debit-memo":
@@ -649,10 +704,10 @@ class Accounting
 			case 'purchase-order':
 			case 'bill':
 			case 'write-check':
-				$data["main_account"]		= 'payable';
-				$data["name"] 				= 'vendor';
-				$data["newNormalJournal"] 	= 'normalBalance';
-				$data["newContraJournal"] 	= 'contraAccount';
+				$data["main_account"]		= 'cash-r';
+				$data["name"] 				= '';
+				$data["newNormalJournal"] 	= 'contraAccount';
+				$data["newContraJournal"] 	= 'normalBalance';
 				return $data;
 				break;
 			case 'debit-memo':

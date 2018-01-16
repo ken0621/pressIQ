@@ -24,6 +24,7 @@ use App\Globals\Accounting;
 use App\Globals\Purchase_Order;
 use App\Globals\Billing;
 use App\Globals\Item;
+use App\Globals\Pdf_global;
 use App\Globals\Warehouse;
 use App\Globals\Utilities;
 use App\Globals\UnitMeasurement;
@@ -34,6 +35,7 @@ use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_bill_item_line;
 use Carbon\Carbon;
 use Session;
+use PDF;
 
 class Vendor_ReceiveInventoryController extends Member
 {
@@ -78,16 +80,16 @@ class Vendor_ReceiveInventoryController extends Member
         if($access == 1)
         { 
             $data["ri"] = Tbl_bill::vendor()->where("bill_id",$ri_id)->first();
-            dd($data["ri"]);
-            $data["_poline"] = Tbl_purchase_order_line::um()->item()->where("poline_po_id",$po_id)->get();
-            foreach($data["_poline"] as $key => $value) 
+            $data["_riline"] = Tbl_bill_item_line::um()->item()->where("itemline_bill_id",$ri_id)->get();
+            //dd($data["_riline"]);
+            /*foreach($data["_poline"] as $key => $value) 
             {
                 $qty = UnitMeasurement::um_qty($value->poline_um);
 
                 $total_qty = $value->poline_orig_qty * $qty;
                 $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
-            }
-            $pdf = view("member.vendor_list.po_pdf",$data);
+            }*/
+            $pdf = view("member.vendor_list.ri_pdf",$data);
             return Pdf_global::show_pdf($pdf);
         }
         else
@@ -477,13 +479,29 @@ class Vendor_ReceiveInventoryController extends Member
                 }
 
                 $json["status"]         = "success-receive-inventory";
-                if($button_action == "save-and-edit")
+                /*if($button_action == "save-and-edit")
                 {
                     $json["redirect"]    = "/member/vendor/receive_inventory/list";
                 }
                 elseif($button_action == "save-and-new")
                 {
                     $json["redirect"]   = '/member/vendor/receive_inventory';
+                }*/
+                if($button_action == "save-and-edit")
+                {
+                    $json["redirect"]    = "/member/vendor/receive_inventory?id=".$bill_id;
+                }
+                elseif($button_action == "save-and-new")
+                {
+                    $json["redirect"]   = '/member/vendor/receive_inventory';
+                }
+                elseif($button_action == "save-and-close")
+                {
+                    $json["redirect"]   = '/member/vendor/receive_inventory/list';
+                }
+                elseif($button_action == "save-and-print")
+                {
+                    $json["redirect"]   = '/member/vendor/receive_inventory/view_pdf/'.$bill_id;
                 }
                 Request::session()->flash('success', 'Successfully Created');
             }

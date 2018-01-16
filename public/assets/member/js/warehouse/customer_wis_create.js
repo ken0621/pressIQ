@@ -32,7 +32,25 @@ function customer_wis_create()
 		action_lastclick_row();
 		event_remove_tr();
 		event_compute_class_change();
+		event_button_action_click();
+		action_date_picker();
+		action_compute();
 
+
+	}
+
+	function action_date_picker()
+	{
+		$(".draggable .datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
+	}
+
+	function event_button_action_click()
+	{
+		$(document).on("click","button[type='submit']", function()
+		{
+			$(".button-action").val($(this).attr("code"));
+		})
+		action_compute();
 	}
 
 	function action_reassign_number()
@@ -184,7 +202,7 @@ function customer_wis_create()
 		$parent.find(".txt-qty").val(1).change();
 		if($this.find("option:selected").attr("has-um"))
 		{
-			$parent.find(".txt-qty").attr("disabled",true);
+			$parent.find(".txt-qty").attr("disabled",false);
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$parent.find(".txt-qty").removeAttr("disabled");
@@ -250,7 +268,7 @@ function customer_wis_create()
 		/* action_compute TOTAL */
 		var total = 0;
 		total     = subtotal;
-		
+
 		$(".total-amount").html(action_add_comma(total.toFixed(2)));
 		$(".total-amount-input").val(total.toFixed(2));
 	}
@@ -567,8 +585,9 @@ function success_create_customer_wis(data)
 {
 	if(data.status == 'success')
 	{
-		toastr.success('Success');
-		location.href = '/member/customer/wis';
-		
+		/*toastr.success('Success');
+		location.href = '/member/customer/wis';*/
+		toastr.success("Success");
+       	location.href = data.redirect_to;
 	}
 }

@@ -46,7 +46,7 @@
         </div>
         <div class="col-sm-2">
             <label>Reference No</label>
-            <input type="text" class="form-control input-sm" />
+            <input type="text" class="form-control input-sm" value="" />
         </div>
         <div class="col-sm-3">
             <label>Deposit to</label>

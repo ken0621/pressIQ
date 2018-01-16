@@ -275,6 +275,10 @@ class Customer_EstimateController extends Member
             {
                 $data["redirect"] = "/member/customer/estimate";
             }
+            elseif($button_action == "save-and-print")
+            {
+                $data["redirect"] = "/member/customer/customer_estimate_view/".$est_id;
+            }
         }
         else
         {
@@ -348,6 +352,10 @@ class Customer_EstimateController extends Member
             elseif($button_action == "save-and-new")
             {
                 $data["redirect"] = "/member/customer/estimate";
+            }
+            elseif($button_action == "save-and-print")
+            {
+                $data["redirect"] = "/member/customer/customer_estimate_view/".$est_id;
             }
         }
         else

@@ -52,7 +52,7 @@ class TransactionSalesOrderController extends Member
 		$insert['customer_id'] 			 = $request->customer_id;
 		$insert['customer_email']        = $request->customer_email;
 		$insert['customer_address']      = $request->customer_address;
-		$insert['transaction_date']      = $request->transaction_date;
+		$insert['transaction_date']      = datepicker_input($request->transaction_date);
 		$insert['customer_message']      = $request->customer_message;
 		$insert['customer_memo']         = $request->customer_memo;
 
@@ -62,7 +62,7 @@ class TransactionSalesOrderController extends Member
 			if($value)
 			{
 				$insert_item[$key]['item_id'] = $value;
-				$insert_item[$key]['item_servicedate'] = $request->item_servicedate[$key];
+				$insert_item[$key]['item_servicedate'] = datepicker_input($request->item_servicedate[$key]);
 				$insert_item[$key]['item_description'] = $request->item_description[$key];
 				$insert_item[$key]['item_um'] = $request->item_um[$key];
 				$insert_item[$key]['item_qty'] = str_replace(',', '', $request->item_qty[$key]);

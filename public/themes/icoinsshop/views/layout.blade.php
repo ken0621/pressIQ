@@ -18,16 +18,6 @@
     <!-- GLOBAL CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css?version=2">
-    <!-- VIDEO LIGHTBOX -->
-    <link rel="stylesheet" type="text/css" media="all" href="/themes/{{ $shop_theme }}/assets/lity/assets/prism.css">
-    <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/lity/dist/lity.css">
-    
-    <!-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/new_sidenav.css"> -->
-    <!-- COUNTDOWN TIMER -->
-    <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/animate.css">
-    {{-- <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/form-elements.css"> --}}
-    <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/style.css">
-    <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/css/media-queries.css">
     
     @include("frontend.ghead")
     <!-- OTHER CSS -->
@@ -70,7 +60,7 @@
                         <div class="col-md-8">
                             <nav>
                                 <ul>
-                                    <li><a style="padding-left: 0;" href="javascript:">Home</a></li>
+                                    <li><a style="padding-left: 0;" href="/">Home</a></li>
                                     <li><a href="javascript:">About Us</a></li>
                                     <li><a href="javascript:">Mission & Vision</a></li>
                                     <li><a href="javascript:">Now Releases</a></li>
@@ -91,59 +81,7 @@
         <!-- FOOTER -->
         <footer>
             <div class="container">
-                <div class="row clearfix">
-                    <div class="col-md-4">
-                        <div class="text-header">INFORMATION</div>
-                        <div class="holder">
-                            <div class="link"><a href="javascript:">HOME</a></div>
-                            <div class="link"><a href="javascript:">ABOUT US</a></div>
-                            <div class="link"><a href="javascript:">CONTACT US</a></div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="text-header">NEWS LETTER</div>
-                        <div class="holder">
-                            <div class="parag">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus adipisci, architecto qui iusto. A, ea.</div>
-                        </div>
-                        <form action="">
-                            <div class="form-group">
-                                <input type="text" placeholder="Enter your email here"><a href="javascript:"><i class="fa fa-paper-plane" aria-hidden="true"></i></a>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="text-header">FOLLOW US ON</div>
-                        <div class="holder">
-                            <div class="social-icons">
-                                <a class="icon" href="javascript:"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                                {{-- <span class="space"></span> --}}
-                                <a class="icon" href="javascript:"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                {{-- <span class="space"></span> --}}
-                                <a class="icon" href="javascript:"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bottom">
-                    <div class="row clearfix">
-                        <div class="col-md-6">
-                            <div class="left">
-                                <span><a href="javascript:">Terms & Conditions</a></span>
-                                <span class="space">|</span>
-                                <span><a href="javascript:">API Use Policy</a></span>
-                                <span class="space">|</span>
-                                <span><a href="javascript:">Privacy Policy</a></span>
-                                <span class="space">|</span>
-                                <span><a href="javascript:">Cookies</a></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="right">
-                                <span>Powered by: DIGIMA WEB SOLUTIONS INC.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="bottom-text">Copyright © 2018 Icoinsshop. All Rights Reserved </div>
             </div>
         </footer>
     </div>
@@ -151,16 +89,6 @@
     @include("frontend.gfoot")
     {{-- GLOBALS --}}
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js?version=2"></script>
-    <!-- COUNTDOWN TIMER -->
-    {{-- <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.backstretch.min.js"></script>
-    <script src="/themes/{{ $shop_theme }}/assets/countdown/jquery.countdown.min.js"></script>
-    <script src="/themes/{{ $shop_theme }}/assets/countdown/wow.min.js"></script>
-    <script src="/themes/{{ $shop_theme }}/assets/countdown/scripts.js?version=1"></script> --}}
-
-    <!-- LITY -->
-    {{-- <script src="/themes/{{ $shop_theme }}/assets/lity/vendor/jquery.js"></script> --}}
-    <script src="/themes/{{ $shop_theme }}/assets/lity/dist/lity.js"></script>
-    <script src="/themes/{{ $shop_theme }}/assets/lity/assets/prism.js"></script>
     
     <!-- FB WIDGET -->
     <div id="fb-root"></div>

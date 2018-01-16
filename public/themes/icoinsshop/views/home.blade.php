@@ -44,7 +44,7 @@
         </div>
     </div>
 
-    <!-- ABOUT US-->
+    <!-- ABOUT US -->
     <section class="wrapper-1" style="background-image: url('/themes/{{ $shop_theme }}/img/networkbg.png')">
         <div class="container">
             <div class="wrapper-title"><span>About</span> Us</div>
@@ -55,7 +55,7 @@
         </div>
     </section>
 
-    <!-- MISSION VISION-->
+    <!-- MISSION VISION -->
     <section class="wrapper-2">
         <div class="unskew" style="background-image: url('/themes/{{ $shop_theme }}/img/missionvision-bg.png')">
             <div class="container">
@@ -79,7 +79,7 @@
         </div>
     </section>
 
-    <!-- HOW IT WORKS-->
+    <!-- HOW IT WORKS -->
     <section class="wrapper-3" style="background-image: url('/themes/{{ $shop_theme }}/img/networkbg.png')">
         <div class="container">
             <div class="wrapper-title"><span>How</span> It Works</div>
@@ -101,36 +101,104 @@
         </div>
     </section>
 
-    <!--PRODUCTS-->
+    <!-- PRODUCTS -->
     <section class="wrapper-4">
         <div class="container unskew">
             <div class="wrapper-title"><span>ICO</span> Token Products</div>
-            <div class="row-no-paddind clearfix">
+            <div class="row clearfix">
                 <div class="col-md-4">
                     <div class="product-holder">
                         <div class="top">
-                            <div class="icon-holder">
-                                
-                            </div>
+                            <img src="/themes/{{ $shop_theme }}/img/krops.jpg">
                         </div>
                         <div class="bottom">
-                            
+                            <div class="texts"> KROPS is offering tokenized shares of the company through an offering of 16,000,000 or sixteen million KROPS tokens of KropCoins.</div>
+                            <div class="btn-container">
+                                <button class="btn-more-info">MORE INFO</button>
+                                <button class="btn-buy-tokens">BUY TOKENS</button>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="product-holder">
-                        
+                        <div class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
+                        </div>
+                        <div class="text">Other tokens are coming soon!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="product-holder">
-                        
+                        <div class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
+                        </div>
+                        <div class="text">Other tokens are coming soon!</div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>    
+    </section>
+
+    <!-- NEWS AND ANNOUNCEMENTS -->
+    <section class="wrapper-5">
+        <div class="container">
+            <div class="wrapper-title"><span>News</span> an Announcements</div>
+            <div class="row clearfix">
+                <div class="col-md-4">
+                    <div class="news-holder">
+                        <div class="row-no-padding clearfix">
+                            <div class="col-md-6 col-xs-6">
+                                <div class="img-holder">
+                                    <img src="/themes/{{ $shop_theme }}/img/news-img-1.jpg">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-6">
+                                <div class="caption-holder">
+                                    <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                    <div class="date">January 15, 2018</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="news-holder">
+                        <div class="row-no-padding clearfix">
+                            <div class="col-md-6 col-xs-6">
+                                <div class="img-holder">
+                                    <img src="/themes/{{ $shop_theme }}/img/news-img-2.jpg">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-6">
+                                <div class="caption-holder">
+                                    <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                    <div class="date">January 05, 2018</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="news-holder">
+                        <div class="row-no-padding clearfix">
+                            <div class="col-md-6 col-xs-6">
+                                <div class="img-holder">
+                                    <img src="/themes/{{ $shop_theme }}/img/news-img-3.jpg">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-6">
+                                <div class="caption-holder">
+                                    <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                    <div class="date">January 07, 2018</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>

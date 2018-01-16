@@ -1,5 +1,8 @@
 @import "../../../assets/front/sass/mixin";
 
+$display-text: 'Ubuntu', sans-serif;
+$content-text: 'Open Sans', sans-serif;
+
 body
 {
 	font-family: 'Ubuntu', sans-serif;
@@ -190,171 +193,21 @@ body
 /* FOOTER */
 footer
 {
-	background-color: #262626;
+	background-color: #082c22;
 	padding: 50px 0;
 
-	.text-header
+	.bottom-text
 	{
+		font-family: $display-text;
 		color: #fff;
-		font-size: 15px;
 		font-weight: 400;
+		font-size: 15px;
+		text-align: center;
+		border-top: 1px solid #39564e;
+		padding-top: 20px;
+		margin-top: 100px;
 	}
 
-	.holder
-	{
-		padding: 10px 0;
-		font-family: 'Open Sans', sans-serif;
-
-		.link
-		{
-			display: block;
-
-			a
-			{
-				color: #838383;
-				text-decoration: none;
-				font-size: 12px;
-				font-weight: 400;
-			}
-		}
-
-		.parag
-		{
-			color: #838383;
-			font-size: 12px;
-			font-weight: 400;
-		}
-
-		.social-icons
-		{
-			padding-top: 10px;
-
-			.icon
-			{
-				@include transition(0.2s);
-				background-color: #313131;
-				padding: 7px 8px;
-				border-radius: 100%;
-				text-decoration: none;
-				color: #838383;
-				font-size: 20px;
-				margin-left: 5px;
-
-				.fa
-				{
-					@include transition(0.2s);
-					width: 7%;
-					text-align: center;
-				}
-
-				&:first-child
-				{
-					&:hover
-					{
-						background-color: #3b5998;
-
-						.fa
-						{
-							color: #fff;
-							font-size: 25px;
-						}
-					}
-				}
-
-				&:nth-child(2)
-				{
-					&:hover
-					{
-						background-color: #00aced;
-
-						.fa
-						{
-							color: #fff;
-							font-size: 25px;
-						}
-					}
-				}
-
-				&:last-child
-				{
-					&:hover
-					{
-						background-color: #cb2027;
-
-						.fa
-						{
-							color: #fff;
-							font-size: 25px;
-						}
-					}
-				}
-			}
-
-			.space
-			{
-				padding: 0 3px;
-			}
-		}
-	}
-
-	form
-	{
-		input
-		{
-			background-color: #313131;
-			border: 1px solid #fff;
-			font-size: 12px;
-			padding: 5px 15px;
-			color: #838383;
-			position: relative;
-			width: 60%;
-		}
-
-		.fa
-		{
-			color: #fff;
-			position: absolute;
-			margin-left: -25px;
-			margin-top: 6px;
-
-		}
-
-	}
-
-	.bottom
-	{
-		border-top: 1px solid #838383;
-		margin-top: 15px;
-		padding: 10px 0;
-
-		.left
-		{
-			span
-			{
-				a
-				{
-					text-decoration: none;
-					color: #838383;
-				}
-			}
-
-			.space
-			{
-				padding: 0 10px;
-			}
-		}
-
-		.right
-		{
-			float: right;
-
-			span
-			{
-				color: #838383;
-			}
-		}
-
-	}
 }
 
 /* SCROLL TO TOP */

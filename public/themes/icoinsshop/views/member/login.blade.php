@@ -1,6 +1,6 @@
 @extends("layout")
 @section("content")
-<div id="home" class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/slider-img.jpg')">
+<div id="home" class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/cover-photo.jpg')">
 	<div style="padding: 100px 0 50px 0;">
 		<div class="container">
 			<input type="hidden" id="_token" value="{{csrf_token()}}">

@@ -11,11 +11,11 @@
             <div class="title-container">Email's Press Release</div>
             <table>
                 <tr>
-                    <th>Email From</th>
-                    <th>Header</th>
-                    <th>Content</th>
-                    <th>Boilerplate</th>
-                    <th>Action</th>
+                    <th style="width: 30%;">Email From</th>
+                    <th style="width: 30%;">Header</th>
+                    <th style="width: 30%;">Content</th>
+                    <th style="width: 30%;">Boilerplate</th>
+                    <th style="width: 30%;">Action</th>
                     @foreach($_email as $email)
                     <tr>
                         <td style="width: 20%;">{{$email->pr_from}}</td>

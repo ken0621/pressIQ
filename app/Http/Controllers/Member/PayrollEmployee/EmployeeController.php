@@ -66,6 +66,18 @@ class EmployeeController extends PayrollMember
 		}
 	} 
 
+	public static function authorized_access($employee_id)
+	{
+		if($employee_id == '21')
+		{
+			echo view('member.payroll2.employee_dashboard.authorized_yangming_access');
+		}
+		else
+		{
+			echo view('member.payroll2.employee_dashboard.authorized_all_access_menu');
+		}
+	}
+
 	public function employee()
 	{
 		$data['page']	= 'Dashboard';

@@ -2,6 +2,11 @@
 @section("pressview")
 <div class="background-container">
     <div class="pressview">
+         @if (Session::has('delete'))
+              <div class="alert alert-danger">
+                 <center>{{ Session::get('delete') }}</center>
+              </div>
+              @endif 
          <!-- Drafts -->
         <div class="drafts-holder-container">
             <table>

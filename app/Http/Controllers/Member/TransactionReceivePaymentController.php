@@ -113,7 +113,7 @@ class TransactionReceivePaymentController extends Member
 		$insert['rp_ar_account']  				= $request->rp_ar_account;
 		$insert['customer_memo']         	    = $request->customer_memo;
 		$insert['transaction_date']       	    = date("Y-m-d", strtotime($request->transaction_date));
-		$insert['rp_total_amount']				= $request->rp_total_amount;
+		$insert['rp_total_amount']				= str_replace(',', '', $request->rp_total_amount);
 
 		$insert_item = null;
 		$txn_line = $request->line_is_checked;
@@ -125,7 +125,7 @@ class TransactionReceivePaymentController extends Member
 	            {
 	                $insert_item[$key]["rpline_reference_name"]   = $request->rpline_txn_type[$key];
 	                $insert_item[$key]["rpline_reference_id"]     = $request->rpline_txn_id[$key];
-	                $insert_item[$key]["rpline_amount"] 		  = $request->rpline_amount[$key];
+	                $insert_item[$key]["rpline_amount"] 		  = str_replace(',', '', $request->rpline_amount[$key]);
 	            }
 	        }
 		}

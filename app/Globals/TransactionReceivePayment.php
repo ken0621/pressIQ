@@ -3,6 +3,7 @@ namespace App\Globals;
 
 use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_receive_payment;
+use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_receive_payment_line;
 use Carbon\Carbon;
 use DB;
@@ -121,6 +122,8 @@ class TransactionReceivePayment
         	Tbl_receive_payment::where('rp_id', $rp_id)->update($ins);
 
         	/* INSERT CODE HERE THAT WILL RETURN THE PAYMENT ON THE INVOICE */
+        	Self::return_payment($rp_id);
+
         	Tbl_receive_payment_line::where('rpline_rp_id', $rp_id)->delete();
         	$val = Self::insertline($rp_id, $insert_item);
 
@@ -143,6 +146,21 @@ class TransactionReceivePayment
 		}
 		return $return;
 	}
+	public static function return_payment($rp_id)
+	{
+      	$_inv = Tbl_receive_payment_line::where('rpline_rp_id', $rp_id)->get();
+      	if(count($_inv) > 0)
+      	{
+      		foreach ($_inv as $key => $value) 
+      		{
+      			$inv = Tbl_customer_invoice::where('inv_id', $value->rpline_reference_id)->first();
+      			$up['inv_payment_applied'] = $inv->inv_payment_applied - $value->rpline_amount;
+      			Tbl_customer_invoice::where('inv_id', $value->rpline_reference_id)->update($up);
+    			// Invoice::updateAmountApplied($value->rpline_reference_id);
+    			Invoice::updateIsPaid($value->rpline_reference_id);
+      		}
+      	}
+	}
 	public static function insertline($rcvpayment_id, $insert_item)
 	{
 		foreach ($insert_item as $key => $value) 
@@ -151,17 +169,21 @@ class TransactionReceivePayment
             $insert_line[$key]["rpline_reference_name"]   = $value['rpline_reference_name'];
             $insert_line[$key]["rpline_reference_id"]     = $value['rpline_reference_id'];
             $insert_line[$key]["rpline_amount"]    		  = $value['rpline_amount'];
-
-            if($insert_line[$key]["rpline_reference_name"] == 'invoice')
-            {
-                $ret = Invoice::updateAmountApplied($insert_line[$key]["rpline_reference_id"]);
-            }
 		}
 		$return = null;
 		if(count($insert_line) > 0)
 		{			
 			$return = $rcvpayment_id;
             Tbl_receive_payment_line::insert($insert_line);
+
+
+			foreach ($insert_item as $key => $value) 
+			{   
+	            if($value["rpline_reference_name"] == 'invoice')
+	            {
+	                $ret = Invoice::updateAmountApplied($value["rpline_reference_id"]);
+	            }
+	        }
 		}
 		return $return;
 	}

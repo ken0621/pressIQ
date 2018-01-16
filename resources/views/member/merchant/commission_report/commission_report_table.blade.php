@@ -19,7 +19,7 @@
         <tr>
             <td class="text-center">{{$t->mlm_pin}}</td>
             <td class="text-center">{{$t->mlm_activation}}</td>
-            <td class="text-center">{{$t->record_log_date_updated}}</td>
+            <td class="text-center">{{date("m/d/Y", strtotime($t->record_log_date_updated))}}</td>
             <td class="text-left" style="text-indent: 40px;">{{currency('Php',$t->item_price)}}</td>
             <td class="text-center">{{$t->merchant_commission_percentage}}%</td>
             <td class="text-left" style="text-indent: 40px;">{{currency('Php',$t->item_price*($t->merchant_commission_percentage/100))}}</td>

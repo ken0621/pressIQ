@@ -624,8 +624,8 @@ class MerchantController extends Member
 	{
 		$warehouse_id = $this->current_warehouse->warehouse_id;
 		$data['page'] = 'Commission Report Table';
-		$data['table'] = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('record_source_ref_name','rr')->where('item_in_use','used')->paginate(10);
-		$total = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('item_in_use','used')->sum('item_price');
+		$data['table'] = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('record_source_ref_name','rr')->where('item_in_use','used')->where('tbl_warehouse_inventory_record_log.commission_report',0)->paginate(10);
+		$total = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('item_in_use','used')->where('tbl_warehouse_inventory_record_log.commission_report',0)->sum('item_price');
 		
 		$commission = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id);
 		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->first();
@@ -647,8 +647,8 @@ class MerchantController extends Member
 	{
 		$warehouse_id = $this->current_warehouse->warehouse_id;
 		
-		$data['table'] = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('record_source_ref_name','rr')->where('item_in_use','used')->paginate(10);
-		$total = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('item_in_use','used')->sum('item_price');
+		$data['table'] = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('record_source_ref_name','rr')->where('item_in_use','used')->where('tbl_warehouse_inventory_record_log.commission_report',0)->get();
+		$total = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('item_in_use','used')->where('tbl_warehouse_inventory_record_log.commission_report',0)->sum('item_price');
 		
 		$commission = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id);
 		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->first();
@@ -688,21 +688,23 @@ class MerchantController extends Member
 			// ini_set('memory_limit', '-1');
 			$data = array();
 			$report = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('pin','activation'));
+			// dd($report);
+			$response = 'success';
 			if(isset($report[0]['pin']))
 			{
 				foreach ($report as $r) 
 				{
-					$cell['pin']			= $r['pin'];
-					$cell['activation']		= $r['activation'];
-					if($cell['pin'] != '' && $cell['activation'] != '')
+					if($r['pin'] != '' && $r['activation'] != '')
 					{
-						array_push($data, $cell);
+						$update['commission_report'] = 1;
+						Tbl_warehouse_inventory_record_log::
+						where('mlm_pin',$r['pin'])
+							->where('mlm_activation',$r['activation'])
+							->update($update);
 					}
 				}
-				dd($data);
 			}
-			$response = 'success';
-			if(count($data)<1)
+			else
 			{
 				$response = 'no_data';
 			}

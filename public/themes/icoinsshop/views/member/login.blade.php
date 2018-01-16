@@ -5,25 +5,29 @@
 		<div class="container">
 			<input type="hidden" id="_token" value="{{csrf_token()}}">
 			<div class="register">
-				{{-- <table>
-					<tbody>
-						<tr>
-							<td class="c1">
-								<div class="register-side">
-									<img src="/themes/{{ $shop_theme }}/img/logo-2.png">
-								</div>
-							</td>
-							<td class="c2">
-								@include("member2.include_login")
-							</td>
-						</tr>
-					</tbody>
-				</table> --}}
 				<div class="logo-holder">
 					<img src="/themes/{{ $shop_theme }}/img/logo-2.png" alt="">
 				</div>		
-				<div class="register-form">					
+				<div class="register-form">
+
+					@if (session("error"))
+					    <div class="alert">
+					    	{!! session("error") !!}
+					    </div>
+					@endif
+
+					@if ($errors->any())
+					    <div class="alert">
+					        <ul>
+					            @foreach ($errors->all() as $error)
+					                <li>{{ $error }}</li>
+					            @endforeach
+					        </ul>
+					    </div>
+					@endif
+
 					<form class="autoform" method="post">
+						{{ csrf_field() }}
 						<div class="form-group">
 							<div class="form-input">
 								<div class="register-label">EMAIL</div>

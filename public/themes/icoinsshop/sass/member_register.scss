@@ -12,339 +12,348 @@ body
 	background-color: #ededed;
 }
 
-.register
+.slider-wrapper 
 {
-	font-family: $content-text;
-	letter-spacing: 0.2px;
-	margin: 25px 0;
-	background-color: #fff;
-	table
+	position: relative;
+	width: 100%;
+	background-position: center;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: cover;
+	.register
 	{
-		table-layout: fixed;
-		width: 100%;
-		tr
+		font-family: $content-text;
+		letter-spacing: 0.2px;
+		margin: 25px 0;
+		background-color: #fff;
+		table
 		{
-			@media screen and (max-width: 768px)
-			{
-				width: 100%;
-				display: block;
-			}
-		}
-		td
-		{
-			vertical-align: top;
-			@media screen and (max-width: 768px)
-			{
-				width: 100%;
-				display: block;
-			}
-		}
-		.c1
-		{
-			width: 50%;
-			@media screen and (max-width: 768px)
-			{
-				width: 100%;
-				display: block;
-			}
-		}
-		.c2
-		{
-			width: 50%;
-			@media screen and (max-width: 768px)
-			{
-				width: 100%;
-				display: block;
-			}
-		}
-	}
-	.register-side
-	{
-		img
-		{
+			table-layout: fixed;
 			width: 100%;
-		}
-	}
-	.register-header
-	{
-		padding: 10px 40px;
-		border-bottom: 1px solid #e3e5e8;
-		@media screen and (max-width: 500px)
-		{
-			padding: 15px;
-		}
-		.title
-		{
-			color: $text-dark;
-			font-size: 20px;
-			font-weight: 700;
-			padding: 15px 0;
-			@media screen and (max-width: 581px)
+			tr
 			{
-				text-align: center;
-			}
-		}
-		.or
-		{
-			display: inline-block;
-			vertical-align: middle;
-			margin-right: 30px;
-			@media screen and (max-width: 581px)
-			{
-				display: block;
-				text-align: center;
-				margin-bottom: 25px;
-				margin-right: 0;
-			}
-		}
-		.social-button
-		{
-			display: inline-block;
-			vertical-align: middle;
-			@media screen and (max-width: 581px)
-			{
-				display: block;
-				text-align: center;
-			}
-			.holder
-			{
-				display: inline-block;
-				vertical-align: middle;
-				margin-right: 25px;
-				@media screen and (max-width: 523px)
-				{
-					margin-right: 0;
-				}
-				@media screen and (max-width: 448px)
-				{
-					margin-bottom: 15px;
-					&:last-child
-					{
-						margin-bottom: 0;
-					}
-				}
-				&.fb
-				{
-					background-color: #3c66c4;
-				}
-				&.gp
-				{
-					background-color: #cf4332;
-				}
-				&:last-child
-				{
-					margin-right: 0;
-				}
-				.img
-				{
-					display: inline-block;
-					vertical-align: middle;
-					margin-right: 10px;
-					img
-					{
-						
-					}
-				}
-				.name
-				{
-					display: inline-block;
-					vertical-align: middle;
-					color: #fff;
-					font-size: 12.24px;
-					font-weight: 600;
-					text-align: left;
-					padding: 5px 10px;
-					letter-spacing: 0.5px;
-					margin-top: 3px;
-					.fa
-					{
-						font-size: 22.25px;
-						vertical-align: middle;
-						margin-right: 7.5px;
-					}
-				}
-			}		
-		}
-		.left
-		{
-			@media screen and (min-width: 991px)
-			{
-				float: left;
-			}
-		}
-		.right
-		{
-			@media screen and (min-width: 991px)
-			{
-				float: right;
-			}
-		}
-	}
-	.register-form
-	{
-		padding: 50px;
-		padding-top: 25px;
-		padding-left: 75px;
-		@media screen and (max-width: 500px)
-		{
-			padding: 15px;
-			max-width: 420px;
-			margin: auto;
-		}
-		.form-group
-		{
-			margin-bottom: 25px;
-			&:last-child
-			{
-				margin-bottom: 0;
-			}
-			.register-label
-			{
-				color: $text-dark;
-				font-size: 13px;
-				font-weight: 600;
-			}
-			.radio-inline
-			{
-				color: $text-dark;
-				font-size: 13px;
-				font-weight: 600;
-				margin-right: 25px;
-				input
-				{
-					margin-top: 3px;
-				}
-			}
-			.gender-input
-			{
-				margin-top: 10px; 
-				margin-left: 25px;
 				@media screen and (max-width: 768px)
 				{
-					margin-left: 0;
+					width: 100%;
+					display: block;
 				}
 			}
-			.form-input
+			td
 			{
-				margin-top: 5px;
-				.form-control
-				{
-					border: 0;
-					border-bottom: 1px solid #e0e0e0;
-					box-shadow: none;
-					color: $text-light;
-					font-weight: $regular;
-					font-size: 13px;
-					padding-left: 0;
-					padding-right: 0;
-				}
-			}
-			.date-holder
-			{
-				display: inline-block;
 				vertical-align: top;
-				margin-right: 25px;
-				&:last-child
+				@media screen and (max-width: 768px)
 				{
-					margin-right: 0;
+					width: 100%;
+					display: block;
 				}
 			}
-			.checkbox
+			.c1
 			{
-				text-align: left;
-				label
+				width: 50%;
+				@media screen and (max-width: 768px)
 				{
-					font-size: 13px;
-					color: $text-light;
-					font-weight: $regular;
-				}
-				input
-				{
-					vertical-align: middle;
-					margin-top: 2px;
-				}
-				span
-				{
-					@include transition(0.2s);
-					color: #0466AF;
-
-					&:hover
-					{
-						opacity: 0.8;
-					}
+					width: 100%;
+					display: block;
 				}
 			}
-			.choice
+			.c2
 			{
-				text-align: left;
-				@media screen and (max-width: 991px)
+				width: 50%;
+				@media screen and (max-width: 768px)
+				{
+					width: 100%;
+					display: block;
+				}
+			}
+		}
+		.register-side
+		{
+			img
+			{
+				width: 100%;
+			}
+		}
+		.register-header
+		{
+			padding: 10px 40px;
+			border-bottom: 1px solid #e3e5e8;
+			@media screen and (max-width: 500px)
+			{
+				padding: 15px;
+			}
+			.title
+			{
+				color: $text-dark;
+				font-size: 20px;
+				font-weight: 700;
+				padding: 15px 0;
+				@media screen and (max-width: 581px)
 				{
 					text-align: center;
 				}
-
+			}
+			.or
+			{
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 30px;
+				@media screen and (max-width: 581px)
+				{
+					display: block;
+					text-align: center;
+					margin-bottom: 25px;
+					margin-right: 0;
+				}
+			}
+			.social-button
+			{
+				display: inline-block;
+				vertical-align: middle;
+				@media screen and (max-width: 581px)
+				{
+					display: block;
+					text-align: center;
+				}
 				.holder
 				{
 					display: inline-block;
 					vertical-align: middle;
-					@media screen and (max-width: 991px)
+					margin-right: 25px;
+					@media screen and (max-width: 523px)
 					{
-						display: block;
+						margin-right: 0;
 					}
-					a
+					@media screen and (max-width: 448px)
 					{
-						@include transition(0.2s);
-						/* color: $text-dark !important; */
-						font-weight: $regular;
-						color: #0466AF !important;
-						font-size: 15px !important;
-
-						&:hover
+						margin-bottom: 15px;
+						&:last-child
 						{
-							opacity: 0.8 !important;
+							margin-bottom: 0;
 						}
 					}
-					.btn-custom
+					&.fb
 					{
-						@include transition(0.2s);
-						background-color: #0466AF;
+						background-color: #3c66c4;
+					}
+					&.gp
+					{
+						background-color: #cf4332;
+					}
+					&:last-child
+					{
+						margin-right: 0;
+					}
+					.img
+					{
+						display: inline-block;
+						vertical-align: middle;
+						margin-right: 10px;
+						img
+						{
+							
+						}
+					}
+					.name
+					{
+						display: inline-block;
+						vertical-align: middle;
 						color: #fff;
-
-						@media screen and (max-width: 991px)
+						font-size: 12.24px;
+						font-weight: 600;
+						text-align: left;
+						padding: 5px 10px;
+						letter-spacing: 0.5px;
+						margin-top: 3px;
+						.fa
 						{
-							width: 100%;
-						}
-						&:hover 
-						{
-							opacity: 0.8;
+							font-size: 22.25px;
+							vertical-align: middle;
+							margin-right: 7.5px;
 						}
 					}
-				}
-				.or
+				}		
+			}
+			.left
+			{
+				@media screen and (min-width: 991px)
 				{
-					color: $text-light;
-					font-size: 11px;
-					font-weight: $regular;
-					margin: 15px 15px;
-					@media screen and (max-width: 991px)
-					{
-						display: block;
-					}
+					float: left;
 				}
-				.login-href
+			}
+			.right
+			{
+				@media screen and (min-width: 991px)
 				{
-					@include transition(0.2s);
-					color: #eead0e !important;
-					font-size: 13px;
-					font-weight: 600;
-
-					@media screen and (max-width: 991px)
-					{
-						display: block;
-					}
+					float: right;
 				}
 			}
 		}
-	}	
+		.register-form
+		{
+			padding: 50px;
+			padding-top: 25px;
+			padding-left: 75px;
+			@media screen and (max-width: 500px)
+			{
+				padding: 15px;
+				max-width: 420px;
+				margin: auto;
+			}
+			.form-group
+			{
+				margin-bottom: 25px;
+				&:last-child
+				{
+					margin-bottom: 0;
+				}
+				.register-label
+				{
+					color: $text-dark;
+					font-size: 13px;
+					font-weight: 600;
+				}
+				.radio-inline
+				{
+					color: $text-dark;
+					font-size: 13px;
+					font-weight: 600;
+					margin-right: 25px;
+					input
+					{
+						margin-top: 3px;
+					}
+				}
+				.gender-input
+				{
+					margin-top: 10px; 
+					margin-left: 25px;
+					@media screen and (max-width: 768px)
+					{
+						margin-left: 0;
+					}
+				}
+				.form-input
+				{
+					margin-top: 5px;
+					.form-control
+					{
+						border: 0;
+						border-bottom: 1px solid #e0e0e0;
+						box-shadow: none;
+						color: $text-light;
+						font-weight: $regular;
+						font-size: 13px;
+						padding-left: 0;
+						padding-right: 0;
+					}
+				}
+				.date-holder
+				{
+					display: inline-block;
+					vertical-align: top;
+					margin-right: 25px;
+					&:last-child
+					{
+						margin-right: 0;
+					}
+				}
+				.checkbox
+				{
+					text-align: left;
+					label
+					{
+						font-size: 13px;
+						color: $text-light;
+						font-weight: $regular;
+					}
+					input
+					{
+						vertical-align: middle;
+						margin-top: 2px;
+					}
+					span
+					{
+						@include transition(0.2s);
+						color: #062027;
+
+						&:hover
+						{
+							color: #e1890b;
+						}
+					}
+				}
+				.choice
+				{
+					text-align: left;
+					@media screen and (max-width: 991px)
+					{
+						text-align: center;
+					}
+
+					.holder
+					{
+						display: inline-block;
+						vertical-align: middle;
+						@media screen and (max-width: 991px)
+						{
+							display: block;
+						}
+						a
+						{
+							@include transition(0.2s);
+							/* color: $text-dark !important; */
+							font-weight: $regular;
+							color: #062027 !important;
+							font-size: 15px !important;
+							text-decoration: none;
+
+							&:hover
+							{
+								color: #e1890b !important;
+							}
+						}
+						.btn-custom
+						{
+							@include transition(0.2s);
+							background-color: #062027;
+							color: #fff;
+
+							@media screen and (max-width: 991px)
+							{
+								width: 100%;
+							}
+							&:hover 
+							{
+								background-color: #e1890b;
+								opacity: 0.8;
+							}
+						}
+					}
+					.or
+					{
+						color: $text-light;
+						font-size: 11px;
+						font-weight: $regular;
+						margin: 15px 15px;
+						@media screen and (max-width: 991px)
+						{
+							display: block;
+						}
+					}
+					.login-href
+					{
+						@include transition(0.2s);
+						font-size: 13px;
+						font-weight: 600;
+						@media screen and (max-width: 991px)
+						{
+							display: block;
+						}
+					}
+				}
+			}
+		}	
+	}
 }
 
 .modal-agreement

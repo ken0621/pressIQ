@@ -193,6 +193,7 @@ function estimate_quotation()
 			{
 				$(this).parent().remove();
 				action_reassign_number();
+				action_compute();
 			}
 			else
 			{

@@ -25,6 +25,7 @@
                                 Action <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
+                                <li><a href="/member/transaction/sales_order/create?id={{$so->est_id}}">Edit Sales Order</a></li>
                                 <li><a href="javascript">PRINT</a></li>
                             </ul>
                         </div>

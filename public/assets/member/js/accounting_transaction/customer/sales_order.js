@@ -13,6 +13,7 @@ function sales_order()
 		event_remove_tr();
 		action_compute();
 		action_date_picker();
+		action_reassign_number();
 		event_compute_class_change();
 	}
 	function action_compute()
@@ -215,6 +216,7 @@ function sales_order()
 			{
 				$(this).parent().remove();
 				action_reassign_number();
+				action_compute();
 			}
 			else
 			{

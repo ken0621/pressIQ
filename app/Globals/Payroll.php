@@ -3014,7 +3014,7 @@ class Payroll
 		$status 	= Tbl_payroll_tax_reference::sel($shop_id, 'Status', $payroll_tax_period)->first();
 		$tax_index 	= '';
 		$tax_contribution = 0;
-		
+		// dd($tax);
 		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
 		if($tax != null)
 		{
@@ -3053,12 +3053,6 @@ class Payroll
 			if($rate >= $tax->taxt_sixth_range &&  $rate < $tax->tax_seventh_range)
 			{
 				$tax_index = 'taxt_sixth_range';
-			}
-
-
-			if($rate >= $tax->tax_seventh_range && $rate)
-			{
-				$tax_index = 'tax_seventh_range';
 			}
 
 			// dd($tax_index);

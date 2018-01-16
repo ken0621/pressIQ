@@ -135,9 +135,17 @@ class ShopMemberController extends Shop
                 foreach($_slot as $slot)
                 {
                     // 4 = V.I.P Platinum && 65 = V.I.P Platinum (FS)
-                    if($slot->slot_membership == 4 || $slot->slot_membership == 65)
+                    if($slot->slot_membership == 4 || $slot->slot_membership == 65 || $slot->slot_membership == 3)
                     {
                         $data["travel_and_tours"] = true;
+                        if($slot->slot_membership == 3) 
+                        {
+                            $data['link'] = '#';
+                        }
+                        else
+                        {
+                            $data['link'] = 'http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx';
+                        }
                     }
                 }
             }
@@ -453,7 +461,6 @@ class ShopMemberController extends Shop
       
     }
 
-
     public function send($pr_info)
     {
         $to=explode(",", $pr_info['pr_to']);
@@ -462,7 +469,9 @@ class ShopMemberController extends Shop
         {
             Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
             {
-                $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
+                $from_explode = explode("@", $pr_info["pr_from"]);
+
+                $message->from(isset($from_explode[0]) ? $from_explode[0] . "@press-iq.com" : $pr_info["pr_from"], $pr_info["pr_sender_name"]);
                 $message->to($pr_info["to"]);
             });
         }
@@ -602,32 +611,59 @@ class ShopMemberController extends Shop
 
     public function press_release_analytics()
     {
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://mandrillapp.com/api/1.0/users/info.json?key=cKQiemfNNB-5xm98HhcNzw",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                "cache-control: no-cache",
-                "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
-            ) ,
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err)
+        if (Session::exists('user_email')) 
         {
-            echo "cURL Error #:" . $err;
+            $level=session('pr_user_level');
+            $explode_email = explode("@", Session::get('user_email'));
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://mandrillapp.com/api/1.0/senders/info.json?key=UWTLQzFotM-rRUyOJqlvjw&address=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+                ) ,
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err)
+            {
+                echo "cURL Error #:" . $err;
+            }
+            else
+            {
+                $share_analytics = json_decode($response);
+                Session::put('share_analytics', $share_analytics);
+                $data["page"] = "Analytics";
+                return view("press_user.press_user_analytics",$data);
+            }
         }
         else
         {
-            dd(json_decode($response));
+           return Redirect::to("/"); 
         }
+    }
+
+    /* Tracking Press Release */
+    public function press_release_track_open()
+    {
+        dd(header('Content-Type: image/gif'));
+        //THIS RETURNS THE IMAGE
+        header('Content-Type: image/gif');
+        readfile(public_path() . '/email-tracker/tracking.gif');
+
+        //THIS IS THE SCRIPT FOR THE ACTUAL TRACKING
+        // $date = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
+        // $txt = $date.",". $_SERVER['REMOTE_ADDR'];
+        // $myfile = file_put_contents('log.txt', $txt.PHP_EOL , FILE_APPEND);
+        exit; 
     }
 
     public function press_user_manage_user()
@@ -703,45 +739,7 @@ class ShopMemberController extends Shop
         {   
             return Redirect::to("/"); 
         }
-        // if (request()->isMethod("post"))
-        // { 
-        //     $value["contact_name"]          =request('contact_name');
-        //     $rules["contact_name"]          =['required'];
-        //     $value["country"]               =request('country');
-        //     $rules["country"]               =['required'];
-        //     $value["contact_email"]         =request('contact_email');
-        //     $rules["contact_email"]         =['required','email','unique:tbl_pressiq_media_contacts,contact_email'];
-        //     $value["contact_website"]       =request('contact_website');
-        //     $rules["contact_website"]       =['required'];
-        //     $value["contact_description"]   =request('contact_description');
-        //     $rules["contact_description"]   =['required'];
-        //     $validator = Validator::make($value, $rules);
-
-        //     if ($validator->fails()) 
-        //     {
-        //         return Redirect::to("/pressadmin/mediacontacts")->with('message', $validator->errors()->first())->withInput();
-        //     }
-        //     else
-        //     {
-        //         $contact_info["contact_name"]=request('contact_name');
-        //         $contact_info["country"]=request('country');
-        //         $contact_info["contact_email"]=request('contact_email');
-        //         $contact_info["contact_website"]=request('contact_website');
-        //         $contact_info["contact_description"]=request('contact_description');
-        //         $contact_id = tbl_pressiq_media_contacts::insertGetId($contact_info); 
-        //         $data["page"] = "Press Release - Media Contacts";
-        //         $contacts = DB::table('tbl_pressiq_media_contacts')->get();
-        //         $data["contacts"]=$contacts;
-        //         return view("press_admin.press_admin_media_contacts",$data);                
-        //     }
-        // }
-        // else
-        // {
-        //     $data["page"] = "Press Release - Media Contacts";
-        //     $contacts = DB::table('tbl_pressiq_media_contacts')->get();
-        //     $data["contacts"]=$contacts;
-        //     return view("press_admin.press_admin_media_contacts",$data);
-        // }
+      
     }
     public function manage_user()
     {
@@ -2184,6 +2182,8 @@ class ShopMemberController extends Shop
         unset($insert["b_year"]);
         unset($insert["b_day"]);
 
+        // dd($insert["birthday"]);
+
         if(Customer::register($this->shop_info->shop_id, $insert))
         {
             Self::store_login_session($insert["email"], $raw_password);
@@ -2347,6 +2347,7 @@ class ShopMemberController extends Shop
             $insert_customer["birthday"]    = $birthday;
             $insert_customer["country_id"]  = $request->country_id;
             $insert_customer["updated_at"]  = Carbon::now();
+            $insert_customer['contact']     = $request->contact;
 
             Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
                         ->shop(Self::$customer_info->shop_id)

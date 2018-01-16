@@ -21,6 +21,7 @@
 	    <!-- Custom styles for this template-->
 	    <link href="/assets/employee/css/sb-admin.css" rel="stylesheet">
 	    <link href="/assets/employee/css/employee_profile.css" rel="stylesheet">
+	    <link rel="stylesheet" type="text/css" href="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.css">
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	    <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
 
@@ -171,7 +172,9 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-				<li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+				
+			{{ (new App\Http\Controllers\Member\PayrollEmployee\EmployeeController)->authorized_access($employee_id) }}
+				{{-- <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
 					<a class="nav-link" href="/employee">
 						<i class="fa fa-fw fa-dashboard"></i>
 						<span class="nav-link-text">Dashboard</span>
@@ -218,7 +221,7 @@
 						<i class="fa fa-fw fa-list-alt"></i>
 						<span class="nav-link-text">RFP</span>
 					</a>
-				</li>
+				</li> --}}
 				{{ (new App\Http\Controllers\Member\PayrollEmployee\EmployeeController)->approver_access($employee_id) }}
 				
 			</ul>
@@ -380,7 +383,8 @@
 			<!-- Custom scripts for this page-->
 			<script src="/assets/employee/js/sb-admin-datatables.min.js"></script>
 			<script src="/assets/employee/js/global_function.js"></script>
-
+			<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
+			<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 			@yield('script')
 			@yield('js')
 

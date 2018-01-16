@@ -419,15 +419,27 @@ class PayrollReportController extends Member
 		$data["page"] = "Loan Summary";
 		$data["_loan_data"] = PayrollDeductionController::get_deduction($this->shop_id());
 		$data["_company"] = Payroll::company_heirarchy(Self::shop_id());//Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
-
+		$data['totals']	= $this->get_totals_loan_summary($data);
+		// dd($data['$totals']);
 		return view("member.payrollreport.loan_summary", $data);
 	}
 
-	public function table_loan_summary($deduction_type='')
+	public function table_loan_summary($deduction_type='',$company=0)
 	{
 		$data["page"] = "Loan Summary";
 		$deduction_type = str_replace("_"," ",$deduction_type);
 		$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type);
+		if($company == 0)
+		{
+			$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
+		}
+		else
+		{
+			$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+		}
+		
+		$data['totals']	= $this->get_totals_loan_summary($data);
+
 		return view("member.payrollreport.loan_summary_table", $data);
 	}
 
@@ -435,6 +447,17 @@ class PayrollReportController extends Member
 	{
 		$data['company_id'] = Request::input('company_id');
 		$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$data['company_id'],0)->get();
+
+		if($data['company_id'] == 0)
+		{
+			$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
+		}
+		else
+		{
+			$data['company']	= Tbl_payroll_company::selcompanybyid($data['company_id'])->get();
+		}
+
+		$data['totals']	= $this->get_totals_loan_summary($data);
 
 		return view('member.payrollreport.table_company_loan_summary',$data);
 	}
@@ -448,6 +471,103 @@ class PayrollReportController extends Member
 		return view("member.payroll.modal.modal_loan_summary", $data);
 	}
 
+	public function loan_summary_report_excel($company = 0, $deduction_type='')
+	{
+
+		$data["_loan_data"] = PayrollDeductionController::get_deduction($this->shop_id());
+		$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
+		$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
+
+		if($company != 0 && $deduction_type == 'noval')
+		{
+			$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$company,0)->get();	
+			$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+		}	
+		else if($deduction_type != 'noval')
+		{
+			$deduction_type = str_replace("_"," ",$deduction_type);
+			$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type);
+			if($company == 0)
+			{
+				$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
+			}
+			else
+			{
+				$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+			}
+		}
+		$data['totals']	= $this->get_totals_loan_summary($data);
+
+          Excel::create("Loan Summary Reports",function($excel) use ($data)
+          {
+               $excel->sheet('clients',function($sheet) use ($data)
+               {
+                    $sheet->loadView('member.payrollreport.loan_summary_export_excel',$data);
+               });
+          })->download('xls');
+	}
+
+	public function get_totals_loan_summary($data)
+	{
+		$temp['loan_total'] 		        	 	  = 0;
+		$temp['total_total_payment']        		  = 0;
+		$temp['total_remaining_balance']    		  = 0;
+		$temp['payroll_employee_company_id'] 		  = -1;
+
+		$lastvalue['loan_total'] 		        	 	  = 0;
+		$lastvalue['total_total_payment']        		  = 0;
+		$lastvalue['total_remaining_balance']    		  = 0;
+
+		$totals = array();
+		foreach($data['_loan_data'] as $key => $loan_data)
+		{	
+			if($temp['payroll_employee_company_id'] == -1)
+			{
+				$temp['payroll_employee_company_id']      = $loan_data['payroll_employee_company_id'];
+				$lastvalue['loan_total']          		 += $loan_data['payroll_deduction_amount'];
+				$lastvalue['total_total_payment'] 		 += $loan_data['total_payment'];
+				$lastvalue['total_remaining_balance']	 += $loan_data['payroll_deduction_amount'] - $loan_data['total_payment'];
+			}
+
+			if($temp['payroll_employee_company_id'] == $loan_data['payroll_employee_company_id'])
+			{
+				$temp['loan_total']          		 += $loan_data['payroll_deduction_amount'];
+				$temp['total_total_payment'] 		 += $loan_data['total_payment'];
+				$temp['total_remaining_balance']	 += $loan_data['payroll_deduction_amount'] - $loan_data['total_payment'];
+
+				if($temp['loan_total'] > $lastvalue['loan_total'])
+				{
+					array_pop($totals);
+				}
+
+			}
+			else
+			{
+						$temp['loan_total'] 		        	 	  = 0;
+						$temp['total_total_payment']        		  = 0;
+						$temp['total_remaining_balance']    		  = 0;
+
+						$lastvalue['loan_total'] 		        	 	  = 0;
+						$lastvalue['total_total_payment']        		  = 0;
+						$lastvalue['total_remaining_balance']    		  = 0;
+
+						$temp['loan_total']          		 += $loan_data['payroll_deduction_amount'];
+						$temp['total_total_payment'] 		 += $loan_data['total_payment'];
+						$temp['total_remaining_balance']	 += $loan_data['payroll_deduction_amount'] - $loan_data['total_payment'];
+
+						$lastvalue['loan_total']          		 += $loan_data['payroll_deduction_amount'];
+						$lastvalue['total_total_payment'] 		 += $loan_data['total_payment'];
+						$lastvalue['total_remaining_balance']	 += $loan_data['payroll_deduction_amount'] - $loan_data['total_payment'];
+
+			}
+			$temp['payroll_employee_company_id']  = $loan_data['payroll_employee_company_id'];
+			array_push($totals,$temp);
+		}
+		
+		$data['totals']	= $totals;
+
+		return $data;
+	}
 
 	public function export_loan_summary_report_to_excel($employee_id = 0,$payroll_deduction_id = 0 )
 	{
@@ -533,7 +653,7 @@ class PayrollReportController extends Member
 		// dd(unserialize($data["_employee"][0]["cutoff_input"]));
 		$data = $this->get_total_payroll_register($data);
 		// dd($data);
-		$data['columns'] = Tbl_payroll_register_column::select('*')->get();
+		$data['columns'] = Tbl_payroll_register_column::select('*')->where('shop_id',Self::shop_id())->get();
 
 		return view('member.payrollreport.payroll_register_report_table', $data);
 	}
@@ -541,7 +661,53 @@ class PayrollReportController extends Member
 	public function modal_filter_register_columns($period_company_id)
 	{
 			$data['period_company_id'] = $period_company_id;
-			$data['columns'] = Tbl_payroll_register_column::select('*')->get();
+			$data['columns'] = Tbl_payroll_register_column::select('*')->where('shop_id',Self::shop_id())->get();
+			if(count($data['columns']) == 0)
+			{
+				$insert['name']							= 1;			
+				$insert['gross_basic_pay']				= 1;
+				$insert['absent']						= 1;
+				$insert['late']							= 1;
+				$insert['undertime']					= 1;
+				$insert['basic_pay']					= 1;
+				$insert['cola']							= 1;
+				$insert['overtime_pay']					= 1;
+				$insert['night_differential_pay']		= 1;
+				$insert['regular_holiday_pay']			= 1;
+				$insert['special_holiday_pay']			= 1;
+				$insert['restday_pay']					= 1;
+				$insert['leave_pay']					= 1;
+				$insert['allowance']					= 1;
+				$insert['bonus']						= 1;
+				$insert['commision']					= 1;
+				$insert['incentives']					= 1;
+				$insert['additions']					= 1;
+				$insert['de_minimis_benefit']			= 1;
+				$insert['others']						= 1;
+				$insert['gross_pay']					= 1;
+				$insert['deductions']					= 1;
+				$insert['cash_bond']					= 1;
+				$insert['cash_advance']					= 1;
+				$insert['other_loan']					= 1;
+				$insert['sss_loan']						= 1;
+				$insert['sss_ee']						= 1;
+				$insert['hdmf_loan']					= 1;
+				$insert['hdmf_ee']						= 1;
+				$insert['phic_ee']						= 1;
+				$insert['with_holding_tax']				= 1;
+				$insert['total_deduction']				= 1;
+				$insert['take_home_pay']				= 1;
+				$insert['sss_er']						= 1;
+				$insert['sss_ec']						= 1;
+				$insert['hdmf_er']						= 1;
+				$insert['phic_er']						= 1;
+				$insert['month_13_and_other']			= 1;
+				$insert['rendered_days']				= 1;
+				$insert['shop_id']						= Self::shop_id();
+				Tbl_payroll_register_column::insert($insert);
+			}
+
+			$data['columnn'] = Tbl_payroll_register_column::select('*')->where('shop_id',Self::shop_id())->get();
 			return view('member.payrollreport.modal_filter_register_columns',$data);
 	}
 
@@ -586,6 +752,7 @@ class PayrollReportController extends Member
 			$update['sss_ec']						= 0;
 			$update['hdmf_er']						= 0;
 			$update['phic_er']						= 0;
+
 
 			if(!empty(request::input('name')))
 			{
@@ -744,11 +911,12 @@ class PayrollReportController extends Member
 				$update['phic_er'] = request::input('phic_er');
 			}
 
-	        Tbl_payroll_register_column::where('payroll_register_columns_id', 6)->update($update);
+	        Tbl_payroll_register_column::where('shop_id',Self::shop_id())->update($update);
+  		
+	  		$response['call_function'] = 'reload';
+			$response['status'] = 'success';
 
-	      $return['status'] = 'success';
-	      $return['function_name']      = 'payroll_register_columns.action_register_report_table';
-          return json_encode($return);
+			return $response;
 	}
 
 	public function payroll_register_report_export_excel($period_company_id, $payroll_company_id)

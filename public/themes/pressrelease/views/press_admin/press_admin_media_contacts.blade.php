@@ -104,7 +104,6 @@
                     <div class="title">Company Name: *</div>
                     <input type="text" id="company_name" name="company_name" class="form-control" required>
 
-
                     <div class="title">Country: *</div>
                     <input type="text" id="country" name="country" class="form-control" required>
 

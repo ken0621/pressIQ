@@ -120,11 +120,11 @@ function employee_tag_schedule_leave()
 		var html = '<li class="list-group-item padding-3-10">';
 	  	html 	+= '<div class="checkbox">'
 	  	if (data.remaining_leave==null) {
-	  		html 	+= '<label><input type="checkbox" name="employee_tag[]" class="check-tag" value="'+data.payroll_leave_employee_id_2+'">'+ data.payroll_employee_title_name + ' ' +data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name +'<span class="pull-right">'+ data.leave_cap +'</span></label>';
+	  		html 	+= '<label><input type="checkbox" name="employee_tag[]" class="check-tag" value="'+data.payroll_leave_employee_id_2+'">'+ data.payroll_employee_title_name + ' ' +data.payroll_employee_last_name + ', ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_suffix_name +'<span class="pull-right">'+ data.leave_cap +'</span></label>';
 	  	}
 	  	else
 	  	{
-	  		html 	+= '<label><input type="checkbox" name="employee_tag[]" class="check-tag" value="'+data.payroll_leave_employee_id_2+'">'+ data.payroll_employee_title_name + ' ' +data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name +'<span class="pull-right">'+ data.remaining_leave +'</span></label>';
+	  		html 	+= '<label><input type="checkbox" name="employee_tag[]" class="check-tag" value="'+data.payroll_leave_employee_id_2+'">'+ data.payroll_employee_title_name + ' ' +data.payroll_employee_last_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_suffix_name +'<span class="pull-right">'+ data.remaining_leave +'</span></label>';
 	  	}
 	  	html 	+= '</div></li>';
 	  	return html;

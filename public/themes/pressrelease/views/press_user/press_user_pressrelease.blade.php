@@ -15,7 +15,7 @@
                <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Create New Release</button>
                <button class="tablinks" onclick="openCity(event, 'choose_recipient')" id="">Choose Recipients</button>
                <button class="tablinks" onclick="openCity(event, 'send_release')" id="">Send Release</button>
-               <button class="tablinks" onclick="openCity(event, 'summary')" id="">Summary</button>
+               <!-- <button class="tablinks" onclick="openCity(event, 'summary')" id="">Summary</button> -->
             </div>
            
             <div class="press-release-content">
@@ -182,15 +182,8 @@
                   <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
                   <div class="button-container">
                     <button type="submit" formaction="/pressuser/pressrelease/pr">Send &raquo;</button>
-                    <button type="button" class="tablinks" onclick="openCity(event, 'summary')">View Summary</button>
                   </div>
                 </div>
-
-                <div id="summary" class="tabcontent send-release-container">
-                    <div class="title-container">Summary</div>
-                    <div class="content"></div>
-                </div>
-
               </form>
             </div>
          </div>
@@ -227,6 +220,7 @@
           <div id="preview_boiler_content"></div>
             <div>
               &nbsp; <a href="https://twitter.com/share" class="twitter-share-button" data-url="" data-size="large">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              
               <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Ffacebook/oliverbryan19.com&width=74&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId" width="74" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
             </div>
           <div class="modal-footer">
@@ -235,12 +229,13 @@
       </div>
     </div>
   </div>
-</div>  
+</div>
+
 
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_user_pressrelease.css">
-@endsection
+@endsection 
 @section("script")
 <script>
    function openCity(evt, cityName) 

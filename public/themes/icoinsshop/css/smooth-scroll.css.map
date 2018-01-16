@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAUK,+BACA,CACE,aAAa,CAAE,iBAAiB,CAChC,cAAc,CAAE,GAAG",
+"sources": ["../sass/smooth-scroll.scss"],
+"names": [],
+"file": "smooth-scroll.css"
+}

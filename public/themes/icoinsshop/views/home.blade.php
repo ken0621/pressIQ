@@ -3,49 +3,52 @@
 <div class="content">
 
     <!-- Media Slider -->
-    <div id="home" class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/cover-photo.jpg')">
-        <div class="container fadeMe">
-            <div class="row clearfix">
-                <div class="col-md-6">
-                    <div class="caption-container">
-                        <div class="text-1 wow fadeInDown" data-wow-delay=".2s" data-wow-duration="2s">Where your future digital currencies begin</div>
-                        <div class="text-2 wow fadeInDown" data-wow-delay=".4s" data-wow-duration="2s">Join the community of ICOinssop.com to educate on different ICO’s  and be updated on crypto market trends! </div>
+    <div id="home" class="page-section slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/cover-photo.jpg')">
+        <div class="container">
+            <div class="holder fadeMe">
+                <div class="row clearfix">
+                    <div class="col-md-6">
+                        <div class="caption-container">
+                            <div class="text-1 wow fadeInDown" data-wow-delay=".2s" data-wow-duration="2s">Where your future digital currencies begin</div>
+                            <div class="text-2 wow fadeInDown" data-wow-delay=".4s" data-wow-duration="2s">Join the community of ICOinssop.com to educate on different ICO’s  and be updated on crypto market trends! </div>
+                        </div>
+                        <div class="button-container">
+                            <button class="btn-explore wow fadeInDown" data-wow-delay=".6s" data-wow-duration="2s">JOIN US TODAY</button>
+                        </div>
                     </div>
-                    <div class="button-container">
-                        <button class="btn-explore wow fadeInDown" data-wow-delay=".6s" data-wow-duration="2s">JOIN US TODAY</button>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card wow fadeInRight" data-wow-duration="2s">
-                        <div class="card-content">
-                            <div class="title">
-                                <span>Current Exchange<div class="underline"></div></span>
-                            </div>
-                            <div class="card-holder">
-                                <div class="icon-text-container">
-                                    <img src="/themes/{{ $shop_theme }}/img/card-img.png">
-                                    <span>
-                                        <div class="text-1">KROPS</div>
-                                        <div class="text-2">1 KRO = $0.88</div>
-                                    </span>
+                    <div class="col-md-6">
+                        <div class="card wow fadeInRight" data-wow-duration="2s">
+                            <div class="card-content">
+                                <div class="title">
+                                    <span>Current Exchange<div class="underline"></div></span>
                                 </div>
-                                <div class="border"></div>
-                                <div class="details">
-                                    Krops has the potential of becoming the largest food hub in the world without even owning a single farm.
-                                </div>
-                                <div class="button-container">
-                                    <button class="btn-buy-tokens">BUY TOKENS</button>
+                                <div class="card-holder">
+                                    <div class="icon-text-container">
+                                        <img src="/themes/{{ $shop_theme }}/img/card-img.png">
+                                        <span>
+                                            <div class="text-1">KROPS</div>
+                                            <div class="text-2">1 KRO = $0.88</div>
+                                        </span>
+                                    </div>
+                                    <div class="border"></div>
+                                    <div class="details">
+                                        Krops has the potential of becoming the largest food hub in the world without even owning a single farm.
+                                    </div>
+                                    <div class="button-container">
+                                        <button class="btn-buy-tokens">BUY TOKENS</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="scroll-down"><a href="#about"><img src="/themes/{{ $shop_theme }}/img/arrow-down.png"></a></div>
         </div>
     </div>
 
-    <!-- ABOUT US -->
-    <section class="wrapper-1" style="background-image: url('/themes/{{ $shop_theme }}/img/networkbg.png')">
+    <!-- ABOUT -->
+    <section id="about" class="page-section wrapper-1" style="background-image: url('/themes/{{ $shop_theme }}/img/networkbg.png')">
         <div class="container">
             <div class="wrapper-title wow fadeIn" data-wow-duration="3s"><span>About</span> Us</div>
             <div class="img-holder wow fadeInDown" data-wow-delay=".4s" data-wow-duration="2s">
@@ -73,8 +76,8 @@
     </section> --}}
 
     <!-- MISSION VISION -->
-    <section class="wrapper-2">
-        <div class="unskew" style="background-image: url('/themes/{{ $shop_theme }}/img/missionvision-bg.png')">
+    <section class="page-section wrapper-2">
+        <div id="missionvision" class="unskew" style="background-image: url('/themes/{{ $shop_theme }}/img/missionvision-bg.png')">
             <div class="container">
                 <div class="row clearfix">
                     <div class="col-md-6">
@@ -99,7 +102,7 @@
     </section>
 
     <!-- HOW IT WORKS -->
-    <section class="wrapper-3" style="background-image: url('/themes/{{ $shop_theme }}/img/networkbg.png')">
+    <section id="howitworks" class="page-section wrapper-3" style="background-image: url('/themes/{{ $shop_theme }}/img/networkbg.png')">
         <div class="container">
             <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>How</span> It Works</div>
             <div class="row clearfix">
@@ -121,8 +124,8 @@
     </section>
 
     <!-- PRODUCTS -->
-    <section class="wrapper-4">
-        <div class="container unskew">
+    <section class="page-section wrapper-4">
+        <div id="products" class="container unskew">
             <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>ICO</span> Token Products <div class="underline"></div></div>
             <div class="row clearfix">
                 <div class="col-md-4">
@@ -160,7 +163,7 @@
     </section>
 
     <!-- NEWS AND ANNOUNCEMENTS -->
-    <section class="wrapper-5">
+    <section id="news" class="page-section wrapper-5">
         <div class="container">
             <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> an Announcement</div>
             <div class="row clearfix">
@@ -234,9 +237,9 @@
 $(document).ready(function($) 
 {
     /*TEXT FADEOUT*/
-    $(window).scroll(function(){
-        $(".fadeMe").css("opacity", 1 - $(window).scrollTop() / 250);
-    });
+    // $(window).scroll(function(){
+    //     $(".fadeMe").css("opacity", 1 - $(window).scrollTop() / 250);
+    // });
 });
 </script>
 

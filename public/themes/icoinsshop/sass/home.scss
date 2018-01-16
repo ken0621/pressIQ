@@ -49,148 +49,167 @@ body
 .slider-wrapper 
 {
 	position: relative;
-	//width: 100%;
 	height: 100vh;
 	background-position: center;
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-size: cover;
-	padding: 250px 0 250px 0;
 	font-family: $display-text;
 
-	.caption-container	
+	.holder
 	{
-		.text-1
+		padding: 200px 0 0 0;
+
+		.caption-container	
 		{
-			color: #fff;
-			font-size: 40px;
-			font-weight: 400;
-			padding-top: 10px;
-		}
-
-		.text-2
-		{
-			color: #fff;
-			font-size: 15px;
-			font-weight: 400;
-			padding: 10px 0;
-		}
-	}
-
-	.button-container
-	{
-		padding: 20px 0 20px 0;
-
-		.btn-explore
-		{
-			@include transition(0.3s);
-			background-color: #016f56;
-			color: #fff;
-			border: none;
-			padding: 10px 25px;
-			border-bottom: 4px solid #025c37;
-
-			&:hover
+			.text-1
 			{
-				color: #016f56;
-				background-color: #fff;
-				border-bottom: 4px solid #025c37;
+				color: #fff;
+				font-size: 40px;
+				font-weight: 400;
+				padding-top: 10px;
+			}
+
+			.text-2
+			{
+				color: #fff;
+				font-size: 15px;
+				font-weight: 400;
+				padding: 10px 0;
 			}
 		}
-	}
 
-	.card
-	{
-		background-color: #fff;
-		//padding: 20px;
-		width: 50%;
-		float: right;
-
-		.card-content
+		.button-container
 		{
-			.title	
-			{
-				padding: 20px;
+			padding: 20px 0 20px 0;
 
-				span
+			.btn-explore
+			{
+				@include transition(0.3s);
+				background-color: #016f56;
+				color: #fff;
+				border: none;
+				padding: 10px 25px;
+				border-bottom: 4px solid #025c37;
+
+				&:hover
 				{
-					color: #000;
-					font-weight: 500;
-					font-size: 25px;
-					
-					.underline
-					{
-						border-bottom: 2px solid #016f56;
-						width: 30px;
-					}
+					color: #016f56;
+					background-color: #fff;
+					border-bottom: 4px solid #025c37;
 				}
 			}
+		}
 
-			.card-holder
+		.card
+		{
+			background-color: #fff;
+			//padding: 20px;
+			width: 50%;
+			float: right;
+
+			.card-content
 			{
-				background-color: #f3f3f3;
-				padding: 20px;
-
-				.icon-text-container
+				.title	
 				{
-					display: inline-block;
-					padding: 10px 0 10px 0;
-
-					img
-					{
-						vertical-align: inherit;
-					}
+					padding: 20px;
 
 					span
 					{
-						display: inline-block;
-						padding-left: 5px;
-
-						.text-1
+						color: #000;
+						font-weight: 500;
+						font-size: 25px;
+						
+						.underline
 						{
-							font-size: 15px;
-							font-weight: 400;
-							color: #5f9f0d;
+							border-bottom: 2px solid #016f56;
+							width: 30px;
 						}
-
-						.text-2
-						{
-							color: #1c1c1c;
-							font-family: $content-text;
-							font-size: 20px;
-							font-weight: 700;
-						}
-
 					}
 				}
 
-				.border
+				.card-holder
 				{
-					border-bottom: 1px solid #cfcfcf;
-					margin: 5px 0 10px 0;
-				}
+					background-color: #f3f3f3;
+					padding: 20px;
 
-				.details
-				{
-					color: #585858;
-					font-size: 13px;
-					font-weight: 400;
-				}
-
-				.button-container
-				{
-					padding: 10px 0 10px 0;
-
-					.btn-buy-tokens
+					.icon-text-container
 					{
-						@include transition(0.4s);
-						background-color: #5f9f0d;
-						color: #fff;
-						border: none;
-						border-bottom: 4px solid #53870f;
-						padding: 8px 20px;
+						display: inline-block;
+						padding: 10px 0 10px 0;
+
+						img
+						{
+							vertical-align: inherit;
+						}
+
+						span
+						{
+							display: inline-block;
+							padding-left: 5px;
+
+							.text-1
+							{
+								font-size: 15px;
+								font-weight: 400;
+								color: #5f9f0d;
+							}
+
+							.text-2
+							{
+								color: #1c1c1c;
+								font-family: $content-text;
+								font-size: 20px;
+								font-weight: 700;
+							}
+
+						}
+					}
+
+					.border
+					{
+						border-bottom: 1px solid #cfcfcf;
+						margin: 5px 0 10px 0;
+					}
+
+					.details
+					{
+						color: #585858;
+						font-size: 13px;
+						font-weight: 400;
+					}
+
+					.button-container
+					{
+						padding: 10px 0 10px 0;
+
+						.btn-buy-tokens
+						{
+							@include transition(0.4s);
+							background-color: #5f9f0d;
+							color: #fff;
+							border: none;
+							border-bottom: 4px solid #53870f;
+							padding: 8px 20px;
+						}
 					}
 				}
+			}
+		}
+	}
+
+	.scroll-down
+	{
+		text-align: center;
+		padding-top: 100px;
+
+		a
+		{
+			text-decoration: none;
+
+			img
+			{
+
 			}
 		}
 	}
@@ -200,7 +219,7 @@ body
 // ABOUT US
 .wrapper-1
 {
-	padding: 50px 0;
+	padding: 90px 0 120px 0;
 	text-align: center;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -292,7 +311,7 @@ body
 // HOW IT WORKS
 .wrapper-3
 {
-	padding: 100px 0;
+	padding: 100px 0 120px 0;
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-color: #fff;
@@ -352,11 +371,11 @@ body
 {
 	transform: skewY(4deg);
 	background-color: #e1890b;
-	padding: 50px 0 110px 0;
 
 	.unskew
 	{
 		transform: skewY(-4deg);
+		padding: 90px 0 120px 0;
 
 		.wrapper-title
 		{
@@ -475,7 +494,7 @@ body
 .wrapper-5
 {
 	//background-color: #f2f2f2;
-	padding: 50px 0 100px 0;
+	padding: 90px 0 120px 0;
 
 	.wrapper-title
 	{

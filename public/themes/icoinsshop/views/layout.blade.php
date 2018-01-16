@@ -18,6 +18,7 @@
     <!-- GLOBAL CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css?version=2">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/smooth-scroll.css">
     
     @include("frontend.ghead")
     <!-- OTHER CSS -->
@@ -51,22 +52,45 @@
             <div class="nav-holder">
                 <div class="container">
                     <div class="row-no-padding clearfix">
-                        <div class="col-md-3">
+                        <!--<div class="col-md-3">
                             <div class="image-logo-holder">
                                 <a class="clearfix logo-1" href="/"><img src="/themes/{{ $shop_theme }}/img/icoins-logo.png"></a>
                                 <a class="clearfix logo-2" href="/"><img src="/themes/{{ $shop_theme }}/img/logo-2.png"></a>
                             </div>
                         </div>
                         <div class="col-md-9">
-                            <nav>
+                            <nav class="navigation">
                                 <ul>
-                                    <li><a style="padding-left: 0;" href="/">HOME</a></li>
-                                    <li><a href="javascript:">ABOUT</a></li>
-                                    <li><a href="javascript:">HOW IT WORKS</a></li>
-                                    <li><a href="javascript:">PRODUCTS</a></li>
-                                    <li><a href="javascript:">NEWS AND ANNOUNCEMENT</a></li>
+                                    <li><a class="navigation__link" href="#home">HOME</a></li>
+                                    <li><a class="navigation__link" href="#about">ABOUT</a></li>
+                                    <li><a class="navigation__link" href="#missionvision">MISSION AND VISION</a></li>
+                                    <li><a class="navigation__link" href="#howitworks">HOW IT WORKS</a></li>
+                                    <li><a class="navigation__link" href="#products">PRODUCTS</a></li>
+                                    <li><a class="navigation__link" href="#news">NEWS AND ANNOUNCEMENT</a></li>
                                     @if($customer)
                                         {{-- <li><a class="{{ Request::segment(1) == 'members' ? 'active' : '' }}" href="/members">MY ACCOUNT</a></li> --}}
+                                        <li class="pull-right"><a href="/members/logout"><button class="btn-signin">LOGOUT</button></a></li>
+                                    @else
+                                        <li class="pull-right"><a href="/members/login"><button class="btn-signin">SIGN IN</button></a></li>
+                                    @endif
+                                </ul>
+                            </nav>
+                        </div>-->
+                        <div class="col-md-12">
+                            <div class="image-logo-holder">
+                                <a class="clearfix logo-1" href="/"><img src="/themes/{{ $shop_theme }}/img/icoins-logo.png"></a>
+                                <a class="clearfix logo-2" href="/"><img src="/themes/{{ $shop_theme }}/img/logo-2.png"></a>
+                            </div>
+                            <nav class="navigation">
+                                <ul>
+                                    <li><a class="navigation__link" href="#home">HOME</a></li>
+                                    <li><a class="navigation__link" href="#about">ABOUT</a></li>
+                                    <li><a class="navigation__link" href="#missionvision">MISSION AND VISION</a></li>
+                                    <li><a class="navigation__link" href="#howitworks">HOW IT WORKS</a></li>
+                                    <li><a class="navigation__link" href="#products">PRODUCTS</a></li>
+                                    <li><a class="navigation__link" href="#news">NEWS AND ANNOUNCEMENT</a></li>
+                                    @if($customer)
+                                        {{-- <li><a class="navigation__link {{ Request::segment(1) == 'members' ? 'active' : '' }}" href="/members">MY ACCOUNT</a></li> --}}
                                         <li class="pull-right"><a href="/members/logout"><button class="btn-signin">LOGOUT</button></a></li>
                                     @else
                                         <li class="pull-right"><a href="/members/login"><button class="btn-signin">SIGN IN</button></a></li>
@@ -95,6 +119,7 @@
     @include("frontend.gfoot")
     {{-- GLOBALS --}}
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js?version=2"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/smooth-scroll.js"></script>
     
     <!-- FB WIDGET -->
     <div id="fb-root"></div>

@@ -61,8 +61,8 @@ body
 
 	.active
 	{
-		//color: #ffce00;
-		font-weight: 500;
+		border-bottom: 2px solid #016F56;
+		padding-bottom: 7px;
 	}
 
 	@include transition(0.4s);
@@ -83,8 +83,9 @@ body
 	.image-logo-holder
 	{
 		@include transition(0.4s);
+		display: inline-block;
 
-		width: 60%;
+		//width: 60%;
 		
 		.logo-2
 		{
@@ -93,18 +94,18 @@ body
 
 		img
 		{
-			width: 100%;
+			//width: 100%;
 		}
 	}
 
 	nav
 	{
 		padding: 15px 0 5px 0;
-		margin-left: -50px;
+		// margin-left: -50px;
+		display: inline-block;
 
 		ul
 		{
-
 			li
 			{
 				display: inline-block;
@@ -115,15 +116,15 @@ body
 				{
 					text-decoration: none;
 					color: #fff;
-					padding-left: 50px;
+					padding: 0 15px;
 					vertical-align: middle;
 
 					.btn-signin
 					{
 						border: none;
-						border-bottom: 4px solid #a76200;
-						padding: 0 15px 7px 15px;
-						margin-top: -2;
+						//border-bottom: 4px solid #a76200;
+						//padding: 0 15px 7px 15px;
+						//margin-top: -2;
 						color: #fff;
 						background-color: inherit;
 						vertical-align: middle;
@@ -161,7 +162,7 @@ body
 			.image-logo-holder
 			{
 				@include transition(0.4s);
-				width: 52%;
+				//width: 52%;
 
 				.logo-1
 				{

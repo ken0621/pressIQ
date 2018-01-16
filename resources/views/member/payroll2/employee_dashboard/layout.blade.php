@@ -172,6 +172,7 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+				
 			{{ (new App\Http\Controllers\Member\PayrollEmployee\EmployeeController)->authorized_access($employee_id) }}
 				{{-- <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
 					<a class="nav-link" href="/employee">

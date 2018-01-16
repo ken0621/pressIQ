@@ -1,0 +1,332 @@
+@import "../../../assets/front/sass/mixin";
+
+$display-text: 'Ubuntu', sans-serif;
+$content-text: 'Open Sans', sans-serif;
+
+body
+{
+	background-color: transparent;
+}
+
+/* SLIDER */
+.slider-wrapper 
+{
+	position: relative;
+	//width: 100%;
+	height: 100vh;
+	background-position: center;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: cover;
+	padding: 250px 0 250px 0;
+	font-family: $display-text;
+
+	.caption-container	
+	{
+		.text-1
+		{
+			color: #fff;
+			font-size: 40px;
+			font-weight: 400;
+			padding-top: 10px;
+		}
+
+		.text-2
+		{
+			color: #fff;
+			font-size: 15px;
+			font-weight: 400;
+			padding: 10px 0;
+		}
+	}
+
+	.button-container
+	{
+		padding: 20px 0 20px 0;
+
+		.btn-explore
+		{
+			@include transition(0.3s);
+			background-color: #016f56;
+			color: #fff;
+			border: none;
+			padding: 10px 25px;
+			border-bottom: 4px solid #025c37;
+
+			// &:hover
+			// {
+			// 	color: #fff;
+			// 	border: 1px solid #e1890b;
+			// 	background-color: #e1890b;
+			// }
+		}
+	}
+
+	.card
+	{
+		background-color: #fff;
+		//padding: 20px;
+		width: 50%;
+		float: right;
+
+		.card-content
+		{
+			.title	
+			{
+				padding: 20px;
+
+				span
+				{
+					color: #000;
+					font-weight: 500;
+					font-size: 25px;
+
+					u
+					{
+						text-decoration-color: #016f56;
+					}
+				}
+			}
+
+			.card-holder
+			{
+				background-color: #f3f3f3;
+				padding: 20px;
+
+				.icon-text-container
+				{
+					display: inline-block;
+					padding: 10px 0 10px 0;
+
+					img
+					{
+						vertical-align: inherit;
+					}
+
+					span
+					{
+						display: inline-block;
+						padding-left: 5px;
+
+						.text-1
+						{
+							font-size: 15px;
+							font-weight: 400;
+							color: #5f9f0d;
+						}
+
+						.text-2
+						{
+							color: #1c1c1c;
+							font-family: $content-text;
+							font-size: 20px;
+							font-weight: 700;
+						}
+
+					}
+				}
+
+				.border
+				{
+					border-bottom: 1px solid #cfcfcf;
+					margin: 5px 0 10px 0;
+				}
+
+				.details
+				{
+					color: #585858;
+					font-size: 13px;
+					font-weight: 400;
+				}
+
+				.button-container
+				{
+					padding: 10px 0 10px 0;
+
+					.btn-buy-tokens
+					{
+						@include transition(0.4s);
+						background-color: #5f9f0d;
+						color: #fff;
+						border: none;
+						border-bottom: 4px solid #53870f;
+						padding: 8px 20px;
+					}
+				}
+			}
+		}
+	}
+
+}
+
+// ABOUT US
+.wrapper-1
+{
+	padding: 50px 0;
+	text-align: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-color: #fff;
+
+	.wrapper-title
+	{
+		font-family: $display-text;
+		font-size: 30px;
+		color: #1c1c1c;
+
+		span
+		{
+			color: #e1890b;
+		}
+
+	}
+
+	.img-holder
+	{
+		//width: 50%;
+		margin: auto;
+		padding: 50px 0;
+
+		img
+		{
+			//width: 100%;
+		}
+	}
+
+	.wrapper-texts
+	{
+		font-family: $content-text;
+		font-size: 15px;
+		color: #585858;
+		padding: 0 200px;
+	}
+}
+
+// MISSION VISION
+.wrapper-2
+{
+	transform: skewY(4deg);
+	background-color: #082c22;
+	text-align: center;
+
+	.unskew
+	{
+		transform: skewY(-4deg);
+		background-repeat: no-repeat;
+		background-size: cover;
+	    padding: 110px 0 150px 0;
+
+		.img-holder
+		{
+			margin: auto;
+		}
+
+		.title
+		{
+			font-family: $display-text;
+			color: #df8709;
+			font-size: 24px;
+			font-weight: 400;
+			padding: 20px 0;
+		}
+
+		.texts
+		{	
+			font-family: $content-text;
+			font-size: 15px;
+			font-weight: 400;
+			color: #fff;
+			padding: 0 65px;
+			line-height: 2;
+		}
+	}
+}
+
+// HOW IT WORKS
+.wrapper-3
+{
+	padding: 100px 0;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-color: #fff;
+
+	.wrapper-title
+	{
+		font-family: $display-text;
+		font-size: 30px;
+		color: #1c1c1c;
+		text-align: center;
+		padding-bottom: 80px;
+
+		span
+		{
+			color: #e1890b;
+		}
+
+	}
+
+	.left
+	{
+		.text-header
+		{
+			font-family: $display-text;
+			color: #e1890b;
+			font-size: 24px;
+			font-weight: 400;
+		}
+
+		.text-content
+		{
+			line-height: 2;
+			font-family: $content-text;
+			font-size: 15px;
+			font-weight: 400;
+			color: #585858;
+			padding-top: 10px;
+		}
+	}
+
+	.right
+	{
+		text-align: center;
+
+		.img-holder
+		{
+			img
+			{
+
+			}
+		}
+	}
+}
+
+// PRODUCTS
+.wrapper-4	
+{
+	transform: skewY(4deg);
+	background-color: #e1890b;
+	padding: 20px 0 150px 0;
+
+	.unskew
+	{
+		transform: skewY(-4deg);
+
+		.wrapper-title
+		{
+			font-family: $display-text;
+			font-size: 30px;
+			color: #1c1c1c;
+
+			span
+			{
+				color: #fff;
+				font-weight: 500;
+			}
+		}
+
+		.product-holder
+		{
+			
+		}
+	}
+}

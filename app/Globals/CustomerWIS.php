@@ -131,6 +131,90 @@ class CustomerWIS
 
         return $validate;
     }
+    public static function customer_update_wis($wis_id, $shop_id, $remarks, $ins, $_item = array(), $insert_item = array())
+    {
+        $old = Tbl_customer_wis::where("cust_wis_id", $wis_id);
+
+
+        $validate = null;
+
+        $warehouse_id = $ins['cust_wis_from_warehouse'];
+        // dd($_item);
+
+        if(count($_item) <= 0)
+        {
+            $validate .= "Please Select item.<br>";
+        }
+        if(!$ins['destination_customer_id'])
+        {
+            $validate .= "Please Select customer.<br>";
+        }
+        if(!$validate)
+        {
+            foreach ($_item as $key => $value)
+            {
+                $validate .= CustomerWIS::get_consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
+            }        
+        }
+        
+        /*$check = Tbl_customer_wis::where('transaction_refnum',$ins['transaction_refnum'])->where('cust_wis_shop_id',$shop_id)->first();
+        //die(var_dump($check));
+ 
+        if($check)
+        {
+            $validate .= 'WIS number already exist';
+        }*/
+        if(!$validate)
+        {
+            Tbl_customer_wis::where("cust_wis_id", $wis_id)->update($ins);
+            //die(var_dump($wis_id));
+           
+            //Tbl_customer_wis::insertGetId($ins);
+            $reference_name = 'customer_wis';
+            //Tbl_purchase_order::where("po_id", $po_id)->update($update);
+
+            /* TOTAL */
+            $overall_price = collect($insert_item)->sum('item_amount');
+
+            /* Transaction Journal */
+            $entry["reference_module"]  = 'warehouse-issuance-slip';
+            $entry["reference_id"]      = $wis_id;
+            $entry["name_id"]           = $ins['destination_customer_id'];
+            $entry["total"]             = $overall_price;
+            $entry["vatable"]           = '';
+            $entry["discount"]          = '';
+            $entry["ewt"]               = '';
+
+            Tbl_customer_wis_item_line::where("itemline_wis_id", $wis_id)->delete();
+            //Self::insertLine($po_id, $insert_item);
+
+            $val = Self::insertline($wis_id, $insert_item, $entry);
+            if(is_numeric($val))
+            {
+                $return = Warehouse2::consume_bulk($shop_id, $warehouse_id, $reference_name, $wis_id ,$remarks ,$_item);
+
+                if(!$return)
+                {
+                    $get_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','customer_wis')->where('record_consume_ref_id',$wis_id)->get();
+
+                    $ins_customer_item = null;
+                    foreach ($get_item as $key_item => $value_item)
+                    {
+                        $ins_customer_item[$key_item]['cust_wis_id'] = $wis_id;
+                        $ins_customer_item[$key_item]['cust_wis_record_log_id'] = $value_item->record_log_id;
+                    }
+
+                    if($ins_customer_item)
+                    {
+                        Tbl_customer_wis_item::insert($ins_customer_item);
+                        $validate = $wis_id;
+                    }
+                }                
+            }
+        }
+
+        return $validate;
+    }
     public static function insertline($cust_wis_id, $insert_item, $entry)
     {
         $return = null;

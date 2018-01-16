@@ -59,7 +59,7 @@
 		  	</div>
 		  	<div class="clearfix">
 			  	<div class="pull-right">
-			  		{!! $_codes->render() !!}
+			  		{{ $_codes->render() }}
 			  	</div>
 		  	</div>
 		</div>

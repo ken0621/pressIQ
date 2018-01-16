@@ -2707,8 +2707,8 @@ class ShopMemberController extends Shop
 
         $data['customer_id'] = Self::$customer_info->customer_id;
 
-        $q = $query->where("tbl_transaction.transaction_reference_id",Self::$customer_info->customer_id);
-        $data['_codes'] = $q->where("transaction_reference_table","tbl_customer")->where("item_in_use","unused")->where("item_type_id",5)->where("tbl_transaction.shop_id",$this->shop_info->shop_id)->paginate(10);
+        $q = $query;
+        $data['_codes'] = $q->where("transaction_reference_table","tbl_customer")->where("item_in_use","unused")->where("item_type_id",5)->where("tbl_transaction.shop_id",$this->shop_info->shop_id)->paginate(8);
         return (Self::load_view_for_members("member.code-vault",$data));
     }
     public function getUsecode()

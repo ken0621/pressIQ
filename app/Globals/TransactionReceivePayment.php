@@ -51,6 +51,15 @@ class TransactionReceivePayment
 
 		return $data;
 	}
+
+	public static function info($shop_id, $rp_id)
+	{
+		return Tbl_receive_payment::customer()->where("rp_shop_id", $shop_id)->where("rp_id", $rp_id)->first();
+	}
+	public static function info_item($rp_id)
+	{
+		return Tbl_receive_payment_line::invoice()->where("rpline_rp_id", $rp_id)->get();		
+	}
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);

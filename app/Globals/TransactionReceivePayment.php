@@ -73,6 +73,7 @@ class TransactionReceivePayment
 	        $insert["rp_date"]              = $insert['transaction_date'];
 	        $insert["rp_total_amount"]      = $insert['rp_total_amount'];
 	        $insert["rp_payment_method"]    = $insert['transaction_payment_method'];
+	        $insert["rp_payment_ref_no"]	= $insert['transaction_ref_no'];
 	        $insert["rp_memo"]              = $insert['customer_memo'];
 	        $insert["date_created"]         = Carbon::now();
 
@@ -92,7 +93,49 @@ class TransactionReceivePayment
 
    	        $entry_journal = Accounting::postJournalEntry($entry, $entry_data);
    	        $return = $val;
+		}
+		else
+		{
+			$return = $val;
+		}
+		return $return;
+	}
 
+	public static function postUpdate($rp_id, $shop_id, $insert, $insert_item = array())
+	{
+		$val = AccountingTransaction::customer_validation($insert, $insert_item);
+		if(!$val)
+		{
+			$ins["rp_shop_id"]           = $shop_id;
+	        $ins["rp_customer_id"]       = $insert['customer_id']; 
+	        $ins["transaction_refnum"]   = $insert['transaction_refnum'];
+	        $ins["rp_customer_email"]    = $insert['customer_email'];
+	        $ins["rp_ar_account"]        = $insert['rp_ar_account'];
+	        $ins["rp_date"]              = $insert['transaction_date'];
+	        $ins["rp_total_amount"]      = $insert['rp_total_amount'];
+	        $ins["rp_payment_method"]    = $insert['transaction_payment_method'];
+	        $ins["rp_payment_ref_no"]	= $insert['transaction_ref_no'];
+	        $ins["rp_memo"]              = $insert['customer_memo'];
+	        $ins["date_created"]         = Carbon::now();
+
+        	Tbl_receive_payment::where('rp_id', $rp_id)->update($ins);
+
+        	/* INSERT CODE HERE THAT WILL RETURN THE PAYMENT ON THE INVOICE */
+        	Tbl_receive_payment_line::where('rpline_rp_id', $rp_id)->delete();
+        	$val = Self::insertline($rp_id, $insert_item);
+
+        	/* Transaction Journal */
+	        $entry["reference_module"]      = "receive-payment";
+	        $entry["reference_id"]          = $rp_id;
+	        $entry["name_id"]               = $ins["rp_customer_id"];
+	        $entry["total"]                 = $ins["rp_total_amount"];
+	        $entry_data[0]['account_id']    = $ins["rp_ar_account"];
+	        $entry_data[0]['vatable']       = 0;
+	        $entry_data[0]['discount']      = 0;
+	        $entry_data[0]['entry_amount']  = $ins["rp_total_amount"];
+
+   	        $entry_journal = Accounting::postJournalEntry($entry, $entry_data);
+   	        $return = $val;
 		}
 		else
 		{
@@ -109,9 +152,9 @@ class TransactionReceivePayment
             $insert_line[$key]["rpline_reference_id"]     = $value['rpline_reference_id'];
             $insert_line[$key]["rpline_amount"]    		  = $value['rpline_amount'];
 
-            if($insert_line["rpline_reference_name"] == 'invoice')
+            if($insert_line[$key]["rpline_reference_name"] == 'invoice')
             {
-                $ret = Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                $ret = Invoice::updateAmountApplied($insert_line[$key]["rpline_reference_id"]);
             }
 		}
 		$return = null;

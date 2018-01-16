@@ -100,6 +100,53 @@ class TransactionReceivePaymentController extends Member
 		return json_encode($return);
 	}
 
+	public function postUpdateReceivePayment(Request $request)
+	{
+		$btn_action = $request->button_action;
+		$rp_id = $request->rp_id;
+
+		$insert['transaction_refnum']	 		= $request->transaction_refnumber;
+		$insert['customer_id'] 			 		= $request->customer_id;
+		$insert['customer_email']        		= $request->customer_email;
+		$insert['transaction_payment_method']   = $request->transaction_payment_method;
+		$insert['transaction_ref_no']     		= $request->transaction_ref_no;
+		$insert['rp_ar_account']  				= $request->rp_ar_account;
+		$insert['customer_memo']         	    = $request->customer_memo;
+		$insert['transaction_date']       	    = date("Y-m-d", strtotime($request->transaction_date));
+		$insert['rp_total_amount']				= $request->rp_total_amount;
+
+		$insert_item = null;
+		$txn_line = $request->line_is_checked;
+		if($txn_line)
+		{
+	        foreach($txn_line as $key => $txn)
+	        {
+	            if($txn == 1)
+	            {
+	                $insert_item[$key]["rpline_reference_name"]   = $request->rpline_txn_type[$key];
+	                $insert_item[$key]["rpline_reference_id"]     = $request->rpline_txn_id[$key];
+	                $insert_item[$key]["rpline_amount"] 		  = $request->rpline_amount[$key];
+	            }
+	        }
+		}
+
+        $return = null;
+		$validate = TransactionReceivePayment::postUpdate($rp_id, $this->user_info->shop_id, $insert, $insert_item);
+		if(is_numeric($validate))
+		{
+			$return['status'] = 'success';
+			$return['status_message'] = 'Success updating payment.';
+			$return['call_function'] = 'success_receive_payment';
+			$return['status_redirect'] = AccountingTransaction::get_redirect('receive_payment', $validate ,$btn_action);
+		}
+		else
+		{
+			$return['status'] = 'error';
+			$return['status_message'] = $validate;
+		}
+
+		return json_encode($return);
+	}
 	public function getCountTransaction(Request $request)
 	{
 		$customer_id = $request->customer_id;

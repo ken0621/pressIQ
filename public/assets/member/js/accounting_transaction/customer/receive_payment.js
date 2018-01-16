@@ -258,6 +258,16 @@ function receive_payment()
 
 }
 
+function success_receive_payment(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
+}
+
+
 function submit_done(data)
 {
 	if(data.status == "success" || data.response_status == "success")

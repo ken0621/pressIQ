@@ -161,7 +161,7 @@ class LeaveController extends PayrollMember
 			 $temp['payroll_request_leave_date']			=	Request::input('payroll_request_leave_date');
 			 $temp['payroll_request_leave_date_filed']		=	Request::input('payroll_request_leave_date_filed');
 			 $temp['payroll_request_leave_total_hours']		=	Request::input('payroll_request_leave_total_hours');
-			 $temp['payroll_request_leave_remark']			=	"Used ".Request::input('payroll_request_leave_total_hours')." hours in ".Request::input('payroll_request_leave_type');
+			 $temp['payroll_request_leave_remark']			=	Request::input('remark');
 			 $temp['payroll_request_leave_status']			=	'pending';
 			 $temp['payroll_request_leave_status_level'] 	=    1;
 			 $temp['payroll_request_leave_type']					=	Request::input('payroll_request_leave_type');

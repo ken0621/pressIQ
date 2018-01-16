@@ -66,6 +66,20 @@ class EmployeeController extends PayrollMember
 		}
 	} 
 
+	public static function authorized_access($employee_id)
+	{
+		$shop_id = Tbl_payroll_employee_basic::select('shop_id')->where('payroll_employee_id',$employee_id)->first();
+
+		if($shop_id['shop_id'] == 21)
+		{
+			echo view('member.payroll2.employee_dashboard.authorized_yangming_access');
+		}
+		else
+		{
+			echo view('member.payroll2.employee_dashboard.authorized_all_access_menu');
+		}
+	}
+
 	public function employee()
 	{
 		$data['page']	= 'Dashboard';
@@ -365,6 +379,7 @@ class EmployeeController extends PayrollMember
 		$data['page']	= 'Authorized Access Official Business';
 		return view('member.payroll2.employee_dashboard.authorized_access_official_business',$data);
 	}
+	
 	public function authorized_access_approver()
 	{
 		$data['page']	= 'Authorized Access Approver';
@@ -382,6 +397,9 @@ class EmployeeController extends PayrollMember
 
 		$data['page']				= 'Time Keeping';
 		$data['period_record'] 		= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->get();
+
+		$data['access_timekeeping'] = Self::employee_shop_id();
+
 		// dd($data['period_record']);
 		return view('member.payroll2.employee_dashboard.employee_time_keeping',$data);
 	}

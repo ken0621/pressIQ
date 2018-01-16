@@ -11,6 +11,7 @@ function sales_receipt()
 		action_load_initialize_select();
 		event_click_last_row();
 		event_remove_tr();
+		action_date_picker();
 		action_compute();
 		event_compute_class_change();
 	}
@@ -320,7 +321,7 @@ function sales_receipt()
 
 	function action_date_picker()
 	{
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm/dd/yy', });
 	}
 
 	function action_reassign_number()

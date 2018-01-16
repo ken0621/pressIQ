@@ -12,6 +12,7 @@ function sales_order()
 		event_click_last_row();
 		event_remove_tr();
 		action_compute();
+		action_date_picker();
 		event_compute_class_change();
 	}
 	function action_compute()
@@ -277,7 +278,7 @@ function sales_order()
 
 	function action_date_picker()
 	{
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm/dd/yy', });
 	}
 
 	function action_reassign_number()

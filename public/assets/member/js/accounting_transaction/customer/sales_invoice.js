@@ -14,6 +14,7 @@ function sales_invoice()
 		action_compute();
 		event_compute_class_change();
 		action_reassign_number();
+		action_date_picker();
 		event_load_open_transaction();
 	}
 	function event_load_open_transaction()
@@ -329,7 +330,7 @@ function sales_invoice()
 
 	function action_date_picker()
 	{
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm/dd/yy', });
 	}
 
 	function action_reassign_number()

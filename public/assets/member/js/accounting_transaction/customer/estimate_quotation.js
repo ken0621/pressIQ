@@ -10,8 +10,10 @@ function estimate_quotation()
 	{
 		action_load_initialize_select();
 		event_click_last_row();
+		action_reassign_number();
 		event_remove_tr();
 		action_compute();
+		action_date_picker();
 		event_compute_class_change();
 	}
 	function action_compute()
@@ -254,7 +256,7 @@ function estimate_quotation()
 
 	function action_date_picker()
 	{
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm/dd/yy', });
 	}
 
 	function action_reassign_number()

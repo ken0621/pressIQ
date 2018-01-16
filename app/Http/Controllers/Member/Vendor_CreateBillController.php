@@ -94,7 +94,7 @@ class Vendor_CreateBillController extends Member
             $data["_vendor"]    = Vendor::getAllVendor('active');
             $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
             $data['_item']      = Item::get_all_category_item();
-            $data['_account']   = Accounting::getAllAccount();
+            $data['_account']   = Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
             $data['_um']        = UnitMeasurement::load_um_multi();
             $data['action']     = "/member/vendor/create_bill/add";
             $data['vendor_id']     = Request::input("vendor_id");
@@ -107,6 +107,7 @@ class Vendor_CreateBillController extends Member
                $data["bill"] = Tbl_bill::where("bill_id",$id)->first();
                $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["bill"]->bill_vendor_id)->where("po_is_billed",0)->get();
                $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
+               $data["_bill_account_line"] = Tbl_bill_account_line::where("accline_bill_id",$id)->get();
 
                $type = "bill";
                if($data["bill"]->inventory_only == 1)
@@ -118,7 +119,6 @@ class Vendor_CreateBillController extends Member
                     $data["_bill_item_line"][$key]->serial_number = ItemSerial::get_serial($type,$id,$value->itemline_item_id);
                }
                $data['_item']      = Item::get_all_category_item();
-               $data['_account']   = Accounting::getAllAccount();
                $data['action']     = "/member/vendor/create_bill/update";
             }
             
@@ -178,7 +178,24 @@ class Vendor_CreateBillController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('itemline_item_id');
 
+        $_accountline                       = Request::input('expense_account');
+        $_accountamount                     = Request::input('account_amount');
+        $_accountdesc                       = Request::input('account_desc');
+
         $ctr_items = 0;
+
+        $account_info = null;
+        foreach ($_accountline as $key_acct => $value_acct) 
+        {
+            if($value_acct && $_accountamount[$key_acct] != 0)
+            {
+                $ctr_items++;
+                $account_info[$key_acct]['account_id']      = $value_acct;
+                $account_info[$key_acct]['account_amount']  = str_replace(",","",$_accountamount[$key_acct]);
+                $account_info[$key_acct]['account_desc']    = $_accountdesc[$key_acct];
+            }
+        }
+
         $item_refill = [];
         $item_serial = [];
         foreach($_itemline as $key => $item_line)
@@ -286,7 +303,7 @@ class Vendor_CreateBillController extends Member
             // <-- end bundle
             if($ctr_items != 0)
             {
-                $bill_id = Billing::postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
+                $bill_id = Billing::postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info, $account_info);
                 if(count(Session::get("po_item")) > 0)
                 {
                     Billing::insertPotoBill($bill_id, Session::get("po_item"));
@@ -328,7 +345,7 @@ class Vendor_CreateBillController extends Member
             else
             {
                 $json["status"] = "error";
-                $json["status_message"] = "Please insert Item.";
+                $json["status_message"] = "Please insert Item or Expense Account.";
             }
         }
 
@@ -363,7 +380,24 @@ class Vendor_CreateBillController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('itemline_item_id');
 
+
+        $_accountline                       = Request::input('expense_account');
+        $_accountamount                     = Request::input('account_amount');
+        $_accountdesc                       = Request::input('account_desc');
+
         $ctr_items = 0;
+        $account_info = null;
+        foreach ($_accountline as $key_acct => $value_acct) 
+        {
+            if($value_acct && $_accountamount[$key_acct] != 0)
+            {
+                $ctr_items++;
+                $account_info[$key_acct]['account_id']      = $value_acct;
+                $account_info[$key_acct]['account_amount']  = str_replace(",","",$_accountamount[$key_acct]);
+                $account_info[$key_acct]['account_desc']    = $_accountdesc[$key_acct];
+            }
+        }
+
         $item_refill = [];
         $item_serial = [];
         foreach($_itemline as $key => $item_line)
@@ -469,7 +503,7 @@ class Vendor_CreateBillController extends Member
         {            
             if($ctr_items != 0)
             {
-                $bill_id = Billing::updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
+                $bill_id = Billing::updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info, $account_info);
 
                 if(count(Request::input("itemline_ref_id")) > 0)
                 {
@@ -519,7 +553,7 @@ class Vendor_CreateBillController extends Member
             else
             {
                 $json["status"] = "error";
-                $json["status_message"] = "Please insert Item.";            
+                $json["status_message"] = "Please insert Item or Expense Account.";            
             }
         }
 

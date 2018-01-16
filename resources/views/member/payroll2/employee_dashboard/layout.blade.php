@@ -21,6 +21,7 @@
 	    <!-- Custom styles for this template-->
 	    <link href="/assets/employee/css/sb-admin.css" rel="stylesheet">
 	    <link href="/assets/employee/css/employee_profile.css" rel="stylesheet">
+	    <link rel="stylesheet" type="text/css" href="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.css">
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	    <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
 
@@ -380,7 +381,8 @@
 			<!-- Custom scripts for this page-->
 			<script src="/assets/employee/js/sb-admin-datatables.min.js"></script>
 			<script src="/assets/employee/js/global_function.js"></script>
-
+			<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
+			<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 			@yield('script')
 			@yield('js')
 

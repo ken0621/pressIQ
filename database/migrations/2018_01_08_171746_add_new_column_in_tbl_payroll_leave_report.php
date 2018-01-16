@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnPayrollRegister13 extends Migration
+class AddNewColumnInTblPayrollLeaveReport extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,9 @@ class AddColumnPayrollRegister13 extends Migration
     public function up()
     {
         //
-                   Schema::table('tbl_payroll_leave_report', function (Blueprint $table) {
-            //  
-                             $table->tinyInteger('month_13_and_other');
+                Schema::table('tbl_payroll_leave_report', function (Blueprint $table) {
+                $table->decimal('payroll_leave_temp_hours', 4, 2);
+                $table->text('payroll_leave_temp_name');
         });
     }
 

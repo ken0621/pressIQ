@@ -6,9 +6,9 @@ function employee_leave_management()
 
 	function init()
 	{
-		ajax_load_pending_leave()
 		ajax_load_approved_leave()
 		ajax_load_rejected_leave()
+		ajax_load_canceled_leave()
 
 		$(document).ready(function()
 		{
@@ -19,40 +19,13 @@ function employee_leave_management()
 
 	function document_ready()
 	{
-		ajax_all_load_leave();
+		ajax_load_pending_leave();
 	}
 
-	function ajax_all_load_leave()
-	{
-		$(".tbl-tag").html('<tr><td colspan="7" class="text-center">'+misc('spinner') + '</td></tr>');
-		$.ajax({
-			url 	: 	"/leave/ajax_load_leave",
-			type 	: 	"POST",
-			data 	: 	{
-				_token:misc('_token')
-			},
-			success : 	function(result)
-			{
-				result = JSON.parse(result);
-				var html = "";
-				$(result).each(function(index, emp)
-				{			
-					 html += tbl_tag(emp);
-				});
-				$(".tbl-tag").html(html);
-			},
-			error 	: 	function(err)
-			{
-				error_function();
-			}
-		});
-	}
 
 	function ajax_load_pending_leave()
 	{
-		$(".pending").on("click", function(e)
-		{
-			$(".tbl-tag").html('<tr><td colspan="7" class="text-center">'+misc('spinner') + '</td></tr>');
+			$(".tbl-tag").html('<tr><td colspan="8" class="text-center">'+misc('spinner') + '</td></tr>');
 			$.ajax({
 				url 	: 	"/leave/ajax_load_pending_leave",
 				type 	: 	"POST",
@@ -63,25 +36,33 @@ function employee_leave_management()
 				{
 					result = JSON.parse(result);
 					var html = "";
-					$(result).each(function(index, emp)
-					{			
-						 html += tbl_tag(emp);
-					});
-					$(".tbl-tag").html(html);
+					
+					if(result.length > 0)
+					{
+						$(result).each(function(index, emp)
+						{			
+							 html += tbl_tag(emp);
+						});
+						$(".tbl-tag").html(html);
+					}
+					else
+					{
+					 	html += tbl_tag_2();
+						$(".tbl-tag").html(html);
+					}
 				},
 				error 	: 	function(err)
 				{
 					error_function();
 				}
 			});
-		});
 	}
 
 	function ajax_load_approved_leave()
 	{
 		$(".approved").on("click", function(e)
 		{
-			$(".tbl-tag").html('<tr><td colspan="7" class="text-center">'+misc('spinner') + '</td></tr>');
+			$(".tbl-tag").html('<tr><td colspan="8" class="text-center">'+misc('spinner') + '</td></tr>');
 			$.ajax({
 				url 	: 	"/leave/ajax_load_approved_leave",
 				type 	: 	"POST",
@@ -92,11 +73,21 @@ function employee_leave_management()
 				{
 					result = JSON.parse(result);
 					var html = "";
-					$(result).each(function(index, emp)
-					{			
-						 html += tbl_tag(emp);
-					});
-					$(".tbl-tag").html(html);
+					
+					if(result.length > 0)
+					{
+						$(result).each(function(index, emp)
+						{			
+							 html += tbl_tag(emp);
+						});
+						$(".tbl-tag").html(html);
+					}
+					else
+					{
+					 	html += tbl_tag_2();
+						$(".tbl-tag").html(html);
+					}
+
 				},
 				error 	: 	function(err)
 				{
@@ -110,7 +101,7 @@ function employee_leave_management()
 	{
 		$(".rejected").on("click", function(e)
 		{
-			$(".tbl-tag").html('<tr><td colspan="7" class="text-center">'+misc('spinner') + '</td></tr>');
+			$(".tbl-tag").html('<tr><td colspan="8" class="text-center">'+misc('spinner') + '</td></tr>');
 			$.ajax({
 				url 	: 	"/leave/ajax_load_rejected_leave",
 				type 	: 	"POST",
@@ -121,11 +112,22 @@ function employee_leave_management()
 				{
 					result = JSON.parse(result);
 					var html = "";
-					$(result).each(function(index, emp)
-					{			
-						 html += tbl_tag(emp);
-					});
-					$(".tbl-tag").html(html);
+
+					if(result.length > 0)
+					{
+						$(result).each(function(index, emp)
+						{			
+							 html += tbl_tag(emp);
+						});
+						$(".tbl-tag").html(html);
+					}
+					else
+					{
+					 	html += tbl_tag_2();
+						$(".tbl-tag").html(html);
+					}
+		
+			
 				},
 				error 	: 	function(err)
 				{
@@ -135,9 +137,49 @@ function employee_leave_management()
 		});
 	}
 
-	$(".all").on("click", function(e)
+	function ajax_load_canceled_leave()
 	{
-		ajax_all_load_leave();
+		$(".canceled").on("click", function(e)
+		{
+			$(".tbl-tag").html('<tr><td colspan="8" class="text-center">'+misc('spinner') + '</td></tr>');
+			$.ajax({
+				url 	: 	"/leave/ajax_load_canceled_leave",
+				type 	: 	"POST",
+				data 	: 	{
+					_token:misc('_token')
+				},
+				success : 	function(result)
+				{
+					result = JSON.parse(result);
+					var html = "";
+
+					if(result.length > 0)
+					{
+						$(result).each(function(index, emp)
+						{			
+							 html += tbl_tag(emp);
+						});
+						$(".tbl-tag").html(html);
+					}
+					else
+					{
+					 	html += tbl_tag_2();
+						$(".tbl-tag").html(html);
+					}
+		
+			
+				},
+				error 	: 	function(err)
+				{
+					error_function();
+				}
+			});
+		});
+	}
+
+	$(".pending").on("click", function(e)
+	{
+		ajax_load_pending_leave();
 	});
 
 	function error_function()
@@ -147,17 +189,34 @@ function employee_leave_management()
 
 	function tbl_tag(data)
 	{
+
 		var html = '<tr class="text-center">';
-		html += '<td>'+data.payroll_leave_name+'</td>';
-		html += '<td>'+data.leave_hours+'</td>';
-		html += '<td>'+data.date_filed+'</td>';
-		html += '<td>'+data.payroll_schedule_leave+'</td>';
-		html += '<td>'+data.payroll_employee_display_name_approver+'</td>';
-		html += '<td>'+data.payroll_employee_display_name_reliever+'</td>';
-		html += '<td>'+data.status+'</td>';
+		html += '<td>'+data.payroll_request_leave_date_filed+'</td>';
+		html += '<td>'+data.payroll_request_leave_type+'</td>';
+		html += '<td>'+data.payroll_request_leave_date+'</td>';
+		html += '<td>'+data.payroll_request_leave_total_hours+'</td>';
+		html += '<td>'+data.payroll_employee_display_name+'</td>';
+		html += '<td>'+data.payroll_request_leave_status+'</td>';
+		html += '<td>'+data.payroll_request_leave_status_level+'</td>';
+		html += '<td><div class="dropdown">';
+		html += '<button class="btn btn-link dropdown-toggle" type="button" id="menu-drop-down" data-toggle="dropdown" style="font-size:12px;">Action';
+		html += '<span class="caret"></span></button>';
+		html += '<ul class="dropdown-menu" role="menu" aria-labelledby="menu-drop-down">';
+		html += '<li style="padding-left: 10px;" role="presentation" class="popup" link="/employee_request_leave_view/'+data.payroll_request_leave_id+'" size="lg"><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-search" aria-hidden="true"></i> &nbsp; View</a></li>';
+		html += '<li style="padding-left: 10px;" role="presentation" class="popup" link="/employee_request_leave_cancel/'+data.payroll_request_leave_id+'" size="sm"><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-ban" aria-hidden="true"></i> &nbsp; Cancel</a></li>';
+		html += '</ul></div></td>';
 		html += '</tr>';
 
 		return html;
+	}
+
+	function tbl_tag_2()
+	{
+			var html = '<tr class="text-center">';
+			html += '<td colspan="8"><h2 style="margin: 50px; text-align: center;">No Data</h2></td>';
+			html += '</tr>';
+
+			return html;
 	}
 
 	function misc(str){

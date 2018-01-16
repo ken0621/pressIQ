@@ -4101,7 +4101,8 @@ class Payroll2
 		// dd($tax_reference);
 		if($tax_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
 		{
-			$tax = Payroll::tax_contribution($shop_id, $tax_declared, $employee->payroll_employee_tax_status, $payroll_period_category);	
+
+			$tax = Payroll::tax_contribution($shop_id, $tax_declared, $employee->payroll_employee_tax_status, "Monthly");	
 			$tax_description = payroll_currency($tax_declared) . " declared TAX Salary (" . $employee->payroll_employee_tax_status . ")";
 
 			if($tax_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD

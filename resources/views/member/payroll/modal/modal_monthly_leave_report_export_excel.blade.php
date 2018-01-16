@@ -6,7 +6,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center wa">Leave Name</th> 
-                                <th class="text-center wa">Employee Code</th>
+                                <th class="text-center wa">Employee Number</th>
                                 <th class="text-center empname">Employee Name</th>
                                 <th class="text-center wa">Date of Leave</th>
                                 <th class="text-center wa">Leave Credits</th>

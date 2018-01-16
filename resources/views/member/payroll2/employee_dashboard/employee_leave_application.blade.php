@@ -88,6 +88,13 @@
 				</div>
         </div>
         <br>
+       	<div class="row">
+	        <div class="col-sm-12">
+	        <small>Remarks</small>
+	        	<textarea class="form-control" rows="4" name="remark" placeholder="Type Remarks" required></textarea>
+	        </div>
+	    </div>
+        <br>
 
 	    <div class="row">
 	    	<div class="col-sm-12">

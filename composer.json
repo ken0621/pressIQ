@@ -25,7 +25,8 @@
         "mpdf/mpdf": "^6.1",
         "msurguy/honeypot": "dev-master",
         "netshell/paypal": "dev-master",
-        "niklasravnsborg/laravel-pdf": "^1.5"
+        "niklasravnsborg/laravel-pdf": "^1.5",
+        "sentry/sentry-laravel": "^0.8.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

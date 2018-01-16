@@ -1020,6 +1020,15 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']        = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']     = "Everyone";
 
+
+        $code = "access-level";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']         = "Access level";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']          = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']           = $path . $page . "/payroll_admin_dashboard/access_level";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']        = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']     = "Everyone";
+
     /* PAYROLL Biometric */
     $code = "payroll-biometric";
     $nav[$page]['submenu'][$code]['label'] = "Payroll Biometric";

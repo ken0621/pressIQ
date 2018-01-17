@@ -8,43 +8,6 @@ body
 	background-color: transparent;
 }
 
-.parallax {
-  height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-perspective: 1px;
-  perspective: 1px;
-}
-
-.parallax__layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: -17px;
-  bottom: 0;
-}
-
-.parallax__layer--base {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-}
-
-.parallax__layer--back {
-  -webkit-transform: translateZ(-1px) scale(2);
-  transform: translateZ(-1px) scale(2);
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.absolute-position {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  color: #000;
-}
-
 /* SLIDER */
 .slider-wrapper 
 {
@@ -56,9 +19,14 @@ body
 	background-size: cover;
 	font-family: $display-text;
 
+	display: -webkit-flex; /* Safari */
+    -webkit-align-items: center; /* Safari 7.0+ */
+    display: flex;
+    align-items: center;
+
 	.holder
 	{
-		padding: 200px 0 0 0;
+		//padding: 200px 0 0 0;
 
 		.caption-container	
 		{
@@ -200,8 +168,14 @@ body
 
 	.scroll-down
 	{
-		text-align: center;
-		padding-top: 100px;
+
+		position: absolute;
+		left: 50%;
+	    right: 50%;
+	    top: 93%;
+
+		//text-align: center;
+		//padding-top: 100px;
 
 		a
 		{

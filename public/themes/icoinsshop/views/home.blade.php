@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div>
-            <div class="scroll-down"><a href="#about"><img src="/themes/{{ $shop_theme }}/img/arrow-down.png"></a></div>
+            <div class="scroll-down wow fadeInDown" data-wow-delay=".8s" data-wow-duration="2s"><a href="#about"><img src="/themes/{{ $shop_theme }}/img/arrow-down.png"></a></div>
         </div>
     </div>
 
@@ -57,23 +57,6 @@
             <div class="wrapper-texts wow fadeInDown" data-wow-delay=".6s" data-wow-duration="1s">ICOins Shop is a privately owned marketing company, introducing and educating the people on different ICO’s to start an opportunity for everyone on the future generation of digital currencies.</div>
         </div>
     </section>
-
-    <!-- ABOUT US PARALLAX-->
-{{--     <section class="parallax wrapper-1" >
-        <div class="container">
-            <div class="parallax__layer parallax__layer--back" style="background-image: url('/themes/{{ $shop_theme }}/img/networkbg.png')">
-            </div>
-            <div class="parallax__layer parallax__layer--base">
-                <div class="absolute-position">
-                    <div class="wrapper-title"><span>About</span> Us</div>
-                    <div class="img-holder">
-                        <img src="/themes/{{ $shop_theme }}/img/aboutus-img-1.png">
-                    </div>
-                    <div class="wrapper-texts">ICOins Shop is a privately owned marketing company, introducing and educating the people on different ICO’s to start an opportunity for everyone on the future generation of digital currencies.</div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
 
     <!-- MISSION VISION -->
     <section class="page-section wrapper-2">
@@ -237,9 +220,9 @@
 $(document).ready(function($) 
 {
     /*TEXT FADEOUT*/
-    // $(window).scroll(function(){
-    //     $(".fadeMe").css("opacity", 1 - $(window).scrollTop() / 250);
-    // });
+    $(window).scroll(function(){
+        $(".fadeMe, .scroll-down").css("opacity", 1 - $(window).scrollTop() / 250);
+    });
 });
 </script>
 

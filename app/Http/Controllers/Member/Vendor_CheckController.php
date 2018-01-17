@@ -135,6 +135,7 @@ class Vendor_CheckController extends Member
             }
         }
 
+        $item_refill = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -160,7 +161,6 @@ class Vendor_CheckController extends Member
             }
         }
 
-        $item_refill = [];
         // --> for bundles
         foreach ($_itemline as $keyitem => $value_item) 
         {

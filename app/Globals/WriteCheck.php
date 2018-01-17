@@ -241,10 +241,7 @@ class WriteCheck
         $entry["discount"]          = '';
         $entry["ewt"]               = '';
 
-        /*Tbl_write_check_line::where("wcline_wc_id", $wc_id)->delete();
-
-        WriteCheck::insert_wc_line($wc_id, $item_info, $entry);*/
-
+        Tbl_write_check_line::where("wcline_wc_id", $wc_id)->delete();
         Tbl_write_check_account_line::where("accline_wc_id", $wc_id)->delete();
         WriteCheck::insert_wc_line($wc_id, $item_info, $entry, $account_info);
 

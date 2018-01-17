@@ -3,11 +3,11 @@
 	<h4 class="modal-title">{{$page}}</h4>
 </div>
 <div class="modal-body clearfix">
+	<div class="slot-holder">
 	@foreach($slots as $slot)
-		<div class="slot-holder">
-			<div class="slot-no-style"><span>{{$slot->slot_no}}</span></div>
-		</div>
+		<div class="slot-no-style"><span>{{$slot->slot_no}}</span></div>
 	@endforeach
+	</div>
 </div>
 <div class="modal-footer">
 	<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>

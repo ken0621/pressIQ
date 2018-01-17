@@ -102,7 +102,7 @@
 			</div>
 
 
-			<div class="col-md-6">
+			{{-- <div class="col-md-6">
 
 				<div class="square-container">
 					<div class="title">Binary Points</div>
@@ -129,7 +129,43 @@
 	                    </div>
 					</div>
 				</div>
+			</div> --}}
+
+			<div class="col-md-6">
+				<div class="square-container">
+					<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+					<div class="sub-container">
+						<div class="chart-legend">
+							@foreach($_wallet_plan as $plan)
+								<div class="holder">
+
+									<div class="color"></div>
+
+									<div class="name"><span>{{ $plan->label }}</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+
+								</div>
+							@endforeach
+							@if(count($_wallet_plan)<1)
+								<div class="holder">
+
+									<div class="color"></div>
+
+									<div class="name"><span>Unilevel</span> <div class="name w2hpx">PHP 0.00</div></div>
+
+								</div>
+								<div class="holder">
+
+									<div class="color"></div>
+
+									<div class="name"><span>Direct Pass Up</span> <div class="name w2hpx">PHP 0.00</div></div>
+
+								</div>
+							@endif
+						</div>
+					</div>
+				</div>
 			</div>
+
 		</div>
 
 		<div class="row clearfix">

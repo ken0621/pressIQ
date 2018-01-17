@@ -1,7 +1,7 @@
 @extends("layout")
 
 @section("content")
-<div class="content">
+{{-- <div class="content">
 	<div class="container">
 	<!-- TOP CONTENT -->
 		<div class="row clearfix">
@@ -185,9 +185,9 @@
 	</div>	
 	<!-- SCROLL TO TOP -->
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
-</div>
+</div> --}}
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product.css">
+{{-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product.css"> --}}
 @endsection

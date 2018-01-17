@@ -220,7 +220,7 @@
 						<span class="nav-link-text">RFP</span>
 					</a>
 				</li>
-				
+
 				{{ (new App\Http\Controllers\Member\PayrollEmployee\EmployeeController)->approver_access($employee_id) }}
 				
 			</ul>

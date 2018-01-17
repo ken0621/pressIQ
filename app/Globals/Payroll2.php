@@ -24,6 +24,7 @@ use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_pagibig;
 use App\Models\Tbl_payroll_holiday_company;
+use App\Models\Tbl_payroll_holiday_employee;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_period;
@@ -935,8 +936,10 @@ class Payroll2
 		$day_type	= 'not_holiday';
 		// $day_type["holiday_name"]	= '';
 		$company_id	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_company_id');
-		$holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
 
+		// $holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
+		$holiday	= Tbl_payroll_holiday_employee::getholidayv2($employee_id, $date)->first();
+		
 		if($holiday != null)
 		{
 			$day_type = strtolower($holiday->payroll_holiday_category);

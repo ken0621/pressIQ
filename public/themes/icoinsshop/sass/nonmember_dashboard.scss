@@ -319,7 +319,7 @@ $text-dark: #272c2f;
 		{
 			@include transition(0.2s);
 			color: #fff;
-			background-color: #02295E;
+			background-color: #e1890b;
 			padding: 12px 25px;
 			border: none;
 			border-radius: 2px;
@@ -344,7 +344,7 @@ $text-dark: #272c2f;
 		
 		.modal-header
 		{
-			background-color: #02295E;
+			background-color: #e1890b;
 
 			.close
 			{
@@ -370,7 +370,7 @@ $text-dark: #272c2f;
 				margin-bottom: 27px;
 				font-size: 13px !important;
 				letter-spacing: 0.3px;
-				color: #02295E !important;
+				color: #e1890b !important;
 			}
 			.value-set
 			{
@@ -408,9 +408,9 @@ $text-dark: #272c2f;
 				.btn-proceed-1
 				{
 					color: #fff;
-					background-color: #02295E;
+					background-color: #e1890b;
 					padding: 12px 40px;
-					border: 2px solid #02295E;
+					border: 2px solid #e1890b;
 					border-radius: 2px;
 				}
 			}
@@ -476,7 +476,7 @@ $text-dark: #272c2f;
 				width: 100%;
 				font-size: 16px;
 				border: none;
-				border: 1px solid #02295E;
+				border: 1px solid #e1890b;
 				margin: 5px 0px;
 				margin-bottom: 15px;
 				padding: 5px;
@@ -496,7 +496,7 @@ $text-dark: #272c2f;
 				{
 					@include transition(0.2s);
 					color: #fff;
-					background-color: #02295E;
+					background-color: #e1890b;
 					padding: 10px 40px;
 					border-radius: 2px;
 					border: 0px !important;

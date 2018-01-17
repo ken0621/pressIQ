@@ -13,7 +13,7 @@
                             <div class="text-2 wow fadeInDown" data-wow-delay=".4s" data-wow-duration="2s">Join the community of ICOinssop.com to educate on different ICO’s  and be updated on crypto market trends! </div>
                         </div>
                         <div class="button-container">
-                            <button class="btn-explore wow fadeInDown" data-wow-delay=".6s" data-wow-duration="2s">JOIN US TODAY</button>
+                            <a href="/members/register"><button class="btn-join wow fadeInDown" data-wow-delay=".6s" data-wow-duration="2s">JOIN US TODAY</button></a>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div>
-            <div class="scroll-down wow fadeInDown" data-wow-delay=".8s" data-wow-duration="2s"><a href="#about"><img src="/themes/{{ $shop_theme }}/img/arrow-down.png"></a></div>
+            <div class="scroll-down wow fadeInDown" data-wow-delay=".8s" data-wow-duration="2s"><a class="navigation__link" href="#about"><img src="/themes/{{ $shop_theme }}/img/arrow-down.png"></a></div>
         </div>
     </div>
 

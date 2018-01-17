@@ -1,8 +1,10 @@
 @import "../../../assets/front/sass/mixin";
 
+//ALL MODAL DESIGNS AND BUTTONS FOR MEMBERS AREA
 .modal-title
 {
 	//font-weight: 700;
+	line-height: 1;
 
 	strong
 	{
@@ -89,7 +91,6 @@
 	}
 }
 
-
 .btn-custom-primary
 {
 	background-color: #e1890b;
@@ -106,6 +107,7 @@
 		opacity: 0.8;
 	}
 }
+//END MODAL AND BUTTON DESIGNS
 
 .member
 {

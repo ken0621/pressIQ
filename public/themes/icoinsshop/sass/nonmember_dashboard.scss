@@ -370,7 +370,7 @@ $text-dark: #272c2f;
 				margin-bottom: 27px;
 				font-size: 13px !important;
 				letter-spacing: 0.3px;
-				color: #e1890b !important;
+				color: #e62d2d !important;
 			}
 			.value-set
 			{
@@ -503,11 +503,11 @@ $text-dark: #272c2f;
 				  	width: 100%;
 				  	margin-top: 20px;
 				  	text-transform: uppercase;
-				}
 
-				.btn-proceed-2:hover
-				{
-					opacity: 0.9;
+				  	&:hover
+				  	{
+				  		opacity: 0.8;
+				  	}
 				}
 			}
 		}

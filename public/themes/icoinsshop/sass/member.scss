@@ -84,7 +84,7 @@ $content-text: 'Open Sans', sans-serif;
 .btn-custom-white
 {
 	@include transition(0.3s);
-	background-color: rgba(230,45,45,0.8) !important;
+	background-color: rgba(230,25,25,0.8) !important;
 	color: #fff;
 	//opacity: 0.8;
 
@@ -98,7 +98,7 @@ $content-text: 'Open Sans', sans-serif;
 .btn-danger-custom
 {
 	@include transition(0.3s);
-	background-color: rgba(230,45,45,0.8);
+	background-color: rgba(230,25,25,0.8);
 	color: #fff;
 
 	&:hover
@@ -111,7 +111,7 @@ $content-text: 'Open Sans', sans-serif;
 .btn-ico-custom
 {
 	@include transition(0.3s);
-	background-color: #149B78;
+	background-color: #016F56;
 	color: #fff;
 
 	&:hover

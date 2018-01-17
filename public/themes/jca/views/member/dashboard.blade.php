@@ -3,8 +3,9 @@
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
+@if(isset($not_placed_slot->slot_id))
 <input type="hidden" name="not_placed_yet" class="not_placed_yet" value="{{ $not_placed_yet or 0 }}" link="/members/enter-placement?slot_no={{ Crypt::encrypt($not_placed_slot->slot_id) }}&key={{ md5($not_placed_slot->slot_id . $not_placed_slot->slot_no) }}">
-
+@endif
 @if(!$mlm_member)
 	<div class="dashboard">
 	    <div class="dashboard-top">

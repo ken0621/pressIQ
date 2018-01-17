@@ -1793,22 +1793,33 @@ class ShopMemberController extends Shop
         $json["message"] = "";
 
         /* UPDATE  METHOD */
-        foreach(request("airline") as $key => $value)
+        if (request("customer_payout_method") == "airline") 
         {
-            $slot_info = Tbl_mlm_slot::where("slot_no", $value)->where("shop_id", $this->shop_info->shop_id)->first();
-
-            if ($slot_info) 
+            if (request("airline")) 
             {
-                if ($customer) 
+                foreach(request("airline") as $key => $value)
                 {
-                    $airline_result = AbsMain::update_info($customer->customer_id, $slot_info->slot_id, request("tour_wallet_account_id")[$key], $this->shop_info->shop_id); 
-                    
-                    if ($airline_result["status"] != 1) 
+                    $slot_info = Tbl_mlm_slot::where("slot_no", $value)->where("shop_id", $this->shop_info->shop_id)->first();
+
+                    if ($slot_info) 
                     {
-                        $json["status"] = "error";
-                        $json["message"] = "Your Airline Ticketing Account ID is incorrect.";
+                        if ($customer) 
+                        {
+                            $airline_result = AbsMain::update_info($customer->customer_id, $slot_info->slot_id, request("tour_wallet_account_id")[$key], $this->shop_info->shop_id); 
+                            
+                            if ($airline_result["status"] != 1) 
+                            {
+                                $json["status"] = "error";
+                                $json["message"] = "Your Airline Ticketing Account ID is incorrect.";
+                            }
+                        }
                     }
                 }
+            }
+            else
+            {
+                $json["status"] = "error";
+                $json["message"] = "Your Airline Ticketing Account ID Field is empty.";
             }
         }
 

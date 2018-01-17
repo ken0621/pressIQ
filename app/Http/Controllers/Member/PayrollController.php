@@ -4216,6 +4216,7 @@ class PayrollController extends Member
 
            $employee_id = Tbl_payroll_leave_employeev2::select('payroll_employee_id')->getemployeeid($month[1],Self::shop_id())->get();
 
+   // $empdata = Tbl_payroll_leave_schedulev2::join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id', '=', 'tbl_payroll_leave_employee_v2.payroll_leave_employee_id')->join("tbl_payroll_employee_basic","tbl_payroll_leave_employee_v2.payroll_employee_id","=","tbl_payroll_employee_basic.payroll_employee_id")->select(DB::raw('*, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours -  tbl_payroll_leave_schedulev2.consume) as remaining_leave'))->whereMonth('payroll_schedule_leave',$month[1])->where('tbl_payroll_leave_schedulev2.shop_id', $shop_id)->get();
           $leavedata = array();                                               
           foreach($employee_id as $key => $emp_id)
           {
@@ -4795,7 +4796,7 @@ class PayrollController extends Member
 
           Session::put('employee_leave_tag', array());
 
-          return view('member.payroll.modal.modal_schedule_employee_leavev2', $data);
+     return view('member.payroll.modal.modal_schedule_employee_leavev2', $data);
      }
 
      public function ajax_schedule_leave_tag_employeev2()

@@ -15,10 +15,9 @@
  			    	<small>Type of Leave</small>
 					<select class="form-control user-error" name="payroll_request_leave_type" aria-invalid="true" required>
 						<option value="">Select Leave Type</option>
-						<option value="SL">Sick Leave</option>
-						<option value="VL">Vacation Leave</option>
-						<option value="ML">Maternity Leave</option>
-						<option value="PL">Paternity Leave</option>
+					@foreach($leave_type as $leave)
+		    		<option value="{{ $leave->payroll_leave_temp_id }}"> {{ $leave->payroll_leave_temp_name }} </option>
+		    		@endforeach
 					</select>
 					<label>Status of Leave</label>
 		  		</div>
@@ -87,6 +86,13 @@
 			      	<input class="form-control payroll_schedule_leave_end" type="date" class="form-control" name="payroll_request_leave_date_end" disabled="">
 				</div>
         </div>
+        <br>
+       	<div class="row">
+	        <div class="col-sm-12">
+	        <small>Remarks</small>
+	        	<textarea class="form-control" rows="4" name="remark" placeholder="Type Remarks" required></textarea>
+	        </div>
+	    </div>
         <br>
 
 	    <div class="row">

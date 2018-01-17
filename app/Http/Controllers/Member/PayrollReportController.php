@@ -653,7 +653,7 @@ class PayrollReportController extends Member
 		// dd(unserialize($data["_employee"][0]["cutoff_input"]));
 		$data = $this->get_total_payroll_register($data);
 		// dd($data);
-		$data['columns'] = Tbl_payroll_register_column::select('*')->get();
+		$data['columns'] = Tbl_payroll_register_column::select('*')->where('shop_id',Self::shop_id())->get();
 
 		return view('member.payrollreport.payroll_register_report_table', $data);
 	}
@@ -661,7 +661,53 @@ class PayrollReportController extends Member
 	public function modal_filter_register_columns($period_company_id)
 	{
 			$data['period_company_id'] = $period_company_id;
-			$data['columns'] = Tbl_payroll_register_column::select('*')->get();
+			$data['columns'] = Tbl_payroll_register_column::select('*')->where('shop_id',Self::shop_id())->get();
+			if(count($data['columns']) == 0)
+			{
+				$insert['name']							= 1;			
+				$insert['gross_basic_pay']				= 1;
+				$insert['absent']						= 1;
+				$insert['late']							= 1;
+				$insert['undertime']					= 1;
+				$insert['basic_pay']					= 1;
+				$insert['cola']							= 1;
+				$insert['overtime_pay']					= 1;
+				$insert['night_differential_pay']		= 1;
+				$insert['regular_holiday_pay']			= 1;
+				$insert['special_holiday_pay']			= 1;
+				$insert['restday_pay']					= 1;
+				$insert['leave_pay']					= 1;
+				$insert['allowance']					= 1;
+				$insert['bonus']						= 1;
+				$insert['commision']					= 1;
+				$insert['incentives']					= 1;
+				$insert['additions']					= 1;
+				$insert['de_minimis_benefit']			= 1;
+				$insert['others']						= 1;
+				$insert['gross_pay']					= 1;
+				$insert['deductions']					= 1;
+				$insert['cash_bond']					= 1;
+				$insert['cash_advance']					= 1;
+				$insert['other_loan']					= 1;
+				$insert['sss_loan']						= 1;
+				$insert['sss_ee']						= 1;
+				$insert['hdmf_loan']					= 1;
+				$insert['hdmf_ee']						= 1;
+				$insert['phic_ee']						= 1;
+				$insert['with_holding_tax']				= 1;
+				$insert['total_deduction']				= 1;
+				$insert['take_home_pay']				= 1;
+				$insert['sss_er']						= 1;
+				$insert['sss_ec']						= 1;
+				$insert['hdmf_er']						= 1;
+				$insert['phic_er']						= 1;
+				$insert['month_13_and_other']			= 1;
+				$insert['rendered_days']				= 1;
+				$insert['shop_id']						= Self::shop_id();
+				Tbl_payroll_register_column::insert($insert);
+			}
+
+			$data['columnn'] = Tbl_payroll_register_column::select('*')->where('shop_id',Self::shop_id())->get();
 			return view('member.payrollreport.modal_filter_register_columns',$data);
 	}
 
@@ -706,6 +752,7 @@ class PayrollReportController extends Member
 			$update['sss_ec']						= 0;
 			$update['hdmf_er']						= 0;
 			$update['phic_er']						= 0;
+
 
 			if(!empty(request::input('name')))
 			{
@@ -864,7 +911,7 @@ class PayrollReportController extends Member
 				$update['phic_er'] = request::input('phic_er');
 			}
 
-	        Tbl_payroll_register_column::where('payroll_register_columns_id', 1)->update($update);
+	        Tbl_payroll_register_column::where('shop_id',Self::shop_id())->update($update);
   		
 	  		$response['call_function'] = 'reload';
 			$response['status'] = 'success';

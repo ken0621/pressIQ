@@ -2577,19 +2577,26 @@ class ShopMemberController extends Shop
     }
     public function getGenealogy(Request $request)
     {
-        $data["page"] = "Genealogy";
-        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
-        $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
-        $data['slot_no'] = 0;
-        $data['mode'] = 'sponsor';
-        
-        if($slot)
+        if (isset(Self::$customer_info->customer_id)) 
         {
-            $data['slot_no'] = $slot->slot_no;
-            $data['mode'] = $request->mode;
-        }
+            $data["page"] = "Genealogy";
+            $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+            $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
+            $data['slot_no'] = 0;
+            $data['mode'] = 'sponsor';
+            
+            if($slot)
+            {
+                $data['slot_no'] = $slot->slot_no;
+                $data['mode'] = $request->mode;
+            }
 
-        return (Self::load_view_for_members("member.genealogy", $data));
+            return (Self::load_view_for_members("member.genealogy", $data));
+        }
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
     public function getGenealogyTree(Request $request)
     {

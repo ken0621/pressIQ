@@ -163,7 +163,7 @@
 										@if($direct->distributed == 1)
 											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-ico-custom"><i class="fa fa-star"></i> VIEW INFO</button>
 										@else
-											<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+											<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger-custom"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 										@endif
 									</div>
 								</div>
@@ -347,86 +347,6 @@ $(document).ready(function()
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 30px white inset;
 }
-/* PLACEMENT VERIFIER */
-.popup-verify-placement {
-  /*background-color: #EEEEEE;*/
-  font-family: "Arimo", sans-serif; }
-  .popup-verify-placement .modal-sm {
-    width: 100%;
-    max-width: 500px; }
-  .popup-verify-placement .modal-content {
-    /*background-color: #eee;*/ }
-    .popup-verify-placement .modal-content .modal-header {
-      background-color: #e1890b;
-      /*border-top-left-radius: 3px;
-      border-top-right-radius: 3px;*/ }
-      .popup-verify-placement .modal-content .modal-header .close {
-        color: #FFF; }
-      .popup-verify-placement .modal-content .modal-header .modal-title {
-        font-weight: 600;
-        color: #FFF;
-        font-size: 15px; }
-    .popup-verify-placement .modal-content .modal-body {
-      font-weight: 600;
-      margin: 0px 20px 0px 20px; }
-      .popup-verify-placement .modal-content .modal-body .message {
-        text-align: center;
-        margin-bottom: 10px;
-        color: red;
-        font-size: 14px;
-        text-transform: uppercase; }
-      .popup-verify-placement .modal-content .modal-body .input {
-        width: 100%;
-        font-size: 16px;
-        border: none;
-        border: 1px solid #e1890b;
-        margin: 5px 0px;
-        margin-bottom: 15px;
-        padding: 5px;
-        border-radius: 2px; }
-      .popup-verify-placement .modal-content .modal-body label {
-        font-size: 13px;
-        text-align: center !important;
-        margin: 10px 0px;
-        padding: 10px; }
-      .popup-verify-placement .modal-content .modal-body .labeld {
-        color: #e1890b;
-        text-align: center;
-        text-transform: uppercase; }
-      .popup-verify-placement .modal-content .modal-body select {
-        width: 100%;
-        font-size: 16px;
-        border: none;
-        border: 1px solid #e1890b;
-        margin: 5px 0px;
-        margin-bottom: 15px;
-        padding: 5px;
-        border-radius: 2px; }
-      .popup-verify-placement .modal-content .modal-body .btn-container {
-        text-align: center;
-        font-family: "Arimo", sans-serif;
-        font-weight: 600;
-        font-size: 14px;
-        text-transform: uppercase;
-        padding-bottom: 20px; }
-        .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement {
-          color: #fff;
-          background-color: #e1890b;
-          padding: 10px 40px;
-          border: 2px solid #e1890b;
-          border-radius: 2px;
-          opacity: 0.9;
-          -webkit-transition: all 0.2s ease-in-out;
-          -moz-transition: all 0.2s ease-in-out;
-          -o-transition: all 0.2s ease-in-out;
-          transition: all 0.2s ease-in-out;
-          width: 100%;
-          margin-top: 20px;
-          text-transform: uppercase; }
-        .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement:hover {
-          color: #fff;
-          background-color: #e1890b;
-          opacity: 1.0; }
 
 </style>
 @endsection

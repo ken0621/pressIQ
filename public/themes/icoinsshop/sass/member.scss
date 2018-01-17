@@ -2,7 +2,7 @@
 
 .modal-title
 {
-	font-weight: 700;
+	//font-weight: 700;
 
 	strong
 	{
@@ -63,10 +63,23 @@
 	}
 }
 
+.btn-danger-custom
+{
+	@include transition(0.3s);
+	background-color: rgba(230,45,45,0.8);
+	color: #fff;
+
+	&:hover
+	{
+		opacity: .8;
+		color: #fff;
+	}
+}
+
 .btn-ico-custom
 {
 	@include transition(0.3s);
-	background-color: #016F56;
+	background-color: #149B78;
 	color: #fff;
 
 	&:hover
@@ -75,6 +88,7 @@
 		color: #fff;
 	}
 }
+
 
 .btn-custom-primary
 {

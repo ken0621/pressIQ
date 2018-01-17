@@ -792,13 +792,13 @@ class Warehouse2
 
         return $validate_consume;
     } 
-    public static function consume_bulk_src_ref($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item, $ref_name = '', $ref_id = 0)
+    public static function consume_bulk_src_ref($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item, $ref_src_name = '', $ref_src_id = 0)
     {
         $validate = null;
         foreach ($_item as $key => $value)
         {
             $serial = isset($value['serial']) ? $value['serial'] : null;
-            $validate .= Warehouse2::consume_validation_ref_num($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+            $validate .= Warehouse2::consume_validation_ref_num($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial, $ref_src_name, $ref_src_id);
         }
         if(!$validate)
         {
@@ -816,7 +816,7 @@ class Warehouse2
         return $validate;
 
     }
-    public static function consume_validation_ref_num($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array())
+    public static function consume_validation_ref_num($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array(), $ref_src_name = '', $ref_src_id = 0)
     {
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();

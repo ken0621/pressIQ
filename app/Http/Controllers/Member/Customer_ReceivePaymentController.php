@@ -347,7 +347,7 @@ class Customer_ReceivePaymentController extends Member
                 $json["status"]         = "success";
                 $json["rcvpayment_id"]  = $rcvpayment_id;
                 $json["message"]        = "Successfully updated payment";
-                $json["url"]            = "/member/customer/receive_payment?id=".$rcvpayment_id;
+                //$json["url"]            = "/member/customer/receive_payment?id=".$rcvpayment_id;
                 
                 if($button_action == "save-and-new")
                 {

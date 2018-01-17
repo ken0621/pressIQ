@@ -299,7 +299,7 @@ class Vendor_ReceiveInventoryController extends Member
                     $warehouse_id       = $this->current_warehouse->warehouse_id;
                     $transaction_type   = "receive_inventory";
                     $transaction_id     = $bill_id;
-                    $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array',null,$item_serial);
+                    $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array', null, $item_serial);
                 }
 
                 $json["status"]         = "success-receive-inventory";

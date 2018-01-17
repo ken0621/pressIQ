@@ -132,8 +132,8 @@ class Vendor_PayBillController extends Member
 
         if($ctr_bill != 0)
         {
-            /*if(Request::input('paybill_ap_id') != '')
-            {*/
+            if(Request::input('paybill_ap_id') != '')
+            {
                 $pb_data["paybill_ap_id"] = Request::input('paybill_ap_id');
 
                 $paybill_id  = BillPayment::postPaybill($pb_data, $pbline_data);
@@ -164,12 +164,12 @@ class Vendor_PayBillController extends Member
                 {
                     $json["redirect"]   = "/member/vendor/print_paybill?id=".$paybill_id;
                 } 
-            /*}
+            }
             else
             {
                 $json["status"]         = "error";
                 $json["message"]        = "Please Select Account";
-            }  */         
+            }           
         }
         else
         {
@@ -209,40 +209,48 @@ class Vendor_PayBillController extends Member
 
         if($ctr_bill != 0)
         {
-            BillPayment::updatePaybill($paybill_id, $pb_data, $pbline_data);
-
-            $new_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
-            AuditTrail::record_logs("Edited","bill_payment",$paybill_id,serialize($old_data),serialize($new_data));
-
-
-            $button_action = Request::input('button_action');
-
-            $json["status"]         = "success";
-            $json["bill_id"]        = $paybill_id;
-            $json["message"]        = "Successfully updated Pay Bills";
-            /*$json["redirect"]            = "/member/vendor/paybill?id=".$paybill_id;
-            
-            if($button_action == "save-and-new")
+            if(Request::input('paybill_ap_id') != '')
             {
-                $json["redirect"]   = '/member/vendor/paybill';
-            }*/
+                BillPayment::updatePaybill($paybill_id, $pb_data, $pbline_data);
 
-            if($button_action == "save-and-close")    
+                $new_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
+                AuditTrail::record_logs("Edited","bill_payment",$paybill_id,serialize($old_data),serialize($new_data));
+
+
+                $button_action = Request::input('button_action');
+
+                $json["status"]         = "success";
+                $json["bill_id"]        = $paybill_id;
+                $json["message"]        = "Successfully updated Pay Bills";
+                /*$json["redirect"]            = "/member/vendor/paybill?id=".$paybill_id;
+                
+                if($button_action == "save-and-new")
                 {
-                    $json["redirect"]   = "/member/vendor/paybill/list";
-                }
-                elseif($button_action == "save-and-edit")
-                {
-                    $json["redirect"]   = "/member/vendor/paybill?id=".$paybill_id;
-                }
-                elseif($button_action == "save-and-new") 
-                {
-                    $json["redirect"]   = "/member/vendor/paybill";
-                } 
-                elseif($button_action == "save-and-print") 
-                {
-                    $json["redirect"]   = "/member/vendor/print_paybill?id=".$paybill_id;
-                } 
+                    $json["redirect"]   = '/member/vendor/paybill';
+                }*/
+
+                if($button_action == "save-and-close")    
+                    {
+                        $json["redirect"]   = "/member/vendor/paybill/list";
+                    }
+                    elseif($button_action == "save-and-edit")
+                    {
+                        $json["redirect"]   = "/member/vendor/paybill?id=".$paybill_id;
+                    }
+                    elseif($button_action == "save-and-new") 
+                    {
+                        $json["redirect"]   = "/member/vendor/paybill";
+                    } 
+                    elseif($button_action == "save-and-print") 
+                    {
+                        $json["redirect"]   = "/member/vendor/print_paybill?id=".$paybill_id;
+                    } 
+            }
+            else
+            {
+                $json["status"]         = "error";
+                $json["message"]        = "Please Select Account";
+            }
         }
         else
         {

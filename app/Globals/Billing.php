@@ -142,13 +142,26 @@ class Billing
             $entry["total"]             = $insert['bill_total_amount'];
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
-            $entry["ewt"]               = '';            
+            $entry["ewt"]               = ''; 
+
+            $transaction_bill = "bill";
         }
-        $transaction_bill = "bill";
+
+        
         if($bill_info['inventory_only'] != 0)
         {
+            $entry["reference_module"]  = "receive-inventory";
+            $entry["reference_id"]      = $bill_id;
+            $entry["name_id"]           = $vendor_info['bill_vendor_id'];
+            $entry["total"]             = $insert['bill_total_amount'];
+            $entry["vatable"]           = '';
+            $entry["discount"]          = '';
+            $entry["ewt"]               = ''; 
+
             $transaction_bill = "receive_inventory";
         }
+
+        //die(var_dump($transaction_bill));
 
         Billing::insert_bill_line($bill_id, $item_info, $entry, $account_info);
 
@@ -254,20 +267,32 @@ class Billing
         Tbl_bill::where("bill_id", $bill_id)->update($update);
 
         /* Transaction Journal */
-        $entry["reference_module"]  = "bill";
-        $entry["reference_id"]      = $bill_id;
-        $entry["name_id"]           = $vendor_info['bill_vendor_id'];
-        $entry["total"]             = $update['bill_total_amount'];
-        $entry["vatable"]           = '';
-        $entry["discount"]          = '';
-        $entry["ewt"]               = '';
+        if($bill_info['inventory_only'] == 0)
+        {
+            $entry["reference_module"]  = "bill";
+            $entry["reference_id"]      = $bill_id;
+            $entry["name_id"]           = $vendor_info['bill_vendor_id'];
+            $entry["total"]             = $update['bill_total_amount'];
+            $entry["vatable"]           = '';
+            $entry["discount"]          = '';
+            $entry["ewt"]               = '';
 
-
-        $transaction_bill = "bill";
+            $transaction_bill = "bill";
+        }     
+            
         if($bill_info['inventory_only'] != 0)
         {
+            $entry["reference_module"]  = "receive-inventory";
+            $entry["reference_id"]      = $bill_id;
+            $entry["name_id"]           = $vendor_info['bill_vendor_id'];
+            $entry["total"]             = $update['bill_total_amount'];
+            $entry["vatable"]           = '';
+            $entry["discount"]          = '';
+            $entry["ewt"]               = '';
+
             $transaction_bill = "receive_inventory";
         }
+        
         $new = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
         AuditTrail::record_logs("Edited",$transaction_bill,$bill_id,serialize($old),serialize($new));
 

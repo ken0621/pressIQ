@@ -97,7 +97,7 @@ class Tbl_item extends Model
                      })
                      ->groupBy("item_id");
     } 
-    public function scopeRecordloginventory($query, $warehouse_id = null)
+    public function scopeRecordloginventory_old($query, $warehouse_id = null)
     {
         return $query->selectRaw("*, IFNULL(count(record_log_id),0) as inventory_count")
                      
@@ -113,6 +113,25 @@ class Tbl_item extends Model
                      })
                      ->groupBy("item_id");
     }
+    public function scopeRecordloginventory($query, $warehouse_id = null, $all = false)
+    {
+        return $query->selectRaw("*, IFNULL(count(record_log_id),0) as inventory_count, count(CASE when record_count_inventory < 0 then record_count_inventory else 0 end) as offset_count")
+                     ->leftjoin(DB::raw("(Select wi.* from tbl_warehouse_inventory_record_log wi INNER JOIN tbl_warehouse wh on wh.warehouse_id = wi.record_warehouse_id where wh.archived = 0) warehouse"), function($join) use ($warehouse_id, $all)
+                     {
+                        $join->on("record_item_id","=","item_id");
+                        if($warehouse_id)
+                        {
+                            $join->on("warehouse.record_warehouse_id","=", DB::raw($warehouse_id));
+                            if($all == false)
+                            {
+                                $join->where('record_inventory_status',0)
+                                ->where('item_in_use','unused');
+                            }
+                        }
+                     })
+                     ->groupBy("item_id");
+    }
+
     public function scopeInventorylog($query)
     {
         return $query->leftjoin('tbl_warehouse_inventory_record_log','record_item_id','=','item_id');

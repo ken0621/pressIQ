@@ -936,21 +936,10 @@ class Payroll2
 		$day_type	= 'not_holiday';
 		// $day_type["holiday_name"]	= '';
 		$company_id	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_company_id');
-<<<<<<< HEAD
-<<<<<<< HEAD
-		$holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
-
-=======
-		// $holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
-		$holiday	= Tbl_payroll_holiday_employee::getholidayv2($employee_id, $date)->first();
-		
->>>>>>> 3bc960fec59dd0c42a18891bf4b7f58f255e459d
-=======
 
 		// $holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
 		$holiday	= Tbl_payroll_holiday_employee::getholidayv2($employee_id, $date)->first();
 		
->>>>>>> 6dc6599589d1ae0cb72eb597dd594ddcb27d182e
 		if($holiday != null)
 		{
 			$day_type = strtolower($holiday->payroll_holiday_category);

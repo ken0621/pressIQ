@@ -34,9 +34,15 @@
                                     <div class="details">
                                         Krops has the potential of becoming the largest food hub in the world without even owning a single farm.
                                     </div>
-                                    <div class="button-container">
-                                        <button class="btn-buy-tokens">BUY TOKENS</button>
-                                    </div>
+                                    @if(!$mlm_member)
+                                        <div class="button-container">
+                                            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
+                                        </div>
+                                    @else
+                                        <div class="button-container">
+                                            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

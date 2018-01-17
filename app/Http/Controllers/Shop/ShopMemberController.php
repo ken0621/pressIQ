@@ -2843,21 +2843,28 @@ class ShopMemberController extends Shop
     }
     public function getReport()
     {
-        $data["page"]               = "Report";
-
-        if(request("sort_by"))
+        if (isset($this->shop_info->shop_id) && isset(Self::$customer_info->customer_id)) 
         {
-            $sort_by = request("sort_by");
+            $data["page"]               = "Report";
+
+            if(request("sort_by"))
+            {
+                $sort_by = request("sort_by");
+            }
+            else
+            {
+                $sort_by = 0;
+            }
+
+            $data["_rewards"]           = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,$sort_by);
+            $data["_codes"]             = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            
+            return (Self::load_view_for_members("member.report", $data));
         }
         else
         {
-            $sort_by = 0;
+            return Redirect::to("/members/login");
         }
-
-        $data["_rewards"]           = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,$sort_by);
-        $data["_codes"]             = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
-        
-        return (Self::load_view_for_members("member.report", $data));
     }
     public function getReportPoints()
     {

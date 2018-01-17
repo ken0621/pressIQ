@@ -57,7 +57,7 @@
 					</div>
 				</div>
 
-				<div class="square-container">
+				{{-- <div class="square-container">
 					<div class="title">Reward Summary</div>
 					<div class="sub-container">
 						<div class="chart-legend">
@@ -89,7 +89,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 
 				<div class="square-container">
 					<div class="title">Enter Product Code</div>

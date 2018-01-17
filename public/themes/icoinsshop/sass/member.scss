@@ -1,8 +1,13 @@
 @import "../../../assets/front/sass/mixin";
 
+$display-text: 'Ubuntu', sans-serif;
+$content-text: 'Open Sans', sans-serif;
+
+//ALL MODAL DESIGNS AND BUTTONS FOR MEMBERS AREA
 .modal-title
 {
 	//font-weight: 700;
+	line-height: 1;
 
 	strong
 	{
@@ -89,7 +94,6 @@
 	}
 }
 
-
 .btn-custom-primary
 {
 	background-color: #e1890b;
@@ -106,6 +110,7 @@
 		opacity: 0.8;
 	}
 }
+//END MODAL AND BUTTON DESIGNS
 
 .member
 {
@@ -120,11 +125,13 @@
 		position: relative;
 		min-height: 620px;
 		border: 1px solid #ccc;
+
 		.header
 		{
 			border-bottom: 1px solid #e9e9e9;
 			text-align: right;
 			margin-left: 80px;
+
 			.notification
 			{
 				display: inline-block;
@@ -136,11 +143,13 @@
 					background-color: #ed5639;
 				}
 			}
+
 			.profile-dropdown
 			{
 				padding: 7.5px 20px;
 				display: inline-block;
 				vertical-align: middle;
+
 				.img
 				{
 					width: 36px;
@@ -156,12 +165,14 @@
 						border-radius: 100%;
 					}
 				}
+
 				.name
 				{
 					display: inline-block;
 					vertical-align: middle;
 					color: #7e8285;
 					font-size: 13px;
+
 					.slot
 					{
 						font-size: 13px;
@@ -238,12 +249,14 @@
 					max-width: 158.8px;
 					.name
 					{
+						font-family: $display-text;
 						color: #fff;
 						font-size: 14px;
-						font-weight: 700;
+						font-weight: 500;
 					}
 					.sub
 					{
+						font-family: $content-text;
 						font-size: 13px;
 						color: #dac5a6;
 						color: #fff;

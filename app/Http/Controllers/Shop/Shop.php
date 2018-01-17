@@ -44,7 +44,15 @@ class Shop extends Controller
 
         if(hasSubdomain())
         {
-			$url = $_SERVER['HTTP_HOST'];
+            if (isset($_SERVER['HTTP_HOST'])) 
+            {
+                $url = $_SERVER['HTTP_HOST'];
+            }
+            else
+            {
+                $url = $_SERVER['SERVER_NAME'];
+            }
+            
 			$host = explode('.', $url);
 			$subdomains = array_slice($host, 0, count($host) - 2 );
 			$subdomain = $subdomains[0];

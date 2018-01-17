@@ -59,7 +59,7 @@
 		  	</div>
 		  	<div class="clearfix">
 			  	<div class="pull-right">
-			  		{!! session('notification_paginate') !!}
+			  		{{ $_codes->render() }}
 			  	</div>
 		  	</div>
 		</div>

@@ -620,32 +620,109 @@ class ShopMemberController extends Shop
 
     public function press_release_analytics()
     {
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://mandrillapp.com/api/1.0/users/info.json?key=cKQiemfNNB-5xm98HhcNzw",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                "cache-control: no-cache",
-                "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
-            ) ,
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
 
-        if ($err)
+        if (Session::exists('user_email')) 
         {
-            echo "cURL Error #:" . $err;
+           
+            $explode_email = explode("@", Session::get('user_email'));
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://mandrillapp.com/api/1.0/senders/info.json?key=UWTLQzFotM-rRUyOJqlvjw&address=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+                ) ,
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err)
+            {
+                echo "cURL Error #:" . $err;
+            }
+            else
+            {
+                $share_analytics = json_decode($response);
+                Session::put('share_analytics', $share_analytics);
+                $data["page"] = "Analytics";
+                return view("press_user.press_user_analytics",$data);
+            }
         }
         else
         {
             dd(json_decode($response));
         }
+    }
+
+
+    public function press_release_analytics_view()
+    {
+         if (Session::exists('user_email')) 
+         {
+            $explode_email = explode("@", Session::get('user_email'));
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+                ) ,
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err)
+            {
+                echo "cURL Error #:" . $err;
+            }
+            else
+            {
+                $analytics_view = json_decode($response);
+                foreach ($analytics_view as $key => $value) 
+                {
+                    if ($value->sender != $explode_email[0] . '@press-iq.com') 
+                    {
+                        unset($analytics_view[$key]);
+                    }
+                }
+                $data["analytics_view"] = $analytics_view;
+                $data["page"] = "Analytics View";
+                return view("press_user.press_user_analytics_view",$data);
+            }
+        }
+         else
+        {
+           return Redirect::to("/"); 
+        }
+    }
+
+    /* Tracking Press Release */
+    public function press_release_track_open()
+    {
+        dd(header('Content-Type: image/gif'));
+        //THIS RETURNS THE IMAGE
+        header('Content-Type: image/gif');
+        readfile(public_path() . '/email-tracker/tracking.gif');
+
+        //THIS IS THE SCRIPT FOR THE ACTUAL TRACKING
+        // $date = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
+        // $txt = $date.",". $_SERVER['REMOTE_ADDR'];
+        // $myfile = file_put_contents('log.txt', $txt.PHP_EOL , FILE_APPEND);
+        exit; 
     }
 
     public function press_user_manage_user()

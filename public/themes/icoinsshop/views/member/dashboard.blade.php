@@ -46,7 +46,7 @@
 								</div>
 								<div class="holder">
 									<div class="color cs"></div>
-									<div class="name"><span>Current Slot(s)</span> <div class="name cs-text"><a style="text-decoration: none;" onclick="action_load_link_to_modal('/members/slots')">{{ $customer_summary["display_slot_count"] }}</div></div>
+									<div class="name"><span>Current Slot(s)</span> <div class="name cs-text"><a style="text-decoration: none;" onclick="action_load_link_to_modal('/members/slots')">{{ $customer_summary["display_slot_count"] }}</a></div></div>
 								</div>
 								<div class="holder">
 									<div class="color tr"></div>
@@ -145,7 +145,7 @@
 
 									<div class="color"></div>
 
-									<div class="name"><span>{{ $plan->label }}</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+									<div class="name"><span>{{ $plan->label." Bonus" }}</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 
 								</div>
 							@endforeach
@@ -154,14 +154,14 @@
 
 									<div class="color"></div>
 
-									<div class="name"><span>Unilevel</span> <div class="name w2hpx">PHP 0.00</div></div>
+									<div class="name"><span>Unilevel Bonus</span> <div class="name w2hpx">PHP 0.00</div></div>
 
 								</div>
 								<div class="holder">
 
 									<div class="color"></div>
 
-									<div class="name"><span>Direct Pass Up</span> <div class="name w2hpx">PHP 0.00</div></div>
+									<div class="name"><span>Direct Pass Up Bonus</span> <div class="name w2hpx">PHP 0.00</div></div>
 
 								</div>
 							@endif

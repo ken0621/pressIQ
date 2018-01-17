@@ -197,18 +197,26 @@ class ShopMemberController extends Shop
                 $total_points += $this->redeem_points_sum($s->slot_id);
             }
             $data['total_points'] = currency("",$total_points)." POINT(S)";
-        }
 
-        // for shift only
-        if($this->shop_info->shop_id == 54)
+            // for shift only
+            if($this->shop_info->shop_id == 54)
+            {
+                $slot_id = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id);
+                $data['reward_point_redemption'] = Tbl_mlm_slot_points_log::Slot()->where('tbl_mlm_slot.slot_owner',Self::$customer_info->customer_id)->where("points_log_complan","PURCHASE_GC")->sum('points_log_points');
+            }
+            // dd($slot_id." ; ".$data['reward_point_redemption']);
+            // dd($data['wallet']);
+            return Self::load_view_for_members("member.dashboard", $data);
+        }
+        else
         {
-            $slot_id = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id);
-            $data['reward_point_redemption'] = Tbl_mlm_slot_points_log::Slot()->where('tbl_mlm_slot.slot_owner',Self::$customer_info->customer_id)->where("points_log_complan","PURCHASE_GC")->sum('points_log_points');
+            return Redirect::to('/members/login');
         }
         // dd($slot_id." ; ".$data['reward_point_redemption']);
         // dd($data['wallet']);
         // dd($data['_wallet_plan']);
         return Self::load_view_for_members("member.dashboard", $data);
+
     }
     public function getDirectReferrals()
     {

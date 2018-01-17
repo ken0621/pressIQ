@@ -93,6 +93,7 @@
                                         <li><a class="pr {{ Request::segment(1) == "members" ? "active" : "" }}" href="/members">MY ACCOUNT</a></li>
                                         <li><a href="/members/logout"><button class="btn-signin">LOGOUT</button></a></li>
                                     @else
+                                        <li><a href="/members/register"><button class="btn-signin">REGISTER</button></a></li>
                                         <li><a href="/members/login"><button class="btn-signin">SIGNIN</button></a></li>
                                     @endif
                                 </ul>

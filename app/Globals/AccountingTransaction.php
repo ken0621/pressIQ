@@ -341,9 +341,9 @@ class AccountingTransaction
 				foreach ($item_info as $key => $value) 
 				{
 					$item_type = Item::get_item_type($value['item_id']);
-					if($item_type == 5 || $item_type == 4)
+					if($item_type == 5 && $item_type == 4)
 					{
-						Item::assemble_membership_kit($shop_id, $warehouse_id, $value['item_id'], $value['item_qty']);
+						Warehouse2::refill_bundling_item($shop_id, $warehouse_id, $value['item_id'], $value['item_qty'], $ref_name, $ref_id);
 					}
 				}
 			}

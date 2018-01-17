@@ -809,12 +809,83 @@ class Warehouse2
                 $consume['name'] = $reference_name;
                 $consume['id'] = $reference_id;
 
-                $validate = Warehouse2::consume($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $consume, $serial, 'inventory_history_recorded');
+                $validate = Warehouse2::consume_src_ref($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $consume, $serial, 'inventory_history_recorded', $ref_src_name, $ref_src_id);
             }
         }
 
         return $validate;
 
+    }
+    public static function consume_src_ref($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '', $ref_src_name = '', $ref_src_id = 0)
+    {
+        $return = null;
+
+        $insert_slip['warehouse_id']                 = $warehouse_id;
+        $insert_slip['inventory_remarks']            = $remarks;
+        $insert_slip['inventory_slip_date']          = Carbon::now();
+        $insert_slip['inventory_slip_shop_id']       = $shop_id;
+        $insert_slip['slip_user_id']                 = Warehouse::getUserid();
+        $insert_slip['inventroy_source_reason']      = isset($consume['name']) ? $consume['name'] : '';
+        $insert_slip['inventory_source_id']          = isset($consume['id']) ? $consume['id'] : 0;
+        $insert_slip['slip_user_id']                 = Warehouse::getUserid();
+        $slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
+
+        $serial_qty = count($serial);
+        for ($ctr_qty = 0; $ctr_qty < $quantity; $ctr_qty++) 
+        {
+            $insert['record_shop_id']            = $shop_id;
+            $insert['record_item_id']            = $item_id;
+            $insert['record_warehouse_id']       = $warehouse_id;
+            $insert['record_item_remarks']       = $remarks;
+            $insert['record_warehouse_slip_id']  = $slip_id;
+            $insert['record_consume_ref_name']   = isset($consume['name']) ? $consume['name'] : '';
+            $insert['record_consume_ref_id']     = isset($consume['id']) ? $consume['id'] : 0;
+            $insert['record_inventory_status']   = 1;
+            $insert['record_log_date_updated']   = Carbon::now();
+
+            $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
+                                                   ->where("record_inventory_status",0)
+                                                   ->where("item_in_use",'unused')
+                                                   ->where("record_source_ref_name", $ref_src_name)
+                                                   ->where("record_source_ref_id", $ref_src_id)
+                                                   ->value('record_log_id');
+            if($serial_qty > 0)
+            {
+                $insert['record_serial_number'] = $serial[$ctr_qty];
+
+                $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
+                                                   ->where("record_inventory_status",0)
+                                                   ->where("record_serial_number",$serial[$ctr_qty])
+                                                   ->where("item_in_use",'unused')
+                                                   ->where("record_source_ref_name", $ref_src_name)
+                                                   ->where("record_source_ref_id", $ref_src_id)
+                                                   ->value('record_log_id');
+            }
+            Warehouse2::insert_item_history($id);
+            Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
+        }
+
+        if(!$inventory_history)
+        {
+            $inventory_details['history_description'] = "Consume items from ". $insert_slip['inventroy_source_reason']." #".$insert_slip['inventory_source_id'];
+            $inventory_details['history_remarks'] = $remarks;
+            $inventory_details['history_type'] = "WIS";
+            $inventory_details['history_reference'] = $insert_slip['inventroy_source_reason'];
+            $inventory_details['history_reference_id'] = $insert_slip['inventory_source_id'];
+            $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
+
+            $history_item[0]['item_id'] = $item_id;
+            $history_item[0]['quantity'] = $quantity;
+            $history_item[0]['item_remarks'] = $remarks;
+
+            Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+        }
+
+        Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
+
+        return $return;
     }
     public static function consume_validation_ref_num($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array(), $ref_src_name = '', $ref_src_id = 0)
     {
@@ -850,7 +921,12 @@ class Warehouse2
         {
             $return .= "The warehouse doesn't belong to your account <br>";
         }
-        $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
+        $inventory_qty = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
+                                                   ->where("record_inventory_status",0)
+                                                   ->where("record_source_ref_name", $ref_src_name)
+                                                   ->where("record_source_ref_id", $ref_src_id)
+                                                   ->count();
         if($quantity > $inventory_qty)
         {
             $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";

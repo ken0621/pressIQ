@@ -123,13 +123,13 @@
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>
-                                        <tbody class="tbody-item">
+                                        <tbody class="draggable tbody-item">
                                             @if(isset($inv))
                                                 @foreach($_invline as $invline)
                                                     <tr class="tr-draggable tr-id-{{$invline->invline_ref_id}}">
                                                         <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
-                                                        <td><input type="text" class="for-datepicker" name="invline_service_date[]" value="{{$invline->invline_service_date}}" /></td>
+                                                        <td><input type="text" class="for-datepicker" name="invline_service_date[]" value="{{$invline->invline_service_date != '1970-01-01' ? $invline->invline_service_date : ''}}" /></td>
                                                         @if(isset($serial)) 
                                                         <td>
                                                             <textarea class="txt-serial-number" name="serial_number[]">{{$invline->serial_number}}</textarea>
@@ -148,9 +148,9 @@
                                                         
                                                         <td>
                                                             @if($pis)
-                                                                <textarea class="textarea-expand txt-desc" readonly="true" name="invline_description[]">{{$invline->invline_service_date}}</textarea>
+                                                                <textarea class="textarea-expand txt-desc" readonly="true" name="invline_description[]">{{$invline->invline_description}}</textarea>
                                                             @else
-                                                                <textarea class="textarea-expand txt-desc" name="invline_description[]" value="{{$invline->invline_service_date}}"></textarea>
+                                                                <textarea class="textarea-expand txt-desc" name="invline_description[]" value="{{$invline->invline_description}}"></textarea>
                                                             @endif
                                                         </td>
                                                         <td>

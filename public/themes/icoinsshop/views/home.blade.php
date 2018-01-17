@@ -34,9 +34,15 @@
                                     <div class="details">
                                         Krops has the potential of becoming the largest food hub in the world without even owning a single farm.
                                     </div>
-                                    <div class="button-container">
-                                        <button class="btn-buy-tokens">BUY TOKENS</button>
-                                    </div>
+                                    @if(!$mlm_member)
+                                        <div class="button-container">
+                                            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
+                                        </div>
+                                    @else
+                                        <div class="button-container">
+                                            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -151,55 +157,61 @@
             <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> an Announcement</div>
             <div class="row clearfix">
                 <div class="col-md-4">
-                    <div class="news-holder wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">
-                        <div class="row-no-padding clearfix">
-                            <div class="col-md-6 col-xs-6">
-                                <div class="img-holder">
-                                    <img src="/themes/{{ $shop_theme }}/img/news-img-1.jpg">
+                    <a href="/announcement">
+                        <div class="news-holder wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">
+                            <div class="row-no-padding clearfix">
+                                <div class="col-md-6 col-xs-6">
+                                    <div class="img-holder">
+                                        <img src="/themes/{{ $shop_theme }}/img/news-img-1.jpg">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6 col-xs-6">
-                                <div class="caption-holder">
-                                    <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                    <div class="date">January 15, 2018</div>
+                                <div class="col-md-6 col-xs-6">
+                                    <div class="caption-holder">
+                                        <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                        <div class="date">January 15, 2018</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                     </a>
                 </div>
                 <div class="col-md-4">
-                    <div class="news-holder wow fadeInLeft" data-wow-delay=".4s" data-wow-duration="2s">
-                        <div class="row-no-padding clearfix">
-                            <div class="col-md-6 col-xs-6">
-                                <div class="img-holder">
-                                    <img src="/themes/{{ $shop_theme }}/img/news-img-2.jpg">
+                    <a href="/announcement">
+                        <div class="news-holder wow fadeInLeft" data-wow-delay=".4s" data-wow-duration="2s">
+                            <div class="row-no-padding clearfix">
+                                <div class="col-md-6 col-xs-6">
+                                    <div class="img-holder">
+                                        <img src="/themes/{{ $shop_theme }}/img/news-img-2.jpg">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6 col-xs-6">
-                                <div class="caption-holder">
-                                    <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                    <div class="date">January 05, 2018</div>
+                                <div class="col-md-6 col-xs-6">
+                                    <div class="caption-holder">
+                                        <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                        <div class="date">January 05, 2018</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>    
                 </div>
                 <div class="col-md-4">
-                    <div class="news-holder wow fadeInLeft" data-wow-delay=".6s" data-wow-duration="2s">
-                        <div class="row-no-padding clearfix">
-                            <div class="col-md-6 col-xs-6">
-                                <div class="img-holder">
-                                    <img src="/themes/{{ $shop_theme }}/img/news-img-3.jpg">
+                    <a href="/announcement">
+                        <div class="news-holder wow fadeInLeft" data-wow-delay=".6s" data-wow-duration="2s">
+                            <div class="row-no-padding clearfix">
+                                <div class="col-md-6 col-xs-6">
+                                    <div class="img-holder">
+                                        <img src="/themes/{{ $shop_theme }}/img/news-img-3.jpg">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6 col-xs-6">
-                                <div class="caption-holder">
-                                    <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                    <div class="date">January 07, 2018</div>
+                                <div class="col-md-6 col-xs-6">
+                                    <div class="caption-holder">
+                                        <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                        <div class="date">January 07, 2018</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>

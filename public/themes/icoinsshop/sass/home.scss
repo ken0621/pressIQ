@@ -156,6 +156,11 @@ body
 					{
 						padding: 10px 0 10px 0;
 
+						a
+						{
+							text-decoration: none;
+						}
+
 						.btn-buy-tokens
 						{
 							@include transition(0.4s);

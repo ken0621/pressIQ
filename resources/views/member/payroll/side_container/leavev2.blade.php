@@ -44,7 +44,7 @@
 												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_edit_leave_tempv2/{{$active->payroll_leave_temp_id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 											</li>
 											<li>
-												<a href="#" class="popup" link="#" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
+												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_leave_action/{{$active->payroll_leave_temp_id}}/archivedwholeleave/0" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
 											</li>
 										</ul>
 									</div>
@@ -88,7 +88,7 @@
 												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_edit_leave_tempv2/{{$archive->payroll_leave_temp_id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 											</li>
 											<li>
-												<a href="#" class="popup" link="#" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Restore</a>
+												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_leave_action/{{$archive->payroll_leave_temp_id}}/restorewholeleave/0" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Restore</a>
 											</li>
 										</ul>
 									</div>

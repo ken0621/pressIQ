@@ -4547,6 +4547,15 @@ class PayrollController extends Member
                $data['id']         = $payroll_leave_employee_id;
                $data['remaining_leave'] = $remaining_leave;
           }
+          else if($action == 'restore_temp')
+          {
+               $action = 'Restore temp';
+               $data['title']      = 'Do you really want to '.$action.'?';
+               $data['html']       = '';
+               $data['action']     = '/member/payroll/leave/v2/restore_leave_tempv2';
+               $data['id']         = $payroll_leave_employee_id;
+               $data['remaining_leave'] = $remaining_leave;
+          }
           else if($action == 'archived_history')
           {
                $action = 'Archived History';
@@ -4556,6 +4565,25 @@ class PayrollController extends Member
                $data['id']         = $payroll_leave_employee_id;
                $data['remaining_leave'] = $remaining_leave;
           }
+          else if($action == 'archivedwholeleave')
+          {
+               $action = 'Archived whole temp';
+               $data['title']      = 'Do you really want to '.$action.'?';
+               $data['html']       = '';
+               $data['action']     = '/member/payroll/leave/v2/archived_whole_leave_tempv2';
+               $data['id']         = $payroll_leave_employee_id;
+               $data['remaining_leave'] = $remaining_leave;
+          }
+          else if($action == 'restorewholeleave')
+          {
+               $action = 'Restore whole temp';
+               $data['title']      = 'Do you really want to '.$action.'?';
+               $data['html']       = '';
+               $data['action']     = '/member/payroll/leave/v2/restore_whole_leave_tempv2';
+               $data['id']         = $payroll_leave_employee_id;
+               $data['remaining_leave'] = $remaining_leave;
+          }
+
 
           return view('member.payroll.modal.modal_leave_reset_confirm',$data);
 
@@ -4681,6 +4709,18 @@ class PayrollController extends Member
           return json_encode($return);
      }
 
+     public function restore_leave_tempv2()
+     {
+          $id = Request::input('id');
+          $update['payroll_leave_employee_is_archived'] = 0;
+
+          Tbl_payroll_leave_employeev2::where('payroll_leave_employee_id', $id)->update($update);
+
+          $return['status']             = 'success';
+          $return['function_name']      = 'modal_create_leave_tempv2.load_for_edit_leave_temp';
+          return json_encode($return);
+     }
+
      public function archived_leave_history()
      {
           $id = Request::input('id');
@@ -4692,6 +4732,31 @@ class PayrollController extends Member
           $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
           return json_encode($return);
      }
+
+     public function archived_whole_leave_tempv2()
+     {
+          $id = Request::input('id');
+          $update['payroll_leave_temp_archived']    = 1;
+
+          Tbl_payroll_leave_tempv2::where('payroll_leave_temp_id', $id)->update($update);
+
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
+          return json_encode($return);
+     }
+
+     public function restore_whole_leave_tempv2()
+     {
+          $id = Request::input('id');
+          $update['payroll_leave_temp_archived']    = 0;
+
+          Tbl_payroll_leave_tempv2::where('payroll_leave_temp_id', $id)->update($update);
+
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
+          return json_encode($return);
+     }
+
 // scheduling leave
      public function save_schedule_leave_tagv2()
      {

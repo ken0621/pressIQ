@@ -68,6 +68,13 @@
                                         <li><a class="navigation__link" href="/#howitworks">HOW IT WORKS</a></li>
                                         <li><a class="navigation__link" href="/#products">PRODUCTS</a></li>
                                         <li><a class="navigation__link" href="/#news">NEWS</a></li>
+                                    @elseif(Request::segment(1) == "announcement")
+                                        <li><a class="navigation__link" href="/#home">HOME</a></li>
+                                        <li><a class="navigation__link" href="/#about">ABOUT</a></li>
+                                        <li><a class="navigation__link" href="/#missionvision">MISSION AND VISION</a></li>
+                                        <li><a class="navigation__link" href="/#howitworks">HOW IT WORKS</a></li>
+                                        <li><a class="navigation__link" href="/#products">PRODUCTS</a></li>
+                                        <li><a class="navigation__link" href="/#news">NEWS</a></li>
                                     @else
                                         <li><a class="navigation__link" href="#home">HOME</a></li>
                                         <li><a class="navigation__link" href="#about">ABOUT</a></li>

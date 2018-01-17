@@ -57,7 +57,7 @@
 					</div>
 				</div>
 
-				<div class="square-container">
+				{{-- <div class="square-container">
 					<div class="title">Reward Summary</div>
 					<div class="sub-container">
 						<div class="chart-legend">
@@ -89,7 +89,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 
 				<div class="square-container">
 					<div class="title">Enter Product Code</div>
@@ -264,9 +264,9 @@
 <script type="text/javascript" src="/assets/member/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 
-
 <script>
-$(window).on('hashchange', function() {
+$(window).on('hashchange', function() 
+{
     if (window.location.hash) {
         var page = window.location.hash.replace('#', '');
         if (page == Number.NaN || page <= 0) {
@@ -276,14 +276,17 @@ $(window).on('hashchange', function() {
         }
     }
 });
-$(document).ready(function() {
+$(document).ready(function() 
+{
 	getPosts(1);
-    $(document).on('click', '.pagination a', function (e) {
+    $(document).on('click', '.pagination a', function (e) 
+    {
         getPosts($(this).attr('href').split('page=')[1]);
         e.preventDefault();
     });
 });
-function getPosts(page) {
+function getPosts(page) 
+{
     $.ajax(
     {
         url : '/members/direct-referrals?page=' + page,

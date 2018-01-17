@@ -12,7 +12,7 @@
 
 .modal-header
 {
-	background-color: #E1890B;
+	background-color: #e1890b;
 	color: #FFF;
 
 	.fa
@@ -34,11 +34,11 @@
 
 .btn-primary
 {
-	@include transition(0.2s);
-	background-color: #E1890B !important;
+	@include transition(0.3s);
+	background-color: #e1890b !important;
 	color: #fff !important;
 	background-image: none !important;
-	border-color: #E1890B !important;
+	border-color: #e1890b !important;
     box-shadow: none !important;
     opacity: 0.8;
 
@@ -51,8 +51,8 @@
 
 .btn-custom-white
 {
-	@include transition(0.2s);
-	background-color: rgba(255,0,23,0.8) !important;
+	@include transition(0.3s);
+	background-color: rgba(230,45,45,0.8) !important;
 	color: #fff;
 	opacity: 0.8;
 
@@ -65,7 +65,7 @@
 
 .btn-ico-custom
 {
-	@include transition(0.2s);
+	@include transition(0.3s);
 	background-color: #016F56;
 	color: #fff;
 
@@ -78,7 +78,7 @@
 
 .btn-custom-primary
 {
-	background-color: #E1890B;
+	background-color: #e1890b;
 	color: #fff;
 
 	.fa
@@ -164,7 +164,7 @@
 
 		.sidebar
 		{
-			background-color: #E1890B;
+			background-color: #e1890b;
 			width: 300px;
 			position: absolute;
 			left: 0;
@@ -249,7 +249,7 @@
 					{
 						display: block;
 						position: relative;
-						background-color: #E1890B;
+						background-color: #e1890b;
 						a
 						{
 							display: block;
@@ -369,7 +369,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #E1890B;
+										background-color: #e1890b;
 										span, &:before
 										{
 											opacity: 0.5;
@@ -398,7 +398,7 @@
 			&.small
 			{
 				width: 80px;
-				background-color: #E1890B;
+				background-color: #e1890b;
 				.shadow
 				{
 					display: none;

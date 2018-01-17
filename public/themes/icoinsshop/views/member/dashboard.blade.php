@@ -95,7 +95,7 @@
 					<div class="title">Enter Product Code</div>
 					<div class="sub-container">
 						<div class="chart-legend text-center">
-							<button class="btn btn-p4w-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+							<button class="btn btn-ico-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 						</div>
 					</div>
 				</div>
@@ -161,7 +161,7 @@
 								<div class="col-md-5">
 									<div class="action" style="text-align: center;">
 										@if($direct->distributed == 1)
-											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-p4w-custom"><i class="fa fa-star"></i> VIEW INFO</button>
+											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-ico-custom"><i class="fa fa-star"></i> VIEW INFO</button>
 										@else
 											<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 										@endif
@@ -357,7 +357,7 @@ input:-webkit-autofill {
   .popup-verify-placement .modal-content {
     /*background-color: #eee;*/ }
     .popup-verify-placement .modal-content .modal-header {
-      background-color: #E1890B;
+      background-color: #e1890b;
       /*border-top-left-radius: 3px;
       border-top-right-radius: 3px;*/ }
       .popup-verify-placement .modal-content .modal-header .close {
@@ -379,7 +379,7 @@ input:-webkit-autofill {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #E1890B;
+        border: 1px solid #e1890b;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -390,14 +390,14 @@ input:-webkit-autofill {
         margin: 10px 0px;
         padding: 10px; }
       .popup-verify-placement .modal-content .modal-body .labeld {
-        color: #E1890B;
+        color: #e1890b;
         text-align: center;
         text-transform: uppercase; }
       .popup-verify-placement .modal-content .modal-body select {
         width: 100%;
         font-size: 16px;
         border: none;
-        border: 1px solid #E1890B;
+        border: 1px solid #e1890b;
         margin: 5px 0px;
         margin-bottom: 15px;
         padding: 5px;
@@ -411,9 +411,9 @@ input:-webkit-autofill {
         padding-bottom: 20px; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement {
           color: #fff;
-          background-color: #E1890B;
+          background-color: #e1890b;
           padding: 10px 40px;
-          border: 2px solid #E1890B;
+          border: 2px solid #e1890b;
           border-radius: 2px;
           opacity: 0.9;
           -webkit-transition: all 0.2s ease-in-out;
@@ -425,7 +425,7 @@ input:-webkit-autofill {
           text-transform: uppercase; }
         .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement:hover {
           color: #fff;
-          background-color: #E1890B;
+          background-color: #e1890b;
           opacity: 1.0; }
 
 </style>

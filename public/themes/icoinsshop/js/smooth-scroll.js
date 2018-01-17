@@ -1,24 +1,53 @@
-$(document).ready(function() 
+// $(document).ready(function() 
+// {
+// 	$('a[href*=#]').bind('click', function(e) 
+// 	{
+// 		e.preventDefault(); // prevent hard jump, the default behavior
+
+// 		var target = $(this).attr("href"); // Set the target as variable
+
+// 		// perform animated scrolling by getting top-position of target-element and set it as scroll target
+// 		$('html, body').stop().animate(
+// 		{
+// 			scrollTop: $(target).offset().top
+
+// 		}, 600, function()
+// 		{
+// 			location.hash = target; //attach the hash (#jumptarget) to the pageurl
+// 		});
+
+// 		return false;
+// 	});
+// });
+
+(function($) 
 {
-	$('a[href*=#]').bind('click', function(e) 
-	{
-		e.preventDefault(); // prevent hard jump, the default behavior
+    'use strict'; // Start of use strict
 
-		var target = $(this).attr("href"); // Set the target as variable
+    // $('.navigation__link').on('click', function(event) 
+    // {
+    //     var $anchor = $(this);
 
-		// perform animated scrolling by getting top-position of target-element and set it as scroll target
-		$('html, body').stop().animate(
-		{
-			scrollTop: $(target).offset().top
+    //     $('html, body').stop().animate({
+    //         scrollTop: ($($anchor.attr('href')).offset().top - 30)
+    //     }, 1250, 'easeInOutExpo'); //1250
+        
+    //     event.preventDefault();
+    // });
 
-		}, 600, function() 
-		{
-			location.hash = target; //attach the hash (#jumptarget) to the pageurl
-		});
+    $('.navigation__link').on('click', function(event) 
+    {
+        var $anchor = $(this);
 
-		return false;
-	});
-});
+        $('html, body').stop().animate(
+        {
+            scrollTop: ($($anchor.attr('href')).offset().top)
+        }, 1250, 'easeInOutExpo');
+        
+        event.preventDefault();
+    });
+
+})(jQuery);
 
 $(window).scroll(function() 
 {
@@ -42,20 +71,3 @@ $(window).scroll(function()
 	});
 
 }).scroll();
-
-(function($) 
-{
-    'use strict'; // Start of use strict
-
-    $('.navigation__link').on('click', function(event) 
-    {
-        var $anchor = $(this);
-        $('html, body').stop().animate({
-            scrollTop: ($($anchor.attr('href')).offset().top - 50)
-        }, 1250, 'easeInOutExpo'); //1250
-        
-        event.preventDefault();
-    });
-    
-
-})(jQuery);

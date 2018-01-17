@@ -57,29 +57,29 @@ function checkout_form()
 			}
 
 			ajax_load_location = 	$.ajax(
-									{
-						            	url: '/checkout/locale?parent=' + parent,
-						            	success: function(data)
-						            	{
-						            		$(".load-location[level=" + level + "]").html(data);
+			{
+            	url: '/checkout/locale?parent=' + parent,
+            	success: function(data)
+            	{
+            		$(".load-location[level=" + level + "]").html(data);
 
-						            		if(deflt != "" && firstload == true)
-						            		{
-						            			$(".load-location[level=" + level + "]").val(deflt);
-						            		}
+            		if(deflt != "" && firstload == true)
+            		{
+            			$(".load-location[level=" + level + "]").val(deflt);
+            		}
 
-						            		if (level == 3) 
-						            		{
-						            			var append = 'NEXT <i class="fa fa-angle-double-right"></i>';
+            		if (level == 3) 
+            		{
+            			var append = 'NEXT <i class="fa fa-angle-double-right"></i>';
 
-						            			$('.checkout-button-submit').html(append);
-						            			$('.checkout-button-submit').removeAttr("disabled");
-						            			$('.checkout-button-submit').removeProp("disabled");
-						            		}
-						            		
-						              		action_load_location(level+1, $(".load-location[level=" + (level) + "]").val());
-						            	}
-						          	});
+            			$('.checkout-button-submit').html(append);
+            			$('.checkout-button-submit').removeAttr("disabled");
+            			$('.checkout-button-submit').removeProp("disabled");
+            		}
+            		
+              		action_load_location(level+1, $(".load-location[level=" + (level) + "]").val());
+            	}
+          	});
 		}
 	}
 
@@ -137,22 +137,22 @@ function checkout_form()
 			}
 
 			ajax_load_bill_location = 	$.ajax(
-									{
-						            	url: '/checkout/locale?parent=' + parent,
-						            	success: function(data)
-						            	{
-						            		$(".bill-load-location[level=" + level + "]").html(data);
+			{
+            	url: '/checkout/locale?parent=' + parent,
+            	success: function(data)
+            	{
+            		$(".bill-load-location[level=" + level + "]").html(data);
 
-						            		if(bill_deflt != "" && bill_firstload == true)
-						            		{
-						            			$(".bill-load-location[level=" + level + "]").val(bill_deflt);
-						            		}
+            		if(bill_deflt != "" && bill_firstload == true)
+            		{
+            			$(".bill-load-location[level=" + level + "]").val(bill_deflt);
+            		}
 
 
-						            		
-						              		action_load_bill_location(level+1, $(".bill-load-location[level=" + (level) + "]").val());
-						            	}
-						          	});
+            		
+              		action_load_bill_location(level+1, $(".bill-load-location[level=" + (level) + "]").val());
+            	}
+          	});
 		}
 	}
 

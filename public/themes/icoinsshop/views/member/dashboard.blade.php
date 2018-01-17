@@ -52,6 +52,10 @@
 									<div class="color tr"></div>
 									<div class="name"><span>Total Reward</span> <div class="name tr-text">{{ $wallet->display_total_earnings }}</div></div>
 								</div>
+								<div class="holder">
+									<div class="color tr"></div>
+									<div class="name"><span>Total KROPS</span> <div class="name tr-text">0.00 KROP(S)</div></div>
+								</div>
 							</div>
 						</div>
 					</div>

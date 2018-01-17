@@ -32,12 +32,13 @@
 			<strong>DATE.</strong><br>
 		</div>
 		<div class="col-md-6 text-left" style="float: left; width: 50%">
-			<span>{{sprintf("%'.04d\n", $wc->wc_id)}}</span><br>
+			<span>{{$wc->transaction_refnum != '' ? $wc->transaction_refnum : sprintf("%'.04d", $wc->wc_id)}}</span><br>
 			<span>{{date('m/d/Y',strtotime($wc->date_created))}}</span><br>
 		</div>
 	</div>
 </div>
 
+@if(count($_wcline) > 0)
 <table width="100%" style="padding: 0; margin-top: 20px ">
 	<tr>
 		<th>PRODUCT NAME</th>
@@ -46,8 +47,7 @@
 		<th width="15%">AMOUNT</th>
 	</tr>
 		<input type="hidden" name="{{$total = 0}}" class="{{$taxable_item = 0}}" >
-	<tbody>
-	@if($_wcline)		
+	<tbody>	
 		@foreach($_wcline as $wcline)
 			<tr >
 				<td>{{$wcline->item_name}}</td>
@@ -57,7 +57,6 @@
 			</tr>
 		@endforeach
 		<!-- <div class="$invoice->inv_is_paid == 1 ? 'watermark' : 'hidden'"> PAID </div> -->
-	@endif	
 		<tr>
 			<!-- <td colspan="1"></td>
 			<td colspan="2" style="text-align: left;font-weight: bold">SUBTOTAL</td>
@@ -67,6 +66,36 @@
 
 	</tbody>
 </table>
+@endif
+
+@if(count($_wcline_acc) > 0)
+<table width="100%" style="padding: 0; margin-top: 20px ">
+	<tr>
+		<th>ACCOUNT NAME</th>
+		<th width="50%">DESCRIPTION</th>
+		<th width="15%">AMOUNT</th>
+	</tr>
+		<input type="hidden" name="{{$total = 0}}" class="{{$taxable_item = 0}}" >
+	<tbody>
+		@foreach($_wcline_acc as $wcline_acc)
+			<tr >
+				<td>{{$wcline_acc->account_number}} - {{$wcline_acc->account_name}}</td>
+				<td>{{$wcline_acc->accline_description}}</td>
+				<td style="text-align: right;">{{currency("PHP",$wcline_acc->accline_amount)}}</td>
+			</tr>
+		@endforeach
+		<!-- <div class="$invoice->inv_is_paid == 1 ? 'watermark' : 'hidden'"> PAID </div> -->
+
+		<tr>
+			<!-- <td colspan="1"></td>
+			<td colspan="2" style="text-align: left;font-weight: bold">SUBTOTAL</td>
+			<td style="text-align: right; font-weight: bold">{{currency('PHP', $wc->po_subtotal_price)}}</td> -->
+		</tr>
+		
+
+	</tbody>
+</table>
+@endif
 	<div class="row pull-right" >
 		<h3><strong>TOTAL</strong> {{currency('PHP',($wc->wc_total_amount))}}</h3>
 	</div>

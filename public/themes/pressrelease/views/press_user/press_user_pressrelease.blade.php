@@ -26,7 +26,7 @@
                   <div class="title-container">New Release</div>
                     @if(session()->has("pr_edit"))
                       @foreach($edit as $edits)
-                  <div class="title">Type:</div>
+                  <div class="title">Type1:</div>
                    <select name="pr_type" id="pr_type" style="width: 80% !important;">
                      <option>--Select option--</option>
                      @if($edits->pr_type=="Media Release")

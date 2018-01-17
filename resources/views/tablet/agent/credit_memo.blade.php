@@ -1,6 +1,5 @@
 @extends('tablet.layout')
 @section('content')
-
 <div class="form-group">
     <div class="col-md-12">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">

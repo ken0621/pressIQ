@@ -17,7 +17,7 @@
             <div class="col-md-6">            
                 <label>Is Sub Warehouse of :</label>
                 <select class="form-control select-warehouse" name="warehouse_parent_id">
-                   @include('member.warehousev2.load_warehouse_v2')
+                
                 </select>
             </div>
         </div> -->

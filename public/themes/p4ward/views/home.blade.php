@@ -85,7 +85,7 @@
                             <div class="percent-container">100% Organic</div>
                             <div class="product-title-container">Don Organics Coffee Scrub</div>
                             <div class="product-image"><img src="/themes/{{ $shop_theme }}/img/wrapper3-image1.png"></div>
-                            <div class="button-container"><a href="/product">See Benefits</a></div>
+                            <div class="button-container"><a href="/product"><button>See Benefits</button></a></div>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -93,7 +93,7 @@
                             <div class="percent-container">100% Organic</div>
                             <div class="product-title-container">Don Organics Red Rice Scrub</div>
                             <div class="product-image"><img src="/themes/{{ $shop_theme }}/img/wrapper3-image2.png"></div>
-                            <div class="button-container"><a href="#">See Benefits</a></div>
+                            <div class="button-container"><a href="#"><button>See Benefits</button></a></div>
                         </div>
                     </div>
                 </div>
@@ -151,102 +151,153 @@
     <!-- Testimonials of P4ward -->
     <div id="testimonials" class="wrapper-6">
         <div class="container">
+
             <div class="wow fadeInDown title-container">
                 <span class="icon-container"><img src="/themes/{{ $shop_theme }}/img/p4ward-icon-white.png"></span><span class="title-white">What </span><span class="title-orange">They </span><span class="title-orange">Say</span>
             </div>
+
             <div class="says-container">
-                <div>
-                    <div class="holder">
-                        <div class="feedback-container match-height">
-                            <div class="top-container">
-                                <div class="row-no-padding clearfix">
-                                    <div class="col-md-3">
+                <div class="holder wow fadeInDown" data-wow-delay=".2s">
+                    <div class="feedback-container match-height">
+                        <div class="top-container">
+                            <div class="row-no-padding clearfix">
+                                <div class="col-md-3">
+                                    <div class="left">
                                         <div class="image-holder">
                                             <img src="/themes/{{ $shop_theme }}/img/wrapper6-image1.png">
                                         </div>
                                     </div>
-                                    <div class="col-md-9">
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="right">
                                         <div class="name">Mumai Vitangcol Nidea</div>
                                         <div class="date">January 10</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="bottom-container">
-                                <div class="description">Another must haves! I rarely use skin essentials but this one's on top of my list now! You can use it on your face and body and see/feel the result right after using it. One of the best products I've used and I just love that freshly brewed coffee smell. Two thumbs up!</div>
-                                <div class="star"><img src="/themes/{{ $shop_theme }}/img/wrapper6-star.png"></div>
-                            </div>
+                        </div>
+                        <div class="bottom-container">
+                            <div class="description">Another must haves! I rarely use skin essentials but this one's on top of my list now! You can use it on your face and body and see/feel the result right after using it. One of the best products I've used and I just love that freshly brewed coffee smell. Two thumbs up!</div>
+                            <div class="star"><img src="/themes/{{ $shop_theme }}/img/wrapper6-star.png"></div>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div class="holder">
-                        <div class="feedback-container match-height">
-                            <div class="top-container">
-                                <div class="row-no-padding clearfix">
-                                    <div class="col-md-3">
+            
+                <div class="holder wow fadeInDown" data-wow-delay=".3s">
+                    <div class="feedback-container match-height">
+                        <div class="top-container">
+                            <div class="row-no-padding clearfix">
+                                <div class="col-md-3">
+                                    <div class="left">
                                         <div class="image-holder">
                                             <img src="/themes/{{ $shop_theme }}/img/wrapper6-image2.png">
                                         </div>
                                     </div>
-                                    <div class="col-md-9">
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="right">
                                         <div class="name">Maricar-Anthony Sierra</div>
                                         <div class="date">February 7</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="bottom-container">
-                                <div class="description">Wow! I usually don't write reviews, but I read tons of reviews before trying out something, and I just had to add another good one. I have tried hundreds of products and this is probably the best scrub I have ever come across! Cleared up my excema and makes my skin soo soft! Worth the money!! Will Def repurchase when this bag runs out.</div>
-                                <div class="star"><img src="/themes/{{ $shop_theme }}/img/wrapper6-star.png"></div>
-                            </div>
+                        </div>
+                        <div class="bottom-container">
+                            <div class="description">Wow! I usually don't write reviews, but I read tons of reviews before trying out something, and I just had to add another good one. I have tried hundreds of products and this is probably the best scrub I have ever come across! Cleared up my excema and makes my skin soo soft! Worth the money!! Will Def repurchase when this bag runs out.</div>
+                            <div class="star"><img src="/themes/{{ $shop_theme }}/img/wrapper6-star.png"></div>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div class="holder">
-                        <div class="feedback-container match-height">
-                            <div class="top-container">
-                                <div class="row-no-padding clearfix">
-                                    <div class="col-md-3">
+            
+                <div class="holder wow fadeInDown" data-wow-delay=".4s">
+                    <div class="feedback-container match-height">
+                        <div class="top-container">
+                            <div class="row-no-padding clearfix">
+                                <div class="col-md-3">
+                                    <div class="left">
                                         <div class="image-holder">
                                             <img src="/themes/{{ $shop_theme }}/img/wrapper6-image3.png">
                                         </div>
                                     </div>
-                                    <div class="col-md-9">
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="right">
                                         <div class="name">Shiela Mae San Diego</div>
                                         <div class="date">January 8</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="bottom-container">
-                                <div class="description">Makes my skin soft and smooth after using it. It's a bit messy to use but rinses easily with (a lot of) water.</div>
-                                <div class="star"><img src="/themes/{{ $shop_theme }}/img/wrapper6-star.png"></div>
-                            </div>
+                        </div>
+                        <div class="bottom-container">
+                            <div class="description">Makes my skin soft and smooth after using it. It's a bit messy to use but rinses easily with (a lot of) water.</div>
+                            <div class="star"><img src="/themes/{{ $shop_theme }}/img/wrapper6-star.png"></div>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div class="holder">
-                        <div class="feedback-container match-height">
-                            <div class="top-container">
-                                <div class="row-no-padding clearfix">
-                                    <div class="col-md-3">
+            
+                <div class="holder wow fadeInDown" data-wow-delay=".5s">
+                    <div class="feedback-container match-height">
+                        <div class="top-container">
+                            <div class="row-no-padding clearfix">
+                                <div class="col-md-3">
+                                    <div class="left">
                                         <div class="image-holder">
-                                            <img src="/themes/{{ $shop_theme }}/img/wrapper6-image1.png">
+                                            <img src="/themes/{{ $shop_theme }}/img/wrapper6-image4.png">
                                         </div>
                                     </div>
-                                    <div class="col-md-9">
-                                        <div class="name">Mumai Vitangcol Nidea</div>
-                                        <div class="date">January 10</div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="right">
+                                        <div class="name">Yan Chino Dino Villanueva</div>
+                                        <div class="date">January 8</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="bottom-container">
-                                <div class="description">Another must haves! I rarely use skin essentials but this one's on top of my list now! You can use it on your face and body and see/feel the result right after using it. One of the best products I've used and I just love that freshly brewed coffee smell. Two thumbs up!</div>
-                                <div class="star"><img src="/themes/{{ $shop_theme }}/img/wrapper6-star.png"></div>
-                            </div>
+                        </div>
+                        <div class="bottom-container">
+                            <div class="description">Amazing as ever...<br>I'm so inlove with this product...</div>
+                            <div class="star"><img src="/themes/{{ $shop_theme }}/img/wrapper6-star.png"></div>
                         </div>
                     </div>
                 </div>
+
+                <div class="holder wow fadeInDown" data-wow-delay=".6s">
+                    <div class="feedback-container match-height">
+                        <div class="top-container">
+                            <div class="row-no-padding clearfix">
+                                <div class="col-md-3">
+                                    <div class="left">
+                                        <div class="image-holder">
+                                            <img src="/themes/{{ $shop_theme }}/img/wrapper6-image5.png">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="right">
+                                        <div class="name">Christopher John Tumalad</div>
+                                        <div class="date">January 8</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bottom-container">
+                            <div class="description">This is what I'm using now.</div>
+                            <div class="star"><img src="/themes/{{ $shop_theme }}/img/wrapper6-star.png"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Network Marketing PDF link-->
+    <div class="wrapper-x" style="background-image: url('/themes/{{ $shop_theme }}/img/pdf-img-bg2.jpg')">
+        <div class="container">
+            <div class="wrapper-x-title wow fadeInDown" data-wow-delay = ".2s">Network Marketing Without Recruitment</div>
+
+            <div class="btn-container wow fadeInDown" data-wow-delay = ".4s">
+                <a href="https://drive.google.com/file/d/0B9TqTDu5OK_3V0NFUlRTRUhFVm1PYzZob091RmhaanlpTFkw/view" target="_blank"><button>Read More &raquo;</button></a>
             </div>
         </div>
     </div>
@@ -318,29 +369,9 @@
 @endsection
 
 @section("script")
-<script type="text/javascript">
-/*$(document).ready(function($) {
 
-        //START MISSION AND VISION
-        $(".title-vision").click(function()
-        {
-            $("#vision").removeClass("hide");
-            $("#mission").addClass("hide");
-            $(".title-vision").addClass("highlighted");
-            $(".title-mission").removeClass("highlighted");
-            
-        });
-        $(".title-mission").click(function()
-        {
-            $("#vision").addClass("hide");
-            $("#mission").removeClass("hide");
-            $(".title-mission").addClass("highlighted");
-            $(".title-vision").removeClass("highlighted");
-        });
-        //END MISSION ANF VISION
-});*/
-</script>
 <script type="text/javascript">
+
     $(document).ready(function()
     {
         $('.single-item').slick
@@ -358,9 +389,9 @@
         });
 
     });
+    
 </script>
 
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
-
 
 @endsection

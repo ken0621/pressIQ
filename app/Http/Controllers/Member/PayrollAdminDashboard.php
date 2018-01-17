@@ -22,13 +22,15 @@ use App\Models\Tbl_payroll_department;
 use App\Models\Tbl_payroll_approver_employee;
 use App\Models\Tbl_payroll_approver_group;
 use App\Models\Tbl_payroll_approver_group_employee;
+use App\Models\Tbl_payroll_employee_basic;
 
 class PayrollAdminDashboard extends Member
 {
 
 	public function shop_id($return = 'shop_id')
 	{
-	     switch ($return) {
+	     switch ($return) 
+	     {
 	          case 'shop_id':
 	               return $shop_id = $this->user_info->user_shop;
 	               break;
@@ -45,9 +47,9 @@ class PayrollAdminDashboard extends Member
 
 	public function employee_approver()
 	{
-		$data['overtime_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','overtime')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
-		$data['rfp_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','rfp')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
-		$data['leave_approver'] = Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','leave')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
+		$data['overtime_approver'] 	= Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','overtime')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
+		$data['rfp_approver'] 		= Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','rfp')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
+		$data['leave_approver'] 	= Tbl_payroll_approver_employee::where('tbl_payroll_approver_employee.shop_id', $this->user_info->shop_id)->where('payroll_approver_employee_type','leave')->where('tbl_payroll_approver_employee.archived', 0)->EmployeeInfo()->get();
 		
 		return view('member.payroll2.employees_approver', $data);
 	}
@@ -107,6 +109,7 @@ class PayrollAdminDashboard extends Member
 		}
 
 		Tbl_payroll_approver_employee::insert($insert);
+
 		$response["response_status"] 	= "success";
 		$response['call_function'] 		= 'success_saving_import';
 
@@ -127,7 +130,7 @@ class PayrollAdminDashboard extends Member
 		$update['payroll_approver_employee_level'] = Request::input('approver_level');
 		Tbl_payroll_approver_employee::where('payroll_approver_employee_id',Request::input('approver_id'))->update($update);
 		$response['response_status']  	= 'success';
-		$response['call_function']		= 'submit_done';
+		$response['call_function']		= 'reload_page';
 		$response['function_name'] 		= 'payroll_employee_approver.reload';
 		
 		return json_encode($response);
@@ -135,8 +138,6 @@ class PayrollAdminDashboard extends Member
 
 	public function modal_delete_approver($approver_id)
 	{
-		
-
 		if (Request::isMethod('post')) 
 		{
 			$response['response_status']  	= 'success';
@@ -158,7 +159,6 @@ class PayrollAdminDashboard extends Member
 
 			return view('member.modal.confirm', $data);
 		}
-		// 
 	}
 
 	public function create_approver_tag_employee()
@@ -251,9 +251,10 @@ class PayrollAdminDashboard extends Member
 				$_approver_group_by_level[$key] = array();
 				foreach($approver_group as $key2 => $approver_by_level)
 				{
-					array_push($_approver_group_by_level[$key], $approver_by_level['payroll_approver_employee_id']) ;
+					array_push($_approver_group_by_level[$key], $approver_by_level['payroll_approver_employee_id']);
 				}
 			}
+
 			$data['_approver_group_by_level'] = $_approver_group_by_level;
 		}
 		
@@ -376,6 +377,31 @@ class PayrollAdminDashboard extends Member
 			
 			return view('member.modal.confirm', $data);
 		}
+	}
+
+	//access
+
+	public function access_level()
+	{
+
+		$data['employee_info']	= Tbl_payroll_employee_basic::select('payroll_employee_email','payroll_employee_tin')->where('shop_id',Self::shop_id())->get();
+			
+		return view('member.payroll2.access_level',$data);
+	}
+
+	public function add_access_group()
+	{
+
+		$data['_company']        = Tbl_payroll_company::selcompany($this->user_info->shop_id)->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+		$data['_department']     = Tbl_payroll_department::sel($this->user_info->shop_id)->orderBy('payroll_department_name')->get();
+
+		return view('member.payroll2.create_access_group',$data);
+	}
+
+	public function save_access_group()
+	{
+		return view('member.payroll2.create_access_group');
 	}
 
 }

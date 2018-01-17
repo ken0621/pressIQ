@@ -51,12 +51,12 @@
             <div class="col-md-6">
                 <label>Requisition Slip Number</label>
                 <div>
-                   <input type="text" class="form-control" name="requisition_slip_number">
+                   <input type="text" class="form-control" name="requisition_slip_number" value="RS20180225-0001">
                 </div>
             </div>
             <div class="col-sm-3 text-right"></div>
             <div class="col-sm-3 text-right">
-                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_requisition/load-transaction"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">{{$count_so}}</span> Open Transaction</a></h4>
+                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_requisition/load-transaction"><i class="fa fa-handshake-o"></i> {{$count_so}} Open Transaction</a></h4>
             </div>
         </div>
         <div class="form-group">

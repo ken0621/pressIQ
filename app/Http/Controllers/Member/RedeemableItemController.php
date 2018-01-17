@@ -27,10 +27,12 @@ class RedeemableItemController extends Member
         $data['item_name'] = $request->item_name;
         $data['item_description'] = $request->item_sales_information;
         $data['redeemable_points'] = $request->redeemable_points;
+        $data['quantity'] = $request->quantity;
 
         $rules['item_name'] = 'required';
         $rules['item_description'] = 'required';
         $rules['redeemable_points'] = 'required';
+        $rules['quantity'] = 'required';
 
         $validator = Validator::make($data,$rules);
 
@@ -47,15 +49,17 @@ class RedeemableItemController extends Member
         else
         {
 
-        $insert['item_name'] = $request->item_name;
-        $insert['item_sales_information'] = $request->item_sales_information;
-        $insert['shop_id'] = $this->user_info->shop_id;
+        // $insert['item_name'] = $request->item_name;
+        // $insert['item_sales_information'] = $request->item_sales_information;
+        // $insert['shop_id'] = $this->user_info->shop_id;
 
-        $item_id = Tbl_item::insertGetId($insert);
+        // $item_id = Tbl_item::insertGetId($insert);
 
         $insertRedeem['redeemable_points'] = $request->redeemable_points;
-        $insertRedeem['item_id'] = $item_id;
+        $insertRedeem['item_id'] = 0;
+        // $insertRedeem['item_id'] = $item_id;
         $insertRedeem['item_name'] = $request->item_name;
+        $insertRedeem['quantity'] = $request->quantity;
         $insertRedeem['item_description'] = $request->item_sales_information;
         $insertRedeem['shop_id'] = $this->user_info->shop_id;
         $insertRedeem['image_path'] = $request->image_path;
@@ -72,7 +76,8 @@ class RedeemableItemController extends Member
     public function table()
     {
         $data["activetab"] = request("activetab");
-        $query = Tbl_item_redeemable::where("archived",request("activetab"));
+        $query = Tbl_item_redeemable::where('shop_id',$this->user_info->shop_id)
+                                    ->where("archived",request("activetab"));
 
         if(request("search")!="")
         {
@@ -105,10 +110,12 @@ class RedeemableItemController extends Member
         $data['item_name'] = $request->item_name;
         $data['item_description'] = $request->item_sales_information;
         $data['redeemable_points'] = $request->redeemable_points;
+        $data['quantity'] = $request->quantity;
 
         $rules['item_name'] = 'required';
         $rules['item_description'] = 'required';
         $rules['redeemable_points'] = 'required';
+        $rules['quantity'] = 'required';
 
         $validator = Validator::make($data,$rules);
 
@@ -126,6 +133,7 @@ class RedeemableItemController extends Member
         {
             $update['redeemable_points'] = $request->redeemable_points;
             $update['item_name'] = $request->item_name;
+            $update['quantity'] = $request->quantity;
             $update['item_description'] = $request->item_sales_information;
             $update['image_path'] = $request->image_path;
             Tbl_item_redeemable::where('item_redeemable_id',request("item_redeemable_id"))->update($update);

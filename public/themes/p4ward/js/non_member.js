@@ -11,6 +11,7 @@ function non_member()
 			document_ready();
 		});
 	}
+
 	function document_ready()
 	{
 		add_event_enter_code_click();
@@ -20,6 +21,7 @@ function non_member()
 		add_event_submit_verify_placement();
 		add_event_process_slot_placement();
 	}
+
 	function add_event_process_slot_creation()
 	{
 		$("body").on("click", ".process-slot-creation", function()
@@ -51,6 +53,7 @@ function non_member()
 			});
 		});
 	}
+
 	function add_event_submit_verify_code()
 	{
 		$(".code-verification-form").submit(function()
@@ -59,6 +62,7 @@ function non_member()
 			return false;
 		});
 	}
+
 	function add_event_submit_verify_sponsor()
 	{
 		$(".submit-verify-sponsor").submit(function(e)
@@ -81,6 +85,7 @@ function non_member()
 			return false;
 		});
 	}	
+
 	function add_event_submit_verify_placement()
 	{
 		$(".slot-placement-form").submit(function(e)
@@ -103,6 +108,7 @@ function non_member()
 			return false;
 		});
 	}
+
 	function action_verify_code()
 	{
 		var form_data = {};
@@ -144,6 +150,7 @@ function non_member()
 		});
 
 	}
+
 	function action_verify_sponsor()
 	{
 		$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-spinner fa-pulse fa-fw"></i> VERIFYING SPONSOR').attr("disabled", "disabled");
@@ -181,6 +188,7 @@ function non_member()
 			}
 		});
 	}
+
 	function add_event_enter_code_click()
 	{
 	    $(".btn-enter-a-code").click(function()
@@ -192,6 +200,7 @@ function non_member()
 			$(".submit-verify-sponsor").find("input").removeAttr("disabled").val("");
 	    });
 	}
+	
 	function action_verify_placement()
 	{
 		var form_data 			 = {};

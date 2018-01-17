@@ -115,6 +115,16 @@ class Customer
 	{
 		return Tbl_customer::where("customer_id", $customer_id)->where("shop_id", $shop_id)->first();
 	}
+	public static function get_name($shop_id, $customer_id)
+	{
+		$name = "No Customer Found";
+		$customer = Self::get_info($shop_id, $customer_id);
+		if($customer)
+		{
+			$name = $customer->company != "" ? $customer->company : ucwords($customer->first_name.' '.$customer->middle_name.' '.$customer->last_name);
+		}
+		return $name;
+	}
 	public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
@@ -190,28 +200,21 @@ class Customer
 		if($query->count() <= 0)
 		{
 			$return = Tbl_customer::where('shop_id', $shop_id);
-			$return->where('tbl_customer.first_name','LIKE', "%" . $keyword . "%");
-		}
-		$query2 = $return;
-		if($query2->count() <= 0)
-		{	
-			$return = Tbl_customer::where('shop_id', $shop_id);
-			$return->where('tbl_customer.last_name','LIKE', "%" . $keyword . "%");
-		}
-		$query1 = $return;
-		if($query1->count() <= 0)
-		{
-			$return = Tbl_customer::where('shop_id', $shop_id);
-			$return->where('tbl_customer.middle_name','LIKE', "%" . $keyword . "%");
+
+			$return->where(function($q) use ($keyword)
+            {
+                $q->orWhere("tbl_customer.first_name", "LIKE", "%$keyword%");
+                $q->orWhere("tbl_customer.last_name", "LIKE", "%$keyword%");
+                $q->orWhere("tbl_customer.middle_name", "LIKE", "%$keyword%");
+            });
 		}
 		if($paginate != 0)
 		{
-			$return = $return->groupBy('tbl_customer.customer_id')->paginate($paginate);
-
+			$return = $return->groupBy('tbl_customer.customer_id')->orderBy("tbl_customer.company",'ASC')->paginate($paginate);
 		}
 		else
 		{
-			$return = $return->groupBy('tbl_customer.customer_id')->get();
+			$return = $return->groupBy('tbl_customer.customer_id')->orderBy("tbl_customer.company",'ASC')->get();
 		}
 
 		return $return;

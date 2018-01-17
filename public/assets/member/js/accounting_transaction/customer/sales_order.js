@@ -125,6 +125,7 @@ function sales_order()
 			{				
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
 				$(".customer-billing-address").val($(this).find("option:selected").attr("billing-address"));
+				action_load_open_transaction($(this).val());
 			}
 		});
 
@@ -182,6 +183,28 @@ function sales_order()
     		}
 
         }).globalDropList('disabled');
+	}
+
+	function action_load_open_transaction($customer_id)
+	{
+		if($customer_id)
+		{
+			$.ajax({
+				url : '/member/transaction/sales_order/count-transaction',
+				type : 'get',
+				data : {customer_id : $customer_id},
+				success : function(data)
+				{
+					$(".open-transaction").slideDown();
+					$(".popup-link-open-transaction").attr('link','/member/transaction/sales_order/load-transaction?c='+$customer_id);
+					$(".count-open-transaction").html(data);
+				}
+			});
+		}
+		else
+		{
+			$(".open-transaction").slideUp();
+		}
 	}
 	function event_remove_tr()
 	{
@@ -288,3 +311,14 @@ function success_item(data)
     });
     data.element.modal("hide");
 }
+
+function success_sales_order(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
+}
+
+

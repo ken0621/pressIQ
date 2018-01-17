@@ -49,4 +49,8 @@ class SalesAgent
 
 		return $agent;
 	}
+	public static function get_info($shop_id, $agent_code)
+	{
+		return Tbl_employee::position()->where("shop_id", $shop_id)->where('agent_code', $agent_code)->first();
+	}
 }

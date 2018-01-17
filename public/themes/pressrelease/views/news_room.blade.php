@@ -10,27 +10,30 @@
             <div class="background-border-container" id="show_newsroom">
                 <div class="row clearfix">
                     <div class="col-md-12">
-                        <div class="search-container"  >
+                        <div class="search-container">
                             <input type="text" placeholder="Search News" name="search_newsroom" id="search_newsroom">
-                            <span>
-                            <i  type="button"  class="fa fa-search" id="search_newsroom_btn" name="search_newsroom_btn" aria-hidden="true" her></i></span> 
+                            <button type="button" id="search_newsroom_btn" name="search_newsroom_btn" aria-hidden="true" her><i class="fa fa-search"></i></button>
                         </div>
                     </div>
                 </div>
                 
-                @foreach ($pr as $prs)
-                <div class="news-title-container" >
-                    <div class="title"><a href="/newsroom/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a></div>
-                </div>  
-                <div class="details-container">
-                    <p>{!!$prs->pr_content!!}</p>
-                </div>
-                <div class="button-container">
-                    <button onclick="window.location.href='/newsroom/view/{{$prs->pr_id}}'">Read More</button>
-                </div>
-                @endforeach
-                <div class="button-container" >
-                {!! $pr->render() !!}
+                <div class="main-container">
+                    @foreach ($pr as $prs)
+                    <div class="news-title-container" >
+                        <div class="title">
+                            <a href="/newsroom/view/{{$prs->pr_id}}">{{$prs->pr_headline}}</a>
+                        </div>
+                    </div>  
+                    <div class="details-container">
+                        <p>{!!$prs->pr_content!!}</p>
+                    </div>
+                    <div class="button-container">
+                        <button onclick="window.location.href='/newsroom/view/{{$prs->pr_id}}'">Read More &raquo;</button>
+                    </div>
+                    @endforeach
+                    <div class="button-container" style="border-bottom: none;" >
+                    {!! $pr->render() !!}
+                    </div>
                 </div>
             </div>
 

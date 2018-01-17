@@ -568,9 +568,7 @@ function success_create_customer_wis(data)
 	if(data.status == 'success')
 	{
 		toastr.success('Success');
-		setInterval(function()
-		{
-			location.href = '/member/customer/wis';
-		},2000);
+		location.href = '/member/customer/wis';
+		
 	}
 }

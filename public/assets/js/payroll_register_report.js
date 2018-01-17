@@ -42,6 +42,7 @@ function payroll_register_report()
 			success: function(data)
 				{
 					$(".payroll_register_report_table").html(data);
+				
 				}
 			});
 	}
@@ -54,5 +55,6 @@ function payroll_register_report()
 			window.location = "/member/payroll/reports/payroll_register_report_period/export_excel/"+period_company_id+"/"+payroll_company_id;
 		});
 	}
+
 }
 

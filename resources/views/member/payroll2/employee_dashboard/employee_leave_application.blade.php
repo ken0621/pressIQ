@@ -1,95 +1,150 @@
-<div id="myModal" class="modal fade">
+<link rel="stylesheet" type="text/css" href="/assets/member/payroll/css/timesheet.css">
 
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-
-            <div class="modal-header">
-
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
-                <h4 class="modal-title">Confirmation</h4>
-
-            </div>
+<form class="global-submit" role="form" action="/leave/save_leave" method="POST">
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="/employee">Dashboard </a>
+    </li>
+    <input type="hidden" name="_token" value="{{csrf_token()}}">
+   <li class="breadcrumb-item active">&nbsp/&nbsp{{ $page }}</li>
+</ol>
 	<div class="modal-body form-horizontal">
-		<div class="row">
-		    <div class="col-md-6">
-				<small>Group of Approver</small>
-				<select class="form-control" required>
-					<option value="">Select Approver</option>
-				</select>
-		  	</div>
-		  	<div class="col-md-6">
-				<small>Reliever</small>
-				<select class="form-control" required>
-					<option value="">Select Reliever</option>
-				</select>
+
+        <div class="row">
+ 			    <div class="col-md-6">
+ 			    	<small>Type of Leave</small>
+					<select class="form-control user-error" name="payroll_request_leave_type" aria-invalid="true" required>
+						<option value="">Select Leave Type</option>
+					@foreach($leave_type as $leave)
+		    		<option value="{{ $leave->payroll_leave_temp_id }}"> {{ $leave->payroll_leave_temp_name }} </option>
+		    		@endforeach
+					</select>
+					<label>Status of Leave</label>
+		  		</div>
+
+		  		<div class="col-md-6">
+			  		<small>Date Filed</small>
+			      	<input class="form-control" type="date" class="form-control" name="payroll_request_leave_date_filed" required>
+				</div>
+        </div>
+
+        <div class="row">
+ 			    <div class="col-md-3">
+					<small>Available Leave</small>
+				   	<input class="form-control" type="text" class="form-control" style="width: 80px;" disabled>
+		  		</div>
+
+		  		 <div class="col-md-3">
+					<small>Unused Leave</small>
+				   	<input class="form-control" type="text" class="form-control" style="width: 80px;" disabled>
+		  		</div>
+
+		  		 <div class="col-md-6">
+					<small>Reliever</small>
+					<select class="form-control" name="payroll_request_leave_id_reliever" required>
+						<option value="">Select Employee</option>
+						@foreach($employees_info as $employee)
+							<option value="{{$employee->payroll_employee_id}}">{{$employee->payroll_employee_first_name}} {{$employee->payroll_employee_middle_name}} {{$employee->payroll_employee_last_name}}</option> 
+						@endforeach
+
+					</select>
+		  		</div>
+        </div>
+
+         <div class="row">
+ 			    <div class="col-md-3">
+					<small>Used Leave</small>
+				   	<input class="form-control" type="text" class="form-control" style="width: 80px;" disabled>
+		  		</div>
+
+		  		 <div class="col-md-3">
+					<small>Hours</small>
+				   	<input class="text-center form-control break time-entry time-target time-entry-24 is-timeEntry" type="text" name="payroll_request_leave_total_hours" placeholder="00:00" style="width: 80px;">
+		  		</div>
+
+		  		 <div class="col-md-6">
+		
+		  		</div>
+        </div>
+
+        <div class="row">
+        	<div class="col-md-6">
+        		<br>	
+				<div class="checkbox">
+					<label><input type="checkbox" class="single_date_only" name="single_date_only" value="1" checked>Single date only</label>
+				</div>
 			</div>
-		</div>
-	    <div class="row">
-			<div class="col-sm-6">
-				<input id="checkBox" type="checkbox">
-				<small>Create your own Approver?</small>
-			</div>
-	        <div class="col-sm-2">
-				<small>Total hours of leave</small>
-				<input class="form-control" type="number" placeholder="1.0" step="0.01" min="0" max="10" value='96' disabled>
-			</div>
-			<div class="col-md-2">
-				<small>Used</small>
-				<input class="form-control" type="number" placeholder="1.0" step="0.01" min="0" max="10" value='8.5' disabled>
-			</div>
-			<div class="col-md-2">
-				<small>Unused</small>
-				<input class="form-control" type="number" placeholder="1.0" step="0.01" min="0" max="10" value='87.5' disabled>
-			</div>
-	    </div>
-		<div class="row">
-			<div class="col-md-6">
-				<small>Type of Leave</small>
-				<select class="form-control" required>
-					<option value="">Select Type of Leave</option>
-				</select>
-			</div>
-			<div class="col-md-3">
-				<small>Number of Days</small>
-				<input class="form-control" type="number"  placeholder="0" required>
-			</div>
-			<div class="col-md-3">
-				<small>Number of Hour/s</small>
-				<input class="form-control" type="number" placeholder="1.0" step="0.01" min="0" max="10">
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-6">
-				<small>Date: From</small>
-				<input class="form-control" id="date" type="date" placeholder="mm/dd/yyyy" required>
-			</div>
-			<div class="col-md-6">
-				<small>To</small>
-				<input class="form-control" id="date" type="date" placeholder="mm/dd/yyyy" disabled>
-			</div>
-		</div>
-		<div class="row">
+        </div>
+        <div class="row">
+		  		<div class="col-md-6">
+			  		<small>Schedule Date Start</small>
+			      	<input class="form-control" type="date" class="form-control" name="payroll_request_leave_date" required>
+				</div>
+
+		  		<div class="col-md-6">
+			  		<small>Schedule Date End</small>
+			      	<input class="form-control payroll_schedule_leave_end" type="date" class="form-control" name="payroll_request_leave_date_end" disabled="">
+				</div>
+        </div>
+        <br>
+       	<div class="row">
 	        <div class="col-sm-12">
-	        <small>Reason for Leave</small>
-	        	<textarea class="form-control" name="other_info" rows="4" required></textarea>
+	        <small>Remarks</small>
+	        	<textarea class="form-control" rows="4" name="remark" placeholder="Type Remarks" required></textarea>
 	        </div>
 	    </div>
+        <br>
+
 	    <div class="row">
-	        <div class="col-sm-6">
-	        <small>Location while on leave</small>
-	        	<input type="text" class="form-control">
-	        </div>
-			<div class="col-md-6">
-				<small>Contact No.</small>
-				<input class="form-control" type="text" class="form-control">
-			</div>
-	    </div>
+	    	<div class="col-sm-12">
+	    		<small for="approver_group">Select Group Approver</small>
+		    	<select class="form-control approver_group_leave" id="approver_group" name="approver_group" required>
+		    		<option value=""> Select Group Approver </option>
+		    		@foreach($_group_approver as $group_approver)
+		    		<option value="{{ $group_approver->payroll_approver_group_id }}"> {{ $group_approver->payroll_approver_group_name }} </option>
+		    		@endforeach
+		    	</select>
+	    	</div>
+	    </div> 
+	    
+	    <div class="row">
+	    	<div class="col-sm-12 approver_group_list_leave">
+	    		
+	    	</div>
+	    </div>    
+
 	</div>
-</div>
-<div class="modal-footer">
-	<button type="button"  class="btn btn-primary btn-md">Cancel</button>
-	<button type="submit"  class="btn btn-primary btn-md">Submit</button>
-</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-primary btn-md" data-dismiss="modal">Cancel</button>
+		<button type="submit" class="btn btn-primary btn-md">Submit</button>
+	</div>
 </form>
+<script>
+		function reload(data)
+		{
+			data.element.modal("hide");
+			location.reload();
+		}
+	
+		$(".time-entry").timeEntry('destroy');
+		$(".time-entry-24").timeEntry('destroy');
+		$(".time-entry.time-in").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+		$(".time-entry.time-out").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 12, 0, 0)});
+		$(".time-entry-24").timeEntry({unlimitedHours: true, defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+
+		$(".single_date_only").unbind("change");
+		$(".single_date_only").bind("change",function()
+		{
+			if($(this).is(':checked'))
+			{
+				$(".payroll_schedule_leave_end").attr("disabled","true");
+				$(".payroll_schedule_leave_end").removeAttr("required");
+			}
+			else
+			{
+				$(".payroll_schedule_leave_end").removeAttr("disabled");
+				$(".payroll_schedule_leave_end").attr("required",true);
+			}
+		});
+</script>
+<script type="text/javascript" src="/assets/employee/js/employee_overtime_application.js"></script>

@@ -131,9 +131,11 @@ class Purchase_Order
             if($item_line)
             {
                 $discount = $item_line['discount'];
+                $discount_type  = 'fixed';
                 if(strpos($discount, '%'))
                 {
                     $discount = substr($discount, 0, strpos($discount, '%')) / 100;
+                    $discount_type  = 'percent';
                 }
 
                 $insert_line['poline_po_id']           = $po_id;
@@ -145,6 +147,7 @@ class Purchase_Order
                 $insert_line['poline_orig_qty']        = $item_line['quantity'];
                 $insert_line['poline_rate']            = $item_line['rate'];
                 $insert_line['poline_discount']        = $discount;
+                $insert_line['poline_discounttype']    = $discount_type;
                 $insert_line['poline_discount_remark'] = $item_line['discount_remark'];
                 $insert_line['taxable']                = $item_line['taxable'];
                 $insert_line['poline_amount']          = $item_line['amount'];

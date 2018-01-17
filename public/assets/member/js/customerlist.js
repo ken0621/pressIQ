@@ -22,10 +22,9 @@ function customerlist()
 
 	function search()
 	{
-		$(".customer-search").unbind("keyup");
-		$(".customer-search").bind("keyup", function ()
+		$("body").on("change",'.customer-search', function ()
 		{
-			if($(".customer-search").val() != "")
+			if($(this).val())
 			{
 				 var str = $(this).val();
 				 var value = $(this).attr("data-value");

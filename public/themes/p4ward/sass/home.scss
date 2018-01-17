@@ -1,18 +1,21 @@
+@import "../../../assets/front/sass/mixin";
+
 $display-text: 'Lato', sans-serif;
-$content-text: 'PT Sans', sans-serif;
+$content-text: 'Ubuntu', sans-serif;
 $light: 300;
 $regular: 400;
-$medium: 500;
 $bold: 700;
 $text-light: #555;
 $text-dark: #1c1c1c;
 
-body{
+body
+{
 	background-color: transparent;
 	color: $text-light;
 	font-family: $display-text;
 
 }
+
 /* SLIDER */
 .slider-wrapper 
 {
@@ -24,10 +27,12 @@ body{
 {
 	right: 0;
 }
+
 .slick-prev
 {
 	left: 0;
 }
+
 .slick-next, .slick-prev
 {
 	width: 50px;
@@ -38,9 +43,11 @@ body{
 .wrapper-1
 {
 	padding: 50px 0px;
+
 	.title-container
 	{
 		font-size: 30px;
+
 		.title-blue
 		{
 			color: #0466af;
@@ -66,6 +73,7 @@ body{
 			}
 		}
 	}
+
 	.details-container
 	{
 		padding: 0px 0px 15px 0px;
@@ -77,17 +85,26 @@ body{
 			margin-top: 20px;
 		}
 	}
+
 	.button-container
 	{
 		font-family: 'Ubuntu', sans-serif;
-		background-color: #0466af;
-		padding: 10px 20px;
-		text-align: center;
-		width: 120px;
+		margin-bottom: 50px;
+
 		a
 		{
+			@include transition(0.3s);
+			background-color: #0466af;
+			padding: 10px 20px;
+			text-align: center;
+			width: 120px;
 			text-decoration: none;
 			color: #fff;
+
+			&:hover
+			{
+				opacity: 0.8;
+			}
 		}
 	}
 
@@ -96,21 +113,25 @@ body{
 		background-color: #0466af;
 		min-height: 400px;
 		padding: 40px;
+
 		.title-container
 		{
 			padding-bottom: 10px;
+
 			.title-white
 			{
 				color: #fff;
 				font-size: 30px;
 
 			}
+
 			.title-orange
 			{
 				color: #f4ac00;
 				font-size: 30px;
 				
 			}
+
 			span
 			{
 				display: inline-block;
@@ -121,6 +142,7 @@ body{
 
 			}
 		}
+
 		p
 		{
 			font-family: 'Open+Sans', sans-serif;
@@ -128,9 +150,11 @@ body{
 			font-size: 15px;
 			margin-left: 7px;
 		}
+
 		.subtitle-container
 		{
 			margin-top: 35px;
+
 			span
 			{
 				display: inline-block;
@@ -139,6 +163,7 @@ body{
 				color: #fff;
 				padding: 0px 5px 10px 5px;
 			}
+
 			.title
 			{
 				font-size: 20px;
@@ -153,18 +178,22 @@ body{
 {
 	padding: 30px 0px 40px 0px;
 	background-color: #0466af;
+
 	.title-container
 	{
 		text-align: center;
 		font-size: 35px;
+
 		.title-white
 		{
 			color: #fff;
 		}
+
 		.title-orange
 		{
 			color: #f4ac00;
 		}
+
 		span
 		{
 			display: inline-block;
@@ -172,23 +201,29 @@ body{
 			font-family: 'Cantarell', sans-serif;
 			font-style: italic;
 			padding: 0px 2px;
+
 			img
 			{
 				display: block;
 			}
 		}
 	}
+
 	.bottom-container
 	{
 		margin-top: 40px;
+
 		.image-holder
 		{
 			width: 100%;
+			margin-bottom: 20px;
+
 			img
 			{
 				width: 100%;
 			}
 		}
+
 		.title
 		{
 			font-size: 25px;
@@ -196,6 +231,7 @@ body{
 			font-style: italic;
 			color: #fff;
 		}
+
 		.details-container
 		{
 			p
@@ -213,18 +249,22 @@ body{
 {
 	background-color: #fff;
 	padding: 30px 0px 50px 0px;
+
 	.title-container
 	{
 		text-align: center;
 		font-size: 35px;
+
 		.title-blue
 		{
 			color: #0466af;
 		}
+
 		.title-orange
 		{
 			color: #f4ac00;
 		}
+
 		span
 		{
 			display: inline-block;
@@ -238,15 +278,18 @@ body{
 			}
 		}
 	}
+
 	.product-container
 	{
 		padding: 50px;
+
 		.percent-container
 		{
 			color: #0466af;
 			font-family: 'Cantarell', sans-serif;
 			font-size: 25px;
 		}
+
 		.product-title-container
 		{
 			color: #f4ac00;
@@ -254,33 +297,56 @@ body{
 			font-style: italic;
 			font-size: 30px;
 			padding: 0px 90px;
-		}
-		.product-image
-		{
-			padding: 30px 0px;
-		}
-		.button-container
-		{
-			border: 2px solid #0466af;
-			padding: 10px 40px;
-			width: 180px;
-			font-size: 15px;
-			margin: auto;
-			a
+
+			@media screen and (max-width: 500px)
 			{
-				color: #0466af;
-				text-decoration: none;
-			}
-		}
-		.button-container:hover
-		{
-			background-color: #0466af;
-			a
-			{
-				color: #fff;
+				font-size: 25px;
 			}
 		}
 
+		.product-image
+		{
+			padding: 30px 0px;
+			
+			@media screen and (max-width: 500px)
+			{
+				width: 90%;
+				margin: auto;
+
+				img
+				{
+					width: 100%;
+				}
+			}
+		}
+
+		.button-container
+		{
+			margin: auto;
+
+			a
+			{
+				text-decoration: none;
+			
+				button
+				{
+					@include transition(0.3s);
+					border: 2px solid #0466af;
+					padding: 10px 40px;
+					width: 180px;
+					font-size: 15px;
+					background-color: inherit;
+
+					&:hover
+					{
+						background-color: #0466af;
+						cursor: pointer;
+						color: #fff;
+					}
+				}
+
+			}
+		}
 	}
 }
 
@@ -289,13 +355,22 @@ body{
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	padding: 140px 50px;
+
 	.benefits-container
 	{
 		padding: 0px 15px;
+
 		.image-holder
 		{
 			text-align: center;
+
+			@media screen and (max-width: 800px)
+			{
+				margin-top: 20px;
+			}
+
 		}
+
 		.title-container
 		{
 			text-align: center;
@@ -306,6 +381,7 @@ body{
 			font-size: 25px;
 			padding: 20px 0px 0px 0px;
 		}
+
 		.details-container
 		{
 			text-align: center;
@@ -322,6 +398,7 @@ body{
 	background-color: #fff;
 	padding-bottom: 20px;
 	padding: 80px 0px 50px 0px;
+
 	.title-container
 	{
 		font-size: 25px;
@@ -329,6 +406,7 @@ body{
 		font-style: italic;
 		color: #0466af;;
 	}
+
 	.details-container
 	{
 		p
@@ -339,10 +417,17 @@ body{
 			padding: 5px 0px 0px 0px;
 		}
 	}
+
 	.image-holder
 	{
 		padding: 20px 0px 0px 0px;
 		text-align: center;
+		width: 100%;
+
+		img
+		{
+			width: 100%;
+		}
 	}
 	
 }
@@ -351,18 +436,22 @@ body{
 {
 	padding: 30px 0px 50px 0px;
 	background-color: #0466af;
+
 	.title-container
 	{
 		text-align: center;
 		font-size: 35px;
+
 		.title-white
 		{
 			color: #fff;
 		}
+
 		.title-orange
 		{
 			color: #f4ac00;
 		}
+
 		span
 		{
 			display: inline-block;
@@ -370,21 +459,25 @@ body{
 			font-family: 'Cantarell', sans-serif;
 			font-style: italic;
 			padding: 0px 2px;
+
 			img
 			{
 				display: block;
 			}
 		}
 	}
+
 	.holder
 	{
 		padding:  15px 5px; 
 		margin: auto 5px;
 		height: 500px;
+
 		.says-container
 		{
 			padding: 0px 50px;
 		}
+
 		.feedback-container
 		{
 			margin: 50px 0px 100px 0px;
@@ -395,24 +488,57 @@ body{
 				padding: 10px;
 				text-align: left;
 				border-bottom: 1px solid #d4d4d4;
-				.image-holder
+				
+				.left
 				{
-					text-align: center;
+					.image-holder
+					{
+						text-align: center;
+						width: 60%;
+						margin: auto;
+
+						img
+						{
+							width: 100%;
+							border-radius: 100%;
+						}
+
+						@media screen and (max-width: 800px)
+						{
+							width: 15%;
+							margin: 0;
+						}
+					}
+
+					@media screen and (max-width: 800px)
+					{
+						margin-left: 15px;
+					}
 				}
-				.name
+
+				.right
 				{
-					font-family: 'Open+Sans', sans-serif;
-					font-weight: 700;
-					font-size: 18px;
-					color: #000;
-					padding: 7px 0px 0px 0px;
+					.name
+					{
+						font-family: 'Open+Sans', sans-serif;
+						font-weight: 700;
+						font-size: 18px;
+						color: #000;
+						padding: 7px 0px 0px 0px;
+					}
+					.date
+					{
+						font-family: 'Open+Sans', sans-serif;
+						font-size: 15px;
+						color: #0466af;
+					}
+
+					@media screen and (max-width: 800px)
+					{
+						margin: -50px 0 0 80px;
+					}
 				}
-				.date
-				{
-					font-family: 'Open+Sans', sans-serif;
-					font-size: 15px;
-					color: #0466af;
-				}
+
 			}
 			.bottom-container
 			{
@@ -426,6 +552,7 @@ body{
 					text-align: left;
 					min-height: 270px;
 				}
+
 				.star
 				{
 					text-align: left;
@@ -436,9 +563,57 @@ body{
 	}
 }
 
+// Network Marketing Without Recruitment PDF
+.wrapper-x
+{
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	padding: 50px 0px;
+	text-align: center;
+	
+	.wrapper-x-title
+	{
+		color: #fff;
+		font-family: 'Cantarell', sans-serif;
+		font-style: italic;
+		font-size: 25px;
+	}
+
+	.btn-container
+	{
+		padding: 30px 0 0 0;
+		margin: auto;
+
+		a
+		{
+			text-decoration: none;
+		
+			button
+			{
+				@include transition(0.3s);
+				border: 2px solid #F4AC00;
+				padding: 10px 40px;
+				width: 180px;
+				font-size: 15px;
+				background-color: inherit;
+				color: #F4AC00;
+
+				&:hover
+				{
+					border: 2px solid #0466AF;
+					background-color: #0466AF;
+					cursor: pointer;
+					color: #fff;
+				}
+			}
+		}
+	}
+}
+
 .wrapper-7
 {
 	padding: 50px 0px;
+
 	.title-container
 	{
 		font-size: 25px;
@@ -447,6 +622,7 @@ body{
 		color: #0466af;
 		padding-bottom: 30px;
 	}
+
 	input
 	{
 		padding: 0px 10px;
@@ -456,6 +632,7 @@ body{
 		width: 100%;
 		border: 1px solid #919191;
 	}
+
 	textarea
 	{
 		padding: 10px 10px;
@@ -469,28 +646,34 @@ body{
 		min-width: 100%;
 		border: 1px solid #919191;
 	}
+
 	.button-container
 	{
 		padding: 20px 0px;
 		text-align: left;
-		width: 180px;
+
 		a
 		{
+			@include transition(0.3s);
 			background-color: #0466af;
+			width: 180px;
 			color: #fff;
 			font-size: 15px;
 			padding: 10px 40px;
 			text-decoration: none;
-		}
-		a:hover
-		{
-			opacity: 0.9;
+
+			&:hover
+			{
+				opacity: 0.8;
+			}
 		}
 	}
+
 	.icon
 	{
 		vertical-align: middle;
 	}
+
 	.title
 	{
 		font-size: 25px;
@@ -500,6 +683,7 @@ body{
 		padding: 0px 0px 10px 10px;
 		vertical-align: middle;
 	}
+
 	.details-container
 	{
 		p
@@ -510,6 +694,7 @@ body{
 			padding: 10px 0px 25px 50px;
 		}
 	}
+
 	.number-container
 	{
 		p:nth-child(1)
@@ -519,6 +704,7 @@ body{
 			font-size: 16px;
 			padding: 10px 0px 0px 50px;
 		}
+		
 		p:nth-child(2)
 		{
 			font-family: 'Open+Sans', sans-serif;

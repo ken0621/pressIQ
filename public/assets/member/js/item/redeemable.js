@@ -36,6 +36,9 @@ function redeemable()
 		table_data.activetab = $('.change-tab.active').attr("mode");
 		table_data.search = $('.search').val();
 
+
+		console.log($('.change-tab.active').attr("mode"));
+
 		action_table_loader();
 		$.ajax(
 		{

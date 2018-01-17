@@ -379,13 +379,12 @@ function credit_memo(){
 		// 	$parent.find(".txt-rate").attr("readonly",true);
 		// 	$parent.find(".txt-discount").attr("disabled","disabled");
 		// }
-
-		$parent.find(".txt-qty").attr("disabled",true);
 		if($this.find("option:selected").attr("has-um") != '')
 		{		
-			$parent.find(".txt-qty").removeAttr("disabled");	
+			$parent.find(".txt-qty").attr("disabled",true);
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
+			$parent.find(".txt-qty").removeAttr("disabled");	
 				$(this).globalDropList("reload").globalDropList("enabled");
 				$(this).val($(this).find("option:first").val()).change();
 			})
@@ -498,7 +497,30 @@ function submit_done_item(data)
     });
     data.element.modal("hide");
 }
-
+function success_credit_memo(data)
+{
+	if(data.status == "success")
+	{
+		toastr.success("Success");
+        location.href = data.redirect_to;
+    }
+}
+function success_credit_memo_refund(data)
+{
+	if(data.status == "success")
+	{
+		toastr.success("Success");
+        action_load_link_to_modal(data.redirect_to,'lg');
+    }
+}
+function success_credit_memo_apply(data)
+{
+	if(data.status == "success")
+	{
+		toastr.success("Success");
+        action_load_link_to_modal(data.redirect_to,'lg');
+    }
+}
 function submit_done(data)
 {
 	if(data.status == "success-credit-memo")

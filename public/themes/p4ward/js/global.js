@@ -3,10 +3,12 @@ var global = new global()
 function global()
 {
 	init();
+
 	function init()
 	{
 		document_ready();
 	}
+
 	function document_ready()
 	{
 		$(document).ready(function()
@@ -19,6 +21,7 @@ function global()
 			ready_load_mini_ecom_cart();
 		});
 	}
+	
 	function event_show_cart()
 	{
 		$('html').click(function() 
@@ -32,14 +35,17 @@ function global()
 			action_show_cart();
 		});
 	}
+
 	function action_show_cart()
 	{
 		$(".shopping-cart-container .container-cart").addClass("show");
 	}
+
 	function action_hide_cart()
 	{
 		$(".shopping-cart-container .container-cart").removeClass("show");
 	}
+	
 	function action_match_height()
 	{
 		$(".match-height").matchHeight();
@@ -49,6 +55,7 @@ function global()
 			$(".match-height").matchHeight();
 		});
 	}
+
 	function action_fit_text()
 	{
 		jQuery(".item-price").fitText(0.8, {
@@ -56,6 +63,7 @@ function global()
 			minFontSize: '8px',
 		});
 	}
+
 	function action_slick()
 	{
 		$('.daily-container').slick({

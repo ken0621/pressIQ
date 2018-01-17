@@ -3,6 +3,7 @@ var home = new home();
 function home()
 {
 	init();
+
 	function init()
 	{
 		$(document).ready(function()
@@ -10,20 +11,24 @@ function home()
 			document_ready();
 		});
 	}
+
 	function document_ready()
 	{
 		action_says_carousel();
 		action_product_image_carousel();
 	}
+	
 	function action_says_carousel()
 	{
-		$('.says-container').slick({
+		$('.says-container').slick(
+		{
 			infinite: true,
 			slidesToShow: 3,
 			slidesToScroll: 1,
       		autoplay: true,
 			autoplaySpeed: 4000,
-			dots: true,
+			arrows: false,
+			dots: false,
 			responsive: [
 			    {
 			      breakpoint: 1024,

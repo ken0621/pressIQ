@@ -16,6 +16,8 @@ use App\Globals\CustomerWIS;
 use App\Globals\WarehouseTransfer;
 use App\Globals\TransactionPurchaseRequisition;
 
+use App\Globals\TransactionSalesOrder;
+
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Session;
@@ -31,11 +33,14 @@ class TransactionPurchaseRequisitionController extends Member
 	{
 		$data['page'] = 'Purchase Requisition';
 		$data['_list'] = RequisitionSlip::get($this->user_info->shop_id);
+		$data['_pr']   = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
+		//dd($data['_pr']);//dd($data['_list']);
 		return view('member.accounting_transaction.vendor.purchase_requisition.requisition_slip', $data);
 	}
-	public function getLoadRsTable(Request $request)
+	public function getLoadRequisitionSlip(Request $request)
 	{
-		$data['_list'] = RequisitionSlip::get($this->user_info->shop_id, $request->status);
+		$data['_requisition_slip'] = RequisitionSlip::get($this->user_info->shop_id, $request->tab_type, 10, $request->search_keyword);
+		//dd($data['_requisition_slip']);
 		return view('member.accounting_transaction.vendor.purchase_requisition.requisition_slip_table', $data);		
 	}
 	public function getCreate()
@@ -66,6 +71,8 @@ class TransactionPurchaseRequisitionController extends Member
 	}
 	public function getLoadTransaction()
 	{
-		dd('Wait Langs!');
+		$data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
+
+		return view('member.accounting_transaction.vendor.purchase_requisition.load_transaction', $data);
 	}
 }

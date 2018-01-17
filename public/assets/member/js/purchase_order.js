@@ -161,7 +161,9 @@ function purchase_order(){
 			if(discount.indexOf('%') >= 0)
 			{
 				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
-				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * action_return_to_number(rate);
+				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
+				/*$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
+				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * action_return_to_number(rate);*/
 			}
 			else if(discount == "" || discount == null)
 			{
@@ -412,10 +414,9 @@ function purchase_order(){
 		// 	$parent.find(".txt-rate").attr("readonly",true);
 		// 	$parent.find(".txt-discount").attr("disabled","disabled");
 		// }
-		$parent.find(".txt-qty").attr("disabled",true);
 		if($this.find("option:selected").attr("has-um") != '')
 		{
-			$parent.find(".txt-qty").removeAttr("disabled");
+			$parent.find(".txt-qty").attr("disabled",true);
 			$.ajax(
 			{
 				url: '/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"),
@@ -424,6 +425,7 @@ function purchase_order(){
 				{
 					$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 					{
+						$parent.find(".txt-qty").removeAttr("disabled");
 						$(this).globalDropList("reload").globalDropList("enabled");
 						console.log($(this).find("option:first").val());
 						$(this).val($(this).find("option:first").val()).change();

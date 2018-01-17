@@ -513,6 +513,7 @@
 	color: #006CC5 !important;
 	border: 1px solid #006CC5 !important;
 	font-weight: 400;
+	box-shadow: none !important;
 	@include transition(0.3s);
 
 	&:hover

@@ -5,7 +5,10 @@
 		<button type="button" class="close" data-dismiss="modal">×</button>
 		<h4 class="modal-title">PAYOUT DETAILS</h4>
 	</div>
-	<div class="modal-body clearfix">
+	<div class="modal-body clearfix" style="position: relative;">
+		<div class="loader-payout" style="display: none; top: 50%; z-index: 1; transform: translateY(-50%);position: absolute; left: 0; right: 0; text-align: center; background-color: rgba(255,255,255,0.5);">
+    		<img src="/assets/member/img/91.gif">
+    	</div>
 		<div class="row">
 	        <div class="clearfix modal-body"> 
 	            <div class="col-md-6">
@@ -23,6 +26,41 @@
 	            </div>
 	        </div>
 	    </div>
+
+	    {{-- AIRLINE --}}
+		<div class="row payout-mode-container" content="airline">
+	        <div class="clearfix modal-body"> 
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead style="text-transform: uppercase">
+                                <tr>
+                                    <th class="text-center" style="width: 100px;">SLOT CODE</th>
+                                    <th class="text-center" width="120px">AIRLINE TICKETING ACCOUNT ID</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	@if(isset($_airline_slot))
+	                            	@foreach($_airline_slot as $slot)
+	                                <tr>
+	                                	<input type="hidden" name="airline[]" value="{{ $slot->slot_no }}">
+	                                    <td class="text-center" style="vertical-align: middle;">{{ $slot->slot_no }}</td>
+	                                    <td class="text-center">
+	                                    	<input type="text" class="form-control text-center" name="tour_wallet_account_id[]" value="{{ $slot->tour_wallet_account_id }}">
+	                                    </td>
+	                                </tr>
+	                                @endforeach
+	                            @else
+	                            	<tr>
+	                            		<td colspan="2" style="text-align: center;">Only VIP Gold Membership</td>
+	                            	</tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+	        </div>
+		</div>
 
 	    {{-- VMONEY --}}
 		<div class="row payout-mode-container" content="vmoney">
@@ -205,7 +243,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white btn-custom-close" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-		<button type="submit" class="btn btn-custom-primary" type="button"><i class="fa fa-pencil"></i> Update Payout Details</button>
+		<button type="submit" class="btn btn-custom-primary update-payout-button" type="button"><i class="fa fa-pencil"></i> Update Payout Details</button>
 	</div>
 </form>
 @else
@@ -246,6 +284,8 @@ function event_payout_submit()
 {
 	$(".form-payout-submit").submit(function(e)
 	{
+		$(".loader-payout").show();
+		$(".update-payout-button").prop("disabled", true);
 		action_submit_payout_details($(e.currentTarget).serialize());
 		return false;
 	});
@@ -261,12 +301,22 @@ function action_submit_payout_details(form_data)
 		type:"post",
 		success: function(data)
 		{
-			$("#global_modal").modal("hide");
-			setTimeout(function()
+			$(".update-payout-button").prop("disabled", false);
+			$(".loader-payout").hide();
+
+			if (data.status == "success") 
 			{
-				action_load_link_to_modal("/members/payout-setting-success", "sm");
-				$(".top-message-warning.for-payout").fadeOut();
-			}, 350);
+				$("#global_modal").modal("hide");
+				setTimeout(function()
+				{
+					action_load_link_to_modal("/members/payout-setting-success", "sm");
+					$(".top-message-warning.for-payout").fadeOut();
+				}, 350);
+			}
+			else
+			{
+				toastr.error(data.message);
+			}
 		}
 	});
 }

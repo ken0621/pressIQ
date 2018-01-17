@@ -11,19 +11,19 @@
             <div class="title-container">Email's Press Release</div>
             <table>
                 <tr>
-                    <th>Email From</th>
-                    <th>Header</th>
-                    <th>Content</th>
-                    <th>Boilerplate</th>
-                    <th>Action</th>
+                    <th style="width: 30%;">Email From</th>
+                    <th style="width: 30%;">Header</th>
+                    <th style="width: 30%;">Content</th>
+                    <th style="width: 30%;">Boilerplate</th>
+                    <th style="width: 30%;">Action</th>
                     @foreach($_email as $email)
                     <tr>
-                        <td style="text-align: center;">{{$email->pr_from}}</td>
-                        <td style="text-align: center;">{{$email->pr_headline}}</td>
-                        <td style="text-align: center;">{!!$email->pr_content!!}</td>
-                         <td style="text-align: center;">{!!$email->pr_boiler_content!!}</td>
-                        <td  style="text-align: center;align-items: row" align="center">
-                            <a href=""><button type="button"  class="btn btn-warning center">
+                        <td style="width: 20%;">{{$email->pr_from}}</td>
+                        <td style="width: 20%;">{{$email->pr_headline}}</td>
+                        <td style="width: 20%;">{!!$email->pr_content!!}</td>
+                        <td style="width: 20%;">{!!$email->pr_boiler_content!!}</td>
+                        <td style="width: 20%;">
+                            <a href="/pressadmin/email_edit/{{$email->pr_id}}"><button type="button"  class="btn btn-warning center">
                             <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
 
                             <a href="/pressadmin/email_delete/{{$email->pr_id}}"><button type="button"  class="btn btn-danger center">

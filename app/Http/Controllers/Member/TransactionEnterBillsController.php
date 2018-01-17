@@ -14,7 +14,6 @@ use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_terms;
 
-use App\Globals\TransactionEnterBills;
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
@@ -27,6 +26,9 @@ use App\Globals\Utilities;
 use App\Globals\Pdf_global;
 use App\Globals\ItemSerial;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\TransactionEnterBills;
+use App\Globals\TransactionPurchaseOrder;
+use App\Globals\AccountingTransaction;
 
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
@@ -45,7 +47,11 @@ class TransactionEnterBillsController extends Member
         $data['page'] = 'Bills';
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills_list', $data);
     }
-
+    public function getLoadEnterBills(Request $request)
+    {
+        $data['_enter_bills'] = TransactionEnterBills::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
+        return view('member.accounting_transaction.vendor.enter_bills.enter_bills_table', $data);
+    }
     public function getCreate()
     {
         $data['page'] = 'Create Bills';
@@ -57,8 +63,7 @@ class TransactionEnterBillsController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
-        $data['action']     = '/member/transactio/create-enter-bills';
-        $data['count_receive_inventory']   = TransactionEnterBills::countTransaction($this->user_info->shop_id);
+        $data['action']     = '/member/transaction/enter_bills/create-enter-bills';
         
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills', $data);
     }
@@ -70,34 +75,57 @@ class TransactionEnterBillsController extends Member
         $insert['transaction_refnumber']    = $request->transaction_refnumber;
         $insert['vendor_id']                = $request->vendor_id;
         $insert['vendor_address']           = $request->vendor_address;
+        $insert['vendor_email']             = $request->vendor_email;
         $insert['vendor_terms']             = $request->vendor_terms;
         $insert['transaction_date']         = $request->transaction_date;
         $insert['transaction_duedate']      = $request->transaction_duedate;
-        // $insert['vendor_message']           = $request->vendor_message;
         $insert['vendor_memo']              = $request->vendor_memo;
+        $insert['bill_ri_id']               = null;
 
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
         {
             if($value)
             {
-                $insert_item[$key]['item_id'] = $value;
+                $insert_item[$key]['item_id']          = $value;
                 $insert_item[$key]['item_servicedate'] = $request->item_servicedate[$key];
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
-                $insert_item[$key]['item_um'] = $request->item_um[$key];
-                $insert_item[$key]['item_qty'] = str_replace(',', '', $request->item_qty[$key]);
-                $insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
-                /*$insert_item[$key]['item_discount'] = str_replace(',', '', $request->item_discount[$key]);
-                $insert_item[$key]['item_remarks'] = $request->item_remarks[$key];*/
-                $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
-                /*$insert_item[$key]['item_taxable'] = $request->item_taxable[$key];*/
+                $insert_item[$key]['item_um']          = $request->item_um[$key];
+                $insert_item[$key]['item_qty']         = str_replace(',', '', $request->item_qty[$key]);
+                $insert_item[$key]['item_rate']        = str_replace(',', '', $request->item_rate[$key]);
+                $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_discount']    = 0;
             }
         }
-        die(var_dump($btn_action));
+        $validate = TransactionEnterBills::postInsert(null, $this->user_info->shop_id, $insert, $insert_item);
+
+        $return = null;
+        if(is_numeric($validate))
+        {
+            $return['status']          = 'success';
+            $return['status_message']  = 'Success creating bills.';
+            $return['call_function']   = 'success_enter_bills';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('enter_bills', $validate ,$btn_action);
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $validate;
+        }
+
+        return json_encode($return);
     }
-    public function getLoadTransaction()
+    public function getCountTransaction(Request $request)
     {
-        dd('Wail Langs!');
+        $vendor_id = $request->vendor_id;
+        return TransactionEnterBills::countTransaction($this->user_info->shop_id, $vendor_id);
+    }
+    public function getLoadTransaction(Request $request)
+    {
+        $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
+        $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
+
+        return view('member.accounting_transaction.vendor.enter_bills.load_transaction', $data);
     }
     
 }

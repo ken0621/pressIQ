@@ -1,6 +1,102 @@
+@import "../../../assets/front/sass/mixin";
+
+.modal-title
+{
+	font-weight: 700;
+
+	strong
+	{
+		color: #fff;
+	}
+}
+
+.modal-header
+{
+	background-color: #0466AF;
+	color: #FFF;
+
+	.fa
+	{
+		color: #fff;
+	}
+	
+	.close
+	{
+		color: #fff;
+	}
+}
+
+.modal-content
+{
+	border: none !important;
+	border-radius: 0 !important;
+}
+
+.btn-primary
+{
+	@include transition(0.2s);
+	background-color: #0466AF !important;
+	color: #fff !important;
+	background-image: none !important;
+	border-color: #0466AF !important;
+    box-shadow: none !important;
+    opacity: 0.8;
+
+    &:hover
+    {
+    	opacity: 1;
+    	color: #fff;
+    }
+}
+
+.btn-custom-white
+{
+	@include transition(0.2s);
+	background-color: rgba(255,0,23,0.8) !important;
+	color: #fff;
+	opacity: 0.8;
+
+	&:hover
+	{
+		opacity: 1;
+		color: #fff;
+	}
+}
+
+.btn-p4w-custom
+{
+	@include transition(0.2s);
+	background-color: #0466AF;
+	color: #fff;
+
+	&:hover
+	{
+		opacity: 0.8;
+		color: #fff;
+	}
+}
+
+.btn-custom-primary
+{
+	background-color: #0466AF;
+	color: #fff;
+
+	.fa
+	{
+		color: #fff;
+	}
+
+	&:hover
+	{
+		color: #fff;
+		opacity: 0.8;
+	}
+}
+
 .member
 {
 	background-color: #ededed;
+
 	.members
 	{
 		background-color: #fff;
@@ -55,7 +151,7 @@
 					{
 						font-size: 13px;
 						color: #344049;
-						font-weight: 600;
+						font-weight: 700;
 					}
 					.fa
 					{
@@ -67,7 +163,7 @@
 
 		.sidebar
 		{
-			background-color: #02295E;
+			background-color: #0466AF;
 			width: 300px;
 			position: absolute;
 			left: 0;
@@ -77,7 +173,7 @@
 			z-index: 10;
 			transition: 0.3s all ease;
 			// overflow: hidden;
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 768px)
 			{
 				display: none;
 			}
@@ -152,7 +248,7 @@
 					{
 						display: block;
 						position: relative;
-						background-color: #02295E;
+						background-color: #0466AF;
 						a
 						{
 							display: block;
@@ -272,7 +368,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #02295E;
+										background-color: #0466AF;
 										span, &:before
 										{
 											opacity: 0.5;
@@ -301,7 +397,7 @@
 			&.small
 			{
 				width: 80px;
-				background-color: #02295E;
+				background-color: #0466AF;
 				.shadow
 				{
 					display: none;
@@ -390,7 +486,7 @@
 			padding: 15px;
 
 			overflow: hidden;
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 768px)
 			{
 				margin-left: 0;
 			}

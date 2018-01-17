@@ -40,7 +40,7 @@
                             <div class="row clearfix">                        
                                 <div class="col-sm-4">    
                                     <label >Reference Number</label>
-                                    <input type="text" class="form-control input-sm" name="transaction_refnumber" value="SI20171214-0002">
+                                    <input type="text" class="form-control input-sm" name="transaction_refnumber" value="{{isset($sales_invoice) ? $sales_invoice->transaction_refnum : $transaction_refnum}}">
                                 </div>
                             </div>
                         </div>
@@ -48,11 +48,11 @@
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <select class="form-control droplist-customer input-sm pull-left" name="customer_id" data-placeholder="Select a Customer" required>
-                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv) ? $inv->inv_customer_id : (isset($c_id) ? $c_id : '') ])
+                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($sales_invoice) ? $sales_invoice->inv_customer_id : (isset($c_id) ? $c_id : '') ])
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$inv->inv_customer_email or ''}}"/>
+                                    <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$sales_invoice->inv_customer_email or ''}}"/>
                                 </div>
                                 <div class="col-sm-4 text-right open-transaction" style="display: none;">
                                     <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/sales_invoice/load_transaction?customer_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
@@ -62,21 +62,21 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Billing Address</label>
-                                <textarea class="form-control input-sm textarea-expand customer-billing-address" name="customer_billing_address" placeholder="">{{$inv->inv_customer_billing_address or ''}}</textarea>
+                                <textarea class="form-control input-sm textarea-expand customer-billing-address" name="customer_billing_address" placeholder="">{{$sales_invoice->inv_customer_billing_address or ''}}</textarea>
                             </div>
                             <div class="col-sm-2">  
                                 <label>Terms</label>
                                 <select class="form-control input-sm new droplist-terms" name="customer_terms">
-                                    @include("member.load_ajax_data.load_terms", ['terms_id' => isset($inv) ? $inv->inv_terms_id : ''])
+                                    @include("member.load_ajax_data.load_terms", ['terms_id' => isset($sales_invoice) ? $sales_invoice->inv_terms_id : ''])
                                 </select>
                             </div>
                             <div class="col-sm-2">
                                 <label>Invoice Date</label>
-                                <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{isset($inv) ? dateFormat($inv->inv_date) : date('m/d/Y')}}"/>
+                                <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{isset($sales_invoice) ? dateFormat($sales_invoice->inv_date) : date('m/d/Y')}}"/>
                             </div>
                             <div class="col-sm-2">
                                 <label>Due Date</label>
-                                <input type="text" class="datepicker form-control input-sm" name="transaction_duedate" value="{{isset($inv) ? dateFormat($inv->inv_due_date) : date('m/d/Y')}}" />
+                                <input type="text" class="datepicker form-control input-sm" name="transaction_duedate" value="{{isset($sales_invoice) ? dateFormat($sales_invoice->inv_due_date) : date('m/d/Y')}}" />
                             </div>
                         </div>
                         
@@ -101,6 +101,44 @@
                                             </tr>
                                         </thead>
                                         <tbody class="draggable tbody-item estimate-tbl">
+                                            @if(isset($sales_invoice))
+                                                @foreach($sales_invoice_item as $si_item)
+                                                <tr class="tr-draggable">
+                                                    <td class="invoice-number-td text-right">
+                                                        1
+                                                    </td>
+                                                    <td><input type="text" class="for-datepicker" name="item_servicedate[]"/>{{$si_item->invline_service_date != '1970-01-01' ? $si_item->invline_service_date : ''}}</td>
+                                                    <td>
+                                                        <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $si_item->invline_item_id])
+                                                            <option class="hidden" value="" />
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <textarea class="textarea-expand txt-desc" name="item_description[]">{{$si_item->invline_description}}</textarea>
+                                                    </td>
+                                                    <td><select class="2222 droplist-um select-um {{isset($si_item->multi_id) ? 'has-value' : ''}}" name="item_um[]">
+                                                            @if($si_item->invline_um)
+                                                                @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $si_item->multi_um_id, 'selected_um_id' => $si_item->invline_um])
+                                                            @else
+                                                                <option class="hidden" value="" />
+                                                            @endif
+                                                            <option class="hidden" value="" />
+                                                        </select>
+                                                    </td>
+                                                    <td><input class="text-center number-input txt-qty compute" value="{{$si_item->invline_qty}}" type="text" name="item_qty[]"/></td>
+                                                    <td><input class="text-right number-input txt-rate compute" type="text" value="{{$si_item->invline_rate}}" name="item_rate[]"/></td>
+                                                    <td><input class="text-right txt-discount compute" type="text" name="item_discount[]"  value="{{$si_item->invline_discount}}"/></td>
+                                                    <td><textarea class="textarea-expand" type="text" name="item_remarks[]">{{$si_item->invline_discount_remark}}</textarea></td>
+                                                    <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$si_item->invline_amount}}" /></td>
+                                                    <td class="text-center">
+                                                        <input type="hidden" class="invline_taxable" name="item_taxable[]" value="" >
+                                                        <input type="checkbox" name="" class="taxable-check compute" {{$si_item->taxable == 1 ? 'checked' : ''}} value="checked">
+                                                    </td>
+                                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
                                             <tr class="tr-draggable">
                                                 <td class="invoice-number-td text-right">
                                                     1
@@ -161,11 +199,11 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Message Displayed on Invoice</label>
-                                <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder=""></textarea>
+                                <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder="">{{isset($sales_invoice) ? $sales_invoice->inv_message : ''}}</textarea>
                             </div>
                             <div class="col-sm-3">
                                 <label>Statement Memo</label>
-                                <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder=""></textarea>
+                                <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder="">{{isset($sales_invoice) ? $sales_invoice->inv_memo : ''}}</textarea>
                             </div>
                             <div class="col-sm-6">
                                 <div class="row">
@@ -186,9 +224,9 @@
                                             <div class="col-sm-3  padding-lr-1">
                                                 <!-- <input class="form-control input-sm text-right ewt_value number-input" type="text" name="ewt"> -->
                                                 <select class="form-control input-sm ewt-value compute" name="customer_ewt">  
-                                                    <option value="0" {{isset($inv) ? $inv->ewt == 0 ? 'selected' : '' : ''}}></option>
-                                                    <option value="0.01" {{isset($inv) ? $inv->ewt == 0.01 ? 'selected' : '' : ''}}>1%</option>
-                                                    <option value="0.02" {{isset($inv) ? $inv->ewt == 0.02 ? 'selected' : '' : ''}}>2%</option>
+                                                    <option value="0" {{isset($sales_invoice) ? $sales_invoice->ewt == 0 ? 'selected' : '' : ''}}></option>
+                                                    <option value="0.01" {{isset($sales_invoice) ? $sales_invoice->ewt == 0.01 ? 'selected' : '' : ''}}>1%</option>
+                                                    <option value="0.02" {{isset($sales_invoice) ? $sales_invoice->ewt == 0.02 ? 'selected' : '' : ''}}>2%</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -202,12 +240,12 @@
                                         <div class="row">
                                             <div class="col-sm-6 col-sm-offset-4  padding-lr-1">
                                                 <select class="form-control input-sm compute discount_selection" name="customer_discount">  
-                                                    <option value="percent" {{isset($inv) ? $inv->inv_discount_type == 'percent' ? 'selected' : '' : ''}}>Discount percentage</option>
-                                                    <option value="value" {{isset($inv) ? $inv->inv_discount_type == 'value' ? 'selected' : '' : ''}}>Discount value</option>
+                                                    <option value="percent" {{isset($sales_invoice) ? $sales_invoice->inv_discount_type == 'percent' ? 'selected' : '' : ''}}>Discount percentage</option>
+                                                    <option value="value" {{isset($sales_invoice) ? $sales_invoice->inv_discount_type == 'value' ? 'selected' : '' : ''}}>Discount value</option>
                                                 </select>
                                             </div>
                                             <div class="col-sm-2  padding-lr-1">
-                                                <input class="form-control input-sm text-right number-input discount_txt compute" type="text" name="customer_discounttype" value="{{$inv->inv_discount_value or ''}}">
+                                                <input class="form-control input-sm text-right number-input discount_txt compute" type="text" name="customer_discounttype" value="{{$sales_invoice->inv_discount_value or ''}}">
                                             </div>
                                         </div>
                                     </div>
@@ -219,9 +257,9 @@
                                     <div class="col-md-7 text-right digima-table-label">
                                         <div class="row">
                                             <div class="col-sm-4 col-sm-offset-8  padding-lr-1">
-                                                <select class="form-control input-sm tax_selection compute" name="customer_taxcustomer_tax">  
-                                                    <option value="0" {{isset($inv) ? $inv->taxable == 0 ? 'selected' : '' : ''}}>No Tax</option>
-                                                    <option value="1" {{isset($inv) ? $inv->taxable == 1 ? 'selected' : '' : ''}}>Vat (12%)</option>
+                                                <select class="form-control input-sm tax_selection compute" name="customer_tax">  
+                                                    <option value="0" {{isset($sales_invoice) ? $sales_invoice->taxable == 0 ? 'selected' : '' : ''}}>No Tax</option>
+                                                    <option value="1" {{isset($sales_invoice) ? $sales_invoice->taxable == 1 ? 'selected' : '' : ''}}>Vat (12%)</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -239,14 +277,14 @@
                                             PHP&nbsp;<span class="total-amount">0.00</span>
                                         </div>
                                     </div>
-                                @if(isset($inv))
+                                @if(isset($sales_invoice))
                                     <div class="row">
                                         <div class="col-md-7 text-right digima-table-label">
                                             Payment Appplied
                                         </div>
                                         <div class="col-md-5 text-right digima-table-value">
                                             <input type="hidden" name="payment-receive" class="payment-receive-input" />
-                                            PHP&nbsp;<span class="payment-applied">{{$inv->inv_payment_applied}}</span>
+                                            PHP&nbsp;<span class="payment-applied">{{currency('',$sales_invoice->inv_payment_applied)}}</span>
                                         </div>
                                     </div>
                                     <div class="row">

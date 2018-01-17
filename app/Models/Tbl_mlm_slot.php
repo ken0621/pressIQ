@@ -19,6 +19,11 @@ class Tbl_mlm_slot extends Model
     {
         $query->leftJoin("tbl_mlm_slot_bank", "tbl_mlm_slot_bank.slot_id", "=", "tbl_mlm_slot.slot_id");
     }
+    public function scopeAirline($query)
+    {
+        $query->leftJoin("tbl_tour_wallet_slot", "tbl_tour_wallet_slot.slot_id", "=", "tbl_mlm_slot.slot_id");
+        $query->leftJoin("tbl_tour_wallet", "tbl_tour_wallet.tour_wallet_id", "=", "tbl_tour_wallet_slot.tour_wallet_id");
+    }
     public function scopeVmoney($query)
     {
         $query->leftJoin("tbl_vmoney_settings", "tbl_vmoney_settings.slot_id", "=", "tbl_mlm_slot.slot_id");

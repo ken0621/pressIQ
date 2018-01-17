@@ -1,23 +1,16 @@
-$content-text: 'Open Sans', sans-serif;
+@import "../../../assets/front/sass/mixin";
+
+$content-text: 'Lato', sans-serif;
 $light: 300;
 $regular: 400;
-$semi-bold: 600;
 $bold: 700;
+$black: 900;
 $text-light: #777;
 $text-dark: #272c2f;
-
-@mixin transition($transition)
-{
-	  -webkit-transition: all $transition ease-in-out;
-	  -moz-transition: all $transition ease-in-out;
-	  -o-transition: all $transition ease-in-out;
-	  transition: all $transition ease-in-out;
-}
 
 /* Dashboard Top */
 .dashboard-top
 {
-
 	.img-container
 	{
 		img
@@ -37,7 +30,7 @@ $text-dark: #272c2f;
 
 		span
 		{
-			font-weight: $bold;
+			font-weight: $black;
 		}
 	}
 
@@ -64,7 +57,7 @@ $text-dark: #272c2f;
 
 			.text-header1
 			{
-				font-weight: $regular;
+				font-weight: $bold;
 				font-size: 24px;
 				color: #fff;
 				word-break: break-all;
@@ -108,7 +101,7 @@ $text-dark: #272c2f;
 
 			.or
 			{
-				font-weight: $regular;
+				font-weight: $bold;
 				font-size: 13px;
 				color: #fff;
 				padding: 20px;
@@ -121,18 +114,19 @@ $text-dark: #272c2f;
 		
 			.btn-enter-a-code
 			{
-				@include transition(0.2s);
-				font-weight: $semi-bold;
-				color: #fff;
+				@include transition(0.3s);
+				font-weight: $bold;
+				color: #F4AC00;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
-				border: 2px solid #fff;
+				border: 2px solid #F4AC00;
 				border-radius: 2px;
 				//margin-bottom: 65px;
 
 				&:hover
 				{
-					background-color: #EDAC0E;
+					background-color: #F4AC00;
+					border: 2px solid #fff;
 					color: #fff;
 				}
 			}
@@ -183,7 +177,7 @@ $text-dark: #272c2f;
 
 	.text-header
 	{
-		font-weight: $bold;
+		font-weight: $black;
 		font-size: 17px;
 		color: $text-dark;
 		padding-top: 10px;
@@ -206,7 +200,7 @@ $text-dark: #272c2f;
 			{
 				text-align: center;
 				padding-top: 10px;
-				font-weight: $bold;
+				font-weight: $black;
 				font-size: 17px;
 				color: $text-dark;
 			}
@@ -222,7 +216,7 @@ $text-dark: #272c2f;
 			{
 				font-size: 15px;
 				color: $text-dark;
-				font-weight: $regular;
+				font-weight: $bold;
 			}
 
 			span
@@ -276,167 +270,78 @@ $text-dark: #272c2f;
 /* Enter a code */
 .popup-enter-a-code
 {
-	font-family: $content-text;
-
-	.modal-sm
-	{  
-		width: 100%;
-		max-width: 370px;
-	}
-
-	.modal-content
+	.labels
 	{
-		background-color: #fff;
-		.modal-header
+		text-align: center;
+	}
+	
+	.output-container
+	{
+		padding: 10px;
+
+		.card
 		{
-			background-color: #02295E;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
+			border: 1px solid #d4d4d4;
+		    background-color: #f4f4f4;
+		    padding: 10px;
+		    margin: 10px;
+		    border-radius: 2px;
 
-			.close
+			.info
 			{
-				color: #FFF;
-			}
+				margin-top: 20px;
+			    text-align: center;
+			    letter-spacing: 0.5px;
 
-			.modal-title
-			{
-				font-weight: $bold;
-				font-size: 15px;
-				color: #FFF;
+				.name
+				{
+					font-size: 17px;
+					font-weight: 500;
+					color: #272c2f;
+					text-transform: uppercase;
+				}
+				
+				.email, .slotno
+				{
+					color: #777;
+				}
 			}
 		}
+	}
 
-		.modal-body
+	.input-verify-sponsor
+	{
+		padding: 5px;
+	    width: 85%;
+	    border: 1px solid #c9c9c9;
+	    margin-top: 20px;
+	    margin-left: 7%;
+	    background-color: #fff;
+	    font-size: 15px;
+	    letter-spacing: 0.5px;
+	}
+
+	.btn-container
+	{
+		text-align: center;
+		font-family: $content-text;
+		font-weight: $bold;
+		font-size: 13px;
+
+		.btn-verify
 		{
-			font-weight: $regular;
-			font-size: 15px;
-			margin: 0px 20px 0px 20px;
-			padding: 20px 5px !important;
+			@include transition(0.2s);
+			color: #fff;
+			background-color: #0466AF;
+			padding: 12px 25px;
+			border: none;
+			border-radius: 2px;
+			opacity: 0.8;
 
-			.labels
+			&:hover
 			{
-				margin-top: 10px;
-				text-align: center;
-			}
-			input
-			{
-
-				padding: 5px;
-				width: 85%;
-				border: 1px solid #c9c9c9;
-				margin-top: 20px;
-				margin-left: 7%;
-				background-color: #fff;
-				font-size: 15px;
-				letter-spacing: 0.5px;
-
-				&::-webkit-input-placeholder {
-				    color: #ddd;
-				    opacity: 1 !important; /* for older chrome versions. may no longer apply. */
-				}
-
-				&:-moz-placeholder { /* Firefox 18- */
-				    color: #ddd;
-				    opacity: 1 !important;
-				}
-
-				&::-moz-placeholder {  /* Firefox 19+ */
-				    color: #ddd;
-				    opacity: 1 !important;
-				}
-
-				&:-ms-input-placeholder {  
-				   color: #ddd;
-				}
-			}
-
-			.output-container
-			{
-				padding: 10px;
-				.error-message
-				{
-					text-align: center;
-					color: #f02432;
-					font-size: 13px;
-					letter-spacing: 0.5px;
-				}
-				.card
-				{
-					border: 1px solid #d4d4d4;
-					background-color: #f4f4f4;
-					padding: 10px;
-					margin: 10px;
-					border-radius: 2px;
-
-
-					.upper {
-
-						.profile-image
-						{
-							height: 75px;
-							width: 75px;
-							border-radius: 100%;
-							overflow: hidden;
-							margin-left: 34%;
-
-							img
-							{
-								/* height: 100px; */
-								width: 100%;
-
-							}
-						}
-					}
-					.info
-					{
-						margin-top: 20px;
-						text-align: center;
-						letter-spacing: 0.5px;
-
-						.name
-						{
-							font-size: 17px;
-							font-weight: $bold;
-							color: $text-dark;
-							text-transform: uppercase;
-						}
-						.email
-						{
-							color: $text-light;
-						}
-						.slotno
-						{
-							color: $text-light;
-						}
-					}
-				}
-			}
-	    	.btn-container
-	    	{
-				text-align: center;
-				font-family: $content-text;
-				font-weight: $semi-bold;
-				font-size: 13px;
-				padding-bottom: 20px;
-
-				.btn-verify
-				{
-					color: #fff;
-					background-color: #02295E;
-					padding: 12px 25px;
-					border: none;
-					border-radius: 2px;
-					opacity: 0.9;
-				  	-webkit-transition: all 0.2s ease-in-out;
-				  	-moz-transition: all 0.2s ease-in-out;
-				  	-o-transition: all 0.2s ease-in-out;
-				  	transition: all 0.2s ease-in-out;
-				}
-				.btn-verify:hover
-				{
-					color: #fff;
-					opacity: 0.8;
-				}
+				opacity: 1;
+				color: #fff;
 			}
 		}
 	}
@@ -446,21 +351,13 @@ $text-dark: #272c2f;
 .popup-proceed1
 {
 	font-family: $content-text;
-	
-	.modal-sm
-	{  
-		width: 100%;
-		max-width: 400px;
-	}
 
 	.modal-content
 	{
 		
 		.modal-header
 		{
-			background-color: #02295E;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
+			background-color: #0466AF;
 
 			.close
 			{
@@ -469,7 +366,7 @@ $text-dark: #272c2f;
 
 			.modal-title
 			{
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				color: #FFF;
 				font-size: 15px;
 			}
@@ -477,7 +374,7 @@ $text-dark: #272c2f;
 
 		.modal-body
 		{
-			font-weight: $regular;
+			font-weight: $bold;
 			margin: 0px 20px 0px 20px;
 
 			.warning
@@ -486,7 +383,7 @@ $text-dark: #272c2f;
 				margin-bottom: 27px;
 				font-size: 13px !important;
 				letter-spacing: 0.3px;
-				color: #02295E !important;
+				color: #FF3446 !important;
 			}
 			.value-set
 			{
@@ -499,7 +396,7 @@ $text-dark: #272c2f;
 				}
 				.values
 				{
-					font-weight: $regular;
+					font-weight: $bold;
 					color: $text-dark;
 				}
 			}
@@ -516,7 +413,7 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $bold;
+				font-weight: $black;
 				font-size: 13px;
 				padding-bottom: 20px;
 				margin-top: 20px;
@@ -524,9 +421,9 @@ $text-dark: #272c2f;
 				.btn-proceed-1
 				{
 					color: #fff;
-					background-color: #02295E;
+					background-color: #0466AF;
 					padding: 12px 40px;
-					border: 2px solid #02295E;
+					border: 2px solid #0466AF;
 					border-radius: 2px;
 				}
 			}
@@ -537,53 +434,23 @@ $text-dark: #272c2f;
 /* Proceed 2 */
 .popup-proceed2
 {
-	background-color: #fff;
 	font-family: $content-text;
 	
-	.modal-sm
-	{  
-		width: 100%;
-		max-width: 350px;
-	}
-
 	.modal-content
 	{
-		background-color: #fff;
-		.modal-header
-		{
-			background-color: #02295E;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
-
-			.close
-			{
-				color: #FFF;
-			}
-
-			.modal-title
-			{
-				font-weight: $semi-bold;
-				color: #FFF;
-				font-size: 15px;
-			}
-		}
-
 		.modal-body
 		{
-			
-
-			font-weight: $semi-bold;
+			font-weight: $bold;
 			margin: 0px 20px 0px 20px;
-
 
 			.message
 			{
 				text-align: center;
 				margin-bottom: 10px;
-				color: #f02432;
+				color: #FF3446;
 				letter-spacing: 0.5px;
 				font-size: 14px;
-				font-weight: $bold !important;
+				font-weight: $black !important;
 				text-transform: uppercase;
 			}
 
@@ -591,7 +458,7 @@ $text-dark: #272c2f;
 			{
 				width: 100%;
 				font-size: 15px;
-				font-weight: $regular !important;
+				font-weight: $bold !important;
 				color: $text-light !important;
 				letter-spacing: 0.5px;
 				border: none;
@@ -609,6 +476,7 @@ $text-dark: #272c2f;
 				margin: 10px 0px;
 				padding: 10px;
 			}
+
 			.labeld
 			{
 				color: $text-dark;
@@ -621,42 +489,39 @@ $text-dark: #272c2f;
 				width: 100%;
 				font-size: 16px;
 				border: none;
-				border: 1px solid #02295E;
+				border: 1px solid #0466AF;
 				margin: 5px 0px;
 				margin-bottom: 15px;
 				padding: 5px;
 				border-radius: 2px;
 			}
-
+			
 	    	.btn-container
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				font-size: 14px;
 				text-transform: uppercase;
 				padding-bottom: 20px;
 
-
 				.btn-proceed-2
 				{
+					@include transition(0.2s);
 					color: #fff;
-					background-color: #02295E;
+					background-color: #0466AF;
 					padding: 10px 40px;
 					border-radius: 2px;
 					border: 0px !important;
-
-				  	-webkit-transition: all 0.2s ease-in-out;
-				  	-moz-transition: all 0.2s ease-in-out;
-				  	-o-transition: all 0.2s ease-in-out;
-				  	transition: all 0.2s ease-in-out;
 				  	width: 100%;
 				  	margin-top: 20px;
 				  	text-transform: uppercase;
-				}
-				.btn-proceed-2:hover
-				{
-					opacity: 0.9;
+				  	opacity: 0.8;
+
+				  	&:hover
+				  	{
+				  		opacity: 1;
+				  	}
 				}
 			}
 		}
@@ -670,9 +535,7 @@ $text-dark: #272c2f;
 	{
 		.modal-header
 		{
-			background-color: #ed5639;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
+			background-color: #FF3446;
 
 			.close
 			{
@@ -698,7 +561,7 @@ $text-dark: #272c2f;
 
 			.text-caption
 			{	
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				color: #344049;
 				padding-top: 5px;
 				font-size: 13px;
@@ -710,7 +573,7 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				font-size: 14px;
 				padding-bottom: 20px;
 

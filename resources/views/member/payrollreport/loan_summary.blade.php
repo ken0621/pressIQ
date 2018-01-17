@@ -17,8 +17,8 @@
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal">
          <div>
-            <select class="select-deduction-type pull-right form-control" style="width: 300px">    
-                <option value="">Select Deduction Type</option>
+            <select class="select-deduction-type pull-right form-control" name="deduction_type" style="width: 300px">    
+                <option value="novalue">Select Deduction Type</option>
                 <option value="SSS_Loan">SSS Loan</option>
                 <option value="HDMF_Loan">HDMF Loan</option>
                 <option value="Cash_Bond">Cash Bond</option>
@@ -37,6 +37,10 @@
                   @endforeach
             </select>
         </div>
+
+        <div>
+            <a href="/member/payroll/reports/loan_summary/loan_summary_report_excel/0/noval" class="excel_tag"><button type="button" class="btn btn-success pull-right" style="margin-right:20px;"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
+        </div>
         <div class="form-group tab-content panel-body employee-container">
             <div id="all" class="tab-pane fade in active">
                 <div class="form-group order-tags"></div>
@@ -50,4 +54,21 @@
 @endsection
 @section('script')
 <script type="text/javascript" src="/assets/member/payroll/js/loan_summary.js"></script>
+<script>
+    $(".select-company-name").unbind("change");
+    $(".select-company-name").bind("change", function()
+    {
+
+        var link = "/member/payroll/reports/loan_summary/loan_summary_report_excel/" + $(this).val() +"/noval";
+         $(".excel_tag").attr('href',link);
+    });
+
+    $('select[name=deduction_type]').change(function() 
+    {
+        var company = $('.select-company-name').val();
+        var link = "/member/payroll/reports/loan_summary/loan_summary_report_excel/"+ company +"/" + $(this).val();
+         $(".excel_tag").attr('href',link);
+    });
+
+    </script>
 @endsection

@@ -5,27 +5,6 @@
     <input type="hidden" class="token" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" class="button-action" name="button_action" value="">
 
-    <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
-
-    <div class="drawer drawer-default">
-        <div class="drawer-brand">Purchase Order</div>
-        <nav class="drawer-nav">
-            <div class="clearfix purchase-order-container">
-                @include('member.load_ajax_data.load_purchase_order')
-            </div>   
-        </nav>
-    </div>
-
-<!--<div class="panel panel-default panel-block panel-title-block purchase-order hidden">
-        <div class="panel-heading">
-             <div class="form-group">
-                 <div class="col-md-12">
-                                       
-                 </div>
-             </div>  
-        </div>
-    </div>
- -->
 <div class="drawer-overlay">
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
@@ -67,21 +46,20 @@
                                             <label>Reference Number</label>
                                             <input type="text" class="form-control" name="transaction_refnumber" value="RI20171225-0001">
                                         </div>
-                                        <div class="col-sm-5 text-right"></div>
-                                        <div class="col-sm-3 text-right">
-                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/receive_inventory/load-transaction"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">{{$count_open_purchase_order}}</span> Open Transaction</a></h4>
-                                        </div>
                                     </div>
                                 </div>
                                 <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                                     <div class="row clearfix">
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-4">
                                             <select class="form-control droplist-vendor input-sm pull-left" name="vendor_id">
                                                  @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')])
                                             </select>
                                         </div>
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$bill->bill_vendor_email or ''}}"/>
+                                        </div>
+                                        <div class="col-sm-4 text-right open-transaction" style="display: none;">
+                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/receive_inventory/load-transaction?vendor_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -177,74 +155,7 @@
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="tbody-item">
-                                                    @if(isset($bill))
-                                                        @foreach($_bill_item_line as $item)
-                                                        <tr class="tr-draggable tr-id-{{$item->itemline_ref_id}}">
-                                                            <td class="invoice-number-td text-right">1</td>
-                                                            <td>
-
-                                                                <input type="hidden" class="poline_id" name="itemline_ref_name[]" value="{{$item->itemline_ref_name}}">
-                                                                <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]" value="{{$item->itemline_ref_id}}">
-
-                                                                <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
-                                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $item->itemline_item_id])
-                                                                </select>
-                                                            </td>
-                                                            <td><textarea class="textarea-expand txt-desc" name="item_description[]">{{$item->itemline_description}}</textarea></td>
-                                                            <td>
-                                                                <select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" />
-                                                                    @if($item->itemline_um)
-                                                                        @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $item->multi_um_id, 'selected_um_id' => $item->itemline_um])
-                                                                    @else
-                                                                        <option class="hidden" value="" />
-                                                                    @endif
-                                                                </select>
-                                                            </td>
-                                                            <td><input class="text-center number-input txt-qty compute" type="text" value="{{$item->itemline_qty}}" name="item_qty[]"/></td>
-                                                            <td><input class="text-right number-input txt-rate compute" type="text" value="{{$item->itemline_rate}}" name="item_rate[]"/></td>
-                                                            <td><input class="text-right number-input txt-amount" type="text" value="{{$item->itemline_amount}}" name="item_amount[]"/></td>
-                                                            @if(isset($serial)) 
-                                                             <td>
-                                                                <textarea class="txt-serial-number" name="serial_number[]">{{$item->serial_number}}</textarea>
-                                                            </td>
-                                                            @endif
-                                                            <td  tr_id="{{$item->itemline_ref_id}}" linked_in="{{$item->itemline_ref_name}}" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                        </tr>
-                                                        @endforeach
-                                                    @endif
-
-                                                <tbody class="draggable tbody-item po-tbl">
-                                                    @if(count(Session::get('po_item')) > 0)
-                                                        @foreach(Session::get('po_item') as $items)
-                                                        <tr class="trcount tr-draggable tr-id-{{$items['poline_po_id']}}">
-                                                            <td class="invoice-number-td text-right">1</td>
-                                                                <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
-                                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $items['poline_item_id']])
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                <textarea class="textarea-expand txt-desc" name="item_description[]">{{$items['poline_description']}}</textarea>
-                                                            </td>
-                                                            <td>
-                                                                <select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" />
-                                                                    @if($items['poline_um'])
-                                                                        @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $items['multi_um_id'], 'selected_um_id' => $items['poline_um']])
-                                                                    @else
-                                                                        <option class="hidden" value="" />
-                                                                    @endif
-                                                                </select>
-                                                            </td>
-                                                            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]" value="{{$items['poline_qty']}}" /></td>
-                                                            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{$items['poline_rate']}}" />
-                                                            </td>
-                                                            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$items['poline_amount']}}"/>
-                                                            </td>
-                                                            @include("member.load_ajax_data.load_td_serial_number")
-                                                            <td tr_id="{{$items['poline_po_id']}}" linked_in="no" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                        </tr>
-                                                        @endforeach
-                                                    @endif
+                                                <tbody class="draggable">
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
@@ -341,9 +252,9 @@
 
 @section('script')
 
-<script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
+<!-- <script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script> -->
 <script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/receive_inventory.js"></script>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 $("#acct-a").click(function()
 {
     $('#account-tbl').toggle();
@@ -424,5 +335,5 @@ nav.user-menu
 {
     background-color: #F5F5F5;
 }
-</style>
+</style> -->
 @endsection

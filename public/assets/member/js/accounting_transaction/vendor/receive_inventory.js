@@ -30,6 +30,7 @@ function receive_inventory()
 			{
 				$(".vendor-email").val($(this).find("option:selected").attr("email"));
 				$('textarea[name="vendor_address"]').val($(this).find("option:selected").attr("billing-address"));
+				action_load_open_transaction($(this).val());
 			}
 		});
 
@@ -121,7 +122,27 @@ function receive_inventory()
 				$(".drawer-toggle").trigger("click");
 			});
 	}
-
+	function action_load_open_transaction($vendor_id)
+	{
+		if($vendor_id)
+		{
+			$.ajax({
+				url : '/member/transaction/receive_inventory/count-transaction',
+				type : 'get',
+				data : {vendor_id : $vendor_id},
+				success : function(data)
+				{
+					$(".open-transaction").slideDown();
+					$(".popup-link-open-transaction").attr('link','/member/transaction/receive_inventory/load-transaction?vendor='+$vendor_id);
+					$(".count-open-transaction").html(data);
+				}
+			});
+		}
+		else
+		{
+			$(".open-transaction").slideUp();
+		}
+	}
 	function action_compute()
 	{
 		var subtotal = 0;
@@ -328,12 +349,9 @@ function receive_inventory()
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("purchase-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-qty").val(1).change();
-		console.log($this.find("option:selected").attr("item-type"));		
 
-		$parent.find(".txt-qty").attr("disabled",true);
 		if($this.find("option:selected").attr("has-um"))
 		{
-			$parent.find(".txt-qty").removeAttr("disabled");
 			$.ajax(
 			{
 				url: '/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"),
@@ -491,6 +509,16 @@ function success_item(data)
 		data.element.modal("hide");
 	});
 }
+
+function success_receive_inventory(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
+}
+
 function add_po_to_receive_inventory(po_id)
 {
 	$(".modal-loader").removeClass("hidden");

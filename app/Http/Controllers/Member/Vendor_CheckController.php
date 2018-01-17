@@ -263,6 +263,7 @@ class Vendor_CheckController extends Member
 
         $data["wc"] = Tbl_write_check::vendor()->customer()->where("wc_id",$wc_id)->first();
         $data["_wcline"] = Tbl_write_check_line::um()->item()->where("wcline_wc_id",$wc_id)->get();
+        $data["_wcline_acc"] = Tbl_write_check_account_line::account()->where("accline_wc_id",$wc_id)->get();
        
         $pdf = view("member.vendor_list.wc_pdf",$data);
         return Pdf_global::show_pdf($pdf);

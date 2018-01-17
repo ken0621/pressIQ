@@ -28,6 +28,9 @@
                             <li><a class="select-action" code="save-and-new">Save & New</a></li>
                         </ul>
                     </div>
+
+                    <div>
+                    </div>
                 </div>
                 @if(isset($rcvpayment))
                 <div class="pull-right">

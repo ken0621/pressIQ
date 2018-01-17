@@ -983,6 +983,12 @@ class Seed_manual
             $insert[15]['other']     = "Y/m/d";
             $insert[15]['separator'] = "-";
 
+            $insert[16]['shop_id']   = $shop_id; 
+            $insert[16]['key']       = "debit_memo";  
+            $insert[16]['prefix']    = "DM";
+            $insert[16]['other']     = "Y/m/d";
+            $insert[16]['separator'] = "-";
+
             DB::table('tbl_transaction_ref_number')->insert($insert);
 
         }

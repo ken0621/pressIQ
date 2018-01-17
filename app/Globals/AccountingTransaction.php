@@ -8,7 +8,13 @@ use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_chart_of_account;
-
+use App\Models\Tbl_requisition_slip;
+use App\Models\Tbl_purchase_order;
+use App\Models\Tbl_receive_inventory;
+use App\Models\Tbl_pay_bill;
+use App\Models\Tbl_bill;
+use App\Models\Tbl_write_check;
+use App\Models\Tbl_debit_memo;
 
 use Carbon\Carbon;
 use Validator;
@@ -254,7 +260,6 @@ class AccountingTransaction
 		if($transaction_type)
 		{
 			$get = Tbl_transaction_ref_number::where('shop_id', $shop_id)->where('key', $transaction_type)->first();
-			//die(var_dump($get));
 			if($get)
 			{
 				$date = explode('/', $get->other);
@@ -290,6 +295,38 @@ class AccountingTransaction
 		if($transaction_type == 'sales_order')
 		{
 			$get = Tbl_customer_estimate::where('est_shop_id', $shop_id)->where('is_sales_order',1)->orderBy('est_id','DESC')->first();
+		}
+		if($transaction_type == 'purchase_requisition')
+		{
+			$get = Tbl_requisition_slip::where('shop_id', $shop_id)->orderBy('requisition_slip_id','DESC')->first();
+		}
+		if($transaction_type == 'purchase_order')
+		{
+			$get = Tbl_purchase_order::where('po_shop_id', $shop_id)->where('po_is_billed', 0)->orderBy('po_id','DESC')->first();
+		}
+		if($transaction_type == 'purchase_order')
+		{
+			$get = Tbl_purchase_order::where('po_shop_id', $shop_id)->where('po_is_billed', 0)->orderBy('po_id','DESC')->first();
+		}
+		if($transaction_type == 'received_inventory')
+		{
+			$get = Tbl_receive_inventory::where('ri_shop_id', $shop_id)->orderBy('ri_id','DESC')->first();
+		}
+		if($transaction_type == 'enter_bills')
+		{
+			$get = Tbl_bill::where('bill_shop_id', $shop_id)->orderBy('bill_id','DESC')->first();
+		}
+		if($transaction_type == 'pay_bill')
+		{
+			$get = Tbl_pay_bill::where('paybill_shop_id', $shop_id)->orderBy('paybill_id','DESC')->first();
+		}
+		if($transaction_type == 'write_check')
+		{
+			$get = Tbl_write_check::where('wc_shop_id', $shop_id)->orderBy('wc_id','DESC')->first();
+		}
+		if($transaction_type == 'debit_memo')
+		{
+			$get = Tbl_debit_memo::where('db_shop_id', $shop_id)->orderBy('db_id','DESC')->first();
 		}
 
 		if($get)

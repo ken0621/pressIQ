@@ -55,7 +55,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="transaction_refnumber" value="PB20171225-0001">
+                                <input type="text" class="form-control" name="transaction_refnumber" value="{{ $transaction_refnum }}">
                             </div>
                         </div>
                     </div>

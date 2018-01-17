@@ -37,6 +37,8 @@ class TransactionDebitMemoController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
 
+        $data["transaction_refnum"] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'debit_memo');
+
         $data['action']     ='/member/transaction/debit_memo/create-debit-memo';
 
         return view('member.accounting_transaction.vendor.debit_memo.debit_memo', $data);

@@ -63,14 +63,20 @@ class TransactionReceiveInventoryController extends Member
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
+        $data["transaction_refnum"] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'received_inventory');
 
         $data['action']     = '/member/transaction/receive_inventory/create-receive-inventory';
+        
         $receive_id = $request->id;
-        /*if($receive_id)
+        $data['term'] = $request->vendor_terms;
+        //dd($receive_id);
+        if($receive_id)
         {
-            $data['']
-        }*/
-        //die(var_dump($id));
+            $data['ri'] = TransactionReceiveInventory::info($this->user_info->shop_id,$receive_id);
+            $data['_riline']= TransactionReceiveInventory::info_item($receive_id);
+            //dd($data['_riline']);
+        }
+
 
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory', $data);
     }

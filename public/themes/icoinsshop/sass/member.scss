@@ -52,8 +52,9 @@ $content-text: 'Open Sans', sans-serif;
 			text-align: center;
 			padding: 5px 0;
 
-			span
+			.slotnum
 			{
+				text-align: center;
 				padding: 5px 250px;
 				font-size: 18px;
 				font-weight: 600;

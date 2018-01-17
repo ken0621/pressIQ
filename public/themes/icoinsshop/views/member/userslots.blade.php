@@ -5,7 +5,7 @@
 <div class="modal-body clearfix">
 	<div class="slot-holder">
 	@foreach($slots as $slot)
-		<div class="slot-no-style"><span>{{$slot->slot_no}}</span></div>
+		<div class="slot-no-style"><div class="slotnum">{{$slot->slot_no}}</div class="slotnum"></div>
 	@endforeach
 	</div>
 </div>

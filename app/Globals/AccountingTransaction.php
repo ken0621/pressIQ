@@ -324,7 +324,7 @@ class AccountingTransaction
 					{
 						foreach ($bundle_list as $key_bundle => $value_bundle) 
 						{
-							$qty = $value['item_qty'] * UnitMeasurement::getQty($value_bundle->bundle_um_id);
+							$qty = $value['item_qty'] * ($value_bundle->bundle_qty * UnitMeasurement::getQty($value_bundle->bundle_um_id));
 							$_item[$key.'b'.$key_bundle]['item_id'] = $value_bundle->bundle_item_id;
 							$_item[$key.'b'.$key_bundle]['quantity'] = $qty;
 							$_item[$key.'b'.$key_bundle]['remarks'] = $value_bundle->item_sales_information;
@@ -363,7 +363,7 @@ class AccountingTransaction
 					{
 						foreach ($bundle_list as $key_bundle => $value_bundle) 
 						{
-							$qty = $value['item_qty'] * UnitMeasurement::getQty($value_bundle->bundle_um_id);
+							$qty = $value['item_qty'] * ($value_bundle->bundle_qty * UnitMeasurement::getQty($value_bundle->bundle_um_id));
 							$_item[$key.'b'.$key_bundle]['item_id'] = $value_bundle->bundle_item_id;
 							$_item[$key.'b'.$key_bundle]['quantity'] = $qty;
 							$_item[$key.'b'.$key_bundle]['remarks'] = $value_bundle->item_sales_information;
@@ -421,7 +421,7 @@ class AccountingTransaction
 					{
 						foreach ($bundle_list as $key_bundle => $value_bundle) 
 						{
-							$qty = $value['item_qty'] * UnitMeasurement::getQty($value_bundle->bundle_um_id);
+							$qty = $value['item_qty'] * ($value_bundle->bundle_qty * UnitMeasurement::getQty($value_bundle->bundle_um_id));
 							$_item[$key.'b'.$key_bundle]['item_id'] = $value_bundle->bundle_item_id;
 							$_item[$key.'b'.$key_bundle]['quantity'] = $qty;
 							$_item[$key.'b'.$key_bundle]['remarks'] = $value_bundle->item_sales_information;

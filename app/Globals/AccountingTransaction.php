@@ -195,7 +195,7 @@ class AccountingTransaction
 
 			$item_type = Item::get_item_type($value['item_id']);
             /* TRANSACTION JOURNAL */  
-            if($item_type != 4 || $item_type != 5)
+            if($item_type != 4 && $item_type != 5)
             {
                 $entry_data[$key]['item_id']            = $value['item_id'];
                 $entry_data[$key]['entry_qty']          = $value['item_qty'];
@@ -337,6 +337,15 @@ class AccountingTransaction
 			if(count($_item) > 0)
 			{
 				$return = Warehouse2::refill_bulk($shop_id, $warehouse_id, $ref_name, $ref_id, $remarks, $_item);
+
+				foreach ($item_info as $key => $value) 
+				{
+					$item_type = Item::get_item_type($value['item_id']);
+					if($item_type == 5 || $item_type == 4)
+					{
+						Item::assemble_membership_kit($shop_id, $warehouse_id, $value['item_id'], $value['item_qty']);
+					}
+				}
 			}
 		}
 		return $return;
@@ -350,26 +359,12 @@ class AccountingTransaction
 			foreach ($item_info as $key => $value) 
 			{
 				$item_type = Item::get_item_type($value['item_id']);
-				if($item_type == 1)
+				if($item_type == 1 || $item_type == 5 || $item_type == 4)
 				{
 					$qty = $value['item_qty'] * UnitMeasurement::getQty($value['item_um']);
 					$_item[$key]['item_id'] = $value['item_id'];
 			        $_item[$key]['quantity'] = $qty;
 			        $_item[$key]['remarks'] = $value['item_description'];
-				}
-				elseif($item_type == 5 || $item_type == 4)
-				{
-					$bundle_list = Item::get_bundle_list($value['item_id']);
-					if(count($bundle_list) > 0)
-					{
-						foreach ($bundle_list as $key_bundle => $value_bundle) 
-						{
-							$qty = $value['item_qty'] * ($value_bundle->bundle_qty * UnitMeasurement::getQty($value_bundle->bundle_um_id));
-							$_item[$key.'b'.$key_bundle]['item_id'] = $value_bundle->bundle_item_id;
-							$_item[$key.'b'.$key_bundle]['quantity'] = $qty;
-							$_item[$key.'b'.$key_bundle]['remarks'] = $value_bundle->item_sales_information;
-						}
-					}
 				}
 			}
 		}

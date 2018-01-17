@@ -416,7 +416,7 @@ class Warehouse2
         $qty = Tbl_item::recordloginventory($warehouse_id, true)->value('offset_count');
         return $qty * -1;
     }
-    public static function refill_backup($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '', $update_count = true)
+    public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '', $update_count = true)
     {
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
@@ -595,7 +595,7 @@ class Warehouse2
 
         return $validate;
     }
-    public static function consume_validation_backup($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array())
+    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array())
     {
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
@@ -769,6 +769,93 @@ class Warehouse2
         }
 
         return $validate;
+    }
+
+    public static function refill_bundling_item($shop_id, $warehouse_id, $item_id, $quantity, $ref_name = '', $ref_id = 0)
+    {
+        $item_list = Item::get_item_in_bundle($item_id);
+        $_item = [];
+        foreach ($item_list as $key => $value) 
+        {
+            $_item[$key]['item_id'] = $value->bundle_item_id;
+            $_item[$key]['quantity'] = $value->bundle_qty * $quantity;
+            $_item[$key]['remarks'] = 'consume item upon assembling item';
+        }
+        $validate_consume = Warehouse2::consume_bulk_src_ref($shop_id, $warehouse_id, 'bundling_item', $item_id, 'Consume Item upon bundling Item#'.$item_id, $_item, $ref_name, $ref_id);
+
+        if(!$validate_consume)
+        {
+            $source['name'] = 'bundling_item';
+            $source['id'] = $item_id;
+            $validate_consume .= Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, 'Refill Item upon bundling Item#'.$item_id, $source);            
+        }
+
+        return $validate_consume;
+    } 
+    public static function consume_bulk_src_ref($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item, $ref_name = '', $ref_id = 0)
+    {
+        $validate = null;
+        foreach ($_item as $key => $value)
+        {
+            $serial = isset($value['serial']) ? $value['serial'] : null;
+            $validate .= Warehouse2::consume_validation_ref_num($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+        }
+        if(!$validate)
+        {
+            foreach ($_item as $key => $value) 
+            {                
+                $serial = isset($value['serial']) ? $value['serial'] : null;
+
+                $consume['name'] = $reference_name;
+                $consume['id'] = $reference_id;
+
+                $validate = Warehouse2::consume($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $consume, $serial, 'inventory_history_recorded');
+            }
+        }
+
+        return $validate;
+
+    }
+    public static function consume_validation_ref_num($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array())
+    {
+        $return = null;
+        $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
+
+        $serial_qty = count($serial);
+        if($serial_qty != 0)
+        {
+            if($serial_qty != $quantity)
+            {
+                $return .= "The serial number are not equal from the quantity. <br> ";
+            }
+
+            foreach ($serial as $key => $value) 
+            {
+                $check_serial = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id)->where('record_serial_number',$value)->first();
+                if(!$check_serial)
+                {
+                    $return .= "The serial number ".$value." does not exist in this warehouse. <br>";
+                }
+            }
+        }
+        if(is_numeric($quantity) == false)
+        { 
+            $return .= "The quantity must be a number. <br>";
+        }
+        if($quantity < 1)
+        {
+            $return .= "The quantity is less than 1. <br> ";
+        }
+        if(!$check_warehouse)
+        {
+            $return .= "The warehouse doesn't belong to your account <br>";
+        }
+        $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
+        if($quantity > $inventory_qty)
+        {
+            $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
+        }
+        return $return;
     }
 
     /* PARAM
@@ -975,7 +1062,7 @@ class Warehouse2
 
 
 
-    public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '', $update_count = true, $for_out_of_stock = '')
+    public static function refill_2($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '', $update_count = true, $for_out_of_stock = '')
     {
 
         $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','<',0)->count();
@@ -1059,7 +1146,7 @@ class Warehouse2
 
 
 
-  public static function update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity)
+    public static function update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity)
     {
         if($count_offset > $quantity)
         {
@@ -1074,7 +1161,7 @@ class Warehouse2
 
             }
         }
-        else if($count_offset-$running_quantity <= 0)
+        else if($count_offset - $running_quantity <= 0)
         {
             $update['record_count_inventory'] = 1;
             Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
@@ -1084,7 +1171,7 @@ class Warehouse2
     }
 
 
-    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array(), $allow_out_of_stock = false)
+    public static function consume_validation_backup($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array(), $allow_out_of_stock = false)
     {
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();

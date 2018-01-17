@@ -55,7 +55,7 @@
 					@foreach($_used as $key => $used)
 					<div class="custom-panel">
 	       				<div class="custom-panel-header cursor-pointer">
-	       					{{date('F d, Y', strtotime($key)).' '.$used[0]['payroll_leave_temp_name']}}
+	       					{{date('F d, Y', strtotime($key))}}
 	       				</div>
 	       				<div class="width-100 display-table">
 				          <div class="triangle-top-right"></div>
@@ -66,6 +66,7 @@
 				              	 @foreach($used as $tag)
 								  <li class="list-group-item padding-tb-10">{{$tag['payroll_employee_title_name'].' '.$tag['payroll_employee_first_name'].' '.$tag['payroll_employee_middle_name'].' '.$tag['payroll_employee_last_name'].' '.$tag['payroll_employee_suffix_name']}}<a href="#" class="pull-right popup" link="/member/payroll/leave_schedule/delete_confirm_schedule_leave/{{$tag['payroll_leave_schedule_id']}}" size="sm"><i class="fa fa-times" aria-hidden="true"></i></a>
 								  <span class="pull-right margin-right-20">{{date('h:i', strtotime($tag['leave_hours']))}}</span>
+								  <span class="pull-right margin-right-20 center">{{$tag['payroll_leave_temp_name']}}</span>
 								  </li>
 								 @endforeach
 								</ul>

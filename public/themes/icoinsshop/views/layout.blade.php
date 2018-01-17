@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css?version=2">
     {{-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/smooth-scroll.css"> --}}
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/mobile_res.css">
     
     @include("frontend.ghead")
     <!-- OTHER CSS -->

@@ -37,6 +37,33 @@ $content-text: 'Open Sans', sans-serif;
 	border-radius: 0 !important;
 }
 
+.modal-body
+{
+
+	.slot-holder
+	{
+		padding: 25px;
+		background-color: #ededed;
+		font-family: $content-text;
+		border: 1px solid rgba(0,0,0,0.2);
+
+		.slot-no-style
+		{
+			text-align: center;
+			padding: 5px 0;
+
+			span
+			{
+				padding: 5px 250px;
+				font-size: 18px;
+				font-weight: 600;
+				color: #272c2f;
+				border-bottom: 1px solid rgba(255,255,255,0.6);
+			}
+		}
+	}
+}
+
 .btn-primary
 {
 	@include transition(0.3s);
@@ -59,11 +86,11 @@ $content-text: 'Open Sans', sans-serif;
 	@include transition(0.3s);
 	background-color: rgba(230,45,45,0.8) !important;
 	color: #fff;
-	opacity: 0.8;
+	//opacity: 0.8;
 
 	&:hover
 	{
-		opacity: 1;
+		//opacity: 1;
 		color: #fff;
 	}
 }
@@ -76,7 +103,7 @@ $content-text: 'Open Sans', sans-serif;
 
 	&:hover
 	{
-		opacity: .8;
+		opacity: .9;
 		color: #fff;
 	}
 }
@@ -110,6 +137,8 @@ $content-text: 'Open Sans', sans-serif;
 		opacity: 0.8;
 	}
 }
+
+
 //END MODAL AND BUTTON DESIGNS
 
 .member

@@ -393,6 +393,11 @@ class AccountingTransaction
 
 		return $return;
 	}
+	public static function inventory_refill_update($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info)
+	{
+		$get_old = 
+
+	}
 	public static function consume_inventory($shop_id, $warehouse_id , $item_info, $ref_name = '', $ref_id = 0, $remarks = '')
 	{
 		$return = null;

@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $content-text: 'Lato', sans-serif;
 $regular: 400;
 $semi-bold: 600;
@@ -7,7 +9,8 @@ $text-dark: #272c2f;
 
 .btn-cust-paysett
 {
-	background-color: #0466AF;
+	@include transition(0.2s);
+	background-color: #037058;
 	color: #fff;
 
 	&:hover
@@ -19,7 +22,8 @@ $text-dark: #272c2f;
 
 .btn-cust-reqpay
 {
-	background-color: #F4AC00;
+	@include transition(0.2s);
+	background-color: #E1890B;
 	color: #fff;
 
 	&:hover

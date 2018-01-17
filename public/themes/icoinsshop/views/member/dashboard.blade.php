@@ -46,7 +46,7 @@
 								</div>
 								<div class="holder">
 									<div class="color cs"></div>
-									<div class="name"><span>Current Slot(s)</span> <div class="name cs-text"><a style="text-decoration: none;" onclick="action_load_link_to_modal('/members/slots')">{{ $customer_summary["display_slot_count"] }}</a></div></div>
+									<div class="name"><span>Current Slot(s)</span> <div class="name cs-text"><a class="hand" onclick="action_load_link_to_modal('/members/slots')">{{ $customer_summary["display_slot_count"] }}</a></div></div>
 								</div>
 								<div class="holder">
 									<div class="color tr"></div>

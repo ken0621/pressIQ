@@ -30,7 +30,7 @@ use App\Globals\Mail_global;
 use App\Globals\Transaction;
 use App\Globals\Warehouse2;
 use App\Globals\Ecom_Product;
-use App\Globals\Abs\AbsMain;
+use App\Globals\abs\AbsMain;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 
@@ -2812,11 +2812,18 @@ class ShopMemberController extends Shop
     }
     public function getWalletEncashment()
     {
-        $data["page"]           = "Wallet Encashment";
-        $data["_encashment"]    = MLM2::customer_payout($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
-        $total_payout           = MLM2::customer_total_payout(Self::$customer_info->customer_id);
-        $data["total_payout"]   = Currency::format($total_payout);
-        return (Self::load_view_for_members("member.wallet_encashment", $data));
+        if (isset($this->shop_info->shop_id) && isset(Self::$customer_info->customer_id)) 
+        {
+            $data["page"]           = "Wallet Encashment";
+            $data["_encashment"]    = MLM2::customer_payout($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+            $total_payout           = MLM2::customer_total_payout(Self::$customer_info->customer_id);
+            $data["total_payout"]   = Currency::format($total_payout);
+            return (Self::load_view_for_members("member.wallet_encashment", $data));
+        }
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
     public function getWalletTransfer()
     {

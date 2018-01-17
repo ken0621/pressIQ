@@ -148,9 +148,9 @@
                                                         
                                                         <td>
                                                             @if($pis)
-                                                                <textarea class="textarea-expand txt-desc" readonly="true" name="invline_description[]">{{$invline->invline_service_date}}</textarea>
+                                                                <textarea class="textarea-expand txt-desc" readonly="true" name="invline_description[]">{{$invline->invline_description}}</textarea>
                                                             @else
-                                                                <textarea class="textarea-expand txt-desc" name="invline_description[]" value="{{$invline->invline_service_date}}"></textarea>
+                                                                <textarea class="textarea-expand txt-desc" name="invline_description[]" value="{{$invline->invline_description}}"></textarea>
                                                             @endif
                                                         </td>
                                                         <td>

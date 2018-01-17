@@ -42,6 +42,18 @@
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button> -->
                 <div class="dropdown pull-right">
                     <div>
+
+                        @if(isset($wc))
+                        <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <!-- <li class="dropdown-header">Dropdown header 1</li> -->
+                            <li><a href="/member/accounting/journal/entry/write-check/{{$wc->wc_id}}">Transaction Journal</a></li>
+                            <!-- <li class="divider"></li> -->
+                            <!-- <li class="dropdown-header">Dropdown header 2</li> -->
+                            <li><a href="#">Void</a></li>
+                        </ul>
+                        @endif 
                         <a class="btn btn-custom-white" href="/member/vendor/write_check/list">Cancel</a>
                         <button class="btn btn-custom-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                         <span class="caret"></span></button>
@@ -53,21 +65,6 @@
                         </ul>
                     </div>
                 </div>
-                @if(isset($wc))
-                <div class="pull-right">
-                    <div class="dropdown">
-                        <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <!-- <li class="dropdown-header">Dropdown header 1</li> -->
-                            <li><a href="/member/accounting/journal/entry/write-check/{{$wc->wc_id}}">Transaction Journal</a></li>
-                            <!-- <li class="divider"></li> -->
-                            <!-- <li class="dropdown-header">Dropdown header 2</li> -->
-                            <li><a href="#">Void</a></li>
-                        </ul>
-                    </div>
-                </div>
-                @endif 
             </div>
         </div>
     </div>

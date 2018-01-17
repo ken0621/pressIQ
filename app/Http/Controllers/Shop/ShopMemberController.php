@@ -3194,6 +3194,12 @@ class ShopMemberController extends Shop
         $data["page"] = "Slot";
         return (Self::load_view_for_members("member.slot", $data));
     }
+    public function getSlots()
+    {
+        $data['page'] = "YOUR SLOT(S)";
+        $data['slots'] = Tbl_mlm_slot::where('slot_owner',Self::$customer_info->customer_id)->get();
+        return view('member.userslots',$data);
+    }
     public function getEonCard()
     {
         $data["page"] = "Eon Card";

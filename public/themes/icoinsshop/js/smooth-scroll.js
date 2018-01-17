@@ -24,12 +24,12 @@ $(window).scroll(function()
 {
 	var scrollDistance = $(window).scrollTop();
 
-	// Show/hide menu on scroll
-	//if (scrollDistance >= 850) {
-	//		$('nav').fadeIn("fast");
-	//} else {
-	//		$('nav').fadeOut("fast");
-	//}
+	//Show/hide menu on scroll
+	// if (scrollDistance >= 850) {
+	// 		$('nav').fadeIn("fast");
+	// } else {
+	// 		$('nav').fadeOut("fast");
+	// }
 
 	// Assign active class to nav links while scolling
 	$('.page-section').each(function(i) 
@@ -42,3 +42,20 @@ $(window).scroll(function()
 	});
 
 }).scroll();
+
+(function($) 
+{
+    'use strict'; // Start of use strict
+
+    $('.navigation__link').on('click', function(event) 
+    {
+        var $anchor = $(this);
+        $('html, body').stop().animate({
+            scrollTop: ($($anchor.attr('href')).offset().top - 50)
+        }, 1250, 'easeInOutExpo'); //1250
+        
+        event.preventDefault();
+    });
+    
+
+})(jQuery);

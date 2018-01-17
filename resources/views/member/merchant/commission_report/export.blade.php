@@ -28,6 +28,7 @@
 <body>
 	<table>
 		<tr class="head">
+			<th>Record Id</th>
 			<th>Pin</th>
             <th>Activation</th>
             <th>Date Used</th>
@@ -37,6 +38,7 @@
 		</tr>
 		@foreach($table as $t)
 		<tr>
+			<td>{{$t->record_log_id}}</td>
 			<td>{{$t->mlm_pin}}</td>
             <td>{{$t->mlm_activation}}</td>
             <td>{{$t->record_log_date_updated}}</td>
@@ -47,6 +49,7 @@
 		@endforeach
 		<br>
 		<tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

@@ -687,22 +687,30 @@ class MerchantController extends Member
 			// dd($file);
 			// ini_set('memory_limit', '-1');
 			$data = array();
-			$report = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('pin','activation'));
+			$report = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('record_id'));
 			// dd($report);
 			$response = 'success';
-			if(isset($report[0]['pin']))
+			if(isset($report[0]['record_id']))
 			{
-				foreach ($report as $r) 
+				// foreach ($report as $r) 
+				// {
+				// 	if($r['pin'] != '' && $r['activation'] != '')
+				// 	{
+				// 		$update['commission_report'] = 1;
+				// 		Tbl_warehouse_inventory_record_log::
+				// 		where('mlm_pin',$r['pin'])
+				// 			->where('mlm_activation',$r['activation'])
+				// 			->update($update);
+				// 	}
+				// }
+
+				$update['commission_report'] = 1;
+				$query = Tbl_warehouse_inventory_record_log::where('record_log_id',$report[0]['record_id']);
+				foreach($report as $r)
 				{
-					if($r['pin'] != '' && $r['activation'] != '')
-					{
-						$update['commission_report'] = 1;
-						Tbl_warehouse_inventory_record_log::
-						where('mlm_pin',$r['pin'])
-							->where('mlm_activation',$r['activation'])
-							->update($update);
-					}
+					$query->orWhere('record_log_id',$r['record_id']);
 				}
+				$query->update($update);
 			}
 			else
 			{

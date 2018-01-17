@@ -69,7 +69,7 @@ class ShopProductContent2Controller extends Shop
         }
         else
         {
-            return Redirect::to('/product');
+            return Redirect::back();
         }
     }
 

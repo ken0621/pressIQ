@@ -18,17 +18,6 @@
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button> -->
                 <div class="dropdown pull-right">
                     <div>
-                        @if(isset($rcvpayment))
-                        <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <!-- <li class="dropdown-header">Dropdown header 1</li> -->
-                            <li><a href="/member/accounting/journal/entry/receive-payment/{{$rcvpayment->rp_id}}">Transaction Journal</a></li>
-                            <!-- <li class="divider"></li> -->
-                            <!-- <li class="dropdown-header">Dropdown header 2</li> -->
-                            <li><a href="#">Void</a></li>
-                        </ul>
-                        @endif
                         <a class="btn btn-custom-white" href="/member/vendor/purchase_order/list">Cancel</a>
                         <button class="btn btn-custom-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                         <span class="caret"></span></button>
@@ -39,7 +28,25 @@
                             <li><a class="select-action" code="save-and-new">Save & New</a></li>
                         </ul>
                     </div>
+
+                    <div>
+                    </div>
                 </div>
+                @if(isset($rcvpayment))
+                <div class="pull-right">
+                    <div class="dropdown">
+                        <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <!-- <li class="dropdown-header">Dropdown header 1</li> -->
+                            <li><a href="/member/accounting/journal/entry/receive-payment/{{$rcvpayment->rp_id}}">Transaction Journal</a></li>
+                            <!-- <li class="divider"></li> -->
+                            <!-- <li class="dropdown-header">Dropdown header 2</li> -->
+                            <li><a href="#">Void</a></li>
+                        </ul>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
     </div>

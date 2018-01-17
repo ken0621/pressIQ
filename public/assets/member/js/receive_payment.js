@@ -23,8 +23,6 @@ function receive_payment()
 		action_initialize_load();
 		action_remove_apply_credit();
 		event_compute_apply_credit();
-		action_update_apply_amount();
-		action_update_credit_amount();
 	}
 
 	this.action_initialize_load = function()

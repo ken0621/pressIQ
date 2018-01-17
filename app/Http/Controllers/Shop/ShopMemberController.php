@@ -101,6 +101,7 @@ use App\Models\Tbl_item;
 use App\Tbl_item_redeemable;
 //for image upload
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class ShopMemberController extends Shop
 {
@@ -1256,8 +1257,16 @@ class ShopMemberController extends Shop
     public function getAutologin()
     {
         $data["force_login"] = true;
-        $data["password"] = Crypt::decrypt(request()->password);
-        return view("member.autologin", $data);
+
+        try 
+        {
+            $data["password"] = Crypt::decrypt(request()->password);
+            return view("member.autologin", $data);
+        }
+        catch (DecryptException $e) 
+        {
+            return Redirect::back();
+        }
     }
     public function request_payout_allow()
     {

@@ -377,7 +377,7 @@ class Payroll2
 				$insert["payroll_time_date"] 		= $from;
 				$insert["payroll_time_shift_raw"] 	= serialize($_shift);
 				Tbl_payroll_time_sheet::insert($insert);
-				$timesheet_db =Payroll2::timesheet_info_db($employee_id, $from);
+				$timesheet_db = Payroll2::timesheet_info_db($employee_id, $from);
 				$insert = null;
 			}
 
@@ -470,6 +470,7 @@ class Payroll2
 
 		if($timesheet_db)
 		{
+			
 			$approved_record = Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->get();
 			$approved = false;
 			
@@ -483,12 +484,21 @@ class Payroll2
 				$_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->get();
 			}
 
-			$return = Payroll2::timesheet_process_daily_info_record($employee_id, $date, $approved, $_record, $timesheet_db->payroll_time_sheet_id, $payroll_period_company_id, $timesheet_db->time_keeping_approved,  $timesheet_db->custom_shift,  $timesheet_db->custom_shift_id);
+			/*START Regular Holiday Pay Checking*/
+			$is_holiday = Payroll2::timesheet_get_is_holiday($employee_id, $date);
+			$regular_holiday_pay = true;
+			if ($is_holiday == "regular") // Run only in regular holiday
+			{
+				$regular_holiday_pay = Payroll2::checkRegularHolidayPay($employee_id, $date, $payroll_period_company_id); //Check Holiday Pay
+							}
+			/*END Regular Holiday Pay Checking*/
+
+			$return = Payroll2::timesheet_process_daily_info_record($employee_id, $date, $approved, $_record, $timesheet_db->payroll_time_sheet_id, $payroll_period_company_id, $timesheet_db->time_keeping_approved,  $timesheet_db->custom_shift,  $timesheet_db->custom_shift_id, $regular_holiday_pay);
+			
 			
 			$return->source = "";
 			$return->branch = "";
 			$return->payroll_time_sheet_id = 0;
-
 		}
 		else
 		{
@@ -516,7 +526,7 @@ class Payroll2
 			Tbl_payroll_time_sheet_record_approved::insert($insert);
 		}
 	}
-	public static function timesheet_process_daily_info_record($employee_id, $date, $approved, $_time, $payroll_time_sheet_id, $payroll_period_company_id, $time_keeping_approved, $custom_shift, $custom_shift_id)
+	public static function timesheet_process_daily_info_record($employee_id, $date, $approved, $_time, $payroll_time_sheet_id, $payroll_period_company_id, $time_keeping_approved, $custom_shift, $custom_shift_id, $regular_holiday_pay = true)
 	{
 		$return 					= new stdClass();
 		$return->for_approval		= ($approved == true ? 0 : 1);
@@ -640,7 +650,15 @@ class Payroll2
 			$return->day_type = $day_type = "regular";
 		}
 
-		$return->is_holiday = $is_holiday = Payroll2::timesheet_get_is_holiday($employee_id, $date);
+		if ($regular_holiday_pay == false) 
+		{
+			$return->is_holiday = $is_holiday = "not_holiday";
+		}
+		else
+		{
+			$return->is_holiday = $is_holiday = Payroll2::timesheet_get_is_holiday($employee_id, $date);
+		}
+		
 		//$return->leave = $leave = $this->timesheet_get_leave_hours($employee_id, $date, $_shift_raw);
 		
 		/*START leave function*/
@@ -673,7 +691,7 @@ class Payroll2
         		$leavepay=$leave_date_data["payroll_leave_temp_with_pay"];
         	}
         }
-        
+
 
     	$return->use_leave = $use_leave;             
 		$return->leave = $leave;
@@ -704,12 +722,12 @@ class Payroll2
 		{
 			$access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
 			
-			//DISPLAY TOTAL AMOUNT IN TIMESHEET 
-			if($access == 1) 
+			
+			if($access == 1) //DISPLAY TOTAL AMOUNT IN TIMESHEET 
 			{
 				$return->value_html = Payroll2::timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
 			}
-			else
+			else //DISPLAY TOTAL HOURS IN TIMESHEET 
 			{
 				$return->value_html = Payroll2::timesheet_daily_target_hours_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->time_output, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
 			}
@@ -943,9 +961,116 @@ class Payroll2
 		if($holiday != null)
 		{
 			$day_type = strtolower($holiday->payroll_holiday_category);
-			// $day_type["holiday_name"] = strtolower($holiday->payroll_holiday_name);
 		}
+
 		return $day_type;
+	}
+
+	public static function checkRegularHolidayPay($employee_id, $date, $payroll_period_company_id)
+	{
+
+		$before = true;
+		$after = true;
+		$i = 0;
+		do //Check last regular day if not absent
+		{
+			$i++;
+			$dateTemp = Carbon::parse($date)->subDay($i)->format("Y-m-d");
+			$timesheet_db = Payroll2::timesheet_info_db($employee_id, $dateTemp);
+
+			$return = null;
+
+			if($timesheet_db)
+			{
+				$return = new stdClass();
+				$approved_record = Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->get();
+				$approved = false;
+				
+				if(count($approved_record) > 0)
+				{
+					$_record = $approved_record;
+					$approved = true;
+				}
+				else
+				{
+					$_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->get();
+				}
+
+				$return = Payroll2::timesheet_process_daily_info_record($employee_id, $dateTemp, $approved, $_record, $timesheet_db->payroll_time_sheet_id, $payroll_period_company_id, $timesheet_db->time_keeping_approved,  $timesheet_db->custom_shift,  $timesheet_db->custom_shift_id);
+				
+				$return->source = "";
+				$return->branch = "";
+				$return->payroll_time_sheet_id = 0;
+			}
+			else
+			{
+				$return->for_approval = 0;
+				$return->daily_salary = 0;
+			}
+			
+		}while( (!($return->day_type == 'regular' && $return->is_holiday == 'not_holiday')) && $return != null);
+		
+		if ($return != null) 
+		{
+			$before = $return->time_output['time_spent'] != "00:00:00";
+		}
+
+
+		$i = 0;
+		do //Check next regular day if not absent
+		{
+			$i++;
+			$dateTemp = Carbon::parse($date)->addDay($i)->format("Y-m-d");
+			$timesheet_db = Payroll2::timesheet_info_db($employee_id, $dateTemp);
+
+			$return = null;
+
+			if($timesheet_db)
+			{
+				$return = new stdClass();
+				$approved_record = Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->get();
+				$approved = false;
+				
+				if(count($approved_record) > 0)
+				{
+					$_record = $approved_record;
+					$approved = true;
+				}
+				else
+				{
+					$_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->get();
+				}
+
+				$return = Payroll2::timesheet_process_daily_info_record($employee_id, $dateTemp, $approved, $_record, $timesheet_db->payroll_time_sheet_id, $payroll_period_company_id, $timesheet_db->time_keeping_approved,  $timesheet_db->custom_shift,  $timesheet_db->custom_shift_id);
+				
+				$return->source = "";
+				$return->branch = "";
+				$return->payroll_time_sheet_id = 0;
+			}
+			else
+			{
+				break;
+			}
+		
+		}while( (!($return->day_type == 'regular' && $return->is_holiday == 'not_holiday')) && $return != null);
+		
+		if ($return != null) 
+		{
+			$after = $return->time_output['time_spent'] != "00:00:00";
+		}
+
+
+		if ($after == true && $before == true) // if before and after is true then Regular Holiday has pay
+		{
+			
+			$return = true;
+		}
+		else // if before or after is false then Regular Holiday has no pay
+		{
+			$return = false;
+		}
+		
+		return $return;
 	}
 
 	public static function timesheet_get_is_leave($employee_id, $date)

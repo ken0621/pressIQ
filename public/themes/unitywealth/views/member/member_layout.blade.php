@@ -92,6 +92,9 @@
 						{{-- <li class="{{ Request::segment(2) == "codevault" ? "active" : "" }}">
 							<a href="/members/codevault"><div class="nav-holder"><div class="icon fa fa-code"></div> <span>Code Vault</span></div></a>
 						</li> --}}
+						<li class="{{ Request::segment(2) == "captcha" ? "active" : "" }}">
+							<a href="/members/captcha"><div class="nav-holder"><div class="icon fa fa-recycle"></div> <span>Captcha</span></div></a>
+						</li>
 						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>

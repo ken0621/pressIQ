@@ -2841,6 +2841,11 @@ class ShopMemberController extends Shop
         $data['activation'] = request("activation");
         return view("member.use_code",$data);
     }
+    public function getCaptcha()
+    {
+        $data['page'] = "Captcha";
+        return view('member.captcha',$data);
+    }
     public function getReport()
     {
         if (isset($this->shop_info->shop_id) && isset(Self::$customer_info->customer_id)) 

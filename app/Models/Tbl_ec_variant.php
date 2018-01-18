@@ -60,6 +60,25 @@ class Tbl_ec_variant extends Model
               ->orderBy("variant_name_order");
     }
 
+    public function scopeRecordloginventory($query, $warehouse_id = null, $all = false)
+    {
+        return $query->selectRaw("count(record_log_id) as inventory_count_v2")
+                     ->leftjoin(DB::raw("(Select wi.* from tbl_warehouse_inventory_record_log wi INNER JOIN tbl_warehouse wh on wh.warehouse_id = wi.record_warehouse_id where wh.archived = 0) warehouse2"), function($join) use ($warehouse_id, $all)
+                     {
+                        $join->on("record_item_id","=","item_id");
+                        if($warehouse_id)
+                        {
+                            $join->on("warehouse2.record_warehouse_id","=", DB::raw($warehouse_id));
+                            if($all == false)
+                            {
+                                $join->where('record_inventory_status',0)
+                                ->where('item_in_use','unused');
+                            }
+                        }
+                     })
+                     ->groupBy("item_id");
+    }
+
     public function scopeOptionValue($query)
     {
     	$query->leftjoin(DB::raw("tbl_variant_name AS var_name"),"evariant_id","=", "variant_id")

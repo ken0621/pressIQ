@@ -257,11 +257,11 @@ class Ecom_Product
 			$product			   	= $product;
 			if ($manufacturer_id) 
 			{
-				$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->manufacturer($manufacturer_id)->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+				$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->recordloginventory(Ecom_Product::getWarehouseId($shop_id))->manufacturer($manufacturer_id)->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
 			}
 			else
 			{
-				$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+				$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->recordloginventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
 			}
 
 			//arcy get disc price
@@ -291,6 +291,7 @@ class Ecom_Product
 			}
 			$product = collect($product)->toArray();
 		}
+		dd($product);
 		return $product;
 	}
 	public static function getMlmDiscount($shop_id, $item_id, $product_price)

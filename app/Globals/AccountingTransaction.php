@@ -382,6 +382,10 @@ class AccountingTransaction
 		}
 		return $return;
 	}
+	public static function inventory_refill_update($shop_id, $warehouse_id,  $item_info, $ref_name, $ref_id)
+	{
+		Warehouse2::inventory_delete_inventory($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info);
+	}
 	public static function inventory_validation($type = 'refill', $shop_id, $warehouse_id, $item_info, $remarks = '')
 	{
 		$return = null;

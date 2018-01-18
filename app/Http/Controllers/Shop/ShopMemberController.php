@@ -207,16 +207,13 @@ class ShopMemberController extends Shop
             }
             // dd($slot_id." ; ".$data['reward_point_redemption']);
             // dd($data['wallet']);
+            $data["krops_gc"] = Tbl_mlm_slot_points_log::Slot()->where('points_log_type',"GC")->where('slot_owner',Self::$customer_info->customer_id)->sum('points_log_points');
             return Self::load_view_for_members("member.dashboard", $data);
         }
         else
         {
             return Redirect::to('/members/login');
         }
-        // dd($slot_id." ; ".$data['reward_point_redemption']);
-        // dd($data['wallet']);
-        // dd($data['_wallet_plan']);
-        return Self::load_view_for_members("member.dashboard", $data);
 
     }
     public function getDirectReferrals()

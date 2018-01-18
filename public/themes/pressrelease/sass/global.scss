@@ -160,13 +160,20 @@ button:hover{
 
 	nav
 	{
+		font-weight: 700;
 		a.active
 		{
-			color: #76b83f;
+			color: #c51f33;
+			border-bottom: 4px solid #c51f33;
+			padding: 6px 0;
 		}
 		a:hover
 		{
-			border-bottom: 2px solid #c51f33;
+			transition: 0.3s ease;
+			border-bottom: 4px solid #c51f33;
+			padding: 6px 0;
+			color: #c51f33;
+			cursor: pointer;
 		}
 	}
 }

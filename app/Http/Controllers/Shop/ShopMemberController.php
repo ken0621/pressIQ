@@ -468,9 +468,7 @@ class ShopMemberController extends Shop
                             ->Orwhere('position','like','%'.$search_key.'%')
                             ->get();
       return view("press_user.search_recipient", $data);
-      
     }
-
 
     public function send($pr_info)
     {
@@ -482,8 +480,30 @@ class ShopMemberController extends Shop
             {
                 $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
                 $message->to($pr_info["to"]);
+                $message->subject($pr_info["pr_headline"]);
             });
         }
+    }
+
+    public function send_contact_us()
+    {
+        $contactus_info["contactus_first_name"]         =request('first_name');
+        $contactus_info["contactus_last_name"]          =request('contactus_last_name');
+        $contactus_info["contactus_phone_number"]       =request('contactus_phone_number');
+        $contactus_info["contactus_subject"]            =request('contactus_subject');
+        $contactus_info["contactus_email"]              =request('contactus_email');
+        $contactus_info["contactus_message"]            =request('contactus_message');
+        $contactus_info["contactus_to"]                 =request('contactus_to');
+
+        Mail::send('emails.Contact_us',$contactus_info, function($message) use ($contactus_info)
+        {
+            $message->from($contactus_info['contactus_email']);
+            $message->to("oliverbacsal@gmail.com");
+            $message->subject($contactus_info['contactus_subject']);
+           
+        });
+        Session::flash('message_concern', 'Message Successfully Sent!');
+        return Redirect::back();
     }
 
     public function press_release_save_as_draft(Request $request)
@@ -531,6 +551,7 @@ class ShopMemberController extends Shop
         $data["page"] = "Press Release - My Press Release";
         return redirect::to("/pressuser/drafts");
     }
+
     public function pressuser_my_pressrelease()
     {
         if(Session::exists('user_email'))
@@ -657,7 +678,7 @@ class ShopMemberController extends Shop
         }
         else
         {
-            dd(json_decode($response));
+             return Redirect::to("/"); 
         }
     }
 

@@ -2281,9 +2281,11 @@ class MLM_PlanController extends Member
     {
         $validate['membership_id'] = Request::input("membership_id");
         $validate['membership_points_initial_points'] = Request::input("membership_points_initial_points");
+        $validate['initial_gc'] = Request::input("initial_gc");
 
         $rules['membership_id']   = "required";
         $rules['membership_points_initial_points']    = "required";
+        $rules['initial_gc']    = "required";
         
         
         $validator = Validator::make($validate,$rules);
@@ -2294,11 +2296,13 @@ class MLM_PlanController extends Member
             {
                 $insert['membership_id'] = $validate['membership_id'];
                 $insert['membership_points_initial_points'] = $validate['membership_points_initial_points'];
+                $insert['initial_gc'] = $validate['initial_gc'];
                 Tbl_membership_points::insert($insert);
             }
             else
             {
                 $update['membership_points_initial_points'] = $validate['membership_points_initial_points'];
+                $update['initial_gc'] = $validate['initial_gc'];
                 Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
             }
             $data['response_status'] = "success";

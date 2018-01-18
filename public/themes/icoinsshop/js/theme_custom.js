@@ -1,95 +1,84 @@
-var theme_custom = new theme_custom()
+var custom_js = new custom_js();
 
-function theme_custom()
+function custom_js()
 {
-	init();
+    init();
 
-	function init()
-	{
-		$(document).ready(function($) 
-		{
-			document_ready();
-		});
-	}
+    function init()
+    {
+        $(document).ready(function() 
+        {
+            document_ready();   
+        });
+    }
 
-	function document_ready()
-	{
-		header_fixed();
-		scroll_up();
-		mobile_nav();
+    function document_ready()
+    {
+        header_fixed();
+        event_side_nav();
+        genealogy_mobile_dropdown();
+        scroll_up();
+    }
 
-        //Mel push menu
-        /*$(document).ready(function() {
-    		$menuLeft = $('.pushmenu-left');
-    		$nav_list = $('#nav_list');
-    		
-    		$nav_list.click(function() {
-    			$(this).toggleClass('active');
-    			$('.pushmenu-push').toggleClass('pushmenu-push-toright');
-    			$menuLeft.toggleClass('pushmenu-open');
-    		});
-    	});*/
+    function scroll_up()
+    {
+        /*scroll up*/
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 700) {
+                $('.scroll-up').fadeIn();
+            } else {
+                $('.scroll-up').fadeOut();
+            }
+        });
 
-		/*EXIT SIDE NAV TOGGLE*/
-        // $('.nav-ext').click(function()
-        // {
-        //     $('#nav_list').click();
-        // });
-	}
+        $('.scroll-up').click(function () {
+            $("html, body").animate({
+                scrollTop: 0
+            }, 700);
+            return false;
+        });
+    }
 
-	function header_fixed()
-	{
-		$window = $(window);
-		$window.scroll(function() {
-		  $scroll_position = $window.scrollTop();
-		    if ($scroll_position > 32.2167) { 
-		        $('.header-container').addClass('header-fixed');
-		        $('.subheader-container').addClass('header-fixed');
+    function header_fixed()
+    {
+        $window = $(window);
+        $window.scroll(function() {
+          $scroll_position = $window.scrollTop();
+            if ($scroll_position > 100) { 
+                $('.header-container').addClass('header-fixed');
+        
+                header_height = $('.your-header').innerHeight();
+                $('body').css('padding-top' , header_height);
+            } else {
+                $('.header-container').removeClass('header-fixed');
+                $('body').css('padding-top' , '0');
+            }
+         });
+    }
 
-		        header_height = $('.your-header').innerHeight();
-		        $('body').css('padding-top' , header_height);
-		    } else {
-		        $('body').css('padding-top' , '0');
-		        $('.header-container').removeClass('header-fixed');
-		        $('.subheader-container').removeClass('header-fixed');
-		    }
-		 });
-	}
+    function event_side_nav()
+    {
+        $menuLeft = $('.pushmenu-left');
+        $nav_list = $('#nav_list');
+        
+        $nav_list.on("click", function() 
+        {
+            $(this).toggleClass('active');
+           /* $('.pushmenu-push').toggleClass('pushmenu-push-toright');*/
+            $menuLeft.toggleClass('pushmenu-open');
+        }); 
+    }
 
-	function scroll_up()
-	{
-		/*scroll up*/
-		$(window).scroll(function () {
-		    if ($(this).scrollTop() > 700) {
-		        $('.scroll-up').fadeIn();
-		    } else {
-		        $('.scroll-up').fadeOut();
-		    }
-		});
-
-		$('.scroll-up').click(function () {
-		    $("html, body").animate({
-		        scrollTop: 0
-		    }, 700);
-		    return false;
-		});
-	}
-
-	function mobile_nav()
-	{
-		$menuLeft = $('.pushmenu-left');
-		$nav_list = $('#nav_list');
-		
-		$nav_list.click(function() {
-			$(this).toggleClass('active');
-			// $('.pushmenu-push').toggleClass('pushmenu-push-toright');
-			$menuLeft.toggleClass('pushmenu-open');
-		});
-
-	}
+    function genealogy_mobile_dropdown()
+    {
+        $(".genealogy-mobile-dropdown").on("click", function (e) 
+        {
+            $(e.currentTarget).siblings(".genealogy-mobile-dropdown-list").slideToggle();
+            $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
+        });
+    }
 }
 
-/*JAVASCRIPT for event_side_nav*/
 function on() 
 {
     document.getElementById("overlay").style.display = "block";
@@ -97,7 +86,6 @@ function on()
     $(".blur-me").css({
         filter: 'blur(50px)'
     });
-
 }
 
 function off()

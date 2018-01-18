@@ -26,7 +26,7 @@ body
 
 	.holder
 	{
-		//padding: 200px 0 0 0;
+		padding: 150px 0 100px 0;
 
 		.caption-container	
 		{
@@ -411,6 +411,11 @@ body
 				    padding: 0px 15px 20px 15px;
 					display: inline-block;
 
+					a
+					{
+						text-decoration: none;
+					}
+
 					.btn-more-info
 					{
 						@include transition(0.3s);
@@ -497,6 +502,7 @@ body
 	.news-holder
 	{
 		background-color: #f2f2f2;
+		cursor: pointer;
 
 		.img-holder
 		{
@@ -510,13 +516,13 @@ body
 		{
 			padding: 20px 0;
 			font-family: $display-text;
-			margin-left: -10px;
+			//margin-left: -10px;
 
 			.caption
 			{
 				color: #1c1c1c;
 				font-weight: 400;
-				font-size: 18px;
+				font-size: 16px;
 			}
 
 			.date

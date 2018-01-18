@@ -46,7 +46,7 @@
 								</div>
 								<div class="holder">
 									<div class="color cs"></div>
-									<div class="name"><span>Current Slot(s)</span> <div class="name cs-text"><a style="text-decoration: none;" onclick="action_load_link_to_modal('/members/slots')">{{ $customer_summary["display_slot_count"] }}</a></div></div>
+									<div class="name"><span>Current Slot(s)</span> <div class="name cs-text"><a class="hand" onclick="action_load_link_to_modal('/members/slots')">{{ $customer_summary["display_slot_count"] }}</a></div></div>
 								</div>
 								<div class="holder">
 									<div class="color tr"></div>
@@ -167,6 +167,31 @@
 							@endif
 						</div>
 					</div>
+				</div>
+			</div>
+
+			<div class="square-container col-md-6">
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="sub-container">
+					@if(count($_point_plan) > 0)
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+						@foreach($_point_plan as $plan)
+							@if($plan->label == "Repurchase Cashback")
+								<!-- <div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>VIP Cashback</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+								</div> -->
+							@else
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>{{ $plan->label }}</span> <div class="name w2hpx">{{ $points->{ "display_" . $plan->string_plan } }}</div></div>
+								</div>
+							@endif
+						@endforeach
+					</div>
+					@else
+						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
+					@endif
 				</div>
 			</div>
 

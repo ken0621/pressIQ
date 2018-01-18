@@ -423,6 +423,7 @@ class AccountingTransaction
 	}
 	public static function inventory_refill_update($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info)
 	{
+		/* DELETE ALL INVENTORY */
 
 	}
 	public static function consume_inventory($shop_id, $warehouse_id , $item_info, $ref_name = '', $ref_id = 0, $remarks = '')

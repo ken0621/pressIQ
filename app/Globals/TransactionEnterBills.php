@@ -20,6 +20,14 @@ class TransactionEnterBills
 	{
 		return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed',0)->count();
 	}
+    public static function info($shop_id, $bill_id)
+    {
+        return Tbl_bill::vendor()->where("bill_shop_id", $shop_id)->where("bill_id", $bill_id)->first();
+    }
+    public static function info_item($bill_id)
+    {
+        return Tbl_bill_item_line::um()->where("itemline_bill_id", $bill_id)->get();        
+    }
     public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
     {
         $data = Tbl_bill::vendor()->where('bill_shop_id', $shop_id);
@@ -67,7 +75,7 @@ class TransactionEnterBills
 	public static function postInsert($ri_id, $shop_id, $insert, $insert_item)
 	{
     	$val = AccountingTransaction::vendorValidation($insert, $insert_item);
-        //die(var_dump($val));
+    
         if(!$val)
         {
     		$ins['bill_shop_id']          = $shop_id;
@@ -81,7 +89,7 @@ class TransactionEnterBills
             $ins['bill_due_date']         = date("Y-m-d", strtotime($insert['transaction_duedate']));
             $ins['bill_memo']             = $insert['vendor_memo'];
             $ins['date_created']		  = Carbon::now();
-            $ins['inventory_only']		  = 1;
+            $ins['inventory_only']		  = 0;
 
              /* TOTAL */
             $total = collect($insert_item)->sum('item_amount');
@@ -111,6 +119,58 @@ class TransactionEnterBills
         return $return;
 	}
 
+    public static function postUpdate($ri_id, $shop_id, $insert, $insert_item)
+    {
+        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+    
+        if(!$val)
+        {
+            $update['bill_shop_id']          = $shop_id;
+            $update['bill_ri_id']            = $ri_id;
+            $update['transaction_refnum']    = $insert['transaction_refnumber'];
+            $update['bill_vendor_id']        = $insert['vendor_id'];
+            $update['bill_mailing_address']  = $insert['vendor_address'];
+            $update['bill_vendor_email']     = $insert['vendor_email'];
+            $update['bill_terms_id']         = $insert['vendor_terms'];
+            $update['bill_date']             = date("Y-m-d", strtotime($insert['transaction_date']));
+            $update['bill_due_date']         = date("Y-m-d", strtotime($insert['transaction_duedate']));
+            $update['bill_memo']             = $insert['vendor_memo'];
+            $update['date_created']          = Carbon::now();
+            $update['inventory_only']        = 0;
+
+             /* TOTAL */
+            $total = collect($insert_item)->sum('item_amount');
+
+            $update['bill_total_amount'] = $total;
+            
+            /*INSERT RI HERE*/
+            Tbl_bill::where('bill_id', $bill_id)->update($update);
+            
+            /* Transaction Journal */
+            $entry["reference_module"]  = "enter-bills";
+            $entry["reference_id"]      = $enter_bills_id;
+            $entry["name_id"]           = $insert['vendor_id'];
+            $entry["total"]             = collect($insert_item)->sum('item_amount');
+            $entry["vatable"]           = '';
+            $entry["discount"]          = '';
+            $entry["ewt"]               = '';            
+
+            Tbl_purchase_order::where("po_id", $po_id)->update($update);
+        
+            Tbl_purchase_order_line::where("poline_po_id", $po_id)->delete();
+            Self::insertLine($po_id, $insert_item);
+
+            $return = Self::insertLine($enter_bills_id, $insert_item, $entry);
+            $return = $enter_bills_id;
+        }
+        else
+        {
+            $return = $val;
+        }
+
+        return $return;
+    }
+
     public static function insertLine($enter_bills_id, $insert_item, $entry)
     {
         $itemline = null;
@@ -129,7 +189,6 @@ class TransactionEnterBills
         {
             Tbl_bill_item_line::insert($itemline);
             $return = AccountingTransaction::entry_data($entry, $insert_item);
-            //die(var_dump($return));
         }
 
         return $return;

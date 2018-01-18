@@ -128,6 +128,7 @@ class TransactionPurchaseOrder
             $purchase_order_id = Tbl_purchase_order::insertGetId($ins);
         
             $return = Self::insertline($purchase_order_id, $insert_item);
+            
             $return = $purchase_order_id;
 		}
         else

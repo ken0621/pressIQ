@@ -3,16 +3,7 @@ namespace App\Http\Controllers\Member;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Tbl_customer;
-use App\Models\Tbl_warehousea;
-use App\Models\Tbl_customer_invoice;
-use App\Models\Tbl_manual_invoice;
-use App\Models\Tbl_customer_invoice_line;
-use App\Models\Tbl_item_bundle;
-use App\Models\Tbl_item;
-use App\Models\Tbl_warehouse;
-use App\Models\Tbl_bill_po;
-use App\Models\Tbl_vendor;
+
 use App\Models\Tbl_terms;
 
 use App\Globals\TransactionDebitMemo;
@@ -30,12 +21,6 @@ use App\Globals\Item;
 use App\Globals\Warehouse;
 use App\Globals\Utilities;
 use App\Globals\UnitMeasurement;
-use App\Models\Tbl_purchase_order;
-use App\Models\Tbl_purchase_order_line;
-use App\Models\Tbl_bill;
-use App\Models\Tbl_bill_account_line;
-use App\Models\Tbl_bill_item_line;
-use App\Models\Tbl_receive_inventory;
 use Carbon\Carbon;
 use Session;
 class TransactionReceiveInventoryController extends Member
@@ -76,8 +61,6 @@ class TransactionReceiveInventoryController extends Member
             $data['_riline']= TransactionReceiveInventory::info_item($receive_id);
             //dd($data['_riline']);
         }
-
-
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory', $data);
     }
     public function postCreateReceiveInventory(Request $request)
@@ -100,8 +83,61 @@ class TransactionReceiveInventoryController extends Member
             if($value)
             {
                 $insert_item[$key]['item_id']          = $value;
-                // $insert_item[$key]['reference_name']   = $request->item_description[$key];
-                // $insert_item[$key]['reference_id']     = $request->item_um[$key];
+                $insert_item[$key]['item_ref_name']    = $request->itemline_ref_name[$key];
+                $insert_item[$key]['item_ref_id']      = $request->itemline_ref_id[$key];
+                $insert_item[$key]['item_description'] = $request->item_description[$key];
+                $insert_item[$key]['item_um']          = $request->item_um[$key];
+                $insert_item[$key]['item_qty']         = str_replace(',', '', $request->item_qty[$key]);
+                $insert_item[$key]['item_rate']        = str_replace(',', '', $request->item_rate[$key]);
+                $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_discount']    = 0;
+
+                die(var_dump($insert_item));
+            }
+        }
+        
+        $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
+
+        $return = null;
+        if(is_numeric($validate))
+        {
+            $return['status'] = 'success';
+            $return['status_message'] = 'Success creating receive inventory.';
+            $return['call_function'] = 'success_receive_inventory';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('receive_inventory', $validate ,$btn_action);
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $validate;
+        }
+
+        return json_encode($return);
+    }
+
+    public function postUpdateReceiveInventory(Request $request)
+    {
+        $btn_action = $request->button_action;
+
+
+        $insert['transaction_refnumber']    = $request->transaction_refnumber;
+        $insert['vendor_id']                = $request->vendor_id;
+        $insert['vendor_address']           = $request->vendor_address;
+        $insert['vendor_email']             = $request->vendor_email;
+        $insert['vendor_terms']             = $request->vendor_terms;
+        $insert['transaction_date']         = $request->transaction_date;
+        $insert['transaction_duedate']      = $request->transaction_duedate;
+        $insert['vendor_memo']              = $request->vendor_memo;
+        $insert['vendor_total']             = $request->vendor_total;
+
+        $insert_item = null;
+        foreach ($request->item_id as $key => $value) 
+        {
+            if($value)
+            {
+                $insert_item[$key]['item_id']          = $value;
+                $insert_item[$key]['item_ref_name']    = $request->itemline_ref_name[$key];
+                $insert_item[$key]['item_ref_id']      = $request->itemline_ref_id[$key];
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
                 $insert_item[$key]['item_um']          = $request->item_um[$key];
                 $insert_item[$key]['item_qty']         = str_replace(',', '', $request->item_qty[$key]);
@@ -129,6 +165,7 @@ class TransactionReceiveInventoryController extends Member
 
         return json_encode($return);
     }
+
     public function getCountTransaction(Request $request)
     {
         $vendor_id = $request->vendor_id;

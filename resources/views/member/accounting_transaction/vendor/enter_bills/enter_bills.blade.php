@@ -36,7 +36,7 @@
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <!-- <li class="dropdown-header">Dropdown header 1</li> -->
-                            <li><a href="/member/accounting/journal/entry/bill/{{$bill->bill_id}}">Transaction Journal</a></li>
+                            <li><a href="/member/accounting/journal/entry/bill/{{$bills->bill_id}}">Transaction Journal</a></li>
                             <!-- <li class="divider"></li> -->
                             <!-- <li class="dropdown-header">Dropdown header 2</li> -->
                             <li><a href="#">Void</a></li>
@@ -59,7 +59,7 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-4">
                                             <label>Reference Number</label>
-                                            <input type="text" class="form-control" name="transaction_refnumber" value="{{$transaction_refnum}}">
+                                            <input type="text" class="form-control" name="transaction_refnumber" value="{{isset($eb->transaction_refnum)? $eb->transaction_refnum : $transaction_refnum}}">
                                         </div>
                                     </div>
                                 </div>
@@ -67,11 +67,11 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-4">
                                             <select class="form-control droplist-vendor input-sm pull-left" name="vendor_id">
-                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')])
+                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($eb->bill_vendor_id) ? $eb->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')])
                                             </select>
                                         </div>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$bill->bill_vendor_email or ''}}"/>
+                                            <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$eb->bill_vendor_email or ''}}"/>
                                         </div>
                                         <div class="col-sm-4 text-right open-transaction" style="display: none;">
                                             <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/enter_bills/load-transaction?vendor_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
@@ -83,21 +83,21 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-3">
                                             <label>Mailing Address</label>
-                                            <textarea class="form-control input-sm textarea-expand" name="vendor_address" placeholder="">{{isset($bill) ? $bill->bill_mailing_address : ''}}</textarea>
+                                            <textarea class="form-control input-sm textarea-expand" name="vendor_address" placeholder="">{{isset($eb) ? $eb->bill_mailing_address : ''}}</textarea>
                                         </div>              
                                         <div class="col-sm-2">
                                             <label>Terms</label>
                                             <select class="form-control input-sm droplist-terms" name="vendor_terms">
-                                                @include("member.load_ajax_data.load_terms", ['terms_id' => isset($bill) ? $bill->bill_terms_id : ''])
+                                                @include("member.load_ajax_data.load_terms", ['terms_id' => isset($eb) ? $eb->bill_terms_id : ''])
                                             </select>
                                         </div>
                                         <div class="col-sm-2">
                                             <label>Billing Date</label>
-                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_date : date('m/d/y')}}" name="transaction_date">
+                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($eb) ? date('m/d/y', strtotime($eb->bill_date)) : date('m/d/y')}}" name="transaction_date">
                                         </div>
                                         <div class="col-sm-2">
                                             <label>Due Date</label>
-                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_due_date : date('m/d/y')}}" name="transaction_duedate">
+                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($eb) ? date('m/d/y', strtotime($eb->bill_due_date)) : date('m/d/y')}}" name="transaction_duedate">
                                         </div>
                                     </div>
                                 </div>
@@ -171,25 +171,29 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody class="draggable">
-                                                    <tr class="tr-draggable">
-                                                        <td class="invoice-number-td text-right">1</td>
-                                                        <td>
-                                                        <input type="hidden" class="poline_id" name="itemline_ref_name[]">
-                                                        <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
-                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
-                                                                @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                                            </select>
-                                                        </td>
-                                                        <td>
-                                                            <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
-                                                        </td>
-                                                        <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
-                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
-                                                        <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-                                                        @include("member.load_ajax_data.load_td_serial_number")
-                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                    </tr>
+                                                    @if(isset($eb))
+                                                        @foreach($_ebline as $ebline)
+                                                            <tr class="tr-draggable">
+                                                                <td class="invoice-number-td text-right">1</td>
+                                                                <td>
+                                                                <input type="hidden" class="poline_id" name="itemline_ref_name[]">
+                                                                <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                                                                    <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                                        @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $ebline->itemline_item_id])
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <textarea class="textarea-expand txt-desc" name="item_description[]">{{ $ebline->itemline_description }}</textarea>
+                                                                </td>
+                                                                <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="{{ $ebline->itemline_um }}" /></select></td>
+                                                                <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]" value="{{ $ebline->itemline_qty }}" /></td>
+                                                                <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{ $ebline->itemline_rate }}" /></td>
+                                                                <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{ $ebline->itemline_amount }}" /></td>
+                                                                @include("member.load_ajax_data.load_td_serial_number")
+                                                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
@@ -217,7 +221,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <label>Memo</label>
-                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" ></textarea>
+                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" >{{isset($eb->bill_memo)? $eb->bill_memo : ''}}</textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">

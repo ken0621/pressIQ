@@ -91,17 +91,9 @@ class TransactionReceiveInventory
             /*INSERT RI HERE*/
             $receive_inventory_id = Tbl_receive_inventory::insertGetId($ins);
 
+
             /*INSERT ENTER BILL HERE*/
             $bill = TransactionEnterBills::postInsert($receive_inventory_id, $shop_id, $insert, $insert_item);
-
-            /* Transaction Journal */
-            /*$entry["reference_module"]  = "receive-inventory";
-            $entry["reference_id"]      = $receive_inventory_id;
-            $entry["name_id"]           = $insert['vendor_id'];
-            $entry["total"]             = collect($insert_item)->sum('itemline_amount');
-            $entry["vatable"]           = '';
-            $entry["discount"]          = '';
-            $entry["ewt"]               = '';*/
 
             $return = Self::insertLine($shop_id, $receive_inventory_id, $insert_item);
             $return = $receive_inventory_id;
@@ -120,8 +112,8 @@ class TransactionReceiveInventory
         {   
             $itemline[$key]['riline_ri_id']        = $receive_inventory_id;
             $itemline[$key]['riline_item_id']      = $value['item_id'];
-            //$itemline[$key]['riline_ref_name']      = $value['reference_name'];
-            //$itemline[$key]['riline_ref_id']        = $value['reference_id'];
+            $itemline[$key]['riline_ref_name']     = $value['item_ref_name'];
+            $itemline[$key]['riline_ref_id']       = $value['item_reference_id'];
             $itemline[$key]['riline_description']  = $value['item_description'];
             $itemline[$key]['riline_um']           = $value['item_um'];
             $itemline[$key]['riline_qty']          = $value['item_qty'];

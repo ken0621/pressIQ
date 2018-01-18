@@ -304,10 +304,6 @@ class AccountingTransaction
 		{
 			$get = Tbl_purchase_order::where('po_shop_id', $shop_id)->where('po_is_billed', 0)->orderBy('po_id','DESC')->first();
 		}
-		if($transaction_type == 'purchase_order')
-		{
-			$get = Tbl_purchase_order::where('po_shop_id', $shop_id)->where('po_is_billed', 0)->orderBy('po_id','DESC')->first();
-		}
 		if($transaction_type == 'received_inventory')
 		{
 			$get = Tbl_receive_inventory::where('ri_shop_id', $shop_id)->orderBy('ri_id','DESC')->first();

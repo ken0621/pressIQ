@@ -160,8 +160,6 @@ class TransactionPurchaseOrderController extends Member
         $insert['vendor_subtotal']       = $request->vendor_subtotal;
         $insert['vendor_total']          = $request->vendor_total;
 
-        //die(var_dump($insert));
-
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
         {

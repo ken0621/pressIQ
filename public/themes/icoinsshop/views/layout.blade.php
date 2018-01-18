@@ -18,7 +18,6 @@
     <!-- GLOBAL CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/mobile_res.css">
     
     @include("frontend.ghead")
     <!-- OTHER CSS -->
@@ -170,7 +169,7 @@
         </header>
 
         <!-- CONTENT -->
-        <div id="scroll-to" class="blur-me clearfix">
+        <div id="scroll-to" class="clearfix">
             @yield("content")
         </div>
 

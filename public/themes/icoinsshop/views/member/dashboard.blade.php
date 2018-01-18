@@ -264,7 +264,7 @@
 								</div>
 								@endforeach
 							@else
-								<div class="text-center" style="padding: 20px">You don't have any pyet.</div>
+								<div class="text-center" style="padding: 20px">You don't have any rewards yet.</div>
 							@endif
 						</div>
 					</div>

@@ -1,10 +1,9 @@
 @import "../../../assets/front/sass/mixin";
 
-$display-text: 'Raleway', sans-serif;
-$content-text: 'Ubuntu', sans-serif;
+$display-text: 'Open Sans', sans-serif;
 $light: 300;
 $regular: 400;
-$medium: 500;
+$semi-bold: 600;
 $bold: 700;
 
 .blur-me
@@ -14,14 +13,13 @@ $bold: 700;
 
 .pushmenu 
 { 
-    /*this is the nav*/
-     // background: #0095DA;
+     /*this is the nav*/
      background-color: rgba(2,92,55,0.7);
      text-align: left;
      width: 300px;
      height: 100%;
      top: 0;
-     z-index: 150;
+     z-index: 1000;
      position: fixed;
      overflow-y: auto;
 
@@ -42,9 +40,9 @@ $bold: 700;
 
     span
     {
-        font-family: $content-text;
+        font-family: $display-text;
         font-size: 16px;
-        font-weight: $medium;
+        font-weight: $semi-bold;
         color: #fff;
         padding-left: 22px;
     }
@@ -53,7 +51,8 @@ $bold: 700;
     {
         padding: 20px;
         text-align: center;
-        
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+
         .profile-img 
         {
             overflow: hidden;
@@ -63,17 +62,16 @@ $bold: 700;
 
             img 
             {
-                border-radius: 100%;
-                border: 1px solid #fff;
                 width: 100%;
+                border: 1px solid #f1f1f1;
+                border-radius: 100%;
             }
         }
-
+        
         .text-holder
         {
              padding-left: 10px;
              margin-top: 9px;
-             
              @media screen and (max-width: 349px)
              {
                 margin-top: 2px;
@@ -92,6 +90,7 @@ $bold: 700;
                 font-weight: $regular;
                 font-size: 16px;
             }
+
             .subtext
             {
                 color: rgba(255,255,255,0.5);
@@ -101,28 +100,14 @@ $bold: 700;
         }
     }
 }
-
- /* .pushmenu h3 
- {
-   color: #f1f1f1;
-   font-size: 1.3em;
-   font-weight: 400;
-   padding: 15px 25px;
-   margin: 0;
-   background: #333;
-   height: 16px;
-   } */
-
    .links
    {
      list-style-type: none;
-     /* margin: 0 0 0 10%; */
      width: 93%;
-     font-family: $content-text;
+     font-family: $display-text;
      text-transform: uppercase;
      padding-left: 20px;
      padding-top: 10px;
-
 
      li
      {
@@ -134,7 +119,6 @@ $bold: 700;
         .fa
         {
            color: #f1f1f1;
-           padding-right: 5px;
            width: 25px;
            text-align: center;
         }
@@ -144,10 +128,37 @@ $bold: 700;
             position: relative;
             display: block; /* drops the nav vertically*/
             color: #f1f1f1;
-            font-size: 14px;
+            font-size: 16px;
             text-decoration: none;
-            //line-height: 80%;
-            //padding: 5px;
+        }
+
+        @media screen and (max-width: 768px)
+        {
+            a
+            {
+                font-size: 14px;
+            }
+        }
+    }
+
+    ul
+    {
+        display: none;
+        color: #fff;
+
+        a
+        {
+            text-decoration: none;
+            color: #f1f1f1;
+            font-size: 14px;
+        }
+
+        @media screen and (max-width: 320px)
+        {
+            a
+            {
+                font-size: 13px;
+            }
         }
     }
 
@@ -168,7 +179,7 @@ $bold: 700;
    bottom: -10px;
    width: 0;
    height: 3px;
-   background-color: #77b93f;
+   background-color: #1D5BC6;
    -webkit-transition: width 0.3s ease;
    -moz-transition: width 0.3s ease;
    transition: width 0.3s ease;
@@ -176,43 +187,54 @@ $bold: 700;
 
 /* .links li a:hover:after { width: 100%; } */
 
+// .links li:active { background-color: #EDAC0E; }
 .links li:active { background-color: rgba(255,255,255,0.2); }
 
 .pushmenu-left
 { 
-    left: -300px; 
+    left: -300px;
 }
 
-.pushmenu-left.pushmenu-open { left: 0; }
+.pushmenu-left.pushmenu-open { left: 0;}
 
 .pushmenu-push
 {
- overflow-x: hidden;
- position: relative;
- left: 0;
+    overflow-x: hidden;
+    position: relative;
+    left: 0;
 }
 
-// .pushmenu-push-toright 
-// {
-//     left: 300px; 
+#overlay
+{
+    @include transition(0.3s);
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    //background-color: rgba(0,0,0,0.2);
+    z-index: 100;
+    cursor: pointer;
+}
 
-//     @media screen and (max-width: 320px)
-//     {
-//         left: 246px;
-//     }
-// }
+.pushmenu-push-toright 
+{
+    /* left: 300px; */ 
+
+    /* @media screen and (max-width: 320px)
+    {
+        left: 246px;
+    } */
+}
 
 
 /*Transition*/
-
 .pushmenu, .pushmenu-push
-{  
-    @include transition(0.3s);
-}
-
-.center-logo-on-mobile
 {
-    position: relative;
+  @include transition(0.3s)
 }
 
 #nav_list
@@ -221,18 +243,9 @@ $bold: 700;
 
     @media screen and (max-width: 991px)
     {
-        //background: url(icon_nav.png) no-repeat left top;
         cursor: pointer;
-        //height: 27px;
-        //width: 33px;
-        //text-indent: -99999em;
-
         display: block;
         width: 50px;
-        //padding: 7.5px 12px 7.5px 12px;
-        //margin-right: auto;
-        //margin-top: 20px;
-        //background-color: #77b93f;
         position: absolute;
         top: 12px;
 
@@ -261,46 +274,233 @@ nav-list.active { background-position: -331px top; }
      padding: 10px 20px;
  } */
 
+ // MOBILE RESPONSIVENESS
 
- /* MEDIA SCREEN */
+ // LAPTOP 1024
+ @media screen and (max-width: 1080px)
+ {
+    .header-container .image-logo-holder 
+    {
+        padding-top: 15px;
+    }
+ }
 
-@media screen and (max-width: 768px)
-{
-    
-}
+ // TABLETS
+ @media screen and (max-width: 800px)
+ {
+    .header-container
+    {
+        position: relative !important;
+    }
 
-@media screen and (max-width: 414px)
-{
+    //remove the padding top on logo
+    .header-container .image-logo-holder 
+    {
+        padding-top: 0;
+    }
 
-}
+    // Disable fadeout when swiped on tablets/mobile
+    .fadeMe
+    {
+        opacity: 1 !important;
+    }
 
-@media screen and (max-width: 425px)
-{
-    
-}
+    // Class to center the logo on tablets/mobile, placed beside col-md-2 located in slider-wrapper on top.
+    .center-logo-on-mobile
+    {
+        text-align: center;
+    }
 
-@media screen and (max-width: 375px)
-{
+    // resize the logo
+    .header-container
+    {
+        .image-logo-holder 
+        {
+            width: 20%;
+        }
+    }
 
-}
+    // remove col-md's on tablets enherited on mobiles
+    .remove-on-mobile
+    {
+        display: none;
+    }
 
-@media screen and (max-width: 320px)
-{
+    // Resized on tablets/mobiles
+    .slider-wrapper
+    {
+        height: 100% !important;
+        align-items: initial !important;
 
-}
+        .holder
+        {
+            padding: 150px 0;
 
-#overlay
-{
-    transition: 0.3s;
-    position: fixed;
-    display: none;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.2);
-    z-index: 145;
-    cursor: pointer;
-}
+            .caption-container
+            {
+                text-align: center;
+
+                .text-1
+                {
+                    font-size: 35px !important;
+                }
+            }
+
+            .button-container
+            {
+                text-align: center;
+            }
+
+            .card
+            {
+                float: none !important;
+                margin: auto;
+            }
+        }
+
+        .scroll-down
+        {
+            left: 48% !important;
+            right: 0 !important;
+        }
+    }
+
+    .wrapper-2
+    {
+        .unskew
+        {
+            .texts
+            {
+                padding-bottom: 20px !important;
+            }
+        }
+    }
+
+    .wrapper-3
+    {
+        .left
+        {
+            
+        }
+
+        .right
+        {
+            .img-holder
+            {
+                padding-top: 50px;
+            }
+        }
+    }
+
+    .wrapper-4
+    {
+        .unskew
+        {
+            .product-holder
+            {
+                height: auto !important;
+
+                .top
+                {
+                    width: 50%;
+                    margin: auto;
+                    padding-top: 25px;
+                }
+
+                .text
+                {
+                    padding-bottom: 125px;
+                }
+            }
+        }
+    }
+
+    .wrapper-5
+    {
+        .news-holder
+        {
+            margin-top: 25px;
+        }
+    }
+ }
+
+ // MOBILE
+ @media screen and (max-width: 500px)
+ {
+    // resize the logo
+    .header-container
+    {
+        .image-logo-holder 
+        {
+            width: 40%;
+        }
+    }
+
+    .slider-wrapper .holder .card 
+    {
+        width: 85% !important;
+    }
+
+    .wrapper-1
+    {
+        .img-holder
+        {
+            img
+            {
+                width: 70%;
+            }
+        }
+
+        .wrapper-texts
+        {
+            padding: 0 !important;
+        }
+    }
+
+
+    .wrapper-2 .unskew .texts 
+    {
+        padding: 0 25px !important;
+    }
+
+    .wrapper-2 .unskew .texts 
+    {
+        margin-bottom: 20px !important;
+    }
+
+    .wrapper-4
+    {
+        .unskew
+        {
+            .product-holder
+            {
+                .bottom
+                {
+                    .btn-container
+                    {
+                        padding: 10px 8px !important;
+                    }
+                }
+            }
+        }
+    }
+ }
+
+ @media screen and (max-width: 360px)
+ {
+    #nav_list
+    {
+        top: 8px;
+
+        .fa
+        {
+            font-size: 25px;
+        }
+    }
+
+    .slider-wrapper .holder 
+    {
+        padding: 35px 0 100px 0 !important;
+    }
+ }
+

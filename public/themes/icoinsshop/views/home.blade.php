@@ -13,7 +13,7 @@
                             <div class="text-2 wow fadeInDown" data-wow-delay=".4s" data-wow-duration="2s">Join the community of ICOinssop.com to educate on different ICO’s  and be updated on crypto market trends! </div>
                         </div>
                         <div class="button-container">
-                            <button class="btn-explore wow fadeInDown" data-wow-delay=".6s" data-wow-duration="2s">JOIN US TODAY</button>
+                            <a href="/members/register"><button class="btn-join wow fadeInDown" data-wow-delay=".6s" data-wow-duration="2s">JOIN US TODAY</button></a>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -34,16 +34,22 @@
                                     <div class="details">
                                         Krops has the potential of becoming the largest food hub in the world without even owning a single farm.
                                     </div>
-                                    <div class="button-container">
-                                        <button class="btn-buy-tokens">BUY TOKENS</button>
-                                    </div>
+                                    @if(!$mlm_member)
+                                        <div class="button-container">
+                                            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
+                                        </div>
+                                    @else
+                                        <div class="button-container">
+                                            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="scroll-down wow fadeInDown" data-wow-delay=".8s" data-wow-duration="2s"><a href="#about"><img src="/themes/{{ $shop_theme }}/img/arrow-down.png"></a></div>
+            <div class="scroll-down fadeMe wow fadeInDown" data-wow-delay=".8s" data-wow-duration="2s"><a class="navigation__link" href="#about"><img src="/themes/{{ $shop_theme }}/img/arrow-down.png"></a></div>
         </div>
     </div>
 
@@ -119,8 +125,8 @@
                         <div class="bottom">
                             <div class="texts"> KROPS is offering tokenized shares of the company through an offering of 16,000,000 or sixteen million KROPS tokens of KropCoins.</div>
                             <div class="btn-container">
-                                <button class="btn-more-info">MORE INFO</button>
-                                <button class="btn-buy-tokens">BUY TOKENS</button>
+                                <a href="javascript:"><button class="btn-more-info">MORE INFO</button></a>
+                                <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
                             </div>
                         </div>
                     </div>
@@ -151,8 +157,8 @@
             <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> an Announcement</div>
             <div class="row clearfix">
                 <div class="col-md-4">
-                    <div class="news-holder wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">
-                        <div class="row-no-padding clearfix">
+                    <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">
+                        <div class="row clearfix">
                             <div class="col-md-6 col-xs-6">
                                 <div class="img-holder">
                                     <img src="/themes/{{ $shop_theme }}/img/news-img-1.jpg">
@@ -168,7 +174,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="news-holder wow fadeInLeft" data-wow-delay=".4s" data-wow-duration="2s">
+                    <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".4s" data-wow-duration="2s">
                         <div class="row-no-padding clearfix">
                             <div class="col-md-6 col-xs-6">
                                 <div class="img-holder">
@@ -185,7 +191,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="news-holder wow fadeInLeft" data-wow-delay=".6s" data-wow-duration="2s">
+                    <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".6s" data-wow-duration="2s">
                         <div class="row-no-padding clearfix">
                             <div class="col-md-6 col-xs-6">
                                 <div class="img-holder">
@@ -217,13 +223,17 @@
 
 @section("script")
 <script type="text/javascript">
+
 $(document).ready(function($) 
 {
     /*TEXT FADEOUT*/
-    $(window).scroll(function(){
-        $(".fadeMe, .scroll-down").css("opacity", 1 - $(window).scrollTop() / 250);
+    $(window).scroll(function()
+    {
+        $(".fadeMe").css("opacity", 1 - $(window).scrollTop() / 250);
     });
+
 });
+
 </script>
 
 @endsection

@@ -274,11 +274,11 @@ body
 					span
 					{
 						@include transition(0.2s);
-						color: #062027;
+						color: #016F56;
 
 						&:hover
 						{
-							color: #e1890b;
+							color: #E1890B;
 						}
 					}
 				}
@@ -303,19 +303,19 @@ body
 							@include transition(0.2s);
 							/* color: $text-dark !important; */
 							font-weight: $regular;
-							color: #062027 !important;
+							color: #016F56 !important;
 							font-size: 15px !important;
 							text-decoration: none;
 
 							&:hover
 							{
-								color: #e1890b !important;
+								color: #E1890B !important;
 							}
 						}
 						.btn-custom
 						{
 							@include transition(0.2s);
-							background-color: #062027;
+							background-color: #016F56;
 							color: #fff;
 
 							@media screen and (max-width: 991px)
@@ -324,7 +324,7 @@ body
 							}
 							&:hover 
 							{
-								background-color: #e1890b;
+								background-color: #E1890B;
 								opacity: 0.8;
 							}
 						}

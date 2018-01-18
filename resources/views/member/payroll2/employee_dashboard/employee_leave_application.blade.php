@@ -5,7 +5,7 @@
     <li class="breadcrumb-item">
       <a href="/employee">Dashboard </a>
     </li>
-    <input type="hidden" name="_token" value="{{csrf_token()}}">
+    <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
    <li class="breadcrumb-item active">&nbsp/&nbsp{{ $page }}</li>
 </ol>
 	<div class="modal-body form-horizontal">
@@ -13,7 +13,7 @@
         <div class="row">
  			    <div class="col-md-6">
  			    	<small>Type of Leave</small>
-					<select class="form-control user-error" name="payroll_request_leave_type" aria-invalid="true" required>
+					<select class="form-control user-error" id="leave_type" name="payroll_request_leave_type" aria-invalid="true" required>
 						<option value="">Select Leave Type</option>
 					@foreach($leave_type as $leave)
 		    		<option value="{{ $leave->payroll_leave_temp_id }}"> {{ $leave->payroll_leave_temp_name }} </option>
@@ -31,12 +31,12 @@
         <div class="row">
  			    <div class="col-md-3">
 					<small>Available Leave</small>
-				   	<input class="form-control" type="text" class="form-control" style="width: 80px;" disabled>
+				   	<input class="form-control" type="text" class="form-control" id="total" style="width: 80px;" disabled>
 		  		</div>
 
 		  		 <div class="col-md-3">
 					<small>Unused Leave</small>
-				   	<input class="form-control" type="text" class="form-control" style="width: 80px;" disabled>
+				   	<input class="form-control" type="text" class="form-control" id="remaining" style="width: 80px;" disabled>
 		  		</div>
 
 		  		 <div class="col-md-6">
@@ -54,7 +54,7 @@
          <div class="row">
  			    <div class="col-md-3">
 					<small>Used Leave</small>
-				   	<input class="form-control" type="text" class="form-control" style="width: 80px;" disabled>
+				   	<input class="form-control" type="text" name="used" id="used" class="form-control used" style="width: 80px;" disabled>
 		  		</div>
 
 		  		 <div class="col-md-3">
@@ -120,6 +120,8 @@
 	</div>
 </form>
 <script>
+	var data = {};
+
 		function reload(data)
 		{
 			data.element.modal("hide");
@@ -145,6 +147,37 @@
 				$(".payroll_schedule_leave_end").removeAttr("disabled");
 				$(".payroll_schedule_leave_end").attr("required",true);
 			}
+		});
+
+		$("#leave_type").on("change",function()
+		{
+			data.leave_temp_id = $(this).val();
+			data._token = $('#_token').val();
+
+			$.ajax(
+			{
+				url: '/get_leave_hours',
+				type: 'post',
+				data: data,
+				success : function(data)
+				{
+					result = JSON.parse(data);
+					if(result[0].total_leave_consume == null)
+					{
+						$("#used").val('0.00');
+						$("#total").val(result[0].payroll_leave_temp_hours);
+						$("#remaining").val(result[0].payroll_leave_temp_hours);
+					}
+					else
+					{
+						$("#used").val(result[0].total_leave_consume);
+						$("#total").val(result[0].payroll_leave_temp_hours);
+						$("#remaining").val(result[0].remaining_leave);
+					}
+			
+
+				}
+			});
 		});
 </script>
 <script type="text/javascript" src="/assets/employee/js/employee_overtime_application.js"></script>

@@ -1,10 +1,12 @@
 <?php
 namespace App\Globals;
 
+use App\Models\Tbl_write_check_line;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_write_check;
-use App\Models\Tbl_vendor;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_vendor;
+
 use App\Globals\AccountingTransaction;
 use Carbon\Carbon;
 use DB;
@@ -21,6 +23,14 @@ class TransactionWriteCheck
 	{
 		return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed','!=', '0')->count();
 	}
+    public static function info($shop_id, $wc_id)
+    {
+        return Tbl_write_check::vendor()->customer()->where("wc_shop_id", $shop_id)->where("wc_id", $wc_id)->first();
+    }
+    public static function info_item($wc_id)
+    {
+        return Tbl_write_check_line::um()->where("wcline_wc_id", $wc_id)->get();       
+    }
 	public static function get($shop_id, $paginate = null, $search_keyword = null)
 	{
 		$data = Tbl_write_check::vendor()->customer()->where('wc_shop_id', $shop_id);

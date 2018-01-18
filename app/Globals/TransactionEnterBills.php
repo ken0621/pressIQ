@@ -120,7 +120,7 @@ class TransactionEnterBills
         return $return;
 	}
 
-    public static function postUpdate($ri_id, $shop_id, $insert, $insert_item)
+    public static function postUpdate($enter_bills_id, $ri_id, $shop_id, $insert, $insert_item)
     {
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);
     
@@ -145,7 +145,7 @@ class TransactionEnterBills
             $update['bill_total_amount'] = $total;
             
             /*INSERT RI HERE*/
-            Tbl_bill::where('bill_id', $bill_id)->update($update);
+            Tbl_bill::where('bill_id', $enter_bills_id)->update($update);
             
             /* Transaction Journal */
             $entry["reference_module"]  = "enter-bills";
@@ -156,10 +156,7 @@ class TransactionEnterBills
             $entry["discount"]          = '';
             $entry["ewt"]               = '';            
 
-            Tbl_purchase_order::where("po_id", $po_id)->update($update);
-        
-            Tbl_purchase_order_line::where("poline_po_id", $po_id)->delete();
-            Self::insertLine($po_id, $insert_item);
+            Tbl_bill_item_line::where("itemline_bill_id", $enter_bills_id)->delete();
 
             $return = Self::insertLine($enter_bills_id, $insert_item, $entry);
             $return = $enter_bills_id;

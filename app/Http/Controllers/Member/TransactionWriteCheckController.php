@@ -52,7 +52,7 @@ class TransactionWriteCheckController extends Member
         $data['_write_check']  = TransactionWriteCheck::get($this->user_info->shop_id, 10, $request->search_keyword);
         return view('member.accounting_transaction.vendor.write_check.write_check_table', $data);
     }
-    public function getCreate()
+    public function getCreate(Request $request)
     {
         $data['page'] = 'Create Write Check';
 
@@ -66,6 +66,14 @@ class TransactionWriteCheckController extends Member
         $data["transaction_refnum"] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'write_check');
 
         $data['action']     = '/member/transaction/write_check/create-write-check';
+
+        $wc_id = $request->id;
+        if($wc_id)
+        {
+            $data['wc'] = TransactionWriteCheck::info($this->user_info->shop_id, $wc_id);
+            $data['_wc_item_line'] = TransactionWriteCheck::info_item($wc_id);
+            //dd($data['_wcline']);
+        }
 
         return view('member.accounting_transaction.vendor.write_check.write_check', $data);
     }

@@ -59,6 +59,7 @@ class TransactionReceiveInventoryController extends Member
         {
             $data['ri'] = TransactionReceiveInventory::info($this->user_info->shop_id,$receive_id);
             $data['_riline']= TransactionReceiveInventory::info_item($receive_id);
+            $data['action']     = '/member/transaction/receive_inventory/update-receive-inventory';
             //dd($data['_riline']);
         }
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory', $data);
@@ -91,11 +92,9 @@ class TransactionReceiveInventoryController extends Member
                 $insert_item[$key]['item_rate']        = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_discount']    = 0;
-
-                die(var_dump($insert_item));
             }
         }
-        
+
         $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
         $return = null;
@@ -118,7 +117,7 @@ class TransactionReceiveInventoryController extends Member
     public function postUpdateReceiveInventory(Request $request)
     {
         $btn_action = $request->button_action;
-
+        $ri_id = $request->ri_id;
 
         $insert['transaction_refnumber']    = $request->transaction_refnumber;
         $insert['vendor_id']                = $request->vendor_id;
@@ -147,13 +146,13 @@ class TransactionReceiveInventoryController extends Member
             }
         }
         
-        $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
+        $validate = TransactionReceiveInventory::postUpdate($ri_id, $this->user_info->shop_id, $insert, $insert_item);
 
         $return = null;
         if(is_numeric($validate))
         {
             $return['status'] = 'success';
-            $return['status_message'] = 'Success creating receive inventory.';
+            $return['status_message'] = 'Success updating receive inventory.';
             $return['call_function'] = 'success_receive_inventory';
             $return['status_redirect'] = AccountingTransaction::get_redirect('receive_inventory', $validate ,$btn_action);
         }

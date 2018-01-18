@@ -89,9 +89,9 @@
 						<!-- <li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
 							<a href="/members/network"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Network List</span></div></a>
 						</li> -->
-						<li class="{{ Request::segment(2) == "codevault" ? "active" : "" }}">
+						{{-- <li class="{{ Request::segment(2) == "codevault" ? "active" : "" }}">
 							<a href="/members/codevault"><div class="nav-holder"><div class="icon fa fa-code"></div> <span>Code Vault</span></div></a>
-						</li>
+						</li> --}}
 						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>

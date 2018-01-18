@@ -366,7 +366,7 @@ function purchase_order()
 
 	function action_date_picker()
 	{/*class name of tbody and text field for date*/
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'yy-mm-dd', });
 	}
 
 	/*ITEM NUMBER*/

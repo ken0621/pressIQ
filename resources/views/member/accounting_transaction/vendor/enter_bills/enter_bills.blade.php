@@ -93,67 +93,15 @@
                                         </div>
                                         <div class="col-sm-2">
                                             <label>Billing Date</label>
-                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($eb) ? date('m/d/y', strtotime($eb->bill_date)) : date('m/d/y')}}" name="transaction_date">
+                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($eb) ? date('m/d/Y', strtotime($eb->bill_date)) : date('m/d/Y')}}" name="transaction_date">
                                         </div>
                                         <div class="col-sm-2">
                                             <label>Due Date</label>
-                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($eb) ? date('m/d/y', strtotime($eb->bill_due_date)) : date('m/d/y')}}" name="transaction_duedate">
+                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($eb) ? date('m/d/Y', strtotime($eb->bill_due_date)) : date('m/d/Y')}}" name="transaction_duedate">
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- <div class="row clearfix">
-                                    <div class="title">
-                                        <h3><a id="acct-a"> <i class="fa fa-caret-down"></i>  Account Details </a></h3>
-                                    </div>
-                                    <div class="table-responsive draggable-container" id="account-tbl">
-                                        <div class="col-sm-12">
-                                            <table class="digima-table">
-                                                <thead >
-                                                    <tr>
-                                                        <th style="width: 15px;"></th>
-                                                        <th style="width: 15px;">#</th>
-                                                        <th style="width: 200px;">Account</th>
-                                                        <th>Description</th>
-                                                        <th style="width: 40px;">Amount(PHP)</th>
-                                                        <th style="width: 15px;"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="draggable">
-                                                    <tr class="tr-draggable">
-                                                        <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-                                                        <td class="invoice-number-td text-right">1</td>
-                                                        <td >                                           
-                                                            <select class="form-control drop-down-coa input-sm" >
-                                                                @include("member.load_ajax_data.load_chart_account", ['add_search' => ""])
-                                                            </select>
-                                                        </td>
-                                                        <td><textarea class="textarea-expand"></textarea></td>
-                                                        <td><input type="text" class="form-control input-sm" name=""></td>
-                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                    </tr>
-                                                    <tr class="tr-draggable">
-                                                        <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-                                                        <td class="invoice-number-td text-right">2</td>
-                                                        <td >                                           
-                                                            <select class="form-control drop-down-coa input-sm" >
-                                                                @include("member.load_ajax_data.load_chart_account", ['add_search' => ""])
-                                                            </select>
-                                                        </td>
-                                                        <td><textarea class="textarea-expand"></textarea></td>
-                                                        <td><input type="text" class="form-control input-sm" name=""></td>
-                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                 <div class="title">
-                                        <h3><a > <i class="fa fa-caret-down"></i>  Item Details </a></h3>
-                                    </div> 
-                                </div> -->
-                                 <div class="row clearfix draggable-container">
+                                <div class="row clearfix draggable-container">
                                     <div class="table-responsive " id="item-tbl">
                                         <div class="col-sm-12">
                                             <table class="digima-table">

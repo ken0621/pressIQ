@@ -71,8 +71,8 @@ class TransactionPurchaseOrderController extends Member
 
         if($po_id)
         {
-            $data["po"]            = Tbl_purchase_order::where("po_id", $po_id)->first();
-            $data["_poline"]       = Tbl_purchase_order_line::um()->where("poline_po_id", $po_id)->get();
+            $data["po"]            = TransactionPurchaseOrder::info($this->user_info->shop_id, $po_id);
+            $data["_poline"]       = TransactionPurchaseOrder::info_item($po_id);
             $data["action"]        = "/member/transaction/purchase_order/update-purchase-order";
         }
         

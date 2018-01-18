@@ -109,6 +109,7 @@ class TransactionEnterBills
             $entry["ewt"]               = '';            
 
             $return = Self::insertLine($enter_bills_id, $insert_item, $entry);
+            
             $return = $enter_bills_id;
         }
         else

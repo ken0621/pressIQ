@@ -29,6 +29,8 @@ Route::any('authorized_access_leave', 'Member\PayrollEmployee\LeaveController@au
 Route::any('authorized_access_leave/view_leave_request/{request_id}', 'Member\PayrollEmployee\LeaveController@view_leave_request');
 Route::any('authorized_access_leave/approve_leave_request/{request_id}', 'Member\PayrollEmployee\LeaveController@approve_leave_request');
 Route::any('authorized_access_leave/reject_leave_request/{request_id}', 'Member\PayrollEmployee\LeaveController@reject_leave_request');
+
+Route::any('/get_leave_hours', 'Member\PayrollEmployee\LeaveController@get_leave_hours');
 /*END LEAVE MANAGEMENT*/
 
 Route::any('employee_official_business', 'Member\PayrollEmployee\EmployeeController@employee_official_business');

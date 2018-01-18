@@ -111,12 +111,13 @@
     </div>
 
     <div class="blur-me">
+
         <div class="loader hide">
             <span><img src="/resources/assets/frontend/img/loader.gif"></span>
         </div>
 
         <!-- HEADER -->
-        <header class="header-container">
+        <div class="header-container">
             <div class="nav-holder">
                 <div class="container">
                     <div class="row-no-padding clearfix">
@@ -172,7 +173,7 @@
                     </div>
                 </div>
             </div>
-        </header>
+        </div>
 
         <!-- CONTENT -->
         <div id="scroll-to" class="clearfix">
@@ -185,6 +186,7 @@
                 <div class="bottom-text">Copyright © 2018 Icoinsshop. All Rights Reserved </div>
             </div>
         </footer>
+        
     </div>
     
     @include("frontend.gfoot")

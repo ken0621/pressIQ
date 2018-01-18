@@ -149,5 +149,48 @@
 // MOBILE
 @media screen and (max-width: 500px)
 {
+	// resize the logo
+	.header-container
+	{
+		.image-logo-holder 
+		{
+	    	width: 40%;
+		}
+	}
 
+	.wrapper-1
+	{
+		.img-holder
+		{
+			img
+			{
+				width: 70%;
+			}
+		}
+
+		.wrapper-texts
+		{
+			padding: 0 !important;
+		}
+	}
+
+	.wrapper-4
+	{
+		.unskew
+		{
+			.product-holder
+			{
+				width: 80%;
+				margin: auto;
+
+				.bottom
+				{
+					.btn-container
+					{
+						padding: 10px 8px !important;
+					}
+				}
+			}
+		}
+	}
 }

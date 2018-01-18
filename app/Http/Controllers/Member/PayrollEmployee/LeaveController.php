@@ -25,6 +25,8 @@ use App\Models\Tbl_payroll_approver_employee;
 use App\Models\Tbl_payroll_request_payment;
 use App\Models\Tbl_payroll_request_payment_sub;
 use App\Models\Tbl_payroll_request_leave;
+use App\Models\Tbl_payroll_leave_employeev2;
+use App\Models\Tbl_payroll_leave_tempv2;
 use App\Globals\Payroll2;
 use App\Globals\Payroll;
 use App\Globals\Utilities;
@@ -84,6 +86,7 @@ class LeaveController extends PayrollMember
 	{
 
 		$shop_id = Self::employee_shop_id();
+		$employee_id = Self::employee_id();
 
 		$data['page']		= 'Employee Leave Application';
         $data["company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
@@ -92,6 +95,10 @@ class LeaveController extends PayrollMember
 
 	   	$data['_group_approver'] = Tbl_payroll_approver_group::where('tbl_payroll_approver_group.shop_id', Self::employee_shop_id())->where('payroll_approver_group_type','leave')->where('archived', 0)->get();
 	      
+	    $data['leave_temp_id']	= Tbl_payroll_leave_employeev2::select('payroll_leave_temp_id')->where('payroll_employee_id',$employee_id)->where('payroll_leave_employee_is_archived',0)->get();
+
+	    $data['leave_type'] = Tbl_payroll_leave_tempv2::whereIn('payroll_leave_temp_id',$data['leave_temp_id'])->where('payroll_leave_temp_archived',0)->get();
+
     	return view('member.payroll2.employee_dashboard.employee_leave_application',$data);
     }
 
@@ -152,44 +159,53 @@ class LeaveController extends PayrollMember
 	public function save_leave()
     {
 
+    	$leave_info = Tbl_payroll_leave_employeev2::join('tbl_payroll_leave_tempv2','tbl_payroll_leave_employee_v2.payroll_leave_temp_id','=','tbl_payroll_leave_tempv2.payroll_leave_temp_id')->select('tbl_payroll_leave_employee_v2.payroll_leave_employee_id','tbl_payroll_leave_tempv2.payroll_leave_temp_name')->where('tbl_payroll_leave_employee_v2.payroll_leave_temp_id',Request::input('payroll_request_leave_type'))->where('tbl_payroll_leave_employee_v2.payroll_employee_id',Self::employee_id())->get();
+
     	$insert = array();
-    	if(Request::has('single_date_only'))
-        {
-        	 $temp['payroll_approver_group_id'] 			= Request::input('approver_group');
-	    	 $temp['payroll_request_leave_id_reliever']		=	Request::input('payroll_request_leave_id_reliever');
-			 $temp['payroll_employee_id']					= 	Self::employee_id();
-			 $temp['payroll_request_leave_date']			=	Request::input('payroll_request_leave_date');
-			 $temp['payroll_request_leave_date_filed']		=	Request::input('payroll_request_leave_date_filed');
-			 $temp['payroll_request_leave_total_hours']		=	Request::input('payroll_request_leave_total_hours');
-			 $temp['payroll_request_leave_remark']			=	Request::input('remark');
-			 $temp['payroll_request_leave_status']			=	'pending';
-			 $temp['payroll_request_leave_status_level'] 	=    1;
-			 $temp['payroll_request_leave_type']					=	Request::input('payroll_request_leave_type');
-
-			 array_push($insert, $temp);
-		}
-		else
-		{
-			  $end = datepicker_input(Request::input('payroll_request_leave_date_end'));
-              $payroll_request_leave_date = datepicker_input(Request::input('payroll_request_leave_date'));
-
-			   while($payroll_request_leave_date <= $end)
-               {
-               	   	 $temp['payroll_approver_group_id'] 			= Request::input('approver_group');
-               		 $temp['payroll_request_leave_id_reliever']		=	Request::input('payroll_request_leave_id_reliever');
+    	foreach($leave_info as $leave)
+    	{
+    			if(Request::has('single_date_only'))
+		        {	 
+		        	 $temp['payroll_approver_group_id'] 			=   Request::input('approver_group');
+			    	 $temp['payroll_request_leave_id_reliever']		=	Request::input('payroll_request_leave_id_reliever');
 					 $temp['payroll_employee_id']					= 	Self::employee_id();
-					 $temp['payroll_request_leave_date']			=	$payroll_request_leave_date;
+					 $temp['payroll_request_leave_date']			=	Request::input('payroll_request_leave_date');
 					 $temp['payroll_request_leave_date_filed']		=	Request::input('payroll_request_leave_date_filed');
 					 $temp['payroll_request_leave_total_hours']		=	Request::input('payroll_request_leave_total_hours');
-					 $temp['payroll_request_leave_remark']			=	"Used ".Request::input('payroll_request_leave_total_hours')." hours in ".Request::input('payroll_request_leave_type');
+					 $temp['payroll_request_leave_remark']			=	Request::input('remark');
 					 $temp['payroll_request_leave_status']			=	'pending';
 					 $temp['payroll_request_leave_status_level'] 	=    1;
-					 $temp['payroll_request_leave_type']					=	Request::input('payroll_request_leave_type');
-
+					 $temp['payroll_request_leave_type']			=	$leave->payroll_leave_temp_name;
+					 $temp['payroll_leave_employee_id']				=   $leave->payroll_leave_employee_id;
+          			 $temp['consume']                               = Payroll::time_float(Request::input('payroll_request_leave_total_hours'));
 					 array_push($insert, $temp);
-     				 $payroll_request_leave_date = Carbon::parse($payroll_request_leave_date)->addDay()->format("Y-m-d");
-               }
-		}
+				}
+				else
+				{
+					  $end = datepicker_input(Request::input('payroll_request_leave_date_end'));
+		              $payroll_request_leave_date = datepicker_input(Request::input('payroll_request_leave_date'));
+
+					   while($payroll_request_leave_date <= $end)
+		               {
+		               	   	 $temp['payroll_approver_group_id'] 			= Request::input('approver_group');
+		               		 $temp['payroll_request_leave_id_reliever']		=	Request::input('payroll_request_leave_id_reliever');
+							 $temp['payroll_employee_id']					= 	Self::employee_id();
+							 $temp['payroll_request_leave_date']			=	$payroll_request_leave_date;
+							 $temp['payroll_request_leave_date_filed']		=	Request::input('payroll_request_leave_date_filed');
+							 $temp['payroll_request_leave_total_hours']		=	Request::input('payroll_request_leave_total_hours');
+							 $temp['payroll_request_leave_remark']			=	"Used ".Request::input('payroll_request_leave_total_hours')." hours in ".Request::input('payroll_request_leave_type');
+							 $temp['payroll_request_leave_status']			=	'pending';
+							 $temp['payroll_request_leave_status_level'] 	=    1;
+							 $temp['payroll_request_leave_type']			=	$leave->payroll_leave_temp_name;
+							 $temp['payroll_leave_employee_id']				=   $leave->payroll_leave_employee_id;
+							 $temp['consume']                               = Payroll::time_float(Request::input('payroll_request_leave_total_hours'));
+
+							 array_push($insert, $temp);
+		     				 $payroll_request_leave_date = Carbon::parse($payroll_request_leave_date)->addDay()->format("Y-m-d");
+		               }
+				}
+    	}
+
 		if(!empty($insert)) 
         {  
            	Tbl_payroll_request_leave::insert($insert);
@@ -290,6 +306,30 @@ class LeaveController extends PayrollMember
 		}
 	}
 
+	public function get_leave_hours()
+	{
+			$leave_temp_id = Request::get('leave_temp_id');
+			$payroll_employee_id = Self::employee_id();
+			$leaveinfo = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_temp_id',$leave_temp_id)->get();
+
+			$leaveemployeeid = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_temp_id',$leave_temp_id)->value('payroll_leave_employee_id');
+
+			$empdata = Tbl_payroll_request_leave::join('tbl_payroll_leave_employee_v2','tbl_payroll_request_leave.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
+             ->select(DB::raw('tbl_payroll_leave_employee_v2.payroll_leave_temp_hours, sum(tbl_payroll_request_leave.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_request_leave.consume)) as remaining_leave'))
+             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
+			 ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id)
+			 ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id', $leaveemployeeid)
+			 ->where('tbl_payroll_request_leave.payroll_leave_employee_id', $leaveemployeeid)
+			 ->where('tbl_payroll_request_leave.archived',0)->where('payroll_request_leave_status','approved')->get();
+
+			 if(count($empdata) == 0)
+			 {
+			 	$empdata = $leaveinfo;
+			 }
+
+		 return json_encode($empdata);
+	}
+
 	public function reject_leave_request($request_id)
 	{
 		if (Request::method() == 'POST') 
@@ -320,5 +360,7 @@ class LeaveController extends PayrollMember
 
 		return $_approver_group;
 	}
+
+
 
 }

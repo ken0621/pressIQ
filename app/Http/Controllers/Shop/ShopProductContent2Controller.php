@@ -21,48 +21,74 @@ class ShopProductContent2Controller extends Shop
     {
     	$data["page"]        		= "Product Content";
         $data["product"]     		= Ecom_Product::getProduct($id, $this->shop_info->shop_id);
-        $data["category"]    		= Tbl_ec_product::category()->where("eprod_category_id", $data["product"]["eprod_category_id"])->first();
-        $data["breadcrumbs"] 		= Ecom_Product::getProductBreadcrumbs($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
-        $data["_variant"]    		= Ecom_Product::getProductOption($id, ",");
-        $data["_related"]    		= Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
-        $data["_related"] 	 		= $this->filter_related($data["_related"], $data["product"]["eprod_id"]);
-        $data["product"]["variant"] = $this->filter_variant($data["product"]["variant"]);
 
-        if ($this->shop_theme == "3xcell") 
+        if ($data["product"]) 
         {
-            if (isset(Self::$customer_info->customer_id) && Self::$customer_info->customer_id) 
-            {
-                foreach ($data["product"]["variant"] as $key => $value) 
-                {
-                    $price_level = Tbl_mlm_slot::priceLevel($value["item_id"])->where("tbl_mlm_slot.slot_owner", Self::$customer_info->customer_id)->first();
+            $data["category"]           = Tbl_ec_product::category()->where("eprod_category_id", $data["product"]["eprod_category_id"])->first();
+            $data["breadcrumbs"]        = Ecom_Product::getProductBreadcrumbs($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
+            $data["_variant"]           = Ecom_Product::getProductOption($id, ",");
+            $data["_related"]           = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
+            $data["_related"]           = $this->filter_related($data["_related"], $data["product"]["eprod_id"]);
+            $data["product"]["variant"] = $this->filter_variant($data["product"]["variant"]);
 
-                    $data["product"]["variant"][$key]["price_level"] = $price_level ? $price_level->custom_price : null;
+            if ($this->shop_theme == "3xcell") 
+            {
+                if (isset(Self::$customer_info->customer_id) && Self::$customer_info->customer_id) 
+                {
+                    foreach ($data["product"]["variant"] as $key => $value) 
+                    {
+                        $price_level = Tbl_mlm_slot::priceLevel($value["item_id"])->where("tbl_mlm_slot.slot_owner", Self::$customer_info->customer_id)->first();
+
+                        $data["product"]["variant"][$key]["price_level"] = $price_level ? $price_level->custom_price : null;
+                    }
                 }
-            }
-            
-            if(isset(Self::$customer_info->customer_id))
-            {
-                $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
-            }
-            else
-            {
-                $slot = null;
-            }
-
-            foreach ($data["product"]["variant"] as $key => $value) 
-            {
-                if ($slot) 
+                
+                if(isset(Self::$customer_info->customer_id))
                 {
-                    $data["product"]["variant"][$key]["pv"] = MLM2::item_points($this->shop_info->shop_id, $value["item_id"], $slot->slot_id);
+                    $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
                 }
                 else
                 {
-                    $data["product"]["variant"][$key]["pv"] = 0;
+                    $slot = null;
+                }
+
+                foreach ($data["product"]["variant"] as $key => $value) 
+                {
+                    if ($slot) 
+                    {
+                        $data["product"]["variant"][$key]["pv"] = MLM2::item_points($this->shop_info->shop_id, $value["item_id"], $slot->slot_id);
+                    }
+                    else
+                    {
+                        $data["product"]["variant"][$key]["pv"] = 0;
+                    }
                 }
             }
-        }
 
-        return view("product_content", $data);
+            if ($this->shop_theme == "philtech") 
+            {
+                if (isset($this->shop_info->shop_id) && isset(Self::$customer_info->customer_id)) 
+                {
+                    foreach ($data["product"]["variant"] as $key => $value) 
+                    {
+                        if ($value["discounted"] == "true") 
+                        {
+                            $data["product"]["variant"][$key]["discounted_price"] = Ecom_Product::getMembershipPrice($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
+                        }
+                        else
+                        {
+                            $data["product"]["variant"][$key]["evariant_price"] = Ecom_Product::getMembershipPrice($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
+                        }
+                    }
+                }
+            }
+            
+            return view("product_content", $data);
+        }
+        else
+        {
+            return Redirect::back();
+        }
     }
 
     public function filter_related($related, $eprod_id)

@@ -8,11 +8,16 @@
                 <div class="col-md-6">
                     <div class="title-container">ANALYTICS</div>
                 </div>
+                <div class="pull-right">
+                    <div class="button-container">
+                        <span class="create-button" ><a href="/pressuser/analytics/view">View Details</a>
+                    </div>
+                </div>
             </div>
               <table style="width:100%;" >
                     <tr>
-                      <th style="text-align: center;">ACTION</th>
-                      <th style="text-align: center;">RESULTS</th> 
+                      <th style="text-align: center;width: 25%">ACTION</th>
+                      <th style="text-align: center;width: 25%">RESULTS</th>
                     </tr>
                     <tr>
                       <td>Sent</td>
@@ -43,20 +48,6 @@
                       <td>{{session('share_analytics')->hard_bounces}}</td>
                     </tr>
               </table>
-              <style>
-                  table, th, td {
-                      border: 1px solid black;
-                      border-collapse: collapse;
-                  }
-                  th, td {
-                      padding: 5px;
-                      text-align: left;
-                  }
-                  table#t01 {
-                      width: 100%;    
-                      background-color: #f1f1c1;
-                  }
-              </style>
         </div>
     </div>
 </div>

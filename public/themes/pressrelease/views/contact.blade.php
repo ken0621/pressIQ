@@ -16,7 +16,7 @@
                  <div class="row clearfix">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="First Name*" id="contactus_first_name" name="contactus_first_name" required>
+                            <input type="text" class="form-control" placeholder="First Name*" id="first_name" name="first_name" required>
                         </div>
                     </div>
                     <div class="col-md-6">

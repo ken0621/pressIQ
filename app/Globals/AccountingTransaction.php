@@ -333,7 +333,6 @@ class AccountingTransaction
 					}
 				}
 			}
-
 			if(count($_item) > 0)
 			{
 				$return = Warehouse2::refill_bulk($shop_id, $warehouse_id, $ref_name, $ref_id, $remarks, $_item);
@@ -341,7 +340,7 @@ class AccountingTransaction
 				foreach ($item_info as $key => $value) 
 				{
 					$item_type = Item::get_item_type($value['item_id']);
-					if($item_type == 5 && $item_type == 4)
+					if($item_type == 5 || $item_type == 4)
 					{
 						Warehouse2::refill_bundling_item($shop_id, $warehouse_id, $value['item_id'], $value['item_qty'], $ref_name, $ref_id);
 					}
@@ -389,11 +388,10 @@ class AccountingTransaction
 
 		return $return;
 	}
-	/*public static function inventory_refill_update($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info)
+	public static function inventory_refill_update($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info)
 	{
-		$get_old = 
 
-	}*/
+	}
 	public static function consume_inventory($shop_id, $warehouse_id , $item_info, $ref_name = '', $ref_id = 0, $remarks = '')
 	{
 		$return = null;

@@ -1,5 +1,13 @@
 // MOBILE RESPONSIVENESS
 
+// LAPTOP 1024
+@media screen and (max-width: 1080px)
+{
+	.header-container .image-logo-holder 
+	{
+	    padding-top: 15px;
+	}
+}
 
 // TABLETS
 @media screen and (max-width: 800px)
@@ -7,6 +15,12 @@
 	// .header-container .image-logo-holder img {
 	//     width: 25%;
 	// }
+
+	//remove the padding top on logo
+	.header-container .image-logo-holder 
+	{
+	    padding-top: 0;
+	}
 
 	// Disable fadeout when swiped on tablets/mobile
 	.fadeMe
@@ -120,6 +134,14 @@
 					padding-bottom: 125px;
 				}
 			}
+		}
+	}
+
+	.wrapper-5
+	{
+		.news-holder
+		{
+			margin-top: 25px;
 		}
 	}
 }

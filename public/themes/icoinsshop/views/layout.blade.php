@@ -110,7 +110,7 @@
         </div>
 
         <!-- HEADER -->
-        <header id="home" class="header-container">
+        <header class="header-container">
             <div class="nav-holder">
                 <div class="container">
                     <div class="row-no-padding clearfix">

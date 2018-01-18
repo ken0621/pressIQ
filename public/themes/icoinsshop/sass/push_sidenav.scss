@@ -14,7 +14,8 @@ $bold: 700;
 .pushmenu 
 { 
      /*this is the nav*/
-     background-color: rgba(2,92,55,0.7);
+     // background-color: rgba(2,92,55,0.7);
+     background-color: #025c37;
      text-align: left;
      width: 300px;
      height: 100%;
@@ -215,7 +216,7 @@ $bold: 700;
     left: 0;
     right: 0;
     bottom: 0;
-    //background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0.8);
     z-index: 100;
     cursor: pointer;
 }

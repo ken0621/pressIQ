@@ -1,7 +1,6 @@
 @extends("layout")
 @section("content")
 <div class="content">
-
     <!-- Media Slider -->
     <div id="home" class="page-section slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/cover-photo.jpg')">
         <div class="container">

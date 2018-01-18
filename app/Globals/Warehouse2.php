@@ -130,7 +130,7 @@ class Warehouse2
                 { 
                     $return .= "The quantity must be a number. <br>";
                 }
-                if($quantity < 0)
+                if($quantity < 1)
                 {
                     $return .= 'The quantity of '.$item_data->item_name.' is less than one. <br>';                
                 }
@@ -1276,7 +1276,7 @@ class Warehouse2
                 $return .= "The quantity must be a number. <br>";
             }
         }
-        if($quantity < 0)
+        if($quantity < 1)
         {
             $return .= "The quantity is less than 1. <br> ";
         }

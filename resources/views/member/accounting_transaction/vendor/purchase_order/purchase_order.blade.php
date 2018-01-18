@@ -44,7 +44,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="transaction_refnumber" value="{{ isset($po->transaction_refnum) ? $po->transaction_refnum : 'PO20180110-0001'}}">
+                                <input type="text" class="form-control" name="transaction_refnumber" value="{{ isset($po->transaction_refnum) ? $po->transaction_refnum : $transaction_refnum}}">
                             </div>
                         </div>
                     </div>
@@ -116,7 +116,7 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <textarea class="textarea-expand txt-desc" name="item_description[]" value="{{$poline->poline_description}}"></textarea>
+                                                        <textarea class="textarea-expand txt-desc" name="item_description[]">{{$poline->poline_description}}</textarea>
                                                     </td>
                                                     <td>
                                                         <select class="1111 droplist-um select-um {{isset($poline->poline_um) ? 'has-value' : ''}}" name="item_um[]">

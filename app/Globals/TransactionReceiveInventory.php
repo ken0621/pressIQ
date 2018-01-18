@@ -27,6 +27,15 @@ class TransactionReceiveInventory
         //die(var_dump($count));
         return $count;
 	}
+
+    public static function info($shop_id, $ri_id)
+    {
+        return Tbl_receive_inventory::vendor()->where("ri_shop_id", $shop_id)->where("ri_id", $ri_id)->first();
+    }
+    public static function info_item($ri_id)
+    {
+        return Tbl_receive_inventory_line::um()->where("riline_ri_id", $ri_id)->get();        
+    }
     
     public static function get($shop_id, $paginate = null, $search_keyword = null)
     {
@@ -68,8 +77,8 @@ class TransactionReceiveInventory
             $ins['ri_mailing_address']  = $insert['vendor_address'];
             $ins['ri_vendor_email']     = $insert['vendor_email'];
             $ins['ri_terms_id']         = $insert['vendor_terms'];
-            $ins['ri_date']         	= $insert['transaction_date'];
-            $ins['ri_due_date']         = $insert['transaction_duedate'];
+            $ins['ri_date']         	= date("Y-m-d", strtotime($insert['transaction_date']));
+            $ins['ri_due_date']         = date("Y-m-d", strtotime($insert['transaction_duedate']));
             $ins['ri_memo']             = $insert['vendor_memo'];
             $ins['date_created']		= Carbon::now();
             $ins['inventory_only']		= 1;

@@ -44,7 +44,7 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-4">
                                             <label>Reference Number</label>
-                                            <input type="text" class="form-control" name="transaction_refnumber" value="RI20171225-0001">
+                                            <input type="text" class="form-control" name="transaction_refnumber" value="{{ isset($ri->transaction_refnum)? $ri->transaction_refnum : $transaction_refnum}}">
                                         </div>
                                     </div>
                                 </div>
@@ -52,11 +52,11 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-4">
                                             <select class="form-control droplist-vendor input-sm pull-left" name="vendor_id">
-                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')])
+                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($ri->ri_vendor_id) ? $ri->ri_vendor_id : ''])
                                             </select>
                                         </div>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$bill->bill_vendor_email or ''}}"/>
+                                            <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$ri->ri_vendor_email or ''}}"/>
                                         </div>
                                         <div class="col-sm-4 text-right open-transaction" style="display: none;">
                                             <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/receive_inventory/load-transaction?vendor_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
@@ -68,76 +68,24 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-3">
                                             <label>Mailing Address</label>
-                                            <textarea class="form-control input-sm textarea-expand" name="vendor_address" placeholder="">{{isset($bill) ? $bill->bill_mailing_address : ''}}</textarea>
+                                            <textarea class="form-control input-sm textarea-expand" name="vendor_address" placeholder="">{{isset($ri) ? $ri->ri_mailing_address : ''}}</textarea>
                                         </div>              
                                         <div class="col-sm-2">
                                         <label>Terms</label>
                                             <select class="form-control input-sm droplist-terms" name="vendor_terms">
-                                                @include("member.load_ajax_data.load_terms", ['terms_id' => isset($bill) ? $bill->bill_terms_id : ''])
+                                                @include("member.load_ajax_data.load_terms", ['terms_id' => isset($ri) ? $ri->ri_terms_id : ''])
                                             </select>
                                         </div>
                                         <div class="col-sm-2">
                                             <label>Billing Date</label>
-                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_date : date('m/d/y')}}" name="transaction_date">
+                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($ri) ? date('m/d/y', strtotime($ri->ri_date)) : date('m/d/y')}}" name="transaction_date">
                                         </div>
                                         <div class="col-sm-2">
                                             <label>Due Date</label>
-                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_due_date : date('m/d/y')}}" name="transaction_duedate">
+                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($ri) ? date('m/d/y', strtotime($ri->ri_due_date)) : date('m/d/y')}}" name="transaction_duedate">
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- <div class="row clearfix">
-                                    <div class="title">
-                                        <h3><a id="acct-a"> <i class="fa fa-caret-down"></i>  Account Details </a></h3>
-                                    </div>
-                                    <div class="table-responsive draggable-container" id="account-tbl">
-                                        <div class="col-sm-12">
-                                            <table class="digima-table">
-                                                <thead >
-                                                    <tr>
-                                                        <th style="width: 15px;"></th>
-                                                        <th style="width: 15px;">#</th>
-                                                        <th style="width: 200px;">Account</th>
-                                                        <th>Description</th>
-                                                        <th style="width: 40px;">Amount(PHP)</th>
-                                                        <th style="width: 15px;"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="draggable">
-                                                    <tr class="tr-draggable">
-                                                        <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-                                                        <td class="invoice-number-td text-right">1</td>
-                                                        <td >                                           
-                                                            <select class="form-control drop-down-coa input-sm" >
-                                                                @include("member.load_ajax_data.load_chart_account", ['add_search' => ""])
-                                                            </select>
-                                                        </td>
-                                                        <td><textarea class="textarea-expand"></textarea></td>
-                                                        <td><input type="text" class="form-control input-sm" name=""></td>
-                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                    </tr>
-                                                    <tr class="tr-draggable">
-                                                        <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-                                                        <td class="invoice-number-td text-right">2</td>
-                                                        <td >                                           
-                                                            <select class="form-control drop-down-coa input-sm" >
-                                                                @include("member.load_ajax_data.load_chart_account", ['add_search' => ""])
-                                                            </select>
-                                                        </td>
-                                                        <td><textarea class="textarea-expand"></textarea></td>
-                                                        <td><input type="text" class="form-control input-sm" name=""></td>
-                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                 <div class="title">
-                                        <h3><a > <i class="fa fa-caret-down"></i>  Item Details </a></h3>
-                                    </div> 
-                                </div> -->
                                 <div class="row clearfix draggable-container">
                                     <div class="table-responsive " id="item-tbl">
                                         <div class="col-sm-12">
@@ -156,25 +104,29 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody class="draggable">
-                                                    <tr class="tr-draggable">
-                                                        <td class="invoice-number-td text-right">1</td>
-                                                        <td>
-                                                            <input type="hidden" class="poline_id" name="itemline_ref_name[]">
-                                                            <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
-                                                            <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
-                                                                @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                                            </select>
-                                                        </td>
-                                                        <td>
-                                                            <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
-                                                        </td>
-                                                        <td><select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
-                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
-                                                        <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-                                                        @include("member.load_ajax_data.load_td_serial_number")
-                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                    </tr>
+                                                    @if(isset($ri))
+                                                        @foreach($_riline as $riline)
+                                                            <tr class="tr-draggable">
+                                                                <td class="invoice-number-td text-right">1</td>
+                                                                <td>
+                                                                    <input type="hidden" class="poline_id" name="itemline_ref_name[]" >
+                                                                    <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                                                                    <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]">
+                                                                        @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $riline->riline_item_id])
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <textarea class="textarea-expand txt-desc" name="item_description[]">{{$riline->riline_description}}</textarea>
+                                                                </td>
+                                                                <td><select class="droplist-um select-um" name="item_um[]" value="{{ isset($riline->riline_um)}}"><option class="hidden" value="" /></select></td>
+                                                                <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]" value="{{ $riline->riline_qty  }}" /></td>
+                                                                <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{ $riline->riline_rate }}" /></td>
+                                                                <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{ $riline->riline_amount }}" /></td>
+                                                                @include("member.load_ajax_data.load_td_serial_number")
+                                                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
@@ -200,7 +152,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <label>Memo</label>
-                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" ></textarea>
+                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" >{{isset($ri->ri_memo)? $ri->ri_memo : ''}}</textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">

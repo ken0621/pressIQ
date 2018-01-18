@@ -50,7 +50,7 @@ class TransactionPayBillsController extends Member
         $data["_vendor"]        = Vendor::getAllVendor('active');
         $data['_account']       = Accounting::getAllAccount('all',null,['Bank']);
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->user_info->shop_id)->get();
-
+        $data["transaction_refnum"] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'pay_bill');
         $data['action']     = "/member/transaction/pay_bills/create-pay-bills";
 
         return view('member.accounting_transaction.vendor.pay_bills.pay_bills', $data);

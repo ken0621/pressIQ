@@ -63,6 +63,7 @@ class TransactionEnterBillsController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
+        $data["transaction_refnum"] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'enter_bills');
         $data['action']     = '/member/transaction/enter_bills/create-enter-bills';
         
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills', $data);

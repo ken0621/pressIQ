@@ -63,6 +63,7 @@ class TransactionWriteCheckController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
+        $data["transaction_refnum"] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'write_check');
 
         $data['action']     = '/member/transaction/write_check/create-write-check';
 

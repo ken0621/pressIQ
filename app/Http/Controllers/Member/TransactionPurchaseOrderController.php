@@ -62,13 +62,13 @@ class TransactionPurchaseOrderController extends Member
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $shop_id)->get();
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
-
+        $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'purchase_order');
         $data['action']     = "/member/transaction/purchase_order/create-purchase-order";
         $data['count_transaction'] = TransactionDebitMemo::countTransaction($shop_id);
         $data["vendor_id"]       = $request->vendor_id;
         $data["terms_id"]       = $request->vendor_terms;
         $po_id = $request->id;
-        //die(var_dump($po_id));
+
         if($po_id)
         {
             $data["po"]            = Tbl_purchase_order::where("po_id", $po_id)->first();

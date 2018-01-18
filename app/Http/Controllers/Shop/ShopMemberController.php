@@ -2698,15 +2698,22 @@ class ShopMemberController extends Shop
     }
     public function getGenealogyTree(Request $request)
     {
-        $slot_no  = $request->slot_no;
-        $shop_id  = $this->shop_info->shop_id;
-        $mode = $request->mode;
-        $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
-
-        if($check)
+        if (isset(Self::$customer_info->customer_id)) 
         {
-            $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
-            return Self::load_view_for_members('member.genealogy_tree', $data);            
+            $slot_no  = $request->slot_no;
+            $shop_id  = $this->shop_info->shop_id;
+            $mode = $request->mode;
+            $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
+
+            if($check)
+            {
+                $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
+                return Self::load_view_for_members('member.genealogy_tree', $data);            
+            }
+            else
+            {
+                die('Invalid slot!');
+            }
         }
         else
         {

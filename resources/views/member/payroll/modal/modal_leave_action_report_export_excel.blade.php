@@ -1,4 +1,4 @@
-	    <h4 class="modal-title"><b>Leave Action Report </b> <i><br> Leave Action Report </i></h4>
+	    <h4 class="modal-title"><b>Leave Action Report : {{$date_start}} to {{$date_end}}</b> <i><br> Leave Action Report </i></h4>
 
     <div class="modal-body clearfix">
                 <div class="table-responsive">

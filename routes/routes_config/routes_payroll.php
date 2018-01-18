@@ -436,11 +436,16 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/leave/v2/archived_leave_tempv2',
 		"Member\PayrollController@archived_leave_tempv2");
+	Route::any('/leave/v2/restore_leave_tempv2',
+		"Member\PayrollController@restore_leave_tempv2");
 
 	Route::any('/leave/v2/archived_leave_history',
 		"Member\PayrollController@archived_leave_history");
 	
-
+	Route::any('/leave/v2/archived_whole_leave_tempv2',
+		"Member\PayrollController@archived_whole_leave_tempv2");
+	Route::any('/leave/v2/restore_whole_leave_tempv2',
+		"Member\PayrollController@restore_whole_leave_tempv2");
 	//end schedule
 
 	//reporting leave

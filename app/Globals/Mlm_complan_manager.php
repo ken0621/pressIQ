@@ -2166,6 +2166,22 @@ class Mlm_complan_manager
 
                 Mlm_slot_log::slot_log_points_array($array);
             }
+
+            if($slot_info->initial_gc != null || $slot_info->initial_gc != 0)
+            {
+                $array['points_log_complan'] = "INITIAL_GC";
+                $array['points_log_level'] = 0;
+                $array['points_log_slot'] = $slot_info->slot_id;
+                $array['points_log_Sponsor'] = $slot_info->slot_id;
+                $array['points_log_date_claimed'] = Carbon::now();
+                $array['points_log_converted'] = 0;
+                $array['points_log_converted_date'] = Carbon::now();
+                $array['points_log_type'] = 'GC';
+                $array['points_log_from'] = 'Slot Creation';
+                $array['points_log_points'] = $slot_info->initial_gc;
+
+                Mlm_slot_log::slot_log_points_array($array);
+            }
         }   
     }
     // END INITIAL POITS

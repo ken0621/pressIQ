@@ -14,6 +14,7 @@
                     </div>
                 </div>
             </div>
+           
             <table>
                 <tr>
                     <th>Press Release Title</th>

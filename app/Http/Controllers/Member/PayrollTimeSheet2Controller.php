@@ -298,8 +298,11 @@ class PayrollTimeSheet2Controller extends Member
 
 		foreach ($_time_sheet_record as $key => $time_sheet_record) 
 		{
-			$update["payroll_time_shee_activity"] = Request::input("remarks")[$key];
-			Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $time_sheet_record->payroll_time_sheet_record_id)->update($update);
+			if(isset(Request::input("remarks")[$key]))
+			{
+				$update["payroll_time_shee_activity"] = Request::input("remarks")[$key];
+				Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $time_sheet_record->payroll_time_sheet_record_id)->update($update);
+			}
 		}
 		
 		//absent and no time_sheet_record

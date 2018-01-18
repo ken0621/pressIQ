@@ -12,14 +12,14 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</button>
-                <button onclick="action_load_link_to_modal('/member/mlm/point_log_complan/add', 'lg')" class="btn btn-primary"><i class="fa fa-plus"></i> Add Log Setting</button>
+                <button onclick="action_load_link_to_modal('/member/mlm/recaptcha/recaptcha_setting', 'md')" class="btn btn-def-white btn-custom-white"><i class="fa fa-cog"></i> Recaptcha Setting</button>
+                <button onclick="action_load_link_to_modal('/member/mlm/point_log_complan/add', 'md')" class="btn btn-primary"><i class="fa fa-plus"></i> Add Amount on Pool</button>
             </div>
         </div>
     </div>
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray "  style="margin-bottom: -10px;">
-    <!-- <ul class="nav nav-tabs">
+    {{-- <ul class="nav nav-tabs">
         <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Active</a></li>
         <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-trash"></i> Archived</a></li>
     </ul>
@@ -42,7 +42,7 @@
                 <input type="text" class="form-control search-employee-name" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
             </div>
         </div>
-    </div> -->
+    </div> --}}
     <div class="tab-content codes_container" style="min-height: 300px;">
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
@@ -59,5 +59,5 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/member/js/mlm/point_log_setting.js"></script>
+<script type="text/javascript" src="/assets/member/js/mlm/recaptcha.js"></script>
 @endsection

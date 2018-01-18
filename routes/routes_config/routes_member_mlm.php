@@ -369,3 +369,7 @@ Route::post('/member/mlm/point_log_complan/modify', 'Member\MLM_PointLogSettingC
 
 //recaptcha
 Route::get('/member/mlm/recaptcha','Member\MLM_RecaptchaController@index');
+Route::get('/member/mlm/recaptcha/recaptcha_table','Member\MLM_RecaptchaController@table');
+Route::get('/member/mlm/recaptcha/recaptcha_setting','Member\MLM_RecaptchaController@setting');
+Route::post('/member/mlm/recaptcha/recaptcha_setting','Member\MLM_RecaptchaController@submit_setting');
+

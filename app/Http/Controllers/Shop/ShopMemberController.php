@@ -1346,15 +1346,22 @@ class ShopMemberController extends Shop
     }
     public function getSlotInfo()
     {
-        $slot_id            = Crypt::decrypt(request("slot_no"));
-        $key                = request("key");
-        $data["slot_info"]  = $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->customer()->first();
-
-        if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
+        try 
         {
-            return Self::load_view_for_members('member.slot_info', $data);   
-        }
-        else
+            $slot_id            = Crypt::decrypt(request("slot_no"));
+            $key                = request("key");
+            $data["slot_info"]  = $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->customer()->first();
+
+            if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
+            {
+                return Self::load_view_for_members('member.slot_info', $data);   
+            }
+            else
+            {
+                return "ERROR OCCURRED";
+            }
+        } 
+        catch (DecryptException $e) 
         {
             return "ERROR OCCURRED";
         }

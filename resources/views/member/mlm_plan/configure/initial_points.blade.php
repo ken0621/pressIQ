@@ -25,7 +25,7 @@
                         <tr><th colspan="3"><center>INITIAL POINTS PER MEMBERSHIP</center></th></tr>
                         <tr>
                             <th>MEMEBERSHIP NAME</th>
-                            <th>INITIAL POINTS</th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -39,7 +39,8 @@
                                             <form id='form{{$mem->membership_id}}' action='/member/mlm/plan/initial_points/edit/membership/points' method='post' class='global-submit'>
                                             {!! csrf_field() !!}
                                             <input type="hidden" name="membership_id" value="{{$mem->membership_id}}">
-                                            <input type="number" name="membership_points_initial_points" class="form-control" value="{{$mem->membership_points_initial_points}}">
+                                            INITIAL POINTS:<input type="number" name="membership_points_initial_points" class="form-control" value="{{$mem->membership_points_initial_points}}">
+                                            INITIAL GC:<input type="number" name="initial_gc" class="form-control" value="{{$mem->initial_gc}}">
                                             </form>
                                             </td>
                                         <td>

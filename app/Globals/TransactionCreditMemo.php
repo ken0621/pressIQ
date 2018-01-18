@@ -69,7 +69,8 @@ class TransactionCreditMemo
 	        $return = Self::insertline($cm_id, $insert_item, $entry);
 			$warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 			/* UPDATE INVENTORY HERE */
-			/* AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'credit_memo', $cm_id, 'Refill upon creating CREDIT MEMO '.$ins['transaction_refnum']); */
+			AccountingTransaction::inventory_refill_update($shop_id, $warehouse_id, $insert_item, 'credit_memo', $cm_id); 
+			AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'credit_memo', $cm_id, 'Refill upon creating CREDIT MEMO '.$ins['transaction_refnum']);
 		}
 		else
 		{

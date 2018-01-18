@@ -791,7 +791,40 @@ class Warehouse2
         }
 
         return $validate_consume;
-    } 
+    }
+
+    public static function inventory_delete_inventory($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info)
+    {
+        /* DELETE ALL INVENTORY */
+        $get = Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                 ->where("record_source_ref_name", $ref_name)
+                                                 ->where("record_source_ref_id", $ref_id)
+                                                 ->get();
+        $del = null;
+        foreach ($get as $key => $value) 
+        {
+            if($value->record_consume_ref_name)
+            {
+                $explode = explode('-', $value->record_consume_ref_name);
+                if(isset($explode[2]))
+                {
+                    $del = $value->record_consume_ref_name;
+                }
+            }
+        }
+
+        Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                 ->where("record_source_ref_name", $ref_name)
+                                                 ->where("record_source_ref_id", $ref_id)
+                                                 ->delete();
+        if($del)
+        {
+            Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                              ->where('record_source_ref_name', $del)
+                                              ->delete();
+        }
+
+    }
     public static function consume_bulk_src_ref($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item, $ref_src_name = '', $ref_src_id = 0)
     {
         $validate = null;

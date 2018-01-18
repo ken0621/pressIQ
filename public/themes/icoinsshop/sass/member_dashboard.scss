@@ -172,6 +172,13 @@ $text-dark: #272c2f;
 					display: inline-block;
 					font-weight: normal;
 				}
+
+				.hand
+				{
+					color: #0466AF;
+					cursor: pointer;
+					text-decoration: none;
+				}
 			}
 		}
 	}
@@ -180,6 +187,7 @@ $text-dark: #272c2f;
 	{
 		margin: 20px;
 		text-align: center;
+
 		#income_summary
 		{
 			margin: auto !important;
@@ -379,6 +387,11 @@ $text-dark: #272c2f;
 	}
 }
 
+// POPUP USE PRODUCT CODE
+
+
+
+
 // POPUP VERIFY PLACEMENT
 .popup-verify-placement
 {
@@ -473,7 +486,6 @@ $text-dark: #272c2f;
 		}
 	}
 }
-
 
 /* Success */
 .popup-success

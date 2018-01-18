@@ -46,18 +46,22 @@
 								</div>
 								<div class="holder">
 									<div class="color cs"></div>
-									<div class="name"><span>Current Slot(s)</span> <div class="name cs-text">{{ $customer_summary["display_slot_count"] }}</div></div>
+									<div class="name"><span>Current Slot(s)</span> <div class="name cs-text"><a class="hand" onclick="action_load_link_to_modal('/members/slots')">{{ $customer_summary["display_slot_count"] }}</a></div></div>
 								</div>
 								<div class="holder">
 									<div class="color tr"></div>
 									<div class="name"><span>Total Reward</span> <div class="name tr-text">{{ $wallet->display_total_earnings }}</div></div>
+								</div>
+								<div class="holder">
+									<div class="color tr"></div>
+									<div class="name"><span>Total KROPS</span> <div class="name tr-text">0.00 KROP(S)</div></div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="square-container">
+				{{-- <div class="square-container">
 					<div class="title">Reward Summary</div>
 					<div class="sub-container">
 						<div class="chart-legend">
@@ -89,7 +93,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 
 				<div class="square-container">
 					<div class="title">Enter Product Code</div>
@@ -102,7 +106,7 @@
 			</div>
 
 
-			<div class="col-md-6">
+			{{-- <div class="col-md-6">
 
 				<div class="square-container">
 					<div class="title">Binary Points</div>
@@ -129,7 +133,68 @@
 	                    </div>
 					</div>
 				</div>
+			</div> --}}
+
+			<div class="col-md-6">
+				<div class="square-container">
+					<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+					<div class="sub-container">
+						<div class="chart-legend">
+							@foreach($_wallet_plan as $plan)
+								<div class="holder">
+
+									<div class="color"></div>
+
+									<div class="name"><span>{{ $plan->label." Bonus" }}</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+
+								</div>
+							@endforeach
+							@if(count($_wallet_plan)<1)
+								<div class="holder">
+
+									<div class="color"></div>
+
+									<div class="name"><span>Unilevel Bonus</span> <div class="name w2hpx">PHP 0.00</div></div>
+
+								</div>
+								<div class="holder">
+
+									<div class="color"></div>
+
+									<div class="name"><span>Direct Pass Up Bonus</span> <div class="name w2hpx">PHP 0.00</div></div>
+
+								</div>
+							@endif
+						</div>
+					</div>
+				</div>
 			</div>
+
+			<div class="square-container col-md-6">
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="sub-container">
+					@if(count($_point_plan) > 0)
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+						@foreach($_point_plan as $plan)
+							@if($plan->label == "Repurchase Cashback")
+								<!-- <div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>VIP Cashback</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+								</div> -->
+							@else
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>{{ $plan->label }}</span> <div class="name w2hpx">{{ $points->{ "display_" . $plan->string_plan } }}</div></div>
+								</div>
+							@endif
+						@endforeach
+					</div>
+					@else
+						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
+					@endif
+				</div>
+			</div>
+
 		</div>
 
 		<div class="row clearfix">
@@ -228,9 +293,9 @@
 <script type="text/javascript" src="/assets/member/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 
-
 <script>
-$(window).on('hashchange', function() {
+$(window).on('hashchange', function() 
+{
     if (window.location.hash) {
         var page = window.location.hash.replace('#', '');
         if (page == Number.NaN || page <= 0) {
@@ -240,14 +305,17 @@ $(window).on('hashchange', function() {
         }
     }
 });
-$(document).ready(function() {
+$(document).ready(function() 
+{
 	getPosts(1);
-    $(document).on('click', '.pagination a', function (e) {
+    $(document).on('click', '.pagination a', function (e) 
+    {
         getPosts($(this).attr('href').split('page=')[1]);
         e.preventDefault();
     });
 });
-function getPosts(page) {
+function getPosts(page) 
+{
     $.ajax(
     {
         url : '/members/direct-referrals?page=' + page,

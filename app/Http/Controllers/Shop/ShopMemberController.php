@@ -30,7 +30,7 @@ use App\Globals\Mail_global;
 use App\Globals\Transaction;
 use App\Globals\Warehouse2;
 use App\Globals\Ecom_Product;
-use App\Globals\Abs\AbsMain;
+use App\Globals\abs\AbsMain;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 
@@ -101,6 +101,7 @@ use App\Models\Tbl_item;
 use App\Tbl_item_redeemable;
 //for image upload
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class ShopMemberController extends Shop
 {
@@ -212,6 +213,11 @@ class ShopMemberController extends Shop
         {
             return Redirect::to('/members/login');
         }
+        // dd($slot_id." ; ".$data['reward_point_redemption']);
+        // dd($data['wallet']);
+        // dd($data['_wallet_plan']);
+        return Self::load_view_for_members("member.dashboard", $data);
+
     }
     public function getDirectReferrals()
     {
@@ -465,6 +471,7 @@ class ShopMemberController extends Shop
       
     }
 
+
     public function send($pr_info)
     {
         $to=explode(",", $pr_info['pr_to']);
@@ -473,9 +480,7 @@ class ShopMemberController extends Shop
         {
             Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
             {
-                $from_explode = explode("@", $pr_info["pr_from"]);
-
-                $message->from(isset($from_explode[0]) ? $from_explode[0] . "@press-iq.com" : $pr_info["pr_from"], $pr_info["pr_sender_name"]);
+                $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
                 $message->to($pr_info["to"]);
             });
         }
@@ -615,9 +620,10 @@ class ShopMemberController extends Shop
 
     public function press_release_analytics()
     {
+
         if (Session::exists('user_email')) 
         {
-            $level=session('pr_user_level');
+           
             $explode_email = explode("@", Session::get('user_email'));
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -650,6 +656,55 @@ class ShopMemberController extends Shop
             }
         }
         else
+        {
+            dd(json_decode($response));
+        }
+    }
+
+
+    public function press_release_analytics_view()
+    {
+         if (Session::exists('user_email')) 
+         {
+            $explode_email = explode("@", Session::get('user_email'));
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+                ) ,
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err)
+            {
+                echo "cURL Error #:" . $err;
+            }
+            else
+            {
+                $analytics_view = json_decode($response);
+                foreach ($analytics_view as $key => $value) 
+                {
+                    if ($value->sender != $explode_email[0] . '@press-iq.com') 
+                    {
+                        unset($analytics_view[$key]);
+                    }
+                }
+                $data["analytics_view"] = $analytics_view;
+                $data["page"] = "Analytics View";
+                return view("press_user.press_user_analytics_view",$data);
+            }
+        }
+         else
         {
            return Redirect::to("/"); 
         }
@@ -743,7 +798,45 @@ class ShopMemberController extends Shop
         {   
             return Redirect::to("/"); 
         }
-      
+        // if (request()->isMethod("post"))
+        // { 
+        //     $value["contact_name"]          =request('contact_name');
+        //     $rules["contact_name"]          =['required'];
+        //     $value["country"]               =request('country');
+        //     $rules["country"]               =['required'];
+        //     $value["contact_email"]         =request('contact_email');
+        //     $rules["contact_email"]         =['required','email','unique:tbl_pressiq_media_contacts,contact_email'];
+        //     $value["contact_website"]       =request('contact_website');
+        //     $rules["contact_website"]       =['required'];
+        //     $value["contact_description"]   =request('contact_description');
+        //     $rules["contact_description"]   =['required'];
+        //     $validator = Validator::make($value, $rules);
+
+        //     if ($validator->fails()) 
+        //     {
+        //         return Redirect::to("/pressadmin/mediacontacts")->with('message', $validator->errors()->first())->withInput();
+        //     }
+        //     else
+        //     {
+        //         $contact_info["contact_name"]=request('contact_name');
+        //         $contact_info["country"]=request('country');
+        //         $contact_info["contact_email"]=request('contact_email');
+        //         $contact_info["contact_website"]=request('contact_website');
+        //         $contact_info["contact_description"]=request('contact_description');
+        //         $contact_id = tbl_pressiq_media_contacts::insertGetId($contact_info); 
+        //         $data["page"] = "Press Release - Media Contacts";
+        //         $contacts = DB::table('tbl_pressiq_media_contacts')->get();
+        //         $data["contacts"]=$contacts;
+        //         return view("press_admin.press_admin_media_contacts",$data);                
+        //     }
+        // }
+        // else
+        // {
+        //     $data["page"] = "Press Release - Media Contacts";
+        //     $contacts = DB::table('tbl_pressiq_media_contacts')->get();
+        //     $data["contacts"]=$contacts;
+        //     return view("press_admin.press_admin_media_contacts",$data);
+        // }
     }
     public function manage_user()
     {
@@ -1241,8 +1334,16 @@ class ShopMemberController extends Shop
     public function getAutologin()
     {
         $data["force_login"] = true;
-        $data["password"] = Crypt::decrypt(request()->password);
-        return view("member.autologin", $data);
+
+        try 
+        {
+            $data["password"] = Crypt::decrypt(request()->password);
+            return view("member.autologin", $data);
+        }
+        catch (DecryptException $e) 
+        {
+            return Redirect::back();
+        }
     }
     public function request_payout_allow()
     {
@@ -1769,22 +1870,33 @@ class ShopMemberController extends Shop
         $json["message"] = "";
 
         /* UPDATE  METHOD */
-        foreach(request("airline") as $key => $value)
+        if (request("customer_payout_method") == "airline") 
         {
-            $slot_info = Tbl_mlm_slot::where("slot_no", $value)->where("shop_id", $this->shop_info->shop_id)->first();
-
-            if ($slot_info) 
+            if (request("airline")) 
             {
-                if ($customer) 
+                foreach(request("airline") as $key => $value)
                 {
-                    $airline_result = AbsMain::update_info($customer->customer_id, $slot_info->slot_id, request("tour_wallet_account_id")[$key], $this->shop_info->shop_id); 
-                    
-                    if ($airline_result["status"] != 1) 
+                    $slot_info = Tbl_mlm_slot::where("slot_no", $value)->where("shop_id", $this->shop_info->shop_id)->first();
+
+                    if ($slot_info) 
                     {
-                        $json["status"] = "error";
-                        $json["message"] = "Your Airline Ticketing Account ID is incorrect.";
+                        if ($customer) 
+                        {
+                            $airline_result = AbsMain::update_info($customer->customer_id, $slot_info->slot_id, request("tour_wallet_account_id")[$key], $this->shop_info->shop_id); 
+                            
+                            if ($airline_result["status"] != 1) 
+                            {
+                                $json["status"] = "error";
+                                $json["message"] = "Your Airline Ticketing Account ID is incorrect.";
+                            }
+                        }
                     }
                 }
+            }
+            else
+            {
+                $json["status"] = "error";
+                $json["message"] = "Your Airline Ticketing Account ID Field is empty.";
             }
         }
 
@@ -2542,19 +2654,26 @@ class ShopMemberController extends Shop
     }
     public function getGenealogy(Request $request)
     {
-        $data["page"] = "Genealogy";
-        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
-        $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
-        $data['slot_no'] = 0;
-        $data['mode'] = 'sponsor';
-        
-        if($slot)
+        if (isset(Self::$customer_info->customer_id)) 
         {
-            $data['slot_no'] = $slot->slot_no;
-            $data['mode'] = $request->mode;
-        }
+            $data["page"] = "Genealogy";
+            $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+            $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
+            $data['slot_no'] = 0;
+            $data['mode'] = 'sponsor';
+            
+            if($slot)
+            {
+                $data['slot_no'] = $slot->slot_no;
+                $data['mode'] = $request->mode;
+            }
 
-        return (Self::load_view_for_members("member.genealogy", $data));
+            return (Self::load_view_for_members("member.genealogy", $data));
+        }
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
     public function getGenealogyTree(Request $request)
     {
@@ -2712,7 +2831,7 @@ class ShopMemberController extends Shop
         $data['customer_id'] = Self::$customer_info->customer_id;
 
         $q = $query->where("tbl_transaction.transaction_reference_id",Self::$customer_info->customer_id);
-        $data['_codes'] = $q->where("transaction_reference_table","tbl_customer")->where("item_in_use","unused")->where("item_type_id",5)->where("tbl_transaction.shop_id",$this->shop_info->shop_id)->get();
+        $data['_codes'] = $q->where("transaction_reference_table","tbl_customer")->where("item_in_use","unused")->where("item_type_id",5)->where("tbl_transaction.shop_id",$this->shop_info->shop_id)->paginate(10);
         return (Self::load_view_for_members("member.code-vault",$data));
     }
     public function getUsecode()
@@ -2724,21 +2843,28 @@ class ShopMemberController extends Shop
     }
     public function getReport()
     {
-        $data["page"]               = "Report";
-
-        if(request("sort_by"))
+        if (isset($this->shop_info->shop_id) && isset(Self::$customer_info->customer_id)) 
         {
-            $sort_by = request("sort_by");
+            $data["page"]               = "Report";
+
+            if(request("sort_by"))
+            {
+                $sort_by = request("sort_by");
+            }
+            else
+            {
+                $sort_by = 0;
+            }
+
+            $data["_rewards"]           = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,$sort_by);
+            $data["_codes"]             = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            
+            return (Self::load_view_for_members("member.report", $data));
         }
         else
         {
-            $sort_by = 0;
+            return Redirect::to("/members/login");
         }
-
-        $data["_rewards"]           = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,$sort_by);
-        $data["_codes"]             = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
-        
-        return (Self::load_view_for_members("member.report", $data));
     }
     public function getReportPoints()
     {
@@ -2812,11 +2938,18 @@ class ShopMemberController extends Shop
     }
     public function getWalletEncashment()
     {
-        $data["page"]           = "Wallet Encashment";
-        $data["_encashment"]    = MLM2::customer_payout($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
-        $total_payout           = MLM2::customer_total_payout(Self::$customer_info->customer_id);
-        $data["total_payout"]   = Currency::format($total_payout);
-        return (Self::load_view_for_members("member.wallet_encashment", $data));
+        if (isset($this->shop_info->shop_id) && isset(Self::$customer_info->customer_id)) 
+        {
+            $data["page"]           = "Wallet Encashment";
+            $data["_encashment"]    = MLM2::customer_payout($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+            $total_payout           = MLM2::customer_total_payout(Self::$customer_info->customer_id);
+            $data["total_payout"]   = Currency::format($total_payout);
+            return (Self::load_view_for_members("member.wallet_encashment", $data));
+        }
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
     public function getWalletTransfer()
     {
@@ -3144,6 +3277,12 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Slot";
         return (Self::load_view_for_members("member.slot", $data));
+    }
+    public function getSlots()
+    {
+        $data['page'] = "YOUR SLOT(S)";
+        $data['slots'] = Tbl_mlm_slot::where('slot_owner',Self::$customer_info->customer_id)->get();
+        return view('member.userslots',$data);
     }
     public function getEonCard()
     {

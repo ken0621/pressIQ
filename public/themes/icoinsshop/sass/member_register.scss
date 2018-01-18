@@ -360,7 +360,7 @@ body
 {
 	.modal-header
 	{
-		background-color: #0466AF;
+		background-color: #e1890b;
 		color: #fff;
 		font-size: 13px;
 		font-weight: 600;
@@ -395,12 +395,12 @@ body
 		.btn-semi
 		{
 			@include transition(0.2s);
-			background-color: rgba(4,102,175,0.9);
+			background-color: #e1890b;
 		}
 		.btn-pure
 		{
 			@include transition(0.2s);
-			background-color: #0466AF;
+			background-color: #e1890b;
 
 		}
 	}

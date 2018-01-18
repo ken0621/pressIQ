@@ -125,8 +125,8 @@
                         <div class="bottom">
                             <div class="texts"> KROPS is offering tokenized shares of the company through an offering of 16,000,000 or sixteen million KROPS tokens of KropCoins.</div>
                             <div class="btn-container">
-                                <button class="btn-more-info">MORE INFO</button>
-                                <button class="btn-buy-tokens">BUY TOKENS</button>
+                                <a href="javascript:"><button class="btn-more-info">MORE INFO</button></a>
+                                <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
                             </div>
                         </div>
                     </div>

@@ -16,7 +16,7 @@
 }
 .container
 {
-	background-color: #f5f5f5;
+	/*background-color: #f5f5f5;*/
 	margin: 0px 130px;
 	padding: 40px 40px;
 	border-radius: 10px;
@@ -37,7 +37,7 @@
 	color: #404040;
 	font-size: 18px;
 	text-align: center;
-	font-family: 'Lato';
+	font-family: 'PT Serif';
 	padding-top: 5px;
 }
 .sender-name
@@ -76,11 +76,11 @@
 .logo-holder
 {
 	margin: auto;
-	box-shadow: 0px 12px 25px -15px rgba(0,0,0,0.2);
+	/*box-shadow: 0px 12px 25px -15px rgba(0,0,0,0.2);*/
 	padding: 15px 20px;
-	border: 1px solid #ededed;
+	/*border: 1px solid #ededed;*/
 	width: 75%;
-	background-color: #fff;
+	/*background-color: #fff;*/
 }
 </style>
 <meta charset="utf-8">

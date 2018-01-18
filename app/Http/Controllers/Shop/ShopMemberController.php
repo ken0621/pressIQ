@@ -221,8 +221,15 @@ class ShopMemberController extends Shop
     }
     public function getDirectReferrals()
     {
-        $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
-        return view('member.newest_direct_referrals',$data);
+        if (Self::$customer_info) 
+        {
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
+            return view('member.newest_direct_referrals',$data);
+        }
+        else
+        {
+            return Redirect::to('/members/login');
+        }
     }
     public function getKit()
     {

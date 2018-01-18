@@ -455,7 +455,6 @@ class ShopMemberController extends Shop
                     $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
                      Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
- 
                 }
                 
             }
@@ -469,26 +468,27 @@ class ShopMemberController extends Shop
       $search_key = $request->search_key;
       $data['_recipient'] = Tbl_press_release_recipient::where('name','like','%'.$search_key.'%')
                             ->Orwhere('company_name','like','%'.$search_key.'%')
-                            ->Orwhere('position','like','%'.$search_key.'%')
+                            ->Orwhere('position','like','%'.$search_key.'   %')
                             ->get();
       return view("press_user.search_recipient", $data);
     }
 
     public function send($pr_info)
     {
-        $to=explode(",", $pr_info['pr_to']);
+        $to  = explode(",", $pr_info['pr_to']);
+        $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
 
-        foreach ($to as $pr_info['to']) 
+        foreach ($to as $pr_info['pr_to']) 
         {
             Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
             {
-                $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
-                $message->to($pr_info["to"]);
+                $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
+                $message->to($pr_info['pr_to']);
                 $message->subject($pr_info["pr_headline"]);
             });
         }
     }
-
+   
     public function send_contact_us()
     {
         $contactus_info["contactus_first_name"]         =request('first_name');
@@ -499,9 +499,11 @@ class ShopMemberController extends Shop
         $contactus_info["contactus_message"]            =request('contactus_message');
         $contactus_info["contactus_to"]                 =request('contactus_to');
 
+        $contactus_info["explode_email"] = explode("@", $contactus_info['contactus_email']);
+        
         Mail::send('emails.Contact_us',$contactus_info, function($message) use ($contactus_info)
         {
-            $message->from($contactus_info['contactus_email']);
+            $message->from($contactus_info["explode_email"][0] . '@press-iq.com',$contactus_info['contactus_email']);
             $message->to("oliverbacsal@gmail.com");
             $message->subject($contactus_info['contactus_subject']);
            
@@ -686,7 +688,6 @@ class ShopMemberController extends Shop
         }
     }
 
-
     public function press_release_analytics_view()
     {
          if (Session::exists('user_email')) 
@@ -716,6 +717,7 @@ class ShopMemberController extends Shop
             }
             else
             {
+
                 $analytics_view = json_decode($response);
                 foreach ($analytics_view as $key => $value) 
                 {

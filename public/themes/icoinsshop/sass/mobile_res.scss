@@ -1,0 +1,153 @@
+// MOBILE RESPONSIVENESS
+
+// LAPTOP 1024
+@media screen and (max-width: 1080px)
+{
+	.header-container .image-logo-holder 
+	{
+	    padding-top: 15px;
+	}
+}
+
+// TABLETS
+@media screen and (max-width: 800px)
+{
+	// .header-container .image-logo-holder img {
+	//     width: 25%;
+	// }
+
+	//remove the padding top on logo
+	.header-container .image-logo-holder 
+	{
+	    padding-top: 0;
+	}
+
+	// Disable fadeout when swiped on tablets/mobile
+	.fadeMe
+	{
+		opacity: 1 !important;
+	}
+
+	// Class to center the logo on tablets/mobile, placed beside col-md-2 located in slider-wrapper on top.
+	.center-logo-on-mobile
+	{
+		text-align: center;
+	}
+
+	// resize the logo
+	.header-container
+	{
+		.image-logo-holder 
+		{
+	    	width: 20%;
+		}
+	}
+
+	// remove col-md's on tablets enherited on mobiles
+	.remove-on-mobile
+	{
+		display: none;
+	}
+
+	// Resized on tablets/mobiles
+	.slider-wrapper
+	{
+		height: 100% !important;
+
+		.holder
+		{
+			padding: 150px 0;
+
+			.caption-container
+			{
+				text-align: center;
+
+				.text-1
+				{
+					font-size: 35px !important;
+				}
+			}
+
+			.button-container
+			{
+				text-align: center;
+			}
+
+			.card
+			{
+				float: none !important;
+				margin: auto;
+			}
+		}
+
+		.scroll-down
+		{
+			left: 48% !important;
+			right: 0 !important;
+		}
+	}
+
+	.wrapper-2
+	{
+		.unskew
+		{
+			.texts
+			{
+				padding-bottom: 20px !important;
+			}
+		}
+	}
+
+	.wrapper-3
+	{
+		.left
+		{
+			
+		}
+
+		.right
+		{
+			.img-holder
+			{
+				padding-top: 50px;
+			}
+		}
+	}
+
+	.wrapper-4
+	{
+		.unskew
+		{
+			.product-holder
+			{
+				height: auto !important;
+
+				.top
+				{
+					width: 50%;
+					margin: auto;
+					padding-top: 25px;
+				}
+
+				.text
+				{
+					padding-bottom: 125px;
+				}
+			}
+		}
+	}
+
+	.wrapper-5
+	{
+		.news-holder
+		{
+			margin-top: 25px;
+		}
+	}
+}
+
+// MOBILE
+@media screen and (max-width: 500px)
+{
+
+}

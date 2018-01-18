@@ -17,8 +17,8 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500" rel="stylesheet">
     <!-- GLOBAL CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css?version=2">
-    {{-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/smooth-scroll.css"> --}}
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/mobile_res.css">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
     
     @include("frontend.ghead")
     <!-- OTHER CSS -->
@@ -41,8 +41,76 @@
 </head>
 <body>
     
-    <div class="blur-me">
+    <div id="overlay" onclick="off()"></div>
 
+    <div class="side-nav">
+        <nav class="pushmenu pushmenu-left">
+            @if($customer)
+            <div class="space1"></div>
+            <a href="/members/profile">
+               <div class="profile-img-container">
+                    <div class="row-no-padding clearfix">
+                        <div class="col-xs-12">
+                            <div class="profile-img"><img src="{{ $profile_image }}"></div>
+                            <div class="text-holder">
+                                <div class="name-text text-overflow">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+                                <div class="subtext text-overflow">{{ $customer->email }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <div class="space1"></div>
+            <span>BROWSE</span>
+            <ul class="links">
+                <li> <a onclick="off()" href="/#home"><i class="fa fa-home" aria-hidden="true"></i> HOME</a></li>
+                <li> <a onclick="off()" href="/#about"><i class="fa fa-info" aria-hidden="true"></i> ABOUT</a></li>
+                <li> <a onclick="off()" href="/#missionvision"><i class="fa fa-rocket" aria-hidden="true"></i> MISSION AND VISION</a></li>
+                <li> <a onclick="off()" href="/#howitworks"><i class="fa fa-question" aria-hidden="true"></i> HOW IT WORKS</a></li>
+                <li> <a onclick="off()" href="/#products"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS</a></li>
+                <li> <a onclick="off()" href="/#news"><i class="fa fa-newspaper-o" aria-hidden="true"></i> NEWS</a></li>
+            </ul>
+            
+            <div class="space2"></div>
+            <span>MEMBER'S AREA</span>
+            <ul class="links">
+                <li> <a href="/members"><i class="fa brown-icon-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                <li> <a href="/members/profile"><i class="fa brown-icon-profile" aria-hidden="true"></i> Profile</a></li>
+                @if($mlm_member)
+                <!-- <li> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li> -->
+                <li class="genealogy-mobile-dropdown"> 
+                    <a href="javascript:"><i class="fa brown-icon-flow-tree" area-hidden="true"></i> Genealogy <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a> 
+                </li>
+                    <ul class="genealogy-mobile-dropdown-list">
+                        {{-- <li><a href="/members/genealogy?mode=binary">Binary Tree</a></li> --}}
+                        <li><a href="/members/genealogy?mode=sponsor">Unilevel Tree</a></li>
+                    </ul>
+
+                <li> <a href="/members/report"><i class="fa fa-bar-chart" aria-hidden="true"></i> Reports</a></li>
+                <li> <a href="/members/report-points"><i class="fa brown-icon-flow-tree" area-hidden="true"></i> Network List</a></li>
+                <li> <a href="/members/wallet-encashment"><i class="fa brown-icon-wallet" aria-hidden="true"></i> Wallet Encashment</a></li>
+                    @if($customer)
+                        <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>
+                    @endif
+                @else
+                @endif
+            </ul>
+            @else
+                <div class="space1"></div>
+                <span>BROWSE</span>
+                <ul class="links">
+                    <li> <a onclick="off()" href="/#home"><i class="fa fa-home" aria-hidden="true"></i> HOME</a></li>
+                    <li> <a onclick="off()" href="/#about"><i class="fa fa-info" aria-hidden="true"></i> ABOUT</a></li>
+                    <li> <a onclick="off()" href="/#missionvision"><i class="fa fa-rocket" aria-hidden="true"></i> MISSION AND VISION</a></li>
+                    <li> <a onclick="off()" href="/#howitworks"><i class="fa fa-question" aria-hidden="true"></i> HOW IT WORKS</a></li>
+                    <li> <a onclick="off()" href="/#products"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS</a></li>
+                    <li> <a onclick="off()" href="/#news"><i class="fa fa-newspaper-o" aria-hidden="true"></i> NEWS</a></li>
+                </ul>
+            @endif
+        </nav>
+    </div>
+
+    <div class="blur-me">
         <div class="loader hide">
             <span><img src="/resources/assets/frontend/img/loader.gif"></span>
         </div>
@@ -52,13 +120,14 @@
             <div class="nav-holder">
                 <div class="container">
                     <div class="row-no-padding clearfix">
-                        <div class="col-md-2">
+                        <div class="center-logo-on-mobile col-md-2">
+                            <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
                             <div class="image-logo-holder">
                                 <a class="clearfix logo-1" href="/"><img src="/themes/{{ $shop_theme }}/img/icoins-logo.png"></a>
                                 <a class="clearfix logo-2" href="/"><img src="/themes/{{ $shop_theme }}/img/logo-2.png"></a>
                             </div>
                         </div>
-                        <div class="col-md-7">
+                        <div class="remove-on-mobile col-md-7">
                             <nav class="navigation">
                                 <ul>
                                     @if(Request::segment(1) == "members")
@@ -86,7 +155,7 @@
                                 </ul>
                             </nav>
                         </div>
-                        <div class="col-md-3">
+                        <div class="remove-on-mobile col-md-3">
                             <div class="nav">
                                 <ul>
                                     @if($customer)
@@ -94,6 +163,7 @@
                                         <li><a href="/members/logout"><button class="btn-signin">LOGOUT</button></a></li>
                                     @else
                                         <li><a href="/members/login"><button class="btn-signin">SIGNIN</button></a></li>
+                                        <li style="margin-left: 10px;"><a href="/members/register"><button class="btn-signin">REGISTER</button></a></li>
                                     @endif
                                 </ul>
                             </div>
@@ -119,8 +189,8 @@
     
     @include("frontend.gfoot")
     {{-- GLOBALS --}}
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js?version=2"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/smooth-scroll.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     
     <!-- FB WIDGET -->
     <div id="fb-root"></div>

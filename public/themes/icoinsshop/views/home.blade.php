@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            <div class="scroll-down wow fadeInDown" data-wow-delay=".8s" data-wow-duration="2s"><a class="navigation__link" href="#about"><img src="/themes/{{ $shop_theme }}/img/arrow-down.png"></a></div>
+            <div class="scroll-down fadeMe wow fadeInDown" data-wow-delay=".8s" data-wow-duration="2s"><a class="navigation__link" href="#about"><img src="/themes/{{ $shop_theme }}/img/arrow-down.png"></a></div>
         </div>
     </div>
 
@@ -229,13 +229,17 @@
 
 @section("script")
 <script type="text/javascript">
+
 $(document).ready(function($) 
 {
     /*TEXT FADEOUT*/
-    $(window).scroll(function(){
-        $(".fadeMe, .scroll-down").css("opacity", 1 - $(window).scrollTop() / 250);
+    $(window).scroll(function()
+    {
+        $(".fadeMe").css("opacity", 1 - $(window).scrollTop() / 250);
     });
+    
 });
+
 </script>
 
 @endsection

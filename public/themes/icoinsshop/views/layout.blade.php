@@ -53,13 +53,13 @@
             <div class="nav-holder">
                 <div class="container">
                     <div class="row-no-padding clearfix">
-                        <div class="col-md-2">
+                        <div class="center-logo-on-mobile col-md-2">
                             <div class="image-logo-holder">
                                 <a class="clearfix logo-1" href="/"><img src="/themes/{{ $shop_theme }}/img/icoins-logo.png"></a>
                                 <a class="clearfix logo-2" href="/"><img src="/themes/{{ $shop_theme }}/img/logo-2.png"></a>
                             </div>
                         </div>
-                        <div class="col-md-7">
+                        <div class="remove-on-mobile col-md-7">
                             <nav class="navigation">
                                 <ul>
                                     @if(Request::segment(1) == "members")
@@ -87,7 +87,7 @@
                                 </ul>
                             </nav>
                         </div>
-                        <div class="col-md-3">
+                        <div class="remove-on-mobile col-md-3">
                             <div class="nav">
                                 <ul>
                                     @if($customer)

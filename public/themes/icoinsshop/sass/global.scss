@@ -24,6 +24,7 @@ body
 	right: 1px;
 	z-index: 50;
 }
+
 .slick-prev
 {
 	left: 0px;
@@ -54,10 +55,15 @@ body
 .header-container
 {
 	background-color: #e1890b;
-	position: fixed;
+	position: relative; //fixed
 	width: 100%;
 	z-index: 999;
-	top: 0;
+	//top: 0;
+
+	@media screen and (max-width: 800px)
+	{
+		padding: 0;
+	}
 
 	.active
 	{

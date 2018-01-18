@@ -55,7 +55,7 @@ body
 .header-container
 {
 	background-color: #e1890b;
-	position: fixed; //fixed
+	position: relative; //fixed
 	width: 100%;
 	z-index: 999;
 	//top: 0;
@@ -77,14 +77,6 @@ body
 	{
 		padding: 10px 0;
 	}
-
-	// nav
-	// {
-	// 	a.active
-	// 	{
-	// 		color: #76b83f;
-	// 	}
-	// }
 
 	.image-logo-holder
 	{

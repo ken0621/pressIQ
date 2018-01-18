@@ -185,8 +185,8 @@
     
     @include("frontend.gfoot")
     {{-- GLOBALS --}}
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/smooth-scroll.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/smooth-scroll.js"></script>
     
     <!-- FB WIDGET -->
     <div id="fb-root"></div>

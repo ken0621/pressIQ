@@ -65,6 +65,24 @@ class ShopProductContent2Controller extends Shop
                 }
             }
 
+            if ($this->shop_theme == "philtech") 
+            {
+                if (isset($this->shop_info->shop_id) && isset(Self::$customer_info->customer_id)) 
+                {
+                    foreach ($data["product"]["variant"] as $key => $value) 
+                    {
+                        if ($value["discounted"] == "true") 
+                        {
+                            $data["product"]["variant"][$key]["discounted_price"] = Ecom_Product::getMembershipPrice($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
+                        }
+                        else
+                        {
+                            $data["product"]["variant"][$key]["evariant_price"] = Ecom_Product::getMembershipPrice($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
+                        }
+                    }
+                }
+            }
+            
             return view("product_content", $data);
         }
         else

@@ -1,4 +1,4 @@
-	    <h4 class="modal-title"><b>Paid - Leave Records</b> <i><br> Paid - Leave Records</i></h4>
+	    <h4 class="modal-title"><b>Paid - Leave Records : {{$date_start}} to {{$date_end}} </b> <i><br> Paid - Leave Records</i></h4>
 
 <div class="modal-body clearfix">
                 <div class="table-responsive">

@@ -55,10 +55,6 @@
 		<tr>
 			<td  width="100%" class="text-center" >
 
-				<br>
-				<br>
-				<br>
-				<br>
 				<div style="float:left;width: 50%;padding-left:5px">
 				</div>
 				<div style="float:right;width: 50%;padding-right:5px"><div class="text-center">{{str_pad($item_code->ctrl_number, 9, '0', STR_PAD_LEFT)}}</div></div></div>
@@ -68,7 +64,12 @@
 				<br>
 				<br>
 				<br>
-				<div class="text-center">
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<div class="text-center" style="font-size: 12px">
 					<div> CODE </div>
 					<div><strong>{{$item_code->mlm_pin}}</strong><div>
 					<div>ACTIVATION<div>

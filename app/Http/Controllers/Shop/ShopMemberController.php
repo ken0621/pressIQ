@@ -218,8 +218,15 @@ class ShopMemberController extends Shop
     }
     public function getDirectReferrals()
     {
-        $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
-        return view('member.newest_direct_referrals',$data);
+        if (Self::$customer_info) 
+        {
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
+            return view('member.newest_direct_referrals',$data);
+        }
+        else
+        {
+            return Redirect::to('/members/login');
+        }
     }
     public function getKit()
     {
@@ -465,9 +472,7 @@ class ShopMemberController extends Shop
                             ->Orwhere('position','like','%'.$search_key.'%')
                             ->get();
       return view("press_user.search_recipient", $data);
-      
     }
-
 
     public function send($pr_info)
     {
@@ -479,8 +484,30 @@ class ShopMemberController extends Shop
             {
                 $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
                 $message->to($pr_info["to"]);
+                $message->subject($pr_info["pr_headline"]);
             });
         }
+    }
+
+    public function send_contact_us()
+    {
+        $contactus_info["contactus_first_name"]         =request('first_name');
+        $contactus_info["contactus_last_name"]          =request('contactus_last_name');
+        $contactus_info["contactus_phone_number"]       =request('contactus_phone_number');
+        $contactus_info["contactus_subject"]            =request('contactus_subject');
+        $contactus_info["contactus_email"]              =request('contactus_email');
+        $contactus_info["contactus_message"]            =request('contactus_message');
+        $contactus_info["contactus_to"]                 =request('contactus_to');
+
+        Mail::send('emails.Contact_us',$contactus_info, function($message) use ($contactus_info)
+        {
+            $message->from($contactus_info['contactus_email']);
+            $message->to("oliverbacsal@gmail.com");
+            $message->subject($contactus_info['contactus_subject']);
+           
+        });
+        Session::flash('message_concern', 'Message Successfully Sent!');
+        return Redirect::back();
     }
 
     public function press_release_save_as_draft(Request $request)
@@ -528,6 +555,7 @@ class ShopMemberController extends Shop
         $data["page"] = "Press Release - My Press Release";
         return redirect::to("/pressuser/drafts");
     }
+
     public function pressuser_my_pressrelease()
     {
         if(Session::exists('user_email'))
@@ -654,7 +682,7 @@ class ShopMemberController extends Shop
         }
         else
         {
-            dd(json_decode($response));
+             return Redirect::to("/"); 
         }
     }
 
@@ -2387,28 +2415,35 @@ class ShopMemberController extends Shop
     /* LOGIN AND REGISTRATION - END */
     public function getProfile()
     {
-        $data["page"]                = "Profile";
-        $data["mlm"]                 = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
-        $data["profile"]             = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
-        $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
-        $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
-        $data["_country"]            = Tbl_country::get();
-        $data["_locale"]             = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
-        $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
-
-        $data['beneficiary'] = null;
-        if(Self::$customer_info)
+        if (Self::$customer_info) 
         {
-            $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
-            $data["wallet"]             = $data["customer_summary"]["_wallet"];
+            $data["page"]                = "Profile";
+            $data["mlm"]                 = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
+            $data["profile"]             = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
+            $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
+            $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
+            $data["_country"]            = Tbl_country::get();
+            $data["_locale"]             = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
+            $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
 
-            $data['beneficiary'] = CustomerBeneficiary::first(Self::$customer_info->customer_id);
+            $data['beneficiary'] = null;
+            if(Self::$customer_info)
+            {
+                $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                $data["wallet"]             = $data["customer_summary"]["_wallet"];
+
+                $data['beneficiary'] = CustomerBeneficiary::first(Self::$customer_info->customer_id);
+            }
+
+
+            // $data["allowed_change_pass"] = true;
+
+            return (Self::load_view_for_members("member.profile", $data));
         }
-
-
-        // $data["allowed_change_pass"] = true;
-
-        return (Self::load_view_for_members("member.profile", $data));
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
     public function postProfileUpdateInfo(Request $request)
     {
@@ -2674,15 +2709,22 @@ class ShopMemberController extends Shop
     }
     public function getGenealogyTree(Request $request)
     {
-        $slot_no  = $request->slot_no;
-        $shop_id  = $this->shop_info->shop_id;
-        $mode = $request->mode;
-        $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
-
-        if($check)
+        if (isset(Self::$customer_info->customer_id)) 
         {
-            $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
-            return Self::load_view_for_members('member.genealogy_tree', $data);            
+            $slot_no  = $request->slot_no;
+            $shop_id  = $this->shop_info->shop_id;
+            $mode = $request->mode;
+            $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
+
+            if($check)
+            {
+                $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
+                return Self::load_view_for_members('member.genealogy_tree', $data);            
+            }
+            else
+            {
+                die('Invalid slot!');
+            }
         }
         else
         {
@@ -3815,26 +3857,33 @@ class ShopMemberController extends Shop
     }
     public function getEnterPlacement()
     {
-        $data["page"] = "Enter Code";
-        $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
-        
-
-        $slot_id            = Crypt::decrypt(request("slot_no"));
-        $key                = request("key");
-        $data["slot_info"]  = $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->customer()->first();
-
-        if($slot_info->slot_owner == Self::$customer_info->customer_id)
+        if (Self::$customer_info) 
         {
-            $data["iamowner"] = true;
-        }
-        else
-        {
-            $data["iamowner"] = false;
-        }
+            $data["page"] = "Enter Code";
+            $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
+            
 
-        if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
-        {
-            return Self::load_view_for_members('member2.enter_placement', $data);
+            $slot_id            = Crypt::decrypt(request("slot_no"));
+            $key                = request("key");
+            $data["slot_info"]  = $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->customer()->first();
+
+            if($slot_info->slot_owner == Self::$customer_info->customer_id)
+            {
+                $data["iamowner"] = true;
+            }
+            else
+            {
+                $data["iamowner"] = false;
+            }
+
+            if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
+            {
+                return Self::load_view_for_members('member2.enter_placement', $data);
+            }
+            else
+            {
+                return "ERROR OCCURRED";
+            }
         }
         else
         {

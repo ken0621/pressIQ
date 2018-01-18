@@ -86,19 +86,22 @@ class WarehouseReceivingReportController extends Member
         $return = null;
 
         $items = null;
-        foreach ($_item as $key => $value) 
+        if($wis_data)
         {
-            if($value)
+            foreach ($_item as $key => $value) 
             {
-                if($request->wis_item_quantity[$key] < $value)
+                if($value)
                 {
-                    $return .= "The ITEM no ".$key." is not enough to transfer <br>";
-                }
+                    if($request->wis_item_quantity[$key] < $value)
+                    {
+                        $return .= "The ITEM no ".$key." is not enough to transfer <br>";
+                    }
 
-                $items[$key]['item_id'] = $key;
-                $items[$key]['quantity'] = $value;
-                $items[$key]['remarks'] = 'Transfer item no. '.$key.' from WIS -('.$wis_data->wis_number.')';                
-            }
+                    $items[$key]['item_id'] = $key;
+                    $items[$key]['quantity'] = $value;
+                    $items[$key]['remarks'] = 'Transfer item no. '.$key.' from WIS -('.$wis_data->wis_number.')';                
+                }
+            }            
         }
 
         $data = null;

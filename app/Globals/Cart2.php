@@ -1,6 +1,7 @@
 <?php
 namespace App\Globals;
 use App\Globals\Item;
+use App\Globals\Ecom_Product;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_cart;
@@ -10,6 +11,7 @@ use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Models\Tbl_cart_item_pincode;	
 use App\Models\Tbl_cart_payment;	
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_customer;
 use Session;
 use Carbon\Carbon;
 use App\Globals\Currency;
@@ -340,6 +342,16 @@ class Cart2
 		            	if ($price_level) 
 		            	{
 		            		$_cart[$key]->item_price = $price_level->custom_price;
+		            	}
+		            	else
+		            	{
+		         			$shop_id = Tbl_customer::where("customer_id", $customer_id)->value("shop_id");
+
+		         			if ($shop_id) 
+		         			{
+		         				$membership_discount = Ecom_Product::getMembershipPrice($shop_id, $customer_id, $item_info->item_id, $item_info->item_price);
+			            		$_cart[$key]->item_price = $membership_discount;
+		         			}
 		            	}
 		            }
 		            

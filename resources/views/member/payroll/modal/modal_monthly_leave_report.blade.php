@@ -4,6 +4,7 @@
 		<button type="button" class="close" data-dismiss="modal">×</button>
 		<h4 class="modal-title">Monthly Leave Summary Report - {{$month_today_string}}</h4>
 	</div>
+        <input type="hidden" id="category" value="monthly_leave">
     <div class="panel panel-default panel-block panel-title-block">
         <div class="panel-body form-horizontal">
             <div class="form-group">

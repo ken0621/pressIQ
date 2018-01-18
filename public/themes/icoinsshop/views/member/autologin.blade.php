@@ -1,13 +1,13 @@
 @extends("layout")
 @section("content")
-<div id="home" class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/cover-photo.jpg')">
+<div id="home" class="login-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/cover-photo.jpg')">
 	<div style="padding: 100px 0 50px 0;">
 		<div class="container">
 			<input type="hidden" id="_token" value="{{csrf_token()}}">
 			<div class="login">
 				<div class="logo-holder">
 					<img src="/themes/{{ $shop_theme }}/img/logo-2.png" alt="">
-				</div>		
+				</div>
 				<div class="login-form">
 
 					@if (session("error"))

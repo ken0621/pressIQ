@@ -781,11 +781,11 @@ class Warehouse2
             $_item[$key]['quantity'] = $value->bundle_qty * $quantity;
             $_item[$key]['remarks'] = 'consume item upon assembling item';
         }
-        $validate_consume = Warehouse2::consume_bulk_src_ref($shop_id, $warehouse_id, 'bundling_item', $item_id, 'Consume Item upon bundling Item#'.$item_id, $_item, $ref_name, $ref_id);
+        $validate_consume = Warehouse2::consume_bulk_src_ref($shop_id, $warehouse_id, 'bundling_item-'.$ref_name.'-'.$ref_id, $item_id, 'Consume Item upon bundling Item#'.$item_id, $_item, $ref_name, $ref_id);
 
         if(!$validate_consume)
         {
-            $source['name'] = 'bundling_item';
+            $source['name'] = 'bundling_item-'.$ref_name.'-'.$ref_id;
             $source['id'] = $item_id;
             $validate_consume .= Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, 'Refill Item upon bundling Item#'.$item_id, $source);            
         }

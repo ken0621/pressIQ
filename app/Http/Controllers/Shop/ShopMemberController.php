@@ -3860,26 +3860,33 @@ class ShopMemberController extends Shop
     }
     public function getEnterPlacement()
     {
-        $data["page"] = "Enter Code";
-        $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
-        
-
-        $slot_id            = Crypt::decrypt(request("slot_no"));
-        $key                = request("key");
-        $data["slot_info"]  = $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->customer()->first();
-
-        if($slot_info->slot_owner == Self::$customer_info->customer_id)
+        if (Self::$customer_info) 
         {
-            $data["iamowner"] = true;
-        }
-        else
-        {
-            $data["iamowner"] = false;
-        }
+            $data["page"] = "Enter Code";
+            $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
+            
 
-        if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
-        {
-            return Self::load_view_for_members('member2.enter_placement', $data);
+            $slot_id            = Crypt::decrypt(request("slot_no"));
+            $key                = request("key");
+            $data["slot_info"]  = $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->customer()->first();
+
+            if($slot_info->slot_owner == Self::$customer_info->customer_id)
+            {
+                $data["iamowner"] = true;
+            }
+            else
+            {
+                $data["iamowner"] = false;
+            }
+
+            if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
+            {
+                return Self::load_view_for_members('member2.enter_placement', $data);
+            }
+            else
+            {
+                return "ERROR OCCURRED";
+            }
         }
         else
         {

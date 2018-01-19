@@ -1526,7 +1526,7 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function db_get_company_period_information($period_id)
 	{
-		return Tbl_payroll_period_company::sel($period_id)->select('tbl_payroll_company.*','tbl_payroll_period.*','tbl_payroll_period_company.*')->get();
+		return Tbl_payroll_period_company::sel($period_id)->select('tbl_payroll_company.*','tbl_payroll_period.*','tbl_payroll_period_company.*')->first();
 	}
 	public function db_get_time_sheet_record_of_in_and_out($time_sheet_id)
 	{

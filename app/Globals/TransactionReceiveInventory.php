@@ -124,26 +124,24 @@ class TransactionReceiveInventory
 
             /* TOTAL */
             $total = collect($insert_item)->sum('item_amount');
-
             $update['ri_total_amount'] = $total;
 
-            $bill = Tbl_bill::where('bill_ri_id', $receive_inventory_id)->first();
-
-            //die(var_dump($bill));
-            foreach ($bill->bill_id as $key => $value)
-            {
-                //die(var_dump($bill->bill_id));
-            }
+        
             /*INSERT RI HERE*/
             Tbl_receive_inventory::where('ri_id',$receive_inventory_id)->update($update);
-            
             Tbl_receive_inventory_line::where('riline_ri_id', $receive_inventory_id)->delete();
 
             /*INSERT ENTER BILL HERE*/
-            $bill = TransactionEnterBills::postUpdate($receive_inventory_id, $shop_id, $insert, $insert_item);
+
+            $bill = Tbl_bill::where('bill_ri_id', $receive_inventory_id)->first();
+            //die(var_dump($bill->bill_id));
+            
+            if($bill)
+            {
+                TransactionEnterBills::postUpdate($bill->bill_id, $receive_inventory_id, $shop_id, $insert, $insert_item);
+            }
 
             $return = Self::insertLine($shop_id, $receive_inventory_id, $insert_item);
-
             $return = $receive_inventory_id;
         }
         else

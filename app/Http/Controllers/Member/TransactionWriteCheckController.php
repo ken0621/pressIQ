@@ -71,8 +71,8 @@ class TransactionWriteCheckController extends Member
         if($wc_id)
         {
             $data['wc'] = TransactionWriteCheck::info($this->user_info->shop_id, $wc_id);
-            $data['_wc_item_line'] = TransactionWriteCheck::info_item($wc_id);
-            //dd($data['_wcline']);
+            $data['_wcline'] = TransactionWriteCheck::info_item($wc_id);
+            dd($data['_wcline']);
         }
 
         return view('member.accounting_transaction.vendor.write_check.write_check', $data);
@@ -99,8 +99,8 @@ class TransactionWriteCheckController extends Member
             {
                 $ctr_items++;
             
-                /*$insert_item[$key]['itemline_ref_id']       = $value;
-                $insert_item[$key]['itemline_ref_name']     = $request->itemline_ref_name[$key];*/
+                /*$insert_item[$key]['itemline_ref_id'] = $value;
+                $insert_item[$key]['itemline_ref_name'] = $request->itemline_ref_name[$key];*/
                 $insert_item[$key]['item_id']           = $value;
                 $insert_item[$key]['item_description']  = $request->item_description[$key];
                 $insert_item[$key]['item_um']           = $request->item_um[$key];

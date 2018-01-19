@@ -1014,8 +1014,7 @@ class Payroll2
 		{
 			$before = $return->time_output['time_spent'] != "00:00:00";
 		}
-
-
+		
 		$i = 0;
 		do //Check next regular day if not absent
 		{

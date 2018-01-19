@@ -16,6 +16,10 @@
                 </h1>
                 <div class="dropdown pull-right">
                     <div>
+
+                        @if(isset($sales_invoice))
+                        <a class="btn btn-custom-white"  href="/member/accounting/journal/entry/invoice/{{$sales_invoice->inv_id}}">Transaction Journal</a>
+                        @endif  
                         <a class="btn btn-custom-white" href="/member/transaction/sales_invoice">Cancel</a>
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                         <span class="caret"></span></button>
@@ -24,6 +28,7 @@
                           <li><a class="select-action" code="sedit">Save & Edit</a></li>
                           <li><a class="select-action" code="sprint">Save & Print</a></li>
                           <li><a class="select-action" code="snew">Save & New</a></li>
+                          <li><a class="select-action" code="swis">Save & WIS</a></li>
                         </ul>
                     </div>
                 </div>

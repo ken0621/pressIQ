@@ -880,7 +880,7 @@ class PayrollTimeSheet2Controller extends Member
 					if (Payroll::time_float(Payroll::time_diff($rec->time_sheet_in,$rec->time_sheet_out)) >= $temp_time_float) 
 					{
 						$temp_time_float = Payroll::time_float(Payroll::time_diff($rec->time_sheet_in,$rec->time_sheet_out));
-						$_timesheet[$from]->branch_source_company_id = $rec->branch_id;
+						$_timesheet[$from]->branch_source_company_id = isset($rec->branch_id) ? $rec->branch_id : 0;
 					}
 				}
 			}

@@ -73,14 +73,14 @@
 					    </thead>
 					    <tbody>
 					    	
-					    	 @foreach($_period as $lbl => $period)
+					    	 @foreach($_employee as $lbl => $period)
 						    	<tr>
 						    	 	<td class="text-center">{{$period->payroll_period_start}} - {{$period->payroll_period_end}}</td>
 						    	 	<td class="text-center">{{number_format($period->net_basic_pay,2)}}</td>
 						    	 	<td class="text-center" >{{ number_format($period->overtime,2) }}</td>
 						    	 	<td class="text-center" >{{ number_format($period->nightdiff,2) }}</td>
-							    	<td class="text-center" >{{ number_format($period->special_holiday,2) }}</td>
 							    	<td class="text-center" >{{ number_format($period->regular_holiday,2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->special_holiday,2) }}</td>
 							    	<td class="text-center" >{{ number_format($period->restday,2 )}}</td>
 							    	<td class="text-center" >{{ number_format($period->leave_pay,2) }}</td>
 							    	<td class="text-center" >{{ number_format($period->cola,2) }}</td>

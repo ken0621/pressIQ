@@ -56,9 +56,9 @@
             	<div class="background-border">
             		<div class="background-container">
 		        		<div class="title-info-container">Email Address</div>
-		        		<div class="contact-info"><i class="fa fa-envelope" aria-hidden="true"></i><span>pressiq@gmail.com</span></div>
-		        		<div class="title-info-container">Contact Number</div>
-		        		<div class="contact-info"><i class="fa fa-phone" aria-hidden="true"></i><span>+4736 - 9806 - 890</span></div>
+		        		<div class="contact-info"><i class="fa fa-envelope" aria-hidden="true"></i><span>market@pressiq.com</span></div>
+		        		{{-- <div class="title-info-container">Contact Number</div>
+		        		<div class="contact-info"><i class="fa fa-phone" aria-hidden="true"></i><span>+4736 - 9806 - 890</span></div> --}}
 	        		</div>
         		</div>
             </div>

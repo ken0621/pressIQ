@@ -48,11 +48,12 @@ class Tbl_payroll_leave_employeev2 extends Model
 		return $query;
 	}
 
-	public function scopegetemployeeidbytempid($query,$payroll_leave_temp_id =0)
+	public function scopegetemployeeidbytempid($query,$payroll_leave_temp_id =0,$shop_id)
 	{
 			$query->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_employee_v2.payroll_leave_temp_id','=','tbl_payroll_leave_tempv2.payroll_leave_temp_id')
 			   ->whereIn('tbl_payroll_leave_tempv2.payroll_leave_temp_id',$payroll_leave_temp_id)
                ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_is_archived',0)
+               ->where('tbl_payroll_leave_tempv2.shop_id',$shop_id)
                ->select('payroll_employee_id','payroll_leave_employee_id');
 
               	return $query; 

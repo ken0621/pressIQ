@@ -2916,21 +2916,28 @@ class ShopMemberController extends Shop
     }
     public function getReportPoints()
     {
-        $data["page"]               = "Report";
-        if(request("sort_by"))
+        if (Self::$customer_info) 
         {
-            $sort_by = request("sort_by");
+            $data["page"]               = "Report";
+            if(request("sort_by"))
+            {
+                $sort_by = request("sort_by");
+            }
+            else
+            {
+                $sort_by = 0;
+            }
+
+            $data["_rewards_points"]    = MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by);
+
+            // return MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by)->first();
+            
+            return (Self::load_view_for_members("member.report_points", $data));
         }
         else
         {
-            $sort_by = 0;
+            return Redirect::to("/members/login");
         }
-
-        $data["_rewards_points"]    = MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by);
-
-        // return MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by)->first();
-        
-        return (Self::load_view_for_members("member.report_points", $data));
     }
     public function getLeadList()
     {

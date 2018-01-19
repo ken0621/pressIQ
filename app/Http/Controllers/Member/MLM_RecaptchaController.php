@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Models\Tbl_mlm_point_log_setting;
 use App\Models\Tbl_recaptcha_setting;
+use App\Models\Tbl_recaptcha_pool_amount;
+use App\Models\Tbl_mlm_slot_wallet_log;
+
+use Carbon\Carbon;
 
 class MLM_RecaptchaController extends Member
 {
@@ -16,8 +20,11 @@ class MLM_RecaptchaController extends Member
     }
     public function table()
     {
-    	// $data['logs'] = 
-    	return 'table';
+    	$data['logs'] = Tbl_mlm_slot_wallet_log::where('wallet_log_plan','RECAPTCHA')
+				    	->where('shop_id',$this->user_info->shop_id)
+				    	->orderBy('wallet_log_date_created','DESC')
+				    	->paginate(10);
+    	return view('member.mlm_recaptcha.mlm_recaptcha_table',$data);
     }
     public function setting()
     {
@@ -40,8 +47,64 @@ class MLM_RecaptchaController extends Member
     		$insert['point'] 	= $request->point;;
     		Tbl_recaptcha_setting::insert($insert);
     	}
-    	$response['call_function'] = 'success';
+    	$response['call_function'] = 'success_setting';
     	return json_encode($response);
+    }
+    public function add_pool()
+    {
+    	$data['page'] = 'Add Amount';
+    	return view('member.mlm_recaptcha.add_pool',$data);
+    }
+    public function submit_add_pool(Request $request)
+    {
+    	$pool = $this->getTotalPool();
+    	$acquired_points = $this->getTotalAcquiredPoints();
+    	$remaining_points = ($pool-$acquired_points);
+    	if($remaining_points+$request->amount>=0)
+    	{
+    		$insert['shop_id'] 			= $this->user_info->shop_id;
+	    	$insert['amount']			= $request->amount;
+	    	$insert['date_created'] 	= Carbon::now();
+
+	    	if(Tbl_recaptcha_pool_amount::insert($insert))
+	    	{
+	    		$response['call_function'] = 'success_pool';
+	    	}
+	    	else
+	    	{
+	    		$response['call_function'] = 'error';
+	    	}
+    	}
+    	else
+    	{
+    		$response['call_function'] = 'negative';
+    	}
+    	
+
+    	return json_encode($response);
+
+    }
+    public function getTotalAcquiredPoints()
+    {
+    	$acquired_points = Tbl_mlm_slot_wallet_log::where('wallet_log_plan','RECAPTCHA')
+				    	->where('shop_id',$this->user_info->shop_id)
+				    	->sum('wallet_log_amount');
+		return $acquired_points;
+    }
+    public function getTotalPool()
+    {
+    	$pool = Tbl_recaptcha_pool_amount::where('shop_id',$this->user_info->shop_id)->sum('amount');
+    	return $pool;
+    }
+    public function load_pool()
+    {
+    	$query = Tbl_recaptcha_pool_amount::where('shop_id',$this->user_info->shop_id)->sum('amount');
+    	return currency('PHP',$query);
+    }
+    public function load_points()
+    {
+    	$query = Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->first()->point;
+    	return currency('PHP',$query);
     }
     
 }

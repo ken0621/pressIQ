@@ -9,16 +9,31 @@
         <input type="hidden" id="category" value="monthly_leave">
     <div class="panel panel-default panel-block panel-title-block">
         <div class="panel-body form-horizontal">
-              <div class="form-group">
+                <div class="form-group">
              
-                    <div class="col-md-3">
-                        <small>Date Start</small>
-                        <input type="text" name="payroll_schedule_leave_start" id="start" class="date_picker form-control payroll_schedule_leave_start" value="{{date("m/d/Y")}}" required>
-                    </div>
-                    <div class="col-md-3">
-                        <small>Date End</small>
-                        <input type="text" name="payroll_schedule_leave_end" id="end" class="date_picker form-control payroll_schedule_leave_end" value="{{date("m/d/Y")}}" required>
-                    </div>
+            <div class="col-md-2">
+                <small>Date Start</small>
+                <input type="text" name="payroll_schedule_leave_start" id="start" class="date_picker form-control payroll_schedule_leave_start" value="{{date("m/d/Y")}}" required style="width: 150px">
+            </div>
+
+            <div class="col-md-2">
+                <small>Date End</small>
+                <input type="text" name="payroll_schedule_leave_end" id="end" class="date_picker form-control payroll_schedule_leave_end" value="{{date("m/d/Y")}}" required style="width: 150px">
+            </div>
+
+            <div class="col-md-2">
+                <small>Company</small>
+                <select class="select-company-name form-control" style="width: 300px">    
+                    <option value="0">All Company</option>
+                      @foreach($_company as $company)
+                      <option value="{{$company['company']->payroll_company_id}}">{{$company['company']->payroll_company_name}}</option> 
+                        @foreach($company['branch'] as $branch)
+                            <option value="{{$branch->payroll_company_id}}">&nbsp;&nbsp;• {{$branch->payroll_company_name}}</option>
+                        @endforeach
+                      @endforeach
+                </select>
+            </div>
+
             </div>
         </div>
     </div>
@@ -70,7 +85,7 @@
 	</div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-        &nbsp;<a href="/member/payroll/leave/v2/monthly_leave_report_excel/{{date("Y-m-d")}}/{{date("Y-m-d")}}"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
+        &nbsp;<a href="/member/payroll/leave/v2/monthly_leave_report_excel/{{date("Y-m-d")}}/{{date("Y-m-d")}}/0"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
     </div>
     </div>
 </form>

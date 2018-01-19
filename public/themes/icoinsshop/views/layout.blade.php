@@ -177,7 +177,15 @@
         <!-- FOOTER -->
         <footer>
             <div class="container">
-                <div class="bottom-text">Copyright © 2018 Icoinsshop. All Rights Reserved.</div>
+                <div class="border"></div>
+                <div class="row clearfix">
+                    <div class="col-md-6 col-xs-6">
+                        <div class="bottom-text pull-left">Copyright © 2018 Icoinsshop. All Rights Reserved.</div>
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        <div class="bottom-text pull-right">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
+                    </div>
+                </div>
             </div>
         </footer>
         

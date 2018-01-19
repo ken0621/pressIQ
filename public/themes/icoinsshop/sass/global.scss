@@ -304,16 +304,20 @@ footer
     background-color: #082c22;
     padding: 50px 0;
 
-    .bottom-text 
+	.border
+	{
+		border-top: 1px solid #39564e;
+		padding-bottom: 20px;
+		margin-top: 50px;
+	}
+
+    .bottom-text
     {
         font-family: $display-text;
         color: #fff;
         font-weight: 400;
         font-size: 15px;
         text-align: center;
-        border-top: 1px solid #39564e;
-        padding-top: 20px;
-        margin-top: 100px;
     }
 }
 

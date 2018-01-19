@@ -1959,8 +1959,7 @@ class Item
     }
     public static function get_last_print()
     {
-        $return = Tbl_warehouse_inventory_record_log::item()->where('item_type_id',5)->where('record_shop_id',Self::getShopId())->where('printed_by',0)->where('ctrl_number','!=',0)->value('ctrl_number');
-
+        $return = Tbl_warehouse_inventory_record_log::item()->where('item_type_id',5)->where('record_shop_id',Self::getShopId())->where('printed_by',0)->where('ctrl_number','!=',0)->orderBy('record_log_id', 'ASC')->value('ctrl_number');
         return $return;
     }
 }

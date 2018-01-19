@@ -3988,50 +3988,57 @@ class ShopMemberController extends Shop
 
         if($data)
         {
-            $shop_id        = $this->shop_info->shop_id;
-            $customer_id    = Self::$customer_info->customer_id;
-            $membership_id  = $data["membership_code"]->membership_id;
-            $sponsor        = $data["sponsor"]->slot_id;
-
-            $slot_no_based_on_name = Self::generate_slot_no_based_on_name(Self::$customer_info->first_name, Self::$customer_info->last_name);
-            
-            $new_slot_no    = $data["pin"];
-            $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
-            $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $slot_no_based_on_name);
-            
-            $return = Item::check_unused_product_code($shop_id, $data["pin"], $data["activation"]);
-
-            if($return)
+            if (isset(Self::$customer_info->customer_id)) 
             {
-                $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
+                $shop_id        = $this->shop_info->shop_id;
+                $customer_id    = Self::$customer_info->customer_id;
+                $membership_id  = $data["membership_code"]->membership_id;
+                $sponsor        = $data["sponsor"]->slot_id;
 
-                if(is_numeric($create_slot))
+                $slot_no_based_on_name = Self::generate_slot_no_based_on_name(Self::$customer_info->first_name, Self::$customer_info->last_name);
+                
+                $new_slot_no    = $data["pin"];
+                $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
+                $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $slot_no_based_on_name);
+                
+                $return = Item::check_unused_product_code($shop_id, $data["pin"], $data["activation"]);
+
+                if($return)
                 {
-                    $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
-                    MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
+                    $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
 
-                    $setting = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
-                    $slot_id = $create_slot;
-
-                    if($setting->plan_settings_placement_required == 0)
+                    if(is_numeric($create_slot))
                     {
-                        $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
-                        Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1);
-                        MLM2::entry($shop_id, $slot_id);
+                        $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
+                        MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
+
+                        $setting = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
+                        $slot_id = $create_slot;
+
+                        if($setting->plan_settings_placement_required == 0)
+                        {
+                            $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+                            Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1);
+                            MLM2::entry($shop_id, $slot_id);
+                        }
+                        
+                        $store["get_success_mode"] = "success";
+                        session($store);
+                        echo json_encode("success");
                     }
-                    
-                    $store["get_success_mode"] = "success";
-                    session($store);
-                    echo json_encode("success");
+                    else
+                    {
+                        echo json_encode($create_slot);
+                    }                
                 }
                 else
                 {
-                    echo json_encode($create_slot);
-                }                
+                    echo json_encode('Item Code already used');
+                }
             }
             else
             {
-                echo json_encode('Item Code already used');
+                echo json_encode('Customer is not logged in');
             }
         }
     }

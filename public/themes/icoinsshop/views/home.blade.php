@@ -165,54 +165,63 @@
     <section id="news" class="page-section wrapper-5">
         <div class="container">
             <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> and Announcement</div>
-            <div class="row clearfix">
-                <div class="col-md-4">
-                    <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">
-                        <div class="row-no-padding clearfix">
-                            <div class="col-md-6 col-xs-6">
-                                <div class="img-holder">
-                                    <img src="/themes/{{ $shop_theme }}/img/news-img-1.jpg">
-                                </div>
+            <div class="news-display">
+                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">
+                    <div class="row-no-padding clearfix">
+                        <div class="col-md-6 col-xs-6">
+                            <div class="img-holder">
+                                <img src="/themes/{{ $shop_theme }}/img/news-img-1.jpg">
                             </div>
-                            <div class="col-md-6 col-xs-6">
-                                <div class="caption-holder">
-                                    <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                    <div class="date">January 15, 2018</div>
-                                </div>
+                        </div>
+                        <div class="col-md-6 col-xs-6">
+                            <div class="caption-holder">
+                                <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                <div class="date">January 15, 2018</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".4s" data-wow-duration="2s">
-                        <div class="row-no-padding clearfix">
-                            <div class="col-md-6 col-xs-6">
-                                <div class="img-holder">
-                                    <img src="/themes/{{ $shop_theme }}/img/news-img-2.jpg">
-                                </div>
+                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".4s" data-wow-duration="2s">
+                    <div class="row-no-padding clearfix">
+                        <div class="col-md-6 col-xs-6">
+                            <div class="img-holder">
+                                <img src="/themes/{{ $shop_theme }}/img/news-img-2.jpg">
                             </div>
-                            <div class="col-md-6 col-xs-6">
-                                <div class="caption-holder">
-                                    <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                    <div class="date">January 05, 2018</div>
-                                </div>
+                        </div>
+                        <div class="col-md-6 col-xs-6">
+                            <div class="caption-holder">
+                                <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                <div class="date">January 05, 2018</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".6s" data-wow-duration="2s">
-                        <div class="row-no-padding clearfix">
-                            <div class="col-md-6 col-xs-6">
-                                <div class="img-holder">
-                                    <img src="/themes/{{ $shop_theme }}/img/news-img-3.jpg">
-                                </div>
+                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".6s" data-wow-duration="2s">
+                    <div class="row-no-padding clearfix">
+                        <div class="col-md-6 col-xs-6">
+                            <div class="img-holder">
+                                <img src="/themes/{{ $shop_theme }}/img/news-img-1.jpg">
                             </div>
-                            <div class="col-md-6 col-xs-6">
-                                <div class="caption-holder">
-                                    <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                    <div class="date">January 07, 2018</div>
-                                </div>
+                        </div>
+                        <div class="col-md-6 col-xs-6">
+                            <div class="caption-holder">
+                                <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                <div class="date">January 15, 2018</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".8s" data-wow-duration="2s">
+                    <div class="row-no-padding clearfix">
+                        <div class="col-md-6 col-xs-6">
+                            <div class="img-holder">
+                                <img src="/themes/{{ $shop_theme }}/img/news-img-3.jpg">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-6">
+                            <div class="caption-holder">
+                                <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                <div class="date">January 07, 2018</div>
                             </div>
                         </div>
                     </div>

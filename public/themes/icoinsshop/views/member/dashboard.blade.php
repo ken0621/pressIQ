@@ -98,15 +98,6 @@
 						</div>
 					</div>
 				</div>
-
-				<div class="square-container">
-					<div class="title">Enter Product Code</div>
-					<div class="sub-container">
-						<div class="chart-legend text-center">
-							<button class="btn btn-ico-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
-						</div>
-					</div>
-				</div>
 			</div>
 
 
@@ -141,7 +132,7 @@
 
 			<div class="col-md-6">
 				<div class="square-container">
-					<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+					<div class="title">Reward Summary</div>
 					<div class="sub-container">
 						<div class="chart-legend">
 							@foreach($_wallet_plan as $plan)
@@ -172,6 +163,16 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="square-container">
+					<div class="title">Enter Product Code</div>
+					<div class="sub-container">
+						<div class="chart-legend text-center">
+							<button class="btn btn-ico-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+						</div>
+					</div>
+				</div>
+
 			</div>
 
 			{{-- <div class="square-container col-md-6">
@@ -283,7 +284,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>Icoinshop</b>.</div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>Icoinsshop</b>.</div>
 	                    </div>
 	                </div>
 	            </div>

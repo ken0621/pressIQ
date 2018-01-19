@@ -1,4 +1,4 @@
-    <h4 class="modal-title"><b>Monthly Leave - {{$month_today_string}}</b> <i><br> Used - Leave Records<br>SL/VL / Summary of all Leave Types<br></i></h4>
+    <h4 class="modal-title"><b>Monthly Leave - : {{$date_start}} to {{$date_end}}</b> <i><br> Used - Leave Records<br>SL/VL / Summary of all Leave Types<br></i></h4>
 
     <div class="modal-body clearfix">
                 <div class="table-responsive">
@@ -26,7 +26,13 @@
                                 <td class="text-center">{{ $leave->payroll_schedule_leave }}</td>
                                 <td class="text-center">{{ $leave->payroll_leave_temp_hours }}</td>
                                 <td class="text-center">{{ $leave->total_leave_consume }}</td>
-                                <td class="text-center">{{ $leave->remaining_leave }}</td>
+                                @foreach($remainings as $remain)
+                                    @foreach($remain as $rem)
+                                          @if($rem->payroll_employee_id == $leave->payroll_employee_id)
+                                          <td class="text-center">{{ $rem->remaining_leave }}</td>
+                                          @endif
+                                    @endforeach
+                                @endforeach
                                 <td class="text-center">{{ $leave->payroll_leave_temp_with_pay == '1' ? 'P' : 'NP'}}</td>
                             </tr>
                                  @endforeach

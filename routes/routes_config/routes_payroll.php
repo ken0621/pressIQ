@@ -431,7 +431,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 		"Member\PayrollController@leavev2_reports");
 	Route::any('/leave/v2/modal_monthly_leave_report',
 		"Member\PayrollController@modal_monthly_leave_report");
-	Route::any('/leave/v2/monthly_leave_report_excel/{month}',
+	Route::any('/leave/v2/monthly_leave_report_excel/{date_start}/{date_end}',
 		"Member\PayrollController@monthly_leave_report_excel");
 	Route::any('/leave/v2/monthly_leave_report_filter',
 		"Member\PayrollController@monthly_leave_report_filter");
@@ -449,7 +449,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 		"Member\PayrollController@withoutpay_leave_report_excel");
 	Route::any('/leave/v2/modal_leave_action_report',
 		"Member\PayrollController@modal_leave_action_report");
-	Route::any('/leave/v2/leave_action_report_excel/{date_start}/{date_end}',
+	Route::any('/leave/v2/leave_action_report_excel/{date_start}/{date_end}/{company}',
 		"Member\PayrollController@leave_action_report_excel");
 
 	//end reporting

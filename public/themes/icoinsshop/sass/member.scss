@@ -145,7 +145,12 @@ $content-text: 'Open Sans', sans-serif;
 .member
 {
 	background-color: #ededed;
-	padding-top: 100px;
+	padding-top: 80px;
+
+	@media screen and (max-width: 800px)
+	{
+		padding-top: 0;
+	}
 
 	.members
 	{

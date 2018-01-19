@@ -24,12 +24,13 @@ function modal_create_leave_tempv2()
 
 	function load_monthly_leave_report()
 	{    
-		$(".filter-by-month-leave").on("change", function(e)
+		$(".payroll_schedule_leave_end").on("change", function(e)
 		{
-
-			var month      		= $(this).val();
-			ajaxdata.month      = month;
+			ajaxdata.company_id = $('.select-company-name').val();
 			ajaxdata._token 	= $("._token").val();
+			ajaxdata.category	= $("#category").val();
+			ajaxdata.date_start = $("#start").val();
+			ajaxdata.date_end   = $(this).val();
 			$('#spinningLoader').show();
 			$(".load-filter-data").hide();
 	        setTimeout(function(e){
@@ -49,6 +50,61 @@ function modal_create_leave_tempv2()
 			});
 			}, 700);
 		});
+
+		$(".payroll_schedule_leave_start").on("change", function(e)
+		{
+			ajaxdata.company_id = $('.select-company-name').val();
+			ajaxdata._token 	= $("._token").val();
+			ajaxdata.category	= $("#category").val();
+			ajaxdata.date_end   = $("#end").val();
+			ajaxdata.date_start = $(this).val();
+			$('#spinningLoader').show();
+			$(".load-filter-data").hide();
+	        setTimeout(function(e){
+			$.ajax(
+			{
+				url:"/member/payroll/leave/v2/monthly_leave_report_filter",
+				type:"post",
+				data: ajaxdata,
+				
+				success: function(data)
+				{
+					$('#spinningLoader').hide();
+					$(".load-filter-data").show();
+					$(".load-filter-data").html(data);
+					// alert(data);
+				}
+			});
+			}, 700);
+		});
+
+		$('.select-company-name').change(function()
+        {
+            ajaxdata.company_id = this.value;
+            ajaxdata._token 	= $("._token").val();
+			ajaxdata.category	= $("#category").val();
+			ajaxdata.date_end   = $("#end").val();
+			ajaxdata.date_start = $("#start").val();
+
+			$('#spinningLoader').show();
+			$(".load-filter-data").hide();
+          	setTimeout(function(e){
+			$.ajax(
+			{
+				url:"/member/payroll/leave/v2/monthly_leave_report_filter",
+				type:"post",
+				data: ajaxdata,
+				
+				success: function(data)
+				{
+					$('#spinningLoader').hide();
+					$(".load-filter-data").show();
+					$(".load-filter-data").html(data);
+					// alert(data);
+				}
+			});
+			}, 700);
+        });
 	}
 
 	function remove_tag()

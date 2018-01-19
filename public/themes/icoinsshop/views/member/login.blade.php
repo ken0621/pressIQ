@@ -1,14 +1,14 @@
 @extends("layout")
 @section("content")
-<div id="home" class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/cover-photo.jpg')">
+<div id="home" class="login-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/cover-photo.jpg')">
 	<div style="padding: 100px 0 50px 0;">
 		<div class="container">
 			<input type="hidden" id="_token" value="{{csrf_token()}}">
-			<div class="register">
+			<div class="login">
 				<div class="logo-holder">
 					<img src="/themes/{{ $shop_theme }}/img/logo-2.png" alt="">
 				</div>		
-				<div class="register-form">
+				<div class="login-form">
 
 					@if (session("error"))
 					    <div class="alert">
@@ -30,13 +30,13 @@
 						{{ csrf_field() }}
 						<div class="form-group">
 							<div class="form-input">
-								<div class="register-label">EMAIL</div>
+								<div class="login-label">EMAIL</div>
 								<input class="form-control input-sm" type="email" name="email" placeholder="Email / Username">
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="form-input">
-								<div class="register-label">PASSWORD</div>
+								<div class="login-label">PASSWORD</div>
 								<input class="form-control input-sm" type="password" name="password" placeholder="Password">
 							</div>
 						</div>

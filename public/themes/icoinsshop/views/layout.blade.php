@@ -17,8 +17,8 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500" rel="stylesheet">
     <!-- GLOBAL CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/mobile_res.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/mobile_res.css">
     
     @include("frontend.ghead")
     <!-- OTHER CSS -->
@@ -27,14 +27,6 @@
     .content
     {
         background-color: transparent;
-    }
-    .navbar.sticky
-    {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 100;
     }
     </style>
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
@@ -105,6 +97,8 @@
                     <li> <a onclick="off()" href="/#howitworks"><i class="fa fa-question" aria-hidden="true"></i> HOW IT WORKS</a></li>
                     <li> <a onclick="off()" href="/#products"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS</a></li>
                     <li> <a onclick="off()" href="/#news"><i class="fa fa-newspaper-o" aria-hidden="true"></i> NEWS</a></li>
+                    <li> <a onclick="off()" href="/members/login"><i class="fa fa-sign-in" aria-hidden="true"></i> SIGNIN</a></li>
+                    <li> <a onclick="off()" href="/members/register"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> REGISTER</a></li>
                 </ul>
             @endif
         </nav>
@@ -117,7 +111,7 @@
         </div>
 
         <!-- HEADER -->
-        <div class="header-container">
+        <header class="header-container">
             <div class="nav-holder">
                 <div class="container">
                     <div class="row-no-padding clearfix">
@@ -173,7 +167,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </header>
 
         <!-- CONTENT -->
         <div id="scroll-to" class="clearfix">
@@ -183,7 +177,15 @@
         <!-- FOOTER -->
         <footer>
             <div class="container">
-                <div class="bottom-text">Copyright © 2018 Icoinsshop. All Rights Reserved </div>
+                <div class="border"></div>
+                <div class="row clearfix">
+                    <div class="col-md-6 col-xs-6">
+                        <div class="bottom-text pull-left">Copyright © 2018 Icoinsshop. All Rights Reserved.</div>
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        <div class="bottom-text pull-right">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
+                    </div>
+                </div>
             </div>
         </footer>
         
@@ -191,8 +193,8 @@
     
     @include("frontend.gfoot")
     {{-- GLOBALS --}}
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/smooth-scroll.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/smooth-scroll.js"></script>
     
     <!-- FB WIDGET -->
     <div id="fb-root"></div>

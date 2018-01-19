@@ -39,9 +39,9 @@
                             @if(!isset($page['url']))
                                  @foreach($page['submenu'] as $sub_page)
                                 <tr>
-                                    <td>&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i>  {{ $sub_page["label"] }}</td>
-                                    <td class="text-left">{!! $sub_page["status"] !!}</td>
-                                    <td class="text-right">{!! $sub_page["developer"] !!}</td>
+                                    <td>&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i>  {{ isset($sub_page["label"]) ? $sub_page["label"] : "None" }}</td>
+                                    <td class="text-left">{!! isset($sub_page["status"]) ? $sub_page["status"] : "None" !!}</td>
+                                    <td class="text-right">{!! isset($sub_page["developer"]) ? $sub_page["developer"] : "None" !!}</td>
                                 </tr>
                                  @endforeach
                             @endif

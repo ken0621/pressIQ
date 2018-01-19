@@ -6,7 +6,7 @@
 			<div class="info col-md-12">
 				<div class="row clearfix">
 					<div class="image col-md-4">
-						<img src="{{ $customer->profile ? $customer->profile : '/assets/front/img/avatar.png' }}">
+						<img src="{{ isset($customer->profile) ? $customer->profile : '/assets/front/img/avatar.png' }}">
 					</div>
 					<div class="info-holder col-md-8">
 						@if($customer->middle_name)

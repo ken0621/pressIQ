@@ -3,7 +3,7 @@
 <form class="global-submit form-horizontal" role="form" action="{link_submit_here}" method="post">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
-        <h4 class="modal-title"><b>{{ date("F d, Y",strtotime($timesheet_db->payroll_time_date)) }}</b> &raquo; {{ $employee_info->payroll_employee_first_name }} {{ $employee_info->payroll_employee_last_name }} (Employee No. {{ $employee_info->payroll_employee_number == "" ? "00" : $employee_info->payroll_employee_number }}) </h4>
+        <h4 class="modal-title"><b>{{ isset($timesheet_db->payroll_time_date) ? date("F d, Y",strtotime($timesheet_db->payroll_time_date)) : 'Unknown Date' }}</b> &raquo; {{ isset($employee_info->payroll_employee_first_name) ? $employee_info->payroll_employee_first_name : '' }} {{ isset($employee_info->payroll_employee_last_name) ? $employee_info->payroll_employee_last_name : '' }} (Employee No. {{ isset($employee_info->payroll_employee_number) ? ($employee_info->payroll_employee_number == "" ? "00" : $employee_info->payroll_employee_number) : '' }}) </h4>
     </div>
     <div class="modal-body clearfix">
         <div>

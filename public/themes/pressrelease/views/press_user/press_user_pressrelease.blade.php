@@ -164,7 +164,7 @@
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue To Send &raquo;</a></button></span>
+                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue &raquo;</a></button></span>
                       <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                       @endif
                     <div class="button-container"></div>

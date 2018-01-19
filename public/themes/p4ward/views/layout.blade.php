@@ -11,7 +11,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
-        <link rel="icon" href="/themes/{{ $shop_theme }}/img/header-logo.png" type="image/jpg" />
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/favicon.png" type="image/jpg" />
     
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
@@ -180,6 +180,12 @@
                                     <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
                                     <li><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></li>
                                     <li><a class="smoth-scroll" href="/#contactus">CONTACT</a></li>
+                                @elseif(Request::segment(1)=="about")
+                                    <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                                    <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
+                                    <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
+                                    <li><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></li>
+                                    <li><a class="smoth-scroll" href="/#contactus">CONTACT</a></li>
                                 @else
                                     <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                     <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
@@ -204,14 +210,14 @@
             <div class="container">
                 <div class="footer-container">
                     <div class="upper row clearfix">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="footer-icon-container">
                                 <img src="\themes\p4ward\img\p4ward-icon-footer.png">
                             </div>
                             <div><p>P4ward Global Marketing started through the concept of giving. On December 22, 2016, a tragedy hit our family. An accident happened in the apartment of my brother which started a fire that engulfed the entire flat including his body...</div>
                             <div class="button-container"><a href="#">READ MORE</a></div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                              <div class="footer-title-container">
                                 <p class="footer-title">NAVIGATION</p>
                             </div>
@@ -231,12 +237,22 @@
                             @endif
 
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="footer-title-container">
                                 <p class="footer-title">PRODUCT PORTFOLIO</p>
                             </div>
                             <div class="product-list"><a href="#">DON ORGANICS COFFEE SCRUB</a></div>
                             <div class="product-list"><a href="#">DON ORGANICS RED RICE SCRUB</a></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="footer-title-container">
+                                <p class="footer-title">FOLLOW US ON</p>
+                            </div>
+                            <div class="social-icon-container">
+                                <a href="https://facebook.com/p4ward"><span><i class="fa fa-facebook-square"></i></span></a>
+                                <a href="https://mobile.twitter.com/P4wardph"><span><i class="fa fa-twitter-square"></i></span></a>
+                                <a href="https://www.instagram.com/p4wardph/"><span><i class="fa fa-instagram"></i></span></a>
+                            </div>
                         </div>
                     </div>
                 </div>

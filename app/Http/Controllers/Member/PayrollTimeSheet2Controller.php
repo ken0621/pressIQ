@@ -298,8 +298,11 @@ class PayrollTimeSheet2Controller extends Member
 
 		foreach ($_time_sheet_record as $key => $time_sheet_record) 
 		{
-			$update["payroll_time_shee_activity"] = Request::input("remarks")[$key];
-			Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $time_sheet_record->payroll_time_sheet_record_id)->update($update);
+			if(isset(Request::input("remarks")[$key]))
+			{
+				$update["payroll_time_shee_activity"] = Request::input("remarks")[$key];
+				Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $time_sheet_record->payroll_time_sheet_record_id)->update($update);
+			}
 		}
 		
 		//absent and no time_sheet_record
@@ -877,7 +880,7 @@ class PayrollTimeSheet2Controller extends Member
 					if (Payroll::time_float(Payroll::time_diff($rec->time_sheet_in,$rec->time_sheet_out)) >= $temp_time_float) 
 					{
 						$temp_time_float = Payroll::time_float(Payroll::time_diff($rec->time_sheet_in,$rec->time_sheet_out));
-						$_timesheet[$from]->branch_source_company_id = $rec->branch_id;
+						$_timesheet[$from]->branch_source_company_id = isset($rec->branch_id) ? $rec->branch_id : 0;
 					}
 				}
 			}

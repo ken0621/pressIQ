@@ -12,7 +12,7 @@ body
 	background-color: #ededed;
 }
 
-.slider-wrapper 
+.register-wrapper 
 {
 	position: relative;
 	width: 100%;
@@ -20,12 +20,14 @@ body
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-size: cover;
+
 	.register
 	{
 		font-family: $content-text;
 		letter-spacing: 0.2px;
 		margin: 25px 0;
 		background-color: #fff;
+
 		table
 		{
 			table-layout: fixed;
@@ -360,7 +362,7 @@ body
 {
 	.modal-header
 	{
-		background-color: #0466AF;
+		background-color: #e1890b;
 		color: #fff;
 		font-size: 13px;
 		font-weight: 600;
@@ -381,26 +383,29 @@ body
 	{
 		.btn
 		{
-			color: #ffffff;
+			color: #fff;
 			font-weight:$bold;
 			font-size: 13px;
 			border-radius: 1.5px;
 			padding: 10px 25px;
 			margin-left: 12.5px;
+
 			&:last-child
 			{
 				margin-left: 0;
 			}
 		}
+		
 		.btn-semi
 		{
 			@include transition(0.2s);
-			background-color: rgba(4,102,175,0.9);
+			background-color: #e1890b;
 		}
+
 		.btn-pure
 		{
 			@include transition(0.2s);
-			background-color: #0466AF;
+			background-color: #e1890b;
 
 		}
 	}

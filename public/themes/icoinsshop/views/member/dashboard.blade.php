@@ -81,19 +81,23 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 				
 				<div class="square-containr">
 					<div class="title"> Reward Points</div>
 					<div class="sub-container">
 						<div class="chart-legend" style="max-height: auto;">
-							<div class="holder">
+							{{-- <div class="holder">
 								<div class="color fifth-pgc"></div>
 								<div class="name"><span>5th Pair GC</span> <div class="name fifth-pgc-text">{{ $points->display_binary }}</div></div>
+							</div> --}}
+							<div class="holder">
+								<div class="color fifth-pgc"></div>
+								<div class="name"><span>KROPS GC</span> <div class="name fifth-pgc-text">{{isset($krops_gc) ? currency('',$krops_gc)." POINT(S)" : '0.00 POINT(S)' }}</div></div>
 							</div>
 						</div>
 					</div>
-				</div> --}}
+				</div>
 
 				<div class="square-container">
 					<div class="title">Enter Product Code</div>
@@ -170,7 +174,7 @@
 				</div>
 			</div>
 
-			<div class="square-container col-md-6">
+			{{-- <div class="square-container col-md-6">
 				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
 					@if(count($_point_plan) > 0)
@@ -193,7 +197,7 @@
 						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
 					@endif
 				</div>
-			</div>
+			</div> --}}
 
 		</div>
 
@@ -264,7 +268,7 @@
 								</div>
 								@endforeach
 							@else
-								<div class="text-center" style="padding: 20px">You don't have any pyet.</div>
+								<div class="text-center" style="padding: 20px">You don't have any rewards yet.</div>
 							@endif
 						</div>
 					</div>

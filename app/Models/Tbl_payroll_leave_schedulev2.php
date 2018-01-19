@@ -108,11 +108,16 @@ class Tbl_payroll_leave_schedulev2 extends Model
         return $query;
 	}
 
-	public function scopegetviewleavedata($query, $payroll_employee_id=0, $payroll_leave_employee_id=0)
+	public function scopegetviewleavedata($query, $payroll_employee_id=0, $payroll_leave_employee_id=0,$date = array())
 	{
-			$date[0] = date('Y-01-01');
-			$date[1] = date('Y-12-31');
-		
+
+			if(empty($date))
+			{
+				$date[0] = date('2010-01-01');
+				$date[1] = date('Y-12-31');
+			}
+
+
 			 $query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
              ->join("tbl_payroll_employee_basic","tbl_payroll_leave_employee_v2.payroll_employee_id","=","tbl_payroll_employee_basic.payroll_employee_id")
              ->join("tbl_payroll_leave_tempv2","tbl_payroll_leave_employee_v2.payroll_leave_temp_id","=","tbl_payroll_leave_tempv2.payroll_leave_temp_id")
@@ -130,7 +135,7 @@ class Tbl_payroll_leave_schedulev2 extends Model
 	public function scopegetallemployeeleavedata($query,$payroll_leave_employee_id=0)
 	{
 
-			$date[0] = date('Y-01-01');
+			$date[0] = date('2010-01-01');
 			$date[1] = date('Y-12-31');
 		
 
@@ -163,11 +168,9 @@ class Tbl_payroll_leave_schedulev2 extends Model
         return $query;
 	}
 
-	public function scopegetleavewithpay($query, $payroll_employee_id=0, $payroll_leave_employee_id=0)
+	public function scopegetleavewithpay($query, $payroll_employee_id=0, $payroll_leave_employee_id=0,$date = "0000-00-00")
 	{
-			$date[0] = date('Y-01-01');
-			$date[1] = date('Y-12-31');
-		
+
 			 $query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
              ->join("tbl_payroll_employee_basic","tbl_payroll_leave_employee_v2.payroll_employee_id","=","tbl_payroll_employee_basic.payroll_employee_id")
              ->join("tbl_payroll_leave_tempv2","tbl_payroll_leave_employee_v2.payroll_leave_temp_id","=","tbl_payroll_leave_tempv2.payroll_leave_temp_id")
@@ -183,11 +186,8 @@ class Tbl_payroll_leave_schedulev2 extends Model
     
 	}
 
-	public function scopegetleavewithoutpay($query, $payroll_employee_id=0, $payroll_leave_employee_id=0)
-	{
-			$date[0] = date('Y-01-01');
-			$date[1] = date('Y-12-31');
-		
+	public function scopegetleavewithoutpay($query, $payroll_employee_id=0, $payroll_leave_employee_id=0,$date = "0000-00-00")
+	{	
 			 $query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
              ->join("tbl_payroll_employee_basic","tbl_payroll_leave_employee_v2.payroll_employee_id","=","tbl_payroll_employee_basic.payroll_employee_id")
              ->join("tbl_payroll_leave_tempv2","tbl_payroll_leave_employee_v2.payroll_leave_temp_id","=","tbl_payroll_leave_tempv2.payroll_leave_temp_id")
@@ -205,10 +205,8 @@ class Tbl_payroll_leave_schedulev2 extends Model
     
 	}
 
-	public function scopegetremainings($query, $payroll_employee_id=0)
+	public function scopegetremainings($query, $payroll_employee_id=0,$date = "0000-00-00")
 	{
-		$date[0] = date('Y-01-01');
-		$date[1] = date('Y-12-31');
 
 		$query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_leave_employee_id','=','tbl_payroll_leave_schedulev2.payroll_leave_employee_id')
 				  ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_tempv2.payroll_leave_temp_id','=','tbl_payroll_leave_employee_v2.payroll_leave_temp_id')

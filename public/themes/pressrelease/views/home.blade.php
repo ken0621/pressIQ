@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="caption-container">
-                        <span class="caption-black">Distribute your News using</span><span class="caption-red"> Intelligent</span><span class="caption-black"> and up to date database</span>
+                        <span class="caption-black">Distribute your News using</span><span class="caption-red"> Our Intelligent</span><span class="caption-black"> and most updated media database</span>
                     </div>
                     <div class="details-container">
                         <span class="details-blue">Contacts of media journalist and editors</span><span class="details-black"> across all regions including Asia, North America, Europe and the Middle East</span>
@@ -36,7 +36,7 @@
                         <span class="details-blue">Media monitoring</span><span class="details-black"> receive a full report of coverage after your distribution campaign</span>
                     </div>
                     <div class="details-container">
-                        <span class="details-blue">Real-time</span><span class="details-black"> reporting and measurable reults</span>
+                        <span class="details-blue">Real-time</span><span class="details-black"> reporting and measurable results</span>
                     </div>
                     <div class="details-container">
                         <span class="details-blue">Advanced segmentation</span><span class="details-black"> by Audience, media, demographic, and Category</span>
@@ -89,7 +89,7 @@
         </div>
     </div>
 
-    <div class="wrapper-3">
+    {{-- <div class="wrapper-3">
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-3">
@@ -115,7 +115,7 @@
 
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>

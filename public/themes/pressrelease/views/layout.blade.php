@@ -54,20 +54,20 @@
     <div id="home" class="subheader-container">
         <div class="container">
             @if($customer)
-            <div class="left-container">
+            {{-- <div class="left-container">
                 <i class="fa fa-phone" aria-hidden="true"></i>
                 <span>+4736 - 9806 - 890</span>
                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                 <span>pressiq@gmail.com</span>
-            </div>
+            </div> --}}
             <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span><span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
             @else
-            <div class="left-container">
+            {{-- <div class="left-container">
                 <i class="fa fa-phone" aria-hidden="true"></i>
                 <span>+4736 - 9806 - 890</span>
                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                 <span>pressiq@gmail.com</span>
-            </div>
+            </div> --}}
             <div class="right-container">
                 @if(session()->has('user_email'))
                 <span class="smoth-scroll" style="cursor: pointer; text-transform: capitalize;" onClick="location.href='/pressuser/dashboard'">{{ session('user_first_name')}}  {{ session('user_last_name')}}</span>
@@ -114,15 +114,15 @@
                     <nav class="navirino">
                         <ul>
                             @if(Request::segment(1)=="members")
-                                <li><a class="smoth-scroll" href="/#home">Home</a></li>
-                                <li><a class="smoth-scroll" href="/newsroom">News Room</a></li>
-                                <li><a class="smoth-scroll" href="/about">About</a></li>
-                                <li><a class="smoth-scroll" href="/contact">Contact Us</a></li>
+                                <li><a href="/#home" class="link-nav {{ Request::segment(1) == '' ? 'active' : '' }}">HOME</a></li>
+                                <li><a href="/contact" class="link-nav {{ Request::segment(1) == 'newsroom' ? 'active' : '' }}">NEWS ROOM</a></li>
+                                <li><a href="/about" class="link-nav {{ Request::segment(1) == 'about' ? 'active' : '' }}" >ABOUT US</a></li>
+                                <li><a href="/contact" class="link-nav {{ Request::segment(1) == 'contact' ? 'active' : '' }}">CONTACT US</a></li>
                             @else
-                                <li><a class="smoth-scroll" href="/#home">Home</a></li>
-                                <li><a class="smoth-scroll" href="/newsroom">News Room</a></li>
-                                <li><a class="smoth-scroll" href="/about">About</a></li>
-                                <li><a class="smoth-scroll" href="/contact">Contact Us</a></li>
+                                <li><a href="/#home" class="link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a></li>
+                                <li><a href="/contact" class="link-nav {{ Request::segment(1) == 'newsroom' ? 'active' : '' }}">NEWS ROOM</a></li>
+                                <li><a href="/about" class="link-nav {{ Request::segment(1) == 'about' ? 'active' : '' }}" >ABOUT US</a></li>
+                                <li><a href="/contact" class="link-nav {{ Request::segment(1) == 'contact' ? 'active' : '' }}">CONTACT US</a></li>
                             @endif
                         </ul>
                     </nav>

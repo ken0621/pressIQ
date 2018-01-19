@@ -1,7 +1,6 @@
 @extends("layout")
 @section("content")
 <div class="content">
-
     <!-- Media Slider -->
     <div id="home" class="page-section slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/cover-photo.jpg')">
         <div class="container">
@@ -116,37 +115,48 @@
     <section class="page-section wrapper-4">
         <div id="products" class="container unskew">
             <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>ICO</span> Token Products <div class="underline"></div></div>
-            <div class="row clearfix">
-                <div class="col-md-4">
-                    <div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
-                        <div class="top">
-                            <img src="/themes/{{ $shop_theme }}/img/krops.jpg">
-                        </div>
-                        <div class="bottom">
-                            <div class="texts"> KROPS is offering tokenized shares of the company through an offering of 16,000,000 or sixteen million KROPS tokens of KropCoins.</div>
-                            <div class="btn-container">
-                                <a href="javascript:"><button class="btn-more-info">MORE INFO</button></a>
-                                <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
-                            </div>
+            <div class="product-display">
+
+                <div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
+                    <div class="top">
+                        <img src="/themes/{{ $shop_theme }}/img/krops.jpg">
+                    </div>
+                    <div class="bottom">
+                        <div class="texts"> KROPS is offering tokenized shares of the company through an offering of 16,000,000 or sixteen million KROPS tokens of KropCoins.</div>
+                        <div class="btn-container">
+                            <a href="javascript:"><button class="btn-more-info">MORE INFO</button></a>
+                            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="product-holder wow fadeIn" data-wow-delay=".4s" data-wow-duration="2s">
-                        <div class="img-holder">
-                            <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
+            
+                <div class="product-holder wow fadeIn" data-wow-delay=".4s" data-wow-duration="2s">
+                    <div class="img-holder">
+                        <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
+                    </div>
+                    <div class="text">Other tokens are coming soon!</div>
+                </div>
+
+                <div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
+                    <div class="top">
+                        <img src="/themes/{{ $shop_theme }}/img/krops.jpg">
+                    </div>
+                    <div class="bottom">
+                        <div class="texts"> KROPS is offering tokenized shares of the company through an offering of 16,000,000 or sixteen million KROPS tokens of KropCoins.</div>
+                        <div class="btn-container">
+                            <a href="javascript:"><button class="btn-more-info">MORE INFO</button></a>
+                            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
                         </div>
-                        <div class="text">Other tokens are coming soon!</div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="product-holder wow fadeIn" data-wow-delay=".6s" data-wow-duration="2s">
-                        <div class="img-holder">
-                            <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
-                        </div>
-                        <div class="text">Other tokens are coming soon!</div>
+            
+                <div class="product-holder wow fadeIn" data-wow-delay=".6s" data-wow-duration="2s">
+                    <div class="img-holder">
+                        <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
                     </div>
+                    <div class="text">Other tokens are coming soon!</div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -154,11 +164,11 @@
     <!-- NEWS AND ANNOUNCEMENTS -->
     <section id="news" class="page-section wrapper-5">
         <div class="container">
-            <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> an Announcement</div>
+            <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> and Announcement</div>
             <div class="row clearfix">
                 <div class="col-md-4">
                     <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">
-                        <div class="row clearfix">
+                        <div class="row-no-padding clearfix">
                             <div class="col-md-6 col-xs-6">
                                 <div class="img-holder">
                                     <img src="/themes/{{ $shop_theme }}/img/news-img-1.jpg">
@@ -232,8 +242,20 @@ $(document).ready(function($)
         $(".fadeMe").css("opacity", 1 - $(window).scrollTop() / 250);
     });
 
+    // $('.single-item').slick
+    // ({
+    //     prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/img/arrow-left.png'>",
+    //     nextArrow:"<img class='a-right control-c next slick-next' src='/themes/img/arrow-right.png'>",
+    //     dots: false,
+    //     autoplay: true,
+    //     slidesToShow: 3,
+    //     autoplaySpeed: 2000,
+    // });
+
 });
 
 </script>
+
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
 
 @endsection

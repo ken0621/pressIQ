@@ -97,10 +97,10 @@ class TransactionWriteCheck
 			$ins['transaction_refnum']		= $insert['transaction_refnumber'];
 			$ins['wc_reference_id']         = $insert['vendor_id'];
 	        $ins['wc_reference_name']       = $insert['wc_reference_name'];
-	        $ins['wc_customer_vendor_email']= $insert['wc_customer_vendor_email'];
+	        $ins['wc_customer_vendor_email']= $insert['vendor_email'];
 	        $ins['wc_mailing_address']      = $insert['wc_mailing_address'];
 	        $ins['wc_cash_account']         = 0;
-	        $ins['wc_payment_date']         = $insert['wc_payment_date'];
+	        $ins['wc_payment_date']         = date('Y-m-d', strtotime($insert['wc_payment_date']));
 	        $ins['wc_memo']                 = $insert['wc_memo'];
 	        $ins['date_created']            = Carbon::now();
 
@@ -131,7 +131,7 @@ class TransactionWriteCheck
 
         return $return;
 	}
-    public static function postUpdate($shop_id, $insert, $insert_item)
+    public static function postUpdate($write_check_id, $shop_id, $insert, $insert_item)
     {
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);
         if(!$val)
@@ -140,7 +140,7 @@ class TransactionWriteCheck
             $ins['transaction_refnum']      = $insert['transaction_refnumber'];
             $ins['wc_reference_id']         = $insert['vendor_id'];
             $ins['wc_reference_name']       = $insert['wc_reference_name'];
-            $ins['wc_customer_vendor_email']= $insert['wc_customer_vendor_email'];
+            $ins['wc_customer_vendor_email']= $insert['vendor_email'];
             $ins['wc_mailing_address']      = $insert['wc_mailing_address'];
             $ins['wc_cash_account']         = 0;
             $ins['wc_payment_date']         = date('Y-m-d', strtotime($insert['wc_payment_date']));
@@ -159,7 +159,7 @@ class TransactionWriteCheck
             $entry["reference_id"]      = $write_check_id;
             $entry["name_id"]           = $insert['vendor_id'];
             $entry["name_reference"]    = $insert['wc_reference_name'];
-            $entry["total"]             = collect($insert_item)->sum('itemline_amount');
+            $entry["total"]             = $total;
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
             $entry["ewt"]               = '';
@@ -187,7 +187,6 @@ class TransactionWriteCheck
             $itemline[$key]['wcline_qty']         = $value['item_qty'];
             $itemline[$key]['wcline_rate']        = $value['item_rate'];
             $itemline[$key]['wcline_amount']      = $value['item_amount'];
-
         }
         if(count($itemline) > 0)
         {

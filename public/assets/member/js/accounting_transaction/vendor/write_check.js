@@ -370,7 +370,7 @@ function write_check()
 		$parent.find(".txt-qty").val(1).change();
 		if($this.find("option:selected").attr("has-um"))
 		{
-			$parent.find(".txt-qty").attr("disabled",true);
+			$parent.find(".txt-qty").attr("disabled",false);
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$parent.find(".txt-qty").removeAttr("disabled");

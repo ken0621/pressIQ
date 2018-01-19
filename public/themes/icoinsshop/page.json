@@ -44,6 +44,7 @@
 			"size":"3"
 		}
 	},
+	
 	"replicated-link":
 	{
 		"replicated_video_link" :
@@ -54,6 +55,7 @@
 			"size":"12"
 		}
 	},
+
 	"non-member-video":
 	{
 		"nonmember_video_link" :
@@ -64,6 +66,7 @@
 			"size":"12"
 		}
 	},
+
 	"videos":
 	{
 		"product_video_maintenance" :
@@ -79,6 +82,7 @@
 			"size":"12"
 		}
 	},
+
 	"footer-details":
 	{
 		"footer_company_profile" :

@@ -108,7 +108,7 @@ class Tbl_payroll_leave_schedulev2 extends Model
         return $query;
 	}
 
-	public function scopegetviewleavedata($query, $payroll_employee_id=0, $payroll_leave_employee_id=0,$date = array())
+	public function scopegetviewleavedata($query, $payroll_employee_id=0, $payroll_leave_employee_id=0,$date = array(),$company = 0, $shop_id = 0)
 	{
 
 			if(empty($date))
@@ -127,6 +127,16 @@ class Tbl_payroll_leave_schedulev2 extends Model
 			 ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id', $payroll_leave_employee_id)
 			 ->where('tbl_payroll_leave_schedulev2.payroll_leave_schedule_archived',0)
              ->whereBetween('tbl_payroll_leave_schedulev2.payroll_schedule_leave', $date);
+
+
+              if ($company !=0) 
+	          {
+	          	   	$query->where('tbl_payroll_employee_basic.payroll_employee_company_id',$company);
+	          }
+	      	  else
+	      	  {
+	      	  		$query->where('tbl_payroll_leave_schedulev2.shop_id',$shop_id);
+	      	  }
 
             return $query;                                                     
     
@@ -152,7 +162,7 @@ class Tbl_payroll_leave_schedulev2 extends Model
         return $query;
 	}
 
-	public function scopegetmonthleavereportfilter($query,$payroll_employee_id=0,$date = "0000-00-00")
+	public function scopegetmonthleavereportfilter($query,$payroll_employee_id=0,$date = "0000-00-00",$company = 0, $shop_id = 0)
 	{	
 
 			 $query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
@@ -162,7 +172,17 @@ class Tbl_payroll_leave_schedulev2 extends Model
              ->groupBy('tbl_payroll_leave_schedulev2.payroll_leave_schedule_id')
 			 ->where('tbl_payroll_leave_schedulev2.payroll_leave_schedule_archived',0)
 			 ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id)
-			 ->whereBetween('tbl_payroll_leave_schedulev2.payroll_schedule_leave', $date);  
+			 ->whereBetween('tbl_payroll_leave_schedulev2.payroll_schedule_leave', $date); 
+
+			 
+              if ($company !=0) 
+	          {
+	          	   	$query->where('tbl_payroll_employee_basic.payroll_employee_company_id',$company);
+	          }
+	      	  else
+	      	  {
+	      	  		$query->where('tbl_payroll_leave_schedulev2.shop_id',$shop_id);
+	      	  } 
              
 
         return $query;

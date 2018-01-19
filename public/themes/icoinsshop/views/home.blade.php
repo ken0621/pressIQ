@@ -153,7 +153,7 @@
     <!-- NEWS AND ANNOUNCEMENTS -->
     <section id="news" class="page-section wrapper-5">
         <div class="container">
-            <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> an Announcement</div>
+            <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> and Announcement</div>
             <div class="row clearfix">
                 <div class="col-md-4">
                     <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">

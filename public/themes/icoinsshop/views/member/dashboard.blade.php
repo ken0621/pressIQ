@@ -141,7 +141,7 @@
 
 			<div class="col-md-6">
 				<div class="square-container">
-					<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+					<div class="title">Reward Summary</div>
 					<div class="sub-container">
 						<div class="chart-legend">
 							@foreach($_wallet_plan as $plan)

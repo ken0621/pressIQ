@@ -101,6 +101,40 @@
     toastr.error("Please select a file");
     @endif
 </script>
+{{-- table pagination --}}
+<script type="text/javascript">
+    $(window).on('hashchange', function() {
+        if (window.location.hash) {
+            var page = window.location.hash.replace('#', '');
+            if (page == Number.NaN || page <= 0) {
+                return false;
+            } else {
+                getPosts(page);
+            }
+        }
+    });
+    $(document).ready(function() {
+        getPosts(1);
+        $(document).on('click', '.pagination a', function (e) {
+            getPosts($(this).attr('href').split('page=')[1]);
+            e.preventDefault();
+        });
+    });
+    function getPosts(page) {
+        $.ajax(
+        {
+            url : '/member/merchant/commission_report/table?page=' + page,
+            type: 'get',
+        }).done(function (data) 
+        {
+            $('.load-commission-table-here').html(data);
+            location.hash = page;
+        }).fail(function () 
+        {
+            alert('Posts could not be loaded.');
+        });
+    }
+</script>
 @endsection
 <script type="text/javascript" src="/assets/themes/js/jquery.min.js?v=1"></script>
 <script type="text/javascript">

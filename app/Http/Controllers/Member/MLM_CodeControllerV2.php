@@ -303,8 +303,8 @@ class MLM_CodeControllerV2 extends Member
             {
                 if($request->type == "register_form")
                 {
-                    $paper_size = "a6";
-                    $orientation = 'landscape';
+                    $paper_size = "a4";
+                    $orientation = null;
                 }
             }
             $pdf = view('member.mlm_code_v2.print_code_pdf', $data);

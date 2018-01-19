@@ -726,7 +726,7 @@ class PayrollController extends Member
           // die(var_dump(Request::all()));
           $_data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
           $first = $_data[0]; 
-          
+          die(var_dump($_data));
           /* check index exist */
           
           if(isset($first['company']) && isset($first['first_name']) && isset($first['department']) && isset($first['start_date']))
@@ -7150,9 +7150,8 @@ class PayrollController extends Member
      public function leave_schedule()
      {
           $data['_upcoming'] = Self::leave_schedule_break();
-
           $data['_used'] = Self::leave_schedule_break('<');
-
+          
           return view('member.payroll.leave_schedule', $data);
      }
 

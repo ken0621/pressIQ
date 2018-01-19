@@ -177,7 +177,7 @@
         <!-- FOOTER -->
         <footer>
             <div class="container">
-                <div class="bottom-text">Copyright © 2018 Icoinsshop. All Rights Reserved </div>
+                <div class="bottom-text">Copyright © 2018 Icoinsshop. All Rights Reserved.</div>
             </div>
         </footer>
         

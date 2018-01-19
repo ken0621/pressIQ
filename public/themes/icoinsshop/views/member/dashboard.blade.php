@@ -172,7 +172,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 			</div>
 
 			{{-- <div class="square-container col-md-6">
@@ -284,7 +284,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>Icoinshop</b>.</div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>Icoinsshop</b>.</div>
 	                    </div>
 	                </div>
 	            </div>

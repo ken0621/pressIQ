@@ -34,7 +34,7 @@ class CustomerWIS
     }
     public static function settings($shop_id)
     {
-        return Tbl_settings('settings_key','customer_wis')->where('shop_id', $shop_id)->value('settings_value');
+        return Tbl_settings::where('settings_key','customer_wis')->where('shop_id', $shop_id)->value('settings_value');
     }
     public static function get_consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks)
     {

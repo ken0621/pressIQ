@@ -223,7 +223,8 @@ class TransactionSalesReceipt
 		if(count($itemline) > 0)
 		{
 			Tbl_customer_invoice_line::insert($itemline);
-			$return = AccountingTransaction::entry_data($entry, $insert_item);
+			AccountingTransaction::entry_data($entry, $insert_item);
+			$return = $sales_receipt_id;
 		}
 
 		return $return;

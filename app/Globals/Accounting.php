@@ -372,6 +372,37 @@ class Accounting
 					case "product-order":
 						break;
 					case "sales-receipt":
+						/* INCOME ACCOUNT */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::normalBalance($account_income);
+						$line_data["account_id"]	= $account_income;
+						Accounting::insertJournalLine($line_data);
+
+						if(CustomerWIS::settings($shop_id) == 0)
+						{
+							if($item->item_type_id == 1) // INVENTORY TYPE
+							{
+								/* EXPENSE ACCOUNT */
+								$line_data["entry_amount"]	= $item->item_cost;
+								$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
+								$line_data["account_id"] 	= $account_expense;
+								Accounting::insertJournalLine($line_data);
+
+								/* ASSET ACCOUNT */
+								$line_data["entry_amount"]	= $item->item_cost;
+								$line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
+								$line_data["account_id"] 	= $account_asset;
+								Accounting::insertJournalLine($line_data);
+							}							
+						}
+
+						if($entry_line["discount"] > 0)
+						{
+							$line_data["entry_amount"]	= $entry_line["discount"];
+							$line_data["entry_type"] 	= Accounting::contraAccount(Accounting::getDiscountSale());
+							$line_data["account_id"] 	= Accounting::getDiscountSale();
+							Accounting::insertJournalLine($line_data);
+						}
 						break;
 					case "warehouse-issuance-slip":
 						if(CustomerWIS::settings($shop_id) == 1)

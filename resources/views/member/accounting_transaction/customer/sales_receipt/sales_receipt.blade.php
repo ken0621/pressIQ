@@ -16,6 +16,9 @@
                 </h1>
                 <div class="dropdown pull-right">
                     <div>
+                        @if(isset($sales_receipt))
+                        <a class="btn btn-custom-white" href="/member/accounting/journal/entry/sales-receipt/{{$sales_receipt->inv_id}}">Transaction Journal</a>
+                        @endif
                         <a class="btn btn-custom-white" href="/member/transaction/credit_memo">Cancel</a>
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                         <span class="caret"></span></button>

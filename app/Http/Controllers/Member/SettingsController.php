@@ -81,83 +81,122 @@ class SettingsController extends Member
     public function verify()
     {
         // return $_POST;
-        $key = Request::input('settings_key');
+        $settings_key = Request::input('settings_key');
+        $settings_value = Request::input('settings_value');
         $type = Request::input('update_type');
-        if($type == "add")
-        {
-            if($key != null)
-            {
-                $shop_id = $this->user_info->shop_id;
-                $count_settings = Tbl_settings::where('settings_key', $key)->where('shop_id', $shop_id)->count();
-                if($count_settings == 0)
-                {
-                    $insert['settings_key'] = Request::input('settings_key');
-                    $insert['settings_value'] = Request::input('settings_value');
-                    $insert['shop_id'] = $shop_id;
-                    Tbl_settings::insert($insert);
 
-                    $data['response_status'] = "success_viery";
-                    $data['message'] = "Success";
-                }
-                else
-                {
-                    // success_viery
-                    $count_not_setup = Tbl_settings::where('settings_key', $key)
-                    ->where('shop_id', $shop_id)
-                    ->where('settings_setup_done', 0)
-                    ->count();
-                    if($count_not_setup >= 1)
-                    {
-                        $data['response_status'] = "success_viery";
-                        $data['message'] = "Success";
-                    }
-                    else
-                    {
-                        $data['response_status'] = "success_already";
-                        $data['message'] = "Success";
-                    }
-                }
+
+        $settings_id = 0;
+        foreach ($settings_key as $key => $value) 
+        {
+            $check = Tbl_settings::where('shop_id', $this->user_info->shop_id)->where('settings_key', $value)->first();
+            if($check)
+            {
+                $update['settings_value'] = $settings_value[$key];
+                $update['settings_setup_done'] = 1;
+                Tbl_settings::where('shop_id', $this->user_info->shop_id)->where('settings_key', $value)->update($update);
+                $settings_id = $check->settings_id;
             }
             else
             {
-                $data['response_status'] = "error";
-                $data['message'] = "Invalid Settings";
+                $insert['settings_key'] = $value;
+                $insert['settings_setup_done'] = 1;
+                $insert['settings_value'] = $settings_value[$key];
+                $insert['shop_id'] = $this->user_info->shop_id;
+                $settings_id = Tbl_settings::insertGetId($insert);
             }
+        }
+
+        if($settings_id != 0)
+        {
+            $data['message'] = "Success";
+            $data['response_status'] = "success_update";
+            $data['call_function'] = "success_settings";
         }
         else
         {
-            if($key != null)
-            {
-                $shop_id = $this->user_info->shop_id;
-                $count_settings = Tbl_settings::where('settings_key', $key)->where('shop_id', $shop_id)->count();
-                if($count_settings == 0)
-                {
-                    $insert['settings_key'] = Request::input('settings_key');
-                    $insert['settings_value'] = Request::input('settings_value');
-                    $insert['shop_id'] = $shop_id;
-                    Tbl_settings::insert($insert);
-
-                    $data['response_status'] = "success_viery";
-                    $data['message'] = "Success";
-                }
-                else
-                {
-                    $update['settings_value'] = Request::input('settings_value');
-                    $update['settings_setup_done'] = 1;
-                    Tbl_settings::where('settings_key', $key)->where('shop_id', $shop_id)->update($update);
-                    
-                    $data['form_input'] = $update;
-                    $data['response_status'] = "success_update";
-                    $data['message'] = "Success";
-                }
-                
-            }
-            else
-            {
-                $data['response_status'] = "error";
-                $data['message'] = "Invalid Settings";
-            }   
+            $data['message'] = "Something wen't wrong";
+            $data['response_status'] = "error";
+            $data['call_function'] = "success_settings";            
         }
+
+
+
+        // if($type == "add")
+        // {
+        //     if($key != null)
+        //     {
+        //         $shop_id = $this->user_info->shop_id;
+        //         $count_settings = Tbl_settings::where('settings_key', $key)->where('shop_id', $shop_id)->count();
+        //         if($count_settings == 0)
+        //         {
+        //             $insert['settings_key'] = Request::input('settings_key');
+        //             $insert['settings_value'] = Request::input('settings_value');
+        //             $insert['shop_id'] = $shop_id;
+        //             Tbl_settings::insert($insert);
+
+        //             $data['response_status'] = "success_viery";
+        //             $data['message'] = "Success";
+        //         }
+        //         else
+        //         {
+        //             // success_viery
+        //             $count_not_setup = Tbl_settings::where('settings_key', $key)
+        //             ->where('shop_id', $shop_id)
+        //             ->where('settings_setup_done', 0)
+        //             ->count();
+        //             if($count_not_setup >= 1)
+        //             {
+        //                 $data['response_status'] = "success_viery";
+        //                 $data['message'] = "Success";
+        //             }
+        //             else
+        //             {
+        //                 $data['response_status'] = "success_already";
+        //                 $data['message'] = "Success";
+        //             }
+        //         }
+        //     }
+        //     else
+        //     {
+        //         $data['response_status'] = "error";
+        //         $data['message'] = "Invalid Settings";
+        //     }
+        // }
+        // else
+        // {
+        //     if($key != null)
+        //     {
+        //         $shop_id = $this->user_info->shop_id;
+        //         $count_settings = Tbl_settings::where('settings_key', $key)->where('shop_id', $shop_id)->count();
+        //         if($count_settings == 0)
+        //         {
+        //             $insert['settings_key'] = Request::input('settings_key');
+        //             $insert['settings_value'] = Request::input('settings_value');
+        //             $insert['shop_id'] = $shop_id;
+        //             Tbl_settings::insert($insert);
+
+        //             $data['response_status'] = "success_viery";
+        //             $data['message'] = "Success";
+        //         }
+        //         else
+        //         {
+        //             $update['settings_value'] = Request::input('settings_value');
+        //             $update['settings_setup_done'] = 1;
+        //             Tbl_settings::where('settings_key', $key)->where('shop_id', $shop_id)->update($update);
+                    
+        //             $data['form_input'] = $update;
+        //             $data['response_status'] = "success_update";
+        //             $data['message'] = "Success";
+        //         }
+                
+        //     }
+        //     else
+        //     {
+        //         $data['response_status'] = "error";
+        //         $data['message'] = "Invalid Settings";
+        //     }   
+        // }
         echo json_encode($data);
     }
     public function get_settings($key)

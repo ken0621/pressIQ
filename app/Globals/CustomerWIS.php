@@ -8,7 +8,7 @@ use App\Models\Tbl_customer_wis_item_line;
 use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_customer_wis_item;
-
+use App\Models\Tbl_settings;
 
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
@@ -32,7 +32,10 @@ class CustomerWIS
         }
         return $data->get();
     }
-
+    public static function settings($shop_id)
+    {
+        return Tbl_settings('settings_key','customer_wis')->where('shop_id', $shop_id)->value('settings_value');
+    }
     public static function get_consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks)
     {
         $return = null;

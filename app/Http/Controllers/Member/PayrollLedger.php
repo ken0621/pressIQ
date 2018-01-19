@@ -69,15 +69,12 @@ class PayrollLedger extends Member
 	public function modal_ledger($employee_id)
 	{
 		$data["employee"] = Tbl_payroll_employee_basic::where("tbl_payroll_employee_basic.payroll_employee_id",$employee_id)->first();
-		$data["_period"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id)
+		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id)
 		->where("tbl_payroll_period_company.payroll_period_status","!=","pending")
 		->get();
 
-
-		$data = Payroll2::get_grand_total_whole_year($data);
-		$data = Payroll2::get_total_per_period($data);
-
-		// dd($data);
+		$data = Payroll2::get_total_payroll_register($data);
+		
 		return view("member.payrollreport.payroll_employee_ledger",$data);
 	}
 

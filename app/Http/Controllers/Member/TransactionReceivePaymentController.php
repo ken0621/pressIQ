@@ -16,6 +16,7 @@ use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
 use App\Globals\TransactionReceivePayment;
 use App\Globals\TransactionCreditMemo;
+use App\Globals\AccountingTransaction;
 
 use Session;
 use Carbon\Carbon;

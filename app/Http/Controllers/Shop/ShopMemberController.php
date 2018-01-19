@@ -2916,21 +2916,28 @@ class ShopMemberController extends Shop
     }
     public function getReportPoints()
     {
-        $data["page"]               = "Report";
-        if(request("sort_by"))
+        if (Self::$customer_info) 
         {
-            $sort_by = request("sort_by");
+            $data["page"]               = "Report";
+            if(request("sort_by"))
+            {
+                $sort_by = request("sort_by");
+            }
+            else
+            {
+                $sort_by = 0;
+            }
+
+            $data["_rewards_points"]    = MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by);
+
+            // return MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by)->first();
+            
+            return (Self::load_view_for_members("member.report_points", $data));
         }
         else
         {
-            $sort_by = 0;
+            return Redirect::to("/members/login");
         }
-
-        $data["_rewards_points"]    = MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by);
-
-        // return MLM2::customer_rewards_points($this->shop_info->shop_id, Self::$customer_info->customer_id, 0, $sort_by)->first();
-        
-        return (Self::load_view_for_members("member.report_points", $data));
     }
     public function getLeadList()
     {
@@ -3328,9 +3335,16 @@ class ShopMemberController extends Shop
     }
     public function getSlots()
     {
-        $data['page'] = "YOUR SLOT(S)";
-        $data['slots'] = Tbl_mlm_slot::where('slot_owner',Self::$customer_info->customer_id)->get();
-        return view('member.userslots',$data);
+        if (Self::$customer_info) 
+        {
+            $data['page'] = "YOUR SLOT(S)";
+            $data['slots'] = Tbl_mlm_slot::where('slot_owner',Self::$customer_info->customer_id)->get();
+            return view('member.userslots',$data);
+        }
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
     public function getEonCard()
     {
@@ -3852,17 +3866,24 @@ class ShopMemberController extends Shop
     }
     public function getEnterSponsor()
     {
-        $data["page"] = "Enter Code";
-        $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
-        $data["lock_sponsor"] = false;
-        
-        if(!$this->mlm_member && Self::$customer_info->customer_lead != "")
+        if (Self::$customer_info) 
         {
-            $sponsor_no = Tbl_mlm_slot::where("slot_id", Self::$customer_info->customer_lead)->value("slot_no");
-            $data["lock_sponsor"] = $sponsor_no;
+            $data["page"] = "Enter Code";
+            $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
+            $data["lock_sponsor"] = false;
+            
+            if(!$this->mlm_member && Self::$customer_info->customer_lead != "")
+            {
+                $sponsor_no = Tbl_mlm_slot::where("slot_id", Self::$customer_info->customer_lead)->value("slot_no");
+                $data["lock_sponsor"] = $sponsor_no;
+            }
+            
+            return Self::load_view_for_members('member2.enter_sponsor', $data);
         }
-        
-        return Self::load_view_for_members('member2.enter_sponsor', $data);
+        else
+        {
+            return "ERROR OCCURRED";
+        }
     }
     public function getEnterPlacement()
     {
@@ -3988,50 +4009,57 @@ class ShopMemberController extends Shop
 
         if($data)
         {
-            $shop_id        = $this->shop_info->shop_id;
-            $customer_id    = Self::$customer_info->customer_id;
-            $membership_id  = $data["membership_code"]->membership_id;
-            $sponsor        = $data["sponsor"]->slot_id;
-
-            $slot_no_based_on_name = Self::generate_slot_no_based_on_name(Self::$customer_info->first_name, Self::$customer_info->last_name);
-            
-            $new_slot_no    = $data["pin"];
-            $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
-            $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $slot_no_based_on_name);
-            
-            $return = Item::check_unused_product_code($shop_id, $data["pin"], $data["activation"]);
-
-            if($return)
+            if (isset(Self::$customer_info->customer_id)) 
             {
-                $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
+                $shop_id        = $this->shop_info->shop_id;
+                $customer_id    = Self::$customer_info->customer_id;
+                $membership_id  = $data["membership_code"]->membership_id;
+                $sponsor        = $data["sponsor"]->slot_id;
 
-                if(is_numeric($create_slot))
+                $slot_no_based_on_name = Self::generate_slot_no_based_on_name(Self::$customer_info->first_name, Self::$customer_info->last_name);
+                
+                $new_slot_no    = $data["pin"];
+                $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
+                $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $slot_no_based_on_name);
+                
+                $return = Item::check_unused_product_code($shop_id, $data["pin"], $data["activation"]);
+
+                if($return)
                 {
-                    $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
-                    MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
+                    $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
 
-                    $setting = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
-                    $slot_id = $create_slot;
-
-                    if($setting->plan_settings_placement_required == 0)
+                    if(is_numeric($create_slot))
                     {
-                        $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
-                        Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1);
-                        MLM2::entry($shop_id, $slot_id);
+                        $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
+                        MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
+
+                        $setting = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();
+                        $slot_id = $create_slot;
+
+                        if($setting->plan_settings_placement_required == 0)
+                        {
+                            $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+                            Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1);
+                            MLM2::entry($shop_id, $slot_id);
+                        }
+                        
+                        $store["get_success_mode"] = "success";
+                        session($store);
+                        echo json_encode("success");
                     }
-                    
-                    $store["get_success_mode"] = "success";
-                    session($store);
-                    echo json_encode("success");
+                    else
+                    {
+                        echo json_encode($create_slot);
+                    }                
                 }
                 else
                 {
-                    echo json_encode($create_slot);
-                }                
+                    echo json_encode('Item Code already used');
+                }
             }
             else
             {
-                echo json_encode('Item Code already used');
+                echo json_encode('Customer is not logged in');
             }
         }
     }

@@ -53,7 +53,7 @@
 		
 		<!-- {!! $ctr == 3 ? "</tr><tr>" : '' !!}	 -->
 		<tr>
-			<td  width="100%" class="text-center" style="font-size: 20px">
+			<td  width="100%" class="text-center" style="font-size: 17.5px">
 				<div style="float:left;width: 50%;padding-left:5px">
 				</div>
 				<div style="float:right;width: 50%;padding-right:5px"><div class="text-center">{{str_pad($item_code->ctrl_number, 9, '0', STR_PAD_LEFT)}}</div></div></div>

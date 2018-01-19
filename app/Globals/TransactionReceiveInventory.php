@@ -105,6 +105,52 @@ class TransactionReceiveInventory
         return $return;
 	}
 
+    public static function postUpdate($receive_inventory_id, $shop_id, $insert, $insert_item)
+    {
+        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        if(!$val)
+        {
+            $update['ri_shop_id']          = $shop_id;
+            $update['transaction_refnum']  = $insert['transaction_refnumber'];
+            $update['ri_vendor_id']        = $insert['vendor_id'];
+            $update['ri_mailing_address']  = $insert['vendor_address'];
+            $update['ri_vendor_email']     = $insert['vendor_email'];
+            $update['ri_terms_id']         = $insert['vendor_terms'];
+            $update['ri_date']             = date("Y-m-d", strtotime($insert['transaction_date']));
+            $update['ri_due_date']         = date("Y-m-d", strtotime($insert['transaction_duedate']));
+            $update['ri_memo']             = $insert['vendor_memo'];
+            $update['date_created']        = Carbon::now();
+            $update['inventory_only']      = 1;
+
+            /* TOTAL */
+            $total = collect($insert_item)->sum('item_amount');
+            $update['ri_total_amount'] = $total;
+
+        
+            /*INSERT RI HERE*/
+            Tbl_receive_inventory::where('ri_id',$receive_inventory_id)->update($update);
+            Tbl_receive_inventory_line::where('riline_ri_id', $receive_inventory_id)->delete();
+
+            /*INSERT ENTER BILL HERE*/
+
+            $bill = Tbl_bill::where('bill_ri_id', $receive_inventory_id)->first();
+            //die(var_dump($bill->bill_id));
+            
+            if($bill)
+            {
+                TransactionEnterBills::postUpdate($bill->bill_id, $receive_inventory_id, $shop_id, $insert, $insert_item);
+            }
+
+            $return = Self::insertLine($shop_id, $receive_inventory_id, $insert_item);
+            $return = $receive_inventory_id;
+        }
+        else
+        {
+            $return = $val;
+        }
+        return $return;
+    }
+
     public static function insertLine($shop_id, $receive_inventory_id, $insert_item)
     {
         $itemline = null;
@@ -113,7 +159,7 @@ class TransactionReceiveInventory
             $itemline[$key]['riline_ri_id']        = $receive_inventory_id;
             $itemline[$key]['riline_item_id']      = $value['item_id'];
             $itemline[$key]['riline_ref_name']     = $value['item_ref_name'];
-            $itemline[$key]['riline_ref_id']       = $value['item_reference_id'];
+            $itemline[$key]['riline_ref_id']       = $value['item_ref_id'];
             $itemline[$key]['riline_description']  = $value['item_description'];
             $itemline[$key]['riline_um']           = $value['item_um'];
             $itemline[$key]['riline_qty']          = $value['item_qty'];

@@ -184,7 +184,7 @@
                                                 </thead>
                                                 <tbody class="tbody-item">
                                                     @if(isset($wc))
-                                                        @foreach($_wc_item_line as $item)
+                                                        @foreach($_wcline as $item)
                                                         <tr class="tr-draggable tr-id-{{$item->wcline_ref_id}}">
                                                             <td class="invoice-number-td text-right">1</td>
                                                             <td>

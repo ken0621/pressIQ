@@ -112,6 +112,8 @@ class TransactionEnterBillsController extends Member
     public function postUpdateEnterBills(Request $request)
     {
         $btn_action  = $request->button_action;
+        $bill_id  = $request->bill_id;
+        //die(var_dump($bill_id));
 
         $insert['transaction_refnumber']    = $request->transaction_refnumber;
         $insert['vendor_id']                = $request->vendor_id;
@@ -138,7 +140,7 @@ class TransactionEnterBillsController extends Member
                 $insert_item[$key]['item_discount']    = 0;
             }
         }
-        $validate = TransactionEnterBills::postUpdate(null, $this->user_info->shop_id, $insert, $insert_item);
+        $validate = TransactionEnterBills::postUpdate($bill_id, null, $this->user_info->shop_id, $insert, $insert_item);
 
         $return = null;
         if(is_numeric($validate))

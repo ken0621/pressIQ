@@ -4,6 +4,7 @@
 <form class="global-submit" role="form" action="{{ $action or ''}}" method="post" >
     <input type="hidden" class="token" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" class="button-action" name="button_action" value="">
+    <input type="hidden" name="bill_id" value="{{ $eb->bill_id or ''}}">
 
 <div class="drawer-overlay">
     <div class="panel panel-default panel-block panel-title-block" id="top">
@@ -124,16 +125,22 @@
                                                             <tr class="tr-draggable">
                                                                 <td class="invoice-number-td text-right">1</td>
                                                                 <td>
-                                                                <input type="hidden" class="poline_id" name="itemline_ref_name[]">
-                                                                <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
-                                                                    <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
-                                                                        @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $ebline->itemline_item_id])
+                                                                    <input type="hidden" class="poline_id" name="itemline_ref_name[]">
+                                                                    <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                                                                        <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $ebline->itemline_item_id])
+                                                                        </select>
+                                                                </td>
+                                                                <td><textarea class="textarea-expand txt-desc" name="item_description[]">{{ $ebline->itemline_description }}</textarea></td>
+                                                                <td>
+                                                                    <select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" />
+                                                                        @if($ebline->itemline_um)
+                                                                            @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $ebline->multi_um_id, 'selected_um_id' => $ebline->itemline_um])
+                                                                        @else
+                                                                            <option class="hidden" value="" />
+                                                                        @endif
                                                                     </select>
                                                                 </td>
-                                                                <td>
-                                                                    <textarea class="textarea-expand txt-desc" name="item_description[]">{{ $ebline->itemline_description }}</textarea>
-                                                                </td>
-                                                                <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="{{ $ebline->itemline_um }}" /></select></td>
                                                                 <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]" value="{{ $ebline->itemline_qty }}" /></td>
                                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{ $ebline->itemline_rate }}" /></td>
                                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{ $ebline->itemline_amount }}" /></td>
@@ -144,6 +151,25 @@
                                                     @endif
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
+                                                        <td>
+                                                        <input type="hidden" class="poline_id" name="itemline_ref_name[]">
+                                                        <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                                @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
+                                                        </td>
+                                                        <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                                        <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
+                                                        @include("member.load_ajax_data.load_td_serial_number")
+                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                    </tr>
+                                                    <tr class="tr-draggable">
+                                                        <td class="invoice-number-td text-right">2</td>
                                                         <td>
                                                         <input type="hidden" class="poline_id" name="itemline_ref_name[]">
                                                         <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">

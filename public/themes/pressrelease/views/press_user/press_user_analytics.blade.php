@@ -21,31 +21,31 @@
                     </tr>
                     <tr>
                       <td>Sent</td>
-                      <td>{{session('share_analytics')->sent}}</td>
+                      <td>{{isset(session('share_analytics')->sent) ? session('share_analytics')->sent : 0}}</td>
                     </tr>
                     <tr>
                       <td>Email Open</td>
-                      <td>{{session('share_analytics')->opens}}</td>
+                      <td>{{isset(session('share_analytics')->opens) ? session('share_analytics')->opens : 0}}</td>
                     </tr>
                     <tr>
                       <td>Clicks</td>
-                      <td>{{session('share_analytics')->clicks}}</td>
+                      <td>{{isset(session('share_analytics')->clicks) ? session('share_analytics')->clicks : 0}}</td>
                     </tr>
                     <tr>
                       <td>Reject</td>
-                      <td>{{session('share_analytics')->rejects}}</td>
+                      <td>{{isset(session('share_analytics')->rejects) ? session('share_analytics')->rejects : 0}}</td>
                     </tr>
                     <tr>
                       <td>Unsubscribe</td>
-                      <td>{{session('share_analytics')->unsubs}}</td>
+                      <td>{{isset(session('share_analytics')->unsubs) ? session('share_analytics')->unsubs : 0}}</td>
                     </tr>
                     <tr>
                       <td>Soft Bounce</td>
-                      <td>{{session('share_analytics')->soft_bounces}}</td>
+                      <td>{{isset(session('share_analytics')->soft_bounces) ? session('share_analytics')->soft_bounces : 0}}</td>
                     </tr>
                     <tr>
                       <td>Hard Bounce</td>
-                      <td>{{session('share_analytics')->hard_bounces}}</td>
+                      <td>{{isset(session('share_analytics')->hard_bounces) ? session('share_analytics')->hard_bounces : 0}}</td>
                     </tr>
               </table>
         </div>

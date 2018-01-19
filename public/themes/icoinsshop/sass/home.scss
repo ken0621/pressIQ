@@ -18,7 +18,6 @@ body
 	background-repeat: no-repeat;
 	background-size: cover;
 	font-family: $display-text;
-
 	display: -webkit-flex; /* Safari */
     -webkit-align-items: center; /* Safari 7.0+ */
     display: flex;
@@ -26,7 +25,7 @@ body
 
 	.holder
 	{
-		//padding: 200px 0 0 0;
+		padding: 150px 0 100px 0;
 
 		.caption-container	
 		{
@@ -359,7 +358,8 @@ body
 	.unskew
 	{
 		transform: skewY(-4deg);
-		padding: 90px 0 120px 0;
+		padding-top: 90px;
+		padding-bottom: 120px;
 
 		.wrapper-title
 		{
@@ -502,6 +502,7 @@ body
 	.news-holder
 	{
 		background-color: #f2f2f2;
+		cursor: pointer;
 
 		.img-holder
 		{
@@ -515,13 +516,13 @@ body
 		{
 			padding: 20px 0;
 			font-family: $display-text;
-			margin-left: -10px;
+			//margin-left: -10px;
 
 			.caption
 			{
 				color: #1c1c1c;
 				font-weight: 400;
-				font-size: 18px;
+				font-size: 16px;
 			}
 
 			.date

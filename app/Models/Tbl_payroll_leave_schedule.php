@@ -31,8 +31,7 @@ class Tbl_payroll_leave_schedule extends Model
 
 		return $query;
 	}
-
-
+	
 	public function scopegetlist($query, $shop_id = 0, $date = '0000-00-00' ,$param = '>=')
 	{
 		$query->join('tbl_payroll_leave_employee','tbl_payroll_leave_employee.payroll_leave_employee_id','=','tbl_payroll_leave_schedule.payroll_leave_employee_id')
@@ -42,6 +41,7 @@ class Tbl_payroll_leave_schedule extends Model
 			  ->where('tbl_payroll_leave_schedule.payroll_schedule_leave', $param, $date);
 		return $query;
 	}
+
 	public function scopespecific($query, $payroll_leave_schedule_id = 0)
 	{
 		$query->join('tbl_payroll_leave_employee','tbl_payroll_leave_employee.payroll_leave_employee_id','=','tbl_payroll_leave_schedule.payroll_leave_employee_id')
@@ -50,7 +50,6 @@ class Tbl_payroll_leave_schedule extends Model
 			  ->where('tbl_payroll_leave_schedule.payroll_leave_schedule_id', $payroll_leave_schedule_id);
 		return $query;
 	}
-
 
 	public function scopecheckemployee($query, $payroll_employee_id = 0, $payroll_schedule_leave = '0000-00-00')
 	{

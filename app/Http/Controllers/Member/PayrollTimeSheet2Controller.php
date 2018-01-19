@@ -814,9 +814,9 @@ class PayrollTimeSheet2Controller extends Member
 		/* COMPUTATION FOR CUTOFF */
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($data["period_company_id"])->first();
 		// return json_encode("123");
-		$x = view('member.payroll2.employee_day_summary', $data);
-		return json_encode($x->render());
-		//return view('member.payroll2.employee_day_summary', $data);
+		// $x = view('member.payroll2.employee_day_summary', $data);
+		// return json_encode($x->render());
+		return view('member.payroll2.employee_day_summary', $data);
 	}
 	public function compute_process_cutoff($payroll_time_keeping_approved_info)
 	{

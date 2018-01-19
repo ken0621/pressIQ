@@ -12,28 +12,40 @@ function recaptcha()
 	}
 	function document_ready()
 	{
-		action_enable_button($('.g-recaptcha-response').val());
-		event_verify();
-		console.log('recaptcha.js loaded');
+		event_submit_form();
+		select2();
+		action_set_slot_no();
+		event_change_slot();
 	}
-	function event_verify()
+	function select2()
 	{
-		$('body').on('click','#recaptcha-verify-button',function()
-		{
-			alert(123);
-			action_enable_button($('.g-recaptcha-response').val());
-		})
+		$('.slot-owner').select2();
 	}
-	function action_enable_button(data)
+	function event_change_slot()
 	{
-		if(data == '' || data == 'undefined')
+		$('.slot-owner').on('change',function()
 		{
-			$('.submit-captcha').attr('disabled',false);
-		}
-		else
-		{
-			$('.submit-captcha').attr('disabled',true);
-		}
-		
+			action_set_slot_no();
+		});
 	}
+	function action_set_slot_no()
+	{
+		$('.hidden_slot_no').val($('.slot-owner').val());
+	}
+	function event_submit_form()
+	{
+		$('.submit-captcha').on('click',function(e)
+		{
+			if($('.g-recaptcha-response').val() == '')
+			{
+				e.preventDefault();
+				toastr.error('Click captcha first');
+			}
+			else
+			{
+				console.log('submitted');
+			}
+		});
+	}
+	
 }

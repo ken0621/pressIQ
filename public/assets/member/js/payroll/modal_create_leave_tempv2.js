@@ -26,7 +26,7 @@ function modal_create_leave_tempv2()
 	{    
 		$(".payroll_schedule_leave_end").on("change", function(e)
 		{
-
+			ajaxdata.company_id = $('.select-company-name').val();
 			ajaxdata._token 	= $("._token").val();
 			ajaxdata.category	= $("#category").val();
 			ajaxdata.date_start = $("#start").val();
@@ -53,7 +53,7 @@ function modal_create_leave_tempv2()
 
 		$(".payroll_schedule_leave_start").on("change", function(e)
 		{
-
+			ajaxdata.company_id = $('.select-company-name').val();
 			ajaxdata._token 	= $("._token").val();
 			ajaxdata.category	= $("#category").val();
 			ajaxdata.date_end   = $("#end").val();
@@ -77,6 +77,34 @@ function modal_create_leave_tempv2()
 			});
 			}, 700);
 		});
+
+		$('.select-company-name').change(function()
+        {
+            ajaxdata.company_id = this.value;
+            ajaxdata._token 	= $("._token").val();
+			ajaxdata.category	= $("#category").val();
+			ajaxdata.date_end   = $("#end").val();
+			ajaxdata.date_start = $("#start").val();
+
+			$('#spinningLoader').show();
+			$(".load-filter-data").hide();
+          	setTimeout(function(e){
+			$.ajax(
+			{
+				url:"/member/payroll/leave/v2/monthly_leave_report_filter",
+				type:"post",
+				data: ajaxdata,
+				
+				success: function(data)
+				{
+					$('#spinningLoader').hide();
+					$(".load-filter-data").show();
+					$(".load-filter-data").html(data);
+					// alert(data);
+				}
+			});
+			}, 700);
+        });
 	}
 
 	function remove_tag()

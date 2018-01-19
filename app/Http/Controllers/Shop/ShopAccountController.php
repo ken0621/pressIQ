@@ -201,6 +201,8 @@ class ShopAccountController extends Shop
         }
         else
         {
+            if (!isset($data["shipping_address"])) $data["shipping_address"] = new \stdClass();
+
             $data["shipping_address"]->state_id = null;
             $data["shipping_address"]->city_id = null;
             $data["shipping_address"]->zip_code = null;

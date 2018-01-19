@@ -54,7 +54,6 @@ class Vendor_PayBillController extends Member
                 $data["paybill"]         = Tbl_pay_bill::where("paybill_id", $id)->first();
                 $data["_paybill_line"]   = Tbl_pay_bill_line::where("pbline_pb_id", $id)->get();
                 $data["_bill"]           = Billing::getAllBillByVendorWithPaybill($data["paybill"]->paybill_vendor_id, $data["paybill"]->paybill_id);
-                // dd($data["_invoice"]);
                 $data['action']             = "/member/vendor/paybill/update/".$data["paybill"]->paybill_id;
             }
 

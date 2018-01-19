@@ -36,16 +36,27 @@ class Tbl_payroll_leave_employeev2 extends Model
 		return $query;
 	}
 
-	public function scopegetemployeeid($query, $month, $shop_id)
+	public function scopegetemployeeid($query, $date = '0000-00-00', $shop_id)
 	{	
 	
 		
 			  $query->join('tbl_payroll_leave_schedulev2','tbl_payroll_leave_employee_v2.payroll_leave_employee_id','=','tbl_payroll_leave_schedulev2.payroll_leave_employee_id')
 			  ->where('tbl_payroll_leave_schedulev2.shop_id',$shop_id)
-			  ->whereMonth('tbl_payroll_leave_schedulev2.payroll_schedule_leave',$month)
+			  ->whereBetween('tbl_payroll_leave_schedulev2.payroll_schedule_leave', $date)
 			  ->distinct();
 		
 		return $query;
+	}
+
+	public function scopegetemployeeidbytempid($query,$payroll_leave_temp_id =0,$shop_id)
+	{
+			$query->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_employee_v2.payroll_leave_temp_id','=','tbl_payroll_leave_tempv2.payroll_leave_temp_id')
+			   ->whereIn('tbl_payroll_leave_tempv2.payroll_leave_temp_id',$payroll_leave_temp_id)
+               ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_is_archived',0)
+               ->where('tbl_payroll_leave_tempv2.shop_id',$shop_id)
+               ->select('payroll_employee_id','payroll_leave_employee_id');
+
+              	return $query; 
 	}
 
 	// public function scopegetpayable_leave($query, $payroll_employee_id = 0)

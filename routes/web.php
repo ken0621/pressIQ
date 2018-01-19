@@ -950,7 +950,7 @@ AdvancedRoute::controller('/member/report', 'Member\ReportControllerV2');
 //reports end
 
 /* Customer */
-Route::get('/member/customer','Customer\CustomerController@index');
+Route::get('/member/customer','Member\CustomerController@index');
 Route::get('/member/customer/bulk_archive','Member\CustomerController@bulk_archive');
 Route::post('/member/customer/bulk_archive','Member\CustomerController@bulk_archive_post');
 Route::get('/member/customer/list','Member\CustomerController@index');

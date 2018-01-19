@@ -55,9 +55,16 @@ class PayrollTimeSheet2Controller extends Member
 
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
 		$data["company"] = $this->db_get_company_period_information($period_id);
-		$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_company_id);
-		
-		return view('member.payroll2.employee_summary', $data);
+
+		if (isset($data["company"]->payroll_company_id)) 
+		{
+			$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_company_id);
+			return view('member.payroll2.employee_summary', $data);
+		}
+		else
+		{
+			return Redirect::to('/member/payroll/time_keeping');
+		}
 	}
 	public function index_redirect_if_time_keeping_does_not_exist($period_id)
 	{
@@ -291,8 +298,11 @@ class PayrollTimeSheet2Controller extends Member
 
 		foreach ($_time_sheet_record as $key => $time_sheet_record) 
 		{
-			$update["payroll_time_shee_activity"] = Request::input("remarks")[$key];
-			Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $time_sheet_record->payroll_time_sheet_record_id)->update($update);
+			if(isset(Request::input("remarks")[$key]))
+			{
+				$update["payroll_time_shee_activity"] = Request::input("remarks")[$key];
+				Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $time_sheet_record->payroll_time_sheet_record_id)->update($update);
+			}
 		}
 		
 		//absent and no time_sheet_record
@@ -785,6 +795,7 @@ class PayrollTimeSheet2Controller extends Member
 
 	public function day_summary($timesheet_id)
 	{
+
 		$data["period_company_id"] = Request::input("period_company_id");
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db_by_id($timesheet_id);
 		$data["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
@@ -802,7 +813,9 @@ class PayrollTimeSheet2Controller extends Member
 		
 		/* COMPUTATION FOR CUTOFF */
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($data["period_company_id"])->first();
-
+		// return json_encode("123");
+		// $x = view('member.payroll2.employee_day_summary', $data);
+		// return json_encode($x->render());
 		return view('member.payroll2.employee_day_summary', $data);
 	}
 	public function compute_process_cutoff($payroll_time_keeping_approved_info)
@@ -870,7 +883,7 @@ class PayrollTimeSheet2Controller extends Member
 					if (Payroll::time_float(Payroll::time_diff($rec->time_sheet_in,$rec->time_sheet_out)) >= $temp_time_float) 
 					{
 						$temp_time_float = Payroll::time_float(Payroll::time_diff($rec->time_sheet_in,$rec->time_sheet_out));
-						$_timesheet[$from]->branch_source_company_id = $rec->branch_id;
+						$_timesheet[$from]->branch_source_company_id = isset($rec->branch_id) ? $rec->branch_id : 0;
 					}
 				}
 			}

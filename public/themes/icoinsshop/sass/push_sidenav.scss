@@ -1,59 +1,60 @@
 @import "../../../assets/front/sass/mixin";
 
-$display-text: 'Raleway', sans-serif;
-$content-text: 'Ubuntu', sans-serif;
+$display-text: 'Open Sans', sans-serif;
 $light: 300;
 $regular: 400;
-$medium: 500;
+$semi-bold: 600;
 $bold: 700;
 
-.blur-me
+.blur-me 
 {
     @include transition(0.3s);
 }
 
-.pushmenu 
-{ 
+.pushmenu
+{
     /*this is the nav*/
-     // background: #0095DA;
-     background-color: rgba(255,137,11,0.7);
-     text-align: left;
-     width: 300px;
-     height: 100%;
-     top: 0;
-     z-index: 150;
-     position: fixed;
-     overflow-y: auto;
+    // background-color: rgba(2,92,55,0.7);
+    //background-color: #025c37;
+    background-color: #082C22;
+    text-align: left;
+    width: 300px;
+    height: 100%;
+    top: 0;
+    z-index: 1000;
+    position: fixed;
+    overflow-y: auto;
 
-     @media screen and (max-width: 320px)
+    @media screen and (max-width: 320px) 
     {
         width: 250px;
     }
 
-    .space1
+    .space1 
     {
         padding: 10px 0px 10px 0px;
     }
 
-    .space2
+    .space2 
     {
         padding: 20px 0px 10px 0px;
     }
 
-    span
+    span 
     {
-        font-family: $content-text;
+        font-family: $display-text;
         font-size: 16px;
-        font-weight: $medium;
+        font-weight: $semi-bold;
         color: #fff;
         padding-left: 22px;
     }
 
-    .profile-img-container
+    .profile-img-container 
     {
         padding: 20px;
         text-align: center;
-        
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+
         .profile-img 
         {
             overflow: hidden;
@@ -63,38 +64,38 @@ $bold: 700;
 
             img 
             {
-                border-radius: 100%;
-                border: 1px solid #fff;
                 width: 100%;
+                border: 1px solid #f1f1f1;
+                border-radius: 100%;
             }
         }
 
-        .text-holder
+        .text-holder 
         {
-             padding-left: 10px;
-             margin-top: 9px;
-             
-             @media screen and (max-width: 349px)
-             {
+            padding-left: 10px;
+            margin-top: 9px;
+            @media screen and (max-width: 349px) 
+            {
                 margin-top: 2px;
-             }
+            }
 
-            .text-overflow
+            .text-overflow 
             {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
 
-            .name-text
+            .name-text 
             {
                 color: #fff;
                 font-weight: $regular;
                 font-size: 16px;
             }
-            .subtext
+
+            .subtext 
             {
-                color: rgba(255,255,255,0.5);
+                color: rgba(255, 255, 255, 0.5);
                 font-weight: $light;
                 font-size: 14px;
             }
@@ -102,62 +103,74 @@ $bold: 700;
     }
 }
 
- /* .pushmenu h3 
- {
-   color: #f1f1f1;
-   font-size: 1.3em;
-   font-weight: 400;
-   padding: 15px 25px;
-   margin: 0;
-   background: #333;
-   height: 16px;
-   } */
+.links 
+{
+    list-style-type: none;
+    width: 93%;
+    font-family: $display-text;
+    text-transform: uppercase;
+    padding-left: 20px;
+    padding-top: 10px;
 
-   .links
-   {
-     list-style-type: none;
-     /* margin: 0 0 0 10%; */
-     width: 93%;
-     font-family: $content-text;
-     text-transform: uppercase;
-     padding-left: 20px;
-     padding-top: 10px;
-
-
-     li
-     {
+    li 
+    {
         //margin-top: 30px;
-        border-bottom: 1px solid rgba(255,255,255, 0.2);
-        padding: 10px 0px;
-        // padding-left: 10px;
-
-        .fa
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 10px 0px; // padding-left: 10px;
+        .fa 
         {
-           color: #f1f1f1;
-           padding-right: 5px;
-           width: 25px;
-           text-align: center;
+            color: #f1f1f1;
+            width: 25px;
+            text-align: center;
         }
 
-        a
+        a 
         {
             position: relative;
-            display: block; /* drops the nav vertically*/
+            display: block;
+            /* drops the nav vertically*/
             color: #f1f1f1;
-            font-size: 14px;
+            font-size: 16px;
             text-decoration: none;
-            //line-height: 80%;
-            //padding: 5px;
+        }
+
+        @media screen and (max-width: 768px) 
+        {
+            a 
+            {
+                font-size: 14px;
+            }
         }
     }
 
-    .user-logout
+    ul 
+    {
+        display: none;
+        color: #fff;
+
+        a 
+        {
+            text-decoration: none;
+            color: #f1f1f1;
+            font-size: 14px;
+        }
+
+        @media screen and (max-width: 320px) 
+        {
+            a 
+            {
+                font-size: 13px;
+            }
+        }
+    }
+
+    .user-logout 
     {
         border-bottom: none;
         color: #fff;
     }
-
 }
+
 
 /* .links li a:after
 {
@@ -168,130 +181,42 @@ $bold: 700;
    bottom: -10px;
    width: 0;
    height: 3px;
-   background-color: #77b93f;
+   background-color: #1D5BC6;
    -webkit-transition: width 0.3s ease;
    -moz-transition: width 0.3s ease;
    transition: width 0.3s ease;
 } */
 
-/* .links li a:hover:after { width: 100%; } */
 
-.links li:active { background-color: rgba(255,255,255,0.2); }
+/* .links li a:hover:after 
+{ width: 100%; } */
 
-.pushmenu-left
-{ 
-    left: -300px; 
-}
-
-.pushmenu-left.pushmenu-open { left: 0; }
-
-.pushmenu-push
+// .links li:active { background-color: #EDAC0E; }
+.links li:active 
 {
- overflow-x: hidden;
- position: relative;
- left: 0;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
-// .pushmenu-push-toright 
-// {
-//     left: 300px; 
-
-//     @media screen and (max-width: 320px)
-//     {
-//         left: 246px;
-//     }
-// }
-
-
-/*Transition*/
-
-.pushmenu, .pushmenu-push
-{  
-    @include transition(0.3s);
-}
-
-.center-logo-on-mobile
+.pushmenu-left 
 {
+    left: -300px;
+}
+
+.pushmenu-left.pushmenu-open 
+{
+    left: 0;
+}
+
+.pushmenu-push 
+{
+    overflow-x: hidden;
     position: relative;
+    left: 0;
 }
 
-#nav_list
+#overlay 
 {
-    display: none;
-
-    @media screen and (max-width: 991px)
-    {
-        //background: url(icon_nav.png) no-repeat left top;
-        cursor: pointer;
-        //height: 27px;
-        //width: 33px;
-        //text-indent: -99999em;
-
-        display: block;
-        width: 50px;
-        //padding: 7.5px 12px 7.5px 12px;
-        //margin-right: auto;
-        //margin-top: 20px;
-        //background-color: #77b93f;
-        position: absolute;
-        top: 12px;
-
-        .fa
-        {
-            display: block;
-            color: #fff;
-            font-size: 30px;
-        }
-
-    }
-}
-
-
-nav-list.active { background-position: -331px top; }
-
-/* .buttonset 
-{
- background: #00A287;
- height: 16px;
- padding: 10px 20px 20px;
-} */
-
-/*  section.content 
- {
-     padding: 10px 20px;
- } */
-
-
- /* MEDIA SCREEN */
-
-@media screen and (max-width: 768px)
-{
-    
-}
-
-@media screen and (max-width: 414px)
-{
-
-}
-
-@media screen and (max-width: 425px)
-{
-    
-}
-
-@media screen and (max-width: 375px)
-{
-
-}
-
-@media screen and (max-width: 320px)
-{
-
-}
-
-#overlay
-{
-    transition: 0.3s;
+    @include transition(0.3s);
     position: fixed;
     display: none;
     width: 100%;
@@ -300,7 +225,54 @@ nav-list.active { background-position: -331px top; }
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.8);
-    z-index: 145;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 100;
     cursor: pointer;
+}
+
+.pushmenu-push-toright 
+{
+    /* left: 300px; */
+    /* @media screen and (max-width: 320px)
+    
+    {
+        left: 246px;
+    } */
+}
+
+
+
+/*Transition*/
+
+.pushmenu,
+.pushmenu-push 
+{
+    @include transition(0.3s)
+}
+
+#nav_list 
+{
+    display: none;
+
+    @media screen and (max-width: 991px) 
+    {
+        cursor: pointer;
+        display: block;
+        width: 50px;
+        position: absolute;
+        top: 12px;
+
+        .fa 
+        {
+            display: block;
+            color: #fff;
+            font-size: 30px;
+        }
+    }
+}
+
+
+nav-list.active 
+{
+    background-position: -331px top;
 }

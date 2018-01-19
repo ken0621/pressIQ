@@ -735,15 +735,15 @@ class Payroll2
 		
 		if($time_keeping_approved == 1)
 		{
-			$string = '<a style="color: green;" onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary2/' . $timesheet_id . '?period_company_id=' . $period_company_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';	
+			$string = '<a style="color: green;" onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '?period_company_id=' . $period_company_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';	
 		}
 		elseif($approved == true)
 		{
-			$string = '<a onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary2/' . $timesheet_id . '?period_company_id=' . $period_company_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';	
+			$string = '<a onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '?period_company_id=' . $period_company_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';	
 		}
 		else
 		{
-			$string = '<a style="color: red;" onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary2/' . $timesheet_id . '?period_company_id=' . $period_company_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';
+			$string = '<a style="color: red;" onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '?period_company_id=' . $period_company_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';
 		}
 		
 		return $string;

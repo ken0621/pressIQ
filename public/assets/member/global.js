@@ -333,7 +333,8 @@ function action_load_after_multiple_modal(url, size)
             setTimeout(function()
             {
                  // action_load_link_to_modal(url, size);
-                 action_load_after_multiple_modal(url, size);
+                 // action_load_after_multiple_modal(url, size);
+                  $("#global_modal").find(".modal-content").html(response);
             }, 2000)
         }
         else

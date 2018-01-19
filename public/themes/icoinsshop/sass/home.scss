@@ -471,7 +471,7 @@ body
 			.text
 			{
 				color: #585858;
-				font-family: $display-text;
+				//font-family: $display-text;
 				font-size: 18px;
 				font-weight: 400;
 				text-align: center;
@@ -509,18 +509,19 @@ body
 		{
 			img
 			{
-
+				width: 90%;
 			}
 		}
 
 		.caption-holder
 		{
 			padding: 20px 0;
-			font-family: $display-text;
+			
 			//margin-left: -10px;
 
 			.caption
 			{
+				font-family: $display-text;
 				color: #1c1c1c;
 				font-weight: 400;
 				font-size: 16px;
@@ -528,6 +529,7 @@ body
 
 			.date
 			{
+				font-family: $display-text;
 				padding-top: 20px;
 				color: #016f56;
 				font-size: 15px;

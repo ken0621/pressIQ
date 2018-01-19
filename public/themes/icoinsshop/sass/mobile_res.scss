@@ -1,4 +1,5 @@
 // MOBILE RESPONSIVENESS
+
 // LAPTOP 1024
 @media screen and (max-width: 1080px) 
 {
@@ -26,6 +27,11 @@
                         {
                             padding: 15px !important;
                             margin-left: 20px !important;
+
+                            @media screen and (max-width: 800px)
+                            {
+                                margin-left: 0 !important;
+                            }
                         }
                     }
                 }
@@ -33,15 +39,15 @@
         }
     }
   
-    .wrapper-5 .news-holder .img-holder img 
-    {
-        width: 100% !important;
-    }
+    // .wrapper-5 .news-holder .img-holder img 
+    // {
+    //     width: 100% !important;
+    // }
 
-    .wrapper-5 .news-holder .caption-holder 
-    {
-        padding: 12px 10px !important;
-    }
+    // .wrapper-5 .news-holder .caption-holder 
+    // {
+    //     padding: 12px 10px !important;
+    // }
 }
 
 // TABLETS
@@ -50,30 +56,42 @@
     .header-container 
     {
         position: relative !important;
-    } //remove the padding top on logo
+    }
+
+     //remove the padding top on logo
     .header-container .image-logo-holder 
     {
         padding-top: 0;
-    } // Disable fadeout when swiped on tablets/mobile
+    }
+
+     // Disable fadeout when swiped on tablets/mobile
     .fadeMe 
     {
         opacity: 1 !important;
-    } // Class to center the logo on tablets/mobile, placed beside col-md-2 located in slider-wrapper on top.
+    }
+
+     // Class to center the logo on tablets/mobile, placed beside col-md-2 located in slider-wrapper on top.
     .center-logo-on-mobile 
     {
         text-align: center;
-    } // resize the logo
+    }
+
+     // resize the logo
     .header-container 
     {
         .image-logo-holder 
         {
             width: 20%;
         }
-    } // remove col-md's on tablets enherited on mobiles
+    }
+
+     // remove col-md's on tablets enherited on mobiles
     .remove-on-mobile 
     {
         display: none;
-    } // Resized on tablets/mobiles
+    }
+
+     // Resized on tablets/mobiles
     .slider-wrapper 
     {
         height: 100% !important;
@@ -145,12 +163,12 @@
             {
                 height: auto !important;
 
-                .top 
-                {
-                    width: 50%;
-                    margin: auto;
-                    padding-top: 25px;
-                }
+                // .top 
+                // {
+                //     width: 50%;
+                //     margin: auto;
+                //     padding-top: 25px;
+                // }
 
                 .text 
                 {
@@ -223,16 +241,23 @@
 
     .wrapper-4 
     {
-        .unskew 
+        .bottom 
         {
-            .product-holder 
+            .btn-container 
             {
-                .bottom 
+                padding: 0px 15px 20px 15px;
+                display: block !important;
+
+                .btn-more-info 
                 {
-                    .btn-container 
-                    {
-                        padding: 10px 8px !important;
-                    }
+                    width: 100%;
+                }
+
+                .btn-buy-tokens 
+                {
+                    width: 100%;
+                    margin-left: 0 !important;
+                    margin-top: 10px;
                 }
             }
         }
@@ -254,30 +279,6 @@
     .slider-wrapper .holder 
     {
         padding: 35px 0 100px 0 !important;
-    }
-
-    .wrapper-4 
-    {
-        .bottom 
-        {
-            .btn-container 
-            {
-                padding: 0px 15px 20px 15px;
-                display: block !important;
-
-                .btn-more-info 
-                {
-                    width: 100%;
-                }
-
-                .btn-buy-tokens 
-                {
-                    width: 100%;
-                    margin-left: 0 !important;
-                    margin-top: 10px;
-                }
-            }
-        }
     }
 }
 

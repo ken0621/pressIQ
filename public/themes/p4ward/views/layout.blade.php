@@ -180,6 +180,12 @@
                                     <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
                                     <li><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></li>
                                     <li><a class="smoth-scroll" href="/#contactus">CONTACT</a></li>
+                                @elseif(Request::segment(1)=="about")
+                                    <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                                    <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
+                                    <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
+                                    <li><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></li>
+                                    <li><a class="smoth-scroll" href="/#contactus">CONTACT</a></li>
                                 @else
                                     <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                     <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>

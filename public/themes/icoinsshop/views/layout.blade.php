@@ -23,12 +23,7 @@
     @include("frontend.ghead")
     <!-- OTHER CSS -->
     @yield("css")
-    <style type="text/css">
-    .content
-    {
-        background-color: transparent;
-    }
-    </style>
+
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
 <body>
@@ -157,8 +152,8 @@
                                         <li><a class="pr {{ Request::segment(1) == "members" ? "active" : "" }}" href="/members">MY ACCOUNT</a></li>
                                         <li><a href="/members/logout"><button class="btn-signin">LOGOUT</button></a></li>
                                     @else
-                                        <li><a href="/members/login"><button class="btn-signin">SIGNIN</button></a></li>
-                                        <li style="margin-left: 10px;"><a href="/members/register"><button class="btn-signin">REGISTER</button></a></li>
+                                        <li><a class="{{ Request::segment(2) == "login" ? "active" : "" }}" href="/members/login"><button class="btn-signin">SIGNIN</button></a></li>
+                                        <li style="margin-left: 10px;"><a class="{{ Request::segment(2) == "register" ? "active" : "" }}" href="/members/register"><button class="btn-signin">REGISTER</button></a></li>
                                     @endif
                                 </ul>
                             </div>

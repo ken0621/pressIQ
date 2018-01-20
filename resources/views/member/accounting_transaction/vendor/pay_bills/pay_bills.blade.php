@@ -77,13 +77,13 @@
                             </div>
                         <div class="col-sm-3">
                             <label>Payment Method</label>
-                            <select class="drop-down-payment" name="paybill_payment_method">
+                            <select class="drop-down-payment payment-method" name="paybill_payment_method">
                                 @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($pb) ? $pb->paybill_payment_method : ''])
                             </select>
                         </div>
                         <div class="col-sm-2">
                             <label>Reference No</label>
-                            <input type="text" class="form-control input-sm"/>
+                            <input type="text" class="form-control input-sm" name="paybill_ref_num" value="{{ isset($pb->paybill_ref_num)? $pb->paybill_ref_num : '' }}" />
                         </div>
                         <div class="col-sm-3">
                             <label>Payment Account</label>
@@ -150,7 +150,6 @@
                             </div> 
                         </div>
                     </div>
-                    
                     <!-- END CONTENT -->
                 </div>
             </div>

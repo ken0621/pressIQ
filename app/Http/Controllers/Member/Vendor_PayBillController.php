@@ -119,8 +119,7 @@ class Vendor_PayBillController extends Member
             {
                 $ctr_bill++;
             }
-            //die(var_dump($txn));
-
+            
             $pbline_data[$key]["line_is_checked"]         = Request::input('line_is_checked')[$key];
 
             $pbline_data[$key]["pbline_reference_name"]   = Request::input('pbline_txn_type')[$key];

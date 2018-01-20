@@ -80,8 +80,10 @@ class TransactionPayBillsController extends Member
         $insert["paybill_date"]              = $request->paybill_date;
         $insert["paybill_total_amount"]      = $request->paybill_total_amount;
         $insert["paybill_payment_method"]    = $request->paybill_payment_method;
+        $insert["paybill_ref_num"]           = $request->paybill_ref_num;
         $insert["paybill_memo"]              = $request->vendor_memo;
 
+        
         $insert_item = null;
         $ctr_bill = 0;
 
@@ -140,6 +142,7 @@ class TransactionPayBillsController extends Member
         $insert["paybill_date"]              = $request->paybill_date;
         $insert["paybill_total_amount"]      = $request->paybill_total_amount;
         $insert["paybill_payment_method"]    = $request->paybill_payment_method;
+        $insert["paybill_ref_num"]           = $request->paybill_ref_num;
         $insert["paybill_memo"]              = $request->vendor_memo;
 
         $insert_item = null;

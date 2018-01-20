@@ -1,109 +1,62 @@
-.about
+.main-container
 {
-	font-family: "Arimo", sans-serif;
-	text-align: center;
-	margin: 50px 0;
-	letter-spacing: 0.2px;
-	.about-title
+	padding: 25px 0 60px 0;
+	.title-container
 	{
-		color: #1c1c1c;
 		font-size: 30px;
-		font-weight: 600;
-	}
-	.about-desc
-	{
-		color: #1c1c1c;
-		font-size: 15px;
-		font-weight: 300;
-		margin-top: 15px;
-	}
-	.about-title-2
-	{
-		color: #1c1c1c;
-		font-size: 20px;
-		font-weight: 600;
-		margin-top: 40px;
-	}
-	.about-desc
-	{
-		color: #1c1c1c;
-		font-size: 15px;
-		font-weight: 300;
-	}
-	.quote
-	{
-		margin-top: 50px;
-		background-image: url("/themes/brown/img/about-bg.png");
-		background-size: cover;
-		background-position: center;
-		background-attachment: fixed;
-		padding: 175px 0;
-		.text
+
+		.title-blue
 		{
-			color: #ffffff;
+			color: #0466af;
 			font-size: 30px;
-			font-weight: 600;
-			line-height: 30px;
+
 		}
-		.text-sub
+		.title-orange
 		{
-			margin-top: 10px;
-			font-size: 15px;
-			font-weight: 300;
-			color: #fff;
+			color: #f4ac00;
+			font-size: 30px;
+			
 		}
-	}
-	.brand
-	{
-		margin-top: 40px;
-		.img
+		span
 		{
-			max-width: 240px;
-			margin: auto;
-			display: block;
+			display: inline-block;
+			vertical-align: middle;
+			font-family: 'Cantarell', sans-serif;
+			font-style: italic;
+			padding: 0px 2px;
 			img
 			{
-				width: 100%;
-			}		
-		}
-		.text
-		{
-			color: #1c1c1c;
-			font-weight: 600;
-			font-size: 20px;
-			margin-top: 20px;
-		}
-		.text-sub
-		{
-			color: #1c1c1c;
-			font-size: 15px;
-			font-weight: 300;
-			margin-top: 20px;
+				display: block;
+			}
 		}
 	}
-	.logo
+	.details-container
 	{
-		margin-top: 100px;
-		.text
+		padding: 0px 0px 15px 0px;
+		p
 		{
-			color: #1c1c1c;
+			font-family: 'Open+Sans', sans-serif;
+			color: #585858;
+			text-align: justify;
 			font-size: 15px;
-			font-weight: 300;
-			margin-bottom: 25px;
+			margin-top: 15px;
 		}
-		.holder-container
+	}
+	.p4ward_partner_container
+	{
+		p
 		{
-			.holder
+			font-family: 'Open+Sans', sans-serif;
+			color: #585858;
+			text-align: justify;
+			font-size: 15px;
+			margin-top: 15px;
+		}
+		.image-holder
+		{
+			img
 			{
-				display: inline-block;
-				vertical-align: middle;
-				margin: 0 15px;
-				img
-				{
-					max-width: 100%;
-					display: block;
-					margin: auto;
-				}
+				width: 10%;
 			}
 		}
 	}

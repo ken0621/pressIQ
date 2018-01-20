@@ -1,19 +1,16 @@
 @extends("layout")
 @section("content")
 <div class="content">
-
     <!-- Media Slider -->
     <div id="home" class="slider-wrapper single-item">
-        {{-- @if(loop_content_condition($shop_theme_info, "home", "home_slider"))
+        @if(loop_content_condition($shop_theme_info, "home", "home_slider"))
             @foreach(loop_content_get($shop_theme_info, "home", "home_slider") as $slider)
             <img src="{{ $slider }}">
             @endforeach
         @else
         <img src="/themes/{{ $shop_theme }}/img/home-banner.jpg">
-        <img src="/themes/{{ $shop_theme }}/img/home-slide-1.jpg">
-        @endif --}}
-        <img src="{{ get_content($shop_theme_info, "home", "home_slider_1") }}">
-        <img src="{{ get_content($shop_theme_info, "home", "home_slider_2") }}">
+        <img src="/themes/{{ $shop_theme }}/img/home-slide-2.jpg">
+        @endif
     </div>
 
     <!-- About P4ward -->
@@ -26,10 +23,7 @@
                         <span class="icon-container"><img src="/themes/{{ $shop_theme }}/img/p4ward-icon-blue.png"></span><span class="title-blue">Our </span><span class="title-orange">History</span>
                     </div>
                     <div class="details-container">
-                        <p>P4ward Global Marketing started through the concept of giving.</p>
-                        <p>On December 22, 2016, a tragedy hit our family. An accident happened in the apartment of my brother which started a fire that engulfed the entire flat including his body. He suffered 60% body burn up to the 3rd degrees.</p>
-                        <p>The nearest hospital he can be rushed to was a big private hospital. He will stay in the ICU for almost 2 weeks and will stay in the hospital for the next 3 months until he will fully recover.</p>
-                        <p>During the first 3 days in the ICU, his bill already reached 6 digits just for the hospital and medicine bills alone. That bill was already bigger than our entire family’s savings combined and with the rate of his medical expenses, it’ll reach 7 figures within the next few days.</p>
+                        {!! get_content($shop_theme_info, "home", "home_history_front") !!}
                     </div>
                     <div class="button-container"><a href="/about">Read More &raquo;</a></div>
                 </div>
@@ -39,17 +33,17 @@
                         <div class="title-container">
                             <span class="title-white">Our </span><span class="title-orange">Purpose</span>
                         </div>
-                        <p>{!! get_content($shop_theme_info, "home", "home_our_purpose") !!}</p>
+                        <p>{{ get_content($shop_theme_info, "home", "home_our_purpose") }}</p>
                         <!-- Mission -->
                         <div class="subtitle-container">
                             <span class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-mission.png"></span><span class="title">Mission</span>
                         </div>
-                        <p>{!! get_content($shop_theme_info, "home", "home_mission") !!}</p>
+                        <p>{{ get_content($shop_theme_info, "home", "home_mission") }}</p>
                         <!-- Vision -->
                         <div class="subtitle-container">
                             <span class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-vision.png"></span><span class="title">Vision</span>
                         </div>
-                        <p>{!! get_content($shop_theme_info, "home", "home_vision") !!}</p>
+                        <p>{{ get_content($shop_theme_info, "home", "home_vision") }}</p>
                     </div>
                 </div> 
             </div>
@@ -72,11 +66,7 @@
                     <div class="wow fadeInRight col-md-7">
                         <div class="title">Why Join P4ward</div>
                         <div class="details-container">
-                            <p>Our goal is not just to help you succeed but to make you significant to others. It’s a bigger
-    responsibility but it’s a life worth living. Imagine someone approached you and with tears in his eyes hugged and thanked you from the bottom of his heart because of the impact you made in his life. That is being significant.</p>
-                            <p>SUCCESS is achieving your dreams.</p>
-                            <p>SIGNIFICANCE is helping someone achieve their dreams.</p>
-                            <p>I invite you to help us create a deeper meaning of Network Marketing. We will define it as not only the source of great products and opportunities, but also the source of camaraderie, respect and love for others. Because it’s not just about you, it’s about others.</p>
+                            {!! get_content($shop_theme_info, "home", "home_history_front") !!}
                         </div>
                     </div>
                 </di>
@@ -92,16 +82,16 @@
                 <div class="row clearfix">
                     <div class="col-md-6">
                         <div class="wow fadeInLeft product-container" data-wow-delay=".6s">
-                            <div class="percent-container">{!! get_content($shop_theme_info, "home", "home_percent_of_product_1") !!}</div>
-                            <div class="product-title-container">{!! get_content($shop_theme_info, "home", "home_p4ward_product_1") !!}</div>
+                            <div class="percent-container">{{ get_content($shop_theme_info, "home", "home_percent_of_product_1") }}</div>
+                            <div class="product-title-container">{{ get_content($shop_theme_info, "home", "home_p4ward_product_1") }}</div>
                             <div class="product-image"><img src="{{ get_content($shop_theme_info, "home", "home_image_product_1") }}"></div>
                             <div class="button-container"><a href="/product"><button>See Benefits</button></a></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="wow fadeInRight product-container" data-wow-delay=".6s">
-                            <div class="percent-container">{!! get_content($shop_theme_info, "home", "home_percent_of_product_2") !!}</div>
-                            <div class="product-title-container">{!! get_content($shop_theme_info, "home", "home_p4ward_product_2") !!}</div>
+                            <div class="percent-container">{{ get_content($shop_theme_info, "home", "home_percent_of_product_2") }}</div>
+                            <div class="product-title-container">{{ get_content($shop_theme_info, "home", "home_p4ward_product_2") }}</div>
                             <div class="product-image"><img src="{{ get_content($shop_theme_info, "home", "home_image_product_2") }}"></div>
                             <div class="button-container"><a href="#"><button>See Benefits</button></a></div>
                         </div>
@@ -144,15 +134,11 @@
                 <div class="col-md-7">
                     <div class="wow fadeInLeft title-container">What makes Don Organics Different from Other Coffee Scrubs?</div>
                     <div class="wow fadeInLeft details-container">
-                        <p>One of the important factors of a coffee scrub is its caffeine content.</p>
-                        <p>Some coffee scrubs will only use brewed coffee grounds which has less benefits to the skin due to the depletion of caffeine. Others use Arabica coffee beans, which almost all coffee that you drink are made of.</p>
-                        <p>The higher the caffeine content of the scrub, the more it is beneficial to the skin.</p>
-                        <p>Don Organics uses Robusta coffee beans. Robusta beans have 2x more caffeine than Arabica beans do. This makes Don Organics coffee scrub caffeine content twice as potent as other coffee scrub.</p>
-                        <p>Since caffeine is the key ingredient to a very effective scrub, Don Organics spend more on Robusta beans so our customers get the best coffee scrub they deserve.</p>
+                        {!! get_content($shop_theme_info, "home", "home_coffee_diff_context") !!}
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <div class="wow fadeInRight image-holder"><img src="/themes/{{ $shop_theme }}/img/wrapper5-image.jpg"></div>
+                    <div class="wow fadeInRight image-holder"><img src="{{ get_content($shop_theme_info, "home", "home_coffee_diff_image") }}"></div>
                 </div>
             </div>
         </div>
@@ -358,11 +344,11 @@
                 </div>
                 <div class="col-md-6">
                     <span class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-address.png"></span><span class="title">Business Address</span>
-                    <div class="details-container"><p>{!! get_content($shop_theme_info, "home", "home_business_address") !!}</p></div>
+                    <div class="details-container"><p>{{ get_content($shop_theme_info, "home", "home_business_address") }}</p></div>
                     <span class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-envelope.png"></span><span class="title">Email Address</span>
-                    <div class="details-container"><p>{!! get_content($shop_theme_info, "home", "home_email_address") !!}</p></div>
+                    <div class="details-container"><p>{{ get_content($shop_theme_info, "home", "home_email_address") }}</p></div>
                     <span class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-mobile.png"></span><span class="title">Contact Number</span>
-                    <div class="number-container"><p>Phone: {!! get_content($shop_theme_info, "home", "home_phone_number") !!}</p><p>Mobile: {!! get_content($shop_theme_info, "home", "home_mobile_number") !!}</p></div>
+                    <div class="number-container"><p>Phone: {{ get_content($shop_theme_info, "home", "home_phone_number") }}</p><p>Mobile: {{ get_content($shop_theme_info, "home", "home_mobile_number") }}</p></div>
                 </div>
             </div>
         </div>

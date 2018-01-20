@@ -136,21 +136,15 @@
                     </div>
                     <div class="text">Other tokens are coming soon!</div>
                 </div>
-
-                <div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
-                    <div class="top">
-                        <img src="/themes/{{ $shop_theme }}/img/krops.jpg">
-                    </div>
-                    <div class="bottom">
-                        <div class="texts"> KROPS is offering tokenized shares of the company through an offering of 16,000,000 or sixteen million KROPS tokens of KropCoins.</div>
-                        <div class="btn-container">
-                            <a href="javascript:"><button class="btn-more-info">MORE INFO</button></a>
-                            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
-                        </div>
-                    </div>
-                </div>
             
                 <div class="product-holder wow fadeIn" data-wow-delay=".6s" data-wow-duration="2s">
+                    <div class="img-holder">
+                        <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
+                    </div>
+                    <div class="text">Other tokens are coming soon!</div>
+                </div>
+
+                <div class="product-holder wow fadeIn" data-wow-delay=".8s" data-wow-duration="2s">
                     <div class="img-holder">
                         <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
                     </div>

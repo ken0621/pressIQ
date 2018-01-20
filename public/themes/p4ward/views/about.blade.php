@@ -13,7 +13,7 @@
                 <p>May you live a life of significance.</p>
                 <p>Your P4ward Partner,</p>
                 <div class="image-holder">
-                    <img src="/themes/{{ $shop_theme }}/img/p4ward_image_partner.jpg">
+                    <img src="{{ get_content($shop_theme_info, "about", "about_author_img") }}">
                 </div>
                 <p style="font-weight: 700;">Chris Sarmiento</p>
             </div>

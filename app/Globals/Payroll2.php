@@ -968,7 +968,6 @@ class Payroll2
 
 	public static function checkRegularHolidayPay($employee_id, $date, $payroll_period_company_id)
 	{
-
 		$before = true;
 		$after = true;
 		$i = 0;

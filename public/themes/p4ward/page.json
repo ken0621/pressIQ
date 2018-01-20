@@ -144,6 +144,13 @@
 			"type":"tinymce",
 			"default":"",
 			"size":"12"
+		},
+		"about_author_img" :
+		{
+			"label":"Author Image",
+			"type":"image",
+			"default":"/themes/p4ward/img/p4ward_image_partner.jpg",
+			"size":"3"
 		}
 	}
 }

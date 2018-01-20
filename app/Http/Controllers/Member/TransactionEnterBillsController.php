@@ -38,6 +38,16 @@ class TransactionEnterBillsController extends Member
         $data['_enter_bills'] = TransactionEnterBills::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills_table', $data);
     }
+    public function getPrint(Request $request)
+    {
+        $eb_id = $request->id;
+           
+        $data['eb'] = TransactionEnterBills::info($this->user_info->shop_id, $eb_id);
+        $data['_ebline'] = TransactionEnterBills::info_item($eb_id);
+
+        $pdf = view('member.accounting_transaction.vendor.enter_bills.enter_bills_pdf', $data);
+        return Pdf_global::show_pdf($pdf);
+    }
     public function getCreate(Request $request)
     {
         $data['page'] = 'Create Bills';

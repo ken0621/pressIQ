@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\Tbl_terms;
+use App\Models\Tbl_purchase_order_line;
+use App\Models\Tbl_purchase_order;
 
 use App\Globals\TransactionDebitMemo;
 use App\Globals\TransactionPurchaseOrder;
@@ -21,6 +23,7 @@ use App\Globals\Item;
 use App\Globals\Warehouse;
 use App\Globals\Utilities;
 use App\Globals\UnitMeasurement;
+use App\Globals\Pdf_global;
 use Carbon\Carbon;
 use Session;
 class TransactionReceiveInventoryController extends Member
@@ -36,7 +39,32 @@ class TransactionReceiveInventoryController extends Member
         $data['_receive_inventory'] = TransactionReceiveInventory::get($this->user_info->shop_id, 10, $request->search_keyword);
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory_table', $data);
     }
+    public function getAddItem($po_id)
+    {
+        $po_data = Tbl_purchase_order_line::um()->where("poline_po_id",$po_id)->get();
+        
+        foreach ($po_data as $key => $value) 
+        {
+            Session::push('po_item',collect($value)->toArray());
+        }
+        $data["ctr_item"] = count(Session::get("po_item"));
 
+        $data['_item']      = Item::get_all_category_item();
+        $data['_um']        = UnitMeasurement::load_um_multi();
+        $data["serial"] = ItemSerial::check_setting();
+
+        return view('member.accounting_transaction.vendor.purchase_order.po_load_item_session',$data);
+
+    }
+    public function getPrint(Request $request)
+    {
+        $ri_id = $request->id;
+        $data["ri"] = TransactionReceiveInventory::info($this->user_info->shop_id,$ri_id);
+        $data["_riline"] = TransactionReceiveInventory::info_item($ri_id);
+
+        $pdf = view("member.accounting_transaction.vendor.receive_inventory.receive_inventory_pdf",$data);
+        return Pdf_global::show_pdf($pdf);
+    }
     public function getCreate(Request $request)
     {
         $data['page'] = 'Create Receive Inventory';
@@ -50,6 +78,7 @@ class TransactionReceiveInventoryController extends Member
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
         $data["transaction_refnum"] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'received_inventory');
 
+        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$request->vendor_id)->where("po_is_billed",0)->get();
         $data['action']     = '/member/transaction/receive_inventory/create-receive-inventory';
         
         $receive_id = $request->id;

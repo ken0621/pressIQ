@@ -18,20 +18,10 @@ use App\Globals\AccountingTransaction;
 use App\Globals\TransactionSalesOrder;
 use App\Globals\TransactionDebitMemo;
 
-use App\Models\Tbl_customer;
-use App\Models\Tbl_warehousea;
-use App\Models\Tbl_customer_invoice;
-use App\Models\Tbl_manual_invoice;
-use App\Models\Tbl_customer_invoice_line;
-use App\Models\Tbl_item;
-use App\Models\Tbl_warehouse;
-use App\Models\Tbl_vendor;
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Purchase_Order;
 use App\Globals\ItemSerial;
-use App\Models\Tbl_purchase_order;
-use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_terms;
 
 use Carbon\Carbon;
@@ -53,6 +43,24 @@ class TransactionPurchaseOrderController extends Member
         $data['_purchase_order'] = TransactionPurchaseOrder::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
         //dd($data['_purchase_order']);
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order_table', $data);
+    }
+    public function getPrint(Request $request)
+    {
+        $po_id = $request->id;
+
+        $data["po"] = TransactionPurchaseOrder::info($this->user_info->shop_id, $po_id);
+        $data["_poline"]       = TransactionPurchaseOrder::info_item($po_id);
+        //dd($data);
+        foreach($data["_poline"] as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->poline_um);
+
+            $total_qty = $value->poline_orig_qty * $qty;
+            $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
+        }
+
+        $pdf = view("member.accounting_transaction.vendor.purchase_order.purchase_order_pdf",$data);
+        return Pdf_global::show_pdf($pdf);
     }
     public function getCreate(Request $request)
     {

@@ -26,7 +26,7 @@ class TransactionEnterBills
     }
     public static function info_item($bill_id)
     {
-        return Tbl_bill_item_line::um()->where("itemline_bill_id", $bill_id)->get();        
+        return Tbl_bill_item_line::um()->item()->where("itemline_bill_id", $bill_id)->get();        
     }
     public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
     {

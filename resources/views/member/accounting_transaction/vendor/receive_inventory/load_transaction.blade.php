@@ -7,7 +7,7 @@
         <div class="clearfix modal-body"> 
             <div class="form-group">
                 <div class="col-md-12">
-                    <h4> <i class="fa fa-caret-down"></i> Sales Order</h4>
+                    <h4> <i class="fa fa-caret-down"></i> Purchase Order</h4>
                 </div> 
                 <div class="col-md-12">
                     @if(count($_po) > 0)
@@ -69,4 +69,6 @@
 <div class="modal-footer">
 	<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
 	<button class="btn btn-primary btn-custom-primary" type="button">Add</button>
+    <a onclick="add_po_to_bill({{$po->po_id}})">Add</a>
+
 </div>

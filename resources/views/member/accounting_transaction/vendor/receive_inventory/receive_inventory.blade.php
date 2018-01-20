@@ -4,7 +4,7 @@
 <form class="global-submit" role="form" action="{{ $action or ''}}" method="POST" >
     <input type="hidden" class="token" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" class="button-action" name="button_action" value="">
-    <input type="hidden" name="ri_id" value="{{ $ri->ri_id }}">
+    <input type="hidden" name="ri_id" value="{{ $ri->ri_id or ''}}">
 <div class="drawer-overlay">
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
@@ -99,7 +99,6 @@
                                                         <th style="width: 70px;">Qty</th>
                                                         <th style="width: 120px;">Rate</th>
                                                         <th style="width: 120px;">Amount</th>
-                                                        @include("member.load_ajax_data.load_th_serial_number")
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
@@ -127,6 +126,8 @@
                                                             </tr>
                                                         @endforeach
                                                     @endif
+                                                <tbody class="draggable tbody-item po-tbl">
+                                                    @include("member.accounting_transaction.vendor.purchase_order.po_load_item_session")  
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>

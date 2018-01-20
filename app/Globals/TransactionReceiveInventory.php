@@ -27,14 +27,13 @@ class TransactionReceiveInventory
         //die(var_dump($count));
         return $count;
 	}
-
     public static function info($shop_id, $ri_id)
     {
         return Tbl_receive_inventory::vendor()->where("ri_shop_id", $shop_id)->where("ri_id", $ri_id)->first();
     }
     public static function info_item($ri_id)
     {
-        return Tbl_receive_inventory_line::um()->where("riline_ri_id", $ri_id)->get();        
+        return Tbl_receive_inventory_line::um()->item()->where("riline_ri_id", $ri_id)->get();        
     }
     
     public static function get($shop_id, $paginate = null, $search_keyword = null)

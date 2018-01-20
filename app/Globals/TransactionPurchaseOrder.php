@@ -28,11 +28,11 @@ class TransactionPurchaseOrder
     }
     public static function info($shop_id, $po_id)
     {
-        return Tbl_purchase_order::where("po_shop_id", $shop_id)->where("po_id", $po_id)->first();
+        return Tbl_purchase_order::vendor()->where("po_shop_id", $shop_id)->where("po_id", $po_id)->first();
     }
     public static function info_item($po_id)
     {
-        return Tbl_purchase_order_line::um()->where("poline_po_id", $po_id)->get();        
+        return Tbl_purchase_order_line::um()->item()->where("poline_po_id", $po_id)->get();        
     }
     public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
     {

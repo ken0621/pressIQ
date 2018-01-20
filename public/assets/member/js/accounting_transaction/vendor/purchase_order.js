@@ -103,7 +103,21 @@ function purchase_order()
 
         }).globalDropList('disabled');
 	}
-
+	function action_load_pdf($po_id)
+	{
+		if($po_id)
+		{
+			$.ajax({
+				url : '/member/transaction/purchase_order/print',
+				type : 'get',
+				data : {po_id : $po_id},
+				success : function(data)
+				{
+					$(".popup-link-pdf").attr('link','/member/transaction/purchase_order/print?id='+$po_id);
+				}
+			});
+		}
+	}
 	function action_compute()
 	{
 		var subtotal = 0;

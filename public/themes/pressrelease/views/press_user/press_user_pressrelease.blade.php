@@ -48,7 +48,7 @@
                      @endif
                    </select> 
                   <div class="title">Title:</div>
-                        <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus value="{{$edits->pr_headline}}">
+                        <input type="text" id="pr_headline" name="pr_headline" class="form-control" value="{{$edits->pr_headline}}" autofocus>
                   <div class="title">Release Text Body:</div>
                         <textarea name="pr_content" id="pr_content">{!!$edits->pr_content!!}</textarea>
                   <div class="title">Boilerplate:</div>
@@ -180,7 +180,9 @@
                   <div class="content" id="headline_pr"></div>
                   <div class="title">Send To:</div>
                   <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
+                  <a href="javascript:" id="pop_chosen_recipient_btn">  VIEW</a>
                   <div class="button-container">
+                    <button class="preview-button" type="button"  id="prev_btn_send">Preview</button>
                     <button type="submit" formaction="/pressuser/pressrelease/pr">Send &raquo;</button>
                   </div>
                 </div>
@@ -266,7 +268,19 @@
 <script>
   $('#prev_btn').click(function()
   {
-    //alert("123");
+    // alert("123");
+    var headline = document.getElementById('pr_headline').value;
+    var type = document.getElementById('pr_type').value;
+    var content = tinymce.get('pr_content').getContent();
+    var boiler_content = tinymce.get('pr_boiler_content').getContent();
+    document.getElementById('preview_headline').innerHTML =headline;
+    document.getElementById('preview_content').innerHTML =content;
+    document.getElementById('preview_type').innerHTML =type;
+    document.getElementById('preview_boiler_content').innerHTML =boiler_content;
+    $('#previewPopup').modal('show'); 
+  });
+  $('#prev_btn_send').click(function()
+  {
     var headline = document.getElementById('pr_headline').value;
     var type = document.getElementById('pr_type').value;
     var content = tinymce.get('pr_content').getContent();
@@ -353,6 +367,16 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     var data = $('.recipient_form').serialize();
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
 });
+</script>
+
+<script>
+  $('#pop_chosen_recipient_btn').click(function()
+  {
+    $('#recipient_name').each(function()
+    {
+      alert($(this).text())
+    });
+  });
 </script>
 
 @endsection

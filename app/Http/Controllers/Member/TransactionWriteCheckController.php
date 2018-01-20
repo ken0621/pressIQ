@@ -83,9 +83,9 @@ class TransactionWriteCheckController extends Member
         $btn_action = $request->button_action;
 
         $insert['transaction_refnumber']   = $request->transaction_refnumber;
-        $insert['vendor_id']               = $request->wc_id;
+        $insert['vendor_id']               = $request->wc_ref_id;
         $insert['wc_reference_name']       = $request->wc_reference_name;
-        $insert['wc_customer_vendor_email']= $request->wc_customer_vendor_email;
+        $insert['vendor_email']            = $request->wc_customer_vendor_email;
         $insert['wc_mailing_address']      = $request->wc_mailing_address;
         $insert['wc_payment_date']         = $request->wc_payment_date;
         $insert['wc_memo']                 = $request->wc_memo;
@@ -98,7 +98,6 @@ class TransactionWriteCheckController extends Member
             if($value)
             {
                 $ctr_items++;
-            
                 /*$insert_item[$key]['itemline_ref_id'] = $value;
                 $insert_item[$key]['itemline_ref_name'] = $request->itemline_ref_name[$key];*/
                 $insert_item[$key]['item_id']           = $value;
@@ -110,33 +109,36 @@ class TransactionWriteCheckController extends Member
                 $insert_item[$key]['item_discount']     = 0;
             }
 
-            $validate = TransactionWriteCheck::postInsert($this->user_info->shop_id, $insert, $insert_item);
-            
-            $return = null;
-            if(is_numeric($validate))
-            {
-                $return['status'] = 'success';
-                $return['status_message'] = 'Success creating write check.';
-                $return['call_function'] = 'success_write_check';
-                $return['status_redirect'] = AccountingTransaction::get_redirect('write_check', $validate ,$btn_action);
-            }
-            else
-            {
-                $return['status'] = 'error';
-                $return['status_message'] = $validate;
-            }
-            return $return;
         }
+        
+        $validate = TransactionWriteCheck::postInsert($this->user_info->shop_id, $insert, $insert_item);
+        
+        $return = null;
+        if(is_numeric($validate))
+        {
+            $return['status'] = 'success';
+            $return['status_message'] = 'Success creating write check.';
+            $return['call_function'] = 'success_write_check';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('write_check', $validate ,$btn_action);
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $validate;
+        }
+
+        return $return;
     }
     public function postUpdateWriteCheck(Request $request)
     {
         $btn_action = $request->button_action;
         $write_check_id = $request->wc_id;
+        //die(var_dump($write_check_id));
 
         $insert['transaction_refnumber']   = $request->transaction_refnumber;
-        $insert['vendor_id']               = $request->wc_id;
+        $insert['vendor_id']               = $request->wc_ref_id;
         $insert['wc_reference_name']       = $request->wc_reference_name;
-        $insert['wc_customer_vendor_email']= $request->wc_customer_vendor_email;
+        $insert['vendor_email']            = $request->wc_customer_vendor_email;
         $insert['wc_mailing_address']      = $request->wc_mailing_address;
         $insert['wc_payment_date']         = $request->wc_payment_date;
         $insert['wc_memo']                 = $request->wc_memo;
@@ -160,24 +162,24 @@ class TransactionWriteCheckController extends Member
                 $insert_item[$key]['item_amount']       = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_discount']     = 0;
             }
-
-            $validate = TransactionWriteCheck::postUpdate($write_check_id, $this->user_info->shop_id, $insert, $insert_item);
-            
-            $return = null;
-            if(is_numeric($validate))
-            {
-                $return['status'] = 'success';
-                $return['status_message'] = 'Success creating write check.';
-                $return['call_function'] = 'success_write_check';
-                $return['status_redirect'] = AccountingTransaction::get_redirect('write_check', $validate ,$btn_action);
-            }
-            else
-            {
-                $return['status'] = 'error';
-                $return['status_message'] = $validate;
-            }
-            return $return;
         }
+
+        $validate = TransactionWriteCheck::postUpdate($write_check_id, $this->user_info->shop_id, $insert, $insert_item);
+        
+        $return = null;
+        if(is_numeric($validate))
+        {
+            $return['status'] = 'success';
+            $return['status_message'] = 'Success creating write check.';
+            $return['call_function'] = 'success_write_check';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('write_check', $validate ,$btn_action);
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $validate;
+        }
+        return $return;
     }
     public function getCountTransaction(Request $request)
     {

@@ -45,8 +45,7 @@
 					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">Witholding Tax</th>
 					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">TOTAL DEDUCTION</th>
 					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">GROSS PAY</th>
-								<th valign="center" rowspan="2" class="text-center" style="width: 100px">NET HOME PAY</th>
-													           
+								<th valign="center" rowspan="2" class="text-center" style="width: 100px">NET HOME PAY</th>					           
 					        </tr>
 					        
 					        <tr>
@@ -72,7 +71,6 @@
                         	</tr>
 					    </thead>
 					    <tbody>
-					    	
 					    	 @foreach($_employee as $lbl => $period)
 						    	<tr>
 						    	 	<td class="text-center">{{$period->payroll_period_start}} - {{$period->payroll_period_end}}</td>
@@ -108,7 +106,6 @@
 							    	<td class="text-center" >{{ number_format($period->net_pay,2) }}</td>
 						    	</tr>
 					    	 @endforeach
-
 					    	  	<tr >
 							   		<td class="text-center" ><b>Total</b></td>
 							    	<td class="text-center" ><b>{{ number_format($total_basic,2) }}</b></td>

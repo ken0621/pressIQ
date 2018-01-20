@@ -179,19 +179,20 @@ class TransactionPayBills
 	            $itemline[$key]["pbline_reference_name"]   = $value['pbline_reference_name'];
 	            $itemline[$key]["pbline_reference_id"]     = $value['pbline_reference_id'];
 	            $itemline[$key]["pbline_amount"]           = $value['item_amount'];
-
-	            Tbl_pay_bill_line::insert($itemline);
-
-	            if($itemline[$key]["pbline_reference_name"] == 'bill')
-		        {
-		        	Self::updateAppliedAmount($itemline[$key]["pbline_reference_id"], $shop_id);
-		        }
-        	}
-        	else
-	        {
-	        	Self::updateAppliedAmount($value['pbline_reference_id'], $shop_id);   
-	        }
+			}
+	            
         }
+
+        Tbl_pay_bill_line::insert($itemline);
+
+        if($itemline[$key]["pbline_reference_name"] == 'bill')
+        {
+        	Self::updateAppliedAmount($itemline[$key]["pbline_reference_id"], $shop_id);
+        }
+		else
+    	{
+    	Self::updateAppliedAmount($value['pbline_reference_id'], $shop_id);   
+    	}
 
         $return = AccountingTransaction::entry_data($entry, $insert_item);
 

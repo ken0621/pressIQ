@@ -416,7 +416,7 @@
         50% { opacity: 0; }
         }
         </style>
-        <script type="text/javascript" src="/assets/member/global.js?version=6.3"></script>
+        <script type="text/javascript" src="/assets/member/global.js?version=8.3"></script>
         <!-- Testing only -->
         <script type="text/javascript" src="/assets/member/settings/settings_global.js"></script>
         <script type="text/javascript" src="/assets/member/mlm/global_slot.js"></script>

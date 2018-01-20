@@ -59,6 +59,11 @@ class TransactionPurchaseRequisitionController extends Member
 		$return = RequisitionSlip::create($this->user_info->shop_id, $this->user_info->user_id, $request);
 		return json_encode($return);
 	}
+	public function postUpdateSubmit(Request $request)
+	{
+		$return = RequisitionSlip::create($this->user_info->shop_id, $this->user_info->user_id, $request);
+		return json_encode($return);
+	}
 	public function getPrint(Request $request, $slip_id = 0)
 	{
 		$data['rs'] = RequisitionSlip::get_slip($this->user_info->shop_id, $slip_id);

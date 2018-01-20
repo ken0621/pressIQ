@@ -319,7 +319,7 @@ button:hover{
 		p 
 		{
 			color: rgba(255,255,255, 0.5);
-			font-size: 14px;
+			font-size: 12px;
 		}
 		.button-container
 		{
@@ -374,6 +374,71 @@ button:hover{
 				margin: 5px 0px;
 				color: rgba(255,255,255, 0.5);
 				text-decoration: none;
+			}
+		}
+		.social-icon-container
+		{
+			
+			span
+			{
+				padding: 5px !important;
+			}
+
+			.fa
+			{
+				font-size: 45px;
+				cursor: pointer;
+			}
+
+			.fa-facebook-square
+			{
+				@include transition(0.2s);
+				padding: 0px !important;
+				vertical-align: middle;
+				font-size: 30px;
+
+				&:hover
+				{
+					color: #3b5998;
+					/* border-radius: 5px;
+					background-color: #FFF; */
+				}
+			}
+
+			.fa-twitter-square
+			{
+				@include transition(0.2s);
+				vertical-align: middle;
+				font-size: 30px;
+
+				&:hover
+				{
+					color: #00aced;
+					/* border-radius: 5px;
+					background-color: #FFF; */
+				}
+			}
+
+			.fa-instagram
+			{
+				@include transition(0.2s);
+				vertical-align: middle;
+				color: #003054;
+				background-color: #fff;
+				border-radius: 5px;
+				padding: 3px 5px;;
+				font-size: 20px;
+				margin-left: 5px;
+
+				&:hover
+				{
+					background: #f09433; 
+					background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
+					background: -webkit-linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+					background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+					/* border-radius: 5px;
+					background-color: #FFF; */
+				}
 			}
 		}
 	}
@@ -1174,12 +1239,6 @@ button:hover{
 .fa-google-plus-square {
 	color: #d54432;
 }
-.fa-twitter-square {
-	color: #2aaae0;
-}
-.fa-facebook-square {
-	color: #3d5190;
-}
 .fa-angle-double-down {
 	color: white;
 	font-size: 32px !important;
@@ -1197,10 +1256,6 @@ button:hover{
 	color: #fff;
 }
 .fa-envelope-o {
-	font-size: 15px;
-	color: #fff;
-}
-.fa-facebook {
 	font-size: 15px;
 	color: #fff;
 }

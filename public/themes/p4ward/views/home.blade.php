@@ -4,8 +4,16 @@
 
     <!-- Media Slider -->
     <div id="home" class="slider-wrapper single-item">
+        {{-- @if(loop_content_condition($shop_theme_info, "home", "home_slider"))
+            @foreach(loop_content_get($shop_theme_info, "home", "home_slider") as $slider)
+            <img src="{{ $slider }}">
+            @endforeach
+        @else
         <img src="/themes/{{ $shop_theme }}/img/home-banner.jpg">
         <img src="/themes/{{ $shop_theme }}/img/home-slide-1.jpg">
+        @endif --}}
+        <img src="{{ get_content($shop_theme_info, "home", "home_slider_1") }}">
+        <img src="{{ get_content($shop_theme_info, "home", "home_slider_2") }}">
     </div>
 
     <!-- About P4ward -->
@@ -23,7 +31,7 @@
                         <p>The nearest hospital he can be rushed to was a big private hospital. He will stay in the ICU for almost 2 weeks and will stay in the hospital for the next 3 months until he will fully recover.</p>
                         <p>During the first 3 days in the ICU, his bill already reached 6 digits just for the hospital and medicine bills alone. That bill was already bigger than our entire family’s savings combined and with the rate of his medical expenses, it’ll reach 7 figures within the next few days.</p>
                     </div>
-                    <div class="button-container"><a href="#">Read More &raquo;</a></div>
+                    <div class="button-container"><a href="/about">Read More &raquo;</a></div>
                 </div>
                 <div class="wow fadeInRight col-md-4">
                     <div class="right-container">
@@ -31,17 +39,17 @@
                         <div class="title-container">
                             <span class="title-white">Our </span><span class="title-orange">Purpose</span>
                         </div>
-                        <p>To create and promote a good image of Network Marketing in the Philippines.</p>
+                        <p>{!! get_content($shop_theme_info, "home", "home_our_purpose") !!}</p>
                         <!-- Mission -->
                         <div class="subtitle-container">
                             <span class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-mission.png"></span><span class="title">Mission</span>
                         </div>
-                        <p>Uplift Lives</p>
+                        <p>{!! get_content($shop_theme_info, "home", "home_mission") !!}</p>
                         <!-- Vision -->
                         <div class="subtitle-container">
                             <span class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-vision.png"></span><span class="title">Vision</span>
                         </div>
-                        <p>100,000 successful P4wards Partners</p>
+                        <p>{!! get_content($shop_theme_info, "home", "home_vision") !!}</p>
                     </div>
                 </div> 
             </div>
@@ -57,7 +65,9 @@
             <div class="bottom-container">
                 <di class="row clearfix">
                     <div class="wow fadeInLeft col-md-5">
-                        <div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/wrapper2-image.jpg"></div>
+                        <div class="image-holder">
+                            <img src="{{ get_content($shop_theme_info, "home", "home_why_p4ward_image") }}">
+                        </div>
                     </div>
                     <div class="wow fadeInRight col-md-7">
                         <div class="title">Why Join P4ward</div>
@@ -82,17 +92,17 @@
                 <div class="row clearfix">
                     <div class="col-md-6">
                         <div class="wow fadeInLeft product-container" data-wow-delay=".6s">
-                            <div class="percent-container">100% Organic</div>
-                            <div class="product-title-container">Don Organics Coffee Scrub</div>
-                            <div class="product-image"><img src="/themes/{{ $shop_theme }}/img/wrapper3-image1.png"></div>
+                            <div class="percent-container">{!! get_content($shop_theme_info, "home", "home_percent_of_product_1") !!}</div>
+                            <div class="product-title-container">{!! get_content($shop_theme_info, "home", "home_p4ward_product_1") !!}</div>
+                            <div class="product-image"><img src="{{ get_content($shop_theme_info, "home", "home_image_product_1") }}"></div>
                             <div class="button-container"><a href="/product"><button>See Benefits</button></a></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="wow fadeInRight product-container" data-wow-delay=".6s">
-                            <div class="percent-container">100% Organic</div>
-                            <div class="product-title-container">Don Organics Red Rice Scrub</div>
-                            <div class="product-image"><img src="/themes/{{ $shop_theme }}/img/wrapper3-image2.png"></div>
+                            <div class="percent-container">{!! get_content($shop_theme_info, "home", "home_percent_of_product_2") !!}</div>
+                            <div class="product-title-container">{!! get_content($shop_theme_info, "home", "home_p4ward_product_2") !!}</div>
+                            <div class="product-image"><img src="{{ get_content($shop_theme_info, "home", "home_image_product_2") }}"></div>
                             <div class="button-container"><a href="#"><button>See Benefits</button></a></div>
                         </div>
                     </div>
@@ -292,12 +302,12 @@
     </div>
 
     <!-- Network Marketing PDF link-->
-    <div class="wrapper-x" style="background-image: url('/themes/{{ $shop_theme }}/img/pdf-img-bg2.jpg')">
+    <div class="wrapper-x" style="background-image: url('/themes/{{ $shop_theme }}/img/network-marketing-bg.jpg')">
         <div class="container">
             <div class="wrapper-x-title wow fadeInDown" data-wow-delay = ".2s">Network Marketing Without Recruitment</div>
 
             <div class="btn-container wow fadeInDown" data-wow-delay = ".4s">
-                <a href="https://drive.google.com/file/d/0B9TqTDu5OK_3V0NFUlRTRUhFVm1PYzZob091RmhaanlpTFkw/view" target="_blank"><button>Read More &raquo;</button></a>
+                <a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view"><button>Read More &raquo;</button></a>
             </div>
         </div>
     </div>
@@ -348,11 +358,11 @@
                 </div>
                 <div class="col-md-6">
                     <span class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-address.png"></span><span class="title">Business Address</span>
-                    <div class="details-container"><p>0261 BE (STALL 1) M.A. Fernando St. Santa Cruz Angat Bulacan 3012</p></div>
+                    <div class="details-container"><p>{!! get_content($shop_theme_info, "home", "home_business_address") !!}</p></div>
                     <span class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-envelope.png"></span><span class="title">Email Address</span>
-                    <div class="details-container"><p>admin@p4ward.com</p></div>
+                    <div class="details-container"><p>{!! get_content($shop_theme_info, "home", "home_email_address") !!}</p></div>
                     <span class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-mobile.png"></span><span class="title">Contact Number</span>
-                    <div class="number-container"><p>Phone: 028995519</p><p>Mobile: 0947-985-5602 / 09988627466</p></div>
+                    <div class="number-container"><p>Phone: {!! get_content($shop_theme_info, "home", "home_phone_number") !!}</p><p>Mobile: {!! get_content($shop_theme_info, "home", "home_mobile_number") !!}</p></div>
                 </div>
             </div>
         </div>

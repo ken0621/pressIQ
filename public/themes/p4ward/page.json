@@ -2,19 +2,12 @@
 	"home":
 	{
 		
-		"home_slider_1" :
+		"home_slider" :
 		{
-			"label":"Home Slider 1 (1600x700) Image Dimension",
-			"type":"image",
-			"default":"/themes/p4ward/img/home-banner.jpg",
-			"size":"6"
-		},
-		"home_slider_2" :
-		{
-			"label":"Home Slider 2 (1600x700) Image Dimension",
-			"type":"image",
-			"default":"/themes/p4ward/img/home-slide-2.jpg",
-			"size":"6"
+			"label":"Slider Maintenance",
+			"type":"gallery",
+			"default":"",
+			"size":"12"
 		},
 		"home_our_purpose" :
 		{
@@ -37,12 +30,26 @@
 			"default":"100,000 successful P4wards Partners",
 			"size":"4"
 		},
+		"home_history_front" :
+		{
+			"label":"History Section",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
+		},
 		"home_why_p4ward_image" :
 		{
 			"label":"Why P4ward Image (420x300) Image Dimension",
 			"type":"image",
 			"default":"/themes/p4ward/img/wrapper2-image.jpg",
-			"size":"7"
+			"size":"6"
+		},
+		"home_why_p4ward_context" :
+		{
+			"label":"Why P4ward Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
 		},
 		"home_percent_of_product_1" :
 		{
@@ -79,6 +86,20 @@
 			"default":"/themes/p4ward/img/wrapper3-image1.png",
 			"size":"6"
 		},
+		"home_coffee_diff_context" :
+		{
+			"label":"Don Organics Difference Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"home_coffee_diff_image" :
+		{
+			"label":"Don Organics Difference Image",
+			"type":"image",
+			"default":"/themes/p4ward/img/wrapper5-image.jpg",
+			"size":"6"
+		},
 		"home_image_product_2" :
 		{
 			"label":"Image of Product 2 (300x190) Image Dimension",
@@ -113,7 +134,16 @@
 			"type":"textbox",
 			"default":"0947-985-5602 / 09988627466",
 			"size":"3"
+		}	
+	},
+	"about":
+	{
+		"about_history" :
+		{
+			"label":"History",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
 		}
-		
 	}
 }

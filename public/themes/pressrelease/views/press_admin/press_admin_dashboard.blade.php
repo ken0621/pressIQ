@@ -2,7 +2,7 @@
 @section("pressview")
 <div class="background-container">
     <div class="pressview">
-        
+
     </div>
 </div>
 @endsection

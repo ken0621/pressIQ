@@ -42,13 +42,13 @@
         <div class="modal-footer row clearfix">
             <div class="col-md-8">
                 <div class="left-btn-container">
-                    <div style="color: #1c1c1c;"><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
+                    <div data-dismiss="modal" style="color: #1c1c1c; cursor: pointer;"><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
                     <button class="btn-checkout" onclick="location.href='/members/checkout'">Checkout</button>
                 </div>
             </div>
             <div class="col-md-4">
                 @if(isset($cart) && $cart)
-                <div class="total" style="display: inline-block; vertical-align: top; margin-right: 15px;">Shipping Fee: {{ number_format($cart["info"]->shipping_fee, 2) }}</div>
+                {{-- <div class="total" style="display: inline-block; vertical-align: top; margin-right: 15px;">Shipping Fee: {{ number_format($cart["info"]->shipping_fee, 2) }}</div> --}}
                     <div class="total" style="display: inline-block; vertical-align: top;">Total: {{ $cart["_total"]->display_grand_total }}</div>
                 @else
                     <div class="total" style="display: inline-block; vertical-align: top;">Total: 0.00</div>

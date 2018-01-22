@@ -98,7 +98,7 @@
 									{{ get_product_first_name($related) }}
 								</div>
 								<div class="price-container">PHP {{ get_product_first_price($related) }}</div>
-								<div class="button-container">SHOP NOW</div>
+								<div class="button-container">BUY NOW</div>
 							</div>
 						</div>
 					</div>
@@ -127,7 +127,7 @@
 										{{ get_product_first_name($package) }}
 									</div>
 									<div class="price-container">PHP {{ get_product_first_price($package) }}</div>
-									<div class="button-container">SHOP NOW</div>
+									<div class="button-container">BUY NOW</div>
 								</div>
 							</div>
 						</div>
@@ -138,6 +138,9 @@
 			@endif
 		</div>
 	</div>
+
+    <!-- SCROLL TO TOP -->
+    <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
 @endsection
 
@@ -145,26 +148,9 @@
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product_content.css">
 @endsection
 
-@section("js")
+@section("script")
 <script type="text/javascript">
-$(document).ready(function()
-{
-	/*scroll up*/
-	$(window).scroll(function () {
-        if ($(this).scrollTop() > 700) {
-            $('.scroll-up').fadeIn();
-        } else {
-            $('.scroll-up').fadeOut();
-        }
-    });
 
-    $('.scroll-up').click(function () {
-        $("html, body").animate({
-            scrollTop: 0
-        }, 700);
-        return false;
-    });
-});
 </script>
 <script type="text/javascript" src="/assets/front/js/zoom.js"></script>
 <script type="text/javascript">

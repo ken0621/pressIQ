@@ -87,8 +87,9 @@
                 <li> <a onclick="off()" href="/#howitworks"><i class="fa fa-question" aria-hidden="true"></i> HOW IT WORKS</a></li>
                 <li> <a onclick="off()" href="/#products"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS</a></li>
                 <li> <a onclick="off()" href="/#news"><i class="fa fa-newspaper-o" aria-hidden="true"></i> NEWS</a></li>
-                <li> <a onclick="off()" href="/members/login"><i class="fa fa-sign-in" aria-hidden="true"></i> SIGNIN</a></li>
+                <li> <a onclick="off()" href="/members/login"><i class="fa fa-sign-in" aria-hidden="true"></i> LOGIN</a></li>
                 <li> <a onclick="off()" href="/members/register"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> REGISTER</a></li>
+                <li class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}"> <a onclick="off()" href="javascript:"><i class="fa fa-shopping-cart" aria-hidden="true"></i> ADD TO CART</a></li>
             </ul>
             @endif
         </nav>
@@ -117,28 +118,28 @@
                                     <li><a class="navigation__link" href="/#about">ABOUT</a></li>
                                     <li><a class="navigation__link" href="/#missionvision">MISSION AND VISION</a></li>
                                     <li><a class="navigation__link" href="/#howitworks">HOW IT WORKS</a></li>
-                                    <li><a class="navigation__link" href="/#products">PRODUCTS</a></li>
+                                    <li><a class="navigation__link {{ Request::segment(1) == "product" ? "active" : "" }}" href="/#products">PRODUCTS</a></li>
                                     <li><a class="navigation__link" href="/#news">NEWS</a></li>
                                     @elseif(Request::segment(1) == "product")
                                     <li><a class="navigation__link" href="/#home">HOME</a></li>
                                     <li><a class="navigation__link" href="/#about">ABOUT</a></li>
                                     <li><a class="navigation__link" href="/#missionvision">MISSION AND VISION</a></li>
                                     <li><a class="navigation__link" href="/#howitworks">HOW IT WORKS</a></li>
-                                    <li><a class="navigation__link" href="/#products">PRODUCTS</a></li>
+                                    <li><a class="navigation__link {{ Request::segment(1) == "product" ? "active" : "" }}" href="/#products">PRODUCTS</a></li>
                                     <li><a class="navigation__link" href="/#news">NEWS</a></li>
                                     @elseif(Request::segment(1) == "announcement")
                                     <li><a class="navigation__link" href="/#home">HOME</a></li>
                                     <li><a class="navigation__link" href="/#about">ABOUT</a></li>
                                     <li><a class="navigation__link" href="/#missionvision">MISSION AND VISION</a></li>
                                     <li><a class="navigation__link" href="/#howitworks">HOW IT WORKS</a></li>
-                                    <li><a class="navigation__link" href="/#products">PRODUCTS</a></li>
+                                    <li><a class="navigation__link {{ Request::segment(1) == "product" ? "active" : "" }}" href="/#products">PRODUCTS</a></li>
                                     <li><a class="navigation__link" href="/#news">NEWS</a></li>
                                     @else
                                     <li><a class="navigation__link" href="#home">HOME</a></li>
                                     <li><a class="navigation__link" href="#about">ABOUT</a></li>
                                     <li><a class="navigation__link" href="#missionvision">MISSION AND VISION</a></li>
                                     <li><a class="navigation__link" href="#howitworks">HOW IT WORKS</a></li>
-                                    <li><a class="navigation__link" href="#products">PRODUCTS</a></li>
+                                    <li><a class="navigation__link {{ Request::segment(1) == "product" ? "active" : "" }}" href="#products">PRODUCTS</a></li>
                                     <li><a class="navigation__link" href="#news">NEWS</a></li>
                                     @endif
                                 </ul>
@@ -148,11 +149,13 @@
                             <div class="nav">
                                 <ul>
                                     @if($customer)
-                                    <li><a class="pr {{ Request::segment(1) == "members" ? "active" : "" }}" href="/members">MY ACCOUNT</a></li>
-                                    <li><a href="/members/logout"><button class="btn-signin">LOGOUT</button></a></li>
+                                        <li><a class="pr {{ Request::segment(1) == "members" ? "active" : "" }}" href="/members">MY ACCOUNT</a></li>
+                                        <li><a href="/members/logout"><button class="btn-login">LOGOUT</button></a></li>
                                     @else
-                                    <li><a class="{{ Request::segment(2) == "login" ? "active" : "" }}" href="/members/login"><button class="btn-signin">SIGNIN</button></a></li>
-                                    <li style="margin-left: 10px;"><a class="{{ Request::segment(2) == "register" ? "active" : "" }}" href="/members/register"><button class="btn-signin">REGISTER</button></a></li>
+                                        <li><a class="{{ Request::segment(2) == "login" ? "active" : "" }}" href="/members/login"><button class="btn-login">LOGIN</button></a></li>
+                                        {{-- <li style="margin-left: 10px;"><a class="{{ Request::segment(2) == "register" ? "active" : "" }}" href="/members/register"><button class="btn-login">REGISTER</button></a></li> --}}
+                                        <li class="cart-icon-1 product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}" style="margin-left: 10px;"><a href="javascript:"><img src="/themes/{{ $shop_theme }}/img/shopping-cart1.png"></a></li>
+                                        <li class="cart-icon-2 product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}" style="margin-left: 10px;"><a href="javascript:"><img src="/themes/{{ $shop_theme }}/img/shopping-cart2.png"></a></li>
                                     @endif
                                 </ul>
                             </div>

@@ -177,11 +177,11 @@ body
                     }
                 }
 
-                .btn-signin 
+                .btn-login 
                 {
                     @include transition(0.2s);
                     border: none;
-                    border-bottom: 4px solid #a76200;
+                    border-bottom: 4px solid #016f56;
                     padding: 0 15px 5px 15px; 
                     //margin-top: -2;
                     color: #fff;
@@ -193,6 +193,11 @@ body
                 {
                     padding-right: 25px;
                 }
+            }
+
+            .cart-icon-2
+            {
+                display: none;
             }
         }
     }
@@ -285,10 +290,20 @@ body
                             color: #000;
                         }
 
-                        .btn-signin 
+                        .btn-login 
                         {
                             color: #000;
                         }
+                    }
+                    
+                    .cart-icon-1
+                    {
+                        display: none;
+                    }
+
+                    .cart-icon-2
+                    {
+                        display: inline-block;
                     }
                 }
             } 
@@ -302,7 +317,7 @@ body
 footer 
 {
     background-color: #082c22;
-    padding: 50px 0;
+    padding: 150px 0 20px 0;
 
 	.border
 	{

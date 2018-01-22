@@ -269,11 +269,14 @@ class CustomerWarehouseIssuanceSlipController extends Member
     }
      public function getPrint(Request $request, $wis_id)
     {
+        $date = date("F j, Y, g:i a");
+        $first_name         = $this->user_info->user_first_name;
+        $last_name         = $this->user_info->user_last_name;
+        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
 
         $data['wis'] = CustomerWIS::get_customer_wis_data($wis_id);
-
         $customer_id = $data['wis']->destination_customer_id;
-
+        
         $data['wis_item'] = CustomerWIS::print_customer_wis_item($wis_id);
         $data['user'] = $this->user_info;
         $data['owner'] = WarehouseTransfer::get_warehouse_data($data['wis']->cust_wis_from_warehouse);

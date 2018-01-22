@@ -83,6 +83,11 @@ class Vendor_PayBillController extends Member
     }
     public function print_pay_bill()
     {
+        $date       = date("F j, Y, g:i a");
+        $first_name = $this->user_info->user_first_name;
+        $last_name  = $this->user_info->user_last_name;
+        $footer     ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
         $id = Request::input('id');
         $data['paybill'] = Tbl_pay_bill::vendor()->where('paybill_id',$id)->first();
         $data['paybill_line'] = Tbl_pay_bill_line::where('pbline_pb_id',$id)->get();
@@ -92,7 +97,7 @@ class Vendor_PayBillController extends Member
         // return view('member.pay_bill.paybill_pdf',$data);
         
         $pdf = view('member.pay_bill.paybill_pdf',$data);
-        return Pdf_global::show_pdf($pdf);
+        return Pdf_global::show_pdf($pdf, null, $footer);
     }
     public function load_vendor_pb($vendor_id)
     {

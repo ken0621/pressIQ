@@ -71,8 +71,12 @@ class Vendor_CreateBillController extends Member
     } 
     public function print_bill()
     {
-        $id = Request::input('id');
+        $date       = date("F j, Y, g:i a");
+        $first_name = $this->user_info->user_first_name;
+        $last_name  = $this->user_info->user_last_name;
+        $footer     ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
 
+        $id = Request::input('id');
         $data['bill'] = Tbl_bill::vendor()->where('bill_id',$id)->first();
         $data['bill_item'] = Tbl_bill_item_line::item()->um()->where('itemline_bill_id',$id)->get();
         $data['transaction_type'] = "Bill";
@@ -81,7 +85,7 @@ class Vendor_CreateBillController extends Member
         // return view('member.receive_inventory.bill_pdf',$data);
 
         $pdf = view('member.receive_inventory.bill_pdf',$data);
-        return Pdf_global::show_pdf($pdf);
+        return Pdf_global::show_pdf($pdf, null, $footer);
     }  
     public function create_bill()
     {

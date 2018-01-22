@@ -79,6 +79,11 @@ class Vendor_ReceiveInventoryController extends Member
         $access = Utilities::checkAccess('vendor-receive-inventory', 'access_page');
         if($access == 1)
         { 
+            $date       = date("F j, Y, g:i a");
+            $first_name = $this->user_info->user_first_name;
+            $last_name  = $this->user_info->user_last_name;
+            $footer     ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
             $data["ri"] = Tbl_bill::vendor()->where("bill_id",$ri_id)->first();
             $data["_riline"] = Tbl_bill_item_line::um()->item()->where("itemline_bill_id",$ri_id)->get();
             //dd($data["_riline"]);
@@ -90,7 +95,7 @@ class Vendor_ReceiveInventoryController extends Member
                 $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
             }*/
             $pdf = view("member.vendor_list.ri_pdf",$data);
-            return Pdf_global::show_pdf($pdf);
+            return Pdf_global::show_pdf($pdf, null, $footer);
         }
         else
         {

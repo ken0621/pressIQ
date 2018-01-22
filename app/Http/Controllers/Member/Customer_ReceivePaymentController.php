@@ -92,10 +92,15 @@ class Customer_ReceivePaymentController extends Member
     }
     public function rp_pdf($rp_id)
     {
+        $date = date("F j, Y, g:i a");
+        $first_name         = $this->user_info->user_first_name;
+        $last_name         = $this->user_info->user_last_name;
+        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
         $data['receive_payment'] = Tbl_receive_payment::customer()->where("rp_id",$rp_id)->where("rp_shop_id",$this->user_info->shop_id)->first();       
         $data["_invoice"] = Tbl_receive_payment_line::invoice()->where('inv_shop_id',$this->user_info->shop_id)->where('rpline_rp_id',$rp_id)->get();
         $pdf = view('member.receive_payment.receive_payment_pdf', $data);
-        return Pdf_global::show_pdf($pdf);
+        return Pdf_global::show_pdf($pdf, null, $footer);
 
     }
     public function add_receive_payment()

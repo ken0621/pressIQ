@@ -2358,7 +2358,7 @@ class Payroll2
 		}
 
 		
-		$total_day_income 				= $daily_rate ;
+		$total_day_income 				= $daily_rate;
 		$target_float 					= Self::time_float($_time['target_hours']);
 		$daily_rate_plus_cola			= $daily_rate + $cola;
 
@@ -2423,8 +2423,6 @@ class Payroll2
 		{
 			if ($rest_float != 0) 
 			{
-				if ($time_spent != 0) 
-				{
 					//Rest Day
 					if($compute_type == "daily")
 					{
@@ -2442,7 +2440,7 @@ class Payroll2
 						$total_day_income   = 0;
 						$return->daily_rate = 0;
 						$return->_breakdown_addition["Rest Day"]["time"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($regular_param['payroll_overtime_rest_day']).")"; 
-						$return->_breakdown_addition["Rest Day"]["rate"] = (( ( $target_float >= $target_float ? $target_float:$time_spent ) * $hourly_rate ) * ($regular_param['payroll_overtime_rest_day']));
+						$return->_breakdown_addition["Rest Day"]["rate"] = (($target_float * $hourly_rate ) * ($regular_param['payroll_overtime_rest_day']));
 						$return->_breakdown_addition["Rest Day"]["hour"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]);
 						
 						$total_day_income 		= $total_day_income + $return->_breakdown_addition["Rest Day"]["rate"]; 			
@@ -2459,7 +2457,7 @@ class Payroll2
 						$additional_percentage 	 = ($regular_param['payroll_overtime_rest_day']);
 						$breakdown_addition 	 += $return->_breakdown_addition["Rest Day"]["rate"];
 					}
-				}
+				
 
 				//Rest Day Over Time
 				if ($overtime_float != 0) 
@@ -2486,14 +2484,12 @@ class Payroll2
 			}
 			else
 			{
-				if ($time_spent != 0) 
+
+				if ($compute_type == "hourly") 
 				{
-					if ($compute_type == "hourly") 
-					{
-						$return->daily_rate = $hourly_rate * $target_float;
-						$total_day_income   = $hourly_rate * $target_float;
-					}
-			    }
+					$return->daily_rate = $hourly_rate * $target_float;
+					$total_day_income   = $return->daily_rate;
+				}
 		  		if ($overtime_float != 0) 
 				{
 					$return->_breakdown_addition["Over Time"]["time"] = $_time["overtime"] ." (".ctopercent($regular_param['payroll_overtime_overtime']).")"; 
@@ -2522,9 +2518,6 @@ class Payroll2
 			//Legal Holiday with rest day
 			if($rest_float > 0)
 			{
-
-				if ($time_spent != 0) 
-				{
 
 					if ($compute_type == "daily") 
 					{
@@ -2558,7 +2551,7 @@ class Payroll2
 						$additional_percentage = ($legal_param['payroll_overtime_rest_day']);
 						$breakdown_addition    += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
 					}
-				}
+				
 
 				//Legal Holiday Rest Day Over Time
 				if ($overtime_float!=0) 
@@ -2586,8 +2579,6 @@ class Payroll2
 			}
 			else
 			{
-				if ($time_spent != 0) 
-				{
 				//Legal Holiday
 					if ($compute_type=="daily" ) 
 					{
@@ -2616,7 +2607,15 @@ class Payroll2
 					else if ($compute_type == "hourly")
 					{
 						$total_day_income = 0;
-						$return->daily_rate = $hourly_rate * $target_float;
+
+						if($time_spent != 0)
+						{
+							$return->daily_rate = $hourly_rate * $target_float;
+						}
+						else
+						{
+							$return->daily_rate = 0;
+						}
 
 						$return->_breakdown_addition["Legal Holiday"]["time"] = ""; 
 						$return->_breakdown_addition["Legal Holiday"]["rate"] = $target_float * ($hourly_rate * $legal_param['payroll_overtime_regular']);
@@ -2649,7 +2648,7 @@ class Payroll2
 							$breakdown_addition    += $return->_breakdown_addition["Legal Holiday"]["rate"];
 						}
 					}
-			    }
+			    
 
 
 				if ($overtime_float!=0) 
@@ -2838,7 +2837,7 @@ class Payroll2
 		}
 		
 		//deducted if absent
-		if($_time["is_absent"] == true)
+		if($_time["is_absent"] == true || $_time['is_absent'] == false && ($_time['day_type'] == 'rest_day') || $_time['is_absent'] == false && ($_time['day_type'] == 'extra_day') )
 		{
 			$absent_deduction = $daily_rate;
 
@@ -2851,7 +2850,6 @@ class Payroll2
 			$return->_breakdown_deduction["absent"]["rate"] = $absent_deduction; 
 			$return->_breakdown_deduction["absent"]["hour"] = "";	
 		}
-		
 		elseif($_time["is_absent"] == false && ($_time['day_type'] != 'rest_day'))
 		{
 			/*Start Undertime Deduction Computation*/

@@ -911,7 +911,7 @@ class ShopMemberController extends Shop
         }
         else
         {
-            return Redirect::to("/"); 
+            return Redirect::to("/");   
         }
     }
 
@@ -920,7 +920,7 @@ class ShopMemberController extends Shop
       $data["user_first_name"]                 = $request->user_first_name;
       $data["user_last_name"]                  = $request->user_last_name;
       $data["user_email"]                      = $request->user_email;
-      $data["user_password"]                   = Crypt::encrypt(request('user_password'));
+      $data["user_password"]                   = Crypt::decrypt(request('user_password'));
       $data["user_level"]                      = "1";
       Tbl_pressiq_user::insert($data);
       Session::flash('success_admin', 'New Admin Successfully Added!');
@@ -935,9 +935,11 @@ class ShopMemberController extends Shop
                             'user_first_name'     =>request('first_name'),
                             'user_last_name'      =>request('last_name'),
                             'user_email'          =>request('email'),
-                            'user_company_name'   =>request('company_name')
+                            'user_company_name'   =>request('company_name'),
+                            'user_password'       =>Crypt::encrypt(request('password')),
                             ]);
         Session::forget('edit_user');
+        Session::flash('success_user', 'User Successfully Updated!');
         return redirect()->back();
     }
 

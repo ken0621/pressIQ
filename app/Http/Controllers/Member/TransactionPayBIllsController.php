@@ -103,6 +103,7 @@ class TransactionPayBillsController extends Member
             $insert_item[$key]["item_qty"]                = 0;
             $insert_item[$key]["item_description"]        = 0;    
         }
+        //die(var_dump($request->line_is_checked));
         
         if($ctr_bill != 0)
         {

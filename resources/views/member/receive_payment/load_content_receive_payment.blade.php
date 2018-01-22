@@ -6,8 +6,8 @@
                 @if(isset($cm_data))
                 <input type="text" class="form-control" disabled name="rp_customer_name" value="{{ $_customer->company != '' ? $_customer->company : $_customer->first_name.' '.$_customer->last_name}}">
                 <input type="hidden" class="form-control" name="rp_customer_id" value="{{$c_id}}">
-                @else
-                <select class="drop-down-customer" name="rp_customer_id" required>
+                @els
+e                <select class="drop-down-customer" name="rp_customer_id" required>
                     @include("member.load_ajax_data.load_customer", ['customer_id' => isset($rcvpayment) ? $rcvpayment->rp_customer_id : (isset($c_id) ? $c_id : '')])
                 </select>
                 @endif

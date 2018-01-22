@@ -21,7 +21,7 @@
                 @endif
             </select>
         </td>
-        <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]" value="{{$items['poline_qty']}}" /></td>
+        <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]" value="{{$items['poline_orig_qty']}}" /></td>
         <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{$items['poline_rate']}}" />
         </td>
         <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$items['poline_amount']}}"/>

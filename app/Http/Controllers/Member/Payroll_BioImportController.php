@@ -361,15 +361,27 @@ class Payroll_BioImportController extends Member
 	    		}
 
 	    		$_record[$key_employee]->employee_record[$key_date]				= new stdClass();
-		    	$_record[$key_employee]->employee_record[$key_date]->date 		= $excel["date"] . "-" . date("Y");
+
+	    		$date_has_year = Payroll2::date_has_year($excel["date"]);
+	    		
+	    		if ($date_has_year) //Check if date has year
+	    		{
+	    			$_record[$key_employee]->employee_record[$key_date]->date 		= $excel["date"];
+	    		}
+	    		else
+	    		{
+	    			$_record[$key_employee]->employee_record[$key_date]->date 		= $excel["date"] . "-" . date("Y");
+	    		}
+
 		    	$_record[$key_employee]->employee_record[$key_date]->time_in 	= $excel["in"];
 		    	$_record[$key_employee]->employee_record[$key_date]->time_out 	= $excel["out"];
 		    	$_record[$key_employee]->employee_record[$key_date]->branch 	= "";
 		    	$_record[$key_employee]->employee_record[$key_date]->status 	= "status";
 		    	$key_date++; 	
 	    	}
-
+	    
 	    	$data = Self::save_record($_record, $company, $this->user_info->shop_id, "TOUCHLINK RDS");
+	    	
 	    	return view("member.payroll2.biometrics", $data);
     	}
     	else

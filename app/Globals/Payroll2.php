@@ -7407,4 +7407,17 @@ class Payroll2
 
 		return $data;
 	}
+
+	public static function date_has_year($date)
+	{
+		$has_year = false;
+		$date = explode("-", $date);
+		
+		if (isset($date[2])) 
+		{
+			$has_year = true;
+		}
+
+		return $has_year;
+	}
 }

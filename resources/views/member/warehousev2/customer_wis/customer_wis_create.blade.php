@@ -4,8 +4,8 @@
 <form class="global-submit form-to-submit-add" action="{{$action}}" method="post">
     <input type="hidden" class="button-action" name="button_action" value="">
     <input type="hidden" name="cust_wis_id" value="{{ $wis->cust_wis_id or '' }}">
-    <input type="hidden trans-id" name="trans_id" value="{{ isset($sales_data['info']) ? $sales_data['info']->inv_id : '' }}">
-    <input type="hidden trans-type" name="trans_type" value="{{ isset($trans_type) ? $trans_type : '' }}">
+    <input type="hidden"  class="trans-id" name="trans_id" value="{{ isset($sales_data['info']) ? $sales_data['info']->inv_id : '' }}">
+    <input type="hidden" class="trans-type"  name="trans_type" value="{{ isset($trans_type) ? $trans_type : '' }}">
 
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">

@@ -61,8 +61,13 @@
               </div>
 
               <div class="user-container">
-                <div class="title">User Account</div>
-                  <table  class="table table-bordered" id="showHere_table">
+                 <div class="title">User Account
+                        <div class="search-container pull-right">
+                         <input placeholder="Search" type="text"  name="search_user" id="search_user">
+                         <button  type="button" name="search_button_user" id="search_button_user" class="btn btn-success">Search</button>
+                        </div>
+                  </div>
+                  <table  class="table table-bordered" id="showHere_table_search">
                      <tr>
                          <th style="width: 15%;">First Name</th>
                          <th style="width: 15%;">Last Name</th>
@@ -174,7 +179,7 @@
 @endsection
 
 @section("script")
-
+<script  src="/assets/js/manage_user.js"></script>
 
 <script>
   $('#edit').click(function()

@@ -20,16 +20,23 @@
                   <div class="alert alert-danger">
                      <center>{{ Session::get('delete') }}</center>
                   </div>
-                  @endif    
+                  @endif
+
                 <div class="col-md-12">
                  <div class="press-holder-container">
-                   <div class="left-container" id="press_table" name="press_table">
-                     <table  class="table table-bordered" id="showHere_table">
+                    <div class="Title">Media Contacts
+                        <div class="search-container pull-right">
+                         <input placeholder="Search" type="text"  name="search_media" id="search_media">
+                         <button  type="button" name="search_button" id="search_button" class="btn btn-success">Search</button>
+                        </div>
+                    </div>
+                   <div class="left-container" name="press_table" id="press_table1">
+                     <table  class="table table-bordered" id="showHere_table1">
                          <tr>
-                             <th style="width: 20%;">Contact Name</th>
-                             <th style="width: 20%;">Company</th>
-                             <th style="width: 20%;">Country</th>
-                             <th style="width: 20%;">Action</th>
+                             <th style="width: 25%;">Contact Name</th>
+                             <th style="width: 25%;">Company</th>
+                             <th style="width: 25%;">Country</th>
+                             <th style="width: 25%;">Action</th>
                          </tr>
                           @foreach($_media_contacts as $_media)
                             <tr>
@@ -142,7 +149,7 @@
 @endsection
 
 @section("script")
-
+<script  src="/assets/js/media_contacts.js"></script>
 <script>
 function openCity(evt, cityName) 
 {

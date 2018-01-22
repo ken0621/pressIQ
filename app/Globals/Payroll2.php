@@ -2838,7 +2838,7 @@ class Payroll2
 		}
 		
 		//deducted if absent
-		if($_time["is_absent"] == true && $compute_type != "hourly")
+		if($_time["is_absent"] == true)
 		{
 			$absent_deduction = $daily_rate;
 
@@ -2851,6 +2851,7 @@ class Payroll2
 			$return->_breakdown_deduction["absent"]["rate"] = $absent_deduction; 
 			$return->_breakdown_deduction["absent"]["hour"] = "";	
 		}
+		
 		elseif($_time["is_absent"] == false && ($_time['day_type'] != 'rest_day'))
 		{
 			/*Start Undertime Deduction Computation*/

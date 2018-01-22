@@ -99,6 +99,11 @@ class DebitMemoController extends Member
     }
     public function db_pdf($db_id)
     {
+        $date = date("F j, Y, g:i a");
+        $first_name         = $this->user_info->user_first_name;
+        $last_name         = $this->user_info->user_last_name;
+        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
         $data["debit_memo_id"] = $db_id;
         $data["db"] = Tbl_debit_memo::vendor()->where("db_id",$db_id)->first();
         $data["_db_item"] = Tbl_debit_memo_line::replace_dbitem()->db_item()->where("dbline_db_id",$db_id)->get();
@@ -122,7 +127,7 @@ class DebitMemoController extends Member
         }
 
       $pdf = view('member.vendor.debit_memo.debit_memo_pdf', $data);
-      return Pdf_global::show_pdf($pdf);
+      return Pdf_global::show_pdf($pdf, null, $footer);
     }
     public function create_submit()
     {

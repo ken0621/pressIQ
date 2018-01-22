@@ -737,6 +737,11 @@ class Customer_SaleReceiptController extends Member
     }
     public function invoice_view_pdf($inv_id)
     {
+        $date = date("F j, Y, g:i a");
+        $first_name         = $this->user_info->user_first_name;
+        $last_name         = $this->user_info->user_last_name;
+        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
         $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
 
         $data["transaction_type"] = "Sales Receipt";
@@ -764,7 +769,7 @@ class Customer_SaleReceiptController extends Member
             }
         }
           $pdf = view('member.customer_invoice.invoice_pdf', $data);
-          return Pdf_global::show_pdf($pdf);
+          return Pdf_global::show_pdf($pdf, null, $footer);
     }
     /**
      * Show the form for creating a new resource.

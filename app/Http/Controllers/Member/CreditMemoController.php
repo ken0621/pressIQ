@@ -181,6 +181,11 @@ class CreditMemoController extends Member
     }
     public function cm_pdf($cm_id)
     {
+        $date = date("F j, Y, g:i a");
+        $first_name         = $this->user_info->user_first_name;
+        $last_name         = $this->user_info->user_last_name;
+        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
         $data['cm'] = Tbl_credit_memo::customer()->where("cm_id",$cm_id)->where("cm_shop_id",$this->user_info->shop_id)->first();
         $data["_cmline"] = Tbl_credit_memo_line::Cm_item()->where("cmline_cm_id",$cm_id)->get();
         //dd($data);
@@ -193,7 +198,7 @@ class CreditMemoController extends Member
         // }
 
        $pdf = view('member.customer.credit_memo.cm_pdf', $data);
-       return Pdf_global::show_pdf($pdf);
+       return Pdf_global::show_pdf($pdf, null, $footer);
 
     }
     public function create_submit()

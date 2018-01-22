@@ -94,6 +94,11 @@ class Customer_EstimateController extends Member
     }
     public function estimate_pdf($est_id)
     {
+        $date = date("F j, Y, g:i a");
+        $first_name         = $this->user_info->user_first_name;
+        $last_name         = $this->user_info->user_last_name;
+        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
         $data['estimate'] = Tbl_customer_estimate::customer()->where("est_id",$est_id)->where("est_shop_id",$this->user_info->shop_id)->first();
         $data["transaction_type"] = "ESTIMATE";
         $data["estimate_item"] = Tbl_customer_estimate_line::estimate_item()->where("estline_est_id",$est_id)->get();
@@ -106,7 +111,7 @@ class Customer_EstimateController extends Member
         }
 
        $pdf = view('member.customer.estimate.estimate_pdf', $data);
-       return Pdf_global::show_pdf($pdf);
+       return Pdf_global::show_pdf($pdf, null, $footer);
 
     }
     public function update_status($id)

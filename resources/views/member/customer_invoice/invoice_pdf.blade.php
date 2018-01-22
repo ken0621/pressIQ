@@ -161,5 +161,10 @@
 	    -webkit-transform: rotate(-40deg); /* Chrome, Safari, Opera */
 	    transform: rotate(-40deg);
 	}
+	.page 
+	{
+		page-break-after:always;
+		position: relative;
+	}
 </style>
 </html>

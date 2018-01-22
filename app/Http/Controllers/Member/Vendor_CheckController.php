@@ -260,7 +260,11 @@ class Vendor_CheckController extends Member
 
     public function wc_pdf($wc_id)
     {
-
+        $date       = date("F j, Y, g:i a");
+        $first_name = $this->user_info->user_first_name;
+        $last_name  = $this->user_info->user_last_name;
+        $footer     ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+            
         $data["wc"] = Tbl_write_check::vendor()->customer()->where("wc_id",$wc_id)->first();
         $data["_wcline"] = Tbl_write_check_line::um()->item()->where("wcline_wc_id",$wc_id)->get();
         $data["_wcline_acc"] = Tbl_write_check_account_line::account()->where("accline_wc_id",$wc_id)->get();

@@ -141,6 +141,11 @@ class Vendor_PurchaseOrderController extends Member
         $access = Utilities::checkAccess('vendor-purchase-order', 'access_page');
         if($access == 1)
         { 
+            $date       = date("F j, Y, g:i a");
+            $first_name = $this->user_info->user_first_name;
+            $last_name  = $this->user_info->user_last_name;
+            $footer     ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
             $data["po"] = Tbl_purchase_order::vendor()->where("po_id",$po_id)->first();
             $data["_poline"] = Tbl_purchase_order_line::um()->item()->where("poline_po_id",$po_id)->get();
             foreach($data["_poline"] as $key => $value) 
@@ -151,7 +156,7 @@ class Vendor_PurchaseOrderController extends Member
                 $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
             }
             $pdf = view("member.vendor_list.po_pdf",$data);
-            return Pdf_global::show_pdf($pdf);
+            return Pdf_global::show_pdf($pdf, null, $footer);
         }
         else
         {

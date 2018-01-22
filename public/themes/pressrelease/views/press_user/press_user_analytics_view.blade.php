@@ -26,9 +26,9 @@
                     <tr>
                       <th style="text-align: center;width: 20%">Date / Time </th>
                       <th style="text-align: center;width: 20%">Title / Subject</th>
-                      <th style="text-align: center;width: 15%">Status </th>
-                      <th style="text-align: center;width: 35%">Recipients</th>
-                      <th style="text-align: center;width: 20%">No. Email Open</th>
+                      <th style="text-align: center;width: 10%">Status </th>
+                      <th style="text-align: center;width: 25%">Recipients</th>
+                      <th style="text-align: center;width: 15%">No. Email Open</th>
                       <th style="text-align: center;width: 15%">Clicks</th>
                     </tr>
                     @foreach($analytics_view as $view)

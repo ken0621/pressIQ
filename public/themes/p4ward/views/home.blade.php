@@ -66,7 +66,7 @@
                     <div class="wow fadeInRight col-md-7">
                         <div class="title">Why Join P4ward</div>
                         <div class="details-container">
-                            {!! get_content($shop_theme_info, "home", "home_history_front") !!}
+                            {!! get_content($shop_theme_info, "home", "home_why_p4ward_context") !!}
                         </div>
                     </div>
                 </di>

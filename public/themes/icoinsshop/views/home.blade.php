@@ -130,7 +130,7 @@
                     </div>
                 </div>
             
-                <div class="product-holder wow fadeIn" data-wow-delay=".4s" data-wow-duration="2s">
+                {{-- <div class="product-holder wow fadeIn" data-wow-delay=".4s" data-wow-duration="2s">
                     <div class="img-holder">
                         <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
                     </div>
@@ -149,9 +149,10 @@
                         <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
                     </div>
                     <div class="text">Other tokens are coming soon!</div>
-                </div>
+                </div> --}}
 
             </div>
+            <div class="view-product-page pull-right"><a href="/product">Go to product page</a></div>
         </div>
     </section>
 

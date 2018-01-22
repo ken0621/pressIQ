@@ -1,15 +1,13 @@
-.main-container 
+.main-container
 {
     margin: 15px auto;
     background-color: #fff;
     padding: 15px;
 }
-
-.form-holder 
+.form-holder
 {
     border: 1px solid #dde2e4;
-
-    .form-header 
+    .form-header
     {
         border: 1px solid #dde2e4;
         padding: 5px 10px;
@@ -19,42 +17,41 @@
         font-weight: 700;
         font-size: 16px;
     }
-
-    .form-content 
+    .form-content
     {
         max-width: 500px;
         margin: 25px auto;
     }
 }
-
-.checkout-summary 
+.checkout-summary
 {
-    .title 
+    .title
     {
         font-size: 20px;
         padding: 10px;
     }
 
-    .order-summary 
+    .order-summary
     {
         border: 1px solid #ddd;
         padding: 10px;
+        .number-in-cart
+        {
 
-        .number-in-cart 
-        {}
+        }
 
-        table 
+        table
         {
             width: 100%;
             color: #777;
 
-            thead 
+            thead
             {
                 font-weight: bold;
 
-                tr 
+                tr
                 {
-                    td 
+                    td
                     {
                         padding: 5px 0;
                         border-bottom: 1px dashed #ddd;
@@ -62,11 +59,12 @@
                 }
             }
 
-            tbody 
+            tbody
             {
-                tr 
+                tr
                 {
-                    td 
+
+                    td
                     {
                         padding: 5px 0;
                         border-bottom: 1px dashed #ddd;
@@ -75,23 +73,21 @@
             }
         }
 
-        .total 
+        .total
         {
             overflow: auto;
             padding-top: 5px;
-
-            .total-label 
+            .total-label
             {
                 float: right;
             }
-
-            .total-price 
+            .total-price
             {
                 width: 100px;
                 margin-left: 15px;
                 float: right;
 
-                &.supertotal 
+                &.supertotal
                 {
                     color: #2B628B;
                     font-weight: bold;

@@ -20,7 +20,7 @@
         <tr>
             <td class="text-center">{{$log->wallet_log_id}}</td>
             <td class="text-center">{{date('Y/m/d',strtotime($log->wallet_log_date_created))}}</td>
-            <td class="text-center">{{$log->wallet_log_slot}}</td>
+            <td class="text-center">{{$log->slot_no}}</td>
             <td class="text-center">{{currency('PHP',$log->wallet_log_amount)}}</td>
         </tr>
         @endforeach

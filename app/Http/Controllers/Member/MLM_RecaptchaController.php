@@ -20,8 +20,8 @@ class MLM_RecaptchaController extends Member
     }
     public function table()
     {
-    	$data['logs'] = Tbl_mlm_slot_wallet_log::where('wallet_log_plan','RECAPTCHA')
-				    	->where('shop_id',$this->user_info->shop_id)
+    	$data['logs'] = Tbl_mlm_slot_wallet_log::Recaptcha()->where('wallet_log_plan','RECAPTCHA')
+				    	->where('tbl_mlm_slot_wallet_log.shop_id',$this->user_info->shop_id)
 				    	->orderBy('wallet_log_date_created','DESC')
 				    	->paginate(10);
     	return view('member.mlm_recaptcha.mlm_recaptcha_table',$data);

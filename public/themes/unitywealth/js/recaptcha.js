@@ -39,7 +39,7 @@ function recaptcha()
 			if($('.g-recaptcha-response').val() == '')
 			{
 				e.preventDefault();
-				toastr.error('Click captcha first');
+				toastr.error('Verify Captcha First');
 			}
 			else
 			{

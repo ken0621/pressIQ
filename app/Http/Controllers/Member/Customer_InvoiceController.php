@@ -809,9 +809,6 @@ class Customer_InvoiceController extends Member
     }
     public function invoice_view_pdf($inv_id)
     {
-        /*$data['date_printed'] = date("F j, Y, g:i a");
-        $data['user']         = $this->user_info;*/
-
         $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
 
         $data["transaction_type"] = "INVOICE";

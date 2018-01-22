@@ -188,9 +188,6 @@ class TransactionReceiveInventoryController extends Member
         $data['_dm'] = TransactionDebitMemo::getOpenDM($this->user_info->shop_id, $request->vendor);
         $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
 
-        $checked_po = $request->line_is_checked;
-
-
         return view('member.accounting_transaction.vendor.receive_inventory.load_transaction', $data);
     }
     

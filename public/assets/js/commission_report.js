@@ -68,35 +68,4 @@ function commission_report()
 			}
 		});
 	}
-	$(window).on('hashchange', function() {
-	    if (window.location.hash) {
-	        var page = window.location.hash.replace('#', '');
-	        if (page == Number.NaN || page <= 0) {
-	            return false;
-	        } else {
-	            getPosts(page);
-	        }
-	    }
-	});
-	$(document).ready(function() {
-		getPosts(1);
-	    $(document).on('click', '.pagination a', function (e) {
-	        getPosts($(this).attr('href').split('page=')[1]);
-	        e.preventDefault();
-	    });
-	});
-	function getPosts(page) {
-	    $.ajax(
-	    {
-	        url : '/member/merchant/commission_report/table?page=' + page,
-	        type: 'get',
-	    }).done(function (data) 
-	    {
-	        $('.load-table-here').html(data);
-	        location.hash = page;
-	    }).fail(function () 
-	    {
-	        alert('Posts could not be loaded.');
-	    });
-	}
 }

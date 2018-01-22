@@ -91,6 +91,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressadmin/manage_user/delete_admin/{id}', 'Shop\ShopMemberController@manage_user_delete_admin'); //PRESS RELEASE
 	Route::any('/pressadmin/manage_user', 'Shop\ShopMemberController@manage_user'); //PRESS RELEASE
 	Route::get('/pressadmin/email',				'Shop\ShopMemberController@pressadmin_email'); //PRESS RELEASE
+	Route::any('/pressadmin/manage_user_search',	'Shop\ShopMemberController@manage_user_search');//PRESS RELEASE
 	Route::get('/pressadmin/edit_user/{id}','Shop\ShopMemberController@edit_user'); //PRESS RELEASE
 	Route::any('/pressadmin/manage_user_edit','Shop\ShopMemberController@pressadmin_manage_user_edit'); //PRESS RELEASE
 	Route::get('/pressadmin/delete_user/{id}','Shop\ShopMemberController@manage_user_delete_user'); //PRESS RELEASE
@@ -110,6 +111,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressadmin/pressreleases_edit_recipient/{id}', 'Shop\ShopMemberController@pressreleases_edit_recipient');//PRESS RELEASE
 	Route::get('/newsroom',			'Shop\ShopNewsRoomController@index');//PRESS RELEASE
 	Route::any('/newsroom/search',	'Shop\ShopNewsRoomController@newsroom_search');//PRESS RELEASE
+	Route::any('/mediacontacts/search',	'Shop\ShopMemberController@mediacontacts_search');//PRESS RELEASE
 	Route::get('/newsroom/view/{pid}','Shop\ShopNewsRoomController@news_room_view');//PRESS RELEASE
 
 	Route::get('/pressuser/choose_recipient', 'Shop\ShopMemberController@pressuser_choose_recipient');

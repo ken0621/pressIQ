@@ -13,6 +13,11 @@
               <div class="alert alert-danger">
                  <center>{{ Session::get('delete_admin') }}</center>
               </div>
+            @endif
+            @if (Session::has('delete_user'))
+              <div class="alert alert-danger">
+                 <center>{{ Session::get('delete_user') }}</center>
+              </div>
             @endif    
           <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'user_account')" id="defaultOpen">Users Account</button>
@@ -66,8 +71,11 @@
                            <td>
                             <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"><button type="button"  class="btn btn-warning center"><i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button></a>
 
-                            <a href="/pressadmin/manage_force_login/{{$_user_account->user_id}}"><button type="button" class="btn btn-danger center">
-                            <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Force Login</button></a>
+                            <a href="/pressadmin/delete_user/{{$_user_account->user_id}}"><button type="button" class="btn btn-danger center">
+                            <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button></a>
+
+                            <a href="/pressadmin/manage_force_login/{{$_user_account->user_id}}"><button type="button" class="btn btn-success center">
+                            <i class="fa fa-vcard-o" name="recipient_id" aria-hidden="true"></i>Force Login</button></a>
                            </td>
                         </tr>
                         @endforeach

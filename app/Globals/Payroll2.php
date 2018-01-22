@@ -2485,7 +2485,7 @@ class Payroll2
 			{
 				if ($compute_type == "hourly") 
 				{
-					$return->daily_rate = $hourly_rate * $time_spent;
+					$return->daily_rate = $hourly_rate * $regular_float;
 					$total_day_income   = $hourly_rate * $time_spent;
 				}
 				if ($overtime_float != 0) 

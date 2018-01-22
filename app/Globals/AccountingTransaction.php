@@ -251,6 +251,10 @@ class AccountingTransaction
 		{
 			$return = '/member/transaction/'.$transaction_type.'/create';
 		}	
+		if($transaction_type == 'sales_invoice' || $transaction_type == 'sales_receipt' && $btn_action == 'swis')
+		{
+			$return = '/member/customer/wis/create?tId='. $transaction_id.'&trans_type='.$transaction_type;			
+		}
 
 		return $return;	
 	}

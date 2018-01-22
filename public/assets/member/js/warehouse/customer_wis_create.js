@@ -35,8 +35,7 @@ function customer_wis_create()
 		event_button_action_click();
 		action_date_picker();
 		action_compute();
-
-
+		action_reassign_number();
 	}
 
 	function action_date_picker()

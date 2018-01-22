@@ -29,7 +29,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
 {
     /**
      * Display a listing of the resource.
-     *
+     * @author EDEN
      * @return \Illuminate\Http\Response
      */
     public function getIndex(Request $request)
@@ -64,10 +64,17 @@ class CustomerWarehouseIssuanceSlipController extends Member
         if($cust_wis_id)
         {
             $data["wis"]  = CustomerWIS::get_customer_wis_data($cust_wis_id);
-            //dd($data["wis"]);
             $data["_wisline"] = CustomerWIS::get_wis_line($cust_wis_id);
             $data['action']     = "/member/customer/wis/update-submit";
-            //dd($data);
+        }
+
+        $sales_id = $request->tId;
+        if($sales_id)
+        {
+            $sales_data = CustomerWIS::get_sales_info($this->user_info->shop_id, $sales_id);
+            $data['c_id'] = $sales_data['info']->inv_customer_id;
+            $data['sales_data'] = $sales_data;
+            $data['trans_type'] = $request->trans_type;
         }
 
         return view('member.warehousev2.customer_wis.customer_wis_create',$data);

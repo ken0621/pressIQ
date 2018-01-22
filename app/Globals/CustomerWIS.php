@@ -8,6 +8,8 @@ use App\Models\Tbl_customer_wis_item_line;
 use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_customer_wis_item;
+use App\Models\Tbl_customer_invoice;
+use App\Models\Tbl_customer_invoice_line;
 use App\Models\Tbl_settings;
 
 use App\Globals\Item;
@@ -31,6 +33,13 @@ class CustomerWIS
             $data = $data->where('customer_id',$customer_id);
         }
         return $data->get();
+    }
+    public static function get_sales_info($shop_id, $transaction_id)
+    {
+        $return['info'] = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('inv_id', $transaction_id)->first();
+        $return['info_item'] = Tbl_customer_invoice_line::where('invline_inv_id', $transaction_id)->get();
+
+        return $return;
     }
     public static function settings($shop_id)
     {

@@ -4,7 +4,8 @@
 <form class="global-submit form-to-submit-add" action="{{$action}}" method="post">
     <input type="hidden" class="button-action" name="button_action" value="">
     <input type="hidden" name="cust_wis_id" value="{{ $wis->cust_wis_id or '' }}">
-
+    <input type="hidden trans-id" name="trans_id" value="{{ isset($sales_data['info']) ? $sales_data['info']->inv_id : '' }}">
+    <input type="hidden trans-type" name="trans_type" value="{{ isset($trans_type) ? $trans_type : '' }}">
 
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
@@ -47,7 +48,7 @@
                 </select>
             </div>
             <div class="col-md-4">
-                 <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$wis->cust_email or ''}}"/>
+                 <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{isset($wis) ? $wis->cust_email : (isset($sales_data) ? $sales_data['info']->inv_customer_email : '')}}"/>
             </div>
             <div class="col-sm-4 text-right open-transaction" style="display: none;">
                 <h4><a class="popup popup-link-open-transaction" size="md" link="/member/customer/wis/load-transaction?customer_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
@@ -57,7 +58,7 @@
             <div class="col-md-4">
                 <label>Ship to</label>
                 <div>
-                    <textarea required class="form-control customer-billing-address" name="customer_address" value="">{{ isset($wis->destination_customer_address) ==''? '':$wis->destination_customer_address }}</textarea>
+                    <textarea required class="form-control customer-billing-address" name="customer_address" value="">{{ isset($wis->destination_customer_address) ? $wis->destination_customer_address : (isset($sales_data) ? $sales_data['info']->inv_customer_billing_address : '')}}</textarea>
                 </div>
             </div>
             <div class="col-md-4">
@@ -107,6 +108,25 @@
                                     </tr>
                                 @endforeach
                             @endif
+                            @if(isset($sales_data))
+                                @foreach($sales_data['info_item'] as $info_item)
+                                    <tr class="tr-draggable">
+                                        <td class="invoice-number-td text-center">1</td>
+                                        <td>
+                                            <select class="form-control droplist-item select-item input-sm" name="item_id[]" >
+                                                @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $info_item->invline_item_id])
+                                                <option class="hidden" value="" />
+                                            </select>
+                                        </td>
+                                        <td><textarea class="form-control txt-desc" name="item_description[]">{{$info_item->invline_description}}</textarea></td>
+                                        <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="{{$info_item->invline_um}}" /></select></td>
+                                        <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_qty[]" value="{{ $info_item->invline_qty}}" /></td>
+                                        <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]" value="{{ $info_item->invline_rate}}" /></td>
+                                        <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{ $info_item->invline_amount}}" /></td>
+                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                    </tr>
+                                @endforeach
+                            @endif
                             <tr class="tr-draggable">
                                 <td class="invoice-number-td text-center">1</td>
                                 <td>
@@ -147,7 +167,7 @@
             <div class="col-md-6">
                 <label>Remarks</label>
                 <div>
-                    <textarea required class="form-control" name="cust_wis_remarks">{{ isset($wis->cust_wis_remarks)? $wis->cust_wis_remarks : ''}}</textarea>
+                    <textarea required class="form-control" name="cust_wis_remarks">{{ isset($wis->cust_wis_remarks)? $wis->cust_wis_remarks : isset($sales_data) ? $sales_data['info']->transaction_refnum : ''}}</textarea>
                 </div>
             </div>
             <div class="col-md-6">

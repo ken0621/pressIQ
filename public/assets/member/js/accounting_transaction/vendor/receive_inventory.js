@@ -117,7 +117,6 @@ function receive_inventory()
 		$(".purchase-order-container").load("/member/vendor/load_purchase_order/"+vendor_id , function()
 			{
 				$(".purchase-order").removeClass("hidden");
-				// $(".drawer").drawer({openClass: "drawer-open"});
 				$(".drawer-toggle").trigger("click");
 			});
 	}
@@ -481,8 +480,14 @@ function receive_inventory()
 			  });
 		});
 	}
+	this.action_load_received_po = function()
+	{
+		event_click_last_row()
+		action_compute();
+		event_remove_tr()
+		event_accept_number_only()
 
-
+	}
 }
 
 /*AFTER ADDING VENDOR*/
@@ -517,14 +522,14 @@ function success_receive_inventory(data)
 		location.href = data.status_redirect;
 	}
 }
+
 function success_apply_po(data)
 {
     if(data.status == "success")
     {
     	$(".po-tbl").load("/member/transaction/receive_inventory/load-selected-po", function()
 		{
-			//action_reassign_number();
-			action_compute();
+			receive_inventory.action_load_received_po();
 		});
 		data.element.modal("toggle");
     }

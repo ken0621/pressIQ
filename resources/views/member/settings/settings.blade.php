@@ -120,3 +120,14 @@
 			<option value="1">Enable</option>
 		</select>
 	</div>
+
+	<center>Accounting</center>
+	<!-- Customer with Unit -->
+	<div class="settings" id="customer_wis">
+		Allow Out of Stock
+		<input type="hidden" name="settings_key[]" value="out_of_stock">
+		<select name="settings_value[]" class="form-control">
+			<option value="1">Yes</option>
+			<option value="0">No</option>
+		</select>
+	</div>

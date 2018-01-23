@@ -25,6 +25,7 @@ use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_customer;
 
+use App\Globals\Inventory;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
@@ -629,8 +630,11 @@ class Warehouse2
         {
             $return .= "The warehouse doesn't belong to your account <br>";
         }
+
         $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
-        if($quantity > $inventory_qty)
+        $settings_qty = Inventory::allow_out_of_stock($shop_id);
+        
+        if($quantity > $inventory_qty && $settings_qty == 0)
         {
             $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
         }

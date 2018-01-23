@@ -661,6 +661,13 @@ class Ecom_Product
 		$slot = $_slot->toArray();
 		$slot = array_column($slot, 'discounted_amount');
 		
-		return min($slot);
+		if ($slot) 
+		{
+			return min($slot);
+		}
+		else
+		{
+			return $product_price;
+		}
 	}
 }

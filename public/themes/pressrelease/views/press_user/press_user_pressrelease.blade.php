@@ -48,7 +48,7 @@
                      @endif
                    </select> 
                   <div class="title">Title:</div>
-                        <input type="text" id="pr_headline" name="pr_headline" class="form-control" autofocus value="{{$edits->pr_headline}}">
+                        <input type="text" id="pr_headline" name="pr_headline" class="form-control" value="{{$edits->pr_headline}}" autofocus>
                   <div class="title">Release Text Body:</div>
                         <textarea name="pr_content" id="pr_content">{!!$edits->pr_content!!}</textarea>
                   <div class="title">Boilerplate:</div>
@@ -180,7 +180,9 @@
                   <div class="content" id="headline_pr"></div>
                   <div class="title">Send To:</div>
                   <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
+                  <a href="javascript:" id="pop_chosen_recipient_btn">  VIEW</a>
                   <div class="button-container">
+                    <button class="preview-button" type="button"  id="prev_btn_send">Preview</button>
                     <button type="submit" formaction="/pressuser/pressrelease/pr">Send &raquo;</button>
                   </div>
                 </div>
@@ -221,7 +223,7 @@
             <div>
               &nbsp; <a href="https://twitter.com/share" class="twitter-share-button" data-url="" data-size="large">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
               
-              <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Ffacebook/oliverbryan19.com&width=74&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId" width="74" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+              <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Ffacebook/press-iq.com&width=74&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId" width="74" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
             </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -266,7 +268,19 @@
 <script>
   $('#prev_btn').click(function()
   {
-    //alert("123");
+    // alert("123");
+    var headline = document.getElementById('pr_headline').value;
+    var type = document.getElementById('pr_type').value;
+    var content = tinymce.get('pr_content').getContent();
+    var boiler_content = tinymce.get('pr_boiler_content').getContent();
+    document.getElementById('preview_headline').innerHTML =headline;
+    document.getElementById('preview_content').innerHTML =content;
+    document.getElementById('preview_type').innerHTML =type;
+    document.getElementById('preview_boiler_content').innerHTML =boiler_content;
+    $('#previewPopup').modal('show'); 
+  });
+  $('#prev_btn_send').click(function()
+  {
     var headline = document.getElementById('pr_headline').value;
     var type = document.getElementById('pr_type').value;
     var content = tinymce.get('pr_content').getContent();
@@ -353,6 +367,16 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     var data = $('.recipient_form').serialize();
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
 });
+</script>
+
+<script>
+  $('#pop_chosen_recipient_btn').click(function()
+  {
+    $('#recipient_name').each(function()
+    {
+      alert($(this).text())
+    });
+  });
 </script>
 
 @endsection

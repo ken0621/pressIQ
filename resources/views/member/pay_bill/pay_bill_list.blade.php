@@ -51,7 +51,7 @@
                         @foreach($_paybill as $paybill)
                             <tr>
                                 <td>{{$paybill->paybill_id}}</td>
-                                <td>{{$paybill->vendor_company}}</td>
+                                <td>{{$paybill->vendor_company != '' ? $paybill->vendor_company : ucwords($paybill->vendor_title_name.' '.$paybill->vendor_first_name.' '.$paybill->vendor_middle_name.' '.$paybill->vendor_last_name)}}</td>
                                 <td>{{currency("PHP",$paybill->paybill_total_amount)}}</td>
                                 <td class="text-center">
                                     <div class="btn-group">

@@ -120,7 +120,7 @@
                 @if(count($_product) > 0)
 
                     @foreach($_product as $product)
-                    <div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
+                    <div class="product-holder wow fadeIn match-height" data-wow-delay=".2s" data-wow-duration="2s">
                         <div class="top">
                             <img src="{{ get_product_first_image($product) }}">
                         </div>
@@ -135,25 +135,21 @@
                     </div>
                     @endforeach
                 @else
-                    <div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
-                        <div class="top">
-                            <img src="/themes/{{ $shop_theme }}/img/krops.jpg">
-                        </div>
-                        <div class="bottom">
-                            <div class="product-title"> KROPS is offering tokenized shares of the company through an offering of 16,000,000 or sixteen million KROPS tokens of KropCoins.</div>
-                            <div class="btn-container">
-                                <a href="/product/view2/test"><button class="btn-more-info">MORE INFO</button></a>
-                                <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-holder wow fadeIn" data-wow-delay=".4s" data-wow-duration="2s">
+                    <div class="product-holder wow fadeIn match-height" data-wow-delay=".4s" data-wow-duration="2s">
                         <div class="img-holder">
                             <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
                         </div>
                         <div class="text">Other tokens are coming soon!</div>
                     </div>
-                    <div class="product-holder wow fadeIn" data-wow-delay=".4s" data-wow-duration="2s">
+                    
+                    <div class="product-holder wow fadeIn match-height" data-wow-delay=".6s" data-wow-duration="2s">
+                        <div class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
+                        </div>
+                        <div class="text">Other tokens are coming soon!</div>
+                    </div>
+
+                    <div class="product-holder wow fadeIn match-height" data-wow-delay=".8s" data-wow-duration="2s">
                         <div class="img-holder">
                             <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
                         </div>
@@ -161,26 +157,7 @@
                     </div>
                 @endif
 
-                {{-- <div class="product-holder wow fadeIn" data-wow-delay=".4s" data-wow-duration="2s">
-                    <div class="img-holder">
-                        <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
-                    </div>
-                    <div class="text">Other tokens are coming soon!</div>
-                </div>
-            
-                <div class="product-holder wow fadeIn" data-wow-delay=".6s" data-wow-duration="2s">
-                    <div class="img-holder">
-                        <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
-                    </div>
-                    <div class="text">Other tokens are coming soon!</div>
-                </div>
 
-                <div class="product-holder wow fadeIn" data-wow-delay=".8s" data-wow-duration="2s">
-                    <div class="img-holder">
-                        <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
-                    </div>
-                    <div class="text">Other tokens are coming soon!</div>
-                </div> --}}
 
             </div>
             <div class="view-product-page pull-right"><a href="/product">Go to product page &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></div>
@@ -192,7 +169,7 @@
         <div class="container">
             <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> and Announcement</div>
             <div class="news-display">
-                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">
+                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft match-height" data-wow-delay=".2s" data-wow-duration="2s">
                     <div class="row-no-padding clearfix">
                         <div class="col-md-6 col-xs-6">
                             <div class="img-holder">
@@ -207,7 +184,7 @@
                         </div>
                     </div>
                 </div>
-                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".4s" data-wow-duration="2s">
+                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft match-height" data-wow-delay=".4s" data-wow-duration="2s">
                     <div class="row-no-padding clearfix">
                         <div class="col-md-6 col-xs-6">
                             <div class="img-holder">
@@ -222,7 +199,7 @@
                         </div>
                     </div>
                 </div>
-                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".6s" data-wow-duration="2s">
+                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft match-height" data-wow-delay=".6s" data-wow-duration="2s">
                     <div class="row-no-padding clearfix">
                         <div class="col-md-6 col-xs-6">
                             <div class="img-holder">
@@ -237,7 +214,7 @@
                         </div>
                     </div>
                 </div>
-                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft" data-wow-delay=".8s" data-wow-duration="2s">
+                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft match-height" data-wow-delay=".8s" data-wow-duration="2s">
                     <div class="row-no-padding clearfix">
                         <div class="col-md-6 col-xs-6">
                             <div class="img-holder">

@@ -18,6 +18,7 @@ function custom_js()
         event_side_nav();
         genealogy_mobile_dropdown();
         scroll_up();
+        match_height();
     }
 
     function scroll_up()
@@ -76,6 +77,11 @@ function custom_js()
             $(e.currentTarget).siblings(".genealogy-mobile-dropdown-list").slideToggle();
             $(e.currentTarget).find(".fa-angle-down").toggleClass('fa-rotate-180');
         });
+    }
+
+    function match_height()
+    {
+        $(".match-height").matchHeight();
     }
 }
 

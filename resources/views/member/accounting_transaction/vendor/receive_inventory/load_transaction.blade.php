@@ -24,7 +24,7 @@
                                 @foreach($_po as $po)
                                 <tr class="{{ $total_po_amount += $po->po_overall_price}}">
                                     <td class="text-center">
-                                        <input type="checkbox" class="td-check-received-po td-po-amount" name="apply_po_id[{{$po->po_id}}]" value="{{$po->po_overall_price}}" data-content="{{$po->po_overall_price}}" {{isset($_applied_po_id[$po->po_id]) ? 'checked' : ''}}></td>
+                                        <input type="checkbox" class="td-check-received-po td-po-amount" name="apply_po_id[{{$po->po_id}}]" value="{{$po->po_id}}" data-content="{{$po->po_overall_price}}" {{isset($_applied_po_id[$po->po_id]) ? 'checked' : ''}}></td>
                                     <td class="text-center" value="{{$po->transaction_refnum != '' ? $po->transaction_refnum : $po->po_id}}">{{$po->transaction_refnum != "" ? $po->transaction_refnum : $po->po_id}}</td>
                                     <td class="text-right" value="{{currency('PHP',$po->po_overall_price)}}">{{currency('PHP',$po->po_overall_price)}}</td>
                                 </tr>

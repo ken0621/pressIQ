@@ -104,18 +104,6 @@ function receive_inventory()
 
         }).globalDropList('disabled');
 	}
-	/* CHECK BOX FOR LINE ITEM */
-	function event_line_check_change()
-	{
-		$(document).on("click", ".line-checked", function()
-		{
-			dd('123');
-			action_change_input_value($(this));
-		});
-	}
-
-	
-
 	function event_button_action_click()
 	{
 		$(document).on("click","button[type='submit']", function()
@@ -497,26 +485,6 @@ function receive_inventory()
 
 }
 
-/*function add_po()
-{
-	//aler('123');
- 	var checkboxes = document.getElementsByName('line_is_checked[]');
-
-	var vals = "";
-	for (var i=0, n=checkboxes.length;i<n;i++) 
-	{
-	    if (checkboxes[i].checked) 
-	    {
-	        vals += ","+checkboxes[i].value;
-	    }
-
-	}
-	alert(vals);
-	//die(var_dump(vals));
-	if (vals) vals = vals.substring(1);
-}
-*/
-
 /*AFTER ADDING VENDOR*/
 function success_vendor(data)
 {
@@ -555,71 +523,9 @@ function success_apply_po(data)
     {
     	$(".po-tbl").load("/member/transaction/receive_inventory/load-selected-po", function()
 		{
-			//alert('123');
-			//receive_payment.event_compute_apply_credit();
+			//action_reassign_number();
+			action_compute();
 		});
 		data.element.modal("toggle");
     }
 } 
-function add_po_to_bill(po_id)
-{
-	$(".po-tbl").load('/member/transaction/receive_inventory//'+po_id, function()
-	{
-		/*console.log("success");
-		bill.action_compute();
-		bill.iniatilize_select();
-		$(".tbody-item .select-um").globalDropList("enabled");
-
-		$(".po-"+po_id).addClass("hidden");*/
-	});
-}
-function add_po_to_receive_inventory(po_id)
-{
-	$(".modal-loader").removeClass("hidden");
-	$.ajax({
-		url : "/member/vendor/load_po_item",
-		data : {po_id: po_id},
-		dataType : "json",
-		type : "get",
-		success : function(data)
-		{
-             $(data).each(function (a, b)
-             {				
-	             $("tbody.draggable").prepend(global_tr_html);
-	             receive_inventory.action_trigger_select_plugin_not_last();
-	             var $container = $("tbody.draggable .tr-draggable:first");
-	             // $this.closest(".tr-draggable");
-
-	            $container.addClass("tr-"+b.poline_po_id);
-	            $container.find(".select-item").val(b.poline_item_id).change();
-	            $container.find(".txt-desc").val(b.poline_description);
-	            $container.find(".select-um").load('/member/item/load_one_um/'+b.multi_um_id, function()
-             	{
-             		$container.find(".select-um").globalDropList("reload");
-             		$container.find(".select-um").val(b.poline_um).change();
-             	});
-				$container.find(".poline_id").val(b.poline_id);
-				$container.find(".itemline_po_id").val(po_id);
-	            $container.find(".txt-qty").val(b.poline_qty);
-	            $container.find(".txt-rate").val(b.poline_rate);
-	            $container.find(".txt-amount").val(b.poline_amount);
-	            $container.find(".remove-tr").addClass("remove-tr"+b.poline_po_id);
-	            $container.find(".remove-tr").attr("tr_id", b.poline_po_id);
-             });
-
-	         $(".po-listing").prepend(po_id_list);
-	         var $po_id = $(".po-listing .po_id:first");
-	         $(".po-listing .po_id:first").addClass("div_po_id"+po_id);
-	         $po_id.find(".po-id-input").val(po_id).change();
-
-	        $(".po-"+po_id).addClass("hidden");
-			$(".modal-loader").addClass("hidden");
-
-             receive_inventory.action_reassign_number();
-		},
-		error : function()
-		{
-			alert("Something wen't wrong.");
-		}
-	});
-}

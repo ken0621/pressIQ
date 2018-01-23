@@ -6,17 +6,48 @@
         <!-- <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script> -->
         <script type="text/javascript" src="/assets/external/jquery.minv1.js"></script>
         <script type="text/javascript" src="/assets/slot_genealogy/genealogy/drag.js"></script>
+        <script type="text/javascript" src="/assets/slot_genealogy/genealogy/genealogy_modal.js"></script>
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/old_genealogy.css" />
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/genealogy_modal.css" />
 
         <!-- Trial-->
         <link rel="stylesheet" href="/resources/assets/remodal/src/jquery.remodal.css">
         <link rel="stylesheet" href="/resources/assets/remodal/src/remodal-default-theme.css">
         <link rel="stylesheet" href="/assets/external/chosen/chosen/chosen.css" media="screen"/>
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
         <style type="text/css">
         </style>
         <title>Genealogy</title>
     </head>
     <body id="body" class="body" style="height: 100%;">
+        
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <form class="global-submit form-horizontal" role="form" action="#" method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create Slot</h4>
+                </div>
+                <div class="modal-body clearfix">
+                    <select name="slot" class="code-vault">
+                        <option class="form-control" value="a">a</option>
+                        <option class="form-control" value="a">b</option>
+                        <option class="form-control" value="a">c</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-def-white btn-custom-white close-modal" type="button">Close</button>
+                    <button class="btn btn-primary btn-custom-primary" type="button">Submit</button>
+                </div>
+            </form>
+          </div>
+
+        </div>
         <!-- backup style="height: 100%;" -->
         <div class="overscroll" style="width: 100%; height: inherit; overflow: auto;">
 
@@ -63,7 +94,8 @@
     <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
     <!-- Trial -->
     <script src="/resources/assets/remodal/src/jquery.remodal.js"></script>
-    <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script> 
+    <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script type="text/javascript">
         var mode = "{{ Request::input('mode') }}";
         var g_width = 0;

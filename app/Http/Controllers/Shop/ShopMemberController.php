@@ -2779,6 +2779,11 @@ class ShopMemberController extends Shop
         $data = MemberSlotGenealogy::downline($request->x, $request->mode);
         return $data;
     }
+    public function getCreateSlot()
+    {
+        $data['page'] = "Create Slot";
+        return 'Create Slot';
+    }
     public function getNetwork()
     {
         $data["page"] = "Network List";

@@ -89,7 +89,7 @@
                 <li> <a onclick="off()" href="/#news"><i class="fa fa-newspaper-o" aria-hidden="true"></i> NEWS</a></li>
                 <li> <a onclick="off()" href="/members/login"><i class="fa fa-sign-in" aria-hidden="true"></i> LOGIN</a></li>
                 <li> <a onclick="off()" href="/members/register"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> REGISTER</a></li>
-                <li class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}"> <a onclick="off()" href="javascript:"><i class="fa fa-shopping-cart" aria-hidden="true"></i> ADD TO CART</a></li>
+                <li class="popup" link="/cartv2" size="lg"> <a onclick="off()" href="javascript:"><i class="fa fa-shopping-cart" aria-hidden="true"></i> ADD TO CART</a></li>
             </ul>
             @endif
         </nav>
@@ -151,11 +151,13 @@
                                     @if($customer)
                                         <li><a class="pr {{ Request::segment(1) == "members" ? "active" : "" }}" href="/members">MY ACCOUNT</a></li>
                                         <li><a href="/members/logout"><button class="btn-login">LOGOUT</button></a></li>
+                                        <li class="cart-icon-1 popup" link="/cartv2" size="lg" style="margin-left: 10px;"><a href="javascript:"><img src="/themes/{{ $shop_theme }}/img/shopping-cart1.png"></a></li>
+                                        <li class="cart-icon-2 popup" link="/cartv2" size="lg" style="margin-left: 10px;"><a href="javascript:"><img src="/themes/{{ $shop_theme }}/img/shopping-cart2.png"></a></li>
                                     @else
                                         <li><a class="{{ Request::segment(2) == "login" ? "active" : "" }}" href="/members/login"><button class="btn-login">LOGIN</button></a></li>
                                         {{-- <li style="margin-left: 10px;"><a class="{{ Request::segment(2) == "register" ? "active" : "" }}" href="/members/register"><button class="btn-login">REGISTER</button></a></li> --}}
-                                        <li class="cart-icon-1 product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}" style="margin-left: 10px;"><a href="javascript:"><img src="/themes/{{ $shop_theme }}/img/shopping-cart1.png"></a></li>
-                                        <li class="cart-icon-2 product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}" style="margin-left: 10px;"><a href="javascript:"><img src="/themes/{{ $shop_theme }}/img/shopping-cart2.png"></a></li>
+                                        <li class="cart-icon-1 popup" link="/cartv2" size="lg" style="margin-left: 10px;"><a href="javascript:"><img src="/themes/{{ $shop_theme }}/img/shopping-cart1.png"></a></li>
+                                        <li class="cart-icon-2 popup" link="/cartv2" size="lg" style="margin-left: 10px;"><a href="javascript:"><img src="/themes/{{ $shop_theme }}/img/shopping-cart2.png"></a></li>
                                     @endif
                                 </ul>
                             </div>

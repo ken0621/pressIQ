@@ -32,30 +32,6 @@
 							@else
 								{{ get_product_first_price($product) }}
 							@endif
-							<div style="margin-top: 15px; font-size: 18px;">
-								@if($mlm_member)
-									@foreach($product["variant"][0]["pv"] as $key => $value)
-										@if($key == "STAIRSTEP" )
-										{{-- || $key == "STAIRSTEP_GROUP" || $key == "RANK" --}}
-											<div>
-												<span class="pv-label" style="padding-left: 0;">
-													<i class="fa fa-star" aria-hidden="true"></i>
-												</span>
-												{{-- @if($key == "RANK")
-													<span class="pv-label">RANK PV:</span>
-												@elseif($key == "STAIRSTEP_GROUP")
-													<span class="pv-label">GROUP VOLUME:</span> --}}
-												@if($key == "STAIRSTEP")
-													<span class="pv-label"></span>
-												@else
-													<span class="pv-label">{{ str_replace("_", " ", $key) }}</span>
-												@endif
-												<span class="pv-details">{{ number_format($value, 2) }} PV</span>
-											</div>
-										@endif
-									@endforeach
-								@endif
-							</div>
 						</div>
 						<div class="product-quantity">
 							<div class="info-title">

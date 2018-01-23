@@ -52,7 +52,7 @@
                         @foreach($_bill_list as $bill_list)
                             <tr>
                                 <td>{{$bill_list->bill_id}}</td>
-                                <td>{{$bill_list->vendor_company}}</td>
+                                <td>{{$bill_list->vendor_company != '' ? $bill_list->vendor_company : ucwords($bill_list->vendor_title_name.' '.$bill_list->vendor_first_name.' '.$bill_list->vendor_middle_name.' '.$bill_list->vendor_last_name)}}</td>
                                 <td>{{currency("PHP",$bill_list->bill_total_amount)}}</td>
                                 <td>
                                     @if($bill_list->bill_is_paid == 0)

@@ -50,7 +50,7 @@ class Vendor_CreateBillController extends Member
         $access = Utilities::checkAccess('vendor-bill', 'access_page');
         if($access == 1)
         { 
-            $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderBy("bill_id","DESC")->get();
+            $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderBy("bill_id","DESC")->where("inventory_only",0)->get();
 
             foreach ($data["_bill_list"] as $key => $value) 
             {

@@ -99,7 +99,7 @@ class Billing
     }
     public static function getAllBillByVendor($vendor_id)
     {
-          return  Tbl_bill::appliedPayment(Billing::getShopId())->byVendor(Billing::getShopId(), $vendor_id)->where("bill_is_paid", 0)->get()->toArray();
+          return  Tbl_bill::appliedPayment(Billing::getShopId())->byVendor(Billing::getShopId(), $vendor_id)->where("bill_is_paid", 0)->where('inventory_only',0)->get()->toArray();
     }
     public static function getAllBillByVendorWithPaybill($vendor_id, $paybill_id)
     {

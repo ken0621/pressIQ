@@ -394,16 +394,17 @@ class Customer_ReceivePaymentController extends Member
     public function apply_credit_submit()
     {
         $_credit = Request::input("apply_credit");
-
+        
         $_apply_credit = Session::get('applied_credits');
-
+        
+        
         if(count($_credit) > 0)
         {
             foreach ($_credit as $key => $value) 
             {
                 $_apply_credit[$key] = $value;
             }
-            Session::put('applied_credits', $_apply_credit);   
+            Session::put('applied_credits', $_apply_credit);
         }
 
         $return['status'] = "success";

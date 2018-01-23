@@ -187,8 +187,54 @@ class TransactionReceiveInventoryController extends Member
         $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
         $data['_dm'] = TransactionDebitMemo::getOpenDM($this->user_info->shop_id, $request->vendor);
         $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
+        $data['_applied_po_id'] = Session::get("applied_po");
+        $data['_applied_dm'] = Session::get("applied_dm");
 
         return view('member.accounting_transaction.vendor.receive_inventory.load_transaction', $data);
     }
-    
+    public function postAppliedTransaction(Request $request)
+    {
+        /*$apply_po_id = $request->apply_po_id;
+        $_applied_po_id = Session::get('applied_po');
+
+        if(count($apply_po_id) > 0)
+        {
+            foreach ($apply_po_id as $key => $value)
+            {
+                $_applied_po_id[$key] = $value;
+            }
+            //die(var_dump($key));
+            Session::put('applied_po', $_applied_po_id);
+        }
+
+        $return['status'] = "success";
+        $return['call_function'] = "success_apply_po";*/
+
+        $apply_po_id = $request->apply_po_id;
+        $_applied_po_id = Session::get('applied_po');
+
+        if(count($apply_po_id) > 0)
+        {
+            foreach ($apply_po_id as $key => $value)
+            {
+                $_applied_po_id[$key] = TransactionPurchaseOrder::info($this->user_info->shop_id,$key);
+                die(var_dump($value));
+            }
+
+            Session::put('applied_po', $_applied_po_id);
+        }
+
+        $return['status'] = "success";
+        $return['call_function'] = "success_apply_po";
+
+        return json_encode($return);
+
+    }
+    public function getLoadSelectedPo(Request $request)
+    {
+        $data['_po'] = Session::get('applied_po');
+        
+
+        return view('member.accounting_transaction.vendor.purchase_order.po_load_item_session', $data);
+    }
 }

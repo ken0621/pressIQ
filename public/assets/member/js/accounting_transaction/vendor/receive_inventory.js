@@ -549,11 +549,23 @@ function success_receive_inventory(data)
 		location.href = data.status_redirect;
 	}
 }
+function success_apply_po(data)
+{
+    if(data.status == "success")
+    {
+    	$(".po-tbl").load("/member/transaction/receive_inventory/load-selected-po", function()
+		{
+			//alert('123');
+			//receive_payment.event_compute_apply_credit();
+		});
+		data.element.modal("toggle");
+    }
+} 
 function add_po_to_bill(po_id)
 {
-	$(".po-tbl").load('/member/transaction/purchase_order/add-item/'+po_id, function()
+	$(".po-tbl").load('/member/transaction/receive_inventory//'+po_id, function()
 	{
-/*		console.log("success");
+		/*console.log("success");
 		bill.action_compute();
 		bill.iniatilize_select();
 		$(".tbody-item .select-um").globalDropList("enabled");

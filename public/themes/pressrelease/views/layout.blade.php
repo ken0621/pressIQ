@@ -157,12 +157,6 @@
                         <p style="text-transform: uppercase; letter-spacing: 0.5px;">
                             Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
                         </p>
-                        <div class="email-textbox-container">
-                            <input type="text" placeholder="Enter Your Email Here">
-                            <span style="padding-left: 10px;">
-                                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                            </span>
-                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="footer-follow-container">

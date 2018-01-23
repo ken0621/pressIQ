@@ -4633,6 +4633,14 @@ class PayrollController extends Member
                });
           })->download('xls');
      }
+
+     public function modal_leave_annual_report()
+     {    
+          $tempmonth = date("Y-m-d");
+          $month = explode("-", $tempmonth);
+
+          return view("member.payroll.modal.modal_leave_annual_report");
+     }
      //end reporting v2
 
      public function modal_leave_action($payroll_leave_employee_id,$action,$remaining_leave)

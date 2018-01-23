@@ -451,7 +451,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 		"Member\PayrollController@modal_leave_action_report");
 	Route::any('/leave/v2/leave_action_report_excel/{date_start}/{date_end}/{company}',
 		"Member\PayrollController@leave_action_report_excel");
-
+	Route::any('/leave/v2/modal_leave_annual_report',
+		"Member\PayrollController@modal_leave_annual_report");
 	//end reporting
 
 	Route::any('/leave/v2/modal_view_leave_employee/{payroll_leave_temp_id}/',"Member\PayrollController@modal_view_leave_employee");

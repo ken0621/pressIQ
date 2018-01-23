@@ -6,7 +6,7 @@
 		    <div class="row clearfix">
 		    	<div class="col-md-6">
 		    		<div class="signup-left-container">
-		    			<span class="desc-red">Press-IQ</span><span class="desc-black"> is a intelligent results- driven platform for</span><span class="desc-red"> PR Proffessionals</span><span class="desc-black"> and</span><span class="desc-red"> Marketers</span><span class="desc-black"> for targeted distribution of your press release. We provide you with access to the most updated and extensive database of media journalist</span>
+		    			<span class="desc-red">Press-IQ</span><span class="desc-black"> is a intelligent results- driven platform for</span><span class="desc-red"> PR Professionals</span><span class="desc-black"> and</span><span class="desc-red"> Marketers</span><span class="desc-black"> for targeted distribution of your press release. We provide you with access to the most updated and extensive database of media journalist</span>
 		    		</div>
 		    	</div>
 		    	<div class="col-md-6">

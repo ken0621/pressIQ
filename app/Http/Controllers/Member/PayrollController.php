@@ -4636,8 +4636,22 @@ class PayrollController extends Member
 
      public function modal_leave_annual_report()
      {    
-          $tempmonth = date("Y-m-d");
-          $month = explode("-", $tempmonth);
+
+          $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->get();
+
+          $payroll_employee_id   = Tbl_payroll_leave_employeev2::getemployeeidbytempid($payroll_leave_temp_id,Self::shop_id())->get();
+
+          $datas     = array();                                        
+          foreach($payroll_employee_id as $key => $emp_id)
+          {
+               $empdata = Tbl_payroll_leave_schedulev2::getannualleave($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'],12)->get();
+
+               array_push($datas, $empdata); 
+          }
+
+          dd($datas);
+
+
 
           return view("member.payroll.modal.modal_leave_annual_report");
      }

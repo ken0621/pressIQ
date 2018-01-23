@@ -697,8 +697,23 @@ class Warehouse2
                                                    ->where("item_in_use",'unused')
                                                    ->value('record_log_id');
             }
-            Warehouse2::insert_item_history($id);
-            Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
+            if($id)
+            {            
+                Warehouse2::insert_item_history($id);
+                Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
+            }
+            else
+            {
+                if(Inventory::allow_out_of_stock($shop_id) == 1)
+                {
+                    $insert['record_count_inventory'] = 0;
+                    $insert['record_source_ref_name'] = $insert['record_consume_ref_name'];
+                    $insert['record_source_ref_id'] = $insert['record_consume_ref_id'];
+                    $id = Tbl_warehouse_inventory_record_log::insertGetId($insert);
+
+                    Warehouse2::insert_item_history($id);
+                }
+            }
         }
 
         if(!$inventory_history)

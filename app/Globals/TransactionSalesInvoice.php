@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use DB;
 use App\Globals\AccountingTransaction;
 use App\Globals\CustomerWIS;
+use App\Globals\Warehouse2;
 /**
  * 
  *
@@ -136,6 +137,7 @@ class TransactionSalesInvoice
 			Tbl_customer_invoice_line::where("invline_inv_id", $invoice_id)->delete();
 	        $return = Self::insertline($invoice_id, $insert_item, $entry);
 	        $return = $invoice_id;
+
 		}
 		else
 		{
@@ -208,6 +210,9 @@ class TransactionSalesInvoice
 
 	        $return = Self::insertline($invoice_id, $insert_item, $entry);
 	        $return = $invoice_id;
+
+			$warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+			AccountingTransaction::consume_inventory($shop_id, $warehouse_id, $insert_item, 'sales_invoice', $invoice_id, 'Consume upon creating SALES INVOICE '.$ins['transaction_refnum']);
 		}
 		else
 		{

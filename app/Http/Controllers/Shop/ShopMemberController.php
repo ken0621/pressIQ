@@ -887,7 +887,7 @@ class ShopMemberController extends Shop
         {
             return Redirect::to("/");   
         }
-    }
+    }         
 
     public function manage_user_search(Request $request)
     {   
@@ -922,7 +922,6 @@ class ShopMemberController extends Shop
                             'user_last_name'      =>request('last_name'),
                             'user_email'          =>request('email'),
                             'user_company_name'   =>request('company_name'),
-                            'user_password'       =>Crypt::encrypt(request('password')),
                             ]);
         Session::forget('edit_user');
         Session::flash('success_user', 'User Successfully Updated!');

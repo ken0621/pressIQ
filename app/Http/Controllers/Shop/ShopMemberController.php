@@ -2761,7 +2761,7 @@ class ShopMemberController extends Shop
 
             if($check)
             {
-                $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
+                $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode,Self::$customer_info->customer_id);
                 return Self::load_view_for_members('member.genealogy_tree', $data);            
             }
             else
@@ -2779,10 +2779,21 @@ class ShopMemberController extends Shop
         $data = MemberSlotGenealogy::downline($request->x, $request->mode);
         return $data;
     }
-    public function getCreateSlot()
+    public function postCreateSlot(Request $request)
     {
         $data['page'] = "Create Slot";
-        return 'Create Slot';
+        // $shop_id, $customer_id, $membership_id, $sponsor, $slot_no = null, $slot_type = "PS"
+        $shop_id        = $this->shop_info->shop_id;
+        $customer_id    = Self::$customer_info->customer_id;
+        $membership     = $request->codevault;
+        $sponsor        = 544;
+        $slot_no        = Self::generate_slot_no_based_on_name(Self::$customer_info->first_name, Self::$customer_info->last_name);
+
+        $slot_id        = MLM2::create_slot($shop_id,$customer_id,$membership,$sponsor,$slot_no);
+        // dd($slot_id);
+        MLM2::entry($shop_id,$slot_id);
+
+        return Redirect::back();
     }
     public function getNetwork()
     {
@@ -2919,6 +2930,7 @@ class ShopMemberController extends Shop
 
         $q = $query->where("tbl_transaction.transaction_reference_id",Self::$customer_info->customer_id);
         $data['_codes'] = $q->where("transaction_reference_table","tbl_customer")->where("item_in_use","unused")->where("item_type_id",5)->where("tbl_transaction.shop_id",$this->shop_info->shop_id)->paginate(10);
+        // dd($data['_codes']);
         return (Self::load_view_for_members("member.code-vault",$data));
     }
     public function getUsecode()

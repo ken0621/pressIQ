@@ -29,25 +29,49 @@
 
           <!-- Modal content -->
           <div class="modal-content">
-            <form class="global-submit form-horizontal" role="form" action="#" method="post">
+            <form class="global-submit form-horizontal" role="form" action="/members/create-slot" method="post">
+                {{csrf_field()}}
                 <div class="modal-header">
                     <h4 class="modal-title">Create Slot</h4>
                 </div>
                 <div class="modal-body clearfix">
-                    <select name="slot" class="code-vault">
-                        <option class="form-control" value="a">a</option>
-                        <option class="form-control" value="a">b</option>
-                        <option class="form-control" value="a">c</option>
+                    <select style="width: 98%;" name="codevault" class="code-vault">
+                        @foreach($_codes as $code)
+                        <option value="{{$code->membership_id}}">{{$code->mlm_activation.'('.$code->item_name.')'}}</option>
+                        @endforeach
                     </select>
+                    <h4>Choose Owner</h4>
+                    <input type="radio" name="owner" value="self" checked="checked"> Your Account<br>
+                    <input type="radio" name="owner" value="new"> New User<br>
+                    <div class="new-user" style="display: none">
+                        <label>First Name</label><br>
+                        <input type="text" name="first_name"><br>
+                        <label>Last Name</label><br>
+                        <input type="text" name="last_name"><br>
+                        <label>Email</label><br>
+                        <input type="text" name="email"><br>
+                        <label>Username</label><br>
+                        <input type="text" name="username"><br>
+                        <label>Password</label><br>
+                        <input type="text" name="password"><br>
+                        <label>Confirm Password</label><br>
+                        <input type="text" name="confirm_pass"><br>
+                        <label>Country</label><br>
+                        <select style="width: 98%;" name="country" class="country">
+                            <option value="420">Philippines</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-def-white btn-custom-white close-modal" type="button">Close</button>
-                    <button class="btn btn-primary btn-custom-primary" type="button">Submit</button>
+                    <button class="btn btn-primary btn-custom-primary" type="submit">Submit</button>
                 </div>
             </form>
           </div>
 
         </div>
+        {{-- Modal End --}}
+
         <!-- backup style="height: 100%;" -->
         <div class="overscroll" style="width: 100%; height: inherit; overflow: auto;">
 

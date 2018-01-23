@@ -17,6 +17,7 @@ function genealogy_modal()
 		event_add_slot();
 		event_close_modal();
 		select2();
+		event_radio_change();
 	}
 	function select2()
 	{
@@ -42,5 +43,19 @@ function genealogy_modal()
 	{
         var modal = document.getElementById('myModal');
 		modal.style.display = "block";
+	}
+	function event_radio_change()
+	{
+		$('input[type=radio][name=owner]').change(function()
+		{
+	        if(this.value == 'new')
+	        {
+	        	$('.new-user').slideDown();
+	        }
+	        else
+	        {
+	        	$('.new-user').slideUp();
+	        }
+	    });
 	}
 }

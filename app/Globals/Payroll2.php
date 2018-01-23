@@ -2487,7 +2487,7 @@ class Payroll2
 
 				if ($compute_type == "hourly") 
 				{
-					$return->daily_rate = $daily_rate;
+					$return->daily_rate = $hourly_rate * $target_float;
 					$total_day_income   = $return->daily_rate;
 				}
 		  		if ($overtime_float != 0) 
@@ -2840,6 +2840,11 @@ class Payroll2
 		if($_time["is_absent"] == true || $_time['is_absent'] == false && ($_time['day_type'] == 'rest_day') || $_time['is_absent'] == false && ($_time['day_type'] == 'extra_day') )
 		{
 			$absent_deduction = $daily_rate;
+
+			if($compute_type == "hourly")
+			{
+				$absent_deduction = $hourly_rate * $target_float;
+			}
 
 			$total_day_income 	  = $total_day_income - $absent_deduction;
 			$absent_float 		  = 1;

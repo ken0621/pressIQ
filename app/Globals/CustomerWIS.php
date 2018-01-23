@@ -286,8 +286,10 @@ class CustomerWIS
     public static function countTransaction($shop_id, $customer_id)
     {
         $so = Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_customer_id",$customer_id)->where("est_status","accepted")->count();
-        $inv = 0;
-        return $so + $inv;
+        $so = 0;
+        $inv = TransactionSalesInvoice::countUndeliveredSalesInvoice($shop_id, $customer_id);
+        $sr = TransactionSalesReceipt::countUndeliveredSalesReceipt($shop_id, $customer_id);
+        return $inv + $sr;
     }
 
     /*public static function check_customer_existence($shop_id, $customer_id = 0)

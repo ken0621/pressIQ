@@ -7,6 +7,7 @@ use App\Models\Tbl_customer_invoice_line;
 use Carbon\Carbon;
 use DB;
 use App\Globals\AccountingTransaction;
+use App\Globals\CustomerWIS;
 /**
  * 
  *
@@ -18,6 +19,14 @@ class TransactionSalesInvoice
 	public static function countTransaction($shop_id, $customer_id)
 	{
 		return Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_customer_id",$customer_id)->where("est_status","accepted")->count();
+	}
+	public static function countUndeliveredSalesInvoice($shop_id, $customer_id)
+	{
+		return Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('inv_customer_id', $customer_id)->where('is_sales_receipt',0)->where('item_delivered',0)->count();
+	}
+	public static function getUndeliveredSalesInvoice($shop_id, $customer_id)
+	{
+		return Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('inv_customer_id', $customer_id)->where('is_sales_receipt',0)->where('item_delivered',0)->get();
 	}
 	public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
 	{
@@ -157,6 +166,12 @@ class TransactionSalesInvoice
 	        $ins['inv_message']                  = $insert['customer_message'];
 	        $ins['inv_memo']                     = $insert['customer_memo'];
 	        $ins['date_created']                 = Carbon::now();
+
+			$ins['item_delivered'] = 0;
+	        if(CustomerWIS::settings($shop_id) == 0)
+			{
+				$ins['item_delivered'] = 1;
+			}
 
 	        /* SUBTOTAL */
 	        $subtotal_price = collect($insert_item)->sum('item_amount');

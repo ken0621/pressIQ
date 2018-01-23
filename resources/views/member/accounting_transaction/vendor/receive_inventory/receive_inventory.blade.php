@@ -102,7 +102,7 @@
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="draggable">
+                                                <tbody class="tbody-item">
                                                     @if(isset($ri))
                                                         @foreach($_riline as $riline)
                                                             <tr class="tr-draggable">
@@ -127,7 +127,7 @@
                                                         @endforeach
                                                     @endif
                                                 <tbody class="draggable tbody-item po-tbl">
-                                                    @include("member.accounting_transaction.vendor.purchase_order.po_load_item_session")  
+                                                @include("member.accounting_transaction.vendor.purchase_order.po_load_item_session") 
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>

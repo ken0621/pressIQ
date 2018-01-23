@@ -32,6 +32,8 @@
             <a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_withoutpay_leave_report" style="margin-right:20px;">Without Pay Leave</a>
 
             <a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_leave_action_report" style="margin-right:20px;">Leave Action Report</a>
+
+            <a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_leave_annual_report" style="margin-right:20px;">Annual Leave Report</a>
             </h4>
     </div>
 </div>

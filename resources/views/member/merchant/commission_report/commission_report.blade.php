@@ -11,16 +11,16 @@
             Insert Description Here
             </small>
             </h1>
-            <!-- <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</button>
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-star"></i> Primary Command</button>
-            </div> -->
+            <div class="dropdown pull-right">
+                <button onclick="window.open('/member/merchant/commission_report/export')" class="btn btn-def-white btn-custom-green-white"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                <button onclick="action_load_link_to_modal('/member/merchant/commission_report/import', 'md')" class="btn btn-custom-white"><i class="fa fa-upload"></i> Import Excel File</button>
+            </div>
         </div>
     </div>
 </div>
+    {!! csrf_field() !!}
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-6">
     <div class="tab-content">
-    {!! csrf_field() !!}
         <div id="all-orders" class="tab-pane fade in active">
             <form method="post">
                 <div class="panel-heading">
@@ -29,13 +29,30 @@
                     <label>Commission Percentage</label>
                     <input type="number" min="0" value="{{$percentage}}" class="form-control commission-percentage" name="merchant_commission_percentage">
                     <hr>
-                    <button onclick="return false" class="btn btn-primary popup pull-right" size='md' link="/member/merchant/commission-report-pass">Save</button>
+                    <button onclick="return false" class="btn btn-primary popup pull-right" size='md' link="/member/merchant/commission-report-pass"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>
                 </div>
             </form>
         </div>   
     </div>
 </div>
+<!-- <div class="panel panel-default panel-block panel-title-block panel-gray col-md-6">
+    <div class="tab-content">
+        <div id="all-orders" class="tab-pane fade in active">
+            <form method="post">
+                <div class="panel-heading">
+                    <center>Import Excel File</center>
+                    <div class="col-md-12">
+                        <label>Excel File</label>
+                        <input id="basic-input" type="file"  class="form-control" name="excel_file">
+                        <hr>
+                        <button onclick="return false" class="btn btn-primary popup pull-right" size='md' link="/member/merchant/commission-report-pass"><i class="fa fa-upload"></i> Import File</button>
+                    </div>
+                </div>
+            </form>
+        </div>   
+    </div>
+</div> -->
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-12"  style="margin-bottom: -10px;">
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">
@@ -74,7 +91,50 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/js/commission_report.js?v=10"></script>
+<script type="text/javascript" src="/assets/js/commission_report.js?v=11"></script>
+<script type="text/javascript">
+    @if(Session::get("response")=='success')
+    toastr.success("Importation Complete");
+    @elseif(Session::get("response")=='no_data')
+    toastr.error("Importation Failed (No Data Found)");
+    @elseif(Session::get("response")=='error')
+    toastr.error("Please select a file");
+    @endif
+</script>
+{{-- table pagination --}}
+<script type="text/javascript">
+    $(window).on('hashchange', function() {
+        if (window.location.hash) {
+            var page = window.location.hash.replace('#', '');
+            if (page == Number.NaN || page <= 0) {
+                return false;
+            } else {
+                getPosts(page);
+            }
+        }
+    });
+    $(document).ready(function() {
+        getPosts(1);
+        $(document).on('click', '.pagination a', function (e) {
+            getPosts($(this).attr('href').split('page=')[1]);
+            e.preventDefault();
+        });
+    });
+    function getPosts(page) {
+        $.ajax(
+        {
+            url : '/member/merchant/commission_report/table?page=' + page,
+            type: 'get',
+        }).done(function (data) 
+        {
+            $('.load-commission-table-here').html(data);
+            location.hash = page;
+        }).fail(function () 
+        {
+            alert('Posts could not be loaded.');
+        });
+    }
+</script>
 @endsection
 <script type="text/javascript" src="/assets/themes/js/jquery.min.js?v=1"></script>
 <script type="text/javascript">
@@ -84,3 +144,4 @@
         commission_report.action_load_table();
     }
 </script>
+

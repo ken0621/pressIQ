@@ -2393,7 +2393,7 @@ class PayrollController extends Member
           $update['payroll_company_logo']                   = $logo;
           $newdata = serialize($update);
           Tbl_payroll_company::where('payroll_company_id', $payroll_company_id)->update($update);
-          AuditTrail::record_logs('EDITED: Payroll Company', 'Payroll Company Name: '.Request::input('payroll_company_name'), $id, "" ,$newdata);
+          AuditTrail::record_logs('EDITED: Payroll Company', 'Payroll Company Name: '.Request::input('payroll_company_name'), $payroll_company_id, "" ,$newdata);
 
           $return['function_name'] = 'companylist.save_company';
           $return['status'] = 'success';

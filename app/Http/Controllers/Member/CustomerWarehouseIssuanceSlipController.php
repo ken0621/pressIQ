@@ -13,6 +13,8 @@ use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\CustomerWIS;
 use App\Globals\TransactionSalesOrder;
+use App\Globals\TransactionSalesInvoice;
+use App\Globals\TransactionSalesReceipt;
 use App\Globals\TransactionEstimateQuotation;
 use App\Globals\Customer;
 use App\Globals\WarehouseTransfer;
@@ -29,7 +31,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
 {
     /**
      * Display a listing of the resource.
-     *
+     * @author EDEN
      * @return \Illuminate\Http\Response
      */
     public function getIndex(Request $request)
@@ -64,10 +66,8 @@ class CustomerWarehouseIssuanceSlipController extends Member
         if($cust_wis_id)
         {
             $data["wis"]  = CustomerWIS::get_customer_wis_data($cust_wis_id);
-            //dd($data["wis"]);
             $data["_wisline"] = CustomerWIS::get_wis_line($cust_wis_id);
             $data['action']     = "/member/customer/wis/update-submit";
-            //dd($data);
         }
 
         return view('member.warehousev2.customer_wis.customer_wis_create',$data);
@@ -291,7 +291,8 @@ class CustomerWarehouseIssuanceSlipController extends Member
 
         $data['_eq'] = TransactionEstimateQuotation::getOpenEQ($this->user_info->shop_id, $request->c);
         $data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
-        $data['_si'] = null;
+        $data['_si'] = TransactionSalesInvoice::getUndeliveredSalesInvoice($this->user_info->shop_id, $request->c);
+        $data['_sr'] = TransactionSalesReceipt::getUndeliveredSalesReceipt($this->user_info->shop_id, $request->c);
         $data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
         return view('member.warehousev2.customer_wis.load_transaction', $data);
     }

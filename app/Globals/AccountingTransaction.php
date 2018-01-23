@@ -250,7 +250,7 @@ class AccountingTransaction
 		elseif($btn_action == 'snew')
 		{
 			$return = '/member/transaction/'.$transaction_type.'/create';
-		}	
+		}
 
 		return $return;	
 	}
@@ -430,7 +430,7 @@ class AccountingTransaction
 		$return = null;
 		if(count($item_info) > 0)
 		{
-			$item = null;
+			$_item = null;
 			foreach ($item_info as $key => $value) 
 			{
 				$item_type = Item::get_item_type($value['item_id']);
@@ -442,8 +442,7 @@ class AccountingTransaction
 			        $_item[$key]['remarks'] = $value['item_description'];
 				}
 			}
-
-			if(count($item) > 0)
+			if(count($_item) > 0)
 			{
 				$return = Warehouse2::consume_bulk($shop_id, $warehouse_id, $ref_name, $ref_id, $remarks, $_item);
 			}

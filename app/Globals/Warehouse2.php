@@ -25,6 +25,7 @@ use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_customer;
 
+use App\Globals\Inventory;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
@@ -629,8 +630,11 @@ class Warehouse2
         {
             $return .= "The warehouse doesn't belong to your account <br>";
         }
+
         $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
-        if($quantity > $inventory_qty)
+        $settings_qty = Inventory::allow_out_of_stock($shop_id);
+        
+        if($quantity > $inventory_qty && $settings_qty == 0)
         {
             $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
         }
@@ -693,8 +697,23 @@ class Warehouse2
                                                    ->where("item_in_use",'unused')
                                                    ->value('record_log_id');
             }
-            Warehouse2::insert_item_history($id);
-            Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
+            if($id)
+            {            
+                Warehouse2::insert_item_history($id);
+                Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
+            }
+            else
+            {
+                if(Inventory::allow_out_of_stock($shop_id) == 1)
+                {
+                    $insert['record_count_inventory'] = 0;
+                    $insert['record_source_ref_name'] = $insert['record_consume_ref_name'];
+                    $insert['record_source_ref_id'] = $insert['record_consume_ref_id'];
+                    $id = Tbl_warehouse_inventory_record_log::insertGetId($insert);
+
+                    Warehouse2::insert_item_history($id);
+                }
+            }
         }
 
         if(!$inventory_history)

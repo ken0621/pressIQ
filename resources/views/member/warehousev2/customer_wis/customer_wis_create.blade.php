@@ -5,7 +5,6 @@
     <input type="hidden" class="button-action" name="button_action" value="">
     <input type="hidden" name="cust_wis_id" value="{{ $wis->cust_wis_id or '' }}">
 
-
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -47,7 +46,7 @@
                 </select>
             </div>
             <div class="col-md-4">
-                 <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$wis->cust_email or ''}}"/>
+                 <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{isset($wis) ? $wis->cust_email : ''}}"/>
             </div>
             <div class="col-sm-4 text-right open-transaction" style="display: none;">
                 <h4><a class="popup popup-link-open-transaction" size="md" link="/member/customer/wis/load-transaction?customer_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
@@ -57,7 +56,7 @@
             <div class="col-md-4">
                 <label>Ship to</label>
                 <div>
-                    <textarea required class="form-control customer-billing-address" name="customer_address" value="">{{ isset($wis->destination_customer_address) ==''? '':$wis->destination_customer_address }}</textarea>
+                    <textarea required class="form-control customer-billing-address" name="customer_address" value="">{{ isset($wis->destination_customer_address) ? $wis->destination_customer_address : ''}}</textarea>
                 </div>
             </div>
             <div class="col-md-4">

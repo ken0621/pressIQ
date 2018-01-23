@@ -101,7 +101,7 @@ class TransactionCreditMemo
 	        $ins['date_created']                = Carbon::now();
 
 	        /* INSERT CREDIT MEMO HERE */
-	        $cm_id = Tbl_credit_memo::insertGetId($ins);;
+	        $cm_id = Tbl_credit_memo::insertGetId($ins);
 
 	        /* Transaction Journal */
 	        $entry["reference_module"]  = "credit-memo";

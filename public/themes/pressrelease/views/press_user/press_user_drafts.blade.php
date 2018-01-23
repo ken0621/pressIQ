@@ -9,6 +9,7 @@
               @endif 
          <!-- Drafts -->
         <div class="drafts-holder-container">
+          <div class="table-container">
             <table>
                 <tr>    
                     <th>Press Release Title</th>
@@ -27,6 +28,7 @@
                 </tr>
                 @endforeach
             </table>
+          </div>
         </div>
     </div>
 </div>

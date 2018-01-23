@@ -49,9 +49,6 @@
                       <div class="title">Company Name:</div>
                       <input type="text" id="company_name" name="company_name" class="form-control" value="{{$_user_edits->user_company_name}}">
 
-                      <div class="title">Password:</div>
-                      <input type="Password" id="password" name="password" class="form-control" value="{{$_user_edits->user_password}}">
-
                       <div class="button-container">
                           <button type="submit" id="submit_button" name="submit_button" formaction="/pressadmin/manage_user_edit">Submit</button>
                       </div>

@@ -184,6 +184,13 @@
                                     <li><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></li>
                                     <li><a class="smoth-scroll" href="/#contactus">CONTACT</a></li>
                                     <li><a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank">NETGIVING</a></li>
+                                @elseif(Request::segment(1)=="product2")
+                                    <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                                    <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
+                                    <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
+                                    <li><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></li>
+                                    <li><a class="smoth-scroll" href="/#contactus">CONTACT</a></li>
+                                    <li><a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank">NETGIVING</a></li>
                                 @elseif(Request::segment(1)=="about")
                                     <li><a class="smoth-scroll" href="/#home">HOME</a></li>
                                     <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
@@ -234,12 +241,35 @@
                                 <div class="nav-list"><a class="smoth-scroll" href="/#product">PRODUCT</a></div>
                                 <div class="nav-list"><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></div>
                                 <div class="nav-list"><a class="smoth-scroll" href="/#contactus">CONTACT</a></div>
+                                <div class="nav-list"><a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank">NETGIVING</a></div>
+                            @elseif(Request::segment(1)=="product")
+                                <div class="nav-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                                <div class="nav-list"><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></div>
+                                <div class="nav-list"><a class="smoth-scroll" href="/#product">PRODUCT</a></div>
+                                <div class="nav-list"><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></div>
+                                <div class="nav-list"><a class="smoth-scroll" href="/#contactus">CONTACT</a></div>
+                                <div class="nav-list"><a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank">NETGIVING</a></div>
+                            @elseif(Request::segment(1)=="product2")
+                                <div class="nav-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                                <div class="nav-list"><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></div>
+                                <div class="nav-list"><a class="smoth-scroll" href="/#product">PRODUCT</a></div>
+                                <div class="nav-list"><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></div>
+                                <div class="nav-list"><a class="smoth-scroll" href="/#contactus">CONTACT</a></div>
+                                <div class="nav-list"><a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank">NETGIVING</a></div>
+                            @elseif(Request::segment(1)=="about")
+                                <div class="nav-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                                <div class="nav-list"><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></div>
+                                <div class="nav-list"><a class="smoth-scroll" href="/#product">PRODUCT</a></div>
+                                <div class="nav-list"><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></div>
+                                <div class="nav-list"><a class="smoth-scroll" href="/#contactus">CONTACT</a></div>
+                                <div class="nav-list"><a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank">NETGIVING</a></div>
                             @else
                                 <div class="nav-list"><a class="smoth-scroll" href="#home">HOME</a></div>
                                 <div class="nav-list"><a class="smoth-scroll" href="#aboutus">ABOUT US</a></div>
                                 <div class="nav-list"><a class="smoth-scroll" href="#product">PRODUCT</a></div>
                                 <div class="nav-list"><a class="smoth-scroll" href="#testimonials">TESTIMONIALS</a></div>
                                 <div class="nav-list"><a class="smoth-scroll" href="#contactus">CONTACT</a></div>
+                                <div class="nav-list"><a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank">NETGIVING</a></div>
                             @endif
 
                         </div>

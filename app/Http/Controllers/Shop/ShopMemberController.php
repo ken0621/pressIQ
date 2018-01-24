@@ -865,6 +865,15 @@ class ShopMemberController extends Shop
             else
             {
                 $analytics_view = json_decode($response);
+                $new_analytic_view = [];
+                foreach ($analytics_view as $key => $value) 
+                {
+                    if ($value->sender != $explode_email[0] . '@press-iq.com') 
+                    {
+                        $new_analytic_view[$value->subject] = $value;
+                    }
+                }
+                $analytics_view = $new_analytic_view;
                 $data["analytics_view"] = $analytics_view;
                 $data["page"] = "Press Release - Dashboard";
                 return view("press_admin.press_admin_dashboard",$data);
@@ -875,6 +884,55 @@ class ShopMemberController extends Shop
            return Redirect::to("/"); 
         }
     }
+
+     public function pressadmin_dashboard_view()   
+    {
+        if (Session::exists('user_email')) 
+         {
+            $explode_email = explode("@", Session::get('user_email'));
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+                ) ,
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err)
+            {
+                echo "cURL Error #:" . $err;
+            }
+            else
+            {
+                $analytics_view = json_decode($response);
+                foreach ($analytics_view as $key => $value) 
+                {
+                    if ($value->subject != Crypt::decrypt(Request2::input("subject"))) 
+                    {
+                        unset($analytics_view[$key]);
+                    }
+                }
+                $data["analytics_view"] = $analytics_view;
+                $data["page"] = "Press Release - Details";
+                return view("press_admin.press_admin_dashboard_view",$data); 
+            }
+        }
+         else
+        {
+           return Redirect::to("/"); 
+        }
+    }
+
     public function pressadmin_media_contacts()
     {
 
@@ -963,7 +1021,7 @@ class ShopMemberController extends Shop
       $data["user_first_name"]                 = $request->user_first_name;
       $data["user_last_name"]                  = $request->user_last_name;
       $data["user_email"]                      = $request->user_email;
-      $data["user_password"]                   = Crypt::decrypt(request('user_password'));
+      $data["user_password"]                   = Crypt::encrypt(request('user_password'));
       $data["user_level"]                      = "1";
       Tbl_pressiq_user::insert($data);
       Session::flash('success_admin', 'New Admin Successfully Added!');

@@ -293,7 +293,7 @@
             <div class="wrapper-x-title wow fadeInDown" data-wow-delay = ".2s">Network Marketing Without Recruitment</div>
 
             <div class="btn-container wow fadeInDown" data-wow-delay = ".4s">
-                <a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view"><button>Read More &raquo;</button></a>
+                <a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank"><button>Read More &raquo;</button></a>
             </div>
         </div>
     </div>

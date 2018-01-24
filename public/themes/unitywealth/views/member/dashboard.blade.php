@@ -165,12 +165,14 @@
 							@endforeach
 					</div>
 
-					<div class="title">Buy a Kit</div>
-					<div class="sub-container">
-						<div class="btn-container">
-							<button class="btn-buy-a-kit" type="button">Buy</button>
+					@if($shop_id == "90")
+						<div class="title">Buy a Kit</div>
+						<div class="sub-container">
+							<div class="btn-container">
+								<button class="btn-buy-a-kit" type="button">Buy</button>
+							</div>
 						</div>
-					</div>
+					@endif
 
 				</div>
 			</div>

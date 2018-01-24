@@ -110,6 +110,7 @@ class ShopMemberController extends Shop
     public function getIndex()
     {
         $data["page"] = "Dashboard";
+        $data['shop_id'] = $this->shop_info->shop_id;
         $data["mode"] = session("get_success_mode");
         $data["zero_currency"] = Currency::format(0);
         session()->forget("get_success_mode");

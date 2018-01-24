@@ -382,6 +382,7 @@
                             <li><a href="javascript:">Terms and Conditions</a></li>
                             <li><a href="javascript:">Privacy Policy</a></li>
                             <li><a href="javascript:">Store Directory</a></li>
+                            <li><a href="javascript:">Downloadable File</a></li>
                         </ul>
                     </div>
                 </div>

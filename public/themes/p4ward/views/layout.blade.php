@@ -72,6 +72,7 @@
                 <li> <a onclick="off()" href="/#product"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCT</a></li>
                 <li> <a onclick="off()" href="/#testimonials"><i class="fa fa-quote-left" aria-hidden="true"></i> TESTIMONIALS</a></li>
                 <li> <a onclick="off()" href="/#contactus"><i class="fa fa-phone" aria-hidden="true"></i> CONTACT US</a></li>
+                <li> <a onclick="off()" href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank"><i class="fa fa-users" aria-hidden="true"></i> NETGIVING</a></li>
             </ul>
             
             <div class="space2"></div>
@@ -106,6 +107,7 @@
                     <li> <a onclick="off()" href="/#product"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCT</a></li>
                     <li> <a onclick="off()" href="/#testimonials"><i class="fa fa-quote-left" aria-hidden="true"></i> TESTIMONIALS</a></li>
                     <li> <a onclick="off()" href="/#contactus"><i class="fa fa-phone" aria-hidden="true"></i> CONTACT US</a></li>
+                    <li> <a onclick="off()" href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank"><i class="fa fa-users" aria-hidden="true"></i> NETGIVING</a></li>
                 </ul>
             @endif
         </nav>
@@ -174,24 +176,28 @@
                                     <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
                                     <li><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></li>
                                     <li><a class="smoth-scroll" href="/#contactus">CONTACT</a></li>
+                                    <li><a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank">NETGIVING</a></li>
                                 @elseif(Request::segment(1)=="product")
                                     <li><a class="smoth-scroll" href="/#home">HOME</a></li>
                                     <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
                                     <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
                                     <li><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></li>
                                     <li><a class="smoth-scroll" href="/#contactus">CONTACT</a></li>
+                                    <li><a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank">NETGIVING</a></li>
                                 @elseif(Request::segment(1)=="about")
                                     <li><a class="smoth-scroll" href="/#home">HOME</a></li>
                                     <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
                                     <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
                                     <li><a class="smoth-scroll" href="/#testimonials">TESTIMONIALS</a></li>
                                     <li><a class="smoth-scroll" href="/#contactus">CONTACT</a></li>
+                                    <li><a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank">NETGIVING</a></li>
                                 @else
                                     <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                     <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
                                     <li><a class="smoth-scroll" href="#product">PRODUCT</a></li>
                                     <li><a class="smoth-scroll" href="#testimonials">TESTIMONIALS</a></li>
                                     <li><a class="smoth-scroll" href="#contactus">CONTACT</a></li>
+                                    <li><a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank">NETGIVING</a></li>
                                 @endif
                             </ul>
                         </nav>
@@ -215,7 +221,7 @@
                                 <img src="\themes\p4ward\img\p4ward-icon-footer.png">
                             </div>
                             <div><p>P4ward Global Marketing started through the concept of giving. On December 22, 2016, a tragedy hit our family. An accident happened in the apartment of my brother which started a fire that engulfed the entire flat including his body...</div>
-                            <div class="button-container"><a href="#">READ MORE</a></div>
+                            <div class="button-container"><a href="/about">READ MORE</a></div>
                         </div>
                         <div class="col-md-3">
                              <div class="footer-title-container">
@@ -241,17 +247,17 @@
                             <div class="footer-title-container">
                                 <p class="footer-title">PRODUCT PORTFOLIO</p>
                             </div>
-                            <div class="product-list"><a href="#">DON ORGANICS COFFEE SCRUB</a></div>
-                            <div class="product-list"><a href="#">DON ORGANICS RED RICE SCRUB</a></div>
+                            <div class="product-list"><a href="/product">DON ORGANICS COFFEE SCRUB</a></div>
+                            <div class="product-list"><a href="/product2">DON ORGANICS RED RICE SCRUB</a></div>
                         </div>
                         <div class="col-md-3">
                             <div class="footer-title-container">
                                 <p class="footer-title">FOLLOW US ON</p>
                             </div>
                             <div class="social-icon-container">
-                                <a href="https://facebook.com/p4ward"><span><i class="fa fa-facebook-square"></i></span></a>
-                                <a href="https://mobile.twitter.com/P4wardph"><span><i class="fa fa-twitter-square"></i></span></a>
-                                <a href="https://www.instagram.com/p4wardph/"><span><i class="fa fa-instagram"></i></span></a>
+                                <a href="https://facebook.com/p4ward" target="_blank"><span><i class="fa fa-facebook-square"></i></span></a>
+                                <a href="https://mobile.twitter.com/P4wardph" target="_blank"><span><i class="fa fa-twitter-square"></i></span></a>
+                                <a href="https://www.instagram.com/p4wardph/" target="_blank"><span><i class="fa fa-instagram"></i></span></a>
                             </div>
                         </div>
                     </div>

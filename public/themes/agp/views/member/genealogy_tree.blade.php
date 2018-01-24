@@ -9,6 +9,10 @@
         <script type="text/javascript" src="/assets/slot_genealogy/genealogy/genealogy_modal.js"></script>
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/old_genealogy.css" />
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/genealogy_modal.css" />
+        <link rel="stylesheet" type="text/css" href="/assets/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
+        <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
+        <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
 
         <!-- Trial-->
         <link rel="stylesheet" href="/resources/assets/remodal/src/jquery.remodal.css">
@@ -29,33 +33,43 @@
 
           <!-- Modal content -->
           <div class="modal-content">
-            <form class="global-submit form-horizontal" role="form" action="/members/create-slot" method="post">
+            <form class="form-create-slot" role="form" action="/members/create-slot" method="post">
                 {{csrf_field()}}
                 <div class="modal-header">
                     <h4 class="modal-title">Create Slot</h4>
                 </div>
                 <div class="modal-body clearfix">
+                    <label>Membership</label><br>
                     <select style="width: 98%;" name="codevault" class="code-vault">
                         @foreach($_codes as $code)
-                        <option value="{{$code->membership_id}}">{{$code->mlm_activation.'('.$code->item_name.')'}}</option>
+                        <option value="{{$code->transaction_id}}">{{$code->mlm_activation.'('.$code->item_name.')'}}</option>
                         @endforeach
                     </select>
+                    <input type="hidden" name="placement" class="slot-placement">
+                    <input type="hidden" name="position" class="slot-position">
+                    <input type="hidden" name="shop_id" class="shop_id" value="{{$shop_id}}">
+                    <h4>Sponsor</h4>
+                    <input type="text" name="sponsor" class="sponsor"><div class="verify-sponsor" verify='false'><font color="red"><i class="fa fa-times-circle-o" aria-hidden="true"></font></i></div>
                     <h4>Choose Owner</h4>
                     <input type="radio" name="owner" value="self" checked="checked"> Your Account<br>
                     <input type="radio" name="owner" value="new"> New User<br>
                     <div class="new-user" style="display: none">
                         <label>First Name</label><br>
-                        <input type="text" name="first_name"><br>
+                        <input type="text" name="first_name" class="fname"><br>
+                        <label>Middle Name</label><br>
+                        <input type="text" name="middle_name" class="mname"><br>
                         <label>Last Name</label><br>
-                        <input type="text" name="last_name"><br>
+                        <input type="text" name="last_name" class="lname"><br>
+                        <label>Contact</label><br>
+                        <input type="text" name="contact" class="contact"><br>
                         <label>Email</label><br>
-                        <input type="text" name="email"><br>
+                        <input type="text" name="email" class="email"><br>
                         <label>Username</label><br>
-                        <input type="text" name="username"><br>
+                        <input type="text" name="username" class="username"><br>
                         <label>Password</label><br>
-                        <input type="text" name="password"><br>
+                        <input type="password" name="password" class="password"><br>
                         <label>Confirm Password</label><br>
-                        <input type="text" name="confirm_pass"><br>
+                        <input type="password" name="confirm_pass" class="confirm_pass"><br>
                         <label>Country</label><br>
                         <select style="width: 98%;" name="country" class="country">
                             <option value="420">Philippines</option>

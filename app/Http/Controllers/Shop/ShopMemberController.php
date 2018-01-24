@@ -2779,19 +2779,70 @@ class ShopMemberController extends Shop
         $data = MemberSlotGenealogy::downline($request->x, $request->mode);
         return $data;
     }
+    public function getAvailableSponsor()
+    {
+        $shop_id = request('shop_id');
+        $sponsor = request('sponsor');
+        $slot = Tbl_mlm_slot::where('shop_id',$shop_id)->where('slot_id',$sponsor)->first();
+        if($slot)
+        {
+            return 'true';
+        }
+        else
+        {
+            return 'false';
+        }
+    }
     public function postCreateSlot(Request $request)
     {
         $data['page'] = "Create Slot";
+        //patrick
+        $codes = Tbl_transaction_list::CodeVaultTransaction()
+                            ->selectRaw('tbl_warehouse_inventory_record_log.mlm_pin,tbl_warehouse_inventory_record_log.mlm_activation,membership_id,tbl_warehouse_inventory_record_log.record_log_id')
+                            ->where('tbl_transaction.transaction_id',$request->codevault)
+                            ->first();
+        $response = 'error';
         // $shop_id, $customer_id, $membership_id, $sponsor, $slot_no = null, $slot_type = "PS"
         $shop_id        = $this->shop_info->shop_id;
         $customer_id    = Self::$customer_info->customer_id;
-        $membership     = $request->codevault;
-        $sponsor        = 544;
+        $membership     = $codes->membership_id;
+        $sponsor        = $request->sponsor;
         $slot_no        = Self::generate_slot_no_based_on_name(Self::$customer_info->first_name, Self::$customer_info->last_name);
+        if($request->owner == 'new')
+        {
+            $customer['shop_id']           = $shop_id;
+            $customer['country_id']        = $request->country;
+            $customer['first_name']        = $request->first_name;
+            $customer['middle_name']       = $request->middle_name;
+            $customer['last_name']         = $request->last_name;
+            $customer['email']             = $request->email;
+            $customer['password']          = Crypt::crypt($request->password);
+            $customer['Iswalkin']          = 0;
+            $customer['created_date']      = Carbon::now();
+            $customer['ismlm']             = 1;
+            $customer['mlm_username']      = $request->username;
+            $customer['contact']           = $request->contact;
+
+            $customer_id = Tbl_customer::insertGetId($insert);
+            $new_customer_info = Tbl_customer::where('customer_id',$customer_id)->first();
+            $slot_no     = Self::generate_slot_no_based_on_name($new_customer_info->first_name, $new_customer_info->last_name);
+        }
 
         $slot_id        = MLM2::create_slot($shop_id,$customer_id,$membership,$sponsor,$slot_no);
         // dd($slot_id);
-        MLM2::entry($shop_id,$slot_id);
+
+        if($slot_id)
+        {
+            $update['slot_placement']   = $request->placement;
+            $update['slot_position']    = $request->position;
+
+            Tbl_mlm_slot::where('slot_id',$slot_id)->update($update);
+
+            MLM2::entry($shop_id,$slot_id);
+            $used['item_in_use'] = 'used';
+            Tbl_warehouse_inventory_record_log::where('record_log_id',$codes->record_log_id)->update($used);
+            $response = 'success';
+        }
 
         return Redirect::back();
     }

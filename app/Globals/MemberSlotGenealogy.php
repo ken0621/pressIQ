@@ -137,7 +137,7 @@ class MemberSlotGenealogy
                             ->where("item_type_id",5)
                             ->where("tbl_transaction.shop_id",$shop_id)
                             ->get();
-
+        $data['shop_id'] = $shop_id;
         return $data;
     }
     public static function downline($x = 0, $mode = '')

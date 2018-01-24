@@ -666,14 +666,22 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Still Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Patrick Manarang";
 
+        $code = "mlm-recaptcha";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Recaptcha";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/recaptcha";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Still Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Patrick Manarang";
 
-    $code = "mlm-recaptcha";
-    $nav[$page]['submenu'][$code]['label'] = "Recaptcha";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/recaptcha";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "still developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Patrick Manarang";
+
+    // $code = "mlm-recaptcha";
+    // $nav[$page]['submenu'][$code]['label'] = "Recaptcha";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/recaptcha";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "still developing";
+    // $nav[$page]['submenu'][$code]['developer'] = "Patrick Manarang";
 
 
     /* ACCOUNTING*/

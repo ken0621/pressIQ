@@ -30,7 +30,14 @@ class MLM_RecaptchaController extends Member
     {
     	$data['page'] 		= 'Recaptcha Setting';
     	$setting_points 	= Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->first();
-    	$data['point'] 		= $setting_points->point;
+        if($setting_points)
+        {
+            $data['point'] = $setting_points->point;
+        }
+    	else
+        {
+            $data['point'] = 0;
+        }
     	return view('member.mlm_recaptcha.mlm_recaptcha_setting',$data);
     }
     public function submit_setting(Request $request)
@@ -103,8 +110,16 @@ class MLM_RecaptchaController extends Member
     }
     public function load_points()
     {
-    	$query = Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->first()->point;
-    	return currency('PHP',$query);
+    	if($query =Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->first())
+        {
+             $point = $query->point;
+        }
+        else
+        {
+            $point = 0;
+        }
+        
+    	return currency('PHP',$point);
     }
     
 }

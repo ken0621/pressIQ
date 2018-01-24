@@ -2841,9 +2841,14 @@ class ShopMemberController extends Shop
     }
     public function getCaptcha()
     {
-        $data['page'] = "Captcha";
-        $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
-        return view('member.captcha',$data);
+        // unitywealth100
+        if($this->shop_info->shop_id == 90)
+        {
+            $data['page'] = "Captcha";
+            $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+            return view('member.captcha',$data);
+        }
+        
     }
     public function postSubmitcaptcha(Request $request)
     {

@@ -8,7 +8,7 @@
 			</div>
 			<div class="text">
 				<div class="name">{{$page}}</div>
-				<div class="sub">{{$customer_id}}</div>
+				<div class="sub">You can view your available packages here</div>
 			</div>
 		</div>
 		<div class="right">
@@ -25,10 +25,10 @@
 		  		<table class="table">
 			  		<thead>
 			  			<tr>
-			  				<th class="text-center" width="300px">Transaction Id</th>
-			  				<th class="text-center" width="300px">Pin</th>
-			  				<th class="text-center" width="300px">Activation Key</th>
-			  				<th class="text-left"> </th>
+			  				<th class="text-center" width="300px"><b>TRANSACTION ID</b></th>
+			  				<th class="text-center" width="300px"><b>ITEM NAME</b></th>
+			  				<th class="text-center" width="300px"><b>PIN</b></th>
+			  				<th class="text-center" width="300px"><b>ACTIVATION KEY</b></th>
 			  			</tr>
 			  		</thead>
 			  		<tbody>
@@ -39,13 +39,13 @@
 				  					<div><b>{{ $code->transaction_id }}</b></div>
 				  				</td>
 				  				<td class="text-center">
+				  					<div><b>{{ $code->item_name }}</b></div>
+				  				</td>
+				  				<td class="text-center">
 				  					<div>{{ $code->mlm_pin }}</div>
 				  				</td>
 				  				<td class="text-center">
 				  					<div>{{ $code->mlm_activation }}</div>
-				  				</td>
-				  				<td class="text-center">
-				  					<div><button onclick="" class="btn btn-primary btn-custom-primary use-code">use code</button></div>
 				  				</td>
 				  			</tr>
 				  			@endforeach

@@ -61,7 +61,7 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>&nbsp;</small>
-				<button class="btn btn-custom-primary btn-block popup employee-tag" type="button" link="/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/0/0">Tag Employee</button>
+				<button class="btn btn-custom-primary btn-block popup employee-tag" type="button" link="/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/0/1">Tag Employee</button>
 			</div>
 		</div>
 		<div class="form-group">
@@ -110,7 +110,15 @@
 	});
 
 	   $('input[type=radio][name=payroll_leave_temp_with_pays]').change(function() {
-		var link = "/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/" + $(".select-leave").val() +"/" + $(this).val();
+
+	    var leave  = $(".select-leave").val();
+
+	    if(leave == "")
+	    {
+	    	leave = 0;
+	    }
+
+		var link = "/member/payroll/leave_schedule/v2/leave_schedule_tag_employeev2/" + leave +"/" + $(this).val();
 		 $(".employee-tag").attr('link',link);
     });
 

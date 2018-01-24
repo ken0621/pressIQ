@@ -87,6 +87,44 @@ class TransactionPurchaseOrder
         return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', 0)->get();
     }
 
+    public static function getPO($shop_id, $vendor_id)
+    {        
+        /*$a = Tbl_purchase_order_line::PO()->where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->get();
+
+        $b = null;
+        foreach ($a as $key => $value) {
+            $b[$key]['po_id'] = $key;
+            $b[$key]['val'] = $value;
+            //$value['balance'] = $value->poline_qty * $value->poline_rate; 
+        }
+
+        return $b;*/
+
+        $data = Self::getOpenPO($shop_id, $vendor_id);
+
+        foreach ($data as $key)
+        {
+            $po_line = Tbl_purchase_order_line::where('poline_po_id', $key->po_id)->get();
+
+            foreach ($po_line as $key2) 
+            {
+                $key2['balance'] = $key2->poline_qty * $key2->poline_rate;
+               
+                //$po[$key2]['balance'] = $value->poline_qty * $value->poline_rate;
+            }
+
+            //$key['balance'] = $po;
+            /*foreach ($key['balance'] as $key3 => $value2)
+            {
+                $amount += $value2;
+            }*/ 
+
+        }
+       
+       return $key2;
+        
+    }   //dd($return);
+
     public static function postInsert($shop_id, $insert, $insert_item)
 	{
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);

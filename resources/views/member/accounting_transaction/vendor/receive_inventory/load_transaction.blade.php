@@ -1,10 +1,10 @@
 <div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal">×</button>
-	<h4 class="modal-title">Open Transaction - {{ $vendor->vendor_company }}</h4>
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h4 class="modal-title">Open Transaction - {{ $vendor->vendor_company }}</h4>
 </div>
 <form class="global-submit" action="/member/transaction/receive_inventory/applied-transaction" method="post">
     <div class="modal-body">
-    	<div class="row">
+        <div class="row">
             <div class="clearfix modal-body"> 
                 <div class="form-group po-div">
                     <div class="col-md-12">
@@ -83,11 +83,11 @@
                     </div>
                 </div>
             </div>
-    	</div>
+        </div>
     </div>
     <div class="modal-footer">
-    	<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-    	<button class="btn btn-primary btn-custom-primary" type="submit">Add</button>
+        <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
+        <button class="btn btn-primary btn-custom-primary" type="submit">Add</button>
     </div>
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 </form>

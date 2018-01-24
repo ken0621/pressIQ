@@ -186,19 +186,11 @@ class TransactionReceiveInventoryController extends Member
     public function getLoadTransaction(Request $request)
     {
         $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
-        
-        $return = null;
-        foreach ($data['_po']->po_id as $key => $value)
-        {
-            $return[$key]['balance'] = Tbl_purchase_order_line::where('poline_po_id', $value->po_id)->get();
-        }
-        dd($return);
-        
         $data['_dm'] = TransactionDebitMemo::getOpenDM($this->user_info->shop_id, $request->vendor);
         $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
         $data['_applied_po_id'] = Session::get("applied_po");
-        //$data['_applied_dm'] = Session::get("applied_dm");
-
+        //$data['_po'] = TransactionPurchaseOrder::getPO($this->user_info->shop_id, $request->vendor);
+        //dd($data['_po']);
         return view('member.accounting_transaction.vendor.receive_inventory.load_transaction', $data);
     }
     public function postAppliedTransaction(Request $request)
@@ -233,17 +225,18 @@ class TransactionReceiveInventoryController extends Member
             $_applied_po = null;
             foreach ($applied_po_id as $key => $value)
             {
-                $_applied_po[$key] = Tbl_purchase_order_line::where('poline_po_id',$value)->get();
+                $_applied_po[$key] = Tbl_purchase_order_line::where('poline_po_id',$value)->where('poline_qty', '!=', '0')->get();
                 
                 $_applied_po_line = null;
                 foreach ($_applied_po as $key1 => $value1)
                 {
                     $_applied_po_line[$key] = $value1;
+
                 }
             }
             $data['_po']   = $value1;
         }
-
+        
         $data['_um']   = UnitMeasurement::load_um_multi();
         $data['_item'] = Item::get_all_category_item();
 

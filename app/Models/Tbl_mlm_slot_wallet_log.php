@@ -26,4 +26,9 @@ class Tbl_mlm_slot_wallet_log extends Model
         $query->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner');
         return $query;
     }
+    public function scopeRecaptcha($query)
+    {
+        $query->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_wallet_log.wallet_log_slot');
+        return $query;
+    }
 }

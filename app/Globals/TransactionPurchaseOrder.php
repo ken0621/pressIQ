@@ -7,6 +7,7 @@ use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_requisition_slip;
 use App\Models\Tbl_shop;
+use App\Models\Tbl_receive_inventory_line;
 use Carbon\Carbon;
 use DB;
 
@@ -172,6 +173,7 @@ class TransactionPurchaseOrder
             $itemline[$key]['poline_description']    = $value['item_description'];
             $itemline[$key]['poline_um']             = $value['item_um'];
             $itemline[$key]['poline_orig_qty']       = $value['item_qty'];
+            $itemline[$key]['poline_qty']            = $value['item_qty'];
             $itemline[$key]['poline_rate']           = $value['item_rate'];
             $itemline[$key]['poline_discount']       = $discount;
             $itemline[$key]['poline_discounttype']   = $discount_type;
@@ -253,6 +255,28 @@ class TransactionPurchaseOrder
         }  
 
         return $return;
+    }
+    public static function checkPoQty($po_id, $ri_id)
+    {
+        $poline = Tbl_purchase_order_line::where('poline_po_id', $po_id)->get();
+
+        $ctr = 0;
+        foreach ($poline as $key => $value)
+        {
+            $receivedline = Tbl_receive_inventory_line::where('riline_ri_id', $ri_id)->where('riline_ref_name', 'purchase_order')->where('riline_item_id', $value->poline_item_id)->first();
+            $update['poline_qty'] = $value->poline_qty - $receivedline->riline_qty;
+            $poline_id = Tbl_purchase_order_line::where('poline_id', $value->poline_id)->update($update);
+            
+            if($update['poline_qty'] <= 0)
+            {
+                $ctr++;
+            }
+        }
+        if($ctr >= count($poline))
+        {
+            $update["po_is_billed"] = $ri_id;
+            Tbl_purchase_order::where("po_id",$po_id)->update($update);
+        }
     }
 
 }

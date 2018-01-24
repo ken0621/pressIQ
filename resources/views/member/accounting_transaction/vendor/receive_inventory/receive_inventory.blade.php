@@ -92,7 +92,7 @@
                                             <table class="digima-table">
                                                 <thead >
                                                     <tr>
-                                                        <th style="width: 15px;">#</th>
+                                                        <th style="width: 1000px;">#</th>
                                                         <th style="width: 200px;">Product/Service</th>
                                                         <th>Description</th>
                                                         <th style="width: 70px;">U/M</th>
@@ -133,23 +133,6 @@
                                                         <td>
                                                         <input type="hidden" name="itemline_ref_name[]">
                                                         <input type="hidden" name="itemline_ref_id[]">
-                                                            <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
-                                                                @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                                            </select>
-                                                        </td>
-                                                        <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
-                                                        <td><select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
-                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
-                                                        <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-                                                            @include("member.load_ajax_data.load_td_serial_number")
-                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                    </tr>
-                                                    <tr class="tr-draggable">
-                                                        <td class="invoice-number-td text-right">2</td>
-                                                        <td>
-                                                        <input type="hidden" class="poline_id" name="itemline_ref_name[]">
-                                                        <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
                                                             <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
@@ -221,89 +204,5 @@
 @endsection
 
 @section('script')
-
-<!-- <script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script> -->
 <script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/receive_inventory.js"></script>
-<!-- <script type="text/javascript">
-$("#acct-a").click(function()
-{
-    $('#account-tbl').toggle();
-    $('i',this).toggleClass("fa-caret-right fa-caret-down")
-});
-$("#item-a").click(function()
-{
-    $('#item-tbl').toggle();
-    $('i',this).toggleClass("fa-caret-right fa-caret-down")
-});
-$(document).ready(function() 
-{
-  $('.drawer').drawer({
-    desktopEvent:'click'
-  });
-});
-</script>
-@endsection
-
-@section("css")
-<link rel="stylesheet" type="text/css" href="/assets/member/bootstrap_drawer/cooker.drawer.css">
-<style type="text/css">
-.po-style
-{
-    padding: 10px;
-    background-color: #fff;
-}
-.drawer-toggle
-{
-    background-color: #76B6EC;
-    color: #fff;
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 0;
-}
-.drawer-toggle:hover
-{
-    background-color: #76B6EC;
-    color: #fff;
-}
-
-.drawer-default
-{
-    -webkit-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
-    -moz-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
-    box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
-    -webkit-transition: all 0.4s ease;
-       -o-transition: all 0.4s ease;
-          transition: all 0.4s ease;
-    z-index: 2;
-}
-.drawer-toggle
-{
-    -webkit-transition: all 0.4s ease;
-       -o-transition: all 0.4s ease;
-          transition: all 0.4s ease;
-}
-.drawer-default + .drawer-overlay
-{
-    background-color: transparent !important;
-    -webkit-transition: all 0.4s ease;
-       -o-transition: all 0.4s ease;
-          transition: all 0.4s ease;
-}
-.drawer-open .drawer-overlay
-{
-    padding-right: 30px;
-}
-.drawer-close .drawer.drawer-default
-{
-    right: -280px;
-}
-.drawer-open .drawer.drawer-default
-{
-    right: 0;
-}
-nav.user-menu
-{
-    background-color: #F5F5F5;
-}
-</style> -->
 @endsection

@@ -482,11 +482,9 @@ function receive_inventory()
 	}
 	this.action_load_received_po = function()
 	{
-		event_click_last_row()
 		action_compute();
 		event_remove_tr()
-		event_accept_number_only()
-
+		event_click_last_row_op()
 	}
 }
 

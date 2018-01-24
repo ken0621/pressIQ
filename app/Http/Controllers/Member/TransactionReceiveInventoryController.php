@@ -52,7 +52,7 @@ class TransactionReceiveInventoryController extends Member
     {
         $data['page'] = 'Create Receive Inventory';
 
-        Session::forget("po_item");
+        
         $data['pis']        = Purchasing_inventory_system::check();
         $data["_vendor"]    = Vendor::getAllVendor('active');
         $data['_item']      = Item::get_all_category_item();
@@ -66,7 +66,8 @@ class TransactionReceiveInventoryController extends Member
         
         $receive_id = $request->id;
         $data['term'] = $request->vendor_terms;
-        //dd($receive_id);
+
+        Session::forget("applied_po");
         if($receive_id)
         {
             $data['ri'] = TransactionReceiveInventory::info($this->user_info->shop_id,$receive_id);
@@ -96,8 +97,8 @@ class TransactionReceiveInventoryController extends Member
             if($value)
             {
                 $insert_item[$key]['item_id']          = $value;
-                $insert_item[$key]['item_ref_name']    = $request->itemline_ref_name[$key];
-                $insert_item[$key]['item_ref_id']      = $request->itemline_ref_id[$key];
+                $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
                 $insert_item[$key]['item_um']          = $request->item_um[$key];
                 $insert_item[$key]['item_qty']         = str_replace(',', '', $request->item_qty[$key]);
@@ -147,8 +148,8 @@ class TransactionReceiveInventoryController extends Member
             if($value)
             {
                 $insert_item[$key]['item_id']          = $value;
-                $insert_item[$key]['item_ref_name']    = $request->itemline_ref_name[$key];
-                $insert_item[$key]['item_ref_id']      = $request->itemline_ref_id[$key];
+                $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
                 $insert_item[$key]['item_um']          = $request->item_um[$key];
                 $insert_item[$key]['item_qty']         = str_replace(',', '', $request->item_qty[$key]);
@@ -185,10 +186,18 @@ class TransactionReceiveInventoryController extends Member
     public function getLoadTransaction(Request $request)
     {
         $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
+        
+        $return = null;
+        foreach ($data['_po']->po_id as $key => $value)
+        {
+            $return[$key]['balance'] = Tbl_purchase_order_line::where('poline_po_id', $value->po_id)->get();
+        }
+        dd($return);
+        
         $data['_dm'] = TransactionDebitMemo::getOpenDM($this->user_info->shop_id, $request->vendor);
         $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
         $data['_applied_po_id'] = Session::get("applied_po");
-        $data['_applied_dm'] = Session::get("applied_dm");
+        //$data['_applied_dm'] = Session::get("applied_dm");
 
         return view('member.accounting_transaction.vendor.receive_inventory.load_transaction', $data);
     }
@@ -197,17 +206,17 @@ class TransactionReceiveInventoryController extends Member
         $apply_po_id = $request->apply_po_id;
 
         $_applied_po_id = Session::get('applied_po');
-
-
+        
         if(count($apply_po_id) > 0)
         {
             foreach ($apply_po_id as $key => $value)
             {
-                $applied_po = Tbl_purchase_order_line::where('poline_po_id',$value)->get();
+                $_applied_po_id[$key] = $value; // to retain checked po id
+                
             }   
-            Session::put('applied_po', $applied_po);
+            Session::put('applied_po', $_applied_po_id);
         }
-
+        
         $return['status']        = "success";
         $return['call_function'] = "success_apply_po";
 
@@ -216,8 +225,28 @@ class TransactionReceiveInventoryController extends Member
     }
     public function getLoadSelectedPo(Request $request)
     {
-        $data['_po']   = Session::get('applied_po');
+        $ri_id = $request->ri_id;
+        $applied_po_id = Session::get('applied_po');
+
+        if(count($applied_po_id) > 0)
+        {
+            $_applied_po = null;
+            foreach ($applied_po_id as $key => $value)
+            {
+                $_applied_po[$key] = Tbl_purchase_order_line::where('poline_po_id',$value)->get();
+                
+                $_applied_po_line = null;
+                foreach ($_applied_po as $key1 => $value1)
+                {
+                    $_applied_po_line[$key] = $value1;
+                }
+            }
+            $data['_po']   = $value1;
+        }
+
+        $data['_um']   = UnitMeasurement::load_um_multi();
         $data['_item'] = Item::get_all_category_item();
+
         return view('member.accounting_transaction.vendor.purchase_order.po_load_item_session', $data);
     }
 }

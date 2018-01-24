@@ -33,6 +33,8 @@ use App\Globals\Ecom_Product;
 use App\Globals\abs\AbsMain;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_recaptcha_setting;
+use App\Models\Tbl_recaptcha_pool_amount;
 
 use App\Models\Tbl_image;
 // use App\Models\Tbl_mlm_slot_points_log;
@@ -3022,6 +3024,54 @@ class ShopMemberController extends Shop
         $data['pin'] = request("pin");
         $data['activation'] = request("activation");
         return view("member.use_code",$data);
+    }
+    public function getCaptcha()
+    {
+        // unitywealth100
+        if($this->shop_info->shop_id == 90)
+        {
+            $data['page'] = "Captcha";
+            $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+            return view('member.captcha',$data);
+        }
+        
+    }
+    public function postSubmitcaptcha(Request $request)
+    {
+        $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first()->point;
+        $insert['shop_id']                  = $this->shop_info->shop_id;
+        $insert['wallet_log_slot']          = Tbl_mlm_slot::where('slot_no',$request->slot_no)->first()->slot_id;
+        $insert['wallet_log_date_created']  = Carbon::now();
+        $insert['wallet_log_amount']        = $point;
+        $insert['wallet_log_plan']          = "RECAPTCHA";
+        $insert['wallet_log_claimbale_on']  = Carbon::now();
+        $insert['encashment_process_type']  = 0;
+
+        $pool_amount        = Tbl_recaptcha_pool_amount::where('shop_id',$this->shop_info->shop_id)->sum('amount');
+        $acquired_points    = Tbl_mlm_slot_wallet_log::where('wallet_log_plan','RECAPTCHA')
+                                ->where('shop_id',$this->shop_info->shop_id)
+                                ->sum('wallet_log_amount');
+        $remaining_points   = $pool_amount-$acquired_points;
+        if($remaining_points>=$point)
+        {
+            $query = Tbl_mlm_slot_wallet_log::insert($insert);
+
+            if($query)
+            {
+                $response = 'success';
+            }
+            else
+            {
+                $response = 'error';
+            }
+        }
+        else
+        {
+            $response = 'no_points';
+        }
+
+        
+        return Redirect::back()->with('response',$response);
     }
     public function getReport()
     {

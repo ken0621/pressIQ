@@ -8,7 +8,7 @@
 			</div>
 			<div class="text">
 				<div class="name">{{$page}}</div>
-				<div class="sub">{{$customer_id}}</div>
+				<div class="sub">You can view your available packages here</div>
 			</div>
 		</div>
 		<div class="right">

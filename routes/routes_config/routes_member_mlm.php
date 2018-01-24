@@ -366,3 +366,13 @@ Route::post('/member/mlm/point_log_complan/add', 'Member\MLM_PointLogSettingCont
 Route::get('/member/mlm/point_log_complan/table', 'Member\MLM_PointLogSettingController@table');
 Route::get('/member/mlm/point_log_complan/modify', 'Member\MLM_PointLogSettingController@modify');
 Route::post('/member/mlm/point_log_complan/modify', 'Member\MLM_PointLogSettingController@submit_modify');
+
+//recaptcha
+Route::get('/member/mlm/recaptcha','Member\MLM_RecaptchaController@index');
+Route::get('/member/mlm/recaptcha/recaptcha_table','Member\MLM_RecaptchaController@table');
+Route::get('/member/mlm/recaptcha/recaptcha_setting','Member\MLM_RecaptchaController@setting');
+Route::post('/member/mlm/recaptcha/recaptcha_setting','Member\MLM_RecaptchaController@submit_setting');
+Route::get('/member/mlm/recaptcha/add_pool','Member\MLM_RecaptchaController@add_pool');
+Route::post('/member/mlm/recaptcha/add_pool','Member\MLM_RecaptchaController@submit_add_pool');
+Route::get('/member/mlm/recaptcha/load_pool','Member\MLM_RecaptchaController@load_pool');
+Route::get('/member/mlm/recaptcha/load_points','Member\MLM_RecaptchaController@load_points');

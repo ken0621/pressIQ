@@ -135,21 +135,21 @@
                     </div>
                     @endforeach
                 @else
-                    <div class="product-holder wow fadeIn match-height" data-wow-delay=".4s" data-wow-duration="2s">
+                    <div class="product-holder wow fadeIn" data-wow-delay=".4s" data-wow-duration="2s">
                         <div class="img-holder">
                             <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
                         </div>
                         <div class="text">Other tokens are coming soon!</div>
                     </div>
                     
-                    <div class="product-holder wow fadeIn match-height" data-wow-delay=".6s" data-wow-duration="2s">
+                    <div class="product-holder wow fadeIn" data-wow-delay=".6s" data-wow-duration="2s">
                         <div class="img-holder">
                             <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
                         </div>
                         <div class="text">Other tokens are coming soon!</div>
                     </div>
 
-                    <div class="product-holder wow fadeIn match-height" data-wow-delay=".8s" data-wow-duration="2s">
+                    <div class="product-holder wow fadeIn" data-wow-delay=".8s" data-wow-duration="2s">
                         <div class="img-holder">
                             <img src="/themes/{{ $shop_theme }}/img/logo-2.png">
                         </div>

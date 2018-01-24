@@ -24,9 +24,20 @@
                     </div>
                     <div class="subtitle-container">100% Organic</div>
                     <div class="details-container">
-                        <p>Peeling regularly is one way of keeping our skin young, hydrated and healthy. This helps in getting rid of dead cells and improving blood circulation.</p>
-                        <p>Red Rice has exfoliating, antioxidant, anti-inflammatory and emollient properties which can soften the skin, hydrate, and relive inflammations.</p>
-                        <p>Red Rice has natural anti aging and oil-absorbing properties which makes them good for acne-prone or oily and dull mature skin. </p>
+                        <p>
+                            Peeling regularly is one way of keeping our skin young, hydrated and healthy. This helps in getting rid of
+                            dead cells and improving blood circulation.<br><br>
+
+                            Red Rice has exfoliating, antioxidant, anti-inflammatory and emollient properties which can soften the
+                            skin, hydrate, and relive inflammations.<br><br>
+
+                            Red Rice has natural anti aging and oil-absorbing properties which makes them good for acne-prone or
+                            oily and dull mature skin.<br><br>
+
+                            Don Organics Red Rice Scrub will work wonderfully on you skin. It will exfoliate,
+                            purifies and re-mineralize your skin. This body scrub will leave your skin satin smooth, soft and
+                            refreshed. This will help improve fine lines, reduce signs of aging and soothe dry skin.
+                        </p>
                     </div>
                     <div class="ingredients-container">
                         <div class="title">Ingredients</div>
@@ -71,7 +82,7 @@
             </div>
         </div>
     </div>
-    <div class="wrapper-3">
+    {{-- <div class="wrapper-3">
         <div class="container">
             <div class="title-container">Some of its great benefits are:</div>
             <div class="benefits-container">
@@ -99,7 +110,7 @@
                 <p>Use circular motions to work the scrub into your skin to help improve firmness so you can rock that bikini with ease.</p>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>

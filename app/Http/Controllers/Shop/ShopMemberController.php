@@ -3038,7 +3038,15 @@ class ShopMemberController extends Shop
     }
     public function postSubmitcaptcha(Request $request)
     {
-        $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first()->point;
+        $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
+        if($point)
+        {
+            $points = $point->point;
+        }
+        else
+        {
+            $point = 0;
+        }
         $insert['shop_id']                  = $this->shop_info->shop_id;
         $insert['wallet_log_slot']          = Tbl_mlm_slot::where('slot_no',$request->slot_no)->first()->slot_id;
         $insert['wallet_log_date_created']  = Carbon::now();

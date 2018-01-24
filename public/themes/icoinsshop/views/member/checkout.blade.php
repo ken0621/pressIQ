@@ -12,7 +12,8 @@
 		</div>
 	</div>
 
-	<form method="post" class="submitt-asd">
+	{{-- <form method="post" class="submitt-asd"> If there's a return policy--}}
+	<form method="post">
 		{{ csrf_field() }}
 		<div class="bottom-container">
 			<div class="container">
@@ -192,37 +193,37 @@
 	 //    });
 	 //  });
 
- 	$(document).ready(function($) 
- 	{
- 		$(".btn-proceed").unbind('click');
- 		$(".btn-proceed").bind('click', function()
- 		{
- 		    var province = $(".province-is-empty").val();
- 		    var payment_method = $(".payment-method-is-empty").val();
- 		    var shipping_address = $(".textarea-is-empty").val();
+ 	// $(document).ready(function($) 
+ 	// {
+ 	// 	$(".btn-proceed").unbind('click');
+ 	// 	$(".btn-proceed").bind('click', function()
+ 	// 	{
+ 	// 	    var province = $(".province-is-empty").val();
+ 	// 	    var payment_method = $(".payment-method-is-empty").val();
+ 	// 	    var shipping_address = $(".textarea-is-empty").val();
  		    
- 		    if (province == "")
- 		    {
- 		        alert("Please select your province.");
- 		    }
+ 	// 	    if (province == "")
+ 	// 	    {
+ 	// 	        alert("Please select your province.");
+ 	// 	    }
 
- 		    else if(shipping_address == "")
- 		    {
- 		        alert("Please type your complete address");
- 		    }
+ 	// 	    else if(shipping_address == "")
+ 	// 	    {
+ 	// 	        alert("Please type your complete address");
+ 	// 	    }
 
- 		    else if(payment_method == "")
- 		    {
- 		        alert("Please select a payment method.");
- 		    }
+ 	// 	    else if(payment_method == "")
+ 	// 	    {
+ 	// 	        alert("Please select a payment method.");
+ 	// 	    }
 
- 		    else
- 		    {
- 		        $('.submitt-asd').submit();
- 		    }
+ 	// 	    else
+ 	// 	    {
+ 	// 	        $('.submitt-asd').submit();
+ 	// 	    }
 
- 		});
- 	});
+ 	// 	});
+ 	// });
 
 </script>
 

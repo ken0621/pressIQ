@@ -46,25 +46,27 @@ function genealogy_modal()
 
 			var form = true;
 			var pass = true;
+			var passlength = true;
 
 			var stop = false;
 
 			var sponsor_verify = $('.verify-sponsor').attr('verify');
 
-			if(membership == '')
+			console.log(membership);
+			if(membership == '' || membership == null)
 			{
 				e.preventDefault();
-				toastr.error('Please complete all fields');
+				toastr.error('Invalid code');
 				stop = true;
 			}
-			if(sponsor_verify == 'false')
+			else if(sponsor_verify == 'false')
 			{
 				e.preventDefault();
 				toastr.error('Invalid sponsor');
 				stop = true;
 			}
 
-			if(stop)
+			if(!stop)
 			{
 				if(owner == 'self')
 				{
@@ -109,6 +111,10 @@ function genealogy_modal()
 					{
 						pass = false;
 					}
+					if(password.length < 8 )
+					{
+						passlength = false;
+					}
 
 					if(!form)
 					{
@@ -118,6 +124,11 @@ function genealogy_modal()
 					else if(!pass)
 					{
 						toastr.error('password did not match');
+						e.preventDefault();
+					}
+					else if(!passlength)
+					{
+						toastr.error('password must be at least 8 characters');
 						e.preventDefault();
 					}
 				}

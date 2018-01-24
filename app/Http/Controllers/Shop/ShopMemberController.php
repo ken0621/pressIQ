@@ -2816,14 +2816,14 @@ class ShopMemberController extends Shop
             $customer['middle_name']       = $request->middle_name;
             $customer['last_name']         = $request->last_name;
             $customer['email']             = $request->email;
-            $customer['password']          = Crypt::crypt($request->password);
+            $customer['password']          = Crypt::encrypt($request->password);
             $customer['Iswalkin']          = 0;
             $customer['created_date']      = Carbon::now();
             $customer['ismlm']             = 1;
             $customer['mlm_username']      = $request->username;
             $customer['contact']           = $request->contact;
 
-            $customer_id = Tbl_customer::insertGetId($insert);
+            $customer_id = Tbl_customer::insertGetId($customer);
             $new_customer_info = Tbl_customer::where('customer_id',$customer_id)->first();
             $slot_no     = Self::generate_slot_no_based_on_name($new_customer_info->first_name, $new_customer_info->last_name);
         }

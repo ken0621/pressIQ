@@ -10,7 +10,7 @@
                 </div>
                 <div class="pull-right">
                     <div class="button-container">
-                        <span class="create-button" ><a href="/pressuser/analytics/view">View Analytic Details</a>
+                        <span class="create-button" ><a href="/pressuser/analytics/view">View Details</a>
                     </div>
                 </div>
             </div>

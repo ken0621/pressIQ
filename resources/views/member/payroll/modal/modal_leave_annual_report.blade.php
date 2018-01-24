@@ -63,9 +63,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                           {{--  @if(isset($leave_report))
+                         {{--    @if(isset($leave_report))
                  			@foreach($leave_report as $leave_data)
                                 @foreach($leave_data as $leave)
+    
                         	<tr>
                                 <td class="text-center">{{ $leave->payroll_leave_temp_name }}</td>
                         		<td class="text-center">{{ $leave->payroll_employee_id }}</td>
@@ -73,14 +74,6 @@
                         		<td class="text-center">{{ $leave->payroll_schedule_leave }}</td>
                         		<td class="text-center">{{ $leave->payroll_leave_temp_hours }}</td>
                         		<td class="text-center">{{ $leave->total_leave_consume }}</td>
-                        		@foreach($remainings as $remain)
-                                    @foreach($remain as $rem)
-                                          @if($rem->payroll_employee_id == $leave->payroll_employee_id)
-                                          <td class="text-center">{{ $rem->remaining_leave }}</td>
-                                          @endif
-                                    @endforeach
-                                @endforeach
-                        		<td class="text-center">{{ $leave->payroll_leave_temp_with_pay == '1' ? 'P' : 'NP'}}</td>
                         	</tr>
                                  @endforeach
                         	@endforeach

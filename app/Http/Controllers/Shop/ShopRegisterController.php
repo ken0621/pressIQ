@@ -12,7 +12,7 @@ use Image;
 use Session;
 use Validator;
 use Carbon\Carbon;
-use App\Tbl_pressiq_user;
+use App\Models\Tbl_pressiq_user;
 
 class ShopRegisterController extends Shop
 {

@@ -2393,7 +2393,7 @@ class PayrollController extends Member
           $update['payroll_company_logo']                   = $logo;
           $newdata = serialize($update);
           Tbl_payroll_company::where('payroll_company_id', $payroll_company_id)->update($update);
-          AuditTrail::record_logs('EDITED: Payroll Company', 'Payroll Company Name: '.Request::input('payroll_company_name'), $id, "" ,$newdata);
+          AuditTrail::record_logs('EDITED: Payroll Company', 'Payroll Company Name: '.Request::input('payroll_company_name'), $payroll_company_id, "" ,$newdata);
 
           $return['function_name'] = 'companylist.save_company';
           $return['status'] = 'success';
@@ -4632,6 +4632,28 @@ class PayrollController extends Member
                     $sheet->loadView('member.payroll.modal.modal_leave_action_report_export_excel',$data);
                });
           })->download('xls');
+     }
+
+     public function modal_leave_annual_report()
+     {    
+
+          $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->get();
+
+          $payroll_employee_id   = Tbl_payroll_leave_employeev2::getemployeeidbytempid($payroll_leave_temp_id,Self::shop_id())->get();
+
+          $datas     = array();                                        
+          foreach($payroll_employee_id as $key => $emp_id)
+          {
+               $empdata = Tbl_payroll_leave_schedulev2::getannualleave($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'],12)->get();
+
+               array_push($datas, $empdata); 
+          }
+
+          dd($datas);
+
+
+
+          return view("member.payroll.modal.modal_leave_annual_report");
      }
      //end reporting v2
 

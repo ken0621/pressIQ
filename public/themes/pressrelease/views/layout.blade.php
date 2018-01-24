@@ -161,9 +161,9 @@
                     <div class="col-md-4">
                         <div class="footer-follow-container">
                             <p class="footer-follow-title">FOLLOW US ON</p>
-                            <span><i class="fa fa-facebook-square" aria-hidden="true"></i></span>
-                            <span><i class="fa fa-twitter-square" aria-hidden="true"></i></span>
-                            <span><i class="fa fa-pinterest-square" aria-hidden="true"></i></span>
+                            <span><a href="https://www.facebook.com/press-iq"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></span>
+                            <span><a href="https://www.twitter.com/press-iq"><i class="fa fa-twitter-square" aria-hidden="true"></i></a></span>
+                            <span><a href="https://www.pinterest.com/press-iq"><i class="fa fa-pinterest-square" aria-hidden="true"></i></a></span>
                         </div>
                     </div>
                 </div>

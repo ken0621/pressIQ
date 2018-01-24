@@ -10,10 +10,11 @@
                 </div>
                 <div class="pull-right">
                     <div class="button-container">
-                        <span class="create-button" ><a href="/pressuser/analytics/view">View Analytic Details</a>
+                        <span class="create-button" ><a href="/pressuser/analytics/view">View Details</a>
                     </div>
                 </div>
             </div>
+            <div class="table-container">
               <table style="width:100%;" >
                     <tr>
                       <th style="text-align: center;width: 25%">ACTION</th>
@@ -48,6 +49,7 @@
                       <td>{{isset(session('share_analytics')->hard_bounces) ? session('share_analytics')->hard_bounces : 0}}</td>
                     </tr>
               </table>
+            </div>
         </div>
     </div>
 </div>

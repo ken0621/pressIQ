@@ -225,11 +225,16 @@ class PayrollHolidayController extends Member
      }
      public function tag_employee($company_id = 0)
      {
+        $parameter['date']                  = date('Y-m-d');
+        $parameter['company_id']            = $company_id;
+        $parameter['employement_status']    = 0;
+        $parameter['shop_id']               = Self::shop_id();
+
         $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_company_id',$company_id)->first();
 
         $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
 
-        $data['_employee'] = Tbl_payroll_employee_basic::where('payroll_employee_company_id',$company_id)->get();
+        $data['_employee'] = Tbl_payroll_employee_basic::selemployee($parameter)->get();
         $data['action']          = '/member/payroll/holiday/tag_employee/submit';
 
         $get_all = Session::get('employee_tag');

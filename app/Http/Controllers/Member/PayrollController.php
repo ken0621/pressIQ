@@ -5500,11 +5500,11 @@ class PayrollController extends Member
           // {
           //   Tbl_payroll_group_rest_day::insert($insert_extra_day);
           // }
-          $_selected_employee = Request::input('selected_employee');
-          foreach ($_selected_employee as $key => $selected_employee) 
-          {
+          // $_selected_employee = Request::input('selected_employee');
+          // foreach ($_selected_employee as $key => $selected_employee) 
+          // {
         
-          }
+          // }
 
           $data['_data']           = array();
           $data['selected']   = $group_id;

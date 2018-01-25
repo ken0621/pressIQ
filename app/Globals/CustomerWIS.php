@@ -47,7 +47,7 @@ class CustomerWIS
     }
     public static function get_inv_item($shop_id, $inv_id)
     {
-        return Tbl_customer_invoice_line::invoice()->where('inv_shop_id', $shop_id)->where('invline_inv_id', $inv_id)->get();
+        return Tbl_customer_invoice_line::um()->invoice()->where('inv_shop_id', $shop_id)->where('invline_inv_id', $inv_id)->get();
     }
     public static function settings($shop_id)
     {

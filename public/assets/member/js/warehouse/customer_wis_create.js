@@ -132,7 +132,6 @@ function customer_wis_create()
     		}
 
     	});
-        $('.droplist-um:not(.has-value)').globalDropList("disabled");
 
         $(".draggable .tr-draggable:last td select.select-um").globalDropList(
         {
@@ -144,7 +143,7 @@ function customer_wis_create()
     			action_load_unit_measurement($(this));
     		}
 
-        }).globalDropList('disabled');
+        });
 	}
 
 	function action_load_unit_measurement($this)

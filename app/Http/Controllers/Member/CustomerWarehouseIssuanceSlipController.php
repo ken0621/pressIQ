@@ -69,6 +69,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
             $data["_wisline"] = CustomerWIS::get_wis_line($cust_wis_id);
             $data['action']     = "/member/customer/wis/update-submit";
         }
+        Session::forget('applied_transaction');
 
         return view('member.warehousev2.customer_wis.customer_wis_create',$data);
     }
@@ -322,6 +323,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
                     {
                         $return[$key.'i'.$key_item]['item_id'] = $value_item->invline_item_id;
                         $return[$key.'i'.$key_item]['item_description'] = $value_item->invline_description;
+                        $return[$key.'i'.$key_item]['multi_um_id'] = $value_item->multi_um_id;
                         $return[$key.'i'.$key_item]['item_um'] = $value_item->invline_um;
                         $return[$key.'i'.$key_item]['item_qty'] = $value_item->invline_qty;
                         $return[$key.'i'.$key_item]['item_rate'] = $value_item->invline_rate;
@@ -337,6 +339,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $data['_item']  = Item::get_all_category_item([1,4,5]);
         $data['_transactions'] = $return;
         $data['remarks'] = $remarks;
+        $data['_um']        = UnitMeasurement::load_um_multi();
 
         return view('member.warehousev2.customer_wis.applied_transaction', $data);
     }

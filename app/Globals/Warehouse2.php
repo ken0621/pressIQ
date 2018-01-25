@@ -710,8 +710,6 @@ class Warehouse2
                     $insert['record_source_ref_name'] = $insert['record_consume_ref_name'];
                     $insert['record_source_ref_id'] = $insert['record_consume_ref_id'];
                     $id = Tbl_warehouse_inventory_record_log::insertGetId($insert);
-
-                    Warehouse2::insert_item_history($id);
                 }
             }
         }
@@ -856,6 +854,8 @@ class Warehouse2
         {
             foreach ($get as $key => $value) 
             {
+                Warehouse2::insert_item_history($value->record_log_id);
+
                 $update['record_inventory_status'] = 0;
                 $update['record_consume_ref_name'] = null;    
                 $update['record_consume_ref_id'] = 0;

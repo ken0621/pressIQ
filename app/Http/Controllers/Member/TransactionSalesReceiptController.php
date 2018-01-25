@@ -86,7 +86,14 @@ class TransactionSalesReceiptController extends Member
 			}
 		}
 		$return = null;
-		$validate = TransactionSalesReceipt::postInsert($this->user_info->shop_id, $insert, $insert_item);
+		$warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+		$validate = AccountingTransaction::inventory_validation('consume', $this->user_info->shop_id, $warehouse_id, $insert_item);
+		if(!$validate)
+		{
+			$return = null;
+			$validate = TransactionSalesReceipt::postInsert($this->user_info->shop_id, $insert, $insert_item);
+		}
+
 		if(is_numeric($validate))
 		{			
 			$return['status'] = 'success';
@@ -138,7 +145,13 @@ class TransactionSalesReceiptController extends Member
 			}
 		}
 		$return = null;
-		$validate = TransactionSalesReceipt::postUpdate($sales_receipt_id, $this->user_info->shop_id, $insert, $insert_item);
+		$warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+		$validate = AccountingTransaction::inventory_validation('consume', $this->user_info->shop_id, $warehouse_id, $insert_item);
+		if(!$validate)
+		{
+			$return = null;
+			$validate = TransactionSalesReceipt::postUpdate($sales_receipt_id, $this->user_info->shop_id, $insert, $insert_item);
+		}
 		if(is_numeric($validate))
 		{			
 			$return['status'] = 'success';

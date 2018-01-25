@@ -853,8 +853,7 @@ class ShopMemberController extends Shop
         {
             return Redirect::to("/"); 
         }
-       
-    }
+    }  
 
     public function pressuser_media_contacts_add(Request $request)
     {
@@ -868,15 +867,16 @@ class ShopMemberController extends Shop
       $data["industry_type"]             = $request->industry_type;
       $data["title_of_journalist"]       = $request->title_journalist;
       $data["description"]               = $request->description;
-      $data["user_id"]                  = session('pr_user_id');
-
+      $data["user_id"]                   = session('pr_user_id');
       Tbl_press_release_recipient::insert($data);
+      Session::flash('success_user', 'Recipient Successfully Added!');
       return redirect::back();
     }
 
     public function pressuser_media_contacts_delete($id)
     {
       Tbl_press_release_recipient::where('recipient_id',$id)->delete();
+       Session::flash('delete_user', 'Recipient Successfully Deleted!');
       return  redirect::back();
     }
 

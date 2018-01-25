@@ -4,11 +4,20 @@
 <div class="pressview">
         <div class="dashboard-container">
         <div class="media-container">
+          @if (Session::has('success_user'))
+          <div class="alert alert-success">
+             <center>{{ Session::get('success_user') }}</center>
+          </div>
+          @endif                        
+          @if (Session::has('delete_user'))   
+          <div class="alert alert-danger">
+             <center>{{ Session::get('delete_user') }}</center>
+          </div>
+          @endif
           <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'add_media')" id="defaultOpen">Add Media Contacts</button>
             <button class="tablinks" onclick="openCity(event, 'press_user')" >Media Contacts</button>
-          </div>
-                                    
+          </div>                                    
             <div class="press-release-content">
                 <div id="add_media" class="tabcontent add-media-container">
                     <form method="post" action="/pressuser/media_contacts/add">

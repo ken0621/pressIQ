@@ -341,8 +341,7 @@ class ShopMemberController extends Shop
     }
 
     public function pressuser_pressrelease()
-    {
-        // $data['_user']                 = Tbl_pressiq_user::where('user_id',session('user_id'))->first();
+    {  
         $data['_country']              = Tbl_press_release_recipient::distinct()->get(['country']);
         $data['_industry_type']        = Tbl_press_release_recipient::distinct()->get(['industry_type']);
         $data['_title_of_journalist']  = Tbl_press_release_recipient::distinct()->get(['title_of_journalist']);
@@ -513,7 +512,7 @@ class ShopMemberController extends Shop
         return Redirect::back();
     }
 
-    public function send_demo()   
+    public function send_demo()     
     {
         $demo_info["demo_name"]             =request('name');
         $demo_info["demo_company"]          =request('company');
@@ -526,7 +525,7 @@ class ShopMemberController extends Shop
         Mail::send('emails.demo_request',$demo_info, function($message) use ($demo_info)
         {
            $message->from($demo_info["explode_email"][0] . '@press-iq.com',$demo_info['demo_email']);
-           $message->to('oliverbacsal@gmail.com');  
+           $message->to("marketing@press-iq.com");  
            
         });
         Session::flash('Demo_message', 'Demo Request Successfully Sent!');
@@ -829,11 +828,53 @@ class ShopMemberController extends Shop
         exit; 
     }
 
-    public function press_user_manage_user()
+    public function pressuser_media_contacts()   
     {
-      
-        $data["page"] = "Manage User";
-        return view("press_user.press_user_manage_user", $data);
+        $data['user_media_contacts'] = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))->get();
+
+        if(Session::exists('user_email'))
+        {
+           $level=session('pr_user_level');
+           if($level!="1")
+           {
+                $data["page"] = "Media Contacts";
+                return view("press_user.press_user_media_contacts", $data);
+            }
+            else
+           {
+                $data["page"] = "Media Contacts";
+                return view("press_user.press_user_media_contacts", $data);
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
+       
+    }
+
+    public function pressuser_media_contacts_add(Request $request)
+    {
+      $data["name"]                      = $request->name;
+      $data["position"]                  = $request->position;
+      $data["company_name"]              = $request->company_name;
+      $data["country"]                   = $request->country;
+      $data["research_email_address"]    = $request->contact_email;
+      $data["website"]                   = $request->contact_website;
+      $data["media_type"]                = $request->media_type;
+      $data["industry_type"]             = $request->industry_type;
+      $data["title_of_journalist"]       = $request->title_journalist;
+      $data["description"]               = $request->description;
+      $data["user_id"]                  = session('pr_user_id');
+
+      Tbl_press_release_recipient::insert($data);
+      return redirect::back();
+    }
+
+    public function pressuser_media_contacts_delete($id)
+    {
+      Tbl_press_release_recipient::where('recipient_id',$id)->delete();
+      return  redirect::back();
     }
 
      public function pressadmin()

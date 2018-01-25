@@ -11,7 +11,7 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <label for="basic-input">Slot No.</label>
-                            <input disabled type="text" class="form-control" value="{{ $slot_info->slot_no }}">
+                            <input type="text" name="slot_no" class="form-control" value="{{ $slot_info->slot_no }}">
                         </div>
                     </div>
 

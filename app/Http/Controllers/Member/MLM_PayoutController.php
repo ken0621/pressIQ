@@ -34,7 +34,7 @@ class MLM_PayoutController extends Member
 	public function postIndexTable()
 	{
 		$shop_id 		= $this->user_info->shop_id;
-		$query 			= Tbl_mlm_slot_wallet_log::where("tbl_mlm_slot_wallet_log.shop_id", $shop_id)->slot()->customer();
+		$query 			= Tbl_mlm_slot_wallet_log::where("tbl_mlm_slot_wallet_log.shop_id", $shop_id)->where("tbl_mlm_slot_wallet_log.wallet_log_plan", "!=", "EZ")->slot()->customer();
 
 		$mode = 'PENDING';
 		if(Request::input('mode'))

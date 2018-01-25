@@ -1055,8 +1055,9 @@ class MlmDeveloperController extends Member
             }
             else
             {
-                $update["slot_position"] = request("position");
+                $update["slot_position"]   = request("position");
                 $update["slot_membership"] = request("membership_id");
+                $update["slot_no"]         = request("slot_no");
                 Tbl_mlm_slot::where("slot_id", $slot_id)->update($update);
 
                 $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();

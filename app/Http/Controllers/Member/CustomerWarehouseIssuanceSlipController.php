@@ -284,11 +284,11 @@ class CustomerWarehouseIssuanceSlipController extends Member
     {
         $data['page'] = "Open Transaction";
 
-        $data['_eq'] = TransactionEstimateQuotation::getOpenEQ($this->user_info->shop_id, $request->c);
-        $data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
         $data['_si'] = TransactionSalesInvoice::getUndeliveredSalesInvoice($this->user_info->shop_id, $request->c);
         $data['_sr'] = TransactionSalesReceipt::getUndeliveredSalesReceipt($this->user_info->shop_id, $request->c);
         $data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
+
+        $data['applied'] = Session::get('applied_transaction');
         $data['action'] = '/member/customer/wis/apply-transaction';
         return view('member.warehousev2.customer_wis.load_transaction', $data);
     }

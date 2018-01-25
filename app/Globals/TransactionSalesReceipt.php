@@ -125,6 +125,11 @@ class TransactionSalesReceipt
 			Tbl_customer_invoice_line::where("invline_inv_id", $sales_receipt_id)->delete();
 	        $return = Self::insertline($sales_receipt_id, $insert_item, $entry);
 	        $return = $sales_receipt_id;
+
+	        $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+	        /* UPDATE INVENTORY HERE */
+			AccountingTransaction::inventory_consume_update($shop_id, $warehouse_id, 'sales_receipt', $sales_receipt_id); 
+			AccountingTransaction::consume_inventory($shop_id, $warehouse_id, $insert_item, 'sales_receipt', $sales_receipt_id, 'Consume upon creating SALES RECEIPT '.$ins['transaction_refnum']);
 		}
 		else
 		{
@@ -197,6 +202,10 @@ class TransactionSalesReceipt
 	        $entry["ewt"]               = $ewt;
 
 	        $return = Self::insertline($sales_receipt_id, $insert_item, $entry);
+
+
+			$warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+			AccountingTransaction::consume_inventory($shop_id, $warehouse_id, $insert_item, 'sales_receipt', $sales_receipt_id, 'Consume upon creating SALES RECEIPT '.$ins['transaction_refnum']);
 		}
 		else
 		{

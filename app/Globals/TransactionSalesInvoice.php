@@ -147,7 +147,7 @@ class TransactionSalesInvoice
 		else
 		{
 			$return = $val;
-		}		
+		}
 
         return $return; 
 	}

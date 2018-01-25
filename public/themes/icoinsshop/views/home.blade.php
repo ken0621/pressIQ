@@ -62,7 +62,7 @@
             <div class="wrapper-texts wow fadeInDown" data-wow-delay=".6s" data-wow-duration="1s">ICOins Shop is a privately owned marketing company, introducing and educating the people on different ICO’s to start an opportunity for everyone on the future generation of digital currencies.</div>
         </div>
     </section>
-
+    
     <!-- MISSION VISION -->
     <section class="page-section wrapper-2">
         <div id="missionvision" class="unskew" style="background-image: url('/themes/{{ $shop_theme }}/img/missionvision-bg.png')">

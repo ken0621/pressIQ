@@ -33,6 +33,8 @@ use App\Globals\Ecom_Product;
 use App\Globals\abs\AbsMain;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_recaptcha_setting;
+use App\Models\Tbl_recaptcha_pool_amount;
 
 use App\Models\Tbl_image;
 // use App\Models\Tbl_mlm_slot_points_log;
@@ -108,6 +110,7 @@ class ShopMemberController extends Shop
     public function getIndex()
     {
         $data["page"] = "Dashboard";
+        $data['shop_id'] = $this->shop_info->shop_id;
         $data["mode"] = session("get_success_mode");
         $data["zero_currency"] = Currency::format(0);
         session()->forget("get_success_mode");
@@ -453,7 +456,7 @@ class ShopMemberController extends Shop
                 else
                 {
                     $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
-                     Session::flash('email_sent', 'Email Successfully Sent!');
+                     Session::flash('email_sent', 'Press Release Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
                 }
                 
@@ -688,9 +691,60 @@ class ShopMemberController extends Shop
         }
     }
 
-    public function press_release_analytics_view()
+    public function press_release_analytics_campaign()
     {
          if (Session::exists('user_email')) 
+         {
+            $explode_email = explode("@", Session::get('user_email'));
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+                ) ,
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err)
+            {
+                echo "cURL Error #:" . $err;
+            }
+            else
+            {
+                
+                $analytics_view = json_decode($response);
+                $new_analytic_view = [];
+                foreach ($analytics_view as $key => $value) 
+                {
+                    if ($value->sender == $explode_email[0] . '@press-iq.com') 
+                    {
+                        $new_analytic_view[$value->subject] = $value;
+                    }
+                }
+                $analytics_view = $new_analytic_view;
+                $data["analytics_view"] = $analytics_view;
+                $data["page"] = "Campaign Detail";
+                return view("press_user.press_user_analytics_view",$data);
+            }
+        }
+         else
+        {
+           return Redirect::to("/"); 
+        }
+    }
+
+    public function press_release_analytics_view_all()
+    {
+        if (Session::exists('user_email')) 
          {
             $explode_email = explode("@", Session::get('user_email'));
             $curl = curl_init();
@@ -724,16 +778,22 @@ class ShopMemberController extends Shop
                     {
                         unset($analytics_view[$key]);
                     }
+
+                    if ($value->subject != Crypt::decrypt(Request2::input("subject"))) 
+                    {
+                        unset($analytics_view[$key]);
+                    }
                 }
+
                 $data["analytics_view"] = $analytics_view;
-                $data["page"] = "Analytics View";
-                return view("press_user.press_user_analytics_view",$data);
+                $data["page"] = "Analytics Details";
+                return view("press_user.press_user_analytics_view_all",$data); 
             }
         }
          else
         {
            return Redirect::to("/"); 
-        }
+        }  
     }
 
     /* Tracking Press Release */
@@ -808,6 +868,15 @@ class ShopMemberController extends Shop
             else
             {
                 $analytics_view = json_decode($response);
+                $new_analytic_view = [];
+                foreach ($analytics_view as $key => $value) 
+                {
+                    if ($value->sender != $explode_email[0] . '@press-iq.com') 
+                    {
+                        $new_analytic_view[$value->subject] = $value;
+                    }
+                }
+                $analytics_view = $new_analytic_view;
                 $data["analytics_view"] = $analytics_view;
                 $data["page"] = "Press Release - Dashboard";
                 return view("press_admin.press_admin_dashboard",$data);
@@ -818,6 +887,55 @@ class ShopMemberController extends Shop
            return Redirect::to("/"); 
         }
     }
+
+     public function pressadmin_dashboard_view()   
+    {
+        if (Session::exists('user_email')) 
+         {
+            $explode_email = explode("@", Session::get('user_email'));
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+                ) ,
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err)
+            {
+                echo "cURL Error #:" . $err;
+            }
+            else
+            {
+                $analytics_view = json_decode($response);
+                foreach ($analytics_view as $key => $value) 
+                {
+                    if ($value->subject != Crypt::decrypt(Request2::input("subject"))) 
+                    {
+                        unset($analytics_view[$key]);
+                    }
+                }
+                $data["analytics_view"] = $analytics_view;
+                $data["page"] = "Press Release - Details";
+                return view("press_admin.press_admin_dashboard_view",$data); 
+            }
+        }
+         else
+        {
+           return Redirect::to("/"); 
+        }
+    }
+
     public function pressadmin_media_contacts()
     {
 
@@ -844,46 +962,20 @@ class ShopMemberController extends Shop
         {   
             return Redirect::to("/"); 
         }
-        // if (request()->isMethod("post"))
-        // { 
-        //     $value["contact_name"]          =request('contact_name');
-        //     $rules["contact_name"]          =['required'];
-        //     $value["country"]               =request('country');
-        //     $rules["country"]               =['required'];
-        //     $value["contact_email"]         =request('contact_email');
-        //     $rules["contact_email"]         =['required','email','unique:tbl_pressiq_media_contacts,contact_email'];
-        //     $value["contact_website"]       =request('contact_website');
-        //     $rules["contact_website"]       =['required'];
-        //     $value["contact_description"]   =request('contact_description');
-        //     $rules["contact_description"]   =['required'];
-        //     $validator = Validator::make($value, $rules);
-
-        //     if ($validator->fails()) 
-        //     {
-        //         return Redirect::to("/pressadmin/mediacontacts")->with('message', $validator->errors()->first())->withInput();
-        //     }
-        //     else
-        //     {
-        //         $contact_info["contact_name"]=request('contact_name');
-        //         $contact_info["country"]=request('country');
-        //         $contact_info["contact_email"]=request('contact_email');
-        //         $contact_info["contact_website"]=request('contact_website');
-        //         $contact_info["contact_description"]=request('contact_description');
-        //         $contact_id = tbl_pressiq_media_contacts::insertGetId($contact_info); 
-        //         $data["page"] = "Press Release - Media Contacts";
-        //         $contacts = DB::table('tbl_pressiq_media_contacts')->get();
-        //         $data["contacts"]=$contacts;
-        //         return view("press_admin.press_admin_media_contacts",$data);                
-        //     }
-        // }
-        // else
-        // {
-        //     $data["page"] = "Press Release - Media Contacts";
-        //     $contacts = DB::table('tbl_pressiq_media_contacts')->get();
-        //     $data["contacts"]=$contacts;
-        //     return view("press_admin.press_admin_media_contacts",$data);
-        // }
+      
     }
+
+    public function mediacontacts_search(Request $request)
+    {  
+      $search_media = $request->search_media;
+      $data["_media_contacts"] = Tbl_press_release_recipient::where('name','like','%'.$search_media.'%')
+                                 ->Orwhere('company_name','like','%'.$search_media.'%')
+                                 ->Orwhere('country','like','%'.$search_media.'%')
+                                 ->Orwhere('research_email_address','like','%'.$search_media.'%')
+                                 ->get();
+      return view("press_admin.search_press_admin_media_contacts", $data);
+    }
+
     public function manage_user()
     {
         // dd(session("edit_user"));
@@ -913,6 +1005,18 @@ class ShopMemberController extends Shop
         {
             return Redirect::to("/");   
         }
+    }         
+
+    public function manage_user_search(Request $request)
+    {   
+      $search_user = $request->search_user;
+      $data["_user"] = Tbl_pressiq_user::where('user_level',2)
+                        ->where('user_first_name','like','%'.$search_user.'%')
+                        ->Orwhere('user_last_name','like','%'.$search_user.'%')
+                        ->Orwhere('user_email','like','%'.$search_user.'%')
+                        ->Orwhere('user_company_name','like','%'.$search_user.'%')
+                        ->get();
+      return view("press_admin.search_press_admin_manage_user", $data);
     }
 
     public function manage_user_add_admin(Request $request)
@@ -920,7 +1024,7 @@ class ShopMemberController extends Shop
       $data["user_first_name"]                 = $request->user_first_name;
       $data["user_last_name"]                  = $request->user_last_name;
       $data["user_email"]                      = $request->user_email;
-      $data["user_password"]                   = Crypt::decrypt(request('user_password'));
+      $data["user_password"]                   = Crypt::encrypt(request('user_password'));
       $data["user_level"]                      = "1";
       Tbl_pressiq_user::insert($data);
       Session::flash('success_admin', 'New Admin Successfully Added!');
@@ -936,7 +1040,6 @@ class ShopMemberController extends Shop
                             'user_last_name'      =>request('last_name'),
                             'user_email'          =>request('email'),
                             'user_company_name'   =>request('company_name'),
-                            'user_password'       =>Crypt::encrypt(request('password')),
                             ]);
         Session::forget('edit_user');
         Session::flash('success_user', 'User Successfully Updated!');
@@ -2990,6 +3093,62 @@ class ShopMemberController extends Shop
         $data['pin'] = request("pin");
         $data['activation'] = request("activation");
         return view("member.use_code",$data);
+    }
+    public function getCaptcha()
+    {
+        // unitywealth100
+        if($this->shop_info->shop_id == 90)
+        {
+            $data['page'] = "Captcha";
+            $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+            return view('member.captcha',$data);
+        }
+        
+    }
+    public function postSubmitcaptcha(Request $request)
+    {
+        $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
+        if($point)
+        {
+            $points = $point->point;
+        }
+        else
+        {
+            $point = 0;
+        }
+        $insert['shop_id']                  = $this->shop_info->shop_id;
+        $insert['wallet_log_slot']          = Tbl_mlm_slot::where('slot_no',$request->slot_no)->first()->slot_id;
+        $insert['wallet_log_date_created']  = Carbon::now();
+        $insert['wallet_log_amount']        = $point;
+        $insert['wallet_log_plan']          = "RECAPTCHA";
+        $insert['wallet_log_claimbale_on']  = Carbon::now();
+        $insert['encashment_process_type']  = 0;
+
+        $pool_amount        = Tbl_recaptcha_pool_amount::where('shop_id',$this->shop_info->shop_id)->sum('amount');
+        $acquired_points    = Tbl_mlm_slot_wallet_log::where('wallet_log_plan','RECAPTCHA')
+                                ->where('shop_id',$this->shop_info->shop_id)
+                                ->sum('wallet_log_amount');
+        $remaining_points   = $pool_amount-$acquired_points;
+        if($remaining_points>=$point)
+        {
+            $query = Tbl_mlm_slot_wallet_log::insert($insert);
+
+            if($query)
+            {
+                $response = 'success';
+            }
+            else
+            {
+                $response = 'error';
+            }
+        }
+        else
+        {
+            $response = 'no_points';
+        }
+
+        
+        return Redirect::back()->with('response',$response);
     }
     public function getReport()
     {

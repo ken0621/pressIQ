@@ -84,6 +84,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* EMPLOYEE START */
 	Route::any('/employee_list','Member\PayrollController@employee_list');
 
+	/* export to pdf */
+	Route::any('/employee_list/export_to_pdf_employee','Member\PayrollController@export_to_pdf_employee');
 	/* import from excel start */
 	Route::any('/employee_list/modal_import_employee','Member\PayrollController@modal_import_employee');
 	Route::any('/employee_list/modal_import_employee/get_201_template','Member\PayrollController@get_201_template');
@@ -451,7 +453,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 		"Member\PayrollController@modal_leave_action_report");
 	Route::any('/leave/v2/leave_action_report_excel/{date_start}/{date_end}/{company}',
 		"Member\PayrollController@leave_action_report_excel");
-
+	Route::any('/leave/v2/modal_leave_annual_report',
+		"Member\PayrollController@modal_leave_annual_report");
 	//end reporting
 
 	Route::any('/leave/v2/modal_view_leave_employee/{payroll_leave_temp_id}/',"Member\PayrollController@modal_view_leave_employee");

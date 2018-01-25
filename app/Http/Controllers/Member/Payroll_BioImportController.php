@@ -381,7 +381,7 @@ class Payroll_BioImportController extends Member
 	    	}
 	    
 	    	$data = Self::save_record($_record, $company, $this->user_info->shop_id, "TOUCHLINK RDS");
-	    	
+
 	    	return view("member.payroll2.biometrics", $data);
     	}
     	else
@@ -389,9 +389,9 @@ class Payroll_BioImportController extends Member
     		echo "<div class='text-center'>INVALID FILE FORMAT</div>";
     	}
     }
+
     public static function save_record($_record, $company, $shop_id, $biometerics_name)
     {
-
     	$success = 0;
     	$failed = 0;
     	$incomplete = 0;

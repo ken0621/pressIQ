@@ -3,24 +3,23 @@
 <div class="background-container">
     <div class="pressview">
       <div class="dashboard-container">
-        <div class="table-view">
+        <div class="title-container">Analytics</div>
+        <div class="table-view ">
           <table>
                 <tr>
                   <th style="text-align: center;width: 20%">Date / Time </th>
                   <th style="text-align: center;width: 20%">Title / Subject</th>
-                  <th style="text-align: center;width: 15%">Status </th>
-                  <th style="text-align: center;width: 20%">Recipients</th>
-                  <th style="text-align: center;width: 15%">No. Email Open</th>
-                  <th style="text-align: center;width: 20%">Clicks</th>
+                  <th style="text-align: center;width: 20%">Sender</th>
+                  <th style="text-align: center;width: 20%">Action</th>
                 </tr>
                 @foreach($analytics_view as $view)
                 <tr>
                   <td>{{date("m-d-Y\ / h:i:s a",($view->ts))}} </td>
                   <td>{{$view-> subject}}</td>
-                  <td>{{$view-> state}}</td>
-                  <td>{{$view-> email}}</td>
-                  <td>{{$view-> opens}}</td>
-                  <td>{{$view-> clicks}}</td>
+                  <td>{{$view-> sender}}</td>
+                  <td>
+                      <span class="create-button" ><a href="/pressadmin/dashboard/view?subject={{ Crypt::encrypt($view->subject)}}">VIEW</a>
+                  </td>
                 </tr>
                 @endforeach
           </table>

@@ -191,4 +191,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 	/* Return Policy */
 	Route::get('/return_policy', 'Shop\ShopAboutController@return_policy'); 
+
+	/* Alternative */
+	Route::get('/product2', 'Shop\ShopProductController@product2'); //Carlo
 }

@@ -111,8 +111,8 @@ class Tbl_customer extends Model
 
     public function scopeBalanceJournal($query)
     {
-        $balance = DB::table("tbl_journal_entry_line")->join("tbl_chart_of_account", "account_id", "=", "jline_account_id")
-                                           ->join("tbl_chart_account_type","chart_type_id", "=", "account_type_id")
+        $balance = DB::table("tbl_journal_entry_line")->leftjoin("tbl_chart_of_account", "account_id", "=", "jline_account_id")
+                                           ->leftjoin("tbl_chart_account_type","chart_type_id", "=", "account_type_id")
                                            ->whereRaw("chart_type_name = 'Accounts Receivable'")
                                            ->whereRaw("jline_name_reference = 'customer'")
                                            ->whereRaw("jline_name_id = tbl_customer.customer_id")

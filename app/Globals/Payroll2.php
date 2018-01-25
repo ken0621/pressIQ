@@ -2832,7 +2832,16 @@ class Payroll2
 		{
 			if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
 			{
-				
+				$_time["is_absent"] = false;
+			}
+		}
+
+		if($time_spent == 0 && $compute_type=="hourly")
+		{
+
+			if($_time['is_holiday'] == 'special')
+			{
+				$_time["is_absent"] = false;
 			}
 		}
 		

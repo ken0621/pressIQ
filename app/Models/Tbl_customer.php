@@ -70,11 +70,11 @@ class Tbl_customer extends Model
     public function scopeInfo($query)
     {
         return $query->leftjoin("tbl_customer_address", function($on)
-                            {
-                                $on->on("tbl_customer_address.customer_id","=","tbl_customer.customer_id");
-                                $on->on("purpose","=", DB::raw("'billing'"));
-                            })
-                            ->leftjoin("tbl_customer_other_info","tbl_customer_other_info.customer_id","=","tbl_customer.customer_id");
+                        {
+                            $on->on("tbl_customer_address.customer_id","=","tbl_customer.customer_id");
+                            $on->on("purpose","=", DB::raw("'billing'"));
+                        })
+                        ->leftjoin("tbl_customer_other_info","tbl_customer_other_info.customer_id","=","tbl_customer.customer_id");
     }
 
     /* !! CURRENTLY NOT IN USE !! */

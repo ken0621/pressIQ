@@ -91,6 +91,7 @@ use App\Models\Tbl_payroll_13th_month_basis;
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
 use App\Globals\Utilities;
+use App\Globals\Pdf_global;
 use DateTime;
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_shift_time;
@@ -291,6 +292,26 @@ class PayrollController extends Member
          
           return view('member.payroll.employeelist', $data);
      }   
+
+     public function export_to_pdf_employee()
+     {
+
+          $active_status[0]    = 1;
+          $active_status[1]    = 2;
+          $active_status[2]    = 3;
+          $active_status[3]    = 4;
+          $active_status[4]    = 5;
+          $active_status[5]    = 6;
+          $active_status[7]    = 7;
+
+          $separated_status[0] = 8;
+          $separated_status[1] = 9;
+
+          $data['_active']     = Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $active_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_last_name')->get();
+          
+          $pdf = view('member.payroll.employeelist_pdf', $data);
+          return Pdf_global::show_pdf($pdf, 'landscape');
+     }
 
 
      /* IMPORT EMPLOYEE DATA FROM EXCEL  START*/
@@ -4650,6 +4671,8 @@ class PayrollController extends Member
                array_push($datas, $empdata);
 
           }
+
+          dd($datas);
    
           $data['leave_report'] = $datas;
           return view("member.payroll.modal.modal_leave_annual_report",$data);

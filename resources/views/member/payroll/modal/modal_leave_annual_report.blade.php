@@ -11,15 +11,7 @@
         <div class="panel-body form-horizontal">
                 <div class="form-group">
              
-            <div class="col-md-2">
-                <small>Date Start</small>
-                <input type="text" name="payroll_schedule_leave_start" id="start" class="date_picker form-control payroll_schedule_leave_start" value="{{date("m/d/Y")}}" required style="width: 150px">
-            </div>
 
-            <div class="col-md-2">
-                <small>Date End</small>
-                <input type="text" name="payroll_schedule_leave_end" id="end" class="date_picker form-control payroll_schedule_leave_end" value="{{date("m/d/Y")}}" required style="width: 150px">
-            </div>
 {{-- 
             <div class="col-md-2">
                 <small>Company</small>

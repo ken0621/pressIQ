@@ -186,7 +186,15 @@ function genealogy_modal()
             $('.slot-position').val($(e.currentTarget).attr('position'));
             $('.slot-placement').val($(e.currentTarget).attr('placement'));
             // alert($('.slot-placement').val()+" "+$('.slot-position').val());
-            event_show_modal();
+            var no_of_codes = $('.no_of_codes').val();
+            if(no_of_codes > 0)
+            {
+            	event_show_modal();
+            }
+            else
+            {
+            	toastr.error('No package available');
+            }
         });
 	}
 	function event_close_modal()

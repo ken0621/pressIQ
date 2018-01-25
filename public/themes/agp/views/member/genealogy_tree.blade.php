@@ -47,6 +47,7 @@
                             <option value="{{$code->transaction_id}}">{{$code->mlm_activation.'('.$code->item_name.')'}}</option>
                             @endforeach
                         </select>
+                        <input type="hidden" name="no_of_codes" class="no_of_codes" value="{{count($_codes)}}">
                         <input type="hidden" name="placement" class="slot-placement">
                         <input type="hidden" name="position" class="slot-position">
                         <input type="hidden" name="shop_id" class="shop_id" value="{{$shop_id}}">

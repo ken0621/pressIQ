@@ -130,7 +130,7 @@
                     
                     <div class="bottom">                           
                         <div class="ftr-title">© 2018 koloretemarketing. All Rights Reserved.</div>
-                        <div class="ftr-title-2"><span class="kolorete-policies"><a href="#">kolorete marketing Policies</a></span><span class="divider">|</span><span>Powered By: DIGIMA WEB SOLUTIONS, Inc.</span></div>
+                        <div class="ftr-title-2"><span class="kolorete-policies"><a href="/terms_and_conditions">kolorete marketing Policies</a></span><span class="divider">|</span><span>Powered By: DIGIMA WEB SOLUTIONS, Inc.</span></div>
                     </div>
                 </div>
             </footer>

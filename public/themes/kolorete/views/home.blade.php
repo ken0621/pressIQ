@@ -718,7 +718,8 @@
 			                <img src="/themes/{{ $shop_theme }}/img/logo-footer.png">
 			                <div class="title">FIND US ON MAP</div>
 			                <div class="map-container">
-			                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15464.695385219487!2d121.10835262093266!3d14.301329689896523!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397d84dbebed523%3A0x4e68f08544f784bc!2sVictoria+Townhomes!5e0!3m2!1sen!2sph!4v1516816862979" width="360" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
+			                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15464.659178244572!2d121.1135937!3d14.3018559!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x86f66d98403088c7!2sKolorete+Marketing!5e0!3m2!1sen!2sph!4v1516420495967" width="360" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
+
 			                </div>
 			            </div>
 			        </div>

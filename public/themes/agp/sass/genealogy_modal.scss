@@ -21,7 +21,7 @@
 
         .modal-header
         {
-            background-color: #C4A75F;
+            background-color: #75A04B;
             padding: 20px;
 
             .modal-title
@@ -41,7 +41,60 @@
                     padding: 10px 0;
                     display: block;
                     font-weight: 500;
+                    font-size: 16px;
                 }
+
+                .select2-selection
+                {
+                    border-radius: 0 !important;
+                    padding: 15px 0;
+                }
+
+                .select2-container--default .select2-selection--single .select2-selection__arrow b
+                {
+                    margin-top: 0px;
+                }
+
+                .sponsor
+                {
+                    padding: 6px 5px;
+                    width: 90%;
+                }
+
+                .verify-sponsor
+                {
+                    .fa 
+                    {
+                        font-size: 20px;
+                        vertical-align: middle;
+                        margin-left: 10px;
+                    }
+                }
+
+                .btn-radio
+                {
+                    vertical-align: middle;
+                    cursor: pointer;
+                }
+
+                .new-user
+                {
+                    display: none;
+                    padding: 10px 0 0 0;
+
+                    .same-width
+                    {
+                        width: 97%;
+                        padding: 6px 5px;
+                    }
+
+                    select
+                    {
+                        width: 100%;
+                        padding: 6px 5px;
+                    }
+                }
+
             }
 
         }
@@ -51,14 +104,28 @@
             padding: 20px;
             display: flex;
             justify-content: flex-end;
+            border-top: 1px solid rgba(0,0,0,0.2);
 
             .btn-custom-primary
             {
+                border: none;
+                padding: 10px 20px;
+                color: #fff;
+                margin-left: 5px;
+                background-color: #75A04B;
+                text-transform: uppercase;
+                cursor: pointer;
 
             }
 
             .btn-custom-close
             {
+                border: none;
+                padding: 10px 20px;
+                text-transform: uppercase;
+                background-color: #C4A75F;
+                color: #fff;
+                cursor: pointer;
 
             }
         }

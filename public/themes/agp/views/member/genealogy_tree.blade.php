@@ -63,28 +63,31 @@
                         <input type="radio" class="btn-radio" name="owner" value="new"> New User<br>
                     </div>
 
-                    <div class="new-user" style="display: none">
-                        <label>First Name</label><br>
-                        <input type="text" name="first_name" class="fname"><br>
-                        <label>Middle Name</label><br>
-                        <input type="text" name="middle_name" class="mname"><br>
-                        <label>Last Name</label><br>
-                        <input type="text" name="last_name" class="lname"><br>
-                        <label>Contact</label><br>
-                        <input type="text" name="contact" class="contact"><br>
-                        <label>Email</label><br>
-                        <input type="text" name="email" class="email"><br>
-                        <label>Username</label><br>
-                        <input type="text" name="username" class="username"><br>
-                        <label>Password</label><br>
-                        <input type="password" name="password" class="password"><br>
-                        <label>Confirm Password</label><br>
-                        <input type="password" name="confirm_pass" class="confirm_pass"><br>
-                        <label>Country</label><br>
-                        <select style="width: 100%;" name="country" class="country">
-                            <option value="420">Philippines</option>
-                        </select>
+                    <div class="holder">
+                        <div class="new-user">
+                            <label>First Name</label>
+                            <input type="text" name="first_name" class="same-width fname">
+                            <label>Middle Name</label>
+                            <input type="text" name="middle_name" class="same-width mname">
+                            <label>Last Name</label>
+                            <input type="text" name="last_name" class="same-width lname">
+                            <label>Contact</label>
+                            <input type="text" name="contact" class="same-width contact">
+                            <label>Email</label>
+                            <input type="text" name="email" class="same-width email">
+                            <label>Username</label>
+                            <input type="text" name="username" class="same-width username">
+                            <label>Password</label>
+                            <input type="password" name="password" class="same-width password">
+                            <label>Confirm Password</label>
+                            <input type="password" name="confirm_pass" class="same-width confirm_pass">
+                            <label>Country</label>
+                            <select name="country" class="country">
+                                <option value="420">Philippines</option>
+                            </select>
+                        </div>
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-custom-close close-modal" type="button">Close</button>

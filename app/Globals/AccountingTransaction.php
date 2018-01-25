@@ -20,6 +20,7 @@ use Carbon\Carbon;
 use Validator;
 use DB;
 use App\Globals\Accounting;
+use App\Globals\CustomerWIS;
 use App\Globals\Item;
 use App\Globals\Warehouse2;
 /**
@@ -338,44 +339,47 @@ class AccountingTransaction
 	public static function refill_inventory($shop_id, $warehouse_id , $item_info, $ref_name = '', $ref_id = 0, $remarks = '')
 	{
 		$return = null;
-		if(count($item_info) > 0)
+		if(CustomerWIS::settings($shop_id) == 0)
 		{
-			$_item = null;
-			foreach ($item_info as $key => $value) 
+			if(count($item_info) > 0)
 			{
-				$item_type = Item::get_item_type($value['item_id']);
-				if($item_type == 1)
-				{
-					$qty = $value['item_qty'] * UnitMeasurement::getQty($value['item_um']);
-					$_item[$key]['item_id'] = $value['item_id'];
-			        $_item[$key]['quantity'] = $qty;
-			        $_item[$key]['remarks'] = $value['item_description'];
-				}
-				elseif($item_type == 5 || $item_type == 4)
-				{
-					$bundle_list = Item::get_bundle_list($value['item_id']);
-					if(count($bundle_list) > 0)
-					{
-						foreach ($bundle_list as $key_bundle => $value_bundle) 
-						{
-							$qty = $value['item_qty'] * ($value_bundle->bundle_qty * UnitMeasurement::getQty($value_bundle->bundle_um_id));
-							$_item[$key.'b'.$key_bundle]['item_id'] = $value_bundle->bundle_item_id;
-							$_item[$key.'b'.$key_bundle]['quantity'] = $qty;
-							$_item[$key.'b'.$key_bundle]['remarks'] = $value_bundle->item_sales_information;
-						}
-					}
-				}
-			}
-			if(count($_item) > 0)
-			{
-				$return = Warehouse2::refill_bulk($shop_id, $warehouse_id, $ref_name, $ref_id, $remarks, $_item);
-
+				$_item = null;
 				foreach ($item_info as $key => $value) 
 				{
 					$item_type = Item::get_item_type($value['item_id']);
-					if($item_type == 5 || $item_type == 4)
+					if($item_type == 1)
 					{
-						Warehouse2::refill_bundling_item($shop_id, $warehouse_id, $value['item_id'], $value['item_qty'], $ref_name, $ref_id);
+						$qty = $value['item_qty'] * UnitMeasurement::getQty($value['item_um']);
+						$_item[$key]['item_id'] = $value['item_id'];
+				        $_item[$key]['quantity'] = $qty;
+				        $_item[$key]['remarks'] = $value['item_description'];
+					}
+					elseif($item_type == 5 || $item_type == 4)
+					{
+						$bundle_list = Item::get_bundle_list($value['item_id']);
+						if(count($bundle_list) > 0)
+						{
+							foreach ($bundle_list as $key_bundle => $value_bundle) 
+							{
+								$qty = $value['item_qty'] * ($value_bundle->bundle_qty * UnitMeasurement::getQty($value_bundle->bundle_um_id));
+								$_item[$key.'b'.$key_bundle]['item_id'] = $value_bundle->bundle_item_id;
+								$_item[$key.'b'.$key_bundle]['quantity'] = $qty;
+								$_item[$key.'b'.$key_bundle]['remarks'] = $value_bundle->item_sales_information;
+							}
+						}
+					}
+				}
+				if(count($_item) > 0)
+				{
+					$return = Warehouse2::refill_bulk($shop_id, $warehouse_id, $ref_name, $ref_id, $remarks, $_item);
+
+					foreach ($item_info as $key => $value) 
+					{
+						$item_type = Item::get_item_type($value['item_id']);
+						if($item_type == 5 || $item_type == 4)
+						{
+							Warehouse2::refill_bundling_item($shop_id, $warehouse_id, $value['item_id'], $value['item_qty'], $ref_name, $ref_id);
+						}
 					}
 				}
 			}
@@ -384,48 +388,63 @@ class AccountingTransaction
 	}
 	public static function inventory_refill_update($shop_id, $warehouse_id,  $item_info, $ref_name, $ref_id)
 	{
-		Warehouse2::inventory_delete_inventory_refill($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info);
+		if(CustomerWIS::settings($shop_id) == 0)
+		{
+			Warehouse2::inventory_delete_inventory_refill($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info);
+		}
 	}
-
 	public static function inventory_consume_update($shop_id, $warehouse_id, $ref_name, $ref_id)
 	{
-		Warehouse2::update_inventory_consume($shop_id, $warehouse_id, $ref_name, $ref_id);
+		if(CustomerWIS::settings($shop_id) == 0)
+		{
+			Warehouse2::update_inventory_consume($shop_id, $warehouse_id, $ref_name, $ref_id);
+		}
 	}
 	public static function inventory_validation($type = 'refill', $shop_id, $warehouse_id, $item_info, $remarks = '')
 	{
 		$return = null;
-		$_item = null;
-		if(count($item_info) > 0)
+		if(CustomerWIS::settings($shop_id) == 0)
 		{
-			foreach ($item_info as $key => $value) 
+			$_item = null;
+			if(count($item_info) > 0)
 			{
-				$item_type = Item::get_item_type($value['item_id']);
-				if($item_type == 1 || $item_type == 5 || $item_type == 4)
+				foreach ($item_info as $key => $value) 
 				{
-					$qty = $value['item_qty'] * UnitMeasurement::getQty($value['item_um']);
-					$_item[$key]['item_id'] = $value['item_id'];
-			        $_item[$key]['quantity'] = $qty;
-			        $_item[$key]['remarks'] = $value['item_description'];
+					$item_type = Item::get_item_type($value['item_id']);
+					if($item_type == 1 || $item_type == 5 || $item_type == 4)
+					{
+						$qty = $value['item_qty'] * UnitMeasurement::getQty($value['item_um']);
+						$_item[$key]['item_id'] = $value['item_id'];
+				        $_item[$key]['quantity'] = $qty;
+				        $_item[$key]['remarks'] = $value['item_description'];
+					}
 				}
 			}
-		}
-		if(count($_item) > 0)
-		{
-			foreach ($_item as $key => $value) 
+			if(count($_item) > 0)
 			{
-				if($type == 'refill')
+				foreach ($_item as $key => $value) 
 				{
-					$return = Warehouse2::refill_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
+					if($type == 'refill')
+					{
+						$return = Warehouse2::refill_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
+					}
+					if($type == 'consume')
+					{
+						$return = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
+					}
 				}
-				if($type == 'consume')
-				{
-					$return = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
-				}
+			}
+			else
+			{
+				$return = "Please select item";
 			}
 		}
 		else
 		{
-			$return = "Please select item";
+			if(count($item_info) < 1)
+			{
+				$return = "Please select item";
+			}
 		}
 
 		return $return;
@@ -433,23 +452,26 @@ class AccountingTransaction
 	public static function consume_inventory($shop_id, $warehouse_id , $item_info, $ref_name = '', $ref_id = 0, $remarks = '')
 	{
 		$return = null;
-		if(count($item_info) > 0)
+		if(CustomerWIS::settings($shop_id) == 0)
 		{
-			$_item = null;
-			foreach ($item_info as $key => $value) 
+			if(count($item_info) > 0)
 			{
-				$item_type = Item::get_item_type($value['item_id']);
-				if($item_type == 1 || $item_type == 5 || $item_type == 4)
+				$_item = null;
+				foreach ($item_info as $key => $value) 
 				{
-					$qty = $value['item_qty'] * UnitMeasurement::getQty($value['item_um']);
-					$_item[$key]['item_id'] = $value['item_id'];
-			        $_item[$key]['quantity'] = $qty;
-			        $_item[$key]['remarks'] = $value['item_description'];
+					$item_type = Item::get_item_type($value['item_id']);
+					if($item_type == 1 || $item_type == 5 || $item_type == 4)
+					{
+						$qty = $value['item_qty'] * UnitMeasurement::getQty($value['item_um']);
+						$_item[$key]['item_id'] = $value['item_id'];
+				        $_item[$key]['quantity'] = $qty;
+				        $_item[$key]['remarks'] = $value['item_description'];
+					}
 				}
-			}
-			if(count($_item) > 0)
-			{
-				$return = Warehouse2::consume_bulk($shop_id, $warehouse_id, $ref_name, $ref_id, $remarks, $_item);
+				if(count($_item) > 0)
+				{
+					$return = Warehouse2::consume_bulk($shop_id, $warehouse_id, $ref_name, $ref_id, $remarks, $_item);
+				}
 			}
 		}
 		return $return;

@@ -14,10 +14,10 @@
 				</div>
 				<div class="col-md-4">
 					<div class="ads-container">
-						<img src="/themes/{{ $shop_theme }}/img/home-ads-1.jpg">
+						<img src="/themes/{{ $shop_theme }}/img/home-ads-1.png">
 					</div>
 					<div class="ads-container" style="margin-top: 8px;">
-						<img src="/themes/{{ $shop_theme }}/img/home-ads-2.jpg">
+						<img src="/themes/{{ $shop_theme }}/img/home-ads-2.png">
 					</div>
 				</div>
 			</div>

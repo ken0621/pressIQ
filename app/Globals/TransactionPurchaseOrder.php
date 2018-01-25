@@ -133,8 +133,7 @@ class TransactionPurchaseOrder
         {
             foreach ($po_data as $key => $value)
             {
-                $po_id = $value['item_ref_id'];
-                Self::checkPolineQty($po_id, $ri_id);
+                Self::checkPolineQty($value['item_ref_id'], $ri_id);
             }
         }
 
@@ -156,8 +155,8 @@ class TransactionPurchaseOrder
             
             $update['poline_qty'] = $value->poline_qty - $receivedline->riline_qty;
             
-            $poline_id = Tbl_purchase_order_line::where('poline_id', $value->poline_id)->update($update);
-            
+            Tbl_purchase_order_line::where('poline_id', $value->poline_id)->update($update);    
+
             if($update['poline_qty'] <= 0)
             {
                 $ctr++;

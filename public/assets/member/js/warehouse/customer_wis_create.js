@@ -571,6 +571,22 @@ function customer_wis_create()
 	{
 		return '<div style="padding: ' + $padding + 'px; font-size: 20px;" class="text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>';
 	}
+	function load_applied_transaction()
+	{
+		$('.applied-transaction-list').load('/member/customer/wis/load-applied-transaction', function()
+		{
+			console.log("success");
+			action_initialize_select();
+			action_compute();
+			action_reassign_number();
+			$('.remarks-wis').html($('.inv-remarks').val());
+		});
+	}
+
+	this.load_applied_transaction = function()
+	{
+		load_applied_transaction();
+	}
 }
 
 function new_price_level_save_done(data)
@@ -588,5 +604,13 @@ function success_create_customer_wis(data)
 		location.href = '/member/customer/wis';*/
 		toastr.success("Success");
        	location.href = data.redirect_to;
+	}
+}
+function success_apply_transaction(data)
+{
+	if(data.status == 'success')
+	{
+		data.element.modal("toggle");
+		customer_wis_create.load_applied_transaction();
 	}
 }

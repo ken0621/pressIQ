@@ -56,7 +56,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
     public function getCreate(Request $request)
     {
         $data['page'] = 'CREATE - CUSTOMER WIS';
-        $data['_item']  = Item::get_all_category_item([1,5]);
+        $data['_item']  = Item::get_all_category_item([1,4,5]);
         $data["_customer"]  = Customer::getAllCustomer();
         $data['action']     = "/member/customer/wis/create-submit";
 
@@ -260,13 +260,8 @@ class CustomerWarehouseIssuanceSlipController extends Member
 
         return json_encode($data);
     }
-     public function getPrint(Request $request, $wis_id)
+    public function getPrint(Request $request, $wis_id)
     {
-        $date = date("F j, Y, g:i a");
-        $first_name         = $this->user_info->user_first_name;
-        $last_name         = $this->user_info->user_last_name;
-        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
-
         $data['wis'] = CustomerWIS::get_customer_wis_data($wis_id);
         $customer_id = $data['wis']->destination_customer_id;
         
@@ -294,6 +289,55 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $data['_si'] = TransactionSalesInvoice::getUndeliveredSalesInvoice($this->user_info->shop_id, $request->c);
         $data['_sr'] = TransactionSalesReceipt::getUndeliveredSalesReceipt($this->user_info->shop_id, $request->c);
         $data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
+        $data['action'] = '/member/customer/wis/apply-transaction';
         return view('member.warehousev2.customer_wis.load_transaction', $data);
+    }
+    public function postApplyTransaction(Request $request)
+    {
+        $_transaction = $request->apply_transaction;
+        Session::put('applied_transaction', $_transaction);
+
+        $return['call_function'] = "success_apply_transaction";
+        $return['status'] = "success";
+
+        return json_encode($return);
+    }
+    public function getLoadAppliedTransaction(Request $request)
+    {
+        $_ids = Session::get('applied_transaction');
+
+        $return = null;
+        $remarks = null;
+        if(count($_ids) > 0)
+        {
+            foreach ($_ids as $key => $value) 
+            {
+                $get = CustomerWIS::get_inv_item($this->user_info->shop_id, $key);
+                $info = CustomerWIS::get_inv($this->user_info->shop_id, $key);
+
+                foreach ($get as $key_item => $value_item)
+                {
+                    $type = Item::get_item_type($value_item->invline_item_id);
+                    if($type == 1 || $type == 4 || $type == 5 )
+                    {
+                        $return[$key.'i'.$key_item]['item_id'] = $value_item->invline_item_id;
+                        $return[$key.'i'.$key_item]['item_description'] = $value_item->invline_description;
+                        $return[$key.'i'.$key_item]['item_um'] = $value_item->invline_um;
+                        $return[$key.'i'.$key_item]['item_qty'] = $value_item->invline_qty;
+                        $return[$key.'i'.$key_item]['item_rate'] = $value_item->invline_rate;
+                        $return[$key.'i'.$key_item]['item_amount'] = $value_item->invline_amount;
+                    }
+                }
+                if($info)
+                {
+                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : 'INV#'.$info->inv_id.', ';
+                }
+            }
+        }
+        $data['_item']  = Item::get_all_category_item([1,4,5]);
+        $data['_transactions'] = $return;
+        $data['remarks'] = $remarks;
+
+        return view('member.warehousev2.customer_wis.applied_transaction', $data);
     }
 }

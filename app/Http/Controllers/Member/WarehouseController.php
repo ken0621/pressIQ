@@ -989,7 +989,7 @@ class WarehouseController extends Member
             //INSERT TO tbl_warehouse
             $ins_warehouse["warehouse_name"]    = Request::input("warehouse_name");
             $ins_warehouse["warehouse_address"] = Request::input("warehouse_address");
-            $ins_warehouse["warehouse_parent_id"] = Request::input("warehouse_parent_id");
+            $ins_warehouse["warehouse_parent_id"] = Request::input("warehouse_parent_id") != null ? Request::input("warehouse_parent_id") : 0;
             $ins_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
             $ins_warehouse["warehouse_created"] = Carbon::now();
 

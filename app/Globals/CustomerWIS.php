@@ -41,6 +41,14 @@ class CustomerWIS
 
         return $return;
     }
+    public static function get_inv($shop_id, $inv_id)
+    {
+        return Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('inv_id', $inv_id)->first();
+    }
+    public static function get_inv_item($shop_id, $inv_id)
+    {
+        return Tbl_customer_invoice_line::invoice()->where('inv_shop_id', $shop_id)->where('invline_inv_id', $inv_id)->get();
+    }
     public static function settings($shop_id)
     {
         return Tbl_settings::where('settings_key','customer_wis')->where('shop_id', $shop_id)->value('settings_value');

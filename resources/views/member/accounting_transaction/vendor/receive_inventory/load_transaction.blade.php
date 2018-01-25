@@ -8,7 +8,7 @@
             <div class="clearfix modal-body"> 
                 <div class="form-group po-div">
                     <div class="col-md-12">
-                        <h4> <i class="fa fa-caret-down"></i> Purchase Order</h4>
+                        <h4> <i class="fa fa-caret-down"></i> Purchase Order </h4>
                     </div>
                     <div class="col-md-12">
                         @if(count($_po) > 0)
@@ -22,12 +22,14 @@
                             </thead>
                             <tbody>
                                 @foreach($_po as $po)
-                                <tr class="{{ $total_po_amount += $po->po_overall_price}}">
-                                    <td class="text-center">
-                                        <input type="checkbox" class="td-check-received-po td-po-amount" name="apply_po_id[{{$po->po_id}}]" value="{{$po->po_id}}" data-content="{{$po->po_overall_price}}" {{isset($_applied_po_id[$po->po_id]) ? 'checked' : ''}}></td>
-                                    <td class="text-center" value="{{$po->transaction_refnum != '' ? $po->transaction_refnum : $po->po_id}}">{{$po->transaction_refnum != "" ? $po->transaction_refnum : $po->po_id}}</td>
-                                    <td class="text-right" value="{{currency('PHP',$po->po_overall_price)}}">{{currency('PHP',$po->po_overall_price)}}</td>
-                                </tr>
+                                    @if($po->po_balance != 0)
+                                    <tr class="{{ $total_po_amount += $po->po_balance}}">
+                                        <td class="text-center">
+                                            <input type="checkbox" class="td-check-received-po td-po-amount" name="apply_po_id[{{$po->po_id}}]" value="{{$po->po_id}}" data-content="{{$po->po_balance}}" {{isset($_applied_po_id[$po->po_id]) ? 'checked' : ''}}></td>
+                                        <td class="text-center" value="{{$po->transaction_refnum != '' ? $po->transaction_refnum : $po->po_id}}">{{$po->transaction_refnum != "" ? $po->transaction_refnum : $po->po_id}}</td>
+                                        <td class="text-right" value="{{currency('PHP',$po->po_balance)}}">{{currency('PHP',$po->po_balance)}}</td>
+                                    </tr>
+                                    @endif
                                 @endforeach
                                 <tr>
                                     <td colspan="2" class="text-right"><b> Total PO Amount</b> </td>

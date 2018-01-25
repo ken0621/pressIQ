@@ -84,47 +84,29 @@ class TransactionPurchaseOrder
 
     public static function getOpenPO($shop_id, $vendor_id)
     {
-        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', 0)->get();
+        $data = Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', 0)->get();
+
+        foreach ($data as $key => $value)
+        {
+            $data[$key]->po_balance = Self::getPOBalance($shop_id, $vendor_id, $value->po_id);
+        }
+        return $data;
     }
 
-    public static function getPO($shop_id, $vendor_id)
+    public static function getPOBalance($shop_id, $vendor_id, $po_id)
     {        
-        /*$a = Tbl_purchase_order_line::PO()->where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->get();
-
-        $b = null;
-        foreach ($a as $key => $value) {
-            $b[$key]['po_id'] = $key;
-            $b[$key]['val'] = $value;
-            //$value['balance'] = $value->poline_qty * $value->poline_rate; 
-        }
-
-        return $b;*/
-
-        $data = Self::getOpenPO($shop_id, $vendor_id);
-
-        foreach ($data as $key)
-        {
-            $po_line = Tbl_purchase_order_line::where('poline_po_id', $key->po_id)->get();
-
-            foreach ($po_line as $key2) 
-            {
-                $key2['balance'] = $key2->poline_qty * $key2->poline_rate;
-               
-                //$po[$key2]['balance'] = $value->poline_qty * $value->poline_rate;
-            }
-
-            //$key['balance'] = $po;
-            /*foreach ($key['balance'] as $key3 => $value2)
-            {
-                $amount += $value2;
-            }*/ 
-
-        }
-       
-       return $key2;
+        $data = Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', 0)->where('po_id', $po_id)->first();
+        $po_line = Tbl_purchase_order_line::where('poline_po_id', $data->po_id)->get();
         
-    }   //dd($return);
+        $poline_amount = null;
+        foreach ($po_line as $key => $value)
+        {
+            $balance = $value->poline_qty * $value->poline_rate;
+            $poline_amount += $balance;
+        }
 
+        return $poline_amount;
+    }
     public static function postInsert($shop_id, $insert, $insert_item)
 	{
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);
@@ -303,6 +285,7 @@ class TransactionPurchaseOrder
         {
             $receivedline = Tbl_receive_inventory_line::where('riline_ri_id', $ri_id)->where('riline_ref_name', 'purchase_order')->where('riline_item_id', $value->poline_item_id)->first();
             $update['poline_qty'] = $value->poline_qty - $receivedline->riline_qty;
+
             $poline_id = Tbl_purchase_order_line::where('poline_id', $value->poline_id)->update($update);
             
             if($update['poline_qty'] <= 0)

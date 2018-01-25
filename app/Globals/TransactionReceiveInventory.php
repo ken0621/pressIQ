@@ -165,11 +165,13 @@ class TransactionReceiveInventory
             $itemline[$key]['riline_rate']         = $value['item_rate'];
             $itemline[$key]['riline_amount']       = $value['item_amount'];
 
+            TransactionPurchaseOrder::checkPoQty($value['item_ref_id'], $receive_inventory_id);
+
         }
         if(count($itemline) > 0)
         {
             $return = Tbl_receive_inventory_line::insert($itemline);   
-            TransactionPurchaseOrder::checkPoQty($value['item_ref_id'], $receive_inventory_id);
+            
             Tbl_bill::where('bill_shop_id', $shop_id)->where('bill_ri_id', $receive_inventory_id)->first();
         }
 

@@ -48,44 +48,51 @@
 
     <div id="requestdemo" class="wrapper-2" style="background-image: url('/themes/{{ $shop_theme }}/img/wrapper2-image.jpg')">
         <div class="container">
+                @if (session('Demo_message'))
+                    <div class="alert alert-success">
+                        {{ session('Demo_message') }}
+                    </div>
+                 @endif
             <div class="title-container">
                 <span class="title">Request a free demo of Press IQ!</span><span class="icon"><img src="/themes/{{ $shop_theme }}/img/wrapper-2-icon.png"></span>
             </div>
+            <form action="Post"> 
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="form-group">
                         <div class="title">Name: *</div>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" id="name" name="name" required>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <div class="title">Company: *</div>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" id="company" name="company" required>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <div class="title">Email: *</div>
-                        <input type="text" class="form-control">
+                        <input type="Email" class="form-control" id="email" name="email" required>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <div class="title">Phone Number: *</div>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" id="number" name="number" required>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
                         <div class="title">Message: *</div>
-                        <textarea type="text" class="form-control text-message"></textarea>
+                        <textarea type="text" class="form-control text-message" id="message" name="message"></textarea>
                     </div>
                 </div>
                 <div class="button-container">
-                    <a href="#">SEND</a>
+                    <button type="submit" formaction="/demo/send">SEND</button>
                 </div>
             </div>
+            </form>
         </div>
     </div>
 

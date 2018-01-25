@@ -69,6 +69,7 @@ use App\Models\Tbl_tour_wallet;
 use App\Models\Tbl_press_release_recipient;
 use App\Models\Tbl_pressiq_press_releases;
 use App\Models\Tbl_pressiq_user;
+use App\Models\Tbl_pressiq_demo;
 
 use App\Models\Tbl_item_redeemable_points;
 use App\Models\Tbl_item_redeemable_request;
@@ -504,12 +505,32 @@ class ShopMemberController extends Shop
         Mail::send('emails.Contact_us',$contactus_info, function($message) use ($contactus_info)
         {
             $message->from($contactus_info["explode_email"][0] . '@press-iq.com',$contactus_info['contactus_email']);
-            $message->to("oliverbacsal@gmail.com");
+            $message->to("marketing@press-iq.com");  
             $message->subject($contactus_info['contactus_subject']);
            
         });
         Session::flash('message_concern', 'Message Successfully Sent!');
         return Redirect::back();
+    }
+
+    public function send_demo()   
+    {
+        $demo_info["demo_name"]             =request('name');
+        $demo_info["demo_company"]          =request('company');
+        $demo_info["demo_email"]            =request('email');
+        $demo_info["demo_phone_number"]     =request('number');
+        $demo_info["demo_message"]          =request('message');
+    
+        $demo_info["explode_email"] = explode("@", $demo_info['demo_email']);
+
+        Mail::send('emails.demo_request',$demo_info, function($message) use ($demo_info)
+        {
+           $message->from($demo_info["explode_email"][0] . '@press-iq.com',$demo_info['demo_email']);
+           $message->to('oliverbacsal@gmail.com');  
+           
+        });
+        Session::flash('Demo_message', 'Demo Request Successfully Sent!');
+        return Redirect::back();  
     }
 
     public function press_release_save_as_draft(Request $request)

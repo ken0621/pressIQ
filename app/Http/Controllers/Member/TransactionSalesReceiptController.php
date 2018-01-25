@@ -86,8 +86,12 @@ class TransactionSalesReceiptController extends Member
 			}
 		}
 		$return = null;
-		$warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
-		$validate = AccountingTransaction::inventory_validation('consume', $this->user_info->shop_id, $warehouse_id, $insert_item);
+		$validate = null;
+		if(CustomerWIS::settings($shop_id) == 0)
+		{
+			$warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+			$validate = AccountingTransaction::inventory_validation('consume', $this->user_info->shop_id, $warehouse_id, $insert_item);
+		}
 		if(!$validate)
 		{
 			$return = null;
@@ -145,8 +149,12 @@ class TransactionSalesReceiptController extends Member
 			}
 		}
 		$return = null;
-		$warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
-		$validate = AccountingTransaction::inventory_validation('consume', $this->user_info->shop_id, $warehouse_id, $insert_item);
+		$validate = null;
+		if(CustomerWIS::settings($shop_id) == 0)
+		{
+			$warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+			$validate = AccountingTransaction::inventory_validation('consume', $this->user_info->shop_id, $warehouse_id, $insert_item);
+		}
 		if(!$validate)
 		{
 			$return = null;
@@ -179,5 +187,10 @@ class TransactionSalesReceiptController extends Member
 		$data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
 		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
 		return view("member.accounting_transaction.customer.sales_receipt.load_transaction", $data);
+	}
+	
+	public function getPrint(Request $request)
+	{
+		dd("Under Maintenance");
 	}
 }

@@ -11,6 +11,7 @@ use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_requisition_slip;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_receive_inventory;
+use App\Models\Tbl_customer_wis;
 use App\Models\Tbl_pay_bill;
 use App\Models\Tbl_bill;
 use App\Models\Tbl_write_check;

@@ -27,6 +27,7 @@
                           <li><a class="select-action" code="sedit">Save & Edit</a></li>
                           <li><a class="select-action" code="sprint">Save & Print</a></li>
                           <li><a class="select-action" code="snew">Save & New</a></li>
+                          <li><a class="select-action" code="swis">Save & Create WIS</a></li>
                         </ul>
                     </div>
                 </div>

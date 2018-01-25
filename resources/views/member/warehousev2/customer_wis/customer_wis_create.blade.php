@@ -37,14 +37,13 @@
         <div class="form-group">
             <div class="col-md-4">
                 <label>WIS Number</label>
-                <input type="text" name="cust_wis_number" class="form-control" required value="{{ $transaction_refnum != '' ? $transaction_refnum : (isset($wis->transaction_refnum) ==''? 'WIS20171219-00010' : $wis->transaction_refnum) }}">
+                <input type="text" name="cust_wis_number" class="form-control" required value="{{isset($wis) ? $wis->transaction_refnum : $transaction_refnum}}">
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-4">
                 <select class="form-control droplist-customer input-sm pull-left" name="customer_id" data-placeholder="Select a Customer" required>
-                    @include('member.load_ajax_data.load_customer', ['customer_id' => isset($wis) ? $wis->destination_customer_id : (isset($applied) ? $applied->inv_customer_id : '') ]);
-                  
+                    @include('member.load_ajax_data.load_customer', ['customer_id' => isset($wis) ? $wis->destination_customer_id : (isset($applied) ? $applied->inv_customer_id : '') ])
                 </select>
             </div>
             <div class="col-md-4">

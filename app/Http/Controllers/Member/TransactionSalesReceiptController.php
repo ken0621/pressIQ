@@ -21,6 +21,7 @@ use App\Globals\AccountingTransaction;
 use Session;
 use Carbon\Carbon;
 use App\Globals\Pdf_global;
+use App\Globals\CustomerWIS;
 
 class TransactionSalesReceiptController extends Member
 {
@@ -87,7 +88,7 @@ class TransactionSalesReceiptController extends Member
 		}
 		$return = null;
 		$validate = null;
-		if(CustomerWIS::settings($shop_id) == 0)
+		if(CustomerWIS::settings($this->user_info->shop_id) == 0)
 		{
 			$warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
 			$validate = AccountingTransaction::inventory_validation('consume', $this->user_info->shop_id, $warehouse_id, $insert_item);

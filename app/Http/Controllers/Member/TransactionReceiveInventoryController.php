@@ -73,7 +73,6 @@ class TransactionReceiveInventoryController extends Member
             $data['ri'] = TransactionReceiveInventory::info($this->user_info->shop_id,$receive_id);
             $data['_riline']= TransactionReceiveInventory::info_item($receive_id);
             $data['action']     = '/member/transaction/receive_inventory/update-receive-inventory';
-            //dd($data['_riline']);
         }
         return view('member.accounting_transaction.vendor.receive_inventory.receive_inventory', $data);
     }
@@ -246,11 +245,11 @@ class TransactionReceiveInventoryController extends Member
                 }
             }
         }
-        //dd($return);
-        $data['_po']   = $return;
+
+        $data['_po']     = $return;
         $data['remarks'] = $remarks;
-        $data['_um']   = UnitMeasurement::load_um_multi();
-        $data['_item'] = Item::get_all_category_item();
+        $data['_um']     = UnitMeasurement::load_um_multi();
+        $data['_item']   = Item::get_all_category_item();
 
         return view('member.accounting_transaction.vendor.purchase_order.po_load_item_session', $data);
     }

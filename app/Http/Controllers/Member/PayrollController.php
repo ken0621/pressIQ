@@ -5274,6 +5274,10 @@ class PayrollController extends Member
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
           $data['_shift_code']     = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
 
+          $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+
           return view('member.payroll.modal.modal_create_payroll_group', $data);
      }
 
@@ -5496,7 +5500,11 @@ class PayrollController extends Member
           // {
           //   Tbl_payroll_group_rest_day::insert($insert_extra_day);
           // }
-
+          $_selected_employee = Request::input('selected_employee');
+          foreach ($_selected_employee as $key => $selected_employee) 
+          {
+        
+          }
 
           $data['_data']           = array();
           $data['selected']   = $group_id;

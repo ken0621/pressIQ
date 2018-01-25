@@ -812,7 +812,7 @@ class Warehouse2
         return $validate_consume;
     }
 
-    public static function inventory_delete_inventory($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info)
+    public static function inventory_delete_inventory_refill($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info)
     {
         /* DELETE ALL INVENTORY */
         $get = Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
@@ -843,6 +843,31 @@ class Warehouse2
                                               ->delete();
         }
 
+    }
+
+    public static function update_inventory_consume($shop_id, $warehouse_id, $ref_name, $ref_id)
+    {
+        $get = Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                 ->where("record_consume_ref_name", $ref_name)
+                                                 ->where("record_consume_ref_id", $ref_id)
+                                                 ->where("record_count_inventory", 1)
+                                                 ->get();
+        if(count($get) > 0)
+        {
+            foreach ($get as $key => $value) 
+            {
+                $update['record_inventory_status'] = 0;
+                $update['record_consume_ref_name'] = null;    
+                $update['record_consume_ref_id'] = 0;
+
+                Tbl_warehouse_inventory_record_log::where('record_log_id', $value->record_log_id)->update($update);
+            }
+        }
+        Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                 ->where("record_consume_ref_name", $ref_name)
+                                                 ->where("record_consume_ref_id", $ref_id)
+                                                 ->where("record_count_inventory", 0)
+                                                 ->delete();
     }
     public static function consume_bulk_src_ref($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item, $ref_src_name = '', $ref_src_id = 0)
     {

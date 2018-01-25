@@ -4,7 +4,7 @@ use PDF;
 use App;
 class Pdf_global
 {
-	public static function show_pdf($html, $orient = null, $footer = '', $paper_size = 'a4')
+    public static function show_pdf($html, $orient = null, $footer = '', $paper_size = 'a4')
 	{
 		$html_b = Pdf_global::bootstrap($html);
         $pdf = App::make('snappy.pdf.wrapper');
@@ -42,16 +42,16 @@ class Pdf_global
 	{
 		$html_b = Pdf_global::bootstrap($html);
 		// return $html_b;
-        $pdf = App::make('snappy.image.wrapper');
-        $pdf->loadHTML($html_b);
-        return $pdf->download('card.jpg');
+                $pdf = App::make('snappy.image.wrapper');
+                $pdf->loadHTML($html_b);
+                return $pdf->download('card.jpg');
 	}
 	public static function show_image_url($html)
 	{
 		$html_b = Pdf_global::bootstrap($html);
-        $pdf = App::make('snappy.image.wrapper');
-        $pdf->loadHTML($html_b);
-        return $pdf->download('card.jpg');
+                $pdf = App::make('snappy.image.wrapper');
+                $pdf->loadHTML($html_b);
+                return $pdf->download('card.jpg');
 	}
 	public static function bootstrap($html)
 	{

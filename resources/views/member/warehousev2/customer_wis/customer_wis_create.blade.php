@@ -86,6 +86,8 @@
                                 <th width="10"></th>
                             </tr>
                         </thead>
+                        <tbody class="draggable tbody-item applied-transaction-list">
+                        </tbody>
                         <tbody class="draggable tbody-item">
                             @if(isset($wis))
                                 @foreach($_wisline as $wisline)
@@ -146,7 +148,7 @@
             <div class="col-md-6">
                 <label>Remarks</label>
                 <div>
-                    <textarea required class="form-control" name="cust_wis_remarks">{{ isset($wis->cust_wis_remarks)? $wis->cust_wis_remarks : ''}}</textarea>
+                    <textarea required class="form-control remarks-wis" name="cust_wis_remarks">{{ isset($wis->cust_wis_remarks)? $wis->cust_wis_remarks : ''}}</textarea>
                 </div>
             </div>
             <div class="col-md-6">

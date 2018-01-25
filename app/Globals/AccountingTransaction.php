@@ -20,6 +20,7 @@ use Carbon\Carbon;
 use Validator;
 use DB;
 use App\Globals\Accounting;
+use App\Globals\CustomerWIS;
 use App\Globals\Item;
 use App\Globals\Warehouse2;
 /**
@@ -384,7 +385,12 @@ class AccountingTransaction
 	}
 	public static function inventory_refill_update($shop_id, $warehouse_id,  $item_info, $ref_name, $ref_id)
 	{
-		Warehouse2::inventory_delete_inventory($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info);
+		Warehouse2::inventory_delete_inventory_refill($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info);
+	}
+
+	public static function inventory_consume_update($shop_id, $warehouse_id, $ref_name, $ref_id)
+	{
+		Warehouse2::update_inventory_consume($shop_id, $warehouse_id, $ref_name, $ref_id);
 	}
 	public static function inventory_validation($type = 'refill', $shop_id, $warehouse_id, $item_info, $remarks = '')
 	{

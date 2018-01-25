@@ -189,8 +189,7 @@ class TransactionReceiveInventoryController extends Member
         $data['_dm'] = TransactionDebitMemo::getOpenDM($this->user_info->shop_id, $request->vendor);
         $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
         $data['_applied_po_id'] = Session::get("applied_po");
-        //$data['_po'] = TransactionPurchaseOrder::getPO($this->user_info->shop_id, $request->vendor);
-        //dd($data['_po']);
+        
         return view('member.accounting_transaction.vendor.receive_inventory.load_transaction', $data);
     }
     public function postAppliedTransaction(Request $request)
@@ -204,8 +203,8 @@ class TransactionReceiveInventoryController extends Member
             foreach ($apply_po_id as $key => $value)
             {
                 $_applied_po_id[$key] = $value; // to retain checked po id
-                
             }   
+
             Session::put('applied_po', $_applied_po_id);
         }
         
@@ -217,26 +216,39 @@ class TransactionReceiveInventoryController extends Member
     }
     public function getLoadSelectedPo(Request $request)
     {
-        $ri_id = $request->ri_id;
         $applied_po_id = Session::get('applied_po');
 
         if(count($applied_po_id) > 0)
         {
-            $_applied_po = null;
             foreach ($applied_po_id as $key => $value)
             {
-                $_applied_po[$key] = Tbl_purchase_order_line::where('poline_po_id',$value)->where('poline_qty', '!=', '0')->get();
-                
-                $_applied_po_line = null;
-                foreach ($_applied_po as $key1 => $value1)
-                {
-                    $_applied_po_line[$key] = $value1;
+                $_applied_poline = TransactionPurchaseOrder::info_item($value);
+                $info = TransactionPurchaseOrder::info($this->user_info->shop_id,$value);
 
+                $remarks = null;
+                foreach ($_applied_poline as $poline_key => $poline_value) 
+                {
+                    $type = Item::get_item_type($poline_value->poline_item_id);
+                    if($type == 1 || $type == 4 || $type == 5 )
+                    {
+                        $return[$key.'i'.$poline_key]['poline_po_id'] = $poline_value->poline_po_id;
+                        $return[$key.'i'.$poline_key]['item_id'] = $poline_value->poline_item_id;
+                        $return[$key.'i'.$poline_key]['item_description'] = $poline_value->poline_description;
+                        $return[$key.'i'.$poline_key]['item_um'] = $poline_value->poline_um;
+                        $return[$key.'i'.$poline_key]['item_qty'] = $poline_value->poline_qty;
+                        $return[$key.'i'.$poline_key]['item_rate'] = $poline_value->poline_rate;
+                        $return[$key.'i'.$poline_key]['item_amount'] = $poline_value->poline_amount;
+                    }
+                }    
+                if($info)
+                {
+                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : 'PO#'.$info->po_id.', ';
                 }
             }
-            $data['_po']   = $value1;
         }
-        
+        //dd($return);
+        $data['_po']   = $return;
+        $data['remarks'] = $remarks;
         $data['_um']   = UnitMeasurement::load_um_multi();
         $data['_item'] = Item::get_all_category_item();
 

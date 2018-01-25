@@ -35,7 +35,9 @@ function customer_wis_create()
 		event_button_action_click();
 		action_date_picker();
 		action_compute();
+		event_load_transaction();
 		action_reassign_number();
+		event_load_customer_transaction();
 	}
 
 	function action_date_picker()
@@ -70,6 +72,14 @@ function customer_wis_create()
 				$(this).parent().remove();
 			}
 		});
+	}
+	function event_load_customer_transaction()
+	{
+		$customer_id = $('.droplist-customer').val();
+		if($customer_id)
+		{
+			action_load_open_transaction($customer_id);
+		}
 	}
 	function action_initialize_select()
 	{
@@ -581,7 +591,23 @@ function customer_wis_create()
 			$('.remarks-wis').html($('.inv-remarks').val());
 		});
 	}
-
+	function event_load_transaction()
+	{
+		$trans_id = $(".sales-id").val();
+		console.log($trans_id);
+		if($trans_id)
+		{
+			$.ajax({
+				url : '/member/customer/wis/ajax-apply-transaction',
+				type : 'get',
+				data : {apply_transaction : $trans_id},
+				success : function ()
+				{
+					load_applied_transaction();
+				}
+			});
+		}
+	}
 	this.load_applied_transaction = function()
 	{
 		load_applied_transaction();

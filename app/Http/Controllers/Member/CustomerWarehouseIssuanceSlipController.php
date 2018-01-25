@@ -17,6 +17,7 @@ use App\Globals\TransactionSalesInvoice;
 use App\Globals\TransactionSalesReceipt;
 use App\Globals\TransactionEstimateQuotation;
 use App\Globals\Customer;
+use App\Globals\AccountingTransaction;
 use App\Globals\WarehouseTransfer;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_customer_wis_item_line;
@@ -59,6 +60,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $data['_item']  = Item::get_all_category_item([1,4,5]);
         $data["_customer"]  = Customer::getAllCustomer();
         $data['action']     = "/member/customer/wis/create-submit";
+        $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'warehouse_issuance_slip');
 
         $data['c_id'] = $request->customer_id;
         //dd($data['c_id']);
@@ -69,6 +71,11 @@ class CustomerWarehouseIssuanceSlipController extends Member
             $data["_wisline"] = CustomerWIS::get_wis_line($cust_wis_id);
             $data['action']     = "/member/customer/wis/update-submit";
         }
+        if($request->ids)
+        {
+            $data['applied'] = CustomerWIS::get_inv($this->user_info->shop_id, $request->ids);
+        }
+        // dd(Session::get('applied_transaction'));
         Session::forget('applied_transaction');
 
         return view('member.warehousev2.customer_wis.customer_wis_create',$data);
@@ -119,14 +126,14 @@ class CustomerWarehouseIssuanceSlipController extends Member
         }
 
         $val = CustomerWIS::customer_create_wis($shop_id, $remarks, $ins_wis, $_item, $insert_item);
-
+               CustomerWIS::applied_transaction($shop_id);
         $data = null;
         if(is_numeric($val))
         {
             $data['status'] = 'success';
             $data['call_function'] = 'success_create_customer_wis';
             $data['status_message'] = 'Success';
-
+            Session::forget('applied_transaction');
 
             if($btn_action == 'sclose')
             {
@@ -302,6 +309,13 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $return['status'] = "success";
 
         return json_encode($return);
+    }
+    public function getAjaxApplyTransaction(Request $request)
+    {
+        $_transaction[$request->apply_transaction] = $request->apply_transaction;
+        Session::put('applied_transaction', $_transaction);
+
+        return json_encode('success');
     }
     public function getLoadAppliedTransaction(Request $request)
     {

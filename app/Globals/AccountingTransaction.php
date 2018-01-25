@@ -252,6 +252,10 @@ class AccountingTransaction
 		{
 			$return = '/member/transaction/'.$transaction_type.'/create';
 		}
+		elseif($btn_action == 'swis')
+		{
+			$return = '/member/customer/wis/create?ids='.$transaction_id;
+		}
 
 		return $return;	
 	}
@@ -296,6 +300,10 @@ class AccountingTransaction
 		if($transaction_type == 'sales_order')
 		{
 			$get = Tbl_customer_estimate::where('est_shop_id', $shop_id)->where('is_sales_order',1)->orderBy('est_id','DESC')->first();
+		}
+		if($transaction_type == 'warehouse_issuance_slip')
+		{
+			$get = Tbl_customer_wis::where('cust_wis_shop_id', $shop_id)->orderBy('cust_wis_id','DESC')->first();
 		}
 		if($transaction_type == 'purchase_requisition')
 		{

@@ -900,8 +900,8 @@ class Seed_manual
             $insert[1]['separator'] = "-";
 
             $insert[2]['shop_id']   = $shop_id; 
-            $insert[2]['key']       = "customer_warehouse_issuance_slip";
-            $insert[2]['prefix']    = "WC"; 
+            $insert[2]['key']       = "warehouse_issuance_slip";
+            $insert[2]['prefix']    = "WIS"; 
             $insert[2]['other']     = "Y/m/d";
             $insert[2]['separator'] = "-";
 

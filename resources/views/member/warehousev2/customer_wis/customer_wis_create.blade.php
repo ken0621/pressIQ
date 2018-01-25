@@ -3,7 +3,9 @@
 
 <form class="global-submit form-to-submit-add" action="{{$action}}" method="post">
     <input type="hidden" class="button-action" name="button_action" value="">
+
     <input type="hidden" name="cust_wis_id" value="{{ $wis->cust_wis_id or '' }}">
+    <input type="hidden" name="" class="sales-id" value="{{ Request::input('ids') }}">
 
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
@@ -35,18 +37,18 @@
         <div class="form-group">
             <div class="col-md-4">
                 <label>WIS Number</label>
-                <input type="text" name="cust_wis_number" class="form-control" required value="{{ isset($wis->transaction_refnum) ==''? 'WIS20171219-00010' : $wis->transaction_refnum }}">
+                <input type="text" name="cust_wis_number" class="form-control" required value="{{ $transaction_refnum != '' ? $transaction_refnum : (isset($wis->transaction_refnum) ==''? 'WIS20171219-00010' : $wis->transaction_refnum) }}">
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-4">
                 <select class="form-control droplist-customer input-sm pull-left" name="customer_id" data-placeholder="Select a Customer" required>
-                    @include('member.load_ajax_data.load_customer', ['customer_id' => isset($wis) ? $wis->destination_customer_id : (isset($c_id) ? $c_id : '') ]);
+                    @include('member.load_ajax_data.load_customer', ['customer_id' => isset($wis) ? $wis->destination_customer_id : (isset($applied) ? $applied->inv_customer_id : '') ]);
                   
                 </select>
             </div>
             <div class="col-md-4">
-                 <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{isset($wis) ? $wis->cust_email : ''}}"/>
+                 <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{isset($wis) ? $wis->cust_email : (isset($applied) ? $applied->inv_customer_email : '')}}"/>
             </div>
             <div class="col-sm-4 text-right open-transaction" style="display: none;">
                 <h4><a class="popup popup-link-open-transaction" size="md" link="/member/customer/wis/load-transaction?customer_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
@@ -56,7 +58,7 @@
             <div class="col-md-4">
                 <label>Ship to</label>
                 <div>
-                    <textarea required class="form-control customer-billing-address" name="customer_address" value="">{{ isset($wis->destination_customer_address) ? $wis->destination_customer_address : ''}}</textarea>
+                    <textarea required class="form-control customer-billing-address" name="customer_address" value="">{{ isset($wis->destination_customer_address) ? $wis->destination_customer_address : (isset($applied) ? $applied->inv_customer_billing_address : '')}}</textarea>
                 </div>
             </div>
             <div class="col-md-4">

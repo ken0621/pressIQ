@@ -14,25 +14,26 @@
                 <div class="col-md-6">
                     <div class="product-image-holder">
                         <div class="product-container slider-for">
-                            <img src="/themes/{{ $shop_theme }}/img/don-organic-image.jpg">
+                            <img src="/themes/{{ $shop_theme }}/img/red-rice.jpg">
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="title-container">
-                        <span class="title-blue">Don Organics </span><span class="title-orange">Coffee Scrub</span>
+                        <span class="title-blue">Don Organics </span><span class="title-orange">Red Rice Scrub</span>
                     </div>
                     <div class="subtitle-container">100% Organic</div>
                     <div class="details-container">
-                        <p>Most of us love coffee in the morning. It helps us start our day right. For some, breakfast won’t be complete without a hot cup of it.</p>
-                        <p>We love the aroma and the zest of energy it gives us. Apart from this, there are good benefits of coffee if you put it on your skin.</p>
-                        <p>Coffee grounds have incredible benefit to your skin especially when you combine it with organic and natural ingredients to make a coffee scrub.</p>
+                        <p>Peeling regularly is one way of keeping our skin young, hydrated and healthy. This helps in getting rid of dead cells and improving blood circulation.</p>
+                        <p>Red Rice has exfoliating, antioxidant, anti-inflammatory and emollient properties which can soften the skin, hydrate, and relive inflammations.</p>
+                        <p>Red Rice has natural anti aging and oil-absorbing properties which makes them good for acne-prone or oily and dull mature skin. </p>
                     </div>
                     <div class="ingredients-container">
                         <div class="title">Ingredients</div>
-                        <p>Freshly-ground Robusta coffee</p>
+                        <p>Red Rice</p>
+                        <p>Cinnamon</p>
                         <p>Sea salt</p>
-                        <p>Cold-pressed virgin coconut oil</p>
+                        <p>Cold-pressed Virgin Coconut oil</p>
                         <p>Vitamin E</p>
                         <p>Brown Sugar</p>
                         <p>Raw Honey</p>
@@ -107,7 +108,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product_2.css">
 @endsection
 
 @section("script")

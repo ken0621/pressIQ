@@ -93,7 +93,7 @@
                             <div class="percent-container">{{ get_content($shop_theme_info, "home", "home_percent_of_product_2") }}</div>
                             <div class="product-title-container">{{ get_content($shop_theme_info, "home", "home_p4ward_product_2") }}</div>
                             <div class="product-image"><img src="{{ get_content($shop_theme_info, "home", "home_image_product_2") }}"></div>
-                            <div class="button-container"><a href="#"><button>See Benefits</button></a></div>
+                            <div class="button-container"><a href="/product2"><button>See Benefits</button></a></div>
                         </div>
                     </div>
                 </div>

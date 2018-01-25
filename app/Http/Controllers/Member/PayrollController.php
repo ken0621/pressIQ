@@ -91,6 +91,7 @@ use App\Models\Tbl_payroll_13th_month_basis;
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
 use App\Globals\Utilities;
+use App\Globals\Pdf_global;
 use DateTime;
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_shift_time;
@@ -291,6 +292,26 @@ class PayrollController extends Member
          
           return view('member.payroll.employeelist', $data);
      }   
+
+     public function export_to_pdf_employee()
+     {
+
+          $active_status[0]    = 1;
+          $active_status[1]    = 2;
+          $active_status[2]    = 3;
+          $active_status[3]    = 4;
+          $active_status[4]    = 5;
+          $active_status[5]    = 6;
+          $active_status[7]    = 7;
+
+          $separated_status[0] = 8;
+          $separated_status[1] = 9;
+
+          $data['_active']     = Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $active_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_last_name')->get();
+          
+          $pdf = view('member.payroll.employeelist_pdf', $data);
+          return Pdf_global::show_pdf($pdf, 'landscape');
+     }
 
 
      /* IMPORT EMPLOYEE DATA FROM EXCEL  START*/
@@ -4162,7 +4183,7 @@ class PayrollController extends Member
           foreach($payroll_employee_id as $key => $emp_id)
           {
                // dd($emp_id['payroll_employee_id']);     
-               $empdata = Tbl_payroll_leave_schedulev2::getviewleavedata($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+               $empdata = Tbl_payroll_leave_schedulev2::getviewleavedata2($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'],Self::shop_id())->get();
     
                array_push($datas, $empdata); 
           }
@@ -4644,16 +4665,17 @@ class PayrollController extends Member
           $datas     = array();                                        
           foreach($payroll_employee_id as $key => $emp_id)
           {
-               $empdata = Tbl_payroll_leave_schedulev2::getannualleave($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'],12)->get();
 
-               array_push($datas, $empdata); 
+                       $empdata = Tbl_payroll_leave_schedulev2::getannualleave($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+                       
+               array_push($datas, $empdata);
+
           }
 
           dd($datas);
-
-
-
-          return view("member.payroll.modal.modal_leave_annual_report");
+   
+          $data['leave_report'] = $datas;
+          return view("member.payroll.modal.modal_leave_annual_report",$data);
      }
      //end reporting v2
 
@@ -5032,7 +5054,8 @@ class PayrollController extends Member
 
           if($payroll_leave_pay_value == 1)
           {
-                $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())
+        
+                    $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())
                     ->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
                     ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_tempv2.payroll_leave_temp_id','=','tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
                     ->leftjoin('tbl_payroll_leave_schedulev2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
@@ -5042,10 +5065,29 @@ class PayrollController extends Member
                     ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')                                                                                           
                     ->select(DB::raw('*, tbl_payroll_leave_employee_v2.payroll_leave_employee_id as leave_employee_id, tbl_payroll_leave_employee_v2.payroll_leave_employee_id as payroll_leave_employee_id_2'))
                     ->get();
+               
+
           }
           else
           {
-               $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())->select(DB::raw('*, tbl_payroll_employee_basic.payroll_employee_id as payroll_leave_employee_id_3'))->get();
+               if($leave_id == 0)
+               {
+                     $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())
+                    ->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
+                    ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_tempv2.payroll_leave_temp_id','=','tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
+                    ->leftjoin('tbl_payroll_leave_schedulev2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
+                    ->where('tbl_payroll_leave_tempv2.payroll_leave_temp_id',$leave_id)
+                    ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_is_archived', 0)
+                    ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
+                    ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')                                                                                           
+                    ->select(DB::raw('*, tbl_payroll_leave_employee_v2.payroll_leave_employee_id as leave_employee_id, tbl_payroll_leave_employee_v2.payroll_leave_employee_id as payroll_leave_employee_id_2'))
+                    ->get();
+               }
+               else
+               {
+                    $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())->select(DB::raw('*, tbl_payroll_employee_basic.payroll_employee_id as payroll_leave_employee_id_3'))->get();
+               }
+  
           }
 
           return json_encode($emp);

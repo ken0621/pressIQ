@@ -358,6 +358,23 @@ $text-dark: #272c2f;
 	padding: 5px;
 }
 
+	.btn-container
+	{
+		text-align: center;
+		font-family: $content-text;
+		font-weight: $semi-bold;
+		font-size: 13px;
+	
+		.btn-buy-a-kit
+		{
+			color: #fff;
+			background-color: #00A4E6;
+			padding: 12px 40px 12px 40px;
+			border: 2px solid #00A4E6;
+			border-radius: 2px;
+		}
+	}
+
 /* Success */
 .popup-success
 {

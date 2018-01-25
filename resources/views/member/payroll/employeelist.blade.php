@@ -19,6 +19,8 @@
         <ul class="dropdown-menu dropdown-menu-custom">
           <li><a href="#" class="popup" link="/member/payroll/employee_list/modal_create_employee" size="lg"><i class="fa fa-plus"></i>&nbsp;Create Employee</a></li>
           <li><a href="#" class="popup" link="/member/payroll/employee_list/modal_import_employee"><i class="fa fa-upload"></i>&nbsp;Import From Excel</a></li>
+          <li><a href="/member/payroll/employee_list/export_to_pdf_employee" target="_blank"><i class="fa fa-upload"></i>&nbsp;Export From PDF</a></li>
+
         </ul>
       </div>
       

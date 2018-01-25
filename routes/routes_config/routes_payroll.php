@@ -84,6 +84,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* EMPLOYEE START */
 	Route::any('/employee_list','Member\PayrollController@employee_list');
 
+	/* export to pdf */
+	Route::any('/employee_list/export_to_pdf_employee','Member\PayrollController@export_to_pdf_employee');
 	/* import from excel start */
 	Route::any('/employee_list/modal_import_employee','Member\PayrollController@modal_import_employee');
 	Route::any('/employee_list/modal_import_employee/get_201_template','Member\PayrollController@get_201_template');

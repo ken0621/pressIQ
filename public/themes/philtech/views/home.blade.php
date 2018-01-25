@@ -25,6 +25,9 @@
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.jpg">
 									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide6.jpg">
+									</div>
 								</div>
 							</div>
 						</div>
@@ -219,6 +222,9 @@
 									</div>
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide6.jpg">
 									</div>
 								</div>
 							</div>

@@ -424,7 +424,7 @@ class Warehouse2
 
         if(Inventory::allow_out_of_stock($shop_id) == 1)
         {
-            $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','<',0)->count();
+            $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','<=',0)->count();
             $total_refill_qty = $quantity;
             if($count_offset > 0)
             {
@@ -510,7 +510,7 @@ class Warehouse2
 
             }
         }
-        else if($count_offset-$running_quantity <= 0)
+        else if($count_offset - $quantity <= 0)
         {
             $update['record_count_inventory'] = 1;
             Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
@@ -1324,33 +1324,6 @@ class Warehouse2
 
         return $return;
     }
-
-
-
-    public static function update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity)
-    {
-        if($count_offset > $quantity)
-        {
-            $update_qty = abs($quantity);
-            for ($ctr_qty = 0; $ctr_qty < $update_qty; $ctr_qty++)
-            {
-                $update['record_count_inventory'] = 1;
-                $record_log_id = Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
-                                                    ->where('record_item_id', $item_id)
-                                                    ->where('record_count_inventory','<',0)->value('record_log_id');
-                Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->update($update);
-
-            }
-        }
-        else if($count_offset - $running_quantity <= 0)
-        {
-            $update['record_count_inventory'] = 1;
-            Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
-                                                    ->where('record_item_id', $item_id)
-                                                    ->where('record_count_inventory','<',0)->update($update);
-        }
-    }
-
 
     public static function consume_validation_backup($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array(), $allow_out_of_stock = false)
     {

@@ -193,7 +193,7 @@ class Billing
                 }
             }            
         }
-        die(var_dump($po_data));
+        //die(var_dump($po_data));
     }
     public static function updatePotoBill($bill_id = null, $po_id = array())
     {

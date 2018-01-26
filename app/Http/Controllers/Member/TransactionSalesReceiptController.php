@@ -51,6 +51,8 @@ class TransactionSalesReceiptController extends Member
         	$data['sales_receipt_item'] = TransactionSalesReceipt::info_item($request->id);
         }
 
+        Session::forget('applied_transaction_sr');
+
 		return view('member.accounting_transaction.customer.sales_receipt.sales_receipt',$data);
 	} 
 	public function postCreateSalesReceipt(Request $request)
@@ -83,7 +85,7 @@ class TransactionSalesReceiptController extends Member
 				$insert_item[$key]['item_discount'] 	= str_replace(',', '', $request->item_discount[$key]);
 				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
-				$insert_item[$key]['item_taxable'] 		= $request->item_taxable[$key];
+				$insert_item[$key]['item_taxable'] 		= isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
 			}
 		}
 		$return = null;
@@ -97,6 +99,7 @@ class TransactionSalesReceiptController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesReceipt::postInsert($this->user_info->shop_id, $insert, $insert_item);
+			TransactionSalesReceipt::applied_transaction($this->user_info->shop_id);
 		}
 
 		if(is_numeric($validate))
@@ -105,6 +108,7 @@ class TransactionSalesReceiptController extends Member
 			$return['status_message'] = 'Success creating sales receipt.';
 			$return['call_function'] = 'success_sales_receipt';
 			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_receipt', $validate ,$btn_action);
+			Session::forget('applied_transaction_sr');
 		}
 		else
 		{
@@ -146,7 +150,7 @@ class TransactionSalesReceiptController extends Member
 				$insert_item[$key]['item_discount'] 	= str_replace(',', '', $request->item_discount[$key]);
 				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
-				$insert_item[$key]['item_taxable'] 		= $request->item_taxable[$key];
+				$insert_item[$key]['item_taxable'] 		= isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
 			}
 		}
 		$return = null;
@@ -160,6 +164,7 @@ class TransactionSalesReceiptController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesReceipt::postUpdate($sales_receipt_id, $this->user_info->shop_id, $insert, $insert_item);
+			TransactionSalesReceipt::applied_transaction($this->user_info->shop_id);
 		}
 		if(is_numeric($validate))
 		{			
@@ -167,6 +172,7 @@ class TransactionSalesReceiptController extends Member
 			$return['status_message'] = 'Success updating sales receipt.';
 			$return['call_function'] = 'success_sales_receipt';
 			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_receipt', $validate ,$btn_action);
+			Session::forget('applied_transaction_sr');
 		}
 		else
 		{
@@ -188,6 +194,7 @@ class TransactionSalesReceiptController extends Member
 		$data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
 		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
 		$data['action'] = '/member/transaction/sales_receipt/apply-transaction';
+        $data['applied'] = Session::get('applied_transaction_sr');
 		return view("member.accounting_transaction.customer.sales_receipt.load_transaction", $data);
 	}
 

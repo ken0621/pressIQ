@@ -291,6 +291,23 @@ function sales_order()
 			num++;
 		});
 	}
+
+	this.load_applied_transaction = function()
+	{
+		load_applied_transaction();
+	}
+
+	function load_applied_transaction()
+	{
+		$('.applied-transaction-list').load('/member/transaction/sales_order/load-applied-transaction', function()
+		{
+			console.log("success");
+			action_load_initialize_select();
+			action_compute();
+			action_reassign_number();
+			$('.remarks-so').html($('.so-remarks').val());
+		});
+	}
 }
 function success_update_customer(data)
 {
@@ -321,6 +338,15 @@ function success_sales_order(data)
 	{
 		toastr.success(data.status_message);
 		location.href = data.status_redirect;
+	}
+}
+
+function success_apply_transaction(data)
+{
+	if(data.status == 'success')
+	{
+		data.element.modal("toggle");
+		sales_order.load_applied_transaction();
 	}
 }
 

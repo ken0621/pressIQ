@@ -24,7 +24,7 @@
                         <tbody>
                             @foreach($_eq as $eq)
                             <tr>
-                                <td class="text-center"><input type="checkbox" name="apply_transaction[{{$eq->est_id}}]"></td>
+                                <td class="text-center"><input type="checkbox" name="apply_transaction[{{$eq->est_id}}]" {{isset($applied[$eq->est_id]) ? 'checked' : ''}} ></td>
                                 <td class="text-center">{{$eq->transaction_refnum != "" ? $eq->transaction_refnum : $eq->est_id}}</td>
                                 <td class="text-center">{{currency('PHP',$eq->est_overall_price)}}</td>
                             </tr>
@@ -53,7 +53,7 @@
                         <tbody>
                             @foreach($_so as $so)
                             <tr>
-                                <td class="text-center"><input type="checkbox" name="apply_transaction[{{$so->est_id}}]"></td>
+                                <td class="text-center"><input type="checkbox" name="apply_transaction[{{$so->est_id}}]" {{isset($applied[$so->est_id]) ? 'checked' : ''}} ></td>
                                 <td class="text-center">{{$so->transaction_refnum != "" ? $so->transaction_refnum : $eq->est_id}}</td>
                                 <td class="text-center">{{currency('PHP',$so->est_overall_price)}}</td>
                             </tr>

@@ -25,7 +25,7 @@
                             <tr>
                                 <td class="text-center"><input type="checkbox" name=""></td>
                                 <td class="text-center">{{$so->transaction_refnum != "" ? $so->transaction_refnum : $so->est_id}}</td>
-                                <td class="text-center">{{$so->title_name.' '.$so->first_name.' '.$so->middle_name.' '.$so->last_name}}</td>
+                                <td class="text-center">{{ucfirst($so->title_name).' '.ucfirst($so->first_name).' '.ucfirst($so->middle_name).' '.ucfirst($so->last_name)}}</td>
                                 <td class="text-right">{{currency('PHP',$so->est_overall_price)}}</td>
                             </tr>
                             @endforeach

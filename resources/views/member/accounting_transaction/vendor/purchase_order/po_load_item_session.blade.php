@@ -33,24 +33,4 @@
     @endif
     @endforeach
 @endif
-<tr class="tr-draggable">
-        <input type="text" class="hidden poline_id" name="poline_id[]">
-        <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]">
-    <td class="invoice-number-td text-right">1</td>
-    <td>
-        <input type="hidden" class="poline_id" name="item_ref_name[]">
-        <input type="hidden" class="itemline_po_id" name="item_ref_id[]">
-        <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
-            @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-        </select>
-    </td>
-    <td>
-        <textarea class="textarea-expand txt-desc" readonly="true" name="item_description[]"></textarea>
-    </td>
-    <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-    <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
-    <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
-    <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-    @include("member.load_ajax_data.load_td_serial_number")
-    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-</tr>
+<input type="hidden" class="inv-remarks" name="" value="{!! $remarks or '' !!}">

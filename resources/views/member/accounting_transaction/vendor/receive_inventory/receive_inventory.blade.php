@@ -102,6 +102,8 @@
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
+                                                <tbody class="draggable tbody-item applied-po-transaction-list">
+                                                </tbody>
                                                 <tbody class="tbody-item">
                                                     @if(isset($ri))
                                                         @foreach($_riline as $riline)
@@ -126,10 +128,25 @@
                                                             </tr>
                                                         @endforeach
                                                     @endif
-                                                <tbody class="draggable tbody-item po-tbl">
-                                                @include("member.accounting_transaction.vendor.purchase_order.po_load_item_session") 
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
+                                                        <td>
+                                                        <input type="hidden" name="itemline_ref_name[]">
+                                                        <input type="hidden" name="itemline_ref_id[]">
+                                                            <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                                @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                            </select>
+                                                        </td>
+                                                        <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
+                                                        <td><select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                                        <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
+                                                            @include("member.load_ajax_data.load_td_serial_number")
+                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                    </tr>
+                                                    <tr class="tr-draggable">
+                                                        <td class="invoice-number-td text-right">2</td>
                                                         <td>
                                                         <input type="hidden" name="itemline_ref_name[]">
                                                         <input type="hidden" name="itemline_ref_id[]">
@@ -153,7 +170,11 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <label>Memo</label>
-                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" >{{isset($ri->ri_memo)? $ri->ri_memo : ''}}</textarea>
+                                        <textarea class="form-control input-sm" textarea-expand" name="vendor_memo" >{{isset($ri->ri_memo)? $ri->ri_memo : ''}}</textarea>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Remarks</label>
+                                        <textarea class="form-control input-sm remarks-wis" textarea-expand" name="vendor_reamrks" ></textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">

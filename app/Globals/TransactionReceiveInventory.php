@@ -167,7 +167,6 @@ class TransactionReceiveInventory
         if(count($itemline) > 0)
         {
             $return = Tbl_receive_inventory_line::insert($itemline);   
-            TransactionPurchaseOrder::checkPoQty($receive_inventory_id, $insert_item);
         }
 
         return $return;

@@ -2,7 +2,7 @@
     <button type="button" class="close" data-dismiss="modal">×</button>
     <h4 class="modal-title">Open Transaction - {{ $vendor->vendor_company }}</h4>
 </div>
-<form class="global-submit" action="/member/transaction/receive_inventory/applied-transaction" method="post">
+<form class="global-submit" action="/member/transaction/receive_inventory/apply-transaction" method="post">
     <div class="modal-body">
         <div class="row">
             <div class="clearfix modal-body"> 

@@ -128,31 +128,24 @@ class TransactionPurchaseOrder
         } 
     }*/
     
-    public static function getRiline($ri_id, $poline_item_id, $po_id)
-    {
-        return Tbl_receive_inventory_line::where('riline_ri_id', $ri_id)->where('riline_ref_name', 'purchase_order')->where('riline_item_id', $poline_item_id)->where('riline_ref_id',$po_id)->first();
-    }
-public static function checkPoQty($ri_id, $po_data = array())
+    public static function checkPoQty($ri_id = null, $po_data = array())
     {
         if($ri_id != null)
         {
-            // here
             foreach ($po_data as $key => $value)
             { 
-                //$data = Tbl_receive_inventory_line::where('riline_ri_id', $ri_id)->first();
-
-                Self::checkPolineQty($value['item_ref_id'], $ri_id);
-            }
+                Self::checkPolineQty($key, $ri_id);
+            }   
         }
     }
     public static function checkPolineQty($po_id, $ri_id)
     {
         $poline = Tbl_purchase_order_line::where('poline_po_id', $po_id)->get();
-        //die(var_dump($poline));
+
         $ctr = 0;
         foreach ($poline as $key => $value)
         {
-            $receivedline = Self::getRiline($ri_id, $value->poline_item_id, $po_id);
+            $receivedline = Tbl_receive_inventory_line::where('riline_ri_id', $ri_id)->where('riline_ref_name', 'purchase_order')->where('riline_item_id', $value->poline_item_id)->where('riline_ref_id',$po_id)->first();
             
             $update['poline_qty'] = $value->poline_qty - $receivedline->riline_qty;
             
@@ -165,8 +158,8 @@ public static function checkPoQty($ri_id, $po_data = array())
         }
         if($ctr >= count($poline))
         {
-            $update["po_is_billed"] = $ri_id;
-            Tbl_purchase_order::where("po_id",$po_id)->update($update);
+            $updates["po_is_billed"] = $ri_id;
+            Tbl_purchase_order::where("po_id",$po_id)->update($updates);
         }
     }
     public static function postInsert($shop_id, $insert, $insert_item)

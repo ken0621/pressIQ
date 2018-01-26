@@ -107,7 +107,14 @@ class TransactionReceiveInventoryController extends Member
             }
         }
 
+        
+
         $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
+
+        if(Session::get('applied_po') > 0)
+        {
+            TransactionPurchaseOrder::checkPoQty($validate, Session::get('applied_po'));
+        }
 
         $return = null;
         if(is_numeric($validate))
@@ -157,7 +164,7 @@ class TransactionReceiveInventoryController extends Member
                 $insert_item[$key]['item_discount']    = 0;
             }
         }
-        
+
         $validate = TransactionReceiveInventory::postUpdate($ri_id, $this->user_info->shop_id, $insert, $insert_item);
 
         $return = null;
@@ -187,26 +194,14 @@ class TransactionReceiveInventoryController extends Member
         $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
         $data['_dm'] = TransactionDebitMemo::getOpenDM($this->user_info->shop_id, $request->vendor);
         $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
-        $data['_applied_po_id'] = Session::get("applied_po");
         
+        $data['_applied_po_id'] = Session::get("applied_po");
+        $data['action'] = '/member/customer/wis/apply-transaction';
         return view('member.accounting_transaction.vendor.receive_inventory.load_transaction', $data);
     }
-    public function postAppliedTransaction(Request $request)
+    public function postApplyTransaction(Request $request)
     {
         $apply_po_id = $request->apply_po_id;
-
-        // $_applied_po_id = Session::get('applied_po');
-        
-        // if(count($apply_po_id) > 0)
-        // {
-        //     foreach ($apply_po_id as $key => $value)
-        //     {
-        //         $_applied_po_id[$key] = $value; // to retain checked po id
-        //     }   
-
-        //     Session::put('applied_po', $_applied_po_id);
-        // }
-
         Session::put('applied_po', $apply_po_id);
         
         $return['status']        = "success";
@@ -215,7 +210,7 @@ class TransactionReceiveInventoryController extends Member
         return json_encode($return);
 
     }
-    public function getLoadSelectedPo(Request $request)
+    public function getLoadAppliedTransaction(Request $request)
     {
         $applied_po_id = Session::get('applied_po');
 
@@ -253,6 +248,10 @@ class TransactionReceiveInventoryController extends Member
         $data['_um']     = UnitMeasurement::load_um_multi();
         $data['_item']   = Item::get_all_category_item();
 
+        
+
         return view('member.accounting_transaction.vendor.purchase_order.po_load_item_session', $data);
     }
 }
+
+    

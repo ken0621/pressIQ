@@ -13,12 +13,7 @@
     </tr>
     <tr>
         <td>{{date('F d, Y h:i:s A',strtotime($wis->created_at))}}</td>
-        <td class="text-right"><h4>{{strtoupper($wis->cust_wis_number)}}</td></h4>
-    </tr>
-    <tr>
-        <td colspan="5">
-            <b>REMARKS : </b>{!! $wis->wis_remarks !!}
-        </td>
+        <td class="text-right"><h4>{{strtoupper($wis->transaction_refnum)}}</td></h4>
     </tr>
 </table>
 <br>
@@ -44,8 +39,18 @@
             <td colspan="3" class="text-center">NO ITEMS</td>
         </tr>
         @endif
+
     </tbody>
 </table>
+<br>
+<br>
+<br>
+<br>
+<div>
+    <p>
+       <b>REMARKS : <br>{!! $wis->cust_wis_remarks !!}
+    </p>
+</div>
 <br>
 <br>
 <br>

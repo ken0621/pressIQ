@@ -9,6 +9,8 @@
 				<h4 class="modal-title">Settings</h4>
 				<input type="hidden" name="selected_settings" value="{{$selected_settings}}" class="selected_settings">
 			</div>
+
+			<form class="global-submit" method="post" action="/member/settings/verify/add">
 			<div class="modal-body clearfix">
 
 
@@ -17,14 +19,10 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-def-white btn-custom-white hide" data-dismiss="modal">Close</button>
-				<button class="btn btn-primary btn-custom-primary" type="button" onClick="edit_settings()">Save Settings</button>
+				<button class="btn btn-primary btn-custom-primary" type="submit">Save Settings</button>
 			</div>
 
-			<form class="global-submit" method="post" action="/member/settings/verify/add" id="submit_form_settings">
 				{!! csrf_field() !!}
-				<input type="hidden" value="" name="settings_key" id="settings_key_form">
-				<input type="hidden" value="" name="settings_value" id="settings_value_form">
-				<input type="hidden" value="add" name="update_type" id="update_type">
 			</form>
 		</div>
 	</div>

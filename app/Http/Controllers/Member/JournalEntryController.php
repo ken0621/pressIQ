@@ -10,9 +10,11 @@ use App\Models\Tbl_customer_invoice_line;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_chart_of_account;
+use App\Models\Tbl_report_field;
 
 use App\Globals\Accounting;
 use App\Globals\Item;
+use App\Globals\Report;
 
 use Carbon\Carbon;
 use Request;
@@ -125,28 +127,89 @@ class JournalEntryController extends Member
 		return view('member.accounting.journal_ledger.journal_entry', $data);
 	}
 
-	public function getAllEntryByAccount($account_id)
+	public function anyAllEntryByAccount($account_id)
 	{
+        $data['shop_name']  = $this->user_info->shop_key; 
 		$data["account"]	= Tbl_chart_of_account::where("account_id", $account_id)->first();
-		$date_period = Request::input('period_date') ? Request::input('period_date') : 'all'; 
-		$start_date  = Request::input('start_date');
-		$end_date    = Request::input('end_date');
+		$data['account_id'] = $account_id;
 
-		$new_start_date  = $this->checkDatePeriod($date_period, $start_date, $end_date )['start_date'];
-		$new_end_date  	 = $this->checkDatePeriod($date_period, $start_date, $end_date )['end_date'];
+
+        $data['head_title'] = $data['account']->account_name.' - Account Quick Report';
+        $data['head_icon'] = 'fa fa-area-chart';
+        $data['head_discription'] = 'Account Sales Report';
+        $data['head'] = $this->report_header($data);
+        $data['action'] = '/member/accounting/journal/all-entry-by-account/'.$account_id;
+
+		$report_type    = Request::input('report_type');
+        $load_view      = Request::input('load_view');
+        $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 		// dd($new_end_date	);
 		$data['_journal'] = Tbl_journal_entry_line::account()->journal()->transaction()
 							->where("je_shop_id", $this->getShopId())
 							->where("jline_account_id", $account_id)
-							->where(DB::raw("date(je_entry_date)"),">=",$new_start_date)
-							->where(DB::raw("date(je_entry_date)"),"<=",$new_end_date)
+							->where(DB::raw("date(je_entry_date)"),">=",$data['from'])
+							->where(DB::raw("date(je_entry_date)"),"<=",$data['to'])
 							->orderBy("je_entry_date")
 							->get();
 
 		// dd($data['_journal']);
 
-		return view('member.accounting.journal_ledger.general_ledger', $data);
+		// return view('member.accounting.journal_ledger.general_ledger', $data);
+
+
+        /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
+        if($report_type && !$load_view)
+        {
+            $view =  'member.reports.output.quick_report_account'; 
+            return Report::check_report_type($report_type, $view, $data, 'quick_report_account-'.Carbon::now());
+        }
+        else
+        {
+            return view('member.reports.accounting.quick_report_account', $data);
+        }
 	}
+
+    public function report_header($data)
+    {
+        return view('member.reports.head', $data);
+    }
+
+
+    public function report_field_checker_seed($filter = 'accounting_sales_report')
+    {
+        $shop_id = $this->user_info->shop_id; 
+        $table_header = Report::sales_report($filter);
+        foreach ($table_header as $key => $value) 
+        {
+            $count = DB::table('tbl_report_field')->where('report_field_shop', $shop_id)
+            ->where('report_field_type', '=', $filter)
+            ->where('report_field_module', '=', $key)
+            ->count();
+            if($count == 0)
+            {
+                $insert['report_field_shop'] = $shop_id;
+                $insert['report_field_module'] = $key;
+                $insert['report_field_label'] = $value;
+                $insert['report_field_type'] = $filter;
+                DB::table('tbl_report_field')->insert($insert);
+            }
+        }
+
+        $data['report_field'] = Tbl_report_field::where('report_field_shop', '=', $shop_id)
+        ->orderBy('report_field_position', 'ASC')
+        ->where('report_field_archive', '=', 0)
+        ->where('report_field_type', $filter)
+        ->get()
+        ->keyBy('report_field_module');
+        $data['filter'] = $filter;
+        $data['report_field_default'] = Report::sales_report($filter);
+        return view('member.reports.field.check', $data);
+    }
+
 
 	public function checkDatePeriod($period, $start_date, $end_date)
 	{

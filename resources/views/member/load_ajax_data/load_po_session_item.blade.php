@@ -61,6 +61,6 @@
     <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
     <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
     <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
-    @include("member.load_ajax_data.load_td_serial_number");
+    @include("member.load_ajax_data.load_td_serial_number")
     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
 </tr>

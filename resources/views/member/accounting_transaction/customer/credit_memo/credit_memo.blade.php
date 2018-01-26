@@ -4,6 +4,7 @@
 <form class="global-submit" action="{{$action or ''}}" method="post">
 <div class="panel panel-default panel-block panel-title-block">
     <input type="hidden" class="button-action" name="button_action" value="">
+    <input type="hidden" name="credit_memo_id" value="{{Request::input('id')}}">
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
     <div class="panel-heading">
         <div>
@@ -41,7 +42,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="transaction_refnumber" value="{{$transaction_refnum or ''}}">
+                                <input type="text" class="form-control" name="transaction_refnumber" value="{{isset($credit_memo) ? $credit_memo->transaction_refnum : $transaction_refnum}}">
                             </div>
                         </div>
                     </div>
@@ -49,11 +50,11 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <select class="form-control droplist-customer input-sm pull-left" name="customer_id" data-placeholder="Select a Customer" required>
-                                    @include('member.load_ajax_data.load_customer', ['customer_id' => isset($est) ? $est->est_customer_id : (isset($c_id) ? $c_id : '') ]);
+                                    @include('member.load_ajax_data.load_customer', ['customer_id' => isset($credit_memo) ? $credit_memo->cm_customer_id : (isset($c_id) ? $c_id : '') ]);
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$est->est_customer_email or ''}}"/>
+                                <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$credit_memo->cm_customer_email or ''}}"/>
                             </div> 
                             <div class="col-sm-4">
                                 <div class="pull-right">
@@ -69,11 +70,11 @@
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Billing Address</label>
-                            <textarea class="form-control input-sm textarea-expand customer-billing-address" name="customer_address" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand customer-billing-address" name="customer_address" placeholder="">{{$credit_memo->cm_customer_billing_address or ''}}</textarea>
                         </div>
                         <div class="col-sm-2">
                             <label>Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{date('m/d/y')}}"/>
+                            <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{$credit_memo->cm_date or date('m/d/y')}}"/>
                         </div>
                     </div>
                     
@@ -93,38 +94,63 @@
                                             <th width="10"></th>
                                         </tr>
                                     </thead>
-                                    <tbody class="draggable tbody-item">                                 
+                                    <tbody class="draggable tbody-item">   
+                                        @if(isset($credit_memo))
+                                            @foreach($credit_memo_item as $cm_item)
                                             <tr class="tr-draggable">
                                                 <td class="invoice-number-td text-right">1</td>
                                                 <td>
                                                     <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
-                                                        @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                        @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $cm_item->cmline_item_id])
                                                         <option class="hidden" value="" />
                                                     </select>
                                                 </td>
-                                                <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
-                                                <td><select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                                <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
-                                                <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
-                                                <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
+                                                <td><textarea class="textarea-expand txt-desc" name="item_description[]">{{$cm_item->cmline_description}}</textarea></td>
+                                                <td><select class="droplist-um select-um {{isset($cm_item->multi_id) ? 'has-value' : ''}}" name="item_um[]">
+                                                    @if($cm_item->invline_um)
+                                                        @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $cm_item->multi_um_id, 'selected_um_id' => $cm_item->cmline_um])
+                                                    @else
+                                                        <option class="hidden" value="" />
+                                                    @endif
+                                                </select></td>
+                                                <td><input class="text-center number-input txt-qty compute" value="{{$cm_item->cmline_qty}}" type="text" name="item_qty[]"/></td>
+                                                <td><input class="text-right number-input txt-rate compute" value="{{$cm_item->cmline_rate}}" type="text" name="item_rate[]"/></td>
+                                                <td><input class="text-right number-input txt-amount" value="{{$cm_item->cmline_amount}}" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
+                                            @endforeach
+                                        @endif                              
+                                        <tr class="tr-draggable">
+                                            <td class="invoice-number-td text-right">1</td>
+                                            <td>
+                                                <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                    <option class="hidden" value="" />
+                                                </select>
+                                            </td>
+                                            <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
+                                            <td><select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+                                            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
+                                            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                        </tr>
                                                 
-                                          <tr class="tr-draggable">
-                                                <td class="invoice-number-td text-right">2</td>
-                                                <td>
-                                                    <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
-                                                        @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                                        <option class="hidden" value="" />
-                                                    </select>
-                                                </td>
-                                                <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
-                                                <td><select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                                <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
-                                                <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
-                                                <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-                                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                            </tr>
+                                        <tr class="tr-draggable">
+                                            <td class="invoice-number-td text-right">2</td>
+                                            <td>
+                                                <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                    <option class="hidden" value="" />
+                                                </select>
+                                            </td>
+                                            <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
+                                            <td><select class="droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+                                            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
+                                            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                        </tr>
                                                 
                                     </tbody>
                                 </table>
@@ -134,11 +160,11 @@
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Message Displayed on Credit Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder="">{{$credit_memo->cm_message or ''}}</textarea>
                         </div>
                         <div class="col-sm-3">
                             <label>Statement Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder="">{{$credit_memo->cm_memo or ''}}</textarea>
                         </div>
                         <div class="col-sm-6">
                             <!-- <div class="row">

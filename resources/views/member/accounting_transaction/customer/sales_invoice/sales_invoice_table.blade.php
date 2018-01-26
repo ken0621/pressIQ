@@ -25,7 +25,8 @@
                                 Action <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a href="javascript">PRINT</a></li>
+                                <li><a href="/member/transaction/sales_invoice/create?id={{$si->inv_id}}">Edit Sales Invoice</a></li>
+                                <li><a href="javascript">Print</a></li>
                             </ul>
                         </div>
                     </td>

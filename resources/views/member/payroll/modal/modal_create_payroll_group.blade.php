@@ -575,43 +575,26 @@
 						</div>
 					</div>
 					 <div id="employeetagging" class="tab-pane fade">
-					 			<div class="form-group" style="margin-top: 10px;">
-								  <div class="col-md-4">
-								    <small><b>Filter Company</b></small>
-								    <select class="form-control change-filter change-filter-company">
-								      <option value="0">Select Company</option>
-								      @foreach($_company as $company)
-								      <option value="{{$company->payroll_company_id}}">{{$company->payroll_company_name}}</option>
-								      @endforeach
-								    </select> 
-								  </div>
-								  <div class="col-md-4">
-								    <small><b>Filter Department</b></small>
-								    <select class="form-control change-filter change-filter-department"  >
-								      <option value="0" >Select Department</option>
-								      @foreach($_department as $department)
-								      <option value="{{$department->payroll_department_id}}">{{$department->payroll_department_name}}</option>
-								      @endforeach
-								    </select>
-								  </div>
-								  <div class="col-md-4">
-								    <small><b>Filter Job Title</b></small>
-								    <select class="form-control change-filter change-filter-job-title">
-								      <option value="0">Select Job Title</option>
-								    </select>
-								  </div>
-								</div>
-
-																
+					 			
 								<div class="form-group">
 									<div class="col-md-12">
-										<span><b>Select Employee</b></span>
+										<span><a href="#" class="btn btn-custom-primary pull-right popup" link="/member/payroll/payroll_group/modal_tag_payroll_group_employee">Tag Employee</a></span>
 									</div>
 								</div>
-								<div class="table-employee-tag">
-									
+								<div class="form-group">
+									<div class="col-md-12">
+										<table class="table table-bordered table-condensed">
+											<thead>
+												<tr>
+													<th>Employee Name</th>
+												</tr>
+											</thead>
+											<tbody class="tbl-tag">
+												
+											</tbody>
+										</table>
+									</div>
 								</div>
-				
 					</div>
 				</div>
 			</div>

@@ -12,5 +12,6 @@ class Tbl_receive_payment_line extends Model
     public function scopeInvoice($query)
     {
     	return $query->leftjoin("tbl_customer_invoice","tbl_customer_invoice.inv_id","=","tbl_receive_payment_line.rpline_reference_id");
+    	
     }
 }

@@ -1960,4 +1960,8 @@ class Item
 
         return $return;
     }
+    public static function get_bundle_list($item_id)
+    {
+        return Tbl_item_bundle::item()->where("bundle_bundle_id",$item_id)->get();
+    }
 }

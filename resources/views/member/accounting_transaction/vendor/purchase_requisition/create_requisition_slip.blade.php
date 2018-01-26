@@ -51,7 +51,7 @@
             <div class="col-md-6">
                 <label>Requisition Slip Number</label>
                 <div>
-                   <input type="text" class="form-control" name="requisition_slip_number" value="RS20180225-0001">
+                   <input type="text" class="form-control" name="requisition_slip_number" value="{{$transaction_refnum}}">
                 </div>
             </div>
             <div class="col-sm-3 text-right"></div>

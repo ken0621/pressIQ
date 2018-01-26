@@ -7,7 +7,7 @@
 		    	<input type="hidden" class="line-is-checked" name="line_is_checked[]" value="" >
 		    	<input type="checkbox" class="line-checked">
 		    </td>
-		    <td>Invoice # {{$invoice["new_inv_id"]}} ( {{dateFormat($invoice["inv_date"])}} )</td>
+		    <td>Invoice # {{$invoice['transaction_refnum'] != '' ? $invoice['transaction_refnum'] : $invoice["new_inv_id"]}} ( {{dateFormat($invoice["inv_date"])}} )</td>
 		    <td class="text-right">{{dateFormat($invoice["inv_due_date"])}}</td>
 		    <td><input type="text" class="text-right original-amount" value="{{number_format($invoice['inv_overall_price'],2) }}" disabled /></td>
 		    <td><input type="text" class="text-right balance-due" value="{{number_format(($invoice['inv_overall_price']) - $invoice['amount_applied'] + (isset($invoice['rpline_amount']) ? $invoice['rpline_amount'] : 0 ),2)}}" disabled /></td>

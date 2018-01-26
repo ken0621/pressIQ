@@ -12,6 +12,7 @@ use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_customer_invoice_line;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_item;
+use App\Models\Tbl_write_check_account_line;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_user;
 use App\Models\Tbl_bill_po;
@@ -28,6 +29,7 @@ use App\Globals\Item;
 use App\Globals\Warehouse;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\Pdf_global;
 
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
@@ -52,7 +54,7 @@ class Vendor_CheckController extends Member
         $data["_vendor"]    = Vendor::getAllVendor('active');
         $data["_name"]      = Tbl_customer::unionVendor(WriteCheck::getShopId())->get();
         $data['_item']      = Item::get_all_category_item();
-        $data['_account']   = Accounting::getAllAccount();
+        $data['_account']   = Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['action']     = "/member/vendor/write_check/add";
         $data['vendor_id']     = Request::input("vendor_id");
@@ -67,8 +69,8 @@ class Vendor_CheckController extends Member
            $data["wc"] = Tbl_write_check::where("wc_id",$id)->first();
            $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["wc"]->wc_vendor_id)->where("po_is_billed",0)->get();
            $data["_wc_item_line"] = Tbl_write_check_line::um()->where("wcline_wc_id",$id)->get();
+           $data["_wc_acct_line"] = Tbl_write_check_account_line::where("accline_wc_id",$id)->get();
            $data['_item']      = Item::get_all_category_item();
-           $data['_account']   = Accounting::getAllAccount();
            $data['action']     = "/member/vendor/write_check/update";
         }
         return view("member.vendor.check.write_check",$data);
@@ -115,7 +117,25 @@ class Vendor_CheckController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('itemline_item_id');
 
+        $_accountline                       = Request::input('expense_account');
+        $_accountamount                     = Request::input('account_amount');
+        $_accountdesc                       = Request::input('account_desc');
+
         $ctr_items = 0;
+
+        $account_info = null;
+        foreach ($_accountline as $key_acct => $value_acct) 
+        {
+            if($value_acct && $_accountamount[$key_acct] != 0)
+            {
+                $ctr_items++;
+                $account_info[$key_acct]['account_id']      = $value_acct;
+                $account_info[$key_acct]['account_amount']  = str_replace(",","",$_accountamount[$key_acct]);
+                $account_info[$key_acct]['account_desc']    = $_accountdesc[$key_acct];
+            }
+        }
+
+        $item_refill = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -141,7 +161,6 @@ class Vendor_CheckController extends Member
             }
         }
 
-        $item_refill = [];
         // --> for bundles
         foreach ($_itemline as $keyitem => $value_item) 
         {
@@ -188,7 +207,7 @@ class Vendor_CheckController extends Member
         // <-- end bundle
         if($ctr_items != 0)
         {
-            $wc_id = WriteCheck::postWriteCheck($vendor_info, $wc_info, $wc_other_info, $item_info, $total_info);
+            $wc_id = WriteCheck::postWriteCheck($vendor_info, $wc_info, $wc_other_info, $item_info, $total_info, $account_info);
             if(count(Session::get("po_item")) > 0)
             {
                 WriteCheck::insertPotoWc($wc_id, Session::get("po_item"));
@@ -198,9 +217,20 @@ class Vendor_CheckController extends Member
             $warehouse_id       = $this->current_warehouse->warehouse_id;
             $transaction_type   = "write_check";
             $transaction_id     = $wc_id;
-            $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
+            if(count($item_refill) > 0)
+            {
+                $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
+            }
 
             $json["status"]         = "success-write-check";
+            /*if($button_action == "save-and-edit")
+            {
+                $json["redirect"]    = "/member/vendor/write_check?id=".$wc_id;
+            }
+            elseif($button_action == "save-and-new")
+            {
+                $json["redirect"]   = '/member/vendor/write_check';
+            }*/
             if($button_action == "save-and-edit")
             {
                 $json["redirect"]    = "/member/vendor/write_check?id=".$wc_id;
@@ -209,15 +239,38 @@ class Vendor_CheckController extends Member
             {
                 $json["redirect"]   = '/member/vendor/write_check';
             }
+            elseif($button_action == "save-and-close")
+            {
+                $json["redirect"]   = '/member/vendor/write_check/list';
+            }
+            elseif($button_action == "save-and-print")
+            {
+                $json["redirect"]   = '/member/vendor/write_check/view_pdf/'.$wc_id;
+            }
             Request::session()->flash('success', 'Successfully Created');
         }
         else
         {
             $json["status"] = "error";
-            $json["status_message"] = "Please insert Item.";
+            $json["status_message"] = "Please insert Item or Expense Account.";
         }
 
         return json_encode($json);
+    }
+
+    public function wc_pdf($wc_id)
+    {
+        $date       = date("F j, Y, g:i a");
+        $first_name = $this->user_info->user_first_name;
+        $last_name  = $this->user_info->user_last_name;
+        $footer     ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+            
+        $data["wc"] = Tbl_write_check::vendor()->customer()->where("wc_id",$wc_id)->first();
+        $data["_wcline"] = Tbl_write_check_line::um()->item()->where("wcline_wc_id",$wc_id)->get();
+        $data["_wcline_acc"] = Tbl_write_check_account_line::account()->where("accline_wc_id",$wc_id)->get();
+       
+        $pdf = view("member.vendor_list.wc_pdf",$data);
+        return Pdf_global::show_pdf($pdf);
     }
 
     public function update_check()
@@ -244,7 +297,24 @@ class Vendor_CheckController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('itemline_item_id');
 
+
+        $_accountline                       = Request::input('expense_account');
+        $_accountamount                     = Request::input('account_amount');
+        $_accountdesc                       = Request::input('account_desc');
+
         $ctr_items = 0;
+        $account_info = null;
+        foreach ($_accountline as $key_acct => $value_acct) 
+        {
+            if($value_acct && $_accountamount[$key_acct] != 0)
+            {
+                $ctr_items++;
+                $account_info[$key_acct]['account_id']      = $value_acct;
+                $account_info[$key_acct]['account_amount']  = str_replace(",","",$_accountamount[$key_acct]);
+                $account_info[$key_acct]['account_desc']    = $_accountdesc[$key_acct];
+            }
+        }
+
         $item_refill = [];
         foreach($_itemline as $key => $item_line)
         {
@@ -317,7 +387,7 @@ class Vendor_CheckController extends Member
         // <-- end bundle
         if($ctr_items != 0)
         {
-            $wc_id = WriteCheck::updateWriteCheck($wc_id, $vendor_info, $wc_info, $wc_other_info, $item_info, $total_info);
+            $wc_id = WriteCheck::updateWriteCheck($wc_id, $vendor_info, $wc_info, $wc_other_info, $item_info, $total_info, $account_info);
             if(count(Session::get("po_item")) > 0)
             {
                 WriteCheck::insertPotoWc($wc_id, Session::get("po_item"));
@@ -325,10 +395,22 @@ class Vendor_CheckController extends Member
 
             $transaction_id = $wc_id;
             $transaction_type = "write_check";
-            $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
+            if(count($item_refill) > 0)
+            {
+                $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
+            }
 
 
             $json["status"]         = "success-write-check";
+            /*if($button_action == "save-and-edit")
+            {
+                $json["redirect"]    = "/member/vendor/write_check?id=".$wc_id;
+            }
+            elseif($button_action == "save-and-new")
+            {
+                $json["redirect"]   = '/member/vendor/write_check';
+            }*/
+
             if($button_action == "save-and-edit")
             {
                 $json["redirect"]    = "/member/vendor/write_check?id=".$wc_id;
@@ -337,12 +419,20 @@ class Vendor_CheckController extends Member
             {
                 $json["redirect"]   = '/member/vendor/write_check';
             }
+            elseif($button_action == "save-and-close")
+            {
+                $json["redirect"]   = '/member/vendor/write_check/list';
+            }
+            elseif($button_action == "save-and-print")
+            {
+                $json["redirect"]   = '/member/vendor/write_check/view_pdf/'.$wc_id;
+            }
             Request::session()->flash('success', 'Successfully Created');
         }
         else
         {
             $json["status"] = "error";
-            $json["status_message"] = "Please insert Item.";
+            $json["status_message"] = "Please insert Item or Expense Account.";
         }
 
         return json_encode($json);

@@ -24,6 +24,7 @@ use App\Globals\Accounting;
 use App\Globals\Purchase_Order;
 use App\Globals\Billing;
 use App\Globals\Item;
+use App\Globals\Pdf_global;
 use App\Globals\Warehouse;
 use App\Globals\Utilities;
 use App\Globals\UnitMeasurement;
@@ -34,6 +35,7 @@ use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_bill_item_line;
 use Carbon\Carbon;
 use Session;
+use PDF;
 
 class Vendor_ReceiveInventoryController extends Member
 {
@@ -71,6 +73,35 @@ class Vendor_ReceiveInventoryController extends Member
             return $this->show_no_access();
         }
     }    
+
+    public function ri_pdf($ri_id)
+    {
+        $access = Utilities::checkAccess('vendor-receive-inventory', 'access_page');
+        if($access == 1)
+        { 
+            $date       = date("F j, Y, g:i a");
+            $first_name = $this->user_info->user_first_name;
+            $last_name  = $this->user_info->user_last_name;
+            $footer     ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
+            $data["ri"] = Tbl_bill::vendor()->where("bill_id",$ri_id)->first();
+            $data["_riline"] = Tbl_bill_item_line::um()->item()->where("itemline_bill_id",$ri_id)->get();
+            //dd($data["_riline"]);
+            /*foreach($data["_poline"] as $key => $value) 
+            {
+                $qty = UnitMeasurement::um_qty($value->poline_um);
+
+                $total_qty = $value->poline_orig_qty * $qty;
+                $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
+            }*/
+            $pdf = view("member.vendor_list.ri_pdf",$data);
+            return Pdf_global::show_pdf($pdf, null, $footer);
+        }
+        else
+        {
+             return $this->show_no_access();            
+        }
+    }
     public function receive_inventory()
     {
         $access = Utilities::checkAccess('vendor-receive-inventory', 'access_page');
@@ -89,8 +120,7 @@ class Vendor_ReceiveInventoryController extends Member
             $data['pis']        = Purchasing_inventory_system::check();
             
             $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_billed",0)->get();
-            //die(var_dump($data));
-            //dd($data["_po"]);
+
             $id = Request::input("id");
             if($id)
             {
@@ -274,17 +304,25 @@ class Vendor_ReceiveInventoryController extends Member
                     $warehouse_id       = $this->current_warehouse->warehouse_id;
                     $transaction_type   = "receive_inventory";
                     $transaction_id     = $bill_id;
-                    $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array',null,$item_serial);
+                    $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array', null, $item_serial);
                 }
 
                 $json["status"]         = "success-receive-inventory";
                 if($button_action == "save-and-edit")
                 {
-                    $json["redirect"]    = "/member/vendor/receive_inventory/list";
+                    $json["redirect"]    = "/member/vendor/receive_inventory?id=".$bill_id;
                 }
                 elseif($button_action == "save-and-new")
                 {
                     $json["redirect"]   = '/member/vendor/receive_inventory';
+                }
+                elseif($button_action == "save-and-close")
+                {
+                    $json["redirect"]   = '/member/vendor/receive_inventory/list';
+                }
+                elseif($button_action == "save-and-print")
+                {
+                    $json["redirect"]   = '/member/vendor/receive_inventory/view_pdf/'.$bill_id;
                 }
                 Request::session()->flash('success', 'Successfully Created');
             }
@@ -446,13 +484,29 @@ class Vendor_ReceiveInventoryController extends Member
                 }
 
                 $json["status"]         = "success-receive-inventory";
-                if($button_action == "save-and-edit")
+                /*if($button_action == "save-and-edit")
                 {
                     $json["redirect"]    = "/member/vendor/receive_inventory/list";
                 }
                 elseif($button_action == "save-and-new")
                 {
                     $json["redirect"]   = '/member/vendor/receive_inventory';
+                }*/
+                if($button_action == "save-and-edit")
+                {
+                    $json["redirect"]    = "/member/vendor/receive_inventory?id=".$bill_id;
+                }
+                elseif($button_action == "save-and-new")
+                {
+                    $json["redirect"]   = '/member/vendor/receive_inventory';
+                }
+                elseif($button_action == "save-and-close")
+                {
+                    $json["redirect"]   = '/member/vendor/receive_inventory/list';
+                }
+                elseif($button_action == "save-and-print")
+                {
+                    $json["redirect"]   = '/member/vendor/receive_inventory/view_pdf/'.$bill_id;
                 }
                 Request::session()->flash('success', 'Successfully Created');
             }
@@ -466,6 +520,8 @@ class Vendor_ReceiveInventoryController extends Member
         return json_encode($json);
 
     }
+
+    
 
     /**
      * Show the form for creating a new resource.

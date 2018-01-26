@@ -32,8 +32,6 @@ class TransactionSalesOrder
 	{
 		return Tbl_customer_estimate_line::um()->where("estline_est_id", $sales_order_id)->get();		
 	}
-
-
 	public static function getAllOpenSO($shop_id)
     {
         return Tbl_customer_estimate::Customer()->where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->get();

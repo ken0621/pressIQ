@@ -51,6 +51,8 @@ class TransactionSalesInvoiceController extends Member
         	$data['sales_invoice_item'] = TransactionSalesInvoice::info_item($request->id);
         }
 
+        Session::forget('applied_transaction_si');
+
 		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice',$data);
 	}
 	public function postCreateSalesInvoice(Request $request)
@@ -192,6 +194,8 @@ class TransactionSalesInvoiceController extends Member
 		$data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
 		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
 		$data['action'] = '/member/transaction/sales_invoice/apply-transaction';
+
+        $data['applied'] = Session::get('applied_transaction_si');
 		return view("member.accounting_transaction.customer.sales_invoice.load_transaction", $data);
 	}
 

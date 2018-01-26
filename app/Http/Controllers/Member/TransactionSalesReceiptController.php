@@ -51,6 +51,8 @@ class TransactionSalesReceiptController extends Member
         	$data['sales_receipt_item'] = TransactionSalesReceipt::info_item($request->id);
         }
 
+        Session::forget('applied_transaction_sr');
+
 		return view('member.accounting_transaction.customer.sales_receipt.sales_receipt',$data);
 	} 
 	public function postCreateSalesReceipt(Request $request)
@@ -188,6 +190,7 @@ class TransactionSalesReceiptController extends Member
 		$data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
 		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
 		$data['action'] = '/member/transaction/sales_receipt/apply-transaction';
+        $data['applied'] = Session::get('applied_transaction_sr');
 		return view("member.accounting_transaction.customer.sales_receipt.load_transaction", $data);
 	}
 

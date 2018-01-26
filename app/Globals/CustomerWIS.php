@@ -80,7 +80,7 @@ class CustomerWIS
     }
     public static function applied_transaction($shop_id)
     {
-        $applied_transaction = Session::get('applied_transaction');
+        $applied_transaction = Session::get('applied_transaction_wis');
         if(count($applied_transaction) > 0)
         {
             foreach ($applied_transaction as $key => $value) 

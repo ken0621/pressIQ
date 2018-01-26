@@ -99,6 +99,7 @@ class TransactionSalesReceiptController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesReceipt::postInsert($this->user_info->shop_id, $insert, $insert_item);
+			TransactionSalesReceipt::applied_transaction($this->user_info->shop_id);
 		}
 
 		if(is_numeric($validate))
@@ -107,6 +108,7 @@ class TransactionSalesReceiptController extends Member
 			$return['status_message'] = 'Success creating sales receipt.';
 			$return['call_function'] = 'success_sales_receipt';
 			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_receipt', $validate ,$btn_action);
+			Session::forget('applied_transaction_sr');
 		}
 		else
 		{
@@ -162,6 +164,7 @@ class TransactionSalesReceiptController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesReceipt::postUpdate($sales_receipt_id, $this->user_info->shop_id, $insert, $insert_item);
+			TransactionSalesReceipt::applied_transaction($this->user_info->shop_id);
 		}
 		if(is_numeric($validate))
 		{			
@@ -169,6 +172,7 @@ class TransactionSalesReceiptController extends Member
 			$return['status_message'] = 'Success updating sales receipt.';
 			$return['call_function'] = 'success_sales_receipt';
 			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_receipt', $validate ,$btn_action);
+			Session::forget('applied_transaction_sr');
 		}
 		else
 		{

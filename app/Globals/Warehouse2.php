@@ -419,9 +419,23 @@ class Warehouse2
     }
     public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '', $update_count = true)
     {
+        
+        $return = null;
+
+        $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','<',0)->count();
+        $total_refill_qty = $quantity;
+        if($count_offset > 0)
+        {
+            $total_refill_qty = $quantity - $count_offset;
+        }
+        if(!$for_out_of_stock)
+        {
+            Self::update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity);
+        }
+        $quantity = $total_refill_qty;
+
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
-        $return = null;
 
         $serial_qty = count($serial);
         if($serial_qty != 0)

@@ -1,7 +1,5 @@
 var payroll_group = new payroll_group();
-var change_filter_company 		= 0;
-var change_filter_job_title 	= 0;
-var change_filter_department 	= 0;
+
 
 function payroll_group()
 {
@@ -19,13 +17,6 @@ function payroll_group()
 	function document_ready()
 	{
 		custom_drop_down('.shift_code_id');	
-		change_filter_company 		= 0;
-		change_filter_job_title 	= 0;
-		change_filter_department 	= 0;
-		event_change_company();
-		event_change_job_title();
-		event_change_filter_department();
-		employee_list();
 	}
 
 	function custom_drop_down(target)
@@ -46,67 +37,80 @@ function payroll_group()
 		});
 	}
 
-	function event_change_company()
+	this.load_tag_employee = function()
 	{
-		$('.change-filter-company').unbind('change');
-		$('.change-filter-company').bind('change', function() 
-		{
-			change_filter_company = $(this).val();
-			console.log(change_filter_company);
-			employee_list();
-		});
-	}
-
-	function event_change_job_title()
-	{
-		$('.change-filter-job-title').unbind('change');
-		$('.change-filter-job-title').bind('change', function() 
-		{
-			change_filter_job_title = $(this).val();
-			employee_list();
-		});
-	}
-
-	function event_change_filter_department()
-	{
-		$('.change-filter-department').unbind('change');
-		$('.change-filter-department').bind('change', function() 
-		{
-			change_filter_department = $(this).val();
-			employee_list();
-		});
-	}
-
-	function employee_list()
-	{
-		var target = ".table-employee-tag";
-		var html =''; // '<li class="list-group-item padding-3-10"><div class="checkbox"><label><input type="checkbox" name="" class="check-all-tag">Check All</label></div></li>'
-		$(target).html(misc("loader"));
+		$(".tbl-tag").html('<tr><td colspan="3" class="text-center">'+misc('loader') + '</td></tr>');
 		$.ajax({
-			url: '/member/payroll/payroll_admin_dashboard/create_approver_table',
-			type: 'GET',
-			data: { _token : misc('_token'), company : change_filter_company, jobtitle : change_filter_job_title, department : change_filter_department},
-			success : function(data)
+			url 	: 	"/member/payroll/payroll_group/get_payroll_tag_employee",
+			type 	: 	"POST",
+			data 	: 	{
+				_token:misc('_token')
+			},
+			success : 	function(result)
 			{
-				// data = JSON.parse(data);
-				// $(data).each(function(index, data) 
-				// {
-				// 	console.log(data.payroll_employee_first_name);
-				// 	html += str_list(data);
-				// });
-				// $(target).html(html);
-				$(target).html(data);
+				result = JSON.parse(result);
+				var html = "";
+				console.log(result);
+				$(result.new_record).each(function(index, emp)
+				{			
+						html += tbl_tag(emp);
+				});
+				$(".tbl-tag").html(html);
+				remove_tag();
+			},
+			error 	: 	function(err)
+			{
+				error_function();
 			}
-		})
-		.done(function() {
-			console.log("success");
-		})
-		.fail(function() {
-			console.log("error");
-		})
-		.always(function() {
-			console.log("complete");
 		});
+	}
+
+	function remove_tag()
+		{
+			$(".btn-remove-tag").unbind("click");
+			$(".btn-remove-tag").bind("click", function()
+			{
+				var content 	= $(this).data("content");
+				var con 		= confirm("Do you really want to remove this employee from tagging?");
+				var parent 		= $(this).parents("tr");
+				var element 	= $(this);
+				var html 		= element.html();
+
+				if(con)
+				{	
+					element.html(misc('spinner'));
+					$.ajax({
+						url 	: 	"/member/payroll/payroll_group/remove_payroll_tag_employee",
+						type 	: 	"POST",
+						data 	: 	{
+							_token:misc('_token'),
+							content:content
+						},
+						success : 	function(result)
+						{
+							parent.remove();
+						},
+						error 	: 	function(err)
+						{
+							error_function();
+							element.html(html);
+							remove_tag()
+						}
+					});
+				}
+			});
+		}
+
+	function tbl_tag(data)
+	{
+
+		var html = '<tr>';
+		html += '<td>' + data.payroll_employee_title_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_employee_id+'"></td>';
+		html += '<td class="text-center edit-data zerotogray" width="25%"><input type="text" name="leave_hours_'+data.payroll_employee_id+'" placeholder="00:00" class="text-center form-control break time-entry time-target time-entry-24 is-timeEntry"></td>';
+		html += '<td><a href="#" class="btn-remove-tag" data-content="'+data.payroll_employee_id+'"><i class="fa fa-times"></i></a></td>';
+		html += '</tr>';
+
+		return html;
 	}
 
 	function misc(str){

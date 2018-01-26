@@ -155,7 +155,7 @@ class PayrollTimeSheet2Controller extends Member
 		else
 		{
 			$pdf = view('member.payroll2.employee_timesheet_pdf', $data);
-	        return Pdf_global::show_pdf($pdf, 'landscape');
+	        return Pdf_global::show_pdf($pdf, 'portrait');
 		}
 	}
 	public function approve_timesheets($period_id = 0, $employee_id = 0)

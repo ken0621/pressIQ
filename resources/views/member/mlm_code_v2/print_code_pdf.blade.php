@@ -68,12 +68,16 @@
 				<br>
 				<br>
 				<br>
+				<br>
 				<div class="text-center">
 					<div> CODE </div>
 					<div><strong>{{$item_code->mlm_pin}}</strong><div>
 					<div>ACTIVATION<div>
 					<div><strong>{{$item_code->mlm_activation}}</strong> <div>
 				</div>
+				<br>
+				<br>
+				<br>
 				<br>
 				<br>
 				<br>

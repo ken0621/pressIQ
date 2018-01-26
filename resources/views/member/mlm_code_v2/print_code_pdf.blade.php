@@ -75,6 +75,10 @@
 					<div><strong>{{$item_code->mlm_activation}}</strong> <div>
 				</div>
 				<br>
+				<br>
+				<br>
+				<br>
+				<br>
 			</td>
 		</tr>
 		@endif

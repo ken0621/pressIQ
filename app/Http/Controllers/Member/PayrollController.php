@@ -5303,6 +5303,14 @@ class PayrollController extends Member
                $array = Session::get('payroll_group_tag_employee');
           }
 
+
+          if(isset($employee_tag)){
+               foreach($employee_tag as $tag)
+               {
+                    array_push($array, $tag);
+               }    
+          }
+
           Session::put('payroll_group_tag_employee',$array);
           $return['status']             = 'success';
           $return['function_name']      = 'payroll_group.load_tag_employee';
@@ -5425,6 +5433,21 @@ class PayrollController extends Member
           $insert['pagibig_reference']            = Request::input('pagibig_reference');
          
           $group_id = Tbl_payroll_group::insertGetId($insert);
+
+          if(!empty(Request::input('employee_tag')))
+          {
+               foreach(Request::input('employee_tag') as $tag)
+               {
+                    $checkcontract = Tbl_payroll_employee_contract::selemployee($tag)->first();
+
+                    if(count($checkcontract) > 0)
+                    {
+                         $update['payroll_group_id'] = $group_id;
+                         Tbl_payroll_employee_contract::where('payroll_employee_id',$tag)->update($update);
+                    }
+               }
+          }
+
           
           $insert_13th_month = array();
 
@@ -5509,6 +5532,7 @@ class PayrollController extends Member
                }
           }
           
+
 
           // $_restday                                                = array();
           // $_extraday                                               = array();

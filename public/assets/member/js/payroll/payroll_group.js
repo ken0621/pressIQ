@@ -106,7 +106,7 @@ function payroll_group()
 
 		var html = '<tr>';
 		html += '<td>' + data.payroll_employee_title_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_employee_id+'"></td>';
-		html += '<td class="text-center edit-data zerotogray" width="25%"><input type="text" name="leave_hours_'+data.payroll_employee_id+'" placeholder="00:00" class="text-center form-control break time-entry time-target time-entry-24 is-timeEntry"></td>';
+		html += '<input type="hidden" name="'+data.payroll_employee_id+'" class="text-center form-control break ">';
 		html += '<td><a href="#" class="btn-remove-tag" data-content="'+data.payroll_employee_id+'"><i class="fa fa-times"></i></a></td>';
 		html += '</tr>';
 

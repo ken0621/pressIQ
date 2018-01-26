@@ -17,6 +17,7 @@ use App\Globals\WarehouseTransfer;
 use App\Globals\TransactionPurchaseRequisition;
 
 use App\Globals\TransactionSalesOrder;
+use App\Globals\AccountingTransaction;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -48,10 +49,17 @@ class TransactionPurchaseRequisitionController extends Member
 		$data['page'] = 'Create Purchase Requisition';
         $data['_item']  = Item::get_all_category_item([1]);
         $data["_vendor"] = Vendor::getAllVendor('active');
+        $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'purchase_requisition');
+        //dd($data['transaction_refnum']);
         $data['count_so'] = TransactionPurchaseRequisition::countTransaction($this->user_info->shop_id);
 		return view('member.accounting_transaction.vendor.purchase_requisition.create_requisition_slip', $data);
 	}
 	public function postCreateSubmit(Request $request)
+	{
+		$return = RequisitionSlip::create($this->user_info->shop_id, $this->user_info->user_id, $request);
+		return json_encode($return);
+	}
+	public function postUpdateSubmit(Request $request)
 	{
 		$return = RequisitionSlip::create($this->user_info->shop_id, $this->user_info->user_id, $request);
 		return json_encode($return);

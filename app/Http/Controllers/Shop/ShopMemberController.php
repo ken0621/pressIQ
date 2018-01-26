@@ -4535,7 +4535,7 @@ class ShopMemberController extends Shop
         $consume['name'] = 'customer_product_code';
         $consume['id'] =Self::$customer_info->customer_id;
         $val = Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, $consume);
-
+        
         if(is_numeric($val))
         {
             MLM2::purchase($shop_id, $slot_id, $val);

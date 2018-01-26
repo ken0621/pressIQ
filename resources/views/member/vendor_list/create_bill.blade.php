@@ -38,9 +38,22 @@
                     <!--Add a product on your website-->
                     </small>
                 </h1>
-                <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
+                <!-- <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save</button>
-                <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
+                <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button> -->
+                <div class="dropdown pull-right">
+                    <div>
+                        <a class="btn btn-custom-white" href="/member/vendor/bill_list">Cancel</a>
+                        <button class="btn btn-custom-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu  dropdown-menu-custom">
+                            <li><a class="select-action" code="save-and-close">Save & Close</a></li>
+                            <li><a class="select-action" code="save-and-edit">Save & Edit</a></li>
+                            <li><a class="select-action" code="save-and-print">Save & Print</a></li>
+                            <li><a class="select-action" code="save-and-new">Save & New</a></li>
+                        </ul>
+                    </div>
+                </div>
                 @if(isset($bill))
                 <div class="pull-right">
                     <div class="dropdown">
@@ -103,7 +116,7 @@
                                     </div>
                                 </div>
                                 
-                                <!-- <div class="row clearfix">
+                                <div class="row clearfix">
                                     <div class="title">
                                         <h3><a id="acct-a"> <i class="fa fa-caret-down"></i>  Account Details </a></h3>
                                     </div>
@@ -116,34 +129,50 @@
                                                         <th style="width: 15px;">#</th>
                                                         <th style="width: 200px;">Account</th>
                                                         <th>Description</th>
-                                                        <th style="width: 40px;">Amount(PHP)</th>
+                                                        <th style="width: 150px;">Amount</th>
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="draggable">
+                                                <tbody class="draggable tbody-acct">
+                                                    @if(isset($_bill_account_line))
+                                                        @foreach($_bill_account_line as $accline)
+                                                        <tr class="tr-draggable">
+                                                            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+                                                            <td class="acct-number-td text-right">1</td>
+                                                            <td >                                           
+                                                                <select name="expense_account[]" class="form-control drop-down-coa select-coa input-sm" >
+                                                                    @include("member.load_ajax_data.load_chart_account", ['add_search' => "", 'account_id' => $accline->accline_coa_id])
+                                                                </select>
+                                                            </td>
+                                                            <td><textarea class="textarea-expand acct-desc" name="account_desc[]">{{$accline->accline_description}}</textarea></td>
+                                                            <td><input type="text" class="form-control text-right number-input input-sm acct-amount compute" value="{{currency('',$accline->accline_amount)}}" name="account_amount[]"></td>
+                                                            <td class="text-center acct-remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                        </tr>
+                                                        @endforeach
+                                                    @endif
                                                     <tr class="tr-draggable">
                                                         <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-                                                        <td class="invoice-number-td text-right">1</td>
+                                                        <td class="acct-number-td text-right">1</td>
                                                         <td >                                           
-                                                            <select class="form-control drop-down-coa input-sm" >
+                                                            <select name="expense_account[]" class="form-control drop-down-coa select-coa input-sm" >
                                                                 @include("member.load_ajax_data.load_chart_account", ['add_search' => ""])
                                                             </select>
                                                         </td>
-                                                        <td><textarea class="textarea-expand"></textarea></td>
-                                                        <td><input type="text" class="form-control input-sm" name=""></td>
-                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                        <td><textarea class="textarea-expand acct-desc" name="account_desc[]"></textarea></td>
+                                                        <td><input type="text" class="form-control text-right number-input input-sm acct-amount compute" value="0.00" name="account_amount[]"></td>
+                                                        <td class="text-center acct-remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                     <tr class="tr-draggable">
                                                         <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-                                                        <td class="invoice-number-td text-right">2</td>
+                                                        <td class="acct-number-td text-right">2</td>
                                                         <td >                                           
-                                                            <select class="form-control drop-down-coa input-sm" >
+                                                            <select name="expense_account[]" class="form-control drop-down-coa select-coa input-sm" >
                                                                 @include("member.load_ajax_data.load_chart_account", ['add_search' => ""])
                                                             </select>
                                                         </td>
-                                                        <td><textarea class="textarea-expand"></textarea></td>
-                                                        <td><input type="text" class="form-control input-sm" name=""></td>
-                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                        <td><textarea class="textarea-expand acct-desc" name="account_desc[]"></textarea></td>
+                                                        <td><input type="text" class="form-control text-right input-sm number-input acct-amount compute" value="0.00" name="account_amount[]"></td>
+                                                        <td class="text-center acct-remove-tr  cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -151,9 +180,9 @@
                                     </div>
 
                                  <div class="title">
-                                        <h3><a > <i class="fa fa-caret-down"></i>  Item Details </a></h3>
+                                        <h3><a id="item-a" > <i class="fa fa-caret-down"></i>  Item Details </a></h3>
                                     </div> 
-                                </div> -->
+                                </div> 
                                  <div class="row clearfix draggable-container">
                                     <div class="table-responsive " id="item-tbl">
                                         <div class="col-sm-12">
@@ -198,9 +227,9 @@
                                                                 @endif
                                                             </td>
                                                             <td>
-                                                                <select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" />
-                                                                    @if($item->itemline_um)
-                                                                        @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $item->multi_um_id, 'selected_um_id' => $item->itemline_um])
+                                                                <select class="1111 droplist-um select-um {{isset($ebline->itemline_um) ? 'has-value' : ''}}" name="item_um[]">
+                                                                    @if($ebline->itemline_um)
+                                                                        @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $ebline->multi_um_id, 'selected_um_id' => $ebline->itemline_um])
                                                                     @else
                                                                         <option class="hidden" value="" />
                                                                     @endif
@@ -289,6 +318,22 @@
         <input type="text" class="po-id-input" name="po_id[]">    
     </div>
 </div>
+<div class="acct-div-scrip">
+    <table class="div-acct-row-script hide">
+         <tr class="tr-draggable">
+            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+            <td class="acct-number-td text-right">1</td>
+            <td >                                           
+                <select name="expense_account[]" class="form-control select-coa input-sm" >
+                    @include("member.load_ajax_data.load_chart_account", ['add_search' => ""])
+                </select>
+            </td>
+            <td><textarea class="textarea-expand acct-desc" name="account_desc[]"></textarea></td>
+            <td><input type="text" class="form-control input-sm acct-amount compute text-right number-input" name="account_amount[]" value="0.00"></td>
+            <td class="text-center acct-remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+        </tr>
+    </table>
+</div>
 <div class="div-script">
     <table class="div-item-row-script hide">
        <tr class="tr-draggable">
@@ -314,7 +359,7 @@
             <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
             <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
-            @include("member.load_ajax_data.load_td_serial_number");
+            @include("member.load_ajax_data.load_td_serial_number")
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>

@@ -2,16 +2,7 @@
 namespace App\Http\Controllers\Member;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Tbl_customer;
-use App\Models\Tbl_warehousea;
-use App\Models\Tbl_customer_invoice;
-use App\Models\Tbl_manual_invoice;
-use App\Models\Tbl_customer_invoice_line;
-use App\Models\Tbl_item_bundle;
-use App\Models\Tbl_item;
-use App\Models\Tbl_warehouse;
-use App\Models\Tbl_bill_po;
-use App\Models\Tbl_vendor;
+
 use App\Models\Tbl_terms;
 
 use App\Globals\Vendor;
@@ -30,11 +21,6 @@ use App\Globals\TransactionEnterBills;
 use App\Globals\TransactionPurchaseOrder;
 use App\Globals\AccountingTransaction;
 
-use App\Models\Tbl_purchase_order;
-use App\Models\Tbl_purchase_order_line;
-use App\Models\Tbl_bill;
-use App\Models\Tbl_bill_account_line;
-use App\Models\Tbl_bill_item_line;
 use Carbon\Carbon;
 use Session;
 use PDF;
@@ -52,7 +38,17 @@ class TransactionEnterBillsController extends Member
         $data['_enter_bills'] = TransactionEnterBills::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills_table', $data);
     }
-    public function getCreate()
+    public function getPrint(Request $request)
+    {
+        $eb_id = $request->id;
+           
+        $data['eb'] = TransactionEnterBills::info($this->user_info->shop_id, $eb_id);
+        $data['_ebline'] = TransactionEnterBills::info_item($eb_id);
+
+        $pdf = view('member.accounting_transaction.vendor.enter_bills.enter_bills_pdf', $data);
+        return Pdf_global::show_pdf($pdf);
+    }
+    public function getCreate(Request $request)
     {
         $data['page'] = 'Create Bills';
 
@@ -63,8 +59,16 @@ class TransactionEnterBillsController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
+        $data["transaction_refnum"] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'enter_bills');
         $data['action']     = '/member/transaction/enter_bills/create-enter-bills';
-        
+
+        $eb_id = $request->id;
+        if($eb_id)
+        {
+            $data['eb'] = TransactionEnterBills::info($this->user_info->shop_id, $eb_id);
+            $data['_ebline'] = TransactionEnterBills::info_item($eb_id);
+            $data['action']     = '/member/transaction/enter_bills/update-enter-bills';
+        }
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills', $data);
     }
 
@@ -98,6 +102,55 @@ class TransactionEnterBillsController extends Member
             }
         }
         $validate = TransactionEnterBills::postInsert(null, $this->user_info->shop_id, $insert, $insert_item);
+
+        $return = null;
+        if(is_numeric($validate))
+        {
+            $return['status']          = 'success';
+            $return['status_message']  = 'Success creating bills.';
+            $return['call_function']   = 'success_enter_bills';
+            $return['status_redirect'] = AccountingTransaction::get_redirect('enter_bills', $validate ,$btn_action);
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $validate;
+        }
+
+        return json_encode($return);
+    }
+    public function postUpdateEnterBills(Request $request)
+    {
+        $btn_action  = $request->button_action;
+        $bill_id  = $request->bill_id;
+        //die(var_dump($bill_id));
+
+        $insert['transaction_refnumber']    = $request->transaction_refnumber;
+        $insert['vendor_id']                = $request->vendor_id;
+        $insert['vendor_address']           = $request->vendor_address;
+        $insert['vendor_email']             = $request->vendor_email;
+        $insert['vendor_terms']             = $request->vendor_terms;
+        $insert['transaction_date']         = $request->transaction_date;
+        $insert['transaction_duedate']      = $request->transaction_duedate;
+        $insert['vendor_memo']              = $request->vendor_memo;
+        $insert['bill_ri_id']               = null;
+
+        $insert_item = null;
+        foreach ($request->item_id as $key => $value) 
+        {
+            if($value)
+            {
+                $insert_item[$key]['item_id']          = $value;
+                $insert_item[$key]['item_servicedate'] = $request->item_servicedate[$key];
+                $insert_item[$key]['item_description'] = $request->item_description[$key];
+                $insert_item[$key]['item_um']          = $request->item_um[$key];
+                $insert_item[$key]['item_qty']         = str_replace(',', '', $request->item_qty[$key]);
+                $insert_item[$key]['item_rate']        = str_replace(',', '', $request->item_rate[$key]);
+                $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_discount']    = 0;
+            }
+        }
+        $validate = TransactionEnterBills::postUpdate($bill_id, null, $this->user_info->shop_id, $insert, $insert_item);
 
         $return = null;
         if(is_numeric($validate))

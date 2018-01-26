@@ -50,6 +50,11 @@ class Customer_SaleOrderController extends Member
     }
     public function so_pdf($est_id)
     {
+        $date = date("F j, Y, g:i a");
+        $first_name         = $this->user_info->user_first_name;
+        $last_name         = $this->user_info->user_last_name;
+        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
         $data['estimate'] = Tbl_customer_estimate::customer()->where("est_id",$est_id)->where("est_shop_id",$this->user_info->shop_id)->first();
         $data["transaction_type"] = "SALES ORDER";
         $data["estimate_item"] = Tbl_customer_estimate_line::estimate_item()->where("estline_est_id",$est_id)->get();
@@ -62,8 +67,7 @@ class Customer_SaleOrderController extends Member
         }
 
        $pdf = view('member.customer.estimate.estimate_pdf', $data);
-       return Pdf_global::show_pdf($pdf);
-
+       return Pdf_global::show_pdf($pdf, null, $footer);
     }
     public function update_status($id)
     {
@@ -173,6 +177,10 @@ class Customer_SaleOrderController extends Member
             {
                 $data["redirect"] = "/member/customer/sales_order";
             }
+            elseif($button_action == "save-and-print")
+            {
+                $data["redirect"] = "/member/customer/customer_sales_order_view/".$est_id;
+            }
         }
         else
         {
@@ -246,6 +254,10 @@ class Customer_SaleOrderController extends Member
             elseif($button_action == "save-and-new")
             {
                 $data["redirect"] = "/member/customer/sales_order";
+            }
+            elseif($button_action == "save-and-print")
+            {
+                $data["redirect"] = "/member/customer/customer_sales_order_view/".$est_id;
             }
         }
         else

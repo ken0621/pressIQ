@@ -434,7 +434,16 @@ class Customer_InvoiceController extends Member
                 {
                     $json["status"]         = "success-invoice";
 
-                    if($button_action == "save-and-edit")
+                    /*if($button_action == "save-and-edit")
+                    {
+                        $json["redirect"]    = "/member/customer/invoice_list";
+                    }
+                    elseif($button_action == "save-and-new")
+                    {
+                        $json["redirect"]   = '/member/customer/invoice';
+                    }*/
+
+                    if($button_action == "save-and-close")
                     {
                         $json["redirect"]    = "/member/customer/invoice_list";
                     }
@@ -442,6 +451,16 @@ class Customer_InvoiceController extends Member
                     {
                         $json["redirect"]   = '/member/customer/invoice';
                     }
+                    elseif($button_action == "save-and-edit")
+                    {
+                        $json["redirect"]   = '/member/customer/invoice?id='.$inv_id;
+                    }
+                    elseif($button_action == "save-and-print")
+                    {
+                        $json["redirect"]   = '/member/customer/customer_invoice_pdf/'.$inv_id;
+                    }
+
+
 
                     Request::session()->flash('success', 'Invoice Successfully Created');
                 }
@@ -757,6 +776,18 @@ class Customer_InvoiceController extends Member
                     {
                         $json["redirect"]   = '/member/customer/invoice';
                     }
+                    if($button_action == "save-and-close")
+                    {
+                        $json["redirect"]    = "/member/customer/invoice_list";
+                    }
+                    elseif($button_action == "save-and-edit")
+                    {
+                        $json["redirect"]   = '/member/customer/invoice?id='.$inv_id;
+                    }
+                    elseif($button_action == "save-and-print")
+                    {
+                        $json["redirect"]   = '/member/customer/customer_invoice_pdf/'.$inv_id;
+                    }
                     Request::session()->flash('success', 'Invoice Successfully Updated');
                 }
                 elseif($json["status"] == "error" && count($json["status_message"]) > 0)
@@ -803,21 +834,25 @@ class Customer_InvoiceController extends Member
             $data['new_inv_id'] = $invoice_data->new_inv_id;
         }
 
-        // $data["invoice_id"] = "INVOICE";
         $data["action_load"] = "/member/customer/customer_invoice_pdf";
         return view("member.customer_invoice.invoice_view",$data);
     }
     public function invoice_view_pdf($inv_id)
     {
-        $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
+        $date = date("F j, Y, g:i a");
+        $first_name         = $this->user_info->user_first_name;
+        $last_name         = $this->user_info->user_last_name;
 
+        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
+        $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
         $data["transaction_type"] = "INVOICE";
         if(Tbl_customer_invoice::where("inv_id",$inv_id)->value("is_sales_receipt") != 0)
         {
             $data["transaction_type"] = "Sales Receipt";            
         }
+
         $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
-        //dd($data["invoice_item"]);
         foreach($data["invoice_item"] as $key => $value) 
         {
             $qty = UnitMeasurement::um_qty($value->invline_um);
@@ -825,6 +860,7 @@ class Customer_InvoiceController extends Member
             $total_qty = $value->invline_qty * $qty;
             $data["invoice_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
         }
+
         $data["cm"] = null;
         $data["_cmline"] = null;
         if($data["invoice"] != null)
@@ -840,10 +876,8 @@ class Customer_InvoiceController extends Member
                 $data["_cmline"][$keys]->cm_qty = UnitMeasurement::um_view($total_qtys,$values->item_measurement_id,$values->cmline_um);
             }
         }
-        //dd($data);
-        //return view('member.customer_invoice.invoice_pdf', $data);
         $pdf = view('member.customer_invoice.invoice_pdf', $data);
-        return Pdf_global::show_pdf($pdf);
+        return Pdf_global::show_pdf($pdf, null, $footer);
     }
 
     public function check_stock($check_single, $check_bundle)

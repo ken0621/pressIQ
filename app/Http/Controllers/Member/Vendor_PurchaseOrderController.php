@@ -88,8 +88,10 @@ class Vendor_PurchaseOrderController extends Member
             $data["action"]     = "/member/vendor/purchase_order/create_po";
             $data["v_id"]       = Request::input("vendor_id");
             $data["terms"]       = Request::input("term_id");
+
+            //$data["print"] = Tbl_purchase_order::vendor()->where("po_shop_id",Purchase_Order::getShopId())->get();
+            //dd($data["_po"]);
             $id = Request::input('id');
-           
 
             if($id)
             {
@@ -139,6 +141,11 @@ class Vendor_PurchaseOrderController extends Member
         $access = Utilities::checkAccess('vendor-purchase-order', 'access_page');
         if($access == 1)
         { 
+            $date       = date("F j, Y, g:i a");
+            $first_name = $this->user_info->user_first_name;
+            $last_name  = $this->user_info->user_last_name;
+            $footer     ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
             $data["po"] = Tbl_purchase_order::vendor()->where("po_id",$po_id)->first();
             $data["_poline"] = Tbl_purchase_order_line::um()->item()->where("poline_po_id",$po_id)->get();
             foreach($data["_poline"] as $key => $value) 
@@ -149,7 +156,7 @@ class Vendor_PurchaseOrderController extends Member
                 $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
             }
             $pdf = view("member.vendor_list.po_pdf",$data);
-            return Pdf_global::show_pdf($pdf);
+            return Pdf_global::show_pdf($pdf, null, $footer);
         }
         else
         {
@@ -158,6 +165,7 @@ class Vendor_PurchaseOrderController extends Member
     }
     public function create_po()
     {
+
         //dd(Request::input());
 
         $button_action = Request::input('button_action');
@@ -215,6 +223,14 @@ class Vendor_PurchaseOrderController extends Member
         {
             $json["redirect_to"]    = "/member/vendor/purchase_order";
         }
+        elseif($button_action == "save-and-close")
+        {
+            $json["redirect_to"]    = "/member/vendor/purchase_order/list";
+        }
+        elseif($button_action == "save-and-print")
+        {
+            $json["redirect_to"]    = "/member/vendor/purchase_order/pdf/".$po_id;
+        }
 
         return json_encode($json);
 
@@ -223,7 +239,8 @@ class Vendor_PurchaseOrderController extends Member
     public function update_po()
     {
         $po_id = Request::input("po_id");
-
+        $button_action = Request::input('button_action');
+        
         $vendor_info                        = [];
         $vendor_info['po_vendor_id']       = Request::input('po_vendor_id');;
         $vendor_info['po_vendor_email']    = Request::input('po_vendor_email');
@@ -273,7 +290,24 @@ class Vendor_PurchaseOrderController extends Member
         $po_id = Purchase_Order::updatePurchase($po_id, $vendor_info, $po_info, $po_other_info, $item_info, $total_info);
 
         $json["status"]         = "success-po";
-        $json["redirect_to"]    = "/member/vendor/purchase_order?id=".$po_id;
+        //$json["redirect_to"]    = "/member/vendor/purchase_order?id=".$po_id;
+
+        if($button_action == "save-and-edit")
+        {
+            $json["redirect_to"]    = "/member/vendor/purchase_order?id=".$po_id;
+        }
+        elseif($button_action == "save-and-new")
+        {
+            $json["redirect_to"]    = "/member/vendor/purchase_order";
+        }
+        elseif($button_action == "save-and-close")
+        {
+            $json["redirect_to"]    = "/member/vendor/purchase_order/list";
+        }
+        elseif($button_action == "save-and-print")
+        {
+            $json["redirect_to"]    = "/member/vendor/purchase_order/pdf/".$po_id;
+        }
 
         return json_encode($json);
 

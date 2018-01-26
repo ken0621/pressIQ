@@ -131,6 +131,7 @@ class TransactionPurchaseOrder
     {
         if($ri_id != null)
         {
+            // here
             foreach ($po_data as $key => $value)
             {
                 Self::checkPolineQty($value['item_ref_id'], $ri_id);

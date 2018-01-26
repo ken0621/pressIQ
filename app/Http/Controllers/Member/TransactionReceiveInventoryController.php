@@ -195,17 +195,19 @@ class TransactionReceiveInventoryController extends Member
     {
         $apply_po_id = $request->apply_po_id;
 
-        $_applied_po_id = Session::get('applied_po');
+        // $_applied_po_id = Session::get('applied_po');
         
-        if(count($apply_po_id) > 0)
-        {
-            foreach ($apply_po_id as $key => $value)
-            {
-                $_applied_po_id[$key] = $value; // to retain checked po id
-            }   
+        // if(count($apply_po_id) > 0)
+        // {
+        //     foreach ($apply_po_id as $key => $value)
+        //     {
+        //         $_applied_po_id[$key] = $value; // to retain checked po id
+        //     }   
 
-            Session::put('applied_po', $_applied_po_id);
-        }
+        //     Session::put('applied_po', $_applied_po_id);
+        // }
+
+        Session::put('applied_po', $apply_po_id);
         
         $return['status']        = "success";
         $return['call_function'] = "success_apply_po";
@@ -221,8 +223,8 @@ class TransactionReceiveInventoryController extends Member
         {
             foreach ($applied_po_id as $key => $value)
             {
-                $_applied_poline = TransactionPurchaseOrder::info_item($value);
-                $info = TransactionPurchaseOrder::info($this->user_info->shop_id,$value);
+                $_applied_poline = TransactionPurchaseOrder::info_item($key);
+                $info = TransactionPurchaseOrder::info($this->user_info->shop_id,$key);
 
                 $remarks = null;
                 foreach ($_applied_poline as $poline_key => $poline_value) 

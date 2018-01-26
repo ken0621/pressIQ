@@ -95,6 +95,8 @@
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>
+                                        <tbody class="draggable tbody-item applied-transaction-list">
+                                        </tbody>
                                         <tbody class="draggable tbody-item estimate-tbl">
                                             @if(isset($sales_receipt))
                                                 @foreach($sales_receipt_item as $sr_item)
@@ -191,7 +193,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Message Displayed on Receipt</label>
-                                <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder="">{{isset($sales_receipt) ? $sales_receipt->inv_message : ''}}</textarea>
+                                <textarea class="form-control input-sm textarea-expand remarks-sr" name="customer_message" placeholder="">{{isset($sales_receipt) ? $sales_receipt->inv_message : ''}}</textarea>
                             </div>
                             <div class="col-sm-3">
                                 <label>Statement Memo</label>

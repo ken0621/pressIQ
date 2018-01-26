@@ -187,8 +187,66 @@ class TransactionSalesReceiptController extends Member
 		$data['_eq'] = TransactionEstimateQuotation::getOpenEQ($this->user_info->shop_id, $request->c);
 		$data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
 		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
+		$data['action'] = '/member/transaction/sales_receipt/apply-transaction';
 		return view("member.accounting_transaction.customer.sales_receipt.load_transaction", $data);
 	}
+
+    public function postApplyTransaction(Request $request)
+    {
+        $_transaction = $request->apply_transaction;
+        Session::put('applied_transaction_sr', $_transaction);
+
+        $return['call_function'] = "success_apply_transaction";
+        $return['status'] = "success";
+
+        return json_encode($return);
+    }
+     public function getLoadAppliedTransaction(Request $request)
+    {
+        $_ids = Session::get('applied_transaction_sr');
+
+        $return = null;
+        $remarks = null;
+        if(count($_ids) > 0)
+        {
+            foreach ($_ids as $key => $value) 
+            {
+                $get = TransactionSalesReceipt::transaction_data_item($key);
+                $info = TransactionSalesReceipt::transaction_data($this->user_info->shop_id, $key);
+
+                foreach ($get as $key_item => $value_item)
+                {
+                    $return[$key.'i'.$key_item]['service_date'] = $value_item->estline_service_date;
+                    $return[$key.'i'.$key_item]['item_id'] = $value_item->estline_item_id;
+                    $return[$key.'i'.$key_item]['item_description'] = $value_item->estline_description;
+                    $return[$key.'i'.$key_item]['multi_um_id'] = $value_item->multi_um_id;
+                    $return[$key.'i'.$key_item]['item_um'] = $value_item->estline_um;
+                    $return[$key.'i'.$key_item]['item_qty'] = $value_item->estline_qty;
+                    $return[$key.'i'.$key_item]['item_rate'] = $value_item->estline_rate;
+                    $return[$key.'i'.$key_item]['item_amount'] = $value_item->estline_amount;
+                    $return[$key.'i'.$key_item]['item_discount'] = $value_item->estline_discount;
+                    $return[$key.'i'.$key_item]['item_discount_type'] = $value_item->estline_discount_type;
+                    $return[$key.'i'.$key_item]['item_remarks'] = $value_item->estline_discount_remark;
+                    $return[$key.'i'.$key_item]['taxable'] = $value_item->taxable;
+                }
+                if($info)
+                {
+                	$con = 'SO#';
+                	if($info->is_sales_order == 0)
+                	{
+                		$con = 'EQ#';
+                	}
+                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : $con.$info->est_id.', ';
+                }
+            }
+        }
+        $data['_item']  = Item::get_all_category_item([1,4,5]);
+        $data['_transactions'] = $return;
+        $data['remarks'] = $remarks;
+        $data['_um']        = UnitMeasurement::load_um_multi();
+
+        return view('member.accounting_transaction.customer.sales_receipt.applied_transaction', $data);
+    }
 	
 	public function getPrint(Request $request)
 	{

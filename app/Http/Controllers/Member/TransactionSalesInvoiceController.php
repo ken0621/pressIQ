@@ -102,6 +102,7 @@ class TransactionSalesInvoiceController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesInvoice::postInsert($this->user_info->shop_id, $insert, $insert_item);
+			TransactionSalesInvoice::applied_transaction($this->user_info->shop_id);
 		}
 		if(is_numeric($validate))
 		{
@@ -109,6 +110,7 @@ class TransactionSalesInvoiceController extends Member
 			$return['status_message'] = 'Success creating invoice.';
 			$return['call_function'] = 'success_invoice';
 			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_invoice', $validate ,$btn_action);
+			Session::forget('applied_transaction_si');
 		}
 		else
 		{
@@ -167,6 +169,7 @@ class TransactionSalesInvoiceController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesInvoice::postUpdate($invoice_id, $this->user_info->shop_id, $insert, $insert_item);
+			TransactionSalesInvoice::applied_transaction($this->user_info->shop_id);
 		}
 		if(is_numeric($validate))
 		{
@@ -174,6 +177,7 @@ class TransactionSalesInvoiceController extends Member
 			$return['status_message'] = 'Success updating invoice.';
 			$return['call_function'] = 'success_invoice';
 			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_invoice', $validate ,$btn_action);
+			Session::forget('applied_transaction_si');
 		}
 		else
 		{

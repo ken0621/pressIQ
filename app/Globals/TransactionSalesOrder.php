@@ -189,4 +189,17 @@ class TransactionSalesOrder
 		return $return;
 	}
 
+    public static function applied_transaction($shop_id)
+    {
+        $applied_transaction = Session::get('applied_transaction_so');
+        if(count($applied_transaction) > 0)
+        {
+            foreach ($applied_transaction as $key => $value) 
+            {
+                $update['est_status'] = 'closed';
+                Tbl_customer_estimate::where("est_id", $key)->where('est_shop_id', $shop_id)->update($update);
+            }
+        }
+    }
+
 }

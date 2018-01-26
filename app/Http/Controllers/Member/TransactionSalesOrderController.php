@@ -81,12 +81,14 @@ class TransactionSalesOrderController extends Member
 		}
 		$return = null;
 		$validate = TransactionSalesOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
+		TransactionSalesOrder::applied_transaction($this->user_info->shop_id);
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';
 			$return['status_message'] = 'Success creating sales order.';
 			$return['call_function'] = 'success_sales_order';
 			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_order', $validate ,$btn_action);
+			Session::forget('applied_transaction_so');
 		}
 		else
 		{
@@ -128,12 +130,14 @@ class TransactionSalesOrderController extends Member
 		}
 		$return = null;
 		$validate = TransactionSalesOrder::postUpdate($sales_order_id, $this->user_info->shop_id, $insert, $insert_item);
+		TransactionSalesOrder::applied_transaction($this->user_info->shop_id);
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';
 			$return['status_message'] = 'Success updating sales order.';
 			$return['call_function'] = 'success_sales_order';
 			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_order', $validate ,$btn_action);
+			Session::forget('applied_transaction_so');
 		}
 		else
 		{

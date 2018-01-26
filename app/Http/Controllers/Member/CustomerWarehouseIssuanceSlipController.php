@@ -75,8 +75,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         {
             $data['applied'] = CustomerWIS::get_inv($this->user_info->shop_id, $request->ids);
         }
-        // dd(Session::get('applied_transaction'));
-        Session::forget('applied_transaction');
+        Session::forget('applied_transaction_wis');
 
         return view('member.warehousev2.customer_wis.customer_wis_create',$data);
     }
@@ -133,7 +132,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
             $data['status'] = 'success';
             $data['call_function'] = 'success_create_customer_wis';
             $data['status_message'] = 'Success';
-            Session::forget('applied_transaction');
+            Session::forget('applied_transaction_wis');
 
             if($btn_action == 'sclose')
             {
@@ -296,7 +295,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $data['_sr'] = TransactionSalesReceipt::getUndeliveredSalesReceipt($this->user_info->shop_id, $request->c);
         $data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
 
-        $data['applied'] = Session::get('applied_transaction');
+        $data['applied'] = Session::get('applied_transaction_wis');
         $data['action'] = '/member/customer/wis/apply-transaction';
         return view('member.warehousev2.customer_wis.load_transaction', $data);
     }
@@ -319,7 +318,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
     }
     public function getLoadAppliedTransaction(Request $request)
     {
-        $_ids = Session::get('applied_transaction');
+        $_ids = Session::get('applied_transaction_wis');
 
         $return = null;
         $remarks = null;
@@ -346,7 +345,12 @@ class CustomerWarehouseIssuanceSlipController extends Member
                 }
                 if($info)
                 {
-                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : 'INV#'.$info->inv_id.', ';
+                    $con = 'SR#';
+                    if($info->is_sales_receipt == 0)
+                    {
+                        $con = 'SI#';
+                    }
+                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : $con.$info->inv_id.', ';
                 }
             }
         }

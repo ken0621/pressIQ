@@ -243,7 +243,7 @@ class TransactionSalesReceipt
 			$itemline[$key]['invline_discount'] 		= $discount;
 			$itemline[$key]['invline_discount_type'] 	= $discount_type;
 			$itemline[$key]['invline_discount_remark'] 	= $value['item_remarks'];
-			$itemline[$key]['taxable'] 					= $value['item_taxable'];
+			$itemline[$key]['taxable'] 					= $value['item_taxable'] != null ? $value['item_taxable'] : 0;
 			$itemline[$key]['invline_amount'] 			= $value['item_amount'];
 			$itemline[$key]['date_created'] 			= Carbon::now();
 		}

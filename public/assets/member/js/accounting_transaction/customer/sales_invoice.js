@@ -224,7 +224,6 @@ function sales_invoice()
     		}
 
     	});
-        $('.droplist-um:not(.has-value)').globalDropList("disabled");
 
         $(".draggable .tr-draggable:last td select.select-um").globalDropList(
         {
@@ -236,7 +235,7 @@ function sales_invoice()
     			action_load_unit_measurement($(this));
     		}
 
-        }).globalDropList('disabled');
+        });
 	}
 	function action_load_open_transaction($customer_id)
 	{
@@ -333,6 +332,17 @@ function sales_invoice()
 		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm/dd/yy', });
 	}
 
+	function load_applied_transaction()
+	{
+		$('.applied-transaction-list').load('/member/transaction/sales_invoice/load-applied-transaction', function()
+		{
+			console.log("success");
+			action_load_initialize_select();
+			action_compute();
+			action_reassign_number();
+			$('.remarks-si').html($('.si-remarks').val());
+		});
+	}
 	function action_reassign_number()
 	{
 		var num = 1;
@@ -340,6 +350,11 @@ function sales_invoice()
 			$(this).html(num);
 			num++;
 		});
+	}
+
+	this.load_applied_transaction = function()
+	{
+		load_applied_transaction();
 	}
 }
 function success_update_customer(data)
@@ -369,5 +384,14 @@ function success_invoice(data)
 	{
 		toastr.success(data.status_message);
 		location.href = data.status_redirect;
+	}
+}
+
+function success_apply_transaction(data)
+{
+	if(data.status == 'success')
+	{
+		data.element.modal("toggle");
+		sales_invoice.load_applied_transaction();
 	}
 }

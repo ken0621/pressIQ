@@ -2,6 +2,7 @@
 namespace App\Globals;
 
 use App\Models\Tbl_customer_estimate;
+use App\Models\Tbl_customer_estimate_line;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_customer_invoice_line;
 use Carbon\Carbon;
@@ -28,6 +29,14 @@ class TransactionSalesInvoice
 	public static function getUndeliveredSalesInvoice($shop_id, $customer_id)
 	{
 		return Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('inv_customer_id', $customer_id)->where('is_sales_receipt',0)->where('item_delivered',0)->get();
+	}
+	public static function transaction_data($shop_id, $trans_id)
+	{
+		return Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_id",$trans_id)->first();
+	}
+	public static function transaction_data_item($trans_id)
+	{
+		return Tbl_customer_estimate_line::um()->where("estline_est_id",$trans_id)->get();		
 	}
 	public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
 	{
@@ -257,7 +266,7 @@ class TransactionSalesInvoice
 			$itemline[$key]['invline_discount'] 		= $discount;
 			$itemline[$key]['invline_discount_type'] 	= $discount_type;
 			$itemline[$key]['invline_discount_remark'] 	= $value['item_remarks'];
-			$itemline[$key]['taxable'] 					= $value['item_taxable'];
+			$itemline[$key]['taxable'] 					= $value['item_taxable'] != null ? $value['item_taxable'] : 0;
 			$itemline[$key]['invline_amount'] 			= $value['item_amount'];
 			$itemline[$key]['date_created'] 			= Carbon::now();
 		}

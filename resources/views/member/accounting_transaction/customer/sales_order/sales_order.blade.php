@@ -64,7 +64,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Billing Address</label>
-                                <textarea class="form-control input-sm textarea-expand customer-billing-address" name="customer_address" placeholder="">{{$sales_order->est_customer_billing_address}}</textarea>
+                                <textarea class="form-control input-sm textarea-expand customer-billing-address" name="customer_address" placeholder="">{{$sales_order->est_customer_billing_address or ''}}</textarea>
                             </div>
                             <div class="col-sm-2">
                                 <label>Sales Order Date</label>
@@ -120,8 +120,7 @@
                                                     <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea> {{$so_item->estline_discount_remark}}</td>
                                                     <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$so_item->estline_amount}}"/></td>
                                                     <td class="text-center">
-                                                        <input type="hidden" class="estline_taxable" name="item_taxable[]" value="" >
-                                                        <input type="checkbox" name="" class="taxable-check compute" value="checked" {{$so_item->taxable == 1 ? 'checked' : ''}} value="checked">
+                                                        <input type="checkbox" name="item_taxable[]" class="taxable-check compute"  {{$so_item->taxable == 1 ? 'checked' : ''}} value="1">
                                                     </td>
                                                     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                 </tr>
@@ -146,8 +145,7 @@
                                                 <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center">
-                                                    <input type="hidden" class="item_taxable" name="item_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
+                                                    <input type="checkbox" name="item_taxable[]" class="taxable-check compute" value="1">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -171,8 +169,7 @@
                                                 <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center">
-                                                    <input type="hidden" class="item_taxable" name="item_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
+                                                    <input type="checkbox" name="item_taxable[]" class="taxable-check compute" value="1">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -237,8 +234,7 @@
             <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center">
-                <input type="hidden" class="item_taxable" name="item_taxable[]" value="" >
-                <input type="checkbox" name="" class="taxable-check compute" value="checked">
+                <input type="checkbox" name="item_taxable[]" class="taxable-check compute" value="1">
             </td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>

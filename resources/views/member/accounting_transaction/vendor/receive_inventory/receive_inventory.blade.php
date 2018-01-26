@@ -92,7 +92,7 @@
                                             <table class="digima-table">
                                                 <thead >
                                                     <tr>
-                                                        <th style="width: 1000px;">#</th>
+                                                        <th style="width: 15px;">#</th>
                                                         <th style="width: 200px;">Product/Service</th>
                                                         <th>Description</th>
                                                         <th style="width: 70px;">U/M</th>

@@ -92,6 +92,8 @@
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>
+                                        <tbody class="draggable tbody-item applied-transaction-list">
+                                        </tbody>
                                         <tbody class="draggable tbody-item">    
                                             @if(isset($sales_order))
                                                 @foreach($sales_order_item as $so_item)
@@ -181,7 +183,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Message Displayed on Sales Order</label>
-                                <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder="">{{$sales_order->est_message or ''}}</textarea>
+                                <textarea class="form-control input-sm textarea-expand remarks-so" name="customer_message" placeholder="">{{$sales_order->est_message or ''}}</textarea>
                             </div>
                             <div class="col-sm-3">
                                 <label>Statement Memo</label>

@@ -51,6 +51,8 @@ class TransactionSalesInvoiceController extends Member
         	$data['sales_invoice_item'] = TransactionSalesInvoice::info_item($request->id);
         }
 
+        Session::forget('applied_transaction_si');
+
 		return view('member.accounting_transaction.customer.sales_invoice.sales_invoice',$data);
 	}
 	public function postCreateSalesInvoice(Request $request)
@@ -85,7 +87,7 @@ class TransactionSalesInvoiceController extends Member
 				$insert_item[$key]['item_discount'] 	= str_replace(',', '', $request->item_discount[$key]);
 				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
-				$insert_item[$key]['item_taxable'] 		= $request->item_taxable[$key];
+				$insert_item[$key]['item_taxable'] 		= isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
 			}
 		}
 
@@ -100,6 +102,7 @@ class TransactionSalesInvoiceController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesInvoice::postInsert($this->user_info->shop_id, $insert, $insert_item);
+			TransactionSalesInvoice::applied_transaction($this->user_info->shop_id);
 		}
 		if(is_numeric($validate))
 		{
@@ -107,6 +110,7 @@ class TransactionSalesInvoiceController extends Member
 			$return['status_message'] = 'Success creating invoice.';
 			$return['call_function'] = 'success_invoice';
 			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_invoice', $validate ,$btn_action);
+			Session::forget('applied_transaction_si');
 		}
 		else
 		{
@@ -150,7 +154,7 @@ class TransactionSalesInvoiceController extends Member
 				$insert_item[$key]['item_discount'] 	= str_replace(',', '', $request->item_discount[$key]);
 				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
-				$insert_item[$key]['item_taxable'] 		= $request->item_taxable[$key];
+				$insert_item[$key]['item_taxable'] 		= isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
 			}
 		}
 		$return = null;
@@ -165,6 +169,7 @@ class TransactionSalesInvoiceController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesInvoice::postUpdate($invoice_id, $this->user_info->shop_id, $insert, $insert_item);
+			TransactionSalesInvoice::applied_transaction($this->user_info->shop_id);
 		}
 		if(is_numeric($validate))
 		{
@@ -172,6 +177,7 @@ class TransactionSalesInvoiceController extends Member
 			$return['status_message'] = 'Success updating invoice.';
 			$return['call_function'] = 'success_invoice';
 			$return['status_redirect'] = AccountingTransaction::get_redirect('sales_invoice', $validate ,$btn_action);
+			Session::forget('applied_transaction_si');
 		}
 		else
 		{
@@ -192,6 +198,8 @@ class TransactionSalesInvoiceController extends Member
 		$data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
 		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
 		$data['action'] = '/member/transaction/sales_invoice/apply-transaction';
+
+        $data['applied'] = Session::get('applied_transaction_si');
 		return view("member.accounting_transaction.customer.sales_invoice.load_transaction", $data);
 	}
 

@@ -32,8 +32,6 @@ class TransactionSalesOrder
 	{
 		return Tbl_customer_estimate_line::um()->where("estline_est_id", $sales_order_id)->get();		
 	}
-
-
 	public static function getAllOpenSO($shop_id)
     {
         return Tbl_customer_estimate::Customer()->where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->get();
@@ -190,5 +188,18 @@ class TransactionSalesOrder
 
 		return $return;
 	}
+
+    public static function applied_transaction($shop_id)
+    {
+        $applied_transaction = Session::get('applied_transaction_so');
+        if(count($applied_transaction) > 0)
+        {
+            foreach ($applied_transaction as $key => $value) 
+            {
+                $update['est_status'] = 'closed';
+                Tbl_customer_estimate::where("est_id", $key)->where('est_shop_id', $shop_id)->update($update);
+            }
+        }
+    }
 
 }

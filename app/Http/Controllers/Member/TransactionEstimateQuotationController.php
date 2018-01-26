@@ -75,7 +75,7 @@ class TransactionEstimateQuotationController extends Member
 				$insert_item[$key]['item_discount'] = str_replace(',', '', $request->item_discount[$key]);
 				$insert_item[$key]['item_remarks'] = $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
-				$insert_item[$key]['item_taxable'] = $request->item_taxable[$key];
+				$insert_item[$key]['item_taxable'] = isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
 			}
 		}
 		$return = null;
@@ -124,7 +124,7 @@ class TransactionEstimateQuotationController extends Member
 				$insert_item[$key]['item_discount'] = str_replace(',', '', $request->item_discount[$key]);
 				$insert_item[$key]['item_remarks'] = $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
-				$insert_item[$key]['item_taxable'] = $request->item_taxable[$key];
+				$insert_item[$key]['item_taxable'] = isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
 			}
 		}
 		$return = null;

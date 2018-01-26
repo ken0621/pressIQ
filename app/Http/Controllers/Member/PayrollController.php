@@ -91,6 +91,7 @@ use App\Models\Tbl_payroll_13th_month_basis;
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
 use App\Globals\Utilities;
+use App\Globals\Pdf_global;
 use DateTime;
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_shift_time;
@@ -291,6 +292,26 @@ class PayrollController extends Member
          
           return view('member.payroll.employeelist', $data);
      }   
+
+     public function export_to_pdf_employee()
+     {
+
+          $active_status[0]    = 1;
+          $active_status[1]    = 2;
+          $active_status[2]    = 3;
+          $active_status[3]    = 4;
+          $active_status[4]    = 5;
+          $active_status[5]    = 6;
+          $active_status[7]    = 7;
+
+          $separated_status[0] = 8;
+          $separated_status[1] = 9;
+
+          $data['_active']     = Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $active_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_last_name')->get();
+          
+          $pdf = view('member.payroll.employeelist_pdf', $data);
+          return Pdf_global::show_pdf($pdf, 'landscape');
+     }
 
 
      /* IMPORT EMPLOYEE DATA FROM EXCEL  START*/
@@ -726,7 +747,6 @@ class PayrollController extends Member
           // die(var_dump(Request::all()));
           $_data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
           $first = $_data[0]; 
-          die(var_dump($_data));
           /* check index exist */
           
           if(isset($first['company']) && isset($first['first_name']) && isset($first['department']) && isset($first['start_date']))
@@ -4162,7 +4182,7 @@ class PayrollController extends Member
           foreach($payroll_employee_id as $key => $emp_id)
           {
                // dd($emp_id['payroll_employee_id']);     
-               $empdata = Tbl_payroll_leave_schedulev2::getviewleavedata($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+               $empdata = Tbl_payroll_leave_schedulev2::getviewleavedata2($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'],Self::shop_id())->get();
     
                array_push($datas, $empdata); 
           }
@@ -4636,10 +4656,25 @@ class PayrollController extends Member
 
      public function modal_leave_annual_report()
      {    
-          $tempmonth = date("Y-m-d");
-          $month = explode("-", $tempmonth);
 
-          return view("member.payroll.modal.modal_leave_annual_report");
+          $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->get();
+
+          $payroll_employee_id   = Tbl_payroll_leave_employeev2::getemployeeidbytempid($payroll_leave_temp_id,Self::shop_id())->get();
+
+          $datas     = array();                                        
+          foreach($payroll_employee_id as $key => $emp_id)
+          {
+
+                       $empdata = Tbl_payroll_leave_schedulev2::getannualleave($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
+                       
+               array_push($datas, $empdata);
+
+          }
+
+          dd($datas);
+   
+          $data['leave_report'] = $datas;
+          return view("member.payroll.modal.modal_leave_annual_report",$data);
      }
      //end reporting v2
 
@@ -5018,7 +5053,8 @@ class PayrollController extends Member
 
           if($payroll_leave_pay_value == 1)
           {
-                $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())
+        
+                    $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())
                     ->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
                     ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_tempv2.payroll_leave_temp_id','=','tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
                     ->leftjoin('tbl_payroll_leave_schedulev2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
@@ -5028,10 +5064,29 @@ class PayrollController extends Member
                     ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')                                                                                           
                     ->select(DB::raw('*, tbl_payroll_leave_employee_v2.payroll_leave_employee_id as leave_employee_id, tbl_payroll_leave_employee_v2.payroll_leave_employee_id as payroll_leave_employee_id_2'))
                     ->get();
+               
+
           }
           else
           {
-               $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())->select(DB::raw('*, tbl_payroll_employee_basic.payroll_employee_id as payroll_leave_employee_id_3'))->get();
+               if($leave_id == 0)
+               {
+                     $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())
+                    ->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
+                    ->join('tbl_payroll_leave_tempv2','tbl_payroll_leave_tempv2.payroll_leave_temp_id','=','tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
+                    ->leftjoin('tbl_payroll_leave_schedulev2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
+                    ->where('tbl_payroll_leave_tempv2.payroll_leave_temp_id',$leave_id)
+                    ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_is_archived', 0)
+                    ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
+                    ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')                                                                                           
+                    ->select(DB::raw('*, tbl_payroll_leave_employee_v2.payroll_leave_employee_id as leave_employee_id, tbl_payroll_leave_employee_v2.payroll_leave_employee_id as payroll_leave_employee_id_2'))
+                    ->get();
+               }
+               else
+               {
+                    $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())->select(DB::raw('*, tbl_payroll_employee_basic.payroll_employee_id as payroll_leave_employee_id_3'))->get();
+               }
+  
           }
 
           return json_encode($emp);
@@ -5213,12 +5268,78 @@ class PayrollController extends Member
 
      public function modal_create_payroll_group()
      {
+          Session::put('payroll_group_tag_employee', array());
           $data['_overtime_rate']  = Tbl_payroll_over_time_rate_default::get();
           $data['_day']            = Payroll::restday_checked(); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
           $data['_shift_code']     = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
 
+          $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+
           return view('member.payroll.modal.modal_create_payroll_group', $data);
+     }
+
+     public function modal_tag_payroll_group_employee()
+     {
+          $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+
+          $data['deduction_id']    =    0;
+
+          $data['action']               ='/member/payroll/payroll_group/set_tag_payroll_group_employee';
+          return view('member.payroll.modal.modal_deduction_tag_employee', $data);
+     }
+
+     public function set_tag_payroll_group_employee()
+     {
+          $employee_tag = Request::input('employee_tag');
+
+          $array = array();
+          if(Session::has('payroll_group_tag_employee'))
+          {
+               $array = Session::get('payroll_group_tag_employee');
+          }
+
+
+          if(isset($employee_tag)){
+               foreach($employee_tag as $tag)
+               {
+                    array_push($array, $tag);
+               }    
+          }
+
+          Session::put('payroll_group_tag_employee',$array);
+          $return['status']             = 'success';
+          $return['function_name']      = 'payroll_group.load_tag_employee';
+          
+          return json_encode($return);
+     }
+
+     public function get_payroll_tag_employee()
+     {
+          $employee = [0 => 0];
+          if(Session::has('payroll_group_tag_employee'))
+          {
+               $employee = Session::get('payroll_group_tag_employee');
+          }
+          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+
+          $data['new_record'] = $emp;
+
+          return json_encode($data);
+     }
+
+     public function remove_payroll_tag_employee()
+     {
+           $content = Request::input('content');
+          $array     = Session::get('payroll_group_tag_employee');
+          if(($key = array_search($content, $array)) !== false) {
+              unset($array[$key]);
+          }
+          Session::put('payroll_group_tag_employee',$array);
      }
 
      public function modal_save_payroll_group()
@@ -5312,6 +5433,21 @@ class PayrollController extends Member
           $insert['pagibig_reference']            = Request::input('pagibig_reference');
          
           $group_id = Tbl_payroll_group::insertGetId($insert);
+
+          if(!empty(Request::input('employee_tag')))
+          {
+               foreach(Request::input('employee_tag') as $tag)
+               {
+                    $checkcontract = Tbl_payroll_employee_contract::selemployee($tag)->first();
+
+                    if(count($checkcontract) > 0)
+                    {
+                         $update['payroll_group_id'] = $group_id;
+                         Tbl_payroll_employee_contract::where('payroll_employee_id',$tag)->update($update);
+                    }
+               }
+          }
+
           
           $insert_13th_month = array();
 
@@ -5397,6 +5533,7 @@ class PayrollController extends Member
           }
           
 
+
           // $_restday                                                = array();
           // $_extraday                                               = array();
           // if(Request::has('restday'))
@@ -5440,7 +5577,11 @@ class PayrollController extends Member
           // {
           //   Tbl_payroll_group_rest_day::insert($insert_extra_day);
           // }
-
+          // $_selected_employee = Request::input('selected_employee');
+          // foreach ($_selected_employee as $key => $selected_employee) 
+          // {
+        
+          // }
 
           $data['_data']           = array();
           $data['selected']   = $group_id;

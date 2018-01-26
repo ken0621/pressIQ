@@ -65,6 +65,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/thank_you','Shop\ShopLoginController@thank_you');//PRESS RELEASE
 	Route::post('/contactus', 'Shop\ShopContactController@contact_us');
 	Route::any('/contactus/send', 'Shop\ShopMemberController@send_contact_us');
+	Route::any('/demo/send', 	  'Shop\ShopMemberController@send_demo');
 	Route::any('/sign_up', 'Shop\ShopRegisterController@press_signup'); //PRESS RELEASE
 	Route::get('/pressuser', 'Shop\ShopMemberController@pressuser'); //PRESS RELEASE
 	Route::get('/pressuser/mypressrelease/pressrelease/view/{pid}', 'Shop\ShopMemberController@pressuser_view'); //PRESS RELEASE
@@ -86,6 +87,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressuser/manage_user','Shop\ShopMemberController@press_user_manage_user');
 	Route::get('/pressadmin', 'Shop\ShopMemberController@pressadmin'); //PRESS RELEASE
 	Route::get('/pressadmin/dashboard', 'Shop\ShopMemberController@pressadmin_dashboard'); //PRESS RELEASE
+	Route::get('/pressadmin/dashboard/view', 'Shop\ShopMemberController@pressadmin_dashboard_view'); //PRESS RELEASE
 	Route::get('/pressadmin/mediacontacts', 'Shop\ShopMemberController@pressadmin_media_contacts'); //PRESS RELEASE
 	Route::any('/pressadmin/manage_user/add_admin', 'Shop\ShopMemberController@manage_user_add_admin'); //PRESS RELEASE
 	Route::any('/pressadmin/manage_user/delete_admin/{id}', 'Shop\ShopMemberController@manage_user_delete_admin'); //PRESS RELEASE
@@ -102,7 +104,11 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressadmin/email_edit/{id}','Shop\ShopMemberController@pressadmin_email_edit'); //PRESS RELEASE
 	Route::get('/pressadmin/email_delete/{id}', 'Shop\ShopMemberController@email_delete'); //PRESS RELEASE
 	Route::get('/pressuser/analytics', 'Shop\ShopMemberController@press_release_analytics');
-	Route::get('/pressuser/analytics/view', 'Shop\ShopMemberController@press_release_analytics_view');
+	Route::get('/pressuser/analytics/view', 'Shop\ShopMemberController@press_release_analytics_campaign');
+	Route::get('/pressuser/analytics/view/all', 'Shop\ShopMemberController@press_release_analytics_view_all');
+	Route::get('/pressuser/media_contacts', 'Shop\ShopMemberController@pressuser_media_contacts');
+	Route::any('/pressuser/media_contacts/add', 'Shop\ShopMemberController@pressuser_media_contacts_add');
+	Route::any('/pressuser/media_contacts/delete/{id}', 'Shop\ShopMemberController@pressuser_media_contacts_delete');
 
 
 	Route::post('/pressadmin/pressreleases/recipient', 'Shop\ShopMemberController@pressadmin_pressreleases_recipient'); //PRESS RELEASE
@@ -185,4 +191,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 	/* Return Policy */
 	Route::get('/return_policy', 'Shop\ShopAboutController@return_policy'); 
+
+	/* Alternative */
+	Route::get('/product2', 'Shop\ShopProductController@product2'); //Carlo
 }

@@ -37,7 +37,7 @@ use App\Globals\PayrollLeave;
 use App\Globals\Utilities;
 use App\Models\Tbl_payroll_company;
 use App\Globals\Pdf_global;
-
+use PDF2;
 
 use App\Models\Tbl_payroll_deduction_v2;
 use App\Models\Tbl_payroll_deduction_employee_v2;
@@ -147,15 +147,21 @@ class PayrollTimeSheet2Controller extends Member
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
 
 		$data["period_id"] = $period_id;
-		
+
+		$data['compute_cutoff'] = $this->compute_whole_cutoff($period_id, $employee_id);
+
 		if($data["compute_type"] == "Flat Rate")
 		{
 			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
 		}
 		else
 		{
-			$pdf = view('member.payroll2.employee_timesheet_pdf', $data);
-	        return Pdf_global::show_pdf($pdf, 'landscape');
+			$format["title"] = "A4";
+			$format["format"] = "A4";
+			$format["default_font"] = "sans-serif";
+
+	        $pdf = PDF2::loadView('member.payroll2.employee_timesheet_pdf', $data, [], $format);
+			return $pdf->stream('document.pdf');
 		}
 	}
 	public function approve_timesheets($period_id = 0, $employee_id = 0)

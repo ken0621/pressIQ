@@ -16,6 +16,7 @@
 					<li><a data-toggle="tab" href="#deduction-basis">Deduction Basis</a></li>
 					<li><a data-toggle="tab" href="#over-time-rates">Over Time Rates</a></li>
 					<li><a data-toggle="tab" href="#shifting">Shifting</a></li>
+					<li><a data-toggle="tab" href="#employeetagging">Employee</a></li>
 				</ul>
 				<div class="tab-content tab-content-custom tab-pane-div margin-bottom-0">
 					<div id="basic" class="tab-pane fade in active form-horizontal">
@@ -572,6 +573,28 @@
 							<!--	</div>-->
 							<!--</div>-->
 						</div>
+					</div>
+					 <div id="employeetagging" class="tab-pane fade">
+					 			
+								<div class="form-group">
+									<div class="col-md-12">
+										<span><a href="#" class="btn btn-custom-primary pull-right popup" link="/member/payroll/payroll_group/modal_tag_payroll_group_employee">Tag Employee</a></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-md-12">
+										<table class="table table-bordered table-condensed">
+											<thead>
+												<tr>
+													<th>Employee Name</th>
+												</tr>
+											</thead>
+											<tbody class="tbl-tag">
+												
+											</tbody>
+										</table>
+									</div>
+								</div>
 					</div>
 				</div>
 			</div>

@@ -84,6 +84,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* EMPLOYEE START */
 	Route::any('/employee_list','Member\PayrollController@employee_list');
 
+	/* export to pdf */
+	Route::any('/employee_list/export_to_pdf_employee','Member\PayrollController@export_to_pdf_employee');
 	/* import from excel start */
 	Route::any('/employee_list/modal_import_employee','Member\PayrollController@modal_import_employee');
 	Route::any('/employee_list/modal_import_employee/get_201_template','Member\PayrollController@get_201_template');
@@ -474,6 +476,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_group/modal_update_payroll_group',"Member\PayrollController@modal_update_payroll_group");
 	Route::any('/payroll_group/confirm_archived_payroll_group/{archived}/{group_id}',"Member\PayrollController@confirm_archived_payroll_group");
 	Route::any('/payroll_group/archived_payroll_group',"Member\PayrollController@archived_payroll_group");
+
+    Route::any('/payroll_group/modal_tag_payroll_group_employee',"Member\PayrollController@modal_tag_payroll_group_employee");
+    Route::any('/payroll_group/get_payroll_tag_employee',"Member\PayrollController@get_payroll_tag_employee");
+    Route::any('/payroll_group/set_tag_payroll_group_employee',"Member\PayrollController@set_tag_payroll_group_employee");
+    Route::any('/payroll_group/remove_payroll_tag_employee',"Member\PayrollController@remove_payroll_tag_employee");
 	/* PAYROLL GROUP END */
 
 	/* PAYROLL JOURNAL SETTINGS START */

@@ -191,13 +191,13 @@ class Customer
 	{
 		$return = Tbl_customer::where('shop_id', $shop_id);
 
+		// if($keyword != '')
+		// {
+		// 	$return->leftjoin("tbl_customer_search","tbl_customer_search.customer_id","=","tbl_customer.customer_id")
+		// 		   ->where("tbl_customer_search.body", "LIKE", "%" . $keyword . "%");
+		// }
+		// $query = $return;
 		if($keyword != '')
-		{
-			$return->leftjoin("tbl_customer_search","tbl_customer_search.customer_id","=","tbl_customer.customer_id")
-				   ->where("tbl_customer_search.body", "LIKE", "%" . $keyword . "%");
-		}
-		$query = $return;
-		if($query->count() <= 0)
 		{
 			$return = Tbl_customer::where('shop_id', $shop_id);
 
@@ -206,6 +206,7 @@ class Customer
                 $q->orWhere("tbl_customer.first_name", "LIKE", "%$keyword%");
                 $q->orWhere("tbl_customer.last_name", "LIKE", "%$keyword%");
                 $q->orWhere("tbl_customer.middle_name", "LIKE", "%$keyword%");
+                $q->orWhere("tbl_customer.company", "LIKE", "%$keyword%");
             });
 		}
 		if($paginate != 0)

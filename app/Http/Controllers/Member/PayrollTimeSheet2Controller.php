@@ -147,7 +147,9 @@ class PayrollTimeSheet2Controller extends Member
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
 
 		$data["period_id"] = $period_id;
-		
+
+		$data['compute_cutoff'] = $this->compute_whole_cutoff($period_id, $employee_id);
+
 		if($data["compute_type"] == "Flat Rate")
 		{
 			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";

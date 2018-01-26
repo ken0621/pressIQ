@@ -3,6 +3,7 @@
 <form class="global-submit" action="{{ $action or ''}}" method="post">
     <input type="hidden" name="_token" value="{{csrf_token()}}"> 
     <input type="hidden" class="button-action" name="button_action" value="">
+    <input type="hidden" name="pb_id" value="{{ $pb->paybill_id or ''}}">
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
             <div>
@@ -26,14 +27,14 @@
                         </ul>
                     </div>
                 </div>
-                @if(isset($paybill))
+                @if(isset($pb))
                 <div class="pull-right">
                     <div class="dropdown">
                         <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <!-- <li class="dropdown-header">Dropdown header 1</li> -->
-                            <li><a href="/member/accounting/journal/entry/bill-payment/{{$paybill->paybill_id}}">Transaction Journal</a></li>
+                            <li><a href="/member/accounting/journal/entry/bill-payment/{{$pb->paybill_id}}">Transaction Journal</a></li>
                             <!-- <li class="divider"></li> -->
                             <!-- <li class="dropdown-header">Dropdown header 2</li> -->
                             <li><a href="#">Void</a></li>
@@ -55,7 +56,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="transaction_refnumber" value="PB20171225-0001">
+                                <input type="text" class="form-control" name="transaction_refnumber" value="{{ isset($pb->transaction_refnum)? $pb->transaction_refnum : $transaction_refnum }}">
                             </div>
                         </div>
                     </div>
@@ -63,40 +64,36 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <select class="drop-down-vendor" name="vendor_id" required>
-                                    @include("member.load_ajax_data.load_vendor", ['vendor_id' => isset($paybill) ? $paybill->paybill_vendor_id : (isset($v_id) ? $v_id : '')])
+                                    @include("member.load_ajax_data.load_vendor", ['vendor_id' => isset($pb) ? $pb->paybill_vendor_id : ''])
                                 </select>
                             </div>
-                           <!--  <div class="col-sm-4">
-                                <button class="btn btn-custom-white btn-sm" data-placement="bottom" data-html="true" id="example" data-content="<form><br><input type='text' class='form-control input-sm' ><br><a style='cursor:pointer' class='pull-left' onclick='$(&quot;#example&quot;).popover(&quot;hide&quot;);'>Cancel</a><a style='cursor:pointer' class='pull-right'>Find</a><br></form>" data-toggle="popover">Find by invoice no.</button>
-                            </div> -->
                         </div>
-                    </div>
-                                    
+                    </div>   
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                      <div class="row clearfix">
                       <div class="col-sm-2">
                                 <label>Payment Date</label>
-                                <input type="text" name="paybill_date" class="datepicker form-control input-sm" value="{{$paybill->paybill_date or date('m/d/y')}}" />
+                                <input type="text" name="paybill_date" class="datepicker form-control input-sm" value="{{isset($pb->paybill_date)? date('m/d/Y', strtotime($pb->paybill_date)) : date('m/d/Y')}}" />
                             </div>
                         <div class="col-sm-3">
                             <label>Payment Method</label>
-                            <select class="drop-down-payment" name="paybill_payment_method">
-                                @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($paybill) ? $paybill->paybill_payment_method : ''])
+                            <select class="drop-down-payment payment-method" name="paybill_payment_method">
+                                @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($pb) ? $pb->paybill_payment_method : ''])
                             </select>
                         </div>
                         <div class="col-sm-2">
                             <label>Reference No</label>
-                            <input type="text" class="form-control input-sm" />
+                            <input type="text" class="form-control input-sm" name="paybill_ref_num" value="{{ isset($pb->paybill_ref_num)? $pb->paybill_ref_num : '' }}" />
                         </div>
                         <div class="col-sm-3">
                             <label>Payment Account</label>
                             <select class="drop-down-coa" name="paybill_ap_id" required>
-                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", "account_id" => isset($paybill) ? $paybill->paybill_ap_id : ''])
+                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", "account_id" => isset($pb) ? $pb->paybill_ap_id : ''])
                             </select>
                         </div>
                         <div class="col-sm-2 pull-right">
                         	<label>Total Payment</label>
-                        	<input type="text" name="paybill_total_amount" class="input-sm form-control amount-received" value="{{$paybill->paybill_total_amount or ''}}">
+                        	<input type="text" name="paybill_total_amount" class="input-sm form-control amount-received" value="{{isset($pb->paybill_total_amount)? $pb->paybill_total_amount : ''}}">
                         </div>
                     </div>
                    <!--  <div class="row clearfix">
@@ -130,7 +127,7 @@
                     <div class="row clearfix">
                         <div class="col-sm-6">
                             <label>Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="vendor_memo" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="vendor_memo" placeholder="">{{ isset($pb->paybill_memo)? $pb->paybill_memo : ''}}</textarea>
                         </div>
                         <div class="col-sm-6">
                             <div class="row">
@@ -153,7 +150,6 @@
                             </div> 
                         </div>
                     </div>
-                    
                     <!-- END CONTENT -->
                 </div>
             </div>

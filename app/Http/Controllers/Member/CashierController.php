@@ -28,7 +28,13 @@ class CashierController extends Member
         {
             $data['customer'] = Customer::info(Session::get('customer_id'), $this->user_info->shop_id);
             $data['customer_points'] = Customer::get_points_wallet(Session::get('customer_id'));
-            $warehouse_id = Customer::get_info($this->user_info->shop_id, Session::get('customer_id'))->stockist_warehouse_id;
+            $cust_data = Customer::get_info($this->user_info->shop_id, Session::get('customer_id'));
+            $warehouse_id = null;
+            if($cust_data)
+            {
+                $warehouse_id = $cust_data->stockist_warehouse_id;
+            }
+            
             $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id, $warehouse_id);
             $data['exist'] = $data['customer'];
         }

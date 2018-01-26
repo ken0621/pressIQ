@@ -17,7 +17,7 @@
                         <small> {{ucwords($rp->first_name.' '.$rp->middle_name.' '.$rp->last_name)}} </small>
                     </td>
                     <td class="text-center">{{$rp->transaction_refnum != "" ? $rp->transaction_refnum : $rp->rp_id}}</td>
-                    <td class="text-center">{{date('F d, Y',strtotime($rp->date_created))}}</td>
+                    <td class="text-center">{{date('F d, Y',strtotime($rp->rp_date))}}</td>
                     <td class="text-center">{{currency('',$rp->rp_total_amount)}}</td>
                     <td class="text-center">
                         <div class="btn-group">
@@ -25,7 +25,8 @@
                                 Action <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a href="javascript">PRINT</a></li>
+                                <li><a href="/member/transaction/receive_payment/create?id={{$rp->rp_id}}">Edit Receive Payment</a></li>
+                                <li><a href="javascript">Print</a></li>
                             </ul>
                         </div>
                     </td>

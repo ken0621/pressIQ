@@ -3,6 +3,7 @@
 <form class="global-submit" action="{{$action or ''}}" method="post">
     <div class="panel panel-default panel-block panel-title-block">
         <input type="hidden" class="button-action" name="button_action" value="">
+        <input type="hidden" name="estimate_quotation_id" value="{{Request::input('id')}}">
         <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
         <div class="panel-heading">
             <div>
@@ -40,7 +41,7 @@
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <label>Reference Number</label>
-                                    <input type="text" class="form-control" name="transaction_refnumber" value="{{$transaction_refnum or ''}}">
+                                    <input type="text" class="form-control" name="transaction_refnumber" value="{{isset($estimate_quotation) ? $estimate_quotation->transaction_refnum : $transaction_refnum}}">
                                 </div>
                             </div>
                         </div>
@@ -48,26 +49,26 @@
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <select class="form-control droplist-customer input-sm pull-left" name="customer_id" data-placeholder="Select a Customer" required>
-                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($est) ? $est->customer_id : (isset($c_id) ? $c_id : '') ]);
+                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($estimate_quotation) ? $estimate_quotation->est_customer_id : (isset($c_id) ? $c_id : '') ]);
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$est->customer_email or ''}}"/>
+                                    <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$estimate_quotation->est_customer_email or ''}}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Billing Address</label>
-                                <textarea class="form-control input-sm textarea-expand customer-billing-address" name="customer_address" placeholder=""></textarea>
+                                <textarea class="form-control input-sm textarea-expand customer-billing-address" name="customer_address" placeholder="">{{$estimate_quotation->est_customer_billing_address or ''}}</textarea>
                             </div>
                             <div class="col-sm-2">
                                 <label>Estimate Date</label>
-                                <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{date('m/d/y')}}"/>
+                                <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{$estimate_quotation->est_date or date('m/d/y')}}"/>
                             </div>
                             <div class="col-sm-2">
                                 <label>Expiration Date</label>
-                                <input type="text" class="datepicker form-control input-sm" name="transaction_duedate" value="{{date('m/d/y')}}" />
+                                <input type="text" class="datepicker form-control input-sm" name="transaction_duedate" value="{{$estimate_quotation->est_exp_date or date('m/d/y')}}" />
                             </div>
                         </div>
                         
@@ -91,7 +92,40 @@
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>
-                                        <tbody class="draggable tbody-item">                                 
+                                        <tbody class="draggable tbody-item">   
+                                            @if(isset($estimate_quotation))
+                                                @foreach($estimate_quotation_item as $eq_item)
+                                                <tr class="tr-draggable">
+                                                    <td class="invoice-number-td text-right">1</td>
+                                                    <td><input type="text" class="for-datepicker" name="item_servicedate[]"value="{{($eq_item->estline_service_date != '1970-01-01' ?  $eq_item->estline_service_date != '0000-00-00' ? dateFormat($eq_item->estline_service_date) : '' :'' )}}"/></td>
+                                                    <td>
+                                                        <select class="form-control droplist-item select-item input-sm pull-left" name="item_id[]" >
+                                                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $eq_item->estline_item_id])
+                                                            <option class="hidden" value="" />
+                                                        </select>
+                                                    </td>
+                                                    <td><textarea class="textarea-expand txt-desc" name="item_description[]">{{$eq_item->estline_description}}</textarea></td>
+                                                    <td>
+                                                        <select class="droplist-um select-um {{isset($eq_item->multi_id) ? 'has-value' : ''}}" name="item_um[]">
+                                                          @if($eq_item->invline_um)
+                                                                @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $eq_item->multi_um_id, 'selected_um_id' => $eq_item->estline_um])
+                                                            @else
+                                                                <option class="hidden" value="" />
+                                                            @endif
+                                                        </select>
+                                                    </td>
+                                                    <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]" value="{{$eq_item->estline_qty}}" /></td>
+                                                    <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{$eq_item->estline_rate}}"/></td>
+                                                    <td><input class="text-right txt-discount compute" type="text" name="item_discount[]" value="{{$eq_item->estline_discount}}{{$eq_item->estline_discount_type != 'fixed' ? '%' : ''}}"/></td>
+                                                    <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea> {{$eq_item->estline_discount_remark}}</td>
+                                                    <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$eq_item->estline_amount}}"/></td>
+                                                    <td class="text-center">
+                                                        <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1" {{$eq_item->taxable == 1 ? 'checked' : ''}}>
+                                                    </td>
+                                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
                                             <tr class="tr-draggable">
                                                 <td class="invoice-number-td text-right">1</td>
                                                 <td><input type="text" class="for-datepicker" name="item_servicedate[]"/></td>
@@ -109,8 +143,7 @@
                                                 <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center">
-                                                    <input type="hidden" class="estline_taxable" name="item_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
+                                                    <input type="checkbox" name="item_taxable[]" class="taxable-check compute" value="1">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -132,8 +165,7 @@
                                                 <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center">
-                                                    <input type="hidden" class="estline_taxable" name="item_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
+                                                   <input type="checkbox" name="item_taxable[]" class="taxable-check compute" value="1">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -146,11 +178,11 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Message Displayed on Estimate</label>
-                                <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder=""></textarea>
+                                <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder="">{{$estimate_quotation->est_message or ''}}</textarea>
                             </div>
                             <div class="col-sm-3">
                                 <label>Statement Memo</label>
-                                <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder=""></textarea>
+                                <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder="">{{$estimate_quotation->est_memo or ''}}</textarea>
                             </div>
                             <div class="col-sm-6">
                                <!--  <div class="row">
@@ -198,8 +230,7 @@
             <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center">
-                <input type="hidden" class="estline_taxable" name="item_taxable[]" value="" >
-                <input type="checkbox" name="" class="taxable-check compute" value="checked">
+               <input type="checkbox" name="item_taxable[]" class="taxable-check compute" value="1">
             </td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>                                            

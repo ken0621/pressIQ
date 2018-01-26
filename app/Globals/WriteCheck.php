@@ -12,6 +12,8 @@ use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_write_check_line;
+use App\Models\Tbl_write_check_account_line;
+use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_write_check;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_pay_bill;
@@ -32,7 +34,7 @@ class WriteCheck
     {
     	return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
-	 public static function postWriteCheck($customer_vendor_info, $wc_info, $wc_other_info, $item_info, $total_info)
+	 public static function postWriteCheck($customer_vendor_info, $wc_info, $wc_other_info, $item_info, $total_info, $account_info = array())
     {
     	$insert['wc_shop_id']             = WriteCheck::getShopId();    
     	$insert['wc_cash_account']		  = 0;    
@@ -44,9 +46,9 @@ class WriteCheck
         $insert['wc_payment_date']        = $wc_info['wc_payment_date'];
 
         $insert['wc_memo']                = $wc_other_info['wc_memo'];
-        $insert['wc_total_amount']        = collect($item_info)->sum('itemline_amount');
+        $insert['wc_total_amount']        = collect($item_info)->sum('itemline_amount') + collect($account_info)->sum('account_amount');
         $insert['wc_is_paid']             = 1;
-        $insert['wc_applied_payment']     = collect($item_info)->sum('itemline_amount');
+        $insert['wc_applied_payment']     = collect($item_info)->sum('itemline_amount') + collect($account_info)->sum('account_amount');
         $insert['date_created']           = Carbon::now();
         
         $wc_id = Tbl_write_check::insertGetId($insert);
@@ -56,7 +58,7 @@ class WriteCheck
         $entry["reference_id"]      = $wc_id;
         $entry["name_id"]           = $customer_vendor_info['wc_reference_id'];
         $entry["name_reference"]    = $customer_vendor_info['wc_reference_name'];
-        $entry["total"]             = collect($item_info)->sum('itemline_amount');
+        $entry["total"]             = $insert['wc_total_amount'];
         $entry["vatable"]           = '';
         $entry["discount"]          = '';
         $entry["ewt"]               = '';
@@ -65,7 +67,7 @@ class WriteCheck
         $wc_data = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
         AuditTrail::record_logs("Added","write_check",$wc_id,"",serialize($wc_data));
 
-        WriteCheck::insert_wc_line($wc_id, $item_info, $entry);
+        WriteCheck::insert_wc_line($wc_id, $item_info, $entry, $account_info);
 
         return $wc_id;
 
@@ -133,6 +135,17 @@ class WriteCheck
 
                         WriteCheck::insert_bill_wc_line($wc_id, $item_info);
                     }
+
+                    $bill_line_acct = Tbl_bill_account_line::where("accline_bill_id",$value->pbline_reference_id)->get();
+
+                    foreach ($bill_line_acct as $key => $value2)
+                    {
+                        $account_info['accline_coa_id'] = $value2->accline_coa_id;
+                        $account_info['accline_description'] = $value2->accline_description;
+                        $account_info['accline_amount'] = $value2->accline_amount;
+
+                        WriteCheck::insert_bill_wc_acct_line($wc_id, $account_info);
+                    }
                 }
             }
 
@@ -185,6 +198,16 @@ class WriteCheck
 
                         WriteCheck::insert_bill_wc_line($wc_id, $item_info);
                     }
+                    $bill_line_acct = Tbl_bill_account_line::where("accline_bill_id",$value->pbline_reference_id)->get();
+
+                    foreach ($bill_line_acct as $key => $value2)
+                    {
+                        $account_info['accline_coa_id'] = $value2->accline_coa_id;
+                        $account_info['accline_description'] = $value2->accline_description;
+                        $account_info['accline_amount'] = $value2->accline_amount;
+
+                        WriteCheck::insert_bill_wc_acct_line($wc_id, $account_info);
+                    }
                 }
             }
 
@@ -193,7 +216,7 @@ class WriteCheck
 
         }
     }
-    public static function updateWriteCheck($wc_id, $customer_vendor_info, $wc_info, $wc_other_info, $item_info, $total_info)
+    public static function updateWriteCheck($wc_id, $customer_vendor_info, $wc_info, $wc_other_info, $item_info, $total_info, $account_info = array())
     {
         $old = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
 
@@ -204,7 +227,7 @@ class WriteCheck
         $update['wc_mailing_address']         = $customer_vendor_info['wc_mailing_address'];
         $update['wc_payment_date']            = $wc_info['wc_payment_date'];
         $update['wc_memo']                    = $wc_other_info['wc_memo'];
-        $update['wc_total_amount']            = collect($item_info)->sum('itemline_amount');
+        $update['wc_total_amount']            = collect($item_info)->sum('itemline_amount') + collect($account_info)->sum('account_amount');
 
         Tbl_write_check::where("wc_id", $wc_id)->update($update);
 
@@ -213,13 +236,15 @@ class WriteCheck
         $entry["reference_id"]      = $wc_id;
         $entry["name_id"]           = $customer_vendor_info['wc_reference_id'];
         $entry["name_reference"]    = $customer_vendor_info['wc_reference_name'];
-        $entry["total"]             = collect($item_info)->sum('itemline_amount');
+        $entry["total"]             = $update['wc_total_amount'];
         $entry["vatable"]           = '';
         $entry["discount"]          = '';
         $entry["ewt"]               = '';
 
         Tbl_write_check_line::where("wcline_wc_id", $wc_id)->delete();
-        WriteCheck::insert_wc_line($wc_id, $item_info);
+        Tbl_write_check_account_line::where("accline_wc_id", $wc_id)->delete();
+        WriteCheck::insert_wc_line($wc_id, $item_info, $entry, $account_info);
+
 
         
         $new = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
@@ -245,57 +270,94 @@ class WriteCheck
         }
 
     }
-    public static function insert_wc_line($wc_id, $item_info, $entry)
+    public static function insert_bill_wc_acct_line($wc_id, $account_info)
     {
-    	foreach($item_info as $key => $item_line)
+        if($account_info)
+        {            
+            $insert_acc['accline_wc_id'] = $wc_id;
+            $insert_acc['accline_coa_id'] = $account_info['accline_coa_id'];
+            $insert_acc['accline_description'] = $account_info['accline_description'];
+            $insert_acc['accline_amount'] = $account_info['accline_amount'];
+
+            Tbl_write_check_account_line::insert($insert_acc);
+        }
+    }
+    public static function insert_wc_line($wc_id, $item_info, $entry, $account_info = array())
+    {
+        if(count($account_info) > 0)
         {
-            if($item_line)
+            foreach ($account_info as $key_acct => $value) 
             {
-                $insert_line['wcline_wc_id']         = $wc_id;
-                $insert_line['wcline_item_id']       = $item_line['itemline_item_id'];
-                $insert_line['wcline_ref_name']      = $item_line['itemline_ref_name'] ;
-                $insert_line['wcline_ref_id']        = $item_line['itemline_ref_id'] ;
-                $insert_line['wcline_description']   = $item_line['itemline_description'];
-                $insert_line['wcline_um']            = $item_line['itemline_um'];
-                $insert_line['wcline_qty']           = $item_line['itemline_qty'];
-                $insert_line['wcline_rate']		     = $item_line['itemline_rate'];
-                $insert_line['wcline_amount']        = $item_line['itemline_amount'];
-
-                Tbl_write_check_line::insert($insert_line);
-
-                $item_type = Item::get_item_type($item_line['itemline_item_id']);
-                /* TRANSACTION JOURNAL */  
-                if($item_type != 4)
+                if($value['account_id'])
                 {
-                    $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
-                    $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
-                    $entry_data[$key]['vatable']            = 0;
-                    $entry_data[$key]['discount']           = 0;
-                    $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
-                    $entry_data[$key]['entry_description']  = $item_line['itemline_description'];  
+                    $insert_acc['accline_wc_id'] = $wc_id;
+                    $insert_acc['accline_coa_id'] = $value['account_id'];
+                    $insert_acc['accline_description'] = $value['account_desc'];
+                    $insert_acc['accline_amount'] = $value['account_amount'];
+
+                    Tbl_write_check_account_line::insert($insert_acc);
+
+                    $entry_data['a'.$key_acct]['account_id'] = $value['account_id'];
+                    $entry_data['a'.$key_acct]['vatable'] = 0;
+                    $entry_data['a'.$key_acct]['discount'] = 0;
+                    $entry_data['a'.$key_acct]['entry_amount'] = $value['account_amount'];
+                    $entry_data['a'.$key_acct]['entry_description'] = $value['account_desc'];
                 }
-                else
+            }            
+        }
+        if(count($item_info) > 0)
+        {
+        	foreach($item_info as $key => $item_line)
+            {
+                if($item_line)
                 {
-                    $item_bundle = Item::get_item_in_bundle($item_line['itemline_item_id']);
-                    if(count($item_bundle) > 0)
+                    $insert_line['wcline_wc_id']         = $wc_id;
+                    $insert_line['wcline_item_id']       = $item_line['itemline_item_id'];
+                    $insert_line['wcline_ref_name']      = $item_line['itemline_ref_name'] ;
+                    $insert_line['wcline_ref_id']        = $item_line['itemline_ref_id'] ;
+                    $insert_line['wcline_description']   = $item_line['itemline_description'];
+                    $insert_line['wcline_um']            = $item_line['itemline_um'];
+                    $insert_line['wcline_qty']           = $item_line['itemline_qty'];
+                    $insert_line['wcline_rate']		     = $item_line['itemline_rate'];
+                    $insert_line['wcline_amount']        = $item_line['itemline_amount'];
+
+                    Tbl_write_check_line::insert($insert_line);
+
+                    $item_type = Item::get_item_type($item_line['itemline_item_id']);
+                    /* TRANSACTION JOURNAL */  
+                    if($item_type != 4)
                     {
-                        foreach ($item_bundle as $key_bundle => $value_bundle) 
+                        $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
+                        $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
+                        $entry_data[$key]['vatable']            = 0;
+                        $entry_data[$key]['discount']           = 0;
+                        $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
+                        $entry_data[$key]['entry_description']  = $item_line['itemline_description'];  
+                    }
+                    else
+                    {
+                        $item_bundle = Item::get_item_in_bundle($item_line['itemline_item_id']);
+                        if(count($item_bundle) > 0)
                         {
-                            $item_data = Item::get_item_details($value_bundle->bundle_item_id);
-                            $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
-                            $entry_data['b'.$key.$key_bundle]['entry_qty']          = $item_line['itemline_qty'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
-                            $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
-                            $entry_data['b'.$key.$key_bundle]['discount']           = 0;
-                            $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
-                            $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                            foreach ($item_bundle as $key_bundle => $value_bundle) 
+                            {
+                                $item_data = Item::get_item_details($value_bundle->bundle_item_id);
+                                $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
+                                $entry_data['b'.$key.$key_bundle]['entry_qty']          = $item_line['itemline_qty'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
+                                $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
+                                $entry_data['b'.$key.$key_bundle]['discount']           = 0;
+                                $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
+                                $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                            }
                         }
                     }
                 }
             }
-
-
-            $wc_journal = Accounting::postJournalEntry($entry, $entry_data);  
         }
 
+        if(count($entry_data) > 0)
+        {
+            $wc_journal = Accounting::postJournalEntry($entry, $entry_data);
+        }
     }
 }

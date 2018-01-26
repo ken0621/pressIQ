@@ -11,11 +11,11 @@ class Tbl_purchase_order_line extends Model
     public $timestamps = false;
     
 
-    public function scopeUm($query)
+    public static function scopeUm($query)
     {
         return $query->leftjoin("tbl_unit_measurement_multi", "multi_id", "=", "poline_um");
     }
-    public function scopeItem($query)
+    public static function scopeItem($query)
     {
         return $query->leftjoin("tbl_item", "poline_item_id", "=", "tbl_item.item_id");
     }

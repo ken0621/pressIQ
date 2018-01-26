@@ -14,10 +14,23 @@
                     
                     </small>
                 </h1>
-                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save & Edit</button>
+                <!-- <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save & Edit</button>
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save & New</button>
-                <button type="submit" class="panel-buttons btn btn-custom-default pull-right" data-action="save-and-close">Save & Close</button>
+                <button type="submit" class="panel-buttons btn btn-custom-default pull-right" data-action="save-and-close">Save & Close</button> -->
                <!--  <a href="javascript:" class="panel-buttons btn btn-custom-white pull-right popup" link="/member/item/add" size="lg">Save</a> -->
+                <div class="dropdown pull-right">
+                    <div>
+                        <a class="btn btn-custom-white" href="/member/customer/sales_order_list">Cancel</a>
+                        <button class="btn btn-custom-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu  dropdown-menu-custom">
+                            <li><a class="select-action" code="save-and-close">Save & Close</a></li>
+                            <li><a class="select-action" code="save-and-edit">Save & Edit</a></li>
+                            <li><a class="select-action" code="save-and-print">Save & Print</a></li>
+                            <li><a class="select-action" code="save-and-new">Save & New</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

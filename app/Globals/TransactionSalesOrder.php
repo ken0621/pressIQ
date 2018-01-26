@@ -22,6 +22,16 @@ class TransactionSalesOrder
 	{
 		return Tbl_customer_estimate::where("is_sales_order",0)->where("est_status","accepted")->where("est_shop_id", $shop_id)->where("est_customer_id",$customer_id)->count();
 	}
+
+
+	public static function info($shop_id, $sales_order_id)
+	{
+		return Tbl_customer_estimate::customer()->where("est_shop_id", $shop_id)->where("est_id", $sales_order_id)->first();
+	}
+	public static function info_item($sales_order_id)
+	{
+		return Tbl_customer_estimate_line::um()->where("estline_est_id", $sales_order_id)->get();		
+	}
 	public static function getAllOpenSO($shop_id)
     {
         return Tbl_customer_estimate::Customer()->where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->get();
@@ -99,6 +109,48 @@ class TransactionSalesOrder
 
         return $return; 
 	}
+
+	public static function postUpdate($sales_order_id, $shop_id, $insert, $insert_item = array())
+	{
+		$val = AccountingTransaction::customer_validation($insert, $insert_item);
+		if(!$val)
+		{
+			$return  = null; 
+			$ins['est_shop_id']                  = $shop_id;  
+			$ins['est_customer_id']              = $insert['customer_id'];  
+			$ins['transaction_refnum']	 		 = $insert['transaction_refnum'];   
+	        $ins['est_customer_email']           = $insert['customer_email'];
+	        $ins['est_customer_billing_address'] = $insert['customer_address'];
+	        $ins['est_date']                     = date("Y-m-d", strtotime($insert['transaction_date']));
+	        $ins['est_message']                  = $insert['customer_message'];
+	        $ins['est_memo']                     = $insert['customer_memo'];
+	        $ins['date_created']                 = Carbon::now();
+
+	        /* SUBTOTAL */
+	        $subtotal_price = collect($insert_item)->sum('item_amount');
+
+	        /* OVERALL TOTAL */
+	        $overall_price  = convertToNumber($subtotal_price);
+
+	        $ins['est_subtotal_price']           = $subtotal_price;
+	        $ins['est_overall_price']            = $overall_price;
+	        $ins['is_sales_order'] 				 = 1;    
+            $ins['est_status']					 = 'accepted';   
+
+	        /* INSERT SALES ORDER HERE */
+	        Tbl_customer_estimate::where('est_id', $sales_order_id)->update($ins);
+	        // $sales_order_id = 0;
+	        Tbl_customer_estimate_line::where('estline_est_id', $sales_order_id)->delete();
+
+	        $return = Self::insertline($sales_order_id, $insert_item);
+		}
+		else
+		{
+			$return = $val;
+		}		
+
+        return $return; 
+	}
 	public static function insertline($sales_order_id, $insert_item)
 	{
 		$itemline = null;
@@ -124,17 +176,30 @@ class TransactionSalesOrder
 			$itemline[$key]['estline_discount'] 		= $discount;
 			$itemline[$key]['estline_discount_type'] 	= $discount_type;
 			$itemline[$key]['estline_discount_remark'] 	= $value['item_remarks'];
-			$itemline[$key]['taxable'] 					= $value['item_taxable'];
+			$itemline[$key]['taxable'] 					= $value['item_taxable'] != null ? $value['item_taxable'] : 0;
 			$itemline[$key]['estline_amount'] 			= $value['item_amount'];
 			$itemline[$key]['date_created'] 			= Carbon::now();
 		}
 		if(count($itemline) > 0)
 		{
 			Tbl_customer_estimate_line::insert($itemline);
-			$return = 1;
+			$return = $sales_order_id;
 		}
 
 		return $return;
 	}
+
+    public static function applied_transaction($shop_id)
+    {
+        $applied_transaction = Session::get('applied_transaction_so');
+        if(count($applied_transaction) > 0)
+        {
+            foreach ($applied_transaction as $key => $value) 
+            {
+                $update['est_status'] = 'closed';
+                Tbl_customer_estimate::where("est_id", $key)->where('est_shop_id', $shop_id)->update($update);
+            }
+        }
+    }
 
 }

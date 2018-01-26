@@ -422,38 +422,22 @@ class Warehouse2
         
         $return = null;
 
-        $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','<',0)->count();
-        $total_refill_qty = $quantity;
-        if($count_offset > 0)
+        if(Inventory::allow_out_of_stock($shop_id) == 1)
         {
-            $total_refill_qty = $quantity - $count_offset;
-        }
-        if(!$for_out_of_stock)
-        {
+            $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','<',0)->count();
+            $total_refill_qty = $quantity;
+            if($count_offset > 0)
+            {
+                $total_refill_qty = $quantity - $count_offset;
+            }
             Self::update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity);
+
+            $quantity = $total_refill_qty;            
         }
-        $quantity = $total_refill_qty;
 
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
-
         $serial_qty = count($serial);
-        if($serial_qty != 0)
-        {
-            if($serial_qty != $quantity)
-            {
-                $return .= "The serial number are not equal from the quantity. <br> ";
-            }
-        }
-        if($quantity < 1)
-        {
-            $return .= "The quantity is less than 1. <br> ";
-        }
-        if(!$check_warehouse)
-        {
-            $return .= "The warehouse doesn't belong to your account <br>";
-        }
-
         if(!$return)
         {  
             $insert_slip['warehouse_id']                 = $warehouse_id;

@@ -2317,7 +2317,7 @@ class Payroll2
 		
 		if($compute_type == "daily")
 		{
-			if( $_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time['day_type'] == 'extra_day' ) //|| $_time["is_holiday"] == "special"
+			if( $_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time['day_type'] == 'extra_day' || $_time["is_holiday"] == "special") //|| $_time["is_holiday"] == "special"
 			{
 				$daily_rate = 0;
 			}
@@ -2832,12 +2832,29 @@ class Payroll2
 		{
 			if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
 			{
-				
+				$_time["is_absent"] = false;
+			}
+		}
+
+		if($time_spent == 0 && $compute_type=="hourly")
+		{
+
+			if($_time['is_holiday'] == 'special')
+			{
+				$_time["is_absent"] = false;
 			}
 		}
 		
+		if(($_time['day_type'] == 'rest_day') && $time_spent == 0 || ($_time['day_type'] == 'extra_day') && $time_spent == 0)
+		{
+			$_time["is_absent"] = false;
+			$return->daily_rate = 0;
+			$total_day_income = 0;
+
+		}
+
 		//deducted if absent
-		if($_time["is_absent"] == true || $_time['is_absent'] == false && ($_time['day_type'] == 'rest_day') || $_time['is_absent'] == false && ($_time['day_type'] == 'extra_day') )
+		if($_time["is_absent"] == true)
 		{
 			$absent_deduction = $daily_rate;
 

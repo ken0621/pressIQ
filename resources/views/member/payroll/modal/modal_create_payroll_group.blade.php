@@ -587,7 +587,6 @@
 											<thead>
 												<tr>
 													<th>Employee Name</th>
-													<th width="5%"></th>
 												</tr>
 											</thead>
 											<tbody class="tbl-tag">

@@ -10,6 +10,7 @@ use DB;
 use App\Globals\AccountingTransaction;
 use App\Globals\CustomerWIS;
 use App\Globals\Warehouse2;
+use Session;
 /**
  * 
  *

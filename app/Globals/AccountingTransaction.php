@@ -429,7 +429,7 @@ class AccountingTransaction
 				}
 				if($type == 'consume')
 				{
-					$return = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
+					// $return = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
 				}
 			}
 		}

@@ -424,7 +424,7 @@ class Warehouse2
 
         if(Inventory::allow_out_of_stock($shop_id) == 1)
         {
-            $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','<=',0)->count();
+            $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','=',0)->count();
             $total_refill_qty = $quantity;
             if($count_offset > 0)
             {
@@ -505,7 +505,7 @@ class Warehouse2
                 $update['record_count_inventory'] = 1;
                 $record_log_id = Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
                                                     ->where('record_item_id', $item_id)
-                                                    ->where('record_count_inventory','<',0)->value('record_log_id');
+                                                    ->where('record_count_inventory','=',0)->value('record_log_id');
                 Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->update($update);
 
             }
@@ -515,7 +515,7 @@ class Warehouse2
             $update['record_count_inventory'] = 1;
             Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
                                                     ->where('record_item_id', $item_id)
-                                                    ->where('record_count_inventory','<',0)->update($update);
+                                                    ->where('record_count_inventory','=',0)->update($update);
         }
     }
 
@@ -618,7 +618,7 @@ class Warehouse2
 
         return $validate;
     }
-    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array(), $ref_name = '')
+    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array(), $ref_name = null)
     {
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
@@ -656,11 +656,10 @@ class Warehouse2
         $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
         
         $settings_qty = 0;
-        if(!$ref_name)
+        if($ref_name != 'customer_wis')
         {
             $settings_qty = Inventory::allow_out_of_stock($shop_id);
         }
-        
         if($quantity > $inventory_qty && $settings_qty == 0)
         {
             $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
@@ -697,6 +696,7 @@ class Warehouse2
         $slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
         $serial_qty = count($serial);
+
         for ($ctr_qty = 0; $ctr_qty < $quantity; $ctr_qty++) 
         {
             $insert['record_shop_id']            = $shop_id;

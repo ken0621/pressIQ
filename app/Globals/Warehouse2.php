@@ -596,7 +596,7 @@ class Warehouse2
 
         return $validate;
     }
-    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array())
+    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array(), $ref_name = '')
     {
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
@@ -632,7 +632,12 @@ class Warehouse2
         }
 
         $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
-        $settings_qty = Inventory::allow_out_of_stock($shop_id);
+        
+        $settings_qty = 0;
+        if(!$ref_name)
+        {
+            $settings_qty = Inventory::allow_out_of_stock($shop_id);
+        }
         
         if($quantity > $inventory_qty && $settings_qty == 0)
         {
@@ -770,7 +775,7 @@ class Warehouse2
         foreach ($_item as $key => $value)
         {
             $serial = isset($value['serial']) ? $value['serial'] : null;
-            $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+            $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial, $reference_name);
         }
         if(!$validate)
         {

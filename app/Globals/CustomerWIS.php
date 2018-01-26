@@ -47,7 +47,7 @@ class CustomerWIS
     }
     public static function get_inv_item($shop_id, $inv_id)
     {
-        return Tbl_customer_invoice_line::invoice()->where('inv_shop_id', $shop_id)->where('invline_inv_id', $inv_id)->get();
+        return Tbl_customer_invoice_line::um()->invoice()->where('inv_shop_id', $shop_id)->where('invline_inv_id', $inv_id)->get();
     }
     public static function settings($shop_id)
     {
@@ -77,6 +77,18 @@ class CustomerWIS
         }
         
         return $return;
+    }
+    public static function applied_transaction($shop_id)
+    {
+        $applied_transaction = Session::get('applied_transaction');
+        if(count($applied_transaction) > 0)
+        {
+            foreach ($applied_transaction as $key => $value) 
+            {
+                $update['item_delivered'] = 1;
+                Tbl_customer_invoice::where("inv_id", $key)->where('inv_shop_id', $shop_id)->update($update);
+            }
+        }
     }
     public static function customer_create_wis($shop_id, $remarks, $ins, $_item = array(), $insert_item = array())
     {

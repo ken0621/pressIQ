@@ -178,7 +178,7 @@ class TransactionSalesOrder
 			$itemline[$key]['estline_discount'] 		= $discount;
 			$itemline[$key]['estline_discount_type'] 	= $discount_type;
 			$itemline[$key]['estline_discount_remark'] 	= $value['item_remarks'];
-			$itemline[$key]['taxable'] 					= $value['item_taxable'];
+			$itemline[$key]['taxable'] 					= $value['item_taxable'] != null ? $value['item_taxable'] : 0;
 			$itemline[$key]['estline_amount'] 			= $value['item_amount'];
 			$itemline[$key]['date_created'] 			= Carbon::now();
 		}

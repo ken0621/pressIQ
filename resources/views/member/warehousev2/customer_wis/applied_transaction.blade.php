@@ -5,11 +5,17 @@
         <td>
             <select class="form-control droplist-item select-item input-sm" name="item_id[]" >
                 @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $transaction['item_id']])
-                <option class="hidden" value="" />
             </select>
         </td>
         <td><textarea class="form-control txt-desc" name="item_description[]">{{$transaction['item_description']}}</textarea></td>
-        <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="{{$transaction['item_um']}}" /></select></td>
+        <td><select class="2222 droplist-um select-um {{isset($transaction['multi_id']) ? 'has-value' : ''}}" name="item_um[]" >
+                @if($transaction['item_um'])
+                    @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $transaction['multi_um_id'], 'selected_um_id' => $transaction['item_um']])
+                @else
+                    <option class="hidden" value="" />
+                @endif
+            </select>
+        </td>
         <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_qty[]" value="{{$transaction['item_qty']}}" /></td>
         <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]" value="{{$transaction['item_rate']}}" /></td>
         <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$transaction['item_amount']}}" /></td>

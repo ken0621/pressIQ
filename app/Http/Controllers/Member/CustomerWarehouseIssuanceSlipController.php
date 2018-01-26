@@ -17,6 +17,7 @@ use App\Globals\TransactionSalesInvoice;
 use App\Globals\TransactionSalesReceipt;
 use App\Globals\TransactionEstimateQuotation;
 use App\Globals\Customer;
+use App\Globals\AccountingTransaction;
 use App\Globals\WarehouseTransfer;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_customer_wis_item_line;
@@ -59,6 +60,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $data['_item']  = Item::get_all_category_item([1,4,5]);
         $data["_customer"]  = Customer::getAllCustomer();
         $data['action']     = "/member/customer/wis/create-submit";
+        $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'warehouse_issuance_slip');
 
         $data['c_id'] = $request->customer_id;
         //dd($data['c_id']);
@@ -69,6 +71,11 @@ class CustomerWarehouseIssuanceSlipController extends Member
             $data["_wisline"] = CustomerWIS::get_wis_line($cust_wis_id);
             $data['action']     = "/member/customer/wis/update-submit";
         }
+        if($request->ids)
+        {
+            $data['applied'] = CustomerWIS::get_inv($this->user_info->shop_id, $request->ids);
+        }
+        Session::forget('applied_transaction_wis');
 
         return view('member.warehousev2.customer_wis.customer_wis_create',$data);
     }
@@ -118,14 +125,14 @@ class CustomerWarehouseIssuanceSlipController extends Member
         }
 
         $val = CustomerWIS::customer_create_wis($shop_id, $remarks, $ins_wis, $_item, $insert_item);
-
+               CustomerWIS::applied_transaction($shop_id);
         $data = null;
         if(is_numeric($val))
         {
             $data['status'] = 'success';
             $data['call_function'] = 'success_create_customer_wis';
             $data['status_message'] = 'Success';
-
+            Session::forget('applied_transaction_wis');
 
             if($btn_action == 'sclose')
             {
@@ -284,11 +291,11 @@ class CustomerWarehouseIssuanceSlipController extends Member
     {
         $data['page'] = "Open Transaction";
 
-        $data['_eq'] = TransactionEstimateQuotation::getOpenEQ($this->user_info->shop_id, $request->c);
-        $data['_so'] = TransactionSalesOrder::getOpenSO($this->user_info->shop_id, $request->c);
         $data['_si'] = TransactionSalesInvoice::getUndeliveredSalesInvoice($this->user_info->shop_id, $request->c);
         $data['_sr'] = TransactionSalesReceipt::getUndeliveredSalesReceipt($this->user_info->shop_id, $request->c);
         $data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
+
+        $data['applied'] = Session::get('applied_transaction_wis');
         $data['action'] = '/member/customer/wis/apply-transaction';
         return view('member.warehousev2.customer_wis.load_transaction', $data);
     }
@@ -302,9 +309,16 @@ class CustomerWarehouseIssuanceSlipController extends Member
 
         return json_encode($return);
     }
+    public function getAjaxApplyTransaction(Request $request)
+    {
+        $_transaction[$request->apply_transaction] = $request->apply_transaction;
+        Session::put('applied_transaction', $_transaction);
+
+        return json_encode('success');
+    }
     public function getLoadAppliedTransaction(Request $request)
     {
-        $_ids = Session::get('applied_transaction');
+        $_ids = Session::get('applied_transaction_wis');
 
         $return = null;
         $remarks = null;
@@ -322,6 +336,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
                     {
                         $return[$key.'i'.$key_item]['item_id'] = $value_item->invline_item_id;
                         $return[$key.'i'.$key_item]['item_description'] = $value_item->invline_description;
+                        $return[$key.'i'.$key_item]['multi_um_id'] = $value_item->multi_um_id;
                         $return[$key.'i'.$key_item]['item_um'] = $value_item->invline_um;
                         $return[$key.'i'.$key_item]['item_qty'] = $value_item->invline_qty;
                         $return[$key.'i'.$key_item]['item_rate'] = $value_item->invline_rate;
@@ -330,13 +345,19 @@ class CustomerWarehouseIssuanceSlipController extends Member
                 }
                 if($info)
                 {
-                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : 'INV#'.$info->inv_id.', ';
+                    $con = 'SR#';
+                    if($info->is_sales_receipt == 0)
+                    {
+                        $con = 'SI#';
+                    }
+                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : $con.$info->inv_id.', ';
                 }
             }
         }
         $data['_item']  = Item::get_all_category_item([1,4,5]);
         $data['_transactions'] = $return;
         $data['remarks'] = $remarks;
+        $data['_um']        = UnitMeasurement::load_um_multi();
 
         return view('member.warehousev2.customer_wis.applied_transaction', $data);
     }

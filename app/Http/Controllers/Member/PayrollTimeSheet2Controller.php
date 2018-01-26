@@ -37,7 +37,7 @@ use App\Globals\PayrollLeave;
 use App\Globals\Utilities;
 use App\Models\Tbl_payroll_company;
 use App\Globals\Pdf_global;
-
+use PDF2;
 
 use App\Models\Tbl_payroll_deduction_v2;
 use App\Models\Tbl_payroll_deduction_employee_v2;
@@ -154,8 +154,12 @@ class PayrollTimeSheet2Controller extends Member
 		}
 		else
 		{
-			$pdf = view('member.payroll2.employee_timesheet_pdf', $data);
-	        return Pdf_global::show_pdf($pdf, 'portrait');
+			$format["title"] = "A4";
+			$format["format"] = "A4";
+			$format["default_font"] = "sans-serif";
+
+	        $pdf = PDF2::loadView('member.payroll2.employee_timesheet_pdf', $data, [], $format);
+			return $pdf->stream('document.pdf');
 		}
 	}
 	public function approve_timesheets($period_id = 0, $employee_id = 0)

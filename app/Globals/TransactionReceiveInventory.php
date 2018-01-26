@@ -96,6 +96,7 @@ class TransactionReceiveInventory
 
             $return = Self::insertLine($shop_id, $receive_inventory_id, $insert_item);
             $return = $receive_inventory_id;
+
         }
         else
         {

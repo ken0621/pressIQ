@@ -123,6 +123,9 @@ class TransactionWriteCheck
 
 	        $return = Self::insertLine($write_check_id, $insert_item, $entry);
 	        $return = $write_check_id;
+
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+            AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'write_check', $write_check_id, 'Refill upon creating WRITE CHECK '.$ins['transaction_refnum']);
 		}
 		else
 		{
@@ -167,6 +170,12 @@ class TransactionWriteCheck
             Tbl_write_check_line::where('wcline_wc_id', $write_check_id)->delete();
             $return = Self::insertLine($write_check_id, $insert_item, $entry);
             $return = $write_check_id;
+
+            
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+            /* UPDATE INVENTORY HERE */
+            AccountingTransaction::inventory_refill_update($shop_id, $warehouse_id, $insert_item, 'write_check', $write_check_id); 
+            AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'write_check', $write_check_id, 'Refill upon creating WRITE CHECK '.$ins['transaction_refnum']);
         }
         else
         {

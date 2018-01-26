@@ -78,7 +78,8 @@ class TransactionCreditMemo
 		}		
 
         return $return; 
-	}	public static function postInsert($shop_id, $insert, $insert_item = array())
+	}	
+	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);
 		if(!$val)

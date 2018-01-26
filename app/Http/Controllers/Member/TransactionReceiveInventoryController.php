@@ -21,6 +21,7 @@ use App\Globals\Purchase_Order;
 use App\Globals\Billing;
 use App\Globals\Item;
 use App\Globals\Warehouse;
+use App\Globals\Warehouse2;
 use App\Globals\Utilities;
 use App\Globals\UnitMeasurement;
 use App\Globals\Pdf_global;
@@ -107,9 +108,13 @@ class TransactionReceiveInventoryController extends Member
             }
         }
 
-        $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
-
         $return = null;
+        $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+        $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
+        if(!$validate)
+        {
+            $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
+        }
         if(is_numeric($validate))
         {
             $return['status'] = 'success';
@@ -157,10 +162,14 @@ class TransactionReceiveInventoryController extends Member
                 $insert_item[$key]['item_discount']    = 0;
             }
         }
-        
-        $validate = TransactionReceiveInventory::postUpdate($ri_id, $this->user_info->shop_id, $insert, $insert_item);
-
         $return = null;
+        $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+        $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
+        if(!$validate)
+        {
+            $validate = TransactionReceiveInventory::postUpdate($ri_id, $this->user_info->shop_id, $insert, $insert_item);
+        }
+        
         if(is_numeric($validate))
         {
             $return['status'] = 'success';

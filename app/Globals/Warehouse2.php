@@ -497,6 +497,30 @@ class Warehouse2
 
         return $return;
     }
+    public static function update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity)
+    {
+        if($count_offset > $quantity)
+        {
+            $update_qty = abs($quantity);
+            for ($ctr_qty = 0; $ctr_qty < $update_qty; $ctr_qty++)
+            {
+                $update['record_count_inventory'] = 1;
+                $record_log_id = Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                    ->where('record_item_id', $item_id)
+                                                    ->where('record_count_inventory','<',0)->value('record_log_id');
+                Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->update($update);
+
+            }
+        }
+        else if($count_offset-$running_quantity <= 0)
+        {
+            $update['record_count_inventory'] = 1;
+            Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                    ->where('record_item_id', $item_id)
+                                                    ->where('record_count_inventory','<',0)->update($update);
+        }
+    }
+
     public static function get_control_number($warehouse_id, $shop_id, $item_type = null)
     {
         $return = 0;
@@ -645,6 +669,7 @@ class Warehouse2
         }
         return $return;
     }
+
     public static function consume_update($ref_name, $ref_id, $item_id, $quantity)
     {
         $data = Tbl_warehouse_inventory_record_log::where("record_consume_ref_name",$ref_name)->where("record_consume_ref_id",$ref_id)->get();

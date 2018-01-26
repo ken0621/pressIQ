@@ -150,14 +150,14 @@
                         <a href="/about"><p>ABOUT US</p></a>
                         <a href="/contact"><p>CONTACT US</p></a>
                     </div>
+                    <form action="Post"> 
                     <div class="col-md-4">
                         <div class="footer-title-container">
                             <p class="footer-title">NEWS LETTER</p>
                         </div>
-                        <p style="text-transform: uppercase; letter-spacing: 0.5px;">
-                            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
-                        </p>
+                        <span><input type="email" name="newsletter" id="newsletter" required><button type="submit" formaction="/newsletter/send"><i class="button" aria-hidden="true">Send</i>
                     </div>
+                    </form>
                     <div class="col-md-4">
                         <div class="footer-follow-container">
                             <p class="footer-follow-title">FOLLOW US ON</p>

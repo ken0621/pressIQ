@@ -525,7 +525,7 @@ class ShopMemberController extends Shop
     
         $demo_info["explode_email"] = explode("@", $demo_info['demo_email']);
 
-        Mail::send('emails.demo_request',$demo_info, function($message) use ($demo_info)
+        Mail::send('emails.Demo_request',$demo_info, function($message) use ($demo_info)
         {
            $message->from($demo_info["explode_email"][0] . '@press-iq.com',$demo_info['demo_email']);
            $message->to("marketing@press-iq.com");  
@@ -533,6 +533,22 @@ class ShopMemberController extends Shop
         });
         Session::flash('Demo_message', 'Demo Request Successfully Sent!');
         return Redirect::back();  
+    }
+
+    public function send_newsletter()
+    {
+        $newsletter_info["newsletter_email"]       =request('newsletter');
+        $newsletter_info["subject"]                ="NewsLetter";
+
+        $newsletter_info["explode_email"] = explode("@", $newsletter_info['newsletter_email']);
+
+        Mail::send('emails.newsletter_email',$newsletter_info, function($message) use ($newsletter_info)
+        {
+           $message->from($newsletter_info["explode_email"][0] . '@press-iq.com',$newsletter_info['newsletter_email']);
+           $message->to("oliverbacsal@gmail.com");
+           $message->subject($newsletter_info['subject']);  
+        });
+        return Redirect::back(); 
     }
 
     public function press_release_save_as_draft(Request $request)

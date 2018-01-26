@@ -28,7 +28,7 @@
 				   <li class="{{ Request::segment(2) == "pressrelease" ? "active" : "" }}"><a href="/pressuser/pressrelease">Press Release</a></li><!-- Add link -->
 				   <li class="{{ Request::segment(2) == "mypressrelease" ? "active" : "" }}"><a href="/pressuser/mypressrelease">My Press Releases</a></li><!-- add link -->
 				   <li class="{{ Request::segment(2) == "analytics" ? "active" : "" }}"><a href="/pressuser/analytics">Analytics</a></li><!-- add link -->
-				   <li class="{{ Request::segment(2) == "media_contacts" ? "active" : "" }}"><a href="/pressuser/media_contacts">Media Contacts</a></li><!-- add link -->
+				   {{-- <li class="{{ Request::segment(2) == "media_contacts" ? "active" : "" }}"><a href="/pressuser/media_contacts">Media Contacts</a></li> --}}<!-- add link -->
 
 				   <li class="{{ Request::segment(2) == "drafts" ? "active" : "" }}"><a href="/pressuser/drafts">Drafts</a></li><!-- add link -->
 				</ul>

@@ -8,6 +8,7 @@ use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_requisition_slip;
 use App\Models\Tbl_shop;
+use App\Models\Tbl_bill_po;
 use Carbon\Carbon;
 use DB;
 
@@ -106,53 +107,52 @@ class TransactionPurchaseOrder
 
         return $poline_amount;
     }
-    /*public static function checkPoQty($po_data = array(), $bill_id = null)
+    /*public static function checkPoQty($bill_id = null, $po_data = array())
     {
         if($bill_id != null)
         {
+            Tbl_bill_po::where("billed_id",$bill_id)->delete();
             foreach ($po_data as $key => $value) 
             {
-                
-                $chk = Tbl_bill_po::where("billed_id",$bill_id)->where("purchase_order_id",$value["poline_po_id"])->first();
+                $chk = Tbl_bill_po::where("billed_id",$bill_id)->where("purchase_order_id",$value["item_ref_id"])->first();
                 if($chk == null)
                 {
                     $ins["billed_id"] = $bill_id;
-                    $ins["purchase_order_id"] = $value["poline_po_id"];
+                    $ins["purchase_order_id"] = $value["item_ref_id"];
                     
                     Tbl_bill_po::insert($ins);
 
-                    Self::checkPolineQty($bill_id, $value["poline_po_id"]);  
+                    Self::checkPolineQty($value["item_ref_id"], $bill_id);  
                 }
-            }            
-        }
-        die(var_dump($po_data));
+            }           
+        } 
     }*/
-    public static function checkPoQty($ri_id = null, $po_data)
+    
+    public static function getRiline($ri_id, $poline_item_id, $po_id)
+    {
+        return Tbl_receive_inventory_line::where('riline_ri_id', $ri_id)->where('riline_ref_name', 'purchase_order')->where('riline_item_id', $poline_item_id)->where('riline_ref_id',$po_id)->first();
+    }
+public static function checkPoQty($ri_id, $po_data = array())
     {
         if($ri_id != null)
         {
             // here
             foreach ($po_data as $key => $value)
-            {
+            { 
+                //$data = Tbl_receive_inventory_line::where('riline_ri_id', $ri_id)->first();
+
                 Self::checkPolineQty($value['item_ref_id'], $ri_id);
             }
         }
-
     }
-    public static function getRiline($ri_id, $poline_item_id)
-    {
-        return Tbl_receive_inventory_line::where('riline_ri_id', $ri_id)->where('riline_ref_name', 'purchase_order')->where('riline_item_id', $poline_item_id)->first();
-    }
-
     public static function checkPolineQty($po_id, $ri_id)
     {
         $poline = Tbl_purchase_order_line::where('poline_po_id', $po_id)->get();
-
+        //die(var_dump($poline));
         $ctr = 0;
         foreach ($poline as $key => $value)
         {
-
-            $receivedline = Self::getRiline($ri_id, $value->poline_item_id);
+            $receivedline = Self::getRiline($ri_id, $value->poline_item_id, $po_id);
             
             $update['poline_qty'] = $value->poline_qty - $receivedline->riline_qty;
             
@@ -265,7 +265,6 @@ class TransactionPurchaseOrder
             
         }
 
-        //die(var_dump($itemline[$key]['poline_service_date']));
         if(count($itemline) > 0)
         {
             /*INSERTING ITEMS TO DATABASE*/

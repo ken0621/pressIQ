@@ -1,7 +1,7 @@
 @if(count($_po) > 0)
     @foreach($_po as $items)
     @if($items['item_qty'] != 0)
-    <tr class="trcount tr-draggable tr-id-{{$items['poline_po_id']}}">
+    <tr class="tr-draggable">
             <input type="hidden" class="poline_id" name="item_ref_name[]" value="purchase_order">
             <input type="hidden" class="itemline_po_id" name="item_ref_id[]" value="{{$items['poline_po_id']}}">
         <td class="invoice-number-td text-right">1</td>
@@ -16,7 +16,7 @@
         <td>
             <select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" />
                 @if($items['item_um'])
-                    @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $items['multi_um_id'], 'selected_um_id' => $items['item_um']])
+                    @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $items['item_um'], 'selected_um_id' => $items['item_um']])
                 @else
                     <option class="hidden" value="" />
                 @endif

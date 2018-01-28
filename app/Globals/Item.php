@@ -362,7 +362,7 @@ class Item
     /* READ DATA */
     public static function get($shop_id = 0, $paginate = false, $archive = 0)
     {
-        $query = Tbl_item::where("tbl_item.shop_id", $shop_id)->where('item_id',479)->where("tbl_item.archived", $archive)->type()->membership();
+        $query = Tbl_item::where("tbl_item.shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->membership();
 
         if(session("get_inventory"))
         {

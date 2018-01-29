@@ -27,9 +27,11 @@ function government_forms()
 		{
 			var company_id 		= $(e.currentTarget).val();
 			var month      		= $(this).attr("data-id");
+			var year 			= $(".year").val();
 			ajaxdata.company_id = company_id;
 			ajaxdata.month      = month;
 			ajaxdata._token 	= $("._token").val();
+			ajaxdata.year		= year;
 			$('#spinningLoader').show();
 			$(".load-filter-data").hide();
 			setTimeout(function(e){
@@ -56,9 +58,11 @@ function government_forms()
 		{
 			var company_id 		= $(e.currentTarget).val();
 			var month      		= $(this).attr("data-id");
+			var year 			= $(".year").val();
 			ajaxdata.company_id = company_id;
 			ajaxdata.month      = month;
 			ajaxdata._token 	= $("._token").val();
+			ajaxdata.year		= year;
 			$('#spinningLoader').show();
 			$(".load-filter-data").hide();
 	        setTimeout(function(e){
@@ -85,9 +89,11 @@ function government_forms()
 		{
 			var company_id 		= $(e.currentTarget).val();
 			var month      		= $(this).attr("data-id");
+			var year 			= $(".year").val();
 			ajaxdata.company_id = company_id;
 			ajaxdata.month      = month;
 			ajaxdata._token 	= $("._token").val();
+			ajaxdata.year		= year;
 			$('#spinningLoader').show();
 			$(".load-filter-data").hide();
 	        setTimeout(function(e){

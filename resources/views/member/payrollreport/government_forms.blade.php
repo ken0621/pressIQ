@@ -19,7 +19,9 @@
         <div class="form-group">
             <div class="col-md-3">
                 <select class="form-control contribution-month">
-                    <option>2017</option>
+                    @foreach($_year_period as $year)
+                        <option value="{{$year["year_contribution"]}}" {{$year["year_contribution"] == $year_today ? 'selected': 'unselected'}}>{{$year["year_contribution"]}}</option>
+                    @endforeach
                 </select>
             </div>
             
@@ -49,9 +51,9 @@
                                 <td>{{ $period["month_name"] }}</td>
                                 <td class="text-center">{{ $period["period_count"] }}</td>
                                 @if($period["period_count"] != 0)
-                                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/government_forms_sss/{{ $key }}','lg')">SSS</a></td>
-                                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/government_forms_philhealth/{{ $key }}','lg')">PHILHEALTH</a></td>
-                                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/government_forms_hdmf/{{ $key }}','lg')">HDMF</a></td>
+                                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/government_forms_sss/{{ $key }}/{{$year_today}}','lg')">SSS</a></td>
+                                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/government_forms_philhealth/{{ $key }}/{{$year_today}}','lg')">PHILHEALTH</a></td>
+                                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/government_forms_hdmf/{{ $key }}/{{$year_today}}','lg')">HDMF</a></td>
                                 @else
                                 <td class="text-center"></td>
                                 <td class="text-center"></td>

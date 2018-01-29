@@ -49,16 +49,31 @@ class PayrollReportController extends Member
 	public function government_forms()
 	{ 
 		$data["page"] = "Monthly Government Forms";
-		$data["_month_period"] = Payroll2::get_number_of_period_per_month($this->shop_id(), 2017);
+		$date = date("Y-m-d");
+		$year = explode("-", $date);
+
+		$data["_month_period"] = Payroll2::get_number_of_period_per_month($this->shop_id(), $year[0]);
+		$data["_year_period"] = Tbl_payroll_period::select('year_contribution')->where("shop_id", Self::shop_id())->distinct()->get();
+		$data["year_today"] = $year[0];
+
 		return view("member.payrollreport.government_forms", $data);
 	}
-	public function government_forms_hdmf($month)
+	public function government_forms_year_filter()
+	{
+		$year = Request::input('year');
+		$data["page"] = "Monthly Government Forms";
+		$data["_month_period"] = Payroll2::get_number_of_period_per_month($this->shop_id(), $year);
+		$data["_year_period"] = Tbl_payroll_period::select('year_contribution')->where("shop_id", Self::shop_id())->distinct()->get();
+		$data["year_today"] = $year;
+
+		return view("member.payrollreport.government_forms_year_filter", $data);
+	}
+	public function government_forms_hdmf($month,$year)
 	{ 
 		$data["page"] = "Monthly Government Forms";
-		$year = 2017;
+		$year = $year;
 		$shop_id = $this->shop_id();
 		$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
-		
 		$data["contri_info"] = $contri_info; 
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
@@ -67,25 +82,23 @@ class PayrollReportController extends Member
 
 		return view("member.payrollreport.government_forms_hdmf", $data);
 	}
-	public function government_forms_sss($month)
+	public function government_forms_sss($month,$year)
 	{ 
 		$data["page"] = "Monthly Government Forms";
-		$year = 2017;
+		$year = $year;
 		$shop_id = $this->shop_id();
 		$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
-		// dd($contri_info);
 		$data["contri_info"] = $contri_info; 
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["year"] = $year;
 		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
-		// dd($contri_info);
 		return view("member.payrollreport.government_forms_sss", $data);
 	}
-	public function government_forms_philhealth($month)
+	public function government_forms_philhealth($month,$year)
 	{ 
 		$data["page"] = "Monthly Government Forms";
-		$year = 2017;
+		$year = $year;
 		$shop_id = $this->shop_id();
 		$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
 		$data["contri_info"] = $contri_info; 
@@ -97,12 +110,12 @@ class PayrollReportController extends Member
 		return view("member.payrollreport.government_forms_philhealth", $data);
 	}
 
-	public function government_forms_hdmf_iframe($month,$company_id)
+	public function government_forms_hdmf_iframe($month,$company_id,$year)
 	{ 
 		if($company_id==0)
 		{
 			$data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
 			$data["contri_info"] = $contri_info; 
@@ -124,7 +137,7 @@ class PayrollReportController extends Member
 		else
 		{
 			$data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
 			$data['company_id1'] = $company_id;
@@ -148,8 +161,9 @@ class PayrollReportController extends Member
 		{
 			$company_id =	Request::input("company_id");
         	$month      =	Request::input('month');
+        	$year 		= 	Request::input('year');
 			$data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
 			$data['company_id1'] = $company_id;
@@ -172,8 +186,9 @@ class PayrollReportController extends Member
 		{
             $month      =	Request::input('month');
             $company_id =	Request::input("company_id");
+            $year 		= 	Request::input('year');
             $data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id,$month, $year);
 			$data["contri_info"] = $contri_info; 
@@ -190,9 +205,10 @@ class PayrollReportController extends Member
 	{
 		$company_id =	Request::input("company_id");
 		$month      =	Request::input('month');
+		$year 		= 	Request::input('year');
 		if (Request::input("company_id") > 0) {
 			$data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
 			$data["contri_info"] = $contri_info; 
@@ -213,7 +229,7 @@ class PayrollReportController extends Member
 		else
 		{
 			$data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
 			$data["contri_info"] = $contri_info; 
@@ -230,9 +246,10 @@ class PayrollReportController extends Member
 	{
 		$company_id =	Request::input("company_id");
 		$month      =	Request::input('month');
+		$year 		= 	Request::input('year');
 		if ($company_id != null && $month != null) {
 			$data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
 			$data['company_id1'] = $company_id;
@@ -254,7 +271,7 @@ class PayrollReportController extends Member
 		else
 		{
 			$data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
 			$data["contri_info"] = $contri_info; 
@@ -267,12 +284,12 @@ class PayrollReportController extends Member
 			return view("member.payrollreport.government_forms_philhealth_filter", $data);
 		}
 	}
-    public function government_forms_hdmf_export_excel($month,$company_id)
+    public function government_forms_hdmf_export_excel($month,$company_id,$year)
 	{
 		if($company_id==0)
 		{
 			$data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
 			$data["contri_info"] = $contri_info; 
@@ -296,7 +313,7 @@ class PayrollReportController extends Member
 		else
 		{
 			$data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
 			
@@ -316,12 +333,12 @@ class PayrollReportController extends Member
 		}
  			
 	}
-	public function government_forms_sss_export_excel($month,$company_id)
+	public function government_forms_sss_export_excel($month,$company_id,$year)
 	{
 		if($company_id==0)
 		{
 			$data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
 			$data["contri_info"] = $contri_info; 
@@ -343,7 +360,7 @@ class PayrollReportController extends Member
 		else
 		{
 			$data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
 			
@@ -363,12 +380,12 @@ class PayrollReportController extends Member
 		}
  			
 	}
-	public function government_forms_philhealth_export_excel($month,$company_id)
+	public function government_forms_philhealth_export_excel($month,$company_id,$year)
 	{
 		if($company_id==0)
 		{
 			$data["page"] = "Monthly Government Forms";
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
 			$data["contri_info"] = $contri_info; 
@@ -388,9 +405,7 @@ class PayrollReportController extends Member
 		else
 		{
 			$data["page"] = "Monthly Government Forms";
-
-
-			$year = 2017;
+			$year = $year;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
 			

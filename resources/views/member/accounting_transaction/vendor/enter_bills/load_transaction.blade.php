@@ -24,7 +24,7 @@
                                 @foreach($_po as $po)
                                 <tr class="{{$total_amount += $po->po_overall_price}}">
                                     <td class="text-center">
-                                        <input type="checkbox" name="_apply_transaction[{{$po->po_id}}]" clas="td-check-po 123"  data-content="{{$po->po_overall_price}}" {{isset($_applied[$po->po_id]) ? 'checked' : ''}}></td>
+                                        <input type="checkbox" name="_apply_transaction[{{$po->po_id}}]" class="td-check-po" value="purchase_order" data-content="{{$po->po_overall_price}}" {{isset($_applied[$po->po_id]) ? 'checked' : ''}}></td>
                                     <td class="text-center">{{$po->transaction_refnum != "" ? $po->transaction_refnum : $po->po_id}}</td>
                                     <td class="text-right">{{currency('PHP',$po->po_overall_price)}}</td>
                                 </tr>
@@ -49,7 +49,8 @@
     </div>
     <div class="modal-footer">
     	<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-    	<button class="btn btn-primary btn-custom-primary" type="button">Add</button>
+    	<button type="submit" class="btn btn-primary btn-custom-primary" type="button">Add</button>
+    </div>
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 </form>
 
@@ -58,11 +59,11 @@
     {
         $('body').on('click','.td-check-po', function()
         {
-            //alert('123');
             $(this).prop('checked', this.checked); 
             compute();
         });
-        
+
+        compute();
         function compute()
         {
             var total_po_amount = 0;

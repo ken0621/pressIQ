@@ -104,8 +104,6 @@
                                                 </thead>
                                                 <tbody class="tbody-item applied-po-transaction-list">
                                                 </tbody>
-                                                <tbody class="tbody-item applied-dm-transaction-list">
-                                                </tbody>
                                                 <tbody class="tbody-item">
                                                     @if(isset($ri))
                                                         @foreach($_riline as $riline)

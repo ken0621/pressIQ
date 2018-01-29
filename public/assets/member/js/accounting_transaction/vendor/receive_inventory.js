@@ -490,6 +490,7 @@ function receive_inventory()
 	this.load_applied_po_transaction = function()
 	{
 		load_applied_po_transaction();
+
 	}
 }
 

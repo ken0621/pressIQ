@@ -3133,7 +3133,8 @@ class ShopMemberController extends Shop
         $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
         if($point)
         {
-            $point = $point->point;
+            $point = mt_rand($point->point*10,$point->max*10)/10;
+            // dd($point);
         }
         else
         {
@@ -3146,13 +3147,14 @@ class ShopMemberController extends Shop
         $insert['wallet_log_plan']          = "RECAPTCHA";
         $insert['wallet_log_claimbale_on']  = Carbon::now();
         $insert['encashment_process_type']  = 0;
+        $insert['wallet_log_details']       = "You earned ".currency('PHP',$point)." from Recaptcha submit";
 
         $pool_amount        = Tbl_recaptcha_pool_amount::where('shop_id',$this->shop_info->shop_id)->sum('amount');
         $acquired_points    = Tbl_mlm_slot_wallet_log::where('wallet_log_plan','RECAPTCHA')
                                 ->where('shop_id',$this->shop_info->shop_id)
                                 ->sum('wallet_log_amount');
         $remaining_points   = $pool_amount-$acquired_points;
-        if($remaining_points>=$point)
+        if($remaining_points>=$point && $point!=0)
         {
             if (Session::get("captcha_limit")) 
             {

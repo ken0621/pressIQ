@@ -33,30 +33,42 @@ class MLM_RecaptchaController extends Member
         if($setting_points)
         {
             $data['point'] = $setting_points->point;
+            $data['max']   = $setting_points->max;
         }
     	else
         {
             $data['point'] = 0;
+            $data['max']   = 0;
         }
     	return view('member.mlm_recaptcha.mlm_recaptcha_setting',$data);
     }
     public function submit_setting(Request $request)
     {
     	$setting_points = Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->first();
-    	if(count($setting_points)>0)
-    	{
-            $update['point']    = $request->point;
-            $update['schedule'] = $request->schedule;
-    		Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->update($update);
-    	}
-    	else
-    	{
-    		$insert['shop_id'] 	= $this->user_info->shop_id;
-    		$insert['point'] 	= $request->point;
-            $insert['schedule'] = $request->schedule;
-    		Tbl_recaptcha_setting::insert($insert);
-    	}
-    	$response['call_function'] = 'success_setting';
+        if($request->point > $request->max)
+        {
+            $response['call_function'] = 'point_error';
+        }
+        else
+        {
+            if(count($setting_points)>0)
+            {
+                $update['point']    = $request->point;
+                $update['max']      = $request->max;
+                $update['schedule'] = $request->schedule;
+                Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->update($update);
+            }
+            else
+            {
+                $insert['shop_id']  = $this->user_info->shop_id;
+                $insert['point']    = $request->point;
+                $insert['max']      = $request->max;
+                $insert['schedule'] = $request->schedule;
+                Tbl_recaptcha_setting::insert($insert);
+            }
+            $response['call_function'] = 'success_setting';
+        }
+    	
     	return json_encode($response);
     }
     public function add_pool()
@@ -114,14 +126,12 @@ class MLM_RecaptchaController extends Member
     {
     	if($query =Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->first())
         {
-             $point = $query->point;
+             return currency('PHP',$query->point)." to ".currency('PHP',$query->max);
         }
         else
         {
-            $point = 0;
+            return currency('PHP',0); 
         }
-        
-    	return currency('PHP',$point);
     }
     
 }

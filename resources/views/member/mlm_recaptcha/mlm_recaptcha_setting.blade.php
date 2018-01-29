@@ -14,9 +14,14 @@
     </div>
     <div class="modal-body clearfix">
         <div class="form-group">
+            <div class="col-md-12"><label for="basic-input">Points</label></div>
             <div class="col-md-12">
-                <label for="basic-input">Points</label>
-                <input autocomplete="off" id="basic-input" type="text" value="{{$point}}" class="form-control" name="point" placeholder="Acquired points per submit">
+                <div class="col-md-6">
+                    <input autocomplete="off" id="basic-input" type="text" value="{{$point}}" class="form-control" name="point" placeholder="lowest">
+                </div>
+                <div class="col-md-6">
+                    <input autocomplete="off" id="basic-input" type="text" value="{{$max}}" class="form-control" name="max" placeholder="highest">
+                </div>
             </div>
         </div>            
         <div class="form-group">
@@ -43,9 +48,9 @@
         recaptcha.action_load_points();
         data.element.modal('hide');
     }
-    function error(data)
+    function point_error(data)
     {
-        toastr.error('Error updating setting');
+        toastr.error('Minimum amount is greater than the Maximum');
     }
 </script>
 

@@ -63,6 +63,8 @@ class TransactionEnterBillsController extends Member
         $data['action']     = '/member/transaction/enter_bills/create-enter-bills';
 
         $eb_id = $request->id;
+
+        Session::forget("applied_transaction");
         if($eb_id)
         {
             $data['eb'] = TransactionEnterBills::info($this->user_info->shop_id, $eb_id);
@@ -107,6 +109,7 @@ class TransactionEnterBillsController extends Member
         if(!$validate)
         {
             $validate = TransactionEnterBills::postInsert(null, $this->user_info->shop_id, $insert, $insert_item);
+            TransactionPurchaseOrder::checkPoQty($validate, Session::get('applied_transaction'));
         }
         if(is_numeric($validate))
         {
@@ -127,7 +130,7 @@ class TransactionEnterBillsController extends Member
     {
         $btn_action  = $request->button_action;
         $bill_id  = $request->bill_id;
-        //die(var_dump($bill_id));
+
 
         $insert['transaction_refnumber']    = $request->transaction_refnumber;
         $insert['vendor_id']                = $request->vendor_id;
@@ -186,18 +189,59 @@ class TransactionEnterBillsController extends Member
         $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
         $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
 
-        $data['_applied'] = Session::put('applied_transaction');
+        $data['_applied'] = Session::get('applied_transaction');
         $data['action']   = '/member/transaction/enter_bills/apply-transaction';
         return view('member.accounting_transaction.vendor.enter_bills.load_transaction', $data);
     }
-    public function getApplyTransaction(Request $request)
+    public function postApplyTransaction(Request $request)
     {
         $apply_transaction = $request->_apply_transaction;
-        $applied_transaction = Session::put('applied_transaction');
+        Session::put("applied_transaction", $apply_transaction);
 
         $return['message'] = 'Success';
         $return['call_function'] = 'success_apply_transaction';
 
         return json_encode($return);
+    }
+    public function getLoadAppliedTransaction(Request $request)
+    {
+        $applied_transaction = Session::get('applied_transaction');
+
+        //die(var_dump($applied_transaction));
+        if(count($applied_transaction) > 0)
+        {
+            foreach ($applied_transaction as $key => $value)
+            {
+                $_applied_poline = TransactionPurchaseOrder::info_item($key);
+                $info = TransactionPurchaseOrder::info($this->user_info->shop_id,$key);
+
+                $remarks = null;
+                foreach ($_applied_poline as $poline_key => $poline_value) 
+                {
+                    $type = Item::get_item_type($poline_value->poline_item_id);
+                    if($type == 1 || $type == 4 || $type == 5 )
+                    {
+                        $return[$key.'i'.$poline_key]['poline_po_id'] = $poline_value->poline_po_id;
+                        $return[$key.'i'.$poline_key]['item_id'] = $poline_value->poline_item_id;
+                        $return[$key.'i'.$poline_key]['item_description'] = $poline_value->poline_description;
+                        $return[$key.'i'.$poline_key]['item_um'] = $poline_value->poline_um;
+                        $return[$key.'i'.$poline_key]['item_qty'] = $poline_value->poline_qty;
+                        $return[$key.'i'.$poline_key]['item_rate'] = $poline_value->poline_rate;
+                        $return[$key.'i'.$poline_key]['item_amount'] = $poline_value->poline_amount;
+                    }
+                }    
+                if($info)
+                {
+                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : 'PO#'.$info->po_id.', ';
+                }
+            }
+        }
+
+        $data['_po']     = $return;
+        $data['remarks'] = $remarks;
+        $data['_um']     = UnitMeasurement::load_um_multi();
+        $data['_item']   = Item::get_all_category_item();
+
+        return view('member.accounting_transaction.vendor.purchase_order.applied_po_transaction', $data);
     }
 }

@@ -119,7 +119,9 @@
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="draggable">
+                                                <tbody class="tbody-item draggable applied-transaction-list">
+                                                </tbody>
+                                                <tbody class="draggable tbody-item">
                                                     @if(isset($eb))
                                                         @foreach($_ebline as $ebline)
                                                             <tr class="tr-draggable">

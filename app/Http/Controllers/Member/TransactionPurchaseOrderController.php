@@ -42,7 +42,7 @@ class TransactionPurchaseOrderController extends Member
     public function getLoadPurchaseOrder(Request $request)
     {
         $data['_purchase_order'] = TransactionPurchaseOrder::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
-        //dd($data['_purchase_order']);
+        
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order_table', $data);
     }
     public function getAddItem($po_id)

@@ -58,13 +58,22 @@ class PayrollReportController extends Member
 
 		return view("member.payrollreport.government_forms", $data);
 	}
+	public function government_forms_year_filter()
+	{
+		$year = Request::input('year');
+		$data["page"] = "Monthly Government Forms";
+		$data["_month_period"] = Payroll2::get_number_of_period_per_month($this->shop_id(), $year);
+		$data["_year_period"] = Tbl_payroll_period::select('year_contribution')->where("shop_id", Self::shop_id())->distinct()->get();
+		$data["year_today"] = $year;
+
+		return view("member.payrollreport.government_forms_year_filter", $data);
+	}
 	public function government_forms_hdmf($month,$year)
 	{ 
 		$data["page"] = "Monthly Government Forms";
 		$year = $year;
 		$shop_id = $this->shop_id();
 		$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
-		
 		$data["contri_info"] = $contri_info; 
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
@@ -79,13 +88,11 @@ class PayrollReportController extends Member
 		$year = $year;
 		$shop_id = $this->shop_id();
 		$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
-		// dd($contri_info);
 		$data["contri_info"] = $contri_info; 
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["year"] = $year;
 		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
-		// dd($contri_info);
 		return view("member.payrollreport.government_forms_sss", $data);
 	}
 	public function government_forms_philhealth($month,$year)

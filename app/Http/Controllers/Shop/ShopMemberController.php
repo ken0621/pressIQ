@@ -526,7 +526,7 @@ class ShopMemberController extends Shop
     
         $demo_info["explode_email"] = explode("@", $demo_info['demo_email']);
 
-        Mail::send('emails.Demo_request',$demo_info, function($message) use ($demo_info)
+        Mail::send('emails.demorequest',$demo_info, function($message) use ($demo_info)
         {
            $message->from($demo_info["explode_email"][0] . '@press-iq.com',$demo_info['demo_email']);
            $message->to('marketing@press-iq.com');

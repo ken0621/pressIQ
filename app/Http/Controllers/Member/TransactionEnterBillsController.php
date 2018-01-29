@@ -198,7 +198,7 @@ class TransactionEnterBillsController extends Member
         $apply_transaction = $request->_apply_transaction;
         Session::put("applied_transaction", $apply_transaction);
 
-        $return['message'] = 'Success';
+        $return['status'] = 'success';
         $return['call_function'] = 'success_apply_transaction';
 
         return json_encode($return);

@@ -1,6 +1,6 @@
 @extends('member.layout')
 @section('content')
-<form class="global-submit form-to-submit-transfer load-po-container" role="form" action="" method="POST" >
+<form class="global-submit form-to-submit-transfer load-po-container" role="form" action="{{$action or ''}}" method="POST" >
     <input type="hidden" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" class="button-action" name="button_action" value="">
     <input type="hidden" name="po_id" value="{{$po->po_id or ''}}" >
@@ -48,12 +48,28 @@
                                 <input type="text" class="form-control" name="reference_number" value="{{$transaction_refnum or ''}}">
                             </div>
                         </div>
+                         <div class="row clearfix">
+                            <div class="col-sm-4">
+                                <label>Warehouse</label>
+                                <select class="form-control droplist-warehouse" name="adj_warehouse">
+                                    @if(count($_warehouse) > 0)
+                                        @foreach($_warehouse as $warehouse)
+                                            <option indent="{{$warehouse->warehouse_level}}" value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <label>Date</label>
+                                <input type="text" class="datepicker form-control" name="adj_created">
+                            </div>
+                        </div>
                     </div>    
                     <div class="row clearfix draggable-container">
                         <div class="table-responsive">
                             <div class="col-sm-12">
                                 <table class="digima-table">
-                                    <thead >
+                                    <thead>
                                         <tr>
                                             <th class="text-center" style="width: 15px;">#</th>
                                             <th class="text-center" style="width: 180px;">Product/Service</th>
@@ -73,42 +89,41 @@
                                     </thead>
                                     <tbody class="draggable tbody-item">                         
                                         <tr class="tr-draggable">
-                                            <td class="invoice-number-td text-right">1</td>                                                <td>
-                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="poline_item_id[]" >
+                                            <td class="invoice-number-td text-right">1</td><td>
+                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                     <option class="hidden" value="" />
                                                 </select>
                                             </td>
                                             <td>
-                                                <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
+                                                <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
                                             </td>
 
-                                            <td><select class="2222 droplist-um select-um" name="poline_um[]"><option class="hidden" value="" /></select></td>
-                                            <td><label class="text-center number-input txt-qty compute" type="text" name="actual_quantity"></label></td>
-                                            <td><input class="text-right txt-new-quantity compute" type="text" name="new_quantity[]"/></td>
-                                            <td><input class="text-right number-input txt-difference" type="text" name="difference[]"/></td>
-                                            <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
-                                            <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
+                                            <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                            <td><label class="text-center number-input txt-qty compute" type="text" name="item_qty"></label></td>
+                                            <td><input class="text-right txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
+                                            <td><input class="text-right number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
+                                            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                         </tr>
-                                            
                                         <tr class="tr-draggable">
-                                            <td class="invoice-number-td text-right">2</td>
-                                            <td>
-                                                <select class="22222 form-control select-item droplist-item input-sm pull-left" name="poline_item_id[]" >
+                                            <td class="invoice-number-td text-right">2</td><td>
+                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                     <option class="hidden" value="" />
                                                 </select>
                                             </td>
                                             <td>
-                                                <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
+                                                <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
                                             </td>
-                                            <td><select class="3333 droplist-um select-um" name="poline_um[]"><option class="hidden" value="" /></select></td>
-                                            <td><label class="text-center number-input txt-qty compute" type="text" name="actual_quantity"></label></td>
-                                            <td><input class="text-right txt-new-quantity compute" type="text" name="new_quantity[]"/></td>
-                                            <td><input class="text-right number-input txt-difference" type="text" name="difference[]"/></td>
-                                            <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
-                                            <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
+
+                                            <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                            <td><label class="text-center number-input txt-qty compute" type="text" name="item_qty"></label></td>
+                                            <td><input class="text-right txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
+                                            <td><input class="text-right number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
+                                            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                         </tr>
                                     </tbody>
@@ -120,11 +135,11 @@
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Remarks</label>
-                            <textarea class="form-control input-sm textarea-expand" name="po_message" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="adjustment_remarks" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-3">
                             <label>Statement Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="po_memo" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="adjustment_memo" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-6">
                            <!--  <div class="row">
@@ -157,23 +172,21 @@
 <div class="div-script">
     <table class="div-item-row-script hide">
         <tr class="tr-draggable">
-            <td class="invoice-number-td text-right">2</td>
-            <td>
-                <select class="form-control select-item input-sm pull-left" name="poline_item_id[]">
+            <td class="invoice-number-td text-right">1</td><td>
+                <select class="1111 form-control select-item input-sm pull-left" name="item_id[]" >
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                     <option class="hidden" value="" />
                 </select>
             </td>
             <td>
-                <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
+                <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
             </td>
-
-            <td><select class="select-um" name="poline_um[]"><option class="hidden" value="" /></select></td>
-            <td><label class="text-center number-input txt-qty compute" type="text" name="actual_quantity"></label></td>
-            <td><input class="text-right txt-new-quantity compute" type="text" name="new_quantity[]"/></td>
-            <td><input class="text-right number-input txt-difference" type="text" name="difference[]"/></td>
-            <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
-            <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
+            <td><select class="2222 select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+            <td><label class="text-center number-input txt-qty compute" type="text" name="item_qty"></label></td>
+            <td><input class="text-right txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
+            <td><input class="text-right number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
+            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>

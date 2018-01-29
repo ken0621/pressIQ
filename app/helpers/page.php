@@ -1236,7 +1236,7 @@ function page_list($pis = 0)
 
              /* -- WAREHOUSE - WIS */
             $code = "warehouse-issuance-slip";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Warehouse Issuance Slip";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Warehouse Transfer";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
             $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/warehouse/wis";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','issue','confirm'];

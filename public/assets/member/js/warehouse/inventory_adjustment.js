@@ -36,6 +36,11 @@ function inventory_adjustment()
             	action_load_item_info($(this));
             }
         });
+        $('.droplist-warehouse').globalDropList(
+        {
+            width : "100%",
+    		hasPopup: "false"
+        });
 
 	    $(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {

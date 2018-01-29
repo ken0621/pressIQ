@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Member;
+
+use Illuminate\Http\Request;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_item;
@@ -16,7 +18,6 @@ use App\Globals\Vendor;
 use App\Globals\Pdf_global;
 use App\Globals\UnitMeasurement;
 use App\Globals\AccountingTransaction;
-use Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Session;
@@ -45,8 +46,14 @@ class WarehouseInventoryAdjustmentController extends Member
         $data['_item']      = Item::get_all_category_item([1,4,5]);
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'inventory_adjustment');
+        $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
+
+        $data['action'] = '/member/item/warehouse/inventory_adjustment/create-submit';
 
         return view('member.warehousev2.invtentory_adjustment.inventory_adjustment',$data);
     }
-
+    public function postCreateSubmit(Request $request)
+    {
+        
+    }
 }

@@ -16,6 +16,7 @@ use App\Models\Tbl_pay_bill;
 use App\Models\Tbl_bill;
 use App\Models\Tbl_write_check;
 use App\Models\Tbl_debit_memo;
+use App\Models\Tbl_warehouse_issuance_report;
 
 use Carbon\Carbon;
 use Validator;
@@ -306,6 +307,11 @@ class AccountingTransaction
 		if($transaction_type == 'warehouse_issuance_slip')
 		{
 			$get = Tbl_customer_wis::where('cust_wis_shop_id', $shop_id)->orderBy('cust_wis_id','DESC')->first();
+		}
+		if($transaction_type == 'warehouse_transfer')
+		{
+			$get = Tbl_warehouse_issuance_report::where('wis_shop_id', $shop_id)->orderBy('wis_id','DESC')->first();
+			$get->transaction_refnum = $get->wis_number;
 		}
 		if($transaction_type == 'purchase_requisition')
 		{

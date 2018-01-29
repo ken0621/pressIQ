@@ -68,17 +68,34 @@ class WarehouseInventoryAdjustmentController extends Member
         {
             if($value)
             {
-                $insert_item[$key]['itemline_item_id']           = $value;
-                $insert_item[$key]['itemline_item_description']  = $request->item_description[$key];
-                $insert_item[$key]['itemline_item_um']           = $request->item_um[$key];
-                $insert_item[$key]['itemline_actual_qty']        = str_replace(',', '', $request->item_actual_qty[$key]);
-                $insert_item[$key]['itemline_new_qty']           = str_replace(',', '', $request->item_new_qty[$key]);
-                $insert_item[$key]['itemline_diff_qty']          = str_replace(',', '', $request->item_diff_qty[$key]);
-                $insert_item[$key]['itemline_rate']              = str_replace(',', '', $request->item_rate[$key]);
-                $insert_item[$key]['itemline_amount']            = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_id']           = $value;
+                $insert_item[$key]['item_description']  = $request->item_description[$key];
+                $insert_item[$key]['item_um']           = $request->item_um[$key];
+                $insert_item[$key]['item_actual_qty']   = str_replace(',', '', $request->item_actual_qty[$key]);
+                $insert_item[$key]['item_new_qty']      = str_replace(',', '', $request->item_new_qty[$key]);
+                $insert_item[$key]['item_diff_qty']     = str_replace(',', '', $request->item_diff_qty[$key]);
+                $insert_item[$key]['item_rate']         = str_replace(',', '', $request->item_rate[$key]);
+                $insert_item[$key]['item_amount']       = str_replace(',', '', $request->item_amount[$key]);
             }
         }
 
+        $val = null;
+        if(count($insert_item) > 0)
+        {
+            $val = InventoryAdjustment::postInsert($this->user_info->shop_id, $insert, $insert_item);
+        }
+        if(is_numeric($val))
+        {
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_adjust_inventory';
+            $return['status_message'] = 'Success adjusting inventory.';
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = 'Please select item.';
+        }
 
+        return json_encode($return);
     }
 }

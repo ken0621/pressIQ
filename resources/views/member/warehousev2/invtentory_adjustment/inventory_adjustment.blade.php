@@ -100,9 +100,9 @@
                                             </td>
 
                                             <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                            <td><label class="text-center number-input txt-qty compute" type="text" name="item_qty"></label></td>
-                                            <td><input class="text-right txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
-                                            <td><input class="text-right number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
+                                            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty"/></td>
+                                            <td><input class="text-center txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
+                                            <td><input class="text-center number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
                                             <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
                                             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
@@ -119,9 +119,9 @@
                                             </td>
 
                                             <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                            <td><label class="text-center number-input txt-qty compute" type="text" name="item_qty"></label></td>
-                                            <td><input class="text-right txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
-                                            <td><input class="text-right number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
+                                            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty"/></td>
+                                            <td><input class="text-center txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
+                                            <td><input class="text-center number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
                                             <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
                                             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
@@ -168,7 +168,6 @@
         </div>
     </div>
 </form>
-
 <div class="div-script">
     <table class="div-item-row-script hide">
         <tr class="tr-draggable">
@@ -182,9 +181,9 @@
                 <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
             </td>
             <td><select class="2222 select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-            <td><label class="text-center number-input txt-qty compute" type="text" name="item_qty"></label></td>
-            <td><input class="text-right txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
-            <td><input class="text-right number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
+            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty"/></td>
+            <td><input class="text-center txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
+            <td><input class="text-center number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>

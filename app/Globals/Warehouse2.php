@@ -401,7 +401,7 @@ class Warehouse2
                 }
             }
         }
-        if($quantity < 1)
+        if($quantity < 0)
         {
             $return .= "The quantity is less than 1. <br> ";
         }

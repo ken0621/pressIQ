@@ -173,7 +173,7 @@ class Item
             $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
             
             $return = Warehouse2::refill_validation($shop_id, $warehouse_id, 0, $insert['item_quantity'], 'Initial Quantity from Item');
-            if(!$return['message'])
+            if(!$return)
             {
                 $item_id = Tbl_item::insertGetId($insert);
                 

@@ -282,6 +282,7 @@ class AccountingTransaction
 	public static function get_count_last_transaction($shop_id, $transaction_type, $separator)
 	{
 		$return = 1;
+		$get = null;
 		if($transaction_type == 'sales_invoice')
 		{
 			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('is_sales_receipt',0)->orderBy('inv_id','DESC')->first();

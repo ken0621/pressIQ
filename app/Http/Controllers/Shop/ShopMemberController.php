@@ -507,7 +507,7 @@ class ShopMemberController extends Shop
         Mail::send('emails.Contact_us',$contactus_info, function($message) use ($contactus_info)
         {
             $message->from($contactus_info["explode_email"][0] . '@press-iq.com',$contactus_info['contactus_email']);
-            $message->to("marketing@press-iq.com");  
+            $message->to('marketing@press-iq.com');  
             $message->subject($contactus_info['contactus_subject']);
            
         });
@@ -529,7 +529,7 @@ class ShopMemberController extends Shop
         Mail::send('emails.Demo_request',$demo_info, function($message) use ($demo_info)
         {
            $message->from($demo_info["explode_email"][0] . '@press-iq.com',$demo_info['demo_email']);
-           $message->to("marketing@press-iq.com");
+           $message->to('marketing@press-iq.com');
            $message->subject($demo_info['demo_subject']);  
            
         });
@@ -544,10 +544,10 @@ class ShopMemberController extends Shop
 
         $newsletter_info["explode_email"] = explode("@", $newsletter_info['newsletter_email']);
 
-        Mail::send('emails.newsletter_email',$newsletter_info, function($message) use ($newsletter_info)
+        Mail::send('emails.Newsletter_email',$newsletter_info, function($message) use ($newsletter_info)
         {
            $message->from($newsletter_info["explode_email"][0] . '@press-iq.com',$newsletter_info['newsletter_email']);
-           $message->to("marketing@press-iq.com");
+           $message->to('marketing@press-iq.com');
            $message->subject($newsletter_info['subject']);  
         });
         return Redirect::back(); 

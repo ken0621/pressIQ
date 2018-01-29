@@ -75,5 +75,13 @@
         //END MISSION ANF VISION
 });*/
 </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-113245030-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-113245030-1');
+</script>
 
 @endsection

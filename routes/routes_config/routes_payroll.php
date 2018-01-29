@@ -8,16 +8,16 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_api','Member\PayrollApiController@index');
 
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
-	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
-	Route::any('/reports/government_forms_philhealth/{id}','Member\PayrollReportController@government_forms_philhealth');
-	Route::any('/reports/government_forms_hdmf/{id}','Member\PayrollReportController@government_forms_hdmf');
-	Route::any('/reports/government_forms_hdmf_iframe/{id}/{id2}','Member\PayrollReportController@government_forms_hdmf_iframe');
+	Route::any('/reports/government_forms_sss/{id}/{year}','Member\PayrollReportController@government_forms_sss');
+	Route::any('/reports/government_forms_philhealth/{id}/{year}','Member\PayrollReportController@government_forms_philhealth');
+	Route::any('/reports/government_forms_hdmf/{id}/{year}','Member\PayrollReportController@government_forms_hdmf');
+	Route::any('/reports/government_forms_hdmf_iframe/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_hdmf_iframe');
 	Route::any('/reports/government_forms_hdmf_filter','Member\PayrollReportController@government_forms_hdmf_filter');
 	Route::any('/reports/government_forms_sss_filter','Member\PayrollReportController@government_forms_sss_filter');
 	Route::any('/reports/government_forms_philhealth_filter','Member\PayrollReportController@government_forms_philhealth_filter');
-	Route::any('/reports/government_forms_hdmf_export_excel/{id}/{id2}','Member\PayrollReportController@government_forms_hdmf_export_excel');
-	Route::any('/reports/government_forms_sss_export_excel/{id}/{id2}','Member\PayrollReportController@government_forms_sss_export_excel');
-	Route::any('/reports/government_forms_philhealth_export_excel/{id}/{id2}','Member\PayrollReportController@government_forms_philhealth_export_excel');
+	Route::any('/reports/government_forms_hdmf_export_excel/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_hdmf_export_excel');
+	Route::any('/reports/government_forms_sss_export_excel/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_sss_export_excel');
+	Route::any('/reports/government_forms_philhealth_export_excel/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_philhealth_export_excel');
 	
 	/*START loan summary report*/
 	Route::any('/reports/loan_summary','Member\PayrollReportController@loan_summary');

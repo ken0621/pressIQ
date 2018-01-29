@@ -42,6 +42,8 @@ function vendor_requisition_slip()
 			if($(".tbody-item .remove-tr").length > 1)
 			{
 				$(this).parent().remove();
+				action_compute();
+				action_reassign_number();
 			}
 		});
 	}
@@ -534,6 +536,23 @@ function vendor_requisition_slip()
 	{
 		return '<div style="padding: ' + $padding + 'px; font-size: 20px;" class="text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>';
 	}
+
+	function load_applied_transaction()
+	{
+		$('.applied-transaction-list').load('/member/transaction/purchase_requisition/load-applied-transaction', function()
+		{
+			console.log("success");
+			action_initialize_select();
+			action_compute();
+			action_reassign_number();
+			$('.remarks-pr').html($('.pr-remarks').val());
+		});
+	}
+
+	this.load_applied_transaction = function()
+	{
+		load_applied_transaction();
+	}
 }
 function success_create_rs(data)
 {
@@ -541,5 +560,14 @@ function success_create_rs(data)
 	{
 		toastr.success('Success');
 		location.href = '/member/transaction/purchase_requisition';
+	}
+}
+
+function success_apply_transaction(data)
+{
+	if(data.status == 'success')
+	{
+		data.element.modal("toggle");
+		vendor_requisition_slip.load_applied_transaction();
 	}
 }

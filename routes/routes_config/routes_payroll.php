@@ -8,6 +8,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_api','Member\PayrollApiController@index');
 
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
+	Route::any('/reports/government_forms_year_filter','Member\PayrollReportController@government_forms_year_filter');
 	Route::any('/reports/government_forms_sss/{id}/{year}','Member\PayrollReportController@government_forms_sss');
 	Route::any('/reports/government_forms_philhealth/{id}/{year}','Member\PayrollReportController@government_forms_philhealth');
 	Route::any('/reports/government_forms_hdmf/{id}/{year}','Member\PayrollReportController@government_forms_hdmf');

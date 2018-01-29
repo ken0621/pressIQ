@@ -109,7 +109,7 @@
                                             @foreach($_poline as $poline)
                                                 <tr class="tr-draggable">
                                                     <td class="invoice-number-td text-right">1</td>
-                                                    <td><input type="text" class="for-datepicker" name="item_servicedate[]" value="{{ date('m/d/Y',strtotime($poline->poline_service_date))}}" /></td>
+                                                    <td><input type="text" class="for-datepicker" name="item_servicedate[]" value="{{ date('m/d/Y',strtotime($poline->poline_service_date)) != ''? $poline->poline_service_date : '00/00/0000'}}" /></td>
                                                     <td>
                                                         <select class="form-control select-item droplist-item input-sm pull-left {{$poline->poline_item_id}}" name="item_id[]" required>
                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $poline->poline_item_id])

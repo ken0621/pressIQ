@@ -17,6 +17,7 @@ use App\Models\Tbl_bill;
 use App\Models\Tbl_write_check;
 use App\Models\Tbl_debit_memo;
 use App\Models\Tbl_warehouse_issuance_report;
+use App\Models\Tbl_inventory_adjustment;
 
 use Carbon\Carbon;
 use Validator;
@@ -340,6 +341,10 @@ class AccountingTransaction
 		if($transaction_type == 'debit_memo')
 		{
 			$get = Tbl_debit_memo::where('db_shop_id', $shop_id)->orderBy('db_id','DESC')->first();
+		}
+		if($transaction_type == 'inventory_adjustment')
+		{
+			$get = Tbl_inventory_adjustment::where('adj_shop_id', $shop_id)->orderBy('inventory_adjustment_id','DESC')->first();
 		}
 
 		if($get)

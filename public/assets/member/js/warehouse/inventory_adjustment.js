@@ -291,7 +291,7 @@ function inventory_adjustment()
 
 	function action_date_picker()
 	{/*class name of tbody and text field for date*/
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm/dd/yy', });
 	}
 
 	/*ITEM NUMBER*/
@@ -397,5 +397,14 @@ function success_item(data)
 
 		data.element.modal("hide");
 	});
+}
+
+function success_adjust_inventory(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
 }
 

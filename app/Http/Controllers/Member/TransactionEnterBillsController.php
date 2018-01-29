@@ -186,7 +186,20 @@ class TransactionEnterBillsController extends Member
         $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
         $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
 
+        $data['_applied'] = Session::put('applied_transaction');
+        $data['action']   = '/member/transaction/enter_bills/apply-transaction';
         return view('member.accounting_transaction.vendor.enter_bills.load_transaction', $data);
     }
-    
+    public function getApplyTransaction(Request $request)
+    {
+        $apply_transaction = $request->_apply_transaction;
+        $applied_transaction = Session::put('applied_transaction');
+
+        //die(var_dump($applied_transaction));
+
+        $return['message'] = 'Success';
+        $return['call_function'] = 'success_apply_transaction';
+
+        return json_encode($return);
+    }
 }

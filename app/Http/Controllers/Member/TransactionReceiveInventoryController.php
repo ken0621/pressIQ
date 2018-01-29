@@ -169,12 +169,15 @@ class TransactionReceiveInventoryController extends Member
                 $insert_item[$key]['item_discount']    = 0;
             }
         }
-<<<<<<< HEAD
+
 
         $validate = TransactionReceiveInventory::postUpdate($ri_id, $this->user_info->shop_id, $insert, $insert_item);
 
-=======
->>>>>>> f222823ab3b81714fd18b698a0b746a5a54aef8e
+        if(Session::get("applied_po") > 0)
+        {
+            TransactionPurchaseOrder::checkPoQty($rvalidate, Session::get("applied_po"));
+        }
+
         $return = null;
         $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);

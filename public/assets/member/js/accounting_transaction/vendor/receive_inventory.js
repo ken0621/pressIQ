@@ -488,9 +488,10 @@ function receive_inventory()
 			/*action_initialize_select();
 			action_compute();
 			action_reassign_number();*/
+
 			action_compute();
-			event_remove_tr()
-			event_click_last_row_op()
+			event_remove_tr();
+			event_click_last_row_op();
 
 			$('.remarks-ri').html($('.inv-remarks').val());
 		});
@@ -498,8 +499,8 @@ function receive_inventory()
 	this.action_load_received_po = function()
 	{
 		action_compute();
-		event_remove_tr()
-		event_click_last_row_op()
+		event_remove_tr();
+		event_click_last_row_op();
 	}
 	this.load_applied_transaction = function()
 	{

@@ -169,12 +169,8 @@
                                 </div>
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
-                                        <label>Memo</label>
-                                        <textarea class="form-control input-sm" textarea-expand" name="vendor_memo" >{{isset($ri->ri_memo)? $ri->ri_memo : ''}}</textarea>
-                                    </div>
-                                    <div class="col-sm-6">
                                         <label>Remarks</label>
-                                        <textarea class="form-control input-sm remarks-wis" textarea-expand" name="vendor_reamrks" ></textarea>
+                                        <textarea class="form-control input-sm remarks-ri" textarea-expand" name="vendor_reamrks" ></textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">
@@ -186,6 +182,12 @@
                                                     PHP&nbsp;<span class="total-amount">0.00</span>
                                             </div>
                                         </div> 
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <label>Memo</label>
+                                        <textarea class="form-control input-sm" textarea-expand" name="vendor_memo" >{{isset($ri->ri_memo)? $ri->ri_memo : ''}}</textarea>
                                     </div>
                                 </div>
                                 

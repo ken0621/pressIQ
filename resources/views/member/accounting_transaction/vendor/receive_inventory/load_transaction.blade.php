@@ -25,7 +25,7 @@
                                     @if($po->po_balance != 0)
                                     <tr class="{{ $total_po_amount += $po->po_balance}}">
                                         <td class="text-center">
-                                            <input type="checkbox" class="td-check-received-po td-po-amount" name="apply_po_id[{{$po->po_id}}]" value="{{$po->po_id}}" data-content="{{$po->po_balance}}" {{isset($_applied_po_id[$po->po_id]) ? 'checked' : ''}}></td>
+                                            <input type="checkbox" name="_apply_transaction[{{$po->po_id}}]" class="td-check-received-po td-po-amount" value="purchase_order" data-content="{{$po->po_balance}}" {{isset($_applied[$po->po_id]) ? 'checked' : ''}}></td>
                                         <td class="text-center" value="{{$po->transaction_refnum != '' ? $po->transaction_refnum : $po->po_id}}">{{$po->transaction_refnum != "" ? $po->transaction_refnum : $po->po_id}}</td>
                                         <td class="text-right" value="{{currency('PHP',$po->po_balance)}}">{{currency('PHP',$po->po_balance)}}</td>
                                     </tr>
@@ -64,7 +64,7 @@
                                 @foreach($_dm as $dm)
                                 <tr class="{{$total_dm_amount += $dm->db_amount}}">
                                     <td class="text-center">
-                                        <input type="checkbox" name="" class="td-check-received-dm td-dm-amount" value="{{$dm->db_amount}}" data-content="{{$dm->db_amount}}" {{isset($_applied_dm[$dm->db_id]) ? 'checked' : ''}}></td>
+                                        <input type="checkbox" name="_apply_transaction[{{$dm->db_id}}]" class="td-check-received-dm td-dm-amount" value="debit_memo" data-content="{{$dm->db_amount}}" {{isset($_applied[$dm->db_id]) ? 'checked' : ''}}></td>
                                     <td class="text-center">{{$dm->transaction_refnum != "" ? $dm->transaction_refnum : $dm->db_id}}</td>
                                     <td class="text-right">{{currency('PHP',$dm->db_amount)}}</td>
                                 </tr>

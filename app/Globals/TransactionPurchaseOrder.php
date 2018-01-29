@@ -107,27 +107,6 @@ class TransactionPurchaseOrder
 
         return $poline_amount;
     }
-    /*public static function checkPoQty($bill_id = null, $po_data = array())
-    {
-        if($bill_id != null)
-        {
-            Tbl_bill_po::where("billed_id",$bill_id)->delete();
-            foreach ($po_data as $key => $value) 
-            {
-                $chk = Tbl_bill_po::where("billed_id",$bill_id)->where("purchase_order_id",$value["item_ref_id"])->first();
-                if($chk == null)
-                {
-                    $ins["billed_id"] = $bill_id;
-                    $ins["purchase_order_id"] = $value["item_ref_id"];
-                    
-                    Tbl_bill_po::insert($ins);
-
-                    Self::checkPolineQty($value["item_ref_id"], $bill_id);  
-                }
-            }           
-        } 
-    }*/
-    
     public static function checkPoQty($ri_id = null, $po_data = array())
     {
         if($ri_id != null)

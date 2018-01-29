@@ -14,15 +14,20 @@
                     
                     </small>
                 </h1>
+
                 <div class="dropdown pull-right">
-                    <select class="form-control">
-                        <option>Save & Close</option>
-                        <option>Save & Edit</option>
-                        <option>Save & Print</option>
-                        <option>Save & New</option>
-                    </select>
+                    <div>
+                        <a class="btn btn-custom-white" href="/member/item/warehouse/inventory_adjustment">Cancel</a>
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu  dropdown-menu-custom">
+                          <li><a class="select-action" code="sclose">Save & Close</a></li>
+                          <li><a class="select-action" code="sedit">Save & Edit</a></li>
+                          <li><a class="select-action" code="sprint">Save & Print</a></li>
+                          <li><a class="select-action" code="snew">Save & New</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <button class="panel-buttons btn btn-custom-white pull-right" onclick="window.location='{{ URL::previous() }}'">Cancel</button>
             </div>
         </div>
     </div>
@@ -40,7 +45,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="reference_number" value="IA20171214-0002">
+                                <input type="text" class="form-control" name="reference_number" value="{{$transaction_refnum or ''}}">
                             </div>
                         </div>
                     </div>    
@@ -66,89 +71,46 @@
                                             <th width="10"></th>
                                         </tr>
                                     </thead>
-                                    <tbody class="draggable tbody-item">     
-                                        @if(isset($po))
-                                            @foreach($_poline as $poline)
-                                                <tr class="tr-draggable">
-                                                    <td class="invoice-number-td text-right">1</td>
-                                                    <td>
-                                                        <select class="form-control select-item droplist-item input-sm pull-left {{$poline->poline_item_id}}" name="poline_item_id[]" required>
-                                                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $poline->poline_item_id])
-                                                        </select>
-                                                    </td>
-                                                    <td>
-                                                        @if($pis)
-                                                            <label class="textarea-expand txt-desc" name="poline_description[]" value="{{$poline->poline_description}}"></label>
-                                                        @else
-                                                            <textarea class="textarea-expand txt-desc" name="poline_description[]" value="{{$poline->poline_description}}"></textarea>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        <select class="1111 droplist-um select-um {{isset($poline->poline_um) ? 'has-value' : ''}}" name="poline_um[]">
-                                                            @if($poline->poline_um)
-                                                                @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $poline->multi_um_id, 'selected_um_id' => $poline->poline_um])
-                                                            @else
-                                                                <option class="hidden" value="" />
-                                                            @endif
-                                                        </select>
-                                                    </td>
-                                                    <td><label class="text-center number-input txt-qty compute" type="text" name="actual_quantity" value="{{$poline->poline_qty}}"></label></td>
-                                                    <td><input class="text-right txt-new-quantity compute" type="text" name="new_quantity[]" value="{{$poline->poline_discount}}" /></td>
-                                                    <td><input class="text-right number-input txt-difference" type="text" name="difference[]"/></td>
-                                                    <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]" value="{{$poline->poline_rate}}" /></td>
-                                                    <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]" value="{{$poline->poline_amount}}" /></td>
-                                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                </tr>
-                                            @endforeach
-                                        @else                                
-                                            <tr class="tr-draggable">
-                                                <td class="invoice-number-td text-right">1</td>                                                <td>
-                                                    <select class="1111 form-control select-item droplist-item input-sm pull-left" name="poline_item_id[]" >
-                                                        @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                                        <option class="hidden" value="" />
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    @if($pis)
-                                                        <label class="textarea-expand txt-desc" name="poline_description[]"></label>
-                                                    @else
-                                                        <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
-                                                    @endif
-                                                </td>
+                                    <tbody class="draggable tbody-item">                         
+                                        <tr class="tr-draggable">
+                                            <td class="invoice-number-td text-right">1</td>                                                <td>
+                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="poline_item_id[]" >
+                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                    <option class="hidden" value="" />
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
+                                            </td>
 
-                                                <td><select class="2222 droplist-um select-um" name="poline_um[]"><option class="hidden" value="" /></select></td>
-                                                <td><label class="text-center number-input txt-qty compute" type="text" name="actual_quantity"></label></td>
-                                                <td><input class="text-right txt-new-quantity compute" type="text" name="new_quantity[]"/></td>
-                                                <td><input class="text-right number-input txt-difference" type="text" name="difference[]"/></td>
-                                                <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
-                                                <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
-                                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                            </tr>
-                                                
-                                            <tr class="tr-draggable">
-                                                <td class="invoice-number-td text-right">2</td>
-                                                <td>
-                                                    <select class="22222 form-control select-item droplist-item input-sm pull-left" name="poline_item_id[]" >
-                                                        @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                                        <option class="hidden" value="" />
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    @if($pis)
-                                                        <label class="textarea-expand txt-desc" name="poline_description[]"></label>
-                                                    @else
-                                                        <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
-                                                    @endif
-                                                </td>
-                                                <td><select class="3333 droplist-um select-um" name="poline_um[]"><option class="hidden" value="" /></select></td>
-                                                <td><label class="text-center number-input txt-qty compute" type="text" name="actual_quantity"></label></td>
-                                                <td><input class="text-right txt-new-quantity compute" type="text" name="new_quantity[]"/></td>
-                                                <td><input class="text-right number-input txt-difference" type="text" name="difference[]"/></td>
-                                                <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
-                                                <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
-                                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                            </tr>
-                                        @endif
+                                            <td><select class="2222 droplist-um select-um" name="poline_um[]"><option class="hidden" value="" /></select></td>
+                                            <td><label class="text-center number-input txt-qty compute" type="text" name="actual_quantity"></label></td>
+                                            <td><input class="text-right txt-new-quantity compute" type="text" name="new_quantity[]"/></td>
+                                            <td><input class="text-right number-input txt-difference" type="text" name="difference[]"/></td>
+                                            <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
+                                            <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
+                                            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                            
+                                        <tr class="tr-draggable">
+                                            <td class="invoice-number-td text-right">2</td>
+                                            <td>
+                                                <select class="22222 form-control select-item droplist-item input-sm pull-left" name="poline_item_id[]" >
+                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                    <option class="hidden" value="" />
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
+                                            </td>
+                                            <td><select class="3333 droplist-um select-um" name="poline_um[]"><option class="hidden" value="" /></select></td>
+                                            <td><label class="text-center number-input txt-qty compute" type="text" name="actual_quantity"></label></td>
+                                            <td><input class="text-right txt-new-quantity compute" type="text" name="new_quantity[]"/></td>
+                                            <td><input class="text-right number-input txt-difference" type="text" name="difference[]"/></td>
+                                            <td><input class="text-right number-input txt-rate compute" type="text" name="poline_rate[]"/></td>
+                                            <td><input class="text-right number-input txt-amount" type="text" name="poline_amount[]"/></td>
+                                            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -203,11 +165,7 @@
                 </select>
             </td>
             <td>
-                @if($pis)
-                    <label class="textarea-expand txt-desc" name="poline_description[]"></label>
-                @else
-                    <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
-                @endif
+                <textarea class="textarea-expand txt-desc" name="poline_description[]"></textarea>
             </td>
 
             <td><select class="select-um" name="poline_um[]"><option class="hidden" value="" /></select></td>

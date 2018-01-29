@@ -68,7 +68,7 @@ class TransactionReceiveInventoryController extends Member
         $receive_id = $request->id;
         $data['term'] = $request->vendor_terms;
 
-        Session::forget("applied_po");
+        Session::forget("applied_transaction");
         if($receive_id)
         {
             $data['ri'] = TransactionReceiveInventory::info($this->user_info->shop_id,$receive_id);
@@ -110,9 +110,9 @@ class TransactionReceiveInventoryController extends Member
 
         $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
-        if(Session::get('applied_po') > 0)
+        if(Session::get('applied_transaction') > 0)
         {
-            TransactionPurchaseOrder::checkPoQty($validate, Session::get('applied_po'));
+            TransactionPurchaseOrder::checkPoQty($validate, Session::get('applied_transaction'));
         }
 
         $return = null;
@@ -173,9 +173,9 @@ class TransactionReceiveInventoryController extends Member
 
         $validate = TransactionReceiveInventory::postUpdate($ri_id, $this->user_info->shop_id, $insert, $insert_item);
 
-        if(Session::get("applied_po") > 0)
+        if(Session::get("applied_transaction") > 0)
         {
-            TransactionPurchaseOrder::checkPoQty($rvalidate, Session::get("applied_po"));
+            TransactionPurchaseOrder::checkPoQty($rvalidate, Session::get("applied_transaction"));
         }
 
         $return = null;
@@ -213,28 +213,28 @@ class TransactionReceiveInventoryController extends Member
         $data['_dm'] = TransactionDebitMemo::getOpenDM($this->user_info->shop_id, $request->vendor);
         $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
         
-        $data['_applied_po_id'] = Session::get("applied_po");
-        $data['action'] = '/member/customer/wis/apply-transaction';
+        $data['_applied'] = Session::get("applied_transaction");
+        $data['action'] = '/member/transaction/receive_inventory/apply-transaction';
         return view('member.accounting_transaction.vendor.receive_inventory.load_transaction', $data);
     }
     public function postApplyTransaction(Request $request)
     {
-        $apply_po_id = $request->apply_po_id;
-        Session::put('applied_po', $apply_po_id);
-        
+        $apply_transaction = $request->_apply_transaction;
+        Session::put("applied_transaction", $apply_transaction);
+
         $return['status']        = "success";
-        $return['call_function'] = "success_apply_po";
+        $return['call_function'] = "success_apply_transaction";
 
         return json_encode($return);
 
     }
-    public function getLoadAppliedTransaction(Request $request)
+    public function getLoadAppliedPoTransaction(Request $request)
     {
-        $applied_po_id = Session::get('applied_po');
+        $applied_transaction = Session::get('applied_transaction');
 
-        if(count($applied_po_id) > 0)
+        if(count($applied_transaction) > 0)
         {
-            foreach ($applied_po_id as $key => $value)
+            foreach ($applied_transaction as $key => $value)
             {
                 $_applied_poline = TransactionPurchaseOrder::info_item($key);
                 $info = TransactionPurchaseOrder::info($this->user_info->shop_id,$key);
@@ -266,9 +266,47 @@ class TransactionReceiveInventoryController extends Member
         $data['_um']     = UnitMeasurement::load_um_multi();
         $data['_item']   = Item::get_all_category_item();
 
-        
+        return view('member.accounting_transaction.vendor.purchase_order.applied_po_transaction', $data);
+    }
 
-        return view('member.accounting_transaction.vendor.purchase_order.po_load_item_session', $data);
+    public function getLoadAppliedDmTransaction(Request $request)
+    {
+        $applied_transaction = Session::get('applied_transaction');
+
+        if(count($applied_transaction) > 0)
+        {
+            foreach ($applied_transaction as $key => $value)
+            {
+                $_applied_dmline = TransactionDebitMemo::info_item($key);
+                $info = TransactionDebitMemo::info($this->user_info->shop_id,$key);
+
+                $remarks = null;
+                foreach ($_applied_dmline as $dmline_key => $dmline_value) 
+                {
+                    $type = Item::get_item_type($dmline_value->dbline_item_id);
+                    if($type == 1 || $type == 4 || $type == 5 )
+                    {
+                        $return[$key.'i'.$dmline_key]['item_id'] = $dmline_value->dbline_item_id;
+                        $return[$key.'i'.$dmline_key]['item_description'] = $dmline_value->dbline_description;
+                        $return[$key.'i'.$dmline_key]['item_um'] = $dmline_value->dbline_um;
+                        $return[$key.'i'.$dmline_key]['item_qty'] = $dmline_value->dbline_qty;
+                        $return[$key.'i'.$dmline_key]['item_rate'] = $dmline_value->dbline_rate;
+                        $return[$key.'i'.$dmline_key]['item_amount'] = $dmline_value->dbline_amount;
+                    }
+                }    
+                if($info)
+                {
+                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : 'DM#'.$info->po_id.', ';
+                }
+            }
+        }
+
+        $data['_dm']     = $return;
+        $data['remarks'] = $remarks;
+        $data['_um']     = UnitMeasurement::load_um_multi();
+        $data['_item']   = Item::get_all_category_item();
+
+        return view('member.accounting_transaction.vendor.debit_memo.applied_dm_transaction', $data);
     }
 }
 

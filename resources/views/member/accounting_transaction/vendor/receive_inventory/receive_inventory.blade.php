@@ -104,6 +104,8 @@
                                                 </thead>
                                                 <tbody class="draggable tbody-item applied-po-transaction-list">
                                                 </tbody>
+                                                <tbody class="draggable tbody-item applied-dm-transaction-list">
+                                                </tbody>
                                                 <tbody class="tbody-item">
                                                     @if(isset($ri))
                                                         @foreach($_riline as $riline)

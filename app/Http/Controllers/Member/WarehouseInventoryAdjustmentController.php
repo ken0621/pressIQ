@@ -15,7 +15,7 @@ use App\Globals\Utilities;
 use App\Globals\Vendor;
 use App\Globals\Pdf_global;
 use App\Globals\UnitMeasurement;
-use App\Globals\Purchasing_inventory_system;
+use App\Globals\AccountingTransaction;
 use Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -41,10 +41,10 @@ class WarehouseInventoryAdjustmentController extends Member
 
     public function getCreate()
     {
-        $data['page'] = "Inventory Adjustment";
-        $data['pis']        = Purchasing_inventory_system::check();
-        $data['_item']      = Item::get_all_category_item();
+        $data['page']       = "Inventory Adjustment";
+        $data['_item']      = Item::get_all_category_item([1,4,5]);
         $data['_um']        = UnitMeasurement::load_um_multi();
+        $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'inventory_adjustment');
 
         return view('member.warehousev2.invtentory_adjustment.inventory_adjustment',$data);
     }

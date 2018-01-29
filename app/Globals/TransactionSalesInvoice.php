@@ -37,7 +37,7 @@ class TransactionSalesInvoice
 	}
 	public static function transaction_data_item($trans_id)
 	{
-		return Tbl_customer_estimate_line::um()->where("estline_est_id",$trans_id)->get();		
+		return Tbl_customer_estimate_line::estimate_item()->um()->where("estline_est_id",$trans_id)->get();		
 	}
 	public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
 	{

@@ -169,7 +169,6 @@ class TransactionReceiveInventory
         {
             $return = Tbl_receive_inventory_line::insert($itemline);   
         }
-
         return $return;
     }
 }

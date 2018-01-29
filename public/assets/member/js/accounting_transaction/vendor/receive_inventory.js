@@ -480,31 +480,40 @@ function receive_inventory()
 			  });
 		});
 	}
-	function load_applied_transaction()
+	function load_applied_po_transaction()
 	{
-		$('.applied-po-transaction-list').load('/member/transaction/receive_inventory/load-applied-transaction', function()
+		$('.applied-po-transaction-list').load('/member/transaction/receive_inventory/load-applied-po-transaction', function()
 		{
 			console.log("success");
-			/*action_initialize_select();
-			action_compute();
-			action_reassign_number();*/
-
 			action_compute();
 			event_remove_tr();
 			event_click_last_row_op();
 
-			$('.remarks-ri').html($('.inv-remarks').val());
+			$('.remarks-ri').html($('.po-remarks').val());
 		});
 	}
-	this.action_load_received_po = function()
+	function load_applied_dm_transaction()
+	{
+		$('.applied-dm-transaction-list').load('/member/transaction/receive_inventory/load-applied-dm-transaction', function()
+		{
+			console.log("success");
+			action_compute();
+			event_remove_tr();
+			event_click_last_row_op();
+
+			$('.remarks-ri').html($('.po-remarks').val());
+		});
+	}
+/*	this.action_load_received_po = function()
 	{
 		action_compute();
 		event_remove_tr();
 		event_click_last_row_op();
-	}
+	}*/
 	this.load_applied_transaction = function()
 	{
-		load_applied_transaction();
+		//load_applied_dm_transaction();
+		load_applied_po_transaction();
 	}
 }
 
@@ -541,7 +550,7 @@ function success_receive_inventory(data)
 	}
 }
 
-function success_apply_po(data)
+function success_apply_transaction(data)
 {
     if(data.status == "success")
     {

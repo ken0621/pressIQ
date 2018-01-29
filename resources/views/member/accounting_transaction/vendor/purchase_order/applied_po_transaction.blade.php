@@ -1,5 +1,6 @@
 @if(count($_po) > 0)
     @foreach($_po as $items)
+    @if($items['item_qty'] != 0)
     <tr class="tr-draggable">
             <input type="hidden" class="poline_id" name="item_ref_name[]" value="purchase_order">
             <input type="hidden" class="itemline_po_id" name="item_ref_id[]" value="{{$items['poline_po_id']}}">
@@ -29,6 +30,7 @@
         @include("member.load_ajax_data.load_td_serial_number");
         <td tr_id="{{$items['poline_po_id']}}" linked_in="no" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
     </tr>
+    @endif
     @endforeach
 @endif
-<input type="hidden" class="inv-remarks" name="" value="{!! $remarks or '' !!}">
+<input type="hidden" class="po-remarks" name="" value="{!! $remarks or '' !!}">

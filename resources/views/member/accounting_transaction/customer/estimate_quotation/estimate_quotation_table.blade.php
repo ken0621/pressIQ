@@ -25,6 +25,7 @@
                                 Action <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
+                                <li><a href="/member/transaction/estimate_quotation/create?id={{$eq->est_id}}">Edit Estimate & Quotation</a></li>
                                 <li><a href="javascript">PRINT</a></li>
                             </ul>
                         </div>

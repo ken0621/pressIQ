@@ -900,8 +900,8 @@ class Seed_manual
             $insert[1]['separator'] = "-";
 
             $insert[2]['shop_id']   = $shop_id; 
-            $insert[2]['key']       = "customer_warehouse_issuance_slip";
-            $insert[2]['prefix']    = "WC"; 
+            $insert[2]['key']       = "warehouse_issuance_slip";
+            $insert[2]['prefix']    = "WIS"; 
             $insert[2]['other']     = "Y/m/d";
             $insert[2]['separator'] = "-";
 
@@ -982,6 +982,12 @@ class Seed_manual
             $insert[15]['prefix']    = "ADJ";
             $insert[15]['other']     = "Y/m/d";
             $insert[15]['separator'] = "-";
+
+            $insert[16]['shop_id']   = $shop_id; 
+            $insert[16]['key']       = "debit_memo";  
+            $insert[16]['prefix']    = "DM";
+            $insert[16]['other']     = "Y/m/d";
+            $insert[16]['separator'] = "-";
 
             DB::table('tbl_transaction_ref_number')->insert($insert);
 

@@ -59,14 +59,23 @@ function check_if_settingis_active(settings_key, settings_value, update)
 
 function submit_done_2(data)
 {
-    console.log(1);
-    if(data.response_status == "success_viery")
+    if(data.response_status == "success_update")
     {
-        
+        toastr.success("Success!");
+        location.reload();
     }
-    else if(data.response_status == "success_update")
+    if(data.response_status == "error")
     {
-        success_s = 1;
+        toastr.error(data.message);
+    }
+}
+function success_settings(data)
+{
+
+    if(data.response_status == "success_update")
+    {
+        toastr.success("Success!");
+        location.reload();
     }
     if(data.response_status == "error")
     {

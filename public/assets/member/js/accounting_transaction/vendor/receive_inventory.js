@@ -518,7 +518,18 @@ function success_receive_inventory(data)
 		location.href = data.status_redirect;
 	}
 }
+function add_po_to_bill(po_id)
+{
+	$(".po-tbl").load('/member/transaction/receive_inventory/add-item/'+po_id, function()
+	{
+		console.log("success");
+		bill.action_compute();
+		bill.iniatilize_select();
+		$(".tbody-item .select-um").globalDropList("enabled");
 
+		$(".po-"+po_id).addClass("hidden");
+	});
+}
 function add_po_to_receive_inventory(po_id)
 {
 	$(".modal-loader").removeClass("hidden");

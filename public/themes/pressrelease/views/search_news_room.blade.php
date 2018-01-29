@@ -26,5 +26,6 @@
     </div>
 </div>
 
+
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/search_news_room.css">
 

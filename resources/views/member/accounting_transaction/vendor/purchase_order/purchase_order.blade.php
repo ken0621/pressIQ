@@ -44,7 +44,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="transaction_refnumber" value="{{ isset($po->transaction_refnum) ? $po->transaction_refnum : 'PO20180110-0001'}}">
+                                <input type="text" class="form-control" name="transaction_refnumber" value="{{ isset($po->transaction_refnum) ? $po->transaction_refnum : $transaction_refnum}}">
                             </div>
                         </div>
                     </div>
@@ -76,11 +76,11 @@
                         </div>
                         <div class="col-sm-2">
                             <label>P.O Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{$po->po_date or date('m/d/y')}}"/>
+                            <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{ isset($po)? date('m/d/Y',strtotime($po->po_date)) : date('m/d/Y') }}"/>
                         </div>
                         <div class="col-sm-2">
                             <label>Due Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="transaction_duedate" value="{{$po->po_due_date or date('m/d/y')}}" />
+                            <input type="text" class="datepicker form-control input-sm" name="transaction_duedate" value="{{ isset($po)? date('m/d/Y',strtotime($po->po_due_date)) : date('m/d/Y') }}" />
                         </div>
                     </div>
                     
@@ -109,14 +109,14 @@
                                             @foreach($_poline as $poline)
                                                 <tr class="tr-draggable">
                                                     <td class="invoice-number-td text-right">1</td>
-                                                    <td><input type="text" class="for-datepicker" name="item_servicedate[]" value="{{$poline->poline_service_date}}" /></td>
+                                                    <td><input type="text" class="for-datepicker" name="item_servicedate[]" value="{{ date('m/d/Y',strtotime($poline->poline_service_date))}}" /></td>
                                                     <td>
                                                         <select class="form-control select-item droplist-item input-sm pull-left {{$poline->poline_item_id}}" name="item_id[]" required>
                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $poline->poline_item_id])
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <textarea class="textarea-expand txt-desc" name="item_description[]" value="{{$poline->poline_description}}"></textarea>
+                                                        <textarea class="textarea-expand txt-desc" name="item_description[]">{{$poline->poline_description}}</textarea>
                                                     </td>
                                                     <td>
                                                         <select class="1111 droplist-um select-um {{isset($poline->poline_um) ? 'has-value' : ''}}" name="item_um[]">
@@ -129,8 +129,12 @@
                                                     </td>
                                                     <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]" value="{{$poline->poline_orig_qty}}" /></td>
                                                     <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{$poline->poline_rate}}" /></td>
-                                                    <td><input class="text-right txt-discount compute" type="text" name="item_discount[]" value="{{$poline->poline_discount}}" /></td>
-                                                    <td><textarea class="textarea-expand" type="text" name="item_remark[]" value="{{$poline->poline_discount_remark}}"></textarea></td>
+                                                    @if($poline->poline_discounttype == 'fixed')
+                                                        <td><input class="text-right txt-discount compute" type="text" name="item_discount[]" value="{{$poline->poline_discount}}" /></td>
+                                                    @else
+                                                        <td><input class="text-right txt-discount compute" type="text" name="item_discount[]" value="{{$poline->poline_discount * 100}}%" /></td>
+                                                    @endif
+                                                    <td><textarea class="textarea-expand" type="text" name="item_remark[]">{{$poline->poline_discount_remark}}</textarea></td>
                                                     <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$poline->poline_amount}}" /></td>
                                                     <td class="text-center">
                                                         <input type="hidden" class="poline_taxable" name="item_taxable[]" value="{{$poline->taxable}}" >
@@ -168,7 +172,7 @@
                                                 
                                             <tr class="tr-draggable">
                                                 <td class="invoice-number-td text-right">2</td>
-                                                <td><input type="text" class="datepicker" name="item_servicedate[]"/></td>
+                                                <td><input type="text" class="for-datepicker" name="item_servicedate[]" /></td>
                                                 <td>
                                                     <select class="22222 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])

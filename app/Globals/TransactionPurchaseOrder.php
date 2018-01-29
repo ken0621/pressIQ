@@ -26,6 +26,14 @@ class TransactionPurchaseOrder
     {
         return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', 0)->count();
     }
+    public static function info($shop_id, $po_id)
+    {
+        return Tbl_purchase_order::vendor()->where("po_shop_id", $shop_id)->where("po_id", $po_id)->first();
+    }
+    public static function info_item($po_id)
+    {
+        return Tbl_purchase_order_line::um()->item()->where("poline_po_id", $po_id)->get();        
+    }
     public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
     {
         $data = Tbl_purchase_order::Vendor()->where('po_shop_id',$shop_id);
@@ -121,8 +129,6 @@ class TransactionPurchaseOrder
             $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
             //die(var_dump($overall_price));
 
-            //
-            
             $ins['po_subtotal_price'] = $subtotal_price;
             $ins['po_overall_price']  = $overall_price;
 
@@ -130,6 +136,7 @@ class TransactionPurchaseOrder
             $purchase_order_id = Tbl_purchase_order::insertGetId($ins);
         
             $return = Self::insertline($purchase_order_id, $insert_item);
+
             $return = $purchase_order_id;
 		}
         else
@@ -157,7 +164,7 @@ class TransactionPurchaseOrder
                 $discount       = substr($discount, 0, strpos($discount, '%')) / 100;
                 $discount_type  = 'percent';
             } 
-            
+
             /*FROM DATABASE*/                        /*FROM CONTROLLER*/
             $itemline[$key]['poline_po_id']          = $purchase_order_id;
             $itemline[$key]['poline_service_date']   = $value['item_servicedate']; 
@@ -167,18 +174,19 @@ class TransactionPurchaseOrder
             $itemline[$key]['poline_orig_qty']       = $value['item_qty'];
             $itemline[$key]['poline_rate']           = $value['item_rate'];
             $itemline[$key]['poline_discount']       = $discount;
-            $itemline[$key]['poline_discount_type']  = $discount_type;
+            $itemline[$key]['poline_discounttype']   = $discount_type;
             $itemline[$key]['poline_discount_remark']= $value['item_remark'];  
             $itemline[$key]['poline_amount']         = $value['item_amount'];   
             $itemline[$key]['taxable']               = $value['item_taxable']; 
             $itemline[$key]['date_created']          = Carbon::now();
-
+            
         }
+
+        //die(var_dump($itemline[$key]['poline_service_date']));
         if(count($itemline) > 0)
         {
             /*INSERTING ITEMS TO DATABASE*/
             $return = Tbl_purchase_order_line::insert($itemline);
-            
         }
 
         return $return;
@@ -227,8 +235,6 @@ class TransactionPurchaseOrder
             /* OVERALL TOTAL */
             $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
             //die(var_dump($overall_price));
-
-            //
             
             $update['po_subtotal_price'] = $subtotal_price;
             $update['po_overall_price']  = $overall_price;

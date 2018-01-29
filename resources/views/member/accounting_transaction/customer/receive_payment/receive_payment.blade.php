@@ -1,8 +1,9 @@
 @extends('member.layout')
 @section('content')
-<form class="global-submit" action="/member/transaction/receive_payment/create-receive-payment" method="post">
+<form class="global-submit" action="{{$action or ''}}" method="post">
   <div class="panel panel-default panel-block panel-title-block">
     <input type="hidden" class="button-action" name="button_action" value="">
+    <input type="hidden" name="rp_id" value="{{Request::input('id')}}">
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
     <div class="panel-heading">
         <div>
@@ -40,7 +41,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="transaction_refnumber" value="RP20171214-0002">
+                                <input type="text" class="form-control" name="transaction_refnumber" value="{{$receive_payment->transaction_refnum or $transaction_refnum}}">
                             </div>
                         </div>
                     </div>
@@ -49,11 +50,11 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <select class="drop-down-customer" name="customer_id" required>
-                                    @include("member.load_ajax_data.load_customer", ['customer_id' => isset($rcvpayment) ? $rcvpayment->rp_customer_id : (isset($c_id) ? $c_id : '')])
+                                    @include("member.load_ajax_data.load_customer", ['customer_id' => isset($receive_payment) ? $receive_payment->rp_customer_id : (isset($c_id) ? $c_id : '')])
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                    <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$inv->inv_customer_email or ''}}"/>
+                                    <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$receive_payment->rp_customer_email or ''}}"/>
                             </div>                          
                             <!-- <div class="col-sm-4">
                                 <button class="btn btn-custom-white btn-sm" data-placement="bottom" data-html="true" id="example" data-content="<form><br><input type='text' class='form-control input-sm' ><br><a style='cursor:pointer' class='pull-left' onclick='$(&quot;#example&quot;).popover(&quot;hide&quot;);'>Cancel</a><a style='cursor:pointer' class='pull-right'>Find</a><br></form>" data-toggle="popover">Find by invoice no.</button>
@@ -71,27 +72,27 @@
                         <div class="row clearfix">
                             <div class="col-sm-2">
                                     <label>Payment Date</label>
-                                    <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{isset($rcvpayment) ? dateFormat($rcvpayment->rp_date) : date('m/d/y')}}" />
+                                    <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{isset($receive_payment) ? dateFormat($receive_payment->rp_date) : date('m/d/y')}}" />
                                 </div>
                             <div class="col-sm-3">
                                 <label>Payment Method</label>
                                 <select class="drop-down-payment" name="transaction_payment_method">
-                                    @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($rcvpayment) ? $rcvpayment->rp_payment_method : ''])
+                                    @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($receive_payment) ? $receive_payment->rp_payment_method : ''])
                                 </select>
                             </div>
                             <div class="col-sm-2">
                                 <label>Reference No</label>
-                                <input type="text" class="form-control input-sm" name="transaction_ref_no"/>
+                                <input type="text" class="form-control input-sm" name="transaction_ref_no" value="{{$receive_payment->rp_payment_ref_no or ''}}" />
                             </div>
                             <div class="col-sm-3">
                                 <label>Deposit to</label>
                                 <select class="drop-down-coa" name="rp_ar_account" required>
-                                    @include("member.load_ajax_data.load_chart_account", ['add_search' => "", "account_id" => isset($rcvpayment) ? $rcvpayment->rp_ar_account : ''])
+                                    @include("member.load_ajax_data.load_chart_account", ['add_search' => "", "account_id" => isset($receive_payment) ? $receive_payment->rp_ar_account : ''])
                                 </select>
                             </div>
                             <div class="col-sm-2 pull-right">
                                 <label>Amount Received</label>
-                                <input type="text" class="input-sm form-control amount-received" value="{{$rcvpayment->rp_total_amount or (isset($cm_data) ? $cm_data->cm_amount : '' )}}">
+                                <input type="text" class="input-sm form-control amount-received" value="{{$receive_payment->rp_total_amount or (isset($cm_data) ? $cm_data->cm_amount : '' )}}">
                             </div>
                         </div>
                        <!--  <div class="row clearfix">
@@ -125,7 +126,7 @@
                     <div class="row clearfix">
                         <div class="col-sm-6">
                             <label>Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder="">{{$receive_payment->rp_memo or ''}}</textarea>
                         </div>
                         <div class="col-sm-6">
                             <div class="row">

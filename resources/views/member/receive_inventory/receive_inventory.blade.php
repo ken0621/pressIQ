@@ -38,8 +38,21 @@
                     <!--Add a product on your website-->
                     </small>
                 </h1>
-                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save and Close</button>
-                <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
+                <!-- <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save and Close</button>
+                <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button> -->
+            </div>
+            <div class="dropdown pull-right">
+                <div>
+                    <a class="btn btn-custom-white" href="/member/vendor/receive_inventory/list">Cancel</a>
+                    <button class="btn btn-custom-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu  dropdown-menu-custom">
+                        <li><a class="select-action" code="save-and-close">Save & Close</a></li>
+                        <li><a class="select-action" code="save-and-edit">Save & Edit</a></li>
+                        <li><a class="select-action" code="save-and-print">Save & Print</a></li>
+                        <li><a class="select-action" code="save-and-new">Save & New</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -55,7 +68,7 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-3">
                                             <select class="form-control droplist-vendor input-sm pull-left" name="bill_vendor_id">
-                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')]);
+                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')])
                                             </select>
                                         </div>
                                         <div class="col-sm-4">
@@ -152,7 +165,7 @@
                                                         <th style="width: 70px;">Qty</th>
                                                         <th style="width: 120px;">Rate</th>
                                                         <th style="width: 120px;">Amount</th>
-                                                        @include("member.load_ajax_data.load_th_serial_number");
+                                                        @include("member.load_ajax_data.load_th_serial_number")
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
@@ -229,7 +242,7 @@
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
                                                         <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
-                                                        @include("member.load_ajax_data.load_td_serial_number");
+                                                        @include("member.load_ajax_data.load_td_serial_number")
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                 </tbody>
@@ -292,7 +305,7 @@
             <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
             <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
-            @include("member.load_ajax_data.load_td_serial_number");
+            @include("member.load_ajax_data.load_td_serial_number")
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>

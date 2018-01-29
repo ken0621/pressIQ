@@ -12,6 +12,8 @@ function sales_order()
 		event_click_last_row();
 		event_remove_tr();
 		action_compute();
+		action_date_picker();
+		action_reassign_number();
 		event_compute_class_change();
 	}
 	function action_compute()
@@ -214,6 +216,7 @@ function sales_order()
 			{
 				$(this).parent().remove();
 				action_reassign_number();
+				action_compute();
 			}
 			else
 			{
@@ -277,7 +280,7 @@ function sales_order()
 
 	function action_date_picker()
 	{
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm/dd/yy', });
 	}
 
 	function action_reassign_number()
@@ -286,6 +289,23 @@ function sales_order()
 		$(".invoice-number-td").each(function(){
 			$(this).html(num);
 			num++;
+		});
+	}
+
+	this.load_applied_transaction = function()
+	{
+		load_applied_transaction();
+	}
+
+	function load_applied_transaction()
+	{
+		$('.applied-transaction-list').load('/member/transaction/sales_order/load-applied-transaction', function()
+		{
+			console.log("success");
+			action_load_initialize_select();
+			action_compute();
+			action_reassign_number();
+			$('.remarks-so').html($('.so-remarks').val());
 		});
 	}
 }
@@ -318,6 +338,15 @@ function success_sales_order(data)
 	{
 		toastr.success(data.status_message);
 		location.href = data.status_redirect;
+	}
+}
+
+function success_apply_transaction(data)
+{
+	if(data.status == 'success')
+	{
+		data.element.modal("toggle");
+		sales_order.load_applied_transaction();
 	}
 }
 

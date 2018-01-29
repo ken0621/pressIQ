@@ -497,7 +497,7 @@ class ShopMemberController extends Shop
         $contactus_info["contactus_first_name"]         =request('first_name');
         $contactus_info["contactus_last_name"]          =request('contactus_last_name');
         $contactus_info["contactus_phone_number"]       =request('contactus_phone_number');
-        $contactus_info["contactus_subject"]            =request('contactus_subject');
+        $contactus_info["contactus_subject"]            ="New Contact Us Message";
         $contactus_info["contactus_email"]              =request('contactus_email');
         $contactus_info["contactus_message"]            =request('contactus_message');
         $contactus_info["contactus_to"]                 =request('contactus_to');
@@ -514,21 +514,23 @@ class ShopMemberController extends Shop
         Session::flash('message_concern', 'Message Successfully Sent!');
         return Redirect::back();
     }
-
-    public function send_demo()     
+                    
+    public function send_demo()                         
     {
         $demo_info["demo_name"]             =request('name');
         $demo_info["demo_company"]          =request('company');
         $demo_info["demo_email"]            =request('email');
         $demo_info["demo_phone_number"]     =request('number');
         $demo_info["demo_message"]          =request('message');
+        $demo_info["demo_subject"]          ="New Request Demo";
     
         $demo_info["explode_email"] = explode("@", $demo_info['demo_email']);
 
         Mail::send('emails.Demo_request',$demo_info, function($message) use ($demo_info)
         {
            $message->from($demo_info["explode_email"][0] . '@press-iq.com',$demo_info['demo_email']);
-           $message->to("marketing@press-iq.com");  
+           $message->to("marketing@press-iq.com");
+           $message->subject($demo_info['demo_subject']);  
            
         });
         Session::flash('Demo_message', 'Demo Request Successfully Sent!');
@@ -538,14 +540,14 @@ class ShopMemberController extends Shop
     public function send_newsletter()
     {
         $newsletter_info["newsletter_email"]       =request('newsletter');
-        $newsletter_info["subject"]                ="NewsLetter";
+        $newsletter_info["subject"]                ="New NewsLetter";
 
         $newsletter_info["explode_email"] = explode("@", $newsletter_info['newsletter_email']);
 
         Mail::send('emails.newsletter_email',$newsletter_info, function($message) use ($newsletter_info)
         {
            $message->from($newsletter_info["explode_email"][0] . '@press-iq.com',$newsletter_info['newsletter_email']);
-           $message->to("oliverbacsal@gmail.com");
+           $message->to("marketing@press-iq.com");
            $message->subject($newsletter_info['subject']);  
         });
         return Redirect::back(); 

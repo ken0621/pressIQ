@@ -13,6 +13,10 @@ class Tbl_customer_invoice_line extends Model
     {
         return $query->leftjoin("tbl_unit_measurement_multi", "multi_id", "=", "invline_um");
     }
+    public function scopeInvoice($query)
+    {
+        return $query->leftjoin("tbl_customer_invoice", "invline_inv_id", "=", "inv_id");
+    }
     public function scopeInvoice_item($query)
     {
     	return $query->leftjoin("tbl_item","tbl_item.item_id","=","invline_item_id");

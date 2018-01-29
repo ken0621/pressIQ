@@ -27,7 +27,7 @@
                         @foreach($_cust_wis as $wis)
                         <tr>
                             <td class="text-center">{{$wis->cust_wis_id}}</td>
-                            <td class="text-center">{{$wis->cust_wis_number}}</td>
+                            <td class="text-center">{{$wis->transaction_refnum}}</td>
                             <td class="text-center">{{$wis->title_name}} {{$wis->first_name}} {{$wis->middle_name}} {{$wis->last_name}}</td>
                             <td class="text-center">{{$wis->cust_delivery_date}}</td>
                             <td class="text-center">{{$wis->issued_qty}} pc(s)</td>

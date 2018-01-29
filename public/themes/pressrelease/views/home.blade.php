@@ -135,27 +135,14 @@
 
 @section("script")
 
-<script type="text/javascript">
-/*$(document).ready(function($) {
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-113245030-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-        //START MISSION AND VISION
-        $(".title-vision").click(function()
-        {
-            $("#vision").removeClass("hide");
-            $("#mission").addClass("hide");
-            $(".title-vision").addClass("highlighted");
-            $(".title-mission").removeClass("highlighted");
-            
-        });
-        $(".title-mission").click(function()
-        {
-            $("#vision").addClass("hide");
-            $("#mission").removeClass("hide");
-            $(".title-mission").addClass("highlighted");
-            $(".title-vision").removeClass("highlighted");
-        });
-        //END MISSION ANF VISION
-});*/
+  gtag('config', 'UA-113245030-1');
 </script>
 
 @endsection
+

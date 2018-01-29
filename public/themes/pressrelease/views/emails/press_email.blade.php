@@ -25,7 +25,7 @@
 	
 .heading-container
 {
-	color: #cd3d35;
+	color: #000000;
 	font-size: 30px;
 	text-align: center;
 	font-weight: 700;

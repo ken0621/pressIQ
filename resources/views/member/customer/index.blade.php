@@ -77,7 +77,7 @@
                                 {{$customer->company}}
                             </td>
                             <td class="text-left">
-                                {{$customer->title_name.' '.$customer->first_name.' '.$customer->middle_name.' '.$customer->last_name.' '.$customer->suffix_name}}
+                                {{ucfirst($customer->title_name).' '.ucfirst($customer->first_name).' '.ucfirst($customer->middle_name).' '.ucfirst($customer->last_name).' '.ucfirst($customer->suffix_name)}}
                             </td>
                             <td class="text-left">
                                 Tel No: {{$customer->customer_phone != null ? $customer->customer_phone : 'No Phone Number' }}<br> 

@@ -122,17 +122,17 @@
                                         <thead>
                                             <tr>
                                                 <th style="" ></th>
-                                                <th style="">Service Date</th>
+                                                <th style="width: 100px">Service Date</th>
                                                 @include("member.load_ajax_data.load_th_serial_number")
                                                 <th style="" class="text-right">#</th>
                                                 <th style="width: 200px">Product/Service</th>
-                                                <th style="">Description</th>
-                                                <th style="">U/M</th>
-                                                <th style="">Qty</th>
-                                                <th style="">Rate</th>
-                                                <th style="">Discount</th>
+                                                <th style="width: 500px">Description</th>
+                                                <th style="width: 75px">U/M</th>
+                                                <th style="width: 75px">Qty</th>
+                                                <th style="width: 120px">Rate</th>
+                                                <th style="width: 100px">Discount</th>
                                                 <th style="">Remark</th>
-                                                <th style="">Amount</th>
+                                                <th style="width: 150px">Amount</th>
                                                 <th style="">Tax</th>
                                                 <th width="10"></th>
                                             </tr>

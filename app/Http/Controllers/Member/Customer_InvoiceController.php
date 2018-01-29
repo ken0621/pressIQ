@@ -845,6 +845,7 @@ class Customer_InvoiceController extends Member
 
         $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
 
+
         $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
         $data["transaction_type"] = "INVOICE";
         if(Tbl_customer_invoice::where("inv_id",$inv_id)->value("is_sales_receipt") != 0)

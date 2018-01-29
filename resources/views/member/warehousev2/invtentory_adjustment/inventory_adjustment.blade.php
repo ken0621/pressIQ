@@ -45,13 +45,13 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="reference_number" value="{{$transaction_refnum or ''}}">
+                                <input type="text" class="form-control" name="transaction_refnum" value="{{$transaction_refnum or ''}}">
                             </div>
                         </div>
                          <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Warehouse</label>
-                                <select class="form-control droplist-warehouse" name="adj_warehouse">
+                                <select class="form-control droplist-warehouse" name="adj_warehouse_id">
                                     @if(count($_warehouse) > 0)
                                         @foreach($_warehouse as $warehouse)
                                             <option indent="{{$warehouse->warehouse_level}}" value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>

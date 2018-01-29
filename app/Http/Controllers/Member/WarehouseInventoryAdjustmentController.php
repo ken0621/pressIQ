@@ -54,6 +54,31 @@ class WarehouseInventoryAdjustmentController extends Member
     }
     public function postCreateSubmit(Request $request)
     {
-        
+        $btn_action = $request->button_action;
+
+        $insert['transaction_refnum']    = $request->transaction_refnum;
+        $insert['adj_warehouse_id']      = $request->adj_warehouse_id;
+        $insert['adj_created']           = date("Y-m-d", strtotime($request->adj_created));
+        $insert['adjustment_remarks']    = $request->adjustment_remarks;
+        $insert['adjustment_memo']       = $request->adjustment_memo;
+        $insert['adj_user_id']           = $this->user_info->user_id;
+
+        $insert_item = null;
+        foreach ($request->item_id as $key => $value) 
+        {
+            if($value)
+            {
+                $insert_item[$key]['itemline_item_id']           = $value;
+                $insert_item[$key]['itemline_item_description']  = $request->item_description[$key];
+                $insert_item[$key]['itemline_item_um']           = $request->item_um[$key];
+                $insert_item[$key]['itemline_actual_qty']        = str_replace(',', '', $request->item_actual_qty[$key]);
+                $insert_item[$key]['itemline_new_qty']           = str_replace(',', '', $request->item_new_qty[$key]);
+                $insert_item[$key]['itemline_diff_qty']          = str_replace(',', '', $request->item_diff_qty[$key]);
+                $insert_item[$key]['itemline_rate']              = str_replace(',', '', $request->item_rate[$key]);
+                $insert_item[$key]['itemline_amount']            = str_replace(',', '', $request->item_amount[$key]);
+            }
+        }
+
+
     }
 }

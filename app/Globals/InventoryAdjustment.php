@@ -14,10 +14,19 @@ use DB;
 
 class InventoryAdjustment
 {
+	public static function info($shop_id, $adj_id)
+	{
+		return Tbl_inventory_adjustment::where('adj_shop_id', $shop_id)->where('inventory_adjustment_id', $adj_id)->first();
+	}
+	public static function info_item($adj_id)
+	{
+		return Tbl_inventory_adjustment_line::um()->where('itemline_ia_id', $adj_id)->get();
+	}
 	public static function postInsert($shop_id, $insert, $insert_item)
 	{
 		$total_amount = collect($insert_item)->sum('item_amount');
 		$insert['adj_shop_id'] = $shop_id;
+		$insert['created_at'] = Carbon::now();
 		$insert['adjustment_amount'] = $total_amount;
 
 		$adj_id = Tbl_inventory_adjustment::insertGetId($insert);

@@ -45,13 +45,13 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="reference_number" value="{{$transaction_refnum or ''}}">
+                                <input type="text" class="form-control" name="transaction_refnum" value="{{$transaction_refnum or ''}}">
                             </div>
                         </div>
                          <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Warehouse</label>
-                                <select class="form-control droplist-warehouse" name="adj_warehouse">
+                                <select class="form-control droplist-warehouse" name="adj_warehouse_id">
                                     @if(count($_warehouse) > 0)
                                         @foreach($_warehouse as $warehouse)
                                             <option indent="{{$warehouse->warehouse_level}}" value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
@@ -100,9 +100,9 @@
                                             </td>
 
                                             <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                            <td><label class="text-center number-input txt-qty compute" type="text" name="item_qty"></label></td>
-                                            <td><input class="text-right txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
-                                            <td><input class="text-right number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
+                                            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty"/></td>
+                                            <td><input class="text-center txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
+                                            <td><input class="text-center number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
                                             <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
                                             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
@@ -119,9 +119,9 @@
                                             </td>
 
                                             <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                            <td><label class="text-center number-input txt-qty compute" type="text" name="item_qty"></label></td>
-                                            <td><input class="text-right txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
-                                            <td><input class="text-right number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
+                                            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty"/></td>
+                                            <td><input class="text-center txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
+                                            <td><input class="text-center number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
                                             <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
                                             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
@@ -168,7 +168,6 @@
         </div>
     </div>
 </form>
-
 <div class="div-script">
     <table class="div-item-row-script hide">
         <tr class="tr-draggable">
@@ -182,9 +181,9 @@
                 <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
             </td>
             <td><select class="2222 select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-            <td><label class="text-center number-input txt-qty compute" type="text" name="item_qty"></label></td>
-            <td><input class="text-right txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
-            <td><input class="text-right number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
+            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty"/></td>
+            <td><input class="text-center txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
+            <td><input class="text-center number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>

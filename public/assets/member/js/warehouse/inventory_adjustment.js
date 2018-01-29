@@ -241,7 +241,7 @@ function inventory_adjustment()
 		$parent = $this.closest(".tr-draggable");
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("purchase-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
-		$parent.find(".txt-qty").html(1).change();
+		$parent.find(".txt-qty").val(1);
 
 		console.log($this.find("option:selected").attr("item-type"));
 		

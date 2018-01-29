@@ -481,18 +481,6 @@ function receive_inventory()
 			$('.remarks-ri').html($('.po-remarks').val());
 		});
 	}
-	function load_applied_dm_transaction()
-	{
-		$('.applied-dm-transaction-list').load('/member/transaction/receive_inventory/load-applied-dm-transaction', function()
-		{
-			console.log("success");
-			action_compute();
-			event_remove_tr();
-			event_click_last_row_op();
-
-			$('.remarks-ri').html($('.po-remarks').val());
-		});
-	}
 /*	this.action_load_received_po = function()
 	{
 		action_compute();
@@ -502,10 +490,6 @@ function receive_inventory()
 	this.load_applied_po_transaction = function()
 	{
 		load_applied_po_transaction();
-	}
-	this.load_applied_dm_transaction = function()
-	{
-		load_applied_dm_transaction();
 	}
 }
 
@@ -548,6 +532,5 @@ function success_apply_transaction(data)
     {
     	data.element.modal("toggle");
 		receive_inventory.load_applied_po_transaction();
-		receive_inventory.load_applied_dm_transaction();
     }
 } 

@@ -428,18 +428,9 @@ function receive_inventory()
 		//cycy
 		$(document).on("click", ".remove-tr", function(e){
 			if($(".tbody-item .remove-tr").length > 1){
-				if($(this).attr("tr_id") != null)
-				{
-					$(".tr-"+$(this).attr("tr_id")).remove();
-			        $(".po-"+$(this).attr("tr_id")).removeClass("hidden");
-			        $(".div_po_id"+$(this).attr("tr_id")).remove();
-					$(".drawer-toggle").trigger("click");
-				}
-				else
-				{
-					$(this).parent().remove();
-				}
 
+				$(this).parent().remove();
+			
 				action_reassign_number();
 				action_compute();
 			}			
@@ -471,11 +462,9 @@ function receive_inventory()
 			    	value = parseFloat(value);
 			    	ret = action_add_comma(value).toLocaleString();
 			    }
-			   	
 			    if(ret == 0){
 			    	ret = '';
 			    }
-
 				return ret;
 			  });
 		});
@@ -510,10 +499,13 @@ function receive_inventory()
 		event_remove_tr();
 		event_click_last_row_op();
 	}*/
-	this.load_applied_transaction = function()
+	this.load_applied_po_transaction = function()
 	{
-		//load_applied_dm_transaction();
 		load_applied_po_transaction();
+	}
+	this.load_applied_dm_transaction = function()
+	{
+		load_applied_dm_transaction();
 	}
 }
 
@@ -555,6 +547,7 @@ function success_apply_transaction(data)
     if(data.status == "success")
     {
     	data.element.modal("toggle");
-		receive_inventory.load_applied_transaction();
+		receive_inventory.load_applied_po_transaction();
+		receive_inventory.load_applied_dm_transaction();
     }
 } 

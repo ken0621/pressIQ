@@ -53,8 +53,6 @@ class TransactionReceiveInventoryController extends Member
     {
         $data['page'] = 'Create Receive Inventory';
 
-        
-        $data['pis']        = Purchasing_inventory_system::check();
         $data["_vendor"]    = Vendor::getAllVendor('active');
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();

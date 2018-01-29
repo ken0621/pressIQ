@@ -44,6 +44,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if(isset($contri_info["_employee_contribution"]))
          			@foreach($contri_info["_employee_contribution"] as $key => $contribution)
                 	<tr>
                 		<td class="text-center">{{ $contribution->count }}</td>
@@ -58,6 +59,7 @@
                 		<td class="text-center" style="color: #76B6EC;">{{ payroll_currency($contribution->total_pagibig_ee_er) }}</td>
                 	</tr>
                 	@endforeach
+                    @endif
                 </tbody>
                 <tfoot>
                 	<tr>

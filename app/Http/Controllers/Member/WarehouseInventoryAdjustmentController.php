@@ -50,7 +50,6 @@ class WarehouseInventoryAdjustmentController extends Member
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
 
         $data['action'] = '/member/item/warehouse/inventory_adjustment/create-submit';
-
         if($request->id)
         {
             $data['action'] = '/member/item/warehouse/inventory_adjustment/update-submit';

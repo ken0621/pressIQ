@@ -1606,4 +1606,30 @@ class Warehouse2
             Self::adjust_inventory($shop_id, $warehouse_id, $value['item_id'], $value['item_new_qty'], $remarks, $ref);
         }
     }
+    public static function adjust_inventory_update_bulk($shop_id, $warehouse_id, $item_info = array(), $remarks = '', $ref = array())
+    {
+        $get_consume = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name', $ref['name'])->where('record_consume_ref_id', $ref['id'])->get();
+        if(count($get_consume))
+        {
+            foreach ($get_consume as $key => $value) 
+            {
+                $update = Self::get_previous_data($value->record_log_id);
+                Tbl_warehouse_inventory_record_log::where('record_log_id', $value->record_log_id)->update($update);
+            }            
+        }
+        Tbl_warehouse_inventory_record_log::where('record_source_ref_name', $ref['name'])->where('record_source_ref_id', $ref['id'])->delete();
+
+    }
+    public static function get_previous_data($record_log_id)
+    {
+        $return = null;
+        $data = Tbl_warehouse_inventory_record_log::where('record_log_id', $record_log_id)->value('record_log_history');
+        if($data)
+        {
+            $value = unserialize($data);
+            $return = end($value);
+            unset($return['record_log_id']);
+        }
+        return $return;
+    }
 }

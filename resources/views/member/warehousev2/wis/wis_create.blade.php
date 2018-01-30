@@ -94,7 +94,7 @@
                                 </td>
                                 <td><textarea class="form-control txt-desc" name="item_remarks[]"></textarea></td>
                                 <td class="text-center"><label class="txt-remaining-qty"></label> </td>
-                                <td><input class="form-control number-input" type="text" name="item_quantity[]"/></td>
+                                <td><input class="form-control number-input text-center" type="text" name="item_quantity[]"/></td>
                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                             </tr>
                             <tr class="tr-draggable">
@@ -106,7 +106,7 @@
                                 </td>
                                 <td><textarea class="form-control txt-desc" name="item_remarks[]"></textarea></td>
                                 <td class="text-center"><label class="txt-remaining-qty"></label> </td>
-                                <td><input class="form-control number-input" type="text" name="item_quantity[]"/></td>
+                                <td><input class="form-control number-input text-center" type="text" name="item_quantity[]"/></td>
                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                             </tr>
                         </tbody>

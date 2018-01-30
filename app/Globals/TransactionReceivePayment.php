@@ -94,7 +94,7 @@ class TransactionReceivePayment
 	        $entry_data[0]['entry_amount']  = $ins["rp_total_amount"];
 
    	        $entry_journal = Accounting::postJournalEntry($entry, $entry_data);
-   	        //die(var_dump($entry_journal));   	        
+	        
    	        $return = $val;
 		}
 		else

@@ -18,6 +18,7 @@ use App\Models\Tbl_write_check;
 use App\Models\Tbl_debit_memo;
 use App\Models\Tbl_warehouse_issuance_report;
 use App\Models\Tbl_inventory_adjustment;
+use App\Models\Tbl_receive_payment;
 
 use Carbon\Carbon;
 use Validator;
@@ -345,6 +346,10 @@ class AccountingTransaction
 		if($transaction_type == 'inventory_adjustment')
 		{
 			$get = Tbl_inventory_adjustment::where('adj_shop_id', $shop_id)->orderBy('inventory_adjustment_id','DESC')->first();
+		}
+		if($transaction_type == 'received_payment')
+		{
+			$get = Tbl_receive_payment::where('rp_shop_id', $shop_id)->orderBy('rp_id','DESC')->first();
 		}
 
 		if($get)

@@ -123,7 +123,6 @@
                                                     @if(isset($_bill_account_line))
                                                         @foreach($_bill_account_line as $accline)
                                                         <tr class="tr-draggable">
-                                                            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
                                                             <td class="acct-number-td text-right">1</td>
                                                             <td >                                           
                                                                 <select name="expense_account[]" class="form-control drop-down-coa select-coa input-sm" >

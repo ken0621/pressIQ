@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Globals\Warehouse2;
 use App\Globals\WarehouseTransfer;
+use App\Globals\AccountingTransaction;
 use App\Globals\Pdf_global;
 
 use Session;

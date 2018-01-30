@@ -19,6 +19,11 @@ class TransactionEstimateQuotation
 		return Tbl_customer_estimate::where("is_sales_order",0)->where("est_status","accepted")->where("est_shop_id", $shop_id)->where("est_customer_id",$customer_id)->get();
 	}
 
+	public static function getAllOpenEQ($shop_id)
+    {
+        return Tbl_customer_estimate::customer()->where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 0)->get();
+    }
+
 	public static function info($shop_id, $eq_id)
 	{
 		return Tbl_customer_estimate::customer()->where("est_shop_id", $shop_id)->where("est_id", $eq_id)->first();

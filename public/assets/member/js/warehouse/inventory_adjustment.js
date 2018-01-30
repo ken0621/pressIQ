@@ -36,6 +36,11 @@ function inventory_adjustment()
             	action_load_item_info($(this));
             }
         });
+        $('.droplist-warehouse').globalDropList(
+        {
+            width : "100%",
+    		hasPopup: "false"
+        });
 
 	    $(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
@@ -236,7 +241,7 @@ function inventory_adjustment()
 		$parent = $this.closest(".tr-draggable");
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("purchase-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
-		$parent.find(".txt-qty").html(1).change();
+		$parent.find(".txt-qty").val(1);
 
 		console.log($this.find("option:selected").attr("item-type"));
 		
@@ -286,7 +291,7 @@ function inventory_adjustment()
 
 	function action_date_picker()
 	{/*class name of tbody and text field for date*/
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm/dd/yy', });
 	}
 
 	/*ITEM NUMBER*/
@@ -392,5 +397,14 @@ function success_item(data)
 
 		data.element.modal("hide");
 	});
+}
+
+function success_adjust_inventory(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
 }
 

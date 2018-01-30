@@ -1,8 +1,9 @@
 @if(count($_po) > 0)
     @foreach($_po as $items)
+    @if($items['item_qty'] != 0)
     <tr class="tr-draggable">
-            <input type="hidden" class="poline_id" name="item_ref_name[]" value="purchase_order">
-            <input type="hidden" class="itemline_po_id" name="item_ref_id[]" value="{{$items['poline_po_id']}}">
+            <input type="hidden" class="poline_id" name="itemline_ref_name[]" value="purchase_order">
+            <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]" value="{{$items['poline_po_id']}}">
         <td class="invoice-number-td text-right">1</td>
         <td>
             <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
@@ -26,9 +27,11 @@
         </td>
         <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$items['item_amount']}}"/>
         </td>
-        @include("member.load_ajax_data.load_td_serial_number");
+        <td>@include("member.load_ajax_data.load_td_serial_number")</td>
+        
         <td tr_id="{{$items['poline_po_id']}}" linked_in="no" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
     </tr>
+    @endif
     @endforeach
 @endif
-<input type="hidden" class="inv-remarks" name="" value="{!! $remarks or '' !!}">
+<input type="hidden" class="po-remarks" name="" value="{!! $remarks or '' !!}">

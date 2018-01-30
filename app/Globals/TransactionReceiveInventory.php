@@ -96,6 +96,7 @@ class TransactionReceiveInventory
 
             $return = Self::insertLine($shop_id, $receive_inventory_id, $insert_item);
             $return = $receive_inventory_id;
+
         }
         else
         {
@@ -131,9 +132,7 @@ class TransactionReceiveInventory
             Tbl_receive_inventory_line::where('riline_ri_id', $receive_inventory_id)->delete();
 
             /*INSERT ENTER BILL HERE*/
-
             $bill = Tbl_bill::where('bill_ri_id', $receive_inventory_id)->first();
-            //die(var_dump($bill->bill_id));
             
             if($bill)
             {
@@ -169,9 +168,7 @@ class TransactionReceiveInventory
         if(count($itemline) > 0)
         {
             $return = Tbl_receive_inventory_line::insert($itemline);   
-            Tbl_bill::where('bill_shop_id', $shop_id)->where('bill_ri_id', $receive_inventory_id)->first();
         }
-
         return $return;
     }
 }

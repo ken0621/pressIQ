@@ -92,12 +92,10 @@ class TransactionWriteCheckController extends Member
         $insert['wc_total_amount']         = $request->wc_total_amount;
         
         $insert_item = null;
-        $ctr_items = 0;
         foreach($request->item_id as $key => $value)
         {
             if($value)
             {
-                $ctr_items++;
                 /*$insert_item[$key]['itemline_ref_id'] = $value;
                 $insert_item[$key]['itemline_ref_name'] = $request->itemline_ref_name[$key];*/
                 $insert_item[$key]['item_id']           = $value;
@@ -108,12 +106,14 @@ class TransactionWriteCheckController extends Member
                 $insert_item[$key]['item_amount']       = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_discount']     = 0;
             }
-
         }
-        
-        $validate = TransactionWriteCheck::postInsert($this->user_info->shop_id, $insert, $insert_item);
-        
         $return = null;
+        $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+        $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
+        if(!$validate)
+        {
+            $validate = TransactionWriteCheck::postInsert($this->user_info->shop_id, $insert, $insert_item);
+        }
         if(is_numeric($validate))
         {
             $return['status'] = 'success';
@@ -145,13 +145,10 @@ class TransactionWriteCheckController extends Member
         $insert['wc_total_amount']         = $request->wc_total_amount;
         
         $insert_item = null;
-        $ctr_items = 0;
         foreach($request->item_id as $key => $value)
         {
             if($value)
-            {
-                $ctr_items++;
-            
+            {            
                 /*$insert_item[$key]['itemline_ref_id'] = $value;
                 $insert_item[$key]['itemline_ref_name'] = $request->itemline_ref_name[$key];*/
                 $insert_item[$key]['item_id']           = $value;
@@ -164,9 +161,13 @@ class TransactionWriteCheckController extends Member
             }
         }
 
-        $validate = TransactionWriteCheck::postUpdate($write_check_id, $this->user_info->shop_id, $insert, $insert_item);
-        
         $return = null;
+        $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+        $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
+        if(!$validate)
+        {
+            $validate = TransactionWriteCheck::postUpdate($write_check_id, $this->user_info->shop_id, $insert, $insert_item);
+        }
         if(is_numeric($validate))
         {
             $return['status'] = 'success';

@@ -16,6 +16,8 @@ use App\Models\Tbl_pay_bill;
 use App\Models\Tbl_bill;
 use App\Models\Tbl_write_check;
 use App\Models\Tbl_debit_memo;
+use App\Models\Tbl_warehouse_issuance_report;
+use App\Models\Tbl_inventory_adjustment;
 
 use Carbon\Carbon;
 use Validator;
@@ -282,6 +284,7 @@ class AccountingTransaction
 	public static function get_count_last_transaction($shop_id, $transaction_type, $separator)
 	{
 		$return = 1;
+		$get = null;
 		if($transaction_type == 'sales_invoice')
 		{
 			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('is_sales_receipt',0)->orderBy('inv_id','DESC')->first();
@@ -305,6 +308,11 @@ class AccountingTransaction
 		if($transaction_type == 'warehouse_issuance_slip')
 		{
 			$get = Tbl_customer_wis::where('cust_wis_shop_id', $shop_id)->orderBy('cust_wis_id','DESC')->first();
+		}
+		if($transaction_type == 'warehouse_transfer')
+		{
+			$get = Tbl_warehouse_issuance_report::where('wis_shop_id', $shop_id)->orderBy('wis_id','DESC')->first();
+			$get->transaction_refnum = $get->wis_number;
 		}
 		if($transaction_type == 'purchase_requisition')
 		{
@@ -333,6 +341,10 @@ class AccountingTransaction
 		if($transaction_type == 'debit_memo')
 		{
 			$get = Tbl_debit_memo::where('db_shop_id', $shop_id)->orderBy('db_id','DESC')->first();
+		}
+		if($transaction_type == 'inventory_adjustment')
+		{
+			$get = Tbl_inventory_adjustment::where('adj_shop_id', $shop_id)->orderBy('inventory_adjustment_id','DESC')->first();
 		}
 
 		if($get)
@@ -429,7 +441,7 @@ class AccountingTransaction
 				}
 				if($type == 'consume')
 				{
-					$return = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
+					// $return = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
 				}
 			}
 		}

@@ -19,6 +19,6 @@ class Tbl_customer_estimate_line extends Model
     }
     public function scopeEstimate_item($query)
     {
-    	return $query->join("tbl_item","tbl_item.item_id","=","estline_item_id");
+    	return $query->leftjoin("tbl_item","tbl_item.item_id","=","estline_item_id");
     }
 }

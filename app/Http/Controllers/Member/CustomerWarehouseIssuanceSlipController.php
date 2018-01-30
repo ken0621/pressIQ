@@ -302,7 +302,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
     public function postApplyTransaction(Request $request)
     {
         $_transaction = $request->apply_transaction;
-        Session::put('applied_transaction', $_transaction);
+        Session::put('applied_transaction_wis', $_transaction);
 
         $return['call_function'] = "success_apply_transaction";
         $return['status'] = "success";
@@ -312,7 +312,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
     public function getAjaxApplyTransaction(Request $request)
     {
         $_transaction[$request->apply_transaction] = $request->apply_transaction;
-        Session::put('applied_transaction', $_transaction);
+        Session::put('applied_transaction_wis', $_transaction);
 
         return json_encode('success');
     }

@@ -1,8 +1,8 @@
-var purchase_order = new purchase_order();
+var enter_bills = new enter_bills();
 var global_tr_html = $(".div-script tbody").html();
 var item_selected = ''; 
 
-function purchase_order()
+function enter_bills()
 {
 	init();
 
@@ -478,7 +478,22 @@ function purchase_order()
 		})
 	}
 
+	function load_applied_transaction()
+	{
+		$('.applied-transaction-list').load('/member/transaction/enter_bills/load-applied-transaction', function()
+		{
+			console.log("success");
+			action_compute();
+			event_remove_tr();
+			event_click_last_row_op();
 
+			$('.remarks-eb').html($('.po-remarks').val());
+		});
+	}
+	this.load_applied_transaction = function()
+	{
+		load_applied_transaction();
+	}
 }
 
 /*AFTER ADDING VENDOR*/
@@ -514,69 +529,18 @@ function success_enter_bills(data)
 	}
 }
 
-function add_po_to_bill(po_id)
+function success_apply_transaction(data)
 {
-	// $(".modal-loader").removeClass("hidden");
-	// $.ajax({
-	// 	url : "/member/vendor/load_po_item",
-	// 	data : {po_id: po_id},
-	// 	dataType : "json",
-	// 	type : "get",
-	// 	success : function(data)
-	// 	{
- //             $(data).each(function (a, b)
- //             {		
-	//              var $container = "";
-	//              var con = $("tbody.draggable").prepend(global_tr_html);
-	//              bill.action_trigger_select_plugin_not_last();
-	//              $container = $("tbody.draggable .tr-draggable:first");
-	//              // $this.closest(".tr-draggable");
-
-	//             $container.addClass("tr-"+b.poline_po_id);
-	//             $container.find(".select-item").val(b.poline_item_id).change();
-	//             $container.find(".txt-desc").val(b.poline_description);
-	//             $container.find(".select-um").load('/member/item/load_one_um/'+b.multi_um_id, function()
- //             	{
- //             		$container.find(".select-um").globalDropList("reload");
- //             		$container.find(".select-um").val(b.poline_um).change();
- //             	});
-	// 			$container.find(".poline_id").val(b.poline_id);
-	// 			$container.find(".itemline_po_id").val(po_id);
-	//             $container.find(".txt-qty").val(b.poline_qty);
-	//             $container.find(".txt-rate").val(b.poline_rate);
-	//             $container.find(".txt-amount").val(b.poline_amount);
-	//             $container.find(".remove-tr").addClass("remove-tr"+b.poline_po_id);
-	//             $container.find(".remove-tr").attr("tr_id", b.poline_po_id);
- //             });
-
-	//          $(".po-listing").prepend(po_id_list);
-	//          var $po_id = $(".po-listing .po_id:first");
-	//          $(".po-listing .po_id:first").addClass("div_po_id"+po_id);
-	//          $po_id.find(".po-id-input").val(po_id).change();
-
-	//         $(".po-"+po_id).addClass("hidden");
-	// 		// $(".modal-loader").addClass("hidden");
-
- //             bill.action_compute();
- //             bill.action_reassign_number();
-	// 	},
-	// 	error : function()
-	// 	{
-	// 		alert("Something wen't wrong.");
-	// 	}
-	// });
+    if(data.status == "success")
+    {
+    	data.element.modal("toggle");
+		enter_bills.load_applied_transaction();
+    }
+} 
 
 
-	$(".po-tbl").load('/member/vendor/load_added_item/'+po_id, function()
-	{
-		console.log("success");
-		bill.action_compute();
-		bill.iniatilize_select();
-		$(".tbody-item .select-um").globalDropList("enabled");
+///
 
-		$(".po-"+po_id).addClass("hidden");
-	});
-}
 function iniatilize(id)
 {
    $('.select-poline-item-'+id).globalDropList(

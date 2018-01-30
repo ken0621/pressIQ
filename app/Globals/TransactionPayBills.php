@@ -7,6 +7,7 @@ use App\Models\Tbl_pay_bill;
 use App\Models\Tbl_bill;
 
 use App\Globals\AccountingTransaction;
+use App\Globals\WriteCheck;
 use Carbon\Carbon;
 
 use Validator;
@@ -92,6 +93,9 @@ class TransactionPayBills
 
 	        $return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
 	        $return = $pay_bill_id;
+
+	        WriteCheck::create_check_from_paybill($pay_bill_id);
+
 		}
 		else
 		{
@@ -137,6 +141,9 @@ class TransactionPayBills
 	        $return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
 
 	        $return = $pay_bill_id;
+
+	        WriteCheck::delete_bill_in_check($pay_bill_id);
+ 			WriteCheck::update_check_from_paybill($pay_bill_id);
 		}
 		else
 		{

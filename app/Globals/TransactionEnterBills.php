@@ -111,6 +111,18 @@ class TransactionEnterBills
             $return = Self::insertLine($enter_bills_id, $insert_item, $entry);
             
             $return = $enter_bills_id;
+
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+
+            if(!$ri_id) // ENTER BILL
+            {
+                AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'enter_bills', $enter_bills_id, 'Refill upon creating ENTER BILLS'.$ins['transaction_refnum']);
+            }
+            else // RECEIVE INVENTORY
+            {
+                AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'receive_inventory', $ri_id, 'Refill upon RECEIVING INVENTORY '.$ins['transaction_refnum']);
+                
+            }
         }
         else
         {
@@ -160,6 +172,20 @@ class TransactionEnterBills
 
             $return = Self::insertLine($enter_bills_id, $insert_item, $entry);
             $return = $enter_bills_id;
+
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+            /* UPDATE INVENTORY HERE */
+            if(!$ri_id) // ENTER BILL
+            {
+                AccountingTransaction::inventory_refill_update($shop_id, $warehouse_id, $insert_item, 'enter_bills', $enter_bills_id); 
+                AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'enter_bills', $enter_bills_id, 'Refill upon creating ENTER BILLS'.$ins['transaction_refnum']);
+            }
+            else // RECEIVE INVENTORY
+            {
+                AccountingTransaction::inventory_refill_update($shop_id, $warehouse_id, $insert_item, 'receive_inventory', $ri_id); 
+                AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'receive_inventory', $ri_id, 'Refill upon RECEIVING INVENTORY '.$ins['transaction_refnum']);
+                
+            }
         }
         else
         {
@@ -175,6 +201,8 @@ class TransactionEnterBills
         foreach ($insert_item as $key => $value) 
         {   
             $itemline[$key]['itemline_bill_id']      = $enter_bills_id;
+            $itemline[$key]['itemline_ref_id']       = $value['item_ref_id'];
+            $itemline[$key]['itemline_ref_name']     = $value['item_ref_name'];
             $itemline[$key]['itemline_item_id']      = $value['item_id'];
             $itemline[$key]['itemline_description']  = $value['item_description'];
             $itemline[$key]['itemline_um']           = $value['item_um'];

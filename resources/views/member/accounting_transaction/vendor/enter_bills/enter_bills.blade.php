@@ -119,7 +119,9 @@
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="draggable">
+                                                <tbody class="draggable tbody-item applied-transaction-list">
+                                                </tbody>
+                                                <tbody class="tbody-item">
                                                     @if(isset($eb))
                                                         @foreach($_ebline as $ebline)
                                                             <tr class="tr-draggable">
@@ -194,8 +196,8 @@
                                 </div>
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
-                                        <label>Memo</label>
-                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" >{{isset($eb->bill_memo)? $eb->bill_memo : ''}}</textarea>
+                                        <label>Remarks</label>
+                                        <textarea class="form-control input-sm textarea-expand remarks-eb" name="vendor_memo" >{{isset($eb->bill_memo)? $eb->bill_memo : ''}}</textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">
@@ -207,6 +209,12 @@
                                                     PHP&nbsp;<span class="total-amount">0.00</span>
                                             </div>
                                         </div> 
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <label>Memo</label>
+                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" >{{isset($eb->bill_memo)? $eb->bill_memo : ''}}</textarea>
                                     </div>
                                 </div>
                                 
@@ -253,90 +261,5 @@
 @endsection
 
 @section('script')
-
 <script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/enter_bills.js"></script>
-
-<!-- <script type="text/javascript">
-
-    $("#acct-a").click(function()
-    {
-        $('#account-tbl').toggle();
-        $('i',this).toggleClass("fa-caret-right fa-caret-down")
-    });
-    $("#item-a").click(function()
-    {
-        $('#item-tbl').toggle();
-        $('i',this).toggleClass("fa-caret-right fa-caret-down")
-    });
-$(document).ready(function() {
-  $('.drawer').drawer({
-    desktopEvent:'click'
-  });
-});
-</script> -->
-
-@endsection
-
-@section('css')
-<link rel="stylesheet" type="text/css" href="/assets/member/bootstrap_drawer/cooker.drawer.css">
-<style type="text/css">
-.po-style
-{
-    padding: 10px;
-    background-color: #fff;
-}
-.drawer-toggle
-{
-    background-color: #76B6EC;
-    color: #fff;
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 0;
-}
-.drawer-toggle:hover
-{
-    background-color: #76B6EC;
-    color: #fff;
-}
-
-.drawer-default
-{
-    -webkit-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
-    -moz-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
-    box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
-    -webkit-transition: all 0.4s ease;
-       -o-transition: all 0.4s ease;
-          transition: all 0.4s ease;
-    z-index: 2;
-}
-.drawer-toggle
-{
-    -webkit-transition: all 0.4s ease;
-       -o-transition: all 0.4s ease;
-          transition: all 0.4s ease;
-}
-.drawer-default + .drawer-overlay
-{
-    background-color: transparent !important;
-    -webkit-transition: all 0.4s ease;
-       -o-transition: all 0.4s ease;
-          transition: all 0.4s ease;
-}
-.drawer-open .drawer-overlay
-{
-    padding-right: 30px;
-}
-.drawer-close .drawer.drawer-default
-{
-    right: -280px;
-}
-.drawer-open .drawer.drawer-default
-{
-    right: 0;
-}
-nav.user-menu
-{
-    background-color: #F5F5F5;
-}
-</style>
 @endsection

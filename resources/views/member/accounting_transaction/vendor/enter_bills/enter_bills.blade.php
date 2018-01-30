@@ -119,9 +119,9 @@
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="tbody-item draggable applied-transaction-list">
+                                                <tbody class="draggable tbody-item applied-transaction-list">
                                                 </tbody>
-                                                <tbody class="draggable tbody-item">
+                                                <tbody class="tbody-item">
                                                     @if(isset($eb))
                                                         @foreach($_ebline as $ebline)
                                                             <tr class="tr-draggable">
@@ -196,8 +196,8 @@
                                 </div>
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
-                                        <label>Memo</label>
-                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" >{{isset($eb->bill_memo)? $eb->bill_memo : ''}}</textarea>
+                                        <label>Remarks</label>
+                                        <textarea class="form-control input-sm textarea-expand remarks-eb" name="vendor_memo" >{{isset($eb->bill_memo)? $eb->bill_memo : ''}}</textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">
@@ -209,6 +209,12 @@
                                                     PHP&nbsp;<span class="total-amount">0.00</span>
                                             </div>
                                         </div> 
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <label>Memo</label>
+                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" >{{isset($eb->bill_memo)? $eb->bill_memo : ''}}</textarea>
                                     </div>
                                 </div>
                                 

@@ -102,16 +102,16 @@
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="tbody-item applied-po-transaction-list">
+                                                <tbody class="applied-po-transaction-list">
                                                 </tbody>
-                                                <tbody class="tbody-item">
+                                                <tbody class="draggable tbody-item">
                                                     @if(isset($ri))
                                                         @foreach($_riline as $riline)
                                                             <tr class="tr-draggable">
                                                                 <td class="invoice-number-td text-right">1</td>
                                                                 <td>
-                                                                    <input type="hidden" name="itemline_ref_name[]" value="{{ $riline->riline_ref_name or ''}}">
-                                                                    <input type="hidden" name="itemline_ref_id[]" value="{{ $riline->riline_ref_id or ''}}">
+                                                                    <input type="hidden" name="item_ref_name[]" value="{{ $riline->riline_ref_name or ''}}">
+                                                                    <input type="hidden" name="item_ref_id[]" value="{{ $riline->riline_ref_id or ''}}">
                                                                     <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]">
                                                                         @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $riline->riline_item_id])
                                                                     </select>
@@ -131,8 +131,8 @@
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
-                                                        <input type="hidden" name="itemline_ref_name[]">
-                                                        <input type="hidden" name="itemline_ref_id[]">
+                                                        <input type="hidden" name="item_ref_name[]">
+                                                        <input type="hidden" name="item_ref_id[]">
                                                             <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
@@ -148,8 +148,8 @@
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">2</td>
                                                         <td>
-                                                        <input type="hidden" name="itemline_ref_name[]">
-                                                        <input type="hidden" name="itemline_ref_id[]">
+                                                        <input type="hidden" name="item_ref_name[]">
+                                                        <input type="hidden" name="item_ref_id[]">
                                                             <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
@@ -170,7 +170,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <label>Remarks</label>
-                                        <textarea class="form-control input-sm remarks-ri" textarea-expand" name="vendor_reamrks" ></textarea>
+                                        <textarea class="form-control input-sm remarks-ri textarea-expand" name="vendor_reamrks" ></textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">
@@ -187,7 +187,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <label>Memo</label>
-                                        <textarea class="form-control input-sm" textarea-expand" name="vendor_memo" >{{isset($ri->ri_memo)? $ri->ri_memo : ''}}</textarea>
+                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" >{{isset($ri->ri_memo)? $ri->ri_memo : ''}}</textarea>
                                     </div>
                                 </div>
                                 
@@ -208,8 +208,8 @@
                 <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]">
             <td class="invoice-number-td text-right">1</td>
             <td>
-                <input type="hidden" class="poline_id" name="itemline_ref_name[]">
-                <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                <input type="hidden" class="poline_id" name="item_ref_name[]">
+                <input type="hidden" class="itemline_po_id" name="item_ref_id[]">
                 <select class="form-control select-item input-sm pull-left" name="item_id[]" >
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                 </select>

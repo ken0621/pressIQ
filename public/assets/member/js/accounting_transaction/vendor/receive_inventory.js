@@ -430,7 +430,6 @@ function receive_inventory()
 			if($(".tbody-item .remove-tr").length > 1){
 
 				$(this).parent().remove();
-			
 				action_reassign_number();
 				action_compute();
 			}			
@@ -474,9 +473,14 @@ function receive_inventory()
 		$('.applied-po-transaction-list').load('/member/transaction/receive_inventory/load-applied-po-transaction', function()
 		{
 			console.log("success");
-			action_compute();
+			/*action_compute();
 			event_remove_tr();
-			event_click_last_row_op();
+			event_click_last_row_op();*/
+
+			action_reassign_number();
+			action_load_initialize_select();
+			action_date_picker();
+    		action_compute();
 
 			$('.remarks-ri').html($('.po-remarks').val());
 		});

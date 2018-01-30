@@ -94,6 +94,8 @@ class TransactionEnterBillsController extends Member
             if($value)
             {
                 $insert_item[$key]['item_id']          = $value;
+                $insert_item[$key]['item_ref_name']    = $request->itemline_ref_name[$key];
+                $insert_item[$key]['item_ref_id']      = $request->itemline_ref_id[$key];
                 $insert_item[$key]['item_servicedate'] = $request->item_servicedate[$key];
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
                 $insert_item[$key]['item_um']          = $request->item_um[$key];
@@ -207,7 +209,6 @@ class TransactionEnterBillsController extends Member
     {
         $applied_transaction = Session::get('applied_transaction');
 
-        //die(var_dump($applied_transaction));
         if(count($applied_transaction) > 0)
         {
             foreach ($applied_transaction as $key => $value)
@@ -242,6 +243,6 @@ class TransactionEnterBillsController extends Member
         $data['_um']     = UnitMeasurement::load_um_multi();
         $data['_item']   = Item::get_all_category_item();
 
-        return view('member.accounting_transaction.vendor.purchase_order.applied_po_transaction', $data);
+        return view('member.accounting_transaction.vendor.enter_bills.applied_transaction', $data);
     }
 }

@@ -947,7 +947,7 @@ class Transaction
         $cart_wallet_amount = Cart2::cart_payment_amount($shop_id,'wallet');
         $cart_gc_amount = Cart2::cart_payment_amount($shop_id,'gc');
         $cart_total_amount = Cart2::cart_payment_amount($shop_id);
-
+        
         if($cart_wallet_amount > $amount['total_wallet'])
         {
             $return .= 'Not enough wallet in <b>slot no'.Customer::slot_info($slot_id)->slot_no.'</b>, wallet remaining '.currency('PHP ',$amount['total_wallet']).'. <br>'; 

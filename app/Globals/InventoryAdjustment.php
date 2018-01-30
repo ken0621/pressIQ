@@ -3,6 +3,7 @@ namespace App\Globals;
 
 use App\Models\Tbl_inventory_adjustment;
 use App\Models\Tbl_inventory_adjustment_line;
+use App\Globals\Warehouse2;
 use Carbon\Carbon;
 use DB;
 
@@ -32,6 +33,8 @@ class InventoryAdjustment
 		$adj_id = Tbl_inventory_adjustment::insertGetId($insert);
 
 		Self::insertline($adj_id, $insert_item);
+		Warehouse2::adjust_inventory_bulk($shop_id, $insert['adj_warehouse_id'], $insert_item);
+		die(var_dump(123));
 		return $adj_id;
 
 	}

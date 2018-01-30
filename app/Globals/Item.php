@@ -1971,7 +1971,8 @@ class Item
         $offset = Tbl_warehouse_inventory_record_log::where('record_shop_id', $shop_id)->where("record_warehouse_id",$warehouse_id)->where('record_item_id', $item_id)->where('record_count_inventory',0);
         $current = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
                                                    ->where("record_item_id",$item_id)
-                                                   ->where("record_inventory_status",0);
+                                                   ->where("record_inventory_status",0)
+                                                   ->where("record_count_inventory",1);
         if($from && $to)
         {
             $offset_qty = $offset->whereBetween('record_log_date_updated',[$from, $to])->count();

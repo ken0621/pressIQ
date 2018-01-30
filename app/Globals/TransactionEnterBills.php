@@ -201,6 +201,8 @@ class TransactionEnterBills
         foreach ($insert_item as $key => $value) 
         {   
             $itemline[$key]['itemline_bill_id']      = $enter_bills_id;
+            $itemline[$key]['itemline_ref_id']       = $value['item_ref_id'];
+            $itemline[$key]['itemline_ref_name']     = $value['item_ref_name'];
             $itemline[$key]['itemline_item_id']      = $value['item_id'];
             $itemline[$key]['itemline_description']  = $value['item_description'];
             $itemline[$key]['itemline_um']           = $value['item_um'];

@@ -96,7 +96,7 @@ class TransactionEnterBillsController extends Member
             {
                 $insert_acct[$key_account]['account_id']    = $value_account;
                 $insert_acct[$key_account]['account_desc']  = $request->account_desc[$key_account];
-                $insert_acct[$key_account]['account_desc']  = $request->account_desc[$key_account];
+                $insert_acct[$key_account]['account_amount']  = $request->account_amount[$key_account];
             }
         }
 
@@ -123,8 +123,8 @@ class TransactionEnterBillsController extends Member
         $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
         if(!$validate)
         {
-            $validate = TransactionEnterBills::postInsert(null, $this->user_info->shop_id, $insert, $insert_item);
-            TransactionPurchaseOrder::checkPoQty($validate, Session::get('applied_transaction'));
+            $validate = TransactionEnterBills::postInsert(null, $this->user_info->shop_id, $insert, $insert_item, $insert_acct);
+            TransactionEnterBills::checkPoQty($validate, Session::get('applied_transaction'));
         }
         if(is_numeric($validate))
         {

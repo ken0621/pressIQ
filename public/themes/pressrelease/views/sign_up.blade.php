@@ -43,7 +43,7 @@
 			    				<input type="text" name="user_company_name" id="user_company_name" placeholder="Company">
 			    			</div>
 			    			<div class="register-form">
-			    				<input type="file" name="user_company_image" id="user_company_image">
+			    				<input type="file" name="user_company_image" id="user_company_image" accept=".png, .jpg, .jpeg">
 			    			</div>
 
 			    			<div class="button-container">

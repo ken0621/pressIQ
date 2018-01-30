@@ -10,9 +10,7 @@
         <div class="modal-content">
             <div class="modal-header">Accept P4ward Contract</div>
             <div class="modal-body">
-                <div class="contract">
-                    <p>{!! get_content($shop_theme_info, "terms_and_condition", "terms_condition") !!}</p>
-                </div>
+                <div class="contract">{!! get_content($shop_theme_info, "terms_and_condition", "terms_condition") !!}</div>
             </div>
             <div class="modal-footer">
             	<button type="submit" class="btn btn-pure pull-right" data-dismiss="modal">Accept</button>

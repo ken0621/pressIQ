@@ -1030,6 +1030,8 @@ class Item
                 {
                     $_category[$key]['item_list'][$key1]['inventory_count'] = Warehouse2::get_item_qty(Warehouse2::get_current_warehouse($shop_id), $item_list['item_id']);
                 }
+
+                $_category[$key]['item_list'][$key1]['item_inventory'] = Self::item_inventory_report($shop_id, $item_list['item_id']);
             }
             $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }
@@ -1062,6 +1064,8 @@ class Item
                    $_category[$key]['item_list'][$key1]['item_cost'] = Item::get_item_bundle_cost($item_list['item_id']); 
                 }
                 $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
+
+                $_category[$key]['item_list'][$key1]['item_inventory'] = Self::item_inventory_report($category['type_shop'], $item_list['item_id']);
             }
             $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }
@@ -2003,6 +2007,7 @@ class Item
         {
             $return[$key] = new \stdClass();
             $return[$key]->warehouse_name = $value->warehouse_name;
+            $return[$key]->warehouse_id = $value->warehouse_id;
             $return[$key]->qty_on_hand = Self::get_item_inventory($shop_id, $item_id, $value->warehouse_id, $date_from, $date_to);
         }
         return $return;

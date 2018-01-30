@@ -1618,7 +1618,8 @@ class Warehouse2
             }            
         }
         Tbl_warehouse_inventory_record_log::where('record_source_ref_name', $ref['name'])->where('record_source_ref_id', $ref['id'])->delete();
-
+        Self::delete_inventory_history($shop_id, $ref);
+        Self::adjust_inventory_bulk($shop_id, $warehouse_id, $item_info, $remarks, $ref);
     }
     public static function get_previous_data($record_log_id)
     {
@@ -1631,5 +1632,9 @@ class Warehouse2
             unset($return['record_log_id']);
         }
         return $return;
+    }
+    public static function delete_inventory_history($shop_id, $ref = array())
+    {
+        Tbl_inventory_history::where('shop_id', $shop_id)->where("history_reference", $ref['name'])->where('history_reference_id',$ref['id'])->delete();
     }
 }

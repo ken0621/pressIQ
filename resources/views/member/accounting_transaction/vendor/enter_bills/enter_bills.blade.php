@@ -106,12 +106,11 @@
                                     <div class="title">
                                         <h3><a id="acct-a"> <i class="fa fa-caret-down"></i>  Account Details </a></h3>
                                     </div>
-                                    <div class="table-responsive draggable-container" id="account-tbl">
+                                    <div class="table-responsive" id="account-tbl">
                                         <div class="col-sm-12">
                                             <table class="digima-table">
                                                 <thead >
                                                     <tr>
-                                                        <th style="width: 15px;"></th>
                                                         <th style="width: 15px;">#</th>
                                                         <th style="width: 200px;">Account</th>
                                                         <th>Description</th>
@@ -136,7 +135,6 @@
                                                         @endforeach
                                                     @endif
                                                     <tr class="tr-draggable">
-                                                        <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
                                                         <td class="acct-number-td text-right">1</td>
                                                         <td >                                           
                                                             <select name="expense_account[]" class="form-control drop-down-coa select-coa input-sm" >
@@ -144,11 +142,10 @@
                                                             </select>
                                                         </td>
                                                         <td><textarea class="textarea-expand acct-desc" name="account_desc[]"></textarea></td>
-                                                        <td><input type="text" class="form-control text-right number-input input-sm acct-amount compute" value="0.00" name="account_amount[]"></td>
-                                                        <td class="text-center acct-remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                        <td><input type="text" class="form-control text-right input-sm number-input acct-amount compute" value="0.00" name="account_amount[]"></td>
+                                                        <td class="text-center acct-remove-tr  cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                     <tr class="tr-draggable">
-                                                        <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
                                                         <td class="acct-number-td text-right">2</td>
                                                         <td >                                           
                                                             <select name="expense_account[]" class="form-control drop-down-coa select-coa input-sm" >
@@ -167,7 +164,7 @@
                                 <div class="title">
                                     <h3><a id="item-a" > <i class="fa fa-caret-down"></i>  Item Details </a></h3>
                                 </div> 
-                                <div class="row clearfix draggable-container">
+                                <div class="row clearfix">
                                     <div class="table-responsive " id="item-tbl">
                                         <div class="col-sm-12">
                                             <table class="digima-table">
@@ -294,16 +291,15 @@
 </div>
 <div class="acct-div-script">
     <table class="div-acct-row-script hide">
-         <tr class="tr-draggable">
-            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+        <tr class="tr-draggable">
             <td class="acct-number-td text-right">1</td>
             <td >                                           
-                <select name="expense_account[]" class="form-control select-coa input-sm" >
+                <select name="expense_account[]" class="form-control drop-down-coa select-coa input-sm" >
                     @include("member.load_ajax_data.load_chart_account", ['add_search' => ""])
                 </select>
             </td>
             <td><textarea class="textarea-expand acct-desc" name="account_desc[]"></textarea></td>
-            <td><input type="text" class="form-control input-sm acct-amount compute text-right number-input" name="account_amount[]" value="0.00"></td>
+            <td><input type="text" class="form-control text-right number-input input-sm acct-amount compute" value="0.00" name="account_amount[]"></td>
             <td class="text-center acct-remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>
@@ -335,4 +331,16 @@
 
 @section('script')
 <script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/enter_bills.js"></script>
+<script type="text/javascript">
+    $("#acct-a").click(function()
+    {
+        $('#account-tbl').toggle();
+        $('i',this).toggleClass("fa-caret-right fa-caret-down")
+    });
+    $("#item-a").click(function()
+    {
+        $('#item-tbl').toggle();
+        $('i',this).toggleClass("fa-caret-right fa-caret-down")
+    });
+</script>
 @endsection

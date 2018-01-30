@@ -17,6 +17,7 @@ use App\Models\Tbl_bill;
 use App\Models\Tbl_write_check;
 use App\Models\Tbl_debit_memo;
 use App\Models\Tbl_warehouse_issuance_report;
+use App\Models\Tbl_warehouse_receiving_report;
 use App\Models\Tbl_inventory_adjustment;
 use App\Models\Tbl_receive_payment;
 
@@ -316,6 +317,14 @@ class AccountingTransaction
 			if($get)
 			{
 				$get->transaction_refnum = $get->wis_number;
+			}
+		}
+		if($transaction_type == 'receiving_report')
+		{
+			$get = Tbl_warehouse_receiving_report::where('rr_shop_id', $shop_id)->orderBy('rr_id','DESC')->first();
+			if($get)
+			{
+				$get->transaction_refnum = $get->rr_number;
 			}
 		}
 		if($transaction_type == 'purchase_requisition')

@@ -116,7 +116,7 @@ class TransactionEstimateQuotation
 	}
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
-		$val = AccountingTransaction::customer_validation($insert, $insert_item);
+		$val = AccountingTransaction::customer_validation($insert, $insert_item, 'estimate_quotation');
 		if(!$val)
 		{
 			$return  = null; 

@@ -67,7 +67,7 @@ class TransactionReceiveInventory
     }
 	public static function postInsert($shop_id, $insert, $insert_item)
 	{
-        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        $val = AccountingTransaction::vendorValidation($insert, $insert_item, 'receive_inventory');
         if(!$val)
         {
     		$ins['ri_shop_id']          = $shop_id;

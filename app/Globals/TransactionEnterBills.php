@@ -78,7 +78,7 @@ class TransactionEnterBills
     }
 	public static function postInsert($ri_id, $shop_id, $insert, $insert_item, $insert_acct)
 	{
-    	$val = AccountingTransaction::vendorValidation($insert, $insert_item);
+    	$val = AccountingTransaction::vendorValidation($insert, $insert_item, 'enter_bills');
     
         if(!$val)
         {

@@ -90,7 +90,7 @@ class TransactionWriteCheck
 
 	public static function postInsert($shop_id, $insert, $insert_item)
 	{
-		$val = AccountingTransaction::vendorValidation($insert, $insert_item);
+		$val = AccountingTransaction::vendorValidation($insert, $insert_item, 'write_check');
 		if(!$val)
 		{
 			$ins['wc_shop_id']				= $shop_id;

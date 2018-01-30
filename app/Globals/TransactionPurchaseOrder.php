@@ -143,7 +143,7 @@ class TransactionPurchaseOrder
     }
     public static function postInsert($shop_id, $insert, $insert_item)
 	{
-        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        $val = AccountingTransaction::vendorValidation($insert, $insert_item, 'purchase_order');
         if(!$val)
         {
             $ins['po_shop_id']         = $shop_id;

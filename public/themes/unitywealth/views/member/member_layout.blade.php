@@ -89,9 +89,9 @@
 						<!-- <li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
 							<a href="/members/network"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Network List</span></div></a>
 						</li> -->
-						{{-- <li class="{{ Request::segment(2) == "codevault" ? "active" : "" }}">
+						<li class="{{ Request::segment(2) == "codevault" ? "active" : "" }}">
 							<a href="/members/codevault"><div class="nav-holder"><div class="icon fa fa-code"></div> <span>Code Vault</span></div></a>
-						</li> --}}
+						</li>
 						@if($allow_captcha)
 							<li class="{{ Request::segment(2) == "captcha" ? "active" : "" }}">
 								<a href="/members/captcha"><div class="nav-holder"><div class="icon fa fa-recycle"></div> <span>Captcha</span></div></a>

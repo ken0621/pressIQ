@@ -215,7 +215,7 @@ class Shop extends Controller
         $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
 
         // Unity
-        if ($this->shop_info->shop_id == "90") 
+        if ($this->shop_info->shop_id) 
         {
             $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
 

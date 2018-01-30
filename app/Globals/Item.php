@@ -172,8 +172,13 @@ class Item
             $insert['item_date_created'] = Carbon::now();
 
             $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+
+            $return = null;
+            if($insert['item_quantity'] > 0)
+            {
+                $return = Warehouse2::refill_validation($shop_id, $warehouse_id, 0, $insert['item_quantity'], 'Initial Quantity from Item');
+            }
             
-            $return = Warehouse2::refill_validation($shop_id, $warehouse_id, 0, $insert['item_quantity'], 'Initial Quantity from Item');
             if(!$return)
             {
                 $item_id = Tbl_item::insertGetId($insert);
@@ -181,7 +186,11 @@ class Item
                 $source['name'] = 'initial_qty';
                 $source['id'] = $item_id;
                 $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
-                $return = Warehouse2::refill($shop_id, $warehouse_id, $item_id, $insert['item_quantity'], 'Initial Quantity from Item',$source);         
+
+                if($insert['item_quantity'] > 0)
+                {
+                    $return = Warehouse2::refill($shop_id, $warehouse_id, $item_id, $insert['item_quantity'], 'Initial Quantity from Item',$source);
+                }
 
                 $return['item_id']       = $item_id;
                 $return['status']        = 'success';
@@ -1971,7 +1980,8 @@ class Item
         $offset = Tbl_warehouse_inventory_record_log::where('record_shop_id', $shop_id)->where("record_warehouse_id",$warehouse_id)->where('record_item_id', $item_id)->where('record_count_inventory',0);
         $current = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
                                                    ->where("record_item_id",$item_id)
-                                                   ->where("record_inventory_status",0);
+                                                   ->where("record_inventory_status",0)
+                                                   ->where("record_count_inventory",1);
         if($from && $to)
         {
             $offset_qty = $offset->whereBetween('record_log_date_updated',[$from, $to])->count();

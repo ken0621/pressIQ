@@ -401,7 +401,7 @@ class Warehouse2
                 }
             }
         }
-        if($quantity < 1)
+        if($quantity < 0)
         {
             $return .= "The quantity is less than 1. <br> ";
         }
@@ -708,6 +708,7 @@ class Warehouse2
             $insert['record_consume_ref_id']     = isset($consume['id']) ? $consume['id'] : 0;
             $insert['record_inventory_status']   = 1;
             $insert['record_log_date_updated']   = Carbon::now();
+            $insert['record_count_inventory']    = 1;
 
             $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
                                                    ->where("record_item_id",$item_id)
@@ -725,10 +726,19 @@ class Warehouse2
                                                    ->where("item_in_use",'unused')
                                                    ->value('record_log_id');
             }
+            if(session('consume_offset_inventory'))
+            {
+                $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
+                                                   ->where("record_count_inventory",0)
+                                                   ->where("item_in_use",'unused')
+                                                   ->value('record_log_id');
+            }
             if($id)
             {            
                 Warehouse2::insert_item_history($id);
                 Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
+                session(['consume_offset_inventory' => null]);
             }
             else
             {
@@ -1527,5 +1537,50 @@ class Warehouse2
             }
         }
         return $return;
+    }
+    public static function consume_offset_inventory($get)
+    {
+        session(['consume_offset_inventory' => $get]);
+    }
+    public static function adjust_inventory($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $ref = array())
+    {
+        /* ZERO OUT ALL THE INVENTORY BY USING CONSUME */
+        $get_current_inventory = Tbl_warehouse_inventory_record_log::where('record_shop_id', $shop_id)
+                                                   ->where("record_warehouse_id", $warehouse_id)
+                                                   ->where("record_item_id", $item_id)
+                                                   ->where('record_inventory_status',0)
+                                                   ->where("record_count_inventory",1)
+                                                   ->count();
+        $get_offset_inventory = Tbl_warehouse_inventory_record_log::where('record_shop_id', $shop_id)
+                                                   ->where("record_warehouse_id", $warehouse_id)
+                                                   ->where("record_item_id", $item_id)
+                                                   ->where('record_count_inventory',0)
+                                                   ->count();
+
+        $t_qty = $get_offset_inventory + $get_current_inventory;
+
+
+        if($t_qty > 0)
+        {
+            Self::consume_offset_inventory(true);
+            Self::consume($shop_id, $warehouse_id, $item_id, $t_qty, $remarks, $ref);
+        }
+
+        if($quantity > 0) /*POSITIVE*/
+        {
+
+        }
+        else /*NEGATIVE*/
+        {
+
+        }
+
+    }
+    public static function adjust_inventory_bulk($shop_id, $warehouse_id, $item_info = array())
+    {
+        foreach ($item_info as $key => $value) 
+        {
+            Self::adjust_inventory($shop_id, $warehouse_id, $value['item_id'], $value['item_actual_qty']);
+        }
     }
 }

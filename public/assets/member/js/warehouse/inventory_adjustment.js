@@ -92,22 +92,16 @@ function inventory_adjustment()
 		$(".tr-draggable").each(function()
 		{
 			/* GET ALL DATA */
-			var qty 	= $(this).find(".txt-qty").val();
-			var rate 	= $(this).find(".txt-rate").val();
-			var amount 	= $(this).find(".txt-amount");
+			var qty 			= $(this).find(".txt-qty").val();
+			var rate 			= $(this).find(".txt-rate").val();
+			var amount 			= $(this).find(".txt-amount");
 			var new_quantity	= $(this).find(".txt-new-quantity").val();
 			var difference 		= $(this).find(".txt-difference");
 			var total_amount 	= $(this).find(".txt-total-amount");
-
 			
 			/* CHECK IF QUANTITY IS EMPTY */
-			if(qty == "" || qty == null)
-			{
-				qty = 1;
-			}
 
 			/* RETURN TO NUMBER IF THERE IS COMMA */
-			qty = action_return_to_number(qty);
 			rate = action_return_to_number(rate);
 			new_quantity = action_return_to_number(new_quantity);
 
@@ -241,12 +235,10 @@ function inventory_adjustment()
 		$parent = $this.closest(".tr-draggable");
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("purchase-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
-		$parent.find(".txt-qty").val(1);
+		$qty = $this.find("option:selected").attr("warehouse_"+$(".droplist-warehouse").val());
+		$parent.find(".txt-qty").val($qty).change();
 
-		console.log($this.find("option:selected").attr("item-type"));
-		
-
-		if($this.find("option:selected").attr("has-um"))
+		if($this.find("option:selected").attr("has-um") != 0)
 		{
 			$.ajax(
 			{

@@ -73,7 +73,7 @@ class WarehouseInventoryAdjustmentController extends Member
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
         {
-            if($value)
+            if($value && $request->item_new_qty[$key])
             {
                 $insert_item[$key]['item_id']           = $value;
                 $insert_item[$key]['item_description']  = $request->item_description[$key];
@@ -118,7 +118,7 @@ class WarehouseInventoryAdjustmentController extends Member
         else
         {
             $return['status'] = 'error';
-            $return['status_message'] = 'Please select item.';
+            $return['status_message'] = "Please select item or enter it's new quantity.";
         }
 
         return json_encode($return);

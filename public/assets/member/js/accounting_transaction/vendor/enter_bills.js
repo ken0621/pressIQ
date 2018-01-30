@@ -91,6 +91,17 @@ function enter_bills()
     		}
 
     	});
+    	$(".draggable.tbody-acct .tr-draggable:last td select.select-coa").globalDropList(
+        {            
+		    link 		: '/member/accounting/chart_of_account/popup/add',
+		    link_size 	: 'md',
+		    width 		: "100%",
+		    placeholder : 'Account',
+            onChangeValue : function()
+            {
+            	action_load_coa_info($(this));
+            }
+        });
 
         $('.droplist-um:not(.has-value)').globalDropList("disabled");
 
@@ -351,6 +362,11 @@ function enter_bills()
 			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
     	action_compute();
+	}
+	function action_load_coa_info($this)
+	{
+		$parent = $this.closest(".tr-draggable");
+		$parent.find(".acct-desc").html($this.find("option:selected").attr("acct-desc")).change();		
 	}
 
 	//Purpose: Add the specified number of dates to a given date.

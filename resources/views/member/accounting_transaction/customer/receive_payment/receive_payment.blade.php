@@ -41,7 +41,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Reference Number</label>
-                                <input type="text" class="form-control" name="transaction_refnumber" value="{{$receive_payment->transaction_refnum or $transaction_refnum}}">
+                                <input type="text" class="form-control" name="transaction_refnumber" value="{{isset($receive_payment->transaction_refnum)? $receive_payment->transaction_refnum : $transaction_refnum}}">
                             </div>
                         </div>
                     </div>

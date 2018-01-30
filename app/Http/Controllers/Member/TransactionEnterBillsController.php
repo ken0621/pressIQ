@@ -12,6 +12,7 @@ use App\Globals\Purchase_Order;
 use App\Globals\Billing;
 use App\Globals\Item;
 use App\Globals\Warehouse;
+use App\Globals\Warehouse2;
 use App\Globals\UnitMeasurement;
 use App\Globals\Utilities;
 use App\Globals\Pdf_global;

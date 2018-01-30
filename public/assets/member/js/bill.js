@@ -1,6 +1,6 @@
 var bill = new bill();
 var global_tr_html = $(".div-script tbody").html();
-var global_acct_tr_html = $(".acct-div-scrip tbody").html();
+var global_acct_tr_html = $(".acct-div-script tbody").html();
 var po_id_list = $(".div-script-po").html();
 var item_selected = ''; 
 

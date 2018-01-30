@@ -312,7 +312,7 @@ class AccountingTransaction
 		if($transaction_type == 'warehouse_transfer')
 		{
 			$get = Tbl_warehouse_issuance_report::where('wis_shop_id', $shop_id)->orderBy('wis_id','DESC')->first();
-			$get->transaction_refnum = $get->wis_number;
+			//$get->transaction_refnum = $get->wis_number;
 		}
 		if($transaction_type == 'purchase_requisition')
 		{

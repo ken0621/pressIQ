@@ -302,7 +302,6 @@ class PayrollReportController extends Member
 			AuditTrail::record_logs("DOWNLOAD","HDMF REPORT",$this->shop_id(),"","");
             // dd(count($contri_info["_employee_contribution"]));
 			Excel::create("Government Forms HDMF",function($excel) use ($data)
-
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{
@@ -348,7 +347,6 @@ class PayrollReportController extends Member
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
 
 			// AuditTrail::record_logs("DOWNLOAD","SSS REPORT",$this->shop_id(),"","");
-			
 			Excel::create("Government Forms SSS",function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
@@ -981,6 +979,26 @@ class PayrollReportController extends Member
 		$data['_company']    = Payroll::company_heirarchy(Self::shop_id());
 
 		return view('member.payrollreport.payroll_employee_summary_report', $data);
+	}
+
+	/* start bir report */
+
+	public function bir_form()
+	{ 
+		$data["page"] = "BIR Forms";
+		$date = date("Y-m-d");
+		$year = explode("-", $date);
+
+	    $_month = array();
+
+		for($ctr = 1; $ctr <= 12; $ctr++)
+		{
+			$_month[$ctr]["month_name"] = DateTime::createFromFormat('!m', $ctr)->format('F');;
+		}
+		$data['_month'] = $_month;
+		$data["_year_period"] = Tbl_payroll_period::select('year_contribution')->where("shop_id", Self::shop_id())->distinct()->get();
+		$data["year_today"] = $year[0];
+		return view("member.payrollreport.bir_form",$data);
 	}
 
 }

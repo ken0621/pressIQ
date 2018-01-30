@@ -19,6 +19,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/government_forms_hdmf_export_excel/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_hdmf_export_excel');
 	Route::any('/reports/government_forms_sss_export_excel/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_sss_export_excel');
 	Route::any('/reports/government_forms_philhealth_export_excel/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_philhealth_export_excel');
+
+	/* BIR REPORT */
+	Route::any('/reports/bir_forms','Member\PayrollReportController@bir_form');
+	/* END BIR REPORT */
 	
 	/*START loan summary report*/
 	Route::any('/reports/loan_summary','Member\PayrollReportController@loan_summary');

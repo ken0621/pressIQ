@@ -79,10 +79,8 @@ class TransactionReceivePayment
 	        $ins["date_created"]         = Carbon::now();
 
 
-
         	$rcvpayment_id  = Tbl_receive_payment::insertGetId($ins);
 
-        	//die(var_dump($rcvpayment_id));
         	$val = Self::insertline($rcvpayment_id, $insert_item);
 
         	/* Transaction Journal */

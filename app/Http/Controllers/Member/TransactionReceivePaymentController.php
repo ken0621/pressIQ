@@ -70,7 +70,6 @@ class TransactionReceivePaymentController extends Member
 		$insert['transaction_date']       	    = date("Y-m-d", strtotime($request->transaction_date));
 		$insert['rp_total_amount']				= $request->rp_total_amount;
 
-		
 		$insert_item = null;
 		$txn_line = $request->line_is_checked;
 		if($txn_line)

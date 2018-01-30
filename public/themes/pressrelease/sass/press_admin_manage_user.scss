@@ -86,6 +86,16 @@
 
             .user-container 
             {
+                input
+                {
+                    padding: 12px;
+                    font-size: 15px;
+                    border: 2px solid #eded;
+                    width: 350px;
+                    float: left;
+                    background: #f1f1f1;
+                    color: #000;
+                }
                 .title
                 {
                     font-size: 25px;
@@ -104,6 +114,7 @@
                     overflow-y: scroll;
                     text-align: center;
                     background-color: #FFFFFF;
+                    margin-top: 15px;
                 }
 
                 th

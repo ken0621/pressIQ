@@ -618,29 +618,11 @@
 			<div class="title-container">
 				<div class="title">Our Trusted Brands</div>
 			</div>
+			{{-- div class="image-holder">
+				<img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-1.jpg" style="width: 85%;">
+			</div> --}}
 			<div class="brand-container">
-				<div class="row clearfix">
-					<div class="col-md-3">
-						<div class="image-holder">
-							<img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-1.jpg" style="width: 85%;">
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="image-holder">
-							<img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-2.jpg">
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="image-holder">
-							<img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-3.jpg">
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="image-holder">
-							<img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-4.jpg">
-						</div>
-					</div>
-				</div>
+				<span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-1.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-2.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-3.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-4.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-5.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-6.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-7.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-8.jpg"></span>
 			</div>
 		</div>
 	</div>

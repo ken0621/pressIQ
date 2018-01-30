@@ -59,6 +59,22 @@
                 min-height: 700px;
                 .press-holder-container
                 {
+                    input
+                    {
+                        padding: 12px;
+                        font-size: 15px;
+                        border: 2px solid #eded;
+                        width: 350px;
+                        float: left;
+                        background: #f1f1f1;
+                    }
+                    .title-container
+                    {
+                        font-size: 25px;
+                        color: #316df9; 
+                        font-weight: 700;
+                        margin-bottom: 40px;
+                    }
                     table
                     {
                         font-family: arial, sans-serif;
@@ -69,6 +85,7 @@
                         overflow-y: scroll;
                         text-align: center;
                         background-color: #FFFFFF;
+                        margin-top: 15px;
                     }
 
                     th

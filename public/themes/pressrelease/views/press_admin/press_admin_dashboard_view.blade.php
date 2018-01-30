@@ -3,14 +3,16 @@
 <div class="background-container">
     <div class="pressview">
       <div class="dashboard-container">
-                <div class="title-container">Details
-                   <div class="button-container pull-right">
-                        <span class="create-button" ><a href="/pressadmin/dashboard">BACK</a>
-                    </div>
-                </div>
-         
-                   
-               
+          <div class="row clearfix">
+            <div class="col-md-6">
+              <div class="title-container">Details</div>
+            </div>
+            <div class="col-md-6">
+              <div class="button-container">
+                   <span class="create-button"><a href="/pressadmin/dashboard">BACK</a></span>
+               </div>
+            </div>
+          </div>
         <div class="table-view ">
           <table>
                 <tr>
@@ -19,8 +21,8 @@
                   <th style="text-align: center;width: 10%">Status </th>
                   <th style="text-align: center;width: 15%">Sender </th>
                   <th style="text-align: center;width: 20%">Recipients</th>
-                  <th style="text-align: center;width: 10%">No. Email Open</th>
-                  <th style="text-align: center;width: 20%">Clicks</th>
+                  <th style="text-align: center;width: 15%">No. Email Open</th>
+                  <th style="text-align: center;width: 10%">Clicks</th>
                 </tr>
                 @foreach($analytics_view as $view)
                 <tr>

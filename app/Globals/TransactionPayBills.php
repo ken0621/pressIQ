@@ -62,7 +62,7 @@ class TransactionPayBills
 
 	public static function postInsert($shop_id, $insert, $insert_item)
 	{
-		$val = Self::payBillsValidation($insert, $insert_item);
+		$val = Self::payBillsValidation($insert, $insert_item, 'enter_bills');
 		if(!$val)
 		{
 			$ins["paybill_shop_id"]			  = $shop_id;

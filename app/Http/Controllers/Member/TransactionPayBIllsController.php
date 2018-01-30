@@ -8,7 +8,7 @@ use App\Globals\Vendor;
 use App\Globals\Billing;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
-use App\Globals\WriteCheck;
+use App\Globals\WriteCheck; 
 use App\Globals\BillPayment;
 use App\Globals\Utilities;
 use App\Globals\Pdf_global;

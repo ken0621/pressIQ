@@ -89,6 +89,17 @@ class TransactionEnterBillsController extends Member
         $insert['vendor_memo']              = $request->vendor_memo;
         $insert['bill_ri_id']               = null;
 
+        $insert_acct = null;
+        foreach($request->expense_account as $key_account => $value_account)
+        {
+            if($value_account)
+            {
+                $insert_acct[$key_account]['account_id']    = $value_account;
+                $insert_acct[$key_account]['account_desc']  = $request->account_desc[$key_account];
+                $insert_acct[$key_account]['account_desc']  = $request->account_desc[$key_account];
+            }
+        }
+
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
         {
@@ -106,6 +117,7 @@ class TransactionEnterBillsController extends Member
                 $insert_item[$key]['item_discount']    = 0;
             }
         }
+               
         $return = null;
         $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);

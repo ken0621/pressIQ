@@ -15,6 +15,7 @@ function enter_bills()
 		action_reassign_number();
 
 		event_remove_tr();
+		event_remove_tr_acct()
 		event_compute_class_change();
 		event_taxable_check_change();
 		event_accept_number_only();
@@ -106,8 +107,8 @@ function enter_bills()
 
         }).globalDropList('disabled');
 
-        $(".drop-down-coa").globalDropList(
-		{
+		$(".draggable.tbody-acct .tr-draggable:last td select.select-coa").globalDropList(
+        {            
 		    link 		: '/member/accounting/chart_of_account/popup/add',
 		    link_size 	: 'md',
 		    width 		: "100%",
@@ -116,7 +117,7 @@ function enter_bills()
             {
             	action_load_coa_info($(this));
             }
-		});
+        });
 	}
 
 	function action_load_open_transaction($vendor_id)
@@ -341,7 +342,6 @@ function enter_bills()
 			$this.prev().val(0);
 		}
 	}
-
 	function action_load_item_info($this)
 	{
 		$parent = $this.closest(".tr-draggable");
@@ -400,7 +400,7 @@ function enter_bills()
 	}
 
 	/*ITEM NUMBER*/
-	function action_reassign_number()
+	function action_acct_reassign_number()
 	{
 		var num = 1;
 		$(".acct-number-td").each(function(){
@@ -445,6 +445,17 @@ function enter_bills()
 
 				$(this).parent().remove();
 				action_reassign_number();
+				action_compute();
+			}			
+		});
+	}
+	function event_remove_tr_acct()
+	{
+		$(document).on("click", ".acct-remove-tr", function(e){
+			if($(".tbody-acct .acct-remove-tr").length > 1){
+
+				$(this).parent().remove();
+				action_acct_reassign_number();
 				action_compute();
 			}			
 		});

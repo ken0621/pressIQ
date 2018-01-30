@@ -102,10 +102,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="title">    
+                                    <h3><a id="acct-a"> <i class="fa fa-caret-down"></i>  Account Details </a></h3>
+                                </div>
                                 <div class="row clearfix">
-                                    <div class="title">
-                                        <h3><a id="acct-a"> <i class="fa fa-caret-down"></i>  Account Details </a></h3>
-                                    </div>
                                     <div class="table-responsive" id="account-tbl">
                                         <div class="col-sm-12">
                                             <table class="digima-table">
@@ -129,24 +129,13 @@
                                                                 </select>
                                                             </td>
                                                             <td><textarea class="textarea-expand acct-desc" name="account_desc[]">{{$accline->accline_description}}</textarea></td>
-                                                            <td><input type="text" class="form-control text-right number-input input-sm acct-amount compute" value="{{currency('',$accline->accline_amount)}}" name="account_amount[]"></td>
+                                                            <td><input type="text"  name="account_amount[]" class="form-control text-right number-input input-sm acct-amount compute" value="{{currency('',$accline->accline_amount)}}"></td>
                                                             <td class="text-center acct-remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                         </tr>
                                                         @endforeach
                                                     @endif
                                                     <tr class="tr-draggable">
                                                         <td class="acct-number-td text-right">1</td>
-                                                        <td >                                           
-                                                            <select name="expense_account[]" class="form-control drop-down-coa select-coa input-sm" >
-                                                                @include("member.load_ajax_data.load_chart_account", ['add_search' => ""])
-                                                            </select>
-                                                        </td>
-                                                        <td><textarea class="textarea-expand acct-desc" name="account_desc[]"></textarea></td>
-                                                        <td><input type="text" class="form-control text-right input-sm number-input acct-amount compute" value="0.00" name="account_amount[]"></td>
-                                                        <td class="text-center acct-remove-tr  cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                    </tr>
-                                                    <tr class="tr-draggable">
-                                                        <td class="acct-number-td text-right">2</td>
                                                         <td >                                           
                                                             <select name="expense_account[]" class="form-control drop-down-coa select-coa input-sm" >
                                                                 @include("member.load_ajax_data.load_chart_account", ['add_search' => ""])

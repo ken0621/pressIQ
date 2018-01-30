@@ -196,7 +196,9 @@ class TransactionEnterBills
 
     public static function insertLine($enter_bills_id, $insert_item, $entry)
     {
+        die(var_dump($insert_item));
         $itemline = null;
+
         foreach ($insert_item as $key => $value) 
         {   
             $itemline[$key]['itemline_bill_id']      = $enter_bills_id;

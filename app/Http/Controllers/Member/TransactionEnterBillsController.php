@@ -138,7 +138,6 @@ class TransactionEnterBillsController extends Member
             $return['status'] = 'error';
             $return['status_message'] = $validate;
         }
-
         return json_encode($return);
     }
     public function postUpdateEnterBills(Request $request)

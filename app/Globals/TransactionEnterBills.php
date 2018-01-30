@@ -76,7 +76,7 @@ class TransactionEnterBills
 
         return $data;
     }
-	public static function postInsert($ri_id, $shop_id, $insert, $insert_item, $insert_acct)
+	public static function postInsert($ri_id, $shop_id, $insert, $insert_item, $insert_acct ='')
 	{
     	$val = AccountingTransaction::vendorValidation($insert, $insert_item, 'enter_bills');
     
@@ -112,6 +112,12 @@ class TransactionEnterBills
             $entry["discount"]          = '';
             $entry["ewt"]               = '';            
 
+
+            /*$entry_data['a'.$key_acct]['account_id'] = $value['account_id'];
+            $entry_data['a'.$key_acct]['vatable'] = 0;
+            $entry_data['a'.$key_acct]['discount'] = 0;
+            $entry_data['a'.$key_acct]['entry_amount'] = $value['account_amount'];
+            $entry_data['a'.$key_acct]['entry_description'] = $value['account_desc'];*/
             $return = Self::insertLine($enter_bills_id, $insert_item, $entry, $insert_acct);
             
             $return = $enter_bills_id;
@@ -135,7 +141,7 @@ class TransactionEnterBills
         return $return;
 	}
 
-    public static function postUpdate($enter_bills_id, $ri_id, $shop_id, $insert, $insert_item)
+    public static function postUpdate($enter_bills_id, $ri_id, $shop_id, $insert, $insert_item, $insert_acct ='')
     {
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);
     
@@ -169,11 +175,12 @@ class TransactionEnterBills
             $entry["total"]             = collect($insert_item)->sum('item_amount');
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
-            $entry["ewt"]               = '';            
+            $entry["ewt"]               = '';
 
             Tbl_bill_item_line::where("itemline_bill_id", $enter_bills_id)->delete();
 
             $return = Self::insertLine($enter_bills_id, $insert_item, $entry, $insert_acct);
+
             $return = $enter_bills_id;
 
             $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -197,15 +204,19 @@ class TransactionEnterBills
         return $return;
     }
 
-    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct)
+    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct = 0)
     {
-        $acct_line = null;
-        foreach ($insert_acct as $key_acct => $value_acct)
+        if($insert_acct !=0)
         {
-            $acct_line[$key_acct]['accline_bill_id']     = $enter_bills_id;
-            $acct_line[$key_acct]['accline_coa_id']      = $value_acct['account_id'];
-            $acct_line[$key_acct]['accline_description'] = $value_acct['account_desc'];
-            $acct_line[$key_acct]['accline_amount']      = $value_acct['account_amount'];
+            $acct_line = null;
+            foreach ($insert_acct as $key_acct => $value_acct)
+            {
+                $acct_line[$key_acct]['accline_bill_id']     = $enter_bills_id;
+                $acct_line[$key_acct]['accline_coa_id']      = $value_acct['account_id'];
+                $acct_line[$key_acct]['accline_description'] = $value_acct['account_desc'];
+                $acct_line[$key_acct]['accline_amount']      = $value_acct['account_amount'];
+            }
+            Tbl_bill_account_line::insert($acct_line);
         }
 
         $itemline = null;
@@ -224,7 +235,6 @@ class TransactionEnterBills
         }
         if(count($itemline) > 0)
         {
-            Tbl_bill_account_line::insert($acct_line);
             Tbl_bill_item_line::insert($itemline);
             $return = AccountingTransaction::entry_data($entry, $insert_item);
         }

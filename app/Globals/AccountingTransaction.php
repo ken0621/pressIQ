@@ -137,9 +137,9 @@ class AccountingTransaction
 	}
 	public static function updateTransaction($shop_id, $acctg_trans_id, $trans_item = array(), $transaction_type)
 	{
-		
+		 
 	}
-	public static function vendorValidation($insert, $insert_item)
+	public static function vendorValidation($insert, $insert_item, $transaction_type = '')
 	{
 		$return = null;
         if(count($insert_item) <= 0)
@@ -154,7 +154,7 @@ class AccountingTransaction
 
         if($transaction_type)
         {
-        	$return .= Self::check_transaction_ref_number(Self::shop_id(), $insert['transaction_refnum'], $transaction_type);
+        	$return .= Self::check_transaction_ref_number(Self::shop_id(), $insert['transaction_refnumber'], $transaction_type);
         }
 
 		$rules['transaction_refnumber'] = 'required';
@@ -211,6 +211,7 @@ class AccountingTransaction
 	public static function check_transaction_ref_number($shop_id, $transaction_refnum, $transaction_type)
 	{
 		$return = null;
+		$get = null;
 		if($transaction_type == 'sales_invoice')
 		{
 			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->where('is_sales_receipt',0)->first();
@@ -254,6 +255,7 @@ class AccountingTransaction
 		if($transaction_type == 'received_inventory')
 		{
 			$get = Tbl_receive_inventory::where('ri_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+			//die(var_dump($get));
 		}
 		if($transaction_type == 'enter_bills')
 		{

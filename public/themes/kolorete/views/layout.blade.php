@@ -97,6 +97,59 @@
                 <div class="container">
                     <div class="row clearfix">
                         <div class="col-md-4">
+                            <div class="categories-container">
+                                <a onclick="myFunction()"><i class="fa fa-bars" aria-hidden="true"></i></a><span>Categories</span>
+                                <ul id="menu">
+                                    <li><a href="#">Men's Apparel</a>
+                                        <ul class="sub-menu">
+                                            <li><a href="#">Mobile and Gadget</a></li>
+                                            <div class="divider"></div>
+                                            <li><a href="#">Consumer Electronic</a></li>
+                                            <div class="divider"></div>
+                                            <li><a href="#">Home and Living</a></li>
+                                            <div class="divider"></div>
+                                        </ul>
+                                    </li>
+                                    <div class="divider"></div>
+                                    <li><a href="#">Mobile and Gadget</a>
+                                        <ul class="sub-menu">
+                                            <li><a href="#">Consumer Electronic</a></li>
+                                            <div class="divider"></div>
+                                            <li><a href="#">Home and Living</a></li>
+                                            <div class="divider"></div>
+                                            <li><a href="#">Men's Accessories</a></li>
+                                            <div class="divider"></div>
+                                            <li><a href="#">Men's Shoes</a></li>
+                                            <div class="divider"></div>
+                                            <li><a href="#">Foods</a></li>
+                                            <div class="divider"></div>
+                                            <li><a href="#">Hobbies and Stationery</a></li>
+                                        </ul>
+                                    </li>
+                                    <div class="divider"></div>
+                                    <li><a href="#">Consumer Electronic</a></li>
+                                    <div class="divider"></div>
+                                    <li><a href="#">Home and Living</a></li>
+                                    <div class="divider"></div>
+                                    <li><a href="#">Men's Accessories</a></li>
+                                    <div class="divider"></div>
+                                    <li><a href="#">Men's Shoes</a></li>
+                                    <div class="divider"></div>
+                                    <li><a href="#">Foods</a></li>
+                                    <div class="divider"></div>
+                                    <li><a href="#">Hobbies and Stationery</a></li>
+                                    <div class="divider"></div>
+                                    <li><a href="#">Women's Apparel</a></li>
+                                    <div class="divider"></div>
+                                    <li><a href="#">Healthy and Beauty</a></li>
+                                    <div class="divider"></div>
+                                    <li><a href="#">Toys, Babies and Kids</a></li>
+                                    <div class="divider"></div>
+                                    <li><a href="#">Bags</a></li>
+                                    <div class="divider"></div>
+                                    <li><a href="#">Women's Accessories</a></li>
+                                </ul>
+                            </div>
                             
                         </div>
                         <div class="col-md-4">
@@ -143,7 +196,14 @@
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
         <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
         <script type="text/javascript">
-            
+            function myFunction() {
+                var x = document.getElementById("menu");
+                if (x.style.display === "block") {
+                    x.style.display = "none";
+                } else {
+                    x.style.display = "block";
+                }
+            }
         </script>
         @yield("js")
     </body>

@@ -1,3 +1,4 @@
+
 body
 {
 	font-family: 'Open Sans', sans-serif;
@@ -100,6 +101,76 @@ button:hover{
 	position: relative;
 	background-color: #fff;
 	padding: 10px 0;
+
+	.categories-container
+	{
+		margin-top: 20px;
+		.fa
+		{
+			color: #000;
+			font-size: 25px;
+			vertical-align: middle;
+			cursor: pointer;
+		}
+		span
+		{
+			color: #000;
+			font-size: 15px;
+			vertical-align: middle;
+			margin-left: 5px;
+		}
+		#menu
+		{
+			display: none;
+			width: 80%;
+			list-style-type: none;
+			background-color: #000;
+			position: absolute;
+			z-index: 100;
+			padding-left: 30px;
+			li
+			{
+				padding: 10px 0;
+				position: relative;
+				z-index: 100;
+				a
+				{
+					text-decoration: none;
+					color: #fff;
+					display: block;
+					&:hover
+					{
+						color: #eded;
+					}
+				}
+			}
+			.divider
+			{
+				border-bottom: 1px solid #393938;
+				margin-right: 30px;
+			}
+			li:hover
+			{
+				.sub-menu
+				{
+					display: block;
+				}
+			}
+			.sub-menu
+			{
+				display: none;
+				width: 90%;
+				list-style-type: none;
+				background-color: #000;
+				position: absolute;
+				z-index: 100;
+				margin-left: 283px;
+				top: 0px;
+				padding-left: 30px;
+			}
+		}
+	}
+
 	input
 	{
 		width: 60%;

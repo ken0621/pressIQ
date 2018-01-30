@@ -8,7 +8,7 @@
                 <span class="title-caption-red">Smart</span><span class="title-caption-black"> and</span><span class="title-caption-blue"> cost effective</span><span class="title-caption-black"> press release distribution platform</span>
             </div>
              <div class="button-container smoth-scroll" href="#requestdemo">
-                <a class="smoth-scroll" href="/about">REQUEST A DEMO</a>
+                <a class="smoth-scroll" href="/about/#requestdemo">REQUEST A DEMO</a>
             </div>
         </div>
     </div>

@@ -155,7 +155,7 @@
                             <div class="footer-title-container">
                                 <p class="footer-title">NEWS LETTER</p>
                             </div>
-                            <input type="email" placeholder="Enter Your Email Here" id="newsletter" required>
+                            <input type="email" placeholder="Enter Your Email Here" id="newsletter" name="newsletter" required>
                             <span>
                             <button type="submit" formaction="/newsletter/send"><i class="fa fa-paper-plane" aria-hidden="true"></i>
                             </span>
@@ -179,7 +179,11 @@
             <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
         </div>
     </div>
-    
+    @if (session('news'))
+       <script type="text/javascript">
+           alert('Newsletter Successfully Sent!')
+       </script>
+    @endif
     @include("frontend.gfoot")
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>

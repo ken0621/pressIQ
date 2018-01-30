@@ -516,7 +516,7 @@ class ShopMemberController extends Shop
         return Redirect::back();
     }
                     
-    public function send_demo()                         
+    public function send_demo()                             
     {
         $demo_info["demo_name"]             =request('name');
         $demo_info["demo_company"]          =request('company');
@@ -535,7 +535,7 @@ class ShopMemberController extends Shop
            
         });
         Session::flash('Demo_message', 'Demo Request Successfully Sent!');
-        return Redirect::back();  
+        return Redirect('/about/#requestdemo');
     }
 
     public function send_newsletter()
@@ -551,6 +551,7 @@ class ShopMemberController extends Shop
            $message->to('marketing@press-iq.com');
            $message->subject($newsletter_info['subject']);  
         });
+        Session::flash('news');
         return Redirect::back(); 
     }
 

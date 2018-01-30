@@ -155,7 +155,10 @@
                             <div class="footer-title-container">
                                 <p class="footer-title">NEWS LETTER</p>
                             </div>
-                            <span><input type="email" name="newsletter" id="newsletter" required><button type="submit" formaction="/newsletter/send"><i class="button" aria-hidden="true">Send</i>
+                            <input type="email" placeholder="Enter Your Email Here" id="newsletter" required>
+                            <span>
+                            <button type="submit" formaction="/newsletter/send"><i class="fa fa-paper-plane" aria-hidden="true"></i>
+                            </span>
                         </div>
                         </form>
                     <div class="col-md-4">

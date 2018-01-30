@@ -1,5 +1,6 @@
 var enter_bills = new enter_bills();
 var global_tr_html = $(".div-script tbody").html();
+var global_tr_html_acctg = $(".div-script tbody").html();
 var item_selected = ''; 
 
 function enter_bills()
@@ -12,6 +13,7 @@ function enter_bills()
 		action_compute();
 		action_date_picker();
 		action_reassign_number();
+		action_acct_reassign_number();
 
 		event_remove_tr();
 		event_compute_class_change();
@@ -379,11 +381,22 @@ function enter_bills()
 			num++;
 		});
 	}
+	function action_acct_reassign_number()
+	{
+		var num = 1;
+		$(".acct-number-td").each(function(){
+			$(this).html(num);
+			num++;
+		});		
+	}
 
 	function event_click_last_row()
 	{
-		$(document).on("click", "tbody.draggable tr:last td:not(.remove-tr)", function(){
+		$(document).on("click", "tbody.draggable.tbody-item tr:last td:not(.remove-tr)", function(){
 			event_click_last_row_op();
+		});
+		$(document).on("click", "tbody.draggable.tbody-acct tr:last td:not(.acct-remove-tr)", function(){
+			event_click_last_row_op_acctg();
 		});
 	}
 
@@ -396,44 +409,36 @@ function enter_bills()
 		action_date_picker();
 	}
 
+	/*INSERTING ANOTHER ROW WHEN CLICKING LAST ROW*/
+	function event_click_last_row_op_acctg()
+	{
+		$("tbody.draggable").append(global_tr_html_acctg);
+		action_acct_reassign_number();
+		action_load_initialize_select();
+	}
+
 	/*REMOVING ROW*/
 	function event_remove_tr()
 	{
 		$(document).on("click", ".remove-tr", function(e){
-			if($(".tbody-item .remove-tr").length > 1)
-			{
-				if($(this).attr("tr_id") != 0 && $(this).attr("tr_id") != null)
-				{					
-					var id = $(this).attr("tr_id");
-					console.log($(this).attr("linked_in"));
-					if($(this).attr("linked_in") != 'no')
-					{						
-						$(".tr-id-"+id).remove();
-					}
-					else
-					{
-						$(".po-tbl").load("/member/vendor/po_remove/"+id, function()
-						{
-							// console.log("success-removing");
-							iniatilize_select();
-							$(".tbody-item .select-um").globalDropList("enabled");
-							$(".po-"+id).removeClass("hidden");
-							$(".drawer-toggle").trigger("click");
-							action_reassign_number();
-							action_compute();
-						});
-					}
-				}
-				else
-				{
-					$(this).parent().remove();
-				}
+			if($(".tbody-item .remove-tr").length > 1){
 
+				$(this).parent().remove();
 				action_reassign_number();
 				action_compute();
 			}			
 		});
+		$(document).on("click", ".acct-remove-tr", function(e){
+			if($(".tbody-acct .acct-remove-tr").length > 1)
+			{
+				$(this).parent().remove();
+
+				action_acct_reassign_number();
+				action_compute();
+			}			
+		});
 	}
+
 
 	function event_accept_number_only()//
 	{
@@ -483,9 +488,10 @@ function enter_bills()
 		$('.applied-transaction-list').load('/member/transaction/enter_bills/load-applied-transaction', function()
 		{
 			console.log("success");
-			action_compute();
-			event_remove_tr();
-			event_click_last_row_op();
+			action_reassign_number();
+			action_load_initialize_select();
+			action_date_picker();
+	    	action_compute();
 
 			$('.remarks-eb').html($('.po-remarks').val());
 		});

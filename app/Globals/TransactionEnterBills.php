@@ -5,6 +5,7 @@ use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_bill_item_line;
 use App\Models\Tbl_bill;
 use App\Globals\AccountingTransaction;
+use App\Globals\Warehouse2;
 use Carbon\Carbon;
 use DB;
 
@@ -121,7 +122,6 @@ class TransactionEnterBills
             else // RECEIVE INVENTORY
             {
                 AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'receive_inventory', $ri_id, 'Refill upon RECEIVING INVENTORY '.$ins['transaction_refnum']);
-                
             }
         }
         else
@@ -184,7 +184,6 @@ class TransactionEnterBills
             {
                 AccountingTransaction::inventory_refill_update($shop_id, $warehouse_id, $insert_item, 'receive_inventory', $ri_id); 
                 AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'receive_inventory', $ri_id, 'Refill upon RECEIVING INVENTORY '.$ins['transaction_refnum']);
-                
             }
         }
         else

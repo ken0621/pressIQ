@@ -42,7 +42,6 @@ class TransactionReceivePaymentController extends Member
 		$data['page'] = "Receive Payment";
         $data["_customer"]       = Customer::getAllCustomer();
         $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'received_payment');
-        //dd($data["transaction_refnum"]);
         $data['_payment_method'] = Payment::get_payment_method($this->user_info->shop_id);
         $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
         $data['action'] 		= "/member/transaction/receive_payment/create-receive-payment";
@@ -70,7 +69,6 @@ class TransactionReceivePaymentController extends Member
 		$insert['transaction_date']       	    = date("Y-m-d", strtotime($request->transaction_date));
 		$insert['rp_total_amount']				= $request->rp_total_amount;
 
-		
 		$insert_item = null;
 		$txn_line = $request->line_is_checked;
 		if($txn_line)

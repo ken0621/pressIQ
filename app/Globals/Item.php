@@ -171,16 +171,23 @@ class Item
             $insert['item_date_created'] = Carbon::now();
 
             $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
-            
-            $return = Warehouse2::refill_validation($shop_id, $warehouse_id, 0, $insert['item_quantity'], 'Initial Quantity from Item');
-            if(!$return['message'])
+            $return = null;
+            if($insert['item_quantity'] > 0)
+            {
+                $return = Warehouse2::refill_validation($shop_id, $warehouse_id, 0, $insert['item_quantity'], 'Initial Quantity from Item');
+            }
+            if(!$return)
             {
                 $item_id = Tbl_item::insertGetId($insert);
                 
                 $source['name'] = 'initial_qty';
                 $source['id'] = $item_id;
                 $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
-                $return = Warehouse2::refill($shop_id, $warehouse_id, $item_id, $insert['item_quantity'], 'Initial Quantity from Item',$source);         
+
+                if($insert['item_quantity'] > 0)
+                {
+                    $return = Warehouse2::refill($shop_id, $warehouse_id, $item_id, $insert['item_quantity'], 'Initial Quantity from Item',$source);
+                }
 
                 $return['item_id']       = $item_id;
                 $return['status']        = 'success';

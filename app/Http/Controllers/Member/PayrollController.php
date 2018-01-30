@@ -760,6 +760,7 @@ class PayrollController extends Member
                                                                ->where('payroll_employee_first_name',Self::nullableToString($data['first_name']))
                                                                ->where('payroll_employee_middle_name', Self::nullableToString($data['middle_name']))
                                                                ->where('payroll_employee_last_name',Self::nullableToString($data['last_name']))
+                                                               ->where('shop_id',Self::shop_id())
                                                                ->count();
                     
                     if($count_employee == 0)

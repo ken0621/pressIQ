@@ -33,10 +33,11 @@ class InventoryAdjustment
 		$adj_id = Tbl_inventory_adjustment::insertGetId($insert);
 
 		Self::insertline($adj_id, $insert_item);
-		Warehouse2::adjust_inventory_bulk($shop_id, $insert['adj_warehouse_id'], $insert_item);
-		die(var_dump(123));
-		return $adj_id;
+		$ref['name'] = 'adjust_inventory';
+		$ref['id'] = $adj_id;
+		Warehouse2::adjust_inventory_bulk($shop_id, $insert['adj_warehouse_id'], $insert_item,'Adjust Inventory', $ref);
 
+		return $adj_id;
 	}
 	public static function postUpdate($adj_id, $shop_id, $insert, $insert_item)
 	{
@@ -48,6 +49,10 @@ class InventoryAdjustment
 		Tbl_inventory_adjustment_line::where('itemline_ia_id', $adj_id)->delete();
 
 		Self::insertline($adj_id, $insert_item);
+
+		$ref['name'] = 'adjust_inventory';
+		$ref['id'] = $adj_id;
+		Warehouse2::adjust_inventory_update_bulk($shop_id, $insert['adj_warehouse_id'], $insert_item,'Adjust Inventory', $ref);
 		return $adj_id;
 
 	}

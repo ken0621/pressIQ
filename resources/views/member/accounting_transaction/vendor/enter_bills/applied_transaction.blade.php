@@ -2,10 +2,10 @@
     @foreach($_po as $items)
     @if($items['item_qty'] != 0)
     <tr class="tr-draggable">
-            <input type="hidden" class="poline_id" name="itemline_ref_name[]" value="purchase_order">
-            <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]" value="{{$items['poline_po_id']}}">
         <td class="invoice-number-td text-right">1</td>
         <td>
+        <input type="hidden" class="poline_id" name="item_ref_name[]" value="purchase_order">
+            <input type="hidden" class="itemline_po_id" name="item_ref_id[]" value="{{$items['poline_po_id']}}">
             <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                 @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $items['item_id']])
             </select>
@@ -23,13 +23,9 @@
             </select>
         </td>
         <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]" value="{{$items['item_qty']}}" /></td>
-        <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{$items['item_rate']}}" />
-        </td>
-        <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$items['item_amount']}}"/>
-        </td>
-        <td>@include("member.load_ajax_data.load_td_serial_number")</td>
-        
-        <td tr_id="{{$items['poline_po_id']}}" linked_in="no" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+        <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{$items['item_rate']}}" /></td>
+        <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$items['item_amount']}}"/></td>
+        <td class="text-center acct-remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
     </tr>
     @endif
     @endforeach

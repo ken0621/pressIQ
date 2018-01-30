@@ -166,7 +166,6 @@
                                                         <th style="width: 70px;">Qty</th>
                                                         <th style="width: 120px;">Rate</th>
                                                         <th style="width: 120px;">Amount</th>
-                                                        @include("member.load_ajax_data.load_th_serial_number")
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
@@ -178,8 +177,8 @@
                                                             <tr class="tr-draggable">
                                                                 <td class="invoice-number-td text-right">1</td>
                                                                 <td>
-                                                                    <input type="hidden" class="poline_id" name="itemline_ref_name[]">
-                                                                    <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                                                                    <input type="hidden" class="poline_id" name="item_ref_name[]">
+                                                                    <input type="hidden" class="itemline_po_id" name="item_ref_id[]">
                                                                         <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $ebline->itemline_item_id])
                                                                         </select>
@@ -197,7 +196,6 @@
                                                                 <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]" value="{{ $ebline->itemline_qty }}" /></td>
                                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{ $ebline->itemline_rate }}" /></td>
                                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{ $ebline->itemline_amount }}" /></td>
-                                                                @include("member.load_ajax_data.load_td_serial_number")
                                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                             </tr>
                                                         @endforeach
@@ -205,8 +203,8 @@
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
-                                                        <input type="hidden" class="poline_id" name="itemline_ref_name[]">
-                                                        <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                                                        <input type="hidden" class="poline_id" name="item_ref_name[]">
+                                                        <input type="hidden" class="itemline_po_id" name="item_ref_id[]">
                                                             <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
@@ -218,14 +216,14 @@
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
                                                         <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-                                                        @include("member.load_ajax_data.load_td_serial_number")
+                                                        
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">2</td>
                                                         <td>
-                                                        <input type="hidden" class="poline_id" name="itemline_ref_name[]">
-                                                        <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                                                        <input type="hidden" class="poline_id" name="item_ref_name[]">
+                                                        <input type="hidden" class="itemline_po_id" name="item_ref_id[]">
                                                             <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
@@ -237,7 +235,7 @@
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
                                                         <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-                                                        @include("member.load_ajax_data.load_td_serial_number")
+                                                        
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                 </tbody>
@@ -298,8 +296,8 @@
        <tr class="tr-draggable">
             <td class="invoice-number-td text-right">1</td>
             <td>
-                <input type="hidden" class="poline_id" name="itemline_ref_name[]">
-                <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                <input type="hidden" class="poline_id" name="item_ref_name[]">
+                <input type="hidden" class="itemline_po_id" name="item_ref_id[]">
                 <select class="1111 form-control select-item input-sm pull-left" name="item_id[]" >
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                 </select>
@@ -311,7 +309,7 @@
             <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-            @include("member.load_ajax_data.load_td_serial_number")
+            
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>

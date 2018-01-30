@@ -106,8 +106,8 @@ class TransactionEnterBillsController extends Member
             if($value)
             {
                 $insert_item[$key]['item_id']          = $value;
-                $insert_item[$key]['item_ref_name']    = $request->itemline_ref_name[$key];
-                $insert_item[$key]['item_ref_id']      = $request->itemline_ref_id[$key];
+                $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
                 $insert_item[$key]['item_servicedate'] = $request->item_servicedate[$key];
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
                 $insert_item[$key]['item_um']          = $request->item_um[$key];

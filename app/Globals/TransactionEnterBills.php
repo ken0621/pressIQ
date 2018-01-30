@@ -207,7 +207,7 @@ class TransactionEnterBills
             $acct_line[$key_acct]['accline_description'] = $value_acct['account_desc'];
             $acct_line[$key_acct]['accline_amount']      = $value_acct['account_amount'];
         }
-        
+
         $itemline = null;
         foreach ($insert_item as $key => $value) 
         {   
@@ -220,7 +220,6 @@ class TransactionEnterBills
             $itemline[$key]['itemline_qty']          = $value['item_qty'];
             $itemline[$key]['itemline_rate']         = $value['item_rate'];
             $itemline[$key]['itemline_amount']       = $value['item_amount'];
-            //die(var_dump($value['item_ref_id']));
 
         }
         if(count($itemline) > 0)
@@ -249,10 +248,8 @@ class TransactionEnterBills
         $ctr = 0;
         foreach ($poline as $key => $value)
         {
-            $receivedline = Tbl_bill_item_line::where('itemline_bill_id', $eb_id)->where('itemline_ref_name', 'purchase_order')->where('itemline_item_id', $value->poline_item_id)->where('itemline_ref_id',$po_id)->first();
-            
-            $update['poline_qty'] = $value->poline_qty - $receivedline->riline_qty;
-            
+            $ebline = Tbl_bill_item_line::where('itemline_bill_id', $eb_id)->where('itemline_item_id', $value->poline_item_id)->where('itemline_ref_name', 'purchase_order')->where('itemline_ref_id',$po_id)->first();
+            $update['poline_qty'] = $value->poline_qty - $ebline->itemline_qty;       
             Tbl_purchase_order_line::where('poline_id', $value->poline_id)->update($update);    
 
             if($update['poline_qty'] <= 0)

@@ -1,6 +1,6 @@
 var enter_bills = new enter_bills();
 var global_tr_html = $(".div-script tbody").html();
-var global_tr_html_acctg = $(".div-script tbody").html();
+var global_tr_html_acct = $(".acct-div-script tbody").html();
 var item_selected = ''; 
 
 function enter_bills()
@@ -13,7 +13,6 @@ function enter_bills()
 		action_compute();
 		action_date_picker();
 		action_reassign_number();
-		action_acct_reassign_number();
 
 		event_remove_tr();
 		event_compute_class_change();
@@ -91,18 +90,8 @@ function enter_bills()
     		}
 
     	});
-    	$(".draggable.tbody-acct .tr-draggable:last td select.select-coa").globalDropList(
-        {            
-		    link 		: '/member/accounting/chart_of_account/popup/add',
-		    link_size 	: 'md',
-		    width 		: "100%",
-		    placeholder : 'Account',
-            onChangeValue : function()
-            {
-            	action_load_coa_info($(this));
-            }
-        });
 
+    	
         $('.droplist-um:not(.has-value)').globalDropList("disabled");
 
         $(".draggable .tr-draggable:last td select.select-um").globalDropList(
@@ -116,6 +105,18 @@ function enter_bills()
     		}
 
         }).globalDropList('disabled');
+
+        $(".drop-down-coa").globalDropList(
+		{
+		    link 		: '/member/accounting/chart_of_account/popup/add',
+		    link_size 	: 'md',
+		    width 		: "100%",
+		    placeholder : 'Account',
+            onChangeValue : function()
+            {
+            	action_load_coa_info($(this));
+            }
+		});
 	}
 
 	function action_load_open_transaction($vendor_id)
@@ -397,13 +398,15 @@ function enter_bills()
 			num++;
 		});
 	}
-	function action_acct_reassign_number()
+
+	/*ITEM NUMBER*/
+	function action_reassign_number()
 	{
 		var num = 1;
 		$(".acct-number-td").each(function(){
 			$(this).html(num);
 			num++;
-		});		
+		});
 	}
 
 	function event_click_last_row()
@@ -419,7 +422,7 @@ function enter_bills()
 	/*INSERTING ANOTHER ROW WHEN CLICKING LAST ROW*/
 	function event_click_last_row_op()
 	{
-		$("tbody.draggable").append(global_tr_html);
+		$("tbody.draggable.tbody-item").append(global_tr_html);
 		action_reassign_number();
 		action_load_initialize_select();
 		action_date_picker();
@@ -428,8 +431,9 @@ function enter_bills()
 	/*INSERTING ANOTHER ROW WHEN CLICKING LAST ROW*/
 	function event_click_last_row_op_acctg()
 	{
-		$("tbody.draggable").append(global_tr_html_acctg);
+		$("tbody.draggable.tbody-acct").append(global_tr_html_acct);
 		action_acct_reassign_number();
+		action_reassign_number();
 		action_load_initialize_select();
 	}
 
@@ -441,15 +445,6 @@ function enter_bills()
 
 				$(this).parent().remove();
 				action_reassign_number();
-				action_compute();
-			}			
-		});
-		$(document).on("click", ".acct-remove-tr", function(e){
-			if($(".tbody-acct .acct-remove-tr").length > 1)
-			{
-				$(this).parent().remove();
-
-				action_acct_reassign_number();
 				action_compute();
 			}			
 		});

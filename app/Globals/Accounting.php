@@ -584,7 +584,7 @@ class Accounting
 				}
 			// }
 		}
-
+		//die(var_dump($line_data["je_id"]));
 		return $line_data["je_id"];
 	}
 

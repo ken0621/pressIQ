@@ -33,7 +33,9 @@ class InventoryAdjustment
 		$adj_id = Tbl_inventory_adjustment::insertGetId($insert);
 
 		Self::insertline($adj_id, $insert_item);
-		Warehouse2::adjust_inventory_bulk($shop_id, $insert['adj_warehouse_id'], $insert_item);
+		$ref['name'] = 'adjust_inventory';
+		$ref['id'] = $adj_id;
+		Warehouse2::adjust_inventory_bulk($shop_id, $insert['adj_warehouse_id'], $insert_item,'Adjust Inventory', $ref);
 		die(var_dump(123));
 		return $adj_id;
 

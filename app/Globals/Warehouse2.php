@@ -422,17 +422,20 @@ class Warehouse2
         
         $return = null;
 
-        if(Inventory::allow_out_of_stock($shop_id) == 1)
+        if(!session('refill_adjust_inventory'))
         {
-            $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','=',0)->count();
-            $total_refill_qty = $quantity;
-            if($count_offset > 0)
+            if(Inventory::allow_out_of_stock($shop_id) == 1)
             {
-                $total_refill_qty = $quantity - $count_offset;
-            }
-            Self::update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity);
+                $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','=',0)->count();
+                $total_refill_qty = $quantity;
+                if($count_offset > 0)
+                {
+                    $total_refill_qty = $quantity - $count_offset;
+                }
+                Self::update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity);
 
-            $quantity = $total_refill_qty;            
+                $quantity = $total_refill_qty;            
+            }
         }
 
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
@@ -468,6 +471,10 @@ class Warehouse2
                 {
                     $insert[$ctr_qty]['record_serial_number'] = $serial[$ctr_qty];
                 }
+                if(session('refill_offset_inventory'))
+                {
+                    $insert[$ctr_qty]['record_count_inventory'] = 0;
+                }
                 Tbl_warehouse_inventory_record_log::insert($insert[$ctr_qty]);
             }
 
@@ -491,6 +498,10 @@ class Warehouse2
             {
                 Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, $quantity);
             }
+
+            $store['refill_offset_inventory'] = null;
+            $store['refill_adjust_inventory'] = null;
+            session($store);
         }       
 
         return $return;
@@ -1542,6 +1553,14 @@ class Warehouse2
     {
         session(['consume_offset_inventory' => $get]);
     }
+    public static function refill_offset_inventory($get)
+    {
+        session(['refill_offset_inventory' => $get]);
+    }
+    public static function refill_adjust_inventory($get)
+    {
+        session(['refill_adjust_inventory' => $get]);
+    }
     public static function adjust_inventory($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $ref = array())
     {
         /* ZERO OUT ALL THE INVENTORY BY USING CONSUME */
@@ -1559,28 +1578,32 @@ class Warehouse2
 
         $t_qty = $get_offset_inventory + $get_current_inventory;
 
-
         if($t_qty > 0)
         {
-            Self::consume_offset_inventory(true);
+            if($get_offset_inventory > 0)
+            {
+                Self::consume_offset_inventory(true);
+            }
             Self::consume($shop_id, $warehouse_id, $item_id, $t_qty, $remarks, $ref);
         }
 
         if($quantity > 0) /*POSITIVE*/
         {
-
+            Self::refill_adjust_inventory(true);
+            Self::refill($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $ref);
         }
         else /*NEGATIVE*/
         {
-
+            Self::refill_offset_inventory(true);
+            Self::refill($shop_id, $warehouse_id, $item_id, abs($quantity), $remarks, $ref);
         }
 
     }
-    public static function adjust_inventory_bulk($shop_id, $warehouse_id, $item_info = array())
+    public static function adjust_inventory_bulk($shop_id, $warehouse_id, $item_info = array(), $remarks = '', $ref = array())
     {
         foreach ($item_info as $key => $value) 
         {
-            Self::adjust_inventory($shop_id, $warehouse_id, $value['item_id'], $value['item_actual_qty']);
+            Self::adjust_inventory($shop_id, $warehouse_id, $value['item_id'], $value['item_new_qty'], $remarks, $ref);
         }
     }
 }

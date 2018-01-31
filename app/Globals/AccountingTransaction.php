@@ -211,6 +211,7 @@ class AccountingTransaction
 	public static function check_transaction_ref_number($shop_id, $transaction_refnum, $transaction_type)
 	{
 		$return = null;
+		$get = null;
 		if($transaction_type == 'sales_invoice')
 		{
 			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->where('is_sales_receipt',0)->first();

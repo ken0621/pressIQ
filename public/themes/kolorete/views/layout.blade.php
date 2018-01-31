@@ -99,7 +99,7 @@
                         <div class="col-md-4">
                             <div class="categories-container">
                                 {{-- <a onclick="myFunction()"><i class="fa fa-bars" aria-hidden="true"></i></a><span>Categories</span> --}}
-                                <div id="nav-icon1">
+                                <div id="nav-icon1" onclick="myFunction()">
                                   <span></span>
                                   <span></span>
                                   <span></span>

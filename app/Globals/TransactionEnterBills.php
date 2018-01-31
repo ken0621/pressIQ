@@ -197,7 +197,7 @@ class TransactionEnterBills
         return $return;
     }
 
-    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct)
+    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct = '')
     {
         $acct_line = null;
         if(count($insert_acct) > 0)

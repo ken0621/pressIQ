@@ -1058,6 +1058,60 @@ class ShopMemberController extends Shop
       return view("press_admin.search_press_admin_media_contacts", $data);
     }
 
+
+
+    public function add_user(Request $request)
+    {
+        if(request()->isMethod("post"))
+        {       
+            $value["user_first_name"]=request('user_first_name');
+            $rules["user_first_name"]=['required'];
+            $value["user_last_name"]=request('user_last_name'); 
+            $rules["user_last_name"]=['required'];
+            $value["user_email"]=request('user_email');
+            $rules["user_email"]=['required','min:5','unique:tbl_pressiq_user,user_email'];
+            $value["password"] = request('user_password');
+            $value["password_confirmation"] = request("user_password_confirmation");
+            $rules["password"] = ['required','min:5','confirmed'];
+            $value["user_company_name"] = request("user_company_name");
+            $rules["user_company_name"] = ['required'];
+            $value["user_company_image"] = request("user_company_image");
+            $rules["user_company_image"] = ['required'];
+            $validator = Validator::make($value, $rules);
+
+            if ($validator->fails()) 
+            {
+                return Redirect::to("/pressadmin/manage_user")->with('message', $validator->errors()->first())->withInput();
+            }
+            else
+            {
+                $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
+                $path ="";
+                if($request->hasFile('user_company_image'))
+                {
+                    $path = Storage::putFile('user_company_image', $request->file('user_company_image'));
+                }               
+                $data["user_first_name"]                 = $request->user_first_name;
+                $data["user_last_name"]                  = $request->user_last_name;
+                $data["user_email"]                      = $request->user_email;
+                $data["user_password"]                   = Crypt::encrypt(request('user_password'));
+                $data["user_date_created"]               = Carbon::now();
+                $data["user_company_name"]               = $request->user_company_name;
+                $data["user_level"]                      = "2";
+                if($path!="")
+                {
+                    $data["user_company_image"]          =$path_prefix.$path;
+                }        
+                Tbl_pressiq_user::insertGetId($data);
+                return redirect::back();
+            }       
+        }
+        else
+        {
+            return redirect::back();
+        }
+    }
+
     public function manage_user()
     {
         // dd(session("edit_user"));
@@ -1065,7 +1119,6 @@ class ShopMemberController extends Shop
         $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
         $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
         $data['_admin_edit'] = Tbl_pressiq_user::where('user_id',session('edit_admin'))->get();
-        
         
         $data['_edit'] = Tbl_pressiq_user::where('user_id',session('u_edit'))->get();
         

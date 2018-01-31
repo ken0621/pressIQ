@@ -25,11 +25,54 @@
               </div>
             @endif    
           <div class="tab">
-            <button class="tablinks" onclick="openCity(event, 'user_account')" id="defaultOpen">Users Account</button>
+             <button class="tablinks" onclick="openCity(event, 'new_user_account')" id="defaultOpen">Add User Account</button>
+            <button class="tablinks" onclick="openCity(event, 'user_account')" >Users Account</button>
             <button class="tablinks" onclick="openCity(event, 'admin_account')" >Admin Account</button>
           </div>    
 
         <div class="press-release-content">
+
+           <div id="new_user_account" class="tabcontent add-media-container">
+               <div class="title-container">Add New User</div>
+
+               <form method="post" action="/pressadmin/add_user" enctype="multipart/form-data">
+                {{csrf_field()}}
+                
+                <div class="register-form">
+                <input type="text" name="user_first_name" id="user_first_name" placeholder="First Name" >
+                </div>
+                <div class="register-form">
+                  <input type="text" name="user_last_name" id="user_last_name" placeholder="Last Name" >
+                </div>
+                <div class="register-form">
+                  <input type="email" name="user_email" id="user_email" placeholder="Email" >
+                </div>
+                <div class="register-form">
+                  <input type="password" name="user_password" id="user_password" placeholder="Password" >
+                </div>
+                <div class="register-form">
+                  <input type="password" name="user_password_confirmation" id="user_password_confirmation" placeholder="Confirm Password">
+                </div>
+                <div class="register-form">
+                  <input type="text" name="user_company_name" id="user_company_name" placeholder="Company" >
+                </div>
+                <div class="register-form">
+                  <input type="file" name="user_company_image" id="user_company_image" accept=".png, .jpg, .jpeg" >
+                </div>
+                @if(session()->has('message'))
+                  <div class="details">
+                  <span style="color: red;">
+                    <strong>Error!</strong> {{ session('message') }}<br>
+                  </span>
+                  </div>
+                @endif
+
+                <div class="button-container">
+                    <button type="submit">Add User</button>
+                </div>
+                </form>  
+            </div>
+
             <div id="user_account" class="tabcontent press-media-container">
               <div class="user-update-container">
                 @if(session::has('edit_user'))
@@ -101,8 +144,8 @@
                          <th style="width: 20%;">Last Name</th>
                          <th style="width: 20%;">Username</th>
                          <th style="width: 20%;">Action</th>
-                         
-                     </tr>
+                            
+                     </tr>       
                       @foreach($_admin as $_admin_account)
                         <tr>
                            <td>{{$_admin_account->user_first_name}}</td>
@@ -166,8 +209,6 @@
         </div>
     </div>
 </div>  
-
-
 
 @endsection
 

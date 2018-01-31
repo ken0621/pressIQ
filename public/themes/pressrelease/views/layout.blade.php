@@ -155,7 +155,7 @@
                             <div class="footer-title-container">
                                 <p class="footer-title">NEWS LETTER</p>
                             </div>
-                            <input type="email" placeholder="Enter Your Email Here" id="newsletter" name="newsletter" required>
+                            <input type="email" placeholder="Subscribe Here / Enter Your Email" id="newsletter" name="newsletter" required>
                             <span>
                             <button type="submit" formaction="/newsletter/send"><i class="fa fa-paper-plane" aria-hidden="true"></i>
                             </span>
@@ -166,7 +166,7 @@
                             <p class="footer-follow-title">FOLLOW US ON</p>
                             <span><a href="https://www.facebook.com/press-iq"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></span>
                             <span><a href="https://www.twitter.com/press-iq"><i class="fa fa-twitter-square" aria-hidden="true"></i></a></span>
-                            <span><a href="https://www.pinterest.com/press-iq"><i class="fa fa-pinterest-square" aria-hidden="true"></i></a></span>
+                            <span><a href="https://www.linkedin.com/press-iq"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a></span>
                         </div>
                     </div>
                 </div>

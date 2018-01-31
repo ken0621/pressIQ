@@ -95,6 +95,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressadmin/manage_user', 'Shop\ShopMemberController@manage_user'); //PRESS RELEASE
 	Route::get('/pressadmin/email',				'Shop\ShopMemberController@pressadmin_email'); //PRESS RELEASE
 	Route::any('/pressadmin/manage_user_search',	'Shop\ShopMemberController@manage_user_search');//PRESS RELEASE
+	Route::any('/pressadmin/add_user',		'Shop\ShopMemberController@add_user');   
 	Route::get('/pressadmin/edit_user/{id}','Shop\ShopMemberController@edit_user'); //PRESS RELEASE
 	Route::any('/pressadmin/manage_user_edit','Shop\ShopMemberController@pressadmin_manage_user_edit'); //PRESS RELEASE
 	Route::get('/pressadmin/delete_user/{id}','Shop\ShopMemberController@manage_user_delete_user'); //PRESS RELEASE

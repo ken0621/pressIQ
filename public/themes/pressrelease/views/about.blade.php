@@ -8,7 +8,7 @@
                 <div class="col-md-6">
                     <div class="title-container">About Press IQ</div>
                     <div class="about-container">
-                        <span class="desc-black">Press-IQ</span><span class="desc-black"> is a intelligent results-driven platform for</span><span class="desc-black"> PR Professionals</span><span class="desc-black"> and</span><span class="desc-black"> Marketers</span><span class="desc-black"> for targeted distribution of your press release. We provide you with access to the most updated and extensive database of media journalist</span>
+                        <span class="desc-black"></span><span class="desc-black"> An intelligent results-driven platform for</span><span class="desc-black"> PR Professionals</span><span class="desc-black"> and</span><span class="desc-black"> Marketers</span><span class="desc-black"> for targeted distribution of your press release. We provide you with access to the most updated and extensive database of media journalist</span>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -34,13 +34,13 @@
                         <span class="details-blue">Contacts of media journalist and editors</span><span class="details-black"> across all regions including Asia, North America, Europe and the Middle East</span>
                     </div>
                     <div class="details-container">
-                        <span class="details-blue">Easy to use</span><span class="details-black"> media release builder with ability to add rich media images or videos to your release</span>
+                        <span class="details-blue">Easy to use</span><span class="details-black"> media release builder with ability to add rich media images or videos to your press release</span>
                     </div>
                     <div class="details-container">
                         <span class="details-blue">Media monitoring</span><span class="details-black"> receive a full report of coverage after your distribution campaign</span>
                     </div>
                     <div class="details-container">
-                        <span class="details-blue">Real-time</span><span class="details-black"> reporting and measurable results</span>
+                        <span class="details-blue">Real-time</span><span class="details-black"> reporting and measurable data</span>
                     </div>
                     <div class="details-container">
                         <span class="details-blue">Advanced segmentation</span><span class="details-black"> by Audience, media, demographic, and Category</span>

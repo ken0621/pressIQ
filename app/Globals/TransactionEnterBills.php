@@ -3,8 +3,12 @@ namespace App\Globals;
 
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_bill_item_line;
+use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_bill;
+use App\Models\Tbl_purchase_order_line;
+
 use App\Globals\AccountingTransaction;
+use App\Globals\Warehouse2;
 use Carbon\Carbon;
 use DB;
 
@@ -72,9 +76,9 @@ class TransactionEnterBills
 
         return $data;
     }
-	public static function postInsert($ri_id, $shop_id, $insert, $insert_item)
+	public static function postInsert($ri_id, $shop_id, $insert, $insert_item, $insert_acct = '')
 	{
-    	$val = AccountingTransaction::vendorValidation($insert, $insert_item);
+    	$val = AccountingTransaction::vendorValidation($insert, $insert_item, 'enter_bills');
     
         if(!$val)
         {
@@ -108,9 +112,20 @@ class TransactionEnterBills
             $entry["discount"]          = '';
             $entry["ewt"]               = '';            
 
-            $return = Self::insertLine($enter_bills_id, $insert_item, $entry);
+            $return = Self::insertLine($enter_bills_id, $insert_item, $entry, $insert_acct);
             
             $return = $enter_bills_id;
+
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+
+            if(!$ri_id) // ENTER BILL
+            {
+                AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'enter_bills', $enter_bills_id, 'Refill upon creating ENTER BILLS'.$ins['transaction_refnum']);
+            }
+            else // RECEIVE INVENTORY
+            {
+                AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'receive_inventory', $ri_id, 'Refill upon RECEIVING INVENTORY '.$ins['transaction_refnum']);
+            }
         }
         else
         {
@@ -158,8 +173,21 @@ class TransactionEnterBills
 
             Tbl_bill_item_line::where("itemline_bill_id", $enter_bills_id)->delete();
 
-            $return = Self::insertLine($enter_bills_id, $insert_item, $entry);
+            $return = Self::insertLine($enter_bills_id, $insert_item, $entry, $insert_acct);
             $return = $enter_bills_id;
+
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+            /* UPDATE INVENTORY HERE */
+            if(!$ri_id) // ENTER BILL
+            {
+                AccountingTransaction::inventory_refill_update($shop_id, $warehouse_id, $insert_item, 'enter_bills', $enter_bills_id); 
+                AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'enter_bills', $enter_bills_id, 'Refill upon creating ENTER BILLS'.$ins['transaction_refnum']);
+            }
+            else // RECEIVE INVENTORY
+            {
+                AccountingTransaction::inventory_refill_update($shop_id, $warehouse_id, $insert_item, 'receive_inventory', $ri_id); 
+                AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'receive_inventory', $ri_id, 'Refill upon RECEIVING INVENTORY '.$ins['transaction_refnum']);
+            }
         }
         else
         {
@@ -169,26 +197,76 @@ class TransactionEnterBills
         return $return;
     }
 
-    public static function insertLine($enter_bills_id, $insert_item, $entry)
+    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct = '')
     {
+        $acct_line = null;
+        if(count($insert_acct) > 0)
+        {
+            foreach ($insert_acct as $key_acct => $value_acct)
+            {
+                $acct_line[$key_acct]['accline_bill_id']     = $enter_bills_id;
+                $acct_line[$key_acct]['accline_coa_id']      = $value_acct['account_id'];
+                $acct_line[$key_acct]['accline_description'] = $value_acct['account_desc'];
+                $acct_line[$key_acct]['accline_amount']      = $value_acct['account_amount'];
+            }
+        }
+        
         $itemline = null;
         foreach ($insert_item as $key => $value) 
         {   
             $itemline[$key]['itemline_bill_id']      = $enter_bills_id;
+            $itemline[$key]['itemline_ref_id']       = $value['item_ref_id'];
+            $itemline[$key]['itemline_ref_name']     = $value['item_ref_name'];
             $itemline[$key]['itemline_item_id']      = $value['item_id'];
             $itemline[$key]['itemline_description']  = $value['item_description'];
             $itemline[$key]['itemline_um']           = $value['item_um'];
             $itemline[$key]['itemline_qty']          = $value['item_qty'];
             $itemline[$key]['itemline_rate']         = $value['item_rate'];
             $itemline[$key]['itemline_amount']       = $value['item_amount'];
+            //die(var_dump($value['item_ref_id']));
 
         }
         if(count($itemline) > 0)
         {
+            Tbl_bill_account_line::insert($acct_line);
             Tbl_bill_item_line::insert($itemline);
             $return = AccountingTransaction::entry_data($entry, $insert_item);
         }
 
         return $return;
+    }
+    public static function checkPoQty($eb_id = null, $po_data = array())
+    {
+        if($eb_id != null)
+        {
+            foreach ($po_data as $key => $value)
+            { 
+                Self::checkPolineQty($key, $eb_id);
+            }   
+        }
+    }
+    public static function checkPolineQty($po_id, $eb_id)
+    {
+        $poline = Tbl_purchase_order_line::where('poline_po_id', $po_id)->get();
+
+        $ctr = 0;
+        foreach ($poline as $key => $value)
+        {
+            $receivedline = Tbl_bill_item_line::where('itemline_bill_id', $eb_id)->where('itemline_ref_name', 'purchase_order')->where('itemline_item_id', $value->poline_item_id)->where('itemline_ref_id',$po_id)->first();
+            
+            $update['poline_qty'] = $value->poline_qty - $receivedline->riline_qty;
+            
+            Tbl_purchase_order_line::where('poline_id', $value->poline_id)->update($update);    
+
+            if($update['poline_qty'] <= 0)
+            {
+                $ctr++;
+            }
+        }
+        if($ctr >= count($poline))
+        {
+            $updates["po_is_billed"] = $eb_id;
+            Tbl_purchase_order::where("po_id",$po_id)->update($updates);
+        }
     }
 }

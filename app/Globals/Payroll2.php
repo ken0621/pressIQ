@@ -2883,6 +2883,7 @@ class Payroll2
 			$_time["is_absent"] = false;
 			$return->daily_rate = 0;
 			$total_day_income = 0;
+			$subtotal_after_addition = 0;
 
 		}
 

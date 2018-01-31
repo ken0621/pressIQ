@@ -25,10 +25,8 @@
                                 Action <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li>
-                                    <a link="/member/transaction/purchase_order/print?id={{$po->po_id}}" class="popup" size="lg">Print</a>
-                                    <a class="popup popup-link-pdf" size="md" link="/member/transaction/purchase_order/print?id=">Print</i></a>
-                                </li>
+                                <li><a href="/member/transaction/purchase_order/create?id={{$po->po_id}}">Edit</a></li>
+                                <li><a href="/member/transaction/purchase_order/print?id={{$po->po_id}}">Print</a></li>
                             </ul>
                         </div>
                     </td>

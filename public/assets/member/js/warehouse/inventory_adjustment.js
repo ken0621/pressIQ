@@ -36,6 +36,11 @@ function inventory_adjustment()
             	action_load_item_info($(this));
             }
         });
+        $('.droplist-warehouse').globalDropList(
+        {
+            width : "100%",
+    		hasPopup: "false"
+        });
 
 	    $(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
@@ -87,22 +92,16 @@ function inventory_adjustment()
 		$(".tr-draggable").each(function()
 		{
 			/* GET ALL DATA */
-			var qty 	= $(this).find(".txt-qty").val();
-			var rate 	= $(this).find(".txt-rate").val();
-			var amount 	= $(this).find(".txt-amount");
+			var qty 			= $(this).find(".txt-qty").val();
+			var rate 			= $(this).find(".txt-rate").val();
+			var amount 			= $(this).find(".txt-amount");
 			var new_quantity	= $(this).find(".txt-new-quantity").val();
 			var difference 		= $(this).find(".txt-difference");
 			var total_amount 	= $(this).find(".txt-total-amount");
-
 			
 			/* CHECK IF QUANTITY IS EMPTY */
-			if(qty == "" || qty == null)
-			{
-				qty = 1;
-			}
 
 			/* RETURN TO NUMBER IF THERE IS COMMA */
-			qty = action_return_to_number(qty);
 			rate = action_return_to_number(rate);
 			new_quantity = action_return_to_number(new_quantity);
 
@@ -236,12 +235,10 @@ function inventory_adjustment()
 		$parent = $this.closest(".tr-draggable");
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("purchase-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
-		$parent.find(".txt-qty").html(1).change();
+		$qty = $this.find("option:selected").attr("warehouse_"+$(".droplist-warehouse").val());
+		$parent.find(".txt-qty").val($qty).change();
 
-		console.log($this.find("option:selected").attr("item-type"));
-		
-
-		if($this.find("option:selected").attr("has-um"))
+		if($this.find("option:selected").attr("has-um") != 0)
 		{
 			$.ajax(
 			{
@@ -286,7 +283,7 @@ function inventory_adjustment()
 
 	function action_date_picker()
 	{/*class name of tbody and text field for date*/
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm/dd/yy', });
 	}
 
 	/*ITEM NUMBER*/
@@ -392,5 +389,14 @@ function success_item(data)
 
 		data.element.modal("hide");
 	});
+}
+
+function success_adjust_inventory(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success(data.status_message);
+		location.href = data.status_redirect;
+	}
 }
 

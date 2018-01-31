@@ -8,6 +8,7 @@ use App\Models\Tbl_customer_invoice_line;
 use Carbon\Carbon;
 use DB;
 use App\Globals\AccountingTransaction;
+use Session;
 
 /**
  * 
@@ -153,7 +154,7 @@ class TransactionSalesReceipt
 	
 	public static function postInsert($shop_id, $insert, $insert_item = array())
 	{
-		$val = AccountingTransaction::customer_validation($insert, $insert_item);
+		$val = AccountingTransaction::customer_validation($insert, $insert_item, 'sales_receipt');
 		if(!$val)
 		{
 			$return  = null; 

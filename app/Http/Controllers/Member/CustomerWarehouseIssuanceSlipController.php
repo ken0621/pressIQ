@@ -93,7 +93,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $ins_wis['transaction_refnum']              = $request->cust_wis_number;
         $ins_wis['cust_wis_from_warehouse']         = Warehouse2::get_current_warehouse($shop_id);
         $ins_wis['cust_email']                      = $request->customer_email;
-        $ins_wis['total_amount']                    = $request->overall_price;
+        $ins_wis['total_amount']                    = str_replace(',', '', $request->overall_price);
         $ins_wis['cust_wis_remarks']                = $remarks;
         $ins_wis['destination_customer_id']         = $request->customer_id;
         $ins_wis['destination_customer_address']    = $request->customer_address;
@@ -112,8 +112,8 @@ class CustomerWarehouseIssuanceSlipController extends Member
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
                 $insert_item[$key]['item_qty'] = $request->item_qty[$key];
                 $insert_item[$key]['item_um'] = $request->item_um[$key];
-                $insert_item[$key]['item_rate'] = $request->item_rate[$key];
-                $insert_item[$key]['item_amount'] = $request->item_amount[$key];
+                $insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
+                $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_discount'] = 0;
 
                 $_item[$key] = null;
@@ -174,7 +174,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $ins_wis['transaction_refnum']              = $request->cust_wis_number;
         $ins_wis['cust_wis_from_warehouse']         = Warehouse2::get_current_warehouse($shop_id);
         $ins_wis['cust_email']                      = $request->customer_email;
-        $ins_wis['total_amount']                    = $request->overall_price;
+        $ins_wis['total_amount']                    = str_replace(',', '', $request->overall_price);
         $ins_wis['cust_wis_remarks']                = $remarks;
         $ins_wis['destination_customer_id']         = $request->customer_id;
         $ins_wis['destination_customer_address']    = $request->customer_address;
@@ -193,8 +193,8 @@ class CustomerWarehouseIssuanceSlipController extends Member
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
                 $insert_item[$key]['item_qty'] = $request->item_qty[$key];
                 $insert_item[$key]['item_um'] = $request->item_um[$key];
-                $insert_item[$key]['item_rate'] = $request->item_rate[$key];
-                $insert_item[$key]['item_amount'] = $request->item_amount[$key];
+                $insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
+                $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_discount'] = 0;
 
                 $_item[$key] = null;
@@ -302,7 +302,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
     public function postApplyTransaction(Request $request)
     {
         $_transaction = $request->apply_transaction;
-        Session::put('applied_transaction', $_transaction);
+        Session::put('applied_transaction_wis', $_transaction);
 
         $return['call_function'] = "success_apply_transaction";
         $return['status'] = "success";
@@ -312,7 +312,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
     public function getAjaxApplyTransaction(Request $request)
     {
         $_transaction[$request->apply_transaction] = $request->apply_transaction;
-        Session::put('applied_transaction', $_transaction);
+        Session::put('applied_transaction_wis', $_transaction);
 
         return json_encode('success');
     }

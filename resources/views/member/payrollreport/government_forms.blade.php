@@ -29,7 +29,7 @@
     </div>
 </div>
  <div class="text-center" id="spinningLoaders" style="display:none;">
-            <img src="/assets/images/loader.gif">
+    <img src="/assets/images/loader.gif">
 </div>
 <div class="load-filter-datas">
 <div class="panel panel-default panel-block panel-title-block">
@@ -41,7 +41,7 @@
                     <table class="table table-bordered table-condensed">
                         <thead>
                             <tr>
-                                <th>Month Name</th>
+                                <th>Month</th>
                                 <th class="text-center">No. of Processed Period</th>
                                 <th width="100px" class="text-center"></th>
                                 <th width="100px"></th>
@@ -79,7 +79,7 @@
         load_government_table_by_year();
 
     })
-    function load_government_table_by_year()
+    function load_bir_forms_filter()
     {    
         $(".contribution-month").on("change", function(e)
         {
@@ -91,7 +91,7 @@
             setTimeout(function(e){
             $.ajax(
             {
-                url:"/member/payroll/reports/government_forms_year_filter",
+                url:"/member/payroll/reports/bir_forms_filter",
                 type:"post",
                 data: ajaxdata,
                 

@@ -16,6 +16,11 @@ use App\Models\Tbl_pay_bill;
 use App\Models\Tbl_bill;
 use App\Models\Tbl_write_check;
 use App\Models\Tbl_debit_memo;
+use App\Models\Tbl_warehouse_issuance_report;
+use App\Models\Tbl_warehouse_receiving_report;
+use App\Models\Tbl_inventory_adjustment;
+use App\Models\Tbl_receive_payment;
+use App\Models\Tbl_user;
 
 use Carbon\Carbon;
 use Validator;
@@ -130,11 +135,11 @@ class AccountingTransaction
 		}
 		return $return;
 	}
-	public static function updateTransaction($shop_id, $acctg_trans_id, $trans_item = array())
+	public static function updateTransaction($shop_id, $acctg_trans_id, $trans_item = array(), $transaction_type)
 	{
 		
 	}
-	public static function vendorValidation($insert, $insert_item)
+	public static function vendorValidation($insert, $insert_item, $transaction_type = '')
 	{
 		$return = null;
         if(count($insert_item) <= 0)
@@ -144,6 +149,12 @@ class AccountingTransaction
         if(!$insert['vendor_id'])
         {
             $return .= '<li style="list-style:none">Please Select Vendor.</li>';          
+        }
+
+
+        if($transaction_type)
+        {
+        	$return .= Self::check_transaction_ref_number(Self::shop_id(), $insert['transaction_refnumber'], $transaction_type);
         }
 
 		$rules['transaction_refnumber'] = 'required';
@@ -159,8 +170,14 @@ class AccountingTransaction
         }
         return $return;
 	}
+	public static function shop_id()
+	{
+		$shop_id = Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
+
+		return $shop_id;
+	}
 	
-	public static function customer_validation($insert, $insert_item)
+	public static function customer_validation($insert, $insert_item, $transaction_type = '')
 	{
 		$return = null;
         if(count($insert_item) <= 0)
@@ -171,6 +188,11 @@ class AccountingTransaction
 		if(!$insert['customer_id'])
         {
         	$return .= '<li style="list-style:none">Please select customer.</li>';        	
+        }
+
+        if($transaction_type)
+        {
+        	$return .= Self::check_transaction_ref_number(Self::shop_id(), $insert['transaction_refnum'], $transaction_type);
         }
 
         $rules['transaction_refnum'] = 'required';
@@ -186,7 +208,86 @@ class AccountingTransaction
         }
         return $return;
 	}
+	public static function check_transaction_ref_number($shop_id, $transaction_refnum, $transaction_type)
+	{
+		$return = null;
+		$get = null;
+		if($transaction_type == 'sales_invoice')
+		{
+			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->where('is_sales_receipt',0)->first();
+		}
+		if($transaction_type == 'sales_receipt')
+		{
+			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->where('is_sales_receipt',1)->first();
+		}
+		if($transaction_type == 'credit_memo')
+		{
+			$get = Tbl_credit_memo::where('cm_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+		}
+		if($transaction_type == 'estimate_quotation')
+		{
+			$get = Tbl_customer_estimate::where('est_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->where('is_sales_order',0)->first();
+		}
+		if($transaction_type == 'sales_order')
+		{
+			$get = Tbl_customer_estimate::where('est_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->where('is_sales_order',1)->first();
+		}
+		if($transaction_type == 'warehouse_issuance_slip')
+		{
+			$get = Tbl_customer_wis::where('cust_wis_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+		}
+		if($transaction_type == 'warehouse_transfer')
+		{
+			$get = Tbl_warehouse_issuance_report::where('wis_shop_id', $shop_id)->where('wis_number', $transaction_refnum)->first();
+		}
+		if($transaction_type == 'receiving_report')
+		{
+			$get = Tbl_warehouse_receiving_report::where('rr_shop_id', $shop_id)->where('rr_number', $transaction_refnum)->first();
+		}
+		if($transaction_type == 'purchase_requisition')
+		{
+			$get = Tbl_requisition_slip::where('shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+		}
+		if($transaction_type == 'purchase_order')
+		{
+			$get = Tbl_purchase_order::where('po_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+		}
+		if($transaction_type == 'received_inventory')
+		{
+			$get = Tbl_receive_inventory::where('ri_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+		}
+		if($transaction_type == 'enter_bills')
+		{
+			$get = Tbl_bill::where('bill_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+		}
+		if($transaction_type == 'pay_bill')
+		{
+			$get = Tbl_pay_bill::where('paybill_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+		}
+		if($transaction_type == 'write_check')
+		{
+			$get = Tbl_write_check::where('wc_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+		}
+		if($transaction_type == 'debit_memo')
+		{
+			$get = Tbl_debit_memo::where('db_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+		}
+		if($transaction_type == 'inventory_adjustment')
+		{
+			$get = Tbl_inventory_adjustment::where('adj_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+		}
+		if($transaction_type == 'received_payment')
+		{
+			$get = Tbl_receive_payment::where('rp_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+		}
+		if($get)
+		{
+			$return = "Duplicate transaction number <br>";
+		}
 
+		return $return;
+
+	}
 	public static function entry_data($entry, $insert_item)
 	{
 		foreach ($insert_item as $key => $value) 
@@ -282,6 +383,7 @@ class AccountingTransaction
 	public static function get_count_last_transaction($shop_id, $transaction_type, $separator)
 	{
 		$return = 1;
+		$get = null;
 		if($transaction_type == 'sales_invoice')
 		{
 			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('is_sales_receipt',0)->orderBy('inv_id','DESC')->first();
@@ -306,13 +408,29 @@ class AccountingTransaction
 		{
 			$get = Tbl_customer_wis::where('cust_wis_shop_id', $shop_id)->orderBy('cust_wis_id','DESC')->first();
 		}
+		if($transaction_type == 'warehouse_transfer')
+		{
+			$get = Tbl_warehouse_issuance_report::where('wis_shop_id', $shop_id)->orderBy('wis_id','DESC')->first();
+			if($get)
+			{
+				$get->transaction_refnum = $get->wis_number;
+			}
+		}
+		if($transaction_type == 'receiving_report')
+		{
+			$get = Tbl_warehouse_receiving_report::where('rr_shop_id', $shop_id)->orderBy('rr_id','DESC')->first();
+			if($get)
+			{
+				$get->transaction_refnum = $get->rr_number;
+			}
+		}
 		if($transaction_type == 'purchase_requisition')
 		{
 			$get = Tbl_requisition_slip::where('shop_id', $shop_id)->orderBy('requisition_slip_id','DESC')->first();
 		}
 		if($transaction_type == 'purchase_order')
 		{
-			$get = Tbl_purchase_order::where('po_shop_id', $shop_id)->where('po_is_billed', 0)->orderBy('po_id','DESC')->first();
+			$get = Tbl_purchase_order::where('po_shop_id', $shop_id)->orderBy('po_id','DESC')->first();
 		}
 		if($transaction_type == 'received_inventory')
 		{
@@ -333,6 +451,14 @@ class AccountingTransaction
 		if($transaction_type == 'debit_memo')
 		{
 			$get = Tbl_debit_memo::where('db_shop_id', $shop_id)->orderBy('db_id','DESC')->first();
+		}
+		if($transaction_type == 'inventory_adjustment')
+		{
+			$get = Tbl_inventory_adjustment::where('adj_shop_id', $shop_id)->orderBy('inventory_adjustment_id','DESC')->first();
+		}
+		if($transaction_type == 'received_payment')
+		{
+			$get = Tbl_receive_payment::where('rp_shop_id', $shop_id)->orderBy('rp_id','DESC')->first();
 		}
 
 		if($get)
@@ -429,7 +555,7 @@ class AccountingTransaction
 				}
 				if($type == 'consume')
 				{
-					$return = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
+					// $return = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks']);
 				}
 			}
 		}

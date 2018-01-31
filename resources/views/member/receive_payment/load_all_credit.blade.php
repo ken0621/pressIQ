@@ -72,6 +72,7 @@
             $(this).prop('checked', this.checked); 
             compute_credit();        
         });
+
         compute_credit();
         function compute_credit()
         {

@@ -23,7 +23,7 @@
         <div class="form-group tab-content panel-body">
             <div class="col-md-6">
                 <label>RR#</label>
-                <input type="text" class="form-control" name="rr_number">
+                <input type="text" class="form-control" name="rr_number" value="{{$transaction_refnum or ''}}">
             </div>
         </div>
         <div class="form-group tab-content panel-body">
@@ -73,10 +73,7 @@
         if(data.status == 'success')
         {
             toastr.success('Success receiving items');
-            setInterval(function()
-            {
-                location.href = '/member/item/warehouse/rr';
-            },2000);
+            location.href = '/member/item/warehouse/rr';
         }
     }
 </script>

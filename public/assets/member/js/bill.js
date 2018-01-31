@@ -1,6 +1,6 @@
 var bill = new bill();
 var global_tr_html = $(".div-script tbody").html();
-var global_acct_tr_html = $(".acct-div-scrip tbody").html();
+var global_acct_tr_html = $(".acct-div-script tbody").html();
 var po_id_list = $(".div-script-po").html();
 var item_selected = ''; 
 
@@ -115,7 +115,7 @@ function bill()
 	{
 		$("tbody.draggable.tbody-acct").append(global_acct_tr_html);
 		action_acct_reassign_number();
-		action_trigger_select_plugin();
+		action_trigger_select_plukgin();
 	}
 
 	function action_date_picker()

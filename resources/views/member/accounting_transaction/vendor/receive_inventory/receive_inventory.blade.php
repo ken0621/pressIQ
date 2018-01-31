@@ -102,14 +102,16 @@
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="draggable">
+                                                <tbody class="applied-po-transaction-list">
+                                                </tbody>
+                                                <tbody class="draggable tbody-item">
                                                     @if(isset($ri))
                                                         @foreach($_riline as $riline)
                                                             <tr class="tr-draggable">
                                                                 <td class="invoice-number-td text-right">1</td>
                                                                 <td>
-                                                                    <input type="hidden" name="itemline_ref_name[]" value="{{ $riline->riline_ref_name or ''}}">
-                                                                    <input type="hidden" name="itemline_ref_id[]" value="{{ $riline->riline_ref_id or ''}}">
+                                                                    <input type="hidden" name="item_ref_name[]" value="{{ $riline->riline_ref_name or ''}}">
+                                                                    <input type="hidden" name="item_ref_id[]" value="{{ $riline->riline_ref_id or ''}}">
                                                                     <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]">
                                                                         @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $riline->riline_item_id])
                                                                     </select>
@@ -126,13 +128,11 @@
                                                             </tr>
                                                         @endforeach
                                                     @endif
-                                                <tbody class="draggable tbody-item po-tbl">
-                                                    @include("member.accounting_transaction.vendor.purchase_order.po_load_item_session")  
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
-                                                        <input type="hidden" name="itemline_ref_name[]">
-                                                        <input type="hidden" name="itemline_ref_id[]">
+                                                        <input type="hidden" name="item_ref_name[]">
+                                                        <input type="hidden" name="item_ref_id[]">
                                                             <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
@@ -148,8 +148,8 @@
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">2</td>
                                                         <td>
-                                                        <input type="hidden" class="poline_id" name="itemline_ref_name[]">
-                                                        <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                                                        <input type="hidden" name="item_ref_name[]">
+                                                        <input type="hidden" name="item_ref_id[]">
                                                             <select class="form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
@@ -169,8 +169,8 @@
                                 </div>
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
-                                        <label>Memo</label>
-                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" >{{isset($ri->ri_memo)? $ri->ri_memo : ''}}</textarea>
+                                        <label>Remarks</label>
+                                        <textarea class="form-control input-sm remarks-ri textarea-expand" name="vendor_reamrks" ></textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">
@@ -182,6 +182,12 @@
                                                     PHP&nbsp;<span class="total-amount">0.00</span>
                                             </div>
                                         </div> 
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <label>Memo</label>
+                                        <textarea class="form-control input-sm textarea-expand" name="vendor_memo" >{{isset($ri->ri_memo)? $ri->ri_memo : ''}}</textarea>
                                     </div>
                                 </div>
                                 
@@ -202,8 +208,8 @@
                 <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]">
             <td class="invoice-number-td text-right">1</td>
             <td>
-                <input type="hidden" class="poline_id" name="itemline_ref_name[]">
-                <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
+                <input type="hidden" class="poline_id" name="item_ref_name[]">
+                <input type="hidden" class="itemline_po_id" name="item_ref_id[]">
                 <select class="form-control select-item input-sm pull-left" name="item_id[]" >
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                 </select>
@@ -221,89 +227,5 @@
 @endsection
 
 @section('script')
-
-<!-- <script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script> -->
 <script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/receive_inventory.js"></script>
-<!-- <script type="text/javascript">
-$("#acct-a").click(function()
-{
-    $('#account-tbl').toggle();
-    $('i',this).toggleClass("fa-caret-right fa-caret-down")
-});
-$("#item-a").click(function()
-{
-    $('#item-tbl').toggle();
-    $('i',this).toggleClass("fa-caret-right fa-caret-down")
-});
-$(document).ready(function() 
-{
-  $('.drawer').drawer({
-    desktopEvent:'click'
-  });
-});
-</script>
-@endsection
-
-@section("css")
-<link rel="stylesheet" type="text/css" href="/assets/member/bootstrap_drawer/cooker.drawer.css">
-<style type="text/css">
-.po-style
-{
-    padding: 10px;
-    background-color: #fff;
-}
-.drawer-toggle
-{
-    background-color: #76B6EC;
-    color: #fff;
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 0;
-}
-.drawer-toggle:hover
-{
-    background-color: #76B6EC;
-    color: #fff;
-}
-
-.drawer-default
-{
-    -webkit-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
-    -moz-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
-    box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
-    -webkit-transition: all 0.4s ease;
-       -o-transition: all 0.4s ease;
-          transition: all 0.4s ease;
-    z-index: 2;
-}
-.drawer-toggle
-{
-    -webkit-transition: all 0.4s ease;
-       -o-transition: all 0.4s ease;
-          transition: all 0.4s ease;
-}
-.drawer-default + .drawer-overlay
-{
-    background-color: transparent !important;
-    -webkit-transition: all 0.4s ease;
-       -o-transition: all 0.4s ease;
-          transition: all 0.4s ease;
-}
-.drawer-open .drawer-overlay
-{
-    padding-right: 30px;
-}
-.drawer-close .drawer.drawer-default
-{
-    right: -280px;
-}
-.drawer-open .drawer.drawer-default
-{
-    right: 0;
-}
-nav.user-menu
-{
-    background-color: #F5F5F5;
-}
-</style> -->
 @endsection

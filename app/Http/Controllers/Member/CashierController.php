@@ -59,7 +59,6 @@ class CashierController extends Member
         {
             $return['status'] = 'error';
             $return['status_message'] = "You can't add zero amount of payment";
-
         }
         return json_encode($return);
     }

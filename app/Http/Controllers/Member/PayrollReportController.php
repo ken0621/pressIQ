@@ -988,17 +988,170 @@ class PayrollReportController extends Member
 		$data["page"] = "BIR Forms";
 		$date = date("Y-m-d");
 		$year = explode("-", $date);
-
+		$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
 	    $_month = array();
 
 		for($ctr = 1; $ctr <= 12; $ctr++)
 		{
-			$_month[$ctr]["month_name"] = DateTime::createFromFormat('!m', $ctr)->format('F');;
+			$_month[$ctr]["month_name"] = DateTime::createFromFormat('!m', $ctr)->format('F');
+			$_month[$ctr]["month_value"] = $ctr;
 		}
 		$data['_month'] = $_month;
+
 		$data["_year_period"] = Tbl_payroll_period::select('year_contribution')->where("shop_id", Self::shop_id())->distinct()->get();
 		$data["year_today"] = $year[0];
 		return view("member.payrollreport.bir_form",$data);
 	}
+
+	public function bir_forms_filter()
+	{
+			$company_id =	Request::input("company_id");
+        	$year 		= 	Request::input('year');
+        	$_month = array();
+        	for($ctr = 1; $ctr <= 12; $ctr++)
+			{
+				$_month[$ctr]["month_name"] = DateTime::createFromFormat('!m', $ctr)->format('F');
+				$_month[$ctr]["month_value"] = $ctr;
+			}
+			$data['_month'] = $_month;
+        	$data["year_today"] = $year;
+        	$data["company"]	 = $company_id;
+        return view("member.payrollreport.bir_form_filter",$data);
+	}
+
+	public function bir_export_excel($year,$month,$company)
+	{
+		$data['company_name'] = Tbl_payroll_company::where('payroll_company_id',$company)->value('payroll_company_name');
+		$data['year']         = $year;
+		$data['month']		  = $month;
+	    $data['company']	  = $company;
+	    $data["month_name"]   = DateTime::createFromFormat('!m', $month)->format('F');
+	    $data['date_today']   = date("m/d/Y H:i");
+
+	    $shop_id = $this->shop_id();
+	    $data['bir_report'] = $this->compute_bir($year,$month,$company,$shop_id);
+
+		Excel::create("BIR Report -".$data["month_name"].' '.$year,function($excel) use ($data)
+		{
+			$excel->sheet('clients',function($sheet) use ($data)
+			{
+				$sheet->loadView('member.payrollreport.bir_form_export_excel',$data);
+			});
+		})->download('xls'); 
+
+	}
+
+	public function view_bir_forms($year,$month,$company)
+	{	
+
+		$date = date('Y-m-d');
+	    $data['year']         = $year;
+	    $data['company_name'] = Tbl_payroll_company::where('payroll_company_id',$company)->value('payroll_company_name');
+	    $data['month']		  = $month;
+	    $data['company']	  = $company;
+		$data["month_name"]   = DateTime::createFromFormat('!m', $month)->format('F');
+		$shop_id = $this->shop_id();
+		$data['bir_report'] = $this->compute_bir($year,$month,$company,$shop_id);
+
+		return view("member.payrollreport.view_bir_forms",$data);
+	}
+
+	public static function compute_bir($year,$month,$company,$shop_id)
+	{
+		$bir_report           = array();
+		$date = date('Y-m-d');
+		$data["month_name"]   = DateTime::createFromFormat('!m', $month)->format('F');
+
+ 		$data['first_period'] = Tbl_payroll_period::sel($shop_id)
+	                                              ->where('tbl_payroll_period_company.payroll_period_status','!=','pending')
+	                                              ->where('tbl_payroll_period_company.payroll_company_id',$company)
+	                                              ->where('year_contribution',$year)
+	                                              ->where('period_count','first_period')
+	                                              ->where('month_contribution',$data["month_name"])
+	                                              ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+	                                              ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+	                                              ->get();
+
+	     $data['last_period'] = Tbl_payroll_period::sel($shop_id)
+	                                              ->where('tbl_payroll_period_company.payroll_period_status','!=','pending')
+	                                              ->where('year_contribution',$year)
+	                                              ->where('tbl_payroll_period_company.payroll_company_id',$company)
+	                                              ->where('period_count','last_period')
+	                                              ->where('month_contribution',$data["month_name"])
+	                                              ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+	                                              ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+	                                              ->get();
+
+	     if(count($data['first_period']) != 0 && $company != 0)
+	     {
+			  //get minimun earnes
+			    $data['employee_minimum'] = Tbl_payroll_employee_basic::join('tbl_payroll_employee_salary','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_employee_salary.payroll_employee_id')
+			    											->where('shop_id',$shop_id)
+			    											->where('tbl_payroll_employee_salary.payroll_employee_salary_minimum_wage',1)
+			    											->where('tbl_payroll_employee_salary.payroll_employee_salary_effective_date','<=', $date)
+			    											->orderBy('payroll_employee_salary_id', 'desc')
+			    											->select('tbl_payroll_employee_basic.payroll_employee_id')
+			    											->distinct()
+			    											->get();
+			    //get data first_period minimum earners
+				$data["_employee"]                    	  = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['first_period'][0]->payroll_period_company_id)->whereIn('employee_id',$data['employee_minimum'])->basic()->get();
+				//total minimun first period
+				$data['total_minimum_first']              = Payroll2::get_total_payroll_register($data);
+
+				//get data last_period minimum earners
+				$data["_employee"]             	          = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['last_period'][0]->payroll_period_company_id)->whereIn('employee_id',$data['employee_minimum'])->basic()->get();
+				//total minimun last period
+				$data['total_minimum_last']               = Payroll2::get_total_payroll_register($data);
+
+			    $data["_employee"]                    	  = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['first_period'][0]->payroll_period_company_id)->basic()->get();
+
+			    $data['non_taxable_total_first']          = Payroll2::get_total_payroll_register($data);
+
+			    $data["_employee"]                    	  = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['last_period'][0]->payroll_period_company_id)->basic()->get();
+
+			    $data['non_taxable_total_last']          = Payroll2::get_total_payroll_register($data);
+
+			     $temp['first_period_total_compensation'] = Payroll2::payroll_number_format($data['first_period'][0]->payroll_period_total_gross, 2);
+			     $temp['last_period_total_compensation']  = Payroll2::payroll_number_format($data['last_period'][0]->payroll_period_total_gross, 2);
+			     $temp['total_for_1601c']                 =  Payroll2::payroll_number_format(($data['last_period'][0]->payroll_period_total_gross + $data['first_period'][0]->payroll_period_total_gross), 2);
+
+			     $temp['first_period_total_minimum']      = Payroll2::payroll_number_format($data['total_minimum_first']['total_gross'],2);
+			     $temp['last_period_total_minimum']       = Payroll2::payroll_number_format($data['total_minimum_last']['total_gross'],2);
+			     $temp['total_for_1601c_minimum']		  =  Payroll2::payroll_number_format(($data['total_minimum_first']['total_gross'] + $data['total_minimum_last']['total_gross']),2);
+
+				$temp['first_minimum_16_b']	              = $data['total_minimum_first']['nightdiff_total'
+				] + $data['total_minimum_first']['leave_pay_total'] + $data['total_minimum_first']['special_holiday_total'] + $data['total_minimum_first']['regular_holiday_total'] + $data['total_minimum_first']['overtime_total'];
+				$temp['last_minimum_16_b']           	  = $data['total_minimum_last']['nightdiff_total'
+				] + $data['total_minimum_last']['leave_pay_total'] + $data['total_minimum_last']['special_holiday_total'] + $data['total_minimum_last']['regular_holiday_total'] + $data['total_minimum_last']['overtime_total'];
+
+				$temp['total_minimum_1601c']              = $temp['first_minimum_16_b'] + $temp['last_minimum_16_b'];
+
+				$allowances_first                         = $data['non_taxable_total_first']['total_adjustment_allowance'] + $data['non_taxable_total_first']['total_adjustment_bonus'] + $data['non_taxable_total_first']['total_adjustment_commission'] + $data['non_taxable_total_first']['total_adjustment_incentives'] + $data['non_taxable_total_first']['total_adjustment_additions']  + $data['non_taxable_total_first']['total_adjustment_13th_month_and_other']  + $data['non_taxable_total_first']['total_adjustment_de_minimis_benefit']  + $data['non_taxable_total_first']['total_adjustment_others'];
+
+				$temp['non_tax_compensation_first']       = $data['non_taxable_total_first']['total_er'] + $data['non_taxable_total_first']['total_ee'] + $data['non_taxable_total_first']['total_ec'] + $allowances_first; 
+
+				$allowances_last                         = $data['non_taxable_total_last']['total_adjustment_allowance'] + $data['non_taxable_total_last']['total_adjustment_bonus'] + $data['non_taxable_total_last']['total_adjustment_commission'] + $data['non_taxable_total_last']['total_adjustment_incentives'] + $data['non_taxable_total_last']['total_adjustment_additions']  + $data['non_taxable_total_last']['total_adjustment_13th_month_and_other']  + $data['non_taxable_total_last']['total_adjustment_de_minimis_benefit']  + $data['non_taxable_total_last']['total_adjustment_others'];
+
+				$temp['non_tax_compensation_last']       = $data['non_taxable_total_last']['total_er'] + $data['non_taxable_total_last']['total_ee'] + $data['non_taxable_total_last']['total_ec'] + $allowances_last; 
+
+				$temp['total_non_tax_compensation']		 = $temp['non_tax_compensation_first'] + $temp['non_tax_compensation_last'];
+
+				$temp['total_taxable_first'] 			 = $temp['first_period_total_compensation'] - ($temp['non_tax_compensation_first'] + $temp['first_minimum_16_b'] + $temp['first_period_total_minimum']);
+
+				$temp['total_taxable_last'] 			 = $temp['last_period_total_compensation'] - ($temp['non_tax_compensation_last'] + $temp['last_minimum_16_b'] + $temp['last_period_total_minimum']);
+
+				$temp['total_taxable']		 = $temp['total_taxable_first'] + $temp['total_taxable_last'];
+
+			    $temp['tax_with_held_first']			  = $data['non_taxable_total_first']['witholding_tax_total'];
+			    $temp['tax_with_held_last']				  = $data['non_taxable_total_last']['witholding_tax_total'];
+			    $temp['tax_total']						  = $temp['tax_with_held_first'] + $temp['tax_with_held_last'];
+
+			     array_push($bir_report,$temp);
+
+			     return $bir_report;
+	     }
+	}
+
+
 
 }

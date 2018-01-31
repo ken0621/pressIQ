@@ -91,7 +91,7 @@
                         <td class="text-center restday_pay_td_td" id="restday_pay_td">{{ number_format($employee->restday,2 )}}</td>
                         <td class="text-center leave_pay_td_td" id="leave_pay_td">{{ number_format($employee->leave_pay,2) }} <br> ({{$employee->time_leave_hours}} hours)</td>
 
-                        <td class="text-center allowance_td_td" id="allowance_td">{{ number_format((number_format($employee->allowance,2) + number_format($employee->adjustment_allowance, 2)), 2) }}</td>
+                        <td class="text-center allowance_td_td" id="allowance_td">{{ number_format($employee->allowance + $employee->adjustment_allowance, 2) }}</td>
                         <td class="text-center bonus_td_td" id="bonus_td">{{ number_format($employee->adjustment_bonus,2) }}</td>
                         <td class="text-center commision_td_td" id="commision_td">{{ number_format($employee->adjustment_commission,2) }}</td>
                         <td class="text-center incentives_td_td" id="incentives_td">{{ number_format($employee->adjustment_incentives,2) }}</td>
@@ -147,7 +147,7 @@
                         <td class="text-center" id="restday_pay_total"><b>{{ number_format($restday_total, 2) }}</b></td>
                         <td class="text-center" id="leave_pay_total"><b>{{ number_format($leave_pay_total, 2) }}</b></td>
 
-                        <td class="text-center" id="allowance_total"><b>{{ number_format(number_format($total_adjustment_allowance, 2) + number_format($allowance_total, 2), 2)}}</b></td>
+                        <td class="text-center" id="allowance_total"><b>{{ number_format($total_adjustment_allowance + $allowance_total, 2)}}</b></td>
                         <td class="text-center" id="bonus_total"><b>{{ number_format($total_adjustment_bonus, 2) }}</b></td>
                         <td class="text-center" id="commision_total"><b>{{ number_format($total_adjustment_commission, 2) }}</b></td>
                         <td class="text-center" id="incentives_total"><b>{{ number_format($total_adjustment_incentives, 2) }}</b></td>

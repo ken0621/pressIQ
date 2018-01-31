@@ -139,7 +139,7 @@ class AccountingTransaction
 	{
 		
 	}
-	public static function vendorValidation($insert, $insert_item)
+	public static function vendorValidation($insert, $insert_item, $transaction_type = '')
 	{
 		$return = null;
         if(count($insert_item) <= 0)
@@ -154,7 +154,7 @@ class AccountingTransaction
 
         if($transaction_type)
         {
-        	$return .= Self::check_transaction_ref_number(Self::shop_id(), $insert['transaction_refnum'], $transaction_type);
+        	$return .= Self::check_transaction_ref_number(Self::shop_id(), $insert['transaction_refnumber'], $transaction_type);
         }
 
 		$rules['transaction_refnumber'] = 'required';

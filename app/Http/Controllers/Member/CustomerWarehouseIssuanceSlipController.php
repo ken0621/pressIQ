@@ -339,7 +339,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
                         $return[$key.'i'.$key_item]['multi_um_id'] = $value_item->multi_um_id;
                         $return[$key.'i'.$key_item]['item_um'] = $value_item->invline_um;
                         $return[$key.'i'.$key_item]['item_qty'] = $value_item->invline_qty;
-                        $return[$key.'i'.$key_item]['item_rate'] = $value_item->invline_rate;
+                        $return[$key.'i'.$key_item]['item_rate'] = $value_item->item_cost;
                         $return[$key.'i'.$key_item]['item_amount'] = $value_item->invline_amount;
                     }
                 }

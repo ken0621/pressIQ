@@ -188,9 +188,10 @@ class Accounting
         }
 
 		/* GETTING THE DEFAULT ACCOUNTS RECEIVABLE AND ACCOUNTS PAYABLE */
-		$account_receivable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-receivable")->value("account_id");
-		$account_payable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-payable")->value("account_id");
-		$account_cash		= Accounting::getCashInBank();
+		$account_receivable			= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-receivable")->value("account_id");
+		$account_payable			= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-payable")->value("account_id");
+		$account_cash				= Accounting::getCashInBank();
+		$account_inventory_asset	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-inventory-asset")->value("account_id");
 
 		/* FOR OLD DATABASE - CHECKING IF THERE IS ALREADY AN ACCOUNT CODE*/
 		if(!$account_receivable)
@@ -337,6 +338,13 @@ class Accounting
 				}
 			}
 		}
+		elseif($main_account == 'inventory-asset')
+		{
+			$line_data["entry_amount"]	= $entry["total"];
+			$line_data["entry_type"] 	= Accounting::$newNormalBalance($account_inventory_asset);
+			$line_data["account_id"] 	= $account_inventory_asset;
+			Accounting::insertJournalLine($line_data);
+		}
 
 		foreach($entry_data as $entry_line)
 		{
@@ -416,10 +424,10 @@ class Accounting
 								Accounting::insertJournalLine($line_data);
 
 								/* ASSET ACCOUNT */
-								$line_data["entry_amount"]	= $item->item_cost;
-								$line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
-								$line_data["account_id"] 	= $account_asset;
-								Accounting::insertJournalLine($line_data);
+								// $line_data["entry_amount"]	= $item->item_cost;
+								// $line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
+								// $line_data["account_id"] 	= $account_asset;
+								// Accounting::insertJournalLine($line_data);
 							}
 						}
 						break;
@@ -717,6 +725,12 @@ class Accounting
 			case 'estimate':
 			case 'sales-order':
 			case 'warehouse-issuance-slip':
+				$data["main_account"]		= 'inventory-asset';
+				$data["name"] 				= 'customer';
+				$data["newNormalJournal"] 	= 'contraAccount';
+				$data["newContraJournal"] 	= 'normalBalance';
+				return $data;
+				break;
 			case 'invoice':
 				$data["main_account"]		= 'receivable';
 				$data["name"] 				= 'customer';

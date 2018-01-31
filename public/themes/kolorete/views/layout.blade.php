@@ -98,7 +98,12 @@
                     <div class="row clearfix">
                         <div class="col-md-4">
                             <div class="categories-container">
-                                <a onclick="myFunction()"><i class="fa fa-bars" aria-hidden="true"></i></a><span>Categories</span>
+                                {{-- <a onclick="myFunction()"><i class="fa fa-bars" aria-hidden="true"></i></a><span>Categories</span> --}}
+                                <div id="nav-icon1">
+                                  <span></span>
+                                  <span></span>
+                                  <span></span>
+                                </div>
                                 <ul id="menu">
                                     <li><a href="#">Men's Apparel</a>
                                         <ul class="sub-menu">
@@ -204,6 +209,13 @@
                     x.style.display = "block";
                 }
             }
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('#nav-icon1').click(function(){
+                    $(this).toggleClass('open');
+                });
+            });
         </script>
         @yield("js")
     </body>

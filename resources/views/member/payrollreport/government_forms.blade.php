@@ -79,7 +79,7 @@
         load_government_table_by_year();
 
     })
-    function load_government_table_by_year()
+    function load_bir_forms_filter()
     {    
         $(".contribution-month").on("change", function(e)
         {
@@ -91,7 +91,7 @@
             setTimeout(function(e){
             $.ajax(
             {
-                url:"/member/payroll/reports/government_forms_year_filter",
+                url:"/member/payroll/reports/bir_forms_filter",
                 type:"post",
                 data: ajaxdata,
                 

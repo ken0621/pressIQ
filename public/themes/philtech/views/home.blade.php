@@ -10,7 +10,15 @@
 						<div class="col-xs-12">
 							<div class="grid-1">
 								<div class="single-slide">
-									<div>
+									@if(loop_content_condition($shop_theme_info, "home", "home_slider"))
+									    @foreach(loop_content_get($shop_theme_info, "home", "home_slider") as $slider)
+									    <img src="{{ $slider }}">
+									    @endforeach
+									@else
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide1.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.jpg">
+									@endif
+									{{-- <div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide11.jpg">
 									</div>
 									<div>
@@ -42,7 +50,7 @@
 									</div>
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide6.jpg">
-									</div>
+									</div> --}}
 								</div>
 							</div>
 						</div>
@@ -223,7 +231,15 @@
 						<div class="col-xs-8">
 							<div class="grid-1">
 								<div class="single-slide">
-									<div>
+									@if(loop_content_condition($shop_theme_info, "home", "home_slider"))
+									    @foreach(loop_content_get($shop_theme_info, "home", "home_slider") as $slider)
+									    <img src="{{ $slider }}">
+									    @endforeach
+									@else
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide1.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.jpg">
+									@endif
+									{{-- <div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide11.jpg">
 									</div>
 									<div>
@@ -255,7 +271,7 @@
 									</div>
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide6.jpg">
-									</div>
+									</div> --}}
 								</div>
 							</div>
 						</div>

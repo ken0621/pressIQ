@@ -312,7 +312,8 @@ class AccountingTransaction
                 $entry_data[$key]['vatable']            = 0;
                 $entry_data[$key]['discount']           = $discount;
                 $entry_data[$key]['entry_amount']       = $value['item_amount'];
-                $entry_data[$key]['entry_description']  = $value['item_description'];                    
+                $entry_data[$key]['entry_description']  = $value['item_description'];
+                                   
             }
             else
             {
@@ -332,7 +333,7 @@ class AccountingTransaction
                 }
             }
 		}
-
+		//die(var_dump($entry_data)); 
         $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
         return $inv_journal;
 	}

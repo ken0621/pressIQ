@@ -276,6 +276,7 @@
         </div>
     </div>
 </div>
+</form>
 <div class="acct-div-script">
     <table class="div-acct-row-script hide">
         <tr class="tr-draggable">

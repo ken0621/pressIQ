@@ -93,7 +93,7 @@ function enter_bills()
     	});
 
     	
-        $('.droplist-um:not(.has-value)').globalDropList("disabled");
+        //$('.droplist-um:not(.has-value)').globalDropList("disabled");
 
         $(".draggable .tr-draggable:last td select.select-um").globalDropList(
         {
@@ -105,7 +105,7 @@ function enter_bills()
     			action_load_unit_measurement($(this));
     		}
 
-        }).globalDropList('disabled');
+        });
 
 		$(".draggable.tbody-acct .tr-draggable:last td select.select-coa").globalDropList(
         {            
@@ -360,7 +360,7 @@ function enter_bills()
 		}
 		else
 		{
-			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("clear");
 		}
     	action_compute();
 	}

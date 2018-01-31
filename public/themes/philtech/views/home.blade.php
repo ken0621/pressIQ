@@ -11,6 +11,18 @@
 							<div class="grid-1">
 								<div class="single-slide">
 									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide11.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide12.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide13.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide14.jpg">
+									</div>
+									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide7.jpg">
 									</div>
 									<div>
@@ -211,6 +223,18 @@
 						<div class="col-xs-8">
 							<div class="grid-1">
 								<div class="single-slide">
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide11.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide12.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide13.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide14.jpg">
+									</div>
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide7.jpg">
 									</div>

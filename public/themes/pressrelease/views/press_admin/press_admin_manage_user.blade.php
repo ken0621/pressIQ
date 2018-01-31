@@ -23,7 +23,12 @@
               <div class="alert alert-danger">
                  <center>{{ Session::get('delete_user') }}</center>
               </div>
-            @endif    
+            @endif 
+             @if (Session::has('success_new_registered'))
+              <div class="alert alert-success">
+                 <center>{{ Session::get('success_new_registered') }}</center>
+              </div>
+            @endif   
           <div class="tab">
              <button class="tablinks" onclick="openCity(event, 'new_user_account')" id="defaultOpen">Add User Account</button>
             <button class="tablinks" onclick="openCity(event, 'user_account')" >Users Account</button>

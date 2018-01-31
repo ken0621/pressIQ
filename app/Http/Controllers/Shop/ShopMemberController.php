@@ -1103,6 +1103,7 @@ class ShopMemberController extends Shop
                     $data["user_company_image"]          =$path_prefix.$path;
                 }        
                 Tbl_pressiq_user::insertGetId($data);
+                Session::flash('success_new_registered', 'New User Successfully Added!');
                 return redirect::back();
             }       
         }

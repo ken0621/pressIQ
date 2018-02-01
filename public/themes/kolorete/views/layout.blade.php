@@ -99,12 +99,15 @@
                         <div class="col-md-4">
                             <div class="categories-container">
                                 {{-- <a onclick="myFunction()"><i class="fa fa-bars" aria-hidden="true"></i></a><span>Categories</span> --}}
-                                <div id="nav-icon1" onclick="myFunction()">
-                                  <span></span>
-                                  <span></span>
-                                  <span></span>
+                                <div class="mini-submenu">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
                                 </div>
                                 <ul id="menu">
+                                    <div class="categories-header">
+                                        <span class="title">CATEGORIES</span><i id="close-menu" class="fa fa-times" aria-hidden="true"></i>
+                                    </div>
                                     <li><a href="#">Men's Apparel</a>
                                         <ul class="sub-menu">
                                             <li><a href="#">Mobile and Gadget</a></li>
@@ -155,7 +158,6 @@
                                     <li><a href="#">Women's Accessories</a></li>
                                 </ul>
                             </div>
-                            
                         </div>
                         <div class="col-md-4">
                             <div class="image-logo-holder">
@@ -200,7 +202,7 @@
         <div id="fb-root"></div>
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
         <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
-        <script type="text/javascript">
+        {{-- <script type="text/javascript">
             function myFunction() {
                 var x = document.getElementById("menu");
                 if (x.style.display === "block") {
@@ -209,13 +211,23 @@
                     x.style.display = "block";
                 }
             }
-        </script>
+        </script> --}}
         <script type="text/javascript">
-            $(document).ready(function(){
-                $('#nav-icon1').click(function(){
-                    $(this).toggleClass('open');
+            $(function()
+            {
+
+                $('#close-menu').on('click',function() 
+                {                 
+                    $(this).closest('#menu').toggle(500,function(){
+                    $('.mini-submenu').fadeIn();    
                 });
             });
+                $('.mini-submenu').on('click',function()
+                {       
+                    $(this).next('#menu').toggle(500);
+                    $('.mini-submenu').hide();
+                })
+            })
         </script>
         @yield("js")
     </body>

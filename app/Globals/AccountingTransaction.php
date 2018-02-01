@@ -476,6 +476,7 @@ class AccountingTransaction
 	public static function refill_inventory($shop_id, $warehouse_id , $item_info, $ref_name = '', $ref_id = 0, $remarks = '')
 	{
 		$return = null;
+
 		if(count($item_info) > 0)
 		{
 			$_item = null;
@@ -518,6 +519,7 @@ class AccountingTransaction
 				}
 			}
 		}
+
 		return $return;
 	}
 	public static function inventory_refill_update($shop_id, $warehouse_id,  $item_info, $ref_name, $ref_id)

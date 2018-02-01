@@ -35,30 +35,37 @@
 		                                		<th class="text-center">Name</th>
 		                                		<th class="text-center">Description</th>
 		                                		<th class="text-center">Type</th>
+                                                <th class="text-center"></th>
 		                                	</tr>
 		                                </thead>
                                         <tbody class="draggable tbody-item">
+                                            @if(count($_landing_cost) > 0)
+                                                @foreach($_landing_cost as $key => $cost)
+                                                <tr>
+                                                    <td class="text-center"><label class="number-td">1</label></td>
+                                                    <td><input type="text" class="form-control" name="cost_name[]" value="{{$cost->default_cost_name}}" /></td>
+                                                    <td><textarea class="form-control textarea-expand" name="cost_description[]">{{$cost->default_cost_description}}</textarea></td>
+                                                    <td>
+                                                        <select class="form-control" name="cost_type[]">
+                                                            <option value="fixed" {{$cost->default_cost_type == 'fixed' ? 'selected' : ''}}>Fixed</option>
+                                                            <option value="percentage" {{$cost->default_cost_type == 'percentage' ? 'selected' : ''}}>Percentage</option>
+                                                        </select>
+                                                    </td>
+                                                    <td class="text-center {{$key != 0 ? 'remove-tr' : ''}} cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
                                         	<tr>
-                                        		<td class="text-center"><label>1</label></td>
-                                        		<td><input type="text" class="form-control" name=""/></td>
-                                        		<td><textarea class="form-control textarea-expand"></textarea></td>
+                                        		<td class="text-center"><label class="number-td">2</label></td>
+                                        		<td><input type="text" class="form-control" name="cost_name[]"/></td>
+                                        		<td><textarea class="form-control textarea-expand" name="cost_description[]"></textarea></td>
                                         		<td>
-                                        			<select class="form-control">
-                                        				<option value="">Fixed</option>
-                                        				<option value="">Percentage</option>
+                                        			<select class="form-control" name="cost_type[]">
+                                        				<option value="fixed">Fixed</option>
+                                        				<option value="percentage">Percentage</option>
                                         			</select>
                                         		</td>
-                                        	</tr>
-                                        	<tr>
-                                        		<td class="text-center"><label>2</label></td>
-                                        		<td><input type="text" class="form-control" name=""/></td>
-                                        		<td><textarea class="form-control textarea-expand"></textarea></td>
-                                        		<td>
-                                        			<select class="form-control">
-                                        				<option value="">Fixed</option>
-                                        				<option value="">Percentage</option>
-                                        			</select>
-                                        		</td>
+                                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                         	</tr>
                                        	</tbody>
 		                            </table>
@@ -75,6 +82,18 @@
 
 <div class="div-script">
     <table class="div-item-row-script hide">
+        <tr>
+            <td class="text-center"><label class="number-td">1</label></td>
+            <td><input type="text" class="form-control" name="cost_name[]"/></td>
+            <td><textarea class="form-control textarea-expand" name="cost_description[]"></textarea></td>
+            <td>
+                <select class="form-control" name="cost_type[]">
+                    <option value="fixed">Fixed</option>
+                    <option value="percentage">Percentage</option>
+                </select>
+            </td>
+            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+        </tr>
     </table>
 </div>
 @endsection

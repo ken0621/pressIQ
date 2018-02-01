@@ -76,10 +76,14 @@ class TransactionEnterBills
 
         return $data;
     }
-	public static function postInsert($ri_id, $shop_id, $insert, $insert_item, $insert_acct = '')
+	public static function postInsert($ri_id, $shop_id, $insert, $insert_item, $insert_acct = array())
 	{
-    	$val = AccountingTransaction::vendorValidation($insert, $insert_item, 'enter_bills');
-    
+        $val = null;
+        if(!$ri_id)
+        {
+    	   $val = AccountingTransaction::vendorValidation($insert, $insert_item, 'enter_bills');
+        }            
+
         if(!$val)
         {
     		$ins['bill_shop_id']          = $shop_id;
@@ -111,11 +115,6 @@ class TransactionEnterBills
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
             $entry["ewt"]               = '';
-            
-            $return = Self::insertLine($enter_bills_id, $insert_item, $entry, $insert_acct);
-            
-            
-            $return = $enter_bills_id;
 
             $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
@@ -126,7 +125,10 @@ class TransactionEnterBills
             else // RECEIVE INVENTORY
             {
                 AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'receive_inventory', $ri_id, 'Refill upon RECEIVING INVENTORY '.$ins['transaction_refnum']);
-            }
+            }            
+            
+            Self::insertLine($enter_bills_id, $insert_item, $entry, $insert_acct);
+            $return = $enter_bills_id;
         }
         else
         {
@@ -136,9 +138,13 @@ class TransactionEnterBills
         return $return;
 	}
 
-    public static function postUpdate($enter_bills_id, $ri_id, $shop_id, $insert, $insert_item, $insert_acct ='')
+    public static function postUpdate($enter_bills_id, $ri_id, $shop_id, $insert, $insert_item, $insert_acct = array())
     {
-        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        $val = null;
+        if(!$ri_id)
+        {
+            $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        }
     
         if(!$val)
         {
@@ -177,7 +183,6 @@ class TransactionEnterBills
 
             $return = Self::insertLine($enter_bills_id, $insert_item, $entry, $insert_acct);
 
-            $return = $enter_bills_id;
 
             $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
             /* UPDATE INVENTORY HERE */
@@ -191,6 +196,7 @@ class TransactionEnterBills
                 AccountingTransaction::inventory_refill_update($shop_id, $warehouse_id, $insert_item, 'receive_inventory', $ri_id); 
                 AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'receive_inventory', $ri_id, 'Refill upon RECEIVING INVENTORY '.$update['transaction_refnum']);
             }
+            $return = $enter_bills_id;
         }
         else
         {
@@ -201,9 +207,10 @@ class TransactionEnterBills
     }
 
 
-    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct = 0)
+    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct = array())
     {
-        if($insert_acct != 0)
+        $return = null;
+        if(count($insert_acct) > 0)
         {
             $acct_line = null;
             foreach ($insert_acct as $key_acct => $value_acct)
@@ -223,7 +230,7 @@ class TransactionEnterBills
             }  
         }
 
-        if($insert_item > 0)
+        if(count($insert_item) > 0)
         {
             $itemline = null;
             foreach ($insert_item as $key => $value) 
@@ -275,8 +282,8 @@ class TransactionEnterBills
         {
             Tbl_bill_item_line::insert($itemline);
             Accounting::postJournalEntry($entry, $entry_data);        
-            $return = $enter_bills_id;    
         }
+        $return = $enter_bills_id;
         
 
         return $return;
